@@ -8,6 +8,6 @@ import (
 const Pylon = "Pylon"
 
 // NewPylon Returns pylon currency
-func NewPylon(amount int64) sdk.Coin {
-	return sdk.NewInt64Coin(Pylon, amount)
+func NewPylon(amount int64) sdk.Coins {
+	return sdk.Coins{sdk.NewInt64Coin(Pylon, amount)}
 }
