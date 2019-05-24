@@ -16,8 +16,7 @@ const (
 	DefaultCoinPerRequest = 500
 )
 
-// GetCmdBuyName is the CLI command for sending a BuyName transaction
-func GetCmdBuyName(cdc *codec.Codec) *cobra.Command {
+func GetPylons(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-pylons",
 		Short: "ask for pylons. 500 pylons per request",

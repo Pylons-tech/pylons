@@ -13,3 +13,11 @@ type Keeper struct {
 	storeKey   sdk.StoreKey // Unexposed key to access store from sdk.Context
 	cdc        *codec.Codec // The wire codec for binary encoding/decoding.
 }
+
+func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+	return Keeper{
+		coinKeeper: coinKeeper,
+		storeKey:   storeKey,
+		cdc:        cdc,
+	}
+}
