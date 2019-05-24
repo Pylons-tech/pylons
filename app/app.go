@@ -30,7 +30,7 @@ type PylonsApp struct {
 
 	keyMain          *sdk.KVStoreKey
 	keyAccount       *sdk.KVStoreKey
-	keyNS            *sdk.KVStoreKey
+	keyPylons        *sdk.KVStoreKey
 	keyFeeCollection *sdk.KVStoreKey
 	keyParams        *sdk.KVStoreKey
 	tkeyParams       *sdk.TransientStoreKey
@@ -57,7 +57,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 
 		keyMain:          sdk.NewKVStoreKey("main"),
 		keyAccount:       sdk.NewKVStoreKey("acc"),
-		keyNS:            sdk.NewKVStoreKey("ns"),
+		keyPylons:        sdk.NewKVStoreKey("pylons"),
 		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
 		keyParams:        sdk.NewKVStoreKey("params"),
 		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
@@ -88,7 +88,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 	// It handles interactions with the namestore
 	app.plnKeeper = pylons.NewKeeper(
 		app.bankKeeper,
-		app.keyNS,
+		app.keyPylons,
 		app.cdc,
 	)
 
@@ -111,7 +111,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 	app.MountStores(
 		app.keyMain,
 		app.keyAccount,
-		app.keyNS,
+		app.keyPylons,
 		app.keyFeeCollection,
 		app.keyParams,
 		app.tkeyParams,
