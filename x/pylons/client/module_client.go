@@ -30,3 +30,12 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 
 	return namesvcTxCmd
 }
+
+// GetQueryCmd returns the cli query commands for this module
+func (mc ModuleClient) GetQueryCmd() *cobra.Command {
+	// Group nameservice queries under a subcommand
+	return &cobra.Command{
+		Use:   "pylons",
+		Short: "Querying commands for the pylons module",
+	}
+}
