@@ -57,5 +57,5 @@ pylonscli tx pylons get-pylons --from alice
 
 - start the `rest-server`
 ```
-nscli rest-server --chain-id pylonschain --trust-node
+pylonscli rest-server --chain-id pylonschain --trust-node
 ```
