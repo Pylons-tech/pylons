@@ -27,7 +27,7 @@ func (msg MsgGetPylons) ValidateBasic() sdk.Error {
 	if msg.Requester.Empty() {
 		return sdk.ErrInvalidAddress(msg.Requester.String())
 	}
-	if msg.Amount.IsAllPositive() {
+	if !msg.Amount.IsAllPositive() {
 		return sdk.ErrUnknownRequest("Amount cannot be less than 0/negative")
 	}
 	return nil
