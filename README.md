@@ -29,8 +29,8 @@ pylonscli keys add jack
 pylonscli keys add alice
 
 # Add both accounts, with coins to the genesis file
-nsd add-genesis-account $(pylonscli keys show jack -a) 100pylon,1000jackcoin
-nsd add-genesis-account $(pylonscli keys show alice -a) 100pylon,1000alicecoin
+pylonsd add-genesis-account $(pylonscli keys show jack -a) 100pylon,1000jackcoin
+pylonsd add-genesis-account $(pylonscli keys show alice -a) 100pylon,1000alicecoin
 
 # Configure your CLI to eliminate need for chain-id flag
 pylonscli config chain-id pylonschain
