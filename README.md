@@ -55,7 +55,14 @@ pylonsd start
 pylonscli tx pylons get-pylons --from alice
 ```
 
-- start the `rest-server`
+- start the `rest-server` in dev mode
 ```
 pylonscli rest-server --chain-id pylonschain --trust-node
+```
+
+## Deploying for production
+
+- run the rest-server using `--cors` mode and use the `--laddr` as `0.0.0.0`
+```
+pylonscli rest-server --chain-id pylonschain --trust-node --cors *
 ```

@@ -19,23 +19,28 @@ func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 
 // GetTxCmd returns the transaction commands for this module
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
-	namesvcTxCmd := &cobra.Command{
+	pylonsTxCmd := &cobra.Command{
 		Use:   "pylons",
 		Short: "Pylons transactions subcommands",
 	}
 
-	namesvcTxCmd.AddCommand(client.PostCommands(
+	pylonsTxCmd.AddCommand(client.PostCommands(
 		plncli.GetPylons(mc.cdc),
 	)...)
 
-	return namesvcTxCmd
+	return pylonsTxCmd
 }
 
 // GetQueryCmd returns the cli query commands for this module
 func (mc ModuleClient) GetQueryCmd() *cobra.Command {
-	// Group nameservice queries under a subcommand
-	return &cobra.Command{
+	// Group pulons queries under a subcommand
+	pylonsQueryCmd := &cobra.Command{
 		Use:   "pylons",
 		Short: "Querying commands for the pylons module",
 	}
+	pylonsQueryCmd.AddCommand(client.GetCommands(
+		plncli.GetPylonsBalance(mc.storeKey, mc.cdc),
+	)...)
+
+	return pylonsQueryCmd
 }
