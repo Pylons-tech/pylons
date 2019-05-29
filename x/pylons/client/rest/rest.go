@@ -24,6 +24,8 @@ const (
 // RegisterRoutes adds routes
 func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons", storeName), getPylonsHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/balance", storeName), pylonsBalanceHandler(cdc, cliCtx)).Methods("GET")
+
 }
 
 type getPylonsReq struct {

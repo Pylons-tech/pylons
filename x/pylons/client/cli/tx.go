@@ -13,6 +13,7 @@ import (
 )
 
 const (
+	// DefaultCoinPerRequest is the number of coins that will be sent per faucet request
 	DefaultCoinPerRequest = 500
 )
 
