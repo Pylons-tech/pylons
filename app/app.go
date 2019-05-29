@@ -103,7 +103,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 
 	// The app.QueryRouter is the main query router where each module registers its routes
 	app.QueryRouter().
-		AddRoute("acc", auth.NewQuerier(app.accountKeeper))
+		AddRoute("acc", auth.NewQuerier(app.accountKeeper)).
+		AddRoute("pylons", pylons.NewQuerier(app.plnKeeper))
 
 	// The initChainer handles translating the genesis.json file into initial state for the network
 	app.SetInitChainer(app.initChainer)
