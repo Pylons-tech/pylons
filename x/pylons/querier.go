@@ -1,8 +1,6 @@
 package pylons
 
 import (
-	"log"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -35,22 +33,31 @@ func queryBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper 
 		return []byte{}, sdk.ErrInternal(err1.Error())
 	}
 	coins := keeper.coinKeeper.GetCoins(ctx, accAddr)
-	log.Println(coins)
 
-	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, QueryResBalance{"test"})
+	var value int64
+	for _, coin := range coins {
+		if coin.Denom == Pylon {
+			value = coin.Amount.Int64()
+			break
+		}
+	}
+
+	// if we cannot find the value then it should return as 0
+	bz, err2 := codec.MarshalJSONIndent(keeper.cdc, QueryResBalance{value})
 	if err2 != nil {
 		panic("could not marshal result to JSON")
 	}
 
 	return bz, nil
+
 }
 
-// Query Result Payload for a resolve query
+// QueryResBalance Result Payload for a resolve query
 type QueryResBalance struct {
-	Value string `json:"value"`
+	Balance int64 `json:"balance"`
 }
 
 // implement fmt.Stringer
 func (r QueryResBalance) String() string {
-	return r.Value
+	return string(r.Balance)
 }

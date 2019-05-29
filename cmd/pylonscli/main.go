@@ -14,14 +14,14 @@ import (
 	amino "github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/libs/cli"
 
+	app "github.com/MikeSofaer/pylons/app"
+	plnclient "github.com/MikeSofaer/pylons/x/pylons/client"
+	plnrest "github.com/MikeSofaer/pylons/x/pylons/client/rest"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 	bank "github.com/cosmos/cosmos-sdk/x/bank/client/rest"
-	app "github.com/MikeSofaer/pylons/app"
-	plnclient "github.com/MikeSofaer/pylons/x/pylons/client"
-	plnrest "github.com/MikeSofaer/pylons/x/pylons/client/rest"
 )
 
 const (
@@ -102,6 +102,11 @@ func queryCmd(cdc *amino.Codec, mc []sdk.ModuleClients) *cobra.Command {
 		client.LineBreak,
 		authcmd.GetAccountCmd(storeAcc, cdc),
 	)
+
+	for _, m := range mc {
+		queryCmd.AddCommand(m.GetQueryCmd())
+	}
+
 	return queryCmd
 }
 

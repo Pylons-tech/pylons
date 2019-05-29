@@ -13,7 +13,7 @@ import (
 func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "balance",
-		Short: "balance",
+		Short: "get pylons balance",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)

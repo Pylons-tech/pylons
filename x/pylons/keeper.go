@@ -15,6 +15,7 @@ type Keeper struct {
 }
 
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+
 	return Keeper{
 		coinKeeper: coinKeeper,
 		storeKey:   storeKey,
