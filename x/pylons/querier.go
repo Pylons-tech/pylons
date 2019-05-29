@@ -19,7 +19,7 @@ func NewQuerier(keeper Keeper) sdk.Querier {
 		case QueryBalance:
 			return queryBalance(ctx, path[1:], req, keeper)
 		default:
-			return nil, sdk.ErrUnknownRequest("unknown nameservice query endpoint")
+			return nil, sdk.ErrUnknownRequest("unknown pylons query endpoint")
 		}
 	}
 }
