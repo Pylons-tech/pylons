@@ -1,4 +1,4 @@
-package pylons
+package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"

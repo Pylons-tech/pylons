@@ -4,7 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/MikeSofaer/pylons/x/pylons"
+	"github.com/MikeSofaer/pylons/x/pylons/queriers"
+
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -35,7 +36,7 @@ func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return fmt.Errorf(err.Error())
 			}
 
-			var out pylons.QueryResBalance
+			var out queriers.QueryResBalance
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
