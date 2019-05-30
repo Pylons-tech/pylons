@@ -4,6 +4,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/MikeSofaer/pylons/x/pylons"
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -31,7 +32,7 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			msg := pylons.NewMsgGetPylons(pylons.NewPylon(DefaultCoinPerRequest), cliCtx.GetFromAddress())
+			msg := msgs.NewMsgGetPylons(pylons.NewPylon(DefaultCoinPerRequest), cliCtx.GetFromAddress())
 			err := msg.ValidateBasic()
 			if err != nil {
 				return err

@@ -11,6 +11,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
 	"github.com/MikeSofaer/pylons/x/pylons"
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+
 	"github.com/gorilla/mux"
 )
 
@@ -54,7 +56,7 @@ func getPylonsHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerF
 		}
 
 		// create the message
-		msg := pylons.NewMsgGetPylons(pylons.NewPylon(DefaultCoinPerRequest), addr)
+		msg := msgs.NewMsgGetPylons(pylons.NewPylon(DefaultCoinPerRequest), addr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -90,7 +92,7 @@ func pylonsBalanceHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.Hand
 		}
 
 		// create the message
-		msg := pylons.NewMsgGetPylons(pylons.NewPylon(DefaultCoinPerRequest), addr)
+		msg := msgs.NewMsgGetPylons(pylons.NewPylon(DefaultCoinPerRequest), addr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

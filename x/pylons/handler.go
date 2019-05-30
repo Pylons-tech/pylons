@@ -3,6 +3,7 @@ package pylons
 import (
 	"fmt"
 
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -10,7 +11,7 @@ import (
 func NewHandler(keeper Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
 		switch msg := msg.(type) {
-		case MsgGetPylons:
+		case msgs.MsgGetPylons:
 			return handleMsgGetPylons(ctx, keeper, msg)
 		default:
 			errMsg := fmt.Sprintf("Unrecognized pylons Msg type: %v", msg.Type())
@@ -19,7 +20,7 @@ func NewHandler(keeper Keeper) sdk.Handler {
 	}
 }
 
-func handleMsgGetPylons(ctx sdk.Context, keeper Keeper, msg MsgGetPylons) sdk.Result {
+func handleMsgGetPylons(ctx sdk.Context, keeper Keeper, msg msgs.MsgGetPylons) sdk.Result {
 
 	// TODO: filter pylons out of all the coins
 	_, _, err := keeper.coinKeeper.AddCoins(ctx, msg.Requester, msg.Amount) // If so, deduct the Bid amount from the sender

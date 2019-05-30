@@ -1,4 +1,4 @@
-package pylons
+package msgs
 
 import "encoding/json"
 import sdk "github.com/cosmos/cosmos-sdk/types"
