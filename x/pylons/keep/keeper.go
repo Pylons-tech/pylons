@@ -1,4 +1,4 @@
-package pylons
+package keep
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -9,16 +9,16 @@ import (
 
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
-	coinKeeper bank.Keeper
-	storeKey   sdk.StoreKey // Unexposed key to access store from sdk.Context
-	cdc        *codec.Codec // The wire codec for binary encoding/decoding.
+	CoinKeeper bank.Keeper
+	StoreKey   sdk.StoreKey // Unexposed key to access store from sdk.Context
+	Cdc        *codec.Codec // The wire codec for binary encoding/decoding.
 }
 
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 
 	return Keeper{
-		coinKeeper: coinKeeper,
-		storeKey:   storeKey,
-		cdc:        cdc,
+		CoinKeeper: coinKeeper,
+		StoreKey:   storeKey,
+		Cdc:        cdc,
 	}
 }

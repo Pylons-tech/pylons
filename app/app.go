@@ -12,7 +12,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	tmtypes "github.com/tendermint/tendermint/types"
 
+	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons"
+
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -39,7 +41,7 @@ type PylonsApp struct {
 	bankKeeper          bank.Keeper
 	feeCollectionKeeper auth.FeeCollectionKeeper
 	paramsKeeper        params.Keeper
-	plnKeeper           pylons.Keeper
+	plnKeeper           keep.Keeper
 }
 
 // NewPylonsApp is a constructor function for PylonsApp
@@ -86,7 +88,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 
 	// The pylonsKeeper is the Keeper from the module for this tutorial
 	// It handles interactions with the namestore
-	app.plnKeeper = pylons.NewKeeper(
+	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
 		app.keyPylons,
 		app.cdc,
