@@ -8,4 +8,6 @@ import (
 // RegisterCodec registers concrete types on wire codec
 func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(msgs.MsgGetPylons{}, "pylons/GetPylons", nil)
+	cdc.RegisterConcrete(msgs.MsgSendPylons{}, "pylons/SendPylons", nil)
+
 }

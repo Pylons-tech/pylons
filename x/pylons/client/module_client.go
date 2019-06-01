@@ -26,6 +26,7 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 
 	pylonsTxCmd.AddCommand(client.PostCommands(
 		plncli.GetPylons(mc.cdc),
+		plncli.SendPylons(mc.cdc),
 	)...)
 
 	return pylonsTxCmd

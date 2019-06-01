@@ -19,7 +19,7 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgSendPylons:
 			return handlers.HandleMsgSendPylons(ctx, keeper, msg)
 		default:
-			errMsg := fmt.Sprintf("Unrecognized pylons Msg type: %v", msg.Type())
+			errMsg := fmt.Sprintf("unrecognized pylons Msg type: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
 	}
