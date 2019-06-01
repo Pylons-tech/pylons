@@ -24,7 +24,7 @@ jobs:
         - checkout
 
         # specify any bash command here prefixed with `run: `
-        - run: go test -v ./...
+        - run: GO111MODULE=on go test -v ./...
 
 workflows:
   version: 2
