@@ -18,10 +18,11 @@ const (
 
 // Validate validates the Level
 func (l Level) Validate() error {
-	if l != Basic || l != Premium {
-		return errors.New("Invalid cookbook plan")
+	if l == Basic || l == Premium {
+		return nil
 	}
-	return nil
+
+	return errors.New("Invalid cookbook plan")
 }
 
 var (
