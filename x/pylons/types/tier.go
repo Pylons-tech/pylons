@@ -1,6 +1,8 @@
 package types
 
 import (
+	"errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -13,6 +15,14 @@ const (
 	Basic Level = iota
 	Premium
 )
+
+// Validate validates the Level
+func (l Level) Validate() error {
+	if l != Basic || l != Premium {
+		return errors.New("Invalid cookbook plan")
+	}
+	return nil
+}
 
 var (
 

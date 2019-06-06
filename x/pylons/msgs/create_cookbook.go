@@ -39,6 +39,14 @@ func (msg MsgCreateCookbook) ValidateBasic() sdk.Error {
 		return sdk.ErrInternal("the description should have more than 20 characters")
 	}
 
+	if err := msg.SupportEmail.Validate(); err != nil {
+		return sdk.ErrInternal(err.Error())
+	}
+
+	if err := msg.Level.Validate(); err != nil {
+		return sdk.ErrInternal(err.Error())
+	}
+
 	return nil
 }
 

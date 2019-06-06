@@ -6,6 +6,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// HandleMsgGetPylons is used to send pylons to requesters. This handler is part of the
+// faucet
 func HandleMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPylons) sdk.Result {
 
 	// TODO: filter pylons out of all the coins

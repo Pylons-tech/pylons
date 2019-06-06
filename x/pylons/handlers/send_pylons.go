@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// HandleMsgSendPylons is used to transact pylons between people
 func HandleMsgSendPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendPylons) sdk.Result {
 
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, msg.Amount) {
