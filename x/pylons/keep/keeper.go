@@ -5,7 +5,9 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/x/bank"
-	"github.com/google/guid"
+	"github.com/google/uuid"
+
+	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -34,29 +36,48 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
 		return errors.New("the sender cannot be empty")
 
 	}
+	mCB, err := k.Cdc.MarshalBinaryBare(cookbook)
+	if err != nil {
+		return err
+	}
 	store := ctx.KVStore(k.StoreKey)
 
-	id := guid.New()
-	store.Set([]byte(id), k.Cdc.MustMarshalBinaryBare(cookbook))
+	id := uuid.New()
+	store.Set([]byte(id.String()), mCB)
 	return nil
 }
 
 // GetCookbook returns cookbook based on UUID
 func (k Keeper) GetCookbook(ctx sdk.Context, id string) types.Cookbook {
-	if cookbook.Sender.Empty() {
-		return errors.New("the sender cannot be empty")
-	}
-
 	store := ctx.KVStore(k.StoreKey)
 
 	uCB := store.Get([]byte(id))
 	var cookbook types.Cookbook
 
-	k.cdc.MustUnmarshalBinaryBare(uCB, &cookbook)
+	k.Cdc.MustUnmarshalBinaryBare(uCB, &cookbook)
 	return cookbook
 }
 
-func (k Keeper) UpdateCookbook() {
+// UpdateCookbook is used to update the cookbook using the id
+func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbook) error {
+	if cookbook.Sender.Empty() {
+		return errors.New("the sender cannot be empty")
+
+	}
+	store := ctx.KVStore(k.StoreKey)
+
+	if !store.Has([]byte(id)) {
+		return fmt.Errorf("the cookbook with gid %s does not exist", id)
+	}
+	mCB, err := k.Cdc.MarshalBinaryBare(cookbook)
+	if err != nil {
+		return err
+	}
+	store.Set([]byte(id), mCB)
+	return nil
+}
+
+func (k Keeper) ListCookbook(ctx sdk.Context) types.Cookbooks {
 
 }
 
