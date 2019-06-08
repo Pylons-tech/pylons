@@ -77,10 +77,12 @@ func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbo
 	return nil
 }
 
-func (k Keeper) ListCookbook(ctx sdk.Context) types.Cookbooks {
+// func (k Keeper) GetCookbooksIterator(ctx sdk.Context) sdk.Iterator {
 
-}
+// }
 
-func (k Keeper) DeleteCookbook() {
-
+// DeleteCookbook
+func (k Keeper) DeleteCookbook(ctx sdk.Context, id string) {
+	store := ctx.KVStore(k.StoreKey)
+	store.Delete([]byte(id))
 }
