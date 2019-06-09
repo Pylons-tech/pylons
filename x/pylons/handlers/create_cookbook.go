@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"fmt"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -25,6 +23,15 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	} else {
 		return sdk.ErrInternal("invalid level").Result()
 	}
-	fmt.Println(fee)
+
+	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, fee) {
+		return sdk.ErrInsufficientCoins("the user doesn't have enough pylons").Result()
+	}
+
+	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer)
+	if err := keeper.SetCookbook(ctx, cb); err != nil {
+		return sdk.ErrInternal(err.Error()).Result()
+	}
+
 	return sdk.Result{}
 }

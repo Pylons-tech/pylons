@@ -60,6 +60,10 @@ func (msg MsgCreateCookbook) ValidateBasic() sdk.Error {
 		return sdk.ErrInternal(err.Error())
 	}
 
+	if err := msg.Version.Validate(); err != nil {
+		return sdk.ErrInternal(err.Error())
+	}
+
 	return nil
 }
 

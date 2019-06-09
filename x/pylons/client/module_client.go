@@ -1,7 +1,9 @@
 package client
 
 import (
-	plncli "github.com/MikeSofaer/pylons/x/pylons/client/cli"
+	"github.com/MikeSofaer/pylons/x/pylons/client/cli/query"
+	"github.com/MikeSofaer/pylons/x/pylons/client/cli/tx"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
 	amino "github.com/tendermint/go-amino"
@@ -25,8 +27,8 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	}
 
 	pylonsTxCmd.AddCommand(client.PostCommands(
-		plncli.GetPylons(mc.cdc),
-		plncli.SendPylons(mc.cdc),
+		tx.GetPylons(mc.cdc),
+		tx.SendPylons(mc.cdc),
 	)...)
 
 	return pylonsTxCmd
@@ -40,7 +42,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 		Short: "Querying commands for the pylons module",
 	}
 	pylonsQueryCmd.AddCommand(client.GetCommands(
-		plncli.GetPylonsBalance(mc.storeKey, mc.cdc),
+		query.GetPylonsBalance(mc.storeKey, mc.cdc),
 	)...)
 
 	return pylonsQueryCmd

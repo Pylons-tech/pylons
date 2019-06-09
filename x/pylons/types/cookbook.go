@@ -9,7 +9,7 @@ import (
 type Cookbook struct {
 	Name         string
 	Description  string
-	Version      string
+	Version      SemVer
 	Developer    string
 	Level        Level
 	SupportEmail Email
@@ -20,7 +20,7 @@ type Cookbook struct {
 type Cookbooks []Cookbook
 
 // NewCookbook return a new Cookbook
-func NewCookbook(sEmail Email, sender sdk.AccAddress, name, description, version, developer string) Cookbook {
+func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string) Cookbook {
 	return Cookbook{
 		Name:         name,
 		Description:  description,
