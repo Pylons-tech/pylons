@@ -19,6 +19,7 @@ type Keeper struct {
 	Cdc         *codec.Codec // The wire codec for binary encoding/decoding.
 }
 
+// NewKeeper creates a new Keeper
 func NewKeeper(coinKeeper bank.Keeper, storeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		CoinKeeper:  coinKeeper,

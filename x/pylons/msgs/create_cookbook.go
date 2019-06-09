@@ -18,6 +18,19 @@ type MsgCreateCookbook struct {
 	Sender       sdk.AccAddress
 }
 
+// NewMsgCreateCookbook a constructor for CreateCookbook msg
+func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, sender sdk.AccAddress) MsgCreateCookbook {
+	return MsgCreateCookbook{
+		Name:         name,
+		Description:  desc,
+		Developer:    devel,
+		Version:      version,
+		SupportEmail: sEmail,
+		Level:        level,
+		Sender:       sender,
+	}
+}
+
 // Route should return the name of the module
 func (msg MsgCreateCookbook) Route() string { return "pylons" }
 
