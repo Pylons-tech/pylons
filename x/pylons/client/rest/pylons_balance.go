@@ -14,12 +14,12 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 )
 
-type getPylonsReq struct {
+type pylonsBalanceReq struct {
 	BaseReq   rest.BaseReq `json:"base_req"`
 	Requester string       `json:"requester"`
 }
 
-func getPylonsHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
+func pylonsBalanceHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req getPylonsReq
 
