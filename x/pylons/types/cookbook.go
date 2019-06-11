@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
 )
@@ -31,7 +33,18 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 	}
 }
 
+// KeyGen generates key for the store
 func (cb Cookbook) KeyGen() string {
 	id := uuid.New()
 	return cb.Sender.String() + id.String()
+}
+
+func (cb Cookbook) String() string {
+	return fmt.Sprintf(`
+	Cookbook{ 
+		Name: %s,
+		Developer: %s,
+		Tier: %d,
+		Support Email: %s,
+	}`, cb.Name, cb.Developer, int(cb.Level), cb.SupportEmail)
 }

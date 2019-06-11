@@ -45,14 +45,18 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
 }
 
 // GetCookbook returns cookbook based on UUID
-func (k Keeper) GetCookbook(ctx sdk.Context, id string) types.Cookbook {
+func (k Keeper) GetCookbook(ctx sdk.Context, id string) (types.Cookbook, error) {
 	store := ctx.KVStore(k.CookbookKey)
+
+	if !store.Has([]byte(id)) {
+		return types.Cookbook{}, errors.New("The cookbook doesn't exist")
+	}
 
 	uCB := store.Get([]byte(id))
 	var cookbook types.Cookbook
 
 	k.Cdc.MustUnmarshalBinaryBare(uCB, &cookbook)
-	return cookbook
+	return cookbook, nil
 }
 
 // UpdateCookbook is used to update the cookbook using the id
