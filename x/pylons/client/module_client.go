@@ -15,6 +15,7 @@ type ModuleClient struct {
 	cdc      *amino.Codec
 }
 
+// NewModuleClient returns a new module client which holds both tx and query kind of handlers
 func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 	return ModuleClient{storeKey, cdc}
 }
@@ -44,6 +45,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	}
 	pylonsQueryCmd.AddCommand(client.GetCommands(
 		query.GetPylonsBalance(mc.storeKey, mc.cdc),
+		query.GetCookbook(mc.storeKey, mc.cdc),
 	)...)
 
 	return pylonsQueryCmd
