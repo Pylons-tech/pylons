@@ -14,7 +14,6 @@ type MsgUpdateCookbook struct {
 	Version      types.SemVer
 	Developer    string
 	SupportEmail types.Email
-	Level        types.Level
 	Sender       sdk.AccAddress
 }
 
