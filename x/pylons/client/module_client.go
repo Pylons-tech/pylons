@@ -31,6 +31,7 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 		tx.GetPylons(mc.cdc),
 		tx.SendPylons(mc.cdc),
 		tx.CreateCookbook(mc.cdc),
+		tx.UpdateCookbook(mc.cdc),
 	)...)
 
 	return pylonsTxCmd

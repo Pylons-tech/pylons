@@ -1,8 +1,6 @@
 package tx
 
 import (
-	"strconv"
-
 	"github.com/spf13/cobra"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
@@ -15,17 +13,16 @@ import (
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
-// CreateCookbook is the client cli command for creating cookbook
-func CreateCookbook(cdc *codec.Codec) *cobra.Command {
+// UpdateCookbook is the client cli command for creating cookbook
+func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
 
-	var msgCCB msgs.MsgCreateCookbook
+	var msgCCB msgs.MsgUpdateCookbook
 	var tmpVersion string
 	var tmpEmail string
-	var tmpLevel string
 
 	ccb := &cobra.Command{
-		Use:   "create-cookbook [args]",
-		Short: "create cookbook by providing the args",
+		Use:   "update-cookbook [args]",
+		Short: "update cookbook by providing the args",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -35,16 +32,11 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
 			}
-			lvl, err := strconv.Atoi(tmpLevel)
-			if err != nil {
-				return err
-			}
-			msgCCB.Level = types.Level(lvl)
+			msgCCB.Sender = cliCtx.GetFromAddress()
 			msgCCB.Version = types.SemVer(tmpVersion)
 			msgCCB.SupportEmail = types.Email(tmpEmail)
-			msgCCB.Sender = cliCtx.GetFromAddress()
 
-			err = msgCCB.ValidateBasic()
+			err := msgCCB.ValidateBasic()
 			if err != nil {
 				return err
 			}
@@ -55,12 +47,10 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 		},
 	}
 
-	ccb.PersistentFlags().StringVar(&msgCCB.Name, "name", "", "The name of the cookbook")
 	ccb.PersistentFlags().StringVar(&msgCCB.Description, "desc", "", "The description for the cookbook")
 	ccb.PersistentFlags().StringVar(&msgCCB.Developer, "developer", "", "The developer of the cookbook")
 	ccb.PersistentFlags().StringVar(&tmpEmail, "email", "", "The support email")
 	ccb.PersistentFlags().StringVar(&tmpVersion, "version", "", "The version of the cookbook")
-	ccb.PersistentFlags().StringVar(&tmpLevel, "level", "", "The level of the cookbook")
 
 	return ccb
 }
