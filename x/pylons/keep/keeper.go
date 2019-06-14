@@ -85,7 +85,12 @@ func (k Keeper) GetCookbooksIterator(ctx sdk.Context, sender sdk.AccAddress) sdk
 }
 
 // DeleteCookbook is usec to delete a cookbook based on the id
-func (k Keeper) DeleteCookbook(ctx sdk.Context, id string) {
+func (k Keeper) DeleteCookbook(ctx sdk.Context, id string) error {
 	store := ctx.KVStore(k.CookbookKey)
+
+	if !store.Has([]byte(id)) {
+		return fmt.Errorf("The cookbook with the id %s doesn't exist", id)
+	}
 	store.Delete([]byte(id))
+	return nil
 }

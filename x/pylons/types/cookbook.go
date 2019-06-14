@@ -18,8 +18,10 @@ type Cookbook struct {
 	Sender       sdk.AccAddress
 }
 
-// Cookbooks is a list of cookbook
-type Cookbooks []Cookbook
+// CookbookList is a list of cookbook
+type CookbookList struct {
+	Cookbooks []Cookbook
+}
 
 // NewCookbook return a new Cookbook
 func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string) Cookbook {
