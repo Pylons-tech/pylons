@@ -23,6 +23,16 @@ type CookbookList struct {
 	Cookbooks []Cookbook
 }
 
+func (cbl CookbookList) String() string {
+	output := "CookbookList{"
+	for _, cb := range cbl.Cookbooks {
+		output += cb.String()
+		output += ","
+	}
+	output += "}"
+	return output
+}
+
 // NewCookbook return a new Cookbook
 func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string) Cookbook {
 	return Cookbook{
