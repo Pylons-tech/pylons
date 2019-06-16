@@ -1,9 +1,12 @@
 package queriers
 
 import (
+	"encoding/hex"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
+	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -19,8 +22,17 @@ func AddrFromPubKey(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 	}
 	hexPubKey := path[0]
 
+	pubKeyBytes, err := hex.DecodeString(hexPubKey)
+	if err != nil {
+		return nil, sdk.ErrInternal(err.Error())
+	}
+
+	var pubKeyBytes33 [33]byte
+	copy(pubKeyBytes33[:], pubKeyBytes)
+	pubKey := crypto.PubKeySecp256k1(pubKeyBytes33)
+
 	addrResp := AddrResp{
-		Bech32Addr: hexPubKey,
+		Bech32Addr: sdk.AccAddress(pubKey.Address().Bytes()).String(),
 	}
 	// if we cannot find the value then it should return an error
 	bz, err := keeper.Cdc.MarshalJSON(addrResp)
