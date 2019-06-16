@@ -1,8 +1,6 @@
 package queriers
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -32,7 +30,7 @@ func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 	}
 
 	// if we cannot find the value then it should return as 0
-	bz, err2 := codec.MarshalJSONIndent(keeper.Cdc, QueryResBalance{value})
+	bz, err2 := keeper.Cdc.MarshalJSON(QueryResBalance{value})
 	if err2 != nil {
 		panic("could not marshal result to JSON")
 	}
