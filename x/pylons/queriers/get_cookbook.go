@@ -1,8 +1,6 @@
 package queriers
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -22,7 +20,7 @@ func GetCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper k
 		return nil, sdk.ErrInternal(err.Error())
 	}
 	// if we cannot find the value then it should return an error
-	bz, err := codec.MarshalJSONIndent(keeper.Cdc, cookbook)
+	bz, err := keeper.Cdc.MarshalJSON(cookbook)
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}

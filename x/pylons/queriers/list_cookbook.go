@@ -44,7 +44,7 @@ func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper 
 		Cookbooks: cookbooks,
 	}
 
-	cbl, err := keeper.Cdc.MarshalBinaryBare(cookbookList)
+	cbl, err := keeper.Cdc.MarshalJSON(cookbookList)
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}
