@@ -47,7 +47,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, sigs, signMsg.Memo)
 
 		gb := GPTxBuilder{
-			SignerBytes: msg.GetSignBytes(),
+			SignerBytes: string(msg.GetSignBytes()),
 			MsgJSON:     stdTx,
 		}
 		eGB, err := cdc.MarshalJSON(gb)
@@ -65,5 +65,5 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 type GPTxBuilder struct {
 	// MsgJSON is the transaction with nil signature
 	MsgJSON     auth.StdTx
-	SignerBytes []byte
+	SignerBytes string
 }
