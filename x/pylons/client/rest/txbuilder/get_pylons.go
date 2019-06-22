@@ -8,9 +8,12 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 	"github.com/gorilla/mux"
 )
 
@@ -25,6 +28,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		vars := mux.Vars(r)
 		requester := vars[TxGPRequesterKey]
 		addr, err := sdk.AccAddressFromBech32(requester)
+		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -32,9 +36,19 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		}
 
 		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr)
+		sigs := []auth.StdSignature{{}}
+
+		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
+
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		}
+
+		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, sigs, signMsg.Memo)
 
 		gb := GPTxBuilder{
 			SignerBytes: msg.GetSignBytes(),
+			MsgJSON:     stdTx,
 		}
 		eGB, err := cdc.MarshalJSON(gb)
 
@@ -49,6 +63,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 
 // GPTxBuilder gives all the necessary fixtures for creating a get pylons transaction
 type GPTxBuilder struct {
-	MsgJson     []byte
+	// MsgJSON is the transaction with nil signature
+	MsgJSON     auth.StdTx
 	SignerBytes []byte
 }
