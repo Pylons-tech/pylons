@@ -3,6 +3,7 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
+	"fmt"
 	"net/http"
 
 	"encoding/hex"
@@ -17,6 +18,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 	"github.com/gorilla/mux"
+	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -38,15 +40,27 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		}
 
 		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr)
-		sigs := []auth.StdSignature{{}}
+
+		// sigs := []auth.StdSignature{{}}
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
-
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
+		privKey, err := GetPrivateKeyFromHex("a96e62ed3955e65be32703f12d87b6b5cf26039ecfa948dc5107a495418e5330")
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		}
+		signedBytes, err := privKey.Sign(signMsg.Bytes())
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		}
+		signature := auth.StdSignature{
+			PubKey:    privKey.PubKey(),
+			Signature: signedBytes,
+		}
 
-		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, sigs, signMsg.Memo)
+		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, []auth.StdSignature{signature}, signMsg.Memo)
 		gb := GPTxBuilder{
 			SignerBytes: hex.EncodeToString(signMsg.Bytes()),
 			SignMsg:     signMsg,
@@ -61,6 +75,22 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 
 		rest.PostProcessResponse(w, cdc, eGB, cliCtx.Indent)
 	}
+}
+
+func GetPrivateKeyFromHex(hexKey string) (*crypto.PrivKeySecp256k1, error) {
+	hexPrivKey := hexKey
+	privKeyBytes, err := hex.DecodeString(hexPrivKey)
+	if err != nil {
+		return nil, err
+	}
+	var privKeyBytes32 [32]byte
+	copy(privKeyBytes32[:], privKeyBytes)
+	privKey := crypto.PrivKeySecp256k1(privKeyBytes32)
+	if err != nil {
+		fmt.Printf("error: \n %+v \n", err)
+	}
+
+	return &privKey, nil
 }
 
 // GPTxBuilder gives all the necessary fixtures for creating a get pylons transaction
