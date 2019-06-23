@@ -11,6 +11,24 @@ import (
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
+func ShittySignature () {
+	// generate private key from cleartext
+	hexPrivKey := "a96e62ed3955e65be32703f12d87b6b5cf26039ecfa948dc5107a495418e5330"
+	privKeyBytes, err := hex.DecodeString(hexPrivKey)
+	if err != nil {
+		fmt.Printf("error: \n %+v \n", err)
+	}
+	var privKeyBytes32 [32]byte
+	copy(privKeyBytes32[:], privKeyBytes)
+	privKey := crypto.PrivKeySecp256k1(privKeyBytes32)
+	signable := []byte{0}
+	signature, err := privKey.Sign(signable)
+	if err != nil {
+		fmt.Printf("error: \n %+v \n", err)
+	}
+	fmt.Printf("test signature for cleartext key and [0]: \n %+v \n", hex.EncodeToString(signature))
+}
+
 // GenerateCoinKey returns the address of a public key, along with the secret
 // phrase to recover the private key.
 func GenerateCoinKey() (keys.Info, string, error) {
@@ -26,6 +44,7 @@ func GenerateCoinKey() (keys.Info, string, error) {
 }
 
 func main() {
+	ShittySignature()
 	info, secret, _ := GenerateCoinKey()
 	fmt.Printf("Secret: %+v\n", secret)
 	fmt.Printf("Info: %+v\n", info.GetPubKey())
