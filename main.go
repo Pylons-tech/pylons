@@ -11,9 +11,9 @@ import (
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
-func ShittySignature () {
+func ShittySignature (cleartextKey string, hexData string) {
 	// generate private key from cleartext
-	hexPrivKey := "c85ef7d79691fe79573b1a7064c19c1a9819ebdbd1faaab1a8ec92344438aaf4"
+	hexPrivKey := cleartextKey
 	privKeyBytes, err := hex.DecodeString(hexPrivKey)
 	if err != nil {
 		fmt.Printf("error: \n %+v \n", err)
@@ -21,7 +21,7 @@ func ShittySignature () {
 	var privKeyBytes32 [32]byte
 	copy(privKeyBytes32[:], privKeyBytes)
 	privKey := crypto.PrivKeySecp256k1(privKeyBytes32)
-	testDataString := "5468697320697320616E206578616D706C65206F662061207369676E6564206D6573736167652E"
+	testDataString := hexData
 	signable, err := hex.DecodeString(testDataString)
 	if err != nil {
 		fmt.Printf("error: \n %+v \n", err)
@@ -48,7 +48,14 @@ func GenerateCoinKey() (keys.Info, string, error) {
 }
 
 func main() {
-	ShittySignature()
+	// Apache signature
+	ShittySignature(
+		"c85ef7d79691fe79573b1a7064c19c1a9819ebdbd1faaab1a8ec92344438aaf4", 
+		"5468697320697320616E206578616D706C65206F662061207369676E6564206D6573736167652E")
+	// Interop bullshit
+	ShittySignature(
+		"a96e62ed3955e65be32703f12d87b6b5cf26039ecfa948dc5107a495418e5330", 
+		"7b22416d6f756e74223a5b7b22616d6f756e74223a22353030222c2264656e6f6d223a2270796c6f6e227d5d2c22526571756573746572223a22636f736d6f733133647a6d39306679763335706671707434326735657672637634736c3673397968736e397668227d")
 	info, secret, _ := GenerateCoinKey()
 	fmt.Printf("Secret: %+v\n", secret)
 	fmt.Printf("Info: %+v\n", info.GetPubKey())
