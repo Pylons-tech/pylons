@@ -13,7 +13,7 @@ import (
 
 func ShittySignature () {
 	// generate private key from cleartext
-	hexPrivKey := "a96e62ed3955e65be32703f12d87b6b5cf26039ecfa948dc5107a495418e5330"
+	hexPrivKey := "c85ef7d79691fe79573b1a7064c19c1a9819ebdbd1faaab1a8ec92344438aaf4"
 	privKeyBytes, err := hex.DecodeString(hexPrivKey)
 	if err != nil {
 		fmt.Printf("error: \n %+v \n", err)
@@ -21,12 +21,16 @@ func ShittySignature () {
 	var privKeyBytes32 [32]byte
 	copy(privKeyBytes32[:], privKeyBytes)
 	privKey := crypto.PrivKeySecp256k1(privKeyBytes32)
-	signable := []byte{0}
+	testDataString := "5468697320697320616E206578616D706C65206F662061207369676E6564206D6573736167652E"
+	signable, err := hex.DecodeString(testDataString)
+	if err != nil {
+		fmt.Printf("error: \n %+v \n", err)
+	}
 	signature, err := privKey.Sign(signable)
 	if err != nil {
 		fmt.Printf("error: \n %+v \n", err)
 	}
-	fmt.Printf("test signature for cleartext key and [0]: \n %+v \n", hex.EncodeToString(signature))
+	fmt.Printf("test signature for cleartext key and test data: \n %+v \n", hex.EncodeToString(signature))
 }
 
 // GenerateCoinKey returns the address of a public key, along with the secret
