@@ -5,6 +5,8 @@ package txbuilder
 import (
 	"net/http"
 
+	"encoding/hex"
+
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
@@ -47,7 +49,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, sigs, signMsg.Memo)
 
 		gb := GPTxBuilder{
-			SignerBytes: string(msg.GetSignBytes()),
+			SignerBytes: hex.EncodeToString(msg.GetSignBytes()),
 			MsgJSON:     stdTx,
 		}
 		eGB, err := cdc.MarshalJSON(gb)
