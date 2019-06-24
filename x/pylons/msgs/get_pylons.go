@@ -43,5 +43,5 @@ func (msg MsgGetPylons) GetSignBytes() []byte {
 }
 
 func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Requester}
+	return []sdk.AccAddress{}
 }

@@ -49,7 +49,12 @@ func (tx StdTx) ValidateBasic() sdk.Error {
 	if tx.Fee.Amount.IsAnyNegative() {
 		return sdk.ErrInsufficientFee(fmt.Sprintf("invalid fee %s amount provided", tx.Fee.Amount))
 	}
-	if len(stdSigs) == 0 {
+
+	if tx.GetMsgs()[0].Type() == "get_pylons" {
+		return nil
+	}
+	
+	if (len(stdSigs) == 0) {
 		return sdk.ErrNoSignatures("no signers")
 	}
 	if len(stdSigs) != len(tx.GetSigners()) {
