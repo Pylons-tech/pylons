@@ -27,7 +27,7 @@ func (cbl CookbookList) String() string {
 	output := "CookbookList{"
 	for _, cb := range cbl.Cookbooks {
 		output += cb.String()
-		output += ","
+		output += ",\n"
 	}
 	output += "}"
 	return output
