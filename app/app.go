@@ -30,12 +30,13 @@ type PylonsApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
-	keyMain          *sdk.KVStoreKey
-	keyAccount       *sdk.KVStoreKey
-	keyPylons        *sdk.KVStoreKey
-	keyFeeCollection *sdk.KVStoreKey
-	keyParams        *sdk.KVStoreKey
-	tkeyParams       *sdk.TransientStoreKey
+	keyMain           *sdk.KVStoreKey
+	keyAccount        *sdk.KVStoreKey
+	keyPylonsCookbook *sdk.KVStoreKey
+	keyPylonsRecipe   *sdk.KVStoreKey
+	keyFeeCollection  *sdk.KVStoreKey
+	keyParams         *sdk.KVStoreKey
+	tkeyParams        *sdk.TransientStoreKey
 
 	accountKeeper       auth.AccountKeeper
 	bankKeeper          bank.Keeper
@@ -57,12 +58,13 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		BaseApp: bApp,
 		cdc:     cdc,
 
-		keyMain:          sdk.NewKVStoreKey("main"),
-		keyAccount:       sdk.NewKVStoreKey("acc"),
-		keyPylons:        sdk.NewKVStoreKey("pylons"),
-		keyFeeCollection: sdk.NewKVStoreKey("fee_collection"),
-		keyParams:        sdk.NewKVStoreKey("params"),
-		tkeyParams:       sdk.NewTransientStoreKey("transient_params"),
+		keyMain:           sdk.NewKVStoreKey("main"),
+		keyAccount:        sdk.NewKVStoreKey("acc"),
+		keyPylonsCookbook: sdk.NewKVStoreKey("pylons_cookbook"),
+		keyPylonsRecipe:   sdk.NewKVStoreKey("pylons_recipe"),
+		keyFeeCollection:  sdk.NewKVStoreKey("fee_collection"),
+		keyParams:         sdk.NewKVStoreKey("params"),
+		tkeyParams:        sdk.NewTransientStoreKey("transient_params"),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
@@ -90,7 +92,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 	// It handles interactions with the namestore
 	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
-		app.keyPylons,
+		app.keyPylonsCookbook,
+		app.keyPylonsRecipe,
 		app.cdc,
 	)
 
@@ -113,7 +116,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 	app.MountStores(
 		app.keyMain,
 		app.keyAccount,
-		app.keyPylons,
+		app.keyPylonsCookbook,
+		app.keyPylonsRecipe,
 		app.keyFeeCollection,
 		app.keyParams,
 		app.tkeyParams,

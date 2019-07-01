@@ -65,7 +65,7 @@ func (k Keeper) GetCookbooksIterator(ctx sdk.Context, sender sdk.AccAddress) sdk
 	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
 }
 
-// DeleteCookbook is usec to delete a cookbook based on the id
+// DeleteCookbook is used to delete a cookbook based on the id
 func (k Keeper) DeleteCookbook(ctx sdk.Context, id string) error {
 	store := ctx.KVStore(k.CookbookKey)
 
