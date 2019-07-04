@@ -13,6 +13,7 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/MikeSofaer/pylons/x/pylons"
+	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
@@ -97,8 +98,9 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		app.cdc,
 	)
 
-	// The AnteHandler handles signature verification and transaction pre-processing
-	app.SetAnteHandler(auth.NewAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
+	// The Custom AnteHandler handles signature verification and transaction pre-processing
+	// and gives an exception for get pylons message
+	app.SetAnteHandler(handlers.NewCustomAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
 	// The app.Router is the main transaction router where each module registers its routes
 	// Register the bank and pylons routes here
 	app.Router().
