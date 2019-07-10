@@ -79,6 +79,7 @@ func main() {
 	var pubKeyBytes33 [33]byte
 	copy(pubKeyBytes33[:], pubKeyBytes)
 	pubKey := crypto.PubKeySecp256k1(pubKeyBytes33)
+	pubKey.Address()
 
 	bech32PubKey := sdk.MustBech32ifyAccPub(pubKey)
 	fmt.Println("bech32PubKey:", bech32PubKey)
