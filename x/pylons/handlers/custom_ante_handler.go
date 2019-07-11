@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/tendermint/tendermint/libs/log"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/multisig"
@@ -29,7 +31,7 @@ func init() {
 // NewCustomAnteHandler returns an AnteHandler that checks and increments sequence
 // numbers, checks signatures & account numbers, and deducts fees from the first
 // signer and in case of a get pylons msg it tries to add the account first
-func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper) sdk.AnteHandler {
+func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper, logger log.Logger) sdk.AnteHandler {
 	return func(
 		ctx sdk.Context, tx sdk.Tx, simulate bool,
 	) (newCtx sdk.Context, res sdk.Result, abort bool) {
@@ -42,6 +44,7 @@ func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper) s
 			newCtx = auth.SetGasMeter(simulate, ctx, 0)
 			return newCtx, sdk.ErrInternal("tx must be StdTx").Result(), true
 		}
+		logger.Error("Reached Custom Ante Handler")
 		if len(stdTx.Msgs) > 0 && stdTx.Msgs[0].Type() == "get_pylons" && len(stdTx.Signatures) > 0 {
 			signerAddrs := stdTx.GetSigners()
 			// if the account doesnt exist we set it

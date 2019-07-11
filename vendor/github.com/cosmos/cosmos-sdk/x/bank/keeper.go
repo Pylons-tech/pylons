@@ -362,7 +362,7 @@ func delegateCoins(
 
 	acc := getAccount(ctx, ak, addr)
 	if acc == nil {
-		return nil, sdk.ErrUnknownAddress(fmt.Sprintf("account %s does not exist", addr))
+		return nil, sdk.ErrUnknownAddress(fmt.Sprintf("6 account %s does not exist", addr))
 	}
 
 	oldCoins := acc.GetCoins()
@@ -396,7 +396,7 @@ func undelegateCoins(
 
 	acc := getAccount(ctx, ak, addr)
 	if acc == nil {
-		return nil, sdk.ErrUnknownAddress(fmt.Sprintf("account %s does not exist", addr))
+		return nil, sdk.ErrUnknownAddress(fmt.Sprintf("7 account %s does not exist", addr))
 	}
 
 	if err := trackUndelegation(acc, amt); err != nil {

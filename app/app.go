@@ -61,7 +61,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 
 		keyMain:           sdk.NewKVStoreKey("main"),
 		keyAccount:        sdk.NewKVStoreKey("acc"),
-		keyPylonsCookbook: sdk.NewKVStoreKey("pylons_cookbook"),
+		keyPylonsCookbook: sdk.NewKVStoreKey("pylons"),
 		keyPylonsRecipe:   sdk.NewKVStoreKey("pylons_recipe"),
 		keyFeeCollection:  sdk.NewKVStoreKey("fee_collection"),
 		keyParams:         sdk.NewKVStoreKey("params"),
@@ -100,7 +100,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 
 	// The Custom AnteHandler handles signature verification and transaction pre-processing
 	// and gives an exception for get pylons message
-	app.SetAnteHandler(handlers.NewCustomAnteHandler(app.accountKeeper, app.feeCollectionKeeper))
+	app.SetAnteHandler(handlers.NewCustomAnteHandler(app.accountKeeper, app.feeCollectionKeeper, logger))
 	// The app.Router is the main transaction router where each module registers its routes
 	// Register the bank and pylons routes here
 	app.Router().
