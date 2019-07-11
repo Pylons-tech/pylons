@@ -44,17 +44,19 @@ func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper, l
 			newCtx = auth.SetGasMeter(simulate, ctx, 0)
 			return newCtx, sdk.ErrInternal("tx must be StdTx").Result(), true
 		}
-		logger.Info("Reached Custom Ante Handler")
+		logger.Error("Reached Custom Ante Handler")
 		if len(stdTx.Msgs) > 0 && stdTx.Msgs[0].Type() == "get_pylons" && len(stdTx.Signatures) > 0 {
-			signerAddrs := stdTx.GetSigners()
+			pubkey := stdTx.Signatures[0].PubKey
+			address := sdk.AccAddress(pubkey.Address().Bytes())
+			logger.Error(address.String() + " received")
 			// if the account doesnt exist we set it
-			if ak.GetAccount(ctx, signerAddrs[0]) == nil {
+			if ak.GetAccount(ctx, address) == nil {
 				acc := &auth.BaseAccount{
 					Sequence:      0,
 					Coins:         sdk.Coins{},
 					AccountNumber: ak.GetNextAccountNumber(ctx),
-					PubKey:        stdTx.Signatures[0].PubKey,
-					Address:       signerAddrs[0],
+					PubKey:        pubkey,
+					Address:       address,
 				}
 				ak.SetAccount(ctx, acc)
 			}
