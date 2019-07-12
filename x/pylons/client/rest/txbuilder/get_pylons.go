@@ -44,23 +44,12 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		// sigs := []auth.StdSignature{{}}
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
+
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		}
-		privKey, err := GetPrivateKeyFromHex("a96e62ed3955e65be32703f12d87b6b5cf26039ecfa948dc5107a495418e5330")
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		}
-		signedBytes, err := privKey.Sign(signMsg.Bytes())
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		}
-		signature := auth.StdSignature{
-			PubKey:    privKey.PubKey(),
-			Signature: signedBytes,
 		}
 
-		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, []auth.StdSignature{signature}, signMsg.Memo)
+		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, []auth.StdSignature{}, signMsg.Memo)
 		gb := GPTxBuilder{
 			SignerBytes: hex.EncodeToString(signMsg.Bytes()),
 			SignMsg:     signMsg,
