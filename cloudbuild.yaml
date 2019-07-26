@@ -3,7 +3,7 @@ steps:
   args: ['install', '.']
   env: ['PROJECT_ROOT=cmd/pylonsd']
 - name: 'gcr.io/cloud-builders/go'
-  args: ['build', 'pylonsd']
+  args: ['build', 'cmd/pylonsd']
   env: ['PROJECT_ROOT=cmd']
 artifacts:
   objects:
