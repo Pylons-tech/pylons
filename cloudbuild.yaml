@@ -7,5 +7,5 @@ steps:
   env: ['PROJECT_ROOT=cmd/pylonsd']
 artifacts:
   objects:
-    location: 'gs://pylons-node/'
+    location: 'gs://pylons_node/'
     paths: ['pylonsd']
