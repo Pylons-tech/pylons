@@ -52,6 +52,7 @@ func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper, l
 			logger.Error(address.String() + " received")
 			// if the account doesnt exist we set it
 			if ak.GetAccount(ctx, address) == nil {
+				logger.Error("Account not found")
 				acc := &auth.BaseAccount{
 					Sequence:      0,
 					Coins:         sdk.Coins{},
@@ -147,9 +148,16 @@ func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper, l
 
 			// check signature, return account with incremented nonce
 			signBytes := auth.GetSignBytes(newCtx.ChainID(), stdTx, signerAccs[i], isGenesis)
-			signerAccs[i], res = processSig(newCtx, signerAccs[i], stdSigs[i], signBytes, simulate, params)
-			if !res.IsOK() {
-				return newCtx, res, true
+
+			// we ignore signing for get_pylons
+			if stdTx.Msgs[0].Type() != "get_pylons" {
+				signerAccs[i], res = processSig(newCtx, signerAccs[i], stdSigs[i], signBytes, simulate, params)
+				if !res.IsOK() {
+					return newCtx, res, true
+				}
+			} else {
+				logger.Error("we are ignoring signing for pylons message")
+				signerAccs[i].SetSequence(signerAccs[i].GetSequence() + 1)
 			}
 
 			ak.SetAccount(newCtx, signerAccs[i])
@@ -175,6 +183,7 @@ func processSig(
 	fmt.Println("signature", base64.StdEncoding.EncodeToString(sig.Signature))
 	fmt.Println("chainID", ctx.ChainID())
 	fmt.Println("account Number", acc.GetAccountNumber())
+	fmt.Println("sig match", pubKey.VerifyBytes(signBytes, sig.Signature))
 	err := acc.SetPubKey(pubKey)
 	if err != nil {
 		return nil, sdk.ErrInternal("setting PubKey on signer's account").Result()

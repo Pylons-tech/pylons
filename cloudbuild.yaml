@@ -1,0 +1,14 @@
+steps:
+- name: 'gcr.io/cloud-builders/go'
+  args: ['install', '.']
+  env: ['PROJECT_ROOT=cmd/pylonsd']
+- name: 'gcr.io/cloud-builders/go'
+  args: ['build', '.']
+  env: ['PROJECT_ROOT=cmd/pylonsd']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['app', 'deploy']
+timeout: '1600s'
+artifacts:
+  objects:
+    location: 'gs://pylons_node/'
+    paths: ['pylonsd']
