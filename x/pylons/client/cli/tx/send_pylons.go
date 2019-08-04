@@ -37,16 +37,22 @@ func SendPylons(cdc *codec.Codec) *cobra.Command {
 				return errors.New("cannot get the keys from home")
 			}
 
-			info, err := kb.Get(args[0])
+			var addr sdk.AccAddress
+			addr, err = sdk.AccAddressFromBech32(args[0])
+			// if its not an address
 			if err != nil {
-				return err
+				info, err := kb.Get(args[0])
+				if err != nil {
+					return err
+				}
+				addr = info.GetAddress()
 			}
 
 			amount, err := strconv.Atoi(args[1])
 			if err != nil {
 				return err
 			}
-			msg := msgs.NewMsgSendPylons(types.NewPylon(int64(amount)), cliCtx.GetFromAddress(), info.GetAddress())
+			msg := msgs.NewMsgSendPylons(types.NewPylon(int64(amount)), cliCtx.GetFromAddress(), addr)
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err
