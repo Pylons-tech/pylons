@@ -2,3 +2,4 @@ pylonsd
 pylonscli
 .vscode
 main
+*.exe
