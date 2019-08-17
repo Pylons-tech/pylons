@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	// "github.com/MikeSofaer/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
