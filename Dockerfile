@@ -19,12 +19,12 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN go build cmd/pylonsd/main.go
+RUN go build ./cmd/pylonsd/
 
-RUN ./main init --chain-id pylonschain
+RUN ./pylonsd init --chain-id pylonschain
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["./main start"]
+CMD ["./pylonsd start"]

@@ -9,5 +9,6 @@ import (
 func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(msgs.MsgGetPylons{}, "pylons/GetPylons", nil)
 	cdc.RegisterConcrete(msgs.MsgSendPylons{}, "pylons/SendPylons", nil)
-
+	cdc.RegisterConcrete(msgs.MsgCreateCookbook{}, "pylons/CreateCookbook", nil)
+	cdc.RegisterConcrete(msgs.MsgUpdateCookbook{}, "pylons/UpdateCookbook", nil)
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 
@@ -95,7 +96,10 @@ func main() {
 	fmt.Println("HEHEHEHEH", tmp["privkey.armor"])
 	// lif := info.
 	privKey, err := mintkey.UnarmorDecryptPrivKey(tmp["privkey.armor"].(string), "jack1234")
-	fmt.Println("PrivKey", hex.EncodeToString(privKey.Bytes()), sdk.AccAddress(privKey.PubKey().Bytes()).String())
+	fmt.Println("PrivKey", privKey, sdk.AccAddress(privKey.PubKey().Bytes()).String())
+	tx, _ := privKey.Sign([]byte("{}"))
+	fmt.Println(hex.EncodeToString(tx))
+	fmt.Println(base64.RawStdEncoding.EncodeToString(tx))
 }
 
 // localInfo is the public information about a locally stored key
