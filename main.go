@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 
-	"encoding/base64"
+	// "encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 
 	clkeys "github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/mintkey"
+	// "github.com/cosmos/cosmos-sdk/crypto/keys/mintkey"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
@@ -93,13 +93,13 @@ func main() {
 	ttt, _ := json.Marshal(infott)
 	tmp := make(map[string]interface{})
 	json.Unmarshal(ttt, &tmp)
-	fmt.Println("HEHEHEHEH", tmp["privkey.armor"])
+	// fmt.Println("HEHEHEHEH", tmp["privkey.armor"])
 	// lif := info.
-	privKey, err := mintkey.UnarmorDecryptPrivKey(tmp["privkey.armor"].(string), "jack1234")
-	fmt.Println("PrivKey", privKey, sdk.AccAddress(privKey.PubKey().Bytes()).String())
-	tx, _ := privKey.Sign([]byte("{}"))
-	fmt.Println(hex.EncodeToString(tx))
-	fmt.Println(base64.RawStdEncoding.EncodeToString(tx))
+	// privKey, err := mintkey.UnarmorDecryptPrivKey(tmp["privkey.armor"].(string), "jack1234")
+	// fmt.Println("PrivKey", privKey, sdk.AccAddress(privKey.PubKey().Bytes()).String())
+	// tx, _ := privKey.Sign([]byte("{}"))
+	// fmt.Println(hex.EncodeToString(tx))
+	// fmt.Println(base64.RawStdEncoding.EncodeToString(tx))
 }
 
 // localInfo is the public information about a locally stored key
