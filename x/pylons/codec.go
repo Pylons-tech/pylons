@@ -11,4 +11,6 @@ func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(msgs.MsgSendPylons{}, "pylons/SendPylons", nil)
 	cdc.RegisterConcrete(msgs.MsgCreateCookbook{}, "pylons/CreateCookbook", nil)
 	cdc.RegisterConcrete(msgs.MsgUpdateCookbook{}, "pylons/UpdateCookbook", nil)
+	cdc.RegisterConcrete(msgs.MsgCreateRecipe{}, "pylons/CreateRecipe", nil)
+
 }
