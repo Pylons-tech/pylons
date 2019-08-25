@@ -14,17 +14,19 @@ type Recipe struct {
 	ID            string // the recipe guid
 	Inputs        InputList
 	Outputs       OutputList
+	Description   string
 	ExecutionTime int64
 	Sender        sdk.AccAddress
 }
 
-func NewRecipe(recipeName, cookbookName string, inputs InputList, outputs OutputList, execTime int64) Recipe {
+func NewRecipe(recipeName, cookbookName, description string, inputs InputList, outputs OutputList, execTime int64) Recipe {
 	rcp := Recipe{
 		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
 		Inputs:        inputs,
 		Outputs:       outputs,
 		ExecutionTime: execTime,
+		Description:   description,
 	}
 
 	rcp.ID = rcp.KeyGen()
