@@ -9,6 +9,7 @@ import (
 
 // MsgCreateRecipe defines a SetName message
 type MsgCreateRecipe struct {
+	RecipeName    string
 	CookbookName  string // the cookbook guid
 	ID            string // the recipe guid
 	Inputs        types.InputList
@@ -19,9 +20,9 @@ type MsgCreateRecipe struct {
 }
 
 // NewMsgCreateRecipe a constructor for CreateCookbook msg
-func NewMsgCreateRecipe(cookbookName, id, description string, inputs types.InputList, outputs types.OutputList, sender sdk.AccAddress) MsgCreateRecipe {
+func NewMsgCreateRecipe(recipeName, cookbookName, description string, inputs types.InputList, outputs types.OutputList, sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
-		ID:            id,
+		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
 		Description:   description,
 		Inputs:        inputs,

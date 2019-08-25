@@ -10,6 +10,7 @@ import (
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
 	CookbookName  string // the cookbook guid
+	RecipeName    string
 	ID            string // the recipe guid
 	Inputs        InputList
 	Outputs       OutputList
@@ -17,18 +18,22 @@ type Recipe struct {
 	Sender        sdk.AccAddress
 }
 
-func NewRecipe(cookbookName string, ID string, inputs InputList, outputs OutputList, execTime int64) Recipe {
-	return Recipe{
+func NewRecipe(recipeName, cookbookName string, inputs InputList, outputs OutputList, execTime int64) Recipe {
+	rcp := Recipe{
+		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
-		ID:            ID,
 		Inputs:        inputs,
 		Outputs:       outputs,
 		ExecutionTime: execTime,
 	}
+
+	rcp.ID = rcp.KeyGen()
+	return rcp
 }
 
 func (rcp *Recipe) String() string {
 	return fmt.Sprintf(`Recipe{
+		RecipeName: %s,
 		CookbookName: %s,
 		ID: %s,
 		Inputs: %s,
@@ -42,4 +47,3 @@ func (rc Recipe) KeyGen() string {
 	id := uuid.New()
 	return rc.Sender.String() + id.String()
 }
-

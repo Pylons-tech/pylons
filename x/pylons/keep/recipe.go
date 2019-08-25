@@ -19,7 +19,7 @@ func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
 	}
 
 	store := ctx.KVStore(k.RecipeKey)
-	store.Set([]byte(recipe.KeyGen()), mr)
+	store.Set([]byte(recipe.ID), mr)
 	return nil
 }
 
