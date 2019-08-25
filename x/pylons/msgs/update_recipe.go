@@ -36,7 +36,7 @@ func NewMsgUpdateRecipe(cookbookName, id, description string, inputs types.Input
 func (msg MsgUpdateRecipe) Route() string { return "pylons" }
 
 // Type should return the action
-func (msg MsgUpdateRecipe) Type() string { return "create_recipe" }
+func (msg MsgUpdateRecipe) Type() string { return "update_recipe" }
 
 // ValidateBasic validates the Msg
 func (msg MsgUpdateRecipe) ValidateBasic() sdk.Error {
