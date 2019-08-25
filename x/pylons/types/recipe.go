@@ -41,7 +41,7 @@ func (rcp *Recipe) String() string {
 		Inputs: %s,
 		Outputs: %s,
 		ExecutionTIme: %d,
-	}`, rcp.CookbookName, rcp.ID, rcp.Inputs.String(), rcp.Outputs.String(), rcp.ExecutionTime)
+	}`, rcp.RecipeName, rcp.CookbookName, rcp.ID, rcp.Inputs.String(), rcp.Outputs.String(), rcp.ExecutionTime)
 }
 
 // KeyGen generates key for the store
