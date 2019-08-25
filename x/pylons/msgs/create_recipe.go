@@ -11,7 +11,6 @@ import (
 type MsgCreateRecipe struct {
 	RecipeName    string
 	CookbookName  string // the cookbook guid
-	ID            string // the recipe guid
 	Inputs        types.InputList
 	Outputs       types.OutputList
 	ExecutionTime int64

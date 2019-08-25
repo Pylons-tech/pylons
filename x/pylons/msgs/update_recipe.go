@@ -20,8 +20,9 @@ type MsgUpdateRecipe struct {
 }
 
 // NewMsgUpdateRecipe a constructor for CreateCookbook msg
-func NewMsgUpdateRecipe(cookbookName, id, description string, inputs types.InputList, outputs types.OutputList, sender sdk.AccAddress) MsgUpdateRecipe {
+func NewMsgUpdateRecipe(recipeName, cookbookName, id, description string, inputs types.InputList, outputs types.OutputList, sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
+		RecipeName:    recipeName,
 		ID:            id,
 		CookbookName:  cookbookName,
 		Description:   description,

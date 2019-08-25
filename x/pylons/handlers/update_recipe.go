@@ -37,5 +37,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 		return sdk.ErrInternal(err.Error()).Result()
 	}
 
+
+
 	return sdk.Result{}
 }
