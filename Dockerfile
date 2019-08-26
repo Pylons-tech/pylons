@@ -23,8 +23,11 @@ RUN go build ./cmd/pylonsd/
 
 RUN ./pylonsd init --chain-id pylonschain
 
+RUN go build ./cmd/pylonscli/
+
 # Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["/app/pylonsd", "start"]
+RUN /app/pylonsd start &
+CMD ["/app/pylonscli", "rest-server", "--chain-id", "pylonschain", "--trust-node", "--cors", "*", "--laddr", "tcp://0.0.0.0:8080"]
