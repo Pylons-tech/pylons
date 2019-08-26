@@ -38,8 +38,8 @@ func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 	return recipe, nil
 }
 
-// GetRecipeIterator returns an iterator for all the iterator
-func (k Keeper) GetRecipeIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+// GetRecipiesIterator returns an iterator for all the iterator
+func (k Keeper) GetRecipiesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
 	store := ctx.KVStore(k.RecipeKey)
 	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
 }

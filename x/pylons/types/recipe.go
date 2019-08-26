@@ -19,6 +19,21 @@ type Recipe struct {
 	Sender        sdk.AccAddress
 }
 
+// RecipeList is a list of cookbook
+type RecipeList struct {
+	Recipies []Recipe
+}
+
+func (cbl RecipeList) String() string {
+	output := "RecipeList{"
+	for _, cb := range cbl.Recipies {
+		output += cb.String()
+		output += ",\n"
+	}
+	output += "}"
+	return output
+}
+
 func NewRecipe(recipeName, cookbookName, description string, inputs InputList, outputs OutputList, execTime int64) Recipe {
 	rcp := Recipe{
 		RecipeName:    recipeName,

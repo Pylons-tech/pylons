@@ -16,6 +16,7 @@ const (
 	// DefaultCoinPerRequest is the number of coins the faucet sends per req
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
+	ownerKeyName          = "ownerKey"
 )
 
 // RegisterRoutes adds routes
@@ -38,4 +39,6 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		pylonsSendHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_recipies/{%s}", storeName, ownerKeyName),
+		listRecipiesHandler(cdc, cliCtx, storeName)).Methods("GET")
 }
