@@ -30,3 +30,21 @@ func (ipl InputList) String() string {
 	return output
 
 }
+
+// Equal compares two inputlists
+func (ipl InputList) Equal(other InputList) bool {
+	for _, inp := range ipl {
+		found := false
+		for _, oinp := range other {
+			if oinp.Item == inp.Item && oinp.Count == inp.Count {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+
+	return true
+}
