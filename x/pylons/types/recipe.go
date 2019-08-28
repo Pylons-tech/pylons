@@ -34,7 +34,7 @@ func (cbl RecipeList) String() string {
 	return output
 }
 
-func NewRecipe(recipeName, cookbookName, description string, inputs InputList, outputs OutputList, execTime int64) Recipe {
+func NewRecipe(recipeName, cookbookName, description string, inputs InputList, outputs OutputList, execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
@@ -42,6 +42,7 @@ func NewRecipe(recipeName, cookbookName, description string, inputs InputList, o
 		Outputs:       outputs,
 		ExecutionTime: execTime,
 		Description:   description,
+		Sender:        sender,
 	}
 
 	rcp.ID = rcp.KeyGen()
