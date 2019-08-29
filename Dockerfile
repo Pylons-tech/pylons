@@ -25,4 +25,3 @@ RUN ./pylonsd init --chain-id pylonschain
 
 # Command to run the executable
 CMD ["/app/pylonsd", "start"]
-CMD ["/app/pylonscli", "rest-server", "--chain-id", "pylonschain", "--trust-node", "--cors", "*", "--laddr", "tcp://0.0.0.0:8080"]
