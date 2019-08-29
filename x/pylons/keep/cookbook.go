@@ -13,7 +13,7 @@ import (
 func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
 
 	if cookbook.Sender.Empty() {
-		return errors.New("the sender cannot be empty")
+		return errors.New("SetCookbook: the sender cannot be empty")
 
 	}
 	mCB, err := k.Cdc.MarshalBinaryBare(cookbook)
@@ -43,7 +43,7 @@ func (k Keeper) GetCookbook(ctx sdk.Context, id string) (types.Cookbook, error) 
 // UpdateCookbook is used to update the cookbook using the id
 func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbook) error {
 	if cookbook.Sender.Empty() {
-		return errors.New("the sender cannot be empty")
+		return errors.New("UpdateCookbook: the sender cannot be empty")
 
 	}
 	store := ctx.KVStore(k.CookbookKey)

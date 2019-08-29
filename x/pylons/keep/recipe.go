@@ -11,7 +11,7 @@ import (
 // SetRecipe sets a recipe in the key store
 func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
 	if recipe.Sender.Empty() {
-		return errors.New("the sender cannot be empty")
+		return errors.New("SetRecipe: the sender cannot be empty")
 	}
 	mr, err := k.Cdc.MarshalBinaryBare(recipe)
 	if err != nil {
@@ -47,7 +47,7 @@ func (k Keeper) GetRecipiesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.
 // UpdateRecipe is used to update the recipe using the id
 func (k Keeper) UpdateRecipe(ctx sdk.Context, id string, recipe types.Recipe) error {
 	if recipe.Sender.Empty() {
-		return errors.New("the sender cannot be empty")
+		return errors.New("UpdateRecipe: the sender cannot be empty")
 
 	}
 	store := ctx.KVStore(k.RecipeKey)
