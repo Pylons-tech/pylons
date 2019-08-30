@@ -26,12 +26,12 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
-	if !recipe.Inputs.Equal(msg.Inputs) {
+	if !recipe.CoinInputs.Equal(msg.CoinInputs) {
 		return sdk.ErrInternal("the items provided for the recipe dont match the system").Result()
 	}
 
 	var cl sdk.Coins
-	for _, inp := range recipe.Inputs {
+	for _, inp := range recipe.CoinInputs {
 		cl = append(cl, sdk.NewCoin(inp.Item, sdk.NewInt(inp.Count)))
 	}
 

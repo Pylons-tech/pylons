@@ -12,7 +12,7 @@ type MsgUpdateRecipe struct {
 	RecipeName    string
 	CookbookName  string // the cookbook guid
 	ID            string // the recipe guid
-	Inputs        types.InputList
+	CoinInputs    types.CoinInputList
 	Outputs       types.OutputList
 	ExecutionTime int64
 	Sender        sdk.AccAddress
@@ -20,13 +20,13 @@ type MsgUpdateRecipe struct {
 }
 
 // NewMsgUpdateRecipe a constructor for CreateCookbook msg
-func NewMsgUpdateRecipe(recipeName, cookbookName, id, description string, inputs types.InputList, outputs types.OutputList, sender sdk.AccAddress) MsgUpdateRecipe {
+func NewMsgUpdateRecipe(recipeName, cookbookName, id, description string, inputs types.CoinInputList, outputs types.OutputList, sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		RecipeName:    recipeName,
 		ID:            id,
 		CookbookName:  cookbookName,
 		Description:   description,
-		Inputs:        inputs,
+		CoinInputs:    inputs,
 		Outputs:       outputs,
 		ExecutionTime: 0,
 		Sender:        sender,

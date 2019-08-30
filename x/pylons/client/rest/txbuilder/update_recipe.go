@@ -26,8 +26,8 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol", types.InputList{
-			types.Input{
+		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol", types.CoinInputList{
+			types.CoinInput{
 				Item:  "Wood",
 				Count: 5,
 			},

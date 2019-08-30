@@ -26,8 +26,8 @@ func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgExecuteRecipe("id0001", types.InputList{
-			types.Input{
+		msg := msgs.NewMsgExecuteRecipe("id0001", types.CoinInputList{
+			types.CoinInput{
 				Item:  "Wood",
 				Count: 5,
 			},

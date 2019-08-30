@@ -12,14 +12,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 )
 
-type testInput struct {
+type testCoinInput struct {
 	cdc *codec.Codec
 	ctx sdk.Context
 	ak  auth.AccountKeeper
 	pk  params.Keeper
 }
 
-func setupTestInput() testInput {
+func setupTestCoinInput() testCoinInput {
 	db := dbm.NewMemDB()
 
 	cdc := codec.New()
@@ -45,5 +45,5 @@ func setupTestInput() testInput {
 
 	ak.SetParams(ctx, auth.DefaultParams())
 
-	return testInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk}
+	return testCoinInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk}
 }

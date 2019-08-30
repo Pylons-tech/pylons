@@ -4,23 +4,23 @@ import (
 	"fmt"
 )
 
-// Input is the game elements that are needs as inputs to a recipe
-type Input struct {
+// CoinInput is the game elements that are needs as inputs to a recipe
+type CoinInput struct {
 	Item  string
 	Count int64
 }
 
-func (ip Input) String() string {
-	return fmt.Sprintf(`Input{
+func (ip CoinInput) String() string {
+	return fmt.Sprintf(`CoinInput{
 		Item: %s,
 		Count: %d,
 		}`, ip.Item, ip.Count)
 }
 
-type InputList []Input
+type CoinInputList []CoinInput
 
-func (ipl InputList) String() string {
-	output := "InputList{"
+func (ipl CoinInputList) String() string {
+	output := "CoinInputList{"
 
 	for _, input := range ipl {
 		output += input.String() + ",\n"
@@ -32,7 +32,7 @@ func (ipl InputList) String() string {
 }
 
 // Equal compares two inputlists
-func (ipl InputList) Equal(other InputList) bool {
+func (ipl CoinInputList) Equal(other CoinInputList) bool {
 	for _, inp := range ipl {
 		found := false
 		for _, oinp := range other {
