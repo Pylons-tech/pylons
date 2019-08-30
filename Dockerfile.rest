@@ -24,4 +24,4 @@ RUN go build ./cmd/pylonscli/
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["/app/pylonscli", "rest-server", "--chain-id", "pylonschain", "--trust-node", "--cors", "*", "--laddr", "tcp://0.0.0.0:8080"]
+CMD ["/app/pylonscli", "rest-server", "--chain-id", "pylonschain", "--trust-node", "--cors", "*", "--laddr", "tcp://0.0.0.0:8080", "--node", "tcp://node:26657"]
