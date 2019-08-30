@@ -8,14 +8,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// DisableRecipeResp is the response for executeRecipe
-type DisableRecipeResp struct {
+// EnableRecipeResp is the response for executeRecipe
+type EnableRecipeResp struct {
 	Message string
 	Status  string
 }
 
-// HandlerMsgDisableRecipe is used to create cookbook by a developer
-func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDisableRecipe) sdk.Result {
+// HandlerMsgEnableRecipe is used to create cookbook by a developer
+func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnableRecipe) sdk.Result {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -26,15 +26,15 @@ func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDi
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
-	recipe.Disabled = true
+	recipe.Disabled = false
 
 	err2 = keeper.UpdateRecipe(ctx, msg.RecipeID, recipe)
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
-	resp, err2 := json.Marshal(DisableRecipeResp{
-		Message: "successfully disabled the recipe",
+	resp, err2 := json.Marshal(EnableRecipeResp{
+		Message: "successfully enabled the recipe",
 		Status:  "Success",
 	})
 

@@ -30,6 +30,8 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 			return handlers.HandlerMsgExecuteRecipe(ctx, keeper, msg)
 		case msgs.MsgDisableRecipe:
 			return handlers.HandlerMsgDisableRecipe(ctx, keeper, msg)
+		case msgs.MsgEnableRecipe:
+			return handlers.HandlerMsgEnableRecipe(ctx, keeper, msg)
 		default:
 			errMsg := fmt.Sprintf("unrecognized pylons Msg type: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
