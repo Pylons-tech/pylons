@@ -31,8 +31,8 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 				Item:  "Wood",
 				Count: 5,
 			},
-		}, types.OutputList{
-			types.Output{
+		}, types.CoinOutputList{
+			types.CoinOutput{
 				Item:  "Chair",
 				Count: 1,
 			},

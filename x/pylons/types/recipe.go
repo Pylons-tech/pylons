@@ -13,7 +13,7 @@ type Recipe struct {
 	RecipeName    string
 	ID            string // the recipe guid
 	CoinInputs        CoinInputList
-	Outputs       OutputList
+	CoinOutputs       CoinOutputList
 	Description   string
 	ExecutionTime int64
 	Sender        sdk.AccAddress
@@ -35,12 +35,12 @@ func (cbl RecipeList) String() string {
 	return output
 }
 
-func NewRecipe(recipeName, cookbookName, description string, inputs CoinInputList, outputs OutputList, execTime int64, sender sdk.AccAddress) Recipe {
+func NewRecipe(recipeName, cookbookName, description string, inputs CoinInputList, outputs CoinOutputList, execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
 		CoinInputs:        inputs,
-		Outputs:       outputs,
+		CoinOutputs:       outputs,
 		ExecutionTime: execTime,
 		Description:   description,
 		Sender:        sender,
@@ -56,9 +56,9 @@ func (rcp *Recipe) String() string {
 		CookbookName: %s,
 		ID: %s,
 		CoinInputs: %s,
-		Outputs: %s,
+		CoinOutputs: %s,
 		ExecutionTIme: %d,
-	}`, rcp.RecipeName, rcp.CookbookName, rcp.ID, rcp.CoinInputs.String(), rcp.Outputs.String(), rcp.ExecutionTime)
+	}`, rcp.RecipeName, rcp.CookbookName, rcp.ID, rcp.CoinInputs.String(), rcp.CoinOutputs.String(), rcp.ExecutionTime)
 }
 
 // KeyGen generates key for the store

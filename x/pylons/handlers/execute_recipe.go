@@ -42,7 +42,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	// output coins to the sender
 	var ocl sdk.Coins
 
-	for _, out := range recipe.Outputs {
+	for _, out := range recipe.CoinOutputs {
 		ocl = append(ocl, sdk.NewCoin(out.Item, sdk.NewInt(out.Count)))
 	}
 
