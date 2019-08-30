@@ -27,6 +27,7 @@ const (
 	appName = "pylons"
 )
 
+// PylonsApp is the top level pylons app
 type PylonsApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec

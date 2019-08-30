@@ -12,8 +12,8 @@ type Recipe struct {
 	CookbookName  string // the cookbook guid
 	RecipeName    string
 	ID            string // the recipe guid
-	CoinInputs        CoinInputList
-	CoinOutputs       CoinOutputList
+	CoinInputs    CoinInputList
+	CoinOutputs   CoinOutputList
 	Description   string
 	ExecutionTime int64
 	Sender        sdk.AccAddress
@@ -39,8 +39,8 @@ func NewRecipe(recipeName, cookbookName, description string, inputs CoinInputLis
 	rcp := Recipe{
 		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
-		CoinInputs:        inputs,
-		CoinOutputs:       outputs,
+		CoinInputs:    inputs,
+		CoinOutputs:   outputs,
 		ExecutionTime: execTime,
 		Description:   description,
 		Sender:        sender,

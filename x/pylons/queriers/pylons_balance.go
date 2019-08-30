@@ -12,6 +12,7 @@ const (
 	KeyPylonsBalance = "balance"
 )
 
+// PylonsBalance provides balances in pylons
 func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) (res []byte, err sdk.Error) {
 	addr := path[0]
 	accAddr, err1 := sdk.AccAddressFromBech32(addr)
