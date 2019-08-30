@@ -24,4 +24,4 @@ RUN go build ./cmd/pylonsd/
 RUN ./pylonsd init --chain-id pylonschain
 
 # Command to run the executable
-CMD ["/app/pylonsd", "start", "--laddr", "0.0.0.0:26657"]
+CMD ["/app/pylonsd", "start", "--rpc.laddr", "0.0.0.0:26657"]
