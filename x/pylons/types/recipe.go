@@ -17,6 +17,7 @@ type Recipe struct {
 	Description   string
 	ExecutionTime int64
 	Sender        sdk.AccAddress
+	Disabled      bool
 }
 
 // RecipeList is a list of cookbook

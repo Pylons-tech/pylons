@@ -17,8 +17,9 @@ type MsgExecuteRecipe struct {
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
 func NewMsgExecuteRecipe(recipeID string, inputs types.InputList, sender sdk.AccAddress) MsgExecuteRecipe {
 	return MsgExecuteRecipe{
-		Inputs: inputs,
-		Sender: sender,
+		RecipeID: recipeID,
+		Inputs:   inputs,
+		Sender:   sender,
 	}
 }
 
