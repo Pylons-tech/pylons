@@ -28,12 +28,12 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 
 		msg := msgs.NewMsgCreateRecipe("name", "id001", "this has to meet character limits lol", types.CoinInputList{
 			types.CoinInput{
-				Item:  "Wood",
+				Coin:  "Wood",
 				Count: 5,
 			},
 		}, types.CoinOutputList{
 			types.CoinOutput{
-				Item:  "Chair",
+				Coin:  "Chair",
 				Count: 1,
 			},
 		}, sender)

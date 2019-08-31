@@ -4,15 +4,15 @@ import "fmt"
 
 // CoinOutput is the game elements that are needs as output to a recipe
 type CoinOutput struct {
-	Item  string
+	Coin  string
 	Count int64
 }
 
 func (op CoinOutput) String() string {
 	return fmt.Sprintf(`CoinOutput{
-		Item: %s,
+		Coin: %s,
 		Count: %d,
-		}`, op.Item, op.Count)
+		}`, op.Coin, op.Count)
 }
 
 // CoinOutputList is the list of outputs

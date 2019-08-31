@@ -32,7 +32,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 	var cl sdk.Coins
 	for _, inp := range recipe.CoinInputs {
-		cl = append(cl, sdk.NewCoin(inp.Item, sdk.NewInt(inp.Count)))
+		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
@@ -43,7 +43,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	var ocl sdk.Coins
 
 	for _, out := range recipe.CoinOutputs {
-		ocl = append(ocl, sdk.NewCoin(out.Item, sdk.NewInt(out.Count)))
+		ocl = append(ocl, sdk.NewCoin(out.Coin, sdk.NewInt(out.Count)))
 	}
 
 	// TODO: send the coins to a master address instead of burning them

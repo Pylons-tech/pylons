@@ -6,17 +6,18 @@ import (
 
 // CoinInput is the game elements that are needs as inputs to a recipe
 type CoinInput struct {
-	Item  string
+	Coin  string
 	Count int64
 }
 
 func (ip CoinInput) String() string {
 	return fmt.Sprintf(`CoinInput{
-		Item: %s,
+		Coin: %s,
 		Count: %d,
-		}`, ip.Item, ip.Count)
+		}`, ip.Coin, ip.Count)
 }
 
+// CoinInputList is a list of Coin inputs
 type CoinInputList []CoinInput
 
 func (ipl CoinInputList) String() string {
@@ -36,7 +37,7 @@ func (ipl CoinInputList) Equal(other CoinInputList) bool {
 	for _, inp := range ipl {
 		found := false
 		for _, oinp := range other {
-			if oinp.Item == inp.Item && oinp.Count == inp.Count {
+			if oinp.Coin == inp.Coin && oinp.Count == inp.Count {
 				found = true
 				break
 			}

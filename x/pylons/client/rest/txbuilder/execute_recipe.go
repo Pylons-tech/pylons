@@ -28,7 +28,7 @@ func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 		msg := msgs.NewMsgExecuteRecipe("id0001", types.CoinInputList{
 			types.CoinInput{
-				Item:  "Wood",
+				Coin:  "Wood",
 				Count: 5,
 			},
 		}, sender)
