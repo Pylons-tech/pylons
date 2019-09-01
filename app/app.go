@@ -36,6 +36,7 @@ type PylonsApp struct {
 	keyAccount        *sdk.KVStoreKey
 	keyPylonsCookbook *sdk.KVStoreKey
 	keyPylonsRecipe   *sdk.KVStoreKey
+	keyPylonsItem     *sdk.KVStoreKey
 	keyFeeCollection  *sdk.KVStoreKey
 	keyParams         *sdk.KVStoreKey
 	tkeyParams        *sdk.TransientStoreKey
@@ -64,6 +65,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		keyAccount:        sdk.NewKVStoreKey("acc"),
 		keyPylonsCookbook: sdk.NewKVStoreKey("pylons"),
 		keyPylonsRecipe:   sdk.NewKVStoreKey("pylons_recipe"),
+		keyPylonsItem:     sdk.NewKVStoreKey("pylons_item"),
 		keyFeeCollection:  sdk.NewKVStoreKey("fee_collection"),
 		keyParams:         sdk.NewKVStoreKey("params"),
 		tkeyParams:        sdk.NewTransientStoreKey("transient_params"),
