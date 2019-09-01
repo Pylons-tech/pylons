@@ -98,6 +98,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		app.bankKeeper,
 		app.keyPylonsCookbook,
 		app.keyPylonsRecipe,
+		app.keyPylonsItem,
 		app.cdc,
 	)
 
