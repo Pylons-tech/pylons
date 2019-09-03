@@ -57,6 +57,28 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 	// Item transaction
 
+	for _, item := range recipe.ItemInputs {
+		if !item.Sender.Equals(msg.Sender) {
+			return sdk.ErrInternal("item owner is not same as sender").Result()
+		}
+
+		storedItem, err := keeper.GetItem(ctx, item.ID)
+		if err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
+		if !storedItem.Equals(*item.Item) {
+			return sdk.ErrInternal("stored state is different from recipe").Result()
+		}
+	}
+
+	// TODO: validate 1-1 correspondence for item input and output - check ids
+
+	for _, item := range recipe.ItemOutputs {
+		if err := keeper.SetItem(ctx, *item.Item); err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
+	}
+
 	resp, err2 := json.Marshal(ExecuteRecipeResp{
 		Message: "successfully executed the recipe",
 		Status:  "Success",
