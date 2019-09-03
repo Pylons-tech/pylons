@@ -30,6 +30,8 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	rc.CookbookName = msg.CookbookName
 	rc.CoinInputs = msg.CoinInputs
 	rc.CoinOutputs = msg.CoinOutputs
+	rc.ItemInputs = msg.ItemInputs
+	rc.ItemOutputs = msg.ItemOutputs
 	rc.ExecutionTime = msg.ExecutionTime
 	rc.RecipeName = msg.RecipeName
 
