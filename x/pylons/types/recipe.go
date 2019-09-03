@@ -14,6 +14,8 @@ type Recipe struct {
 	ID            string // the recipe guid
 	CoinInputs    CoinInputList
 	CoinOutputs   CoinOutputList
+	ItemInputs    ItemInputList
+	ItemOutputs   ItemOutputList
 	Description   string
 	ExecutionTime int64
 	Sender        sdk.AccAddress
@@ -35,12 +37,15 @@ func (cbl RecipeList) String() string {
 	return output
 }
 
-func NewRecipe(recipeName, cookbookName, description string, inputs CoinInputList, outputs CoinOutputList, execTime int64, sender sdk.AccAddress) Recipe {
+// NewRecipe creates a new recipe
+func NewRecipe(recipeName, cookbookName, description string,
+	coinInputs CoinInputList, coinOutputs CoinOutputList, itemInputs ItemInputList, itemOutputs ItemOutputList,
+	execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
-		CoinInputs:    inputs,
-		CoinOutputs:   outputs,
+		CoinInputs:    coinInputs,
+		CoinOutputs:   coinOutputs,
 		ExecutionTime: execTime,
 		Description:   description,
 		Sender:        sender,
@@ -57,8 +62,11 @@ func (rcp *Recipe) String() string {
 		ID: %s,
 		CoinInputs: %s,
 		CoinOutputs: %s,
+		ItemInputs: %s,
+		ItemOutputs: %s,
 		ExecutionTIme: %d,
-	}`, rcp.RecipeName, rcp.CookbookName, rcp.ID, rcp.CoinInputs.String(), rcp.CoinOutputs.String(), rcp.ExecutionTime)
+	}`, rcp.RecipeName, rcp.CookbookName, rcp.ID, rcp.CoinInputs.String(),
+		rcp.CoinOutputs.String(), rcp.ItemInputs.String(), rcp.ItemOutputs.String(), rcp.ExecutionTime)
 }
 
 // KeyGen generates key for the store
