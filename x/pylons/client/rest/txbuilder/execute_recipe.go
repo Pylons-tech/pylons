@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	// "github.com/MikeSofaer/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
@@ -26,12 +25,7 @@ func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgExecuteRecipe("id0001", types.CoinInputList{
-			types.CoinInput{
-				Coin:  "Wood",
-				Count: 5,
-			},
-		}, sender)
+		msg := msgs.NewMsgExecuteRecipe("id0001", sender)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

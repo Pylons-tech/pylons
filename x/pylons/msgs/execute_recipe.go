@@ -3,23 +3,20 @@ package msgs
 import (
 	"encoding/json"
 
-	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // MsgExecuteRecipe defines a SetName message
 type MsgExecuteRecipe struct {
-	RecipeID   string
-	CoinInputs types.CoinInputList
-	Sender     sdk.AccAddress
+	RecipeID string
+	Sender   sdk.AccAddress
 }
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, inputs types.CoinInputList, sender sdk.AccAddress) MsgExecuteRecipe {
+func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress) MsgExecuteRecipe {
 	return MsgExecuteRecipe{
-		RecipeID:   recipeID,
-		CoinInputs: inputs,
-		Sender:     sender,
+		RecipeID: recipeID,
+		Sender:   sender,
 	}
 }
 
