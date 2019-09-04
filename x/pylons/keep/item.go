@@ -38,10 +38,23 @@ func (k Keeper) GetItem(ctx sdk.Context, id string) (types.Item, error) {
 	return item, nil
 }
 
-// GetItemsIterator returns an iterator for all the iterator
-func (k Keeper) GetItemsIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+// GetItemsBySender returns all items by sender
+func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]types.Item, error) {
 	store := ctx.KVStore(k.ItemKey)
-	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+	iter := sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+
+	var items []types.Item
+	for ; iter.Valid(); iter.Next() {
+		var item types.Item
+		mIT := iter.Value()
+		err := k.Cdc.UnmarshalBinaryBare(mIT, &item)
+		if err != nil {
+			return nil, sdk.ErrInternal(err.Error())
+		}
+
+		items = append(items, item)
+	}
+	return items, nil
 }
 
 // UpdateItem is used to update the item using the id
@@ -61,4 +74,24 @@ func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 	}
 	store.Set([]byte(id), mi)
 	return nil
+}
+
+// ItemsByCookbook returns items by cookbook
+func (k Keeper) ItemsByCookbook(ctx sdk.Context, cookbookID string) ([]types.Item, error) {
+	store := ctx.KVStore(k.ItemKey)
+	iter := sdk.KVStorePrefixIterator(store, []byte(""))
+	var items []types.Item
+	for ; iter.Valid(); iter.Next() {
+		var item types.Item
+		mIT := iter.Value()
+		err := k.Cdc.UnmarshalBinaryBare(mIT, &item)
+		if err != nil {
+			return nil, sdk.ErrInternal(err.Error())
+		}
+
+		if cookbookID == item.CookbookID {
+			items = append(items, item)
+		}
+	}
+	return items, nil
 }
