@@ -5,7 +5,9 @@ steps:
   - 'build'
   - '-t'
   - 'gcr.io/$PROJECT_ID/node:$SHORT_SHA'
+  - '-f'
   - 'Dockerfile.rest'
+  - '.'
 
 # This step pushes the image to Container Registry
 # The PROJECT_ID and SHORT_SHA variables are automatically
