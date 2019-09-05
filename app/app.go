@@ -125,6 +125,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		app.keyPylonsCookbook,
 		app.keyPylonsRecipe,
 		app.keyFeeCollection,
+		app.keyPylonsItem,
 		app.keyParams,
 		app.tkeyParams,
 	)

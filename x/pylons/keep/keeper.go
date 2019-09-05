@@ -23,6 +23,7 @@ func NewKeeper(coinKeeper bank.Keeper, cookbookKey, recipeKey, itemKey sdk.Store
 		CoinKeeper:  coinKeeper,
 		CookbookKey: cookbookKey,
 		RecipeKey:   recipeKey,
+		ItemKey:     itemKey,
 		Cdc:         cdc,
 	}
 }

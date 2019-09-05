@@ -17,6 +17,7 @@ const (
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
 	ownerKeyName          = "ownerKey"
+	cookbookKeyName       = "cookbookKey"
 )
 
 // RegisterRoutes adds routes
@@ -47,4 +48,6 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		addrFromPubkeyHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipies/{%s}", storeName, ownerKeyName),
 		listRecipiesHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/items_by_cookbook/{%s}", storeName, cookbookKeyName),
+		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
 }
