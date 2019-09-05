@@ -30,7 +30,8 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 		mCB := iterator.Value()
 		err = keeper.Cdc.UnmarshalBinaryBare(mCB, &recipe)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			// this happens because we have multiple versions of breaking recipes at times
+			continue
 		}
 
 		recipies = append(recipies, recipe)

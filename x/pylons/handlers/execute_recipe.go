@@ -26,13 +26,10 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
-	if !recipe.Inputs.Equal(msg.Inputs) {
-		return sdk.ErrInternal("the items provided for the recipe dont match the system").Result()
-	}
 
 	var cl sdk.Coins
-	for _, inp := range recipe.Inputs {
-		cl = append(cl, sdk.NewCoin(inp.Item, sdk.NewInt(inp.Count)))
+	for _, inp := range recipe.CoinInputs {
+		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
@@ -42,8 +39,8 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	// output coins to the sender
 	var ocl sdk.Coins
 
-	for _, out := range recipe.Outputs {
-		ocl = append(ocl, sdk.NewCoin(out.Item, sdk.NewInt(out.Count)))
+	for _, out := range recipe.CoinOutputs {
+		ocl = append(ocl, sdk.NewCoin(out.Coin, sdk.NewInt(out.Count)))
 	}
 
 	// TODO: send the coins to a master address instead of burning them
@@ -56,6 +53,30 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	_, _, err = keeper.CoinKeeper.AddCoins(ctx, msg.Sender, ocl)
 	if err != nil {
 		return err.Result()
+	}
+
+	// Item transaction
+
+	for _, item := range recipe.ItemInputs {
+		if !item.Sender.Equals(msg.Sender) {
+			return sdk.ErrInternal("item owner is not same as sender").Result()
+		}
+
+		storedItem, err := keeper.GetItem(ctx, item.ID)
+		if err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
+		if !storedItem.Equals(*item.Item) {
+			return sdk.ErrInternal("stored state is different from recipe").Result()
+		}
+	}
+
+	// TODO: validate 1-1 correspondence for item input and output - check ids
+
+	for _, item := range recipe.ItemOutputs {
+		if err := keeper.SetItem(ctx, *item.Item); err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
 	}
 
 	resp, err2 := json.Marshal(ExecuteRecipeResp{

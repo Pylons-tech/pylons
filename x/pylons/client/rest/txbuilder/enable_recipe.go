@@ -6,8 +6,6 @@ import (
 	"net/http"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
-
-	// "github.com/MikeSofaer/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -16,8 +14,8 @@ import (
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
-// ExecuteRecipeTxBuilder returns the fixtures which can be used to create a create cookbook transaction
-func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+// EnableRecipeTxBuilder returns the fixtures which can be used to create an enable recipe transaction
+func EnableRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// vars := mux.Vars(r)
 		// requester := vars[TxGPRequesterKey]
@@ -25,7 +23,7 @@ func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgExecuteRecipe("id0001", sender)
+		msg := msgs.NewMsgEnableRecipe("id0001", sender)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

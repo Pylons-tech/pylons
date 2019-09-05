@@ -17,6 +17,8 @@ const (
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
 	ownerKeyName          = "ownerKey"
+	cookbookKeyName       = "cookbookKey"
+	senderKey             = "senderKey"
 )
 
 // RegisterRoutes adds routes
@@ -35,6 +37,10 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		txbuilder.ExecuteRecipeTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_recipe/tx_build/", storeName),
 		txbuilder.UpdateRecipeTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/enable_recipe/tx_build/", storeName),
+		txbuilder.EnableRecipeTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/disable_recipe/tx_build/", storeName),
+		txbuilder.DisableRecipeTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons", storeName),
 		getPylonsHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons", storeName),
@@ -43,4 +49,9 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		addrFromPubkeyHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipies/{%s}", storeName, ownerKeyName),
 		listRecipiesHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/items_by_cookbook/{%s}", storeName, cookbookKeyName),
+		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/items_by_sender/{%s}", storeName, senderKey),
+		itemsBySenderHandler(cdc, cliCtx, storeName)).Methods("GET")
+
 }

@@ -27,6 +27,7 @@ const (
 	appName = "pylons"
 )
 
+// PylonsApp is the top level pylons app
 type PylonsApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
@@ -35,6 +36,7 @@ type PylonsApp struct {
 	keyAccount        *sdk.KVStoreKey
 	keyPylonsCookbook *sdk.KVStoreKey
 	keyPylonsRecipe   *sdk.KVStoreKey
+	keyPylonsItem     *sdk.KVStoreKey
 	keyFeeCollection  *sdk.KVStoreKey
 	keyParams         *sdk.KVStoreKey
 	tkeyParams        *sdk.TransientStoreKey
@@ -63,6 +65,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		keyAccount:        sdk.NewKVStoreKey("acc"),
 		keyPylonsCookbook: sdk.NewKVStoreKey("pylons"),
 		keyPylonsRecipe:   sdk.NewKVStoreKey("pylons_recipe"),
+		keyPylonsItem:     sdk.NewKVStoreKey("pylons_item"),
 		keyFeeCollection:  sdk.NewKVStoreKey("fee_collection"),
 		keyParams:         sdk.NewKVStoreKey("params"),
 		tkeyParams:        sdk.NewTransientStoreKey("transient_params"),
@@ -95,6 +98,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		app.bankKeeper,
 		app.keyPylonsCookbook,
 		app.keyPylonsRecipe,
+		app.keyPylonsItem,
 		app.cdc,
 	)
 
@@ -121,6 +125,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		app.keyPylonsCookbook,
 		app.keyPylonsRecipe,
 		app.keyFeeCollection,
+		app.keyPylonsItem,
 		app.keyParams,
 		app.tkeyParams,
 	)

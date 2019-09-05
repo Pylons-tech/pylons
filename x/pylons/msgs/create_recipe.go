@@ -11,21 +11,30 @@ import (
 type MsgCreateRecipe struct {
 	RecipeName    string
 	CookbookName  string // the cookbook guid
-	Inputs        types.InputList
-	Outputs       types.OutputList
+	CoinInputs    types.CoinInputList
+	CoinOutputs   types.CoinOutputList
+	ItemInputs    types.ItemInputList
+	ItemOutputs   types.ItemOutputList
 	ExecutionTime int64
 	Sender        sdk.AccAddress
 	Description   string
 }
 
 // NewMsgCreateRecipe a constructor for CreateCookbook msg
-func NewMsgCreateRecipe(recipeName, cookbookName, description string, inputs types.InputList, outputs types.OutputList, sender sdk.AccAddress) MsgCreateRecipe {
+func NewMsgCreateRecipe(recipeName, cookbookName, description string,
+	coinInputs types.CoinInputList,
+	coinOutputs types.CoinOutputList,
+	itemInputs types.ItemInputList,
+	itemOutputs types.ItemOutputList,
+	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
 		RecipeName:    recipeName,
 		CookbookName:  cookbookName,
 		Description:   description,
-		Inputs:        inputs,
-		Outputs:       outputs,
+		CoinInputs:    coinInputs,
+		CoinOutputs:   coinOutputs,
+		ItemInputs:    itemInputs,
+		ItemOutputs:   itemOutputs,
 		ExecutionTime: 0,
 		Sender:        sender,
 	}

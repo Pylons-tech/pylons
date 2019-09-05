@@ -26,17 +26,33 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol", types.InputList{
-			types.Input{
-				Item:  "Wood",
-				Count: 5,
+		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol",
+			types.CoinInputList{
+				types.CoinInput{
+					Coin:  "Wood",
+					Count: 5,
+				},
 			},
-		}, types.OutputList{
-			types.Output{
-				Item:  "Chair",
-				Count: 1,
+			types.CoinOutputList{
+				types.CoinOutput{
+					Coin:  "Chair",
+					Count: 1,
+				},
 			},
-		}, sender)
+			types.ItemInputList{
+				types.ItemInput{
+					Item: types.NewItem("id001", map[string]float64{"endurance": 0.50},
+						map[string]int{"HP": 100}, map[string]string{"Name": "Pichu"}, sender,
+					),
+				},
+			},
+			types.ItemOutputList{
+				types.ItemOutput{
+					Item: types.NewItem("id001", map[string]float64{"endurance": 0.75},
+						map[string]int{"HP": 120}, map[string]string{"Name": "Pickachu"}, sender,
+					),
+				},
+			}, sender)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

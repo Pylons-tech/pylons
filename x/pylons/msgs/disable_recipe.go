@@ -6,28 +6,28 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgExecuteRecipe defines a SetName message
-type MsgExecuteRecipe struct {
+// MsgDisableRecipe defines a SetName message
+type MsgDisableRecipe struct {
 	RecipeID string
 	Sender   sdk.AccAddress
 }
 
-// NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress) MsgExecuteRecipe {
-	return MsgExecuteRecipe{
+// NewMsgDisableRecipe a constructor for DisableCookbook msg
+func NewMsgDisableRecipe(recipeID string, sender sdk.AccAddress) MsgDisableRecipe {
+	return MsgDisableRecipe{
 		RecipeID: recipeID,
 		Sender:   sender,
 	}
 }
 
 // Route should return the name of the module
-func (msg MsgExecuteRecipe) Route() string { return "pylons" }
+func (msg MsgDisableRecipe) Route() string { return "pylons" }
 
 // Type should return the action
-func (msg MsgExecuteRecipe) Type() string { return "execute_recipe" }
+func (msg MsgDisableRecipe) Type() string { return "disable_recipe" }
 
 // ValidateBasic validates the Msg
-func (msg MsgExecuteRecipe) ValidateBasic() sdk.Error {
+func (msg MsgDisableRecipe) ValidateBasic() sdk.Error {
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
@@ -37,7 +37,7 @@ func (msg MsgExecuteRecipe) ValidateBasic() sdk.Error {
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgExecuteRecipe) GetSignBytes() []byte {
+func (msg MsgDisableRecipe) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
@@ -46,6 +46,6 @@ func (msg MsgExecuteRecipe) GetSignBytes() []byte {
 }
 
 // GetSigners gets the signer who should have signed the message
-func (msg MsgExecuteRecipe) GetSigners() []sdk.AccAddress {
+func (msg MsgDisableRecipe) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }
