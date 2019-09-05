@@ -22,7 +22,7 @@ steps:
   - 'set'
   - 'image'
   - 'deployment/node'
-  - 'node=gcr.io/$PROJECT_ID/node:$SHORT_SHA'
+  - 'pylons=gcr.io/$PROJECT_ID/node:$SHORT_SHA'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
   - 'CLOUDSDK_CONTAINER_CLUSTER=standard-cluster-1'
