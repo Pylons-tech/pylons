@@ -18,6 +18,7 @@ const (
 	pubKeyName            = "pubkey"
 	ownerKeyName          = "ownerKey"
 	cookbookKeyName       = "cookbookKey"
+	senderKey             = "senderKey"
 )
 
 // RegisterRoutes adds routes
@@ -50,4 +51,7 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		listRecipiesHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/items_by_cookbook/{%s}", storeName, cookbookKeyName),
 		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/items_by_sender/{%s}", storeName, senderKey),
+		itemsBySenderHandler(cdc, cliCtx, storeName)).Methods("GET")
+
 }
