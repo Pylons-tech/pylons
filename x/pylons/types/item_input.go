@@ -4,9 +4,9 @@ import "fmt"
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
-	Doubles DoubleParamMap
-	Longs   LongParamMap
-	Strings StringParamMap
+	Doubles DoubleInputParamMap
+	Longs   LongInputParamMap
+	Strings StringInputParamMap
 }
 
 // ItemInputList is a list of ItemInputs for convinience

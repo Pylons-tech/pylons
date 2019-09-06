@@ -66,9 +66,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if err != nil {
 			return sdk.ErrInternal(err.Error()).Result()
 		}
-		if !storedItem.Equals(*item.Item) {
-			return sdk.ErrInternal("stored state is different from recipe").Result()
-		}
 	}
 
 	// TODO: validate 1-1 correspondence for item input and output - check ids

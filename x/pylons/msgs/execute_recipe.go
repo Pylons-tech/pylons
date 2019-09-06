@@ -10,13 +10,15 @@ import (
 type MsgExecuteRecipe struct {
 	RecipeID string
 	Sender   sdk.AccAddress
+	ItemIDs  []string
 }
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress) MsgExecuteRecipe {
+func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe {
 	return MsgExecuteRecipe{
 		RecipeID: recipeID,
 		Sender:   sender,
+		ItemIDs:  itemIDs,
 	}
 }
 
