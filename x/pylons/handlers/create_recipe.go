@@ -16,7 +16,11 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 	if err != nil {
 		return err.Result()
 	}
-	// TODO: check the recipe has a parent cookbook and is being created from the owner of the cookbook
+	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookName)
+	if !cook.Sender.Equals(msg.Sender) {
+		return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
+	}
+
 	recipe := types.NewRecipe(msg.RecipeName, msg.CookbookName, msg.Description,
 		msg.CoinInputs, msg.CoinOutputs, msg.ItemInputs, msg.ItemOutputs,
 		0, msg.Sender)
