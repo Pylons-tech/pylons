@@ -48,9 +48,8 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			},
 			types.ItemOutputList{
 				types.ItemOutput{
-					Item: types.NewItem("id001", map[string]float64{"endurance": 0.75},
-						map[string]int{"HP": 120}, map[string]string{"Name": "Pickachu"}, sender,
-					),
+					types.DoubleParamMap{"endurance": types.DoubleParam{0.70, 1.0, 1.0}}, types.LongParamMap{"HP": types.LongParam{100, 140, 1.0}}, 
+						types.StringParamMap{"Name": types.StringParam{"Raichu", 1.0}},
 				},
 			}, sender)
 

@@ -13,8 +13,8 @@ type StringParam struct {
 	Rate         float64
 }
 
-// StringParamList is a list of StringParams
-type StringParamList []StringParam
+// StringParamMap is a map of string:StringParam
+type StringParamMap map[string]StringParam
 
 func (sp StringParam) String() string {
 	return fmt.Sprintf(`
@@ -24,13 +24,22 @@ func (sp StringParam) String() string {
 	}`, sp.Value, strconv.FormatFloat(sp.Rate, 'f', -1, 64))
 }
 
-func (spl StringParamList) String() string {
-	sp := "StringParamList{"
+func (spm StringParamMap) String() string {
+	sp := "StringParamMap{"
 
-	for _, output := range spl {
-		sp += output.String() + ",\n"
+	for name, param := range spm {
+		sp += name + ": " + param.String() + ",\n"
 	}
 
 	sp += "}"
 	return sp
+}
+
+func (spm StringParamMap) Actualize() map[string]string {
+	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
+	m := make(map[string]string)
+	for name, param := range spm {
+		m[name] = param.Value
+	}
+	return m
 }

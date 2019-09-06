@@ -15,8 +15,8 @@ type DoubleParam struct {
 	Rate         float64
 }
 
-// DoubleParamList is a list of DoubleParams
-type DoubleParamList []DoubleParam
+// DoubleParamMap is a map of string:DoubleParam
+type DoubleParamMap map[string]DoubleParam
 
 func (dp DoubleParam) String() string {
 	return fmt.Sprintf(`
@@ -27,13 +27,22 @@ func (dp DoubleParam) String() string {
 	}`, strconv.FormatFloat(dp.MinValue, 'f', -1, 64), strconv.FormatFloat(dp.MaxValue, 'f', -1, 64), strconv.FormatFloat(dp.Rate, 'f', -1, 64))
 }
 
-func (dpl DoubleParamList) String() string {
-	dp := "DoubleParamList{"
+func (dpm DoubleParamMap) String() string {
+	dp := "DoubleParamMap{"
 
-	for _, output := range dpl {
-		dp += output.String() + ",\n"
+	for name, param := range dpm {
+		dp += name + ": " + param.String() + ",\n"
 	}
 
 	dp += "}"
 	return dp
+}
+
+func (dpm DoubleParamMap) Actualize() map[string]float64 {
+	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
+	m := make(map[string]float64)
+	for name, param := range dpm {
+		m[name] = (param.MinValue + param.MaxValue) / 2
+	}
+	return m
 }

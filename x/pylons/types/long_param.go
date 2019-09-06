@@ -14,9 +14,8 @@ type LongParam struct {
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate         float64
 }
-
-// LongParamList is a list of LongParams
-type LongParamList []LongParam
+// LongParamMap is a map of string:LongParam
+type LongParamMap map[string]LongParam
 
 func (lp LongParam) String() string {
 	return fmt.Sprintf(`
@@ -27,13 +26,22 @@ func (lp LongParam) String() string {
 	}`, strconv.FormatInt(lp.MinValue, 10), strconv.FormatInt(lp.MaxValue, 10), strconv.FormatFloat(lp.Rate, 'f', -1, 64))
 }
 
-func (lpl LongParamList) String() string {
-	lp := "LongParamList{"
+func (lpm LongParamMap) String() string {
+	lp := "LongParamMap{"
 
-	for _, output := range lpl {
-		lp += output.String() + ",\n"
+	for name, param := range lpm {
+		lp += name + ": " + param.String() + ",\n"
 	}
 
 	lp += "}"
 	return lp
+}
+
+func (lpm LongParamMap) Actualize() map[string]int {
+	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
+	m := make(map[string]int)
+	for name, param := range lpm {
+		m[name] = int((param.MinValue + param.MaxValue) / 2)
+	}
+	return m
 }

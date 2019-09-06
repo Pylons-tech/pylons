@@ -42,18 +42,16 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			types.ItemInputList{
 				types.ItemInput{
 					Item: types.NewItem("id001", map[string]float64{"endurance": 0.75},
-						map[string]int{"HP": 100}, map[string]string{"Name": "Pickachu"}, sender,
+						map[string]int{"HP": 100}, map[string]string{"Name": "Pikachu"}, sender,
 					),
 				},
 			},
 			types.ItemOutputList{
 				types.ItemOutput{
-					Item: types.NewItem("id001", map[string]float64{"endurance": 0.85},
-						map[string]int{"HP": 120}, map[string]string{"Name": "Richu"}, sender,
-					),
+					types.DoubleParamMap{"endurance": types.DoubleParam{0.70, 1.0, 1.0}}, types.LongParamMap{"HP": types.LongParam{100, 140, 1.0}}, 
+						types.StringParamMap{"Name": types.StringParam{"Raichu", 1.0}},
 				},
-			},
-			sender,
+			}, sender,
 		)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})

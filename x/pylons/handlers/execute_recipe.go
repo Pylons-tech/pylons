@@ -74,7 +74,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	// TODO: validate 1-1 correspondence for item input and output - check ids
 
 	for _, item := range recipe.ItemOutputs {
-		if err := keeper.SetItem(ctx, *item.Item); err != nil {
+		if err := keeper.SetItem(ctx, *item.Item(recipe.CookbookName, msg.Sender)); err != nil {
 			return sdk.ErrInternal(err.Error()).Result()
 		}
 	}
