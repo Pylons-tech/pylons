@@ -2,16 +2,17 @@ package types
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 type DoubleParam struct {
 	// The minimum legal value of this parameter.
-	MinValue     int64
+	MinValue     float64
 	// The maximum legal value of this parameter.
-	MaxValue     int64
+	MaxValue     float64
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate         float32
+	Rate         float64
 }
 
 // DoubleParamList is a list of DoubleParams
@@ -23,7 +24,7 @@ func (dp DoubleParam) String() string {
 		MinValue: %s,
 		MaxValue: %s,
 		Rate: %+v,
-	}`, dp.MinValue, dp.MaxValue, dp.Rate)
+	}`, strconv.FormatFloat(dp.MinValue, 'f', -1, 64), strconv.FormatFloat(dp.MaxValue, 'f', -1, 64), strconv.FormatFloat(dp.Rate, 'f', -1, 64))
 }
 
 func (dpl DoubleParamList) String() string {

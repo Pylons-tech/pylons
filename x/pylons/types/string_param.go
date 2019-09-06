@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"strconv"
 )
 
 // StringParam describes an item input/output parameter of type string
@@ -9,7 +10,7 @@ type StringParam struct {
 	// The value of the parameter
 	Value        string
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate         float32
+	Rate         float64
 }
 
 // StringParamList is a list of StringParams
@@ -20,7 +21,7 @@ func (sp StringParam) String() string {
 	StringParam{ 
 		Value: %s,
 		Rate: %+v,
-	}`, sp.Value, sp.Rate)
+	}`, sp.Value, strconv.FormatFloat(sp.Rate, 'f', -1, 64))
 }
 
 func (spl StringParamList) String() string {
