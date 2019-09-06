@@ -1,8 +1,12 @@
 package types
 
+import "fmt"
+
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
-	*Item
+	Doubles DoubleParamMap
+	Longs   LongParamMap
+	Strings StringParamMap
 }
 
 // ItemInputList is a list of ItemInputs for convinience
@@ -12,7 +16,7 @@ func (iil ItemInputList) String() string {
 	itm := "ItemInputList{"
 
 	for _, input := range iil {
-		itm += input.String() + ",\n"
+		itm += fmt.Sprintf("%+v", input) + ",\n"
 	}
 
 	itm += "}"
