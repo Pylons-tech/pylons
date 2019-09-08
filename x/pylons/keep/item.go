@@ -76,6 +76,12 @@ func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 	return nil
 }
 
+// DeleteItem is used to delete the item
+func (k Keeper) DeleteItem(ctx sdk.Context, id string) {
+	store := ctx.KVStore(k.ItemKey)
+	store.Delete([]byte(id))
+}
+
 // ItemsByCookbook returns items by cookbook
 func (k Keeper) ItemsByCookbook(ctx sdk.Context, cookbookID string) ([]types.Item, error) {
 	store := ctx.KVStore(k.ItemKey)
