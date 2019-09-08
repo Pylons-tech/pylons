@@ -5,7 +5,6 @@ import (
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -58,8 +57,14 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 	// Item transaction
 
-	var items []types.Item
-	
+	// first lets handle all item to item transactions
+
+	// lets check if the Item IDs provided matches the recipe constraints
+
+	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
+		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
+	}
+
 	for _, id := range msg.ItemIDs {
 		item, err := keeper.GetItem(ctx, id)
 		if err != nil {
@@ -68,7 +73,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if !item.Sender.Equals(msg.Sender) {
 			return sdk.ErrInternal("item owner is not same as sender").Result()
 		}
-		items = append(items, item)
+
 	}
 
 	// TODO: validate 1-1 correspondence for item input and output - check ids
