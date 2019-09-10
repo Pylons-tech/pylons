@@ -2,15 +2,14 @@ package types
 
 import (
 	"fmt"
-	"strconv"
 )
 
 // LongInputParam describes the bounds on an item input/output parameter of type int64
 type LongInputParam struct {
 	// The minimum legal value of this parameter.
-	MinValue int64
+	MinValue int
 	// The maximum legal value of this parameter.
-	MaxValue int64
+	MaxValue int
 }
 
 // LongInputParamMap is a map of string:LongInputParam
@@ -19,9 +18,9 @@ type LongInputParamMap map[string]LongInputParam
 func (lp LongInputParam) String() string {
 	return fmt.Sprintf(`
 	LongInputParam{ 
-		MinValue: %s,
-		MaxValue: %s,
-	}`, strconv.FormatInt(lp.MinValue, 10), strconv.FormatInt(lp.MaxValue, 10))
+		MinValue: %d,
+		MaxValue: %d,
+	}`, lp.MinValue, lp.MaxValue)
 }
 
 func (lpm LongInputParamMap) String() string {

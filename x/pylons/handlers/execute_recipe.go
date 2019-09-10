@@ -5,6 +5,7 @@ import (
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -65,6 +66,8 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
 	}
 
+	var inputItems []types.Item
+
 	for _, id := range msg.ItemIDs {
 		item, err := keeper.GetItem(ctx, id)
 		if err != nil {
@@ -74,6 +77,32 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			return sdk.ErrInternal("item owner is not same as sender").Result()
 		}
 
+		inputItems = append(inputItems, item)
+	}
+
+	// we validate and match items
+	var matchedItems []types.Item
+	var matches bool
+	for _, itemInput := range recipe.ItemInputs {
+		matches = false
+
+		for _, item := range inputItems {
+			if itemInput.Matches(item) {
+				matchedItems = append(matchedItems, item)
+				matches = true
+				break
+			}
+		}
+
+		if !matches {
+			return sdk.ErrInternal("the item inputs dont match any items provided").Result()
+		}
+
+	}
+	// we delete all the matched items as those get converted to output items
+
+	for _, item := range matchedItems {
+		keeper.DeleteItem(ctx, item.ID)
 	}
 
 	// TODO: validate 1-1 correspondence for item input and output - check ids

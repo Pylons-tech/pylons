@@ -9,6 +9,44 @@ type ItemInput struct {
 	Strings StringInputParamMap
 }
 
+// Matches checks if all the constraint match the given item
+func (ii ItemInput) Matches(item Item) bool {
+
+	for key, value := range ii.Doubles {
+		double, ok := item.Doubles[key]
+		if !ok {
+			return false
+		}
+
+		if double < value.MinValue || double > value.MaxValue {
+			return false
+		}
+	}
+
+	for key, value := range ii.Longs {
+		long, ok := item.Longs[key]
+		if !ok {
+			return false
+		}
+
+		if long < value.MinValue || long > value.MaxValue {
+			return false
+		}
+	}
+
+	for key, value := range ii.Strings {
+		str, ok := item.Strings[key]
+		if !ok {
+			return false
+		}
+		if str != value.Value {
+			return false
+		}
+	}
+
+	return true
+}
+
 // ItemInputList is a list of ItemInputs for convinience
 type ItemInputList []ItemInput
 
