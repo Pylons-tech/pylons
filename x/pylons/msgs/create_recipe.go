@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgCreateRecipe defines a SetName message
+// MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
 	RecipeName    string
 	CookbookName  string // the cookbook guid
@@ -20,7 +20,7 @@ type MsgCreateRecipe struct {
 	Description   string
 }
 
-// NewMsgCreateRecipe a constructor for CreateCookbook msg
+// NewMsgCreateRecipe a constructor for CreateRecipe msg
 func NewMsgCreateRecipe(recipeName, cookbookName, description string,
 	coinInputs types.CoinInputList,
 	coinOutputs types.CoinOutputList,
