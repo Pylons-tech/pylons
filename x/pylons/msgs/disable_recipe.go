@@ -6,13 +6,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgDisableRecipe defines a SetName message
+// MsgDisableRecipe defines a DisableRecipe message
 type MsgDisableRecipe struct {
 	RecipeID string
 	Sender   sdk.AccAddress
 }
 
-// NewMsgDisableRecipe a constructor for DisableCookbook msg
+// NewMsgDisableRecipe a constructor for DisableRecipe msg
 func NewMsgDisableRecipe(recipeID string, sender sdk.AccAddress) MsgDisableRecipe {
 	return MsgDisableRecipe{
 		RecipeID: recipeID,
