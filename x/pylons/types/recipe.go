@@ -17,7 +17,7 @@ type Recipe struct {
 	ItemInputs    ItemInputList
 	ItemOutputs   ItemOutputList
 	Description   string
-	ExecutionTime int64
+	BlockInterval int64
 	Sender        sdk.AccAddress
 	Disabled      bool
 }
@@ -48,7 +48,7 @@ func NewRecipe(recipeName, cookbookName, description string,
 		CoinOutputs:   coinOutputs,
 		ItemInputs:    itemInputs,
 		ItemOutputs:   itemOutputs,
-		ExecutionTime: execTime,
+		BlockInterval: execTime,
 		Description:   description,
 		Sender:        sender,
 	}
@@ -68,7 +68,7 @@ func (rcp *Recipe) String() string {
 		ItemOutputs: %s,
 		ExecutionTIme: %d,
 	}`, rcp.RecipeName, rcp.CookbookName, rcp.ID, rcp.CoinInputs.String(),
-		rcp.CoinOutputs.String(), rcp.ItemInputs.String(), rcp.ItemOutputs.String(), rcp.ExecutionTime)
+		rcp.CoinOutputs.String(), rcp.ItemInputs.String(), rcp.ItemOutputs.String(), rcp.BlockInterval)
 }
 
 // KeyGen generates key for the store
