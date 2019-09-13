@@ -32,10 +32,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
-		return sdk.ErrInternal("insufficient coin balance").Result()
-	}
-
 	// output coins to the sender
 	var ocl sdk.Coins
 
@@ -43,13 +39,15 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		ocl = append(ocl, sdk.NewCoin(out.Coin, sdk.NewInt(out.Count)))
 	}
 
+	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
+		return sdk.ErrInternal("insufficient coin balance").Result()
+	}
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
 	_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
 	if err != nil {
 		return err.Result()
 	}
-
 	_, _, err = keeper.CoinKeeper.AddCoins(ctx, msg.Sender, ocl)
 	if err != nil {
 		return err.Result()
