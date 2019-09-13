@@ -17,7 +17,6 @@ type ExecuteRecipeResp struct {
 
 // HandlerMsgExecuteRecipe is used to create cookbook by a developer
 func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) sdk.Result {
-
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()
