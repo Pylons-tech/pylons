@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"strconv"
 )
 
 // StringParam describes an item input/output parameter of type string
@@ -10,7 +9,7 @@ type StringParam struct {
 	// The value of the parameter
 	Value        string
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate         float64
+	Rate         FloatString
 }
 
 // StringParamMap is a map of string:StringParam
@@ -21,7 +20,7 @@ func (sp StringParam) String() string {
 	StringParam{ 
 		Value: %s,
 		Rate: %+v,
-	}`, sp.Value, strconv.FormatFloat(sp.Rate, 'f', -1, 64))
+	}`, sp.Value, sp.Rate)
 }
 
 func (spm StringParamMap) String() string {
