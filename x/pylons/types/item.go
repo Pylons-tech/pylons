@@ -37,6 +37,7 @@ func (it Item) String() string {
 	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID)
 }
 
+// Equals compares two items
 func (it Item) Equals(other Item) bool {
 	return it.ID == other.ID &&
 		reflect.DeepEqual(it.Doubles, other.Doubles) &&
