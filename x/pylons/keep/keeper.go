@@ -9,21 +9,22 @@ import (
 
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
-	CoinKeeper  bank.Keeper
-	CookbookKey sdk.StoreKey // Unexposed key to access cookbook store from sdk.Context
-	RecipeKey   sdk.StoreKey
-	ItemKey     sdk.StoreKey
-	Cdc         *codec.Codec // The wire codec for binary encoding/decoding
-
+	CoinKeeper   bank.Keeper
+	ExecutionKey sdk.StoreKey
+	CookbookKey  sdk.StoreKey // Unexposed key to access cookbook store from sdk.Context
+	RecipeKey    sdk.StoreKey
+	ItemKey      sdk.StoreKey
+	Cdc          *codec.Codec // The wire codec for binary encoding/decoding
 }
 
 // NewKeeper creates a new Keeper
-func NewKeeper(coinKeeper bank.Keeper, cookbookKey, recipeKey, itemKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, cookbookKey, recipeKey, itemKey, execKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
-		CoinKeeper:  coinKeeper,
-		CookbookKey: cookbookKey,
-		RecipeKey:   recipeKey,
-		ItemKey:     itemKey,
-		Cdc:         cdc,
+		CoinKeeper:   coinKeeper,
+		ExecutionKey: execKey,
+		CookbookKey:  cookbookKey,
+		RecipeKey:    recipeKey,
+		ItemKey:      itemKey,
+		Cdc:          cdc,
 	}
 }

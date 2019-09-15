@@ -20,5 +20,6 @@ func HandleMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPylo
 	if err != nil {
 		return sdk.ErrInsufficientCoins("Buyer does not have enough coins").Result()
 	}
+
 	return sdk.Result{}
 }

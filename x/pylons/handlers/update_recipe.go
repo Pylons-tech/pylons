@@ -32,7 +32,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	rc.CoinOutputs = msg.CoinOutputs
 	rc.ItemInputs = msg.ItemInputs
 	rc.ItemOutputs = msg.ItemOutputs
-	rc.ExecutionTime = msg.ExecutionTime
+	rc.BlockInterval = msg.BlockInterval
 	rc.RecipeName = msg.RecipeName
 
 	if err := keeper.UpdateRecipe(ctx, msg.ID, rc); err != nil {

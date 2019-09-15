@@ -16,7 +16,7 @@ type MsgUpdateRecipe struct {
 	CoinOutputs   types.CoinOutputList
 	ItemInputs    types.ItemInputList
 	ItemOutputs   types.ItemOutputList
-	ExecutionTime int64
+	BlockInterval int64
 	Sender        sdk.AccAddress
 	Description   string
 }
@@ -34,7 +34,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookName, id, description string,
 		CoinOutputs:   coinOutputs,
 		ItemInputs:    itemInputs,
 		ItemOutputs:   itemOutputs,
-		ExecutionTime: 0,
+		BlockInterval: 0,
 		Sender:        sender,
 	}
 }

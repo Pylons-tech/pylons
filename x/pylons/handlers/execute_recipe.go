@@ -17,7 +17,7 @@ type ExecuteRecipeResp struct {
 
 // HandlerMsgExecuteRecipe is used to create cookbook by a developer
 func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) sdk.Result {
-
+	var exec types.Execution
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()
@@ -33,10 +33,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
-		return sdk.ErrInternal("insufficient coin balance").Result()
-	}
-
 	// output coins to the sender
 	var ocl sdk.Coins
 
@@ -44,22 +40,32 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		ocl = append(ocl, sdk.NewCoin(out.Coin, sdk.NewInt(out.Count)))
 	}
 
-	// TODO: send the coins to a master address instead of burning them
-	// think about making this adding and subtracting atomic using inputoutputcoins method
-	_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
-	if err != nil {
-		return err.Result()
-	}
+	// store the execution as the interval
+	if recipe.BlockInterval > 0 {
+		exec.RecipeID = recipe.ID
+		exec.CoinInputs = cl
+		exec.CoinOutputs = ocl
+		exec.BlockHeight = ctx.BlockHeight() + recipe.BlockInterval
+	} else {
 
-	_, _, err = keeper.CoinKeeper.AddCoins(ctx, msg.Sender, ocl)
-	if err != nil {
-		return err.Result()
+		if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
+			return sdk.ErrInternal("insufficient coin balance").Result()
+		}
+		// TODO: send the coins to a master address instead of burning them
+		// think about making this adding and subtracting atomic using inputoutputcoins method
+		_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
+		if err != nil {
+			return err.Result()
+		}
+		_, _, err = keeper.CoinKeeper.AddCoins(ctx, msg.Sender, ocl)
+		if err != nil {
+			return err.Result()
+		}
+
 	}
 
 	// Item transaction
-
 	// first lets handle all item to item transactions
-
 	// lets check if the Item IDs provided matches the recipe constraints
 
 	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
@@ -99,16 +105,42 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		}
 
 	}
-	// we delete all the matched items as those get converted to output items
 
+	// TODO: validate 1-1 correspondence for item input and output - check ids
+	var outputItems []types.Item
+	for _, item := range recipe.ItemOutputs {
+		outputItems = append(outputItems, *item.Item(recipe.CookbookName, msg.Sender))
+	}
+
+	// we set the inputs and outputs for storing the execution
+	if recipe.BlockInterval > 0 {
+		exec.ItemInputs = matchedItems
+		exec.ItemOutputs = outputItems
+		exec.ID = exec.KeyGen()
+		err2 := keeper.SetExecution(ctx, exec)
+
+		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+		resp, err2 := json.Marshal(ExecuteRecipeResp{
+			Message: "scheduled the recipe",
+			Status:  "Success",
+		})
+
+		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+
+		}
+		return sdk.Result{Data: resp}
+	}
+
+	// we delete all the matched items as those get converted to output items
 	for _, item := range matchedItems {
 		keeper.DeleteItem(ctx, item.ID)
 	}
 
-	// TODO: validate 1-1 correspondence for item input and output - check ids
-
-	for _, item := range recipe.ItemOutputs {
-		if err := keeper.SetItem(ctx, *item.Item(recipe.CookbookName, msg.Sender)); err != nil {
+	for _, item := range outputItems {
+		if err := keeper.SetItem(ctx, item); err != nil {
 			return sdk.ErrInternal(err.Error()).Result()
 		}
 	}
@@ -122,6 +154,5 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return sdk.ErrInternal(err2.Error()).Result()
 
 	}
-
 	return sdk.Result{Data: resp}
 }
