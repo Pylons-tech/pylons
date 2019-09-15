@@ -116,6 +116,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if recipe.BlockInterval > 0 {
 		exec.ItemInputs = matchedItems
 		exec.ItemOutputs = outputItems
+		exec.ID = exec.KeyGen()
 		err2 := keeper.SetExecution(ctx, exec)
 
 		if err2 != nil {
@@ -131,19 +132,17 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 		}
 		return sdk.Result{Data: resp}
-	} else {
+	}
 
-		// we delete all the matched items as those get converted to output items
-		for _, item := range matchedItems {
-			keeper.DeleteItem(ctx, item.ID)
+	// we delete all the matched items as those get converted to output items
+	for _, item := range matchedItems {
+		keeper.DeleteItem(ctx, item.ID)
+	}
+
+	for _, item := range outputItems {
+		if err := keeper.SetItem(ctx, item); err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
 		}
-
-		for _, item := range outputItems {
-			if err := keeper.SetItem(ctx, item); err != nil {
-				return sdk.ErrInternal(err.Error()).Result()
-			}
-		}
-
 	}
 
 	resp, err2 := json.Marshal(ExecuteRecipeResp{
