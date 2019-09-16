@@ -28,7 +28,20 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
-	if exec.BlockHeight == ctx.BlockHeight() {
+	if exec.Completed {
+		resp, err2 := json.Marshal(CheckExecutionResp{
+			Message: "execution already completed",
+			Status:  "Completed",
+		})
+
+		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+
+		}
+		return sdk.Result{Data: resp}
+	}
+
+	if ctx.BlockHeight() >= exec.BlockHeight {
 		// TODO: send the coins to a master address instead of burning them
 		// think about making this adding and subtracting atomic using inputoutputcoins method
 		_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
@@ -55,7 +68,14 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			Message: "successfully completed the execution",
 			Status:  "Success",
 		})
+		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
 
+		// confirm that the execution was completed
+		exec.Completed = true
+
+		err2 = keeper.UpdateExecution(ctx, exec.ID, exec)
 		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 
