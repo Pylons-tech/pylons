@@ -109,7 +109,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	// TODO: validate 1-1 correspondence for item input and output - check ids
 	var outputItems []types.Item
 	for _, item := range recipe.ItemOutputs {
-		outputItems = append(outputItems, *item.Item(recipe.CookbookName, msg.Sender))
+		outputItems = append(outputItems, *item.Item(recipe.CookbookId, msg.Sender))
 	}
 
 	// we set the inputs and outputs for storing the execution

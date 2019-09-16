@@ -10,7 +10,7 @@ import (
 // MsgUpdateRecipe defines a SetName message
 type MsgUpdateRecipe struct {
 	RecipeName    string
-	CookbookName  string // the cookbook guid
+	CookbookId  string // the cookbook guid
 	ID            string // the recipe guid
 	CoinInputs    types.CoinInputList
 	CoinOutputs   types.CoinOutputList
@@ -22,13 +22,13 @@ type MsgUpdateRecipe struct {
 }
 
 // NewMsgUpdateRecipe a constructor for CreateCookbook msg
-func NewMsgUpdateRecipe(recipeName, cookbookName, id, description string,
+func NewMsgUpdateRecipe(recipeName, cookbookId, id, description string,
 	coinInputs types.CoinInputList, coinOutputs types.CoinOutputList, itemInputs types.ItemInputList, itemOutputs types.ItemOutputList,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		RecipeName:    recipeName,
 		ID:            id,
-		CookbookName:  cookbookName,
+		CookbookId:    cookbookId,
 		Description:   description,
 		CoinInputs:    coinInputs,
 		CoinOutputs:   coinOutputs,
@@ -54,10 +54,6 @@ func (msg MsgUpdateRecipe) ValidateBasic() sdk.Error {
 
 	if len(msg.ID) == 0 {
 		return sdk.ErrInternal("the id for the recipe require to update it")
-	}
-
-	if len(msg.CookbookName) < 8 {
-		return sdk.ErrInternal("the name of the cookbook should have more than 8 characters")
 	}
 
 	if len(msg.Description) < 20 {
