@@ -10,7 +10,7 @@ import (
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
 	RecipeName    string
-	CookbookName  string // the cookbook guid
+	CookbookId	  string // the cookbook guid
 	CoinInputs    types.CoinInputList
 	CoinOutputs   types.CoinOutputList
 	ItemInputs    types.ItemInputList
@@ -21,7 +21,7 @@ type MsgCreateRecipe struct {
 }
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
-func NewMsgCreateRecipe(recipeName, cookbookName, description string,
+func NewMsgCreateRecipe(recipeName, cookbookId, description string,
 	coinInputs types.CoinInputList,
 	coinOutputs types.CoinOutputList,
 	itemInputs types.ItemInputList,
@@ -29,7 +29,7 @@ func NewMsgCreateRecipe(recipeName, cookbookName, description string,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
 		RecipeName:    recipeName,
-		CookbookName:  cookbookName,
+		CookbookId:    cookbookId,
 		Description:   description,
 		CoinInputs:    coinInputs,
 		CoinOutputs:   coinOutputs,
@@ -51,10 +51,6 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
-	}
-
-	if len(msg.CookbookName) < 8 {
-		return sdk.ErrInternal("the name of the cookbook should have more than 8 characters")
 	}
 
 	if len(msg.Description) < 20 {

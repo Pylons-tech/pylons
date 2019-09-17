@@ -9,6 +9,7 @@ import (
 
 // Cookbook is a struct that contains all the metadata of a cookbook
 type Cookbook struct {
+	ID           string // the cookbook guid
 	Name         string
 	Description  string
 	Version      SemVer
@@ -35,7 +36,7 @@ func (cbl CookbookList) String() string {
 
 // NewCookbook return a new Cookbook
 func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string) Cookbook {
-	return Cookbook{
+	cb := Cookbook{
 		Name:         name,
 		Description:  description,
 		Version:      version,
@@ -43,6 +44,8 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 		SupportEmail: sEmail,
 		Sender:       sender,
 	}
+	cb.ID = cb.KeyGen()
+	return cb
 }
 
 // KeyGen generates key for the store

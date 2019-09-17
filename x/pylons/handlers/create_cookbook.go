@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+	
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -33,5 +35,13 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return sdk.ErrInternal(err.Error()).Result()
 	}
 
-	return sdk.Result{}
+	mCookbook, err2 := json.Marshal(map[string]string{
+		"CookbookID": cb.ID,
+	})
+
+	if err2 != nil {
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
+
+	return sdk.Result{Data: mCookbook}
 }

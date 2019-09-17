@@ -14,14 +14,14 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
 
 	if cookbook.Sender.Empty() {
 		return errors.New("SetCookbook: the sender cannot be empty")
-
 	}
+
 	mCB, err := k.Cdc.MarshalBinaryBare(cookbook)
 	if err != nil {
 		return err
 	}
 	store := ctx.KVStore(k.CookbookKey)
-	store.Set([]byte(cookbook.KeyGen()), mCB)
+	store.Set([]byte(cookbook.ID), mCB)
 	return nil
 }
 

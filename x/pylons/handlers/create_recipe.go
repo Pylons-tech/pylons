@@ -16,12 +16,12 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 	if err != nil {
 		return err.Result()
 	}
-	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookName)
+	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookId)
 	if !cook.Sender.Equals(msg.Sender) {
 		return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
 	}
 
-	recipe := types.NewRecipe(msg.RecipeName, msg.CookbookName, msg.Description,
+	recipe := types.NewRecipe(msg.RecipeName, msg.CookbookId, msg.Description,
 		msg.CoinInputs, msg.CoinOutputs, msg.ItemInputs, msg.ItemOutputs,
 		0, msg.Sender)
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
@@ -32,7 +32,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		"RecipeID": recipe.ID,
 	})
 
-	if err != nil {
+	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
