@@ -68,12 +68,10 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, tc.sender)
 
 			result := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
-			// t.Errorf("HandlerMsgCreateRecipe LOG:: %+v", result)
 
 			if tc.showError == false {
 				cbData := CreateCBResponse{}
 				err := json.Unmarshal(result.Data, &cbData)
-				// t.Errorf("Unmarshal error LOG:: %+v", err)
 				require.True(t, err == nil)
 				require.True(t, len(cbData.CookbookID) > 0)
 			} else {

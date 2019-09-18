@@ -84,7 +84,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				}, tc.sender,
 			)
 
-			// t.Errorf("msg.CookbookName LOG:: %+v", msg.CookbookName)
 			result := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
 			if tc.showError == false {
 				recipeData := CreateRecipeResponse{}
