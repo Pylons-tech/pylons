@@ -2,7 +2,6 @@ package types
 
 import (
 	"fmt"
-	"strconv"
 )
 
 // LongParam describes the bounds on an item input/output parameter of type int64
@@ -12,7 +11,7 @@ type LongParam struct {
 	// The maximum legal value of this parameter.
 	MaxValue int
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate float64
+	Rate FloatString
 }
 
 // LongParamMap is a map of string:LongParam
@@ -24,7 +23,7 @@ func (lp LongParam) String() string {
 		MinValue: %d,
 		MaxValue: %d,
 		Rate: %+v,
-	}`, lp.MinValue, lp.MaxValue, strconv.FormatFloat(lp.Rate, 'f', -1, 64))
+	}`, lp.MinValue, lp.MaxValue, lp.Rate)
 }
 
 func (lpm LongParamMap) String() string {

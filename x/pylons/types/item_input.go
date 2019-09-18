@@ -18,7 +18,7 @@ func (ii ItemInput) Matches(item Item) bool {
 			return false
 		}
 
-		if double < value.MinValue || double > value.MaxValue {
+		if double < value.MinValue.Float() || double > value.MaxValue.Float() {
 			return false
 		}
 	}
