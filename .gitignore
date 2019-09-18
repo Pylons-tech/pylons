@@ -3,3 +3,4 @@ pylonscli
 .vscode
 main
 *.exe
+*.bat

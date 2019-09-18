@@ -41,16 +41,16 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			},
 			types.ItemInputList{
 				types.ItemInput{
-					types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}},
+					types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.7", "1"}},
 					types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
 					types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
 				},
 			},
 			types.ItemOutputList{
 				types.ItemOutput{
-					types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-					types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-					types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
+					types.DoubleParamMap{"endurance": types.DoubleParam{"0.7", "1", "1"}},
+					types.LongParamMap{"HP": types.LongParam{100, 140, "1"}},
+					types.StringParamMap{"Name": types.StringParam{"Raichu", "1"}},
 				},
 			}, sender,
 		)
