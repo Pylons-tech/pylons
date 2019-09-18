@@ -85,7 +85,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			)
 
 			result := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
-			if tc.showError == false {
+			if !tc.showError {
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
 				require.True(t, err == nil)

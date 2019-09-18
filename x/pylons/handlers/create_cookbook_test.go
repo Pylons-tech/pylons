@@ -69,7 +69,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 
 			result := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
 
-			if tc.showError == false {
+			if !tc.showError {
 				cbData := CreateCBResponse{}
 				err := json.Unmarshal(result.Data, &cbData)
 				require.True(t, err == nil)

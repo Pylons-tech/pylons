@@ -106,7 +106,7 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := NewMsgCreateCookbook(tc.name, tc.desc, tc.devel, tc.version, tc.sEmail, tc.level, tc.sender)
 			validation := msg.ValidateBasic()
-			if tc.showError == false {
+			if !tc.showError {
 				require.True(t, validation == nil)
 			} else {
 				require.True(t, validation != nil)
