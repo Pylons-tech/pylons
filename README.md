@@ -60,6 +60,13 @@ pylonscli tx pylons get-pylons --from alice
 pylonscli rest-server --chain-id pylonschain --trust-node
 ```
 
+## Unit test
+- Unit test command
+
+```
+go test ./...
+```
+
 ## Deploying for production
 
 - run the rest-server using `--cors` mode and use the `--laddr` as `0.0.0.0`
