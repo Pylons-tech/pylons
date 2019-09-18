@@ -9,7 +9,7 @@ import (
 
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
-	CookbookId  string // the cookbook guid
+	CookbookId    string // the cookbook guid
 	RecipeName    string
 	ID            string // the recipe guid
 	CoinInputs    CoinInputList
@@ -66,7 +66,7 @@ func (rcp *Recipe) String() string {
 		CoinOutputs: %s,
 		ItemInputs: %s,
 		ItemOutputs: %s,
-		ExecutionTIme: %d,
+		ExecutionTime: %d,
 	}`, rcp.RecipeName, rcp.CookbookId, rcp.ID, rcp.CoinInputs.String(),
 		rcp.CoinOutputs.String(), rcp.ItemInputs.String(), rcp.ItemOutputs.String(), rcp.BlockInterval)
 }

@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	// "reflect"
+	"encoding/json"
 	"strings"
 	"testing"
-	"encoding/json"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -12,10 +11,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
-
-type CreateCBResponse struct {
-    CookbookID   string	`json:"CookbookID"`
-}
 
 func TestHandlerMsgCreateCookbook(t *testing.T) {
 	mockedCoinInput := setupTestCoinInput()

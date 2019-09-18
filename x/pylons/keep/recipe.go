@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -13,7 +14,7 @@ func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
 	if recipe.Sender.Empty() {
 		return errors.New("SetRecipe: the sender cannot be empty")
 	}
-	mr, err := k.Cdc.MarshalBinaryBare(recipe)
+	mr, err := json.Marshal(recipe)
 	if err != nil {
 		return err
 	}
@@ -34,8 +35,9 @@ func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 	ur := store.Get([]byte(id))
 	var recipe types.Recipe
 
-	k.Cdc.MustUnmarshalBinaryBare(ur, &recipe)
-	return recipe, nil
+	err := json.Unmarshal(ur, &recipe)
+
+	return recipe, err
 }
 
 // GetRecipiesIterator returns an iterator for all the iterator
