@@ -2,12 +2,16 @@ package handlers
 
 import (
 	"encoding/json"
-	
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+type CreateCBResponse struct {
+	CookbookID string `json:"CookbookID"`
+}
 
 // HandlerMsgCreateCookbook is used to create cookbook by a developer
 func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) sdk.Result {

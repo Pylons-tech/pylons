@@ -9,6 +9,10 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+type CreateRecipeResponse struct {
+	RecipeID string `json:"RecipeID"`
+}
+
 // HandlerMsgCreateRecipe is used to create cookbook by a developer
 func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) sdk.Result {
 

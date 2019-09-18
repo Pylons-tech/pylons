@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	// "reflect"
+	"encoding/json"
 	"strings"
 	"testing"
-	"encoding/json"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -12,10 +11,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
-
-type CreateCBResponse struct {
-    CookbookID   string	`json:"CookbookID"`
-}
 
 func TestHandlerMsgCreateCookbook(t *testing.T) {
 	mockedCoinInput := setupTestCoinInput()
@@ -73,12 +68,10 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, tc.sender)
 
 			result := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
-			// t.Errorf("HandlerMsgCreateRecipe LOG:: %+v", result)
 
-			if tc.showError == false {
+			if !tc.showError {
 				cbData := CreateCBResponse{}
 				err := json.Unmarshal(result.Data, &cbData)
-				// t.Errorf("Unmarshal error LOG:: %+v", err)
 				require.True(t, err == nil)
 				require.True(t, len(cbData.CookbookID) > 0)
 			} else {
