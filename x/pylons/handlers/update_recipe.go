@@ -1,11 +1,16 @@
-
 package handlers
 
 import (
+	"encoding/json"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+type UpdateRecipeResponse struct {
+	RecipeID string `json:"RecipeID"`
+}
 
 // HandlerMsgUpdateRecipe is used to create cookbook by a developer
 func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateRecipe) sdk.Result {
@@ -19,7 +24,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 
 	// only the original sender (owner) of the cookbook can update the cookbook
 	if !rc.Sender.Equals(msg.Sender) {
-		return sdk.ErrUnauthorized("the owner of the cookbook is different then the current sender").Result()
+		return sdk.ErrUnauthorized("the owner of the recipe is different then the current sender").Result()
 	}
 
 	if err2 != nil {
@@ -39,7 +44,13 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 		return sdk.ErrInternal(err.Error()).Result()
 	}
 
+	mRecipe, err2 := json.Marshal(map[string]string{
+		"RecipeID": msg.ID,
+	})
 
+	if err2 != nil {
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
 
-	return sdk.Result{}
+	return sdk.Result{Data: mRecipe}
 }
