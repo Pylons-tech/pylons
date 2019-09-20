@@ -10,12 +10,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func listRecipiesHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func listCookbooksHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		ownerKey := vars[ownerKeyName]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_recipe/%s", storeName, ownerKey), nil)
+		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_cookbook/%s", storeName, ownerKey), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return

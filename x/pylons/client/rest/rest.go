@@ -47,8 +47,10 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		pylonsSendHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cdc, cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/list_recipies/{%s}", storeName, ownerKeyName),
-		listRecipiesHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_recipes/{%s}", storeName, ownerKeyName),
+		listRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks/{%s}", storeName, ownerKeyName),
+		listCookbooksHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/items_by_cookbook/{%s}", storeName, cookbookKeyName),
 		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/items_by_sender/{%s}", storeName, senderKey),
