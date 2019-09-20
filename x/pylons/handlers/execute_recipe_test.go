@@ -12,10 +12,11 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHandlerMsgUpdateRecipe(t *testing.T) {
+func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	mockedCoinInput := setupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
 	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.PremiumTier.Fee)
 
@@ -77,8 +78,8 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	zeroInOneOutItemRecipeData := CreateRecipeResponse{}
 	json.Unmarshal(newZeroInOneOutItemRcpResult.Data, &zeroInOneOutItemRecipeData)
 
-	// mock new recipe
-	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
+	// mock 1 input 1 output recipe
+	newOneInputOneOutputItemRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
 		types.CoinInputList{
 			types.CoinInput{
 				Coin:  "wood",
@@ -102,102 +103,131 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 			types.ItemOutput{
 				types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
 				types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-				types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
+				types.StringParamMap{"Name": types.StringParam{"Zombie", "1.0"}},
 			},
 		}, sender1,
 	)
-
-	newRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newRcpMsg)
-	recipeData := CreateRecipeResponse{}
-	json.Unmarshal(newRcpResult.Data, &recipeData)
-
-	// 1) create cookbook - NewMsgCreateCookbook & HandlerCreateCookbook
-	// 2) create recipe - NewMsgCreateRecipe & HandlerCreateRecipe
-	// 3) create items - NewItem
-	// 4) record the items in keeper - SetItem
-	// 5) run execute_recipe handler - NewMsgExecuteRecipe & HandlerExecuteRecipe
+	newOneInputOneOutputItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newOneInputOneOutputItemRcpMsg)
+	oneInputOneOutputRecipeData := CreateRecipeResponse{}
+	json.Unmarshal(newOneInputOneOutputItemRcpResult.Data, &oneInputOneOutputRecipeData)
 
 	cases := map[string]struct {
-		cookbookId   string
-		itemIDs      []string
-		addInputCoin bool
-		recipeName   string
-		recipeID     string
-		recipeDesc   string
-		sender       sdk.AccAddress
-		desiredError string
-		showError    bool
+		cookbookId         string
+		itemIDs            []string
+		dynamicItemSet     bool
+		dynamicItemName    string
+		addInputCoin       bool
+		recipeID           string
+		recipeDesc         string
+		sender             sdk.AccAddress
+		desiredError       string
+		showError          bool
+		checkItemName      string
+		checkItemAvailable bool
 	}{
-		// "insufficient coin balance check": {
-		// 	recipeName:   "recipe0001",
-		// 	itemIDs:      []string{},
-		// 	addInputCoin: false,
-		// 	recipeID:     c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	recipeDesc:   "this has to meet character limits lol",
-		// 	sender:       sender1,
-		// 	desiredError: "insufficient coin balance",
-		// 	showError:    true,
-		// },
-		// "the item IDs count doesn't match the recipe input": {
-		// 	recipeName:   "recipe0001",
-		// 	itemIDs:      []string{"wood"},
-		// 	addInputCoin: true,
-		// 	recipeID:     c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	recipeDesc:   "this has to meet character limits lol",
-		// 	sender:       sender1,
-		// 	desiredError: "the item IDs count doesn't match the recipe input",
-		// 	showError:    true,
-		// },
-		// "coin to coin recipe execution test": {
-		// 	recipeName:   "recipe0001",
-		// 	itemIDs:      []string{},
-		// 	addInputCoin: true,
-		// 	recipeID:     c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	recipeDesc:   "this has to meet character limits lol",
-		// 	sender:       sender1,
-		// 	desiredError: "",
-		// 	showError:    false,
-		// },
-		"zero input item and 1 output item recipe test": {
-			recipeName:   "recipe0001",
-			itemIDs:      []string{},
-			addInputCoin: true,
-			recipeID:     zeroInOneOutItemRecipeData.RecipeID, // available ID
-			recipeDesc:   "this has to meet character limits lol",
-			sender:       sender1,
-			desiredError: "",
-			showError:    false,
+		"insufficient coin balance check": {
+			itemIDs:            []string{},
+			addInputCoin:       false,
+			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender2,
+			desiredError:       "insufficient coin balance",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
 		},
-		// "successful test for execute recipe": {
-		// 	recipeName:   "recipe0001",
-		// 	recipeID:     recipeData.RecipeID, // available ID
-		// 	recipeDesc:   "this has to meet character limits lol",
-		// 	sender:       sender1,
-		// 	desiredError: "",
-		// 	showError:    false,
-		// },
+		"the item IDs count doesn't match the recipe input": {
+			itemIDs:            []string{"Raichu"},
+			addInputCoin:       true,
+			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "the item IDs count doesn't match the recipe input",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"coin to coin recipe execution test": {
+			itemIDs:            []string{},
+			addInputCoin:       true,
+			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "",
+			showError:          false,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"zero input item and 1 output item recipe test": {
+			itemIDs:            []string{},
+			addInputCoin:       true,
+			recipeID:           zeroInOneOutItemRecipeData.RecipeID, // available ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "",
+			showError:          false,
+			checkItemName:      "Raichu",
+			checkItemAvailable: true,
+		},
+		"not existing itemID set test": {
+			itemIDs:            []string{"invaliditemID"},
+			dynamicItemSet:     false,
+			dynamicItemName:    "Raichu",
+			addInputCoin:       true,
+			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "The item doesn't exist",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"invalid type itemID set test": {
+			itemIDs:            []string{"invaliditemID"},
+			dynamicItemSet:     true,
+			dynamicItemName:    "NoRaichu",
+			addInputCoin:       true,
+			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "the item inputs dont match any items provided",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"1 input item and 1 output item recipe test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemName:    "Raichu",
+			addInputCoin:       true,
+			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "",
+			showError:          false,
+			checkItemName:      "Zombie",
+			checkItemAvailable: true,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
 				mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 			}
-			// func NewItem(cookbookID string, doubles map[string]float64, longs map[string]int, strings map[string]string, sender sdk.AccAddress) *Item {
-			// 	item := &Item{
-			// 		CookbookID: cookbookID,
-			// 		Doubles:    doubles,
-			// 		Longs:      longs,
-			// 		Strings:    strings,
-			// 		Sender:     sender,
-			// 	}
-			// 	item.ID = item.KeyGen()
-			// 	return item
-			// }
-			// (recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe
+			if tc.dynamicItemSet {
+				dynamicItem := types.NewItem(
+					cbData.CookbookID,
+					(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
+					(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
+					(types.StringInputParamMap{"Name": types.StringInputParam{tc.dynamicItemName}}).Actualize(),
+					tc.sender,
+				)
+				mockedCoinInput.plnK.SetItem(mockedCoinInput.ctx, *dynamicItem)
+				tc.itemIDs = []string{dynamicItem.ID}
+			}
+
 			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
 			result := HandlerMsgExecuteRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
-
-			t.Errorf("HandlerMsgExecuteRecipe LOG:: %+v", result)
 
 			if tc.showError == false {
 				execRcpResponse := ExecuteRecipeResp{}
@@ -208,6 +238,20 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				require.True(t, execRcpResponse.Message == "successfully executed the recipe")
 
 				require.True(t, mockedCoinInput.plnK.CoinKeeper.HasCoins(mockedCoinInput.ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("chair", 1)}))
+
+				if tc.checkItemAvailable {
+					items, err := mockedCoinInput.plnK.GetItemsBySender(mockedCoinInput.ctx, tc.sender)
+					require.True(t, err == nil)
+
+					itemAvailable := false
+					for _, item := range items {
+						if item.Strings["Name"] == tc.checkItemName {
+							itemAvailable = true
+							break
+						}
+					}
+					require.True(t, itemAvailable == true)
+				}
 			} else {
 				require.True(t, strings.Contains(result.Log, tc.desiredError))
 			}
