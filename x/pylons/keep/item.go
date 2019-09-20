@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -13,7 +14,8 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) error {
 	if item.Sender.Empty() {
 		return errors.New("SetItem: the sender cannot be empty")
 	}
-	mi, err := k.Cdc.MarshalBinaryBare(item)
+
+	mi, err := json.Marshal(item)
 	if err != nil {
 		return err
 	}
@@ -34,8 +36,8 @@ func (k Keeper) GetItem(ctx sdk.Context, id string) (types.Item, error) {
 	ui := store.Get([]byte(id))
 	var item types.Item
 
-	k.Cdc.MustUnmarshalBinaryBare(ui, &item)
-	return item, nil
+	err := json.Unmarshal(ui, &item)
+	return item, err
 }
 
 // GetItemsBySender returns all items by sender
@@ -47,7 +49,7 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 	for ; iter.Valid(); iter.Next() {
 		var item types.Item
 		mIT := iter.Value()
-		err := k.Cdc.UnmarshalBinaryBare(mIT, &item)
+		err := json.Unmarshal(mIT, &item)
 		if err != nil {
 			return nil, sdk.ErrInternal(err.Error())
 		}
@@ -68,7 +70,7 @@ func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 	if !store.Has([]byte(id)) {
 		return fmt.Errorf("the item with gid %s does not exist", id)
 	}
-	mi, err := k.Cdc.MarshalBinaryBare(item)
+	mi, err := json.Marshal(item)
 	if err != nil {
 		return err
 	}
@@ -90,7 +92,7 @@ func (k Keeper) ItemsByCookbook(ctx sdk.Context, cookbookID string) ([]types.Ite
 	for ; iter.Valid(); iter.Next() {
 		var item types.Item
 		mIT := iter.Value()
-		err := k.Cdc.UnmarshalBinaryBare(mIT, &item)
+		err := json.Unmarshal(mIT, &item)
 		if err != nil {
 			return nil, sdk.ErrInternal(err.Error())
 		}

@@ -6,24 +6,24 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 
 	codec "github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
 )
 
-type testCoinInput struct {
-	cdc *codec.Codec
-	ctx sdk.Context
-	ak  auth.AccountKeeper
-	pk  params.Keeper
-	bk  bank.Keeper
-	fcK auth.FeeCollectionKeeper
-	plnK  Keeper      
+type TestCoinInput struct {
+	cdc  *codec.Codec
+	ctx  sdk.Context
+	ak   auth.AccountKeeper
+	pk   params.Keeper
+	bk   bank.Keeper
+	fcK  auth.FeeCollectionKeeper
+	plnK Keeper
 }
 
-func setupTestCoinInput() testCoinInput {
+func setupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
 	cdc := codec.New()
@@ -72,12 +72,12 @@ func setupTestCoinInput() testCoinInput {
 
 	plnK := NewKeeper(
 		bk,
-		cbKey, // cookbook
-		rcKey, // recipe
-		itKey, // item
+		cbKey,   // cookbook
+		rcKey,   // recipe
+		itKey,   // item
 		execKey, // exec
 		cdc,
 	)
 
-	return testCoinInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk, bk: bk, fcK: fcK, plnK: plnK}
+	return TestCoinInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk, bk: bk, fcK: fcK, plnK: plnK}
 }

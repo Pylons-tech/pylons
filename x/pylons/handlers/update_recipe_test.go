@@ -20,41 +20,15 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.PremiumTier.Fee)
 
 	// mock cookbook
-	cookbookName := "cookbook-00001"
-	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, sender1)
-	cbResult := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
-	cbData := CreateCBResponse{}
-	json.Unmarshal(cbResult.Data, &cbData)
+	cbData := mockCookbook(mockedCoinInput, sender1)
 
 	// mock new recipe
 	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
-		types.CoinInputList{
-			types.CoinInput{
-				Coin:  "Wood",
-				Count: 5,
-			},
-		},
-		types.CoinOutputList{
-			types.CoinOutput{
-				Coin:  "Chair",
-				Count: 1,
-			},
-		},
-		types.ItemInputList{
-			types.ItemInput{
-				types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}},
-				types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
-				types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
-			},
-		},
-		types.ItemOutputList{
-			types.ItemOutput{
-				types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-				types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-				types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
-			},
-		}, sender1,
+		types.GenCoinInputList("wood", 5),
+		types.GenCoinOutputList("chair", 1),
+		types.GenItemInputList("Raichu"),
+		types.GenItemOutputList("Raichu"),
+		sender1,
 	)
 
 	newRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newRcpMsg)
@@ -92,32 +66,11 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgUpdateRecipe(tc.recipeName, tc.cookbookId, tc.recipeID, tc.recipeDesc,
-				types.CoinInputList{
-					types.CoinInput{
-						Coin:  "Wood",
-						Count: 5,
-					},
-				},
-				types.CoinOutputList{
-					types.CoinOutput{
-						Coin:  "Chair",
-						Count: 1,
-					},
-				},
-				types.ItemInputList{
-					types.ItemInput{
-						types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}},
-						types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
-						types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
-					},
-				},
-				types.ItemOutputList{
-					types.ItemOutput{
-						types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-						types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-						types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
-					},
-				}, sender1)
+				types.GenCoinInputList("wood", 5),
+				types.GenCoinOutputList("chair", 1),
+				types.GenItemInputList("Raichu"),
+				types.GenItemOutputList("Raichu"),
+				sender1)
 
 			result := HandlerMsgUpdateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
 

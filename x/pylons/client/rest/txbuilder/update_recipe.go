@@ -29,13 +29,13 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol",
 			types.CoinInputList{
 				types.CoinInput{
-					Coin:  "Wood",
+					Coin:  "wood",
 					Count: 5,
 				},
 			},
 			types.CoinOutputList{
 				types.CoinOutput{
-					Coin:  "Chair",
+					Coin:  "chair",
 					Count: 1,
 				},
 			},
