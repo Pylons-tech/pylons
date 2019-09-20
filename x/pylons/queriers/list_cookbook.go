@@ -14,6 +14,9 @@ const (
 
 // ListCookbook returns a cookbook based on the cookbook id
 func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no address is provided in path")
+	}
 	addr := path[0]
 	var cookbookList types.CookbookList
 	var cookbooks []types.Cookbook

@@ -21,7 +21,7 @@ func TestAddrFromPubKeyFromAfti(t *testing.T) {
 	addrRespBytes, err := AddrFromPubKey(input.ctx,
 		[]string{pubKey},
 		req,
-		input.keeper,
+		input.plnK,
 	)
 
 	if err != nil {
@@ -52,7 +52,7 @@ func TestAddrFromPubKeyFromGirish(t *testing.T) {
 	addrRespBytes, err := AddrFromPubKey(input.ctx,
 		[]string{pubKey},
 		req,
-		input.keeper,
+		input.plnK,
 	)
 
 	if err != nil {
