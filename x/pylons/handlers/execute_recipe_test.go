@@ -169,7 +169,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "Raichu",
 			checkItemAvailable: true,
 		},
-		"not existing itemID set test": {
+		"not existing item in input": {
 			itemIDs:            []string{"invaliditemID"},
 			dynamicItemSet:     false,
 			dynamicItemName:    "Raichu",
@@ -182,7 +182,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "",
 			checkItemAvailable: false,
 		},
-		"invalid type itemID set test": {
+		"Wrong item in input": {
 			itemIDs:            []string{"invaliditemID"},
 			dynamicItemSet:     true,
 			dynamicItemName:    "NoRaichu",
