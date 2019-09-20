@@ -57,7 +57,7 @@ func (k Keeper) UpdateRecipe(ctx sdk.Context, id string, recipe types.Recipe) er
 	if !store.Has([]byte(id)) {
 		return fmt.Errorf("the recipe with gid %s does not exist", id)
 	}
-	mr, err := k.Cdc.MarshalBinaryBare(recipe)
+	mr, err := json.Marshal(recipe)
 	if err != nil {
 		return err
 	}
