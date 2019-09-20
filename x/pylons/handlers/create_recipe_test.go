@@ -56,32 +56,11 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, tc.recipeDesc,
-				types.CoinInputList{
-					types.CoinInput{
-						Coin:  "Wood",
-						Count: 5,
-					},
-				},
-				types.CoinOutputList{
-					types.CoinOutput{
-						Coin:  "Chair",
-						Count: 1,
-					},
-				},
-				types.ItemInputList{
-					types.ItemInput{
-						types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}},
-						types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
-						types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
-					},
-				},
-				types.ItemOutputList{
-					types.ItemOutput{
-						types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-						types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-						types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
-					},
-				}, tc.sender,
+				types.GenCoinInputList("wood", 5),
+				types.GenCoinOutputList("chair", 1),
+				types.GenItemInputList("Raichu"),
+				types.GenItemOutputList("Raichu"),
+				tc.sender,
 			)
 
 			result := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)

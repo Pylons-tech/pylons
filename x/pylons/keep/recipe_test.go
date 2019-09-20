@@ -50,33 +50,12 @@ func TestKeeperGetRecipe(t *testing.T) {
 			require.True(t, err == nil)
 
 			recipe := types.NewRecipe(tc.recipeName, cb.ID, tc.desc,
-				types.CoinInputList{
-					types.CoinInput{
-						Coin:  "Wood",
-						Count: 5,
-					},
-				},
-				types.CoinOutputList{
-					types.CoinOutput{
-						Coin:  "Chair",
-						Count: 1,
-					},
-				},
-				types.ItemInputList{
-					types.ItemInput{
-						types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}},
-						types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
-						types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
-					},
-				},
-				types.ItemOutputList{
-					types.ItemOutput{
-						types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-						types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-						types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
-					},
-				},
-				0, tc.sender)
+				types.GenCoinInputList("wood", 5),
+				types.GenCoinOutputList("chair", 1),
+				types.GenItemInputList("Raichu"),
+				types.GenItemOutputList("Raichu"),
+				0,
+				tc.sender)
 			mockedCoinInput.plnK.SetRecipe(mockedCoinInput.ctx, recipe)
 			readRecipe, err2 := mockedCoinInput.plnK.GetRecipe(mockedCoinInput.ctx, recipe.ID)
 			require.True(t, err2 == nil)

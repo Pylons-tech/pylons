@@ -21,27 +21,12 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.PremiumTier.Fee)
 
 	// mock cookbook
-	cookbookName := "cookbook-00001"
-	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, sender1)
-	cbResult := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
-	cbData := CreateCBResponse{}
-	json.Unmarshal(cbResult.Data, &cbData)
+	cbData := mockCookbook(mockedCoinInput, sender1)
 
 	// mock coin to coin recipe
 	newC2CRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
-		types.CoinInputList{
-			types.CoinInput{
-				Coin:  "wood",
-				Count: 5,
-			},
-		},
-		types.CoinOutputList{
-			types.CoinOutput{
-				Coin:  "chair",
-				Count: 1,
-			},
-		},
+		types.GenCoinInputList("wood", 5),
+		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
 		types.ItemOutputList{},
 		sender1,
@@ -52,26 +37,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 	// mock coin to coin recipe
 	newZeroInOneOutItemRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
-		types.CoinInputList{
-			types.CoinInput{
-				Coin:  "wood",
-				Count: 5,
-			},
-		},
-		types.CoinOutputList{
-			types.CoinOutput{
-				Coin:  "chair",
-				Count: 1,
-			},
-		},
+		types.GenCoinInputList("wood", 5),
+		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
-		types.ItemOutputList{
-			types.ItemOutput{
-				types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-				types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-				types.StringParamMap{"Name": types.StringParam{"Raichu", "1.0"}},
-			},
-		},
+		types.GenItemOutputList("Raichu"),
 		sender1,
 	)
 	newZeroInOneOutItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newZeroInOneOutItemRcpMsg)
@@ -80,32 +49,11 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 	// mock 1 input 1 output recipe
 	newOneInputOneOutputItemRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
-		types.CoinInputList{
-			types.CoinInput{
-				Coin:  "wood",
-				Count: 5,
-			},
-		},
-		types.CoinOutputList{
-			types.CoinOutput{
-				Coin:  "chair",
-				Count: 1,
-			},
-		},
-		types.ItemInputList{
-			types.ItemInput{
-				types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}},
-				types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
-				types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
-			},
-		},
-		types.ItemOutputList{
-			types.ItemOutput{
-				types.DoubleParamMap{"endurance": types.DoubleParam{"0.70", "1.0", "1.0"}},
-				types.LongParamMap{"HP": types.LongParam{100, 140, "1.0"}},
-				types.StringParamMap{"Name": types.StringParam{"Zombie", "1.0"}},
-			},
-		}, sender1,
+		types.GenCoinInputList("wood", 5),
+		types.GenCoinOutputList("chair", 1),
+		types.GenItemInputList("Raichu"),
+		types.GenItemOutputList("Zombie"),
+		sender1,
 	)
 	newOneInputOneOutputItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newOneInputOneOutputItemRcpMsg)
 	oneInputOneOutputRecipeData := CreateRecipeResponse{}

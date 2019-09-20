@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/json"
+
 	abci "github.com/tendermint/tendermint/abci/types"
 	dbm "github.com/tendermint/tendermint/libs/db"
 	"github.com/tendermint/tendermint/libs/log"
@@ -13,9 +15,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 )
 
-type testCoinInput struct {
+type TestCoinInput struct {
 	cdc  *codec.Codec
 	ctx  sdk.Context
 	ak   auth.AccountKeeper
@@ -25,7 +28,17 @@ type testCoinInput struct {
 	plnK keep.Keeper
 }
 
-func setupTestCoinInput() testCoinInput {
+func mockCookbook(tci TestCoinInput, sender sdk.AccAddress) CreateCBResponse {
+	cookbookName := "cookbook-00001"
+	cookbookDesc := "this has to meet character limits"
+	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, sender)
+	cbResult := HandlerMsgCreateCookbook(tci.ctx, tci.plnK, msg)
+	cbData := CreateCBResponse{}
+	json.Unmarshal(cbResult.Data, &cbData)
+	return cbData
+}
+
+func setupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
 	cdc := codec.New()
@@ -74,12 +87,12 @@ func setupTestCoinInput() testCoinInput {
 
 	plnK := keep.NewKeeper(
 		bk,
-		cbKey, // cookbook
-		rcKey, // recipe
-		itKey, // item
+		cbKey,   // cookbook
+		rcKey,   // recipe
+		itKey,   // item
 		execKey, // exec
 		cdc,
 	)
 
-	return testCoinInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk, bk: bk, fcK: fcK, plnK: plnK}
+	return TestCoinInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk, bk: bk, fcK: fcK, plnK: plnK}
 }

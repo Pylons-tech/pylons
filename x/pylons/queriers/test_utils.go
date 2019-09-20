@@ -13,13 +13,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type testCoinInput struct {
+type TestCoinInput struct {
 	cdc    *codec.Codec
 	ctx    sdk.Context
 	keeper keep.Keeper
 }
 
-func setupTestCoinInput() testCoinInput {
+func setupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
 	cdc := codec.New()
@@ -38,7 +38,7 @@ func setupTestCoinInput() testCoinInput {
 
 	ctx := sdk.NewContext(ms, abci.Header{ChainID: "test-chain-id"}, false, log.NewNopLogger())
 
-	return testCoinInput{cdc: cdc, ctx: ctx, keeper: keep.Keeper{
+	return TestCoinInput{cdc: cdc, ctx: ctx, keeper: keep.Keeper{
 		Cdc: cdc,
 	}}
 }
