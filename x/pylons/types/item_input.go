@@ -29,7 +29,7 @@ func (ii ItemInput) Matches(item Item) bool {
 			return false
 		}
 
-		if long < value.MinValue || long > value.MaxValue {
+		if !value.Has(long) {
 			return false
 		}
 	}

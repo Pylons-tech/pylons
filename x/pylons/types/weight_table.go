@@ -12,6 +12,10 @@ type WeightRange struct {
 	Weight int
 }
 
+func (wr WeightRange) Has(number int) bool {
+	return number >= wr.Lower && number < wr.Upper
+}
+
 // Generate uses the weight table to generate a random number. Its uses a 2 level random generation mechanism.
 // E.g. 2 weight ranges are provided with values [100, 500  weight: 8] and [600, 800 weight: 2] so now we
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100, 500] else [600, 800].
@@ -37,4 +41,14 @@ func (wt *WeightTable) Generate() int {
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
 	return rand.Intn(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower
+}
+
+// Has checks if any of the weight ranges has the number
+func (wt *WeightTable) Has(number int) bool {
+	for _, weightRange := range wt.WeightRanges {
+		if weightRange.Has(number) {
+			return true
+		}
+	}
+	return false
 }
