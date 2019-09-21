@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
@@ -13,15 +14,15 @@ import (
 )
 
 func TestHandlerMsgExecuteRecipe(t *testing.T) {
-	mockedCoinInput := setupTestCoinInput()
+	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
 
 	// mock cookbook
-	cbData := mockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock coin to coin recipe
 	newC2CRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
@@ -31,7 +32,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.ItemOutputList{},
 		sender1,
 	)
-	newC2CRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newC2CRcpMsg)
+	newC2CRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newC2CRcpMsg)
 	c2cRecipeData := CreateRecipeResponse{}
 	json.Unmarshal(newC2CRcpResult.Data, &c2cRecipeData)
 
@@ -43,7 +44,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.GenItemOutputList("Raichu"),
 		sender1,
 	)
-	newZeroInOneOutItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newZeroInOneOutItemRcpMsg)
+	newZeroInOneOutItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newZeroInOneOutItemRcpMsg)
 	zeroInOneOutItemRecipeData := CreateRecipeResponse{}
 	json.Unmarshal(newZeroInOneOutItemRcpResult.Data, &zeroInOneOutItemRecipeData)
 
@@ -55,7 +56,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.GenItemOutputList("Zombie"),
 		sender1,
 	)
-	newOneInputOneOutputItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newOneInputOneOutputItemRcpMsg)
+	newOneInputOneOutputItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newOneInputOneOutputItemRcpMsg)
 	oneInputOneOutputRecipeData := CreateRecipeResponse{}
 	json.Unmarshal(newOneInputOneOutputItemRcpResult.Data, &oneInputOneOutputRecipeData)
 
@@ -160,7 +161,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 			}
 			if tc.dynamicItemSet {
 				dynamicItem := types.NewItem(
@@ -170,12 +171,12 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 					(types.StringInputParamMap{"Name": types.StringInputParam{tc.dynamicItemName}}).Actualize(),
 					tc.sender,
 				)
-				mockedCoinInput.plnK.SetItem(mockedCoinInput.ctx, *dynamicItem)
+				mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
 				tc.itemIDs = []string{dynamicItem.ID}
 			}
 
 			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
-			result := HandlerMsgExecuteRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
+			result := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				execRcpResponse := ExecuteRecipeResp{}
@@ -185,10 +186,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == "successfully executed the recipe")
 
-				require.True(t, mockedCoinInput.plnK.CoinKeeper.HasCoins(mockedCoinInput.ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("chair", 1)}))
+				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("chair", 1)}))
 
 				if tc.checkItemAvailable {
-					items, err := mockedCoinInput.plnK.GetItemsBySender(mockedCoinInput.ctx, tc.sender)
+					items, err := mockedCoinInput.PlnK.GetItemsBySender(mockedCoinInput.Ctx, tc.sender)
 					require.True(t, err == nil)
 
 					itemAvailable := false

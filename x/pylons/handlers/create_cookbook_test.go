@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
@@ -13,14 +14,14 @@ import (
 )
 
 func TestHandlerMsgCreateCookbook(t *testing.T) {
-	mockedCoinInput := setupTestCoinInput()
+	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	// mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, sdk.NewCoins(sdk.NewInt64Coin("pylons", 500000)))
-	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.PremiumTier.Fee)
-	// mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.BasicTier.Fee)
+	// mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.NewCoins(sdk.NewInt64Coin("pylons", 500000)))
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	// mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.BasicTier.Fee)
 
 	cases := map[string]struct {
 		name         string
@@ -67,7 +68,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, tc.sender)
 
-			result := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
+			result := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if !tc.showError {
 				cbData := CreateCBResponse{}

@@ -11,11 +11,11 @@ import (
 )
 
 func TestKeeperGetRecipe(t *testing.T) {
-	mockedCoinInput := setupTestCoinInput()
+	mockedCoinInput := SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
 	cases := map[string]struct {
 		cookbookName string
@@ -46,7 +46,7 @@ func TestKeeperGetRecipe(t *testing.T) {
 				tc.desc,               // msg.Description,
 				"SketchyCo",           // msg.Developer
 			)
-			err := mockedCoinInput.plnK.SetCookbook(mockedCoinInput.ctx, cb)
+			err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 			require.True(t, err == nil)
 
 			recipe := types.NewRecipe(tc.recipeName, cb.ID, tc.desc,
@@ -56,8 +56,8 @@ func TestKeeperGetRecipe(t *testing.T) {
 				types.GenItemOutputList("Raichu"),
 				0,
 				tc.sender)
-			mockedCoinInput.plnK.SetRecipe(mockedCoinInput.ctx, recipe)
-			readRecipe, err2 := mockedCoinInput.plnK.GetRecipe(mockedCoinInput.ctx, recipe.ID)
+			mockedCoinInput.PlnK.SetRecipe(mockedCoinInput.Ctx, recipe)
+			readRecipe, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, recipe.ID)
 			require.True(t, err2 == nil)
 
 			require.True(t, err2 == nil)

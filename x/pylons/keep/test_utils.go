@@ -14,16 +14,16 @@ import (
 )
 
 type TestCoinInput struct {
-	cdc  *codec.Codec
-	ctx  sdk.Context
-	ak   auth.AccountKeeper
-	pk   params.Keeper
-	bk   bank.Keeper
-	fcK  auth.FeeCollectionKeeper
-	plnK Keeper
+	Cdc  *codec.Codec
+	Ctx  sdk.Context
+	Ak   auth.AccountKeeper
+	Pk   params.Keeper
+	Bk   bank.Keeper
+	FcK  auth.FeeCollectionKeeper
+	PlnK Keeper
 }
 
-func setupTestCoinInput() TestCoinInput {
+func SetupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
 	cdc := codec.New()
@@ -79,5 +79,5 @@ func setupTestCoinInput() TestCoinInput {
 		cdc,
 	)
 
-	return TestCoinInput{cdc: cdc, ctx: ctx, ak: ak, pk: pk, bk: bk, fcK: fcK, plnK: plnK}
+	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: ak, Pk: pk, Bk: bk, FcK: fcK, PlnK: plnK}
 }
