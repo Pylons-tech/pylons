@@ -10,11 +10,11 @@ import (
 )
 
 func TestKeeperGetCookbook(t *testing.T) {
-	mockedCoinInput := setupTestCoinInput()
+	mockedCoinInput := SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
 	cases := map[string]struct {
 		name         string
@@ -43,10 +43,10 @@ func TestKeeperGetCookbook(t *testing.T) {
 				tc.desc,               // msg.Description,
 				"SketchyCo",           // msg.Developer
 			)
-			err := mockedCoinInput.plnK.SetCookbook(mockedCoinInput.ctx, cb)
+			err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 			require.True(t, err == nil)
 
-			readCookbook, err2 := mockedCoinInput.plnK.GetCookbook(mockedCoinInput.ctx, cb.ID)
+			readCookbook, err2 := mockedCoinInput.PlnK.GetCookbook(mockedCoinInput.Ctx, cb.ID)
 			// t.Errorf("CookbookTEST LOG:: %+v", err2)
 			require.True(t, err2 == nil)
 			require.True(t, cb.SupportEmail == readCookbook.SupportEmail)

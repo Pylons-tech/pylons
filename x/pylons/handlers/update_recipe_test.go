@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
@@ -13,14 +14,14 @@ import (
 )
 
 func TestHandlerMsgUpdateRecipe(t *testing.T) {
-	mockedCoinInput := setupTestCoinInput()
+	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
 
 	// mock cookbook
-	cbData := mockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock new recipe
 	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
@@ -31,7 +32,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		sender1,
 	)
 
-	newRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, newRcpMsg)
+	newRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 
@@ -72,7 +73,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenItemOutputList("Raichu"),
 				sender1)
 
-			result := HandlerMsgUpdateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
+			result := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}

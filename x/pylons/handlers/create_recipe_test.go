@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
@@ -13,10 +14,10 @@ import (
 )
 
 func TestHandlerMsgCreateRecipe(t *testing.T) {
-	mockedCoinInput := setupTestCoinInput()
+	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	mockedCoinInput.bk.AddCoins(mockedCoinInput.ctx, sender, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
 	cases := map[string]struct {
 		cookbookName   string
@@ -48,7 +49,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, tc.sender)
-				cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.ctx, mockedCoinInput.plnK, cookbookMsg)
+				cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 
 				err := json.Unmarshal(cookbookResult.Data, &cbData)
 				require.True(t, err == nil)
@@ -63,7 +64,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				tc.sender,
 			)
 
-			result := HandlerMsgCreateRecipe(mockedCoinInput.ctx, mockedCoinInput.plnK, msg)
+			result := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 			if !tc.showError {
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
