@@ -41,7 +41,7 @@ func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 }
 
 // GetRecipiesIterator returns an iterator for all the iterator
-func (k Keeper) GetRecipiesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+func (k Keeper) GetRecipesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
 	store := ctx.KVStore(k.RecipeKey)
 	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
 }

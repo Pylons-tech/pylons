@@ -16,14 +16,14 @@ const (
 func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
 	addr := path[0]
 	var recipeList types.RecipeList
-	var recipies []types.Recipe
+	var recipes []types.Recipe
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}
 
-	iterator := keeper.GetRecipiesIterator(ctx, accAddr)
+	iterator := keeper.GetRecipesIterator(ctx, accAddr)
 
 	for ; iterator.Valid(); iterator.Next() {
 		var recipe types.Recipe
@@ -34,7 +34,7 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 			continue
 		}
 
-		recipies = append(recipies, recipe)
+		recipes = append(recipes, recipe)
 	}
 
 	if err != nil {
@@ -42,7 +42,7 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 	}
 
 	recipeList = types.RecipeList{
-		Recipies: recipies,
+		Recipes: recipes,
 	}
 
 	cbl, err := keeper.Cdc.MarshalJSON(recipeList)
