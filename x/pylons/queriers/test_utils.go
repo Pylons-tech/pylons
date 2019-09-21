@@ -1,26 +1,11 @@
 package queriers
 
 import (
-	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/bank"
-	"github.com/cosmos/cosmos-sdk/x/params"
 )
-
-type TestCoinInput struct {
-	Cdc  *codec.Codec
-	Ctx  sdk.Context
-	Ak   auth.AccountKeeper
-	Pk   params.Keeper
-	Bk   bank.Keeper
-	FcK  auth.FeeCollectionKeeper
-	PlnK keep.Keeper
-}
 
 func newTestMsg(addrs ...sdk.AccAddress) *sdk.TestMsg {
 	return sdk.NewTestMsg(addrs...)
