@@ -60,7 +60,18 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			types.ItemOutputList{
 				types.ItemOutput{
 					Doubles: types.DoubleParamMap{"endurance": types.DoubleParam{MinValue: "0.7", MaxValue: "1", Rate: "1"}},
-					Longs:   types.LongParamMap{"HP": types.LongParam{MinValue: 100, MaxValue: 140, Rate: "1"}},
+					Longs: types.LongParamMap{"HP": types.LongParam{WeightTable: types.WeightTable{WeightRanges: []types.WeightRange{
+						types.WeightRange{
+							Lower:  100,
+							Upper:  500,
+							Weight: 6,
+						},
+						types.WeightRange{
+							Lower:  501,
+							Upper:  800,
+							Weight: 2,
+						},
+					}}}},
 					Strings: types.StringParamMap{"Name": types.StringParam{Value: "Raichu", Rate: "1"}},
 				},
 			}, sender,
