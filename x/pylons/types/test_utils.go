@@ -22,7 +22,7 @@ func GenItemInputList(name string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
 			DoubleInputParamMap{"endurance": DoubleInputParam{"0.70", "1.0"}},
-			LongInputParamMap{"HP": LongInputParam{WeightTable: WeightTable{WeightRanges: []WeightRange{
+			LongInputParamMap{"HP": LongInputParam{IntWeightTable: IntWeightTable{WeightRanges: []WeightRange{
 				WeightRange{
 					Lower:  100,
 					Upper:  500,
@@ -43,7 +43,7 @@ func GenItemOutputList(name string) ItemOutputList {
 	return ItemOutputList{
 		ItemOutput{
 			DoubleParamMap{"endurance": DoubleParam{"0.70", "1.0", "1.0"}},
-			LongParamMap{"HP": LongParam{WeightTable: WeightTable{WeightRanges: []WeightRange{
+			LongParamMap{"HP": LongParam{IntWeightTable: IntWeightTable{WeightRanges: []WeightRange{
 				WeightRange{
 					Lower:  100,
 					Upper:  500,

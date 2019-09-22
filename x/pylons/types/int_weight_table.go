@@ -2,7 +2,7 @@ package types
 
 import "math/rand"
 
-type WeightTable struct {
+type IntWeightTable struct {
 	WeightRanges []WeightRange
 }
 
@@ -20,7 +20,7 @@ func (wr WeightRange) Has(number int) bool {
 // E.g. 2 weight ranges are provided with values [100, 500  weight: 8] and [600, 800 weight: 2] so now we
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100, 500] else [600, 800].
 // next we get a random number from the selected range and return that
-func (wt *WeightTable) Generate() int {
+func (wt *IntWeightTable) Generate() int {
 	lastWeight := 0
 	var weights []int
 	for _, weightRange := range wt.WeightRanges {
@@ -44,7 +44,7 @@ func (wt *WeightTable) Generate() int {
 }
 
 // Has checks if any of the weight ranges has the number
-func (wt *WeightTable) Has(number int) bool {
+func (wt *IntWeightTable) Has(number int) bool {
 	for _, weightRange := range wt.WeightRanges {
 		if weightRange.Has(number) {
 			return true

@@ -6,7 +6,7 @@ import (
 
 // LongParam describes the bounds on an item input/output parameter of type int64
 type LongParam struct {
-	WeightTable
+	IntWeightTable
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate FloatString
 }
@@ -17,9 +17,9 @@ type LongParamMap map[string]LongParam
 func (lp LongParam) String() string {
 	return fmt.Sprintf(`
 	LongParam{ 
-		WeightTable: %+v,
+		IntWeightTable: %+v,
 		Rate: %+v,
-	}`, lp.WeightTable, lp.Rate)
+	}`, lp.IntWeightTable, lp.Rate)
 }
 
 func (lpm LongParamMap) String() string {

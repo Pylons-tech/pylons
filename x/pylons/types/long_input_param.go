@@ -6,7 +6,7 @@ import (
 
 // LongInputParam describes the bounds on an item input/output parameter of type int64
 type LongInputParam struct {
-	WeightTable
+	IntWeightTable
 }
 
 // LongInputParamMap is a map of string:LongInputParam
@@ -16,7 +16,7 @@ func (lp LongInputParam) String() string {
 	return fmt.Sprintf(`
 	LongInputParam{ 
 		%+v
-	}`, lp.WeightTable)
+	}`, lp.IntWeightTable)
 }
 
 func (lpm LongInputParamMap) String() string {
