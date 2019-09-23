@@ -24,12 +24,12 @@ type Recipe struct {
 
 // RecipeList is a list of cookbook
 type RecipeList struct {
-	Recipies []Recipe
+	Recipes []Recipe
 }
 
 func (cbl RecipeList) String() string {
 	output := "RecipeList{"
-	for _, cb := range cbl.Recipies {
+	for _, cb := range cbl.Recipes {
 		output += cb.String()
 		output += ",\n"
 	}
