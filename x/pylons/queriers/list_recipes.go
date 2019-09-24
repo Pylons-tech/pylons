@@ -1,6 +1,8 @@
 package queriers
 
 import (
+	"encoding/json"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,6 +16,9 @@ const (
 
 // ListRecipe returns a recipe based on the recipe id
 func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no address is provided in path")
+	}
 	addr := path[0]
 	var recipeList types.RecipeList
 	var recipes []types.Recipe
@@ -27,8 +32,8 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 
 	for ; iterator.Valid(); iterator.Next() {
 		var recipe types.Recipe
-		mCB := iterator.Value()
-		err = keeper.Cdc.UnmarshalBinaryBare(mCB, &recipe)
+		mRCP := iterator.Value()
+		err = json.Unmarshal(mRCP, &recipe)
 		if err != nil {
 			// this happens because we have multiple versions of breaking recipes at times
 			continue
@@ -45,10 +50,10 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 		Recipes: recipes,
 	}
 
-	cbl, err := keeper.Cdc.MarshalJSON(recipeList)
+	rcpl, err := keeper.Cdc.MarshalJSON(recipeList)
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}
 
-	return cbl, nil
+	return rcpl, nil
 }

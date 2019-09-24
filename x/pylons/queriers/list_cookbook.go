@@ -1,6 +1,8 @@
 package queriers
 
 import (
+	"encoding/json"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -31,7 +33,7 @@ func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper 
 	for ; iterator.Valid(); iterator.Next() {
 		var cookbook types.Cookbook
 		mCB := iterator.Value()
-		err = keeper.Cdc.UnmarshalBinaryBare(mCB, &cookbook)
+		err = json.Unmarshal(mCB, &cookbook)
 		if err != nil {
 			return nil, sdk.ErrInternal(err.Error())
 		}

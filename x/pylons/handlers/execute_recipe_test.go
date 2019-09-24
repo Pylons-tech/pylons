@@ -25,40 +25,37 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock coin to coin recipe
-	newC2CRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
+	c2cRecipeData := MockRecipe(
+		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
 		types.ItemOutputList{},
+		cbData.CookbookID,
 		sender1,
 	)
-	newC2CRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newC2CRcpMsg)
-	c2cRecipeData := CreateRecipeResponse{}
-	json.Unmarshal(newC2CRcpResult.Data, &c2cRecipeData)
 
 	// mock coin to coin recipe
-	newZeroInOneOutItemRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
+	zeroInOneOutItemRecipeData := MockRecipe(
+		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
 		types.GenItemOutputList("Raichu"),
+		cbData.CookbookID,
 		sender1,
 	)
-	newZeroInOneOutItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newZeroInOneOutItemRcpMsg)
-	zeroInOneOutItemRecipeData := CreateRecipeResponse{}
-	json.Unmarshal(newZeroInOneOutItemRcpResult.Data, &zeroInOneOutItemRecipeData)
 
 	// mock 1 input 1 output recipe
-	newOneInputOneOutputItemRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
+	oneInputOneOutputRecipeData := MockRecipe(
+		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenCoinOutputList("chair", 1),
 		types.GenItemInputList("Raichu"),
 		types.GenItemOutputList("Zombie"),
+		cbData.CookbookID,
 		sender1,
 	)
-	newOneInputOneOutputItemRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newOneInputOneOutputItemRcpMsg)
-	oneInputOneOutputRecipeData := CreateRecipeResponse{}
-	json.Unmarshal(newOneInputOneOutputItemRcpResult.Data, &oneInputOneOutputRecipeData)
 
 	cases := map[string]struct {
 		cookbookId         string
