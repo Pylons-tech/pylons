@@ -9,6 +9,17 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func GenCookbook(sender sdk.AccAddress, name string, desc string) types.Cookbook {
+	return types.NewCookbook(
+		"example@example.com", // msg.SupportEmail,
+		sender,                // msg.Sender,
+		"1.0.0",               // msg.Version,
+		name,                  // msg.Name,
+		desc,                  // msg.Description,
+		"SketchyCo",           // msg.Developer
+	)
+}
+
 func TestKeeperGetCookbook(t *testing.T) {
 	mockedCoinInput := SetupTestCoinInput()
 
@@ -35,14 +46,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cb := types.NewCookbook(
-				"example@example.com", // msg.SupportEmail,
-				tc.sender,             // msg.Sender,
-				"1.0.0",               // msg.Version,
-				tc.name,               // msg.Name,
-				tc.desc,               // msg.Description,
-				"SketchyCo",           // msg.Developer
-			)
+			cb := GenCookbook(tc.sender, tc.name, tc.desc)
 			err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 			require.True(t, err == nil)
 
