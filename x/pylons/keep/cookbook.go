@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 
 	"fmt"
@@ -16,7 +17,7 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
 		return errors.New("SetCookbook: the sender cannot be empty")
 	}
 
-	mCB, err := k.Cdc.MarshalBinaryBare(cookbook)
+	mCB, err := json.Marshal(cookbook)
 	if err != nil {
 		return err
 	}
@@ -36,8 +37,8 @@ func (k Keeper) GetCookbook(ctx sdk.Context, id string) (types.Cookbook, error) 
 	uCB := store.Get([]byte(id))
 	var cookbook types.Cookbook
 
-	k.Cdc.MustUnmarshalBinaryBare(uCB, &cookbook)
-	return cookbook, nil
+	err := json.Unmarshal(uCB, &cookbook)
+	return cookbook, err
 }
 
 // UpdateCookbook is used to update the cookbook using the id
@@ -51,7 +52,7 @@ func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbo
 	if !store.Has([]byte(id)) {
 		return fmt.Errorf("the cookbook with gid %s does not exist", id)
 	}
-	mCB, err := k.Cdc.MarshalBinaryBare(cookbook)
+	mCB, err := json.Marshal(cookbook)
 	if err != nil {
 		return err
 	}
