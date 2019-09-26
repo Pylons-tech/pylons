@@ -10,6 +10,16 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
+	return types.NewItem(
+		cbID,
+		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
+		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
+		(types.StringInputParamMap{"Name": types.StringInputParam{name}}).Actualize(),
+		sender,
+	)
+}
+
 func TestKeeperSetItem(t *testing.T) {
 	mockedCoinInput := SetupTestCoinInput()
 
@@ -42,13 +52,7 @@ func TestKeeperSetItem(t *testing.T) {
 
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			item := types.NewItem(
-				cbData.ID,
-				(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-				(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-				(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-				tc.sender,
-			)
+			item := GenItem(cbData.ID, tc.sender, "Raichu")
 			err := mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 			if tc.showError {
@@ -68,13 +72,7 @@ func TestKeeperGetItem(t *testing.T) {
 
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
-	item := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		sender,
-	)
+	item := GenItem(cbData.ID, sender, "Raichu")
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	cases := map[string]struct {
@@ -118,13 +116,7 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
-	item := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		sender,
-	)
+	item := GenItem(cbData.ID, sender, "Raichu")
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	cases := map[string]struct {
@@ -168,27 +160,10 @@ func TestKeeperUpdateItem(t *testing.T) {
 
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
-	item := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		sender,
-	)
-	noSenderItem := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		nil,
-	)
-	newItem := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		sender,
-	)
+	item := GenItem(cbData.ID, sender, "Raichu")
+	noSenderItem := GenItem(cbData.ID, nil, "Raichu")
+	newItem := GenItem(cbData.ID, sender, "Raichu")
+
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 	item.Strings["Name"] = "RC"
 
@@ -248,13 +223,7 @@ func TestKeeperDeleteItem(t *testing.T) {
 
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
-	item := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		sender,
-	)
+	item := GenItem(cbData.ID, sender, "Raichu")
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	cases := map[string]struct {
@@ -295,13 +264,7 @@ func TestKeeperItemsByCookbook(t *testing.T) {
 
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
-	item := types.NewItem(
-		cbData.ID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}}).Actualize(),
-		sender,
-	)
+	item := GenItem(cbData.ID, sender, "Raichu")
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	cases := map[string]struct {

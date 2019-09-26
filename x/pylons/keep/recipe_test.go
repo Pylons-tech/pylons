@@ -10,6 +10,17 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) types.Recipe {
+	return types.NewRecipe(name, cbID, desc,
+		types.GenCoinInputList("wood", 5),
+		types.GenCoinOutputList("chair", 1),
+		types.GenItemInputList("Raichu"),
+		types.GenItemOutputList("Raichu"),
+		0,
+		sender,
+	)
+}
+
 func TestKeeperGetRecipe(t *testing.T) {
 	mockedCoinInput := SetupTestCoinInput()
 
@@ -49,13 +60,7 @@ func TestKeeperGetRecipe(t *testing.T) {
 			err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 			require.True(t, err == nil)
 
-			recipe := types.NewRecipe(tc.recipeName, cb.ID, tc.desc,
-				types.GenCoinInputList("wood", 5),
-				types.GenCoinOutputList("chair", 1),
-				types.GenItemInputList("Raichu"),
-				types.GenItemOutputList("Raichu"),
-				0,
-				tc.sender)
+			recipe := GenRecipe(tc.sender, cb.ID, tc.recipeName, tc.desc)
 			mockedCoinInput.PlnK.SetRecipe(mockedCoinInput.Ctx, recipe)
 			readRecipe, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, recipe.ID)
 			require.True(t, err2 == nil)
