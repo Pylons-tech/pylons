@@ -73,3 +73,152 @@ go test ./...
 ```
 pylonscli rest-server --chain-id pylonschain --trust-node --cors *
 ```
+
+## CLI based tx creation, sign and broadcast
+
+### To get help from pylons tx, use below command
+```
+pylonscli tx pylons --help
+```
+Result is as follows
+```
+Pylons transactions subcommands
+
+Usage:
+  plncli tx pylons [command]
+
+Available Commands:
+  get-pylons      ask for pylons. 500 pylons per request
+  send-pylons     send pylons of specific amount to the name provided
+  create-cookbook create cookbook by providing the args
+  update-cookbook update cookbook by providing the args
+```
+### To generate a transaction json, use below command
+```
+./pylonscli tx pylons get-pylons --from cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 --generate-only > t.json
+```
+Here, `cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337` is account address, can be fetched by using `pylonscli keys show jack -a` command.
+It is generating t.json like below.
+```
+{
+  "type": "auth/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/GetPylons",
+        "value": {
+          "Amount": [
+            {
+              "denom": "pylon",
+              "amount": "500"
+            }
+          ],
+          "Requester": "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
+        }
+      }
+    ],
+    "fee": {
+      "amount": null,
+      "gas": "200000"
+    },
+    "signatures": null,
+    "memo": ""
+  }
+}
+```
+
+On above, main part is `value.msg`. It contains msg type and msg value.
+Totally, it means Requester `cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337`, have requested `500 pylons`.
+
+Here's sample tx for `create cookbook`.
+```
+{
+  "type": "auth/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/CreateCookbook",
+        "value": {
+          "Description": "this has to meet character limits lol",
+          "Developer": "SketchyCo",
+          "Level": "0",
+          "Name": "Morethan8Name",
+          "Sender": "cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2",
+          "SupportEmail": "example@example.com",
+          "Version": "1.0.0"
+        }
+      }
+    ],
+    "fee": {
+      "amount": null,
+      "gas": "200000"
+    },
+    "signatures": null,
+    "memo": ""
+  }
+}
+```
+
+This will enough for understanding structure of Transaction.
+
+### Transaction sign process
+
+Sample command.  
+```
+ pylonscli tx sign create_cookbook.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
+```
+
+It means signing create_cookbook tx with cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 (`pylonscli keys show jack -a`).
+
+This is result of successfully signed transaction.
+
+```
+{
+  "type": "auth/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/CreateCookbook",
+        "value": {
+          "Name": "name",
+          "Description": "this has to meet character limits lol",
+          "Version": "1.0.0",
+          "Developer": "SketchyCo",
+          "SupportEmail": "example@example.com",
+          "Level": "0",
+          "Sender": "cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2"
+        }
+      }
+    ],
+    "fee": {
+      "amount": null,
+      "gas": "200000"
+    },
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "AnzIM9IcLb07Cvwq3hdMJuuRofAgxfDekkD3nJUPPw0w"
+        },
+        "signature": "6t3INv+sTpeXaiEANuZT5VgKjQz5cEUBAVtdSy7TntNu7aKHNaELrTRKqHZxZCsu9K6TIW9fMlqD/wyW4ncgqA=="
+      }
+    ],
+    "memo": ""
+  }
+}
+```
+
+signatures field was modified.
+
+### Broadcast signed transaction
+```
+pylonscli tx broadcast signedCreateCookbookTx.json 
+```
+
+Successful result
+```
+{
+  "height": "0",
+  "txhash": "8A847C81B396B07578FAEB25AA3E01FA11F03F300ECDDC8E4918A1D6F883640A"
+}
+```
