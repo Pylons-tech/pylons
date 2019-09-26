@@ -23,8 +23,6 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 	var tmpEmail string
 	var tmpLevel string
 
-	tmpLevel = "0"
-
 	ccb := &cobra.Command{
 		Use:   "create-cookbook [args]",
 		Short: "create cookbook by providing the args",
