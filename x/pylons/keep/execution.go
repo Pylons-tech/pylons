@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -13,7 +14,7 @@ func (k Keeper) SetExecution(ctx sdk.Context, exec types.Execution) error {
 	if exec.Sender.Empty() {
 		return errors.New("SetExecution: the sender cannot be empty")
 	}
-	mr, err := k.Cdc.MarshalBinaryBare(exec)
+	mr, err := json.Marshal(exec)
 	if err != nil {
 		return err
 	}
@@ -34,22 +35,21 @@ func (k Keeper) GetExecution(ctx sdk.Context, id string) (types.Execution, error
 	ur := store.Get([]byte(id))
 	var exec types.Execution
 
-	k.Cdc.MustUnmarshalBinaryBare(ur, &exec)
-	return exec, nil
+	err := json.Unmarshal(ur, &exec)
+	return exec, err
 }
 
 // UpdateExecution is used to update the exec using the id
 func (k Keeper) UpdateExecution(ctx sdk.Context, id string, exec types.Execution) error {
 	if exec.Sender.Empty() {
 		return errors.New("UpdateExecution: the sender cannot be empty")
-
 	}
 	store := ctx.KVStore(k.ExecutionKey)
 
 	if !store.Has([]byte(id)) {
 		return fmt.Errorf("the exec with gid %s does not exist", id)
 	}
-	mr, err := k.Cdc.MarshalBinaryBare(exec)
+	mr, err := json.Marshal(exec)
 	if err != nil {
 		return err
 	}

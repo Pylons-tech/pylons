@@ -103,7 +103,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if !matches {
 			return sdk.ErrInternal("the item inputs dont match any items provided").Result()
 		}
-
 	}
 
 	// TODO: validate 1-1 correspondence for item input and output - check ids
