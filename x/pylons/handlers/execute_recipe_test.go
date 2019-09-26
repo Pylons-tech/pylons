@@ -164,13 +164,13 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				dynamicItem := types.NewItem(
 					cbData.CookbookID,
 					(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{MinValue: "0.70", MaxValue: "1.0"}}).Actualize(),
-					(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.WeightRange{
-						types.WeightRange{
+					(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
+						types.IntWeightRange{
 							Lower:  100,
 							Upper:  500,
 							Weight: 6,
 						},
-						types.WeightRange{
+						types.IntWeightRange{
 							Lower:  501,
 							Upper:  800,
 							Weight: 2,

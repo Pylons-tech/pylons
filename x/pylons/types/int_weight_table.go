@@ -32,7 +32,7 @@ func (wt *IntWeightTable) Generate() int {
 	first := 0
 	chosenIndex := -1
 	for i, weight := range weights {
-		if randWeight > first && randWeight <= weight {
+		if randWeight >= first && randWeight <= weight {
 			chosenIndex = i
 			break
 		}
