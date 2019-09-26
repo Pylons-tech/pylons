@@ -45,6 +45,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		exec.RecipeID = recipe.ID
 		exec.CoinInputs = cl
 		exec.CoinOutputs = ocl
+		exec.Sender = msg.Sender
 		exec.BlockHeight = ctx.BlockHeight() + recipe.BlockInterval
 	} else {
 
