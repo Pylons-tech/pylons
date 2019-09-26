@@ -3,16 +3,16 @@ package types
 import "math/rand"
 
 type IntWeightTable struct {
-	WeightRanges []WeightRange
+	WeightRanges []IntWeightRange
 }
 
-type WeightRange struct {
+type IntWeightRange struct {
 	Lower  int
 	Upper  int
 	Weight int
 }
 
-func (wr WeightRange) Has(number int) bool {
+func (wr IntWeightRange) Has(number int) bool {
 	return number >= wr.Lower && number < wr.Upper
 }
 
