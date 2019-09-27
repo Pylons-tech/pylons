@@ -26,6 +26,8 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 			return queriers.ItemsByCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyItemsBySender:
 			return queriers.ItemsBySender(ctx, path[1:], req, keeper)
+		case queriers.KeyListExecutions:
+			return queriers.ListExecutions(ctx, path[1:], req, keeper)
 		default:
 			return nil, sdk.ErrUnknownRequest("unknown pylons query endpoint")
 		}
