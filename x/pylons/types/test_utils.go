@@ -22,7 +22,18 @@ func GenItemInputList(name string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
 			DoubleInputParamMap{"endurance": DoubleInputParam{"0.70", "1.0"}},
-			LongInputParamMap{"HP": LongInputParam{100, 140}},
+			LongInputParamMap{"HP": LongInputParam{IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+				IntWeightRange{
+					Lower:  100,
+					Upper:  500,
+					Weight: 6,
+				},
+				IntWeightRange{
+					Lower:  501,
+					Upper:  800,
+					Weight: 2,
+				},
+			}}}},
 			StringInputParamMap{"Name": StringInputParam{name}},
 		},
 	}
@@ -32,7 +43,18 @@ func GenItemOutputList(name string) ItemOutputList {
 	return ItemOutputList{
 		ItemOutput{
 			DoubleParamMap{"endurance": DoubleParam{"0.70", "1.0", "1.0"}},
-			LongParamMap{"HP": LongParam{100, 140, "1.0"}},
+			LongParamMap{"HP": LongParam{IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+				IntWeightRange{
+					Lower:  100,
+					Upper:  500,
+					Weight: 6,
+				},
+				IntWeightRange{
+					Lower:  501,
+					Upper:  800,
+					Weight: 2,
+				},
+			}}}},
 			StringParamMap{"Name": StringParam{name, "1.0"}},
 		},
 	}

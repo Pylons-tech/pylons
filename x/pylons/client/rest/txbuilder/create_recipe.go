@@ -41,16 +41,38 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			},
 			types.ItemInputList{
 				types.ItemInput{
-					types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.7", "1"}},
-					types.LongInputParamMap{"HP": types.LongInputParam{100, 140}},
-					types.StringInputParamMap{"Name": types.StringInputParam{"Raichu"}},
+					Doubles: types.DoubleInputParamMap{"endurance": types.DoubleInputParam{MinValue: "0.7", MaxValue: "1"}},
+					Longs: types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
+						types.IntWeightRange{
+							Lower:  100,
+							Upper:  500,
+							Weight: 6,
+						},
+						types.IntWeightRange{
+							Lower:  501,
+							Upper:  800,
+							Weight: 2,
+						},
+					}}}},
+					Strings: types.StringInputParamMap{"Name": types.StringInputParam{Value: "Raichu"}},
 				},
 			},
 			types.ItemOutputList{
 				types.ItemOutput{
-					types.DoubleParamMap{"endurance": types.DoubleParam{"0.7", "1", "1"}},
-					types.LongParamMap{"HP": types.LongParam{100, 140, "1"}},
-					types.StringParamMap{"Name": types.StringParam{"Raichu", "1"}},
+					Doubles: types.DoubleParamMap{"endurance": types.DoubleParam{MinValue: "0.7", MaxValue: "1", Rate: "1"}},
+					Longs: types.LongParamMap{"HP": types.LongParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
+						types.IntWeightRange{
+							Lower:  100,
+							Upper:  500,
+							Weight: 6,
+						},
+						types.IntWeightRange{
+							Lower:  501,
+							Upper:  800,
+							Weight: 2,
+						},
+					}}}},
+					Strings: types.StringParamMap{"Name": types.StringParam{Value: "Raichu", Rate: "1"}},
 				},
 			}, sender,
 		)

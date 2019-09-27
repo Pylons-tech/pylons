@@ -14,8 +14,19 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 	return types.NewItem(
 		cbID,
 		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{"0.70", "1.0"}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{100, 140}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{name}}).Actualize(),
+		(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
+			types.IntWeightRange{
+				Lower:  100,
+				Upper:  500,
+				Weight: 6,
+			},
+			types.IntWeightRange{
+				Lower:  501,
+				Upper:  800,
+				Weight: 2,
+			},
+		}}}}).Actualize(),
+		(types.StringInputParamMap{"Name": types.StringInputParam{Value: name}}).Actualize(),
 		sender,
 	)
 }
