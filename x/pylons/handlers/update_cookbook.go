@@ -16,13 +16,13 @@ func HandlerMsgUpdateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgU
 
 	cb, err2 := keeper.GetCookbook(ctx, msg.ID)
 
+	if err2 != nil {
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
+
 	// only the original sender (owner) of the cookbook can update the cookbook
 	if !cb.Sender.Equals(msg.Sender) {
 		return sdk.ErrUnauthorized("the owner of the cookbook is different then the current sender").Result()
-	}
-
-	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
 	cb.Description = msg.Description
