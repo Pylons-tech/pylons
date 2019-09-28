@@ -165,3 +165,25 @@ func TestKeeperUpdateExecution(t *testing.T) {
 		})
 	}
 }
+
+func TestKeeperGetExecutionsBySender(t *testing.T) {
+	mockedCoinInput := SetupTestCoinInput()
+	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	for i := 0; i < 5; i++ {
+		exec := GenExecution(sender, mockedCoinInput)
+		mockedCoinInput.PlnK.SetExecution(mockedCoinInput.Ctx, exec)
+	}
+
+	sender2, _ := sdk.AccAddressFromBech32("cosmos1alp8y6rmywahtmjsd9gxrfcz304s0mppujl2q6")
+	for i := 0; i < 2; i++ {
+		exec := GenExecution(sender2, mockedCoinInput)
+		mockedCoinInput.PlnK.SetExecution(mockedCoinInput.Ctx, exec)
+	}
+
+	exec2 := GenExecution(sender2, mockedCoinInput)
+	mockedCoinInput.PlnK.SetExecution(mockedCoinInput.Ctx, exec2)
+	executions, err := mockedCoinInput.PlnK.GetExecutionsBySender(mockedCoinInput.Ctx, sender)
+	require.Nil(t, err, "Error while getting executions")
+	require.True(t, len(executions) == 5)
+
+}
