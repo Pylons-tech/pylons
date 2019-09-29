@@ -21,7 +21,18 @@ func GenCoinOutputList(name string, count int64) CoinOutputList {
 func GenItemInputList(name string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
-			DoubleInputParamMap{"endurance": DoubleInputParam{"0.70", "1.0"}},
+			DoubleInputParamMap{"endurance": DoubleInputParam{DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+				DoubleWeightRange{
+					Lower:  100.00,
+					Upper:  500.00,
+					Weight: 6,
+				},
+				DoubleWeightRange{
+					Lower:  501.00,
+					Upper:  800.00,
+					Weight: 2,
+				},
+			}}}},
 			LongInputParamMap{"HP": LongInputParam{IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				IntWeightRange{
 					Lower:  100,
@@ -42,7 +53,18 @@ func GenItemInputList(name string) ItemInputList {
 func GenItemOutputList(name string) ItemOutputList {
 	return ItemOutputList{
 		ItemOutput{
-			DoubleParamMap{"endurance": DoubleParam{"0.70", "1.0", "1.0"}},
+			DoubleParamMap{"endurance": DoubleParam{DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+				DoubleWeightRange{
+					Lower:  100.00,
+					Upper:  500.00,
+					Weight: 6,
+				},
+				DoubleWeightRange{
+					Lower:  501.00,
+					Upper:  800.00,
+					Weight: 2,
+				},
+			}}, Rate: "1.0"}},
 			LongParamMap{"HP": LongParam{IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				IntWeightRange{
 					Lower:  100,
