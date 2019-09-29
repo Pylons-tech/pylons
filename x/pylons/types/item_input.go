@@ -18,9 +18,10 @@ func (ii ItemInput) Matches(item Item) bool {
 			return false
 		}
 
-		if double < value.MinValue.Float() || double > value.MaxValue.Float() {
+		if !value.Has(double) {
 			return false
 		}
+
 	}
 
 	for key, value := range ii.Longs {

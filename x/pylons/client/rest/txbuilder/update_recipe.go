@@ -41,7 +41,18 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			},
 			types.ItemInputList{
 				types.ItemInput{
-					Doubles: types.DoubleInputParamMap{"endurance": types.DoubleInputParam{MinValue: "0.7", MaxValue: "1"}},
+					Doubles: types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
+						types.DoubleWeightRange{
+							Lower:  100.00,
+							Upper:  500.00,
+							Weight: 6,
+						},
+						types.DoubleWeightRange{
+							Lower:  501.00,
+							Upper:  800.00,
+							Weight: 2,
+						},
+					}}}},
 					Longs: types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
 						types.IntWeightRange{
 							Lower:  100,
@@ -59,7 +70,18 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			},
 			types.ItemOutputList{
 				types.ItemOutput{
-					Doubles: types.DoubleParamMap{"endurance": types.DoubleParam{MinValue: "0.7", MaxValue: "1", Rate: "1"}},
+					Doubles: types.DoubleParamMap{"endurance": types.DoubleParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
+						types.DoubleWeightRange{
+							Lower:  100.00,
+							Upper:  500.00,
+							Weight: 6,
+						},
+						types.DoubleWeightRange{
+							Lower:  501.00,
+							Upper:  800.00,
+							Weight: 2,
+						},
+					}}, Rate: "1"}},
 					Longs: types.LongParamMap{"HP": types.LongParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
 						types.IntWeightRange{
 							Lower:  100,
