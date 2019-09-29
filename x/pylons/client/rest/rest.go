@@ -55,5 +55,7 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/items_by_sender/{%s}", storeName, senderKey),
 		itemsBySenderHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_executions/{%s}", storeName, senderKey),
+		listExecutionsHandler(cdc, cliCtx, storeName)).Methods("GET")
 
 }
