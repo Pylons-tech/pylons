@@ -1,17 +1,23 @@
 package types
 
-import "math/rand"
+import (
+	"encoding/json"
+	"math/rand"
+)
 
 // WeightedParam is to make structs which is using weight to be based on
 type WeightedParam interface {
 	String() string
 	GetWeight() int
-	MarshalJSON() ([]byte, error)
-	UnmarshalJSON([]byte) error
 }
 
 // ItemOutputList is a list of Item outputs
 type WeightedParamList []WeightedParam
+
+type SerializeWeightedParamList struct {
+	CoinOutputs []CoinOutput
+	ItemOutputs []ItemOutput
+}
 
 func (wpl WeightedParamList) String() string {
 	itm := "WeightedParamList{"
@@ -45,10 +51,36 @@ func (wpl *WeightedParamList) Actualize() WeightedParam {
 	return (*wpl)[chosenIndex]
 }
 
-func (wpl *WeightedParamList) MarshalJSON() ([]byte, error) {
-
+func (wpl WeightedParamList) MarshalJSON() ([]byte, error) {
+	var swpl SerializeWeightedParamList
+	for _, wp := range wpl {
+		switch wp.(type) {
+		case CoinOutput:
+			if coinOutput, ok := wp.(CoinOutput); ok {
+				swpl.CoinOutputs = append(swpl.CoinOutputs, coinOutput)
+			}
+		case ItemOutput:
+			if itemOutput, ok := wp.(ItemOutput); ok {
+				swpl.ItemOutputs = append(swpl.ItemOutputs, itemOutput)
+			}
+		default:
+		}
+	}
+	return json.Marshal(swpl)
 }
 
 func (wpl *WeightedParamList) UnmarshalJSON(data []byte) error {
+	var swpl SerializeWeightedParamList
+	err := json.Unmarshal(data, &swpl)
+	if err != nil {
+		return err
+	}
 
+	for _, co := range swpl.CoinOutputs {
+		*wpl = append(*wpl, co)
+	}
+	for _, io := range swpl.ItemOutputs {
+		*wpl = append(*wpl, io)
+	}
+	return nil
 }

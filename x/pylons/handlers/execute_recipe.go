@@ -13,7 +13,7 @@ import (
 type ExecuteRecipeResp struct {
 	Message string
 	Status  string
-	Output  types.WeightedParam
+	Output  []byte
 }
 
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) sdk.Error {
@@ -157,13 +157,19 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			return err.Result()
 		}
 
-		resp, err2 := json.Marshal(ExecuteRecipeResp{
-			Message: "successfully executed the recipe",
-			Status:  "Success",
-			Output:  output,
-		})
+		outputSTR, err2 := json.Marshal(output)
 
 		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+
+		resp, err3 := json.Marshal(ExecuteRecipeResp{
+			Message: "successfully executed the recipe",
+			Status:  "Success",
+			Output:  outputSTR,
+		})
+
+		if err3 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 		return sdk.Result{Data: resp}

@@ -10,38 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
-	return types.NewItem(
-		cbID,
-		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
-			types.DoubleWeightRange{
-				Lower:  100.00,
-				Upper:  500.00,
-				Weight: 6,
-			},
-			types.DoubleWeightRange{
-				Lower:  501.00,
-				Upper:  800.00,
-				Weight: 2,
-			},
-		}}}}).Actualize(),
-		(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
-			types.IntWeightRange{
-				Lower:  100,
-				Upper:  500,
-				Weight: 6,
-			},
-			types.IntWeightRange{
-				Lower:  501,
-				Upper:  800,
-				Weight: 2,
-			},
-		}}}}).Actualize(),
-		(types.StringInputParamMap{"Name": types.StringInputParam{Value: name}}).Actualize(),
-		sender,
-	)
-}
-
 func TestKeeperSetItem(t *testing.T) {
 	mockedCoinInput := SetupTestCoinInput()
 

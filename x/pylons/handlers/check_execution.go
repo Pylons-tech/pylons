@@ -13,7 +13,7 @@ import (
 type CheckExecutionResp struct {
 	Message string
 	Status  string
-	Output  types.WeightedParam
+	Output  []byte
 }
 
 // HandlerMsgCheckExecution is used to create cookbook by a developer
@@ -62,12 +62,19 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			return err.Result()
 		}
 
-		resp, err2 := json.Marshal(CheckExecutionResp{
+		outputSTR, err2 := json.Marshal(output)
+
+		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+
+		resp, err3 := json.Marshal(CheckExecutionResp{
 			Message: "successfully completed the execution",
 			Status:  "Success",
-			Output:  output,
+			Output:  outputSTR,
 		})
-		if err2 != nil {
+
+		if err3 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 

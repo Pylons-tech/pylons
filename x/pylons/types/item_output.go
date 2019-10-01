@@ -15,7 +15,12 @@ type ItemOutput struct {
 }
 
 func (io ItemOutput) String() string {
-	return fmt.Sprintf("%+v", io)
+	return fmt.Sprintf(`ItemOutput{
+		Doubles: %+v,
+		Longs:   %+v,
+		Strings: %+v,
+		Weight:  %d,
+	}`, io.Doubles, io.Longs, io.Strings, io.Weight)
 }
 
 func (io ItemOutput) GetWeight() int {

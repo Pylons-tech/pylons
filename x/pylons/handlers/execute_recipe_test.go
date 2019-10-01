@@ -65,6 +65,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender             sdk.AccAddress
 		desiredError       string
 		showError          bool
+		checkCoinAvailable bool
 		checkItemName      string
 		checkItemAvailable bool
 	}{
@@ -98,6 +99,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			sender:             sender1,
 			desiredError:       "",
 			showError:          false,
+			checkCoinAvailable: true,
 			checkItemName:      "",
 			checkItemAvailable: false,
 		},
@@ -158,35 +160,36 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 			}
 			if tc.dynamicItemSet {
-				dynamicItem := types.NewItem(
-					cbData.CookbookID,
-					(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
-						types.DoubleWeightRange{
-							Lower:  100.00,
-							Upper:  500.00,
-							Weight: 6,
-						},
-						types.DoubleWeightRange{
-							Lower:  501.00,
-							Upper:  800.00,
-							Weight: 2,
-						},
-					}}}}).Actualize(),
-					(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
-						types.IntWeightRange{
-							Lower:  100,
-							Upper:  500,
-							Weight: 6,
-						},
-						types.IntWeightRange{
-							Lower:  501,
-							Upper:  800,
-							Weight: 2,
-						},
-					}}}}).Actualize(),
-					(types.StringInputParamMap{"Name": types.StringInputParam{Value: tc.dynamicItemName}}).Actualize(),
-					tc.sender,
-				)
+				dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.dynamicItemName)
+				// types.NewItem(
+				// 	cbData.CookbookID,
+				// 	(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
+				// 		types.DoubleWeightRange{
+				// 			Lower:  100.00,
+				// 			Upper:  500.00,
+				// 			Weight: 6,
+				// 		},
+				// 		types.DoubleWeightRange{
+				// 			Lower:  501.00,
+				// 			Upper:  800.00,
+				// 			Weight: 2,
+				// 		},
+				// 	}}}}).Actualize(),
+				// 	(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
+				// 		types.IntWeightRange{
+				// 			Lower:  100,
+				// 			Upper:  500,
+				// 			Weight: 6,
+				// 		},
+				// 		types.IntWeightRange{
+				// 			Lower:  501,
+				// 			Upper:  800,
+				// 			Weight: 2,
+				// 		},
+				// 	}}}}).Actualize(),
+				// 	(types.StringInputParamMap{"Name": types.StringInputParam{Value: tc.dynamicItemName}}).Actualize(),
+				// 	tc.sender,
+				// )
 				mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
 				tc.itemIDs = []string{dynamicItem.ID}
 			}
@@ -198,11 +201,14 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				execRcpResponse := ExecuteRecipeResp{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
+				// t.Errorf("ExecuteRecipeTest LOG:: %+v", err)
 				require.True(t, err == nil)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == "successfully executed the recipe")
 
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("chair", 1)}))
+				if tc.checkCoinAvailable {
+					require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("chair", 1)}))
+				}
 
 				if tc.checkItemAvailable {
 					items, err := mockedCoinInput.PlnK.GetItemsBySender(mockedCoinInput.Ctx, tc.sender)

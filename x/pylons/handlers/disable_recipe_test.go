@@ -64,7 +64,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 			msg := msgs.NewMsgDisableRecipe(tc.recipeID, tc.sender)
 			result := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
-			t.Errorf("DisableRecipeTEST LOG:: %+v", result)
+			// t.Errorf("DisableRecipeTEST LOG:: %+v", result)
 
 			if tc.showError == false {
 				disableRcpResponse := DisableRecipeResp{}
