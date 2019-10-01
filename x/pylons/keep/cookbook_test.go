@@ -17,7 +17,8 @@ func GenCookbook(sender sdk.AccAddress, name string, desc string) types.Cookbook
 		"1.0.0",               // msg.Version,
 		name,                  // msg.Name,
 		desc,                  // msg.Description,
-		"SketchyCo",           // msg.Developer
+		"SketchyCo",           // msg.Developer,
+		50,                    // msg.CostPerBlock
 	)
 }
 

@@ -27,6 +27,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		"cookbook0001",
 		"this has to meet character limits",
 		"SketchyCo",
+		msgs.DefaultCostPerBlock,
 	)
 	err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 	require.True(t, err == nil)
