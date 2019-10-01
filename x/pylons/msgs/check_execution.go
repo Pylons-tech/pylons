@@ -10,13 +10,16 @@ import (
 type MsgCheckExecution struct {
 	ExecID string
 	Sender sdk.AccAddress
+	// if this is set to true then we complete the execution by paying for it
+	PayToComplete bool
 }
 
 // NewMsgCheckExecution a constructor for ExecuteCookbook msg
-func NewMsgCheckExecution(execID string, sender sdk.AccAddress) MsgCheckExecution {
+func NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress) MsgCheckExecution {
 	return MsgCheckExecution{
-		ExecID: execID,
-		Sender: sender,
+		ExecID:        execID,
+		Sender:        sender,
+		PayToComplete: ptc,
 	}
 }
 

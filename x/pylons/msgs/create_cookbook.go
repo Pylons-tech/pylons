@@ -20,7 +20,7 @@ type MsgCreateCookbook struct {
 	Level        types.Level
 	Sender       sdk.AccAddress
 	// Pylons per block to be charged across this cookbook for delayed execution early completion
-	CostPerBlock int `json:",omitempty"`
+	CostPerBlock *int `json:",omitempty"`
 }
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
@@ -33,7 +33,7 @@ func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail
 		SupportEmail: sEmail,
 		Level:        level,
 		Sender:       sender,
-		CostPerBlock: cpb,
+		CostPerBlock: &cpb,
 	}
 }
 
