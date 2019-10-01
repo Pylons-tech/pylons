@@ -26,7 +26,9 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 	}
 
 	recipe := types.NewRecipe(msg.RecipeName, msg.CookbookId, msg.Description,
-		msg.CoinInputs, msg.CoinOutputs, msg.ItemInputs, msg.ItemOutputs,
+		msg.CoinInputs,
+		msg.ItemInputs,
+		msg.Entries,
 		0, msg.Sender)
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
 		return sdk.ErrInternal(err.Error()).Result()

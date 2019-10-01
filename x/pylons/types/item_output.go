@@ -11,22 +11,17 @@ type ItemOutput struct {
 	Doubles DoubleParamMap
 	Longs   LongParamMap
 	Strings StringParamMap
+	Weight  int
 }
 
-// ItemOutputList is a list of Item outputs
-type ItemOutputList []ItemOutput
+func (io ItemOutput) String() string {
+	return fmt.Sprintf("%+v", io)
+}
+
+func (io ItemOutput) GetWeight() int {
+	return io.Weight
+}
 
 func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress) *Item {
 	return NewItem(cookbook, io.Doubles.Actualize(), io.Longs.Actualize(), io.Strings.Actualize(), sender)
-}
-
-func (iol ItemOutputList) String() string {
-	itm := "ItemOutputList{"
-
-	for _, output := range iol {
-		itm += fmt.Sprintf("%+v", output) + ",\n"
-	}
-
-	itm += "}"
-	return itm
 }

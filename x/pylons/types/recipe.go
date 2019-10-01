@@ -13,9 +13,8 @@ type Recipe struct {
 	RecipeName    string
 	ID            string // the recipe guid
 	CoinInputs    CoinInputList
-	CoinOutputs   CoinOutputList
 	ItemInputs    ItemInputList
-	ItemOutputs   ItemOutputList
+	Entries       WeightedParamList
 	Description   string
 	BlockInterval int64
 	Sender        sdk.AccAddress
@@ -39,15 +38,16 @@ func (cbl RecipeList) String() string {
 
 // NewRecipe creates a new recipe
 func NewRecipe(recipeName, cookbookId, description string,
-	coinInputs CoinInputList, coinOutputs CoinOutputList, itemInputs ItemInputList, itemOutputs ItemOutputList,
+	coinInputs CoinInputList, // coinOutputs CoinOutputList,
+	itemInputs ItemInputList, // itemOutputs ItemOutputList,
+	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
 	execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		RecipeName:    recipeName,
 		CookbookId:    cookbookId,
 		CoinInputs:    coinInputs,
-		CoinOutputs:   coinOutputs,
 		ItemInputs:    itemInputs,
-		ItemOutputs:   itemOutputs,
+		Entries:       entries,
 		BlockInterval: execTime,
 		Description:   description,
 		Sender:        sender,
@@ -63,12 +63,14 @@ func (rcp *Recipe) String() string {
 		CookbookId: %s,
 		ID: %s,
 		CoinInputs: %s,
-		CoinOutputs: %s,
 		ItemInputs: %s,
-		ItemOutputs: %s,
+		Entries: %s,
 		ExecutionTime: %d,
-	}`, rcp.RecipeName, rcp.CookbookId, rcp.ID, rcp.CoinInputs.String(),
-		rcp.CoinOutputs.String(), rcp.ItemInputs.String(), rcp.ItemOutputs.String(), rcp.BlockInterval)
+	}`, rcp.RecipeName, rcp.CookbookId, rcp.ID,
+		rcp.CoinInputs.String(), // rcp.CoinOutputs.String(),
+		rcp.ItemInputs.String(), // rcp.ItemOutputs.String(),
+		rcp.Entries.String(),
+		rcp.BlockInterval)
 }
 
 // KeyGen generates key for the store

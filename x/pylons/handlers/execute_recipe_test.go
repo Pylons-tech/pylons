@@ -28,20 +28,18 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	c2cRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
-		types.ItemOutputList{},
+		types.GenCoinOnlyEntry("chair"),
 		cbData.CookbookID,
 		sender1,
 	)
 
-	// mock coin to coin recipe
+	// mock coin to item recipe
 	zeroInOneOutItemRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
-		types.GenItemOutputList("Raichu"),
+		types.GenItemOnlyEntry("Raichu"),
 		cbData.CookbookID,
 		sender1,
 	)
@@ -50,9 +48,8 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	oneInputOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.GenItemInputList("Raichu"),
-		types.GenItemOutputList("Zombie"),
+		types.GenItemOnlyEntry("Zombie"),
 		cbData.CookbookID,
 		sender1,
 	)

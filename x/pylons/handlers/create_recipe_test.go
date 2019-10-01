@@ -58,9 +58,8 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, tc.recipeDesc,
 				types.GenCoinInputList("wood", 5),
-				types.GenCoinOutputList("chair", 1),
 				types.GenItemInputList("Raichu"),
-				types.GenItemOutputList("Raichu"),
+				types.GenEntries("chair", "Raichu"),
 				tc.sender,
 			)
 
