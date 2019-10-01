@@ -104,7 +104,7 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := NewMsgCreateCookbook(tc.name, tc.desc, tc.devel, tc.version, tc.sEmail, tc.level, tc.sender)
+			msg := NewMsgCreateCookbook(tc.name, tc.desc, tc.devel, tc.version, tc.sEmail, tc.level, DefaultCostPerBlock, tc.sender)
 			validation := msg.ValidateBasic()
 			if !tc.showError {
 				require.True(t, validation == nil)

@@ -7,6 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// DefaultCostPerBlock the amount of pylons to be charged by default
+const DefaultCostPerBlock = 50 // Pylons
+
 // MsgCreateCookbook defines a SetName message
 type MsgCreateCookbook struct {
 	Name         string
@@ -16,10 +19,12 @@ type MsgCreateCookbook struct {
 	SupportEmail types.Email
 	Level        types.Level
 	Sender       sdk.AccAddress
+	// Pylons per block to be charged across this cookbook for delayed execution early completion
+	CostPerBlock int `json:",omitempty"`
 }
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
-func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, sender sdk.AccAddress) MsgCreateCookbook {
+func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
 		Name:         name,
 		Description:  desc,
@@ -28,6 +33,7 @@ func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail
 		SupportEmail: sEmail,
 		Level:        level,
 		Sender:       sender,
+		CostPerBlock: cpb,
 	}
 }
 
