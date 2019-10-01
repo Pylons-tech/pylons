@@ -48,7 +48,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
-				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, tc.sender)
+				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
 				cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 
 				err := json.Unmarshal(cookbookResult.Data, &cbData)

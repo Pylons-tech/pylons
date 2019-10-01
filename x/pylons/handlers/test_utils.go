@@ -13,7 +13,7 @@ import (
 func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBResponse {
 	cookbookName := "cookbook-00001"
 	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, sender)
+	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cbResult := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	cbData := CreateCBResponse{}
 	json.Unmarshal(cbResult.Data, &cbData)
