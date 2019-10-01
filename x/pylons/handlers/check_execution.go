@@ -29,6 +29,10 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
+	if !msg.Sender.Equals(exec.Sender) {
+		return sdk.ErrUnauthorized("The current sender is different from the executor").Result()
+	}
+
 	if exec.Completed {
 		resp, err2 := json.Marshal(CheckExecutionResp{
 			Message: "execution already completed",
