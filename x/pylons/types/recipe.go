@@ -67,8 +67,8 @@ func (rcp *Recipe) String() string {
 		Entries: %s,
 		ExecutionTime: %d,
 	}`, rcp.RecipeName, rcp.CookbookId, rcp.ID,
-		rcp.CoinInputs.String(), // rcp.CoinOutputs.String(),
-		rcp.ItemInputs.String(), // rcp.ItemOutputs.String(),
+		rcp.CoinInputs.String(),
+		rcp.ItemInputs.String(),
 		rcp.Entries.String(),
 		rcp.BlockInterval)
 }

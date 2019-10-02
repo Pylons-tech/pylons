@@ -18,7 +18,6 @@ func TestWeightedParamListSerialize(t *testing.T) {
 	for testName, _ := range cases {
 		t.Run(testName, func(t *testing.T) {
 			data, err := json.Marshal(entries)
-			// t.Errorf("TestWeightedParamListSerialize1 LOG_entries:: %+v", entries)
 			require.True(t, err == nil)
 			var serializedEntries WeightedParamList
 			err2 := json.Unmarshal(data, &serializedEntries)

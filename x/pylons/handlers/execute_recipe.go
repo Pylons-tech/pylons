@@ -19,21 +19,19 @@ type ExecuteRecipeResp struct {
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) sdk.Error {
 	switch output.(type) {
 	case types.CoinOutput:
-		if coinOutput, ok := output.(types.CoinOutput); ok {
-			var ocl sdk.Coins
-			ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinOutput.Count)))
+		coinOutput, _ := output.(types.CoinOutput)
+		var ocl sdk.Coins
+		ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinOutput.Count)))
 
-			_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
-			if err != nil {
-				return err
-			}
+		_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
+		if err != nil {
+			return err
 		}
 	case types.ItemOutput:
-		if itemOutput, ok := output.(types.ItemOutput); ok {
-			outputItem := *itemOutput.Item(cbID, sender)
-			if err := keeper.SetItem(ctx, outputItem); err != nil {
-				return sdk.ErrInternal(err.Error())
-			}
+		itemOutput, _ := output.(types.ItemOutput)
+		outputItem := *itemOutput.Item(cbID, sender)
+		if err := keeper.SetItem(ctx, outputItem); err != nil {
+			return sdk.ErrInternal(err.Error())
 		}
 	default:
 		return sdk.ErrInternal("no item nor coin type created")
@@ -58,17 +56,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	for _, inp := range recipe.CoinInputs {
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
-
-	// output coins to the sender
-
-	// TODO: CoinOutputs and ItemOutputs should be merged so just need to update this
-	// for _, out := range recipe.CoinOutputs {
-	// 	ocl = append(ocl, sdk.NewCoin(out.Coin, sdk.NewInt(out.Count)))
-	// }
-
-	// Item transaction
-	// first lets handle all item to item transactions
-	// lets check if the Item IDs provided matches the recipe constraints
 
 	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
