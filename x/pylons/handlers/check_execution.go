@@ -13,6 +13,7 @@ import (
 type CheckExecutionResp struct {
 	Message string
 	Status  string
+	Output  []byte
 }
 
 // HandlerMsgCheckExecution is used to create cookbook by a developer
@@ -48,27 +49,32 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		if err != nil {
 			return err.Result()
 		}
-		_, _, err = keeper.CoinKeeper.AddCoins(ctx, msg.Sender, exec.CoinOutputs)
-		if err != nil {
-			return err.Result()
-		}
 
 		// we delete all the matched items as those get converted to output items
 		for _, item := range exec.ItemInputs {
 			keeper.DeleteItem(ctx, item.ID)
 		}
 
-		for _, item := range exec.ItemOutputs {
-			if err := keeper.SetItem(ctx, item); err != nil {
-				return sdk.ErrInternal(err.Error()).Result()
-			}
+		output := exec.Entries.Actualize()
+		err = AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
+
+		if err != nil {
+			return err.Result()
 		}
 
-		resp, err2 := json.Marshal(CheckExecutionResp{
+		outputSTR, err2 := json.Marshal(output)
+
+		if err2 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+
+		resp, err3 := json.Marshal(CheckExecutionResp{
 			Message: "successfully completed the execution",
 			Status:  "Success",
+			Output:  outputSTR,
 		})
-		if err2 != nil {
+
+		if err3 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 
@@ -78,7 +84,6 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		err2 = keeper.UpdateExecution(ctx, exec.ID, exec)
 		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
-
 		}
 		return sdk.Result{Data: resp}
 	}

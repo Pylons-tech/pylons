@@ -27,76 +27,11 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol",
-			types.CoinInputList{
-				types.CoinInput{
-					Coin:  "wood",
-					Count: 5,
-				},
-			},
-			types.CoinOutputList{
-				types.CoinOutput{
-					Coin:  "chair",
-					Count: 1,
-				},
-			},
-			types.ItemInputList{
-				types.ItemInput{
-					Doubles: types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
-						types.DoubleWeightRange{
-							Lower:  100.00,
-							Upper:  500.00,
-							Weight: 6,
-						},
-						types.DoubleWeightRange{
-							Lower:  501.00,
-							Upper:  800.00,
-							Weight: 2,
-						},
-					}}}},
-					Longs: types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
-						types.IntWeightRange{
-							Lower:  100,
-							Upper:  500,
-							Weight: 6,
-						},
-						types.IntWeightRange{
-							Lower:  501,
-							Upper:  800,
-							Weight: 2,
-						},
-					}}}},
-					Strings: types.StringInputParamMap{"Name": types.StringInputParam{Value: "Raichu"}},
-				},
-			},
-			types.ItemOutputList{
-				types.ItemOutput{
-					Doubles: types.DoubleParamMap{"endurance": types.DoubleParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
-						types.DoubleWeightRange{
-							Lower:  100.00,
-							Upper:  500.00,
-							Weight: 6,
-						},
-						types.DoubleWeightRange{
-							Lower:  501.00,
-							Upper:  800.00,
-							Weight: 2,
-						},
-					}}, Rate: "1"}},
-					Longs: types.LongParamMap{"HP": types.LongParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
-						types.IntWeightRange{
-							Lower:  100,
-							Upper:  500,
-							Weight: 6,
-						},
-						types.IntWeightRange{
-							Lower:  501,
-							Upper:  800,
-							Weight: 2,
-						},
-					}}}},
-					Strings: types.StringParamMap{"Name": types.StringParam{Value: "Raichu", Rate: "1"}},
-				},
-			}, sender)
+			types.GenCoinInputList("wood", 5),
+			types.GenItemInputList("Raichu"),
+			types.GenEntries("chair", "Raichu"),
+			sender,
+		)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

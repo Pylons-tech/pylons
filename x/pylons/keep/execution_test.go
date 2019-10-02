@@ -14,12 +14,9 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	rcpData := GenRecipe(sender, cbData.ID, "new recipe", "this has to meet character limits; lol")
 
-	var cl, ocl sdk.Coins
+	var cl sdk.Coins
 	for _, inp := range rcpData.CoinInputs {
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
-	}
-	for _, out := range rcpData.CoinOutputs {
-		ocl = append(ocl, sdk.NewCoin(out.Coin, sdk.NewInt(out.Count)))
 	}
 
 	var inputItems []types.Item
@@ -27,17 +24,12 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 	inputItems = append(inputItems, *GenItem(cbData.ID, sender, "Raichu"))
 	inputItems = append(inputItems, *GenItem(cbData.ID, sender, "Raichu"))
 
-	var outputItems []types.Item
-
-	outputItems = append(inputItems, *GenItem(cbData.ID, sender, "Zombie"))
-
 	exec := types.Execution{
 		RecipeID:    rcpData.ID,
 		CoinInputs:  cl,
-		CoinOutputs: ocl,
 		BlockHeight: tci.Ctx.BlockHeight() + rcpData.BlockInterval,
 		ItemInputs:  inputItems,
-		ItemOutputs: outputItems,
+		Entries:     rcpData.Entries,
 		Sender:      sender,
 		Completed:   false,
 	}

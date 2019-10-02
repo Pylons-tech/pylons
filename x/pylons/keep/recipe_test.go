@@ -13,9 +13,8 @@ import (
 func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) types.Recipe {
 	return types.NewRecipe(name, cbID, desc,
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.GenItemInputList("Raichu"),
-		types.GenItemOutputList("Raichu"),
+		types.GenEntries("chair", "Raichu"),
 		0,
 		sender,
 	)
@@ -63,8 +62,9 @@ func TestKeeperGetRecipe(t *testing.T) {
 			recipe := GenRecipe(tc.sender, cb.ID, tc.recipeName, tc.desc)
 			mockedCoinInput.PlnK.SetRecipe(mockedCoinInput.Ctx, recipe)
 			readRecipe, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, recipe.ID)
-			require.True(t, err2 == nil)
+			// t.Errorf("recipe_test err LOG:: %+v %+v", readRecipe, err2)
 
+			require.True(t, err2 == nil)
 			require.True(t, err2 == nil)
 			require.True(t, reflect.DeepEqual(recipe, readRecipe))
 		})

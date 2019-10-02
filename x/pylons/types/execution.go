@@ -10,10 +10,10 @@ import (
 type Execution struct {
 	ID          string
 	RecipeID    string // the recipe guid
+	CookbookID  string
 	CoinInputs  sdk.Coins
-	CoinOutputs sdk.Coins
 	ItemInputs  []Item
-	ItemOutputs []Item
+	Entries     WeightedParamList
 	BlockHeight int64
 	Sender      sdk.AccAddress
 	Completed   bool

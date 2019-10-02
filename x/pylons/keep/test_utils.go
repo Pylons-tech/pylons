@@ -11,6 +11,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
+
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 )
 
 type TestCoinInput struct {
@@ -21,6 +23,38 @@ type TestCoinInput struct {
 	Bk   bank.Keeper
 	FcK  auth.FeeCollectionKeeper
 	PlnK Keeper
+}
+
+func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
+	return types.NewItem(
+		cbID,
+		(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
+			types.DoubleWeightRange{
+				Lower:  100.00,
+				Upper:  500.00,
+				Weight: 6,
+			},
+			types.DoubleWeightRange{
+				Lower:  501.00,
+				Upper:  800.00,
+				Weight: 2,
+			},
+		}}}}).Actualize(),
+		(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
+			types.IntWeightRange{
+				Lower:  100,
+				Upper:  500,
+				Weight: 6,
+			},
+			types.IntWeightRange{
+				Lower:  501,
+				Upper:  800,
+				Weight: 2,
+			},
+		}}}}).Actualize(),
+		(types.StringInputParamMap{"Name": types.StringInputParam{Value: name}}).Actualize(),
+		sender,
+	)
 }
 
 func SetupTestCoinInput() TestCoinInput {

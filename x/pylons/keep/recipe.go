@@ -34,7 +34,6 @@ func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 
 	ur := store.Get([]byte(id))
 	var recipe types.Recipe
-
 	err := json.Unmarshal(ur, &recipe)
 
 	return recipe, err

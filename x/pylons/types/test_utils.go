@@ -9,15 +9,6 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
-func GenCoinOutputList(name string, count int64) CoinOutputList {
-	return CoinOutputList{
-		CoinOutput{
-			Coin:  name,
-			Count: count,
-		},
-	}
-}
-
 func GenItemInputList(name string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
@@ -50,8 +41,18 @@ func GenItemInputList(name string) ItemInputList {
 	}
 }
 
-func GenItemOutputList(name string) ItemOutputList {
-	return ItemOutputList{
+func GenCoinOnlyEntry(coinName string) WeightedParamList {
+	return WeightedParamList{
+		CoinOutput{
+			Coin:   coinName,
+			Count:  1,
+			Weight: 1,
+		},
+	}
+}
+
+func GenItemOnlyEntry(itemName string) WeightedParamList {
+	return WeightedParamList{
 		ItemOutput{
 			DoubleParamMap{"endurance": DoubleParam{DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 				DoubleWeightRange{
@@ -77,7 +78,15 @@ func GenItemOutputList(name string) ItemOutputList {
 					Weight: 2,
 				},
 			}}}},
-			StringParamMap{"Name": StringParam{name, "1.0"}},
+			StringParamMap{"Name": StringParam{itemName, "1.0"}},
+			1,
 		},
+	}
+}
+
+func GenEntries(coinName string, itemName string) WeightedParamList {
+	return WeightedParamList{
+		GenCoinOnlyEntry(coinName)[0],
+		GenItemOnlyEntry(itemName)[0],
 	}
 }

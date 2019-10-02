@@ -10,12 +10,11 @@ import (
 // MsgUpdateRecipe defines a SetName message
 type MsgUpdateRecipe struct {
 	RecipeName    string
-	CookbookId  string // the cookbook guid
+	CookbookId    string // the cookbook guid
 	ID            string // the recipe guid
 	CoinInputs    types.CoinInputList
-	CoinOutputs   types.CoinOutputList
 	ItemInputs    types.ItemInputList
-	ItemOutputs   types.ItemOutputList
+	Entries       types.WeightedParamList
 	BlockInterval int64
 	Sender        sdk.AccAddress
 	Description   string
@@ -23,7 +22,9 @@ type MsgUpdateRecipe struct {
 
 // NewMsgUpdateRecipe a constructor for CreateCookbook msg
 func NewMsgUpdateRecipe(recipeName, cookbookId, id, description string,
-	coinInputs types.CoinInputList, coinOutputs types.CoinOutputList, itemInputs types.ItemInputList, itemOutputs types.ItemOutputList,
+	coinInputs types.CoinInputList,
+	itemInputs types.ItemInputList,
+	entries types.WeightedParamList,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		RecipeName:    recipeName,
@@ -31,9 +32,8 @@ func NewMsgUpdateRecipe(recipeName, cookbookId, id, description string,
 		CookbookId:    cookbookId,
 		Description:   description,
 		CoinInputs:    coinInputs,
-		CoinOutputs:   coinOutputs,
 		ItemInputs:    itemInputs,
-		ItemOutputs:   itemOutputs,
+		Entries:       entries,
 		BlockInterval: 0,
 		Sender:        sender,
 	}

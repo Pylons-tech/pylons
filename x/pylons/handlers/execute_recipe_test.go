@@ -28,20 +28,18 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	c2cRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
-		types.ItemOutputList{},
+		types.GenCoinOnlyEntry("chair"),
 		cbData.CookbookID,
 		sender1,
 	)
 
-	// mock coin to coin recipe
+	// mock coin to item recipe
 	zeroInOneOutItemRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
-		types.GenItemOutputList("Raichu"),
+		types.GenItemOnlyEntry("Raichu"),
 		cbData.CookbookID,
 		sender1,
 	)
@@ -50,26 +48,38 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	oneInputOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.GenItemInputList("Raichu"),
-		types.GenItemOutputList("Zombie"),
+		types.GenItemOnlyEntry("Zombie"),
+		cbData.CookbookID,
+		sender1,
+	)
+
+	// mock no input 1 coin | 1 item output recipe
+	noInput1Coin1ItemRecipeData := MockRecipe(
+		mockedCoinInput, "existing recipe",
+		types.CoinInputList{},
+		types.ItemInputList{},
+		types.GenEntries("chaira", "ZombieA"),
 		cbData.CookbookID,
 		sender1,
 	)
 
 	cases := map[string]struct {
-		cookbookId         string
-		itemIDs            []string
-		dynamicItemSet     bool
-		dynamicItemName    string
-		addInputCoin       bool
-		recipeID           string
-		recipeDesc         string
-		sender             sdk.AccAddress
-		desiredError       string
-		showError          bool
-		checkItemName      string
-		checkItemAvailable bool
+		cookbookId               string
+		itemIDs                  []string
+		dynamicItemSet           bool
+		dynamicItemName          string
+		addInputCoin             bool
+		recipeID                 string
+		recipeDesc               string
+		sender                   sdk.AccAddress
+		desiredError             string
+		showError                bool
+		checkCoinName            string
+		checkItemName            string
+		checkCoinAvailable       bool
+		checkItemAvailable       bool
+		checkItemOrCoinAvailable bool
 	}{
 		"insufficient coin balance check": {
 			itemIDs:            []string{},
@@ -101,6 +111,8 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			sender:             sender1,
 			desiredError:       "",
 			showError:          false,
+			checkCoinName:      "chair",
+			checkCoinAvailable: true,
 			checkItemName:      "",
 			checkItemAvailable: false,
 		},
@@ -154,6 +166,20 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "Zombie",
 			checkItemAvailable: true,
 		},
+		"randomness test on no input (1 coin | 1) item output recipe": {
+			itemIDs:                  []string{},
+			dynamicItemSet:           false,
+			dynamicItemName:          "Raichu",
+			addInputCoin:             true,
+			recipeID:                 noInput1Coin1ItemRecipeData.RecipeID, // available ID
+			recipeDesc:               "this has to meet character limits lol",
+			sender:                   sender1,
+			desiredError:             "",
+			showError:                false,
+			checkCoinName:            "chaira",
+			checkItemName:            "ZombieA",
+			checkItemOrCoinAvailable: true,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -161,35 +187,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 			}
 			if tc.dynamicItemSet {
-				dynamicItem := types.NewItem(
-					cbData.CookbookID,
-					(types.DoubleInputParamMap{"endurance": types.DoubleInputParam{DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
-						types.DoubleWeightRange{
-							Lower:  100.00,
-							Upper:  500.00,
-							Weight: 6,
-						},
-						types.DoubleWeightRange{
-							Lower:  501.00,
-							Upper:  800.00,
-							Weight: 2,
-						},
-					}}}}).Actualize(),
-					(types.LongInputParamMap{"HP": types.LongInputParam{IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
-						types.IntWeightRange{
-							Lower:  100,
-							Upper:  500,
-							Weight: 6,
-						},
-						types.IntWeightRange{
-							Lower:  501,
-							Upper:  800,
-							Weight: 2,
-						},
-					}}}}).Actualize(),
-					(types.StringInputParamMap{"Name": types.StringInputParam{Value: tc.dynamicItemName}}).Actualize(),
-					tc.sender,
-				)
+				dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.dynamicItemName)
 				mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
 				tc.itemIDs = []string{dynamicItem.ID}
 			}
@@ -201,24 +199,39 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				execRcpResponse := ExecuteRecipeResp{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
+				// t.Errorf("ExecuteRecipeTest LOG::result %+v", result)
+				// t.Errorf("ExecuteRecipeTest LOG:: %+v", err)
 				require.True(t, err == nil)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == "successfully executed the recipe")
 
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("chair", 1)}))
+				// calc generated coin availability
+				coinAvailability := false
+				if tc.checkCoinAvailable || tc.checkItemOrCoinAvailable {
+					coinAvailability = mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
+				}
 
-				if tc.checkItemAvailable {
-					items, err := mockedCoinInput.PlnK.GetItemsBySender(mockedCoinInput.Ctx, tc.sender)
-					require.True(t, err == nil)
+				// calc generated item availability
+				items, err := mockedCoinInput.PlnK.GetItemsBySender(mockedCoinInput.Ctx, tc.sender)
+				require.True(t, err == nil)
 
-					itemAvailable := false
-					for _, item := range items {
-						if item.Strings["Name"] == tc.checkItemName {
-							itemAvailable = true
-							break
-						}
+				itemAvailability := false
+				for _, item := range items {
+					if item.Strings["Name"] == tc.checkItemName {
+						itemAvailability = true
+						break
 					}
-					require.True(t, itemAvailable == true)
+				}
+
+				if tc.checkCoinAvailable {
+					require.True(t, coinAvailability)
+				}
+				if tc.checkItemAvailable {
+					require.True(t, itemAvailability)
+				}
+				if tc.checkItemOrCoinAvailable {
+					require.True(t, itemAvailability || coinAvailability)
+					require.True(t, !(itemAvailability && coinAvailability))
 				}
 			} else {
 				require.True(t, strings.Contains(result.Log, tc.desiredError))

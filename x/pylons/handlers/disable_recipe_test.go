@@ -28,9 +28,8 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	rcpData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenCoinOutputList("chair", 1),
 		types.ItemInputList{},
-		types.ItemOutputList{},
+		types.GenEntries("chair", "Raichu"),
 		cbData.CookbookID,
 		sender1,
 	)
@@ -64,6 +63,8 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgDisableRecipe(tc.recipeID, tc.sender)
 			result := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+
+			// t.Errorf("DisableRecipeTEST LOG:: %+v", result)
 
 			if tc.showError == false {
 				disableRcpResponse := DisableRecipeResp{}
