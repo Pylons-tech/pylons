@@ -30,6 +30,7 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			types.GenCoinInputList("wood", 5),
 			types.GenItemInputList("Raichu"),
 			types.GenEntries("chair", "Raichu"),
+			0,
 			sender,
 		)
 

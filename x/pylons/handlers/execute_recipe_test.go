@@ -31,6 +31,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.ItemInputList{},
 		types.GenCoinOnlyEntry("chair"),
 		cbData.CookbookID,
+		0,
 		sender1,
 	)
 
@@ -41,6 +42,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.ItemInputList{},
 		types.GenItemOnlyEntry("Raichu"),
 		cbData.CookbookID,
+		0,
 		sender1,
 	)
 
@@ -51,6 +53,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.GenItemInputList("Raichu"),
 		types.GenItemOnlyEntry("Zombie"),
 		cbData.CookbookID,
+		0,
 		sender1,
 	)
 
@@ -61,6 +64,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.ItemInputList{},
 		types.GenEntries("chaira", "ZombieA"),
 		cbData.CookbookID,
+		0,
 		sender1,
 	)
 

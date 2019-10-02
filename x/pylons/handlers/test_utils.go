@@ -27,12 +27,14 @@ func MockRecipe(
 	itemInputList types.ItemInputList,
 	entries types.WeightedParamList,
 	cookbookID string,
+	blockInterval int,
 	sender sdk.AccAddress,
 ) CreateRecipeResponse {
 	newRcpMsg := msgs.NewMsgCreateRecipe(recipeName, cookbookID, "this has to meet character limits",
 		coinInputList,
 		itemInputList,
 		entries,
+		blockInterval,
 		sender,
 	)
 	newRcpResult := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)

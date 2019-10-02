@@ -20,19 +20,20 @@ type MsgCreateRecipe struct {
 }
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
-func NewMsgCreateRecipe(recipeName, cookbookId, description string,
+func NewMsgCreateRecipe(recipeName, cookbookID, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
+	blockInterval int,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
 		RecipeName:    recipeName,
-		CookbookId:    cookbookId,
+		CookbookId:    cookbookID,
 		Description:   description,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
-		BlockInterval: 0,
+		BlockInterval: int64(blockInterval),
 		Sender:        sender,
 	}
 }

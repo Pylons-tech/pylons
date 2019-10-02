@@ -28,6 +28,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenEntries("chair", "Raichu"),
+		0,
 		sender1,
 	)
 
