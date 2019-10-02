@@ -29,7 +29,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		msg.CoinInputs,
 		msg.ItemInputs,
 		msg.Entries,
-		0, msg.Sender)
+		msg.BlockInterval, msg.Sender)
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
 		return sdk.ErrInternal(err.Error()).Result()
 	}
