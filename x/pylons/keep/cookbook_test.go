@@ -2,6 +2,7 @@ package keep
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -53,7 +54,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 			readCookbook, err2 := mockedCoinInput.PlnK.GetCookbook(mockedCoinInput.Ctx, tc.cbID)
 			// t.Errorf("CookbookTEST LOG:: %+v", err2)
 			if tc.showError {
-
+				require.True(t, strings.Contains(err2.Error(), tc.desiredError))
 			} else {
 				require.True(t, err2 == nil)
 				require.True(t, cb.SupportEmail == readCookbook.SupportEmail)
