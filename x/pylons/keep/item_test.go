@@ -263,7 +263,7 @@ func TestKeeperItemsByCookbook(t *testing.T) {
 		desiredLength int
 		showError     bool
 	}{
-		"not existing id delete": {
+		"not existing cookbook id": {
 			cookbookID:    "invalidCookbookID",
 			desiredError:  "",
 			desiredLength: 0,

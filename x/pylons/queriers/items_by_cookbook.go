@@ -1,6 +1,8 @@
 package queriers
 
 import (
+	"encoding/json"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -19,6 +21,9 @@ type ItemResp struct {
 
 // ItemsByCookbook returns a cookbook based on the cookbook id
 func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no cookbook id is provided in path")
+	}
 	cookbookID := path[0]
 	items, err := keeper.ItemsByCookbook(ctx, cookbookID)
 
@@ -31,11 +36,10 @@ func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keep
 	}
 
 	// if we cannot find the value then it should return an error
-	mItems, err := keeper.Cdc.MarshalJSON(itemResp)
+	mItems, err := json.Marshal(itemResp)
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}
 
 	return mItems, nil
-
 }

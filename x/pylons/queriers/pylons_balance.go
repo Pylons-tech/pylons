@@ -1,6 +1,8 @@
 package queriers
 
 import (
+	"encoding/json"
+	
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,6 +16,9 @@ const (
 
 // PylonsBalance provides balances in pylons
 func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) (res []byte, err sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no sender is provided in path")
+	}
 	addr := path[0]
 	accAddr, err1 := sdk.AccAddressFromBech32(addr)
 
@@ -31,7 +36,7 @@ func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 	}
 
 	// if we cannot find the value then it should return as 0
-	bz, err2 := keeper.Cdc.MarshalJSON(QueryResBalance{value})
+	bz, err2 := json.Marshal(QueryResBalance{value})
 	if err2 != nil {
 		panic("could not marshal result to JSON")
 	}

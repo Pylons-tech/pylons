@@ -1,6 +1,8 @@
 package queriers
 
 import (
+	"encoding/json"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
@@ -13,6 +15,9 @@ const (
 
 // ItemsBySender returns a cookbook based on the sender address
 func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no sender is provided in path")
+	}
 	sender := path[0]
 	senderAddr, err := sdk.AccAddressFromBech32(sender)
 
@@ -29,7 +34,7 @@ func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 		Items: items,
 	}
 	// if we cannot find the value then it should return an error
-	mItems, err := keeper.Cdc.MarshalJSON(itemResp)
+	mItems, err := json.Marshal(itemResp)
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}

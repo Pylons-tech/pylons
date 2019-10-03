@@ -13,6 +13,9 @@ const (
 
 // GetCookbook returns a cookbook based on the cookbook id
 func GetCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no cookbook id is provided in path")
+	}
 	cookbookID := path[0]
 	cookbook, err := keeper.GetCookbook(ctx, cookbookID)
 
