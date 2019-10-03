@@ -11,7 +11,10 @@ import (
 )
 
 func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBResponse {
-	cookbookName := "cookbook-00001"
+	return MockCookbookByName(tci, sender, "cookbook-00001")
+}
+
+func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCBResponse {
 	cookbookDesc := "this has to meet character limits"
 	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, sender)
 	cbResult := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
