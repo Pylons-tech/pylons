@@ -42,5 +42,4 @@ func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keep
 	}
 
 	return mItems, nil
-
 }
