@@ -64,6 +64,8 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			// pylonscli keys show eugen -a
 			eugenAddr := GetAccountAddr("eugen", t)
 
+			t.Errorf("eugen addr GET:: %+v", eugenAddr)
+
 			// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 			txSignArgs := []string{"tx", "sign", tc.txJson,
 				"--from", eugenAddr,
