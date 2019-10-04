@@ -15,7 +15,7 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: $(pylonscli keys add eugen9 <<< 11111111)
+      - run: pylonscli keys add eugen9 \<<< 11111111
       - run: pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin
       # pylonsd start > pylonsd.log & (sleep 10 && pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json)
       - run: pylonsd start > pylonsd.log & (sleep 10 && GO111MODULE=on go test -v ./...)
