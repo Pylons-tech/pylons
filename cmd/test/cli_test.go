@@ -71,7 +71,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			}
 			output, err := RunPylonsCli(txSignArgs, "11111111\n")
 			if err != nil {
-				t.Errorf("error signing transaction %+v", err)
+				t.Errorf("error signing transaction: %+v --- %+v", output, err)
 			}
 			err = ioutil.WriteFile(signedTxFile, output, 0644)
 			if err != nil {
