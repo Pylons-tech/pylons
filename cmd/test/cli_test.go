@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	"testing"
 
@@ -63,11 +62,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			signedTxFile := "signedTx.json"
 			// pylonscli keys show eugen -a
-			eugenAddrBytes, err := RunPylonsCli([]string{"keys", "show", "eugen", "-a"}, "")
-			eugenAddr := strings.Trim(string(eugenAddrBytes), "\n ")
-			if err != nil {
-				t.Fatal(err)
-			}
+			eugenAddr := GetAccountAddr("eugen", t)
 
 			// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 			txSignArgs := []string{"tx", "sign", tc.txJson,

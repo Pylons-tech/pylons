@@ -6,17 +6,26 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"testing"
 
 	// "path/filepath"
 	// "runtime"
 	"strings"
-	// "testing"
 )
 
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
 	cmd := exec.Command(path.Join(os.Getenv("GOPATH"), "/bin/pylonscli"), args...)
 	cmd.Stdin = strings.NewReader(stdinInput)
 	return cmd.CombinedOutput()
+}
+
+func GetAccountAddr(account string, t *testing.T) string {
+	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a"}, "")
+	addr := strings.Trim(string(addrBytes), "\n ")
+	if t != nil && err != nil {
+		t.Fatal(err)
+	}
+	return addr
 }
 
 func BroadcastTx() {
@@ -28,9 +37,9 @@ func CleanGeneratedFiles() { // remove signed transaction json files
 }
 
 func SetupChainAndAccounts() {
-	// # Initialize configuration files and genesis file
-	// pylonsd init --chain-id pylonschain
-
+	// RunPylonsCli([]string{"keys", "add", "eugen"}, "11111111\n11111111\n")
+	// eugenAddr := GetAccountAddr("eugen", nil)
+	// pylonsd add-genesis-account $(pylonscli keys show aaa -a) 100pylon,1000alicecoin
 	// # Copy the `Address` output here and save it for later use
 	// # [optional] add "--ledger" at the end to use a Ledger Nano S
 	// pylonscli keys add jack
