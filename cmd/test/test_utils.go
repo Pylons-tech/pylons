@@ -1,12 +1,16 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
 	"testing"
 
 	"strings"
+
+	"github.com/stretchr/testify/require"
 )
 
 type SuccessTxResp struct {
@@ -70,6 +74,54 @@ func GenTxWithMsg(msgValue MsgValueModel) TxModel {
 			Memo:       "",
 		},
 	}
+}
+
+func TestTxWithMsg(t *testing.T, msgValue MsgValueModel) {
+	rawTxFile := "raw_tx.json"
+	signedTxFile := "signed_tx.json"
+
+	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
+
+	txModel := GenTxWithMsg(msgValue)
+	output, err := json.Marshal(txModel)
+	ioutil.WriteFile(rawTxFile, output, 0644)
+	ErrValidation2(t, "error writing raw transaction: %+v --- %+v", output, err)
+
+	// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
+	txSignArgs := []string{"tx", "sign", rawTxFile,
+		"--from", eugenAddr,
+		"--chain-id", "pylonschain",
+	}
+	output, err = RunPylonsCli(txSignArgs, "11111111\n")
+	ErrValidation2(t, "error signing transaction: %+v --- %+v", output, err)
+
+	err = ioutil.WriteFile(signedTxFile, output, 0644)
+	ErrValidation(t, "error writing signed transaction %+v", err)
+
+	// pylonscli tx broadcast signedCreateCookbookTx.json
+	txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
+	output, err = RunPylonsCli(txBroadcastArgs, "")
+
+	successTxResp := SuccessTxResp{}
+
+	err = json.Unmarshal(output, &successTxResp)
+	// t.Errorf("signedCreateCookbookTx.json broadcast result: %+v", successTxResp)
+	if err != nil {
+		// This is when "pylonscli config output json" is not set not useful now
+		StrOutput := string(output)
+		require.True(t, strings.Contains(StrOutput, "Response"))
+		StrOutput = strings.ReplaceAll(StrOutput, "Response", "")
+		require.True(t, strings.Contains(StrOutput, "TxHash"))
+		StrOutput = strings.ReplaceAll(StrOutput, "TxHash", "")
+		TxHash := strings.Trim(string(StrOutput), ": \n")
+		require.True(t, len(TxHash) == 64)
+	} else {
+		require.True(t, len(successTxResp.TxHash) == 64)
+		require.True(t, len(successTxResp.Height) > 0)
+	}
+
+	CleanFile(rawTxFile, t)
+	CleanFile(signedTxFile, t)
 }
 
 func CleanFile(filePath string, t *testing.T) {

@@ -3,7 +3,17 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
 jobs:
-  build-and-test:
+  unit-test:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.12.5
+    working_directory: /go/src/github.com/MikeSofaer/pylons
+    steps:
+      - checkout
+
+      # specify any bash command here prefixed with `run: `
+      - run: GO111MODULE=on go test -v ./x/...)
+  integration-test:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
@@ -21,11 +31,12 @@ jobs:
       - run: pylonscli config output json
       - run: pylonscli config indent true
       - run: pylonscli config trust-node true
-      - run: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on go test -v ./...)
+      - run: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on go test -v ./cmd/test)
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build-and-test
+      - unit-test
+      - integration-test
 
