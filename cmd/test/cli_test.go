@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"testing"
@@ -60,24 +59,25 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			signedTxFile := "signedTx.json"
-			// pylonscli keys show eugen -a
-			eugenAddr := GetAccountAddr("eugen", t)
+			eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
 			txModel := TxModel{
 				Type: "auth/StdTx",
 				Value: TxValueModel{
-					Msg: []MsgModel{MsgModel{
-						Type: "pylons/CreateCookbook",
-						Value: MsgValueModel{
-							Description:  "this has to meet character limits lol",
-							Developer:    "SketchyCo",
-							Level:        "0",
-							Name:         "Morethan8Name",
-							Sender:       eugenAddr,
-							SupportEmail: "example@example.com",
-							Version:      "1.0.0",
+					Msg: []MsgModel{
+						MsgModel{
+							Type: "pylons/CreateCookbook",
+							Value: MsgValueModel{
+								Description:  "this has to meet character limits lol",
+								Developer:    "SketchyCo",
+								Level:        "0",
+								Name:         "Morethan8Name",
+								Sender:       eugenAddr,
+								SupportEmail: "example@example.com",
+								Version:      "1.0.0",
+							},
 						},
-					}},
+					},
 					Fee: FeeModel{
 						Amount: nil,
 						Gas:    "200000",
@@ -92,7 +92,6 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				t.Errorf("error writing raw transaction: %+v --- %+v", string(output), err)
 				t.Fatal(err)
 			}
-			// t.Errorf("eugen addr GET:: %+v", eugenAddr)
 
 			// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 			txSignArgs := []string{"tx", "sign", tc.txJson,
@@ -119,8 +118,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			err = json.Unmarshal(output, &successTxResp)
 			// t.Errorf("signedCreateCookbookTx.json broadcast result: %+v", successTxResp)
 			if err != nil {
-				// t.Errorf("error unmarshaling json %+v --- %+v", string(output), err)
-				// t.Fatal(err)
+				// This is when "pylonscli config output json" is not set not useful now
 				StrOutput := string(output)
 				require.True(t, strings.Contains(StrOutput, "Response"))
 				StrOutput = strings.ReplaceAll(StrOutput, "Response", "")
@@ -133,16 +131,8 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				require.True(t, len(successTxResp.Height) > 0)
 			}
 
-			err = os.Remove(tc.txJson)
-			if err != nil {
-				t.Errorf("error removing raw tx file json %+v", err)
-				t.Fatal(err)
-			}
-			err = os.Remove(signedTxFile)
-			if err != nil {
-				t.Errorf("error removing signed tx file json %+v", err)
-				t.Fatal(err)
-			}
+			CleanGeneratedFile(tc.txJson, t)
+			CleanGeneratedFile(signedTxFile, t)
 		})
 	}
 }

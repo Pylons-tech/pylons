@@ -17,6 +17,10 @@ jobs:
       - run: pylonsd init --chain-id pylonschain
       - run: pylonscli keys add eugen \<<< 11111111
       - run: pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin
+      - run: pylonscli config chain-id pylonschain
+      - run: pylonscli config output json
+      - run: pylonscli config indent true
+      - run: pylonscli config trust-node true
       - run: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on go test -v ./...)
 
 workflows:
