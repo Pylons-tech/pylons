@@ -15,7 +15,9 @@ type SuccessTxResp struct {
 	TxHash string `json:"txhash"`
 }
 
-type MsgValueModel struct {
+type MsgValueModel interface{}
+
+type CreateCookbookMsgValueModel struct {
 	Description  string
 	Developer    string
 	Level        string
@@ -24,6 +26,7 @@ type MsgValueModel struct {
 	SupportEmail string
 	Version      string
 }
+
 type MsgModel struct {
 	Type  string        `json:"type"`
 	Value MsgValueModel `json:"value"`
@@ -67,7 +70,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 					Msg: []MsgModel{
 						MsgModel{
 							Type: "pylons/CreateCookbook",
-							Value: MsgValueModel{
+							Value: CreateCookbookMsgValueModel{
 								Description:  "this has to meet character limits lol",
 								Developer:    "SketchyCo",
 								Level:        "0",
