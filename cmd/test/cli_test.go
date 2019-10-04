@@ -89,6 +89,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			ioutil.WriteFile(tc.txJson, output, 0644)
 			if err != nil {
 				t.Errorf("error writing raw transaction: %+v --- %+v", string(output), err)
+				t.Fatal(err)
 			}
 			// t.Errorf("eugen addr GET:: %+v", eugenAddr)
 
@@ -100,10 +101,12 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			output, err = RunPylonsCli(txSignArgs, "11111111\n")
 			if err != nil {
 				t.Errorf("error signing transaction: %+v --- %+v", string(output), err)
+				t.Fatal(err)
 			}
 			err = ioutil.WriteFile(signedTxFile, output, 0644)
 			if err != nil {
 				t.Errorf("error writing signed transaction %+v", err)
+				t.Fatal(err)
 			}
 
 			// pylonscli tx broadcast signedCreateCookbookTx.json
@@ -114,14 +117,23 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 
 			err = json.Unmarshal(output, &successTxResp)
 			// t.Errorf("signedCreateCookbookTx.json broadcast result: %+v", successTxResp)
-			require.True(t, err == nil)
+			if err != nil {
+				t.Errorf("error unmarshaling json %+v --- %+v", string(output), err)
+				t.Fatal(err)
+			}
 			require.True(t, len(successTxResp.Txhash) == 64)
 			require.True(t, len(successTxResp.Height) > 0)
 
 			err = os.Remove(tc.txJson)
-			require.True(t, err == nil)
+			if err != nil {
+				t.Errorf("error removing raw tx file json %+v", err)
+				t.Fatal(err)
+			}
 			err = os.Remove(signedTxFile)
-			require.True(t, err == nil)
+			if err != nil {
+				t.Errorf("error removing signed tx file json %+v", err)
+				t.Fatal(err)
+			}
 		})
 	}
 }
