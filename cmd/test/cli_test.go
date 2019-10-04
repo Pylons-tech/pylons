@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
+	"strings"
 
 	"testing"
 
@@ -12,7 +13,7 @@ import (
 
 type SuccessTxResp struct {
 	Height string `json:"height"`
-	Txhash string `json:"txhash"`
+	TxHash string `json:"txhash"`
 }
 
 type MsgValueModel struct {
@@ -118,11 +119,19 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			err = json.Unmarshal(output, &successTxResp)
 			// t.Errorf("signedCreateCookbookTx.json broadcast result: %+v", successTxResp)
 			if err != nil {
-				t.Errorf("error unmarshaling json %+v --- %+v", string(output), err)
-				t.Fatal(err)
+				// t.Errorf("error unmarshaling json %+v --- %+v", string(output), err)
+				// t.Fatal(err)
+				StrOutput := string(output)
+				require.True(t, strings.Contains(StrOutput, "Response"))
+				StrOutput = strings.ReplaceAll(StrOutput, "Response", "")
+				require.True(t, strings.Contains(StrOutput, "TxHash"))
+				StrOutput = strings.ReplaceAll(StrOutput, "TxHash", "")
+				TxHash := strings.Trim(string(StrOutput), ": \n")
+				require.True(t, len(TxHash) == 64)
+			} else {
+				require.True(t, len(successTxResp.TxHash) == 64)
+				require.True(t, len(successTxResp.Height) > 0)
 			}
-			require.True(t, len(successTxResp.Txhash) == 64)
-			require.True(t, len(successTxResp.Height) > 0)
 
 			err = os.Remove(tc.txJson)
 			if err != nil {
