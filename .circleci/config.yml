@@ -14,9 +14,10 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: GO111MODULE=on go build -v ./cmd/pylonsd/
       - run: GO111MODULE=on go build -v ./cmd/pylonscli/
+      - run: ./pylonsd init --chain-id pylonschain
       # - run: GO111MODULE=on ./pylonsd start
       # pylonsd start > pylonsd.log & (sleep 10 && pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json)
-      - run: GO111MODULE=on ./pylonsd start > pylonsd.log & (sleep 10 && GO111MODULE=on go test -v ./...)
+      - run: ./pylonsd start > pylonsd.log & (sleep 10 && GO111MODULE=on go test -v ./...)
   # test:
   #     docker:
   #       # specify the version
