@@ -10,13 +10,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type SuccessTxResp struct {
-	Height string `json:"height"`
-	TxHash string `json:"txhash"`
-}
-
-type MsgValueModel interface{}
-
 type CreateCookbookMsgValueModel struct {
 	Description  string
 	Developer    string
@@ -25,27 +18,6 @@ type CreateCookbookMsgValueModel struct {
 	Sender       string
 	SupportEmail string
 	Version      string
-}
-
-type MsgModel struct {
-	Type  string        `json:"type"`
-	Value MsgValueModel `json:"value"`
-}
-
-type FeeModel struct {
-	Amount *string `json:"amount"`
-	Gas    string  `json:"gas"`
-}
-type TxValueModel struct {
-	Msg        []MsgModel `json:"msg"`
-	Fee        FeeModel   `json:"fee"`
-	Signatures *string    `json:"signatures"`
-	Memo       string     `json:"memo"`
-}
-
-type TxModel struct {
-	Type  string       `json:"type"`
-	Value TxValueModel `json:"value"`
 }
 
 func TestCreateCookbookViaCLI(t *testing.T) {
@@ -64,37 +36,20 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			signedTxFile := "signedTx.json"
 			eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
-			txModel := TxModel{
-				Type: "auth/StdTx",
-				Value: TxValueModel{
-					Msg: []MsgModel{
-						MsgModel{
-							Type: "pylons/CreateCookbook",
-							Value: CreateCookbookMsgValueModel{
-								Description:  "this has to meet character limits lol",
-								Developer:    "SketchyCo",
-								Level:        "0",
-								Name:         "Morethan8Name",
-								Sender:       eugenAddr,
-								SupportEmail: "example@example.com",
-								Version:      "1.0.0",
-							},
-						},
-					},
-					Fee: FeeModel{
-						Amount: nil,
-						Gas:    "200000",
-					},
-					Signatures: nil,
-					Memo:       "",
+			txModel := GenTxWithMsg(
+				CreateCookbookMsgValueModel{
+					Description:  "this has to meet character limits lol",
+					Developer:    "SketchyCo",
+					Level:        "0",
+					Name:         "Morethan8Name",
+					Sender:       eugenAddr,
+					SupportEmail: "example@example.com",
+					Version:      "1.0.0",
 				},
-			}
+			)
 			output, err := json.Marshal(txModel)
 			ioutil.WriteFile(tc.txJson, output, 0644)
-			if err != nil {
-				t.Errorf("error writing raw transaction: %+v --- %+v", string(output), err)
-				t.Fatal(err)
-			}
+			ErrValidation2(t, "error writing raw transaction: %+v --- %+v", output, err)
 
 			// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 			txSignArgs := []string{"tx", "sign", tc.txJson,
@@ -102,15 +57,10 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				"--chain-id", "pylonschain",
 			}
 			output, err = RunPylonsCli(txSignArgs, "11111111\n")
-			if err != nil {
-				t.Errorf("error signing transaction: %+v --- %+v", string(output), err)
-				t.Fatal(err)
-			}
+			ErrValidation2(t, "error signing transaction: %+v --- %+v", output, err)
+
 			err = ioutil.WriteFile(signedTxFile, output, 0644)
-			if err != nil {
-				t.Errorf("error writing signed transaction %+v", err)
-				t.Fatal(err)
-			}
+			ErrValidation(t, "error writing signed transaction %+v", err)
 
 			// pylonscli tx broadcast signedCreateCookbookTx.json
 			txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
@@ -134,8 +84,8 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				require.True(t, len(successTxResp.Height) > 0)
 			}
 
-			CleanGeneratedFile(tc.txJson, t)
-			CleanGeneratedFile(signedTxFile, t)
+			CleanFile(tc.txJson, t)
+			CleanFile(signedTxFile, t)
 		})
 	}
 }
