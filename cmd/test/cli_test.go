@@ -22,18 +22,18 @@ type CreateCookbookMsgValueModel struct {
 
 func TestCreateCookbookViaCLI(t *testing.T) {
 	tests := []struct {
-		name   string
-		txJson string
+		name string
 	}{
 		{
 			"basic flow test",
-			"create_cookbook_tx.json",
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			rawTxFile := "create_cookbook_tx.json"
 			signedTxFile := "signedTx.json"
+
 			eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
 			txModel := GenTxWithMsg(
@@ -48,11 +48,11 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				},
 			)
 			output, err := json.Marshal(txModel)
-			ioutil.WriteFile(tc.txJson, output, 0644)
+			ioutil.WriteFile(rawTxFile, output, 0644)
 			ErrValidation2(t, "error writing raw transaction: %+v --- %+v", output, err)
 
 			// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
-			txSignArgs := []string{"tx", "sign", tc.txJson,
+			txSignArgs := []string{"tx", "sign", rawTxFile,
 				"--from", eugenAddr,
 				"--chain-id", "pylonschain",
 			}
@@ -84,7 +84,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				require.True(t, len(successTxResp.Height) > 0)
 			}
 
-			CleanFile(tc.txJson, t)
+			CleanFile(rawTxFile, t)
 			CleanFile(signedTxFile, t)
 		})
 	}
