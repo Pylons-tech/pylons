@@ -120,7 +120,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			}
 
 			resp, err2 := json.Marshal(CheckExecutionResp{
-				Message: "successfully payed to complete the execution",
+				Message: "successfully paid to complete the execution",
 				Status:  "Success",
 			})
 

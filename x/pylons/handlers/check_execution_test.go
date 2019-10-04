@@ -45,6 +45,8 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 		payToComplete   bool
 		addHeight       int64
 		expectedMessage string
+		expectError     bool
+		coinAddition    int64
 	}{
 		"coin to coin recipe execution test": {
 			itemIDs:         []string{},
@@ -55,13 +57,23 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			addHeight:       15,
 			expectedMessage: "successfully completed the execution",
 		},
+		"coin to coin early pay recipe execution fail due to insufficient balance": {
+			itemIDs:         []string{},
+			recipeID:        c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			recipeDesc:      "this has to meet character limits lol",
+			sender:          sender2,
+			payToComplete:   true,
+			expectError:     true,
+			expectedMessage: "insufficient balance to complete the execution",
+		},
 		"coin to coin early pay recipe execution test": {
 			itemIDs:         []string{},
 			recipeID:        c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
 			recipeDesc:      "this has to meet character limits lol",
 			sender:          sender2,
 			payToComplete:   true,
-			expectedMessage: "successfully payed to complete the execution",
+			expectedMessage: "successfully paid to complete the execution",
+			coinAddition:    300,
 		},
 	}
 	for testName, tc := range cases {
@@ -71,7 +83,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
 				tc.itemIDs = []string{dynamicItem.ID}
 			}
-			mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+			mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
 
 			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
 			result := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
@@ -83,22 +95,30 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, execRcpResponse.Status == "Success")
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
-			_, _, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(100000))
-			require.True(t, err == nil)
+			if tc.coinAddition != 0 {
+				_, _, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
+				require.True(t, err == nil)
 
+			}
 			execs, err := mockedCoinInput.PlnK.GetExecutionsBySender(mockedCoinInput.Ctx, tc.sender)
 			require.True(t, err == nil)
 
 			checkExec := msgs.NewMsgCheckExecution(execs[0].ID, tc.payToComplete, tc.sender)
+
 			futureContext := mockedCoinInput.Ctx.WithBlockHeight(mockedCoinInput.Ctx.BlockHeight() + tc.addHeight)
 			result = HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
 			checkExecResp := CheckExecutionResp{}
 			err = json.Unmarshal(result.Data, &checkExecResp)
-
 			require.True(t, err == nil)
-			require.True(t, checkExecResp.Status == "Success")
-			require.True(t, checkExecResp.Message == tc.expectedMessage)
 
+			if tc.expectError {
+				require.True(t, checkExecResp.Status == "Failure")
+				require.True(t, checkExecResp.Message == tc.expectedMessage)
+
+			} else {
+				require.True(t, checkExecResp.Status == "Success")
+				require.True(t, checkExecResp.Message == tc.expectedMessage)
+			}
 		})
 	}
 }
