@@ -23,7 +23,7 @@ func GetAccountAddr(account string, t *testing.T) string {
 	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a"}, "")
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
-		t.Fatal(err)
+		t.Errorf("error getting account address %+v", err)
 	}
 	return addr
 }
