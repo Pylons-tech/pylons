@@ -32,6 +32,7 @@ func TestListRecipe(t *testing.T) {
 		types.ItemInputList{},
 		types.GenEntries("chair", "Raichu"),
 		cbData.CookbookID,
+		0,
 		senderAccAddress,
 	)
 

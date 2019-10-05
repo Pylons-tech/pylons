@@ -121,44 +121,43 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 		return sdk.Result{Data: resp}
-	} else {
-		if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
-			return sdk.ErrInternal("insufficient coin balance").Result()
-		}
-		// TODO: send the coins to a master address instead of burning them
-		// think about making this adding and subtracting atomic using inputoutputcoins method
-		_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
-		if err != nil {
-			return err.Result()
-		}
-
-		// we delete all the matched items as those get converted to output items
-		for _, item := range matchedItems {
-			keeper.DeleteItem(ctx, item.ID)
-		}
-
-		output := recipe.Entries.Actualize()
-		err = AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookId)
-
-		if err != nil {
-			return err.Result()
-		}
-
-		outputSTR, err2 := json.Marshal(output)
-
-		if err2 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
-		}
-
-		resp, err3 := json.Marshal(ExecuteRecipeResp{
-			Message: "successfully executed the recipe",
-			Status:  "Success",
-			Output:  outputSTR,
-		})
-
-		if err3 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
-		}
-		return sdk.Result{Data: resp}
 	}
+	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
+		return sdk.ErrInternal("insufficient coin balance").Result()
+	}
+	// TODO: send the coins to a master address instead of burning them
+	// think about making this adding and subtracting atomic using inputoutputcoins method
+	_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
+	if err != nil {
+		return err.Result()
+	}
+
+	// we delete all the matched items as those get converted to output items
+	for _, item := range matchedItems {
+		keeper.DeleteItem(ctx, item.ID)
+	}
+
+	output := recipe.Entries.Actualize()
+	err = AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookId)
+
+	if err != nil {
+		return err.Result()
+	}
+
+	outputSTR, err2 := json.Marshal(output)
+
+	if err2 != nil {
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
+
+	resp, err3 := json.Marshal(ExecuteRecipeResp{
+		Message: "successfully executed the recipe",
+		Status:  "Success",
+		Output:  outputSTR,
+	})
+
+	if err3 != nil {
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
+	return sdk.Result{Data: resp}
 }

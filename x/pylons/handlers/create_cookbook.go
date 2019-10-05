@@ -34,7 +34,12 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return sdk.ErrInsufficientCoins("the user doesn't have enough pylons").Result()
 	}
 
-	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer)
+	cpb := msgs.DefaultCostPerBlock
+	if msg.CostPerBlock != nil {
+		cpb = *msg.CostPerBlock
+	}
+
+	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 	if err := keeper.SetCookbook(ctx, cb); err != nil {
 		return sdk.ErrInternal(err.Error()).Result()
 	}

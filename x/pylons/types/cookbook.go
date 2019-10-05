@@ -16,6 +16,7 @@ type Cookbook struct {
 	Developer    string
 	Level        Level
 	SupportEmail Email
+	CostPerBlock int `json:",omitempty"`
 	Sender       sdk.AccAddress
 }
 
@@ -35,7 +36,7 @@ func (cbl CookbookList) String() string {
 }
 
 // NewCookbook return a new Cookbook
-func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string) Cookbook {
+func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
 	cb := Cookbook{
 		Name:         name,
 		Description:  description,
@@ -43,6 +44,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 		Developer:    developer,
 		SupportEmail: sEmail,
 		Sender:       sender,
+		CostPerBlock: cpb,
 	}
 	cb.ID = cb.KeyGen()
 	return cb
@@ -61,5 +63,6 @@ func (cb Cookbook) String() string {
 		Developer: %s,
 		Tier: %d,
 		Support Email: %s,
-	}`, cb.Name, cb.Developer, int(cb.Level), cb.SupportEmail)
+		CostPerBlock: %d,
+	}`, cb.Name, cb.Developer, int(cb.Level), cb.SupportEmail, cb.CostPerBlock)
 }

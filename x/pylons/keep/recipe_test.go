@@ -54,7 +54,8 @@ func TestKeeperGetRecipe(t *testing.T) {
 				"1.0.0",               // msg.Version,
 				tc.cookbookName,       // msg.Name,
 				tc.desc,               // msg.Description,
-				"SketchyCo",           // msg.Developer
+				"SketchyCo",           // msg.Developer,
+				50,                    // msg.CostPerBlock,
 			)
 			err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 			require.True(t, err == nil)

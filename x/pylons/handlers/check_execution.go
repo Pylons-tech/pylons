@@ -29,6 +29,10 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
+	if !msg.Sender.Equals(exec.Sender) {
+		return sdk.ErrUnauthorized("The current sender is different from the executor").Result()
+	}
+
 	if exec.Completed {
 		resp, err2 := json.Marshal(CheckExecutionResp{
 			Message: "execution already completed",
@@ -86,6 +90,58 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 		return sdk.Result{Data: resp}
+
+	} else if msg.PayToComplete {
+		recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
+		if err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
+		cookbook, err := keeper.GetCookbook(ctx, recipe.CookbookId)
+		if err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
+		blockDiff := exec.BlockHeight - ctx.BlockHeight()
+		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
+
+		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
+			_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
+
+			if err != nil {
+				return sdk.ErrInternal(err2.Error()).Result()
+			}
+
+			// confirm that the execution was completed
+			exec.Completed = true
+
+			err2 := keeper.UpdateExecution(ctx, exec.ID, exec)
+			if err2 != nil {
+				return sdk.ErrInternal(err2.Error()).Result()
+
+			}
+
+			resp, err2 := json.Marshal(CheckExecutionResp{
+				Message: "successfully paid to complete the execution",
+				Status:  "Success",
+			})
+
+			if err2 != nil {
+				return sdk.ErrInternal(err2.Error()).Result()
+
+			}
+
+			return sdk.Result{Data: resp}
+
+		}
+		resp, err := json.Marshal(CheckExecutionResp{
+			Message: "insufficient balance to complete the execution",
+			Status:  "Failure",
+		})
+
+		if err != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+		return sdk.Result{Data: resp}
+
 	}
 	resp, err2 := json.Marshal(CheckExecutionResp{
 		Message: "execution pending",
