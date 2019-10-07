@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2.1
 jobs:
-  build:
+  unit-test:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
@@ -12,26 +12,31 @@ jobs:
       - checkout
 
       # specify any bash command here prefixed with `run: `
-      - run: GO111MODULE=on go build -v ./cmd/pylonsd/
-      - run: GO111MODULE=on go build -v ./cmd/pylonscli/
+      - run: GO111MODULE=on go test -v ./x/...
+  integration-test:
+    docker:
+      # specify the version
+      - image: circleci/golang:1.12.5
+    working_directory: /go/src/github.com/MikeSofaer/pylons
+    steps:
+      - checkout
 
-  test:
-      docker:
-        # specify the version
-        - image: circleci/golang:1.12.5
-      working_directory: /go/src/github.com/MikeSofaer/pylons
-      steps:
-        - checkout
-
-        # specify any bash command here prefixed with `run: `
-        - run: GO111MODULE=on go test -v ./...
+      # specify any bash command here prefixed with `run: `
+      - run: GO111MODULE=on go install -v ./cmd/pylonsd/
+      - run: GO111MODULE=on go install -v ./cmd/pylonscli/
+      - run: pylonsd init --chain-id pylonschain
+      - run: pylonscli keys add eugen \<<< 11111111
+      - run: pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin
+      - run: pylonscli config chain-id pylonschain
+      - run: pylonscli config output json
+      - run: pylonscli config indent true
+      - run: pylonscli config trust-node true
+      - run: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on go test -v ./cmd/test)
 
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - unit-test
+      - integration-test
 
