@@ -57,13 +57,13 @@ func GetAccountAddr(account string, t *testing.T) string {
 	return addr
 }
 
-func GenTxWithMsg(msgValue MsgValueModel) TxModel {
+func GenTxWithMsg(msgValue MsgValueModel, msgType string) TxModel {
 	return TxModel{
 		Type: "auth/StdTx",
 		Value: TxValueModel{
 			Msg: []MsgModel{
 				MsgModel{
-					Type:  "pylons/CreateCookbook",
+					Type:  msgType,
 					Value: msgValue,
 				},
 			},
@@ -77,7 +77,7 @@ func GenTxWithMsg(msgValue MsgValueModel) TxModel {
 	}
 }
 
-func TestTxWithMsg(t *testing.T, msgValue MsgValueModel) {
+func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
 	tmpDir, err := ioutil.TempDir("", "pylons")
 	if err != nil {
 		panic(err.Error())
@@ -87,8 +87,9 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel) {
 
 	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
-	txModel := GenTxWithMsg(msgValue)
+	txModel := GenTxWithMsg(msgValue, msgType)
 	output, err := json.Marshal(txModel)
+
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidation2(t, "error writing raw transaction: %+v --- %+v", output, err)
 
@@ -111,19 +112,12 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel) {
 
 	err = json.Unmarshal(output, &successTxResp)
 	// t.Errorf("signedCreateCookbookTx.json broadcast result: %+v", successTxResp)
-	if err != nil {
-		// This is when "pylonscli config output json" is not set not useful now
-		StrOutput := string(output)
-		require.True(t, strings.Contains(StrOutput, "Response"))
-		StrOutput = strings.ReplaceAll(StrOutput, "Response", "")
-		require.True(t, strings.Contains(StrOutput, "TxHash"))
-		StrOutput = strings.ReplaceAll(StrOutput, "TxHash", "")
-		TxHash := strings.Trim(string(StrOutput), ": \n")
-		require.True(t, len(TxHash) == 64)
-	} else {
-		require.True(t, len(successTxResp.TxHash) == 64)
-		require.True(t, len(successTxResp.Height) > 0)
+	if err != nil { // This can happen when "pylonscli config output json" is not set or when real issue is available
+		t.Errorf("error in broadcasting signed transaction output: %+v, err: %+v", string(output), err)
+		t.Fatal(err)
 	}
+	require.True(t, len(successTxResp.TxHash) == 64)
+	require.True(t, len(successTxResp.Height) > 0)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)

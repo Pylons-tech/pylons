@@ -2,6 +2,7 @@ package pylons
 
 import (
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 )
 
@@ -18,4 +19,5 @@ func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(msgs.MsgEnableRecipe{}, "pylons/EnableRecipe", nil)
 	cdc.RegisterConcrete(msgs.MsgDisableRecipe{}, "pylons/DisableRecipe", nil)
 
+	cdc.RegisterInterface((*types.WeightedParam)(nil), nil)
 }
