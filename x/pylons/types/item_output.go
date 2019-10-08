@@ -8,9 +8,9 @@ import (
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
 type ItemOutput struct {
-	Doubles DoubleParamMap
-	Longs   LongParamMap
-	Strings StringParamMap
+	Doubles DoubleParamList
+	Longs   LongParamList
+	Strings StringParamList
 	Weight  int
 }
 

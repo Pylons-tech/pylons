@@ -6,12 +6,13 @@ import (
 
 // StringInputParam describes the bounds on an item input/output parameter of type int64
 type StringInputParam struct {
+	Key string
 	// The value of the parameter
 	Value string
 }
 
-// StringInputParamMap is a map of string:StringInputParam
-type StringInputParamMap map[string]StringInputParam
+// StringInputParamList is a list of StringInputParam
+type StringInputParamList []StringInputParam
 
 func (lp StringInputParam) String() string {
 	return fmt.Sprintf(`
@@ -20,8 +21,8 @@ func (lp StringInputParam) String() string {
 	}`, lp.Value)
 }
 
-func (lpm StringInputParamMap) String() string {
-	lp := "StringInputParamMap{"
+func (lpm StringInputParamList) String() string {
+	lp := "StringInputParamList{"
 
 	for name, param := range lpm {
 		lp += name + ": " + param.String() + ",\n"
@@ -31,7 +32,7 @@ func (lpm StringInputParamMap) String() string {
 	return lp
 }
 
-func (lpm StringInputParamMap) Actualize() map[string]string {
+func (lpm StringInputParamList) Actualize() map[string]string {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]string)
 	for name, param := range lpm {

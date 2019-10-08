@@ -6,11 +6,12 @@ import (
 
 // DoubleInputParam describes the bounds on an item input/output parameter of type float64
 type DoubleInputParam struct {
+	Key string
 	DoubleWeightTable
 }
 
-// DoubleInputParamMap is a map of string:DoubleInputParam
-type DoubleInputParamMap map[string]DoubleInputParam
+// DoubleInputParamList is a map of string:DoubleInputParam
+type DoubleInputParamList []DoubleInputParam
 
 func (dp DoubleInputParam) String() string {
 	return fmt.Sprintf(`
@@ -19,8 +20,8 @@ func (dp DoubleInputParam) String() string {
 	}`, dp.DoubleWeightTable)
 }
 
-func (dpm DoubleInputParamMap) String() string {
-	dp := "DoubleInputParamMap{"
+func (dpm DoubleInputParamList) String() string {
+	dp := "DoubleInputParamList{"
 
 	for name, param := range dpm {
 		dp += name + ": " + param.String() + ",\n"
@@ -31,7 +32,7 @@ func (dpm DoubleInputParamMap) String() string {
 }
 
 // Actualize creates a map from the float64
-func (dpm DoubleInputParamMap) Actualize() map[string]float64 {
+func (dpm DoubleInputParamList) Actualize() map[string]float64 {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]float64)
 	for name, param := range dpm {
