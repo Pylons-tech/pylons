@@ -24,8 +24,8 @@ func (lp StringInputParam) String() string {
 func (lpm StringInputParamList) String() string {
 	lp := "StringInputParamList{"
 
-	for name, param := range lpm {
-		lp += name + ": " + param.String() + ",\n"
+	for _, param := range lpm {
+		lp += param.Key + ": " + param.String() + ",\n"
 	}
 
 	lp += "}"
@@ -35,8 +35,8 @@ func (lpm StringInputParamList) String() string {
 func (lpm StringInputParamList) Actualize() map[string]string {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]string)
-	for name, param := range lpm {
-		m[name] = param.Value
+	for _, param := range lpm {
+		m[param.Key] = param.Value
 	}
 	return m
 }

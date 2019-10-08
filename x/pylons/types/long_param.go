@@ -27,8 +27,8 @@ func (lp LongParam) String() string {
 func (lpm LongParamList) String() string {
 	lp := "LongParamList{"
 
-	for name, param := range lpm {
-		lp += name + ": " + param.String() + ",\n"
+	for _, param := range lpm {
+		lp += param.Key + ": " + param.String() + ",\n"
 	}
 
 	lp += "}"
@@ -39,8 +39,8 @@ func (lpm LongParamList) String() string {
 func (lpm LongParamList) Actualize() map[string]int {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]int)
-	for name, param := range lpm {
-		m[name] = param.Generate()
+	for _, param := range lpm {
+		m[param.Key] = param.Generate()
 	}
 	return m
 }

@@ -26,8 +26,8 @@ func (dp DoubleParam) String() string {
 func (dpm DoubleParamList) String() string {
 	dp := "DoubleParamList{"
 
-	for name, param := range dpm {
-		dp += name + ": " + param.String() + ",\n"
+	for _, param := range dpm {
+		dp += param.Key + ": " + param.String() + ",\n"
 	}
 
 	dp += "}"
@@ -38,8 +38,8 @@ func (dpm DoubleParamList) String() string {
 func (dpm DoubleParamList) Actualize() map[string]float64 {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]float64)
-	for name, param := range dpm {
-		m[name] = param.Generate()
+	for _, param := range dpm {
+		m[param.Key] = param.Generate()
 	}
 	return m
 }

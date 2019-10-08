@@ -18,7 +18,7 @@ type StringParamList []StringParam
 
 func (sp StringParam) String() string {
 	return fmt.Sprintf(`
-	StringParam{ 
+	StringParam{
 		Value: %s,
 		Rate: %+v,
 	}`, sp.Value, sp.Rate)
@@ -27,8 +27,8 @@ func (sp StringParam) String() string {
 func (spm StringParamList) String() string {
 	sp := "StringParamList{"
 
-	for name, param := range spm {
-		sp += name + ": " + param.String() + ",\n"
+	for _, param := range spm {
+		sp += param.Key + ": " + param.String() + ",\n"
 	}
 
 	sp += "}"
@@ -38,8 +38,8 @@ func (spm StringParamList) String() string {
 func (spm StringParamList) Actualize() map[string]string {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]string)
-	for name, param := range spm {
-		m[name] = param.Value
+	for _, param := range spm {
+		m[param.Key] = param.Value
 	}
 	return m
 }

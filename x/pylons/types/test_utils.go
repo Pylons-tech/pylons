@@ -12,7 +12,7 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 func GenItemInputList(name string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
-			DoubleInputParamList{"endurance": DoubleInputParam{DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+			DoubleInputParamList{DoubleInputParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 				DoubleWeightRange{
 					Lower:  100.00,
 					Upper:  500.00,
@@ -24,7 +24,7 @@ func GenItemInputList(name string) ItemInputList {
 					Weight: 2,
 				},
 			}}}},
-			LongInputParamList{"HP": LongInputParam{IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+			LongInputParamList{LongInputParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				IntWeightRange{
 					Lower:  100,
 					Upper:  500,
@@ -36,7 +36,7 @@ func GenItemInputList(name string) ItemInputList {
 					Weight: 2,
 				},
 			}}}},
-			StringInputParamList{"Name": StringInputParam{name}},
+			StringInputParamList{StringInputParam{"Key", name}},
 		},
 	}
 }
@@ -54,7 +54,7 @@ func GenCoinOnlyEntry(coinName string) WeightedParamList {
 func GenItemOnlyEntry(itemName string) WeightedParamList {
 	return WeightedParamList{
 		ItemOutput{
-			DoubleParamList{"endurance": DoubleParam{DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+			DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 				DoubleWeightRange{
 					Lower:  100.00,
 					Upper:  500.00,
@@ -66,7 +66,7 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 					Weight: 2,
 				},
 			}}, Rate: "1.0"}},
-			LongParamList{"HP": LongParam{IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+			LongParamList{LongParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				IntWeightRange{
 					Lower:  100,
 					Upper:  500,
@@ -78,7 +78,7 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 					Weight: 2,
 				},
 			}}}},
-			StringParamList{"Name": StringParam{itemName, "1.0"}},
+			StringParamList{StringParam{"Name", itemName, "1.0"}},
 			1,
 		},
 	}
