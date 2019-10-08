@@ -203,8 +203,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				execRcpResponse := ExecuteRecipeResp{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
-				// t.Errorf("ExecuteRecipeTest LOG::result %+v", result)
-				// t.Errorf("ExecuteRecipeTest LOG:: %+v", err)
 				require.True(t, err == nil)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == "successfully executed the recipe")

@@ -4,43 +4,43 @@ import "fmt"
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
-	Doubles DoubleInputParamMap
-	Longs   LongInputParamMap
-	Strings StringInputParamMap
+	Doubles DoubleInputParamList
+	Longs   LongInputParamList
+	Strings StringInputParamList
 }
 
 // Matches checks if all the constraint match the given item
 func (ii ItemInput) Matches(item Item) bool {
 
-	for key, value := range ii.Doubles {
-		double, ok := item.Doubles[key]
+	for _, param := range ii.Doubles {
+		double, ok := item.Doubles[param.Key]
 		if !ok {
 			return false
 		}
 
-		if !value.Has(double) {
+		if !param.Has(double) {
 			return false
 		}
 
 	}
 
-	for key, value := range ii.Longs {
-		long, ok := item.Longs[key]
+	for _, param := range ii.Longs {
+		long, ok := item.Longs[param.Key]
 		if !ok {
 			return false
 		}
 
-		if !value.Has(long) {
+		if !param.Has(long) {
 			return false
 		}
 	}
 
-	for key, value := range ii.Strings {
-		str, ok := item.Strings[key]
+	for _, param := range ii.Strings {
+		str, ok := item.Strings[param.Key]
 		if !ok {
 			return false
 		}
-		if str != value.Value {
+		if str != param.Value {
 			return false
 		}
 	}

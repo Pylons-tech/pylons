@@ -6,13 +6,15 @@ import (
 
 // LongParam describes the bounds on an item input/output parameter of type int64
 type LongParam struct {
-	IntWeightTable
+	Key string
+
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate FloatString
+	IntWeightTable
 }
 
-// LongParamMap is a map of string:LongParam
-type LongParamMap map[string]LongParam
+// LongParamList is a list of LongParam
+type LongParamList []LongParam
 
 func (lp LongParam) String() string {
 	return fmt.Sprintf(`
@@ -22,11 +24,11 @@ func (lp LongParam) String() string {
 	}`, lp.IntWeightTable, lp.Rate)
 }
 
-func (lpm LongParamMap) String() string {
-	lp := "LongParamMap{"
+func (lpm LongParamList) String() string {
+	lp := "LongParamList{"
 
-	for name, param := range lpm {
-		lp += name + ": " + param.String() + ",\n"
+	for _, param := range lpm {
+		lp += param.Key + ": " + param.String() + ",\n"
 	}
 
 	lp += "}"
@@ -34,11 +36,11 @@ func (lpm LongParamMap) String() string {
 }
 
 // Actualize builds the params
-func (lpm LongParamMap) Actualize() map[string]int {
+func (lpm LongParamList) Actualize() map[string]int {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]int)
-	for name, param := range lpm {
-		m[name] = param.Generate()
+	for _, param := range lpm {
+		m[param.Key] = param.Generate()
 	}
 	return m
 }

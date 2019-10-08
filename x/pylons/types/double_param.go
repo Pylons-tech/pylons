@@ -6,13 +6,14 @@ import (
 
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 type DoubleParam struct {
-	DoubleWeightTable
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate FloatString
+	Key  string
+	DoubleWeightTable
 }
 
-// DoubleParamMap is a map of string:DoubleParam
-type DoubleParamMap map[string]DoubleParam
+// DoubleParamList is a list of DoubleParam
+type DoubleParamList []DoubleParam
 
 func (dp DoubleParam) String() string {
 	return fmt.Sprintf(`
@@ -22,11 +23,11 @@ func (dp DoubleParam) String() string {
 	}`, dp.DoubleWeightTable, dp.Rate)
 }
 
-func (dpm DoubleParamMap) String() string {
-	dp := "DoubleParamMap{"
+func (dpm DoubleParamList) String() string {
+	dp := "DoubleParamList{"
 
-	for name, param := range dpm {
-		dp += name + ": " + param.String() + ",\n"
+	for _, param := range dpm {
+		dp += param.Key + ": " + param.String() + ",\n"
 	}
 
 	dp += "}"
@@ -34,11 +35,11 @@ func (dpm DoubleParamMap) String() string {
 }
 
 // Actualize creates a map from the float64
-func (dpm DoubleParamMap) Actualize() map[string]float64 {
+func (dpm DoubleParamList) Actualize() map[string]float64 {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make(map[string]float64)
-	for name, param := range dpm {
-		m[name] = param.Generate()
+	for _, param := range dpm {
+		m[param.Key] = param.Generate()
 	}
 	return m
 }
