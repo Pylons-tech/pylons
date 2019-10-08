@@ -36,7 +36,7 @@ func GenItemInputList(name string) ItemInputList {
 					Weight: 2,
 				},
 			}}}},
-			StringInputParamList{StringInputParam{"Key", name}},
+			StringInputParamList{StringInputParam{"Name", name}},
 		},
 	}
 }
