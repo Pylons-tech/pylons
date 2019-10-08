@@ -30,13 +30,13 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 		cbID,
 		(types.DoubleInputParamList{types.DoubleInputParam{Key: "endurance", DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
 			types.DoubleWeightRange{
-				Lower:  100.00,
-				Upper:  500.00,
+				Lower:  "100.00",
+				Upper:  "500.00",
 				Weight: 6,
 			},
 			types.DoubleWeightRange{
-				Lower:  501.00,
-				Upper:  800.00,
+				Lower:  "501.00",
+				Upper:  "800.00",
 				Weight: 2,
 			},
 		}}}}).Actualize(),
