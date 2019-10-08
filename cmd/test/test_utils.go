@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"testing"
 
 	"strings"
@@ -77,8 +78,12 @@ func GenTxWithMsg(msgValue MsgValueModel) TxModel {
 }
 
 func TestTxWithMsg(t *testing.T, msgValue MsgValueModel) {
-	rawTxFile := "raw_tx.json"
-	signedTxFile := "signed_tx.json"
+	tmpDir, err := ioutil.TempDir("", "pylons")
+	if err != nil {
+		panic(err.Error())
+	}
+	rawTxFile := filepath.Join(tmpDir, "raw_tx.json")
+	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
 
 	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
