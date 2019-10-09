@@ -64,6 +64,13 @@ type ListCookbookRespModel struct {
 	Cookbooks []CookbookListModel
 }
 
+func GetAminoCdc() *amino.Codec {
+	var cdc = amino.NewCodec()
+	cdc.RegisterConcrete(ed25519.PubKeyEd25519{}, ed25519.PubKeyAminoName, nil)
+	cdc.RegisterInterface((*crypto.PubKey)(nil), nil)
+	return cdc
+}
+
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
 	cmd := exec.Command(path.Join(os.Getenv("GOPATH"), "/bin/pylonscli"), args...)
 	cmd.Stdin = strings.NewReader(stdinInput)
@@ -87,10 +94,7 @@ func GetDaemonStatus() (*ctypes.ResultStatus, error) {
 	if err != nil {
 		return nil, err
 	}
-	var cdc = amino.NewCodec()
-	cdc.RegisterConcrete(ed25519.PubKeyEd25519{}, ed25519.PubKeyAminoName, nil)
-	cdc.RegisterInterface((*crypto.PubKey)(nil), nil)
-	err = cdc.UnmarshalJSON(dsBytes, &ds)
+	err = GetAminoCdc().UnmarshalJSON(dsBytes, &ds)
 
 	// err = json.Unmarshal(dsBytes, &ds)
 	if err != nil {
