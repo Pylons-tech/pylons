@@ -8,6 +8,7 @@ import (
 	"path"
 	"path/filepath"
 	"testing"
+	"time"
 
 	"strings"
 
@@ -75,6 +76,20 @@ func GenTxWithMsg(msgValue MsgValueModel, msgType string) TxModel {
 			Memo:       "",
 		},
 	}
+}
+
+func MockCookbook(t *testing.T) {
+	eugenAddr := GetAccountAddr("eugen", t)
+	TestTxWithMsg(t, CreateCookbookMsgValueModel{
+		Description:  "this has to meet character limits lol",
+		Developer:    "SketchyCo",
+		Level:        "0",
+		Name:         "COOKBOOK_MOCK_001",
+		Sender:       eugenAddr,
+		SupportEmail: "example@example.com",
+		Version:      "1.0.0",
+	}, "pylons/CreateCookbook")
+	time.Sleep(2 * time.Second)
 }
 
 func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {

@@ -85,6 +85,8 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 }
 
 func TestCreateRecipeViaCLI(t *testing.T) {
+	MockCookbook(t)
+
 	tests := []struct {
 		name string
 	}{
