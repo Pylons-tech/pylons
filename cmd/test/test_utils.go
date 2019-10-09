@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -41,6 +42,21 @@ type TxValueModel struct {
 type TxModel struct {
 	Type  string       `json:"type"`
 	Value TxValueModel `json:"value"`
+}
+
+type CookbookListModel struct {
+	ID           string
+	Description  string
+	Developer    string
+	Level        string
+	Name         string
+	Sender       string
+	SupportEmail string
+	Version      string
+}
+
+type ListCookbookRespModel struct {
+	Cookbooks []CookbookListModel
 }
 
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
@@ -89,7 +105,34 @@ func MockCookbook(t *testing.T) {
 		SupportEmail: "example@example.com",
 		Version:      "1.0.0",
 	}, "pylons/CreateCookbook")
-	time.Sleep(2 * time.Second)
+}
+
+func ListCookbookViaCLI() ([]CookbookListModel, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "list_cookbook"}, "")
+	if err != nil {
+		return []CookbookListModel{}, err
+	}
+	listCBResp := ListCookbookRespModel{}
+	err = json.Unmarshal(output, &listCBResp)
+	if err != nil {
+		return []CookbookListModel{}, err
+	}
+	return listCBResp.Cookbooks, err
+}
+
+func WaitForCookbookArrival(maxWait int) (CookbookListModel, error) {
+	if maxWait == 0 {
+		return CookbookListModel{}, errors.New("cannot get the keys from home")
+	}
+	cbList, err := ListCookbookViaCLI()
+	if err != nil {
+		return CookbookListModel{}, err
+	}
+	if len(cbList) == 0 {
+		time.Sleep(time.Second)
+		return WaitForCookbookArrival(maxWait - 1)
+	}
+	return cbList[0], nil
 }
 
 func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
