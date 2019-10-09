@@ -7,7 +7,7 @@ type DoubleWeightTable struct {
 }
 
 type DoubleWeightRange struct {
-	Lower  FloatString
+	Lower  FloatString // This is added due to amino.Marshal does not support float variable
 	Upper  FloatString
 	Weight int
 }
