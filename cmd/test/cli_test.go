@@ -1,8 +1,6 @@
 package main
 
 import (
-	// "encoding/json"
-	// "io/ioutil"
 	// "strings"
 	"encoding/json"
 	"testing"
