@@ -1,10 +1,7 @@
 package main
 
 import (
-	// "strings"
-
 	"testing"
-	// "github.com/MikeSofaer/pylons/x/pylons/types"
 )
 
 type CreateCookbookMsgValueModel struct {
