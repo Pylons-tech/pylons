@@ -7,13 +7,13 @@ type DoubleWeightTable struct {
 }
 
 type DoubleWeightRange struct {
-	Lower  float64
-	Upper  float64
+	Lower  FloatString // This is added due to amino.Marshal does not support float variable
+	Upper  FloatString
 	Weight int
 }
 
 func (wr DoubleWeightRange) Has(number float64) bool {
-	return number >= wr.Lower && number < wr.Upper
+	return number >= wr.Lower.Float() && number < wr.Upper.Float()
 }
 
 // Generate uses the weight table to generate a random number. Its uses a 2 level random generation mechanism.
@@ -40,7 +40,7 @@ func (wt *DoubleWeightTable) Generate() float64 {
 	}
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
-	return (rand.Float64() * (selectedWeightRange.Upper - selectedWeightRange.Lower)) + selectedWeightRange.Lower
+	return (rand.Float64() * (selectedWeightRange.Upper.Float() - selectedWeightRange.Lower.Float())) + selectedWeightRange.Lower.Float()
 }
 
 // Has checks if any of the weight ranges has the number

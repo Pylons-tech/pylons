@@ -1,12 +1,7 @@
 package main
 
 import (
-	// "encoding/json"
-	// "io/ioutil"
-	// "strings"
-
 	"testing"
-	// "github.com/stretchr/testify/require"
 )
 
 type CreateCookbookMsgValueModel struct {
@@ -39,7 +34,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				Sender:       eugenAddr,
 				SupportEmail: "example@example.com",
 				Version:      "1.0.0",
-			})
+			}, "pylons/CreateCookbook")
 		})
 	}
 }
