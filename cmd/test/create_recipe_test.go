@@ -20,7 +20,11 @@ type CreateRecipeMsgValueModel struct {
 }
 
 func TestCreateRecipeViaCLI(t *testing.T) {
-	MockCookbook(t)
+	err := MockCookbook(t)
+	if err != nil {
+		t.Errorf("error mocking cookbook %+v", err)
+		t.Fatal(err)
+	}
 
 	tests := []struct {
 		name string

@@ -13,6 +13,9 @@ import (
 
 	"strings"
 
+	amino "github.com/tendermint/go-amino"
+	"github.com/tendermint/tendermint/crypto"
+	"github.com/tendermint/tendermint/crypto/ed25519"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 
 	"github.com/stretchr/testify/require"
@@ -84,7 +87,12 @@ func GetDaemonStatus() (*ctypes.ResultStatus, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(dsBytes, &ds)
+	var cdc = amino.NewCodec()
+	cdc.RegisterConcrete(ed25519.PubKeyEd25519{}, ed25519.PubKeyAminoName, nil)
+	cdc.RegisterInterface((*crypto.PubKey)(nil), nil)
+	err = cdc.UnmarshalJSON(dsBytes, &ds)
+
+	// err = json.Unmarshal(dsBytes, &ds)
 	if err != nil {
 		return nil, err
 	}
@@ -111,7 +119,7 @@ func GenTxWithMsg(msgValue MsgValueModel, msgType string) TxModel {
 	}
 }
 
-func MockCookbook(t *testing.T) {
+func MockCookbook(t *testing.T) error {
 	eugenAddr := GetAccountAddr("eugen", t)
 	TestTxWithMsg(t, CreateCookbookMsgValueModel{
 		Description:  "this has to meet character limits lol",
@@ -122,7 +130,7 @@ func MockCookbook(t *testing.T) {
 		SupportEmail: "example@example.com",
 		Version:      "1.0.0",
 	}, "pylons/CreateCookbook")
-	WaitForNextBlock()
+	return WaitForNextBlock()
 }
 
 func ListCookbookViaCLI() ([]CookbookListModel, error) {
@@ -141,7 +149,7 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 func WaitForNextBlock() error {
 	ds, err := GetDaemonStatus()
 	if err != nil {
-		return errors.New("Couldn't get daemon status.")
+		return err // couldn't get daemon status.
 	}
 	currentBlock := ds.SyncInfo.LatestBlockHeight
 
