@@ -14,8 +14,6 @@ import (
 	"strings"
 
 	amino "github.com/tendermint/go-amino"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 
 	"github.com/stretchr/testify/require"
@@ -66,8 +64,7 @@ type ListCookbookRespModel struct {
 
 func GetAminoCdc() *amino.Codec {
 	var cdc = amino.NewCodec()
-	cdc.RegisterConcrete(ed25519.PubKeyEd25519{}, ed25519.PubKeyAminoName, nil)
-	cdc.RegisterInterface((*crypto.PubKey)(nil), nil)
+	ctypes.RegisterAmino(cdc)
 	return cdc
 }
 
