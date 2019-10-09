@@ -13,6 +13,8 @@ import (
 
 	"strings"
 
+	ctypes "github.com/tendermint/tendermint/rpc/core/types"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -74,6 +76,21 @@ func GetAccountAddr(account string, t *testing.T) string {
 	return addr
 }
 
+func GetDaemonStatus() (*ctypes.ResultStatus, error) {
+	var ds ctypes.ResultStatus
+
+	dsBytes, err := RunPylonsCli([]string{"status"}, "")
+
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(dsBytes, &ds)
+	if err != nil {
+		return nil, err
+	}
+	return &ds, nil
+}
+
 func GenTxWithMsg(msgValue MsgValueModel, msgType string) TxModel {
 	return TxModel{
 		Type: "auth/StdTx",
@@ -105,6 +122,7 @@ func MockCookbook(t *testing.T) {
 		SupportEmail: "example@example.com",
 		Version:      "1.0.0",
 	}, "pylons/CreateCookbook")
+	WaitForNextBlock()
 }
 
 func ListCookbookViaCLI() ([]CookbookListModel, error) {
@@ -120,17 +138,29 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 	return listCBResp.Cookbooks, err
 }
 
-func WaitForCookbookArrival(maxWait int) (CookbookListModel, error) {
-	if maxWait == 0 {
-		return CookbookListModel{}, errors.New("Couldn't get mocked cookbook within specified wait time.")
+func WaitForNextBlock() error {
+	ds, err := GetDaemonStatus()
+	if err != nil {
+		return errors.New("Couldn't get daemon status.")
 	}
+	currentBlock := ds.SyncInfo.LatestBlockHeight
+
+	counter := 1
+	for counter < 100 {
+		ds, err = GetDaemonStatus()
+		if ds.SyncInfo.LatestBlockHeight > currentBlock {
+			return nil
+		}
+		time.Sleep(100 * time.Millisecond)
+		counter += 1
+	}
+	return errors.New("No new block found though waited for 10s")
+}
+
+func GetMockedCookbook() (CookbookListModel, error) {
 	cbList, err := ListCookbookViaCLI()
 	if err != nil {
 		return CookbookListModel{}, err
-	}
-	if len(cbList) == 0 {
-		time.Sleep(time.Second)
-		return WaitForCookbookArrival(maxWait - 1)
 	}
 	return cbList[0], nil
 }
