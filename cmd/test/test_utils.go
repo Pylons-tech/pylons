@@ -122,7 +122,7 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 
 func WaitForCookbookArrival(maxWait int) (CookbookListModel, error) {
 	if maxWait == 0 {
-		return CookbookListModel{}, errors.New("cannot get the keys from home")
+		return CookbookListModel{}, errors.New("Couldn't get mocked cookbook within specified wait time.")
 	}
 	cbList, err := ListCookbookViaCLI()
 	if err != nil {
