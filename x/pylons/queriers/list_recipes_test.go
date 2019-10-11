@@ -83,7 +83,7 @@ func TestListRecipe(t *testing.T) {
 
 				require.True(t, rcpListErr == nil)
 				require.True(t, len(rcpList.Recipes) == tc.desiredRcpCnt)
-				require.True(t, rcpList.Recipes[0].RecipeName == tc.firstItemName)
+				require.True(t, rcpList.Recipes[0].Name == tc.firstItemName)
 			}
 		})
 	}

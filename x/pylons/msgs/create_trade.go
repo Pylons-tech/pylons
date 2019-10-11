@@ -7,10 +7,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgCreateRecipe defines a CreateRecipe message
-type MsgCreateRecipe struct {
-	Name    string
-	CookbookId    string // the cookbook guid
+// MsgCreateTrade defines a CreateTrade message
+type MsgCreateTrade struct {
+	TradeName     string
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
 	Entries       types.WeightedParamList
@@ -19,16 +18,15 @@ type MsgCreateRecipe struct {
 	Description   string
 }
 
-// NewMsgCreateRecipe a constructor for CreateRecipe msg
-func NewMsgCreateRecipe(recipeName, cookbookID, description string,
+// NewMsgCreateTrade a constructor for CreateTrade msg
+func NewMsgCreateTrade(tradeName, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
 	blockInterval int,
-	sender sdk.AccAddress) MsgCreateRecipe {
-	return MsgCreateRecipe{
-		Name:    recipeName,
-		CookbookId:    cookbookID,
+	sender sdk.AccAddress) MsgCreateTrade {
+	return MsgCreateTrade{
+		TradeName:     tradeName,
 		Description:   description,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
@@ -39,13 +37,13 @@ func NewMsgCreateRecipe(recipeName, cookbookID, description string,
 }
 
 // Route should return the name of the module
-func (msg MsgCreateRecipe) Route() string { return "pylons" }
+func (msg MsgCreateTrade) Route() string { return "pylons" }
 
 // Type should return the action
-func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
+func (msg MsgCreateTrade) Type() string { return "create_trade" }
 
 // ValidateBasic validates the Msg
-func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
+func (msg MsgCreateTrade) ValidateBasic() sdk.Error {
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
@@ -59,7 +57,7 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgCreateRecipe) GetSignBytes() []byte {
+func (msg MsgCreateTrade) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
@@ -68,6 +66,6 @@ func (msg MsgCreateRecipe) GetSignBytes() []byte {
 }
 
 // GetSigners gets the signer who should have signed the message
-func (msg MsgCreateRecipe) GetSigners() []sdk.AccAddress {
+func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }
