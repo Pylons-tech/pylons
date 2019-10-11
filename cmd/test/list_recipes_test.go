@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/stretchr/testify/require"
 )
 
 type CreateRecipeMsgValueModel struct {
@@ -39,17 +40,8 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := GetAccountAddr("eugen", t)
-			TestTxWithMsg(t, CreateRecipeMsgValueModel{
-				BlockInterval: 0,
-				CoinInputs:    types.GenCoinInputList("wood", 5), // should use GenCoinInput
-				CookbookId:    mCB.ID,                            // should use mocked ID
-				Description:   "this has to meet character limits lol",
-				Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
-				ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
-				RecipeName:    "Recipe00001",
-				Sender:        eugenAddr,
-			}, "pylons/CreateRecipe")
+			recipes := ListRecipesViaCLI()
+			require.True(t, len(recipes) > 0)
 		})
 	}
 }
