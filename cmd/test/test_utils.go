@@ -168,15 +168,31 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 	return listCBResp.Cookbooks, err
 }
 
-func ListRecipesViaCLI() {
+func ListRecipesViaCLI() ([]types.Recipe, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
 	if err != nil {
-		return types.Recipe{}, err
+		return []types.Recipe{types.Recipe{}}, err
 	}
 	listRCPResp := types.RecipeList{}
-	err = json.Unmarshal(output, &listRCPResp)
+	err = GetAminoCdc().UnmarshalJSON(output, &listRCPResp)
+	// err = json.Unmarshal(output, &listRCPResp)
 	if err != nil {
-		return types.Recipe{}, err
+		return []types.Recipe{types.Recipe{}}, err
+	}
+	return listRCPResp.Recipes, err
+}
+
+func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
+	if err != nil {
+		return []types.Recipe{types.Recipe{}}, err
+	}
+	listRCPResp := types.RecipeList{}
+	err = GetAminoCdc().UnmarshalJSON(output, &listRCPResp)
+	// err = json.Unmarshal(output, &listRCPResp)
+	ErrValidation2(t, "error unmarshaling list recipes: %+v --- %+v", output, err)
+	if err != nil {
+		return []types.Recipe{types.Recipe{}}, err
 	}
 	return listRCPResp.Recipes, err
 }
