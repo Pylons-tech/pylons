@@ -13,6 +13,7 @@ import (
 
 	"strings"
 
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 
@@ -134,6 +135,26 @@ func MockCookbook(t *testing.T) error {
 	return WaitForNextBlock()
 }
 
+func MockRecipe(t *testing.T) error {
+	mCB, err := GetMockedCookbook()
+	if err != nil {
+		t.Errorf("error getting mocked cookbook %+v", err)
+		t.Fatal(err)
+	}
+	eugenAddr := GetAccountAddr("eugen", t)
+	TestTxWithMsg(t, CreateRecipeMsgValueModel{
+		BlockInterval: 0,
+		CoinInputs:    types.GenCoinInputList("wood", 5), // should use GenCoinInput
+		CookbookId:    mCB.ID,                            // should use mocked ID
+		Description:   "this has to meet character limits lol",
+		Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
+		ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
+		RecipeName:    "Recipe00001",
+		Sender:        eugenAddr,
+	}, "pylons/CreateRecipe")
+	return WaitForNextBlock()
+}
+
 func ListCookbookViaCLI() ([]CookbookListModel, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "list_cookbook"}, "")
 	if err != nil {
@@ -145,6 +166,19 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 		return []CookbookListModel{}, err
 	}
 	return listCBResp.Cookbooks, err
+}
+
+func ListRecipesViaCLI() {
+	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
+	if err != nil {
+		return types.Recipe{}, err
+	}
+	listRCPResp := types.RecipeList{}
+	err = json.Unmarshal(output, &listRCPResp)
+	if err != nil {
+		return types.Recipe{}, err
+	}
+	return listRCPResp.Recipes, err
 }
 
 func WaitForNextBlock() error {

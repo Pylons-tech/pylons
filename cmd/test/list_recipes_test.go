@@ -23,6 +23,11 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 		t.Errorf("error mocking cookbook %+v", err)
 		t.Fatal(err)
 	}
+	err = MockRecipe(t)
+	if err != nil {
+		t.Errorf("error mocking recipe %+v", err)
+		t.Fatal(err)
+	}
 
 	tests := []struct {
 		name string
@@ -30,12 +35,6 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 		{
 			"basic flow test",
 		},
-	}
-
-	mCB, err := GetMockedCookbook() // WaitForCookbookArrival(5)
-	if err != nil {
-		t.Errorf("error getting mocked cookbook %+v", err)
-		t.Fatal(err)
 	}
 
 	for _, tc := range tests {
