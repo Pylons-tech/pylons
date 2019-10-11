@@ -175,7 +175,6 @@ func ListRecipesViaCLI() ([]types.Recipe, error) {
 	}
 	listRCPResp := types.RecipeList{}
 	err = GetAminoCdc().UnmarshalJSON(output, &listRCPResp)
-	// err = json.Unmarshal(output, &listRCPResp)
 	if err != nil {
 		return []types.Recipe{types.Recipe{}}, err
 	}
@@ -189,7 +188,6 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	}
 	listRCPResp := types.RecipeList{}
 	err = GetAminoCdc().UnmarshalJSON(output, &listRCPResp)
-	// err = json.Unmarshal(output, &listRCPResp)
 	ErrValidation2(t, "error unmarshaling list recipes: %+v --- %+v", output, err)
 	if err != nil {
 		return []types.Recipe{types.Recipe{}}, err
