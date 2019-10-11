@@ -9,7 +9,7 @@ import (
 type CreateRecipeMsgValueModel struct {
 	BlockInterval int64 `json:",string"`
 	CoinInputs    types.CoinInputList
-	CookbookId    string
+	CookbookID    string
 	Description   string
 	Entries       types.WeightedParamList
 	ItemInputs    types.ItemInputList
@@ -38,7 +38,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 			TestTxWithMsg(t, CreateRecipeMsgValueModel{
 				BlockInterval: 0,
 				CoinInputs:    types.GenCoinInputList("wood", 5), // should use GenCoinInput
-				CookbookId:    mCB.ID,                            // should use mocked ID
+				CookbookID:    mCB.ID,                            // should use mocked ID
 				Description:   "this has to meet character limits lol",
 				Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
 				ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem

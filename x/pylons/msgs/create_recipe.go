@@ -9,8 +9,8 @@ import (
 
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
-	Name    string
-	CookbookId    string // the cookbook guid
+	Name          string
+	CookbookID    string // the cookbook guid
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
 	Entries       types.WeightedParamList
@@ -27,8 +27,8 @@ func NewMsgCreateRecipe(recipeName, cookbookID, description string,
 	blockInterval int,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
-		Name:    recipeName,
-		CookbookId:    cookbookID,
+		Name:          recipeName,
+		CookbookID:    cookbookID,
 		Description:   description,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,

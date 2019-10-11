@@ -37,7 +37,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 
 	cases := map[string]struct {
-		cookbookId   string
+		cookbookID   string
 		recipeName   string
 		recipeID     string
 		recipeDesc   string
@@ -46,7 +46,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		showError    bool
 	}{
 		"update recipe check for not available recipe": {
-			cookbookId:   cbData.CookbookID,
+			cookbookID:   cbData.CookbookID,
 			recipeName:   "recipe0001",
 			recipeID:     "id001", // not available ID
 			recipeDesc:   "this has to meet character limits lol",
@@ -55,7 +55,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 			showError:    true,
 		},
 		"successful test for update recipe": {
-			cookbookId:   cbData.CookbookID,
+			cookbookID:   cbData.CookbookID,
 			recipeName:   "recipe0001",
 			recipeID:     recipeData.RecipeID, // available ID
 			recipeDesc:   "this has to meet character limits lol",
@@ -66,7 +66,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgUpdateRecipe(tc.recipeName, tc.cookbookId, tc.recipeID, tc.recipeDesc,
+			msg := msgs.NewMsgUpdateRecipe(tc.recipeName, tc.cookbookID, tc.recipeID, tc.recipeDesc,
 				types.GenCoinInputList("wood", 5),
 				types.GenItemInputList("Raichu"),
 				types.GenEntries("chair", "Raichu"),
