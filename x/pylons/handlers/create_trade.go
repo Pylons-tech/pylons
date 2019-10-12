@@ -9,23 +9,15 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type CreateRecipeResponse struct {
-	RecipeID string `json:"RecipeID"`
-}
-
-// HandlerMsgCreateRecipe is used to create recipe by a developer
-func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) sdk.Result {
+// HandlerMsgCreateTrade is used to create cookbook by a developer
+func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateTrade) sdk.Result {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()
 	}
-	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
-	if !cook.Sender.Equals(msg.Sender) {
-		return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
-	}
 
-	recipe := types.NewDefaultRecipe(msg.Name, msg.CookbookID, msg.Description,
+	recipe := types.NewDefaultRecipe(msg.TradeName, "", msg.Description,
 		msg.CoinInputs,
 		msg.ItemInputs,
 		msg.Entries,

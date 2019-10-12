@@ -37,12 +37,33 @@ func (cbl RecipeList) String() string {
 	return output
 }
 
-// NewRecipe creates a new recipe
-func NewRecipe(recipeName, cookbookID, description string,
+// NewDefaultRecipe creates a new recipe
+func NewDefaultRecipe(recipeName, cookbookID, description string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
 	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
 	execTime int64, sender sdk.AccAddress) Recipe {
+
+	return newRecipe(recipeName, cookbookID, description, coinInputs, itemInputs, entries, execTime, Default, sender)
+}
+
+// NewTradeRecipe creates a new trade recipe
+func NewTradeRecipe(tradeName, description string,
+	coinInputs CoinInputList, // coinOutputs CoinOutputList,
+	itemInputs ItemInputList, // itemOutputs ItemOutputList,
+	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
+	sender sdk.AccAddress) Recipe {
+
+	return newRecipe(tradeName, "", description, coinInputs, itemInputs, entries, 0, Trade, sender)
+}
+
+// NewDefaultRecipe creates a new recipe
+func newRecipe(recipeName, cookbookID, description string,
+	coinInputs CoinInputList, // coinOutputs CoinOutputList,
+	itemInputs ItemInputList, // itemOutputs ItemOutputList,
+	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
+	execTime int64, recipeType RecipeType,
+	sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		Name:          recipeName,
 		CookbookID:    cookbookID,
@@ -52,11 +73,12 @@ func NewRecipe(recipeName, cookbookID, description string,
 		BlockInterval: execTime,
 		Description:   description,
 		Sender:        sender,
-		Type:          Default,
+		Type:          recipeType,
 	}
 
 	rcp.ID = rcp.KeyGen()
 	return rcp
+
 }
 
 func (rcp *Recipe) String() string {
