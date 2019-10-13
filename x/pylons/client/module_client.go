@@ -48,6 +48,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 		query.GetPylonsBalance(mc.storeKey, mc.cdc),
 		query.GetCookbook(mc.storeKey, mc.cdc),
 		query.ListCookbook(mc.storeKey, mc.cdc),
+		query.ListRecipes(mc.storeKey, mc.cdc),
 	)...)
 
 	return pylonsQueryCmd

@@ -13,6 +13,7 @@ import (
 
 	"strings"
 
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 
@@ -134,6 +135,26 @@ func MockCookbook(t *testing.T) error {
 	return WaitForNextBlock()
 }
 
+func MockRecipe(t *testing.T) error {
+	mCB, err := GetMockedCookbook()
+	if err != nil {
+		t.Errorf("error getting mocked cookbook %+v", err)
+		t.Fatal(err)
+	}
+	eugenAddr := GetAccountAddr("eugen", t)
+	TestTxWithMsg(t, CreateRecipeMsgValueModel{
+		BlockInterval: 0,
+		CoinInputs:    types.GenCoinInputList("wood", 5), // should use GenCoinInput
+		CookbookId:    mCB.ID,                            // should use mocked ID
+		Description:   "this has to meet character limits lol",
+		Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
+		ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
+		RecipeName:    "Recipe00001",
+		Sender:        eugenAddr,
+	}, "pylons/CreateRecipe")
+	return WaitForNextBlock()
+}
+
 func ListCookbookViaCLI() ([]CookbookListModel, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "list_cookbook"}, "")
 	if err != nil {
@@ -145,6 +166,33 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 		return []CookbookListModel{}, err
 	}
 	return listCBResp.Cookbooks, err
+}
+
+func ListRecipesViaCLI() ([]types.Recipe, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
+	if err != nil {
+		return []types.Recipe{types.Recipe{}}, err
+	}
+	listRCPResp := types.RecipeList{}
+	err = GetAminoCdc().UnmarshalJSON(output, &listRCPResp)
+	if err != nil {
+		return []types.Recipe{types.Recipe{}}, err
+	}
+	return listRCPResp.Recipes, err
+}
+
+func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
+	if err != nil {
+		return []types.Recipe{types.Recipe{}}, err
+	}
+	listRCPResp := types.RecipeList{}
+	err = GetAminoCdc().UnmarshalJSON(output, &listRCPResp)
+	ErrValidationWithOutputLog(t, "error unmarshaling list recipes: %+v --- %+v", output, err)
+	if err != nil {
+		return []types.Recipe{types.Recipe{}}, err
+	}
+	return listRCPResp.Recipes, err
 }
 
 func WaitForNextBlock() error {
@@ -188,7 +236,7 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
 	output, err := json.Marshal(txModel)
 
 	ioutil.WriteFile(rawTxFile, output, 0644)
-	ErrValidation2(t, "error writing raw transaction: %+v --- %+v", output, err)
+	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
 
 	// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 	txSignArgs := []string{"tx", "sign", rawTxFile,
@@ -196,7 +244,7 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
 		"--chain-id", "pylonschain",
 	}
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")
-	ErrValidation2(t, "error signing transaction: %+v --- %+v", output, err)
+	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
 	ErrValidation(t, "error writing signed transaction %+v", err)
@@ -235,7 +283,7 @@ func ErrValidation(t *testing.T, format string, err error) {
 	}
 }
 
-func ErrValidation2(t *testing.T, format string, bytes []byte, err error) {
+func ErrValidationWithOutputLog(t *testing.T, format string, bytes []byte, err error) {
 	if err != nil {
 		t.Errorf(format, string(bytes), err)
 		t.Fatal(err)

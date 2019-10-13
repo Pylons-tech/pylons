@@ -34,7 +34,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 
 	mCB, err := GetMockedCookbook() // WaitForCookbookArrival(5)
 	if err != nil {
-		t.Errorf("error getting cookbook list %+v", err)
+		t.Errorf("error getting mocked cookbook %+v", err)
 		t.Fatal(err)
 	}
 
