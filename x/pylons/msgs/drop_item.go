@@ -3,23 +3,26 @@ package msgs
 import (
 	"encoding/json"
 
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgDropItem defines a SetName message
 type MsgDropItem struct {
-	ExecID string
-	Sender sdk.AccAddress
-	// if this is set to true then we complete the execution by paying for it
-	PayToComplete bool
+	Doubles    []types.DoubleKeyValue
+	Longs      []types.LongKeyValue
+	Strings    []types.StringKeyValue
+	CookbookID string
+	Sender     sdk.AccAddress
 }
 
 // MsgDropItem a constructor for ExecuteCookbook msg
-func NewMsgDropItem(execID string, ptc bool, sender sdk.AccAddress) MsgDropItem {
+func NewMsgDropItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress) MsgDropItem {
 	return MsgDropItem{
-		ExecID:        execID,
-		Sender:        sender,
-		PayToComplete: ptc,
+		CookbookID: cookbookID,
+		Doubles:    doubles,
+		Longs:      longs,
+		Strings:    strings,
+		Sender:     sender,
 	}
 }
 
@@ -27,11 +30,10 @@ func NewMsgDropItem(execID string, ptc bool, sender sdk.AccAddress) MsgDropItem 
 func (msg MsgDropItem) Route() string { return "pylons" }
 
 // Type should return the action
-func (msg MsgDropItem) Type() string { return "check_execution" }
+func (msg MsgDropItem) Type() string { return "drop_item" }
 
 // ValidateBasic validates the Msg
 func (msg MsgDropItem) ValidateBasic() sdk.Error {
-
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
 	}
