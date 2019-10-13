@@ -35,11 +35,14 @@ func (dpm DoubleParamList) String() string {
 }
 
 // Actualize creates a map from the float64
-func (dpm DoubleParamList) Actualize() map[string]float64 {
+func (dpm DoubleParamList) Actualize() []DoubleKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make(map[string]float64)
+	var m []DoubleKeyValue
 	for _, param := range dpm {
-		m[param.Key] = param.Generate()
+		m = append(m, DoubleKeyValue{
+			Key:   param.Key,
+			Value: ToFloatString(param.Generate()),
+		})
 	}
 	return m
 }

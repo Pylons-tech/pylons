@@ -155,7 +155,7 @@ func TestKeeperUpdateItem(t *testing.T) {
 	newItem := GenItem(cbData.ID, sender, "Raichu")
 
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
-	item.Strings["Name"] = "RC"
+	item.SetString("Name", "RC")
 
 	cases := map[string]struct {
 		desiredError string
@@ -199,7 +199,11 @@ func TestKeeperUpdateItem(t *testing.T) {
 				require.True(t, err == nil)
 				gItem, err2 := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemID)
 				require.True(t, err2 == nil)
-				require.True(t, tc.item.Strings["Name"] == gItem.Strings["Name"])
+				originItemStr, ok := tc.item.FindString("Name")
+				require.True(t, ok == true)
+				gotItemStr, ok := gItem.FindString("Name")
+				require.True(t, ok == true)
+				require.True(t, originItemStr == gotItemStr)
 			}
 		})
 	}
