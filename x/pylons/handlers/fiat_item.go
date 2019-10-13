@@ -9,12 +9,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type DropItemResponse struct {
+type FiatItemResponse struct {
 	ItemID string `json:"ItemID"`
 }
 
-// HandlerMsgDropItem is used to drop item within 1 block execution
-func HandlerMsgDropItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDropItem) sdk.Result {
+// HandlerMsgFiatItem is used to get item within 1 block execution
+func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatItem) sdk.Result {
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()

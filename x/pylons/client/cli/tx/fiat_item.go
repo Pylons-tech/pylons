@@ -12,14 +12,14 @@ import (
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
-// DropItem is the client cli command for dropping item
-func DropItem(cdc *codec.Codec) *cobra.Command {
+// FiatItem is the client cli command for getting item
+func FiatItem(cdc *codec.Codec) *cobra.Command {
 
-	var msgDI msgs.MsgDropItem
+	var msgDI msgs.MsgFiatItem
 
 	ccb := &cobra.Command{
-		Use:   "drop-item [args]",
-		Short: "drop item by providing the args",
+		Use:   "fiat-item [args]",
+		Short: "get item by providing the args",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
@@ -30,7 +30,7 @@ func DropItem(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// TODO: DropItem params should set from CLI args
+			// TODO: FiatItem params should set from CLI args
 
 			err := msgDI.ValidateBasic()
 			if err != nil {

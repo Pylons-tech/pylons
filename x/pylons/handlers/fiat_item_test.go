@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHandlerMsgDropItem(t *testing.T) {
+func TestHandlerMsgFiatItem(t *testing.T) {
 	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
@@ -49,11 +49,11 @@ func TestHandlerMsgDropItem(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
-			msg := msgs.NewMsgDropItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender)
-			result := HandlerMsgDropItem(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender)
+			result := HandlerMsgFiatItem(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if !tc.showError {
-				diRespData := DropItemResponse{}
+				diRespData := FiatItemResponse{}
 				err := json.Unmarshal(result.Data, &diRespData)
 				require.True(t, err == nil)
 				require.True(t, len(diRespData.ItemID) > 0)
