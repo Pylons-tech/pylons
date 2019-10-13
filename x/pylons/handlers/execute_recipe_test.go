@@ -219,7 +219,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 				itemAvailability := false
 				for _, item := range items {
-					if item.Strings["Name"] == tc.checkItemName {
+					itemName, ok := item.FindString("Name")
+					require.True(t, ok)
+					if itemName == tc.checkItemName {
 						itemAvailability = true
 						break
 					}

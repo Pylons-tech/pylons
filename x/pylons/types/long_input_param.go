@@ -31,11 +31,14 @@ func (lpm LongInputParamList) String() string {
 	return lp
 }
 
-func (lpm LongInputParamList) Actualize() map[string]int {
+func (lpm LongInputParamList) Actualize() []LongKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make(map[string]int)
+	var m []LongKeyValue
 	for _, param := range lpm {
-		m[param.Key] = param.Generate()
+		m = append(m, LongKeyValue{
+			Key:   param.Key,
+			Value: param.Generate(),
+		})
 	}
 	return m
 }

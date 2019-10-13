@@ -13,7 +13,7 @@ type ItemInput struct {
 func (ii ItemInput) Matches(item Item) bool {
 
 	for _, param := range ii.Doubles {
-		double, ok := item.Doubles[param.Key]
+		double, ok := item.FindDouble(param.Key)
 		if !ok {
 			return false
 		}
@@ -25,7 +25,7 @@ func (ii ItemInput) Matches(item Item) bool {
 	}
 
 	for _, param := range ii.Longs {
-		long, ok := item.Longs[param.Key]
+		long, ok := item.FindLong(param.Key)
 		if !ok {
 			return false
 		}
@@ -36,7 +36,7 @@ func (ii ItemInput) Matches(item Item) bool {
 	}
 
 	for _, param := range ii.Strings {
-		str, ok := item.Strings[param.Key]
+		str, ok := item.FindString(param.Key)
 		if !ok {
 			return false
 		}

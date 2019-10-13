@@ -35,11 +35,14 @@ func (spm StringParamList) String() string {
 	return sp
 }
 
-func (spm StringParamList) Actualize() map[string]string {
+func (spm StringParamList) Actualize() []StringKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make(map[string]string)
+	var m []StringKeyValue
 	for _, param := range spm {
-		m[param.Key] = param.Value
+		m = append(m, StringKeyValue{
+			Key:   param.Key,
+			Value: param.Value,
+		})
 	}
 	return m
 }

@@ -8,15 +8,67 @@ import (
 	"github.com/google/uuid"
 )
 
+type DoubleKeyValue struct {
+	Key   string
+	Value FloatString
+}
+
+type LongKeyValue struct {
+	Key   string
+	Value int
+}
+
+type StringKeyValue struct {
+	Key   string
+	Value string
+}
+
 // Item is a tradable asset
 type Item struct {
 	ID      string
-	Doubles map[string]float64
-	Longs   map[string]int
-	Strings map[string]string
+	Doubles []DoubleKeyValue
+	Longs   []LongKeyValue
+	Strings []StringKeyValue
 	// as items are unique per cookbook
 	CookbookID string
 	Sender     sdk.AccAddress
+}
+
+func (it Item) FindDouble(key string) (float64, bool) {
+	for _, v := range it.Doubles {
+		if v.Key == key {
+			return v.Value.Float(), true
+		}
+	}
+	return 0, false
+}
+
+func (it Item) FindLong(key string) (int, bool) {
+	for _, v := range it.Longs {
+		if v.Key == key {
+			return v.Value, true
+		}
+	}
+	return 0, false
+}
+
+func (it Item) FindString(key string) (string, bool) {
+	for _, v := range it.Strings {
+		if v.Key == key {
+			return v.Value, true
+		}
+	}
+	return "", false
+}
+
+func (it Item) SetString(key string, value string) bool {
+	for i, v := range it.Strings {
+		if v.Key == key {
+			it.Strings[i].Value = value
+			return true
+		}
+	}
+	return false
 }
 
 // KeyGen generates key for the store
@@ -46,7 +98,7 @@ func (it Item) Equals(other Item) bool {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles map[string]float64, longs map[string]int, strings map[string]string, sender sdk.AccAddress) *Item {
+func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress) *Item {
 	item := &Item{
 		CookbookID: cookbookID,
 		Doubles:    doubles,

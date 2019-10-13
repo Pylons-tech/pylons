@@ -32,11 +32,14 @@ func (lpm StringInputParamList) String() string {
 	return lp
 }
 
-func (lpm StringInputParamList) Actualize() map[string]string {
+func (lpm StringInputParamList) Actualize() []StringKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make(map[string]string)
+	var m []StringKeyValue
 	for _, param := range lpm {
-		m[param.Key] = param.Value
+		m = append(m, StringKeyValue{
+			Key:   param.Key,
+			Value: param.Value,
+		})
 	}
 	return m
 }

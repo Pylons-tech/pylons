@@ -28,6 +28,7 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 		Short: "create cookbook by providing the args",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// TODO: msgCCB should be really set values from args - but it's not set actually
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
 			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
