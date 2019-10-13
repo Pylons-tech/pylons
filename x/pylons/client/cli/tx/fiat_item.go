@@ -12,14 +12,14 @@ import (
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
-// FiatItem is the client cli command for getting item
+// FiatItem is the client cli command for creating item
 func FiatItem(cdc *codec.Codec) *cobra.Command {
 
 	var msgDI msgs.MsgFiatItem
 
 	ccb := &cobra.Command{
 		Use:   "fiat-item [args]",
-		Short: "get item by providing the args",
+		Short: "create item and assign it to sender",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)

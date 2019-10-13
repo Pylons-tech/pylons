@@ -13,7 +13,7 @@ type FiatItemResponse struct {
 	ItemID string `json:"ItemID"`
 }
 
-// HandlerMsgFiatItem is used to get item within 1 block execution
+// HandlerMsgFiatItem is used to create item within 1 block execution
 func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatItem) sdk.Result {
 	err := msg.ValidateBasic()
 	if err != nil {

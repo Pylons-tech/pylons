@@ -31,7 +31,7 @@ func (dpm DoubleInputParamList) String() string {
 	return dp
 }
 
-// Actualize creates a map from the float64
+// Actualize creates a (key, value) list from ParamList
 func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue

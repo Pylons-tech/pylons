@@ -15,7 +15,7 @@ type MsgFiatItem struct {
 	Sender     sdk.AccAddress
 }
 
-// MsgFiatItem a constructor for ExecuteCookbook msg
+// NewMsgFiatItem a constructor for MsgFiatItem msg
 func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress) MsgFiatItem {
 	return MsgFiatItem{
 		CookbookID: cookbookID,
