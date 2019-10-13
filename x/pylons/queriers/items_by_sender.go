@@ -13,7 +13,7 @@ const (
 	KeyItemsBySender = "items_by_sender"
 )
 
-// ItemsBySender returns a cookbook based on the sender address
+// ItemsBySender returns all items based on the sender address
 func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
 	if len(path) == 0 {
 		return nil, sdk.ErrInternal("no sender is provided in path")

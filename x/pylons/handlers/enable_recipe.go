@@ -8,13 +8,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// EnableRecipeResp is the response for executeRecipe
+// EnableRecipeResp is the response for enableRecipe
 type EnableRecipeResp struct {
 	Message string
 	Status  string
 }
 
-// HandlerMsgEnableRecipe is used to create cookbook by a developer
+// HandlerMsgEnableRecipe is used to enable recipe by a developer
 func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnableRecipe) sdk.Result {
 
 	err := msg.ValidateBasic()

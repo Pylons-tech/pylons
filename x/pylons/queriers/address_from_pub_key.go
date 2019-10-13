@@ -14,7 +14,7 @@ const (
 	KeyAddrFromPubKey = "addr_from_pub_key"
 )
 
-// AddrFromPubKey returns a cookbook based on the cookbook id
+// AddrFromPubKey returns a bech32 public address from the public key
 func AddrFromPubKey(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
 
 	if len(path) < 1 {

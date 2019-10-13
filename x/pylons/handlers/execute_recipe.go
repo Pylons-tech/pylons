@@ -39,7 +39,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	return nil
 }
 
-// HandlerMsgExecuteRecipe is used to create cookbook by a developer
+// HandlerMsgExecuteRecipe is used to execute a recipe
 func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) sdk.Result {
 	var exec types.Execution
 	err := msg.ValidateBasic()

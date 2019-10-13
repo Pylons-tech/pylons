@@ -6,13 +6,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgEnableRecipe defines a SetName message
+// MsgEnableRecipe defines a EnableRecipe message
 type MsgEnableRecipe struct {
 	RecipeID string
 	Sender   sdk.AccAddress
 }
 
-// NewMsgEnableRecipe a constructor for EnableCookbook msg
+// NewMsgEnableRecipe a constructor for EnableRecipe msg
 func NewMsgEnableRecipe(recipeID string, sender sdk.AccAddress) MsgEnableRecipe {
 	return MsgEnableRecipe{
 		RecipeID: recipeID,

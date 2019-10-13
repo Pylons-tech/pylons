@@ -13,7 +13,7 @@ type CreateRecipeResponse struct {
 	RecipeID string `json:"RecipeID"`
 }
 
-// HandlerMsgCreateRecipe is used to create cookbook by a developer
+// HandlerMsgCreateRecipe is used to create recipe by a developer
 func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) sdk.Result {
 
 	err := msg.ValidateBasic()

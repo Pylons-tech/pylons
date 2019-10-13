@@ -7,7 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgUpdateCookbook defines a SetName message
+// MsgUpdateCookbook defines a UpdateCookbook message
 type MsgUpdateCookbook struct {
 	ID           string
 	Description  string

@@ -1,9 +1,12 @@
 package msgs
 
-import "encoding/json"
-import sdk "github.com/cosmos/cosmos-sdk/types"
+import (
+	"encoding/json"
 
-// MsgGetPylons defines a SetName message
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+// MsgGetPylons defines a GetPylons message
 type MsgGetPylons struct {
 	Amount    sdk.Coins
 	Requester sdk.AccAddress
