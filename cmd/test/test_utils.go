@@ -141,6 +141,10 @@ func MockRecipe(t *testing.T) error {
 }
 
 func MockRecipeWithName(name string, t *testing.T) error {
+	return MockDelayedExecutionRecipeWithName(0, name, t)
+}
+
+func MockDelayedExecutionRecipeWithName(interval int64, name string, t *testing.T) error {
 	mCB, err := GetMockedCookbook()
 	if err != nil {
 		t.Errorf("error getting mocked cookbook %+v", err)
@@ -148,7 +152,7 @@ func MockRecipeWithName(name string, t *testing.T) error {
 	}
 	eugenAddr := GetAccountAddr("eugen", t)
 	TestTxWithMsg(t, CreateRecipeMsgValueModel{
-		BlockInterval: 0,
+		BlockInterval: interval,
 		CoinInputs:    types.GenCoinInputList("pylon", 5),
 		CookbookId:    mCB.ID,
 		Description:   "this has to meet character limits lol",
@@ -234,22 +238,27 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 }
 
 func WaitForNextBlock() error {
+	return WaitForBlockInterval(1)
+}
+
+func WaitForBlockInterval(interval int64) error {
 	ds, err := GetDaemonStatus()
 	if err != nil {
 		return err // couldn't get daemon status.
 	}
 	currentBlock := ds.SyncInfo.LatestBlockHeight
 
-	counter := 1
-	for counter < 300 {
+	var counter int64
+	counter = 1
+	for counter < 300*interval {
 		ds, err = GetDaemonStatus()
-		if ds.SyncInfo.LatestBlockHeight > currentBlock {
+		if ds.SyncInfo.LatestBlockHeight >= currentBlock+interval {
 			return nil
 		}
 		time.Sleep(100 * time.Millisecond)
 		counter += 1
 	}
-	return errors.New("No new block found though waited for 30s")
+	return errors.New("No new block found though waited for 30s x interval")
 }
 
 func GetMockedCookbook() (CookbookListModel, error) {

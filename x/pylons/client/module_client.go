@@ -50,6 +50,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 		query.ListCookbook(mc.storeKey, mc.cdc),
 		query.ListRecipes(mc.storeKey, mc.cdc),
 		query.ItemsBySender(mc.storeKey, mc.cdc),
+		query.ListExecutions(mc.storeKey, mc.cdc),
 	)...)
 
 	return pylonsQueryCmd
