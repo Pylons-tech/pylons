@@ -24,14 +24,11 @@ func ItemsBySender(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return fmt.Errorf(err.Error())
 			}
 
-			// fmt.Println("queryWithData", string(res))
-
 			var out queriers.ItemResp
 			err = json.Unmarshal(res, &out)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}
-			// cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
 	}

@@ -63,7 +63,6 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			if err != nil {
 				t.Errorf("error listing items via cli ::: %+v", err)
 			}
-			// t.Errorf("items_test ::: %+v", items)
 			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok)
 		})

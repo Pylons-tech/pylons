@@ -179,7 +179,6 @@ func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
 		return []types.Item{}, err
 	}
 	var itemResp queriers.ItemResp
-	// err = json.Unmarshal(output, &itemResp)
 	err = GetAminoCdc().UnmarshalJSON(output, &itemResp)
 	if err != nil {
 		t.Errorf("error unmarshaling itemResp ::: %+v ::: %+v", string(output), err)
