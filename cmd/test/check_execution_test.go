@@ -40,7 +40,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"RCP_execute_001",
+			"RCP_execute_002",
 			[]string{},
 			"Zombie",
 			false,
@@ -67,12 +67,23 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			WaitForBlockInterval(blockInterval)
 
-			// TODO should add cli command for GetExecutionsBySender
+			executions, err := ListExecutionsViaCLI(t)
+			if err != nil {
+				t.Errorf("error listing executions %+v", err)
+				t.Fatal(err)
+			}
+			exec, ok := FindExecutionByRecipeID(executions, rcp.ID)
+			if !ok {
+				t.Errorf("error finding execution with recipeID :: %+v :: rcpID=\"%s\"", executions, rcp.ID)
+				t.Fatal(err)
+			}
+
 			TestTxWithMsg(
 				t,
 				// msgs.NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress),
-				msgs.NewMsgCheckExecution(execID string, tc.payToComplete, sdkAddr),
-				"pylons/ExecuteRecipe")
+				msgs.NewMsgCheckExecution(exec.ID, tc.payToComplete, sdkAddr),
+				"pylons/CheckExecution",
+			)
 
 			WaitForNextBlock()
 

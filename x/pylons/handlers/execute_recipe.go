@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
@@ -98,6 +99,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 	// we set the inputs and outputs for storing the execution
 	if recipe.BlockInterval > 0 {
+		fmt.Println("Executing delayed execution recipe 0010133143")
 		// store the execution as the interval
 		exec.RecipeID = recipe.ID
 		exec.CookbookID = recipe.CookbookId
@@ -112,6 +114,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
+		fmt.Println("Executing delayed execution recipe 0010133143 err2 passed")
 		resp, err3 := json.Marshal(ExecuteRecipeResp{
 			Message: "scheduled the recipe",
 			Status:  "Success",
@@ -120,6 +123,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if err3 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
+		fmt.Println("Executing delayed execution recipe 0010133143 err3 passed")
 		return sdk.Result{Data: resp}
 	}
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
