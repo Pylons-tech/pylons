@@ -10,7 +10,7 @@ import (
 // DefaultCostPerBlock the amount of pylons to be charged by default
 const DefaultCostPerBlock = 50 // Pylons
 
-// MsgCreateCookbook defines a SetName message
+// MsgCreateCookbook defines a CreateCookbook message
 type MsgCreateCookbook struct {
 	Name         string
 	Description  string

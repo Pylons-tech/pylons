@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// MsgCheckExecution defines a SetName message
+// MsgCheckExecution defines a CheckExecution message
 type MsgCheckExecution struct {
 	ExecID string
 	Sender sdk.AccAddress
@@ -14,7 +14,7 @@ type MsgCheckExecution struct {
 	PayToComplete bool
 }
 
-// NewMsgCheckExecution a constructor for ExecuteCookbook msg
+// NewMsgCheckExecution a constructor for CheckExecution msg
 func NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress) MsgCheckExecution {
 	return MsgCheckExecution{
 		ExecID:        execID,

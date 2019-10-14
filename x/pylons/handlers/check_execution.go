@@ -9,14 +9,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// CheckExecutionResp is the response for executeRecipe
+// CheckExecutionResp is the response for checkExecution
 type CheckExecutionResp struct {
 	Message string
 	Status  string
 	Output  []byte
 }
 
-// HandlerMsgCheckExecution is used to create cookbook by a developer
+// HandlerMsgCheckExecution is used to check the status of an execution
 func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCheckExecution) sdk.Result {
 	var exec types.Execution
 	err := msg.ValidateBasic()

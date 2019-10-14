@@ -16,11 +16,9 @@ import (
 	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
-// ExecuteRecipeTxBuilder returns the fixtures which can be used to create a create cookbook transaction
+// ExecuteRecipeTxBuilder returns the fixtures which can be used to create a execute recipe transaction
 func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// vars := mux.Vars(r)
-		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))

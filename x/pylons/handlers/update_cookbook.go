@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// HandlerMsgUpdateCookbook is used to create cookbook by a developer
+// HandlerMsgUpdateCookbook is used to update cookbook by a developer
 func HandlerMsgUpdateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateCookbook) sdk.Result {
 
 	err := msg.ValidateBasic()

@@ -19,9 +19,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	// mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.NewCoins(sdk.NewInt64Coin("pylons", 500000)))
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
-	// mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.BasicTier.Fee)
 
 	cases := map[string]struct {
 		name         string
