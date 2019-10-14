@@ -13,6 +13,7 @@ import (
 
 	"strings"
 
+	"github.com/MikeSofaer/pylons/x/pylons/queriers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -136,6 +137,10 @@ func MockCookbook(t *testing.T) error {
 }
 
 func MockRecipe(t *testing.T) error {
+	return MockRecipeWithName("Recipe00001", t)
+}
+
+func MockRecipeWithName(name string, t *testing.T) error {
 	mCB, err := GetMockedCookbook()
 	if err != nil {
 		t.Errorf("error getting mocked cookbook %+v", err)
@@ -144,12 +149,12 @@ func MockRecipe(t *testing.T) error {
 	eugenAddr := GetAccountAddr("eugen", t)
 	TestTxWithMsg(t, CreateRecipeMsgValueModel{
 		BlockInterval: 0,
-		CoinInputs:    types.GenCoinInputList("wood", 5), // should use GenCoinInput
-		CookbookId:    mCB.ID,                            // should use mocked ID
+		CoinInputs:    types.GenCoinInputList("pylon", 5),
+		CookbookId:    mCB.ID,
 		Description:   "this has to meet character limits lol",
-		Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
-		ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
-		RecipeName:    "Recipe00001",
+		Entries:       types.GenItemOnlyEntry("Zombie"),
+		ItemInputs:    types.ItemInputList{},
+		RecipeName:    name,
 		Sender:        eugenAddr,
 	}, "pylons/CreateRecipe")
 	return WaitForNextBlock()
@@ -166,6 +171,39 @@ func ListCookbookViaCLI() ([]CookbookListModel, error) {
 		return []CookbookListModel{}, err
 	}
 	return listCBResp.Cookbooks, err
+}
+
+func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "items_by_sender"}, "")
+	if err != nil {
+		return []types.Item{}, err
+	}
+	var itemResp queriers.ItemResp
+	err = json.Unmarshal(output, &itemResp)
+	if err != nil {
+		t.Errorf("error unmarshaling itemResp ::: %+v ::: %+v", string(output), err)
+		return []types.Item{}, err
+	}
+	return itemResp.Items, err
+}
+
+func FindItemFromArrayByName(items []types.Item, name string) (types.Item, bool) {
+	for _, item := range items {
+		itemName, _ := item.FindString("Name")
+		if itemName == name {
+			return item, true
+		}
+	}
+	return types.Item{}, false
+}
+
+func FindRecipeFromArrayByName(recipes []types.Recipe, name string) (types.Recipe, bool) {
+	for _, rcp := range recipes {
+		if rcp.RecipeName == name {
+			return rcp, true
+		}
+	}
+	return types.Recipe{}, false
 }
 
 func ListRecipesViaCLI() ([]types.Recipe, error) {
@@ -203,7 +241,7 @@ func WaitForNextBlock() error {
 	currentBlock := ds.SyncInfo.LatestBlockHeight
 
 	counter := 1
-	for counter < 100 {
+	for counter < 300 {
 		ds, err = GetDaemonStatus()
 		if ds.SyncInfo.LatestBlockHeight > currentBlock {
 			return nil
@@ -211,7 +249,7 @@ func WaitForNextBlock() error {
 		time.Sleep(100 * time.Millisecond)
 		counter += 1
 	}
-	return errors.New("No new block found though waited for 10s")
+	return errors.New("No new block found though waited for 30s")
 }
 
 func GetMockedCookbook() (CookbookListModel, error) {
