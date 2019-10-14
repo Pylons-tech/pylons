@@ -19,6 +19,16 @@ type ItemResp struct {
 	Items []types.Item
 }
 
+func (ir ItemResp) String() string {
+	output := "ItemResp{"
+	for _, it := range ir.Items {
+		output += it.String()
+		output += ",\n"
+	}
+	output += "}"
+	return output
+}
+
 // ItemsByCookbook returns a cookbook based on the cookbook id
 func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
 	if len(path) == 0 {

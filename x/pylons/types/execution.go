@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
 )
@@ -23,4 +25,20 @@ type Execution struct {
 func (exec Execution) KeyGen() string {
 	id := uuid.New()
 	return exec.Sender.String() + id.String()
+}
+
+func (e Execution) String() string {
+	return fmt.Sprintf(`
+		Item{ 
+			ID: %s,
+			RecipeID: %s,
+			CookbookID: %s,
+			CoinInputs: %+v,
+			ItemInputs: %+v,
+			Entries: %+v,
+			BlockHeight: %d,
+			Sender: %s,
+			Completed: %t,
+		}`, e.ID, e.RecipeID, e.CookbookID, e.CoinInputs, e.ItemInputs,
+		e.Entries, e.BlockHeight, e.Sender, e.Completed)
 }

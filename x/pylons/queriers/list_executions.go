@@ -18,6 +18,16 @@ type ExecResp struct {
 	Executions []types.Execution
 }
 
+func (er ExecResp) String() string {
+	output := "ExecResp{"
+	for _, e := range er.Executions {
+		output += e.String()
+		output += ",\n"
+	}
+	output += "}"
+	return output
+}
+
 // ListExecutions lists all the executions based on the sender address
 func ListExecutions(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
 	sender := path[0]
