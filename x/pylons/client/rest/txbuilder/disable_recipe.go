@@ -1,7 +1,5 @@
 package txbuilder
 
-// this module provides the fixtures to build a transaction
-
 import (
 	"net/http"
 
