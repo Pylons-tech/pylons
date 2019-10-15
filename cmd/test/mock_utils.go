@@ -73,11 +73,11 @@ func MockDelayedExecutionRecipeWithName(interval int64, name string, outputItemN
 	TestTxWithMsg(t, CreateRecipeMsgValueModel{
 		BlockInterval: interval,
 		CoinInputs:    types.GenCoinInputList("pylon", 5),
-		CookbookId:    mCB.ID,
+		CookbookID:    mCB.ID,
 		Description:   "this has to meet character limits lol",
 		Entries:       types.GenItemOnlyEntry(outputItemName),
 		ItemInputs:    types.ItemInputList{},
-		RecipeName:    name,
+		Name:          name,
 		Sender:        eugenAddr,
 	}, "pylons/CreateRecipe")
 	return WaitForNextBlock()

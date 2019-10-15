@@ -21,7 +21,7 @@ type MsgUpdateRecipe struct {
 }
 
 // NewMsgUpdateRecipe a constructor for UpdateRecipe msg
-func NewMsgUpdateRecipe(recipeName, cookbookId, id, description string,
+func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,

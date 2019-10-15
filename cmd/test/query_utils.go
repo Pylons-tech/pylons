@@ -65,7 +65,7 @@ func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
 
 func FindRecipeFromArrayByName(recipes []types.Recipe, name string) (types.Recipe, bool) {
 	for _, rcp := range recipes {
-		if rcp.RecipeName == name {
+		if rcp.Name == name {
 			return rcp, true
 		}
 	}
