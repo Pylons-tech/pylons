@@ -48,7 +48,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 				Description:   "this has to meet character limits lol",
 				Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
 				ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
-				RecipeName:    "Recipe00001",
+				RecipeName:    "RCP_TestCreateRecipe_001",
 				Sender:        eugenAddr,
 			}, "pylons/CreateRecipe")
 		})

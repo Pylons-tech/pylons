@@ -17,19 +17,6 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 		t.Errorf("error mocking cookbook %+v", err)
 		t.Fatal(err)
 	}
-	err = MockDelayedExecutionRecipeWithName(blockInterval, "RCP_execute_002", t)
-	if err != nil {
-		t.Errorf("error mocking recipe %+v", err)
-		t.Fatal(err)
-	}
-
-	recipes, err := TestQueryListRecipe(t)
-	if err != nil {
-		t.Errorf("error listing recipes %+v", err)
-		t.Fatal(err)
-	}
-	require.True(t, err == nil)
-	require.True(t, len(recipes) > 0)
 
 	tests := []struct {
 		name            string
@@ -40,7 +27,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"RCP_execute_002",
+			"Recipe_TestCheckExecution__001",
 			[]string{},
 			"Zombie",
 			false,
@@ -51,6 +38,20 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			err = MockDelayedExecutionRecipeWithName(blockInterval, tc.rcpName, t)
+			if err != nil {
+				t.Errorf("error mocking recipe %+v", err)
+				t.Fatal(err)
+			}
+		
+			recipes, err := TestQueryListRecipe(t)
+			if err != nil {
+				t.Errorf("error listing recipes %+v", err)
+				t.Fatal(err)
+			}
+			require.True(t, err == nil)
+			require.True(t, len(recipes) > 0)
+
 			rcp, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
 				t.Errorf("error getting recipe with name %+v", tc.rcpName)

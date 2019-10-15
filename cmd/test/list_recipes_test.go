@@ -12,7 +12,7 @@ func TestListRecipeViaCLI(t *testing.T) {
 		t.Errorf("error mocking cookbook %+v", err)
 		t.Fatal(err)
 	}
-	err = MockRecipe(t)
+	err = MockRecipeWithName("RCP_TestListRecipe__001", t)
 	if err != nil {
 		t.Errorf("error mocking recipe %+v", err)
 		t.Fatal(err)
