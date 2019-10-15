@@ -15,6 +15,10 @@ type CreateCookbookMsgValueModel struct {
 }
 
 func TestCreateCookbookViaCLI(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test")
+	}
+
 	tests := []struct {
 		name string
 	}{

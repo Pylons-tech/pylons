@@ -7,6 +7,11 @@ import (
 )
 
 func TestListRecipeViaCLI(t *testing.T) {
+
+	if testing.Short() {
+		t.Skip("Skipping integration test")
+	}
+
 	err := MockCookbook(t)
 	if err != nil {
 		t.Errorf("error mocking cookbook %+v", err)

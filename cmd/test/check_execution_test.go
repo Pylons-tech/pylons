@@ -9,6 +9,10 @@ import (
 )
 
 func TestCheckExecutionViaCLI(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Skipping integration test")
+	}
+
 	var blockInterval int64
 	blockInterval = 5
 
