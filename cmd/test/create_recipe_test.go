@@ -18,6 +18,9 @@ type CreateRecipeMsgValueModel struct {
 }
 
 func TestCreateRecipeViaCLI(t *testing.T) {
+	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
+	WaitForNextBlock()
+
 	err := MockCookbook(t)
 	if err != nil {
 		t.Errorf("error mocking cookbook %+v", err)
