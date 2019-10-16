@@ -18,11 +18,8 @@ type CreateRecipeMsgValueModel struct {
 }
 
 func TestCreateRecipeViaCLI(t *testing.T) {
-	err := MockCookbook(t)
-	if err != nil {
-		t.Errorf("error mocking cookbook %+v", err)
-		t.Fatal(err)
-	}
+	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
+	WaitForNextBlock()
 
 	tests := []struct {
 		name string
@@ -32,11 +29,8 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 		},
 	}
 
-	mCB, err := GetMockedCookbook() // WaitForCookbookArrival(5)
-	if err != nil {
-		t.Errorf("error getting mocked cookbook %+v", err)
-		t.Fatal(err)
-	}
+	mCB, err := GetMockedCookbook(t)
+	ErrValidation(t, "error getting mocked cookbook %+v", err)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -48,7 +42,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 				Description:   "this has to meet character limits lol",
 				Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
 				ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
-				RecipeName:    "Recipe00001",
+				RecipeName:    "TESTRCP_CreateRecipe_001",
 				Sender:        eugenAddr,
 			}, "pylons/CreateRecipe")
 		})

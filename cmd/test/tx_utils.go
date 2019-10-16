@@ -122,11 +122,9 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
 	successTxResp := SuccessTxResp{}
 
 	err = json.Unmarshal(output, &successTxResp)
-	// t.Errorf("signedCreateCookbookTx.json broadcast result: %+v", successTxResp)
-	if err != nil { // This can happen when "pylonscli config output json" is not set or when real issue is available
-		t.Errorf("error in broadcasting signed transaction output: %+v, err: %+v", string(output), err)
-		t.Fatal(err)
-	}
+	// This can happen when "pylonscli config output json" is not set or when real issue is available
+	ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
+
 	require.True(t, len(successTxResp.TxHash) == 64)
 	require.True(t, len(successTxResp.Height) > 0)
 

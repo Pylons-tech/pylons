@@ -15,11 +15,16 @@ type CreateCookbookMsgValueModel struct {
 }
 
 func TestCreateCookbookViaCLI(t *testing.T) {
+	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
+	WaitForNextBlock()
+
 	tests := []struct {
-		name string
+		name   string
+		cbName string
 	}{
 		{
 			"basic flow test",
+			"TESTCB_CreateCookbook_001",
 		},
 	}
 
@@ -30,7 +35,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				Description:  "this has to meet character limits lol",
 				Developer:    "SketchyCo",
 				Level:        "0",
-				Name:         "Morethan8Name",
+				Name:         tc.cbName,
 				Sender:       eugenAddr,
 				SupportEmail: "example@example.com",
 				Version:      "1.0.0",

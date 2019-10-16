@@ -9,24 +9,8 @@ import (
 )
 
 func TestExecuteRecipeViaCLI(t *testing.T) {
-	err := MockCookbook(t)
-	if err != nil {
-		t.Errorf("error mocking cookbook %+v", err)
-		t.Fatal(err)
-	}
-	err = MockRecipeWithName("RCP_execute_001", t)
-	if err != nil {
-		t.Errorf("error mocking recipe %+v", err)
-		t.Fatal(err)
-	}
-
-	recipes, err := TestQueryListRecipe(t)
-	if err != nil {
-		t.Errorf("error listing recipes %+v", err)
-		t.Fatal(err)
-	}
-	require.True(t, err == nil)
-	require.True(t, len(recipes) > 0)
+	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
+	WaitForNextBlock()
 
 	tests := []struct {
 		name            string
@@ -36,7 +20,7 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"RCP_execute_001",
+			"TESTRCP_ExecuteRecipe_001",
 			[]string{},
 			"Zombie",
 		},
@@ -44,6 +28,15 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			err := MockRecipeWithName(tc.rcpName, t)
+			ErrValidation(t, "error mocking recipe %+v", err)
+
+			recipes, err := TestQueryListRecipe(t)
+			ErrValidation(t, "error listing recipes %+v", err)
+
+			require.True(t, err == nil)
+			require.True(t, len(recipes) > 0)
+
 			rcp, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
 				t.Errorf("error getting recipe with name %+v", tc.rcpName)
@@ -60,9 +53,8 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 
 			WaitForNextBlock()
 			items, err := ListItemsViaCLI(t)
-			if err != nil {
-				t.Errorf("error listing items via cli ::: %+v", err)
-			}
+			ErrValidation(t, "error listing items via cli ::: %+v", err)
+
 			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok)
 		})

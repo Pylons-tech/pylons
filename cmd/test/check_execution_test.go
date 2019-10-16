@@ -9,38 +9,21 @@ import (
 )
 
 func TestCheckExecutionViaCLI(t *testing.T) {
-	var blockInterval int64
-	blockInterval = 5
-
-	err := MockCookbook(t)
-	if err != nil {
-		t.Errorf("error mocking cookbook %+v", err)
-		t.Fatal(err)
-	}
-	err = MockDelayedExecutionRecipeWithName(blockInterval, "RCP_execute_002", t)
-	if err != nil {
-		t.Errorf("error mocking recipe %+v", err)
-		t.Fatal(err)
-	}
-
-	recipes, err := TestQueryListRecipe(t)
-	if err != nil {
-		t.Errorf("error listing recipes %+v", err)
-		t.Fatal(err)
-	}
-	require.True(t, err == nil)
-	require.True(t, len(recipes) > 0)
+	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
+	WaitForNextBlock()
 
 	tests := []struct {
 		name            string
 		rcpName         string
+		blockInterval   int64
 		itemIDs         []string
 		desiredItemName string
 		payToComplete   bool
 	}{
 		{
 			"basic flow test",
-			"RCP_execute_002",
+			"TESTRCP_CheckExecution__001",
+			2,
 			[]string{},
 			"Zombie",
 			false,
@@ -51,6 +34,15 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			err := MockDelayedExecutionRecipeWithName(tc.blockInterval, tc.rcpName, t)
+			ErrValidation(t, "error mocking recipe %+v", err)
+
+			recipes, err := TestQueryListRecipe(t)
+			ErrValidation(t, "error listing recipes %+v", err)
+
+			require.True(t, err == nil)
+			require.True(t, len(recipes) > 0)
+
 			rcp, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
 				t.Errorf("error getting recipe with name %+v", tc.rcpName)
@@ -65,13 +57,11 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
 				"pylons/ExecuteRecipe")
 
-			WaitForBlockInterval(blockInterval)
+			WaitForBlockInterval(tc.blockInterval)
 
 			executions, err := ListExecutionsViaCLI(t)
-			if err != nil {
-				t.Errorf("error listing executions %+v", err)
-				t.Fatal(err)
-			}
+			ErrValidation(t, "error listing executions %+v", err)
+
 			exec, ok := FindExecutionByRecipeID(executions, rcp.ID)
 			if !ok {
 				t.Errorf("error finding execution with recipeID :: %+v :: rcpID=\"%s\"", executions, rcp.ID)
@@ -89,9 +79,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			// TODO here desiredItemName should be random - not specific text since by execute_recipe it is available already and can't do real check
 			items, err := ListItemsViaCLI(t)
-			if err != nil {
-				t.Errorf("error listing items via cli ::: %+v", err)
-			}
+			ErrValidation(t, "error listing items via cli ::: %+v", err)
+
 			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok)
 		})

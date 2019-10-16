@@ -77,10 +77,7 @@ func WaitForBlockInterval(interval int64) error {
 
 func CleanFile(filePath string, t *testing.T) {
 	err := os.Remove(filePath)
-	if err != nil {
-		t.Errorf("error removing raw tx file json %+v", err)
-		t.Fatal(err)
-	}
+	ErrValidation(t, "error removing raw tx file json %+v", err)
 }
 
 func ErrValidation(t *testing.T, format string, err error) {
