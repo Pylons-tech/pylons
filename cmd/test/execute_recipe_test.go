@@ -29,16 +29,11 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			err := MockRecipeWithName(tc.rcpName, t)
-			if err != nil {
-				t.Errorf("error mocking recipe %+v", err)
-				t.Fatal(err)
-			}
+			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)
-			if err != nil {
-				t.Errorf("error listing recipes %+v", err)
-				t.Fatal(err)
-			}
+			ErrValidation(t, "error listing recipes %+v", err)
+
 			require.True(t, err == nil)
 			require.True(t, len(recipes) > 0)
 
@@ -58,9 +53,8 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 
 			WaitForNextBlock()
 			items, err := ListItemsViaCLI(t)
-			if err != nil {
-				t.Errorf("error listing items via cli ::: %+v", err)
-			}
+			ErrValidation(t, "error listing items via cli ::: %+v", err)
+
 			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok)
 		})

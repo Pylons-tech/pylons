@@ -30,10 +30,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 	}
 
 	mCB, err := GetMockedCookbook(t)
-	if err != nil {
-		t.Errorf("error getting mocked cookbook %+v", err)
-		t.Fatal(err)
-	}
+	ErrValidation(t, "error getting mocked cookbook %+v", err)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {

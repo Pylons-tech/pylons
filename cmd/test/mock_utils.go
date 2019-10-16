@@ -44,10 +44,7 @@ func CheckCookbookExist() (bool, error) {
 
 func GetMockedCookbook(t *testing.T) (CookbookListModel, error) {
 	err := MockCookbook(t)
-	if err != nil {
-		t.Errorf("error mocking cookbook %+v", err)
-		t.Fatal(err)
-	}
+	ErrValidation(t, "error mocking cookbook %+v", err)
 
 	cbList, err := ListCookbookViaCLI()
 	if err != nil {
@@ -64,18 +61,14 @@ func MockRecipeWithName(name string, t *testing.T) error {
 
 func MockDelayedExecutionRecipeWithName(interval int64, name string, t *testing.T) error {
 	exist, err := CheckRecipeExistByName(name)
-	if err != nil {
-		t.Errorf("error checking if recipe already exist %+v", err)
-		t.Fatal(err)
-	}
+	ErrValidation(t, "error checking if recipe already exist %+v", err)
+
 	if exist { // finish mock if already available
 		return nil
 	}
 	mCB, err := GetMockedCookbook(t)
-	if err != nil {
-		t.Errorf("error getting mocked cookbook %+v", err)
-		t.Fatal(err)
-	}
+	ErrValidation(t, "error getting mocked cookbook %+v", err)
+
 	eugenAddr := GetAccountAddr("eugen", t)
 	TestTxWithMsg(t, CreateRecipeMsgValueModel{
 		BlockInterval: interval,

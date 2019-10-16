@@ -23,16 +23,10 @@ func TestListRecipeViaCLI(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			err := MockRecipeWithName(tc.rcpName, t)
-			if err != nil {
-				t.Errorf("error mocking recipe %+v", err)
-				t.Fatal(err)
-			}
+			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)
-			if err != nil {
-				t.Errorf("error listing recipes %+v", err)
-				t.Fatal(err)
-			}
+			ErrValidation(t, "error listing recipes %+v", err)
 
 			require.True(t, err == nil)
 			require.True(t, len(recipes) > 0)
