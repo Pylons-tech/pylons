@@ -42,7 +42,13 @@ func CheckCookbookExist() (bool, error) {
 	return false, nil
 }
 
-func GetMockedCookbook() (CookbookListModel, error) {
+func GetMockedCookbook(t *testing.T) (CookbookListModel, error) {
+	err := MockCookbook(t)
+	if err != nil {
+		t.Errorf("error mocking cookbook %+v", err)
+		t.Fatal(err)
+	}
+
 	cbList, err := ListCookbookViaCLI()
 	if err != nil {
 		return CookbookListModel{}, err
@@ -65,7 +71,7 @@ func MockDelayedExecutionRecipeWithName(interval int64, name string, t *testing.
 	if exist { // finish mock if already available
 		return nil
 	}
-	mCB, err := GetMockedCookbook()
+	mCB, err := GetMockedCookbook(t)
 	if err != nil {
 		t.Errorf("error getting mocked cookbook %+v", err)
 		t.Fatal(err)

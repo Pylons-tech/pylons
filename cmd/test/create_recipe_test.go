@@ -21,12 +21,6 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
 	WaitForNextBlock()
 
-	err := MockCookbook(t)
-	if err != nil {
-		t.Errorf("error mocking cookbook %+v", err)
-		t.Fatal(err)
-	}
-
 	tests := []struct {
 		name string
 	}{
@@ -35,7 +29,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 		},
 	}
 
-	mCB, err := GetMockedCookbook() // WaitForCookbookArrival(5)
+	mCB, err := GetMockedCookbook(t)
 	if err != nil {
 		t.Errorf("error getting mocked cookbook %+v", err)
 		t.Fatal(err)
