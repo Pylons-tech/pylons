@@ -9,6 +9,7 @@ import (
 )
 
 func TestExecuteRecipeViaCLI(t *testing.T) {
+	WaitForNextBlock()
 	err := MockCookbook(t)
 	if err != nil {
 		t.Errorf("error mocking cookbook %+v", err)
@@ -23,7 +24,7 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"RCP_TestExecuteRecipe__001",
+			"TESTRCP_ExecuteRecipe_001",
 			[]string{},
 			"Zombie",
 		},
@@ -36,7 +37,7 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 				t.Errorf("error mocking recipe %+v", err)
 				t.Fatal(err)
 			}
-		
+
 			recipes, err := TestQueryListRecipe(t)
 			if err != nil {
 				t.Errorf("error listing recipes %+v", err)

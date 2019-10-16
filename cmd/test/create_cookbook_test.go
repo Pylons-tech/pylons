@@ -16,10 +16,12 @@ type CreateCookbookMsgValueModel struct {
 
 func TestCreateCookbookViaCLI(t *testing.T) {
 	tests := []struct {
-		name string
+		name   string
+		cbName string
 	}{
 		{
 			"basic flow test",
+			"TESTCB_CreateCookbook_001",
 		},
 	}
 
@@ -30,7 +32,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				Description:  "this has to meet character limits lol",
 				Developer:    "SketchyCo",
 				Level:        "0",
-				Name:         "Morethan8Name",
+				Name:         tc.cbName,
 				Sender:       eugenAddr,
 				SupportEmail: "example@example.com",
 				Version:      "1.0.0",

@@ -9,9 +9,6 @@ import (
 )
 
 func TestCheckExecutionViaCLI(t *testing.T) {
-	var blockInterval int64
-	blockInterval = 5
-
 	err := MockCookbook(t)
 	if err != nil {
 		t.Errorf("error mocking cookbook %+v", err)
@@ -21,13 +18,15 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	tests := []struct {
 		name            string
 		rcpName         string
+		blockInterval   int64
 		itemIDs         []string
 		desiredItemName string
 		payToComplete   bool
 	}{
 		{
 			"basic flow test",
-			"Recipe_TestCheckExecution__001",
+			"TESTRCP_CheckExecution__001",
+			2,
 			[]string{},
 			"Zombie",
 			false,
@@ -38,12 +37,12 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err = MockDelayedExecutionRecipeWithName(blockInterval, tc.rcpName, t)
+			err = MockDelayedExecutionRecipeWithName(tc.blockInterval, tc.rcpName, t)
 			if err != nil {
 				t.Errorf("error mocking recipe %+v", err)
 				t.Fatal(err)
 			}
-		
+
 			recipes, err := TestQueryListRecipe(t)
 			if err != nil {
 				t.Errorf("error listing recipes %+v", err)
@@ -66,7 +65,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
 				"pylons/ExecuteRecipe")
 
-			WaitForBlockInterval(blockInterval)
+			WaitForBlockInterval(tc.blockInterval)
 
 			executions, err := ListExecutionsViaCLI(t)
 			if err != nil {

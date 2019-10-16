@@ -4,3 +4,4 @@ pylonscli
 main
 *.exe
 *.bat
+**/.DS_Store

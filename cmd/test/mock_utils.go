@@ -36,7 +36,7 @@ func CheckCookbookExist() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	if (len(cbList) > 0) {
+	if len(cbList) > 0 {
 		return true, nil
 	}
 	return false, nil
