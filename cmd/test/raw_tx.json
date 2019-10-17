@@ -1,0 +1,29 @@
+{
+    "type": "auth/StdTx",
+    "value": {
+      "msg": [
+        {
+          "type": "pylons/CreateCookbook",
+          "value": {
+            "type": "pylons/Recipe/ItemOutput",
+            "value": {
+              "Name": "TESTCB_CreateCookbook_001",
+              "Description": "this has to meet character limits lol",
+              "Version": "1.0.0",
+              "Developer": "SketchyCo",
+              "SupportEmail": "example@example.com",
+              "Level": "0",
+              "Sender": "cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2",
+              "CostPerBlock": "50"
+            }
+          }
+        }
+      ],
+      "fee": {
+        "amount": null,
+        "gas": "200000"
+      },
+      "signatures": null,
+      "memo": ""
+    }
+  }

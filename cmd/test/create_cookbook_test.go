@@ -2,6 +2,11 @@ package main
 
 import (
 	"testing"
+
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/stretchr/testify/require"
 )
 
 type CreateCookbookMsgValueModel struct {
@@ -31,15 +36,27 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
-			TestTxWithMsg(t, CreateCookbookMsgValueModel{
-				Description:  "this has to meet character limits lol",
-				Developer:    "SketchyCo",
-				Level:        "0",
-				Name:         tc.cbName,
-				Sender:       eugenAddr,
-				SupportEmail: "example@example.com",
-				Version:      "1.0.0",
-			}, "pylons/CreateCookbook")
+			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
+
+			require.True(t, err == nil)
+			TestTxWithMsg(t, msgs.NewMsgCreateCookbook(
+				tc.cbName,
+				"this has to meet character limits lol",
+				"SketchyCo",
+				"1.0.0",
+				"example@example.com",
+				0,
+				msgs.DefaultCostPerBlock,
+				sdkAddr), "pylons/CreateCookbook")
+			// TestTxWithMsg(t, CreateCookbookMsgValueModel{
+			// 	Description:  "this has to meet character limits lol",
+			// 	Developer:    "SketchyCo",
+			// 	Level:        "0",
+			// 	Name:         tc.cbName,
+			// 	Sender:       eugenAddr,
+			// 	SupportEmail: "example@example.com",
+			// 	Version:      "1.0.0",
+			// }, "pylons/CreateCookbook")
 		})
 	}
 }
