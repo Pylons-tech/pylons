@@ -28,30 +28,8 @@ type TestCoinInput struct {
 func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 	return types.NewItem(
 		cbID,
-		(types.DoubleInputParamList{types.DoubleInputParam{Key: "endurance", DoubleWeightTable: types.DoubleWeightTable{WeightRanges: []types.DoubleWeightRange{
-			types.DoubleWeightRange{
-				Lower:  "100.00",
-				Upper:  "500.00",
-				Weight: 6,
-			},
-			types.DoubleWeightRange{
-				Lower:  "501.00",
-				Upper:  "800.00",
-				Weight: 2,
-			},
-		}}}}).Actualize(),
-		(types.LongInputParamList{types.LongInputParam{Key: "HP", IntWeightTable: types.IntWeightTable{WeightRanges: []types.IntWeightRange{
-			types.IntWeightRange{
-				Lower:  100,
-				Upper:  500,
-				Weight: 6,
-			},
-			types.IntWeightRange{
-				Lower:  501,
-				Upper:  800,
-				Weight: 2,
-			},
-		}}}}).Actualize(),
+		(types.DoubleInputParamList{types.DoubleInputParam{Key: "endurance", MinValue: "100.00", MaxValue: "500.00"}}).Actualize(),
+		(types.LongInputParamList{types.LongInputParam{Key: "HP", MinValue: 100, MaxValue: 500}}).Actualize(),
 		(types.StringInputParamList{types.StringInputParam{Key: "Name", Value: name}}).Actualize(),
 		sender,
 	)
