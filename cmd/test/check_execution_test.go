@@ -22,10 +22,10 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__001",
+			"TESTRCP_CheckExecution__002",
 			2,
 			[]string{},
-			"Zombie",
+			"TESTITEM_CheckExecution__002",
 			false,
 		},
 		// TODO should add test case for check_execution before test
@@ -34,7 +34,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := MockDelayedExecutionRecipeWithName(tc.blockInterval, tc.rcpName, t)
+			err := MockDelayedExecutionRecipeWithName(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)
