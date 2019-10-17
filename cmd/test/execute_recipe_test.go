@@ -20,15 +20,15 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_ExecuteRecipe_001",
+			"TESTRCP_ExecuteRecipe_002",
 			[]string{},
-			"Zombie",
+			"TESTITEM_ExecuteRecipe_002",
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := MockRecipeWithName(tc.rcpName, t)
+			err := MockRecipeWithName(tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)

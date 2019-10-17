@@ -11,18 +11,20 @@ func TestListRecipeViaCLI(t *testing.T) {
 	WaitForNextBlock()
 
 	tests := []struct {
-		name    string
-		rcpName string
+		name           string
+		rcpName        string
+		outputItemName string
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_TestListRecipe__001",
+			"TESTRCP_TestListRecipe__002",
+			"TESTITEM_TestListRecipe__002",
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := MockRecipeWithName(tc.rcpName, t)
+			err := MockRecipeWithName(tc.rcpName, tc.outputItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)
