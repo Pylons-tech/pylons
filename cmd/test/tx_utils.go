@@ -16,12 +16,7 @@ type SuccessTxResp struct {
 	TxHash string `json:"txhash"`
 }
 
-type MsgValueModel interface{}
-
-type MsgModel struct {
-	Type  string        `json:"type"`
-	Value MsgValueModel `json:"value"`
-}
+type MsgModel interface{}
 
 type FeeModel struct {
 	Amount *string `json:"amount"`
@@ -54,16 +49,11 @@ type ListCookbookRespModel struct {
 	Cookbooks []CookbookListModel
 }
 
-func GenTxWithMsg(msgValue MsgValueModel, msgType string) TxModel {
+func GenTxWithMsg(msgValue MsgModel) TxModel {
 	return TxModel{
 		Type: "auth/StdTx",
 		Value: TxValueModel{
-			Msg: []MsgModel{
-				MsgModel{
-					Type:  msgType,
-					Value: msgValue,
-				},
-			},
+			Msg: []MsgModel{msgValue},
 			Fee: FeeModel{
 				Amount: nil,
 				Gas:    "200000",
@@ -88,7 +78,7 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
+func TestTxWithMsg(t *testing.T, msgValue MsgModel) {
 	// tmpDir, err := ioutil.TempDir("", "pylons")
 	tmpDir := "./"
 	// if err != nil {
@@ -99,7 +89,7 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
 
 	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
-	txModel := GenTxWithMsg(msgValue, msgType)
+	txModel := GenTxWithMsg(msgValue)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
 
 	ioutil.WriteFile(rawTxFile, output, 0644)

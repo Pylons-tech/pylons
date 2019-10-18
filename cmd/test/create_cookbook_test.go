@@ -47,7 +47,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				"example@example.com",
 				0,
 				msgs.DefaultCostPerBlock,
-				sdkAddr), "pylons/CreateCookbook")
+				sdkAddr))
 			// TestTxWithMsg(t, CreateCookbookMsgValueModel{
 			// 	Description:  "this has to meet character limits lol",
 			// 	Developer:    "SketchyCo",

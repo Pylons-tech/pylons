@@ -1,33 +1,33 @@
 package main
 
-import (
-	"testing"
-)
+// import (
+// 	"testing"
+// )
 
 ///////////COOKBOOK//////////////////////////////////////////////
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(t *testing.T) error {
-	exist, err := CheckCookbookExist()
-	if err != nil {
-		return err
-	}
-	if exist { // finish mock if already available
-		return nil
-	}
-	eugenAddr := GetAccountAddr("eugen", t)
-	TestTxWithMsg(t, CreateCookbookMsgValueModel{
-		Description:  "this has to meet character limits lol",
-		Developer:    "SketchyCo",
-		Level:        "0",
-		Name:         "COOKBOOK_MOCK_001",
-		Sender:       eugenAddr,
-		SupportEmail: "example@example.com",
-		Version:      "1.0.0",
-	}, "pylons/CreateCookbook")
-	return WaitForNextBlock()
-}
+// func MockCookbook(t *testing.T) error {
+// 	exist, err := CheckCookbookExist()
+// 	if err != nil {
+// 		return err
+// 	}
+// 	if exist { // finish mock if already available
+// 		return nil
+// 	}
+// 	eugenAddr := GetAccountAddr("eugen", t)
+// 	TestTxWithMsg(t, CreateCookbookMsgValueModel{
+// 		Description:  "this has to meet character limits lol",
+// 		Developer:    "SketchyCo",
+// 		Level:        "0",
+// 		Name:         "COOKBOOK_MOCK_001",
+// 		Sender:       eugenAddr,
+// 		SupportEmail: "example@example.com",
+// 		Version:      "1.0.0",
+// 	}, "pylons/CreateCookbook")
+// 	return WaitForNextBlock()
+// }
 
 func CheckCookbookExist() (bool, error) {
 	cbList, err := ListCookbookViaCLI()
@@ -40,16 +40,16 @@ func CheckCookbookExist() (bool, error) {
 	return false, nil
 }
 
-func GetMockedCookbook(t *testing.T) (CookbookListModel, error) {
-	err := MockCookbook(t)
-	ErrValidation(t, "error mocking cookbook %+v", err)
+// func GetMockedCookbook(t *testing.T) (CookbookListModel, error) {
+// 	err := MockCookbook(t)
+// 	ErrValidation(t, "error mocking cookbook %+v", err)
 
-	cbList, err := ListCookbookViaCLI()
-	if err != nil {
-		return CookbookListModel{}, err
-	}
-	return cbList[0], nil
-}
+// 	cbList, err := ListCookbookViaCLI()
+// 	if err != nil {
+// 		return CookbookListModel{}, err
+// 	}
+// 	return cbList[0], nil
+// }
 
 ///////////RECIPE//////////////////////////////////////////////
 

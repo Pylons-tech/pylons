@@ -19,9 +19,9 @@ import (
 func GetAminoCdc() *amino.Codec {
 	var cdc = amino.NewCodec()
 	ctypes.RegisterAmino(cdc)
-	cdc.RegisterInterface((*MsgValueModel)(nil), nil)
+	cdc.RegisterInterface((*MsgModel)(nil), nil)
 
-	cdc.RegisterConcrete(msgs.MsgCreateCookbook{}, "pylons/Recipe/ItemOutput", nil)
+	cdc.RegisterConcrete(msgs.MsgCreateCookbook{}, "pylons/CreateCookbook", nil)
 	return cdc
 }
 
