@@ -6,8 +6,9 @@ import (
 
 // LongInputParam describes the bounds on an item input/output parameter of type int64
 type LongInputParam struct {
-	Key string
-	IntWeightTable
+	Key      string
+	MinValue int
+	MaxValue int
 }
 
 // LongInputParamList is a list of LongInputParam
@@ -16,8 +17,13 @@ type LongInputParamList []LongInputParam
 func (lp LongInputParam) String() string {
 	return fmt.Sprintf(`
 	LongInputParam{ 
-		%+v
-	}`, lp.IntWeightTable)
+		MinValue: %d,
+		MaxValue: %d,
+	}`, lp.MinValue, lp.MaxValue)
+}
+
+func (lp LongInputParam) Has(input int) bool {
+	return input >= lp.MinValue && input < lp.MaxValue
 }
 
 func (lpm LongInputParamList) String() string {
@@ -37,7 +43,7 @@ func (lpm LongInputParamList) Actualize() []LongKeyValue {
 	for _, param := range lpm {
 		m = append(m, LongKeyValue{
 			Key:   param.Key,
-			Value: param.Generate(),
+			Value: (param.MinValue + param.MaxValue) / 2,
 		})
 	}
 	return m

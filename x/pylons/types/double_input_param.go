@@ -7,17 +7,25 @@ import (
 // DoubleInputParam describes the bounds on an item input/output parameter of type float64
 type DoubleInputParam struct {
 	Key string
-	DoubleWeightTable
+	// The minimum legal value of this parameter.
+	MinValue FloatString
+	// The maximum legal value of this parameter.
+	MaxValue FloatString
 }
 
-// DoubleInputParamList is a map of string:DoubleInputParam
+// DoubleInputParamList is a list of DoubleInputParam
 type DoubleInputParamList []DoubleInputParam
 
 func (dp DoubleInputParam) String() string {
 	return fmt.Sprintf(`
 	DoubleInputParam{ 
-		DoubleWeightTable: %+v,
-	}`, dp.DoubleWeightTable)
+		MinValue: %+v,
+		MaxValue: %+v,
+	}`, dp.MinValue, dp.MaxValue)
+}
+
+func (dp DoubleInputParam) Has(input float64) bool {
+	return input >= dp.MinValue.Float() && input < dp.MaxValue.Float()
 }
 
 func (dpm DoubleInputParamList) String() string {
@@ -38,7 +46,7 @@ func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
 	for _, param := range dpm {
 		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
-			Value: ToFloatString(param.Generate()),
+			Value: ToFloatString((param.MinValue.Float() + param.MaxValue.Float()) / 2),
 		})
 	}
 	return m

@@ -12,30 +12,11 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 func GenItemInputList(name string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
-			DoubleInputParamList{DoubleInputParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
-				DoubleWeightRange{
-					Lower:  "100.00",
-					Upper:  "500.00",
-					Weight: 6,
-				},
-				DoubleWeightRange{
-					Lower:  "501.00",
-					Upper:  "800.00",
-					Weight: 2,
-				},
-			}}}},
-			LongInputParamList{LongInputParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
-				IntWeightRange{
-					Lower:  100,
-					Upper:  500,
-					Weight: 6,
-				},
-				IntWeightRange{
-					Lower:  501,
-					Upper:  800,
-					Weight: 2,
-				},
-			}}}},
+			DoubleInputParamList{DoubleInputParam{Key: "endurance",
+				MinValue: "100.00",
+				MaxValue: "500.00",
+			}},
+			LongInputParamList{LongInputParam{Key: "HP", MinValue: 100, MaxValue: 500}},
 			StringInputParamList{StringInputParam{"Name", name}},
 		},
 	}
