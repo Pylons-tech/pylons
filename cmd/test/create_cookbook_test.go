@@ -38,15 +38,6 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				0,
 				msgs.DefaultCostPerBlock,
 				sdkAddr))
-			// TestTxWithMsg(t, CreateCookbookMsgValueModel{
-			// 	Description:  "this has to meet character limits lol",
-			// 	Developer:    "SketchyCo",
-			// 	Level:        "0",
-			// 	Name:         tc.cbName,
-			// 	Sender:       eugenAddr,
-			// 	SupportEmail: "example@example.com",
-			// 	Version:      "1.0.0",
-			// }, "pylons/CreateCookbook")
 		})
 	}
 }

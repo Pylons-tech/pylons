@@ -79,11 +79,10 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 }
 
 func TestTxWithMsg(t *testing.T, msgValue MsgModel) {
-	// tmpDir, err := ioutil.TempDir("", "pylons")
-	tmpDir := "./"
-	// if err != nil {
-	// 	panic(err.Error())
-	// }
+	tmpDir, err := ioutil.TempDir("", "pylons")
+	if err != nil {
+		panic(err.Error())
+	}
 	rawTxFile := filepath.Join(tmpDir, "raw_tx.json")
 	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
 
