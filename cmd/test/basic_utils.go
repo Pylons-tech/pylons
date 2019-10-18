@@ -10,7 +10,7 @@ import (
 
 	"strings"
 
-	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/MikeSofaer/pylons/x/pylons"
 
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
@@ -21,7 +21,7 @@ func GetAminoCdc() *amino.Codec {
 	ctypes.RegisterAmino(cdc)
 	cdc.RegisterInterface((*MsgModel)(nil), nil)
 
-	cdc.RegisterConcrete(msgs.MsgCreateCookbook{}, "pylons/CreateCookbook", nil)
+	pylons.RegisterCodec(cdc)
 	return cdc
 }
 

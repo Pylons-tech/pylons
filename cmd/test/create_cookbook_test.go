@@ -9,16 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type CreateCookbookMsgValueModel struct {
-	Description  string
-	Developer    string
-	Level        string
-	Name         string
-	Sender       string
-	SupportEmail string
-	Version      string
-}
-
 func TestCreateCookbookViaCLI(t *testing.T) {
 	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
 	WaitForNextBlock()

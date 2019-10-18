@@ -1,50 +1,48 @@
 package main
 
-// import (
-// 	"testing"
+import (
+	"testing"
 
-// 	"github.com/MikeSofaer/pylons/x/pylons/types"
-// )
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 
-// type CreateRecipeMsgValueModel struct {
-// 	BlockInterval int64 `json:",string"`
-// 	CoinInputs    types.CoinInputList
-// 	CookbookId    string
-// 	Description   string
-// 	Entries       types.WeightedParamList
-// 	ItemInputs    types.ItemInputList
-// 	RecipeName    string
-// 	Sender        string
-// }
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
-// func TestCreateRecipeViaCLI(t *testing.T) {
-// 	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-// 	WaitForNextBlock()
+	"github.com/stretchr/testify/require"
+)
 
-// 	tests := []struct {
-// 		name string
-// 	}{
-// 		{
-// 			"basic flow test",
-// 		},
-// 	}
+func TestCreateRecipeViaCLI(t *testing.T) {
+	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
+	WaitForNextBlock()
 
-// 	mCB, err := GetMockedCookbook(t)
-// 	ErrValidation(t, "error getting mocked cookbook %+v", err)
+	tests := []struct {
+		name    string
+		rcpName string
+	}{
+		{
+			"basic flow test",
+			"TESTRCP_CreateRecipe_001",
+		},
+	}
 
-// 	for _, tc := range tests {
-// 		t.Run(tc.name, func(t *testing.T) {
-// 			eugenAddr := GetAccountAddr("eugen", t)
-// 			TestTxWithMsg(t, CreateRecipeMsgValueModel{
-// 				BlockInterval: 0,
-// 				CoinInputs:    types.GenCoinInputList("wood", 5), // should use GenCoinInput
-// 				CookbookId:    mCB.ID,                            // should use mocked ID
-// 				Description:   "this has to meet character limits lol",
-// 				Entries:       types.GenEntries("chair", "Raichu"), // use GenEntries
-// 				ItemInputs:    types.GenItemInputList("Raichu"),    // use GenItem
-// 				RecipeName:    "TESTRCP_CreateRecipe_001",
-// 				Sender:        eugenAddr,
-// 			}, "pylons/CreateRecipe")
-// 		})
-// 	}
-// }
+	mCB, err := GetMockedCookbook(t)
+	ErrValidation(t, "error getting mocked cookbook %+v", err)
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			eugenAddr := GetAccountAddr("eugen", t)
+			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
+			require.True(t, err == nil)
+			TestTxWithMsg(t,
+				msgs.NewMsgCreateRecipe(
+					tc.rcpName,
+					mCB.ID,
+					"this has to meet character limits lol",
+					types.GenCoinInputList("wood", 5),
+					types.GenItemInputList("Raichu"),
+					types.GenEntries("chair", "Raichu"),
+					0,
+					sdkAddr))
+		})
+	}
+}
