@@ -9,6 +9,13 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/utils"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
 type SuccessTxResp struct {
@@ -16,37 +23,29 @@ type SuccessTxResp struct {
 	TxHash string `json:"txhash"`
 }
 
-type MsgModel interface{}
+const (
+	DefaultCoinPerRequest = 500
+)
 
-type FeeModel struct {
-	Amount *string `json:"amount"`
-	Gas    string  `json:"gas"`
-}
-type TxValueModel struct {
-	Msg        []MsgModel `json:"msg"`
-	Fee        FeeModel   `json:"fee"`
-	Signatures *string    `json:"signatures"`
-	Memo       string     `json:"memo"`
-}
+func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
+	var err error
+	cdc := GetAminoCdc()
+	cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-type TxModel struct {
-	Type  string       `json:"type"`
-	Value TxValueModel `json:"value"`
-}
-
-func GenTxWithMsg(msgValue MsgModel) TxModel {
-	return TxModel{
-		Type: "auth/StdTx",
-		Value: TxValueModel{
-			Msg: []MsgModel{msgValue},
-			Fee: FeeModel{
-				Amount: nil,
-				Gas:    "200000",
-			},
-			Signatures: nil,
-			Memo:       "",
-		},
+	txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
+	if txBldr.SimulateAndExecute() {
+		txBldr, err = utils.EnrichWithGas(txBldr, cliCtx, messages)
+		if err != nil {
+			return auth.StdTx{}, err
+		}
 	}
+
+	stdSignMsg, err := txBldr.BuildSignMsg(messages)
+	if err != nil {
+		return auth.StdTx{}, err
+	}
+
+	return auth.NewStdTx(stdSignMsg.Msgs, stdSignMsg.Fee, nil, stdSignMsg.Memo), nil
 }
 
 func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
@@ -63,7 +62,7 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func TestTxWithMsg(t *testing.T, msgValue MsgModel) {
+func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) {
 	tmpDir, err := ioutil.TempDir("", "pylons")
 	if err != nil {
 		panic(err.Error())
@@ -73,8 +72,10 @@ func TestTxWithMsg(t *testing.T, msgValue MsgModel) {
 
 	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
-	txModel := GenTxWithMsg(msgValue)
+	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
+	require.True(t, err == nil)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
+	require.True(t, err == nil)
 
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
