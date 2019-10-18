@@ -66,7 +66,7 @@ func MockRecipeWithName(name string, outputItemName string, t *testing.T) error 
 	return MockDelayedExecutionRecipeWithName(0, name, outputItemName, t)
 }
 
-func MockDelayedExecutionRecipeWithName(interval int, name string, outputItemName string, t *testing.T) error {
+func MockDelayedExecutionRecipeWithName(interval int64, name string, outputItemName string, t *testing.T) error {
 	exist, err := CheckRecipeExistByName(name)
 	ErrValidation(t, "error checking if recipe already exist %+v", err)
 
