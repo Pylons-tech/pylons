@@ -13,12 +13,13 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	WaitForNextBlock()
 
 	tests := []struct {
-		name            string
-		rcpName         string
-		blockInterval   int64
-		itemIDs         []string
-		desiredItemName string
-		payToComplete   bool
+		name                 string
+		rcpName              string
+		blockInterval        int64
+		itemIDs              []string
+		desiredItemName      string
+		payToComplete        bool
+		waitForBlockInterval bool
 	}{
 		{
 			"basic flow test",
@@ -27,9 +28,28 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			[]string{},
 			"TESTITEM_CheckExecution__002",
 			false,
+			true,
 		},
-		// TODO should add test case for check_execution before test
-		// TODO should add test case for early_payment
+		// {
+		// 	// TODO should implement early payment test case : implement after custom broadcast cli command is done
+		// 	"early payment test",
+		// 	"TESTRCP_CheckExecution__002",
+		// 	2,
+		// 	[]string{},
+		// 	"TESTITEM_CheckExecution__002",
+		// 	true,
+		// 	false,
+		// },
+		// {
+		// 	// TODO should implement check_execution before test : implement after custom broadcast cli command is done
+		// 	"early payment test",
+		// 	"TESTRCP_CheckExecution__002",
+		// 	2,
+		// 	[]string{},
+		// 	"TESTITEM_CheckExecution__002",
+		// 	false,
+		// 	false,
+		// },
 	}
 
 	for _, tc := range tests {
@@ -74,7 +94,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			WaitForNextBlock()
 
-			// TODO here desiredItemName should be random - not specific text since by execute_recipe it is available already and can't do real check
+			// Here desiredItemName should be different across tests cases and across test files
 			items, err := ListItemsViaCLI(t)
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
