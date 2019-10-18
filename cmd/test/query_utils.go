@@ -1,22 +1,21 @@
 package main
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/queriers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 )
 
-func ListCookbookViaCLI() ([]CookbookListModel, error) {
+func ListCookbookViaCLI() ([]types.Cookbook, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "list_cookbook"}, "")
 	if err != nil {
-		return []CookbookListModel{}, err
+		return []types.Cookbook{}, err
 	}
-	listCBResp := ListCookbookRespModel{}
-	err = json.Unmarshal(output, &listCBResp)
+	listCBResp := types.CookbookList{}
+	err = GetAminoCdc().UnmarshalJSON(output, &listCBResp)
 	if err != nil {
-		return []CookbookListModel{}, err
+		return []types.Cookbook{}, err
 	}
 	return listCBResp.Cookbooks, err
 }

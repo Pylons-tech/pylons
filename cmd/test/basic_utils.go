@@ -10,6 +10,10 @@ import (
 
 	"strings"
 
+	"github.com/MikeSofaer/pylons/x/pylons"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
@@ -17,6 +21,9 @@ import (
 func GetAminoCdc() *amino.Codec {
 	var cdc = amino.NewCodec()
 	ctypes.RegisterAmino(cdc)
+	sdk.RegisterCodec(cdc)
+	auth.RegisterCodec(cdc)
+	pylons.RegisterCodec(cdc)
 	return cdc
 }
 

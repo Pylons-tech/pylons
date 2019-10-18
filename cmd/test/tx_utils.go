@@ -9,6 +9,13 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/utils"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
 type SuccessTxResp struct {
@@ -16,62 +23,29 @@ type SuccessTxResp struct {
 	TxHash string `json:"txhash"`
 }
 
-type MsgValueModel interface{}
+const (
+	DefaultCoinPerRequest = 500
+)
 
-type MsgModel struct {
-	Type  string        `json:"type"`
-	Value MsgValueModel `json:"value"`
-}
+func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
+	var err error
+	cdc := GetAminoCdc()
+	cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-type FeeModel struct {
-	Amount *string `json:"amount"`
-	Gas    string  `json:"gas"`
-}
-type TxValueModel struct {
-	Msg        []MsgModel `json:"msg"`
-	Fee        FeeModel   `json:"fee"`
-	Signatures *string    `json:"signatures"`
-	Memo       string     `json:"memo"`
-}
-
-type TxModel struct {
-	Type  string       `json:"type"`
-	Value TxValueModel `json:"value"`
-}
-
-type CookbookListModel struct {
-	ID           string
-	Description  string
-	Developer    string
-	Level        string
-	Name         string
-	Sender       string
-	SupportEmail string
-	Version      string
-}
-
-type ListCookbookRespModel struct {
-	Cookbooks []CookbookListModel
-}
-
-func GenTxWithMsg(msgValue MsgValueModel, msgType string) TxModel {
-	return TxModel{
-		Type: "auth/StdTx",
-		Value: TxValueModel{
-			Msg: []MsgModel{
-				MsgModel{
-					Type:  msgType,
-					Value: msgValue,
-				},
-			},
-			Fee: FeeModel{
-				Amount: nil,
-				Gas:    "200000",
-			},
-			Signatures: nil,
-			Memo:       "",
-		},
+	txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
+	if txBldr.SimulateAndExecute() {
+		txBldr, err = utils.EnrichWithGas(txBldr, cliCtx, messages)
+		if err != nil {
+			return auth.StdTx{}, err
+		}
 	}
+
+	stdSignMsg, err := txBldr.BuildSignMsg(messages)
+	if err != nil {
+		return auth.StdTx{}, err
+	}
+
+	return auth.NewStdTx(stdSignMsg.Msgs, stdSignMsg.Fee, nil, stdSignMsg.Memo), nil
 }
 
 func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
@@ -88,7 +62,7 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
+func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) {
 	tmpDir, err := ioutil.TempDir("", "pylons")
 	if err != nil {
 		panic(err.Error())
@@ -98,13 +72,15 @@ func TestTxWithMsg(t *testing.T, msgValue MsgValueModel, msgType string) {
 
 	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
-	txModel := GenTxWithMsg(msgValue, msgType)
-	output, err := json.Marshal(txModel)
+	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
+	require.True(t, err == nil)
+	output, err := GetAminoCdc().MarshalJSON(txModel)
+	require.True(t, err == nil)
 
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
 
-	// pylonscli tx sign create_cookbook_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
+	// pylonscli tx sign raw_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signed_tx.json
 	txSignArgs := []string{"tx", "sign", rawTxFile,
 		"--from", eugenAddr,
 		"--chain-id", "pylonschain",

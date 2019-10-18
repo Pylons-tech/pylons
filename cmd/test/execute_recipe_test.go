@@ -48,8 +48,7 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 			TestTxWithMsg(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
-				"pylons/ExecuteRecipe")
+				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
 
 			WaitForNextBlock()
 			items, err := ListItemsViaCLI(t)

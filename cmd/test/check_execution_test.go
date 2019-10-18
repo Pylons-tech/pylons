@@ -54,8 +54,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 			TestTxWithMsg(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
-				"pylons/ExecuteRecipe")
+				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
 
 			WaitForBlockInterval(tc.blockInterval)
 
@@ -70,9 +69,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			TestTxWithMsg(
 				t,
-				// msgs.NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress),
 				msgs.NewMsgCheckExecution(exec.ID, tc.payToComplete, sdkAddr),
-				"pylons/CheckExecution",
 			)
 
 			WaitForNextBlock()
