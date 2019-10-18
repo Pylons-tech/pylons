@@ -49,13 +49,13 @@ func CheckCookbookExist() (bool, error) {
 	return false, nil
 }
 
-func GetMockedCookbook(t *testing.T) (CookbookListModel, error) {
+func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 	err := MockCookbook(t)
 	ErrValidation(t, "error mocking cookbook %+v", err)
 
 	cbList, err := ListCookbookViaCLI()
 	if err != nil {
-		return CookbookListModel{}, err
+		return types.Cookbook{}, err
 	}
 	return cbList[0], nil
 }

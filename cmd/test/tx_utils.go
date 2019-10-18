@@ -34,21 +34,6 @@ type TxModel struct {
 	Value TxValueModel `json:"value"`
 }
 
-type CookbookListModel struct {
-	ID           string
-	Description  string
-	Developer    string
-	Level        string
-	Name         string
-	Sender       string
-	SupportEmail string
-	Version      string
-}
-
-type ListCookbookRespModel struct {
-	Cookbooks []CookbookListModel
-}
-
 func GenTxWithMsg(msgValue MsgModel) TxModel {
 	return TxModel{
 		Type: "auth/StdTx",
