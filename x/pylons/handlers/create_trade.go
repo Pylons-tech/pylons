@@ -28,7 +28,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 			return sdk.ErrInternal(err.Error()).Result()
 		}
 		if !itemFromStore.Sender.Equals(msg.Sender) {
-			return sdk.ErrUnauthorized(fmt.Sprintf("item with %s id is not owned by sender", item.ID))
+			return sdk.ErrUnauthorized(fmt.Sprintf("item with %s id is not owned by sender", item.ID)).Result()
 		}
 	}
 
