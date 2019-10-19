@@ -8,17 +8,18 @@ import (
 )
 
 // Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
-// the FulFiller
+// the FulFiller.
 type Trade struct {
-	Name       string
-	ID         string // the recipe guid
-	CoinInputs CoinInputList
-	ItemInputs ItemInputList
-	Entries    WeightedParamList
-	ExtraInfo  string
-	Sender     sdk.AccAddress
-	FulFiller  sdk.AccAddress
-	Completed  bool
+	Name        string
+	ID          string // the recipe guid
+	CoinInputs  CoinInputList
+	ItemInputs  ItemInputList
+	CoinOutputs sdk.Coins
+	ItemOutputs ItemList
+	ExtraInfo   string
+	Sender      sdk.AccAddress
+	FulFiller   sdk.AccAddress
+	Completed   bool
 }
 
 // TradeList is a list of trades
@@ -40,15 +41,17 @@ func (cbl TradeList) String() string {
 func NewTrade(name, extraInfo string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
-	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
+	coinOutputs sdk.Coins, // newly created param instead of coinOutputs and itemOutputs
+	itemOutputs ItemList,
 	sender sdk.AccAddress) Trade {
 	trd := Trade{
-		Name:       name,
-		CoinInputs: coinInputs,
-		ItemInputs: itemInputs,
-		Entries:    entries,
-		ExtraInfo:  extraInfo,
-		Sender:     sender,
+		Name:        name,
+		CoinInputs:  coinInputs,
+		ItemInputs:  itemInputs,
+		CoinOutputs: coinOutputs,
+		ItemOutputs: itemOutputs,
+		ExtraInfo:   extraInfo,
+		Sender:      sender,
 	}
 
 	trd.ID = trd.KeyGen()
@@ -61,12 +64,14 @@ func (trd *Trade) String() string {
 		ID: %s,
 		CoinInputs: %s,
 		ItemInputs: %s,
-		Entries: %s
+		CoinOutputs: %s,
+		ItemOutputs: %+v,
 	}`, trd.Name,
 		trd.ID,
 		trd.CoinInputs.String(),
 		trd.ItemInputs.String(),
-		trd.Entries.String(),
+		trd.CoinOutputs.String(),
+		trd.ItemOutputs,
 	)
 }
 
