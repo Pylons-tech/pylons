@@ -7,20 +7,21 @@ import (
 	"github.com/google/uuid"
 )
 
-// Trade is
+// Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
+// the FulFiller
 type Trade struct {
-	Name        string
-	ID          string // the recipe guid
-	CoinInputs  CoinInputList
-	ItemInputs  ItemInputList
-	Entries     WeightedParamList
-	Description string
-	Sender      sdk.AccAddress
-	FulFiller   sdk.AccAddress
-	Completed   bool
+	Name       string
+	ID         string // the recipe guid
+	CoinInputs CoinInputList
+	ItemInputs ItemInputList
+	Entries    WeightedParamList
+	ExtraInfo  string
+	Sender     sdk.AccAddress
+	FulFiller  sdk.AccAddress
+	Completed  bool
 }
 
-// TradeList is a list of cookbook
+// TradeList is a list of trades
 type TradeList struct {
 	Trades []Trade
 }
@@ -35,41 +36,42 @@ func (cbl TradeList) String() string {
 	return output
 }
 
-// NewTrade creates a new recipe
-func NewTrade(name, description string,
+// NewTrade creates a new trade
+func NewTrade(name, extraInfo string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
 	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
-	execTime int64, sender sdk.AccAddress) Trade {
-	rcp := Trade{
-		Name:        name,
-		CoinInputs:  coinInputs,
-		ItemInputs:  itemInputs,
-		Entries:     entries,
-		Description: description,
-		Sender:      sender,
+	sender sdk.AccAddress) Trade {
+	trd := Trade{
+		Name:       name,
+		CoinInputs: coinInputs,
+		ItemInputs: itemInputs,
+		Entries:    entries,
+		ExtraInfo:  extraInfo,
+		Sender:     sender,
 	}
 
-	rcp.ID = rcp.KeyGen()
-	return rcp
+	trd.ID = trd.KeyGen()
+	return trd
 }
 
-func (rcp *Trade) String() string {
+func (trd *Trade) String() string {
 	return fmt.Sprintf(`Trade{
 		Name: %s,
 		ID: %s,
 		CoinInputs: %s,
 		ItemInputs: %s,
-		Entries: %s,
-		ExecutionTime: %d,
-	}`, rcp.ID,
-		rcp.CoinInputs.String(),
-		rcp.ItemInputs.String(),
-		rcp.Entries.String())
+		Entries: %s
+	}`, trd.Name,
+		trd.ID,
+		trd.CoinInputs.String(),
+		trd.ItemInputs.String(),
+		trd.Entries.String(),
+	)
 }
 
 // KeyGen generates key for the store
-func (rcp Trade) KeyGen() string {
+func (trd Trade) KeyGen() string {
 	id := uuid.New()
-	return rcp.Sender.String() + id.String()
+	return trd.Sender.String() + id.String()
 }
