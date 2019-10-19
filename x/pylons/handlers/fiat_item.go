@@ -30,8 +30,8 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 		return sdk.ErrInternal(err.Error()).Result()
 	}
 
-	mItem, err2 := json.Marshal(map[string]string{
-		"ItemID": item.ID,
+	mItem, err2 := json.Marshal(FiatItemResponse{
+		item.ID,
 	})
 
 	if err2 != nil {

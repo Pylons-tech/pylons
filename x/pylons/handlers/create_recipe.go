@@ -34,8 +34,8 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		return sdk.ErrInternal(err.Error()).Result()
 	}
 
-	mRecipe, err2 := json.Marshal(map[string]string{
-		"RecipeID": recipe.ID,
+	mRecipe, err2 := json.Marshal(CreateRecipeResponse{
+		recipe.ID,
 	})
 
 	if err2 != nil {
