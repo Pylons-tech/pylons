@@ -76,5 +76,5 @@ func (rcp *Recipe) String() string {
 // KeyGen generates key for the store
 func (rcp Recipe) KeyGen() string {
 	id := uuid.New()
-	return rc.Sender.String() + id.String()
+	return rcp.Sender.String() + id.String()
 }
