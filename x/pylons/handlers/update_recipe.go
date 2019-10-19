@@ -32,12 +32,12 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	}
 
 	rc.Description = msg.Description
-	rc.CookbookId = msg.CookbookId
+	rc.CookbookID = msg.CookbookID
 	rc.CoinInputs = msg.CoinInputs
 	rc.ItemInputs = msg.ItemInputs
 	rc.Entries = msg.Entries
 	rc.BlockInterval = msg.BlockInterval
-	rc.RecipeName = msg.RecipeName
+	rc.Name = msg.Name
 
 	if err := keeper.UpdateRecipe(ctx, msg.ID, rc); err != nil {
 		return sdk.ErrInternal(err.Error()).Result()

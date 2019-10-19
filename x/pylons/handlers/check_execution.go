@@ -96,7 +96,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		if err != nil {
 			return sdk.ErrInternal(err.Error()).Result()
 		}
-		cookbook, err := keeper.GetCookbook(ctx, recipe.CookbookId)
+		cookbook, err := keeper.GetCookbook(ctx, recipe.CookbookID)
 		if err != nil {
 			return sdk.ErrInternal(err.Error()).Result()
 		}
