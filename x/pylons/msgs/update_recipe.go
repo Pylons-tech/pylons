@@ -9,8 +9,8 @@ import (
 
 // MsgUpdateRecipe defines a UpdateRecipe message
 type MsgUpdateRecipe struct {
-	RecipeName    string
-	CookbookId    string // the cookbook guid
+	Name          string
+	CookbookID    string // the cookbook guid
 	ID            string // the recipe guid
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
@@ -21,15 +21,15 @@ type MsgUpdateRecipe struct {
 }
 
 // NewMsgUpdateRecipe a constructor for UpdateRecipe msg
-func NewMsgUpdateRecipe(recipeName, cookbookId, id, description string,
+func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
-		RecipeName:    recipeName,
+		Name:          recipeName,
 		ID:            id,
-		CookbookId:    cookbookId,
+		CookbookID:    cookbookID,
 		Description:   description,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,

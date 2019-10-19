@@ -100,7 +100,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if recipe.BlockInterval > 0 {
 		// store the execution as the interval
 		exec.RecipeID = recipe.ID
-		exec.CookbookID = recipe.CookbookId
+		exec.CookbookID = recipe.CookbookID
 		exec.CoinInputs = cl
 		exec.Sender = msg.Sender
 		exec.BlockHeight = ctx.BlockHeight() + recipe.BlockInterval
@@ -138,7 +138,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	}
 
 	output := recipe.Entries.Actualize()
-	err = AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookId)
+	err = AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
 
 	if err != nil {
 		return err.Result()

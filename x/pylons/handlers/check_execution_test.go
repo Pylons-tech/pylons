@@ -35,7 +35,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	)
 
 	cases := map[string]struct {
-		cookbookId      string
+		cookbookID      string
 		itemIDs         []string
 		dynamicItemSet  bool
 		dynamicItemName string
