@@ -31,7 +31,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			true,
 		},
 		// {
-		// 	// TODO should implement early payment test case : implement after custom broadcast cli command is done
+		// 	// TODO should implement early payment test case : implement after modifying structure to create GUID earlier.
 		// 	"early payment test",
 		// 	"TESTRCP_CheckExecution__002",
 		// 	2,
@@ -41,7 +41,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 		// 	false,
 		// },
 		// {
-		// 	// TODO should implement check_execution before test : implement after custom broadcast cli command is done
+		// 	// TODO should implement check_execution before test : implement after modifying structure to create GUID earlier.
 		// 	"early payment test",
 		// 	"TESTRCP_CheckExecution__002",
 		// 	2,
