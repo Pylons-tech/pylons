@@ -52,7 +52,47 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 	}
 
-	// TODO: exchange items
+	refreshedOutputItems := types.ItemList{}
+
+	// -------------------- handle Item interactions ----------------
+
+	// get the items from the trade initiator
+	for _, item := range trade.ItemOutputs {
+		// verify if its still owned by the initiator
+		storedItem, err := keeper.GetItem(ctx, item.ID)
+		if err != nil {
+			return sdk.ErrInternal(err.Error()).Result()
+		}
+		// if it isn't then we error out as there hasn't been any state changes so far
+		if !storedItem.Sender.Equals(trade.Sender) {
+			return sdk.ErrUnauthorized(fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID)).Result()
+		}
+
+		refreshedOutputItems = append(refreshedOutputItems, storedItem)
+	}
+
+	// TODO: implement rollback strategy
+	for _, item := range refreshedOutputItems {
+		item.Sender = msg.Sender
+		// TODO: implement rollback strategy here
+		err := keeper.SetItem(ctx, item)
+		if err != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+	}
+
+	for _, item := range matchedItems {
+		item.Sender = trade.Sender
+		// TODO: implement rollback strategy here
+		err := keeper.SetItem(ctx, item)
+		if err != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+	}
+
+	// ----------------- handle coin interaction ----------------------
+
+	// TODO: coin interactions
 
 	resp, err3 := json.Marshal(FulfillTradeResp{
 		Message: "successfully fulfilled the trade",
