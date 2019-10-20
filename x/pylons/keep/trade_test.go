@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -64,6 +65,14 @@ func TestGetTrade(t *testing.T) {
 				require.True(t, err != nil)
 			} else {
 				require.True(t, err == nil)
+				storedTrade, err := mockedCoinInput.PlnK.GetTrade(mockedCoinInput.Ctx, trade.ID)
+				require.True(t, err == nil)
+				require.True(t, reflect.DeepEqual(trade.CoinOutputs, storedTrade.CoinOutputs))
+				require.True(t, reflect.DeepEqual(trade.CoinInputs, storedTrade.CoinInputs))
+				require.True(t, reflect.DeepEqual(trade.ItemInputs, storedTrade.ItemInputs))
+				require.True(t, reflect.DeepEqual(trade.ItemOutputs, storedTrade.ItemOutputs))
+				require.True(t, reflect.DeepEqual(trade.Sender, storedTrade.Sender))
+
 			}
 		})
 

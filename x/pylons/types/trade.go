@@ -10,7 +10,6 @@ import (
 // Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
 // the FulFiller.
 type Trade struct {
-	Name        string
 	ID          string // the recipe guid
 	CoinInputs  CoinInputList
 	ItemInputs  ItemInputList
@@ -59,14 +58,12 @@ func NewTrade(extraInfo string,
 
 func (trd *Trade) String() string {
 	return fmt.Sprintf(`Trade{
-		Name: %s,
 		ID: %s,
 		CoinInputs: %s,
 		ItemInputs: %s,
 		CoinOutputs: %s,
 		ItemOutputs: %+v,
-	}`, trd.Name,
-		trd.ID,
+	}`, trd.ID,
 		trd.CoinInputs.String(),
 		trd.ItemInputs.String(),
 		trd.CoinOutputs.String(),
