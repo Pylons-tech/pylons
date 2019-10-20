@@ -106,6 +106,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		exec.BlockHeight = ctx.BlockHeight() + recipe.BlockInterval
 		exec.ItemInputs = matchedItems
 		exec.Entries = recipe.Entries
+		// TODO: ID should not be created in handler, should receive from outside
 		exec.ID = exec.KeyGen()
 		err2 := keeper.SetExecution(ctx, exec)
 

@@ -9,7 +9,9 @@ import (
 
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
-	Name    string
+	// TODO: ID of recipe should be available in this Msg
+	// TODO: types.Recipe has one more field called 'Disabled bool' then MsgCreateRecipe
+	Name          string
 	CookbookID    string // the cookbook guid
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
@@ -27,7 +29,7 @@ func NewMsgCreateRecipe(recipeName, cookbookID, description string,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
-		Name:    recipeName,
+		Name:          recipeName,
 		CookbookID:    cookbookID,
 		Description:   description,
 		CoinInputs:    coinInputs,

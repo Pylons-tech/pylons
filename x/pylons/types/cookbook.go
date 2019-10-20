@@ -46,6 +46,8 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 		Sender:       sender,
 		CostPerBlock: cpb,
 	}
+	// TODO this should not be called by handler function b/c KeyGen is available
+	// TODO or remove KeyGen and have ID from Param
 	cb.ID = cb.KeyGen()
 	return cb
 }

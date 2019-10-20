@@ -109,6 +109,8 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Strings:    strings,
 		Sender:     sender,
 	}
+	// TODO this should not be called by handler function b/c KeyGen is available
+	// TODO or remove KeyGen and have ID from Param
 	item.ID = item.KeyGen()
 	return item
 }

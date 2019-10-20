@@ -52,7 +52,8 @@ func NewRecipe(recipeName, cookbookID, description string,
 		Description:   description,
 		Sender:        sender,
 	}
-
+	// TODO this should not be called by handler function b/c KeyGen is available
+	// TODO or remove KeyGen and have ID from Param
 	rcp.ID = rcp.KeyGen()
 	return rcp
 }

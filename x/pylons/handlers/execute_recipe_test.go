@@ -14,6 +14,7 @@ import (
 )
 
 func TestHandlerMsgExecuteRecipe(t *testing.T) {
+	// TODO after HandlerMsgExecuteRecipe struct is updated, this function should be updated too
 	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
