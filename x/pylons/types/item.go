@@ -34,6 +34,9 @@ type Item struct {
 	Sender     sdk.AccAddress
 }
 
+// ItemList is a list of items
+type ItemList []Item
+
 func (it Item) FindDouble(key string) (float64, bool) {
 	for _, v := range it.Doubles {
 		if v.Key == key {

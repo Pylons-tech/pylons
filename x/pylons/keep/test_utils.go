@@ -49,6 +49,7 @@ func SetupTestCoinInput() TestCoinInput {
 	fcKey := sdk.NewKVStoreKey("fee_collection")
 	cbKey := sdk.NewKVStoreKey("pylons")
 	rcKey := sdk.NewKVStoreKey("pylons_recipe")
+	tdKey := sdk.NewKVStoreKey("pylons_trade")
 	itKey := sdk.NewKVStoreKey("pylons_item")
 	execKey := sdk.NewKVStoreKey("pylons_execution")
 
@@ -58,6 +59,7 @@ func SetupTestCoinInput() TestCoinInput {
 	ms.MountStoreWithDB(keyParams, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(fcKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(cbKey, sdk.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(tdKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(rcKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(itKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(execKey, sdk.StoreTypeIAVL, db)
@@ -88,6 +90,7 @@ func SetupTestCoinInput() TestCoinInput {
 		rcKey,   // recipe
 		itKey,   // item
 		execKey, // exec
+		tdKey,
 		cdc,
 	)
 

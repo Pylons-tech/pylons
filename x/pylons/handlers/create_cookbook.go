@@ -44,8 +44,8 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return sdk.ErrInternal(err.Error()).Result()
 	}
 
-	mCookbook, err2 := json.Marshal(map[string]string{
-		"CookbookID": cb.ID,
+	mCookbook, err2 := json.Marshal(CreateCBResponse{
+		cb.ID,
 	})
 
 	if err2 != nil {
