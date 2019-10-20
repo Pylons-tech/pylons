@@ -47,11 +47,11 @@ func (msg MsgCreateTrade) ValidateBasic() sdk.Error {
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
 	}
-	if msg.CoinOutputs == nil || msg.ItemOutputs == nil {
+	if msg.CoinOutputs == nil && msg.ItemOutputs == nil {
 		return sdk.ErrInternal("sender not providing anything in exchange of the trade: empty outputs")
 	}
 
-	if msg.CoinInputs == nil || msg.ItemInputs == nil {
+	if msg.CoinInputs == nil && msg.ItemInputs == nil {
 		return sdk.ErrInternal("sender not receiving anything for the trade: empty inputs")
 	}
 
