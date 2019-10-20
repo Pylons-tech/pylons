@@ -38,14 +38,13 @@ func (cbl TradeList) String() string {
 }
 
 // NewTrade creates a new trade
-func NewTrade(name, extraInfo string,
+func NewTrade(extraInfo string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
 	coinOutputs sdk.Coins, // newly created param instead of coinOutputs and itemOutputs
 	itemOutputs ItemList,
 	sender sdk.AccAddress) Trade {
 	trd := Trade{
-		Name:        name,
 		CoinInputs:  coinInputs,
 		ItemInputs:  itemInputs,
 		CoinOutputs: coinOutputs,

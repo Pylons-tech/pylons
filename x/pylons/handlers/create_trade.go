@@ -36,7 +36,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		return sdk.ErrInsufficientCoins("sender doesn't have enough coins for the trade").Result()
 	}
 
-	trade := types.NewTrade(msg.Name, msg.ExtraInfo,
+	trade := types.NewTrade(msg.ExtraInfo,
 		msg.CoinInputs,
 		msg.ItemInputs,
 		msg.CoinOutputs,

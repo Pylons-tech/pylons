@@ -9,7 +9,6 @@ import (
 
 // MsgCreateTrade defines a CreateTrade message
 type MsgCreateTrade struct {
-	Name        string
 	CoinInputs  types.CoinInputList
 	ItemInputs  types.ItemInputList
 	CoinOutputs sdk.Coins
@@ -19,7 +18,7 @@ type MsgCreateTrade struct {
 }
 
 // NewMsgCreateTrade a constructor for CreateTrade msg
-func NewMsgCreateTrade(name string,
+func NewMsgCreateTrade(
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	coinOutputs sdk.Coins,
@@ -27,7 +26,6 @@ func NewMsgCreateTrade(name string,
 	extraInfo string,
 	sender sdk.AccAddress) MsgCreateTrade {
 	return MsgCreateTrade{
-		Name:        name,
 		CoinInputs:  coinInputs,
 		ItemInputs:  itemInputs,
 		CoinOutputs: coinOutputs,
