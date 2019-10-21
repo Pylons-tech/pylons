@@ -46,9 +46,24 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 		Sender:       sender,
 		CostPerBlock: cpb,
 	}
-	// TODO this should not be called by handler function b/c KeyGen is available
-	// TODO or remove KeyGen and have ID from Param
+
 	cb.ID = cb.KeyGen()
+	return cb
+}
+
+// TODO make all outside things to use NewCookbookWithGUID rather than using NewCookbook
+// NewCookbook return a new Cookbook
+func NewCookbookWithGUID(GUID string, sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
+	cb := Cookbook{
+		ID:           GUID,
+		Name:         name,
+		Description:  description,
+		Version:      version,
+		Developer:    developer,
+		SupportEmail: sEmail,
+		Sender:       sender,
+		CostPerBlock: cpb,
+	}
 	return cb
 }
 

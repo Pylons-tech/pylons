@@ -114,3 +114,17 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 	item.ID = item.KeyGen()
 	return item
 }
+
+// TODO make all outside things to use NewItemWithGUID rather than using NewItem
+// NewItem create a new item without auto generated ID
+func NewItemWithGUID(GUID string, cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress) *Item {
+	item := &Item{
+		ID:         GUID,
+		CookbookID: cookbookID,
+		Doubles:    doubles,
+		Longs:      longs,
+		Strings:    strings,
+		Sender:     sender,
+	}
+	return item
+}
