@@ -9,11 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// GetCookbook queries the cookbooks
+// GetCookbook get cookbook by GUID
 func GetCookbook(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get_cookbook <id>",
-		Short: "get the current cookbook",
+		Short: "get a cookbook by id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
