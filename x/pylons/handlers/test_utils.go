@@ -25,15 +25,15 @@ func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookN
 
 func MockRecipe(
 	tci keep.TestCoinInput,
-	recipeName string,
+	rcpName string,
 	coinInputList types.CoinInputList,
 	itemInputList types.ItemInputList,
 	entries types.WeightedParamList,
-	cookbookID string,
+	cbID string,
 	blockInterval int64,
 	sender sdk.AccAddress,
 ) CreateRecipeResponse {
-	newRcpMsg := msgs.NewMsgCreateRecipe(recipeName, cookbookID, "this has to meet character limits",
+	newRcpMsg := msgs.NewMsgCreateRecipe(rcpName, cbID, "this has to meet character limits",
 		coinInputList,
 		itemInputList,
 		entries,
@@ -44,4 +44,18 @@ func MockRecipe(
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 	return recipeData
+}
+
+func MockExecution(
+	tci keep.TestCoinInput,
+	rcpID string, // rcpID of blockInterval > 0
+	sender sdk.AccAddress,
+	itemIDs []string,
+) (ExecuteRecipeResp, error) {
+	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
+	result := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+
+	execRcpResponse := ExecuteRecipeResp{}
+	err := json.Unmarshal(result.Data, &execRcpResponse)
+	return execRcpResponse, err
 }
