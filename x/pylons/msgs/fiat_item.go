@@ -8,18 +8,30 @@ import (
 )
 
 type MsgFiatItem struct {
-	// TODO: ID of item should be available in this Msg
 	// TODO: MsgFiatItem & types.Item is same, do we need to use these differently? discuss discord
+	ID         string
+	CookbookID string
 	Doubles    []types.DoubleKeyValue
 	Longs      []types.LongKeyValue
 	Strings    []types.StringKeyValue
-	CookbookID string
 	Sender     sdk.AccAddress
 }
 
 // NewMsgFiatItem a constructor for MsgFiatItem msg
 func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress) MsgFiatItem {
 	return MsgFiatItem{
+		CookbookID: cookbookID,
+		Doubles:    doubles,
+		Longs:      longs,
+		Strings:    strings,
+		Sender:     sender,
+	}
+}
+
+// NewMsgFiatItem a constructor for MsgFiatItem msg
+func NewMsgFiatItemWithGUID(GUID string, cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress) MsgFiatItem {
+	return MsgFiatItem{
+		ID:         GUID,
 		CookbookID: cookbookID,
 		Doubles:    doubles,
 		Longs:      longs,

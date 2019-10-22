@@ -54,6 +54,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 // TODO make all outside things to use NewCookbookWithGUID rather than using NewCookbook
 // NewCookbook return a new Cookbook
 func NewCookbookWithGUID(GUID string, sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
+	// TODO if user send same GUID what to do? fail or random GUID generate internally?
 	cb := Cookbook{
 		ID:           GUID,
 		Name:         name,
@@ -63,6 +64,9 @@ func NewCookbookWithGUID(GUID string, sEmail Email, sender sdk.AccAddress, versi
 		SupportEmail: sEmail,
 		Sender:       sender,
 		CostPerBlock: cpb,
+	}
+	if len(GUID) == 0 {
+		cb.ID = cb.KeyGen()
 	}
 	return cb
 }

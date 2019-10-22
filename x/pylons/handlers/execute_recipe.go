@@ -29,6 +29,8 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 		}
 	case types.ItemOutput:
 		itemOutput, _ := output.(types.ItemOutput)
+		// TODO in the future multiple items could be generated at once and
+		// I guess it's not a good idea to provide predefined GUIDs for all of them
 		outputItem := *itemOutput.Item(cbID, sender)
 		if err := keeper.SetItem(ctx, outputItem); err != nil {
 			return sdk.ErrInternal(err.Error())

@@ -35,6 +35,18 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 	)
 }
 
+// This is used by integration tests when going to manage by GUIDs rather than managing by name
+func GenItemWithGUID(GUID string, cbID string, sender sdk.AccAddress, name string) *types.Item {
+	return types.NewItemWithGUID(
+		GUID,
+		cbID,
+		(types.DoubleInputParamList{types.DoubleInputParam{Key: "endurance", MinValue: "100.00", MaxValue: "500.00"}}).Actualize(),
+		(types.LongInputParamList{types.LongInputParam{Key: "HP", MinValue: 100, MaxValue: 500}}).Actualize(),
+		(types.StringInputParamList{types.StringInputParam{Key: "Name", Value: name}}).Actualize(),
+		sender,
+	)
+}
+
 func SetupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
