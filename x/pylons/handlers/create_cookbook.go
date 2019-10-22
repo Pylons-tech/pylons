@@ -16,7 +16,6 @@ type CreateCBResponse struct {
 // HandlerMsgCreateCookbook is used to create cookbook by a developer
 func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) sdk.Result {
 
-	// TODO after MsgCreateCookbook struct is updated, this function should be updated too
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()

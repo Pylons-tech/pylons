@@ -12,7 +12,6 @@ const DefaultCostPerBlock = 50 // Pylons
 
 // MsgCreateCookbook defines a CreateCookbook message
 type MsgCreateCookbook struct {
-	// TODO: ID of cookbook should be available in this Msg
 	// TODO: MsgCreateCookbook and types.Cookbook is same, need to keep these separately? discord discussion
 	ID           string
 	Name         string

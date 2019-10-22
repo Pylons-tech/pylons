@@ -14,7 +14,6 @@ import (
 )
 
 func TestHandlerMsgCreateCookbook(t *testing.T) {
-	// TODO after HandlerMsgCreateCookbook struct is updated, this function should be updated too
 	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")

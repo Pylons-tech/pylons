@@ -51,7 +51,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 	return cb
 }
 
-// TODO make all outside things to use NewCookbookWithGUID rather than using NewCookbook
+// TODO make all integration test to use NewCookbookWithGUID rather than using NewCookbook
 // NewCookbook return a new Cookbook
 func NewCookbookWithGUID(GUID string, sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
 	// TODO if user send same GUID what to do? fail or random GUID generate internally?

@@ -91,6 +91,7 @@ func FindItemFromArrayByName(items []types.Item, name string) (types.Item, bool)
 }
 
 // TODO: should add cli command and use it to get from GUID directly, rather than listing all of them and finding from them using linear search
-// FindRecipeByGUID(guid string) (types.Recipe bool) {}
-// FindExecutionByGUID(guid string) (types.Recipe bool) {}
-// FindItemByGUID(guid string) (types.Recipe bool) {}
+// TODO: GetCookbookByGUID(guid string) (types.Cookbook bool) {}
+// TODO: FindRecipeByGUID(guid string) (types.Recipe bool) {}
+// TODO: FindExecutionByGUID(guid string) (types.Recipe bool) {}
+// TODO: FindItemByGUID(guid string) (types.Recipe bool) {}

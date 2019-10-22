@@ -113,7 +113,7 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 	return item
 }
 
-// TODO make all outside things to use NewItemWithGUID rather than using NewItem
+// TODO make all integration test to use NewItemWithGUID rather than using NewItem
 // NewItem create a new item without auto generated ID
 func NewItemWithGUID(GUID string, cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress) *Item {
 	// TODO if user send same GUID what to do? fail or random GUID generate internally?
