@@ -14,6 +14,7 @@ const DefaultCostPerBlock = 50 // Pylons
 type MsgCreateCookbook struct {
 	// TODO: ID of cookbook should be available in this Msg
 	// TODO: MsgCreateCookbook and types.Cookbook is same, need to keep these separately? discord discussion
+	ID           string
 	Name         string
 	Description  string
 	Version      types.SemVer
@@ -28,6 +29,21 @@ type MsgCreateCookbook struct {
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
 func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
+		Name:         name,
+		Description:  desc,
+		Developer:    devel,
+		Version:      version,
+		SupportEmail: sEmail,
+		Level:        level,
+		Sender:       sender,
+		CostPerBlock: &cpb,
+	}
+}
+
+// NewMsgCreateCookbookWithGUID is creating a new MsgCreateCookbook with GUID
+func NewMsgCreateCookbookWithGUID(GUID, name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
+	return MsgCreateCookbook{
+		ID:           GUID,
 		Name:         name,
 		Description:  desc,
 		Developer:    devel,

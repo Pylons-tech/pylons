@@ -40,7 +40,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		cpb = *msg.CostPerBlock
 	}
 
-	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
+	cb := types.NewCookbookWithGUID(msg.ID, msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 	if err := keeper.SetCookbook(ctx, cb); err != nil {
 		return sdk.ErrInternal(err.Error()).Result()
 	}
