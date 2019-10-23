@@ -89,18 +89,16 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, execRcpResponse.Status == "Success")
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
-			// TODO this should be used in unit test rather than listing executions by using GetExecutionsBySender
-			// scheduleOutput := ExecuteRecipeScheduleOutput{}
-			// err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-
 			if tc.coinAddition != 0 {
 				_, _, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
 				require.True(t, err == nil)
 			}
-			execs, err := mockedCoinInput.PlnK.GetExecutionsBySender(mockedCoinInput.Ctx, tc.sender)
+
+			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.True(t, err == nil)
-			require.True(t, len(execs) > 0)
-			checkExec := msgs.NewMsgCheckExecution(execs[0].ID, tc.payToComplete, tc.sender)
+
+			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
 			futureContext := mockedCoinInput.Ctx.WithBlockHeight(mockedCoinInput.Ctx.BlockHeight() + tc.addHeight)
 			result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
