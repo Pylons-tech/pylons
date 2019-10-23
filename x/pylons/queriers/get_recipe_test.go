@@ -80,7 +80,7 @@ func TestGetRecipe(t *testing.T) {
 				},
 				mockedCoinInput.PlnK,
 			)
-			t.Errorf("GetRecipeTEST LOG:: %+v, %+v", err, result)
+			// t.Errorf("GetRecipeTEST LOG:: %+v, %+v", err, result)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {

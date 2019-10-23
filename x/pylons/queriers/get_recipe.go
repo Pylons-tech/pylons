@@ -17,7 +17,7 @@ func GetRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper kee
 		return nil, sdk.ErrInternal("no recipe id is provided in path")
 	}
 	rcpID := path[0]
-	recipe, err := keeper.GetItem(ctx, rcpID)
+	recipe, err := keeper.GetRecipe(ctx, rcpID)
 
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
