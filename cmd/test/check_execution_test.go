@@ -23,23 +23,22 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__003",
+			"TESTRCP_CheckExecution__0030",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__003",
+			"TESTITEM_CheckExecution__0030",
 			false,
 			true,
 		},
-		// {
-		// 	// TODO should implement early payment test case : implement after modifying structure to create GUID earlier.
-		// 	"early payment test",
-		// 	"TESTRCP_CheckExecution__002",
-		// 	2,
-		// 	[]string{},
-		// 	"TESTITEM_CheckExecution__002",
-		// 	true,
-		// 	false,
-		// },
+		{
+			"early payment test",
+			"TESTRCP_CheckExecution__0031",
+			2,
+			[]string{},
+			"TESTITEM_CheckExecution__0031",
+			true,
+			false,
+		},
 		// {
 		// 	// TODO should implement check_execution before test : implement after modifying structure to create GUID earlier.
 		// 	"early payment test",
@@ -67,14 +66,19 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
 
-			WaitForBlockInterval(tc.blockInterval)
+			if tc.waitForBlockInterval {
+				WaitForBlockInterval(tc.blockInterval)
+			} else {
+				WaitForNextBlock()
+			}
 
 			executions, err := ListExecutionsViaCLI(t)
 			ErrValidation(t, "error listing executions %+v", err)
 
+			// TODO should be able to get executions by predefined GUID
 			exec, ok := FindExecutionByRecipeID(executions, rcp.ID)
 			if !ok {
-				t.Errorf("error finding execution with recipeID :: %+v :: rcpID=\"%s\"", executions, rcp.ID)
+				t.Errorf("error finding execution with recipeID :: rcpID=\"%s\"", rcp.ID)
 				t.Fatal(err)
 			}
 

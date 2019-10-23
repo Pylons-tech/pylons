@@ -8,6 +8,7 @@ import (
 
 // MsgExecuteRecipe defines a SetName message
 type MsgExecuteRecipe struct {
+	// TODO should add ExecID here
 	RecipeID string
 	Sender   sdk.AccAddress
 	ItemIDs  []string

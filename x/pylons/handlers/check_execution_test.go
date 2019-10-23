@@ -23,7 +23,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
-	// mock coin to coin recipe
+	// mock delayed coin to coin recipe
 	c2cRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
