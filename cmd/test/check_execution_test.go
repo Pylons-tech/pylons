@@ -10,7 +10,7 @@ import (
 
 func TestCheckExecutionViaCLI(t *testing.T) {
 	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-	WaitForNextBlock()
+	// WaitForNextBlock()
 
 	tests := []struct {
 		name                 string
@@ -23,29 +23,29 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__0030",
+			"TESTRCP_CheckExecution__003_TC1",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__0030",
+			"TESTITEM_CheckExecution__003_TC1",
 			false,
 			true,
 		},
 		{
 			"early payment test",
-			"TESTRCP_CheckExecution__0031",
+			"TESTRCP_CheckExecution__003_TC2",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__0031",
+			"TESTITEM_CheckExecution__003_TC2",
 			true,
 			false,
 		},
 		// {
-		// 	// TODO should implement check_execution before test : implement after modifying structure to create GUID earlier.
-		// 	"early payment test",
-		// 	"TESTRCP_CheckExecution__002",
+		// 	// TODO should add failing test checker
+		// 	"no wait direct check execution test",
+		// 	"TESTRCP_CheckExecution__003_TC3",
 		// 	2,
 		// 	[]string{},
-		// 	"TESTITEM_CheckExecution__002",
+		// 	"TESTITEM_CheckExecution__003_TC3",
 		// 	false,
 		// 	false,
 		// },
@@ -53,6 +53,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			WaitForNextBlock()
+
 			guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
