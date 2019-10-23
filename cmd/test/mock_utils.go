@@ -62,17 +62,19 @@ func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 
 ///////////RECIPE//////////////////////////////////////////////
 
-func MockRecipeWithName(name string, outputItemName string, t *testing.T) error {
-	return MockDelayedExecutionRecipeWithName(0, name, outputItemName, t)
+func MockRecipeWithName(name string, outputItemName string, t *testing.T) (string, error) {
+	return MockRecipeGUID(0, name, outputItemName, t)
 }
 
-func MockDelayedExecutionRecipeWithName(interval int64, name string, outputItemName string, t *testing.T) error {
-	exist, err := CheckRecipeExistByName(name)
+func MockRecipeGUID(interval int64, name string, outputItemName string, t *testing.T) (string, error) {
+	guid, err := GetRecipeGUIDFromName(name)
 	ErrValidation(t, "error checking if recipe already exist %+v", err)
 
-	if exist { // finish mock if already available
-		return nil
+	if len(guid) > 0 { // finish mock if already available
+		return guid, nil
 	}
+	guid = types.Recipe{}.KeyGen()
+
 	mCB, err := GetMockedCookbook(t)
 	ErrValidation(t, "error getting mocked cookbook %+v", err)
 
@@ -80,7 +82,8 @@ func MockDelayedExecutionRecipeWithName(interval int64, name string, outputItemN
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	require.True(t, err == nil)
 	TestTxWithMsg(t,
-		msgs.NewMsgCreateRecipe(
+		msgs.NewMsgCreateRecipeWithGUID(
+			guid,
 			name,
 			mCB.ID,
 			"this has to meet character limits lol",
@@ -89,14 +92,14 @@ func MockDelayedExecutionRecipeWithName(interval int64, name string, outputItemN
 			types.GenItemOnlyEntry(outputItemName),
 			interval,
 			sdkAddr))
-	return WaitForNextBlock()
+	return guid, WaitForNextBlock()
 }
 
-func CheckRecipeExistByName(name string) (bool, error) {
+func GetRecipeGUIDFromName(name string) (string, error) {
 	rcpList, err := ListRecipesViaCLI()
 	if err != nil {
-		return false, err
+		return "", err
 	}
-	_, exist := FindRecipeFromArrayByName(rcpList, name)
-	return exist, nil
+	rcp, _ := FindRecipeFromArrayByName(rcpList, name)
+	return rcp.ID, nil
 }

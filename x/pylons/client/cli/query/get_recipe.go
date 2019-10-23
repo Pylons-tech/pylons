@@ -9,16 +9,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// GetItem get an item by GUID
-func GetItem(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// GetRecipe get an execution by GUID
+func GetRecipe(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "get_item <id>",
-		Short: "get an item by id",
+		Use:   "get_recipe <id>",
+		Short: "get a recipe by id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, args[0]), nil)
+			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_recipe/%s", queryRoute, args[0]), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}

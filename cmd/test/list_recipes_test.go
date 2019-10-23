@@ -24,7 +24,7 @@ func TestListRecipeViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := MockRecipeWithName(tc.rcpName, tc.outputItemName, t)
+			_, err := MockRecipeWithName(tc.rcpName, tc.outputItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)

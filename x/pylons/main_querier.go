@@ -16,6 +16,12 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 			return queriers.PylonsBalance(ctx, path[1:], req, keeper)
 		case queriers.KeyGetCookbook:
 			return queriers.GetCookbook(ctx, path[1:], req, keeper)
+		case queriers.KeyGetItem:
+			return queriers.GetItem(ctx, path[1:], req, keeper)
+		case queriers.KeyGetRecipe:
+			return queriers.GetRecipe(ctx, path[1:], req, keeper)
+		case queriers.KeyGetExecution:
+			return queriers.GetExecution(ctx, path[1:], req, keeper)
 		case queriers.KeyListCookbook:
 			return queriers.ListCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyAddrFromPubKey:
@@ -28,7 +34,6 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 			return queriers.ItemsBySender(ctx, path[1:], req, keeper)
 		case queriers.KeyListExecutions:
 			return queriers.ListExecutions(ctx, path[1:], req, keeper)
-
 		default:
 			return nil, sdk.ErrUnknownRequest("unknown pylons query endpoint")
 		}

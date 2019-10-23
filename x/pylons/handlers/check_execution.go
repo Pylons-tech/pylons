@@ -18,7 +18,6 @@ type CheckExecutionResp struct {
 
 // HandlerMsgCheckExecution is used to check the status of an execution
 func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCheckExecution) sdk.Result {
-	var exec types.Execution
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()

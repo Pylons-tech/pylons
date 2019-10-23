@@ -23,10 +23,10 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__002",
+			"TESTRCP_CheckExecution__003",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__002",
+			"TESTITEM_CheckExecution__003",
 			false,
 			true,
 		},
@@ -54,20 +54,11 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := MockDelayedExecutionRecipeWithName(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
+			guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
-			recipes, err := TestQueryListRecipe(t)
-			ErrValidation(t, "error listing recipes %+v", err)
-
+			rcp, err := GetRecipeByGUID(guid)
 			require.True(t, err == nil)
-			require.True(t, len(recipes) > 0)
-
-			rcp, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)
-			if !ok {
-				t.Errorf("error getting recipe with name %+v", tc.rcpName)
-				t.Fatal()
-			}
 
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)

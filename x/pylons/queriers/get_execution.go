@@ -8,7 +8,7 @@ import (
 
 // query endpoints supported by the nameservice Querier
 const (
-	KeyGetExecution = "get_item"
+	KeyGetExecution = "get_execution"
 )
 
 // GetExecution returns an execution based on the execution id
