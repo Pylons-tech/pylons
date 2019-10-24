@@ -9,9 +9,9 @@ import (
 
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
+	ID            string // the recipe guid
 	CookbookID    string // the cookbook guid
 	Name          string
-	ID            string // the recipe guid
 	CoinInputs    CoinInputList
 	ItemInputs    ItemInputList
 	Entries       WeightedParamList
@@ -21,15 +21,15 @@ type Recipe struct {
 	Disabled      bool
 }
 
-// RecipeList is a list of cookbook
+// RecipeList is a list of recipes
 type RecipeList struct {
 	Recipes []Recipe
 }
 
-func (cbl RecipeList) String() string {
+func (rl RecipeList) String() string {
 	output := "RecipeList{"
-	for _, cb := range cbl.Recipes {
-		output += cb.String()
+	for _, r := range rl.Recipes {
+		output += r.String()
 		output += ",\n"
 	}
 	output += "}"
@@ -82,7 +82,7 @@ func NewRecipeWithGUID(GUID, recipeName, cookbookID, description string,
 	return rcp
 }
 
-func (rcp *Recipe) String() string {
+func (rcp Recipe) String() string {
 	return fmt.Sprintf(`Recipe{
 		Name: %s,
 		CookbookID: %s,

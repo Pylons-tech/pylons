@@ -23,7 +23,7 @@ func GetExecution(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return fmt.Errorf(err.Error())
 			}
 
-			var out types.Cookbook
+			var out types.Execution
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},

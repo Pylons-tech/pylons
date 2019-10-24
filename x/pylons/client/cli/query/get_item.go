@@ -23,7 +23,7 @@ func GetItem(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return fmt.Errorf(err.Error())
 			}
 
-			var out types.Cookbook
+			var out types.Item
 			cdc.MustUnmarshalJSON(res, &out)
 			return cliCtx.PrintOutput(out)
 		},
