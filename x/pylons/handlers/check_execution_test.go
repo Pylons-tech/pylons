@@ -71,6 +71,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			coinAddition:    300,
 		},
 		// TODO should add item generation delayed recipe test case
+		// TODO should add test case for already completed execution
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {

@@ -20,35 +20,39 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 		desiredItemName      string
 		payToComplete        bool
 		waitForBlockInterval bool
+		shouldSuccess        bool
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__003_TC1",
+			"TESTRCP_CheckExecution__004_TC1",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__003_TC1",
+			"TESTITEM_CheckExecution__004_TC1",
 			false,
+			true,
 			true,
 		},
 		{
 			"early payment test",
-			"TESTRCP_CheckExecution__003_TC2",
+			"TESTRCP_CheckExecution__004_TC2",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__003_TC2",
+			"TESTITEM_CheckExecution__004_TC2",
 			true,
 			false,
+			true,
 		},
-		// {
-		// 	// TODO should add failing test checker
-		// 	"no wait direct check execution test",
-		// 	"TESTRCP_CheckExecution__003_TC3",
-		// 	2,
-		// 	[]string{},
-		// 	"TESTITEM_CheckExecution__003_TC3",
-		// 	false,
-		// 	false,
-		// },
+		{
+			// TODO should add failing test checker
+			"no wait direct check execution test",
+			"TESTRCP_CheckExecution__004_TC3",
+			2,
+			[]string{},
+			"TESTITEM_CheckExecution__004_TC3",
+			false,
+			false,
+			false,
+		},
 	}
 
 	for _, tc := range tests {
@@ -96,7 +100,10 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
-			require.True(t, ok)
+			require.True(t, ok == tc.shouldSuccess)
+
+			exec, ok = FindExecutionByRecipeID(executions, rcp.ID)
+			require.True(t, exec.Completed == tc.shouldSuccess)
 		})
 	}
 }

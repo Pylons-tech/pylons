@@ -16,6 +16,42 @@ type CheckExecutionResp struct {
 	Output  []byte
 }
 
+func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
+	// TODO: send the coins to a master address instead of burning them
+	// think about making this adding and subtracting atomic using inputoutputcoins method
+	_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
+	if err != nil {
+		return nil, err
+	}
+
+	// we delete all the matched items as those get converted to output items
+	for _, item := range exec.ItemInputs {
+		keeper.DeleteItem(ctx, item.ID)
+	}
+
+	// confirm that the execution was completed
+	exec.Completed = true
+
+	err2 := keeper.UpdateExecution(ctx, exec.ID, exec)
+	if err2 != nil {
+		return nil, err
+	}
+
+	output := exec.Entries.Actualize()
+	err = AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	outputSTR, err2 := json.Marshal(output)
+
+	if err2 != nil {
+		return nil, err2
+	}
+	return outputSTR, nil
+}
+
 // HandlerMsgCheckExecution is used to check the status of an execution
 func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCheckExecution) sdk.Result {
 	err := msg.ValidateBasic()
@@ -40,34 +76,13 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 
 		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
-
 		}
 		return sdk.Result{Data: resp}
 	}
 
 	if ctx.BlockHeight() >= exec.BlockHeight {
-		// TODO: send the coins to a master address instead of burning them
-		// think about making this adding and subtracting atomic using inputoutputcoins method
-		_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
+		outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
 		if err != nil {
-			return err.Result()
-		}
-
-		// we delete all the matched items as those get converted to output items
-		for _, item := range exec.ItemInputs {
-			keeper.DeleteItem(ctx, item.ID)
-		}
-
-		output := exec.Entries.Actualize()
-		err = AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
-
-		if err != nil {
-			return err.Result()
-		}
-
-		outputSTR, err2 := json.Marshal(output)
-
-		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 
@@ -78,14 +93,6 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		})
 
 		if err3 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
-		}
-
-		// confirm that the execution was completed
-		exec.Completed = true
-
-		err2 = keeper.UpdateExecution(ctx, exec.ID, exec)
-		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 		return sdk.Result{Data: resp}
@@ -100,36 +107,32 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			return sdk.ErrInternal(err.Error()).Result()
 		}
 		blockDiff := exec.BlockHeight - ctx.BlockHeight()
+		if blockDiff < 0 { // check if already waited for block interval
+			blockDiff = 0
+		}
 		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
 
 		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
 			_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
-
 			if err != nil {
 				return sdk.ErrInternal(err2.Error()).Result()
 			}
 
-			// confirm that the execution was completed
-			exec.Completed = true
-
-			err2 := keeper.UpdateExecution(ctx, exec.ID, exec)
+			outputSTR, err2 := SafeExecute(ctx, keeper, exec, msg)
 			if err2 != nil {
 				return sdk.ErrInternal(err2.Error()).Result()
-
 			}
 
 			resp, err2 := json.Marshal(CheckExecutionResp{
 				Message: "successfully paid to complete the execution",
 				Status:  "Success",
+				Output:  outputSTR,
 			})
-
 			if err2 != nil {
 				return sdk.ErrInternal(err2.Error()).Result()
-
 			}
 
 			return sdk.Result{Data: resp}
-
 		}
 		resp, err := json.Marshal(CheckExecutionResp{
 			Message: "insufficient balance to complete the execution",
@@ -149,7 +152,6 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
-
 	}
 	return sdk.Result{Data: resp}
 
