@@ -9,8 +9,6 @@ import (
 )
 
 func TestCheckExecutionViaCLI(t *testing.T) {
-	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-	// WaitForNextBlock()
 
 	tests := []struct {
 		name                 string
@@ -56,6 +54,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
 			WaitForNextBlock()
 
 			guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
