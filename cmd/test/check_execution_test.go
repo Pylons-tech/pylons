@@ -84,7 +84,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				msgs.NewMsgCheckExecution(execMsg.ExecID, tc.payToComplete, sdkAddr),
 			)
 
-			WaitForBlockInterval(2)
+			// TODO can work with WaitForNextBlock()? not WaitForBlockInterval(2)?
+			WaitForNextBlock()
 
 			// Here desiredItemName should be different across tests cases and across test files
 			items, err := ListItemsViaCLI(t)
