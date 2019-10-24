@@ -91,10 +91,10 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			Status:  "Success",
 			Output:  outputSTR,
 		})
-
 		if err3 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
+
 		return sdk.Result{Data: resp}
 
 	} else if msg.PayToComplete {

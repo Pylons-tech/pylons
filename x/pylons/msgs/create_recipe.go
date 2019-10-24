@@ -9,7 +9,6 @@ import (
 
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
-	// TODO: types.Recipe has one more field called 'Disabled bool' then MsgCreateRecipe
 	ID            string
 	Name          string
 	CookbookID    string // the cookbook guid

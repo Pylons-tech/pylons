@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/google/uuid"
 )
 
 // MsgExecuteRecipe defines a SetName message
 type MsgExecuteRecipe struct {
-	// TODO should add ExecID here
+	ExecID   string
 	RecipeID string
 	Sender   sdk.AccAddress
 	ItemIDs  []string
@@ -16,11 +17,33 @@ type MsgExecuteRecipe struct {
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
 func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe {
-	return MsgExecuteRecipe{
+	msg := MsgExecuteRecipe{
 		RecipeID: recipeID,
 		Sender:   sender,
 		ItemIDs:  itemIDs,
 	}
+	msg.ExecID = msg.KeyGen()
+	return msg
+}
+
+// NewMsgExecuteRecipeWithGUID a constructor for ExecuteCookbook msg with GUID input
+func NewMsgExecuteRecipeWithGUID(GUID string, recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe {
+	msg := MsgExecuteRecipe{
+		ExecID:   GUID,
+		RecipeID: recipeID,
+		Sender:   sender,
+		ItemIDs:  itemIDs,
+	}
+	if len(GUID) == 0 {
+		msg.ExecID = msg.KeyGen()
+	}
+	return msg
+}
+
+// KeyGen generates key for the store
+func (msg MsgExecuteRecipe) KeyGen() string {
+	id := uuid.New()
+	return msg.Sender.String() + id.String()
 }
 
 // Route should return the name of the module

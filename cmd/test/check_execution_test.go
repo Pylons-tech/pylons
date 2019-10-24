@@ -24,31 +24,30 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__004_TC1",
+			"TESTRCP_CheckExecution__006_TC1",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__004_TC1",
+			"TESTITEM_CheckExecution__006_TC1",
 			false,
 			true,
 			true,
 		},
 		{
 			"early payment test",
-			"TESTRCP_CheckExecution__004_TC2",
+			"TESTRCP_CheckExecution__006_TC2",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__004_TC2",
+			"TESTITEM_CheckExecution__006_TC2",
 			true,
 			false,
 			true,
 		},
 		{
-			// TODO should add failing test checker
 			"no wait direct check execution test",
-			"TESTRCP_CheckExecution__004_TC3",
+			"TESTRCP_CheckExecution__006_TC3",
 			2,
 			[]string{},
-			"TESTITEM_CheckExecution__004_TC3",
+			"TESTITEM_CheckExecution__006_TC3",
 			false,
 			false,
 			false,
@@ -68,9 +67,11 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			require.True(t, err == nil)
+
+			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs)
 			TestTxWithMsg(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
+				execMsg)
 
 			if tc.waitForBlockInterval {
 				WaitForBlockInterval(tc.blockInterval)
@@ -78,31 +79,25 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				WaitForNextBlock()
 			}
 
-			executions, err := ListExecutionsViaCLI(t)
-			ErrValidation(t, "error listing executions %+v", err)
-
-			// TODO should be able to get executions by predefined GUID
-			exec, ok := FindExecutionByRecipeID(executions, rcp.ID)
-			if !ok {
-				t.Errorf("error finding execution with recipeID :: rcpID=\"%s\"", rcp.ID)
-				t.Fatal(err)
-			}
-
 			TestTxWithMsg(
 				t,
-				msgs.NewMsgCheckExecution(exec.ID, tc.payToComplete, sdkAddr),
+				msgs.NewMsgCheckExecution(execMsg.ExecID, tc.payToComplete, sdkAddr),
 			)
 
-			WaitForNextBlock()
+			WaitForBlockInterval(2)
 
 			// Here desiredItemName should be different across tests cases and across test files
 			items, err := ListItemsViaCLI(t)
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
+			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok == tc.shouldSuccess)
 
-			exec, ok = FindExecutionByRecipeID(executions, rcp.ID)
+			exec, err := GetExecutionByGUID(execMsg.ExecID)
+			if err != nil {
+				t.Errorf("error finding execution with ExecID :: ExecID=\"%s\" %+v", execMsg.ExecID, err)
+				t.Fatal(err)
+			}
 			require.True(t, exec.Completed == tc.shouldSuccess)
 		})
 	}

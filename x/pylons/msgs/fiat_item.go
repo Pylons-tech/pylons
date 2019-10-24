@@ -8,7 +8,6 @@ import (
 )
 
 type MsgFiatItem struct {
-	// TODO: MsgFiatItem & types.Item is same, do we need to use these differently? discuss discord
 	ID         string
 	CookbookID string
 	Doubles    []types.DoubleKeyValue
