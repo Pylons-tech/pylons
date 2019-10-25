@@ -57,31 +57,6 @@ func NewRecipe(recipeName, cookbookID, description string,
 	return rcp
 }
 
-// NewRecipeWithGUID creates a new recipe with GUID
-func NewRecipeWithGUID(GUID, recipeName, cookbookID, description string,
-	coinInputs CoinInputList, // coinOutputs CoinOutputList,
-	itemInputs ItemInputList, // itemOutputs ItemOutputList,
-	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
-	execTime int64, sender sdk.AccAddress) Recipe {
-	// TODO if user send same GUID what to do? fail or random GUID generate internally?
-	rcp := Recipe{
-		ID:            GUID,
-		Name:          recipeName,
-		CookbookID:    cookbookID,
-		CoinInputs:    coinInputs,
-		ItemInputs:    itemInputs,
-		Entries:       entries,
-		BlockInterval: execTime,
-		Description:   description,
-		Sender:        sender,
-	}
-
-	if len(GUID) == 0 {
-		rcp.ID = rcp.KeyGen()
-	}
-	return rcp
-}
-
 func (rcp Recipe) String() string {
 	return fmt.Sprintf(`Recipe{
 		Name: %s,

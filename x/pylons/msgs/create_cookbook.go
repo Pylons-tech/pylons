@@ -38,21 +38,6 @@ func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail
 	}
 }
 
-// NewMsgCreateCookbookWithGUID is creating a new MsgCreateCookbook with GUID
-func NewMsgCreateCookbookWithGUID(GUID, name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
-	return MsgCreateCookbook{
-		ID:           GUID,
-		Name:         name,
-		Description:  desc,
-		Developer:    devel,
-		Version:      version,
-		SupportEmail: sEmail,
-		Level:        level,
-		Sender:       sender,
-		CostPerBlock: &cpb,
-	}
-}
-
 // Route should return the name of the module
 func (msg MsgCreateCookbook) Route() string { return "pylons" }
 

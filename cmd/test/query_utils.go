@@ -90,6 +90,7 @@ func FindItemFromArrayByName(items []types.Item, name string) (types.Item, bool)
 	return types.Item{}, false
 }
 
+// GetCookbookByGUID is to get Cookbook from ID
 func GetCookbookByGUID(guid string) (types.Cookbook, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "get_cookbook", guid}, "")
 	if err != nil {
@@ -103,6 +104,7 @@ func GetCookbookByGUID(guid string) (types.Cookbook, error) {
 	return cookbook, err
 }
 
+// GetRecipeByGUID is to get Recipe from ID
 func GetRecipeByGUID(guid string) (types.Recipe, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "get_recipe", guid}, "")
 	if err != nil {
@@ -116,6 +118,7 @@ func GetRecipeByGUID(guid string) (types.Recipe, error) {
 	return rcp, err
 }
 
+// GetExecutionByGUID is to get Execution from ID
 func GetExecutionByGUID(guid string) (types.Execution, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "get_execution", guid}, "")
 	if err != nil {
@@ -129,6 +132,7 @@ func GetExecutionByGUID(guid string) (types.Execution, error) {
 	return exec, err
 }
 
+// GetItemByGUID is to get Item from ID
 func GetItemByGUID(guid string) (types.Item, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "get_item", guid}, "")
 	if err != nil {

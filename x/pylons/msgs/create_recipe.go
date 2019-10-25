@@ -39,26 +39,6 @@ func NewMsgCreateRecipe(recipeName, cookbookID, description string,
 	}
 }
 
-// NewMsgCreateRecipe a constructor for CreateRecipe msg
-func NewMsgCreateRecipeWithGUID(GUID, recipeName, cookbookID, description string,
-	coinInputs types.CoinInputList,
-	itemInputs types.ItemInputList,
-	entries types.WeightedParamList,
-	blockInterval int64,
-	sender sdk.AccAddress) MsgCreateRecipe {
-	return MsgCreateRecipe{
-		ID:            GUID,
-		Name:          recipeName,
-		CookbookID:    cookbookID,
-		Description:   description,
-		CoinInputs:    coinInputs,
-		ItemInputs:    itemInputs,
-		Entries:       entries,
-		BlockInterval: int64(blockInterval),
-		Sender:        sender,
-	}
-}
-
 // Route should return the name of the module
 func (msg MsgCreateRecipe) Route() string { return "pylons" }
 

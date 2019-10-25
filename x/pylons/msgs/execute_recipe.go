@@ -26,20 +26,6 @@ func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []strin
 	return msg
 }
 
-// NewMsgExecuteRecipeWithGUID a constructor for ExecuteCookbook msg with GUID input
-func NewMsgExecuteRecipeWithGUID(GUID string, recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe {
-	msg := MsgExecuteRecipe{
-		ExecID:   GUID,
-		RecipeID: recipeID,
-		Sender:   sender,
-		ItemIDs:  itemIDs,
-	}
-	if len(GUID) == 0 {
-		msg.ExecID = msg.KeyGen()
-	}
-	return msg
-}
-
 // KeyGen generates key for the store
 func (msg MsgExecuteRecipe) KeyGen() string {
 	id := uuid.New()

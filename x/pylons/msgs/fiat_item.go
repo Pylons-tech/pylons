@@ -27,18 +27,6 @@ func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []t
 	}
 }
 
-// NewMsgFiatItem a constructor for MsgFiatItem msg
-func NewMsgFiatItemWithGUID(GUID string, cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress) MsgFiatItem {
-	return MsgFiatItem{
-		ID:         GUID,
-		CookbookID: cookbookID,
-		Doubles:    doubles,
-		Longs:      longs,
-		Strings:    strings,
-		Sender:     sender,
-	}
-}
-
 // Route should return the name of the module
 func (msg MsgFiatItem) Route() string { return "pylons" }
 
