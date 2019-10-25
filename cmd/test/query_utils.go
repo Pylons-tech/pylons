@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/hex"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/queriers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func ListCookbookViaCLI() ([]types.Cookbook, error) {
@@ -60,6 +62,23 @@ func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
 		return []types.Item{}, err
 	}
 	return itemResp.Items, err
+}
+
+func GetTxDetail(txhash string, t *testing.T) ([]byte, error) {
+	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	if err != nil {
+		return []byte{}, err
+	}
+	var tx sdk.TxResponse
+	err = GetAminoCdc().UnmarshalJSON([]byte(output), &tx)
+	if err != nil {
+		return []byte{}, err
+	}
+	bs, err := hex.DecodeString(tx.Data)
+	if err != nil {
+		return []byte{}, err
+	}
+	return bs, nil
 }
 
 func FindRecipeFromArrayByName(recipes []types.Recipe, name string) (types.Recipe, bool) {

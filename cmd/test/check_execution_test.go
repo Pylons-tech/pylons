@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -19,6 +20,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 		payToComplete        bool
 		waitForBlockInterval bool
 		shouldSuccess        bool
+		expectedStatus       string
+		expectedMessage      string
 	}{
 		{
 			"basic flow test",
@@ -29,6 +32,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			false,
 			true,
 			true,
+			"Success",
+			"successfully completed the execution",
 		},
 		{
 			"early payment test",
@@ -39,6 +44,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			true,
 			false,
 			true,
+			"Success",
+			"successfully paid to complete the execution",
 		},
 		{
 			"no wait direct check execution test",
@@ -49,6 +56,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			false,
 			false,
 			false,
+			"Pending",
+			"execution pending",
 		},
 	}
 
@@ -78,13 +87,22 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				WaitForNextBlock()
 			}
 
-			TestTxWithMsg(
+			txhash := TestTxWithMsg(
 				t,
 				msgs.NewMsgCheckExecution(execMsg.ExecID, tc.payToComplete, sdkAddr),
 			)
 
 			// TODO can work with WaitForNextBlock()? not WaitForBlockInterval(2)?
 			WaitForNextBlock()
+
+			txHandleResBytes, err := GetTxDetail(txhash, t)
+			require.True(t, err == nil)
+
+			resp := handlers.CheckExecutionResp{}
+			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			require.True(t, err == nil)
+			require.True(t, resp.Status == tc.expectedStatus)
+			require.True(t, resp.Message == tc.expectedMessage)
 
 			// Here desiredItemName should be different across tests cases and across test files
 			items, err := ListItemsViaCLI(t)
