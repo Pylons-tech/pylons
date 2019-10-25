@@ -9,7 +9,6 @@ import (
 
 // MsgExecuteRecipe defines a SetName message
 type MsgExecuteRecipe struct {
-	// ExecID   string
 	RecipeID string
 	Sender   sdk.AccAddress
 	ItemIDs  []string
@@ -22,7 +21,6 @@ func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []strin
 		Sender:   sender,
 		ItemIDs:  itemIDs,
 	}
-	// msg.ExecID = msg.KeyGen()
 	return msg
 }
 

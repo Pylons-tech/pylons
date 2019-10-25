@@ -9,7 +9,6 @@ import (
 
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
-	// ID            string
 	Name          string
 	CookbookID    string // the cookbook guid
 	CoinInputs    types.CoinInputList
