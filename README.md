@@ -93,6 +93,27 @@ Available Commands:
   create-cookbook create cookbook by providing the args
   update-cookbook update cookbook by providing the args
 ```
+### Unit test
+
+```
+go test ./x/...
+```
+
+### Integration test process on local environment
+
+Resets the blockchain database  
+```
+pylonsd unsafe-reset-all
+```
+Start daemon  
+```
+pylonsd start
+```
+Run integration test  
+```
+go test ./cmd/test
+```
+
 ### To generate a transaction json, use below command
 ```
 ./pylonscli tx pylons get-pylons --from cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 --generate-only > t.json

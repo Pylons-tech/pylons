@@ -24,16 +24,17 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 	inputItems = append(inputItems, *GenItem(cbData.ID, sender, "Raichu"))
 	inputItems = append(inputItems, *GenItem(cbData.ID, sender, "Raichu"))
 
-	exec := types.Execution{
-		RecipeID:    rcpData.ID,
-		CoinInputs:  cl,
-		BlockHeight: tci.Ctx.BlockHeight() + rcpData.BlockInterval,
-		ItemInputs:  inputItems,
-		Entries:     rcpData.Entries,
-		Sender:      sender,
-		Completed:   false,
-	}
-	exec.ID = exec.KeyGen()
+	exec := types.NewExecution(
+		rcpData.ID,
+		cbData.ID,
+		cl,
+		inputItems,
+		rcpData.Entries,
+		tci.Ctx.BlockHeight()+rcpData.BlockInterval,
+		sender,
+		false,
+	)
+
 	return exec
 }
 

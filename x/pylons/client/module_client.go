@@ -47,6 +47,9 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	pylonsQueryCmd.AddCommand(client.GetCommands(
 		query.GetPylonsBalance(mc.storeKey, mc.cdc),
 		query.GetCookbook(mc.storeKey, mc.cdc),
+		query.GetExecution(mc.storeKey, mc.cdc),
+		query.GetItem(mc.storeKey, mc.cdc),
+		query.GetRecipe(mc.storeKey, mc.cdc),
 		query.ListCookbook(mc.storeKey, mc.cdc),
 		query.ListRecipes(mc.storeKey, mc.cdc),
 		query.ItemsBySender(mc.storeKey, mc.cdc),

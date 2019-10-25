@@ -20,28 +20,19 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_ExecuteRecipe_002",
+			"TESTRCP_ExecuteRecipe_003",
 			[]string{},
-			"TESTITEM_ExecuteRecipe_002",
+			"TESTITEM_ExecuteRecipe_003",
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			err := MockRecipeWithName(tc.rcpName, tc.desiredItemName, t)
+			guid, err := MockRecipeWithName(tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
-			recipes, err := TestQueryListRecipe(t)
-			ErrValidation(t, "error listing recipes %+v", err)
-
+			rcp, err := GetRecipeByGUID(guid)
 			require.True(t, err == nil)
-			require.True(t, len(recipes) > 0)
-
-			rcp, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)
-			if !ok {
-				t.Errorf("error getting recipe with name %+v", tc.rcpName)
-				t.Fatal()
-			}
 
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
@@ -50,11 +41,13 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
 
+			// TODO check response by txhash
+
 			WaitForNextBlock()
 			items, err := ListItemsViaCLI(t)
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok = FindItemFromArrayByName(items, tc.desiredItemName)
+			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok)
 		})
 	}

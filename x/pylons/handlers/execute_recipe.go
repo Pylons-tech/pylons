@@ -16,6 +16,10 @@ type ExecuteRecipeResp struct {
 	Output  []byte
 }
 
+type ExecuteRecipeScheduleOutput struct {
+	ExecID string
+}
+
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) sdk.Error {
 	switch output.(type) {
 	case types.CoinOutput:
@@ -41,7 +45,6 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
 func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) sdk.Result {
-	var exec types.Execution
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()
@@ -99,25 +102,26 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	// we set the inputs and outputs for storing the execution
 	if recipe.BlockInterval > 0 {
 		// store the execution as the interval
-		exec.RecipeID = recipe.ID
-		exec.CookbookID = recipe.CookbookID
-		exec.CoinInputs = cl
-		exec.Sender = msg.Sender
-		exec.BlockHeight = ctx.BlockHeight() + recipe.BlockInterval
-		exec.ItemInputs = matchedItems
-		exec.Entries = recipe.Entries
-		exec.ID = exec.KeyGen()
+		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, matchedItems, recipe.Entries,
+			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
 		err2 := keeper.SetExecution(ctx, exec)
 
 		if err2 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
-		resp, err3 := json.Marshal(ExecuteRecipeResp{
+		outputSTR, err3 := json.Marshal(ExecuteRecipeScheduleOutput{
+			ExecID: exec.ID,
+		})
+		if err3 != nil {
+			return sdk.ErrInternal(err2.Error()).Result()
+		}
+		resp, err4 := json.Marshal(ExecuteRecipeResp{
 			Message: "scheduled the recipe",
 			Status:  "Success",
+			Output:  outputSTR,
 		})
 
-		if err3 != nil {
+		if err4 != nil {
 			return sdk.ErrInternal(err2.Error()).Result()
 		}
 		return sdk.Result{Data: resp}

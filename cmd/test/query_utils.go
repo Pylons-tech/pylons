@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/hex"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/queriers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func ListCookbookViaCLI() ([]types.Cookbook, error) {
@@ -62,6 +64,23 @@ func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
 	return itemResp.Items, err
 }
 
+func GetTxDetail(txhash string, t *testing.T) ([]byte, error) {
+	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	if err != nil {
+		return []byte{}, err
+	}
+	var tx sdk.TxResponse
+	err = GetAminoCdc().UnmarshalJSON([]byte(output), &tx)
+	if err != nil {
+		return []byte{}, err
+	}
+	bs, err := hex.DecodeString(tx.Data)
+	if err != nil {
+		return []byte{}, err
+	}
+	return bs, nil
+}
+
 func FindRecipeFromArrayByName(recipes []types.Recipe, name string) (types.Recipe, bool) {
 	for _, rcp := range recipes {
 		if rcp.Name == name {
@@ -90,7 +109,58 @@ func FindItemFromArrayByName(items []types.Item, name string) (types.Item, bool)
 	return types.Item{}, false
 }
 
-// TODO: should add cli command and use it to get from GUID directly, rather than listing all of them and finding from them using linear search
-// FindRecipeByGUID(guid string) (types.Recipe bool) {}
-// FindExecutionByGUID(guid string) (types.Recipe bool) {}
-// FindItemByGUID(guid string) (types.Recipe bool) {}
+// GetCookbookByGUID is to get Cookbook from ID
+func GetCookbookByGUID(guid string) (types.Cookbook, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "get_cookbook", guid}, "")
+	if err != nil {
+		return types.Cookbook{}, err
+	}
+	var cookbook types.Cookbook
+	err = GetAminoCdc().UnmarshalJSON(output, &cookbook)
+	if err != nil {
+		return types.Cookbook{}, err
+	}
+	return cookbook, err
+}
+
+// GetRecipeByGUID is to get Recipe from ID
+func GetRecipeByGUID(guid string) (types.Recipe, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "get_recipe", guid}, "")
+	if err != nil {
+		return types.Recipe{}, err
+	}
+	var rcp types.Recipe
+	err = GetAminoCdc().UnmarshalJSON(output, &rcp)
+	if err != nil {
+		return types.Recipe{}, err
+	}
+	return rcp, err
+}
+
+// GetExecutionByGUID is to get Execution from ID
+func GetExecutionByGUID(guid string) (types.Execution, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "get_execution", guid}, "")
+	if err != nil {
+		return types.Execution{}, err
+	}
+	var exec types.Execution
+	err = GetAminoCdc().UnmarshalJSON(output, &exec)
+	if err != nil {
+		return types.Execution{}, err
+	}
+	return exec, err
+}
+
+// GetItemByGUID is to get Item from ID
+func GetItemByGUID(guid string) (types.Item, error) {
+	output, err := RunPylonsCli([]string{"query", "pylons", "get_item", guid}, "")
+	if err != nil {
+		return types.Item{}, err
+	}
+	var item types.Item
+	err = GetAminoCdc().UnmarshalJSON(output, &item)
+	if err != nil {
+		return types.Item{}, err
+	}
+	return item, err
+}

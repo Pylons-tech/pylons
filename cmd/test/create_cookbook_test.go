@@ -38,6 +38,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				0,
 				msgs.DefaultCostPerBlock,
 				sdkAddr))
+			// TODO check response by txhash
 		})
 	}
 }

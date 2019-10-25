@@ -38,6 +38,7 @@ func TestCreateTradeViaCLI(t *testing.T) {
 					nil,
 					"",
 					sdkAddr))
+			// TODO check response by txhash
 		})
 	}
 }

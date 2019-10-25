@@ -23,7 +23,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
-	// mock coin to coin recipe
+	// mock delayed coin to coin recipe
 	c2cRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
@@ -35,12 +35,10 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	)
 
 	cases := map[string]struct {
-		cookbookID      string
+		rcpID           string
 		itemIDs         []string
 		dynamicItemSet  bool
 		dynamicItemName string
-		recipeID        string
-		recipeDesc      string
 		sender          sdk.AccAddress
 		payToComplete   bool
 		addHeight       int64
@@ -49,32 +47,31 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 		coinAddition    int64
 	}{
 		"coin to coin recipe execution test": {
+			rcpID:           c2cRecipeData.RecipeID,
 			itemIDs:         []string{},
-			recipeID:        c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-			recipeDesc:      "this has to meet character limits lol",
 			sender:          sender1,
 			payToComplete:   false,
 			addHeight:       15,
 			expectedMessage: "successfully completed the execution",
 		},
 		"coin to coin early pay recipe execution fail due to insufficient balance": {
+			rcpID:           c2cRecipeData.RecipeID,
 			itemIDs:         []string{},
-			recipeID:        c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-			recipeDesc:      "this has to meet character limits lol",
 			sender:          sender2,
 			payToComplete:   true,
 			expectError:     true,
 			expectedMessage: "insufficient balance to complete the execution",
 		},
 		"coin to coin early pay recipe execution test": {
+			rcpID:           c2cRecipeData.RecipeID,
 			itemIDs:         []string{},
-			recipeID:        c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-			recipeDesc:      "this has to meet character limits lol",
 			sender:          sender2,
 			payToComplete:   true,
 			expectedMessage: "successfully paid to complete the execution",
 			coinAddition:    300,
 		},
+		// TODO should add item generation delayed recipe test case
+		// TODO should add test case for already completed execution
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -85,12 +82,10 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 			mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
 
-			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
-			result := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
-
-			execRcpResponse := ExecuteRecipeResp{}
-			err := json.Unmarshal(result.Data, &execRcpResponse)
-
+			execRcpResponse, err := MockExecution(mockedCoinInput, tc.rcpID,
+				tc.sender,
+				tc.itemIDs,
+			)
 			require.True(t, err == nil)
 			require.True(t, execRcpResponse.Status == "Success")
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
@@ -98,15 +93,16 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			if tc.coinAddition != 0 {
 				_, _, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
 				require.True(t, err == nil)
-
 			}
-			execs, err := mockedCoinInput.PlnK.GetExecutionsBySender(mockedCoinInput.Ctx, tc.sender)
+
+			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.True(t, err == nil)
 
-			checkExec := msgs.NewMsgCheckExecution(execs[0].ID, tc.payToComplete, tc.sender)
+			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
 			futureContext := mockedCoinInput.Ctx.WithBlockHeight(mockedCoinInput.Ctx.BlockHeight() + tc.addHeight)
-			result = HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+			result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
 			checkExecResp := CheckExecutionResp{}
 			err = json.Unmarshal(result.Data, &checkExecResp)
 			require.True(t, err == nil)

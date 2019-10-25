@@ -46,6 +46,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 		Sender:       sender,
 		CostPerBlock: cpb,
 	}
+
 	cb.ID = cb.KeyGen()
 	return cb
 }

@@ -21,6 +21,27 @@ type Execution struct {
 	Completed   bool
 }
 
+// NewExecution return a new Execution
+func NewExecution(rcpID string, cbID string, ci sdk.Coins,
+	itemInputs []Item, entries WeightedParamList,
+	blockHeight int64, sender sdk.AccAddress,
+	completed bool) Execution {
+
+	exec := Execution{
+		RecipeID:    rcpID,
+		CookbookID:  cbID,
+		CoinInputs:  ci,
+		ItemInputs:  itemInputs,
+		Entries:     entries,
+		BlockHeight: blockHeight,
+		Sender:      sender,
+		Completed:   completed,
+	}
+
+	exec.ID = exec.KeyGen()
+	return exec
+}
+
 // KeyGen generates key for the execution
 func (exec Execution) KeyGen() string {
 	id := uuid.New()

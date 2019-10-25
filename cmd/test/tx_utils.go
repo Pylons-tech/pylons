@@ -62,7 +62,7 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) {
+func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) string {
 	tmpDir, err := ioutil.TempDir("", "pylons")
 	if err != nil {
 		panic(err.Error())
@@ -106,4 +106,6 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) {
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
+
+	return successTxResp.TxHash
 }

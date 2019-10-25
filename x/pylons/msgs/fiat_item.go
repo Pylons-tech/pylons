@@ -8,10 +8,10 @@ import (
 )
 
 type MsgFiatItem struct {
+	CookbookID string
 	Doubles    []types.DoubleKeyValue
 	Longs      []types.LongKeyValue
 	Strings    []types.StringKeyValue
-	CookbookID string
 	Sender     sdk.AccAddress
 }
 
