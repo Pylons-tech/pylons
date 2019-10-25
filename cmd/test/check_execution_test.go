@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
@@ -77,9 +78,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 
 			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs)
-			TestTxWithMsg(
-				t,
-				execMsg)
+			txhash := TestTxWithMsg(t, execMsg)
 
 			if tc.waitForBlockInterval {
 				WaitForBlockInterval(tc.blockInterval)
@@ -87,17 +86,24 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				WaitForNextBlock()
 			}
 
-			txhash := TestTxWithMsg(
-				t,
-				msgs.NewMsgCheckExecution(execMsg.ExecID, tc.payToComplete, sdkAddr),
-			)
-
-			// TODO can work with WaitForNextBlock()? not WaitForBlockInterval(2)?
-			WaitForNextBlock()
-
 			txHandleResBytes, err := GetTxDetail(txhash, t)
 			require.True(t, err == nil)
+			execResp := handlers.ExecuteRecipeResp{}
+			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
+			require.True(t, err == nil)
+			schedule := handlers.ExecuteRecipeScheduleOutput{}
+			err = json.Unmarshal(execResp.Output, &schedule)
+			require.True(t, err == nil)
 
+			txhash = TestTxWithMsg(
+				t,
+				msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr),
+			)
+
+			WaitForNextBlock()
+
+			txHandleResBytes, err = GetTxDetail(txhash, t)
+			require.True(t, err == nil)
 			resp := handlers.CheckExecutionResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			require.True(t, err == nil)
@@ -111,9 +117,9 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)
 			require.True(t, ok == tc.shouldSuccess)
 
-			exec, err := GetExecutionByGUID(execMsg.ExecID)
+			exec, err := GetExecutionByGUID(schedule.ExecID)
 			if err != nil {
-				t.Errorf("error finding execution with ExecID :: ExecID=\"%s\" %+v", execMsg.ExecID, err)
+				t.Errorf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
 				t.Fatal(err)
 			}
 			require.True(t, exec.Completed == tc.shouldSuccess)

@@ -43,6 +43,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 					types.GenEntries("chair", "Raichu"),
 					0,
 					sdkAddr))
+			// TODO check response by txhash
 		})
 	}
 }

@@ -8,7 +8,7 @@ import (
 )
 
 type MsgFiatItem struct {
-	ID         string
+	// ID         string
 	CookbookID string
 	Doubles    []types.DoubleKeyValue
 	Longs      []types.LongKeyValue

@@ -12,7 +12,7 @@ const DefaultCostPerBlock = 50 // Pylons
 
 // MsgCreateCookbook defines a CreateCookbook message
 type MsgCreateCookbook struct {
-	ID           string
+	// ID           string
 	Name         string
 	Description  string
 	Version      types.SemVer

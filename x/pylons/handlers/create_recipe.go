@@ -25,8 +25,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
 	}
 
-	recipe := types.NewRecipeWithGUID(
-		msg.ID,
+	recipe := types.NewRecipe(
 		msg.Name, msg.CookbookID, msg.Description,
 		msg.CoinInputs,
 		msg.ItemInputs,

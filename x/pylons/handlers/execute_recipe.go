@@ -102,7 +102,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	// we set the inputs and outputs for storing the execution
 	if recipe.BlockInterval > 0 {
 		// store the execution as the interval
-		exec := types.NewExecutionWithGUID(msg.ExecID, recipe.ID, recipe.CookbookID, cl, matchedItems, recipe.Entries,
+		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, matchedItems, recipe.Entries,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
 		err2 := keeper.SetExecution(ctx, exec)
 

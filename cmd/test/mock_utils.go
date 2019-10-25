@@ -3,6 +3,7 @@ package main
 import (
 	"testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
@@ -14,19 +15,19 @@ import (
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(t *testing.T) error {
-	exist, err := CheckCookbookExist()
+func MockCookbook(t *testing.T) (string, error) {
+	guid, exist, err := CheckCookbookExist()
 	if err != nil {
-		return err
+		return "", err
 	}
 	if exist { // finish mock if already available
-		return nil
+		return guid, nil
 	}
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	require.True(t, err == nil)
 
-	TestTxWithMsg(t, msgs.NewMsgCreateCookbook(
+	txhash := TestTxWithMsg(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
 		"this has to meet character limits lol",
 		"SketchyCo",
@@ -35,29 +36,35 @@ func MockCookbook(t *testing.T) error {
 		0,
 		msgs.DefaultCostPerBlock,
 		sdkAddr))
-	return WaitForNextBlock()
+
+	err = WaitForNextBlock()
+	ErrValidation(t, "error waiting for creating cookbook %+v", err)
+
+	txHandleResBytes, err := GetTxDetail(txhash, t)
+	require.True(t, err == nil)
+	resp := handlers.CreateCBResponse{}
+	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	require.True(t, err == nil)
+
+	return resp.CookbookID, nil
 }
 
-func CheckCookbookExist() (bool, error) {
+func CheckCookbookExist() (string, bool, error) {
 	cbList, err := ListCookbookViaCLI()
 	if err != nil {
-		return false, err
+		return "", false, err
 	}
 	if len(cbList) > 0 {
-		return true, nil
+		return cbList[0].ID, true, nil
 	}
-	return false, nil
+	return "", false, nil
 }
 
 func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
-	err := MockCookbook(t)
+	guid, err := MockCookbook(t)
 	ErrValidation(t, "error mocking cookbook %+v", err)
 
-	cbList, err := ListCookbookViaCLI()
-	if err != nil {
-		return types.Cookbook{}, err
-	}
-	return cbList[0], nil
+	return GetCookbookByGUID(guid)
 }
 
 ///////////RECIPE//////////////////////////////////////////////
@@ -73,7 +80,6 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 	if len(guid) > 0 { // finish mock if already available
 		return guid, nil
 	}
-	guid = types.Recipe{}.KeyGen()
 
 	mCB, err := GetMockedCookbook(t)
 	ErrValidation(t, "error getting mocked cookbook %+v", err)
@@ -81,9 +87,8 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	require.True(t, err == nil)
-	TestTxWithMsg(t,
-		msgs.NewMsgCreateRecipeWithGUID(
-			guid,
+	txhash := TestTxWithMsg(t,
+		msgs.NewMsgCreateRecipe(
 			name,
 			mCB.ID,
 			"this has to meet character limits lol",
@@ -92,7 +97,17 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 			types.GenItemOnlyEntry(outputItemName),
 			interval,
 			sdkAddr))
-	return guid, WaitForNextBlock()
+
+	err = WaitForNextBlock()
+	ErrValidation(t, "error waiting for creating recipe %+v", err)
+
+	txHandleResBytes, err := GetTxDetail(txhash, t)
+	require.True(t, err == nil)
+	resp := handlers.CreateRecipeResponse{}
+	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	require.True(t, err == nil)
+
+	return resp.RecipeID, nil
 }
 
 func GetRecipeGUIDFromName(name string) (string, error) {
