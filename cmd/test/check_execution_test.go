@@ -1,4 +1,4 @@
-package main
+package intTest
 
 import (
 	"encoding/json"
@@ -111,7 +111,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, resp.Message == tc.expectedMessage)
 
 			// Here desiredItemName should be different across tests cases and across test files
-			items, err := ListItemsViaCLI(t)
+			items, err := ListItemsViaCLI()
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)

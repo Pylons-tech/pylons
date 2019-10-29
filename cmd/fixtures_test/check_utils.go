@@ -1,4 +1,4 @@
-package fixtures
+package fixtureTest
 
 type ItemCheck struct {
 	Name  string `json:"name"`

@@ -11,5 +11,30 @@
                 "cookbooks": ["submarine"]
             }
         }
+    },
+    {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/straight.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "recipe": ["straight"]
+            }
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/straight.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": {
+                "item": "straight_gen_item"
+            }
+        }
     }
 ]

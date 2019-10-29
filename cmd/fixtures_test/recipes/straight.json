@@ -14,5 +14,6 @@
     ],
     "ItemOutputs":null,
     "ExtraInfo":"",
-    "Sender":"eugen"
+    "Sender":"eugen",
+    "CookbookName": "submarine"
 }

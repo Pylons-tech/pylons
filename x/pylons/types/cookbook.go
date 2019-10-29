@@ -61,9 +61,12 @@ func (cb Cookbook) String() string {
 	return fmt.Sprintf(`
 	Cookbook{ 
 		Name: %s,
+		Description: %s,
+		Version: %s,
 		Developer: %s,
-		Tier: %d,
-		Support Email: %s,
+		Level: %d,
+		SupportEmail: %s,
 		CostPerBlock: %d,
-	}`, cb.Name, cb.Developer, int(cb.Level), cb.SupportEmail, cb.CostPerBlock)
+		Sender: %s,
+	}`, cb.Name, cb.Description, cb.Version, cb.Developer, cb.Level, cb.SupportEmail, cb.CostPerBlock, cb.Sender)
 }

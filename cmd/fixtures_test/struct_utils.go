@@ -1,1 +1,1 @@
-package fixtures
+package fixtureTest
