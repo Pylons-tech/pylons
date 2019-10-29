@@ -1,0 +1,85 @@
+[
+    {
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/submarine.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "cookbook": ["submarine"]
+            }
+        }
+    },
+    {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/delayed.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "recipe": ["delayed"]
+            }
+        }
+    },
+    {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/straight.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "recipe": ["straight"]
+            }
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "params": {
+            "recipeName": "straight"
+        },
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": {
+                "item": "straight_gen_item"
+            }
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "params": {
+            "recipeName": "delayed"
+        },
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "scheduled the recipe"
+            },
+            "property": {}
+        }
+    },
+    {
+        "action": "wait",
+        "block-interval": 2
+    },
+    {
+        "action": "check_execution",
+        "paramsRef": -1,
+        "paramsRefDescription": "-1 means just previous execution which was created, execution IDs are stacked in an array",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": {
+                "item": "delayed"
+            }
+        }
+    }
+]

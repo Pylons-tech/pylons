@@ -1,0 +1,18 @@
+{
+    "CoinInputs":null,
+    "ItemInputs":[
+        {
+            "Doubles":[{"Key":"endurance","MinValue":"100.00","MaxValue":"500.00"}],
+            "Longs":[{"Key":"HP","MinValue":"100","MaxValue":"500"}],
+            "Strings":[{
+                "Key":"Name","Value":"Raichu"
+            }]
+        }
+    ],
+    "CoinOutputs":[
+        {"denom":"pylon","amount":"1000"}
+    ],
+    "ItemOutputs":null,
+    "ExtraInfo":"",
+    "Sender":"eugen"
+}
