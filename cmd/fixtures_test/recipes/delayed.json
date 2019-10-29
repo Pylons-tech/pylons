@@ -15,5 +15,7 @@
     "ItemOutputs":null,
     "ExtraInfo":"",
     "Sender":"eugen",
-    "CookbookName": "submarine"
+    "Name": "delayed",
+    "CookbookName": "submarine",
+    "Description": "this has to meet character limits lol"
 }

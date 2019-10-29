@@ -9,6 +9,7 @@ import (
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 
+	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,7 +23,7 @@ type ItemNamesReader struct {
 type ExecuteRecipeReader struct {
 	RecipeID string
 	Sender   sdk.AccAddress
-	ItemIDs  []string
+	ItemIDs  []string `json:"ItemIDs"`
 }
 
 func ReadFile(fileURL string, t *testing.T) []byte {
@@ -90,7 +91,7 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	return newBytes
 }
 
-func UpdateItemNames(bytes []byte, t *testing.T) []byte {
+func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 	var itemNamesResp ItemNamesReader
 	if err := json.Unmarshal(bytes, &itemNamesResp); err != nil {
 		t.Error("read item names using json.Unmarshal:", err)
@@ -104,16 +105,7 @@ func UpdateItemNames(bytes []byte, t *testing.T) []byte {
 		require.True(t, err == nil)
 		ItemIDs = append(ItemIDs, itemID)
 	}
-	var raw map[string]interface{}
-	if err := json.Unmarshal(bytes, &raw); err != nil {
-		t.Error("read raw file using json.Unmarshal:", err)
-		t.Fatal(err)
-	}
-	raw["ItemIDs"] = ItemIDs
-	newBytes, err := json.Marshal(raw)
-	require.True(t, err == nil)
-	// t.Log("remarshaling into json:", string(newBytes), err)
-	return newBytes
+	return ItemIDs
 }
 
 func RunCreateCookbook(step FixtureStep, t *testing.T) {
@@ -134,10 +126,31 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 
 		// convert to msg from type
 		// This is needed b/c this msg is registered as "type":"pylons/CreateCookbook"
-		cbMsg := msgs.NewMsgCreateCookbook(cbType.Name, cbType.Description, cbType.Developer, cbType.Version, cbType.SupportEmail, cbType.Level, cbType.CostPerBlock, cbType.Sender)
+		cbMsg := msgs.NewMsgCreateCookbook(
+			cbType.Name,
+			cbType.Description,
+			cbType.Developer,
+			cbType.Version,
+			cbType.SupportEmail,
+			cbType.Level,
+			cbType.CostPerBlock,
+			cbType.Sender,
+		)
+
 		msgCCB, err := intTest.GetAminoCdc().MarshalJSON(cbMsg)
 		t.Log("msgCCB, err:", string(msgCCB), err)
-		intTest.TestTxWithMsg(t, cbMsg)
+		txhash := intTest.TestTxWithMsg(t, cbMsg)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
+
+		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		t.Log("error getting response from txhash", txhash, string(txHandleResBytes), err)
+		require.True(t, err == nil)
+		resp := handlers.CreateCBResponse{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		require.True(t, err == nil)
+		require.True(t, resp.CookbookID != "")
 	}
 }
 
@@ -163,7 +176,18 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		rcpMsg := msgs.NewMsgCreateRecipe(rcpType.Name, rcpType.CookbookID, rcpType.Description, rcpType.CoinInputs, rcpType.ItemInputs, rcpType.Entries, rcpType.BlockInterval, rcpType.Sender)
 		msgCRCP, err := intTest.GetAminoCdc().MarshalJSON(rcpMsg)
 		t.Log("msgCRCP, err:", string(msgCRCP), err)
-		intTest.TestTxWithMsg(t, rcpMsg)
+		txhash := intTest.TestTxWithMsg(t, rcpMsg)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
+
+		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		require.True(t, err == nil)
+		resp := handlers.CreateRecipeResponse{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		t.Log("CreateRCP, response and err", resp, err)
+		require.True(t, err == nil)
+		require.True(t, resp.RecipeID != "")
 	}
 }
 
@@ -173,7 +197,9 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		byteValue := ReadFile(step.ParamsRef, t)
 		newByteValue := UpdateSenderName(byteValue, t)
 		newByteValue = UpdateRecipeName(newByteValue, t)
-		newByteValue = UpdateItemNames(newByteValue, t)
+		ItemIDs := GetItemIDsFromNames(newByteValue, t)
+
+		t.Log("RunExecuteRecipe.UpdateItemNames:", string(newByteValue))
 
 		var execType ExecuteRecipeReader
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
@@ -186,10 +212,23 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		// convert to msg from type
 		// This is needed b/c this msg is registered as "type":"pylons/CreateRecipe"
-		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.ItemIDs)
+		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
 		msgERCP, err := intTest.GetAminoCdc().MarshalJSON(execMsg)
-		t.Log("msgCRCP, err:", string(msgERCP), err)
-		intTest.TestTxWithMsg(t, execMsg)
+		t.Log("msgERCP, err:", string(msgERCP), err)
+		txhash := intTest.TestTxWithMsg(t, execMsg)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)
+
+		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		t.Log("getting response from txhash", txhash, string(txHandleResBytes), err)
+		require.True(t, err == nil)
+		resp := handlers.ExecuteRecipeResp{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
+		require.True(t, err == nil)
+		require.True(t, resp.Status == step.Output.TxResult.Status)
+		require.True(t, resp.Message == step.Output.TxResult.Message)
 	}
 }
 func TestFixturesViaCLI(t *testing.T) {
