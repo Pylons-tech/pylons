@@ -44,7 +44,6 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 					types.GenEntries("chair", "Raichu"),
 					0,
 					sdkAddr))
-			// TODO check response by txhash
 
 			err = WaitForNextBlock()
 			ErrValidation(t, "error waiting for creating recipe %+v", err)

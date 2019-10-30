@@ -141,7 +141,10 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		keeper.DeleteItem(ctx, item.ID)
 	}
 
-	output := recipe.Entries.Actualize()
+	output, err := recipe.Entries.Actualize()
+	if err != nil {
+		return err.Result()
+	}
 	err = AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
 
 	if err != nil {

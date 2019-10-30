@@ -30,7 +30,7 @@
         "output": {
             "txResult": {
                 "status": "Success",
-                "message": "successfully completed the execution"
+                "message": "successfully executed the recipe"
             },
             "property": {
                 "item": "straight_gen_item"
