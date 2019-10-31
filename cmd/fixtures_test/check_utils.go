@@ -24,6 +24,7 @@ type OutputCheck struct {
 }
 type FixtureStep struct {
 	Action               string      `json:"action"`
+	BlockInterval        int64       `json:"blockInterval"`
 	ParamsRef            string      `json:"paramsRef"`
 	ParamsRefDescription string      `json:"paramsRefDescription"`
 	Output               OutputCheck `json:"output"`

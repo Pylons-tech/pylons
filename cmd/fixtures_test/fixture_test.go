@@ -26,6 +26,14 @@ type ExecuteRecipeReader struct {
 	ItemIDs  []string `json:"ItemIDs"`
 }
 
+type CheckExecutionReader struct {
+	ExecID        string
+	PayToComplete bool
+	Sender        sdk.AccAddress
+}
+
+var execIDs = []string{}
+
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)
 	if err != nil {
@@ -91,6 +99,29 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	return newBytes
 }
 
+func UpdateExecID(bytes []byte, t *testing.T) []byte {
+	var raw map[string]interface{}
+	if err := json.Unmarshal(bytes, &raw); err != nil {
+		t.Error("read raw file using json.Unmarshal:", err)
+		t.Fatal(err)
+	}
+	execRef, ok := raw["ExecRef"].(int)
+	require.True(t, ok)
+	var targetExecID string
+	if execRef < 0 {
+		targetExecID = execIDs[len(execIDs)+execRef]
+	} else {
+		targetExecID = execIDs[execRef]
+	}
+
+	raw["ExecID"] = targetExecID
+	newBytes, err := json.Marshal(raw)
+	require.True(t, err == nil)
+	// t.Log("remarshaling into json:", string(newBytes), err)
+	return newBytes
+
+}
+
 func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 	var itemNamesResp ItemNamesReader
 	if err := json.Unmarshal(bytes, &itemNamesResp); err != nil {
@@ -106,6 +137,53 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 		ItemIDs = append(ItemIDs, itemID)
 	}
 	return ItemIDs
+}
+
+func RunBlockWait(step FixtureStep, t *testing.T) {
+	intTest.WaitForBlockInterval(step.BlockInterval)
+}
+
+func RunCheckExecution(step FixtureStep, t *testing.T) {
+
+	if step.ParamsRef != "" {
+		// translate sender from account name to account address
+		byteValue := ReadFile(step.ParamsRef, t)
+		newByteValue := UpdateSenderName(byteValue, t)
+		newByteValue = UpdateExecID(newByteValue, t)
+
+		// read correct version using amino codec
+		var execType CheckExecutionReader
+		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
+		if err != nil {
+			t.Error("error reading using GetAminoCdc ", execType, err)
+			t.Fatal(err)
+		}
+		require.True(t, err == nil)
+		// t.Log("read item file:", itemType, err)
+
+		// convert to msg from type
+		// This is needed b/c this msg is registered as "type":"pylons/MsgCheckExecution"
+		chkExecMsg := msgs.NewMsgCheckExecution(
+			execType.ExecID,
+			execType.PayToComplete,
+			execType.Sender,
+		)
+		// msgFITEM, err := intTest.GetAminoCdc().MarshalJSON(chkExecMsg)
+		// t.Log("msgFITEM, err:", string(msgFITEM), err)
+		txhash := intTest.TestTxWithMsg(t, chkExecMsg)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
+
+		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		require.True(t, err == nil)
+		resp := handlers.CheckExecutionResp{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		// t.Log("MsgCheckExecution, response and err", resp, err)
+		require.True(t, err == nil)
+		require.True(t, resp.Status == step.Output.TxResult.Status)
+		require.True(t, resp.Message == step.Output.TxResult.Message)
+	}
 }
 
 func RunFiatItem(step FixtureStep, t *testing.T) {
@@ -286,7 +364,16 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, resp.Status == step.Output.TxResult.Status)
 		require.True(t, resp.Message == step.Output.TxResult.Message)
 
-		// TODO: should add checker to check items are really generated
+		if resp.Message == "scheduled the recipe" { // delayed execution
+			var scheduleRes handlers.ExecuteRecipeScheduleOutput
+
+			err := json.Unmarshal(resp.Output, &scheduleRes)
+			require.True(t, err == nil)
+			execIDs = append(execIDs, scheduleRes.ExecID)
+			t.Log("scheduled execution", scheduleRes.ExecID)
+		} else { // straight execution
+			// TODO: should add checker to check items/coins are really generated
+		}
 	}
 }
 func TestFixturesViaCLI(t *testing.T) {
@@ -307,6 +394,10 @@ func TestFixturesViaCLI(t *testing.T) {
 			RunCreateRecipe(step, t)
 		case "execute_recipe":
 			RunExecuteRecipe(step, t)
+		case "block_wait":
+			RunBlockWait(step, t)
+		case "check_execution":
+			RunCheckExecution(step, t)
 		default:
 			t.Errorf("step with unrecognizable action found %s", step.Action)
 		}

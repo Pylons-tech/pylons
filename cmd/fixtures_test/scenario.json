@@ -1,18 +1,5 @@
 [
     {
-        "action": "fiat_item",
-        "paramsRef": "./items/item1.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": {
-                "items": ["item1"]
-            }
-        }
-    },
-    {
         "action": "create_cookbook",
         "paramsRef": "./cookbooks/submarine.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
@@ -22,6 +9,19 @@
             },
             "property": {
                 "cookbooks": ["submarine"]
+            }
+        }
+    },
+    {
+        "action": "fiat_item",
+        "paramsRef": "./items/item1.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "items": ["item1"]
             }
         }
     },
@@ -47,6 +47,37 @@
             },
             "property": {
                 "item": "straight_gen_item"
+            }
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "params": {
+            "recipeName": "delayed"
+        },
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "scheduled the recipe"
+            },
+            "property": {}
+        }
+    },
+    {
+        "action": "block_wait",
+        "blockInterval": 2
+    },
+    {
+        "action": "check_execution",
+        "paramsRef": "./check_executions/check_execution.json",
+        "paramsRefDescription": "-1 means just previous execution which was created, execution IDs are stacked in an array",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": {
+                "item": "delayed"
             }
         }
     }
