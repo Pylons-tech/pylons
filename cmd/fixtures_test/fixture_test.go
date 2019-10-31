@@ -61,7 +61,7 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 		t.Fatal(err)
 	}
 	cbName, ok := raw["CookbookName"].(string)
-	t.Log("UpdateCookbookName ", raw["CookbookName"], cbName, ok)
+	// t.Log("UpdateCookbookName ", raw["CookbookName"], cbName, ok)
 	require.True(t, ok)
 	cbID, exist, err := intTest.GetCookbookIDFromName(cbName)
 	require.True(t, exist)
@@ -106,6 +106,53 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 		ItemIDs = append(ItemIDs, itemID)
 	}
 	return ItemIDs
+}
+
+func RunFiatItem(step FixtureStep, t *testing.T) {
+	// TODO should check item ID is returned
+	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
+	// TODO should check error is not happened by using txhash on all steps
+
+	if step.ParamsRef != "" {
+		// translate sender from account name to account address
+		byteValue := ReadFile(step.ParamsRef, t)
+		newByteValue := UpdateSenderName(byteValue, t)
+		newByteValue = UpdateCookbookName(newByteValue, t)
+
+		// read correct version using amino codec
+		var itemType types.Item
+		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
+		if err != nil {
+			t.Error("error reading using GetAminoCdc ", itemType, err)
+			t.Fatal(err)
+		}
+		require.True(t, err == nil)
+		// t.Log("read item file:", itemType, err)
+
+		// convert to msg from type
+		// This is needed b/c this msg is registered as "type":"pylons/FiatItem"
+		itmMsg := msgs.NewMsgFiatItem(
+			itemType.CookbookID,
+			itemType.Doubles,
+			itemType.Longs,
+			itemType.Strings,
+			itemType.Sender,
+		)
+		// msgFITEM, err := intTest.GetAminoCdc().MarshalJSON(itmMsg)
+		// t.Log("msgFITEM, err:", string(msgFITEM), err)
+		txhash := intTest.TestTxWithMsg(t, itmMsg)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
+
+		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		require.True(t, err == nil)
+		resp := handlers.FiatItemResponse{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		// t.Log("FiatITEM, response and err", resp, err)
+		require.True(t, err == nil)
+		require.True(t, resp.ItemID != "")
+	}
 }
 
 func RunCreateCookbook(step FixtureStep, t *testing.T) {
@@ -238,6 +285,8 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 		require.True(t, resp.Status == step.Output.TxResult.Status)
 		require.True(t, resp.Message == step.Output.TxResult.Message)
+
+		// TODO: should add checker to check items are really generated
 	}
 }
 func TestFixturesViaCLI(t *testing.T) {
@@ -250,6 +299,8 @@ func TestFixturesViaCLI(t *testing.T) {
 	for idx, step := range fixtureSteps {
 		t.Log("Running step id=", idx)
 		switch step.Action {
+		case "fiat_item":
+			RunFiatItem(step, t)
 		case "create_cookbook":
 			RunCreateCookbook(step, t)
 		case "create_recipe":

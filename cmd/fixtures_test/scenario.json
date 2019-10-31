@@ -1,5 +1,18 @@
 [
     {
+        "action": "fiat_item",
+        "paramsRef": "./items/item1.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "items": ["item1"]
+            }
+        }
+    },
+    {
         "action": "create_cookbook",
         "paramsRef": "./cookbooks/submarine.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
