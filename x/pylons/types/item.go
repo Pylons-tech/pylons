@@ -97,6 +97,14 @@ func (it Item) Equals(other Item) bool {
 	return it.ID == other.ID &&
 		reflect.DeepEqual(it.Doubles, other.Doubles) &&
 		reflect.DeepEqual(it.Strings, other.Strings) &&
+		reflect.DeepEqual(it.Longs, other.Longs) &&
+		reflect.DeepEqual(it.CookbookID, other.CookbookID)
+}
+
+// MatchItemInput checks if the ItemInput matches the item
+func (it Item) MatchItemInput(other ItemInput) bool {
+	return reflect.DeepEqual(it.Doubles, other.Doubles) &&
+		reflect.DeepEqual(it.Strings, other.Strings) &&
 		reflect.DeepEqual(it.Longs, other.Longs)
 }
 
