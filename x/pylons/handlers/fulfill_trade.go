@@ -14,7 +14,6 @@ import (
 type FulfillTradeResp struct {
 	Message string
 	Status  string
-	Output  []byte
 }
 
 // HandlerMsgFulfillTrade is used to fulfill a trade
