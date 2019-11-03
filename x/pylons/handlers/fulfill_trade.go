@@ -29,6 +29,11 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
+	if trade.Completed {
+		return sdk.ErrInternal("this trade is already completed").Result()
+
+	}
+
 	items, err2 := keeper.GetItemsBySender(ctx, msg.Sender)
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
@@ -54,9 +59,18 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 	}
 
-	refreshedOutputItems := types.ItemList{}
+	inputCoins := trade.CoinInputs.ToCoins()
+	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, inputCoins) {
+		return sdk.ErrInsufficientCoins("the sender doesn't have sufficient coins").Result()
+	}
+
+	if !keeper.CoinKeeper.HasCoins(ctx, trade.Sender, trade.CoinOutputs) {
+		return sdk.ErrInsufficientCoins("the trade creator doesn't have sufficient coins").Result()
+	}
 
 	// -------------------- handle Item interactions ----------------
+
+	refreshedOutputItems := types.ItemList{}
 
 	// get the items from the trade initiator
 	for _, item := range trade.ItemOutputs {
@@ -94,7 +108,29 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// ----------------- handle coin interaction ----------------------
 
-	// TODO: coin interactions
+	// trade creator to trade acceptor the coin output
+	_, err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
+
+	if err != nil {
+		// TODO: implement rollback strategy here
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
+
+	// trade acceptor to trade creator the coin input
+	_, err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
+
+	if err != nil {
+		// TODO: implement rollback strategy here
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
+
+	trade.FulFiller = msg.Sender
+	trade.Completed = true
+	err2 = keeper.SetTrade(ctx, trade)
+	if err != nil {
+		// TODO: implement rollback strategy here
+		return sdk.ErrInternal(err2.Error()).Result()
+	}
 
 	resp, err3 := json.Marshal(FulfillTradeResp{
 		Message: "successfully fulfilled the trade",
