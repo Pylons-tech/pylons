@@ -2,6 +2,7 @@ package fixtureTest
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -26,6 +27,9 @@ type ExecuteRecipeReader struct {
 	ItemIDs  []string `json:"ItemIDs"`
 }
 
+type ExecRefReader struct {
+	ExecRef int
+}
 type CheckExecutionReader struct {
 	ExecID        string
 	PayToComplete bool
@@ -89,6 +93,7 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	}
 	rcpName, ok := raw["RecipeName"].(string)
 	require.True(t, ok)
+	// t.Log("reading recipe with name", rcpName)
 	rcpID, exist, err := intTest.GetRecipeIDFromName(rcpName)
 	require.True(t, exist)
 	require.True(t, err == nil)
@@ -100,17 +105,33 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 }
 
 func UpdateExecID(bytes []byte, t *testing.T) []byte {
+	var execRefReader ExecRefReader
+	if err := json.Unmarshal(bytes, &execRefReader); err != nil {
+		t.Error("read execRef using json.Unmarshal:", err)
+		t.Fatal(err)
+	}
+
 	var raw map[string]interface{}
 	if err := json.Unmarshal(bytes, &raw); err != nil {
 		t.Error("read raw file using json.Unmarshal:", err)
 		t.Fatal(err)
 	}
-	execRef, ok := raw["ExecRef"].(int)
-	require.True(t, ok)
+	// t.Log("bytes", string(bytes))
+	// t.Log("raw parse", raw)
+	execRef := execRefReader.ExecRef
+	// t.Log("execRef", execRef, len(execIDs))
 	var targetExecID string
 	if execRef < 0 {
+		if len(execIDs) == 0 {
+			t.Errorf("there's no active execID available")
+			t.Fatal(errors.New("there's no active execID available"))
+		}
 		targetExecID = execIDs[len(execIDs)+execRef]
 	} else {
+		if len(execIDs) <= execRef {
+			t.Errorf("specified ExecRef is out of range")
+			t.Fatal(errors.New("specified ExecRef is out of range"))
+		}
 		targetExecID = execIDs[execRef]
 	}
 
@@ -322,11 +343,13 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		// t.Log("CreateRCP, response and err", resp, err)
 		require.True(t, err == nil)
 		require.True(t, resp.RecipeID != "")
+		// t.Log("created recipe", resp.RecipeID, rcpType.Name)
 	}
 }
 
 func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
+		// t.Log("Running RunExecuteRecipe ...")
 		// translate sender from account name to account address
 		byteValue := ReadFile(step.ParamsRef, t)
 		newByteValue := UpdateSenderName(byteValue, t)
@@ -364,16 +387,19 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, resp.Status == step.Output.TxResult.Status)
 		require.True(t, resp.Message == step.Output.TxResult.Message)
 
+		// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
+
 		if resp.Message == "scheduled the recipe" { // delayed execution
 			var scheduleRes handlers.ExecuteRecipeScheduleOutput
 
 			err := json.Unmarshal(resp.Output, &scheduleRes)
 			require.True(t, err == nil)
 			execIDs = append(execIDs, scheduleRes.ExecID)
-			t.Log("scheduled execution", scheduleRes.ExecID)
+			// t.Log("scheduled execution", scheduleRes.ExecID)
 		} else { // straight execution
 			// TODO: should add checker to check items/coins are really generated
 		}
+		// t.Log("Finished RunExecuteRecipe ...")
 	}
 }
 func TestFixturesViaCLI(t *testing.T) {

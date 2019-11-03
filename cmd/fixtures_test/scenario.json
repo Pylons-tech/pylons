@@ -38,6 +38,18 @@
         }
     },
     {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/delayed.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "recipe": ["delayed"]
+            }
+        }
+    },
+    {
         "action": "execute_recipe",
         "paramsRef": "./executions/straight.json",
         "output": {
@@ -52,9 +64,7 @@
     },
     {
         "action": "execute_recipe",
-        "params": {
-            "recipeName": "delayed"
-        },
+        "paramsRef": "./executions/delayed.json",
         "output": {
             "txResult": {
                 "status": "Success",

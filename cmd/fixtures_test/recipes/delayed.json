@@ -60,7 +60,7 @@
     "ItemOutputs":null,
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "straight",
+    "Name": "delayedRecipe",
     "CookbookName": "submarine",
     "Description": "this has to meet character limits lol",
     "BlockInterval":"2"
