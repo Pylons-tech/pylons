@@ -2,6 +2,8 @@ package types
 
 import (
 	"fmt"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // CoinInput is the game elements that are needs as inputs to a recipe
@@ -20,10 +22,19 @@ func (ip CoinInput) String() string {
 // CoinInputList is a list of Coin inputs
 type CoinInputList []CoinInput
 
-func (ipl CoinInputList) String() string {
+// ToCoins converts to coins
+func (cil CoinInputList) ToCoins() sdk.Coins {
+	var coins sdk.Coins
+	for _, ci := range cil {
+		coins = append(coins, sdk.NewInt64Coin(ci.Coin, ci.Count))
+	}
+	return coins
+}
+
+func (cil CoinInputList) String() string {
 	output := "CoinInputList{"
 
-	for _, input := range ipl {
+	for _, input := range cil {
 		output += input.String() + ",\n"
 	}
 
@@ -33,8 +44,8 @@ func (ipl CoinInputList) String() string {
 }
 
 // Equal compares two inputlists
-func (ipl CoinInputList) Equal(other CoinInputList) bool {
-	for _, inp := range ipl {
+func (cil CoinInputList) Equal(other CoinInputList) bool {
+	for _, inp := range cil {
 		found := false
 		for _, oinp := range other {
 			if oinp.Coin == inp.Coin && oinp.Count == inp.Count {

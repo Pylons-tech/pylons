@@ -34,6 +34,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return sdk.ErrInternal(err2.Error()).Result()
 	}
 
+	// check if the sender has all condition met
+
 	matchedItems := types.ItemList{}
 	for _, inpItem := range trade.ItemInputs {
 		matched := false
