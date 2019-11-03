@@ -20,6 +20,7 @@ func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(msgs.MsgDisableRecipe{}, "pylons/DisableRecipe", nil)
 	cdc.RegisterConcrete(msgs.MsgFiatItem{}, "pylons/FiatItem", nil)
 	cdc.RegisterConcrete(msgs.MsgCreateTrade{}, "pylons/CreateTrade", nil)
+	cdc.RegisterConcrete(msgs.MsgFulfillTrade{}, "pylons/FulfillTrade", nil)
 
 	cdc.RegisterConcrete(types.CoinOutput{}, "pylons/Recipe/CoinOutput", nil)
 	cdc.RegisterConcrete(types.ItemOutput{}, "pylons/Recipe/ItemOutput", nil)
