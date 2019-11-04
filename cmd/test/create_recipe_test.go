@@ -48,7 +48,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 			err = WaitForNextBlock()
 			ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-			txHandleResBytes, err := GetTxDetail(txhash, t)
+			txHandleResBytes, err := GetTxData(txhash, t)
 			require.True(t, err == nil)
 			resp := handlers.CreateRecipeResponse{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)

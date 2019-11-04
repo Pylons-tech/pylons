@@ -9,8 +9,9 @@ type CoinCheck struct {
 	Amount string `json:"amount"`
 }
 type TxResultCheck struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
+	Status   string `json:"status"`
+	Message  string `json:"message"`
+	ErrorLog string `json:"errLog"`
 }
 type UserPropertyCheck struct {
 	Cookbooks []string    `json:"cookbooks"`

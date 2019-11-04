@@ -90,5 +90,15 @@
                 "item": "delayed"
             }
         }
+    },
+    {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/wrong-delayed.json",
+        "output": {
+            "txResult": {
+                "errLog": "the item IDs count doesn't match the recipe input"
+            },
+            "property": {}
+        }
     }
 ]

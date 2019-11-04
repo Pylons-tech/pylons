@@ -32,6 +32,12 @@ type CheckExecutionReader struct {
 	Sender        sdk.AccAddress
 }
 
+type HumanReadableError struct {
+	Codespace string `json:"codespace"`
+	Code      int    `json:"code"`
+	Message   string `json:"message"`
+}
+
 var execIDs = []string{}
 
 func ReadFile(fileURL string, t *testing.T) []byte {

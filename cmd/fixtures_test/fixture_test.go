@@ -49,7 +49,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		txHandleResBytes, err := intTest.GetTxData(txhash, t)
 		require.True(t, err == nil)
 		resp := handlers.CheckExecutionResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -97,7 +97,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		txHandleResBytes, err := intTest.GetTxData(txhash, t)
 		require.True(t, err == nil)
 		resp := handlers.FiatItemResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -143,7 +143,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		txHandleResBytes, err := intTest.GetTxData(txhash, t)
 		// t.Log("error getting response from txhash", txhash, string(txHandleResBytes), err)
 		require.True(t, err == nil)
 		resp := handlers.CreateCBResponse{}
@@ -189,7 +189,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
+		txHandleResBytes, err := intTest.GetTxData(txhash, t)
 		require.True(t, err == nil)
 		resp := handlers.CreateRecipeResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -230,27 +230,36 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxDetail(txhash, t)
-		// t.Log("getting response from txhash", txhash, string(txHandleResBytes), err)
-		require.True(t, err == nil)
-		resp := handlers.ExecuteRecipeResp{}
-		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
-		require.True(t, err == nil)
-		require.True(t, resp.Status == step.Output.TxResult.Status)
-		require.True(t, resp.Message == step.Output.TxResult.Message)
-
-		// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
-
-		if resp.Message == "scheduled the recipe" { // delayed execution
-			var scheduleRes handlers.ExecuteRecipeScheduleOutput
-
-			err := json.Unmarshal(resp.Output, &scheduleRes)
+		txErrorBytes, err := intTest.GetTxError(txhash, t)
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+			hmrErr := HumanReadableError{}
+			err = json.Unmarshal(txErrorBytes, &hmrErr)
+			// t.Log("hmrErr.Message", hmrErr.Message, "step.Output.TxResult.ErrorLog", step.Output.TxResult.ErrorLog)
 			require.True(t, err == nil)
-			execIDs = append(execIDs, scheduleRes.ExecID)
-			// t.Log("scheduled execution", scheduleRes.ExecID)
-		} else { // straight execution
-			// TODO: should add checker to check items/coins are really generated
+			require.True(t, hmrErr.Message == step.Output.TxResult.ErrorLog)
+		} else {
+			txHandleResBytes, err := intTest.GetTxData(txhash, t)
+			// t.Log("getting response from txhash", txhash, string(txHandleResBytes), err)
+			require.True(t, err == nil)
+			resp := handlers.ExecuteRecipeResp{}
+			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
+			require.True(t, err == nil)
+			require.True(t, resp.Status == step.Output.TxResult.Status)
+			require.True(t, resp.Message == step.Output.TxResult.Message)
+
+			// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
+
+			if resp.Message == "scheduled the recipe" { // delayed execution
+				var scheduleRes handlers.ExecuteRecipeScheduleOutput
+
+				err := json.Unmarshal(resp.Output, &scheduleRes)
+				require.True(t, err == nil)
+				execIDs = append(execIDs, scheduleRes.ExecID)
+				// t.Log("scheduled execution", scheduleRes.ExecID)
+			} else { // straight execution
+				// TODO: should add checker to check items/coins are really generated
+			}
 		}
 		// t.Log("Finished RunExecuteRecipe ...")
 	}

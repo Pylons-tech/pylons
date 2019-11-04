@@ -63,7 +63,23 @@ func ListItemsViaCLI() ([]types.Item, error) {
 	return itemResp.Items, err
 }
 
-func GetTxDetail(txhash string, t *testing.T) ([]byte, error) {
+func GetTxError(txhash string, t *testing.T) ([]byte, error) {
+	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	if err != nil {
+		return []byte{}, err
+	}
+	var tx sdk.TxResponse
+	err = GetAminoCdc().UnmarshalJSON([]byte(output), &tx)
+	if err != nil {
+		return []byte{}, err
+	}
+	if len(tx.Logs) > 0 {
+		return []byte(tx.Logs[0].Log), nil
+	}
+	return []byte{}, nil
+}
+
+func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
 		return []byte{}, err

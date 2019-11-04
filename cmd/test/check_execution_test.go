@@ -86,7 +86,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				WaitForNextBlock()
 			}
 
-			txHandleResBytes, err := GetTxDetail(txhash, t)
+			txHandleResBytes, err := GetTxData(txhash, t)
 			require.True(t, err == nil)
 			execResp := handlers.ExecuteRecipeResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
@@ -102,7 +102,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			WaitForNextBlock()
 
-			txHandleResBytes, err = GetTxDetail(txhash, t)
+			txHandleResBytes, err = GetTxData(txhash, t)
 			require.True(t, err == nil)
 			resp := handlers.CheckExecutionResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
