@@ -1,12 +1,16 @@
 package fixtureTest
 
+import (
+	"github.com/MikeSofaer/pylons/x/pylons/types"
+)
+
 type ItemCheck struct {
-	StringKeys   []string          `json:"stringKeys"`
-	StringValues map[string]string `json:"stringValues"`
-	DblKeys      []string          `json:"dblKeys"`
-	DblValues    map[string]string `json:"dblValues"`
-	LongKeys     []string          `json:"longKeys"`
-	LongValues   map[string]int    `json:"longValues"`
+	StringKeys   []string                     `json:"stringKeys"`
+	StringValues map[string]string            `json:"stringValues"`
+	DblKeys      []string                     `json:"dblKeys"`
+	DblValues    map[string]types.FloatString `json:"dblValues"`
+	LongKeys     []string                     `json:"longKeys"`
+	LongValues   map[string]int               `json:"longValues"`
 }
 type CoinCheck struct {
 	Name   string `json:"name"`

@@ -13,28 +13,94 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func CheckItemWithStringKeys(item types.Item, stringKeys []string) (bool, error) {
-	return true, nil
+func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
+	for _, sK := range stringKeys {
+		keyExist := false
+		for _, sKV := range item.Strings {
+			if sK == sKV.Key {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
 }
 
-func CheckItemWithStringValues(item types.Item, stringKeys map[string]string) (bool, error) {
-	return true, nil
+func CheckItemWithStringValues(item types.Item, stringValues map[string]string) bool {
+	for sK, sV := range stringValues {
+		keyExist := false
+		for _, sKV := range item.Strings {
+			if sK == sKV.Key && sV == sKV.Value {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
 }
 
-func CheckItemWithDblKeys(item types.Item, stringKeys []string) (bool, error) {
-	return true, nil
+func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
+	for _, sK := range dblKeys {
+		keyExist := false
+		for _, sKV := range item.Doubles {
+			if sK == sKV.Key {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
 }
 
-func CheckItemWithDblValues(item types.Item, stringKeys map[string]string) (bool, error) {
-	return true, nil
+func CheckItemWithDblValues(item types.Item, dblValues map[string]types.FloatString) bool {
+	for sK, sV := range dblValues {
+		keyExist := false
+		for _, sKV := range item.Doubles {
+			if sK == sKV.Key && sV == sKV.Value {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
 }
 
-func CheckItemWithLongKeys(item types.Item, stringKeys []string) (bool, error) {
-	return true, nil
+func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
+	for _, sK := range longKeys {
+		keyExist := false
+		for _, sKV := range item.Longs {
+			if sK == sKV.Key {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
 }
 
-func CheckItemWithLongValues(item types.Item, stringKeys map[string]int) (bool, error) {
-	return true, nil
+func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
+	for sK, sV := range longValues {
+		keyExist := false
+		for _, sKV := range item.Longs {
+			if sK == sKV.Key && sV == sKV.Value {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
 }
 
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
@@ -77,28 +143,33 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 			items, err := intTest.ListItemsViaCLI()
 			intTest.ErrValidation(t, "error listing items %+v", err)
 			for _, item := range items {
-				ok, err := CheckItemWithStringKeys(item, itemCheck.StringKeys)
-				intTest.ErrValidation(t, "error checking item with string keys %+v", err)
+				ok := CheckItemWithStringKeys(item, itemCheck.StringKeys)
+				t.Log("CheckItemWithStringKeys check", ok)
 				if !ok {
 					continue
 				}
-				ok, err = CheckItemWithStringValues(item, itemCheck.StringValues)
+				ok = CheckItemWithStringValues(item, itemCheck.StringValues)
+				t.Log("CheckItemWithStringValues check", ok)
 				if !ok {
 					continue
 				}
-				ok, err = CheckItemWithDblKeys(item, itemCheck.DblKeys)
+				ok = CheckItemWithDblKeys(item, itemCheck.DblKeys)
+				t.Log("CheckItemWithDblKeys check", ok)
 				if !ok {
 					continue
 				}
-				ok, err = CheckItemWithDblValues(item, itemCheck.DblValues)
+				ok = CheckItemWithDblValues(item, itemCheck.DblValues)
+				t.Log("CheckItemWithDblValues check", ok)
 				if !ok {
 					continue
 				}
-				ok, err = CheckItemWithLongKeys(item, itemCheck.LongKeys)
+				ok = CheckItemWithLongKeys(item, itemCheck.LongKeys)
+				t.Log("CheckItemWithLongKeys check", ok)
 				if !ok {
 					continue
 				}
-				ok, err = CheckItemWithLongValues(item, itemCheck.LongValues)
+				ok = CheckItemWithLongValues(item, itemCheck.LongValues)
+				t.Log("CheckItemWithLongValues check", ok)
 				if !ok {
 					continue
 				}
@@ -377,7 +448,7 @@ func TestFixturesViaCLI(t *testing.T) {
 	// t.Log("read steps:", fixtureSteps)
 
 	for idx, step := range fixtureSteps {
-		t.Log("Running step id=", idx)
+		t.Log("Running step id=", idx, step)
 		switch step.Action {
 		case "fiat_item":
 			RunFiatItem(step, t)
