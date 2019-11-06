@@ -1,8 +1,12 @@
 package fixtureTest
 
 type ItemCheck struct {
-	Name  string `json:"name"`
-	Count string `json:"count"`
+	StringKeys   []string          `json:"stringKeys"`
+	StringValues map[string]string `json:"stringValues"`
+	DblKeys      []string          `json:"dblKeys"`
+	DblValues    map[string]string `json:"dblValues"`
+	LongKeys     []string          `json:"longKeys"`
+	LongValues   map[string]int    `json:"longValues"`
 }
 type CoinCheck struct {
 	Name   string `json:"name"`

@@ -13,6 +13,111 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func CheckItemWithStringKeys(item types.Item, stringKeys []string) (bool, error) {
+	return true, nil
+}
+
+func CheckItemWithStringValues(item types.Item, stringKeys map[string]string) (bool, error) {
+	return true, nil
+}
+
+func CheckItemWithDblKeys(item types.Item, stringKeys []string) (bool, error) {
+	return true, nil
+}
+
+func CheckItemWithDblValues(item types.Item, stringKeys map[string]string) (bool, error) {
+	return true, nil
+}
+
+func CheckItemWithLongKeys(item types.Item, stringKeys []string) (bool, error) {
+	return true, nil
+}
+
+func CheckItemWithLongValues(item types.Item, stringKeys map[string]int) (bool, error) {
+	return true, nil
+}
+
+func PropertyExistCheck(step FixtureStep, t *testing.T) {
+
+	pCheck := step.Output.Property
+	if len(pCheck.Cookbooks) > 0 {
+		for idx, cbName := range pCheck.Cookbooks {
+			t.Log("Checking cookbook exist with name=", cbName, "id=", idx)
+			_, exist, err := intTest.CheckCookbookExist() // TODO should check by name
+			if err != nil {
+				t.Error("error checking cookbook exist", err)
+				t.Fatal(err)
+			}
+			if exist {
+				t.Log("checked existance")
+			} else {
+				t.Error("cookbook with name=", cbName, "does not exist")
+				t.Fatal("cookbook does not exist")
+			}
+		}
+	}
+	if len(pCheck.Recipes) > 0 {
+		for idx, rcpName := range pCheck.Recipes {
+			t.Log("Checking cookbook exist with name=", rcpName, "id=", idx)
+			guid, err := intTest.GetRecipeGUIDFromName(rcpName)
+			intTest.ErrValidation(t, "error checking if recipe already exist %+v", err)
+
+			if len(guid) > 0 {
+				t.Log("checked existance")
+			} else {
+				t.Error("recipe with name=", rcpName, "does not exist")
+				t.Fatal("recipe does not exist")
+			}
+		}
+	}
+	if len(pCheck.Items) > 0 {
+		for idx, itemCheck := range pCheck.Items {
+			fitItemExist := false
+			t.Log("Checking item with spec=", itemCheck, "id=", idx)
+			items, err := intTest.ListItemsViaCLI()
+			intTest.ErrValidation(t, "error listing items %+v", err)
+			for _, item := range items {
+				ok, err := CheckItemWithStringKeys(item, itemCheck.StringKeys)
+				intTest.ErrValidation(t, "error checking item with string keys %+v", err)
+				if !ok {
+					continue
+				}
+				ok, err = CheckItemWithStringValues(item, itemCheck.StringValues)
+				if !ok {
+					continue
+				}
+				ok, err = CheckItemWithDblKeys(item, itemCheck.DblKeys)
+				if !ok {
+					continue
+				}
+				ok, err = CheckItemWithDblValues(item, itemCheck.DblValues)
+				if !ok {
+					continue
+				}
+				ok, err = CheckItemWithLongKeys(item, itemCheck.LongKeys)
+				if !ok {
+					continue
+				}
+				ok, err = CheckItemWithLongValues(item, itemCheck.LongValues)
+				if !ok {
+					continue
+				}
+				fitItemExist = true
+			}
+			intTest.ErrValidation(t, "error checking items with string keys %+v", err)
+
+			if fitItemExist {
+				t.Log("checked item existence")
+			} else {
+				t.Error("no item exist which fit item spec")
+				t.Fatal("no item exist which fit item spec")
+			}
+		}
+	}
+	if len(pCheck.Coins) > 0 {
+
+	}
+}
 func RunBlockWait(step FixtureStep, t *testing.T) {
 	intTest.WaitForBlockInterval(step.BlockInterval)
 }
@@ -276,16 +381,22 @@ func TestFixturesViaCLI(t *testing.T) {
 		switch step.Action {
 		case "fiat_item":
 			RunFiatItem(step, t)
+			PropertyExistCheck(step, t)
 		case "create_cookbook":
 			RunCreateCookbook(step, t)
+			PropertyExistCheck(step, t)
 		case "create_recipe":
 			RunCreateRecipe(step, t)
+			PropertyExistCheck(step, t)
 		case "execute_recipe":
 			RunExecuteRecipe(step, t)
+			PropertyExistCheck(step, t)
 		case "block_wait":
 			RunBlockWait(step, t)
+			PropertyExistCheck(step, t)
 		case "check_execution":
 			RunCheckExecution(step, t)
+			PropertyExistCheck(step, t)
 		default:
 			t.Errorf("step with unrecognizable action found %s", step.Action)
 		}

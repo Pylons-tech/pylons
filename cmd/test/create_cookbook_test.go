@@ -39,7 +39,6 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				0,
 				msgs.DefaultCostPerBlock,
 				sdkAddr))
-			// TODO check response by txhash
 
 			err = WaitForNextBlock()
 			ErrValidation(t, "error waiting for creating cookbook %+v", err)

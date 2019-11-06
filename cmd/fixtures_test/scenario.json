@@ -21,7 +21,16 @@
                 "status": "Success"
             },
             "property": {
-                "items": ["item1"]
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": [{ "name": "item1" }],
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
             }
         }
     },
@@ -33,7 +42,7 @@
                 "status": "Success"
             },
             "property": {
-                "recipe": ["straight"]
+                "recipes": ["straight"]
             }
         }
     },
@@ -45,7 +54,7 @@
                 "status": "Success"
             },
             "property": {
-                "recipe": ["delayed"]
+                "recipes": ["delayedRecipe"]
             }
         }
     },
@@ -58,7 +67,16 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "item": "straight_gen_item"
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": [{ "name": "straight_gen_item" }],
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
             }
         }
     },
