@@ -10,6 +10,8 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/stretchr/testify/require"
 )
 
@@ -19,7 +21,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	if len(pCheck.Cookbooks) > 0 {
 		for idx, cbName := range pCheck.Cookbooks {
 			t.Log("Checking cookbook exist with name=", cbName, "id=", idx)
-			_, exist, err := intTest.GetCookbookIDFromName(cbName) // TODO should check by name
+			_, exist, err := intTest.GetCookbookIDFromName(cbName)
 			if err != nil {
 				t.Error("error checking cookbook exist", err)
 				t.Fatal(err)
@@ -90,7 +92,10 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		}
 	}
 	if len(pCheck.Coins) > 0 {
-		// TODO should add coin checker
+		accInfo := intTest.GetAccountInfo("eugen", t)
+		for _, coinCheck := range pCheck.Coins {
+			require.True(t, accInfo.Coins.AmountOf(coinCheck.Name).GTE(sdk.NewInt(coinCheck.Amount)))
+		}
 	}
 }
 func RunBlockWait(step FixtureStep, t *testing.T) {
@@ -136,8 +141,6 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 }
 
 func RunFiatItem(step FixtureStep, t *testing.T) {
-	// TODO should check item ID is returned
-	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
 
 	if step.ParamsRef != "" {
 		byteValue := ReadFile(step.ParamsRef, t)
@@ -258,6 +261,9 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 }
 
 func RunExecuteRecipe(step FixtureStep, t *testing.T) {
+	// TODO should check item ID is returned
+	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
+
 	if step.ParamsRef != "" {
 		byteValue := ReadFile(step.ParamsRef, t)
 		// translate sender from account name to account address

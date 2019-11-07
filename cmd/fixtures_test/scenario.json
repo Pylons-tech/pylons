@@ -59,6 +59,18 @@
         }
     },
     {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "recipes": ["coinRecipe"]
+            }
+        }
+    },
+    {
         "action": "execute_recipe",
         "paramsRef": "./executions/straight.json",
         "output": {
@@ -105,7 +117,16 @@
                 "message": "successfully completed the execution"
             },
             "property": {
-                "item": "delayed"
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "delayed_gen_item" },
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
             }
         }
     },
@@ -117,6 +138,24 @@
                 "errLog": "the item IDs count doesn't match the recipe input"
             },
             "property": {}
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": {
+                "coins": [
+                    {
+                        "denom": "generatedcoin",
+                        "amount": 1
+                    }
+                ]
+            }
         }
     }
 ]

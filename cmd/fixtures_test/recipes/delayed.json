@@ -2,13 +2,7 @@
     "CoinInputs":[],
     "ItemInputs":[],
     "Entries":{
-        "CoinOutputs":[
-            {
-                "Coin":"chair",
-                "Count":1,
-                "Weight":1
-            }
-        ],
+        "CoinOutputs":[],
         "ItemOutputs":[
             {
                 "Doubles":[
@@ -49,7 +43,7 @@
                 "Strings":[
                     {
                         "Key":"Name",
-                        "Value":"delayed",
+                        "Value":"delayed_gen_item",
                         "Rate":"1.0"
                     }
                 ],
@@ -57,7 +51,6 @@
             }
         ]
     },
-    "ItemOutputs":null,
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "delayedRecipe",

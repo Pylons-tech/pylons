@@ -13,8 +13,8 @@ type ItemCheck struct {
 	LongValues   map[string]int               `json:"longValues"`
 }
 type CoinCheck struct {
-	Name   string `json:"name"`
-	Amount string `json:"amount"`
+	Name   string `json:"denom"`
+	Amount int64  `json:"amount"`
 }
 type TxResultCheck struct {
 	Status   string `json:"status"`
