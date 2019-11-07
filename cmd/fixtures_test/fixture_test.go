@@ -30,6 +30,7 @@ func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
 
 func CheckItemWithStringValues(item types.Item, stringValues map[string]string) bool {
 	for sK, sV := range stringValues {
+		// t.Log("sK, sV", sK, sV)
 		keyExist := false
 		for _, sKV := range item.Strings {
 			if sK == sKV.Key && sV == sKV.Value {
@@ -434,6 +435,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				execIDs = append(execIDs, scheduleRes.ExecID)
 				// t.Log("scheduled execution", scheduleRes.ExecID)
 			} else { // straight execution
+				t.Log("straight execution result output", string(resp.Output))
 				// TODO: should add checker to check items/coins are really generated
 			}
 		}

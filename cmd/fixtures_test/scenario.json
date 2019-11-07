@@ -24,7 +24,7 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "name": "item1" },
+                        "stringValues": { "Name": "item1" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
@@ -70,7 +70,7 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "name": "straight_gen_item" },
+                        "stringValues": { "Name": "straight_gen_item" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
