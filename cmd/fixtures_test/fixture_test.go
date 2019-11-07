@@ -138,7 +138,6 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 func RunFiatItem(step FixtureStep, t *testing.T) {
 	// TODO should check item ID is returned
 	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
-	// TODO should check error is not happened by using txhash on all steps
 
 	if step.ParamsRef != "" {
 		byteValue := ReadFile(step.ParamsRef, t)
