@@ -96,6 +96,15 @@ func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	return bs, nil
 }
 
+func FindCookbookFromArrayByName(cbList []types.Cookbook, name string) (types.Cookbook, bool) {
+	for _, cb := range cbList {
+		if cb.Name == name {
+			return cb, true
+		}
+	}
+	return types.Cookbook{}, false
+}
+
 func FindRecipeFromArrayByName(recipes []types.Recipe, name string) (types.Recipe, bool) {
 	for _, rcp := range recipes {
 		if rcp.Name == name {
@@ -143,10 +152,9 @@ func GetCookbookIDFromName(cbName string) (string, bool, error) {
 	if err != nil {
 		return "", false, err
 	}
-	if len(cbList) > 0 {
-		return cbList[0].ID, true, nil
-	}
-	return "", false, nil
+
+	cb, exist := FindCookbookFromArrayByName(cbList, cbName)
+	return cb.ID, exist, nil
 }
 
 func GetRecipeIDFromName(rcpName string) (string, bool, error) {

@@ -19,7 +19,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	if len(pCheck.Cookbooks) > 0 {
 		for idx, cbName := range pCheck.Cookbooks {
 			t.Log("Checking cookbook exist with name=", cbName, "id=", idx)
-			_, exist, err := intTest.CheckCookbookExist() // TODO should check by name
+			_, exist, err := intTest.GetCookbookIDFromName(cbName) // TODO should check by name
 			if err != nil {
 				t.Error("error checking cookbook exist", err)
 				t.Fatal(err)
