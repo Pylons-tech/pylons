@@ -38,3 +38,93 @@ type FixtureStep struct {
 	ParamsRefDescription string      `json:"paramsRefDescription"`
 	Output               OutputCheck `json:"output"`
 }
+
+func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
+	for _, sK := range stringKeys {
+		keyExist := false
+		for _, sKV := range item.Strings {
+			if sK == sKV.Key {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
+}
+
+func CheckItemWithStringValues(item types.Item, stringValues map[string]string) bool {
+	for sK, sV := range stringValues {
+		keyExist := false
+		for _, sKV := range item.Strings {
+			if sK == sKV.Key && sV == sKV.Value {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
+}
+
+func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
+	for _, sK := range dblKeys {
+		keyExist := false
+		for _, sKV := range item.Doubles {
+			if sK == sKV.Key {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
+}
+
+func CheckItemWithDblValues(item types.Item, dblValues map[string]types.FloatString) bool {
+	for sK, sV := range dblValues {
+		keyExist := false
+		for _, sKV := range item.Doubles {
+			if sK == sKV.Key && sV == sKV.Value {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
+}
+
+func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
+	for _, sK := range longKeys {
+		keyExist := false
+		for _, sKV := range item.Longs {
+			if sK == sKV.Key {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
+}
+
+func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
+	for sK, sV := range longValues {
+		keyExist := false
+		for _, sKV := range item.Longs {
+			if sK == sKV.Key && sV == sKV.Value {
+				keyExist = true
+			}
+		}
+		if !keyExist {
+			return false
+		}
+	}
+	return true
+}

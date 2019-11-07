@@ -13,97 +13,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
-	for _, sK := range stringKeys {
-		keyExist := false
-		for _, sKV := range item.Strings {
-			if sK == sKV.Key {
-				keyExist = true
-			}
-		}
-		if !keyExist {
-			return false
-		}
-	}
-	return true
-}
-
-func CheckItemWithStringValues(item types.Item, stringValues map[string]string) bool {
-	for sK, sV := range stringValues {
-		// t.Log("sK, sV", sK, sV)
-		keyExist := false
-		for _, sKV := range item.Strings {
-			if sK == sKV.Key && sV == sKV.Value {
-				keyExist = true
-			}
-		}
-		if !keyExist {
-			return false
-		}
-	}
-	return true
-}
-
-func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
-	for _, sK := range dblKeys {
-		keyExist := false
-		for _, sKV := range item.Doubles {
-			if sK == sKV.Key {
-				keyExist = true
-			}
-		}
-		if !keyExist {
-			return false
-		}
-	}
-	return true
-}
-
-func CheckItemWithDblValues(item types.Item, dblValues map[string]types.FloatString) bool {
-	for sK, sV := range dblValues {
-		keyExist := false
-		for _, sKV := range item.Doubles {
-			if sK == sKV.Key && sV == sKV.Value {
-				keyExist = true
-			}
-		}
-		if !keyExist {
-			return false
-		}
-	}
-	return true
-}
-
-func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
-	for _, sK := range longKeys {
-		keyExist := false
-		for _, sKV := range item.Longs {
-			if sK == sKV.Key {
-				keyExist = true
-			}
-		}
-		if !keyExist {
-			return false
-		}
-	}
-	return true
-}
-
-func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
-	for sK, sV := range longValues {
-		keyExist := false
-		for _, sKV := range item.Longs {
-			if sK == sKV.Key && sV == sKV.Value {
-				keyExist = true
-			}
-		}
-		if !keyExist {
-			return false
-		}
-	}
-	return true
-}
-
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
 
 	pCheck := step.Output.Property
@@ -125,7 +34,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 	if len(pCheck.Recipes) > 0 {
 		for idx, rcpName := range pCheck.Recipes {
-			t.Log("Checking cookbook exist with name=", rcpName, "id=", idx)
+			t.Log("Checking recipe exist with name=", rcpName, "id=", idx)
 			guid, err := intTest.GetRecipeGUIDFromName(rcpName)
 			intTest.ErrValidation(t, "error checking if recipe already exist %+v", err)
 
@@ -145,32 +54,26 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 			intTest.ErrValidation(t, "error listing items %+v", err)
 			for _, item := range items {
 				ok := CheckItemWithStringKeys(item, itemCheck.StringKeys)
-				t.Log("CheckItemWithStringKeys check", ok)
 				if !ok {
 					continue
 				}
 				ok = CheckItemWithStringValues(item, itemCheck.StringValues)
-				t.Log("CheckItemWithStringValues check", ok)
 				if !ok {
 					continue
 				}
 				ok = CheckItemWithDblKeys(item, itemCheck.DblKeys)
-				t.Log("CheckItemWithDblKeys check", ok)
 				if !ok {
 					continue
 				}
 				ok = CheckItemWithDblValues(item, itemCheck.DblValues)
-				t.Log("CheckItemWithDblValues check", ok)
 				if !ok {
 					continue
 				}
 				ok = CheckItemWithLongKeys(item, itemCheck.LongKeys)
-				t.Log("CheckItemWithLongKeys check", ok)
 				if !ok {
 					continue
 				}
 				ok = CheckItemWithLongValues(item, itemCheck.LongValues)
-				t.Log("CheckItemWithLongValues check", ok)
 				if !ok {
 					continue
 				}
@@ -187,7 +90,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		}
 	}
 	if len(pCheck.Coins) > 0 {
-
+		// TODO should add coin checker
 	}
 }
 func RunBlockWait(step FixtureStep, t *testing.T) {
@@ -197,12 +100,12 @@ func RunBlockWait(step FixtureStep, t *testing.T) {
 func RunCheckExecution(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
-		// translate sender from account name to account address
 		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
 		newByteValue := UpdateSenderName(byteValue, t)
+		// translate execRef to execID
 		newByteValue = UpdateExecID(newByteValue, t)
 
-		// read correct version using amino codec
 		var execType CheckExecutionReader
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
@@ -210,17 +113,12 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
-		// t.Log("read item file:", itemType, err)
 
-		// convert to msg from type
-		// This is needed b/c this msg is registered as "type":"pylons/MsgCheckExecution"
 		chkExecMsg := msgs.NewMsgCheckExecution(
 			execType.ExecID,
 			execType.PayToComplete,
 			execType.Sender,
 		)
-		// msgFITEM, err := intTest.GetAminoCdc().MarshalJSON(chkExecMsg)
-		// t.Log("msgFITEM, err:", string(msgFITEM), err)
 		txhash := intTest.TestTxWithMsg(t, chkExecMsg)
 
 		err = intTest.WaitForNextBlock()
@@ -230,7 +128,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 		resp := handlers.CheckExecutionResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		// t.Log("MsgCheckExecution, response and err", resp, err)
+
 		require.True(t, err == nil)
 		require.True(t, resp.Status == step.Output.TxResult.Status)
 		require.True(t, resp.Message == step.Output.TxResult.Message)
@@ -243,12 +141,12 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 	// TODO should check error is not happened by using txhash on all steps
 
 	if step.ParamsRef != "" {
-		// translate sender from account name to account address
 		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
 		newByteValue := UpdateSenderName(byteValue, t)
+		// translate cookbook name to cookbook ID
 		newByteValue = UpdateCookbookName(newByteValue, t)
 
-		// read correct version using amino codec
 		var itemType types.Item
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
 		if err != nil {
@@ -256,10 +154,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
-		// t.Log("read item file:", itemType, err)
 
-		// convert to msg from type
-		// This is needed b/c this msg is registered as "type":"pylons/FiatItem"
 		itmMsg := msgs.NewMsgFiatItem(
 			itemType.CookbookID,
 			itemType.Doubles,
@@ -267,8 +162,6 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			itemType.Strings,
 			itemType.Sender,
 		)
-		// msgFITEM, err := intTest.GetAminoCdc().MarshalJSON(itmMsg)
-		// t.Log("msgFITEM, err:", string(msgFITEM), err)
 		txhash := intTest.TestTxWithMsg(t, itmMsg)
 
 		err = intTest.WaitForNextBlock()
@@ -278,7 +171,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 		resp := handlers.FiatItemResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		// t.Log("FiatITEM, response and err", resp, err)
+
 		require.True(t, err == nil)
 		require.True(t, resp.ItemID != "")
 	}
@@ -286,11 +179,10 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 
 func RunCreateCookbook(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
-		// translate sender from account name to account address
 		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
 		newByteValue := UpdateSenderName(byteValue, t)
 
-		// read correct version using amino codec
 		var cbType types.Cookbook
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
 		if err != nil {
@@ -298,10 +190,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
-		// t.Log("read cookbook file:", cbType, err)
 
-		// convert to msg from type
-		// This is needed b/c this msg is registered as "type":"pylons/CreateCookbook"
 		cbMsg := msgs.NewMsgCreateCookbook(
 			cbType.Name,
 			cbType.Description,
@@ -313,15 +202,13 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			cbType.Sender,
 		)
 
-		// msgCCB, err := intTest.GetAminoCdc().MarshalJSON(cbMsg)
-		// t.Log("msgCCB, err:", string(msgCCB), err)
 		txhash := intTest.TestTxWithMsg(t, cbMsg)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
 		txHandleResBytes, err := intTest.GetTxData(txhash, t)
-		// t.Log("error getting response from txhash", txhash, string(txHandleResBytes), err)
+
 		require.True(t, err == nil)
 		resp := handlers.CreateCBResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -332,12 +219,12 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 
 func RunCreateRecipe(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
-		// translate sender from account name to account address
 		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
 		newByteValue := UpdateSenderName(byteValue, t)
+		// translate cookbook name to cookbook id
 		newByteValue = UpdateCookbookName(newByteValue, t)
 
-		// read correct version using amino codec
 		var rcpType types.Recipe
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpType)
 		if err != nil {
@@ -345,10 +232,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
-		// t.Log("read recipe file:", rcpType, err)
 
-		// convert to msg from type
-		// This is needed b/c this msg is registered as "type":"pylons/CreateRecipe"
 		rcpMsg := msgs.NewMsgCreateRecipe(
 			rcpType.Name,
 			rcpType.CookbookID,
@@ -359,8 +243,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.BlockInterval,
 			rcpType.Sender,
 		)
-		// msgCRCP, err := intTest.GetAminoCdc().MarshalJSON(rcpMsg)
-		// t.Log("msgCRCP, err:", string(msgCRCP), err)
+
 		txhash := intTest.TestTxWithMsg(t, rcpMsg)
 
 		err = intTest.WaitForNextBlock()
@@ -370,23 +253,20 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 		resp := handlers.CreateRecipeResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		// t.Log("CreateRCP, response and err", resp, err)
 		require.True(t, err == nil)
 		require.True(t, resp.RecipeID != "")
-		// t.Log("created recipe", resp.RecipeID, rcpType.Name)
 	}
 }
 
 func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
-		// t.Log("Running RunExecuteRecipe ...")
-		// translate sender from account name to account address
 		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
 		newByteValue := UpdateSenderName(byteValue, t)
+		// translate recipe name to recipe id
 		newByteValue = UpdateRecipeName(newByteValue, t)
+		// translate itemNames to itemIDs
 		ItemIDs := GetItemIDsFromNames(newByteValue, t)
-
-		// t.Log("RunExecuteRecipe.UpdateItemNames:", string(newByteValue))
 
 		var execType ExecuteRecipeReader
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
@@ -395,13 +275,8 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
-		// t.Log("read execute_recipe file:", execType, err)
 
-		// convert to msg from type
-		// This is needed b/c this msg is registered as "type":"pylons/CreateRecipe"
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
-		// msgERCP, err := intTest.GetAminoCdc().MarshalJSON(execMsg)
-		// t.Log("msgERCP, err:", string(msgERCP), err)
 		txhash := intTest.TestTxWithMsg(t, execMsg)
 
 		err = intTest.WaitForNextBlock()
@@ -411,21 +286,16 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			hmrErr := HumanReadableError{}
 			err = json.Unmarshal(txErrorBytes, &hmrErr)
-			// t.Log("hmrErr.Message", hmrErr.Message, "step.Output.TxResult.ErrorLog", step.Output.TxResult.ErrorLog)
 			require.True(t, err == nil)
 			require.True(t, hmrErr.Message == step.Output.TxResult.ErrorLog)
 		} else {
 			txHandleResBytes, err := intTest.GetTxData(txhash, t)
-			// t.Log("getting response from txhash", txhash, string(txHandleResBytes), err)
 			require.True(t, err == nil)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
 			require.True(t, err == nil)
 			require.True(t, resp.Status == step.Output.TxResult.Status)
 			require.True(t, resp.Message == step.Output.TxResult.Message)
-
-			// t.Log("ExecuteRCP, response and err", string(txHandleResBytes), resp, err)
 
 			if resp.Message == "scheduled the recipe" { // delayed execution
 				var scheduleRes handlers.ExecuteRecipeScheduleOutput
@@ -433,13 +303,11 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				err := json.Unmarshal(resp.Output, &scheduleRes)
 				require.True(t, err == nil)
 				execIDs = append(execIDs, scheduleRes.ExecID)
-				// t.Log("scheduled execution", scheduleRes.ExecID)
+				t.Log("scheduled execution", scheduleRes.ExecID)
 			} else { // straight execution
 				t.Log("straight execution result output", string(resp.Output))
-				// TODO: should add checker to check items/coins are really generated
 			}
 		}
-		// t.Log("Finished RunExecuteRecipe ...")
 	}
 }
 func TestFixturesViaCLI(t *testing.T) {
@@ -447,7 +315,6 @@ func TestFixturesViaCLI(t *testing.T) {
 	var fixtureSteps []FixtureStep
 	byteValue := ReadFile("scenario.json", t)
 	json.Unmarshal([]byte(byteValue), &fixtureSteps)
-	// t.Log("read steps:", fixtureSteps)
 
 	for idx, step := range fixtureSteps {
 		t.Log("Running step id=", idx, step)
