@@ -3,6 +3,8 @@ package types
 import (
 	"encoding/json"
 	"math/rand"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // WeightedParam is to make structs which is using weight to be based on
@@ -31,12 +33,15 @@ func (wpl WeightedParamList) String() string {
 	return itm
 }
 
-func (wpl WeightedParamList) Actualize() WeightedParam {
+func (wpl WeightedParamList) Actualize() (WeightedParam, sdk.Error) {
 	lastWeight := 0
 	var weights []int
 	for _, wp := range wpl {
 		lastWeight += wp.GetWeight()
 		weights = append(weights, lastWeight)
+	}
+	if lastWeight == 0 {
+		return nil, sdk.ErrInternal("total weight of weighted param list shouldn't be zero")
 	}
 	randWeight := rand.Intn(lastWeight)
 
@@ -49,7 +54,7 @@ func (wpl WeightedParamList) Actualize() WeightedParam {
 		}
 		first = weight
 	}
-	return wpl[chosenIndex]
+	return wpl[chosenIndex], nil
 }
 
 func (wpl WeightedParamList) MarshalJSON() ([]byte, error) {

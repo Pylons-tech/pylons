@@ -1,4 +1,4 @@
-package main
+package intTest
 
 import (
 	"encoding/json"
@@ -86,7 +86,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				WaitForNextBlock()
 			}
 
-			txHandleResBytes, err := GetTxDetail(txhash, t)
+			txHandleResBytes, err := GetTxData(txhash, t)
 			require.True(t, err == nil)
 			execResp := handlers.ExecuteRecipeResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
@@ -102,7 +102,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			WaitForNextBlock()
 
-			txHandleResBytes, err = GetTxDetail(txhash, t)
+			txHandleResBytes, err = GetTxData(txhash, t)
 			require.True(t, err == nil)
 			resp := handlers.CheckExecutionResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -111,7 +111,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, resp.Message == tc.expectedMessage)
 
 			// Here desiredItemName should be different across tests cases and across test files
-			items, err := ListItemsViaCLI(t)
+			items, err := ListItemsViaCLI()
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)

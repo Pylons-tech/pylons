@@ -1,4 +1,4 @@
-package main
+package intTest
 
 import (
 	"encoding/hex"
@@ -50,7 +50,7 @@ func ListExecutionsViaCLI(t *testing.T) ([]types.Execution, error) {
 	return listExecutionsResp.Executions, err
 }
 
-func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
+func ListItemsViaCLI() ([]types.Item, error) {
 	output, err := RunPylonsCli([]string{"query", "pylons", "items_by_sender"}, "")
 	if err != nil {
 		return []types.Item{}, err
@@ -58,13 +58,28 @@ func ListItemsViaCLI(t *testing.T) ([]types.Item, error) {
 	var itemResp queriers.ItemResp
 	err = GetAminoCdc().UnmarshalJSON(output, &itemResp)
 	if err != nil {
-		t.Errorf("error unmarshaling itemResp ::: %+v ::: %+v", string(output), err)
 		return []types.Item{}, err
 	}
 	return itemResp.Items, err
 }
 
-func GetTxDetail(txhash string, t *testing.T) ([]byte, error) {
+func GetTxError(txhash string, t *testing.T) ([]byte, error) {
+	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	if err != nil {
+		return []byte{}, err
+	}
+	var tx sdk.TxResponse
+	err = GetAminoCdc().UnmarshalJSON([]byte(output), &tx)
+	if err != nil {
+		return []byte{}, err
+	}
+	if len(tx.Logs) > 0 {
+		return []byte(tx.Logs[0].Log), nil
+	}
+	return []byte{}, nil
+}
+
+func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
 		return []byte{}, err
@@ -79,6 +94,15 @@ func GetTxDetail(txhash string, t *testing.T) ([]byte, error) {
 		return []byte{}, err
 	}
 	return bs, nil
+}
+
+func FindCookbookFromArrayByName(cbList []types.Cookbook, name string) (types.Cookbook, bool) {
+	for _, cb := range cbList {
+		if cb.Name == name {
+			return cb, true
+		}
+	}
+	return types.Cookbook{}, false
 }
 
 func FindRecipeFromArrayByName(recipes []types.Recipe, name string) (types.Recipe, bool) {
@@ -121,6 +145,34 @@ func GetCookbookByGUID(guid string) (types.Cookbook, error) {
 		return types.Cookbook{}, err
 	}
 	return cookbook, err
+}
+
+func GetCookbookIDFromName(cbName string) (string, bool, error) {
+	cbList, err := ListCookbookViaCLI()
+	if err != nil {
+		return "", false, err
+	}
+
+	cb, exist := FindCookbookFromArrayByName(cbList, cbName)
+	return cb.ID, exist, nil
+}
+
+func GetRecipeIDFromName(rcpName string) (string, bool, error) {
+	rcpList, err := ListRecipesViaCLI()
+	if err != nil {
+		return "", false, err
+	}
+	rcp, exist := FindRecipeFromArrayByName(rcpList, rcpName)
+	return rcp.ID, exist, nil
+}
+
+func GetItemIDFromName(itemName string) (string, bool, error) {
+	itemList, err := ListItemsViaCLI()
+	if err != nil {
+		return "", false, err
+	}
+	rcp, exist := FindItemFromArrayByName(itemList, itemName)
+	return rcp.ID, exist, nil
 }
 
 // GetRecipeByGUID is to get Recipe from ID

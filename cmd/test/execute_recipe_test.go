@@ -1,4 +1,4 @@
-package main
+package intTest
 
 import (
 	"testing"
@@ -41,10 +41,8 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
 
-			// TODO check response by txhash
-
 			WaitForNextBlock()
-			items, err := ListItemsViaCLI(t)
+			items, err := ListItemsViaCLI()
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)

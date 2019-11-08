@@ -37,7 +37,10 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err
 	}
 
-	output := exec.Entries.Actualize()
+	output, err := exec.Entries.Actualize()
+	if err != nil {
+		return nil, err
+	}
 	err = AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
 
 	if err != nil {

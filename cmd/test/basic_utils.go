@@ -1,4 +1,4 @@
-package main
+package intTest
 
 import (
 	"errors"
@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/MikeSofaer/pylons/app"
+	"github.com/cosmos/cosmos-sdk/x/auth"
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
@@ -32,6 +33,18 @@ func GetAccountAddr(account string, t *testing.T) string {
 		t.Errorf("error getting account address %+v", err)
 	}
 	return addr
+}
+
+func GetAccountInfo(account string, t *testing.T) auth.BaseAccount {
+	addr := GetAccountAddr("eugen", t)
+	accBytes, err := RunPylonsCli([]string{"query", "account", addr}, "")
+	if t != nil && err != nil {
+		t.Errorf("error getting account address %+v", err)
+	}
+	var accInfo auth.BaseAccount
+	GetAminoCdc().UnmarshalJSON(accBytes, &accInfo)
+	t.Log("GetAccountInfo", accInfo)
+	return accInfo
 }
 
 func GetDaemonStatus() (*ctypes.ResultStatus, error) {

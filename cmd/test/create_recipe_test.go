@@ -1,10 +1,11 @@
-package main
+package intTest
 
 import (
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
+	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -33,7 +34,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			require.True(t, err == nil)
-			TestTxWithMsg(t,
+			txhash := TestTxWithMsg(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
 					mCB.ID,
@@ -43,7 +44,16 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 					types.GenEntries("chair", "Raichu"),
 					0,
 					sdkAddr))
-			// TODO check response by txhash
+
+			err = WaitForNextBlock()
+			ErrValidation(t, "error waiting for creating recipe %+v", err)
+
+			txHandleResBytes, err := GetTxData(txhash, t)
+			require.True(t, err == nil)
+			resp := handlers.CreateRecipeResponse{}
+			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			require.True(t, err == nil)
+			require.True(t, resp.RecipeID != "")
 		})
 	}
 }

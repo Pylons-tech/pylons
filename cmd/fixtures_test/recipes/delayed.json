@@ -1,0 +1,60 @@
+{
+    "CoinInputs":[],
+    "ItemInputs":[],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[
+            {
+                "Doubles":[
+                    {
+                        "Rate":"1.0",
+                        "Key":"endurance",
+                        "WeightRanges":[
+                            {
+                                "Lower":"100.00",
+                                "Upper":"500.00",
+                                "Weight":6
+                            },{
+                                "Lower":"501.00",
+                                "Upper":"800.00",
+                                "Weight":2
+                            }
+                        ]
+                    }
+                ],
+                "Longs":[
+                    {
+                        "Key":"HP",
+                        "Rate":"",
+                        "WeightRanges":[
+                            {
+                                "Lower":100,
+                                "Upper":500,
+                                "Weight":6
+                            },
+                            {
+                                "Lower":501,
+                                "Upper":800,
+                                "Weight":2
+                            }
+                        ]
+                    }
+                ],
+                "Strings":[
+                    {
+                        "Key":"Name",
+                        "Value":"delayed_gen_item",
+                        "Rate":"1.0"
+                    }
+                ],
+                "Weight":1
+            }
+        ]
+    },
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "delayedRecipe",
+    "CookbookName": "submarine",
+    "Description": "this has to meet character limits lol",
+    "BlockInterval":"2"
+}
