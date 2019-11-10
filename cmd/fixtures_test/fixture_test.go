@@ -92,9 +92,9 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		}
 	}
 	if len(pCheck.Coins) > 0 {
-		accInfo := intTest.GetAccountInfo("eugen", t)
 		for _, coinCheck := range pCheck.Coins {
-			require.True(t, accInfo.Coins.AmountOf(coinCheck.Name).GTE(sdk.NewInt(coinCheck.Amount)))
+			accInfo := intTest.GetAccountInfo(coinCheck.Owner, t)
+			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).GTE(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
 }

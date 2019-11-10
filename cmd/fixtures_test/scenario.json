@@ -151,6 +151,7 @@
             "property": {
                 "coins": [
                     {
+                        "owner": "eugen",
                         "denom": "generatedcoin",
                         "amount": 1
                     }
