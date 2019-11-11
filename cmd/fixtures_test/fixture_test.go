@@ -2,6 +2,8 @@ package fixtureTest
 
 import (
 	"encoding/json"
+	"os"
+	"path/filepath"
 	"testing"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
@@ -19,8 +21,8 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 
 	pCheck := step.Output.Property
 	if len(pCheck.Cookbooks) > 0 {
-		for idx, cbName := range pCheck.Cookbooks {
-			t.Log("Checking cookbook exist with name=", cbName, "id=", idx)
+		for _, cbName := range pCheck.Cookbooks {
+			// t.Log("Checking cookbook exist with name=", cbName, "id=", idx)
 			_, exist, err := intTest.GetCookbookIDFromName(cbName)
 			if err != nil {
 				t.Error("error checking cookbook exist", err)
@@ -35,8 +37,8 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		}
 	}
 	if len(pCheck.Recipes) > 0 {
-		for idx, rcpName := range pCheck.Recipes {
-			t.Log("Checking recipe exist with name=", rcpName, "id=", idx)
+		for _, rcpName := range pCheck.Recipes {
+			// t.Log("Checking recipe exist with name=", rcpName, "id=", idx)
 			guid, err := intTest.GetRecipeGUIDFromName(rcpName)
 			intTest.ErrValidation(t, "error checking if recipe already exist %+v", err)
 
@@ -49,9 +51,9 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		}
 	}
 	if len(pCheck.Items) > 0 {
-		for idx, itemCheck := range pCheck.Items {
+		for _, itemCheck := range pCheck.Items {
 			fitItemExist := false
-			t.Log("Checking item with spec=", itemCheck, "id=", idx)
+			// t.Log("Checking item with spec=", itemCheck, "id=", idx)
 			items, err := intTest.ListItemsViaCLI()
 			intTest.ErrValidation(t, "error listing items %+v", err)
 			for _, item := range items {
@@ -92,9 +94,9 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		}
 	}
 	if len(pCheck.Coins) > 0 {
-		accInfo := intTest.GetAccountInfo("eugen", t)
 		for _, coinCheck := range pCheck.Coins {
-			require.True(t, accInfo.Coins.AmountOf(coinCheck.Name).GTE(sdk.NewInt(coinCheck.Amount)))
+			accInfo := intTest.GetAccountInfo(coinCheck.Owner, t)
+			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).GTE(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
 }
@@ -317,33 +319,50 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 }
 func TestFixturesViaCLI(t *testing.T) {
 
-	var fixtureSteps []FixtureStep
-	byteValue := ReadFile("scenario.json", t)
-	json.Unmarshal([]byte(byteValue), &fixtureSteps)
+	var files []string
 
-	for idx, step := range fixtureSteps {
-		t.Log("Running step id=", idx, step)
-		switch step.Action {
-		case "fiat_item":
-			RunFiatItem(step, t)
-			PropertyExistCheck(step, t)
-		case "create_cookbook":
-			RunCreateCookbook(step, t)
-			PropertyExistCheck(step, t)
-		case "create_recipe":
-			RunCreateRecipe(step, t)
-			PropertyExistCheck(step, t)
-		case "execute_recipe":
-			RunExecuteRecipe(step, t)
-			PropertyExistCheck(step, t)
-		case "block_wait":
-			RunBlockWait(step, t)
-			PropertyExistCheck(step, t)
-		case "check_execution":
-			RunCheckExecution(step, t)
-			PropertyExistCheck(step, t)
-		default:
-			t.Errorf("step with unrecognizable action found %s", step.Action)
+	scenario_directory := "./scenarios"
+	err := filepath.Walk(scenario_directory, func(path string, info os.FileInfo, err error) error {
+		files = append(files, path)
+		return nil
+	})
+	if err != nil {
+		t.Error(err)
+		t.Fatal(err)
+	}
+	for _, file := range files {
+		if filepath.Ext(file) != ".json" {
+			continue
+		}
+		t.Log("Running scenario path=", file)
+		var fixtureSteps []FixtureStep
+		byteValue := ReadFile(file, t)
+		json.Unmarshal([]byte(byteValue), &fixtureSteps)
+
+		for idx, step := range fixtureSteps {
+			t.Log("Running step id=", idx)
+			switch step.Action {
+			case "fiat_item":
+				RunFiatItem(step, t)
+				PropertyExistCheck(step, t)
+			case "create_cookbook":
+				RunCreateCookbook(step, t)
+				PropertyExistCheck(step, t)
+			case "create_recipe":
+				RunCreateRecipe(step, t)
+				PropertyExistCheck(step, t)
+			case "execute_recipe":
+				RunExecuteRecipe(step, t)
+				PropertyExistCheck(step, t)
+			case "block_wait":
+				RunBlockWait(step, t)
+				PropertyExistCheck(step, t)
+			case "check_execution":
+				RunCheckExecution(step, t)
+				PropertyExistCheck(step, t)
+			default:
+				t.Errorf("step with unrecognizable action found %s", step.Action)
+			}
 		}
 	}
 }

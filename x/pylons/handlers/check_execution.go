@@ -41,13 +41,13 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 	if err != nil {
 		return nil, err
 	}
-	err = AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
+	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
 
 	if err != nil {
 		return nil, err
 	}
 
-	outputSTR, err2 := json.Marshal(output)
+	outputSTR, err2 := json.Marshal(ers)
 
 	if err2 != nil {
 		return nil, err2

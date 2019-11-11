@@ -16,11 +16,19 @@ type ExecuteRecipeResp struct {
 	Output  []byte
 }
 
+type ExecuteRecipeSerialize struct {
+	Type   string `json:"type"`   // COIN or ITEM
+	Coin   string `json:"coin"`   // used when type is ITEM
+	Amount int64  `json:"amount"` // used when type is COIN
+	ItemID string `json:"itemID"` // used when type is ITEM
+}
+
 type ExecuteRecipeScheduleOutput struct {
 	ExecID string
 }
 
-func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) sdk.Error {
+func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) (ExecuteRecipeSerialize, sdk.Error) {
+	var ers ExecuteRecipeSerialize
 	switch output.(type) {
 	case types.CoinOutput:
 		coinOutput, _ := output.(types.CoinOutput)
@@ -29,18 +37,24 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 
 		_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
 		if err != nil {
-			return err
+			return ers, err
 		}
+		ers.Type = "COIN"
+		ers.Coin = coinOutput.Coin
+		ers.Amount = coinOutput.Count
+		return ers, nil
 	case types.ItemOutput:
 		itemOutput, _ := output.(types.ItemOutput)
 		outputItem := *itemOutput.Item(cbID, sender)
 		if err := keeper.SetItem(ctx, outputItem); err != nil {
-			return sdk.ErrInternal(err.Error())
+			return ers, sdk.ErrInternal(err.Error())
 		}
+		ers.Type = "ITEM"
+		ers.ItemID = outputItem.ID
+		return ers, nil
 	default:
-		return sdk.ErrInternal("no item nor coin type created")
+		return ers, sdk.ErrInternal("no item nor coin type created")
 	}
-	return nil
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
@@ -145,13 +159,13 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if err != nil {
 		return err.Result()
 	}
-	err = AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
+	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
 
 	if err != nil {
 		return err.Result()
 	}
 
-	outputSTR, err2 := json.Marshal(output)
+	outputSTR, err2 := json.Marshal(ers)
 
 	if err2 != nil {
 		return sdk.ErrInternal(err2.Error()).Result()
