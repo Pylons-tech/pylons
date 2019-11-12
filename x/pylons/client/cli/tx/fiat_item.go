@@ -14,13 +14,12 @@ import (
 
 // FiatItem is the client cli command for creating item
 func FiatItem(cdc *codec.Codec) *cobra.Command {
-
-	var msgDI msgs.MsgFiatItem
+	var msgFI msgs.MsgFiatItem
 
 	ccb := &cobra.Command{
 		Use:   "fiat-item [args]",
 		Short: "create item and assign it to sender",
-		Args:  cobra.ExactArgs(0),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
@@ -30,20 +29,28 @@ func FiatItem(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// TODO: FiatItem params should set from CLI args
+			byteValue, err := ReadFile(args[0])
+			if err != nil {
+				return err
+			}
+			err = cdc.UnmarshalJSON(byteValue, &msgFI)
+			if err != nil {
+				return err
+			}
+			msgFI.Sender = cliCtx.GetFromAddress()
 
-			err := msgDI.ValidateBasic()
+			err = msgFI.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
 			cliCtx.PrintResponse = true
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgDI}, false)
+			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgFI}, false)
 		},
 	}
 
-	ccb.PersistentFlags().StringVar(&msgDI.CookbookID, "cookbookID", "", "The name of the cookbook for this item")
+	ccb.PersistentFlags().StringVar(&msgFI.CookbookID, "cookbookID", "", "The ID of the cookbook for this item")
 
 	return ccb
 }
