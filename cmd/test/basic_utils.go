@@ -36,14 +36,14 @@ func GetAccountAddr(account string, t *testing.T) string {
 }
 
 func GetAccountInfo(account string, t *testing.T) auth.BaseAccount {
-	addr := GetAccountAddr("eugen", t)
+	addr := GetAccountAddr(account, t)
 	accBytes, err := RunPylonsCli([]string{"query", "account", addr}, "")
 	if t != nil && err != nil {
 		t.Errorf("error getting account address %+v", err)
 	}
 	var accInfo auth.BaseAccount
 	GetAminoCdc().UnmarshalJSON(accBytes, &accInfo)
-	t.Log("GetAccountInfo", accInfo)
+	// t.Log("GetAccountInfo", accInfo)
 	return accInfo
 }
 

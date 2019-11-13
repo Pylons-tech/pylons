@@ -126,7 +126,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 			execType.PayToComplete,
 			execType.Sender,
 		)
-		txhash := intTest.TestTxWithMsg(t, chkExecMsg)
+		txhash := intTest.TestTxWithMsg(t, chkExecMsg, execType.Sender.String())
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -166,7 +166,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			itemType.Strings,
 			itemType.Sender,
 		)
-		txhash := intTest.TestTxWithMsg(t, itmMsg)
+		txhash := intTest.TestTxWithMsg(t, itmMsg, itemType.Sender.String())
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -206,7 +206,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			cbType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsg(t, cbMsg)
+		txhash := intTest.TestTxWithMsg(t, cbMsg, cbType.Sender.String())
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
@@ -248,7 +248,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsg(t, rcpMsg)
+		txhash := intTest.TestTxWithMsg(t, rcpMsg, rcpType.Sender.String())
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -284,7 +284,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
-		txhash := intTest.TestTxWithMsg(t, execMsg)
+		txhash := intTest.TestTxWithMsg(t, execMsg, execType.Sender.String())
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)

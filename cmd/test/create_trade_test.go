@@ -37,7 +37,9 @@ func TestCreateTradeViaCLI(t *testing.T) {
 					types.NewPylon(1000),
 					nil,
 					"",
-					sdkAddr))
+					sdkAddr),
+				"eugen",
+			)
 			// TODO check response by txhash
 		})
 	}
