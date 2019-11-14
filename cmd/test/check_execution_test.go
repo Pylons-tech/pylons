@@ -13,16 +13,19 @@ import (
 func TestCheckExecutionViaCLI(t *testing.T) {
 
 	tests := []struct {
-		name                 string
-		rcpName              string
-		blockInterval        int64
-		itemIDs              []string
-		desiredItemName      string
-		payToComplete        bool
-		waitForBlockInterval bool
-		shouldSuccess        bool
-		expectedStatus       string
-		expectedMessage      string
+		name                    string
+		rcpName                 string
+		blockInterval           int64
+		itemIDs                 []string
+		desiredItemName         string
+		payToComplete           bool
+		waitForBlockInterval    bool
+		shouldSuccess           bool
+		expectedStatus          string
+		expectedMessage         string
+		tryFinishedExecution    bool
+		expectedRetryResMessage string
+		expectedRetryResStatus  string
 	}{
 		{
 			"basic flow test",
@@ -35,6 +38,9 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			true,
 			"Success",
 			"successfully completed the execution",
+			false,
+			"",
+			"",
 		},
 		{
 			"early payment test",
@@ -47,6 +53,9 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			true,
 			"Success",
 			"successfully paid to complete the execution",
+			true,
+			"execution already completed",
+			"Completed",
 		},
 		{
 			"no wait direct check execution test",
@@ -59,6 +68,9 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			false,
 			"Pending",
 			"execution pending",
+			false,
+			"",
+			"",
 		},
 	}
 
@@ -95,11 +107,8 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			err = json.Unmarshal(execResp.Output, &schedule)
 			require.True(t, err == nil)
 
-			txhash = TestTxWithMsg(
-				t,
-				msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr),
-				"eugen",
-			)
+			chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
+			txhash = TestTxWithMsg(t, chkExecMsg, "eugen")
 
 			WaitForNextBlock()
 
@@ -124,6 +133,18 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 				t.Fatal(err)
 			}
 			require.True(t, exec.Completed == tc.shouldSuccess)
+			if tc.tryFinishedExecution {
+				txhash = TestTxWithMsg(t, chkExecMsg, "eugen")
+				WaitForNextBlock()
+
+				txHandleResBytes, err = GetTxData(txhash, t)
+				require.True(t, err == nil)
+				resp := handlers.CheckExecutionResp{}
+				err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+				require.True(t, err == nil)
+				require.True(t, resp.Status == tc.expectedRetryResStatus)
+				require.True(t, resp.Message == tc.expectedRetryResMessage)
+			}
 		})
 	}
 }
