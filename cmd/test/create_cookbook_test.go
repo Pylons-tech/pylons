@@ -38,7 +38,9 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				"example@example.com",
 				0,
 				msgs.DefaultCostPerBlock,
-				sdkAddr))
+				sdkAddr),
+				"eugen",
+			)
 
 			err = WaitForNextBlock()
 			ErrValidation(t, "error waiting for creating cookbook %+v", err)

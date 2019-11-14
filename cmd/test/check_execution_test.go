@@ -78,7 +78,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 
 			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs)
-			txhash := TestTxWithMsg(t, execMsg)
+			txhash := TestTxWithMsg(t, execMsg, "eugen")
 
 			if tc.waitForBlockInterval {
 				WaitForBlockInterval(tc.blockInterval)
@@ -98,6 +98,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			txhash = TestTxWithMsg(
 				t,
 				msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr),
+				"eugen",
 			)
 
 			WaitForNextBlock()

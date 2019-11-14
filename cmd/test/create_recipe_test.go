@@ -43,7 +43,9 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 					types.GenItemInputList("Raichu"),
 					types.GenEntries("chair", "Raichu"),
 					0,
-					sdkAddr))
+					sdkAddr),
+				"eugen",
+			)
 
 			err = WaitForNextBlock()
 			ErrValidation(t, "error waiting for creating recipe %+v", err)

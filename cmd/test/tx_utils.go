@@ -62,15 +62,13 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) string {
+func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	tmpDir, err := ioutil.TempDir("", "pylons")
 	if err != nil {
 		panic(err.Error())
 	}
 	rawTxFile := filepath.Join(tmpDir, "raw_tx.json")
 	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
-
-	eugenAddr := GetAccountAddr("eugen", t) // pylonscli keys show eugen -a
 
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
 	require.True(t, err == nil)
@@ -80,9 +78,9 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg) string {
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
 
-	// pylonscli tx sign raw_tx.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signed_tx.json
+	// pylonscli tx sign raw_tx.json --from eugen --chain-id pylonschain > signed_tx.json
 	txSignArgs := []string{"tx", "sign", rawTxFile,
-		"--from", eugenAddr,
+		"--from", signer,
 		"--chain-id", "pylonschain",
 	}
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")

@@ -39,7 +39,9 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 			TestTxWithMsg(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs))
+				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
+				"eugen",
+			)
 
 			WaitForNextBlock()
 			items, err := ListItemsViaCLI()

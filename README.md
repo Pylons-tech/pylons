@@ -37,9 +37,17 @@ pylonscli config chain-id pylonschain
 pylonscli config output json
 pylonscli config indent true
 pylonscli config trust-node true
+```
 
+- To create initial accounts which is going to used for local testing of integration test, Run
 
 ```
+  sh init-accounts.sh
+```
+
+`michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run. Here, account passwords are `11111111`.
+And each account will have 10000000pylons and 10000000 owncoin.
+
 
 - start the `pylonsd` node
 

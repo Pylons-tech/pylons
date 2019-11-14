@@ -35,7 +35,9 @@ func MockCookbook(t *testing.T) (string, error) {
 		"example@example.com",
 		0,
 		msgs.DefaultCostPerBlock,
-		sdkAddr))
+		sdkAddr),
+		"eugen",
+	)
 
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating cookbook %+v", err)
@@ -96,7 +98,9 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 			types.ItemInputList{},
 			types.GenItemOnlyEntry(outputItemName),
 			interval,
-			sdkAddr))
+			sdkAddr),
+		"eugen",
+	)
 
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating recipe %+v", err)
