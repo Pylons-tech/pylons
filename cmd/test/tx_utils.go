@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"path/filepath"
+	"strconv"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -64,11 +65,22 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 
 func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	tmpDir, err := ioutil.TempDir("", "pylons")
+	// nonceRootDir := "./"
 	if err != nil {
 		panic(err.Error())
 	}
 	rawTxFile := filepath.Join(tmpDir, "raw_tx.json")
 	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
+	// nonceFile := filepath.Join(nonceRootDir, "nonce.json")
+	accInfo := GetAccountInfo(signer, t)
+	nonce := accInfo.Sequence
+
+	if true { // if nonce file exist
+		// nonceBytes := ReadFile(nonceFile, t)
+		// nonce = JSON.unmarshal(nonceBytes)
+	} else {
+		// createNonceFile and initialize with accInfo.Sequence + 1
+	}
 
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
 	require.True(t, err == nil)
@@ -82,6 +94,7 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	txSignArgs := []string{"tx", "sign", rawTxFile,
 		"--from", signer,
 		"--chain-id", "pylonschain",
+		"--sequence", strconv.FormatUint(nonce, 10),
 	}
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)

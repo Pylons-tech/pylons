@@ -2,6 +2,7 @@ package intTest
 
 import (
 	"errors"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
@@ -15,6 +16,19 @@ import (
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
+
+func ReadFile(fileURL string, t *testing.T) []byte {
+	jsonFile, err := os.Open(fileURL)
+	if err != nil {
+		t.Errorf("%+v", err)
+	}
+	// t.Log("Successfully Opened", fileURL)
+
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	return byteValue
+}
 
 func GetAminoCdc() *amino.Codec {
 	return app.MakeCodec()
