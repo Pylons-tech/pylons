@@ -9,8 +9,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func ListCookbookViaCLI() ([]types.Cookbook, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "list_cookbook"}, "")
+func ListCookbookViaCLI(account string) ([]types.Cookbook, error) {
+	queryParams := []string{"query", "pylons", "list_cookbook"}
+	if len(account) != 0 {
+		queryParams = append(queryParams, "--account", account)
+	}
+	output, err := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Cookbook{}, err
 	}
@@ -22,8 +26,12 @@ func ListCookbookViaCLI() ([]types.Cookbook, error) {
 	return listCBResp.Cookbooks, err
 }
 
-func ListRecipesViaCLI() ([]types.Recipe, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
+func ListRecipesViaCLI(account string) ([]types.Recipe, error) {
+	queryParams := []string{"query", "pylons", "list_recipe"}
+	if len(account) != 0 {
+		queryParams = append(queryParams, "--account", account)
+	}
+	output, err := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Recipe{types.Recipe{}}, err
 	}
@@ -35,8 +43,12 @@ func ListRecipesViaCLI() ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func ListExecutionsViaCLI(t *testing.T) ([]types.Execution, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "list_executions"}, "")
+func ListExecutionsViaCLI(account string, t *testing.T) ([]types.Execution, error) {
+	queryParams := []string{"query", "pylons", "list_executions"}
+	if len(account) != 0 {
+		queryParams = append(queryParams, "--account", account)
+	}
+	output, err := RunPylonsCli(queryParams, "")
 	if err != nil {
 		t.Errorf("error running list_executions cli command ::: %+v", err)
 		return []types.Execution{}, err
@@ -50,8 +62,12 @@ func ListExecutionsViaCLI(t *testing.T) ([]types.Execution, error) {
 	return listExecutionsResp.Executions, err
 }
 
-func ListItemsViaCLI() ([]types.Item, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "items_by_sender"}, "")
+func ListItemsViaCLI(account string) ([]types.Item, error) {
+	queryParams := []string{"query", "pylons", "items_by_sender"}
+	if len(account) != 0 {
+		queryParams = append(queryParams, "--account", account)
+	}
+	output, err := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Item{}, err
 	}
@@ -147,8 +163,8 @@ func GetCookbookByGUID(guid string) (types.Cookbook, error) {
 	return cookbook, err
 }
 
-func GetCookbookIDFromName(cbName string) (string, bool, error) {
-	cbList, err := ListCookbookViaCLI()
+func GetCookbookIDFromName(cbName string, account string) (string, bool, error) {
+	cbList, err := ListCookbookViaCLI(account)
 	if err != nil {
 		return "", false, err
 	}
@@ -158,7 +174,7 @@ func GetCookbookIDFromName(cbName string) (string, bool, error) {
 }
 
 func GetRecipeIDFromName(rcpName string) (string, bool, error) {
-	rcpList, err := ListRecipesViaCLI()
+	rcpList, err := ListRecipesViaCLI("")
 	if err != nil {
 		return "", false, err
 	}
@@ -167,7 +183,7 @@ func GetRecipeIDFromName(rcpName string) (string, bool, error) {
 }
 
 func GetItemIDFromName(itemName string) (string, bool, error) {
-	itemList, err := ListItemsViaCLI()
+	itemList, err := ListItemsViaCLI("")
 	if err != nil {
 		return "", false, err
 	}

@@ -44,7 +44,7 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			)
 
 			WaitForNextBlock()
-			items, err := ListItemsViaCLI()
+			items, err := ListItemsViaCLI("")
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)

@@ -52,7 +52,7 @@ func MockCookbook(t *testing.T) (string, error) {
 }
 
 func CheckCookbookExist() (string, bool, error) {
-	cbList, err := ListCookbookViaCLI()
+	cbList, err := ListCookbookViaCLI("")
 	if err != nil {
 		return "", false, err
 	}
@@ -76,7 +76,7 @@ func MockRecipeWithName(name string, outputItemName string, t *testing.T) (strin
 }
 
 func MockRecipeGUID(interval int64, name string, outputItemName string, t *testing.T) (string, error) {
-	guid, err := GetRecipeGUIDFromName(name)
+	guid, err := GetRecipeGUIDFromName(name, "")
 	ErrValidation(t, "error checking if recipe already exist %+v", err)
 
 	if len(guid) > 0 { // finish mock if already available
@@ -114,8 +114,8 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 	return resp.RecipeID, nil
 }
 
-func GetRecipeGUIDFromName(name string) (string, error) {
-	rcpList, err := ListRecipesViaCLI()
+func GetRecipeGUIDFromName(name string, account string) (string, error) {
+	rcpList, err := ListRecipesViaCLI(account)
 	if err != nil {
 		return "", err
 	}

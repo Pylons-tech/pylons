@@ -20,10 +20,16 @@ import (
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
 
 	pCheck := step.Output.Property
+	var pOwnerAddr string
+	if len(pCheck.Owner) == 0 {
+		pOwnerAddr = ""
+	} else {
+		pOwnerAddr = intTest.GetAccountAddr(pCheck.Owner, t)
+	}
 	if len(pCheck.Cookbooks) > 0 {
 		for _, cbName := range pCheck.Cookbooks {
-			// t.Log("Checking cookbook exist with name=", cbName, "id=", idx)
-			_, exist, err := intTest.GetCookbookIDFromName(cbName)
+			// t.Log("Checking cookbook exist with name=", cbName, "owner=", pOwnerAddr)
+			_, exist, err := intTest.GetCookbookIDFromName(cbName, pOwnerAddr)
 			if err != nil {
 				t.Error("error checking cookbook exist", err)
 				t.Fatal(err)
@@ -39,7 +45,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	if len(pCheck.Recipes) > 0 {
 		for _, rcpName := range pCheck.Recipes {
 			// t.Log("Checking recipe exist with name=", rcpName, "id=", idx)
-			guid, err := intTest.GetRecipeGUIDFromName(rcpName)
+			guid, err := intTest.GetRecipeGUIDFromName(rcpName, pOwnerAddr)
 			intTest.ErrValidation(t, "error checking if recipe already exist %+v", err)
 
 			if len(guid) > 0 {
@@ -54,31 +60,25 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		for _, itemCheck := range pCheck.Items {
 			fitItemExist := false
 			// t.Log("Checking item with spec=", itemCheck, "id=", idx)
-			items, err := intTest.ListItemsViaCLI()
+			items, err := intTest.ListItemsViaCLI(pOwnerAddr)
 			intTest.ErrValidation(t, "error listing items %+v", err)
 			for _, item := range items {
-				ok := CheckItemWithStringKeys(item, itemCheck.StringKeys)
-				if !ok {
+				if !CheckItemWithStringKeys(item, itemCheck.StringKeys) {
 					continue
 				}
-				ok = CheckItemWithStringValues(item, itemCheck.StringValues)
-				if !ok {
+				if !CheckItemWithStringValues(item, itemCheck.StringValues) {
 					continue
 				}
-				ok = CheckItemWithDblKeys(item, itemCheck.DblKeys)
-				if !ok {
+				if !CheckItemWithDblKeys(item, itemCheck.DblKeys) {
 					continue
 				}
-				ok = CheckItemWithDblValues(item, itemCheck.DblValues)
-				if !ok {
+				if !CheckItemWithDblValues(item, itemCheck.DblValues) {
 					continue
 				}
-				ok = CheckItemWithLongKeys(item, itemCheck.LongKeys)
-				if !ok {
+				if !CheckItemWithLongKeys(item, itemCheck.LongKeys) {
 					continue
 				}
-				ok = CheckItemWithLongValues(item, itemCheck.LongValues)
-				if !ok {
+				if !CheckItemWithLongValues(item, itemCheck.LongValues) {
 					continue
 				}
 				fitItemExist = true
@@ -95,7 +95,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 	if len(pCheck.Coins) > 0 {
 		for _, coinCheck := range pCheck.Coins {
-			accInfo := intTest.GetAccountInfo(coinCheck.Owner, t)
+			accInfo := intTest.GetAccountInfo(pCheck.Owner, t)
 			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).GTE(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
