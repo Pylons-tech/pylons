@@ -13,7 +13,6 @@ type ItemCheck struct {
 	LongValues   map[string]int               `json:"longValues"`
 }
 type CoinCheck struct {
-	Owner  string `json:"owner"`
 	Coin   string `json:"denom"`
 	Amount int64  `json:"amount"`
 }
@@ -23,6 +22,7 @@ type TxResultCheck struct {
 	ErrorLog string `json:"errLog"`
 }
 type UserPropertyCheck struct {
+	Owner     string      `json:"owner"`
 	Cookbooks []string    `json:"cookbooks"`
 	Recipes   []string    `json:"recipes"`
 	Items     []ItemCheck `json:"items"`

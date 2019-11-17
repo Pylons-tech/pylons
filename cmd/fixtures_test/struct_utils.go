@@ -77,7 +77,7 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 	cbName, ok := raw["CookbookName"].(string)
 	// t.Log("UpdateCookbookName ", raw["CookbookName"], cbName, ok)
 	require.True(t, ok)
-	cbID, exist, err := intTest.GetCookbookIDFromName(cbName)
+	cbID, exist, err := intTest.GetCookbookIDFromName(cbName, "")
 	require.True(t, exist)
 	require.True(t, err == nil)
 	raw["CookbookID"] = cbID
