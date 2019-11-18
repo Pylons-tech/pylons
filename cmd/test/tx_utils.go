@@ -27,7 +27,7 @@ type SuccessTxResp struct {
 }
 
 type NonceStruct struct {
-	nonce uint64
+	Nonce uint64 `json:"nonce"`
 }
 
 const (
@@ -149,12 +149,12 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, nonce
 		if err != nil {
 			ErrValidation(t, "error reading nonce: %+v --- %+v", err)
 		}
-		nonce = nonceStruct.nonce
+		nonce = nonceStruct.Nonce
 	} else {
 		nonce = accInfo.GetSequence()
 	}
-	nonceStruct.nonce = nonce + 1
-	nonceOutput, err := GetAminoCdc().MarshalJSON(nonceStruct)
+	nonceStruct.Nonce = nonce + 1
+	nonceOutput, err := json.Marshal(nonceStruct)
 	require.True(t, err == nil)
 	ioutil.WriteFile(nonceFile, nonceOutput, 0644)
 
