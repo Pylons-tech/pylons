@@ -1,0 +1,107 @@
+[
+    {
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/helicopter.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "cookbooks": ["helicopter"]
+            }
+        }
+    },
+    {
+        "action": "fiat_item",
+        "paramsRef": "./items/item-heli.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "item-heli" },
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/straight-heli.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["straight-heli"]
+            }
+        }
+    },
+    {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/coin-heli.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["heliCoinRecipe"]
+            }
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/straight-heli.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "straight_gen_item_helicopter" },
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/coin-heli.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": {
+                "owner": "eugen",
+                "coins": [
+                    {
+                        "denom": "helicoin",
+                        "amount": 1
+                    }
+                ]
+            }
+        }
+    }
+]

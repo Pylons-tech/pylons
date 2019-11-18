@@ -45,6 +45,7 @@ func GetAccountAddr(account string, t *testing.T) string {
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
 		t.Errorf("error getting account address %+v, account=%s", err, account)
+		t.Fatal(err, account)
 	}
 	return addr
 }

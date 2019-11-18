@@ -190,7 +190,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		var cbType types.Cookbook
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", cbType, err)
+			t.Error("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
@@ -317,6 +317,39 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		}
 	}
 }
+
+func RunSingleFixtureTest(file string, t *testing.T) {
+	var fixtureSteps []FixtureStep
+	byteValue := ReadFile(file, t)
+	json.Unmarshal([]byte(byteValue), &fixtureSteps)
+
+	for idx, step := range fixtureSteps {
+		t.Log("Running step id=", idx)
+		switch step.Action {
+		case "fiat_item":
+			RunFiatItem(step, t)
+			PropertyExistCheck(step, t)
+		case "create_cookbook":
+			RunCreateCookbook(step, t)
+			PropertyExistCheck(step, t)
+		case "create_recipe":
+			RunCreateRecipe(step, t)
+			PropertyExistCheck(step, t)
+		case "execute_recipe":
+			RunExecuteRecipe(step, t)
+			PropertyExistCheck(step, t)
+		case "block_wait":
+			RunBlockWait(step, t)
+			PropertyExistCheck(step, t)
+		case "check_execution":
+			RunCheckExecution(step, t)
+			PropertyExistCheck(step, t)
+		default:
+			t.Errorf("step with unrecognizable action found %s", step.Action)
+		}
+	}
+}
+
 func TestFixturesViaCLI(t *testing.T) {
 	var files []string
 
@@ -333,35 +366,10 @@ func TestFixturesViaCLI(t *testing.T) {
 		if filepath.Ext(file) != ".json" {
 			continue
 		}
-		t.Log("Running scenario path=", file)
-		var fixtureSteps []FixtureStep
-		byteValue := ReadFile(file, t)
-		json.Unmarshal([]byte(byteValue), &fixtureSteps)
-
-		for idx, step := range fixtureSteps {
-			t.Log("Running step id=", idx)
-			switch step.Action {
-			case "fiat_item":
-				RunFiatItem(step, t)
-				PropertyExistCheck(step, t)
-			case "create_cookbook":
-				RunCreateCookbook(step, t)
-				PropertyExistCheck(step, t)
-			case "create_recipe":
-				RunCreateRecipe(step, t)
-				PropertyExistCheck(step, t)
-			case "execute_recipe":
-				RunExecuteRecipe(step, t)
-				PropertyExistCheck(step, t)
-			case "block_wait":
-				RunBlockWait(step, t)
-				PropertyExistCheck(step, t)
-			case "check_execution":
-				RunCheckExecution(step, t)
-				PropertyExistCheck(step, t)
-			default:
-				t.Errorf("step with unrecognizable action found %s", step.Action)
-			}
-		}
+		t.Run(file, func(t *testing.T) {
+			t.Parallel()
+			t.Log("Running scenario path=", file)
+			RunSingleFixtureTest(file, t)
+		})
 	}
 }

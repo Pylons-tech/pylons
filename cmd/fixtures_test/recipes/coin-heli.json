@@ -1,0 +1,20 @@
+{
+    "CoinInputs":[],
+    "ItemInputs":[],
+    "Entries":{
+        "CoinOutputs":[
+            {
+                "Coin":"helicoin",
+                "Count":1,
+                "Weight":1
+            }
+        ],
+        "ItemOutputs":[]
+    },
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "heliCoinRecipe",
+    "CookbookName": "helicopter",
+    "Description": "this has to meet character limits lol",
+    "BlockInterval":"0"
+}

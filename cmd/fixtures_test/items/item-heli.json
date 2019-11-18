@@ -1,0 +1,22 @@
+{
+    "Doubles": [
+        {
+        "Key": "endurance",
+        "Value": "286"
+        }
+    ],
+    "Longs": [
+        {
+        "Key": "HP",
+        "Value": "479"
+        }
+    ],
+    "Strings": [
+        {
+        "Key": "Name",
+        "Value": "item-heli"
+        }
+    ],
+    "CookbookName": "helicopter",
+    "Sender": "eugen"
+}
