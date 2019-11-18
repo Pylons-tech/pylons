@@ -1,3 +1,4 @@
+cmd/fixtures_test/nonce.json
 pylonsd
 pylonscli
 .vscode

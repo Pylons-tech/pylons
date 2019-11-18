@@ -49,16 +49,20 @@ func GetAccountAddr(account string, t *testing.T) string {
 	return addr
 }
 
-func GetAccountInfo(account string, t *testing.T) auth.BaseAccount {
-	addr := GetAccountAddr(account, t)
+func GetAccountInfoFromAddr(addr string, t *testing.T) auth.BaseAccount {
 	accBytes, err := RunPylonsCli([]string{"query", "account", addr}, "")
 	if t != nil && err != nil {
-		t.Errorf("error getting account info %+v", err)
+		t.Errorf("error getting account info addr=%+v err=%+v", addr, err)
 	}
 	var accInfo auth.BaseAccount
 	GetAminoCdc().UnmarshalJSON(accBytes, &accInfo)
 	// t.Log("GetAccountInfo", accInfo)
 	return accInfo
+}
+
+func GetAccountInfoFromName(account string, t *testing.T) auth.BaseAccount {
+	addr := GetAccountAddr(account, t)
+	return GetAccountInfoFromAddr(addr, t)
 }
 
 func GetDaemonStatus() (*ctypes.ResultStatus, error) {

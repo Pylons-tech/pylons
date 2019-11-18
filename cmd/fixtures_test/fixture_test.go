@@ -95,7 +95,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 	if len(pCheck.Coins) > 0 {
 		for _, coinCheck := range pCheck.Coins {
-			accInfo := intTest.GetAccountInfo(pCheck.Owner, t)
+			accInfo := intTest.GetAccountInfoFromName(pCheck.Owner, t)
 			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).GTE(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
@@ -126,7 +126,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 			execType.PayToComplete,
 			execType.Sender,
 		)
-		txhash := intTest.TestTxWithMsg(t, chkExecMsg, execType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, chkExecMsg, execType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -166,7 +166,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			itemType.Strings,
 			itemType.Sender,
 		)
-		txhash := intTest.TestTxWithMsg(t, itmMsg, itemType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, itmMsg, itemType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -206,7 +206,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			cbType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsg(t, cbMsg, cbType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, cbMsg, cbType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
@@ -248,7 +248,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsg(t, rcpMsg, rcpType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, rcpMsg, rcpType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -284,7 +284,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
-		txhash := intTest.TestTxWithMsg(t, execMsg, execType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, execMsg, execType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)
@@ -318,7 +318,6 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	}
 }
 func TestFixturesViaCLI(t *testing.T) {
-
 	var files []string
 
 	scenario_directory := "./scenarios"
