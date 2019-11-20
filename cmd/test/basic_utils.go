@@ -25,7 +25,6 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 	if err != nil {
 		t.Errorf("%+v", err)
 	}
-	// t.Log("Successfully Opened", fileURL)
 
 	defer jsonFile.Close()
 
@@ -50,8 +49,7 @@ func GetAccountAddr(account string, t *testing.T) string {
 	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a"}, "")
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
-		t.Errorf("error getting account address %+v, account=%s", err, account)
-		t.Fatal(err, account)
+		t.Fatalf("error getting account address %+v, account=%s", err, account)
 	}
 	return addr
 }
@@ -119,14 +117,12 @@ func CleanFile(filePath string, t *testing.T) {
 
 func ErrValidation(t *testing.T, format string, err error) {
 	if err != nil {
-		t.Errorf(format, err)
-		t.Fatal(err)
+		t.Fatalf(format, err)
 	}
 }
 
 func ErrValidationWithOutputLog(t *testing.T, format string, bytes []byte, err error) {
 	if err != nil {
-		t.Errorf(format, string(bytes), err)
-		t.Fatal(err)
+		t.Fatalf(format, string(bytes), err)
 	}
 }

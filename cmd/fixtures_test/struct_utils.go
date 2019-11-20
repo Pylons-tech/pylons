@@ -47,7 +47,6 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 	if err != nil {
 		t.Errorf("%+v", err)
 	}
-	// t.Log("Successfully Opened", fileURL)
 
 	defer jsonFile.Close()
 
@@ -127,13 +126,11 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	var targetExecID string
 	if execRef < 0 {
 		if len(execIDs) == 0 {
-			t.Errorf("there's no active execID available")
 			t.Fatal(errors.New("there's no active execID available"))
 		}
 		targetExecID = execIDs[len(execIDs)+execRef]
 	} else {
 		if len(execIDs) <= execRef {
-			t.Errorf("specified ExecRef is out of range")
 			t.Fatal(errors.New("specified ExecRef is out of range"))
 		}
 		targetExecID = execIDs[execRef]

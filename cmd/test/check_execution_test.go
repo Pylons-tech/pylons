@@ -129,8 +129,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 			exec, err := GetExecutionByGUID(schedule.ExecID)
 			if err != nil {
-				t.Errorf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
-				t.Fatal(err)
+				t.Fatalf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
 			}
 			require.True(t, exec.Completed == tc.shouldSuccess)
 			if tc.tryFinishedExecution {
