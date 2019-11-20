@@ -133,8 +133,6 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, nonce
 	if err != nil {
 		panic(err.Error())
 	}
-	rawTxFile := filepath.Join(tmpDir, "raw_tx.json")
-	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
 	nonceRootDir := "./"
 	nonceFile := filepath.Join(nonceRootDir, "nonce.json")
 	accInfo := GetAccountInfoFromAddr(signer, t)
@@ -158,27 +156,33 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, nonce
 	require.True(t, err == nil)
 	ioutil.WriteFile(nonceFile, nonceOutput, 0644)
 
-	nonceMux.Unlock()
-
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
 	require.True(t, err == nil)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
 	require.True(t, err == nil)
 
+	rawTxFile := filepath.Join(tmpDir, "raw_tx_"+strconv.FormatUint(nonce, 10)+".json")
+	signedTxFile := filepath.Join(tmpDir, "signed_tx_"+strconv.FormatUint(nonce, 10)+".json")
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
 
-	// pylonscli tx sign raw_tx.json --from eugen --chain-id pylonschain > signed_tx.json
+	t.Log("TX sign with nonce=", nonce)
+	// pylonscli tx sign sample_transaction.json --account-number 2 --sequence 10 --offline --from eugen
 	txSignArgs := []string{"tx", "sign", rawTxFile,
 		"--from", signer,
+		"--offline",
 		"--chain-id", "pylonschain",
 		"--sequence", strconv.FormatUint(nonce, 10),
+		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
 	}
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")
+	t.Log("TX sign result msg=", msgValue, "output=", string(output))
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
 	ErrValidation(t, "error writing signed transaction %+v", err)
+
+	nonceMux.Unlock()
 
 	txhash := broadcastTxFile(signedTxFile, t)
 

@@ -1,2 +1,2 @@
-rm ./cmd/test/nonce.json || true
+rm ./cmd/fixtures_test/nonce.json || true
 go test -v ./cmd/fixtures_test/

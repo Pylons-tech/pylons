@@ -2,6 +2,7 @@ package intTest
 
 import (
 	"encoding/hex"
+	"errors"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/queriers"
@@ -98,7 +99,7 @@ func GetTxError(txhash string, t *testing.T) ([]byte, error) {
 func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
-		return []byte{}, err
+		return output, err
 	}
 	var tx sdk.TxResponse
 	err = GetAminoCdc().UnmarshalJSON([]byte(output), &tx)
@@ -110,6 +111,19 @@ func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 		return []byte{}, err
 	}
 	return bs, nil
+}
+
+func WaitAndGetTxData(txhash string, maximum_wait_block int64, t *testing.T) ([]byte, error) {
+	txHandleResBytes, err := GetTxData(txhash, t)
+	if err != nil { // maybe transaction is not contained in block
+		if maximum_wait_block == 0 {
+			return txHandleResBytes, errors.New("didn't get result waiting for maximum_wait_block")
+		} else {
+			WaitForNextBlock()
+			return WaitAndGetTxData(txhash, maximum_wait_block-1, t)
+		}
+	}
+	return txHandleResBytes, nil
 }
 
 func FindCookbookFromArrayByName(cbList []types.Cookbook, name string) (types.Cookbook, bool) {

@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"sync"
 	"testing"
 	"time"
 
@@ -16,6 +17,8 @@ import (
 	amino "github.com/tendermint/go-amino"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
+
+var cliMux sync.Mutex
 
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)
@@ -35,9 +38,12 @@ func GetAminoCdc() *amino.Codec {
 }
 
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
+	cliMux.Lock()
 	cmd := exec.Command(path.Join(os.Getenv("GOPATH"), "/bin/pylonscli"), args...)
 	cmd.Stdin = strings.NewReader(stdinInput)
-	return cmd.CombinedOutput()
+	res, err := cmd.CombinedOutput()
+	cliMux.Unlock()
+	return res, err
 }
 
 func GetAccountAddr(account string, t *testing.T) string {
