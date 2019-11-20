@@ -1,3 +1,4 @@
+cmd/fixtures_test/nonce.json
 pylonsd
 pylonscli
 .vscode
@@ -5,3 +6,5 @@ main
 *.exe
 *.bat
 **/.DS_Store
+sample_transaction.json
+signed_transaction.json

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
@@ -95,7 +96,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 	if len(pCheck.Coins) > 0 {
 		for _, coinCheck := range pCheck.Coins {
-			accInfo := intTest.GetAccountInfo(pCheck.Owner, t)
+			accInfo := intTest.GetAccountInfoFromName(pCheck.Owner, t)
 			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).GTE(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
@@ -126,12 +127,12 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 			execType.PayToComplete,
 			execType.Sender,
 		)
-		txhash := intTest.TestTxWithMsg(t, chkExecMsg, execType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, chkExecMsg, execType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxData(txhash, t)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
 		require.True(t, err == nil)
 		resp := handlers.CheckExecutionResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -166,12 +167,12 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			itemType.Strings,
 			itemType.Sender,
 		)
-		txhash := intTest.TestTxWithMsg(t, itmMsg, itemType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, itmMsg, itemType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxData(txhash, t)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
 		require.True(t, err == nil)
 		resp := handlers.FiatItemResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -190,7 +191,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		var cbType types.Cookbook
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", cbType, err)
+			t.Error("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
 			t.Fatal(err)
 		}
 		require.True(t, err == nil)
@@ -206,14 +207,14 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			cbType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsg(t, cbMsg, cbType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, cbMsg, cbType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxData(txhash, t)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
 
-		require.True(t, err == nil)
+		intTest.ErrValidationWithOutputLog(t, "error getting transaction data for creating cookbook %+v", txHandleResBytes, err)
 		resp := handlers.CreateCBResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		require.True(t, err == nil)
@@ -248,12 +249,12 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsg(t, rcpMsg, rcpType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, rcpMsg, rcpType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.GetTxData(txhash, t)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
 		require.True(t, err == nil)
 		resp := handlers.CreateRecipeResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -284,7 +285,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		require.True(t, err == nil)
 
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
-		txhash := intTest.TestTxWithMsg(t, execMsg, execType.Sender.String())
+		txhash := intTest.TestTxWithMsgWithNonce(t, execMsg, execType.Sender.String(), &nonceMux)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)
@@ -296,7 +297,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			require.True(t, err == nil)
 			require.True(t, hmrErr.Message == step.Output.TxResult.ErrorLog)
 		} else {
-			txHandleResBytes, err := intTest.GetTxData(txhash, t)
+			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
 			require.True(t, err == nil)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -317,11 +318,43 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		}
 	}
 }
-func TestFixturesViaCLI(t *testing.T) {
 
+func RunSingleFixtureTest(file string, t *testing.T) {
+	var fixtureSteps []FixtureStep
+	byteValue := ReadFile(file, t)
+	json.Unmarshal([]byte(byteValue), &fixtureSteps)
+
+	for idx, step := range fixtureSteps {
+		t.Log("Running file=", file, "step_id=", idx)
+		switch step.Action {
+		case "fiat_item":
+			RunFiatItem(step, t)
+			PropertyExistCheck(step, t)
+		case "create_cookbook":
+			RunCreateCookbook(step, t)
+			PropertyExistCheck(step, t)
+		case "create_recipe":
+			RunCreateRecipe(step, t)
+			PropertyExistCheck(step, t)
+		case "execute_recipe":
+			RunExecuteRecipe(step, t)
+			PropertyExistCheck(step, t)
+		case "block_wait":
+			RunBlockWait(step, t)
+			PropertyExistCheck(step, t)
+		case "check_execution":
+			RunCheckExecution(step, t)
+			PropertyExistCheck(step, t)
+		default:
+			t.Errorf("step with unrecognizable action found %s", step.Action)
+		}
+	}
+}
+
+func TestFixturesViaCLI(t *testing.T) {
 	var files []string
 
-	scenario_directory := "./scenarios"
+	scenario_directory := "scenarios"
 	err := filepath.Walk(scenario_directory, func(path string, info os.FileInfo, err error) error {
 		files = append(files, path)
 		return nil
@@ -334,35 +367,11 @@ func TestFixturesViaCLI(t *testing.T) {
 		if filepath.Ext(file) != ".json" {
 			continue
 		}
-		t.Log("Running scenario path=", file)
-		var fixtureSteps []FixtureStep
-		byteValue := ReadFile(file, t)
-		json.Unmarshal([]byte(byteValue), &fixtureSteps)
-
-		for idx, step := range fixtureSteps {
-			t.Log("Running step id=", idx)
-			switch step.Action {
-			case "fiat_item":
-				RunFiatItem(step, t)
-				PropertyExistCheck(step, t)
-			case "create_cookbook":
-				RunCreateCookbook(step, t)
-				PropertyExistCheck(step, t)
-			case "create_recipe":
-				RunCreateRecipe(step, t)
-				PropertyExistCheck(step, t)
-			case "execute_recipe":
-				RunExecuteRecipe(step, t)
-				PropertyExistCheck(step, t)
-			case "block_wait":
-				RunBlockWait(step, t)
-				PropertyExistCheck(step, t)
-			case "check_execution":
-				RunCheckExecution(step, t)
-				PropertyExistCheck(step, t)
-			default:
-				t.Errorf("step with unrecognizable action found %s", step.Action)
-			}
-		}
+		t.Run(file, func(t *testing.T) {
+			t.Parallel()
+			testFile := strings.Replace(t.Name(), "TestFixturesViaCLI/", "", -1)
+			t.Log("Running scenario path=", testFile)
+			RunSingleFixtureTest(testFile, t)
+		})
 	}
 }

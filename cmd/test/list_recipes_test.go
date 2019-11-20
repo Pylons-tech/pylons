@@ -36,8 +36,7 @@ func TestListRecipeViaCLI(t *testing.T) {
 			WaitForNextBlock()
 			_, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
-				t.Errorf("error getting recipe with name %+v", tc.rcpName)
-				t.Fatal()
+				t.Fatalf("error getting recipe with name %+v", tc.rcpName)
 			}
 		})
 	}

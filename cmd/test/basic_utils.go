@@ -2,9 +2,11 @@ package intTest
 
 import (
 	"errors"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path"
+	"sync"
 	"testing"
 	"time"
 
@@ -16,35 +18,56 @@ import (
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
 
+var cliMux sync.Mutex
+
+func ReadFile(fileURL string, t *testing.T) []byte {
+	jsonFile, err := os.Open(fileURL)
+	if err != nil {
+		t.Errorf("%+v", err)
+	}
+
+	defer jsonFile.Close()
+
+	byteValue, _ := ioutil.ReadAll(jsonFile)
+	return byteValue
+}
+
 func GetAminoCdc() *amino.Codec {
 	return app.MakeCodec()
 }
 
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
+	cliMux.Lock()
 	cmd := exec.Command(path.Join(os.Getenv("GOPATH"), "/bin/pylonscli"), args...)
 	cmd.Stdin = strings.NewReader(stdinInput)
-	return cmd.CombinedOutput()
+	res, err := cmd.CombinedOutput()
+	cliMux.Unlock()
+	return res, err
 }
 
 func GetAccountAddr(account string, t *testing.T) string {
 	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a"}, "")
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
-		t.Errorf("error getting account address %+v, account=%s", err, account)
+		t.Fatalf("error getting account address %+v, account=%s", err, account)
 	}
 	return addr
 }
 
-func GetAccountInfo(account string, t *testing.T) auth.BaseAccount {
-	addr := GetAccountAddr(account, t)
+func GetAccountInfoFromAddr(addr string, t *testing.T) auth.BaseAccount {
 	accBytes, err := RunPylonsCli([]string{"query", "account", addr}, "")
 	if t != nil && err != nil {
-		t.Errorf("error getting account info %+v", err)
+		t.Errorf("error getting account info addr=%+v err=%+v", addr, err)
 	}
 	var accInfo auth.BaseAccount
 	GetAminoCdc().UnmarshalJSON(accBytes, &accInfo)
 	// t.Log("GetAccountInfo", accInfo)
 	return accInfo
+}
+
+func GetAccountInfoFromName(account string, t *testing.T) auth.BaseAccount {
+	addr := GetAccountAddr(account, t)
+	return GetAccountInfoFromAddr(addr, t)
 }
 
 func GetDaemonStatus() (*ctypes.ResultStatus, error) {
@@ -94,14 +117,12 @@ func CleanFile(filePath string, t *testing.T) {
 
 func ErrValidation(t *testing.T, format string, err error) {
 	if err != nil {
-		t.Errorf(format, err)
-		t.Fatal(err)
+		t.Fatalf(format, err)
 	}
 }
 
 func ErrValidationWithOutputLog(t *testing.T, format string, bytes []byte, err error) {
 	if err != nil {
-		t.Errorf(format, string(bytes), err)
-		t.Fatal(err)
+		t.Fatalf(format, string(bytes), err)
 	}
 }
