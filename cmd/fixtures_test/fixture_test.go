@@ -351,21 +351,6 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 	}
 }
 
-func RunWait(waitCnt int64) {
-	intTest.WaitForBlockInterval(waitCnt)
-}
-
-func RunSingleFixture(file string, t *testing.T) {
-	var fixtureSteps []FixtureStep
-	byteValue := ReadFile(file, t)
-	json.Unmarshal([]byte(byteValue), &fixtureSteps)
-
-	for idx, _ := range fixtureSteps {
-		t.Log("Running file=", file, "step_id=", idx)
-		RunWait(1)
-	}
-}
-
 func TestFixturesViaCLI(t *testing.T) {
 	var files []string
 
@@ -386,7 +371,6 @@ func TestFixturesViaCLI(t *testing.T) {
 			t.Parallel()
 			testFile := strings.Replace(t.Name(), "TestFixturesViaCLI/", "", -1)
 			t.Log("Running scenario path=", testFile)
-			// RunSingleFixture(testFile, t)
 			RunSingleFixtureTest(testFile, t)
 		})
 	}
