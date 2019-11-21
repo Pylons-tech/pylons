@@ -25,7 +25,7 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: sh ./init-accounts.sh 
+      - run: bash ./init-accounts.sh 
       - run: pylonscli config chain-id pylonschain
       - run: pylonscli config output json
       - run: pylonscli config indent true
@@ -44,7 +44,7 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: sh ./init-accounts.sh
+      - run: bash ./init-accounts.sh
       - run: pylonscli config chain-id pylonschain
       - run: pylonscli config output json
       - run: pylonscli config indent true
