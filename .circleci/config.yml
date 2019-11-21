@@ -25,16 +25,7 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: pylonscli keys add michael \<<< 11111111
-      - run: pylonscli keys add iain \<<< 11111111
-      - run: pylonscli keys add afti \<<< 11111111
-      - run: pylonscli keys add girish \<<< 11111111
-      - run: pylonscli keys add eugen \<<< 11111111
-      - run: pylonsd add-genesis-account $(pylonscli keys show michael -a) 10000000pylon,10000000michaelcoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show iain -a) 10000000pylon,10000000iaincoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show afti -a) 10000000pylon,10000000afticoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show girish -a) 10000000pylon,10000000girishcoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin
+      - run: sh ./init-accounts.sh 
       - run: pylonscli config chain-id pylonschain
       - run: pylonscli config output json
       - run: pylonscli config indent true
@@ -53,16 +44,7 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: pylonscli keys add michael \<<< 11111111
-      - run: pylonscli keys add iain \<<< 11111111
-      - run: pylonscli keys add afti \<<< 11111111
-      - run: pylonscli keys add girish \<<< 11111111
-      - run: pylonscli keys add eugen \<<< 11111111
-      - run: pylonsd add-genesis-account $(pylonscli keys show michael -a) 10000000pylon,10000000michaelcoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show iain -a) 10000000pylon,10000000iaincoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show afti -a) 10000000pylon,10000000afticoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show girish -a) 10000000pylon,10000000girishcoin
-      - run: pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin
+      - run: sh ./init-accounts.sh
       - run: pylonscli config chain-id pylonschain
       - run: pylonscli config output json
       - run: pylonscli config indent true
