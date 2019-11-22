@@ -25,7 +25,7 @@ func (dp DoubleInputParam) String() string {
 }
 
 func (dp DoubleInputParam) Has(input float64) bool {
-	return input >= dp.MinValue.Float() && input < dp.MaxValue.Float()
+	return input >= dp.MinValue.Float() && input <= dp.MaxValue.Float()
 }
 
 func (dpm DoubleInputParamList) String() string {

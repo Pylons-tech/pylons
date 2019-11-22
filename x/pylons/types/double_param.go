@@ -35,14 +35,18 @@ func (dpm DoubleParamList) String() string {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize() []DoubleKeyValue {
+func (dpm DoubleParamList) Actualize() ([]DoubleKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue
 	for _, param := range dpm {
+		val, err := param.Generate()
+		if err != nil {
+			return m, err
+		}
 		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
-			Value: ToFloatString(param.Generate()),
+			Value: ToFloatString(val),
 		})
 	}
-	return m
+	return m, nil
 }

@@ -23,7 +23,7 @@ func (lp LongInputParam) String() string {
 }
 
 func (lp LongInputParam) Has(input int) bool {
-	return input >= lp.MinValue && input < lp.MaxValue
+	return input >= lp.MinValue && input <= lp.MaxValue
 }
 
 func (lpm LongInputParamList) String() string {

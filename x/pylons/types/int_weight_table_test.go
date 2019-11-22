@@ -11,10 +11,12 @@ func TestIntWeightTable_NoRandomization(t *testing.T) {
 		WeightRanges: []IntWeightRange{
 			IntWeightRange{
 				Lower:  100,
-				Upper:  101,
+				Upper:  100,
 				Weight: 1,
 			},
 		},
 	}
-	require.True(t, iwt.Generate() == 100)
+	iwtGen, err := iwt.Generate()
+	require.True(t, err == nil)
+	require.True(t, iwtGen == 100)
 }
