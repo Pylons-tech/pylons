@@ -1,6 +1,9 @@
 package types
 
-import "math/rand"
+import (
+	"errors"
+	"math/rand"
+)
 
 type IntWeightTable struct {
 	WeightRanges []IntWeightRange
@@ -20,12 +23,15 @@ func (wr IntWeightRange) Has(number int) bool {
 // E.g. 2 weight ranges are provided with values [100, 500  weight: 8] and [600, 800 weight: 2] so now we
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100, 500] else [600, 800].
 // next we get a random number from the selected range and return that
-func (wt *IntWeightTable) Generate() int {
+func (wt *IntWeightTable) Generate() (int, error) {
 	lastWeight := 0
 	var weights []int
 	for _, weightRange := range wt.WeightRanges {
 		lastWeight += weightRange.Weight
 		weights = append(weights, lastWeight)
+	}
+	if lastWeight == 0 {
+		return 0, errors.New("total weight of weighted param list shouldn't be zero")
 	}
 	randWeight := rand.Intn(lastWeight)
 
@@ -40,7 +46,10 @@ func (wt *IntWeightTable) Generate() int {
 	}
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
-	return rand.Intn(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower
+	if selectedWeightRange.Upper > selectedWeightRange.Lower {
+		return rand.Intn(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower, nil
+	}
+	return selectedWeightRange.Lower, nil
 }
 
 // Has checks if any of the weight ranges has the number

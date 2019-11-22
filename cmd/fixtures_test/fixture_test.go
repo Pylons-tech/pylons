@@ -284,6 +284,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		}
 		require.True(t, err == nil)
 
+		// t.Log("Executed recipe with below params", execType.RecipeID, execType.Sender, ItemIDs)
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
 		txhash := intTest.TestTxWithMsgWithNonce(t, execMsg, execType.Sender.String(), &nonceMux)
 
@@ -301,7 +302,9 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			require.True(t, err == nil)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			require.True(t, err == nil)
+			if err != nil {
+				t.Fatal("failed to parse transaction result txhash=", txhash)
+			}
 			require.True(t, resp.Status == step.Output.TxResult.Status)
 			require.True(t, resp.Message == step.Output.TxResult.Message)
 

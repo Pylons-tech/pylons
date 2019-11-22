@@ -15,7 +15,7 @@
     },
     {
         "action": "fiat_item",
-        "paramsRef": "./items/item1.json",
+        "paramsRef": "./items/knife.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
@@ -26,7 +26,30 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "Name": "item1" },
+                        "stringValues": { "Name": "Knife" },
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "action": "fiat_item",
+        "paramsRef": "./items/shield.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Shield" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
@@ -64,6 +87,19 @@
     },
     {
         "action": "create_recipe",
+        "paramsRef": "./recipes/delayed.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["delayedRecipe"]
+            }
+        }
+    },
+    {
+        "action": "create_recipe",
         "paramsRef": "./recipes/coin.json",
         "output": {
             "txResult": {
@@ -72,6 +108,19 @@
             "property": {
                 "owner": "eugen",
                 "recipes": ["coinRecipe"]
+            }
+        }
+    },
+    {
+        "action": "create_recipe",
+        "paramsRef": "./recipes/knife-shield.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["knife-shield-recipe"]
             }
         }
     },
@@ -110,6 +159,39 @@
         }
     },
     {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/wrong-inputs-count.json",
+        "output": {
+            "txResult": {
+                "errLog": "the item IDs count doesn't match the recipe input"
+            },
+            "property": {}
+        }
+    },
+    {
+        "action": "execute_recipe",
+        "paramsRef": "./executions/knife-shield.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Knife Shield" },
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
+            }
+        }
+    },
+    {
         "action": "block_wait",
         "blockInterval": 2
     },
@@ -135,16 +217,6 @@
                     }
                 ]
             }
-        }
-    },
-    {
-        "action": "execute_recipe",
-        "paramsRef": "./executions/wrong-delayed.json",
-        "output": {
-            "txResult": {
-                "errLog": "the item IDs count doesn't match the recipe input"
-            },
-            "property": {}
         }
     },
     {

@@ -45,8 +45,12 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 		return ers, nil
 	case types.ItemOutput:
 		itemOutput, _ := output.(types.ItemOutput)
-		outputItem := *itemOutput.Item(cbID, sender)
-		if err := keeper.SetItem(ctx, outputItem); err != nil {
+
+		outputItem, err := itemOutput.Item(cbID, sender)
+		if err != nil {
+			return ers, sdk.ErrInternal(err.Error())
+		}
+		if err = keeper.SetItem(ctx, *outputItem); err != nil {
 			return ers, sdk.ErrInternal(err.Error())
 		}
 		ers.Type = "ITEM"
