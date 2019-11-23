@@ -43,7 +43,7 @@
                 "Strings":[
                     {
                         "Key":"Name",
-                        "Value":"delayed_gen_item",
+                        "Value":"Helicopter's Straight Attack Knife",
                         "Rate":"1.0"
                     }
                 ],
@@ -53,8 +53,8 @@
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "delayedRecipe",
-    "CookbookName": "submarine",
+    "Name": "Helicopter's Straight Attack Knife Generation Recipe",
+    "CookbookName": "helicopter",
     "Description": "this has to meet character limits lol",
-    "BlockInterval":"2"
+    "BlockInterval":"0"
 }

@@ -61,72 +61,59 @@
     },
     {
         "action": "create_recipe",
-        "paramsRef": "./recipes/straight.json",
+        "paramsRef": "./recipes/straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "recipes": ["straight"]
+                "recipes": ["Straight Attack Knife Generation Recipe"]
             }
         }
     },
     {
         "action": "create_recipe",
-        "paramsRef": "./recipes/delayed.json",
+        "paramsRef": "./recipes/delayed_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "recipes": ["delayedRecipe"]
+                "recipes": ["Delayed Attack Knife Generation Recipe"]
             }
         }
     },
     {
         "action": "create_recipe",
-        "paramsRef": "./recipes/delayed.json",
+        "paramsRef": "./recipes/subm_coin.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "recipes": ["delayedRecipe"]
+                "recipes": ["Submarine Coin Generation Recipe"]
             }
         }
     },
     {
         "action": "create_recipe",
-        "paramsRef": "./recipes/coin.json",
+        "paramsRef": "./recipes/knife_shield.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "recipes": ["coinRecipe"]
-            }
-        }
-    },
-    {
-        "action": "create_recipe",
-        "paramsRef": "./recipes/knife-shield.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["knife-shield-recipe"]
+                "recipes": ["Knife Shield Generation Recipe"]
             }
         }
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/straight.json",
+        "paramsRef": "./executions/straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -137,7 +124,7 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "Name": "straight_gen_item" },
+                        "stringValues": { "Name": "Straight Attack Knife" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
@@ -149,7 +136,7 @@
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/delayed.json",
+        "paramsRef": "./executions/delayed_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -160,7 +147,7 @@
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/wrong-inputs-count.json",
+        "paramsRef": "./executions/wrong_inputs_count.json",
         "output": {
             "txResult": {
                 "errLog": "the item IDs count doesn't match the recipe input"
@@ -170,7 +157,7 @@
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/knife-shield.json",
+        "paramsRef": "./executions/knife_shield.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -209,7 +196,7 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "Name": "delayed_gen_item" },
+                        "stringValues": { "Name": "Delayed Attack Knife" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
@@ -221,7 +208,7 @@
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/coin.json",
+        "paramsRef": "./executions/subm_coin.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -231,7 +218,7 @@
                 "owner": "eugen",
                 "coins": [
                     {
-                        "denom": "generatedcoin",
+                        "denom": "submcoin",
                         "amount": 1
                     }
                 ]

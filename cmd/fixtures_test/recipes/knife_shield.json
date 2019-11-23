@@ -42,7 +42,7 @@
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "knife-shield-recipe",
+    "Name": "Knife Shield Generation Recipe",
     "CookbookName": "submarine",
     "Description": "this recipe is merging level 1 knife and level 1 shield into level 1 knife-shield.",
     "BlockInterval":"0"

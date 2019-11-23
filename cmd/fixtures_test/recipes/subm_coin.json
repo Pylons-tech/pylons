@@ -4,7 +4,7 @@
     "Entries":{
         "CoinOutputs":[
             {
-                "Coin":"helicoin",
+                "Coin":"submcoin",
                 "Count":1,
                 "Weight":1
             }
@@ -13,8 +13,8 @@
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "heliCoinRecipe",
-    "CookbookName": "helicopter",
+    "Name": "Submarine Coin Generation Recipe",
+    "CookbookName": "submarine",
     "Description": "this has to meet character limits lol",
     "BlockInterval":"0"
 }
