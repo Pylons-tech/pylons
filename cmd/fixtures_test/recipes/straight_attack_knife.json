@@ -43,7 +43,7 @@
                 "Strings":[
                     {
                         "Key":"Name",
-                        "Value":"straight_gen_item",
+                        "Value":"Straight Attack Knife",
                         "Rate":"1.0"
                     }
                 ],
@@ -53,7 +53,7 @@
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "straight",
+    "Name": "Straight Attack Knife Generation Recipe",
     "CookbookName": "submarine",
     "Description": "this has to meet character limits lol",
     "BlockInterval":"0"

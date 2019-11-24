@@ -15,7 +15,7 @@
     },
     {
         "action": "fiat_item",
-        "paramsRef": "./items/knife-heli.json",
+        "paramsRef": "./items/heli_knife.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
@@ -26,7 +26,7 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "Name": "knife-heli" },
+                        "stringValues": { "Name": "Helicopter's Knife" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
@@ -38,33 +38,33 @@
     },
     {
         "action": "create_recipe",
-        "paramsRef": "./recipes/straight-heli.json",
+        "paramsRef": "./recipes/heli_straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "recipes": ["straight-heli"]
+                "recipes": ["Helicopter's Straight Attack Knife Generation Recipe"]
             }
         }
     },
     {
         "action": "create_recipe",
-        "paramsRef": "./recipes/coin-heli.json",
+        "paramsRef": "./recipes/heli_coin.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "recipes": ["heliCoinRecipe"]
+                "recipes": ["Helicopter's Coin Generation Recipe"]
             }
         }
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/straight-heli.json",
+        "paramsRef": "./executions/heli_straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -75,7 +75,7 @@
                 "items": [
                     {
                         "stringKeys": [],
-                        "stringValues": { "Name": "straight_gen_item_helicopter" },
+                        "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
                         "dblKeys": [],
                         "dblValues": [],
                         "longKeys": [],
@@ -87,7 +87,7 @@
     },
     {
         "action": "execute_recipe",
-        "paramsRef": "./executions/coin-heli.json",
+        "paramsRef": "./executions/heli_coin.json",
         "output": {
             "txResult": {
                 "status": "Success",
