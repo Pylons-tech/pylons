@@ -1,6 +1,10 @@
 {
     "CoinInputs":[],
-    "ItemInputs":[
+    "ItemInputRefs": [
+        "item_input/knife_lv1.json",
+        "item_input/shield_lv1.json"
+    ],
+    "ItemInputs":[  
         {
             "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "1"}],
             "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "1"}],

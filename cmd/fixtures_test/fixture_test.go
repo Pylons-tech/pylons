@@ -229,6 +229,8 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		newByteValue := UpdateSenderName(byteValue, t)
 		// translate cookbook name to cookbook id
 		newByteValue = UpdateCookbookName(newByteValue, t)
+		// get ItemInputs from ItemInputRefs
+		itemInputs := GetItemInputs(newByteValue, t)
 
 		var rcpType types.Recipe
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpType)
@@ -243,7 +245,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.CookbookID,
 			rcpType.Description,
 			rcpType.CoinInputs,
-			rcpType.ItemInputs,
+			itemInputs,
 			rcpType.Entries,
 			rcpType.BlockInterval,
 			rcpType.Sender,

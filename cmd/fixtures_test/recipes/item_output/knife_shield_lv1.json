@@ -1,0 +1,22 @@
+{
+    "Doubles":[
+        {
+            "Rate":"1.0",
+            "Key":"attack",
+            "WeightRanges":[{ "Lower":"1", "Upper":"1","Weight":1 }]
+        },
+        {
+            "Rate":"1.0",
+            "Key":"defence",
+            "WeightRanges":[{ "Lower":"1", "Upper":"1","Weight":1 }]
+        }
+    ],
+    "Longs":[
+        {
+            "Rate":"1.0",
+            "Key":"level",
+            "WeightRanges":[{ "Lower": 1, "Upper":1,"Weight":1 }]
+        }
+    ],
+    "Strings":[{ "Key":"Name", "Value":"Knife Shield", "Rate":"1.0" }]
+}

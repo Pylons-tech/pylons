@@ -9,6 +9,7 @@ import (
 	"testing"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -27,6 +28,11 @@ type ExecuteRecipeReader struct {
 type ExecRefReader struct {
 	ExecRef int
 }
+
+type ItemInputsRefReader struct {
+	ItemInputRefs []string
+}
+
 type CheckExecutionReader struct {
 	ExecID        string
 	PayToComplete bool
@@ -57,8 +63,7 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 func UpdateSenderName(bytes []byte, t *testing.T) []byte {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(bytes, &raw); err != nil {
-		t.Error("read raw file using json.Unmarshal:", err)
-		t.Fatal(err)
+		t.Fatal("read raw file using json.Unmarshal:", err)
 	}
 	senderName, ok := raw["Sender"].(string)
 	require.True(t, ok)
@@ -72,8 +77,7 @@ func UpdateSenderName(bytes []byte, t *testing.T) []byte {
 func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(bytes, &raw); err != nil {
-		t.Error("read raw file using json.Unmarshal:", err)
-		t.Fatal(err)
+		t.Fatal("read raw file using json.Unmarshal:", err)
 	}
 	cbName, ok := raw["CookbookName"].(string)
 	// t.Log("UpdateCookbookName ", raw["CookbookName"], cbName, ok)
@@ -91,8 +95,7 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	var raw map[string]interface{}
 	if err := json.Unmarshal(bytes, &raw); err != nil {
-		t.Error("read raw file using json.Unmarshal:", err)
-		t.Fatal(err)
+		t.Fatal("read raw file using json.Unmarshal:", err)
 	}
 	rcpName, ok := raw["RecipeName"].(string)
 	require.True(t, ok)
@@ -110,14 +113,12 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	var execRefReader ExecRefReader
 	if err := json.Unmarshal(bytes, &execRefReader); err != nil {
-		t.Error("read execRef using json.Unmarshal:", err)
-		t.Fatal(err)
+		t.Fatal("read execRef using json.Unmarshal:", err)
 	}
 
 	var raw map[string]interface{}
 	if err := json.Unmarshal(bytes, &raw); err != nil {
-		t.Error("read raw file using json.Unmarshal:", err)
-		t.Fatal(err)
+		t.Fatal("read raw file using json.Unmarshal:", err)
 	}
 	// t.Log("bytes", string(bytes))
 	// t.Log("raw parse", raw)
@@ -147,8 +148,7 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 	var itemNamesResp ItemNamesReader
 	if err := json.Unmarshal(bytes, &itemNamesResp); err != nil {
-		t.Error("read item names using json.Unmarshal:", err)
-		t.Fatal(err)
+		t.Fatal("read item names using json.Unmarshal:", err)
 	}
 	ItemIDs := []string{}
 
@@ -159,4 +159,31 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 		ItemIDs = append(ItemIDs, itemID)
 	}
 	return ItemIDs
+}
+
+func GetItemInputs(bytes []byte, t *testing.T) types.ItemInputList {
+	var itemInputRefsReader ItemInputsRefReader
+	if err := json.Unmarshal(bytes, &itemInputRefsReader); err != nil {
+		t.Fatal("read itemInputRefsReader using json.Unmarshal:", err)
+	}
+
+	var raw map[string]interface{}
+	if err := json.Unmarshal(bytes, &raw); err != nil {
+		t.Fatal("read raw file using json.Unmarshal:", err)
+	}
+
+	var itemInputs types.ItemInputList
+
+	for _, iiRef := range itemInputRefsReader.ItemInputRefs {
+		var ii types.ItemInput
+		iiBytes := ReadFile(iiRef, t)
+		err := intTest.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
+		if err != nil {
+			t.Fatal("error parsing item input provided via fixture error=", err)
+		}
+		t.Log("read item input result=", ii)
+
+		itemInputs = append(itemInputs, ii)
+	}
+	return itemInputs
 }

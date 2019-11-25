@@ -1,0 +1,5 @@
+{
+    "Doubles": [{"Key": "defence", "MinValue": "1", "MaxValue": "1"}],
+    "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "1"}],
+    "Strings": [{"Key": "Name", "Value": "Shield"}]
+}
