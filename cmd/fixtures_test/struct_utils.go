@@ -33,6 +33,20 @@ type ItemInputsRefReader struct {
 	ItemInputRefs []string
 }
 
+type NewOutputRefReader struct {
+	Ref    string
+	Weight int
+}
+
+type NewEntryReader struct {
+	CoinOutputs []types.CoinOutput
+	ItemOutputs []NewOutputRefReader
+}
+
+type NewEntriesReader struct {
+	Entries NewEntryReader
+}
+
 type CheckExecutionReader struct {
 	ExecID        string
 	PayToComplete bool
@@ -161,12 +175,13 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 	return ItemIDs
 }
 
-func GetItemInputs(bytes []byte, t *testing.T) types.ItemInputList {
+func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 	var itemInputRefsReader ItemInputsRefReader
 	if err := json.Unmarshal(bytes, &itemInputRefsReader); err != nil {
 		t.Fatal("read itemInputRefsReader using json.Unmarshal:", err)
 	}
 
+	// TODO remove this raw which is not used I guess?
 	var raw map[string]interface{}
 	if err := json.Unmarshal(bytes, &raw); err != nil {
 		t.Fatal("read raw file using json.Unmarshal:", err)
@@ -186,4 +201,30 @@ func GetItemInputs(bytes []byte, t *testing.T) types.ItemInputList {
 		itemInputs = append(itemInputs, ii)
 	}
 	return itemInputs
+}
+
+func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
+	var entriesReader NewEntriesReader
+	if err := json.Unmarshal(bytes, &entriesReader); err != nil {
+		t.Fatal("read entriesReader using json.Unmarshal:", err)
+	}
+
+	var wpl types.WeightedParamList
+	for _, co := range entriesReader.Entries.CoinOutputs {
+		wpl = append(wpl, co)
+	}
+
+	for _, io := range entriesReader.Entries.ItemOutputs {
+		var pio types.ItemOutput // parsed item output
+		ioBytes := ReadFile(io.Ref, t)
+		err := intTest.GetAminoCdc().UnmarshalJSON(ioBytes, &pio)
+		if err != nil {
+			t.Fatal("error parsing item output provided via fixture error=", string(ioBytes), err)
+		}
+		t.Log("read item output result=", pio)
+
+		wpl = append(wpl, pio)
+	}
+
+	return wpl
 }
