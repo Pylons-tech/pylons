@@ -217,12 +217,12 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
 	for _, io := range entriesReader.Entries.ItemOutputs {
 		var pio types.ItemOutput // parsed item output
 		ioBytes := ReadFile(io.Ref, t)
-		err := intTest.GetAminoCdc().UnmarshalJSON(ioBytes, &pio)
+		err := json.Unmarshal(ioBytes, &pio)
 		if err != nil {
-			t.Fatal("error parsing item output provided via fixture error=", string(ioBytes), err)
+			t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
 		}
 		t.Log("read item output result=", pio)
-
+		pio.Weight = io.Weight
 		wpl = append(wpl, pio)
 	}
 
