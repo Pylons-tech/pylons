@@ -229,8 +229,9 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		newByteValue := UpdateSenderName(byteValue, t)
 		// translate cookbook name to cookbook id
 		newByteValue = UpdateCookbookName(newByteValue, t)
-		// get ItemInputs from ItemInputRefs
+		// get item inputs from fileNames
 		itemInputs := GetItemInputsFromBytes(newByteValue, t)
+		// get entries from fileNames
 		entries := GetEntriesFromBytes(newByteValue, t)
 
 		var rcpType types.Recipe

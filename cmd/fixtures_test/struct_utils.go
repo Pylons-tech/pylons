@@ -181,12 +181,6 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		t.Fatal("read itemInputRefsReader using json.Unmarshal:", err)
 	}
 
-	// TODO remove this raw which is not used I guess?
-	var raw map[string]interface{}
-	if err := json.Unmarshal(bytes, &raw); err != nil {
-		t.Fatal("read raw file using json.Unmarshal:", err)
-	}
-
 	var itemInputs types.ItemInputList
 
 	for _, iiRef := range itemInputRefsReader.ItemInputRefs {
