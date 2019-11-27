@@ -5,7 +5,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
-	"sync"
 	"testing"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
@@ -60,7 +59,6 @@ type HumanReadableError struct {
 }
 
 var execIDs = []string{}
-var nonceMux sync.Mutex
 
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)

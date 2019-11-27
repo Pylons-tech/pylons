@@ -11,7 +11,7 @@ import (
 )
 
 func TestCheckExecutionViaCLI(t *testing.T) {
-
+	t.Parallel()
 	tests := []struct {
 		name                    string
 		rcpName                 string
@@ -76,8 +76,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-			WaitForNextBlock()
+			t.Parallel()
 
 			guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
@@ -90,7 +89,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 
 			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs)
-			txhash := TestTxWithMsg(t, execMsg, "eugen")
+			txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 			if tc.waitForBlockInterval {
 				WaitForBlockInterval(tc.blockInterval)
@@ -108,7 +107,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			require.True(t, err == nil)
 
 			chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-			txhash = TestTxWithMsg(t, chkExecMsg, "eugen")
+			txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 
 			WaitForNextBlock()
 
@@ -133,7 +132,7 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			}
 			require.True(t, exec.Completed == tc.shouldSuccess)
 			if tc.tryFinishedExecution {
-				txhash = TestTxWithMsg(t, chkExecMsg, "eugen")
+				txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 				WaitForNextBlock()
 
 				txHandleResBytes, err = GetTxData(txhash, t)

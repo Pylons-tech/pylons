@@ -127,7 +127,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 			execType.PayToComplete,
 			execType.Sender,
 		)
-		txhash := intTest.TestTxWithMsgWithNonce(t, chkExecMsg, execType.Sender.String(), &nonceMux)
+		txhash := intTest.TestTxWithMsgWithNonce(t, chkExecMsg, execType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -167,7 +167,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			itemType.Strings,
 			itemType.Sender,
 		)
-		txhash := intTest.TestTxWithMsgWithNonce(t, itmMsg, itemType.Sender.String(), &nonceMux)
+		txhash := intTest.TestTxWithMsgWithNonce(t, itmMsg, itemType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -207,7 +207,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			cbType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsgWithNonce(t, cbMsg, cbType.Sender.String(), &nonceMux)
+		txhash := intTest.TestTxWithMsgWithNonce(t, cbMsg, cbType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
@@ -253,7 +253,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsgWithNonce(t, rcpMsg, rcpType.Sender.String(), &nonceMux)
+		txhash := intTest.TestTxWithMsgWithNonce(t, rcpMsg, rcpType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
@@ -290,7 +290,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		// t.Log("Executed recipe with below params", execType.RecipeID, execType.Sender, ItemIDs)
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
-		txhash := intTest.TestTxWithMsgWithNonce(t, execMsg, execType.Sender.String(), &nonceMux)
+		txhash := intTest.TestTxWithMsgWithNonce(t, execMsg, execType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)

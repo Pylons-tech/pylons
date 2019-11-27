@@ -27,7 +27,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	require.True(t, err == nil)
 
-	txhash := TestTxWithMsg(t, msgs.NewMsgCreateCookbook(
+	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
 		"this has to meet character limits lol",
 		"SketchyCo",
@@ -37,6 +37,7 @@ func MockCookbook(t *testing.T) (string, error) {
 		msgs.DefaultCostPerBlock,
 		sdkAddr),
 		"eugen",
+		false,
 	)
 
 	err = WaitForNextBlock()
@@ -89,7 +90,7 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	require.True(t, err == nil)
-	txhash := TestTxWithMsg(t,
+	txhash := TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			name,
 			mCB.ID,
@@ -100,6 +101,7 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 			interval,
 			sdkAddr),
 		"eugen",
+		false,
 	)
 
 	err = WaitForNextBlock()

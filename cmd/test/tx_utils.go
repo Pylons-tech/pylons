@@ -26,6 +26,8 @@ type SuccessTxResp struct {
 	TxHash string `json:"txhash"`
 }
 
+var nonceMux sync.Mutex
+
 type NonceStruct struct {
 	Nonce uint64 `json:"nonce"`
 }
@@ -128,13 +130,17 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	return txhash
 }
 
-func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, nonceMux *sync.Mutex) string {
+func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBech32Addr bool) string {
 	tmpDir, err := ioutil.TempDir("", "pylons")
 	if err != nil {
 		panic(err.Error())
 	}
 	nonceRootDir := "./"
 	nonceFile := filepath.Join(nonceRootDir, "nonce.json")
+	if !isBech32Addr {
+		signer = GetAccountAddr(signer, t)
+	}
+
 	accInfo := GetAccountInfoFromAddr(signer, t)
 	nonce := accInfo.Sequence
 	var nonceStruct NonceStruct
