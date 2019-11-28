@@ -30,7 +30,7 @@ jobs:
       - run: pylonscli config output json
       - run: pylonscli config indent true
       - run: pylonscli config trust-node true
-      - run: pylonsd start > pylonsd.log & (sleep 5 && bash ./int_test.sh)
+      - run: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on bash ./int_test.sh)
 
   fixture-test:
     docker:
@@ -49,7 +49,7 @@ jobs:
       - run: pylonscli config output json
       - run: pylonscli config indent true
       - run: pylonscli config trust-node true
-      - run: pylonsd start > pylonsd.log & (sleep 5 && bash ./fixtures_test.sh)
+      - run: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on bash ./fixtures_test.sh)
 
 workflows:
   version: 2
