@@ -188,7 +188,7 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		if err != nil {
 			t.Fatal("error parsing item input provided via fixture error=", err)
 		}
-		t.Log("read item input result=", ii)
+		// t.Log("read item input result=", ii)
 
 		itemInputs = append(itemInputs, ii)
 	}
