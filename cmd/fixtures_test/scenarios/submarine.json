@@ -7,7 +7,6 @@
         },
         "action": "create_cookbook",
         "paramsRef": "./cookbooks/submarine.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -26,7 +25,6 @@
         },
         "action": "fiat_item",
         "paramsRef": "./items/knife.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -54,7 +52,6 @@
         },
         "action": "fiat_item",
         "paramsRef": "./items/shield.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -237,12 +234,10 @@
         "ID": "CHECK_EXECUTION_KNIFE_SHIELD_RECIPE",
         "runAfter": {
             "precondition": ["EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE"],
-            "blockWait": 2,
-            "execIDFrom": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE"
+            "blockWait": 2
         },
         "action": "check_execution",
         "paramsRef": "./check_executions/check_execution.json",
-        "paramsRefDescription": "-1 means just previous execution which was created, execution IDs are stacked in an array",
         "output": {
             "txResult": {
                 "status": "Success",

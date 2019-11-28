@@ -36,17 +36,15 @@ type OutputCheck struct {
 type RunAfterParams struct {
 	PreCondition []string `json:"precondition"`
 	BlockWait    int64    `json:"blockWait"`
-	ExecIDFrom   string   `json:"execIDFrom"`
 }
 
 type FixtureStep struct {
-	ID                   string         `json:"ID"`
-	RunAfter             RunAfterParams `json:"runAfter"`
-	Action               string         `json:"action"`
-	BlockInterval        int64          `json:"blockInterval"`
-	ParamsRef            string         `json:"paramsRef"`
-	ParamsRefDescription string         `json:"paramsRefDescription"`
-	Output               OutputCheck    `json:"output"`
+	ID            string         `json:"ID"`
+	RunAfter      RunAfterParams `json:"runAfter"`
+	Action        string         `json:"action"`
+	BlockInterval int64          `json:"blockInterval"`
+	ParamsRef     string         `json:"paramsRef"`
+	Output        OutputCheck    `json:"output"`
 }
 
 func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {

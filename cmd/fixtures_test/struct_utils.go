@@ -25,7 +25,7 @@ type ExecuteRecipeReader struct {
 }
 
 type ExecRefReader struct {
-	ExecRef int
+	ExecRef string
 }
 
 type ItemInputsRefReader struct {
@@ -123,6 +123,7 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 }
 
 func UpdateExecID(bytes []byte, t *testing.T) []byte {
+	// TODO execIDs should be collected in map and should find from string
 	var execRefReader ExecRefReader
 	if err := json.Unmarshal(bytes, &execRefReader); err != nil {
 		t.Fatal("read execRef using json.Unmarshal:", err)
