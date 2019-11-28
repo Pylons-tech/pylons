@@ -12,8 +12,7 @@ import (
 )
 
 func TestCreateTradeViaCLI(t *testing.T) {
-	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-	WaitForNextBlock()
+	t.Parallel()
 
 	tests := []struct {
 		name    string
@@ -30,7 +29,7 @@ func TestCreateTradeViaCLI(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			require.True(t, err == nil)
-			TestTxWithMsg(t,
+			TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
 					types.GenItemInputList("Raichu"),
@@ -39,6 +38,7 @@ func TestCreateTradeViaCLI(t *testing.T) {
 					"",
 					sdkAddr),
 				"eugen",
+				false,
 			)
 			// TODO check response by txhash
 		})

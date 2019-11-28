@@ -11,8 +11,7 @@ import (
 )
 
 func TestCreateCookbookViaCLI(t *testing.T) {
-	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-	WaitForNextBlock()
+	t.Parallel()
 
 	tests := []struct {
 		name   string
@@ -30,7 +29,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 
 			require.True(t, err == nil)
-			txhash := TestTxWithMsg(t, msgs.NewMsgCreateCookbook(
+			txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"this has to meet character limits lol",
 				"SketchyCo",
@@ -40,6 +39,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 				msgs.DefaultCostPerBlock,
 				sdkAddr),
 				"eugen",
+				false,
 			)
 
 			err = WaitForNextBlock()

@@ -1,41 +1,14 @@
 {
     "CoinInputs":[],
-    "ItemInputs":[
-        {
-            "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "1"}],
-            "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "1"}],
-            "Strings": [{"Key": "Name", "Value": "Knife"}]
-        },
-        {
-            "Doubles": [{"Key": "defence", "MinValue": "1", "MaxValue": "1"}],
-            "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "1"}],
-            "Strings": [{"Key": "Name", "Value": "Shield"}]
-        }
+    "ItemInputRefs": [
+        "./recipes/item_input/knife_lv1.json",
+        "./recipes/item_input/shield_lv1.json"
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Doubles":[
-                    {
-                        "Rate":"1.0",
-                        "Key":"attack",
-                        "WeightRanges":[{ "Lower":"1", "Upper":"1","Weight":1 }]
-                    },
-                    {
-                        "Rate":"1.0",
-                        "Key":"defence",
-                        "WeightRanges":[{ "Lower":"1", "Upper":"1","Weight":1 }]
-                    }
-                ],
-                "Longs":[
-                    {
-                        "Rate":"1.0",
-                        "Key":"level",
-                        "WeightRanges":[{ "Lower": 1, "Upper":1,"Weight":1 }]
-                    }
-                ],
-                "Strings":[{ "Key":"Name", "Value":"Knife Shield", "Rate":"1.0" }],
+                "Ref": "./recipes/item_output/knife_shield_lv1.json",
                 "Weight":1
             }
         ]

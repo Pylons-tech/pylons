@@ -9,8 +9,7 @@ import (
 )
 
 func TestExecuteRecipeViaCLI(t *testing.T) {
-	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-	WaitForNextBlock()
+	t.Parallel()
 
 	tests := []struct {
 		name            string
@@ -37,10 +36,11 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			require.True(t, err == nil)
-			TestTxWithMsg(
+			TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
 				"eugen",
+				false,
 			)
 
 			WaitForNextBlock()

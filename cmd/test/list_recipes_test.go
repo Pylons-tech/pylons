@@ -7,8 +7,7 @@ import (
 )
 
 func TestListRecipeViaCLI(t *testing.T) {
-	// TODO if we find a way to sign using sequence number between same blocks, this wait can be removed
-	WaitForNextBlock()
+	t.Parallel()
 
 	tests := []struct {
 		name           string
