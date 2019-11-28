@@ -213,7 +213,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
 		if err != nil {
 			t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
 		}
-		t.Log("read item output result=", pio)
+		// t.Log("read item output result=", pio)
 		pio.Weight = io.Weight
 		wpl = append(wpl, pio)
 	}

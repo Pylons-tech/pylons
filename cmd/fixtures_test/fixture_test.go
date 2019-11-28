@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"path/filepath"
-	"strings"
+	"strconv"
 	"testing"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
@@ -17,6 +17,15 @@ import (
 
 	"github.com/stretchr/testify/require"
 )
+
+type FixtureTestQueueItem struct {
+	fixtureFileName string
+	idx             int
+	stepID          string
+	status          string // "NOT_STARTED" | "IN_PROGRESS" | "DONE"
+}
+
+var workQueues []FixtureTestQueueItem
 
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
 
@@ -326,36 +335,89 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	}
 }
 
-func RunSingleFixtureTest(file string, t *testing.T) {
-	var fixtureSteps []FixtureStep
-	byteValue := ReadFile(file, t)
-	json.Unmarshal([]byte(byteValue), &fixtureSteps)
+func GetQueueID(file string, idx int, stepID string) int {
+	for i, work := range workQueues {
+		if work.fixtureFileName == file && work.stepID == stepID {
+			return i
+		}
+	}
+	return -1
+}
 
-	for idx, step := range fixtureSteps {
-		t.Log("Running file=", file, "step_id=", idx)
+func GoodToGoForStep(file string, idx int, step FixtureStep, t *testing.T) bool {
+	for _, condition := range step.RunAfter.PreCondition {
+		queID := GetQueueID(file, idx, condition)
+		if queID == -1 {
+			t.Fatal("No WorkQueue found from specified param ID=", condition, "idx=", idx, "file=", file, workQueues)
+		}
+		work := workQueues[queID]
+		if work.status != "DONE" {
+			return false
+		}
+	}
+	return true
+}
+
+func UpdateWorkQueueStatus(file string, idx int, step FixtureStep, targetStatus string, t *testing.T) {
+	queID := GetQueueID(file, idx, step.ID)
+	if queID == -1 {
+		t.Fatal("No WorkQueue found from specified param ID=", step.ID, "idx=", idx, "file=", file, workQueues)
+	}
+	workQueues[queID].status = targetStatus
+}
+
+func WaitForCondition(file string, idx int, step FixtureStep, t *testing.T) {
+	if GoodToGoForStep(file, idx, step, t) {
+		intTest.WaitForBlockInterval(step.RunAfter.BlockWait)
+	} else {
+		intTest.WaitForNextBlock()
+		WaitForCondition(file, idx, step, t)
+	}
+}
+
+func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *testing.T) {
+	t.Run(strconv.Itoa(idx)+"_"+step.ID, func(t *testing.T) {
+		t.Parallel()
+		WaitForCondition(file, idx, step, t)
 		switch step.Action {
 		case "fiat_item":
 			RunFiatItem(step, t)
-			PropertyExistCheck(step, t)
 		case "create_cookbook":
 			RunCreateCookbook(step, t)
-			PropertyExistCheck(step, t)
 		case "create_recipe":
 			RunCreateRecipe(step, t)
-			PropertyExistCheck(step, t)
 		case "execute_recipe":
 			RunExecuteRecipe(step, t)
-			PropertyExistCheck(step, t)
-		case "block_wait":
-			RunBlockWait(step, t)
-			PropertyExistCheck(step, t)
 		case "check_execution":
 			RunCheckExecution(step, t)
-			PropertyExistCheck(step, t)
 		default:
 			t.Errorf("step with unrecognizable action found %s", step.Action)
 		}
-	}
+		PropertyExistCheck(step, t)
+		UpdateWorkQueueStatus(file, idx, step, "DONE", t)
+	})
+}
+
+func RunSingleFixtureTest(file string, t *testing.T) {
+	t.Run(file, func(t *testing.T) {
+		t.Parallel()
+		var fixtureSteps []FixtureStep
+		byteValue := ReadFile(file, t)
+		json.Unmarshal([]byte(byteValue), &fixtureSteps)
+
+		for idx, step := range fixtureSteps {
+			workQueues = append(workQueues, FixtureTestQueueItem{
+				fixtureFileName: file,
+				idx:             idx,
+				stepID:          step.ID,
+				status:          "NOT_STARTED",
+			})
+		}
+		for idx, step := range fixtureSteps {
+			UpdateWorkQueueStatus(file, idx, step, "IN_PROGRESS", t)
+			ProcessSingleFixtureQueueItem(file, idx, step, t)
+		}
+	})
 }
 
 func TestFixturesViaCLI(t *testing.T) {
@@ -374,11 +436,7 @@ func TestFixturesViaCLI(t *testing.T) {
 		if filepath.Ext(file) != ".json" {
 			continue
 		}
-		t.Run(file, func(t *testing.T) {
-			t.Parallel()
-			testFile := strings.Replace(t.Name(), "TestFixturesViaCLI/", "", -1)
-			t.Log("Running scenario path=", testFile)
-			RunSingleFixtureTest(testFile, t)
-		})
+		t.Log("Running scenario path=", file)
+		RunSingleFixtureTest(file, t)
 	}
 }

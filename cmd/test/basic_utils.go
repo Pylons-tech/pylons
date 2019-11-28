@@ -107,7 +107,7 @@ func WaitForBlockInterval(interval int64) error {
 		time.Sleep(100 * time.Millisecond)
 		counter += 1
 	}
-	return errors.New("No new block found though waited for 30s x interval")
+	return errors.New("You are waiting too long time which is 30s")
 }
 
 func CleanFile(filePath string, t *testing.T) {

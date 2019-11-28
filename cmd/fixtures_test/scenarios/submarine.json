@@ -1,5 +1,10 @@
 [
     {
+        "ID": "CREATE_SUBMARINE_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
         "action": "create_cookbook",
         "paramsRef": "./cookbooks/submarine.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
@@ -14,6 +19,11 @@
         }
     },
     {
+        "ID": "KNIFE_ITEM_CREATION",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
         "action": "fiat_item",
         "paramsRef": "./items/knife.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
@@ -37,6 +47,11 @@
         }
     },
     {
+        "ID": "SHIELD_ITEM_CREATION",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
         "action": "fiat_item",
         "paramsRef": "./items/shield.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
@@ -60,6 +75,11 @@
         }
     },
     {
+        "ID": "CREATE_STRAIGHT_ATTACK_KNIFE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
         "action": "create_recipe",
         "paramsRef": "./recipes/straight_attack_knife.json",
         "output": {
@@ -73,6 +93,11 @@
         }
     },
     {
+        "ID": "CREATE_DELAYED_ATTACK_KNIFE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
         "action": "create_recipe",
         "paramsRef": "./recipes/delayed_attack_knife.json",
         "output": {
@@ -86,6 +111,11 @@
         }
     },
     {
+        "ID": "CREATE_SUBMARINE_COIN_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
         "action": "create_recipe",
         "paramsRef": "./recipes/subm_coin.json",
         "output": {
@@ -99,6 +129,11 @@
         }
     },
     {
+        "ID": "CREATE_KNIFE_SHIELD_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
         "action": "create_recipe",
         "paramsRef": "./recipes/knife_shield.json",
         "output": {
@@ -112,6 +147,11 @@
         }
     },
     {
+        "ID": "EXECUTE_STRAIGHT_ATTACK_KNIFE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_STRAIGHT_ATTACK_KNIFE_RECIPE"],
+            "blockWait": 0
+        },
         "action": "execute_recipe",
         "paramsRef": "./executions/straight_attack_knife.json",
         "output": {
@@ -135,6 +175,11 @@
         }
     },
     {
+        "ID": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE"],
+            "blockWait": 0
+        },
         "action": "execute_recipe",
         "paramsRef": "./executions/delayed_attack_knife.json",
         "output": {
@@ -146,6 +191,11 @@
         }
     },
     {
+        "ID": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE_WRONG_INPUTS_COUNT",
+        "runAfter": {
+            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE"],
+            "blockWait": 0
+        },
         "action": "execute_recipe",
         "paramsRef": "./executions/wrong_inputs_count.json",
         "output": {
@@ -156,6 +206,11 @@
         }
     },
     {
+        "ID": "EXECUTE_KNIFE_SHIELD_RECIPE",
+        "runAfter": {
+            "precondition": ["KNIFE_ITEM_CREATION", "SHIELD_ITEM_CREATION", "CREATE_KNIFE_SHIELD_RECIPE"],
+            "blockWait": 0
+        },
         "action": "execute_recipe",
         "paramsRef": "./executions/knife_shield.json",
         "output": {
@@ -179,10 +234,12 @@
         }
     },
     {
-        "action": "block_wait",
-        "blockInterval": 2
-    },
-    {
+        "ID": "CHECK_EXECUTION_KNIFE_SHIELD_RECIPE",
+        "runAfter": {
+            "precondition": ["EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE"],
+            "blockWait": 2,
+            "execIDFrom": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE"
+        },
         "action": "check_execution",
         "paramsRef": "./check_executions/check_execution.json",
         "paramsRefDescription": "-1 means just previous execution which was created, execution IDs are stacked in an array",
@@ -207,6 +264,11 @@
         }
     },
     {
+        "ID": "EXECUTE_SUBMARINE_COIN_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COIN_RECIPE"],
+            "blockWait": 0
+        },
         "action": "execute_recipe",
         "paramsRef": "./executions/subm_coin.json",
         "output": {
