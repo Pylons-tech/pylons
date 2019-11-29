@@ -103,7 +103,7 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 			t.Errorf("step with unrecognizable action found %s", step.Action)
 		}
 		PropertyExistCheck(step, t)
-		UpdateWorkQueueStatus(file, idx, step, "DONE", t)
+		UpdateWorkQueueStatus(file, idx, step, DONE, t)
 	})
 }
 
@@ -119,11 +119,11 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 				fixtureFileName: file,
 				idx:             idx,
 				stepID:          step.ID,
-				status:          "NOT_STARTED",
+				status:          NOT_STARTED,
 			})
 		}
 		for idx, step := range fixtureSteps {
-			UpdateWorkQueueStatus(file, idx, step, "IN_PROGRESS", t)
+			UpdateWorkQueueStatus(file, idx, step, IN_PROGRESS, t)
 			ProcessSingleFixtureQueueItem(file, idx, step, t)
 		}
 	})

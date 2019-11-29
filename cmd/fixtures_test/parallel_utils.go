@@ -6,11 +6,19 @@ import (
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 )
 
+type Status int
+
+const (
+	NOT_STARTED = iota
+	IN_PROGRESS
+	DONE
+)
+
 type FixtureTestQueueItem struct {
 	fixtureFileName string
 	idx             int
 	stepID          string
-	status          string // "NOT_STARTED" | "IN_PROGRESS" | "DONE"
+	status          Status // NOT_STARTED | IN_PROGRESS | DONE
 }
 
 var workQueues []FixtureTestQueueItem
@@ -31,14 +39,14 @@ func GoodToGoForStep(file string, idx int, step FixtureStep, t *testing.T) bool 
 			t.Fatal("No WorkQueue found from specified param ID=", condition, "idx=", idx, "file=", file, workQueues)
 		}
 		work := workQueues[queID]
-		if work.status != "DONE" {
+		if work.status != DONE {
 			return false
 		}
 	}
 	return true
 }
 
-func UpdateWorkQueueStatus(file string, idx int, step FixtureStep, targetStatus string, t *testing.T) {
+func UpdateWorkQueueStatus(file string, idx int, step FixtureStep, targetStatus Status, t *testing.T) {
 	queID := GetQueueID(file, idx, step.ID)
 	if queID == -1 {
 		t.Fatal("No WorkQueue found from specified param ID=", step.ID, "idx=", idx, "file=", file, workQueues)
