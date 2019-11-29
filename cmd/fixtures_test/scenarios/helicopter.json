@@ -7,7 +7,6 @@
         },
         "action": "create_cookbook",
         "paramsRef": "./cookbooks/helicopter.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -26,7 +25,6 @@
         },
         "action": "fiat_item",
         "paramsRef": "./items/heli_knife.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
                 "status": "Success"

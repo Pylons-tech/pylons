@@ -2,7 +2,6 @@ package fixtureTest
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -25,7 +24,7 @@ type ExecuteRecipeReader struct {
 }
 
 type ExecRefReader struct {
-	ExecRef int
+	ExecRef string
 }
 
 type ItemInputsRefReader struct {
@@ -58,7 +57,7 @@ type HumanReadableError struct {
 	Message   string `json:"message"`
 }
 
-var execIDs = []string{}
+var execIDs map[string]string = make(map[string]string)
 
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)
@@ -132,29 +131,14 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	if err := json.Unmarshal(bytes, &raw); err != nil {
 		t.Fatal("read raw file using json.Unmarshal:", err)
 	}
-	// t.Log("bytes", string(bytes))
-	// t.Log("raw parse", raw)
-	execRef := execRefReader.ExecRef
-	// t.Log("execRef", execRef, len(execIDs))
-	var targetExecID string
-	if execRef < 0 {
-		if len(execIDs) == 0 {
-			t.Fatal(errors.New("there's no active execID available"))
-		}
-		targetExecID = execIDs[len(execIDs)+execRef]
-	} else {
-		if len(execIDs) <= execRef {
-			t.Fatal(errors.New("specified ExecRef is out of range"))
-		}
-		targetExecID = execIDs[execRef]
+	var ok bool
+	raw["ExecID"], ok = execIDs[execRefReader.ExecRef]
+	if !ok {
+		t.Fatal("execID not available for ref=", execRefReader.ExecRef)
 	}
-
-	raw["ExecID"] = targetExecID
 	newBytes, err := json.Marshal(raw)
 	require.True(t, err == nil)
-	// t.Log("remarshaling into json:", string(newBytes), err)
 	return newBytes
-
 }
 
 func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {

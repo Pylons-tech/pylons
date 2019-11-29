@@ -1,5 +1,5 @@
 {
     "PayToComplete": false,
-    "ExecRef": -1,
+    "ExecRef": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE",
     "Sender":"eugen"
 }
