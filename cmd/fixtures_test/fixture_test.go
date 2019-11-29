@@ -18,15 +18,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-type FixtureTestQueueItem struct {
-	fixtureFileName string
-	idx             int
-	stepID          string
-	status          string // "NOT_STARTED" | "IN_PROGRESS" | "DONE"
-}
-
-var workQueues []FixtureTestQueueItem
-
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
 
 	pCheck := step.Output.Property
@@ -38,7 +29,6 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 	if len(pCheck.Cookbooks) > 0 {
 		for _, cbName := range pCheck.Cookbooks {
-			// t.Log("Checking cookbook exist with name=", cbName, "owner=", pOwnerAddr)
 			_, exist, err := intTest.GetCookbookIDFromName(cbName, pOwnerAddr)
 			if err != nil {
 				t.Error("error checking cookbook exist", err)
@@ -54,7 +44,6 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 	if len(pCheck.Recipes) > 0 {
 		for _, rcpName := range pCheck.Recipes {
-			// t.Log("Checking recipe exist with name=", rcpName, "id=", idx)
 			guid, err := intTest.GetRecipeGUIDFromName(rcpName, pOwnerAddr)
 			intTest.ErrValidation(t, "error checking if recipe already exist %+v", err)
 
@@ -73,32 +62,20 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 			items, err := intTest.ListItemsViaCLI(pOwnerAddr)
 			intTest.ErrValidation(t, "error listing items %+v", err)
 			for _, item := range items {
-				if !CheckItemWithStringKeys(item, itemCheck.StringKeys) {
-					continue
+				if CheckItemWithStringKeys(item, itemCheck.StringKeys) &&
+					CheckItemWithStringValues(item, itemCheck.StringValues) &&
+					CheckItemWithDblKeys(item, itemCheck.DblKeys) &&
+					CheckItemWithDblValues(item, itemCheck.DblValues) &&
+					CheckItemWithLongKeys(item, itemCheck.LongKeys) &&
+					CheckItemWithLongValues(item, itemCheck.LongValues) {
+					fitItemExist = true
 				}
-				if !CheckItemWithStringValues(item, itemCheck.StringValues) {
-					continue
-				}
-				if !CheckItemWithDblKeys(item, itemCheck.DblKeys) {
-					continue
-				}
-				if !CheckItemWithDblValues(item, itemCheck.DblValues) {
-					continue
-				}
-				if !CheckItemWithLongKeys(item, itemCheck.LongKeys) {
-					continue
-				}
-				if !CheckItemWithLongValues(item, itemCheck.LongValues) {
-					continue
-				}
-				fitItemExist = true
 			}
 			intTest.ErrValidation(t, "error checking items with string keys %+v", err)
 
 			if fitItemExist {
 				t.Log("checked item existence")
 			} else {
-				t.Error("no item exist which fit item spec")
 				t.Fatal("no item exist which fit item spec")
 			}
 		}
@@ -109,9 +86,6 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).GTE(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
-}
-func RunBlockWait(step FixtureStep, t *testing.T) {
-	intTest.WaitForBlockInterval(step.BlockInterval)
 }
 
 func RunCheckExecution(step FixtureStep, t *testing.T) {
@@ -345,46 +319,6 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				t.Log("straight execution result output", string(resp.Output))
 			}
 		}
-	}
-}
-
-func GetQueueID(file string, idx int, stepID string) int {
-	for i, work := range workQueues {
-		if work.fixtureFileName == file && work.stepID == stepID {
-			return i
-		}
-	}
-	return -1
-}
-
-func GoodToGoForStep(file string, idx int, step FixtureStep, t *testing.T) bool {
-	for _, condition := range step.RunAfter.PreCondition {
-		queID := GetQueueID(file, idx, condition)
-		if queID == -1 {
-			t.Fatal("No WorkQueue found from specified param ID=", condition, "idx=", idx, "file=", file, workQueues)
-		}
-		work := workQueues[queID]
-		if work.status != "DONE" {
-			return false
-		}
-	}
-	return true
-}
-
-func UpdateWorkQueueStatus(file string, idx int, step FixtureStep, targetStatus string, t *testing.T) {
-	queID := GetQueueID(file, idx, step.ID)
-	if queID == -1 {
-		t.Fatal("No WorkQueue found from specified param ID=", step.ID, "idx=", idx, "file=", file, workQueues)
-	}
-	workQueues[queID].status = targetStatus
-}
-
-func WaitForCondition(file string, idx int, step FixtureStep, t *testing.T) {
-	if GoodToGoForStep(file, idx, step, t) {
-		intTest.WaitForBlockInterval(step.RunAfter.BlockWait)
-	} else {
-		intTest.WaitForNextBlock()
-		WaitForCondition(file, idx, step, t)
 	}
 }
 
