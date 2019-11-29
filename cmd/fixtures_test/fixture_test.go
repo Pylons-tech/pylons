@@ -326,7 +326,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 				err := json.Unmarshal(resp.Output, &scheduleRes)
 				require.True(t, err == nil)
-				execIDs = append(execIDs, scheduleRes.ExecID)
+				execIDs[step.ID] = scheduleRes.ExecID
 				t.Log("scheduled execution", scheduleRes.ExecID)
 			} else { // straight execution
 				t.Log("straight execution result output", string(resp.Output))
