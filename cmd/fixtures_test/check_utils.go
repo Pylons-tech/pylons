@@ -4,47 +4,39 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 )
 
-type ItemCheck struct {
-	StringKeys   []string                     `json:"stringKeys"`
-	StringValues map[string]string            `json:"stringValues"`
-	DblKeys      []string                     `json:"dblKeys"`
-	DblValues    map[string]types.FloatString `json:"dblValues"`
-	LongKeys     []string                     `json:"longKeys"`
-	LongValues   map[string]int               `json:"longValues"`
-}
-type CoinCheck struct {
-	Coin   string `json:"denom"`
-	Amount int64  `json:"amount"`
-}
-type TxResultCheck struct {
-	Status   string `json:"status"`
-	Message  string `json:"message"`
-	ErrorLog string `json:"errLog"`
-}
-type UserPropertyCheck struct {
-	Owner     string      `json:"owner"`
-	Cookbooks []string    `json:"cookbooks"`
-	Recipes   []string    `json:"recipes"`
-	Items     []ItemCheck `json:"items"`
-	Coins     []CoinCheck `json:"coins"`
-}
-type OutputCheck struct {
-	TxResult TxResultCheck     `json:"txResult"`
-	Property UserPropertyCheck `json:"property"`
-}
-
-type RunAfterParams struct {
-	PreCondition []string `json:"precondition"`
-	BlockWait    int64    `json:"blockWait"`
-}
-
 type FixtureStep struct {
-	ID            string         `json:"ID"`
-	RunAfter      RunAfterParams `json:"runAfter"`
-	Action        string         `json:"action"`
-	BlockInterval int64          `json:"blockInterval"`
-	ParamsRef     string         `json:"paramsRef"`
-	Output        OutputCheck    `json:"output"`
+	ID       string `json:"ID"`
+	RunAfter struct {
+		PreCondition []string `json:"precondition"`
+		BlockWait    int64    `json:"blockWait"`
+	} `json:"runAfter"`
+	Action        string `json:"action"`
+	BlockInterval int64  `json:"blockInterval"`
+	ParamsRef     string `json:"paramsRef"`
+	Output        struct {
+		TxResult struct {
+			Status   string `json:"status"`
+			Message  string `json:"message"`
+			ErrorLog string `json:"errLog"`
+		} `json:"txResult"`
+		Property struct {
+			Owner     string   `json:"owner"`
+			Cookbooks []string `json:"cookbooks"`
+			Recipes   []string `json:"recipes"`
+			Items     []struct {
+				StringKeys   []string                     `json:"stringKeys"`
+				StringValues map[string]string            `json:"stringValues"`
+				DblKeys      []string                     `json:"dblKeys"`
+				DblValues    map[string]types.FloatString `json:"dblValues"`
+				LongKeys     []string                     `json:"longKeys"`
+				LongValues   map[string]int               `json:"longValues"`
+			} `json:"items"`
+			Coins []struct {
+				Coin   string `json:"denom"`
+				Amount int64  `json:"amount"`
+			} `json:"coins"`
+		} `json:"property"`
+	} `json:"output"`
 }
 
 func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
