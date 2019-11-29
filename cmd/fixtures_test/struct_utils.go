@@ -42,7 +42,6 @@ func UpdateSenderName(bytes []byte, t *testing.T) []byte {
 	raw["Sender"] = intTest.GetAccountAddr(senderName, t)
 	newBytes, err := json.Marshal(raw)
 	require.True(t, err == nil)
-	// t.Log("remarshaling into json:", string(newBytes), err)
 	return newBytes
 }
 
@@ -50,7 +49,6 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
 
 	cbName, ok := raw["CookbookName"].(string)
-	// t.Log("UpdateCookbookName ", raw["CookbookName"], cbName, ok)
 	require.True(t, ok)
 	cbID, exist, err := intTest.GetCookbookIDFromName(cbName, "")
 	require.True(t, exist)
@@ -58,7 +56,6 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 	raw["CookbookID"] = cbID
 	newBytes, err := json.Marshal(raw)
 	require.True(t, err == nil)
-	// t.Log("remarshaling into json:", string(newBytes), err)
 	return newBytes
 }
 
@@ -67,14 +64,12 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 
 	rcpName, ok := raw["RecipeName"].(string)
 	require.True(t, ok)
-	// t.Log("reading recipe with name", rcpName)
 	rcpID, exist, err := intTest.GetRecipeIDFromName(rcpName)
 	require.True(t, exist)
 	require.True(t, err == nil)
 	raw["RecipeID"] = rcpID
 	newBytes, err := json.Marshal(raw)
 	require.True(t, err == nil)
-	// t.Log("remarshaling into json:", string(newBytes), err)
 	return newBytes
 }
 
