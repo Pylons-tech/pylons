@@ -123,7 +123,11 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		// translate execRef to execID
 		newByteValue = UpdateExecID(newByteValue, t)
 
-		var execType CheckExecutionReader
+		var execType struct {
+			ExecID        string
+			PayToComplete bool
+			Sender        sdk.AccAddress
+		}
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
 			t.Error("error reading using GetAminoCdc ", execType, err)
@@ -289,7 +293,12 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		// translate itemNames to itemIDs
 		ItemIDs := GetItemIDsFromNames(newByteValue, t)
 
-		var execType ExecuteRecipeReader
+		var execType struct {
+			RecipeID string
+			Sender   sdk.AccAddress
+			ItemIDs  []string `json:"ItemIDs"`
+		}
+
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
 			t.Error("error reading using GetAminoCdc ", execType, err)
@@ -306,7 +315,11 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		txErrorBytes, err := intTest.GetTxError(txhash, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
-			hmrErr := HumanReadableError{}
+			hmrErr := struct {
+				Codespace string `json:"codespace"`
+				Code      int    `json:"code"`
+				Message   string `json:"message"`
+			}{}
 			err = json.Unmarshal(txErrorBytes, &hmrErr)
 			require.True(t, err == nil)
 			require.True(t, hmrErr.Message == step.Output.TxResult.ErrorLog)

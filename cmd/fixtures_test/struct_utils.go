@@ -9,53 +9,8 @@ import (
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
-
-type ItemNamesReader struct {
-	ItemNames []string
-}
-
-type ExecuteRecipeReader struct {
-	RecipeID string
-	Sender   sdk.AccAddress
-	ItemIDs  []string `json:"ItemIDs"`
-}
-
-type ExecRefReader struct {
-	ExecRef string
-}
-
-type ItemInputsRefReader struct {
-	ItemInputRefs []string
-}
-
-type NewOutputRefReader struct {
-	Ref    string
-	Weight int
-}
-
-type NewEntryReader struct {
-	CoinOutputs []types.CoinOutput
-	ItemOutputs []NewOutputRefReader
-}
-
-type NewEntriesReader struct {
-	Entries NewEntryReader
-}
-
-type CheckExecutionReader struct {
-	ExecID        string
-	PayToComplete bool
-	Sender        sdk.AccAddress
-}
-
-type HumanReadableError struct {
-	Codespace string `json:"codespace"`
-	Code      int    `json:"code"`
-	Message   string `json:"message"`
-}
 
 var execIDs map[string]string = make(map[string]string)
 
@@ -126,7 +81,9 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
 
-	var execRefReader ExecRefReader
+	var execRefReader struct {
+		ExecRef string
+	}
 	if err := json.Unmarshal(bytes, &execRefReader); err != nil {
 		t.Fatal("read execRef using json.Unmarshal:", err)
 	}
@@ -142,7 +99,9 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 }
 
 func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
-	var itemNamesResp ItemNamesReader
+	var itemNamesResp struct {
+		ItemNames []string
+	}
 	if err := json.Unmarshal(bytes, &itemNamesResp); err != nil {
 		t.Fatal("read item names using json.Unmarshal:", err)
 	}
@@ -158,7 +117,9 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 }
 
 func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
-	var itemInputRefsReader ItemInputsRefReader
+	var itemInputRefsReader struct {
+		ItemInputRefs []string
+	}
 	if err := json.Unmarshal(bytes, &itemInputRefsReader); err != nil {
 		t.Fatal("read itemInputRefsReader using json.Unmarshal:", err)
 	}
@@ -178,7 +139,16 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 }
 
 func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
-	var entriesReader NewEntriesReader
+	var entriesReader struct {
+		Entries struct {
+			CoinOutputs []types.CoinOutput
+			ItemOutputs []struct {
+				Ref    string
+				Weight int
+			}
+		}
+	}
+
 	if err := json.Unmarshal(bytes, &entriesReader); err != nil {
 		t.Fatal("read entriesReader using json.Unmarshal:", err)
 	}
