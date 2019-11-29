@@ -46,7 +46,7 @@ Item consists of below fields.
 | 4  | Longs        | array  | level: 1                              | contains int attributes of the item.        |
 | 5  | Strings      | array  | name: "shield", use: "defend and run" | contains string attributes of the item.     |
 
-Sample cookbook JSON
+Sample item JSON
 
 ```
 {
@@ -55,5 +55,47 @@ Sample cookbook JSON
   "Strings": [{ "Key": "Name","Value": "Shield" }],
   "CookbookName": "submarine",
   "Sender": "eugen"
+}
+```
+
+## Recipe
+
+Recipe consists of below fields.
+
+| No | Field         | Type   | Sample                                                       | Description                                                |
+|----|---------------|--------|--------------------------------------------------------------|------------------------------------------------------------|
+| 1  | CookbookName  | string | "submarine"                                                  | contains the name of cookbook for the recipe.              |
+| 2  | Name          | string | "Knife Shield Generation Recipe"                             | name of recipe.                                            |
+| 3  | Description   | string | "level 1 knife and level 1 shield into level 1 knife-shield" | recipe description                                         |
+| 4  | Sender        | string | "eugen"                                                      | recipe owner name.                                         |
+| 5  | CoinInputs    | array  | "goldcoin": 1, "silvercoin": 1                               | required coins to run recipe.                              |
+| 6  | ItemInputs    | array  | level 1 knife, level 1 shield                                | required items to run recipe.                              |
+| 7  | Entries       | array  | level 1 knife-shield                                         | Items and coins which can be generated from this recipe.   |
+| 8  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time. |
+
+Sample recipe JSON
+
+```
+{
+  "CoinInputs":[],
+  "ItemInputRefs": [
+    "./recipes/item_input/knife_lv1.json",
+    "./recipes/item_input/shield_lv1.json"
+  ],
+  "Entries":{
+    "CoinOutputs":[],
+    "ItemOutputs":[
+      {
+        "Ref": "./recipes/item_output/knife_shield_lv1.json",
+        "Weight":1
+      }
+    ]
+  },
+  "ExtraInfo":"",
+  "Sender":"eugen",
+  "Name": "Knife Shield Generation Recipe",
+  "CookbookName": "submarine",
+  "Description": "this recipe is merging level 1 knife and level 1 shield into level 1 knife-shield.",
+  "BlockInterval":"0"
 }
 ```
