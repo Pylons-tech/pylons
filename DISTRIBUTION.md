@@ -99,3 +99,112 @@ Sample recipe JSON
   "BlockInterval":"0"
 }
 ```
+
+### ItemInputs
+This field is showing required items to run recipe.
+
+| No | Field   | type  | sample           | description                                |
+|----|---------|-------|------------------|--------------------------------------------|
+| 1  | Doubles | array | "attack": 1      | required conditions for double attributes. |
+| 2  | Longs   | array | "level": 1       | required conditions for int attributes.    |
+| 3  | Strings | array | "name": "shield" | required conditions for string attributes. |
+
+| No | Field    | Type       | sample   | description                                                                         |
+|----|----------|------------|----------|-------------------------------------------------------------------------------------|
+| 1  | Key      | string     | "attack" | attribute of item to check.                                                         |
+| 2  | Value    | string     | 1        | item's "Key" attribute shoud be same as this value.                                 |
+| 3  | MinValue | int/double | 1        | For int/double values they are checked with range and this describes minimum value. |
+| 4  | MaxValue | int/double | 2        | For int/double values they are checked with range and this describes maximum value. |
+
+Sample ItemInputs JSON
+
+```
+[{
+  "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "1"}],
+  "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "1"}],
+  "Strings": [{"Key": "Name", "Value": "Knife"}]
+}]
+```
+### CoinInputs
+This field is showing required coins to run recipe.
+
+| No | Field | type   | sample     | description              |
+|----|-------|--------|------------|--------------------------|
+| 1  | Coin  | string | "goldcoin" | name of coin             |
+| 2  | Count | int    | 1          | required amount of coin. |
+
+Sample CoinInput JSON
+
+```
+[{
+  Coin: "goldcoin"
+	Count: "1"
+}]
+```
+### Entries
+Entries consist of coin outputs and item outputs. It means recipe can generate coin or item.
+
+Sample Entries JSON
+```
+{
+  "CoinOutputs":[],
+  "ItemOutputs":[
+    {
+      "Ref": "./recipes/item_output/knife_shield_lv1.json",
+      "Weight":1
+    }
+  ]
+}
+```
+#### ItemOutputs
+This describes item which can be generated from recipe.
+
+| No | Field        | type   | sample         | description                                                                      |
+|----|--------------|--------|----------------|----------------------------------------------------------------------------------|
+| 1  | Key          | string | attack         | attribute which want to describe.                                                |
+| 2  | Rate         | double | 0.5            | This describes the percentage of the attribute is available or not.              |
+| 3  | Value        | string | "Knife Shield" | string attribute of item output.                                                 |
+| 4  | WeightRanges | array  | 3-5            | the recipe has randomness in output and this field is for int/double attributes. |
+
+Sample ItemOutputs JSON
+```
+[{
+    "Doubles":[
+        {
+            "Rate":"1.0",
+            "Key":"attack",
+            "WeightRanges":[{ "Lower":"1", "Upper":"1","Weight":1 }]
+        },
+        {
+            "Rate":"1.0",
+            "Key":"defence",
+            "WeightRanges":[{ "Lower":"1", "Upper":"1","Weight":1 }]
+        }
+    ],
+    "Longs":[
+        {
+            "Rate":"1.0",
+            "Key":"level",
+            "WeightRanges":[{ "Lower": 1, "Upper":1,"Weight":1 }]
+        }
+    ],
+    "Strings":[{ "Key":"Name", "Value":"Knife Shield", "Rate":"1.0" }]
+}]
+```
+#### CoinOutputs
+This describes coin which can be generated from recipe.
+
+| No | Field  | type   | sample     | description                                                         |
+|----|--------|--------|------------|---------------------------------------------------------------------|
+| 1  | Coin   | string | "goldcoin" | This shows the name of coin to be generated.                        |
+| 2  | Count  | int    | 1          | This shows the number of coins to be generated.                     |
+| 3  | Weight | int    | 1          | This is used to describe the percentage of coin could be generated. |
+
+Sample CoinOutputs JSON
+```
+{
+  "Coin":"submcoin",
+  "Count":1,
+  "Weight":1
+}
+```
