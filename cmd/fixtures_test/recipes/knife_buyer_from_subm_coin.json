@@ -2,7 +2,7 @@
     "CoinInputs":[
         {
             "Coin": "submcoin",
-            "Count": 1
+            "Count": "1"
         }
     ],
     "ItemInputRefs": [],

@@ -36,9 +36,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Knife" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -64,9 +64,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Knife" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -91,9 +91,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Shield" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -172,6 +172,24 @@
         }
     },
     {
+        "ID": "CREATE_KNIFE_BUYER_FROM_SUBMCOIN_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/knife_buyer_from_subm_coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["Knife buyer recipe from submcoin"]
+            }
+        }
+    },
+    {
         "ID": "EXECUTE_STRAIGHT_ATTACK_KNIFE_RECIPE",
         "runAfter": {
             "precondition": ["CREATE_STRAIGHT_ATTACK_KNIFE_RECIPE"],
@@ -191,9 +209,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Straight Attack Knife" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -250,9 +268,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Knife Shield" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -278,9 +296,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Delayed Attack Knife" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -304,7 +322,41 @@
                 "coins": [
                     {
                         "denom": "submcoin",
-                        "amount": 1
+                        "amount": 100
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "EXECUTE_KNIFE_BUYER_FROM_SUBMCOIN_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_KNIFE_BUYER_FROM_SUBMCOIN_RECIPE", "EXECUTE_SUBMARINE_COIN_RECIPE"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/subm_coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": {
+                "owner": "eugen",
+                "coins": [
+                    {
+                        "denom": "submcoin",
+                        "amount": 99
+                    }
+                ],
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Knife" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": { "level": 2 }
                     }
                 ]
             }

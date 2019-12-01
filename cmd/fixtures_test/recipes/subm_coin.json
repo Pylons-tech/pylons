@@ -5,7 +5,7 @@
         "CoinOutputs":[
             {
                 "Coin":"submcoin",
-                "Count":1,
+                "Count":100,
                 "Weight":1
             }
         ],
