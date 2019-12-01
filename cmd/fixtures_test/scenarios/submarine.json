@@ -45,6 +45,34 @@
         }
     },
     {
+        "ID": "KNIFE_ITEM_CREATION_2",
+        "runAfter": {
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/knife.json",
+        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Knife" },
+                        "dblKeys": [],
+                        "dblValues": [],
+                        "longKeys": [],
+                        "longValues": []
+                    }
+                ]
+            }
+        }
+    },
+    {
         "ID": "SHIELD_ITEM_CREATION",
         "runAfter": {
             "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
@@ -190,7 +218,7 @@
     {
         "ID": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE_WRONG_INPUTS_COUNT",
         "runAfter": {
-            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE"],
+            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE", "KNIFE_ITEM_CREATION_2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
