@@ -2,11 +2,20 @@
 
 Pylons eco system consists of cookbooks, items, coin and recipes.
 
-Here's detailed description of how to use create cookbooks, items, coins and recipes which are compatible with pylons eco system.
+Here's detailed description of how to use cookbooks, items, coins and recipes which are compatible with pylons eco system.
+
+Usually, cookbook contains all recipes and items which is used for game.
+The game is corresponding to Cookbook 1: 1.
+
+Developers create a cookbook along with recipes and item which is going to be used within the game.
+Recipe can be used for buying items, upgrade items, merge two items into one. Also can be used for exchange of coins, sell items and trading items between users.
+And users owe items, coins and recipes. Recipes can be executed when user want.
+
+Since it's a blockchain based system, running recipe is taking more than 1 block time. So developers consider these things when writing cookbooks, recipes and items for their game.
 
 ## Cookbook
 
-Cookbook consists of below fields.
+Cookbook consists of below fields. Reference of [Table generator](https://www.tablesgenerator.com/markdown_tables).
 
 | No |     Field    |  Type  |                     Sample                     |                                         Description                                        |
 |---:|:------------:|:------:|:----------------------------------------------:|:------------------------------------------------------------------------------------------:|
