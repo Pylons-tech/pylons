@@ -31,8 +31,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		}
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", execType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", execType, err)
 		}
 		require.True(t, err == nil)
 
@@ -69,8 +68,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		var itemType types.Item
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", itemType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", itemType, err)
 		}
 		require.True(t, err == nil)
 
@@ -105,8 +103,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		var cbType types.Cookbook
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
 		}
 		require.True(t, err == nil)
 
@@ -151,8 +148,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		var rcpType types.Recipe
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", rcpType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", rcpType, err)
 		}
 		require.True(t, err == nil)
 
@@ -202,8 +198,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", execType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", execType, err)
 		}
 		require.True(t, err == nil)
 

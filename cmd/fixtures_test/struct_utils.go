@@ -17,7 +17,7 @@ var execIDs map[string]string = make(map[string]string)
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)
 	if err != nil {
-		t.Errorf("%+v", err)
+		t.Fatalf("%+v", err)
 	}
 
 	defer jsonFile.Close()

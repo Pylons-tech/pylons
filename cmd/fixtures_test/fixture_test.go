@@ -27,14 +27,12 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		for _, cbName := range pCheck.Cookbooks {
 			_, exist, err := intTest.GetCookbookIDFromName(cbName, pOwnerAddr)
 			if err != nil {
-				t.Error("error checking cookbook exist", err)
-				t.Fatal(err)
+				t.Fatal("error checking cookbook exist", err)
 			}
 			if exist {
 				t.Log("checked existance")
 			} else {
-				t.Error("cookbook with name=", cbName, "does not exist")
-				t.Fatal("cookbook does not exist")
+				t.Fatal("cookbook with name=", cbName, "does not exist")
 			}
 		}
 	}
@@ -46,8 +44,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 			if len(guid) > 0 {
 				t.Log("checked existance")
 			} else {
-				t.Error("recipe with name=", rcpName, "does not exist")
-				t.Fatal("recipe does not exist")
+				t.Fatal("recipe with name=", rcpName, "does not exist")
 			}
 		}
 	}
@@ -101,7 +98,7 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 		case "check_execution":
 			RunCheckExecution(step, t)
 		default:
-			t.Errorf("step with unrecognizable action found %s", step.Action)
+			t.Fatalf("step with unrecognizable action found %s", step.Action)
 		}
 		PropertyExistCheck(step, t)
 		UpdateWorkQueueStatus(file, idx, step, DONE, t)
@@ -139,7 +136,6 @@ func TestFixturesViaCLI(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Error(err)
 		t.Fatal(err)
 	}
 	for _, file := range files {
