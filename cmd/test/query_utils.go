@@ -3,7 +3,8 @@ package intTest
 import (
 	"encoding/hex"
 	"errors"
-	"testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/queriers"
 	"github.com/MikeSofaer/pylons/x/pylons/types"

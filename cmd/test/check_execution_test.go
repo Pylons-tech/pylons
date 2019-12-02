@@ -2,12 +2,12 @@ package intTest
 
 import (
 	"encoding/json"
-	"testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
 )
 
 func TestCheckExecutionViaCLI(t *testing.T) {
@@ -82,11 +82,11 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			rcp, err := GetRecipeByGUID(guid)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 
 			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs)
 			txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
@@ -98,13 +98,13 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			}
 
 			txHandleResBytes, err := GetTxData(txhash, t)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			execResp := handlers.ExecuteRecipeResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			schedule := handlers.ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execResp.Output, &schedule)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 
 			chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
 			txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
@@ -112,36 +112,36 @@ func TestCheckExecutionViaCLI(t *testing.T) {
 			WaitForNextBlock()
 
 			txHandleResBytes, err = GetTxData(txhash, t)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			resp := handlers.CheckExecutionResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			require.True(t, err == nil)
-			require.True(t, resp.Status == tc.expectedStatus)
-			require.True(t, resp.Message == tc.expectedMessage)
+			t.MustTrue(err == nil)
+			t.MustTrue(resp.Status == tc.expectedStatus)
+			t.MustTrue(resp.Message == tc.expectedMessage)
 
 			// Here desiredItemName should be different across tests cases and across test files
 			items, err := ListItemsViaCLI("")
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)
-			require.True(t, ok == tc.shouldSuccess)
+			t.MustTrue(ok == tc.shouldSuccess)
 
 			exec, err := GetExecutionByGUID(schedule.ExecID)
 			if err != nil {
 				t.Fatalf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
 			}
-			require.True(t, exec.Completed == tc.shouldSuccess)
+			t.MustTrue(exec.Completed == tc.shouldSuccess)
 			if tc.tryFinishedExecution {
 				txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 				WaitForNextBlock()
 
 				txHandleResBytes, err = GetTxData(txhash, t)
-				require.True(t, err == nil)
+				t.MustTrue(err == nil)
 				resp := handlers.CheckExecutionResp{}
 				err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-				require.True(t, err == nil)
-				require.True(t, resp.Status == tc.expectedRetryResStatus)
-				require.True(t, resp.Message == tc.expectedRetryResMessage)
+				t.MustTrue(err == nil)
+				t.MustTrue(resp.Status == tc.expectedRetryResStatus)
+				t.MustTrue(resp.Message == tc.expectedRetryResMessage)
 			}
 		})
 	}

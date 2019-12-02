@@ -1,13 +1,11 @@
 package intTest
 
 import (
-	"testing"
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 func TestCreateCookbookViaCLI(t *testing.T) {
@@ -28,7 +26,7 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"this has to meet character limits lol",
@@ -46,11 +44,11 @@ func TestCreateCookbookViaCLI(t *testing.T) {
 			ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
 			txHandleResBytes, err := GetTxData(txhash, t)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			resp := handlers.CreateCBResponse{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			require.True(t, err == nil)
-			require.True(t, resp.CookbookID != "")
+			t.MustTrue(err == nil)
+			t.MustTrue(resp.CookbookID != "")
 		})
 	}
 }

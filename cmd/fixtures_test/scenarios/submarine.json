@@ -335,7 +335,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/knife_buyer_from_subm_coin.json",
+        "paramsRef": "./executions/knife_buyer_from_subm_coin1.json",
         "output": {
             "txResult": {
                 "status": "Success",

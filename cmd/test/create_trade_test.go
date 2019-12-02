@@ -1,14 +1,12 @@
 package intTest
 
 import (
-	"testing"
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 func TestCreateTradeViaCLI(t *testing.T) {
@@ -28,7 +26,7 @@ func TestCreateTradeViaCLI(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,

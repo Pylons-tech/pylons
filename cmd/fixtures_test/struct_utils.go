@@ -4,12 +4,11 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 var execIDs map[string]string = make(map[string]string)
@@ -38,10 +37,10 @@ func UpdateSenderName(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
 
 	senderName, ok := raw["Sender"].(string)
-	require.True(t, ok)
+	t.MustTrue(ok)
 	raw["Sender"] = intTest.GetAccountAddr(senderName, t)
 	newBytes, err := json.Marshal(raw)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	return newBytes
 }
 
@@ -49,13 +48,13 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
 
 	cbName, ok := raw["CookbookName"].(string)
-	require.True(t, ok)
+	t.MustTrue(ok)
 	cbID, exist, err := intTest.GetCookbookIDFromName(cbName, "")
-	require.True(t, exist)
-	require.True(t, err == nil)
+	t.MustTrue(exist)
+	t.MustTrue(err == nil)
 	raw["CookbookID"] = cbID
 	newBytes, err := json.Marshal(raw)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	return newBytes
 }
 
@@ -63,13 +62,13 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
 
 	rcpName, ok := raw["RecipeName"].(string)
-	require.True(t, ok)
+	t.MustTrue(ok)
 	rcpID, exist, err := intTest.GetRecipeIDFromName(rcpName)
-	require.True(t, exist)
-	require.True(t, err == nil)
+	t.MustTrue(exist)
+	t.MustTrue(err == nil)
 	raw["RecipeID"] = rcpID
 	newBytes, err := json.Marshal(raw)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	return newBytes
 }
 
@@ -89,7 +88,7 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 		t.Fatal("execID not available for ref=", execRefReader.ExecRef)
 	}
 	newBytes, err := json.Marshal(raw)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	return newBytes
 }
 
@@ -104,8 +103,8 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 
 	for _, itemName := range itemNamesResp.ItemNames {
 		itemID, exist, err := intTest.GetItemIDFromName(itemName)
-		require.True(t, exist)
-		require.True(t, err == nil)
+		t.MustTrue(exist)
+		t.MustTrue(err == nil)
 		ItemIDs = append(ItemIDs, itemID)
 	}
 	return ItemIDs

@@ -5,13 +5,14 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"testing"
+
+	originTesting "testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
@@ -77,7 +78,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		for _, coinCheck := range pCheck.Coins {
 			accInfo := intTest.GetAccountInfoFromName(pCheck.Owner, t)
 			// TODO should we have the case of using GTE, LTE, GT or LT ?
-			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).LTE(sdk.NewInt(coinCheck.Amount)))
+			t.MustTrue(accInfo.Coins.AmountOf(coinCheck.Coin).Equal(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
 }
@@ -127,7 +128,12 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 	})
 }
 
-func TestFixturesViaCLI(t *testing.T) {
+func TestFixturesViaCLI(t *originTesting.T) {
+	newT := testing.NewT(t)
+	newT.AddEventListener("FAIL", func() {
+		workQueueFailed = true
+	})
+
 	var files []string
 
 	scenario_directory := "scenarios"
@@ -143,6 +149,6 @@ func TestFixturesViaCLI(t *testing.T) {
 			continue
 		}
 		t.Log("Running scenario path=", file)
-		RunSingleFixtureTest(file, t)
+		RunSingleFixtureTest(file, &newT)
 	}
 }

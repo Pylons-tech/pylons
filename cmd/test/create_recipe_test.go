@@ -1,15 +1,13 @@
 package intTest
 
 import (
-	"testing"
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 func TestCreateRecipeViaCLI(t *testing.T) {
@@ -32,7 +30,7 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			txhash := TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
@@ -51,11 +49,11 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 			ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 			txHandleResBytes, err := GetTxData(txhash, t)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			resp := handlers.CreateRecipeResponse{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			require.True(t, err == nil)
-			require.True(t, resp.RecipeID != "")
+			t.MustTrue(err == nil)
+			t.MustTrue(resp.RecipeID != "")
 		})
 	}
 }

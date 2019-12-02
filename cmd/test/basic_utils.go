@@ -7,8 +7,9 @@ import (
 	"os/exec"
 	"path"
 	"sync"
-	"testing"
 	"time"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"strings"
 
