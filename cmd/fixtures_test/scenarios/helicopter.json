@@ -36,9 +36,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Helicopter's Knife" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }
@@ -100,9 +100,9 @@
                         "stringKeys": [],
                         "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
                         "dblKeys": [],
-                        "dblValues": [],
+                        "dblValues": {},
                         "longKeys": [],
-                        "longValues": []
+                        "longValues": {}
                     }
                 ]
             }

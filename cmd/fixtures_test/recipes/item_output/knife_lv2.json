@@ -1,0 +1,17 @@
+{
+    "Doubles":[
+        {
+            "Rate":"1.0",
+            "Key":"attack",
+            "WeightRanges":[{ "Lower":"2", "Upper":"2","Weight":1 }]
+        }
+    ],
+    "Longs":[
+        {
+            "Rate":"1.0",
+            "Key":"level",
+            "WeightRanges":[{ "Lower": 2, "Upper":2,"Weight":1 }]
+        }
+    ],
+    "Strings":[{ "Key":"Name", "Value":"Knife", "Rate":"1.0" }]
+}
