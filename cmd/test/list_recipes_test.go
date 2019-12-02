@@ -1,10 +1,13 @@
 package intTest
 
 import (
+	originTesting "testing"
+
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 )
 
-func TestListRecipeViaCLI(t *testing.T) {
+func TestListRecipeViaCLI(originT *originTesting.T) {
+	t := testing.NewT(originT)
 	t.Parallel()
 
 	tests := []struct {

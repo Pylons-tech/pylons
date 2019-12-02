@@ -1,13 +1,16 @@
 package intTest
 
 import (
+	originTesting "testing"
+
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestExecuteRecipeViaCLI(t *testing.T) {
+func TestExecuteRecipeViaCLI(originT *originTesting.T) {
+	t := testing.NewT(originT)
 	t.Parallel()
 
 	tests := []struct {

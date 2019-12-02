@@ -1,6 +1,8 @@
 package intTest
 
 import (
+	originTesting "testing"
+
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -10,7 +12,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestCreateRecipeViaCLI(t *testing.T) {
+func TestCreateRecipeViaCLI(originT *originTesting.T) {
+	t := testing.NewT(originT)
 	t.Parallel()
 
 	tests := []struct {
@@ -23,8 +26,8 @@ func TestCreateRecipeViaCLI(t *testing.T) {
 		},
 	}
 
-	mCB, err := GetMockedCookbook(t)
-	ErrValidation(t, "error getting mocked cookbook %+v", err)
+	mCB, err := GetMockedCookbook(&t)
+	ErrValidation(&t, "error getting mocked cookbook %+v", err)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
