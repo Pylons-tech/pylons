@@ -12,7 +12,7 @@ jobs:
       - checkout
 
       # specify any bash command here prefixed with `run: `
-      - run: GO111MODULE=on go test -v ./x/...
+      - run: GO111MODULE=on bash ./unit_test.sh
   integration-test:
     docker:
       # specify the version
