@@ -72,7 +72,7 @@ pylonscli rest-server --chain-id pylonschain --trust-node
 - Unit test command
 
 ```
-go test ./...
+bash ./unit_test.sh
 ```
 
 ## Deploying for production
@@ -100,11 +100,6 @@ Available Commands:
   send-pylons     send pylons of specific amount to the name provided
   create-cookbook create cookbook by providing the args
   update-cookbook update cookbook by providing the args
-```
-### Unit test
-
-```
-go test ./x/...
 ```
 
 ### Integration test process on local environment
@@ -196,6 +191,11 @@ Sample command.
 ```
  pylonscli tx sign create_cookbook.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 ```
+Offline sign process to sign more than 1 transactions within 1 block on test with daemon.
+```
+pylonscli tx sign sample_transaction.json --account-number 2 --sequence 10 --offline --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2
+```
+Here `account-number`, `sequence` and `offline` param was added. When we are using multi-node mode, we will need to find a way to broadcast multiple transactions within one account without using offline feature.
 
 It means signing create_cookbook tx with cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 (`pylonscli keys show jack -a`).
 
