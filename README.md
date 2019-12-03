@@ -191,7 +191,7 @@ Sample command.
 ```
  pylonscli tx sign create_cookbook.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 ```
-Offline sign process to sign more than 1 transactions within 1 block on test with daemon.
+Offline sign process to sign more than 1 transactions with 1 account within 1 block on test with daemon.
 ```
 pylonscli tx sign sample_transaction.json --account-number 2 --sequence 10 --offline --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2
 ```
