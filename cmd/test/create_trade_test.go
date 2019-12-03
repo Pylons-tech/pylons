@@ -1,7 +1,7 @@
 package intTest
 
 import (
-	originTesting "testing"
+	originT "testing"
 
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
@@ -11,7 +11,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestCreateTradeViaCL(originT *originTesting.T) {
+func TestCreateTradeViaCL(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 

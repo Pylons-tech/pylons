@@ -3,7 +3,7 @@ package intTest
 import (
 	"encoding/json"
 
-	originTesting "testing"
+	originT "testing"
 
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
@@ -12,7 +12,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestCheckExecutionViaCLI(originT *originTesting.T) {
+func TestCheckExecutionViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 	tests := []struct {

@@ -12,14 +12,13 @@ const (
 	NOT_STARTED = iota
 	IN_PROGRESS
 	DONE
-	FAIL
 )
 
 type FixtureTestQueueItem struct {
 	fixtureFileName string
 	idx             int
 	stepID          string
-	status          Status // NOT_STARTED | IN_PROGRESS | DONE | FAIL
+	status          Status // NOT_STARTED | IN_PROGRESS | DONE
 }
 
 var workQueues []FixtureTestQueueItem

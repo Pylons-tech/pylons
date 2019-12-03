@@ -1,12 +1,12 @@
 package intTest
 
 import (
-	originTesting "testing"
+	originT "testing"
 
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 )
 
-func TestListRecipeViaCLI(originT *originTesting.T) {
+func TestListRecipeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 

@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strconv"
 
-	originTesting "testing"
+	originT "testing"
 
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
@@ -128,7 +128,7 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 	})
 }
 
-func TestFixturesViaCLI(t *originTesting.T) {
+func TestFixturesViaCLI(t *originT.T) {
 	newT := testing.NewT(t)
 	newT.AddEventListener("FAIL", func() {
 		workQueueFailed = true

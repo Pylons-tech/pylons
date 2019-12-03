@@ -1,7 +1,7 @@
 package intTest
 
 import (
-	originTesting "testing"
+	originT "testing"
 
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
@@ -10,7 +10,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestCreateCookbookViaCLI(originT *originTesting.T) {
+func TestCreateCookbookViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 

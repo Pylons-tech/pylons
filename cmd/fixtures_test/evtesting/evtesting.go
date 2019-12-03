@@ -2,6 +2,8 @@ package evtesting
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 type T struct {
@@ -28,10 +30,7 @@ func (t *T) Fatalf(format string, args ...interface{}) {
 }
 
 func (t *T) MustTrue(value bool) {
-	if !value {
-		t.Fatal("must be true")
-	}
-	// require.True(t.origin, value)
+	require.True(t.origin, value)
 }
 
 func (t *T) Parallel() {
