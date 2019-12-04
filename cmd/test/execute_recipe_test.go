@@ -1,14 +1,16 @@
 package intTest
 
 import (
-	"testing"
+	originT "testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
 )
 
-func TestExecuteRecipeViaCLI(t *testing.T) {
+func TestExecuteRecipeViaCLI(originT *originT.T) {
+	t := testing.NewT(originT)
 	t.Parallel()
 
 	tests := []struct {
@@ -31,11 +33,11 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			rcp, err := GetRecipeByGUID(guid)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
@@ -48,7 +50,7 @@ func TestExecuteRecipeViaCLI(t *testing.T) {
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
 			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)
-			require.True(t, ok)
+			t.MustTrue(ok)
 		})
 	}
 }

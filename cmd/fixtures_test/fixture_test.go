@@ -5,13 +5,14 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
-	"testing"
+
+	originT "testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
@@ -27,14 +28,12 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		for _, cbName := range pCheck.Cookbooks {
 			_, exist, err := intTest.GetCookbookIDFromName(cbName, pOwnerAddr)
 			if err != nil {
-				t.Error("error checking cookbook exist", err)
-				t.Fatal(err)
+				t.Fatal("error checking cookbook exist", err)
 			}
 			if exist {
 				t.Log("checked existance")
 			} else {
-				t.Error("cookbook with name=", cbName, "does not exist")
-				t.Fatal("cookbook does not exist")
+				t.Fatal("cookbook with name=", cbName, "does not exist")
 			}
 		}
 	}
@@ -46,8 +45,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 			if len(guid) > 0 {
 				t.Log("checked existance")
 			} else {
-				t.Error("recipe with name=", rcpName, "does not exist")
-				t.Fatal("recipe does not exist")
+				t.Fatal("recipe with name=", rcpName, "does not exist")
 			}
 		}
 	}
@@ -80,7 +78,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		for _, coinCheck := range pCheck.Coins {
 			accInfo := intTest.GetAccountInfoFromName(pCheck.Owner, t)
 			// TODO should we have the case of using GTE, LTE, GT or LT ?
-			require.True(t, accInfo.Coins.AmountOf(coinCheck.Coin).LTE(sdk.NewInt(coinCheck.Amount)))
+			t.MustTrue(accInfo.Coins.AmountOf(coinCheck.Coin).Equal(sdk.NewInt(coinCheck.Amount)))
 		}
 	}
 }
@@ -101,7 +99,7 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 		case "check_execution":
 			RunCheckExecution(step, t)
 		default:
-			t.Errorf("step with unrecognizable action found %s", step.Action)
+			t.Fatalf("step with unrecognizable action found %s", step.Action)
 		}
 		PropertyExistCheck(step, t)
 		UpdateWorkQueueStatus(file, idx, step, DONE, t)
@@ -130,7 +128,12 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 	})
 }
 
-func TestFixturesViaCLI(t *testing.T) {
+func TestFixturesViaCLI(t *originT.T) {
+	newT := testing.NewT(t)
+	newT.AddEventListener("FAIL", func() {
+		workQueueFailed = true
+	})
+
 	var files []string
 
 	scenario_directory := "scenarios"
@@ -139,7 +142,6 @@ func TestFixturesViaCLI(t *testing.T) {
 		return nil
 	})
 	if err != nil {
-		t.Error(err)
 		t.Fatal(err)
 	}
 	for _, file := range files {
@@ -147,6 +149,6 @@ func TestFixturesViaCLI(t *testing.T) {
 			continue
 		}
 		t.Log("Running scenario path=", file)
-		RunSingleFixtureTest(file, t)
+		RunSingleFixtureTest(file, &newT)
 	}
 }

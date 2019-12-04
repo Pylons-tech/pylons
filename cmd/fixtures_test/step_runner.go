@@ -2,7 +2,8 @@ package fixtureTest
 
 import (
 	"encoding/json"
-	"testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
@@ -11,8 +12,6 @@ import (
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
 )
 
 func RunCheckExecution(step FixtureStep, t *testing.T) {
@@ -31,10 +30,9 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		}
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", execType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", execType, err)
 		}
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 
 		chkExecMsg := msgs.NewMsgCheckExecution(
 			execType.ExecID,
@@ -47,13 +45,13 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 		resp := handlers.CheckExecutionResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 
-		require.True(t, err == nil)
-		require.True(t, resp.Status == step.Output.TxResult.Status)
-		require.True(t, resp.Message == step.Output.TxResult.Message)
+		t.MustTrue(err == nil)
+		t.MustTrue(resp.Status == step.Output.TxResult.Status)
+		t.MustTrue(resp.Message == step.Output.TxResult.Message)
 	}
 }
 
@@ -69,10 +67,9 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		var itemType types.Item
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", itemType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", itemType, err)
 		}
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 
 		itmMsg := msgs.NewMsgFiatItem(
 			itemType.CookbookID,
@@ -87,12 +84,12 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 		resp := handlers.FiatItemResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 
-		require.True(t, err == nil)
-		require.True(t, resp.ItemID != "")
+		t.MustTrue(err == nil)
+		t.MustTrue(resp.ItemID != "")
 	}
 }
 
@@ -105,10 +102,9 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		var cbType types.Cookbook
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
 		}
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 
 		cbMsg := msgs.NewMsgCreateCookbook(
 			cbType.Name,
@@ -131,8 +127,8 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		intTest.ErrValidationWithOutputLog(t, "error getting transaction data for creating cookbook %+v", txHandleResBytes, err)
 		resp := handlers.CreateCBResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		require.True(t, err == nil)
-		require.True(t, resp.CookbookID != "")
+		t.MustTrue(err == nil)
+		t.MustTrue(resp.CookbookID != "")
 	}
 }
 
@@ -151,10 +147,9 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		var rcpType types.Recipe
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", rcpType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", rcpType, err)
 		}
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 
 		rcpMsg := msgs.NewMsgCreateRecipe(
 			rcpType.Name,
@@ -173,11 +168,11 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 		resp := handlers.CreateRecipeResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		require.True(t, err == nil)
-		require.True(t, resp.RecipeID != "")
+		t.MustTrue(err == nil)
+		t.MustTrue(resp.RecipeID != "")
 	}
 }
 
@@ -202,10 +197,9 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 		if err != nil {
-			t.Error("error reading using GetAminoCdc ", execType, err)
-			t.Fatal(err)
+			t.Fatal("error reading using GetAminoCdc ", execType, err)
 		}
-		require.True(t, err == nil)
+		t.MustTrue(err == nil)
 
 		// t.Log("Executed recipe with below params", execType.RecipeID, execType.Sender, ItemIDs)
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
@@ -222,24 +216,24 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				Message   string `json:"message"`
 			}{}
 			err = json.Unmarshal(txErrorBytes, &hmrErr)
-			require.True(t, err == nil)
-			require.True(t, hmrErr.Message == step.Output.TxResult.ErrorLog)
+			t.MustTrue(err == nil)
+			t.MustTrue(hmrErr.Message == step.Output.TxResult.ErrorLog)
 		} else {
 			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
-			require.True(t, err == nil)
+			t.MustTrue(err == nil)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			if err != nil {
 				t.Fatal("failed to parse transaction result txhash=", txhash)
 			}
-			require.True(t, resp.Status == step.Output.TxResult.Status)
-			require.True(t, resp.Message == step.Output.TxResult.Message)
+			t.MustTrue(resp.Status == step.Output.TxResult.Status)
+			t.MustTrue(resp.Message == step.Output.TxResult.Message)
 
 			if resp.Message == "scheduled the recipe" { // delayed execution
 				var scheduleRes handlers.ExecuteRecipeScheduleOutput
 
 				err := json.Unmarshal(resp.Output, &scheduleRes)
-				require.True(t, err == nil)
+				t.MustTrue(err == nil)
 				execIDs[step.ID] = scheduleRes.ExecID
 				t.Log("scheduled execution", scheduleRes.ExecID)
 			} else { // straight execution

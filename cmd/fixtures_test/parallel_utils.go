@@ -1,7 +1,7 @@
 package fixtureTest
 
 import (
-	"testing"
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	intTest "github.com/MikeSofaer/pylons/cmd/test"
 )
@@ -22,6 +22,7 @@ type FixtureTestQueueItem struct {
 }
 
 var workQueues []FixtureTestQueueItem
+var workQueueFailed = false
 
 func GetQueueID(file string, idx int, stepID string) int {
 	for i, work := range workQueues {
@@ -55,6 +56,9 @@ func UpdateWorkQueueStatus(file string, idx int, step FixtureStep, targetStatus 
 }
 
 func WaitForCondition(file string, idx int, step FixtureStep, t *testing.T) {
+	if workQueueFailed {
+		t.Fatal("WorkQueue failed --- somewhere else failed")
+	}
 	if GoodToGoForStep(file, idx, step, t) {
 		intTest.WaitForBlockInterval(step.RunAfter.BlockWait)
 	} else {

@@ -1,12 +1,13 @@
 package intTest
 
 import (
-	"testing"
+	originT "testing"
 
-	"github.com/stretchr/testify/require"
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 )
 
-func TestListRecipeViaCLI(t *testing.T) {
+func TestListRecipeViaCLI(originT *originT.T) {
+	t := testing.NewT(originT)
 	t.Parallel()
 
 	tests := []struct {
@@ -29,8 +30,8 @@ func TestListRecipeViaCLI(t *testing.T) {
 			recipes, err := TestQueryListRecipe(t)
 			ErrValidation(t, "error listing recipes %+v", err)
 
-			require.True(t, err == nil)
-			require.True(t, len(recipes) > 0)
+			t.MustTrue(err == nil)
+			t.MustTrue(len(recipes) > 0)
 
 			WaitForNextBlock()
 			_, ok := FindRecipeFromArrayByName(recipes, tc.rcpName)

@@ -7,11 +7,10 @@ import (
 	"path/filepath"
 	"strconv"
 	"sync"
-	"testing"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
-
-	"github.com/stretchr/testify/require"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"
@@ -90,8 +89,8 @@ func broadcastTxFile(signedTxFile string, t *testing.T) string {
 	// This can happen when "pylonscli config output json" is not set or when real issue is available
 	ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
 
-	require.True(t, len(successTxResp.TxHash) == 64)
-	require.True(t, len(successTxResp.Height) > 0)
+	t.MustTrue(len(successTxResp.TxHash) == 64)
+	t.MustTrue(len(successTxResp.Height) > 0)
 	return successTxResp.TxHash
 }
 
@@ -104,9 +103,9 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
 
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
@@ -159,13 +158,13 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	}
 	nonceStruct.Nonce = nonce + 1
 	nonceOutput, err := json.Marshal(nonceStruct)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	ioutil.WriteFile(nonceFile, nonceOutput, 0644)
 
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 
 	rawTxFile := filepath.Join(tmpDir, "raw_tx_"+strconv.FormatUint(nonce, 10)+".json")
 	signedTxFile := filepath.Join(tmpDir, "signed_tx_"+strconv.FormatUint(nonce, 10)+".json")

@@ -7,8 +7,9 @@ import (
 	"os/exec"
 	"path"
 	"sync"
-	"testing"
 	"time"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"strings"
 
@@ -23,7 +24,7 @@ var cliMux sync.Mutex
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)
 	if err != nil {
-		t.Errorf("%+v", err)
+		t.Fatalf("%+v", err)
 	}
 
 	defer jsonFile.Close()
@@ -57,7 +58,7 @@ func GetAccountAddr(account string, t *testing.T) string {
 func GetAccountInfoFromAddr(addr string, t *testing.T) auth.BaseAccount {
 	accBytes, err := RunPylonsCli([]string{"query", "account", addr}, "")
 	if t != nil && err != nil {
-		t.Errorf("error getting account info addr=%+v err=%+v", addr, err)
+		t.Fatalf("error getting account info addr=%+v err=%+v", addr, err)
 	}
 	var accInfo auth.BaseAccount
 	GetAminoCdc().UnmarshalJSON(accBytes, &accInfo)

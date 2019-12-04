@@ -1,14 +1,13 @@
 package intTest
 
 import (
-	"testing"
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
 )
 
 ///////////COOKBOOK//////////////////////////////////////////////
@@ -25,7 +24,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	}
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 
 	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
@@ -44,10 +43,10 @@ func MockCookbook(t *testing.T) (string, error) {
 	ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
 	txHandleResBytes, err := GetTxData(txhash, t)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	resp := handlers.CreateCBResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 
 	return resp.CookbookID, nil
 }
@@ -89,7 +88,7 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	txhash := TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			name,
@@ -108,10 +107,10 @@ func MockRecipeGUID(interval int64, name string, outputItemName string, t *testi
 	ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 	txHandleResBytes, err := GetTxData(txhash, t)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 	resp := handlers.CreateRecipeResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	require.True(t, err == nil)
+	t.MustTrue(err == nil)
 
 	return resp.RecipeID, nil
 }
