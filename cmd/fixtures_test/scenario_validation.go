@@ -1,5 +1,7 @@
 package fixtureTest
 
+// Algorithm link geeksforgeeks.org/detect-cycle-in-a-graph/
+
 var VMap map[string]int  // StepID to GraphID mapper
 var NV = 0					// Number of steps
 var adj [][]int 					// array containing adjacency lists 
