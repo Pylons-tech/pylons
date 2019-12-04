@@ -1,11 +1,12 @@
 # Introduction
 
 Fixture test is a test to check all the cases are working.
-After writing initial test, game developers can easily customize this scenarios since it is based in JSON.
+After writing initial test, game developers can easily create new scenarios according to their game specification.
 
-## What can be tested with this
+## Basic fields description
 
-Here's sample step in JSON
+Scenario is set of steps and each step is carried out by one transaction.  
+Here's sample scenario's step in JSON
 
 ```
     {
@@ -39,6 +40,7 @@ Here's sample step in JSON
 ```
 
 First it can check if transaction run successfully and returned value is correct.
+And also it can check if transaction fails when params are incorrect.
 It is described in `txResult`.
 
 It can also check if user's status is correct after doing a transaction.
@@ -50,7 +52,19 @@ Detailed params can be found at `./scenarios/submarine.json`.
 And to make things easier and to make scenario file smaller, there are references to other files.
 For example when creating recipe, recipe spec is in `./recipes` folder.
 
-## How it is working in background
+## How a game producer write test 
+
+Before reading this, he/she should know well about pylons eco system. Please read [DEVELOPER DOC](https://github.com/MikeSofaer/pylons/blob/master/DEVELOPER_DOC.md) and [README](https://github.com/MikeSofaer/pylons/blob/master/README.md) before reading this.
+
+Game producers should create cookbooks, items, recipes, executions, check_executions and scenarios in JSON to test.
+Sample item formats are available at `items` folder.
+Sample recipe formats are available at `recipes` folder.
+Sample cookbook formats are available at `cookbooks` folder.
+Sample execution formats are available at `executions` folder.
+Sample check execution formats are available at `check_executions` folder.
+Sample scenario formats are available at `scenarios` folder.
+
+## How fixture test executor work
 
 All the test scenarios are running in parallel. Some scenarios have dependencies and there are waiters.
 
