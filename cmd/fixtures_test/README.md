@@ -56,13 +56,8 @@ For example when creating recipe, recipe spec is in `./recipes` folder.
 
 Before reading this, he/she should know well about pylons eco system. Please read [DEVELOPER DOC](https://github.com/MikeSofaer/pylons/blob/master/DEVELOPER_DOC.md) and [README](https://github.com/MikeSofaer/pylons/blob/master/README.md) before reading this.
 
-Game producers should create cookbooks, items, recipes, executions, check_executions and scenarios in JSON to test.
-Sample item formats are available at `items` folder.
-Sample recipe formats are available at `recipes` folder.
-Sample cookbook formats are available at `cookbooks` folder.
-Sample execution formats are available at `executions` folder.
-Sample check execution formats are available at `check_executions` folder.
-Sample scenario formats are available at `scenarios` folder.
+Game producers should create cookbooks, items, recipes, executions, check_executions and scenarios in JSON to test.  
+You can check `scenarios`, `cookbooks`, `items`, `recipes`, `executions`, `check_executions` to get sample JSON formats you want to be aware of.
 
 ## How fixture test executor work
 
