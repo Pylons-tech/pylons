@@ -113,6 +113,8 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 		byteValue := ReadFile(file, t)
 		json.Unmarshal([]byte(byteValue), &fixtureSteps)
 
+		CheckSteps(fixtureSteps, t)
+
 		for idx, step := range fixtureSteps {
 			workQueues = append(workQueues, FixtureTestQueueItem{
 				fixtureFileName: file,
