@@ -88,6 +88,9 @@ func IsCyclic() bool {
 
 func CheckSteps(steps []FixtureStep, t *testing.T) {
 	for _, step := range steps {
+		if len(step.ID) == 0 {
+			t.Fatal("please add ID field for all steps")
+		}
 		if ok := AddVertice(step.ID); !ok {
 			t.Fatal("same ID is available for stepID=", step.ID)
 		}
