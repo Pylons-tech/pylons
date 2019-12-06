@@ -17,7 +17,6 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
-    parallelism: 4
     working_directory: /go/src/github.com/MikeSofaer/pylons
     steps:
       - checkout
@@ -39,7 +38,6 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
-    parallelism: 4
     working_directory: /go/src/github.com/MikeSofaer/pylons
     steps:
       - checkout
