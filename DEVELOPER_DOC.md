@@ -47,13 +47,14 @@ Sample cookbook JSON
 
 Item consists of below fields.
 
-| No | Field        | Type   | Sample                                | Description                                 |
-|----|--------------|--------|---------------------------------------|---------------------------------------------|
-| 1  | CookbookName | string | "submarine"                           | contains the name of cookbook for the item. |
-| 2  | Sender       | string | "eugen"                               | contains the owner of item.                 |
-| 3  | Doubles      | array  | defence: 1.0,  movement: 1.0          | contains double attributes of the item.     |
-| 4  | Longs        | array  | level: 1                              | contains int attributes of the item.        |
-| 5  | Strings      | array  | name: "shield", use: "defend and run" | contains string attributes of the item.     |
+| No | Field         | Type   | Sample                                | Description                                         |
+|----|---------------|--------|---------------------------------------|-----------------------------------------------------|
+| 1  | CookbookName  | string | "submarine"                           | contains the name of cookbook for the item.         |
+| 2  | Sender        | string | "eugen"                               | contains the owner of item.                         |
+| 3  | Doubles       | array  | defence: 1.0,  movement: 1.0          | contains double attributes of the item.             |
+| 4  | Longs         | array  | level: 1                              | contains int attributes of the item.                |
+| 5  | Strings       | array  | name: "shield", use: "defend and run" | contains string attributes of the item.             |
+| 6  | OwnerRecipeID | string | ""                                    | Contains owner recipe id, if not owned, value is "" |
 
 Sample item JSON
 
@@ -63,7 +64,8 @@ Sample item JSON
   "Longs": [{ "Key": "level", "Value": "1" }],
   "Strings": [{ "Key": "Name","Value": "Shield" }],
   "CookbookName": "submarine",
-  "Sender": "eugen"
+  "Sender": "eugen",
+  "OwnerRecipeID": ""
 }
 ```
 
