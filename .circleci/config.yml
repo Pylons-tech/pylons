@@ -33,7 +33,6 @@ jobs:
       - run: 
           command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on bash ./int_test.sh)
           no_output_timeout: 10m
-          parallelism: 4
 
   fixture-test:
     docker:
@@ -55,12 +54,14 @@ jobs:
       - run: 
           command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on bash ./fixtures_test.sh)
           no_output_timeout: 10m
-          parallelism: 4
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - unit-test
-      - integration-test
-      - fixture-test
+      unit-test:
+        parallelism: 4
+      integration-test:
+        parallelism: 4
+      fixture-test:
+        parallelism: 4
 
