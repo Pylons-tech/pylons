@@ -3,8 +3,11 @@
 Using REST interface server is the easiest way to fetch results in REST interface.
 
 ## Running rest server
-
+```
+pylonscli rest-server --chain-id pylonschain --trust-node
+```
 ## Fetching
+This describes regular format of REST endpoints and samples for all endpoints.
 
 ### recipes
 
