@@ -17,6 +17,7 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
+    parallelism: 4
     working_directory: /go/src/github.com/MikeSofaer/pylons
     steps:
       - checkout
@@ -38,6 +39,7 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
+    parallelism: 4
     working_directory: /go/src/github.com/MikeSofaer/pylons
     steps:
       - checkout
@@ -58,10 +60,7 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      unit-test:
-        parallelism: 4
-      integration-test:
-        parallelism: 4
-      fixture-test:
-        parallelism: 4
+      - unit-test
+      - integration-test
+      - fixture-test
 
