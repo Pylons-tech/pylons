@@ -154,9 +154,13 @@ func FindExecutionByRecipeID(execs []types.Execution, rcpID string) (types.Execu
 	return types.Execution{}, false
 }
 
-func FindItemFromArrayByName(items []types.Item, name string) (types.Item, bool) {
+func FindItemFromArrayByName(items []types.Item, name string, includeLockedByRcp bool) (types.Item, bool) {
 	for _, item := range items {
 		itemName, _ := item.FindString("Name")
+		if !includeLockedByRcp && len(item.OwnerRecipeID) != 0 {
+			continue
+		}
+
 		if itemName == name {
 			return item, true
 		}
@@ -197,12 +201,12 @@ func GetRecipeIDFromName(rcpName string) (string, bool, error) {
 	return rcp.ID, exist, nil
 }
 
-func GetItemIDFromName(itemName string) (string, bool, error) {
+func GetItemIDFromName(itemName string, includeLockedByRcp bool) (string, bool, error) {
 	itemList, err := ListItemsViaCLI("")
 	if err != nil {
 		return "", false, err
 	}
-	rcp, exist := FindItemFromArrayByName(itemList, itemName)
+	rcp, exist := FindItemFromArrayByName(itemList, itemName, includeLockedByRcp)
 	return rcp.ID, exist, nil
 }
 

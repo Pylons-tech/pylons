@@ -25,6 +25,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 	}
 
 	// we delete all the matched items as those get converted to output items
+	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 	for _, item := range exec.ItemInputs {
 		keeper.DeleteItem(ctx, item.ID)
 	}

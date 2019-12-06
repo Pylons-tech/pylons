@@ -187,7 +187,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		// translate recipe name to recipe id
 		newByteValue = UpdateRecipeName(newByteValue, t)
 		// translate itemNames to itemIDs
-		ItemIDs := GetItemIDsFromNames(newByteValue, t)
+		ItemIDs := GetItemIDsFromNames(newByteValue, false, t)
 
 		var execType struct {
 			RecipeID string
@@ -235,6 +235,11 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				err := json.Unmarshal(resp.Output, &scheduleRes)
 				t.MustTrue(err == nil)
 				execIDs[step.ID] = scheduleRes.ExecID
+				for _, itemID := range ItemIDs {
+					item, err := intTest.GetItemByGUID(itemID)
+					t.MustTrue(err == nil)
+					t.MustTrue(len(item.OwnerRecipeID) == 0)
+				}
 				t.Log("scheduled execution", scheduleRes.ExecID)
 			} else { // straight execution
 				t.Log("straight execution result output", string(resp.Output))

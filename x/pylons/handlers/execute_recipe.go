@@ -103,7 +103,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		matches = false
 
 		for _, item := range inputItems {
-			if itemInput.Matches(item) {
+			if itemInput.Matches(item) && len(item.OwnerRecipeID) == 0 {
 				matchedItems = append(matchedItems, item)
 				matches = true
 				break
@@ -119,8 +119,17 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 	// we set the inputs and outputs for storing the execution
 	if recipe.BlockInterval > 0 {
+		// set matchedItem's owner recipe
+		var rcpOwnMatchedItems []types.Item
+		for _, item := range matchedItems {
+			item.OwnerRecipeID = recipe.ID
+			if err := keeper.SetItem(ctx, item); err != nil {
+				return sdk.ErrInternal("error updating item's owner recipe").Result()
+			}
+			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
+		}
 		// store the execution as the interval
-		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, matchedItems, recipe.Entries,
+		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems, recipe.Entries,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
 		err2 := keeper.SetExecution(ctx, exec)
 

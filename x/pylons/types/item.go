@@ -30,8 +30,9 @@ type Item struct {
 	Longs   []LongKeyValue
 	Strings []StringKeyValue
 	// as items are unique per cookbook
-	CookbookID string
-	Sender     sdk.AccAddress
+	CookbookID    string
+	Sender        sdk.AccAddress
+	OwnerRecipeID string
 }
 
 // ItemList is a list of items
