@@ -30,11 +30,11 @@ func AddEdge(VSID, WSID string) bool {
 	if _, ok := VMap[VSID]; !ok {
 		return false
 	}
-	v := VMap[VSID]
-
 	if _, ok := VMap[WSID]; !ok {
 		return false
 	}
+
+	v := VMap[VSID]
 	w := VMap[WSID]
 	adj[v] = append(adj[v], w)
 	return true
