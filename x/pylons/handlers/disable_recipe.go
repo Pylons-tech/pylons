@@ -24,7 +24,7 @@ func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDi
 
 	recipe, err2 := keeper.GetRecipe(ctx, msg.RecipeID)
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	if !msg.Sender.Equals(recipe.Sender) {
@@ -34,7 +34,7 @@ func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDi
 
 	err2 = keeper.UpdateRecipe(ctx, msg.RecipeID, recipe)
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	resp, err2 := json.Marshal(DisableRecipeResp{
@@ -43,7 +43,7 @@ func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDi
 	})
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 
 	}
 

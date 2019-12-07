@@ -41,7 +41,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 
 	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 	if err := keeper.SetCookbook(ctx, cb); err != nil {
-		return sdk.ErrInternal(err.Error()).Result()
+		return errInternal(err)
 	}
 
 	mCookbook, err2 := json.Marshal(CreateCBResponse{
@@ -49,7 +49,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	})
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	return sdk.Result{Data: mCookbook}

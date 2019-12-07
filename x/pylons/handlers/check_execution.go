@@ -64,7 +64,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 
 	exec, err2 := keeper.GetExecution(ctx, msg.ExecID)
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	if !msg.Sender.Equals(exec.Sender) {
@@ -78,7 +78,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		})
 
 		if err2 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 		return sdk.Result{Data: resp}
 	}
@@ -86,7 +86,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if ctx.BlockHeight() >= exec.BlockHeight {
 		outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
 		if err != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 
 		resp, err3 := json.Marshal(CheckExecutionResp{
@@ -95,7 +95,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			Output:  outputSTR,
 		})
 		if err3 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 
 		return sdk.Result{Data: resp}
@@ -103,11 +103,11 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	} else if msg.PayToComplete {
 		recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
 		if err != nil {
-			return sdk.ErrInternal(err.Error()).Result()
+			return errInternal(err)
 		}
 		cookbook, err := keeper.GetCookbook(ctx, recipe.CookbookID)
 		if err != nil {
-			return sdk.ErrInternal(err.Error()).Result()
+			return errInternal(err)
 		}
 		blockDiff := exec.BlockHeight - ctx.BlockHeight()
 		if blockDiff < 0 { // check if already waited for block interval
@@ -118,12 +118,12 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
 			_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
 			if err != nil {
-				return sdk.ErrInternal(err2.Error()).Result()
+				return errInternal(err2)
 			}
 
 			outputSTR, err2 := SafeExecute(ctx, keeper, exec, msg)
 			if err2 != nil {
-				return sdk.ErrInternal(err2.Error()).Result()
+				return errInternal(err2)
 			}
 
 			resp, err2 := json.Marshal(CheckExecutionResp{
@@ -132,7 +132,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 				Output:  outputSTR,
 			})
 			if err2 != nil {
-				return sdk.ErrInternal(err2.Error()).Result()
+				return errInternal(err2)
 			}
 
 			return sdk.Result{Data: resp}
@@ -143,7 +143,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		})
 
 		if err != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 		return sdk.Result{Data: resp}
 
@@ -154,7 +154,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	})
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 	return sdk.Result{Data: resp}
 
