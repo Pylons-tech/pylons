@@ -70,7 +70,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 
 	recipe, err2 := keeper.GetRecipe(ctx, msg.RecipeID)
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	var cl sdk.Coins
@@ -87,7 +87,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	for _, id := range msg.ItemIDs {
 		item, err := keeper.GetItem(ctx, id)
 		if err != nil {
-			return sdk.ErrInternal(err.Error()).Result()
+			return errInternal(err)
 		}
 		if !item.Sender.Equals(msg.Sender) {
 			return sdk.ErrInternal("item owner is not same as sender").Result()
@@ -125,13 +125,13 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		err2 := keeper.SetExecution(ctx, exec)
 
 		if err2 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 		outputSTR, err3 := json.Marshal(ExecuteRecipeScheduleOutput{
 			ExecID: exec.ID,
 		})
 		if err3 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 		resp, err4 := json.Marshal(ExecuteRecipeResp{
 			Message: "scheduled the recipe",
@@ -140,7 +140,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		})
 
 		if err4 != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 		return sdk.Result{Data: resp}
 	}
@@ -172,7 +172,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	outputSTR, err2 := json.Marshal(ers)
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	resp, err3 := json.Marshal(ExecuteRecipeResp{
@@ -182,7 +182,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	})
 
 	if err3 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 	return sdk.Result{Data: resp}
 }

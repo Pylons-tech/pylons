@@ -25,7 +25,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	trade, err2 := keeper.GetTrade(ctx, msg.TradeID)
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	if trade.Completed {
@@ -35,7 +35,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	items, err2 := keeper.GetItemsBySender(ctx, msg.Sender)
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	// check if the sender has all condition met
@@ -76,7 +76,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		// verify if its still owned by the initiator
 		storedItem, err := keeper.GetItem(ctx, item.ID)
 		if err != nil {
-			return sdk.ErrInternal(err.Error()).Result()
+			return errInternal(err)
 		}
 		// if it isn't then we error out as there hasn't been any state changes so far
 		if !storedItem.Sender.Equals(trade.Sender) {
@@ -92,7 +92,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		// TODO: implement rollback strategy here
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 	}
 
@@ -101,7 +101,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		// TODO: implement rollback strategy here
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
-			return sdk.ErrInternal(err2.Error()).Result()
+			return errInternal(err2)
 		}
 	}
 
@@ -112,7 +112,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	if err != nil {
 		// TODO: implement rollback strategy here
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	// trade acceptor to trade creator the coin input
@@ -120,7 +120,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	if err != nil {
 		// TODO: implement rollback strategy here
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	trade.FulFiller = msg.Sender
@@ -128,7 +128,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	err2 = keeper.SetTrade(ctx, trade)
 	if err != nil {
 		// TODO: implement rollback strategy here
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	resp, err3 := json.Marshal(FulfillTradeResp{

@@ -25,7 +25,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 	for _, item := range msg.ItemOutputs {
 		itemFromStore, err := keeper.GetItem(ctx, item.ID)
 		if err != nil {
-			return sdk.ErrInternal(err.Error()).Result()
+			return errInternal(err)
 		}
 		if !itemFromStore.Sender.Equals(msg.Sender) {
 			return sdk.ErrUnauthorized(fmt.Sprintf("item with %s id is not owned by sender", item.ID)).Result()
@@ -43,7 +43,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		msg.ItemOutputs,
 		msg.Sender)
 	if err := keeper.SetTrade(ctx, trade); err != nil {
-		return sdk.ErrInternal(err.Error()).Result()
+		return errInternal(err)
 	}
 
 	mTrade, err2 := json.Marshal(CreateTradeResponse{
@@ -51,7 +51,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 	})
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	return sdk.Result{Data: mTrade}

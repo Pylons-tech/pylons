@@ -32,7 +32,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		msg.Entries,
 		msg.BlockInterval, msg.Sender)
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
-		return sdk.ErrInternal(err.Error()).Result()
+		return errInternal(err)
 	}
 
 	mRecipe, err2 := json.Marshal(CreateRecipeResponse{
@@ -40,7 +40,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 	})
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	return sdk.Result{Data: mRecipe}

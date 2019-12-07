@@ -28,7 +28,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	}
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	rc.Description = msg.Description
@@ -40,7 +40,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	rc.Name = msg.Name
 
 	if err := keeper.UpdateRecipe(ctx, msg.ID, rc); err != nil {
-		return sdk.ErrInternal(err.Error()).Result()
+		return errInternal(err)
 	}
 
 	mRecipe, err2 := json.Marshal(UpdateRecipeResponse{
@@ -48,7 +48,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	})
 
 	if err2 != nil {
-		return sdk.ErrInternal(err2.Error()).Result()
+		return errInternal(err2)
 	}
 
 	return sdk.Result{Data: mRecipe}
