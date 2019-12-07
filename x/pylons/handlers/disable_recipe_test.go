@@ -73,7 +73,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 
 				require.True(t, err == nil)
 				require.True(t, disableRcpResponse.Status == "Success")
-				require.True(t, disableRcpResponse.Message == "successfully disabled the recipe")
+				require.True(t, disableRcpResponse.Message == "successfully changed the recipe")
 
 				uRcp, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, tc.recipeID)
 				// t.Errorf("DisableRecipeTEST LOG:: %+v", uRcp)

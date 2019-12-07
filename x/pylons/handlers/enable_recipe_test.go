@@ -70,13 +70,12 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 
 				require.True(t, err == nil)
 				require.True(t, enableRcpResponse.Status == "Success")
-				require.True(t, enableRcpResponse.Message == "successfully enabled the recipe")
+				require.True(t, enableRcpResponse.Message == "successfully changed the recipe")
 
 				uRcp, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, tc.recipeID)
 				require.True(t, err2 == nil)
 				require.True(t, uRcp.Disabled == false)
 			} else {
-				// t.Errorf("EnableRecipeTEST LOG:: %+v", result)
 				require.True(t, strings.Contains(result.Log, tc.desiredError))
 			}
 		})

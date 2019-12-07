@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -178,12 +177,6 @@ func processSig(
 	if !res.IsOK() {
 		return nil, res
 	}
-	fmt.Println("address", sdk.AccAddress(pubKey.Address().Bytes()).String())
-	fmt.Println("signBytes", string(signBytes))
-	fmt.Println("signature", base64.StdEncoding.EncodeToString(sig.Signature))
-	fmt.Println("chainID", ctx.ChainID())
-	fmt.Println("account Number", acc.GetAccountNumber())
-	fmt.Println("sig match", pubKey.VerifyBytes(signBytes, sig.Signature))
 	err := acc.SetPubKey(pubKey)
 	if err != nil {
 		return nil, sdk.ErrInternal("setting PubKey on signer's account").Result()

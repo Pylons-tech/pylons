@@ -1,10 +1,9 @@
 package handlers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,38 +13,17 @@ type EnableRecipeResp struct {
 	Status  string
 }
 
+// RecipeChangeFn is used to change recipe inside a closure
+type RecipeChangeFn func(recipe *types.Recipe) error
+
 // HandlerMsgEnableRecipe is used to enable recipe by a developer
 func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnableRecipe) sdk.Result {
-
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()
 	}
-
-	recipe, err2 := keeper.GetRecipe(ctx, msg.RecipeID)
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	if !msg.Sender.Equals(recipe.Sender) {
-		return sdk.ErrUnauthorized("msg sender is not the owner of the recipe").Result()
-	}
-
-	recipe.Disabled = false
-
-	err2 = keeper.UpdateRecipe(ctx, msg.RecipeID, recipe)
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	resp, err2 := json.Marshal(EnableRecipeResp{
-		Message: "successfully enabled the recipe",
-		Status:  "Success",
+	return recipeChangeContext(ctx, keeper, msg.RecipeID, msg.Sender, func(recipe *types.Recipe) error {
+		recipe.Disabled = false
+		return nil
 	})
-
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	return sdk.Result{Data: resp}
 }
