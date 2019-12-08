@@ -39,10 +39,16 @@ func (k Keeper) GetTrade(ctx sdk.Context, id string) (types.Trade, error) {
 	return trade, err
 }
 
-// GetTradesIterator returns an iterator for all the iterator
-func (k Keeper) GetTradesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+// GetTradesIteratorByCreator returns an iterator for all the trades created by the sender
+func (k Keeper) GetTradesIteratorByCreator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
 	store := ctx.KVStore(k.TradeKey)
 	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+}
+
+// GetTradesIterator returns an iterator for all the trades
+func (k Keeper) GetTradesIterator(ctx sdk.Context) sdk.Iterator {
+	store := ctx.KVStore(k.TradeKey)
+	return sdk.KVStorePrefixIterator(store, []byte(""))
 }
 
 // UpdateTrade is used to update the trade using the id

@@ -50,6 +50,7 @@ func MockRecipe(
 	return recipeData
 }
 
+// MockExecution executes a mockRecipe
 func MockExecution(
 	tci keep.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
