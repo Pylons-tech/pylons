@@ -41,10 +41,6 @@ func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper 
 		cookbooks = append(cookbooks, cookbook)
 	}
 
-	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
-	}
-
 	cookbookList = types.CookbookList{
 		Cookbooks: cookbooks,
 	}

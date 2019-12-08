@@ -42,10 +42,6 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 		recipes = append(recipes, recipe)
 	}
 
-	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
-	}
-
 	recipeList = types.RecipeList{
 		Recipes: recipes,
 	}
