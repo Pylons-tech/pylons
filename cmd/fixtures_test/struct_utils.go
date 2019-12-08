@@ -92,7 +92,7 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	return newBytes
 }
 
-func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
+func GetItemIDsFromNames(bytes []byte, includeLockedByRcp bool, t *testing.T) []string {
 	var itemNamesResp struct {
 		ItemNames []string
 	}
@@ -102,7 +102,7 @@ func GetItemIDsFromNames(bytes []byte, t *testing.T) []string {
 	ItemIDs := []string{}
 
 	for _, itemName := range itemNamesResp.ItemNames {
-		itemID, exist, err := intTest.GetItemIDFromName(itemName)
+		itemID, exist, err := intTest.GetItemIDFromName(itemName, includeLockedByRcp)
 		t.MustTrue(exist)
 		t.MustTrue(err == nil)
 		ItemIDs = append(ItemIDs, itemID)

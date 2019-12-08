@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
@@ -25,6 +26,44 @@ type ExecuteRecipeSerialize struct {
 
 type ExecuteRecipeScheduleOutput struct {
 	ExecID string
+}
+
+func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe) ([]types.Item, error) {
+	// TODO: need to check it's working correctly when it is recipe for merging to same items
+
+	var inputItems []types.Item
+
+	for _, id := range msg.ItemIDs {
+		item, err := keeper.GetItem(ctx, id)
+		if err != nil {
+			return nil, err
+		}
+		if !item.Sender.Equals(msg.Sender) {
+			return nil, errors.New("item owner is not same as sender")
+		}
+
+		inputItems = append(inputItems, item)
+	}
+
+	// we validate and match items
+	var matchedItems []types.Item
+	var matches bool
+	for _, itemInput := range recipe.ItemInputs {
+		matches = false
+
+		for _, item := range inputItems {
+			if itemInput.Matches(item) && len(item.OwnerRecipeID) == 0 {
+				matchedItems = append(matchedItems, item)
+				matches = true
+				break
+			}
+		}
+
+		if !matches {
+			return nil, errors.New("the item inputs dont match any items provided")
+		}
+	}
+	return matchedItems, nil
 }
 
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) (ExecuteRecipeSerialize, sdk.Error) {
@@ -82,45 +121,25 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
 	}
 
-	var inputItems []types.Item
-
-	for _, id := range msg.ItemIDs {
-		item, err := keeper.GetItem(ctx, id)
-		if err != nil {
-			return errInternal(err)
-		}
-		if !item.Sender.Equals(msg.Sender) {
-			return sdk.ErrInternal("item owner is not same as sender").Result()
-		}
-
-		inputItems = append(inputItems, item)
+	matchedItems, err2 := GetMatchedItems(ctx, keeper, msg, recipe)
+	if err2 != nil {
+		return errInternal(err2)
 	}
-
-	// we validate and match items
-	var matchedItems []types.Item
-	var matches bool
-	for _, itemInput := range recipe.ItemInputs {
-		matches = false
-
-		for _, item := range inputItems {
-			if itemInput.Matches(item) {
-				matchedItems = append(matchedItems, item)
-				matches = true
-				break
-			}
-		}
-
-		if !matches {
-			return sdk.ErrInternal("the item inputs dont match any items provided").Result()
-		}
-	}
-
 	// TODO: validate 1-1 correspondence for item input and output - check ids
 
 	// we set the inputs and outputs for storing the execution
 	if recipe.BlockInterval > 0 {
+		// set matchedItem's owner recipe
+		var rcpOwnMatchedItems []types.Item
+		for _, item := range matchedItems {
+			item.OwnerRecipeID = recipe.ID
+			if err := keeper.SetItem(ctx, item); err != nil {
+				return sdk.ErrInternal("error updating item's owner recipe").Result()
+			}
+			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
+		}
 		// store the execution as the interval
-		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, matchedItems, recipe.Entries,
+		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems, recipe.Entries,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
 		err2 := keeper.SetExecution(ctx, exec)
 

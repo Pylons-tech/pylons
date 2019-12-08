@@ -49,7 +49,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			items, err := ListItemsViaCLI("")
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok := FindItemFromArrayByName(items, tc.desiredItemName)
+			_, ok := FindItemFromArrayByName(items, tc.desiredItemName, false)
 			t.MustTrue(ok)
 		})
 	}
