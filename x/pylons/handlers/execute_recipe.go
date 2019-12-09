@@ -134,7 +134,7 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 	return sdk.Result{Data: resp}
 }
 
-func HandlerItemUpgradeRecipe() (ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
 	if len(matchedItems) != 1 {
 		return sdk.ErrInternal("matched items shouldn't be 0 or more than one for upgrade recipe").Result()
@@ -164,7 +164,6 @@ func HandlerItemUpgradeRecipe() (ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 		}
 		targetItem.Strings[strKey].Value = str.UpgradeValue
 	}
-
 
 	if err := keeper.SetItem(ctx, targetItem); err != nil {
 		return errInternal(err)
