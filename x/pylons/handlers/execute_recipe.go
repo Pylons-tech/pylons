@@ -134,6 +134,33 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 	return sdk.Result{Data: resp}
 }
 
+func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
+	for _, dbl := range ToUpgrade.Doubles {
+		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+		if !ok {
+			return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
+		}
+		targetItem.Doubles[dblKey].Value += dbl.UpgradeAmount
+	}
+
+	for _, lng := range ToUpgrade.Longs {
+		lngKey, ok := targetItem.FindLongKey(lng.Key)
+		if !ok {
+			return targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
+		}
+		targetItem.Longs[lngKey].Value += lng.UpgradeAmount
+	}
+
+	for _, str := range ToUpgrade.Strings {
+		strKey, ok := targetItem.FindStringKey(str.Key)
+		if !ok {
+			return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+		}
+		targetItem.Strings[strKey].Value = str.UpgradeValue
+	}
+	return targetItem, nil
+}
+
 func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
 	if len(matchedItems) != 1 {
@@ -141,28 +168,9 @@ func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgE
 	}
 
 	targetItem := matchedItems[0]
-	for _, dbl := range recipe.ToUpgrade.Doubles {
-		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
-		if !ok {
-			return sdk.ErrInternal("double key does not exist which needs to be upgraded").Result()
-		}
-		targetItem.Doubles[dblKey].Value += dbl.UpgradeAmount
-	}
-
-	for _, lng := range recipe.ToUpgrade.Longs {
-		lngKey, ok := targetItem.FindLongKey(lng.Key)
-		if !ok {
-			return sdk.ErrInternal("long key does not exist which needs to be upgraded").Result()
-		}
-		targetItem.Longs[lngKey].Value += lng.UpgradeAmount
-	}
-
-	for _, str := range recipe.ToUpgrade.Strings {
-		strKey, ok := targetItem.FindStringKey(str.Key)
-		if !ok {
-			return sdk.ErrInternal("string key does not exist which needs to be upgraded").Result()
-		}
-		targetItem.Strings[strKey].Value = str.UpgradeValue
+	targetItem, err := UpdateItemFromUpgradeParams(targetItem, recipe.ToUpgrade)
+	if err != nil {
+		return errInternal(err)
 	}
 
 	if err := keeper.SetItem(ctx, targetItem); err != nil {

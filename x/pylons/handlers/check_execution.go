@@ -58,28 +58,10 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		}
 
 		targetItem := exec.ItemInputs[0]
-		for _, dbl := range recipe.ToUpgrade.Doubles {
-			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
-			if !ok {
-				return nil, sdk.ErrInternal("double key does not exist which needs to be upgraded")
-			}
-			targetItem.Doubles[dblKey].Value += dbl.UpgradeAmount
-		}
+		targetItem, err := UpdateItemFromUpgradeParams(targetItem, recipe.ToUpgrade)
 
-		for _, lng := range recipe.ToUpgrade.Longs {
-			lngKey, ok := targetItem.FindLongKey(lng.Key)
-			if !ok {
-				return nil, sdk.ErrInternal("long key does not exist which needs to be upgraded")
-			}
-			targetItem.Longs[lngKey].Value += lng.UpgradeAmount
-		}
-
-		for _, str := range recipe.ToUpgrade.Strings {
-			strKey, ok := targetItem.FindStringKey(str.Key)
-			if !ok {
-				return nil, sdk.ErrInternal("string key does not exist which needs to be upgraded")
-			}
-			targetItem.Strings[strKey].Value = str.UpgradeValue
+		if err != nil {
+			return nil, err
 		}
 
 		if err := keeper.SetItem(ctx, targetItem); err != nil {
