@@ -19,37 +19,77 @@ type CheckExecutionResp struct {
 func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
+	var outputSTR []byte
 	_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
 	if err != nil {
 		return nil, err
 	}
 
-	// we delete all the matched items as those get converted to output items
-	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
-	for _, item := range exec.ItemInputs {
-		keeper.DeleteItem(ctx, item.ID)
+	recipe, err2 := keeper.GetRecipe(ctx, exec.RecipeID)
+	if err2 != nil {
+		return nil, err2
 	}
 
+	if recipe.Type == types.GENERATION {
+		// we delete all the matched items as those get converted to output items
+		// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
+		for _, item := range exec.ItemInputs {
+			keeper.DeleteItem(ctx, item.ID)
+		}
+
+		output, err := exec.Entries.Actualize()
+		if err != nil {
+			return nil, err
+		}
+		ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
+
+		if err != nil {
+			return nil, err
+		}
+
+		outputSTR, err2 = json.Marshal(ers)
+
+		if err2 != nil {
+			return nil, err2
+		}
+	} else {
+		if len(exec.ItemInputs) != 1 {
+			return nil, sdk.ErrInternal("matched items shouldn't be 0 or more than one for upgrade recipe")
+		}
+
+		targetItem := exec.ItemInputs[0]
+		for _, dbl := range recipe.ToUpgrade.Doubles {
+			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+			if !ok {
+				return nil, sdk.ErrInternal("double key does not exist which needs to be upgraded")
+			}
+			targetItem.Doubles[dblKey].Value += dbl.UpgradeAmount
+		}
+
+		for _, lng := range recipe.ToUpgrade.Longs {
+			lngKey, ok := targetItem.FindLongKey(lng.Key)
+			if !ok {
+				return nil, sdk.ErrInternal("long key does not exist which needs to be upgraded")
+			}
+			targetItem.Longs[lngKey].Value += lng.UpgradeAmount
+		}
+
+		for _, str := range recipe.ToUpgrade.Strings {
+			strKey, ok := targetItem.FindStringKey(str.Key)
+			if !ok {
+				return nil, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+			}
+			targetItem.Strings[strKey].Value = str.UpgradeValue
+		}
+
+		if err := keeper.SetItem(ctx, targetItem); err != nil {
+			return nil, err
+		}
+	}
 	// confirm that the execution was completed
 	exec.Completed = true
 
-	err2 := keeper.UpdateExecution(ctx, exec.ID, exec)
-	if err2 != nil {
-		return nil, err
-	}
-
-	output, err := exec.Entries.Actualize()
-	if err != nil {
-		return nil, err
-	}
-	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
-
-	if err != nil {
-		return nil, err
-	}
-
-	outputSTR, err2 := json.Marshal(ers)
-
+	err2 = keeper.UpdateExecution(ctx, exec.ID, exec)
 	if err2 != nil {
 		return nil, err2
 	}

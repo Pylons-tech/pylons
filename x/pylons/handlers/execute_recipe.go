@@ -100,6 +100,87 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	}
 }
 
+func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+	// we delete all the matched items as those get converted to output items
+	for _, item := range matchedItems {
+		keeper.DeleteItem(ctx, item.ID)
+	}
+
+	output, err := recipe.Entries.Actualize()
+	if err != nil {
+		return err.Result()
+	}
+	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
+
+	if err != nil {
+		return err.Result()
+	}
+
+	outputSTR, err2 := json.Marshal(ers)
+
+	if err2 != nil {
+		return errInternal(err2)
+	}
+
+	resp, err3 := json.Marshal(ExecuteRecipeResp{
+		Message: "successfully executed the recipe",
+		Status:  "Success",
+		Output:  outputSTR,
+	})
+
+	if err3 != nil {
+		return errInternal(err3)
+	}
+	return sdk.Result{Data: resp}
+}
+
+func HandlerItemUpgradeRecipe() (ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+
+	if len(matchedItems) != 1 {
+		return sdk.ErrInternal("matched items shouldn't be 0 or more than one for upgrade recipe").Result()
+	}
+
+	targetItem := matchedItems[0]
+	for _, dbl := range recipe.ToUpgrade.Doubles {
+		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+		if !ok {
+			return sdk.ErrInternal("double key does not exist which needs to be upgraded").Result()
+		}
+		targetItem.Doubles[dblKey].Value += dbl.UpgradeAmount
+	}
+
+	for _, lng := range recipe.ToUpgrade.Longs {
+		lngKey, ok := targetItem.FindLongKey(lng.Key)
+		if !ok {
+			return sdk.ErrInternal("long key does not exist which needs to be upgraded").Result()
+		}
+		targetItem.Longs[lngKey].Value += lng.UpgradeAmount
+	}
+
+	for _, str := range recipe.ToUpgrade.Strings {
+		strKey, ok := targetItem.FindStringKey(str.Key)
+		if !ok {
+			return sdk.ErrInternal("string key does not exist which needs to be upgraded").Result()
+		}
+		targetItem.Strings[strKey].Value = str.UpgradeValue
+	}
+
+
+	if err := keeper.SetItem(ctx, targetItem); err != nil {
+		return errInternal(err)
+	}
+
+	resp, err3 := json.Marshal(ExecuteRecipeResp{
+		Message: "successfully upgraded the item",
+		Status:  "Success",
+	})
+
+	if err3 != nil {
+		return errInternal(err3)
+	}
+	return sdk.Result{Data: resp}
+}
+
 // HandlerMsgExecuteRecipe is used to execute a recipe
 func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) sdk.Result {
 	err := msg.ValidateBasic()
@@ -173,35 +254,9 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return err.Result()
 	}
 
-	// we delete all the matched items as those get converted to output items
-	for _, item := range matchedItems {
-		keeper.DeleteItem(ctx, item.ID)
+	if recipe.Type == types.GENERATION {
+		return HandlerItemGenerationRecipe(ctx, keeper, msg, recipe, matchedItems)
+	} else {
+		return HandlerItemUpgradeRecipe(ctx, keeper, msg, recipe, matchedItems)
 	}
-
-	output, err := recipe.Entries.Actualize()
-	if err != nil {
-		return err.Result()
-	}
-	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
-
-	if err != nil {
-		return err.Result()
-	}
-
-	outputSTR, err2 := json.Marshal(ers)
-
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	resp, err3 := json.Marshal(ExecuteRecipeResp{
-		Message: "successfully executed the recipe",
-		Status:  "Success",
-		Output:  outputSTR,
-	})
-
-	if err3 != nil {
-		return errInternal(err2)
-	}
-	return sdk.Result{Data: resp}
 }
