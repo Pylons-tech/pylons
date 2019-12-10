@@ -79,12 +79,14 @@ Recipe consists of below fields.
 | 2  | Name          | string | "Knife Shield Generation Recipe"                             | name of recipe.                                            |
 | 3  | Description   | string | "level 1 knife and level 1 shield into level 1 knife-shield" | recipe description                                         |
 | 4  | Sender        | string | "eugen"                                                      | recipe owner name.                                         |
-| 5  | CoinInputs    | array  | "goldcoin": 1, "silvercoin": 1                               | required coins to run recipe.                              |
-| 6  | ItemInputs    | array  | level 1 knife, level 1 shield                                | required items to run recipe.                              |
-| 7  | Entries       | array  | level 1 knife-shield                                         | Items and coins which can be generated from this recipe.   |
-| 8  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time. |
+| 5  | RType         | Enum   | GENERATION(0) | UPGRADE(1)                                   | type of recipe (create new item or update existing item)   |
+| 6  | CoinInputs    | array  | "goldcoin": 1, "silvercoin": 1                               | required coins to run recipe.                              |
+| 7  | ItemInputs    | array  | level 1 knife, level 1 shield                                | required items to run recipe.                              |
+| 8  | Entries       | array  | level 1 knife-shield                                         | Items and coins which can be generated from this recipe.   |
+| 9  | ToUpgrade     | array  | attack: +1, level: +1, name: 'updated item'                  | modification values for all fields which need updates.     |
+| 9  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time. |
 
-Sample recipe JSON
+Sample generator JSON
 
 ```
 {
@@ -108,6 +110,25 @@ Sample recipe JSON
   "Name": "Knife Shield Generation Recipe",
   "CookbookName": "submarine",
   "Description": "this recipe is merging level 1 knife and level 1 shield into level 1 knife-shield.",
+  "BlockInterval":"0"
+}
+```
+
+Sample upgrader JSON
+
+```
+{
+  "RType": "1",
+  "CoinInputs":[],
+  "ItemInputRefs": [
+    "./recipes/item_input/adventurer.json"
+  ],
+  "ToUpgradeRef": "./recipes/upgrader/adventurer.json",
+  "ExtraInfo":"",
+  "Sender":"eugen",
+  "Name": "Adventurer Upgrade Recipe",
+  "CookbookName": "helicopter",
+  "Description": "this recipe is used to upgrade adventurer which can update all versions of adventurer.",
   "BlockInterval":"0"
 }
 ```
@@ -220,3 +241,27 @@ Sample CoinOutputs JSON
   "Weight":1
 }
 ```
+
+#### ToUpgrade
+This describes the fields of ToUpgrade field of item upgrade recipe.
+
+| No | Field         | Type       | Sample               | Description                        |
+|----|---------------|------------|----------------------|------------------------------------|
+| 1  | Doubles       | array      | attack: +1.0         | contains double attributes updates |
+| 2  | Longs         | array      | level: +1            | contains int attributes updates    |
+| 3  | Strings       | array      | name: "Level2 Knife" | contains string attributes updates |
+| 4  | UpgradeAmount | Float/Long | 1                    | this is for double/long upgrade    |
+| 5  | UpgradeValue  | String     | "Level2 Knife"       | this is for string upgrade         |
+| 6  | Key           | String     | "Name"               | attribute of item to be updated    |
+
+Sample ToUpgrade JSON
+
+```
+{
+  "Doubles": [{"Key": "attack", "UpgradeAmount": "2.0"}],
+  "Longs": [{"Key": "level", "UpgradeAmount": 1}],
+  "Strings": [{"Key": "LastName", "UpgradeValue": "Upgraded Adventurer"}]
+}
+```
+
+This recipe is to upgrade item's level, LastName, and attack.
