@@ -250,17 +250,22 @@ This describes the fields of ToUpgrade field of item upgrade recipe.
 | 1  | Doubles       | array      | attack: +1.0         | contains double attributes updates |
 | 2  | Longs         | array      | level: +1            | contains int attributes updates    |
 | 3  | Strings       | array      | name: "Level2 Knife" | contains string attributes updates |
-| 4  | UpgradeAmount | Float/Long | 1                    | this is for double/long upgrade    |
-| 5  | UpgradeValue  | String     | "Level2 Knife"       | this is for string upgrade         |
-| 6  | Key           | String     | "Name"               | attribute of item to be updated    |
+
+Upgrade also has random effect and for that, weightRanges are used for Doubles and Longs.
 
 Sample ToUpgrade JSON
 
 ```
 {
-  "Doubles": [{"Key": "attack", "UpgradeAmount": "2.0"}],
-  "Longs": [{"Key": "level", "UpgradeAmount": 1}],
-  "Strings": [{"Key": "LastName", "UpgradeValue": "Upgraded Adventurer"}]
+  "Doubles": [{
+    "Key": "attack", 
+    "WeightRanges":[{ "Lower": "2.0", "Upper": "2.0","Weight":1 }]
+  }],
+  "Longs": [{
+    "Key": "level", 
+    "WeightRanges":[{ "Lower": 1, "Upper":1,"Weight":1 }]
+  }],
+  "Strings": [{"Key": "LastName", "Value": "Upgraded Adventurer"}]
 }
 ```
 
