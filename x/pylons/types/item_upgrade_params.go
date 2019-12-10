@@ -1,7 +1,7 @@
 package types
 
 type ItemUpgradeParams struct {
-	Doubles []DoubleUpgradeParam
+	Doubles DoubleParamList
 	Longs   LongParamList
 	Strings []StringUpgradeParam
 }

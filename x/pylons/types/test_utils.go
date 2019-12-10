@@ -101,8 +101,17 @@ func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams 
 
 func GenToUpgradeForDouble(targetKey string, upgradeAmount FloatString) ItemUpgradeParams {
 	return ItemUpgradeParams{
-		Doubles: []DoubleUpgradeParam{
-			{Key: targetKey, UpgradeAmount: upgradeAmount},
+		Doubles: []DoubleParam{
+			{
+				Key: targetKey,
+				DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+					DoubleWeightRange{
+						Lower:  upgradeAmount,
+						Upper:  upgradeAmount,
+						Weight: 1,
+					},
+				}},
+			},
 		},
 	}
 }

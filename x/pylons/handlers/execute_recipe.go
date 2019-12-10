@@ -146,14 +146,18 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 }
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
-	for _, dbl := range ToUpgrade.Doubles {
-		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
-		if !ok {
-			return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
+	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(); err != nil {
+		return targetItem, sdk.ErrInternal("error actualizing double upgrade values")
+	} else {
+		for _, dbl := range dblKeyValues {
+			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+			if !ok {
+				return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
+			}
+			originValue := targetItem.Doubles[dblKey].Value.Float()
+			upgradeAmount := dbl.Value.Float()
+			targetItem.Doubles[dblKey].Value += types.ToFloatString(originValue + upgradeAmount)
 		}
-		originValue := targetItem.Doubles[dblKey].Value.Float()
-		upgradeAmount := dbl.UpgradeAmount.Float()
-		targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
 	}
 
 	if lngKeyValues, err := ToUpgrade.Longs.Actualize(); err != nil {
