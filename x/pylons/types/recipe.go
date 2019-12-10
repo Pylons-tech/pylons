@@ -10,7 +10,7 @@ import (
 type RecipeType int
 
 const (
-	GENERATION = iota
+	GENERATION RecipeType = iota
 	UPGRADE
 )
 
