@@ -100,26 +100,37 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	}
 }
 
-func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, entries types.WeightedParamList) ([]byte, error) {
+	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
+
 	// we delete all the matched items as those get converted to output items
 	for _, item := range matchedItems {
 		keeper.DeleteItem(ctx, item.ID)
 	}
 
-	output, err := recipe.Entries.Actualize()
+	output, err := entries.Actualize()
 	if err != nil {
-		return err.Result()
+		return []byte{}, err
 	}
-	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, recipe.CookbookID)
+	ers, err := AddExecutedResult(ctx, keeper, output, sender, cbID)
 
 	if err != nil {
-		return err.Result()
+		return []byte{}, err
 	}
 
 	outputSTR, err2 := json.Marshal(ers)
 
 	if err2 != nil {
-		return errInternal(err2)
+		return []byte{}, err2
+	}
+	return outputSTR, nil
+}
+
+func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+	// we delete all the matched items as those get converted to output items
+	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe.Entries)
+	if err != nil {
+		return errInternal(err)
 	}
 
 	resp, err3 := json.Marshal(ExecuteRecipeResp{
