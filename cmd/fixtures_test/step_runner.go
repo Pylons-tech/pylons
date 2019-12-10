@@ -155,9 +155,11 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpType.Name,
 			rcpType.CookbookID,
 			rcpType.Description,
+			types.GENERATION,
 			rcpType.CoinInputs,
 			itemInputs,
 			entries,
+			types.ItemUpgradeParams{},
 			rcpType.BlockInterval,
 			rcpType.Sender,
 		)
