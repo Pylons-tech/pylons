@@ -156,7 +156,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 			}
 			originValue := targetItem.Doubles[dblKey].Value.Float()
 			upgradeAmount := dbl.Value.Float()
-			targetItem.Doubles[dblKey].Value += types.ToFloatString(originValue + upgradeAmount)
+			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
 		}
 	}
 
