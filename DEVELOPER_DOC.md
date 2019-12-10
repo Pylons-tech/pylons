@@ -88,6 +88,7 @@ Sample recipe JSON
 
 ```
 {
+  "RType": "0",
   "CoinInputs":[],
   "ItemInputRefs": [
     "./recipes/item_input/knife_lv1.json",

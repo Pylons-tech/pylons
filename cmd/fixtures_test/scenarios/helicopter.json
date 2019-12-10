@@ -45,6 +45,33 @@
         }
     },
     {
+        "ID": "CREATE_ADVENTURER_LV1",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/adventurer_lv1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Adventurer" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
+            }
+        }
+    },
+    {
         "ID": "CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
@@ -77,6 +104,24 @@
             "property": {
                 "owner": "eugen",
                 "recipes": ["Helicopter's Coin Generation Recipe"]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_ADVENTURER_UPDATE_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/adventurer_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["Adventurer Upgrade Recipe"]
             }
         }
     },
@@ -127,6 +172,34 @@
                     {
                         "denom": "helicoin",
                         "amount": 1
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "EXECUTE_ADVENTURER_UPDATE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_ADVENTURER_LV1", "CREATE_ADVENTURER_UPDATE_RECIPE"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/adventurer_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully upgraded the item"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
+                        "dblKeys": [],
+                        "dblValues": { "attack": "3.0" },
+                        "longKeys": [],
+                        "longValues": { "level": 2 }
                     }
                 ]
             }

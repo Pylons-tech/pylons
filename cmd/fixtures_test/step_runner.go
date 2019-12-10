@@ -143,28 +143,30 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		itemInputs := GetItemInputsFromBytes(newByteValue, t)
 		// get entries from fileNames
 		entries := GetEntriesFromBytes(newByteValue, t)
+		// get toUpgrade from fileName
+		toUpgrade := GetToUpgradeFromBytes(newByteValue, t)
 
-		var rcpType types.Recipe
-		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpType)
+		var rcpTempl types.Recipe
+		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpTempl)
 		if err != nil {
-			t.Fatal("error reading using GetAminoCdc ", rcpType, err)
+			t.Fatal("error reading using GetAminoCdc ", rcpTempl, err)
 		}
 		t.MustTrue(err == nil)
 
 		rcpMsg := msgs.NewMsgCreateRecipe(
-			rcpType.Name,
-			rcpType.CookbookID,
-			rcpType.Description,
-			types.GENERATION,
-			rcpType.CoinInputs,
+			rcpTempl.Name,
+			rcpTempl.CookbookID,
+			rcpTempl.Description,
+			rcpTempl.RType,
+			rcpTempl.CoinInputs,
 			itemInputs,
 			entries,
-			types.ItemUpgradeParams{},
-			rcpType.BlockInterval,
-			rcpType.Sender,
+			toUpgrade,
+			rcpTempl.BlockInterval,
+			rcpTempl.Sender,
 		)
 
-		txhash := intTest.TestTxWithMsgWithNonce(t, rcpMsg, rcpType.Sender.String(), true)
+		txhash := intTest.TestTxWithMsgWithNonce(t, rcpMsg, rcpTempl.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)

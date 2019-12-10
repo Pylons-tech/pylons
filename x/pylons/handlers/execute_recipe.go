@@ -151,7 +151,9 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		if !ok {
 			return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
 		}
-		targetItem.Doubles[dblKey].Value += dbl.UpgradeAmount
+		originValue := targetItem.Doubles[dblKey].Value.Float()
+		upgradeAmount := dbl.UpgradeAmount.Float()
+		targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
 	}
 
 	for _, lng := range ToUpgrade.Longs {

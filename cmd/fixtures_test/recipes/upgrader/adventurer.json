@@ -1,0 +1,5 @@
+{
+    "Doubles": [{"Key": "attack", "UpgradeAmount": "2.0"}],
+    "Longs": [{"Key": "level", "UpgradeAmount": 1}],
+    "Strings": [{"Key": "LastName", "UpgradeValue": "Upgraded Adventurer"}]
+}

@@ -165,3 +165,25 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
 
 	return wpl
 }
+
+func GetToUpgradeFromBytes(bytes []byte, t *testing.T) types.ItemUpgradeParams {
+	var upgradeReader struct {
+		ToUpgradeRef string
+	}
+
+	if err := json.Unmarshal(bytes, &upgradeReader); err != nil {
+		t.Fatal("read upgradeReader using json.Unmarshal:", err)
+	}
+
+	var iup types.ItemUpgradeParams
+	if len(upgradeReader.ToUpgradeRef) == 0 {
+		return iup
+	}
+	ioBytes := ReadFile(upgradeReader.ToUpgradeRef, t)
+	err := json.Unmarshal(ioBytes, &iup)
+	if err != nil {
+		t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
+	}
+
+	return iup
+}

@@ -31,7 +31,7 @@ func (wt *IntWeightTable) Generate() (int, error) {
 		weights = append(weights, lastWeight)
 	}
 	if lastWeight == 0 {
-		return 0, errors.New("total weight of weighted param list shouldn't be zero")
+		return 0, errors.New("total weight of IntWeightTable shouldn't be zero")
 	}
 	randWeight := rand.Intn(lastWeight)
 

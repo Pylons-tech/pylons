@@ -88,7 +88,7 @@ func CheckItemWithDblValues(item types.Item, dblValues map[string]types.FloatStr
 	for sK, sV := range dblValues {
 		keyExist := false
 		for _, sKV := range item.Doubles {
-			if sK == sKV.Key && sV == sKV.Value {
+			if sK == sKV.Key && sV.Float() == sKV.Value.Float() {
 				keyExist = true
 			}
 		}
