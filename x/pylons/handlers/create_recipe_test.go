@@ -24,7 +24,9 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		cookbookName   string
 		createCookbook bool
 		recipeDesc     string
+		recipeType     types.RecipeType
 		sender         sdk.AccAddress
+		numItemInput   int // 0 | 1 | 2
 		desiredError   string
 		showError      bool
 	}{
@@ -32,6 +34,8 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: false,
 			recipeDesc:     "this has to meet character limits",
+			recipeType:     types.GENERATION,
+			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "cookbook not owned by the sender",
 			showError:      true,
@@ -40,9 +44,31 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
+			recipeType:     types.GENERATION,
+			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "",
 			showError:      false,
+		},
+		"item upgrade recipe successful check": {
+			cookbookName:   "book000001",
+			createCookbook: true,
+			recipeDesc:     "this has to meet character limits",
+			recipeType:     types.UPGRADE,
+			numItemInput:   1,
+			sender:         sender,
+			desiredError:   "",
+			showError:      false,
+		},
+		"item upgrade recipe more than 2 input failure check": {
+			cookbookName:   "book000001",
+			createCookbook: true,
+			recipeDesc:     "this has to meet character limits",
+			recipeType:     types.UPGRADE,
+			numItemInput:   2,
+			sender:         sender,
+			desiredError:   "For item upgrade recipe, item input should be one",
+			showError:      true,
 		},
 	}
 	for testName, tc := range cases {
@@ -57,10 +83,26 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 
+			mEntries := types.WeightedParamList{}
+			mUpgrades := types.ItemUpgradeParams{}
+			if tc.recipeType == types.GENERATION {
+				mEntries = types.GenEntries("chair", "Raichu")
+			} else {
+				mUpgrades = types.GenToUpgradeForString("Name", "RaichuV2")
+			}
+			mInputList := types.ItemInputList{}
+			if tc.numItemInput == 1 {
+				mInputList = types.GenItemInputList("Raichu")
+			} else {
+				mInputList = types.GenItemInputList("Raichu", "Knife")
+			}
+
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, tc.recipeDesc,
+				tc.recipeType,
 				types.GenCoinInputList("wood", 5),
-				types.GenItemInputList("Raichu"),
-				types.GenEntries("chair", "Raichu"),
+				mInputList,
+				mEntries,
+				mUpgrades,
 				0,
 				tc.sender,
 			)

@@ -25,9 +25,11 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 
 	// mock new recipe
 	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "this has to meet character limits",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenEntries("chair", "Raichu"),
+		types.ItemUpgradeParams{},
 		0,
 		sender1,
 	)

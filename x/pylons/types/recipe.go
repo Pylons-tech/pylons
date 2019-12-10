@@ -39,16 +39,20 @@ func (rl RecipeList) String() string {
 
 // NewRecipe creates a new recipe
 func NewRecipe(recipeName, cookbookID, description string,
+	rcpType RecipeType,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
 	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
+	toUpgrade ItemUpgradeParams,
 	execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		Name:          recipeName,
 		CookbookID:    cookbookID,
+		RType:         rcpType,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		ToUpgrade:     toUpgrade,
 		BlockInterval: execTime,
 		Description:   description,
 		Sender:        sender,

@@ -23,18 +23,22 @@ type MsgCreateRecipe struct {
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
 func NewMsgCreateRecipe(recipeName, cookbookID, description string,
+	rType types.RecipeType,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
+	toUpgrade types.ItemUpgradeParams,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
 		Name:          recipeName,
 		CookbookID:    cookbookID,
 		Description:   description,
+		RType:         rType,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		ToUpgrade:     toUpgrade,
 		BlockInterval: int64(blockInterval),
 		Sender:        sender,
 	}

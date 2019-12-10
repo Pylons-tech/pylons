@@ -27,9 +27,11 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock coin to coin recipe
 	c2cRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenCoinOnlyEntry("chair"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -38,9 +40,11 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock coin to item recipe
 	zeroInOneOutItemRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenItemOnlyEntry("Raichu"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -49,9 +53,11 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenItemOnlyEntry("Zombie"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -60,9 +66,23 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock no input 1 coin | 1 item output recipe
 	noInput1Coin1ItemRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
+		types.GENERATION,
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntries("chaira", "ZombieA"),
+		types.ItemUpgradeParams{},
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	itemUpgradeRecipeData := MockRecipe(
+		mockedCoinInput, "item upgrade recipe",
+		types.UPGRADE,
+		types.CoinInputList{},
+		types.GenItemInputList("Raichu"),
+		types.WeightedParamList{},
+		types.GenToUpgradeForString("Name", "RaichuV2"),
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -78,6 +98,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		recipeDesc               string
 		sender                   sdk.AccAddress
 		desiredError             string
+		successMsg               string
 		showError                bool
 		checkCoinName            string
 		checkItemName            string
@@ -114,6 +135,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkCoinName:      "chair",
 			checkCoinAvailable: true,
@@ -127,6 +149,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkItemName:      "Raichu",
 			checkItemAvailable: true,
@@ -153,6 +176,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "the item inputs dont match any items provided",
+			successMsg:         "successfully executed the recipe",
 			showError:          true,
 			checkItemName:      "",
 			checkItemAvailable: false,
@@ -166,6 +190,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkItemName:      "Zombie",
 			checkItemAvailable: true,
@@ -179,10 +204,25 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeDesc:               "this has to meet character limits lol",
 			sender:                   sender1,
 			desiredError:             "",
+			successMsg:               "successfully executed the recipe",
 			showError:                false,
 			checkCoinName:            "chaira",
 			checkItemName:            "ZombieA",
 			checkItemOrCoinAvailable: true,
+		},
+		"item upgrade test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemName:    "Raichu",
+			addInputCoin:       true,
+			recipeID:           itemUpgradeRecipeData.RecipeID, // available ID
+			recipeDesc:         "this has to meet character limits lol",
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully upgraded the item",
+			showError:          false,
+			checkItemName:      "RaichuV2",
+			checkItemAvailable: true,
 		},
 	}
 	for testName, tc := range cases {
@@ -205,7 +245,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 				require.True(t, err == nil)
 				require.True(t, execRcpResponse.Status == "Success")
-				require.True(t, execRcpResponse.Message == "successfully executed the recipe")
+				require.True(t, execRcpResponse.Message == tc.successMsg)
 
 				// calc generated coin availability
 				coinAvailability := false
