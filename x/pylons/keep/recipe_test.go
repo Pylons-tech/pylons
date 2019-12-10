@@ -12,9 +12,11 @@ import (
 
 func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) types.Recipe {
 	return types.NewRecipe(name, cbID, desc,
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenEntries("chair", "Raichu"),
+		types.ItemUpgradeParams{},
 		0,
 		sender,
 	)

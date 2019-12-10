@@ -28,9 +28,11 @@ func TestListRecipe(t *testing.T) {
 
 	handlers.MockRecipe(
 		mockedCoinInput, "recipe0001",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenEntries("chair", "Raichu"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		senderAccAddress,

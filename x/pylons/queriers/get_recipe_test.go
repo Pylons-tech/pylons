@@ -30,9 +30,11 @@ func TestGetRecipe(t *testing.T) {
 	mockRecipeName := "GET_RECIPE_MOCK_TEST_NAME"
 	rcpData := handlers.MockRecipe(
 		mockedCoinInput, mockRecipeName,
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenCoinOnlyEntry("chair"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		5,
 		senderAccAddress,
