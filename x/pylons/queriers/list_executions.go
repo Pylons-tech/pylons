@@ -30,6 +30,10 @@ func (er ExecResp) String() string {
 
 // ListExecutions lists all the executions based on the sender address
 func ListExecutions(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+	if len(path) == 0 {
+		return nil, sdk.ErrInternal("no address is provided in path")
+	}
+
 	sender := path[0]
 	senderAddr, err := sdk.AccAddressFromBech32(sender)
 
