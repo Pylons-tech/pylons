@@ -7,6 +7,13 @@ import (
 	"github.com/google/uuid"
 )
 
+type RecipeType int
+
+const (
+	GENERATION = iota
+	UPGRADE
+)
+
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
 	ID            string // the recipe guid
@@ -16,6 +23,7 @@ type Recipe struct {
 	CoinInputs    CoinInputList
 	ItemInputs    ItemInputList
 	Entries       WeightedParamList
+	ToUpgrade     ItemUpgradeParams
 	Description   string
 	BlockInterval int64
 	Sender        sdk.AccAddress
