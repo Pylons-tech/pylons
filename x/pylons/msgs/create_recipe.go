@@ -11,9 +11,11 @@ import (
 type MsgCreateRecipe struct {
 	Name          string
 	CookbookID    string // the cookbook guid
+	RType         types.RecipeType
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
 	Entries       types.WeightedParamList
+	ToUpgrade     types.ItemUpgradeParams
 	BlockInterval int64
 	Sender        sdk.AccAddress
 	Description   string
@@ -53,6 +55,10 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 
 	if len(msg.Description) < 20 {
 		return sdk.ErrInternal("the description should have more than 20 characters")
+	}
+
+	if msg.RType == types.UPGRADE && len(msg.ItemInputs) != 1 {
+		return sdk.ErrInternal("For item upgrade recipe, item input should be one")
 	}
 
 	return nil

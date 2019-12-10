@@ -31,7 +31,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err2
 	}
 
-	if recipe.Type == types.GENERATION {
+	if recipe.RType == types.GENERATION {
 		outputSTR, err2 = GenerateItemFromRecipe(ctx, keeper, msg.Sender, exec.CookbookID, exec.ItemInputs, exec.Entries)
 
 		if err2 != nil {

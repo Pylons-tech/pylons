@@ -272,7 +272,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return err.Result()
 	}
 
-	if recipe.Type == types.GENERATION {
+	if recipe.RType == types.GENERATION {
 		return HandlerItemGenerationRecipe(ctx, keeper, msg, recipe, matchedItems)
 	} else {
 		return HandlerItemUpgradeRecipe(ctx, keeper, msg, recipe, matchedItems)

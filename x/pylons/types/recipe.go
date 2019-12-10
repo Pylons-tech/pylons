@@ -12,6 +12,7 @@ type Recipe struct {
 	ID            string // the recipe guid
 	CookbookID    string // the cookbook guid
 	Name          string
+	RType         RecipeType // GENERATION | UPGRADE
 	CoinInputs    CoinInputList
 	ItemInputs    ItemInputList
 	Entries       WeightedParamList
