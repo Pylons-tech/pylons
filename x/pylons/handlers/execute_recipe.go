@@ -177,7 +177,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		if !ok {
 			return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
 		}
-		targetItem.Strings[strKey].Value = str.UpgradeValue
+		targetItem.Strings[strKey].Value = str.Value
 	}
 	return targetItem, nil
 }

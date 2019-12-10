@@ -76,8 +76,8 @@ func GenEntries(coinName string, itemName string) WeightedParamList {
 
 func GenToUpgradeForString(targetKey, targetValue string) ItemUpgradeParams {
 	return ItemUpgradeParams{
-		Strings: []StringUpgradeParam{
-			{Key: targetKey, UpgradeValue: targetValue},
+		Strings: StringParamList{
+			{Key: targetKey, Value: targetValue},
 		},
 	}
 }
