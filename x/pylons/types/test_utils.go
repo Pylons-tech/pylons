@@ -84,8 +84,17 @@ func GenToUpgradeForString(targetKey, targetValue string) ItemUpgradeParams {
 
 func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams {
 	return ItemUpgradeParams{
-		Longs: []LongUpgradeParam{
-			{Key: targetKey, UpgradeAmount: upgradeAmount},
+		Longs: []LongParam{
+			{
+				Key: targetKey,
+				IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+					IntWeightRange{
+						Lower:  upgradeAmount,
+						Upper:  upgradeAmount,
+						Weight: 1,
+					},
+				}},
+			},
 		},
 	}
 }

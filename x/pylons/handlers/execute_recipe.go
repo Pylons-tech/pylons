@@ -156,12 +156,16 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
 	}
 
-	for _, lng := range ToUpgrade.Longs {
-		lngKey, ok := targetItem.FindLongKey(lng.Key)
-		if !ok {
-			return targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
+	if lngKeyValues, err := ToUpgrade.Longs.Actualize(); err != nil {
+		return targetItem, sdk.ErrInternal("error actualizing long upgrade values")
+	} else {
+		for _, lng := range lngKeyValues {
+			lngKey, ok := targetItem.FindLongKey(lng.Key)
+			if !ok {
+				return targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
+			}
+			targetItem.Longs[lngKey].Value += lng.Value
 		}
-		targetItem.Longs[lngKey].Value += lng.UpgradeAmount
 	}
 
 	for _, str := range ToUpgrade.Strings {
