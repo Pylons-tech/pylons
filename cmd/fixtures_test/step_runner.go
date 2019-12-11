@@ -242,7 +242,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				for _, itemID := range ItemIDs {
 					item, err := intTest.GetItemByGUID(itemID)
 					t.MustTrue(err == nil)
-					t.MustTrue(len(item.OwnerRecipeID) == 0)
+					t.MustTrue(len(item.OwnerRecipeID) != 0)
 				}
 				t.Log("scheduled execution", scheduleRes.ExecID)
 			} else { // straight execution
