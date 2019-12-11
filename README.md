@@ -8,7 +8,7 @@ Pylons daemon is the project responsible for providing rest api and amino endpoi
 - Install
 
 ```
-
+go clean -i all
 go install ./cmd/pylonsd
 go install ./cmd/pylonscli
 

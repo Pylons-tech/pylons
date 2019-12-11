@@ -47,10 +47,28 @@ func (it Item) FindDouble(key string) (float64, bool) {
 	return 0, false
 }
 
+func (it Item) FindDoubleKey(key string) (int, bool) {
+	for i, v := range it.Doubles {
+		if v.Key == key {
+			return i, true
+		}
+	}
+	return 0, false
+}
+
 func (it Item) FindLong(key string) (int, bool) {
 	for _, v := range it.Longs {
 		if v.Key == key {
 			return v.Value, true
+		}
+	}
+	return 0, false
+}
+
+func (it Item) FindLongKey(key string) (int, bool) {
+	for i, v := range it.Longs {
+		if v.Key == key {
+			return i, true
 		}
 	}
 	return 0, false
@@ -63,6 +81,15 @@ func (it Item) FindString(key string) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func (it Item) FindStringKey(key string) (int, bool) {
+	for i, v := range it.Strings {
+		if v.Key == key {
+			return i, true
+		}
+	}
+	return 0, false
 }
 
 func (it Item) SetString(key string, value string) bool {

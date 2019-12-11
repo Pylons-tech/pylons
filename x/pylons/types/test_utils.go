@@ -9,17 +9,19 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
-func GenItemInputList(name string) ItemInputList {
-	return ItemInputList{
-		ItemInput{
+func GenItemInputList(names ...string) ItemInputList {
+	iiL := ItemInputList{}
+	for _, name := range names {
+		iiL = append(iiL, ItemInput{
 			DoubleInputParamList{DoubleInputParam{Key: "endurance",
 				MinValue: "100.00",
 				MaxValue: "500.00",
 			}},
 			LongInputParamList{LongInputParam{Key: "HP", MinValue: 100, MaxValue: 500}},
 			StringInputParamList{StringInputParam{"Name", name}},
-		},
+		})
 	}
+	return iiL
 }
 
 func GenCoinOnlyEntry(coinName string) WeightedParamList {
@@ -69,5 +71,47 @@ func GenEntries(coinName string, itemName string) WeightedParamList {
 	return WeightedParamList{
 		GenCoinOnlyEntry(coinName)[0],
 		GenItemOnlyEntry(itemName)[0],
+	}
+}
+
+func GenToUpgradeForString(targetKey, targetValue string) ItemUpgradeParams {
+	return ItemUpgradeParams{
+		Strings: StringParamList{
+			{Key: targetKey, Value: targetValue},
+		},
+	}
+}
+
+func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams {
+	return ItemUpgradeParams{
+		Longs: []LongParam{
+			{
+				Key: targetKey,
+				IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+					IntWeightRange{
+						Lower:  upgradeAmount,
+						Upper:  upgradeAmount,
+						Weight: 1,
+					},
+				}},
+			},
+		},
+	}
+}
+
+func GenToUpgradeForDouble(targetKey string, upgradeAmount FloatString) ItemUpgradeParams {
+	return ItemUpgradeParams{
+		Doubles: []DoubleParam{
+			{
+				Key: targetKey,
+				DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+					DoubleWeightRange{
+						Lower:  upgradeAmount,
+						Upper:  upgradeAmount,
+						Weight: 1,
+					},
+				}},
+			},
+		},
 	}
 }

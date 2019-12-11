@@ -15,7 +15,6 @@ type Execution struct {
 	CookbookID  string
 	CoinInputs  sdk.Coins
 	ItemInputs  []Item
-	Entries     WeightedParamList
 	BlockHeight int64
 	Sender      sdk.AccAddress
 	Completed   bool
@@ -23,7 +22,7 @@ type Execution struct {
 
 // NewExecution return a new Execution
 func NewExecution(rcpID string, cbID string, ci sdk.Coins,
-	itemInputs []Item, entries WeightedParamList,
+	itemInputs []Item,
 	blockHeight int64, sender sdk.AccAddress,
 	completed bool) Execution {
 
@@ -32,7 +31,6 @@ func NewExecution(rcpID string, cbID string, ci sdk.Coins,
 		CookbookID:  cbID,
 		CoinInputs:  ci,
 		ItemInputs:  itemInputs,
-		Entries:     entries,
 		BlockHeight: blockHeight,
 		Sender:      sender,
 		Completed:   completed,
@@ -56,10 +54,9 @@ func (e Execution) String() string {
 			CookbookID: %s,
 			CoinInputs: %+v,
 			ItemInputs: %+v,
-			Entries: %+v,
 			BlockHeight: %d,
 			Sender: %s,
 			Completed: %t,
 		}`, e.ID, e.RecipeID, e.CookbookID, e.CoinInputs, e.ItemInputs,
-		e.Entries, e.BlockHeight, e.Sender, e.Completed)
+		e.BlockHeight, e.Sender, e.Completed)
 }

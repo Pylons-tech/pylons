@@ -7,14 +7,23 @@ import (
 	"github.com/google/uuid"
 )
 
+type RecipeType int
+
+const (
+	GENERATION RecipeType = iota
+	UPGRADE
+)
+
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
 	ID            string // the recipe guid
 	CookbookID    string // the cookbook guid
 	Name          string
+	RType         RecipeType // GENERATION | UPGRADE
 	CoinInputs    CoinInputList
 	ItemInputs    ItemInputList
 	Entries       WeightedParamList
+	ToUpgrade     ItemUpgradeParams
 	Description   string
 	BlockInterval int64
 	Sender        sdk.AccAddress
@@ -38,16 +47,20 @@ func (rl RecipeList) String() string {
 
 // NewRecipe creates a new recipe
 func NewRecipe(recipeName, cookbookID, description string,
+	rcpType RecipeType,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
 	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
+	toUpgrade ItemUpgradeParams,
 	execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		Name:          recipeName,
 		CookbookID:    cookbookID,
+		RType:         rcpType,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		ToUpgrade:     toUpgrade,
 		BlockInterval: execTime,
 		Description:   description,
 		Sender:        sender,

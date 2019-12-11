@@ -19,37 +19,43 @@ type CheckExecutionResp struct {
 func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
+	var outputSTR []byte
 	_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
 	if err != nil {
 		return nil, err
 	}
 
-	// we delete all the matched items as those get converted to output items
-	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
-	for _, item := range exec.ItemInputs {
-		keeper.DeleteItem(ctx, item.ID)
+	recipe, err2 := keeper.GetRecipe(ctx, exec.RecipeID)
+	if err2 != nil {
+		return nil, err2
 	}
 
+	if recipe.RType == types.GENERATION {
+		outputSTR, err2 = GenerateItemFromRecipe(ctx, keeper, msg.Sender, exec.CookbookID, exec.ItemInputs, recipe.Entries)
+
+		if err2 != nil {
+			return nil, err2
+		}
+	} else {
+		if len(exec.ItemInputs) != 1 {
+			return nil, sdk.ErrInternal("item inputs shouldn't be 0 or more than one for upgrade recipe")
+		}
+
+		targetItem := exec.ItemInputs[0]
+		targetItem, err := UpdateItemFromUpgradeParams(targetItem, recipe.ToUpgrade)
+
+		if err != nil {
+			return nil, err
+		}
+
+		if err := keeper.SetItem(ctx, targetItem); err != nil {
+			return nil, err
+		}
+	}
 	// confirm that the execution was completed
 	exec.Completed = true
 
-	err2 := keeper.UpdateExecution(ctx, exec.ID, exec)
-	if err2 != nil {
-		return nil, err
-	}
-
-	output, err := exec.Entries.Actualize()
-	if err != nil {
-		return nil, err
-	}
-	ers, err := AddExecutedResult(ctx, keeper, output, msg.Sender, exec.CookbookID)
-
-	if err != nil {
-		return nil, err
-	}
-
-	outputSTR, err2 := json.Marshal(ers)
-
+	err2 = keeper.UpdateExecution(ctx, exec.ID, exec)
 	if err2 != nil {
 		return nil, err2
 	}

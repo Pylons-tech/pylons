@@ -27,9 +27,11 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	// mock recipe
 	rcpData := MockRecipe(
 		mockedCoinInput, "existing recipe",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenEntries("chair", "Raichu"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,

@@ -1,0 +1,14 @@
+{
+    "RType": "1",
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./recipes/item_input/adventurer.json"
+    ],
+    "ToUpgradeRef": "./recipes/upgrader/adventurer.json",
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "Delayed Adventurer Upgrade Recipe",
+    "CookbookName": "helicopter",
+    "Description": "this recipe is delayed upgrader, used to upgrade adventurer which can update all versions of adventurer.",
+    "BlockInterval":"2"
+}

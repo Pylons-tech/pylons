@@ -28,9 +28,11 @@ func TestGetExecution(t *testing.T) {
 	// mock execution
 	c2cRecipeData := handlers.MockRecipe(
 		mockedCoinInput, "GET_EXECUTION_TEST_RECIPE",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenCoinOnlyEntry("chair"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		5,
 		senderAccAddress,

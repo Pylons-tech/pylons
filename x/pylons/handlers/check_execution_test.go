@@ -26,9 +26,11 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	// mock delayed coin to coin recipe
 	c2cRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
+		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenCoinOnlyEntry("chair"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		5,
 		sender1,
