@@ -1,17 +1,23 @@
 package fixtureTest
 
 import (
+	"sync"
+
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 )
 
 // Algorithm link geeksforgeeks.org/detect-cycle-in-a-graph/
 
 var VMap map[string]int = make(map[string]int) // StepID to GraphID mapper
-var NV = 0                                     // Number of steps
+var VMapMutex = sync.RWMutex{}
+var NV = 0 // Number of steps
 var adj [][]int
+var adjMutex = sync.RWMutex{}
 
 // This is to convert string to into for circular check algorithm
 func AddVertice(VSID string) bool {
+	VMapMutex.Lock()
+	adjMutex.Lock()
 	if _, ok := VMap[VSID]; !ok {
 		VMap[VSID] = NV
 		if NV == 0 {
@@ -23,20 +29,27 @@ func AddVertice(VSID string) bool {
 		NV = NV + 1
 		return true
 	}
+	VMapMutex.Unlock()
+	adjMutex.Unlock()
 	return false
 }
 
 func AddEdge(VSID, WSID string) bool {
+	VMapMutex.RLock()
 	if _, ok := VMap[VSID]; !ok {
 		return false
 	}
 	if _, ok := VMap[WSID]; !ok {
 		return false
 	}
-
 	v := VMap[VSID]
 	w := VMap[WSID]
+	VMapMutex.RUnlock()
+
+	adjMutex.Lock()
 	adj[v] = append(adj[v], w)
+	VMapMutex.Unlock()
+
 	return true
 }
 
