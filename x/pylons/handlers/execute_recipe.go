@@ -248,7 +248,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 		// store the execution as the interval
-		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems, recipe.Entries,
+		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
 		err2 := keeper.SetExecution(ctx, exec)
 

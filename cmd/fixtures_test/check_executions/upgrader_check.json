@@ -1,0 +1,5 @@
+{
+    "PayToComplete": true,
+    "ExecRef": "EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE",
+    "Sender":"eugen"
+}

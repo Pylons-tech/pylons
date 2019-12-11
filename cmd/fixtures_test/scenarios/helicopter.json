@@ -126,6 +126,24 @@
         }
     },
     {
+        "ID": "CREATE_DELAYED_ADVENTURER_UPDATE_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/delayed_adventurer_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "recipes": ["Delayed Adventurer Upgrade Recipe"]
+            }
+        }
+    },
+    {
         "ID": "EXECUTE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE"],
@@ -200,6 +218,50 @@
                         "dblValues": { "attack": "3.0" },
                         "longKeys": [],
                         "longValues": { "level": 2 }
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DELAYED_ADVENTURER_UPDATE_RECIPE", "EXECUTE_ADVENTURER_UPDATE_RECIPE"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/delayed_adventurer_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "scheduled the recipe"
+            },
+            "property": {}
+        }
+    },
+    {
+        "ID": "CHECK_EXECUTION_DELAYED_ADVENTURER_UPDATE_RECIPE",
+        "runAfter": {
+            "precondition": ["EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE"],
+            "blockWait": 0
+        },
+        "action": "check_execution",
+        "paramsRef": "./check_executions/upgrader_check.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
+                        "dblKeys": [],
+                        "dblValues": { "attack": "5.0" },
+                        "longKeys": [],
+                        "longValues": { "level": 3 }
                     }
                 ]
             }

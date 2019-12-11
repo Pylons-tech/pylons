@@ -29,7 +29,6 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 		cbData.ID,
 		cl,
 		inputItems,
-		rcpData.Entries,
 		tci.Ctx.BlockHeight()+rcpData.BlockInterval,
 		sender,
 		false,
