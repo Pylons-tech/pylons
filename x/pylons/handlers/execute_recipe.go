@@ -127,7 +127,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 }
 
 func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
-	// we delete all the matched items as those get converted to output items
+
 	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe.Entries)
 	if err != nil {
 		return errInternal(err)

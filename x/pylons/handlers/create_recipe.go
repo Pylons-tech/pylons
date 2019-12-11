@@ -16,7 +16,6 @@ type CreateRecipeResponse struct {
 // HandlerMsgCreateRecipe is used to create recipe by a developer
 func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) sdk.Result {
 
-	// TODO: for item upgrade recipe, should have item input size as 1
 	err := msg.ValidateBasic()
 	if err != nil {
 		return err.Result()
