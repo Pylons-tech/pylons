@@ -19,7 +19,6 @@ type CheckExecutionResp struct {
 func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
-	// TODO: should make safe Execute code smaller and reduce code duplicate
 	var outputSTR []byte
 	_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
 	if err != nil {
@@ -32,7 +31,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 	}
 
 	if recipe.RType == types.GENERATION {
-		outputSTR, err2 = GenerateItemFromRecipe(ctx, keeper, msg.Sender, exec.CookbookID, exec.ItemInputs, exec.Entries)
+		outputSTR, err2 = GenerateItemFromRecipe(ctx, keeper, msg.Sender, exec.CookbookID, exec.ItemInputs, recipe.Entries)
 
 		if err2 != nil {
 			return nil, err2
