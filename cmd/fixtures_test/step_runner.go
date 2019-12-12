@@ -51,7 +51,9 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(err == nil)
 		t.MustTrue(resp.Status == step.Output.TxResult.Status)
-		t.MustTrue(resp.Message == step.Output.TxResult.Message)
+		if len(step.Output.TxResult.Message) > 0 {
+			t.MustTrue(resp.Message == step.Output.TxResult.Message)
+		}
 	}
 }
 
@@ -231,7 +233,9 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				t.Fatal("failed to parse transaction result txhash=", txhash)
 			}
 			t.MustTrue(resp.Status == step.Output.TxResult.Status)
-			t.MustTrue(resp.Message == step.Output.TxResult.Message)
+			if len(step.Output.TxResult.Message) > 0 {
+				t.MustTrue(resp.Message == step.Output.TxResult.Message)
+			}
 
 			if resp.Message == "scheduled the recipe" { // delayed execution
 				var scheduleRes handlers.ExecuteRecipeScheduleOutput

@@ -9,15 +9,12 @@ import (
 // Algorithm link geeksforgeeks.org/detect-cycle-in-a-graph/
 
 var VMap map[string]int = make(map[string]int) // StepID to GraphID mapper
-var VMapMutex = sync.RWMutex{}
+var VMapMutex = sync.Mutex{}
 var NV = 0 // Number of steps
 var adj [][]int
-var adjMutex = sync.RWMutex{}
 
 // This is to convert string to into for circular check algorithm
 func AddVertice(VSID string) bool {
-	VMapMutex.Lock()
-	adjMutex.Lock()
 	if _, ok := VMap[VSID]; !ok {
 		VMap[VSID] = NV
 		if NV == 0 {
@@ -29,13 +26,10 @@ func AddVertice(VSID string) bool {
 		NV = NV + 1
 		return true
 	}
-	VMapMutex.Unlock()
-	adjMutex.Unlock()
 	return false
 }
 
 func AddEdge(VSID, WSID string) bool {
-	VMapMutex.RLock()
 	if _, ok := VMap[VSID]; !ok {
 		return false
 	}
@@ -44,11 +38,8 @@ func AddEdge(VSID, WSID string) bool {
 	}
 	v := VMap[VSID]
 	w := VMap[WSID]
-	VMapMutex.RUnlock()
 
-	adjMutex.Lock()
 	adj[v] = append(adj[v], w)
-	VMapMutex.Unlock()
 
 	return true
 }
@@ -100,6 +91,7 @@ func IsCyclic() bool {
 }
 
 func CheckSteps(steps []FixtureStep, t *testing.T) {
+	VMapMutex.Lock()
 	for _, step := range steps {
 		if len(step.ID) == 0 {
 			t.Fatal("please add ID field for all steps")
@@ -115,7 +107,7 @@ func CheckSteps(steps []FixtureStep, t *testing.T) {
 			}
 		}
 	}
-	// t.Fatal("adj Graph", adj)
+	VMapMutex.Unlock()
 	if IsCyclic() {
 		t.Fatal("cyclic dependency is available")
 	}
