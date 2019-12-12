@@ -1,13 +1,16 @@
 package fixtureTest
 
 import (
+	"sync"
+
 	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
 )
 
 // Algorithm link geeksforgeeks.org/detect-cycle-in-a-graph/
 
 var VMap map[string]int = make(map[string]int) // StepID to GraphID mapper
-var NV = 0                                     // Number of steps
+var VMapMutex = sync.Mutex{}
+var NV = 0 // Number of steps
 var adj [][]int
 
 // This is to convert string to into for circular check algorithm
@@ -33,10 +36,11 @@ func AddEdge(VSID, WSID string) bool {
 	if _, ok := VMap[WSID]; !ok {
 		return false
 	}
-
 	v := VMap[VSID]
 	w := VMap[WSID]
+
 	adj[v] = append(adj[v], w)
+
 	return true
 }
 
@@ -87,6 +91,7 @@ func IsCyclic() bool {
 }
 
 func CheckSteps(steps []FixtureStep, t *testing.T) {
+	VMapMutex.Lock()
 	for _, step := range steps {
 		if len(step.ID) == 0 {
 			t.Fatal("please add ID field for all steps")
@@ -102,7 +107,7 @@ func CheckSteps(steps []FixtureStep, t *testing.T) {
 			}
 		}
 	}
-	// t.Fatal("adj Graph", adj)
+	VMapMutex.Unlock()
 	if IsCyclic() {
 		t.Fatal("cyclic dependency is available")
 	}

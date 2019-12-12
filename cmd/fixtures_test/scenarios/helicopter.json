@@ -249,8 +249,7 @@
         "paramsRef": "./check_executions/upgrader_check.json",
         "output": {
             "txResult": {
-                "status": "Success",
-                "message": "successfully completed the execution"
+                "status": "Success"
             },
             "property": {
                 "owner": "eugen",

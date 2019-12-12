@@ -52,6 +52,14 @@ Detailed params can be found at `./scenarios/submarine.json`.
 And to make things easier and to make scenario file smaller, there are references to other files.
 For example when creating recipe, recipe spec is in `./recipes` folder.
 
+hint.  
+To ignore txResult Message, which is because it's ambitious to get which message to get, can just ignore TxResult.Message field like below.
+```
+    "txResult": {
+        "status": "Success"
+    },
+```
+
 ## How a game producer write test 
 
 Before reading this, he/she should know well about pylons eco system. Please read [DEVELOPER DOC](https://github.com/MikeSofaer/pylons/blob/master/DEVELOPER_DOC.md) and [README](https://github.com/MikeSofaer/pylons/blob/master/README.md) before reading this.
