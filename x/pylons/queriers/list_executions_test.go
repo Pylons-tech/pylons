@@ -27,10 +27,11 @@ func TestListExecution(t *testing.T) {
 	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
 
 	recipeResp := handlers.MockRecipe(
-		mockedCoinInput, "recipe0001",
+		mockedCoinInput, "recipe0001", types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.ItemInputList{},
 		types.GenEntries("chair", "Raichu"),
+		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		5,
 		senderAccAddress,
