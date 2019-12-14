@@ -50,6 +50,7 @@ func MockRecipe(
 	return recipeData
 }
 
+// MockExecution executes a mockRecipe
 func MockExecution(
 	tci keep.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
@@ -62,4 +63,20 @@ func MockExecution(
 	execRcpResponse := ExecuteRecipeResp{}
 	err := json.Unmarshal(result.Data, &execRcpResponse)
 	return execRcpResponse, err
+}
+
+// MockTrade creates a trade
+func MockTrade(
+	tci keep.TestCoinInput,
+	coinInputList types.CoinInputList,
+	itemInputList types.ItemInputList,
+	coinOutputs sdk.Coins,
+	itemOutputs types.ItemList,
+	sender sdk.AccAddress,
+) (CreateTradeResponse, error) {
+	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
+	result := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
+	createTrdResponse := CreateTradeResponse{}
+	err := json.Unmarshal(result.Data, &createTrdResponse)
+	return createTrdResponse, err
 }

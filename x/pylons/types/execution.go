@@ -20,6 +20,10 @@ type Execution struct {
 	Completed   bool
 }
 
+type ExecutionList struct {
+	Executions []Execution
+}
+
 // NewExecution return a new Execution
 func NewExecution(rcpID string, cbID string, ci sdk.Coins,
 	itemInputs []Item,
