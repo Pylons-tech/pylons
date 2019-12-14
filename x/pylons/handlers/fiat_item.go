@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -21,6 +19,9 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 		return err.Result()
 	}
 	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
+	if err2 != nil {
+		return errInternal(err2)
+	}
 	if !cook.Sender.Equals(msg.Sender) {
 		return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
 	}
@@ -31,13 +32,7 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 		return errInternal(err)
 	}
 
-	mItem, err2 := json.Marshal(FiatItemResponse{
+	return marshalJson(FiatItemResponse{
 		item.ID,
 	})
-
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	return sdk.Result{Data: mItem}
 }

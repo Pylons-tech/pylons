@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
@@ -131,14 +130,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return errInternal(err2)
 	}
 
-	resp, err3 := json.Marshal(FulfillTradeResp{
+	return marshalJson(FulfillTradeResp{
 		Message: "successfully fulfilled the trade",
 		Status:  "Success",
 	})
-
-	if err3 != nil {
-		return sdk.ErrInternal(err3.Error()).Result()
-	}
-
-	return sdk.Result{Data: resp}
 }

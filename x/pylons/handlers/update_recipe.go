@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -43,13 +41,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 		return errInternal(err)
 	}
 
-	mRecipe, err2 := json.Marshal(UpdateRecipeResponse{
+	return marshalJson(UpdateRecipeResponse{
 		msg.ID,
 	})
-
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	return sdk.Result{Data: mRecipe}
 }

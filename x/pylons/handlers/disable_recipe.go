@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -37,15 +35,8 @@ func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDi
 		return errInternal(err2)
 	}
 
-	resp, err2 := json.Marshal(DisableRecipeResp{
+	return marshalJson(DisableRecipeResp{
 		Message: "successfully disabled the recipe",
 		Status:  "Success",
 	})
-
-	if err2 != nil {
-		return errInternal(err2)
-
-	}
-
-	return sdk.Result{Data: resp}
 }
