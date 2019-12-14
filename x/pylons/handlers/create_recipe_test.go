@@ -30,14 +30,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		desiredError   string
 		showError      bool
 	}{
-		"cookbook owner check": {
+		"cookbook not exist": {
 			cookbookName:   "book000001",
 			createCookbook: false,
 			recipeDesc:     "this has to meet character limits",
 			recipeType:     types.GENERATION,
 			numItemInput:   1,
 			sender:         sender,
-			desiredError:   "cookbook not owned by the sender",
+			desiredError:   "The cookbook doesn't exist",
 			showError:      true,
 		},
 		"successful check": {
