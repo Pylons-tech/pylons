@@ -12,7 +12,7 @@ jobs:
       - checkout
 
       # specify any bash command here prefixed with `run: `
-      - run: GO111MODULE=on bash ./unit_test.sh
+      - run: GO111MODULE=on make unit_tests
   integration-test:
     docker:
       # specify the version
@@ -25,13 +25,13 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: bash ./init-accounts.sh 
+      - run: make init_accounts
       - run: pylonscli config chain-id pylonschain
       - run: pylonscli config output json
       - run: pylonscli config indent true
       - run: pylonscli config trust-node true
       - run: 
-          command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on bash ./int_test.sh)
+          command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make int_tests)
           no_output_timeout: 10m
 
   fixture-test:
@@ -46,13 +46,13 @@ jobs:
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: GO111MODULE=on go install -v ./cmd/pylonscli/
       - run: pylonsd init --chain-id pylonschain
-      - run: bash ./init-accounts.sh
+      - run: make init_accounts
       - run: pylonscli config chain-id pylonschain
       - run: pylonscli config output json
       - run: pylonscli config indent true
       - run: pylonscli config trust-node true
       - run: 
-          command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on bash ./fixtures_test.sh)
+          command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make fixture_tests)
           no_output_timeout: 10m
 workflows:
   version: 2
