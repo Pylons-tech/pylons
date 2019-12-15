@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
@@ -46,13 +45,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		return errInternal(err)
 	}
 
-	mTrade, err2 := json.Marshal(CreateTradeResponse{
+	return marshalJson(CreateTradeResponse{
 		trade.ID,
 	})
-
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	return sdk.Result{Data: mTrade}
 }

@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -79,15 +77,10 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	}
 
 	if exec.Completed {
-		resp, err2 := json.Marshal(CheckExecutionResp{
+		return marshalJson(CheckExecutionResp{
 			Message: "execution already completed",
 			Status:  "Completed",
 		})
-
-		if err2 != nil {
-			return errInternal(err2)
-		}
-		return sdk.Result{Data: resp}
 	}
 
 	if ctx.BlockHeight() >= exec.BlockHeight {
@@ -96,17 +89,11 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			return errInternal(err2)
 		}
 
-		resp, err3 := json.Marshal(CheckExecutionResp{
+		return marshalJson(CheckExecutionResp{
 			Message: "successfully completed the execution",
 			Status:  "Success",
 			Output:  outputSTR,
 		})
-		if err3 != nil {
-			return errInternal(err2)
-		}
-
-		return sdk.Result{Data: resp}
-
 	} else if msg.PayToComplete {
 		recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
 		if err != nil {
@@ -133,36 +120,20 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 				return errInternal(err2)
 			}
 
-			resp, err2 := json.Marshal(CheckExecutionResp{
+			return marshalJson(CheckExecutionResp{
 				Message: "successfully paid to complete the execution",
 				Status:  "Success",
 				Output:  outputSTR,
 			})
-			if err2 != nil {
-				return errInternal(err2)
-			}
-
-			return sdk.Result{Data: resp}
 		}
-		resp, err := json.Marshal(CheckExecutionResp{
+		return marshalJson(CheckExecutionResp{
 			Message: "insufficient balance to complete the execution",
 			Status:  "Failure",
 		})
 
-		if err != nil {
-			return errInternal(err2)
-		}
-		return sdk.Result{Data: resp}
-
 	}
-	resp, err2 := json.Marshal(CheckExecutionResp{
+	return marshalJson(CheckExecutionResp{
 		Message: "execution pending",
 		Status:  "Pending",
 	})
-
-	if err2 != nil {
-		return errInternal(err2)
-	}
-	return sdk.Result{Data: resp}
-
 }

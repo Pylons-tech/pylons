@@ -133,16 +133,11 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 		return errInternal(err)
 	}
 
-	resp, err3 := json.Marshal(ExecuteRecipeResp{
+	return marshalJson(ExecuteRecipeResp{
 		Message: "successfully executed the recipe",
 		Status:  "Success",
 		Output:  outputSTR,
 	})
-
-	if err3 != nil {
-		return errInternal(err3)
-	}
-	return sdk.Result{Data: resp}
 }
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
@@ -198,15 +193,10 @@ func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgE
 		return errInternal(err)
 	}
 
-	resp, err3 := json.Marshal(ExecuteRecipeResp{
+	return marshalJson(ExecuteRecipeResp{
 		Message: "successfully upgraded the item",
 		Status:  "Success",
 	})
-
-	if err3 != nil {
-		return errInternal(err3)
-	}
-	return sdk.Result{Data: resp}
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
@@ -261,16 +251,11 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if err3 != nil {
 			return errInternal(err2)
 		}
-		resp, err4 := json.Marshal(ExecuteRecipeResp{
+		return marshalJson(ExecuteRecipeResp{
 			Message: "scheduled the recipe",
 			Status:  "Success",
 			Output:  outputSTR,
 		})
-
-		if err4 != nil {
-			return errInternal(err2)
-		}
-		return sdk.Result{Data: resp}
 	}
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
 		return sdk.ErrInternal("insufficient coin balance").Result()
