@@ -51,7 +51,11 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			}
 		}
 		if matched {
-			matchedItems = append(matchedItems, items[index])
+			matchedItem := items[index]
+			if !matchedItem.Tradable {
+				return errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
+			}
+			matchedItems = append(matchedItems, matchedItem)
 		} else {
 			return sdk.ErrInternal(fmt.Sprintf("the sender doesn't have the trade item attributes %+v", inpItem)).Result()
 		}
@@ -80,6 +84,10 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		// if it isn't then we error out as there hasn't been any state changes so far
 		if !storedItem.Sender.Equals(trade.Sender) {
 			return sdk.ErrUnauthorized(fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID)).Result()
+		}
+
+		if !storedItem.Tradable {
+			return errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)

@@ -33,6 +33,7 @@ type Item struct {
 	CookbookID    string
 	Sender        sdk.AccAddress
 	OwnerRecipeID string
+	Tradable      bool
 }
 
 // ItemList is a list of items
@@ -144,6 +145,8 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Longs:      longs,
 		Strings:    strings,
 		Sender:     sender,
+		// By default all items are tradable
+		Tradable: true,
 	}
 	item.ID = item.KeyGen()
 	return item
