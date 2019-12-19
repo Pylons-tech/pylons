@@ -52,7 +52,7 @@ func (exec Execution) KeyGen() string {
 
 func (e Execution) String() string {
 	return fmt.Sprintf(`
-		Item{ 
+		Execution{ 
 			ID: %s,
 			RecipeID: %s,
 			CookbookID: %s,

@@ -71,12 +71,12 @@ func ListItemsViaCLI(account string) ([]types.Item, error) {
 	}
 	output, err := RunPylonsCli(queryParams, "")
 	if err != nil {
-		return []types.Item{}, err
+		return types.ItemList{}, err
 	}
 	var itemResp queriers.ItemResp
 	err = GetAminoCdc().UnmarshalJSON(output, &itemResp)
 	if err != nil {
-		return []types.Item{}, err
+		return types.ItemList{}, err
 	}
 	return itemResp.Items, err
 }
