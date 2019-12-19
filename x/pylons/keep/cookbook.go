@@ -1,10 +1,7 @@
 package keep
 
 import (
-	"encoding/json"
 	"errors"
-
-	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,32 +9,17 @@ import (
 
 // SetCookbook sets the cookbook with the name as the key
 func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
-
 	if cookbook.Sender.Empty() {
 		return errors.New("SetCookbook: the sender cannot be empty")
 	}
 
-	mCB, err := json.Marshal(cookbook)
-	if err != nil {
-		return err
-	}
-	store := ctx.KVStore(k.CookbookKey)
-	store.Set([]byte(cookbook.ID), mCB)
-	return nil
+	return k.SetObject(ctx, types.TypeCookbook, cookbook.ID, k.CookbookKey, cookbook)
 }
 
 // GetCookbook returns cookbook based on UUID
 func (k Keeper) GetCookbook(ctx sdk.Context, id string) (types.Cookbook, error) {
-	store := ctx.KVStore(k.CookbookKey)
-
-	if !store.Has([]byte(id)) {
-		return types.Cookbook{}, errors.New("The cookbook doesn't exist")
-	}
-
-	uCB := store.Get([]byte(id))
-	var cookbook types.Cookbook
-
-	err := json.Unmarshal(uCB, &cookbook)
+	cookbook := types.Cookbook{}
+	err := k.GetObject(ctx, types.TypeCookbook, id, k.CookbookKey, &cookbook)
 	return cookbook, err
 }
 
@@ -47,17 +29,7 @@ func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbo
 		return errors.New("UpdateCookbook: the sender cannot be empty")
 
 	}
-	store := ctx.KVStore(k.CookbookKey)
-
-	if !store.Has([]byte(id)) {
-		return fmt.Errorf("the cookbook with gid %s does not exist", id)
-	}
-	mCB, err := json.Marshal(cookbook)
-	if err != nil {
-		return err
-	}
-	store.Set([]byte(id), mCB)
-	return nil
+	return k.UpdateObject(ctx, types.TypeCookbook, id, k.CookbookKey, cookbook)
 }
 
 // GetCookbooksIterator returns an iterator for all the cookbooks
@@ -68,11 +40,5 @@ func (k Keeper) GetCookbooksIterator(ctx sdk.Context, sender sdk.AccAddress) sdk
 
 // DeleteCookbook is used to delete a cookbook based on the id
 func (k Keeper) DeleteCookbook(ctx sdk.Context, id string) error {
-	store := ctx.KVStore(k.CookbookKey)
-
-	if !store.Has([]byte(id)) {
-		return fmt.Errorf("The cookbook with the id %s doesn't exist", id)
-	}
-	store.Delete([]byte(id))
-	return nil
+	return k.DeleteObject(ctx, types.TypeCookbook, id, k.CookbookKey)
 }

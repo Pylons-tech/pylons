@@ -3,7 +3,6 @@ package keep
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,29 +13,13 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) error {
 	if item.Sender.Empty() {
 		return errors.New("SetItem: the sender cannot be empty")
 	}
-
-	mi, err := json.Marshal(item)
-	if err != nil {
-		return err
-	}
-
-	store := ctx.KVStore(k.ItemKey)
-	store.Set([]byte(item.ID), mi)
-	return nil
+	return k.SetObject(ctx, types.TypeItem, item.ID, k.ItemKey, item)
 }
 
 // GetItem returns item based on UUID
 func (k Keeper) GetItem(ctx sdk.Context, id string) (types.Item, error) {
-	store := ctx.KVStore(k.ItemKey)
-
-	if !store.Has([]byte(id)) {
-		return types.Item{}, errors.New("The item doesn't exist")
-	}
-
-	ui := store.Get([]byte(id))
-	var item types.Item
-
-	err := json.Unmarshal(ui, &item)
+	item := types.Item{}
+	err := k.GetObject(ctx, types.TypeItem, id, k.ItemKey, &item)
 	return item, err
 }
 
@@ -65,23 +48,13 @@ func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 		return errors.New("UpdateItem: the sender cannot be empty")
 
 	}
-	store := ctx.KVStore(k.ItemKey)
 
-	if !store.Has([]byte(id)) {
-		return fmt.Errorf("the item with gid %s does not exist", id)
-	}
-	mi, err := json.Marshal(item)
-	if err != nil {
-		return err
-	}
-	store.Set([]byte(id), mi)
-	return nil
+	return k.UpdateObject(ctx, types.TypeItem, id, k.ItemKey, item)
 }
 
 // DeleteItem is used to delete the item
 func (k Keeper) DeleteItem(ctx sdk.Context, id string) {
-	store := ctx.KVStore(k.ItemKey)
-	store.Delete([]byte(id))
+	k.DeleteObject(ctx, types.TypeItem, id, k.ItemKey)
 }
 
 // ItemsByCookbook returns items by cookbook

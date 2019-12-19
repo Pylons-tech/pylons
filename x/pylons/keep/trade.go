@@ -1,9 +1,7 @@
 package keep
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,28 +12,13 @@ func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) error {
 	if trade.Sender.Empty() {
 		return errors.New("SetTrade: the sender cannot be empty")
 	}
-	mr, err := json.Marshal(trade)
-	if err != nil {
-		return err
-	}
-
-	store := ctx.KVStore(k.TradeKey)
-	store.Set([]byte(trade.ID), mr)
-	return nil
+	return k.SetObject(ctx, types.TypeTrade, trade.ID, k.TradeKey, trade)
 }
 
 // GetTrade returns trade based on UUID
 func (k Keeper) GetTrade(ctx sdk.Context, id string) (types.Trade, error) {
-	store := ctx.KVStore(k.TradeKey)
-
-	if !store.Has([]byte(id)) {
-		return types.Trade{}, errors.New("The trade doesn't exist")
-	}
-
-	ur := store.Get([]byte(id))
-	var trade types.Trade
-	err := json.Unmarshal(ur, &trade)
-
+	trade := types.Trade{}
+	err := k.GetObject(ctx, types.TypeTrade, id, k.TradeKey, &trade)
 	return trade, err
 }
 
@@ -57,15 +40,5 @@ func (k Keeper) UpdateTrade(ctx sdk.Context, id string, trade types.Trade) error
 		return errors.New("UpdateTrade: the sender cannot be empty")
 
 	}
-	store := ctx.KVStore(k.TradeKey)
-
-	if !store.Has([]byte(id)) {
-		return fmt.Errorf("the trade with gid %s does not exist", id)
-	}
-	mr, err := json.Marshal(trade)
-	if err != nil {
-		return err
-	}
-	store.Set([]byte(id), mr)
-	return nil
+	return k.UpdateObject(ctx, types.TypeTrade, id, k.TradeKey, trade)
 }

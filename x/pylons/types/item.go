@@ -8,6 +8,8 @@ import (
 	"github.com/google/uuid"
 )
 
+const TypeItem = "item"
+
 type DoubleKeyValue struct {
 	Key   string
 	Value FloatString
