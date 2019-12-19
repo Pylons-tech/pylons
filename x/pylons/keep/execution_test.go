@@ -131,7 +131,7 @@ func TestKeeperUpdateExecution(t *testing.T) {
 	}{
 		"wrong exec id test": {
 			execId:       "invalidExecID",
-			desiredError: "the exec with gid invalidExecID does not exist",
+			desiredError: "The execution with gid invalidExecID does not exist",
 			showError:    true,
 		},
 		"successful update execution test": {

@@ -172,7 +172,7 @@ func TestKeeperUpdateItem(t *testing.T) {
 		"not existing ID provide check": {
 			itemID:       "invalidItemID",
 			item:         item,
-			desiredError: "the item with gid invalidItemID does not exist",
+			desiredError: "The item with gid invalidItemID does not exist",
 			showError:    true,
 		},
 		"updateItem ID different from param item": {
