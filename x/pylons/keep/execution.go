@@ -3,7 +3,6 @@ package keep
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,28 +13,13 @@ func (k Keeper) SetExecution(ctx sdk.Context, exec types.Execution) error {
 	if exec.Sender.Empty() {
 		return errors.New("SetExecution: the sender cannot be empty")
 	}
-	mr, err := json.Marshal(exec)
-	if err != nil {
-		return err
-	}
-
-	store := ctx.KVStore(k.ExecutionKey)
-	store.Set([]byte(exec.ID), mr)
-	return nil
+	return k.SetObject(ctx, types.TypeExecution, exec.ID, k.ExecutionKey, exec)
 }
 
 // GetExecution returns exec based on UUID
 func (k Keeper) GetExecution(ctx sdk.Context, id string) (types.Execution, error) {
-	store := ctx.KVStore(k.ExecutionKey)
-
-	if !store.Has([]byte(id)) {
-		return types.Execution{}, errors.New("The execution doesn't exist")
-	}
-
-	ur := store.Get([]byte(id))
-	var exec types.Execution
-
-	err := json.Unmarshal(ur, &exec)
+	exec := types.Execution{}
+	err := k.GetObject(ctx, types.TypeExecution, id, k.ExecutionKey, &exec)
 	return exec, err
 }
 
@@ -44,17 +28,8 @@ func (k Keeper) UpdateExecution(ctx sdk.Context, id string, exec types.Execution
 	if exec.Sender.Empty() {
 		return errors.New("UpdateExecution: the sender cannot be empty")
 	}
-	store := ctx.KVStore(k.ExecutionKey)
 
-	if !store.Has([]byte(id)) {
-		return fmt.Errorf("the exec with gid %s does not exist", id)
-	}
-	mr, err := json.Marshal(exec)
-	if err != nil {
-		return err
-	}
-	store.Set([]byte(id), mr)
-	return nil
+	return k.UpdateObject(ctx, types.TypeExecution, id, k.ExecutionKey, exec)
 }
 
 // GetExecutionsBySender returns all delayed excutions by sender

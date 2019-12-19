@@ -14,6 +14,8 @@ const (
 	UPGRADE
 )
 
+const TypeRecipe = "recipe"
+
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
 	ID            string // the recipe guid
