@@ -8,38 +8,51 @@ import (
 
 // Algorithm link geeksforgeeks.org/detect-cycle-in-a-graph/
 
-var VMap map[string]int = make(map[string]int) // StepID to GraphID mapper
-var VMapMutex = sync.Mutex{}
-var NV = 0 // Number of steps
-var adj [][]int
+type DependencyGraph struct {
+	VMap      map[string]int
+	VMapMutex sync.Mutex
+	NV        int
+	adj       [][]int
+}
+
+var g = DependencyGraph{
+	VMap:      make(map[string]int), // StepID to GraphID mapper
+	VMapMutex: sync.Mutex{},
+	NV:        0, // Number of steps
+}
+
+// var VMap map[string]int = make(map[string]int) // StepID to GraphID mapper
+// var VMapMutex = sync.Mutex{}
+// var NV = 0 // Number of steps
+// var adj [][]int
 
 // This is to convert string to into for circular check algorithm
 func AddVertice(VSID string) bool {
-	if _, ok := VMap[VSID]; !ok {
-		VMap[VSID] = NV
-		if NV == 0 {
-			adj = make([][]int, 1)
-			adj[0] = make([]int, 0)
+	if _, ok := g.VMap[VSID]; !ok {
+		g.VMap[VSID] = g.NV
+		if g.NV == 0 {
+			g.adj = make([][]int, 1)
+			g.adj[0] = make([]int, 0)
 		} else {
-			adj = append(adj, make([]int, 0))
+			g.adj = append(g.adj, make([]int, 0))
 		}
-		NV = NV + 1
+		g.NV = g.NV + 1
 		return true
 	}
 	return false
 }
 
 func AddEdge(VSID, WSID string) bool {
-	if _, ok := VMap[VSID]; !ok {
+	if _, ok := g.VMap[VSID]; !ok {
 		return false
 	}
-	if _, ok := VMap[WSID]; !ok {
+	if _, ok := g.VMap[WSID]; !ok {
 		return false
 	}
-	v := VMap[VSID]
-	w := VMap[WSID]
+	v := g.VMap[VSID]
+	w := g.VMap[WSID]
 
-	adj[v] = append(adj[v], w)
+	g.adj[v] = append(g.adj[v], w)
 
 	return true
 }
@@ -52,7 +65,7 @@ func isCyclicUtil(v int, visited []bool, recStack []bool) bool {
 		recStack[v] = true
 
 		// Recur for all the vertices adjacent to this vertex
-		for _, w := range adj[v] {
+		for _, w := range g.adj[v] {
 			if !visited[w] && isCyclicUtil(w, visited, recStack) {
 				return true
 			} else if recStack[w] {
@@ -74,14 +87,14 @@ func IsCyclic() bool {
 	var visited []bool
 	var recStack []bool
 
-	for i := 0; i < NV; i++ {
+	for i := 0; i < g.NV; i++ {
 		visited = append(visited, false)
 		recStack = append(recStack, false)
 	}
 
 	// Call the recursive helper function to detect cycle in different
 	// DFS trees
-	for i := 0; i < NV; i++ {
+	for i := 0; i < g.NV; i++ {
 		if isCyclicUtil(i, visited, recStack) {
 			return true
 		}
@@ -91,7 +104,7 @@ func IsCyclic() bool {
 }
 
 func CheckSteps(steps []FixtureStep, t *testing.T) {
-	VMapMutex.Lock()
+	g.VMapMutex.Lock()
 	for _, step := range steps {
 		if len(step.ID) == 0 {
 			t.Fatal("please add ID field for all steps")
@@ -107,7 +120,7 @@ func CheckSteps(steps []FixtureStep, t *testing.T) {
 			}
 		}
 	}
-	VMapMutex.Unlock()
+	g.VMapMutex.Unlock()
 	if IsCyclic() {
 		t.Fatal("cyclic dependency is available")
 	}
