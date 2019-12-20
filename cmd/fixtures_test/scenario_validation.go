@@ -21,11 +21,6 @@ var g = DependencyGraph{
 	NV:        0, // Number of steps
 }
 
-// var VMap map[string]int = make(map[string]int) // StepID to GraphID mapper
-// var VMapMutex = sync.Mutex{}
-// var NV = 0 // Number of steps
-// var adj [][]int
-
 // This is to convert string to into for circular check algorithm
 func AddVertice(VSID string) bool {
 	if _, ok := g.VMap[VSID]; !ok {
