@@ -22,7 +22,7 @@ var g = DependencyGraph{
 }
 
 // This is to convert string to into for circular check algorithm
-func AddVertice(VSID string) bool {
+func (g *DependencyGraph) AddVertice(VSID string) bool {
 	if _, ok := g.VMap[VSID]; !ok {
 		g.VMap[VSID] = g.NV
 		if g.NV == 0 {
@@ -37,7 +37,7 @@ func AddVertice(VSID string) bool {
 	return false
 }
 
-func AddEdge(VSID, WSID string) bool {
+func (g *DependencyGraph) AddEdge(VSID, WSID string) bool {
 	if _, ok := g.VMap[VSID]; !ok {
 		return false
 	}
@@ -53,7 +53,7 @@ func AddEdge(VSID, WSID string) bool {
 }
 
 // This function is a variation of DFSUtil() in https://www.geeksforgeeks.org/archives/18212
-func isCyclicUtil(v int, visited []bool, recStack []bool) bool {
+func (g *DependencyGraph) isCyclicUtil(v int, visited []bool, recStack []bool) bool {
 	if visited[v] == false {
 		// Mark the current node as visited and part of recursion stack
 		visited[v] = true
@@ -61,7 +61,7 @@ func isCyclicUtil(v int, visited []bool, recStack []bool) bool {
 
 		// Recur for all the vertices adjacent to this vertex
 		for _, w := range g.adj[v] {
-			if !visited[w] && isCyclicUtil(w, visited, recStack) {
+			if !visited[w] && g.isCyclicUtil(w, visited, recStack) {
 				return true
 			} else if recStack[w] {
 				return true
@@ -75,7 +75,7 @@ func isCyclicUtil(v int, visited []bool, recStack []bool) bool {
 
 // Returns true if the graph contains a cycle, else false.
 // This function is a variation of DFS() in https://www.geeksforgeeks.org/archives/18212
-func IsCyclic() bool {
+func (g *DependencyGraph) IsCyclic() bool {
 	// Mark all the vertices as not visited and not part of recursion
 	// stack
 
@@ -90,7 +90,7 @@ func IsCyclic() bool {
 	// Call the recursive helper function to detect cycle in different
 	// DFS trees
 	for i := 0; i < g.NV; i++ {
-		if isCyclicUtil(i, visited, recStack) {
+		if g.isCyclicUtil(i, visited, recStack) {
 			return true
 		}
 	}
@@ -104,19 +104,19 @@ func CheckSteps(steps []FixtureStep, t *testing.T) {
 		if len(step.ID) == 0 {
 			t.Fatal("please add ID field for all steps")
 		}
-		if ok := AddVertice(step.ID); !ok {
+		if ok := g.AddVertice(step.ID); !ok {
 			t.Fatal("same ID is available for stepID=", step.ID)
 		}
 	}
 	for _, step := range steps {
 		for _, pd := range step.RunAfter.PreCondition {
-			if ok := AddEdge(pd, step.ID); !ok {
+			if ok := g.AddEdge(pd, step.ID); !ok {
 				t.Fatal("ID is not available which is refering as precondition pd=", pd)
 			}
 		}
 	}
 	g.VMapMutex.Unlock()
-	if IsCyclic() {
+	if g.IsCyclic() {
 		t.Fatal("cyclic dependency is available")
 	}
 }
