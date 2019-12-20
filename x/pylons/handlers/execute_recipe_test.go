@@ -13,6 +13,85 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestGetMatchedItems(t *testing.T) {
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+
+	tci.Bk.AddCoins(tci.Ctx, sender1, types.PremiumTier.Fee)
+
+	cbData := MockCookbook(tci, sender1)
+
+	// Generate initial items
+	initItemNames := []string{"Knife", "Knife", "Shield"}
+	initItemIDs := []string{}
+	for _, iN := range initItemNames {
+		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
+		tci.PlnK.SetItem(tci.Ctx, *newItem)
+		initItemIDs = append(initItemIDs, newItem.ID)
+	}
+
+	knifeMergeRecipe := MockRecipe(
+		tci, "knife merge recipe",
+		types.GENERATION,
+		types.CoinInputList{},
+		types.GenItemInputList("Knife", "Knife"),
+		types.WeightedParamList{},
+		types.ItemUpgradeParams{},
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	shieldMergeRecipe := MockRecipe(
+		tci, "shield merge recipe",
+		types.GENERATION,
+		types.CoinInputList{},
+		types.GenItemInputList("Shield", "Shield"),
+		types.WeightedParamList{},
+		types.ItemUpgradeParams{},
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	cases := map[string]struct {
+		itemIDs      []string
+		recipeID     string
+		sender       sdk.AccAddress
+		desiredError string
+		showError    bool
+	}{
+		"correct same item merge recipe": {
+			itemIDs:      []string{initItemIDs[0], initItemIDs[1]},
+			recipeID:     knifeMergeRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "",
+			showError:    false,
+		},
+		"wrong same item merge recipe": {
+			itemIDs:      []string{initItemIDs[2], initItemIDs[2]},
+			recipeID:     shieldMergeRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "multiple use of same item as item inputs",
+			showError:    true,
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
+			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
+			require.True(t, err == nil)
+			_, err = GetMatchedItems(tci.Ctx, tci.PlnK, msg, rcp)
+			if tc.showError {
+				require.True(t, err != nil)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			} else {
+				require.True(t, err == nil)
+			}
+		})
+	}
+}
+
 func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	mockedCoinInput := keep.SetupTestCoinInput()
 
@@ -95,7 +174,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		dynamicItemName          string
 		addInputCoin             bool
 		recipeID                 string
-		recipeDesc               string
 		sender                   sdk.AccAddress
 		desiredError             string
 		successMsg               string
@@ -110,7 +188,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			itemIDs:            []string{},
 			addInputCoin:       false,
 			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender2,
 			desiredError:       "insufficient coin balance",
 			showError:          true,
@@ -121,7 +198,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			itemIDs:            []string{"Raichu"},
 			addInputCoin:       true,
 			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "the item IDs count doesn't match the recipe input",
 			showError:          true,
@@ -132,7 +208,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			itemIDs:            []string{},
 			addInputCoin:       true,
 			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -146,7 +221,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			itemIDs:            []string{},
 			addInputCoin:       true,
 			recipeID:           zeroInOneOutItemRecipeData.RecipeID, // available ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -160,7 +234,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemName:    "Raichu",
 			addInputCoin:       true,
 			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "The item doesn't exist",
 			showError:          true,
@@ -173,7 +246,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemName:    "NoRaichu",
 			addInputCoin:       true,
 			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "the item inputs dont match any items provided",
 			successMsg:         "successfully executed the recipe",
@@ -187,7 +259,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemName:    "Raichu",
 			addInputCoin:       true,
 			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -201,7 +272,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemName:          "Raichu",
 			addInputCoin:             true,
 			recipeID:                 noInput1Coin1ItemRecipeData.RecipeID, // available ID
-			recipeDesc:               "this has to meet character limits lol",
 			sender:                   sender1,
 			desiredError:             "",
 			successMsg:               "successfully executed the recipe",
@@ -216,7 +286,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemName:    "Raichu",
 			addInputCoin:       true,
 			recipeID:           itemUpgradeRecipeData.RecipeID, // available ID
-			recipeDesc:         "this has to meet character limits lol",
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully upgraded the item",
