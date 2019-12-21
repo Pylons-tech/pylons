@@ -42,3 +42,8 @@ func (k Keeper) UpdateTrade(ctx sdk.Context, id string, trade types.Trade) error
 	}
 	return k.UpdateObject(ctx, types.TypeTrade, id, k.TradeKey, trade)
 }
+
+// DeleteTrade deletes a trade using the id
+func (k Keeper) DeleteTrade(ctx sdk.Context, id string) {
+	k.DeleteObject(ctx, types.TypeTrade, id, k.TradeKey)
+}
