@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -27,18 +29,13 @@ func HandlerMsgDeleteTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDele
 	}
 
 	if !trade.Sender.Equals(msg.Sender) {
-		return marshalJson(DeleteTradeResponse{
-			"Failure",
-			"Trade initiator is not the same as sender",
-		})
+		return sdk.ErrUnauthorized("Trade initiator is not the same as sender").Result()
 	}
 
 	if trade.Completed && (trade.FulFiller != nil) {
-		return marshalJson(DeleteTradeResponse{
-			"Fialure",
-			"Cannot delete a completed trade",
-		})
+		return errInternal(errors.New("Cannot delete a completed trade"))
 	}
+
 	keeper.DeleteTrade(ctx, msg.TradeID)
 
 	return marshalJson(DeleteTradeResponse{
