@@ -25,6 +25,14 @@ func HandlerMsgDeleteTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDele
 	if err2 != nil {
 		return errInternal(err2)
 	}
+
+	if !trade.Sender.Equals(msg.Sender) {
+		return marshalJson(DeleteTradeResponse{
+			"Failure",
+			"Trade initiator is not the same as sender",
+		})
+	}
+
 	if trade.Completed && (trade.FulFiller != nil) {
 		return marshalJson(DeleteTradeResponse{
 			"Fialure",
