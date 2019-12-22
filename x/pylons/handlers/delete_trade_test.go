@@ -1,13 +1,15 @@
 package handlers
 
 import (
-	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
+	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
+	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgDeleteTrade(t *testing.T) {
@@ -58,12 +60,33 @@ func TestHandlerMsgDeleteTrade(t *testing.T) {
 			sender:  sender,
 		},
 		"delete a trade failure due to unauthorized sender": {
-			tradeID: id3.String(),
+			tradeID:      id2.String(),
+			showError:    true,
+			sender:       sender,
+			desiredError: "Trade initiator is not the same as sender",
 		},
 		"delete a completed trade with failure": {
-			tradeID: id3.String(),
+			tradeID:      id3.String(),
+			showError:    true,
+			sender:       sender2,
+			desiredError: "Cannot delete a completed trade",
 		},
 	}
-	fmt.Println(cases)
+
+	for name, tc := range cases {
+		t.Run(name, func(t *testing.T) {
+
+			delTrdMsg := msgs.NewMsgDeleteTrade(tc.tradeID, tc.sender)
+			result := HandlerMsgDeleteTrade(mockedCoinInput.Ctx, mockedCoinInput.PlnK, delTrdMsg)
+			if tc.showError == false {
+				trd, err := mockedCoinInput.PlnK.GetTrade(mockedCoinInput.Ctx, tc.tradeID)
+				if !strings.Contains(err.Error(), "The trade doesn't exist") {
+					t.Errorf("The trade %s wasn't deleted\n", trd.ID)
+				}
+			} else {
+				require.True(t, strings.Contains(result.Log, tc.desiredError))
+			}
+		})
+	}
 
 }
