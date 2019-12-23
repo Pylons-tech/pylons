@@ -48,14 +48,6 @@ pylonscli config trust-node true
 `michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run. Here, account passwords are `11111111`.
 And each account will have 10000000pylons and 10000000 owncoin.
 
-- reset chain status
-
-```
-
-make reset_chain
-
-```
-
 - start the `pylonsd` node
 
 ```
@@ -113,7 +105,7 @@ Available Commands:
 
 Resets the blockchain database  
 ```
-pylonsd unsafe-reset-all
+make reset_chain
 ```
 Start daemon  
 ```
