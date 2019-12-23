@@ -18,14 +18,15 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 	if err != nil {
 		return err.Result()
 	}
-	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
-	if err2 != nil {
-		return errInternal(err2)
-	}
-	if !cook.Sender.Equals(msg.Sender) {
-		// TODO: should enable it if fiat_item should only be signed by game dev
-		// return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
-	}
+
+	// TODO: should enable it if fiat_item should only be signed by game dev
+	// cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
+	// if err2 != nil {
+	// 	return errInternal(err2)
+	// }
+	// if !cook.Sender.Equals(msg.Sender) {
+	// 	return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
+	// }
 
 	item := types.NewItem(msg.CookbookID, msg.Doubles, msg.Longs, msg.Strings, msg.Sender)
 
