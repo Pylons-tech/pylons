@@ -27,10 +27,6 @@ type SuccessTxResp struct {
 
 var nonceMux sync.Mutex
 
-type NonceStruct struct {
-	Nonce uint64 `json:"nonce"`
-}
-
 const (
 	DefaultCoinPerRequest = 500
 )
@@ -142,22 +138,23 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 
 	accInfo := GetAccountInfoFromAddr(signer, t)
 	nonce := accInfo.Sequence
-	var nonceStruct NonceStruct
+
+	nonceMap := make(map[string]uint64)
 
 	nonceMux.Lock()
 
 	if fileExists(nonceFile) {
 		nonceBytes := ReadFile(nonceFile, t)
-		err := json.Unmarshal(nonceBytes, &nonceStruct)
+		err := json.Unmarshal(nonceBytes, &nonceMap)
 		if err != nil {
 			ErrValidation(t, "error reading nonce: %+v --- %+v", err)
 		}
-		nonce = nonceStruct.Nonce
+		nonce = nonceMap[signer]
 	} else {
 		nonce = accInfo.GetSequence()
 	}
-	nonceStruct.Nonce = nonce + 1
-	nonceOutput, err := json.Marshal(nonceStruct)
+	nonceMap[signer] = nonce + 1
+	nonceOutput, err := json.Marshal(nonceMap)
 	t.MustTrue(err == nil)
 	ioutil.WriteFile(nonceFile, nonceOutput, 0644)
 
@@ -180,6 +177,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
 	}
+	t.Log("transaction sign", string(output), signer, strconv.FormatUint(accInfo.GetAccountNumber(), 10))
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")
 	// t.Log("TX sign result msg=", msgValue, "output=", string(output))
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
