@@ -1,6 +1,10 @@
 package fixtureTest
 
 import (
+	"encoding/json"
+
+	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
+	intTest "github.com/MikeSofaer/pylons/cmd/test"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 )
 
@@ -127,4 +131,16 @@ func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
 		}
 	}
 	return true
+}
+
+func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
+	txErrorBytes, err := intTest.GetTxError(txhash, t)
+	hmrErr := struct {
+		Codespace string `json:"codespace"`
+		Code      int    `json:"code"`
+		Message   string `json:"message"`
+	}{}
+	err = json.Unmarshal(txErrorBytes, &hmrErr)
+	t.MustTrue(err == nil)
+	return hmrErr.Message
 }

@@ -30,7 +30,7 @@
                 "status": "Success"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -58,7 +58,7 @@
                 "status": "Success"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -85,7 +85,7 @@
                 "status": "Success"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -203,7 +203,7 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -262,7 +262,7 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -290,7 +290,7 @@
                 "message": "successfully completed the execution"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -318,7 +318,7 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "coins": [
                     {
                         "denom": "submcoin",
@@ -342,7 +342,7 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "coins": [
                     {
                         "denom": "submcoin",

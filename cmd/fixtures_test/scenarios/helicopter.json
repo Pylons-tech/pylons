@@ -30,7 +30,7 @@
                 "status": "Success"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -57,7 +57,7 @@
                 "status": "Success"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -157,7 +157,7 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -185,7 +185,7 @@
                 "message": "successfully executed the recipe"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "coins": [
                     {
                         "denom": "helicoin",
@@ -209,7 +209,7 @@
                 "message": "successfully upgraded the item"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],
@@ -252,7 +252,7 @@
                 "status": "Success"
             },
             "property": {
-                "owner": "eugen",
+                "owner": "michael",
                 "items": [
                     {
                         "stringKeys": [],

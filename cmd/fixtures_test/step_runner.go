@@ -42,10 +42,10 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		txhash := intTest.TestTxWithMsgWithNonce(t, chkExecMsg, execType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
-		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
+		intTest.ErrValidation(t, "error waiting for check execution %+v", err)
 
-		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
-		t.MustTrue(err == nil)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
+		intTest.ErrValidation(t, "error getting tx result bytes %+v", err)
 		resp := handlers.CheckExecutionResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 
@@ -83,14 +83,18 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		txhash := intTest.TestTxWithMsgWithNonce(t, itmMsg, itemType.Sender.String(), true)
 
 		err = intTest.WaitForNextBlock()
-		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
+		intTest.ErrValidation(t, "error waiting for fiat item %+v", err)
 
-		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
-		t.MustTrue(err == nil)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
+		intTest.ErrValidation(t, "error getting tx result bytes %+v", err)
 		resp := handlers.FiatItemResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 
-		t.MustTrue(err == nil)
+		if err != nil {
+			hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
+			t.Log("txhash=", txhash, "hmrErrMsg=", hmrErrMsg)
+			t.Fatalf("error unmarshaling tx response %+v", err)
+		}
 		t.MustTrue(resp.ItemID != "")
 	}
 }
@@ -124,7 +128,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 
 		intTest.ErrValidationWithOutputLog(t, "error getting transaction data for creating cookbook %+v", txHandleResBytes, err)
 		resp := handlers.CreateCBResponse{}
@@ -173,7 +177,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 		t.MustTrue(err == nil)
 		resp := handlers.CreateRecipeResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -214,18 +218,11 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)
 
-		txErrorBytes, err := intTest.GetTxError(txhash, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
-			hmrErr := struct {
-				Codespace string `json:"codespace"`
-				Code      int    `json:"code"`
-				Message   string `json:"message"`
-			}{}
-			err = json.Unmarshal(txErrorBytes, &hmrErr)
-			t.MustTrue(err == nil)
-			t.MustTrue(hmrErr.Message == step.Output.TxResult.ErrorLog)
+			hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
+			t.MustTrue(hmrErrMsg == step.Output.TxResult.ErrorLog)
 		} else {
-			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 10, t)
+			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 			t.MustTrue(err == nil)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
