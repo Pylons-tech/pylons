@@ -46,10 +46,11 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 		intTest.ErrValidation(t, "error getting tx result bytes %+v", err)
+
+		CheckErrorOnTx(txhash, t)
 		resp := handlers.CheckExecutionResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-
-		t.MustTrue(err == nil)
+		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
 		t.MustTrue(resp.Status == step.Output.TxResult.Status)
 		if len(step.Output.TxResult.Message) > 0 {
 			t.MustTrue(resp.Message == step.Output.TxResult.Message)
@@ -87,14 +88,12 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 		intTest.ErrValidation(t, "error getting tx result bytes %+v", err)
+
+		CheckErrorOnTx(txhash, t)
 		resp := handlers.FiatItemResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 
-		if err != nil {
-			hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
-			t.Log("txhash=", txhash, "hmrErrMsg=", hmrErrMsg)
-			t.Fatalf("error unmarshaling tx response %+v", err)
-		}
+		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
 		t.MustTrue(resp.ItemID != "")
 	}
 }
@@ -129,11 +128,12 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
-
 		intTest.ErrValidationWithOutputLog(t, "error getting transaction data for creating cookbook %+v", txHandleResBytes, err)
+
+		CheckErrorOnTx(txhash, t)
 		resp := handlers.CreateCBResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		t.MustTrue(err == nil)
+		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
 		t.MustTrue(resp.CookbookID != "")
 	}
 }
@@ -179,9 +179,11 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 		t.MustTrue(err == nil)
+
+		CheckErrorOnTx(txhash, t)
 		resp := handlers.CreateRecipeResponse{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		t.MustTrue(err == nil)
+		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
 		t.MustTrue(resp.RecipeID != "")
 	}
 }
@@ -224,6 +226,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		} else {
 			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 			t.MustTrue(err == nil)
+			CheckErrorOnTx(txhash, t)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			if err != nil {
