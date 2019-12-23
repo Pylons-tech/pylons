@@ -32,17 +32,24 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 	// TODO: need to check it's working correctly when it is recipe for merging to same items
 
 	var inputItems []types.Item
+	keys := make(map[string]bool)
 
 	for _, id := range msg.ItemIDs {
-		item, err := keeper.GetItem(ctx, id)
-		if err != nil {
-			return nil, err
-		}
-		if !item.Sender.Equals(msg.Sender) {
-			return nil, errors.New("item owner is not same as sender")
-		}
+		if _, value := keys[id]; !value {
+			keys[id] = true
 
-		inputItems = append(inputItems, item)
+			item, err := keeper.GetItem(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+			if !item.Sender.Equals(msg.Sender) {
+				return nil, errors.New("item owner is not same as sender")
+			}
+
+			inputItems = append(inputItems, item)
+		} else {
+			return nil, errors.New("multiple use of same item as item inputs")
+		}
 	}
 
 	// we validate and match items
