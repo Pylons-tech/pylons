@@ -12,6 +12,9 @@ go.sum: go.mod
 init_accounts:
 	bash ./init_accounts.sh
 
+reset_chain:
+	pylonsd unsafe-reset-all
+
 int_tests:
 	rm ./cmd/test/nonce.json || true
 	go test -v ./cmd/test/
