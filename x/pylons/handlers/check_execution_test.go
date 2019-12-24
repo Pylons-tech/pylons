@@ -24,17 +24,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock delayed coin to coin recipe
-	c2cRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenCoinOnlyEntry("chair"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		5,
-		sender1,
-	)
+	c2cRecipeData := MockPopularRecipe("5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		rcpID           string

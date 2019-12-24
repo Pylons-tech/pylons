@@ -50,6 +50,77 @@ func MockRecipe(
 	return recipeData
 }
 
+func MockPopularRecipe(
+	hfrt string,
+	tci keep.TestCoinInput,
+	rcpName string,
+	cbID string,
+	sender sdk.AccAddress,
+) CreateRecipeResponse {
+	switch hfrt {
+	case "5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE": // 5 x woodcoin -> 1 x chair coin recipe
+		return MockRecipe(
+			tci, rcpName,
+			types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenCoinOnlyEntry("chair"),
+			types.ItemUpgradeParams{},
+			cbID,
+			0,
+			sender,
+		)
+	case "5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE": // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
+		return MockRecipe(
+			tci, rcpName,
+			types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenCoinOnlyEntry("chair"),
+			types.ItemUpgradeParams{},
+			cbID,
+			5,
+			sender,
+		)
+	case "5xWOODCOIN_1xRAICHU_BUY_RECIPE":
+		return MockRecipe(
+			tci, rcpName,
+			types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenItemOnlyEntry("Raichu"),
+			types.ItemUpgradeParams{},
+			cbID,
+			0,
+			sender,
+		)
+	case "RAICHU_NAME_UPGRADE_RECIPE":
+		return MockRecipe(
+			tci, rcpName,
+			types.UPGRADE,
+			types.CoinInputList{},
+			types.GenItemInputList("Raichu"),
+			types.WeightedParamList{},
+			types.GenToUpgradeForString("Name", "RaichuV2"),
+			cbID,
+			0,
+			sender,
+		)
+	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
+		return MockRecipe(
+			tci, rcpName,
+			types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenEntries("chair", "Raichu"),
+			types.ItemUpgradeParams{},
+			cbID,
+			0,
+			sender,
+		)
+	}
+}
+
 // MockExecution executes a mockRecipe
 func MockExecution(
 	tci keep.TestCoinInput,

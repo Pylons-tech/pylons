@@ -104,30 +104,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock coin to coin recipe
-	c2cRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenCoinOnlyEntry("chair"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	c2cRecipeData := MockPopularRecipe("5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock coin to item recipe
-	zeroInOneOutItemRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenItemOnlyEntry("Raichu"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	zeroInOneOutItemRecipeData := MockPopularRecipe("5xWOODCOIN_1xRAICHU_BUY_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
@@ -155,17 +135,8 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender1,
 	)
 
-	itemUpgradeRecipeData := MockRecipe(
-		mockedCoinInput, "item upgrade recipe",
-		types.UPGRADE,
-		types.CoinInputList{},
-		types.GenItemInputList("Raichu"),
-		types.WeightedParamList{},
-		types.GenToUpgradeForString("Name", "RaichuV2"),
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	// item upgrade recipe
+	itemUpgradeRecipeData := MockPopularRecipe("RAICHU_NAME_UPGRADE_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		cookbookID               string

@@ -25,17 +25,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock recipe
-	rcpData := MockRecipe(
-		mockedCoinInput, "existing recipe",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenEntries("chair", "Raichu"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	rcpData := MockPopularRecipe("DEFAULT_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		recipeID     string
