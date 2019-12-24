@@ -30,17 +30,8 @@ func TestGetMatchedItems(t *testing.T) {
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 
-	knifeMergeRecipe := MockRecipe(
-		tci, "knife merge recipe",
-		types.GENERATION,
-		types.CoinInputList{},
-		types.GenItemInputList("Knife", "Knife"),
-		types.WeightedParamList{},
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	knifeMergeRecipe := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_MERGE_RECIPE", tci,
+		"knife merge recipe", cbData.CookbookID, sender1)
 
 	shieldMergeRecipe := MockRecipe(
 		tci, "shield merge recipe",

@@ -106,6 +106,42 @@ func MockPopularRecipe(
 			0,
 			sender,
 		)
+	case "2_BLOCK_DELAYED_KNIFE_UPGRADE_RECIPE":
+		return MockRecipe(
+			tci, rcpName,
+			types.UPGRADE,
+			types.CoinInputList{},
+			types.GenItemInputList("Knife"),
+			types.WeightedParamList{},
+			types.GenToUpgradeForString("Name", "KnifeV2"),
+			cbID,
+			2,
+			sender,
+		)
+	case "2_BLOCK_DELAYED_KNIFE_MERGE_RECIPE":
+		return MockRecipe(
+			tci, rcpName,
+			types.GENERATION,
+			types.CoinInputList{},
+			types.GenItemInputList("Knife", "Knife"),
+			types.GenItemOnlyEntry("KnifeMRG"),
+			types.ItemUpgradeParams{},
+			cbID,
+			2,
+			sender,
+		)
+	case "2_BLOCK_DELAYED_KNIFE_BUYER_RECIPE":
+		return MockRecipe(
+			tci, rcpName,
+			types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenItemOnlyEntry("Knife"),
+			types.ItemUpgradeParams{},
+			cbID,
+			2,
+			sender,
+		)
 	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
 		return MockRecipe(
 			tci, rcpName,

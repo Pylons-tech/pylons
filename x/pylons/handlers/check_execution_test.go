@@ -26,53 +26,99 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	// mock delayed coin to coin recipe
 	c2cRecipeData := MockPopularRecipe("5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
+	// mock delayed more than 1 item input recipe
+	knifeMergeRecipeData := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_MERGE_RECIPE", mockedCoinInput,
+		"knife merge recipe", cbData.CookbookID, sender1)
+
+	// mock delayed item upgrade recipe
+	knifeUpgradeRecipeData := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_UPGRADE_RECIPE", mockedCoinInput,
+		"knife upgrade recipe", cbData.CookbookID, sender1)
+
+	// mock delayed knife buyer recipe
+	knifeBuyerRecipeData := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_BUYER_RECIPE", mockedCoinInput,
+		"knife upgrade recipe", cbData.CookbookID, sender1)
+
 	cases := map[string]struct {
-		rcpID           string
-		itemIDs         []string
-		dynamicItemSet  bool
-		dynamicItemName string
-		sender          sdk.AccAddress
-		payToComplete   bool
-		addHeight       int64
-		expectedMessage string
-		expectError     bool
-		coinAddition    int64
+		rcpID               string
+		itemIDs             []string
+		dynamicItemSet      bool
+		dynamicItemNames    []string
+		sender              sdk.AccAddress
+		payToComplete       bool
+		addHeight           int64
+		expectedMessage     string
+		expectError         bool
+		coinAddition        int64
+		retryExecution      bool
+		retryResMessage     string
+		desiredUpgradedName string
 	}{
 		"coin to coin recipe execution test": {
-			rcpID:           c2cRecipeData.RecipeID,
-			itemIDs:         []string{},
-			sender:          sender1,
-			payToComplete:   false,
-			addHeight:       15,
-			expectedMessage: "successfully completed the execution",
+			rcpID:            c2cRecipeData.RecipeID,
+			dynamicItemSet:   false,
+			dynamicItemNames: []string{},
+			sender:           sender1,
+			payToComplete:    false,
+			addHeight:        15,
+			expectedMessage:  "successfully completed the execution",
 		},
 		"coin to coin early pay recipe execution fail due to insufficient balance": {
-			rcpID:           c2cRecipeData.RecipeID,
-			itemIDs:         []string{},
-			sender:          sender2,
-			payToComplete:   true,
-			expectError:     true,
-			expectedMessage: "insufficient balance to complete the execution",
+			rcpID:            c2cRecipeData.RecipeID,
+			dynamicItemSet:   false,
+			dynamicItemNames: []string{},
+			sender:           sender2,
+			payToComplete:    true,
+			expectError:      true,
+			expectedMessage:  "insufficient balance to complete the execution",
 		},
 		"coin to coin early pay recipe execution test": {
-			rcpID:           c2cRecipeData.RecipeID,
-			itemIDs:         []string{},
-			sender:          sender2,
-			payToComplete:   true,
-			expectedMessage: "successfully paid to complete the execution",
-			coinAddition:    300,
+			rcpID:            c2cRecipeData.RecipeID,
+			dynamicItemSet:   false,
+			dynamicItemNames: []string{},
+			sender:           sender2,
+			payToComplete:    true,
+			expectedMessage:  "successfully paid to complete the execution",
+			coinAddition:     300,
 		},
-		// TODO should add test case for item upgrade delayed recipe test case
-		// TODO should have test case for more than 1 item input recipe
-		// TODO should add item generation delayed recipe test case
-		// TODO should add test case for already completed execution
+		"item upgrade recipe success execution test": {
+			rcpID:               knifeUpgradeRecipeData.RecipeID,
+			dynamicItemSet:      true,
+			dynamicItemNames:    []string{"Knife"},
+			sender:              sender1,
+			payToComplete:       false,
+			addHeight:           3,
+			expectedMessage:     "successfully completed the execution",
+			desiredUpgradedName: "KnifeV2",
+		},
+		"more than 1 item input recipe success execution test": {
+			rcpID:            knifeMergeRecipeData.RecipeID,
+			dynamicItemSet:   true,
+			dynamicItemNames: []string{"Knife", "Knife"},
+			sender:           sender1,
+			payToComplete:    false,
+			addHeight:        3,
+			expectedMessage:  "successfully completed the execution",
+		},
+		"item generation recipe success execution test": {
+			rcpID:           knifeBuyerRecipeData.RecipeID,
+			dynamicItemSet:  false,
+			sender:          sender1,
+			payToComplete:   false,
+			addHeight:       3,
+			expectedMessage: "successfully completed the execution",
+			retryExecution:  true,
+			retryResMessage: "execution already completed",
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.dynamicItemSet {
-				dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.dynamicItemName)
-				mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
-				tc.itemIDs = []string{dynamicItem.ID}
+				tc.itemIDs = []string{}
+				for _, iN := range tc.dynamicItemNames {
+					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
+					mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
+					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
+				}
 			}
 			mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
 
@@ -114,6 +160,23 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			} else {
 				require.True(t, checkExecResp.Status == "Success")
 				require.True(t, checkExecResp.Message == tc.expectedMessage)
+			}
+
+			if len(tc.desiredUpgradedName) > 0 {
+				updatedItem, err := mockedCoinInput.PlnK.GetItem(futureContext, tc.itemIDs[0])
+				require.True(t, err == nil)
+				updatedName, ok := updatedItem.FindString("Name")
+				require.True(t, ok)
+				require.True(t, updatedName == tc.desiredUpgradedName)
+			}
+
+			if tc.retryExecution {
+				result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+				checkExecResp := CheckExecutionResp{}
+				err = json.Unmarshal(result.Data, &checkExecResp)
+				require.True(t, err == nil)
+				require.True(t, checkExecResp.Status == "Completed")
+				require.True(t, checkExecResp.Message == tc.retryResMessage)
 			}
 		})
 	}
