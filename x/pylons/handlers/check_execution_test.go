@@ -72,6 +72,8 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			expectedMessage: "successfully paid to complete the execution",
 			coinAddition:    300,
 		},
+		// TODO should add test case for item upgrade delayed recipe test case
+		// TODO should have test case for more than 1 item input recipe
 		// TODO should add item generation delayed recipe test case
 		// TODO should add test case for already completed execution
 	}
@@ -100,6 +102,12 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.True(t, err == nil)
+
+			if tc.dynamicItemSet {
+				usedItem, err := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemIDs[0])
+				require.True(t, err == nil)
+				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
+			}
 
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
