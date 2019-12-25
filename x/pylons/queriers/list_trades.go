@@ -44,7 +44,9 @@ func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper kee
 			continue
 		}
 
-		trades = append(trades, trade)
+		if !trade.Disabled {
+			trades = append(trades, trade)
+		}
 	}
 
 	tradeList = types.TradeList{

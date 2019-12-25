@@ -20,6 +20,7 @@ type Trade struct {
 	ExtraInfo   string
 	Sender      sdk.AccAddress
 	FulFiller   sdk.AccAddress
+	Disabled    bool
 	Completed   bool
 }
 
