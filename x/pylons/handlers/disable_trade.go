@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"errors"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,10 +28,14 @@ func HandlerMsgDisableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDis
 	}
 
 	if !msg.Sender.Equals(trade.Sender) {
-		return sdk.ErrUnauthorized("msg sender is not the owner of the trade").Result()
+		return sdk.ErrUnauthorized("Trade initiator is not the same as sender").Result()
 	}
 
-	trade.Disabled = false
+	if trade.Completed && (trade.FulFiller != nil) {
+		return errInternal(errors.New("Cannot disable a completed trade"))
+	}
+
+	trade.Disabled = true
 
 	err2 = keeper.UpdateTrade(ctx, msg.TradeID, trade)
 	if err2 != nil {
@@ -37,7 +43,7 @@ func HandlerMsgDisableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDis
 	}
 
 	return marshalJson(DisableTradeResp{
-		Message: "successfully enabled the trade",
+		Message: "successfully disabled the trade",
 		Status:  "Success",
 	})
 }

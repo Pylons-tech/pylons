@@ -26,7 +26,7 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 	}
 
 	if !msg.Sender.Equals(trade.Sender) {
-		return sdk.ErrUnauthorized("msg sender is not the owner of the trade").Result()
+		return sdk.ErrUnauthorized("Trade initiator is not the same as sender").Result()
 	}
 
 	trade.Disabled = false
