@@ -29,7 +29,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			guid, err := MockRecipeWithName(tc.rcpName, tc.desiredItemName, t)
+			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			rcp, err := GetRecipeByGUID(guid)

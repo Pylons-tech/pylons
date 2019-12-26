@@ -2,6 +2,7 @@ package intTest
 
 import (
 	"encoding/json"
+	"strconv"
 
 	originT "testing"
 
@@ -9,17 +10,19 @@ import (
 
 	"github.com/MikeSofaer/pylons/x/pylons/handlers"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCheckExecutionViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
+
 	tests := []struct {
 		name                    string
-		rcpName                 string
+		rcpType                 types.RecipeType
 		blockInterval           int64
-		itemIDs                 []string
+		currentItemName         string
 		desiredItemName         string
 		payToComplete           bool
 		waitForBlockInterval    bool
@@ -32,9 +35,9 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 	}{
 		{
 			"basic flow test",
-			"TESTRCP_CheckExecution__007_TC1",
+			types.GENERATION,
 			2,
-			[]string{},
+			"",
 			"TESTITEM_CheckExecution__007_TC1",
 			false,
 			true,
@@ -47,9 +50,9 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		},
 		{
 			"early payment test",
-			"TESTRCP_CheckExecution__007_TC2",
+			types.GENERATION,
 			2,
-			[]string{},
+			"",
 			"TESTITEM_CheckExecution__007_TC2",
 			true,
 			false,
@@ -62,9 +65,9 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		},
 		{
 			"no wait direct check execution test",
-			"TESTRCP_CheckExecution__007_TC3",
+			types.GENERATION,
 			2,
-			[]string{},
+			"",
 			"TESTITEM_CheckExecution__007_TC3",
 			false,
 			false,
@@ -75,17 +78,35 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			"",
 			"",
 		},
-		// TODO use similar format of unit test to use MockPopularRecipe helper
-		// TODO create testcase for more than 1 item and check OwnerRecipeID is correctly set
-		// TODO check result if do check execution again after finish
-		// TODO create testcase for item upgrade recipe
+		{
+			"item upgrade check execution test and OwnerRecipeID check",
+			types.UPGRADE,
+			2,
+			"TESTITEM_CheckExecution__007_TC3_CUR",
+			"TESTITEM_CheckExecution__007_TC3",
+			false,
+			false,
+			false,
+			"Pending",
+			"execution pending",
+			false,
+			"",
+			"",
+		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpName, tc.desiredItemName, t)
+			itemIDs := []string{}
+			if len(tc.currentItemName) > 0 {
+				itemIDs = []string{
+					MockItemGUID(tc.currentItemName, t),
+				}
+			}
+			rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
+			guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpType, rcpName, tc.currentItemName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			rcp, err := GetRecipeByGUID(guid)
@@ -95,7 +116,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustTrue(err == nil)
 
-			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs)
+			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 			txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 			if tc.waitForBlockInterval {
@@ -112,6 +133,15 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			schedule := handlers.ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execResp.Output, &schedule)
 			t.MustTrue(err == nil)
+
+			if len(itemIDs) > 0 {
+				items, err := ListItemsViaCLI("")
+				ErrValidation(t, "error listing items via cli ::: %+v", err)
+
+				item, ok := FindItemFromArrayByName(items, tc.currentItemName, true)
+				t.MustTrue(ok)
+				t.MustTrue(item.OwnerRecipeID == guid)
+			}
 
 			chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
 			txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
@@ -149,6 +179,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 				t.MustTrue(err == nil)
 				t.MustTrue(resp.Status == tc.expectedRetryResStatus)
 				t.MustTrue(resp.Message == tc.expectedRetryResMessage)
+				// This is automatically checking OwnerRecipeID lock status ;)
 			}
 		})
 	}

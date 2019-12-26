@@ -63,6 +63,67 @@ const (
 	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 7
 )
 
+func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.RecipeType, types.CoinInputList, types.ItemInputList, types.WeightedParamList, types.ItemUpgradeParams, int64) {
+	switch hfrt {
+	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
+		return types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenCoinOnlyEntry("chair"),
+			types.ItemUpgradeParams{},
+			0
+	case RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
+		return types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenCoinOnlyEntry("chair"),
+			types.ItemUpgradeParams{},
+			5
+	case RCP_5xWOODCOIN_1xRAICHU_BUY:
+		return types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenItemOnlyEntry("Raichu"),
+			types.ItemUpgradeParams{},
+			0
+	case RCP_RAICHU_NAME_UPGRADE:
+		return types.UPGRADE,
+			types.CoinInputList{},
+			types.GenItemInputList("Raichu"),
+			types.WeightedParamList{},
+			types.GenToUpgradeForString("Name", "RaichuV2"),
+			0
+	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
+		return types.UPGRADE,
+			types.CoinInputList{},
+			types.GenItemInputList("Knife"),
+			types.WeightedParamList{},
+			types.GenToUpgradeForString("Name", "KnifeV2"),
+			2
+	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
+		return types.GENERATION,
+			types.CoinInputList{},
+			types.GenItemInputList("Knife", "Knife"),
+			types.GenItemOnlyEntry("KnifeMRG"),
+			types.ItemUpgradeParams{},
+			2
+	case RCP_2_BLOCK_DELAYED_KNIFE_BUYER:
+		return types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenItemOnlyEntry("Knife"),
+			types.ItemUpgradeParams{},
+			2
+	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
+		return types.GENERATION,
+			types.GenCoinInputList("wood", 5),
+			types.ItemInputList{},
+			types.GenEntries("chair", "Raichu"),
+			types.ItemUpgradeParams{},
+			0
+	}
+}
+
 func MockPopularRecipe(
 	hfrt PopularRecipeType,
 	tci keep.TestCoinInput,
@@ -70,104 +131,14 @@ func MockPopularRecipe(
 	cbID string,
 	sender sdk.AccAddress,
 ) CreateRecipeResponse {
-	switch hfrt {
-	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
-		return MockRecipe(
-			tci, rcpName,
-			types.GENERATION,
-			types.GenCoinInputList("wood", 5),
-			types.ItemInputList{},
-			types.GenCoinOnlyEntry("chair"),
-			types.ItemUpgradeParams{},
-			cbID,
-			0,
-			sender,
-		)
-	case RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
-		return MockRecipe(
-			tci, rcpName,
-			types.GENERATION,
-			types.GenCoinInputList("wood", 5),
-			types.ItemInputList{},
-			types.GenCoinOnlyEntry("chair"),
-			types.ItemUpgradeParams{},
-			cbID,
-			5,
-			sender,
-		)
-	case RCP_5xWOODCOIN_1xRAICHU_BUY:
-		return MockRecipe(
-			tci, rcpName,
-			types.GENERATION,
-			types.GenCoinInputList("wood", 5),
-			types.ItemInputList{},
-			types.GenItemOnlyEntry("Raichu"),
-			types.ItemUpgradeParams{},
-			cbID,
-			0,
-			sender,
-		)
-	case RCP_RAICHU_NAME_UPGRADE:
-		return MockRecipe(
-			tci, rcpName,
-			types.UPGRADE,
-			types.CoinInputList{},
-			types.GenItemInputList("Raichu"),
-			types.WeightedParamList{},
-			types.GenToUpgradeForString("Name", "RaichuV2"),
-			cbID,
-			0,
-			sender,
-		)
-	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
-		return MockRecipe(
-			tci, rcpName,
-			types.UPGRADE,
-			types.CoinInputList{},
-			types.GenItemInputList("Knife"),
-			types.WeightedParamList{},
-			types.GenToUpgradeForString("Name", "KnifeV2"),
-			cbID,
-			2,
-			sender,
-		)
-	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
-		return MockRecipe(
-			tci, rcpName,
-			types.GENERATION,
-			types.CoinInputList{},
-			types.GenItemInputList("Knife", "Knife"),
-			types.GenItemOnlyEntry("KnifeMRG"),
-			types.ItemUpgradeParams{},
-			cbID,
-			2,
-			sender,
-		)
-	case RCP_2_BLOCK_DELAYED_KNIFE_BUYER:
-		return MockRecipe(
-			tci, rcpName,
-			types.GENERATION,
-			types.GenCoinInputList("wood", 5),
-			types.ItemInputList{},
-			types.GenItemOnlyEntry("Knife"),
-			types.ItemUpgradeParams{},
-			cbID,
-			2,
-			sender,
-		)
-	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
-		return MockRecipe(
-			tci, rcpName,
-			types.GENERATION,
-			types.GenCoinInputList("wood", 5),
-			types.ItemInputList{},
-			types.GenEntries("chair", "Raichu"),
-			types.ItemUpgradeParams{},
-			cbID,
-			0,
-			sender,
-		)
-	}
+	rcpType, ciL, iiL, entries, upgrades, bI := GetParamsForPopularRecipe(hfrt)
+	return MockRecipe(
+		tci, rcpName,
+		rcpType, ciL, iiL, entries, upgrades,
+		cbID,
+		bI,
+		sender,
+	)
 }
 
 // MockExecution executes a mockRecipe
