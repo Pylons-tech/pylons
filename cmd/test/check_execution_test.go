@@ -75,6 +75,10 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			"",
 			"",
 		},
+		// TODO use similar format of unit test to use MockPopularRecipe helper
+		// TODO create testcase for more than 1 item and check OwnerRecipeID is correctly set
+		// TODO check result if do check execution again after finish
+		// TODO create testcase for item upgrade recipe
 	}
 
 	for _, tc := range tests {
