@@ -30,17 +30,8 @@ func TestGetMatchedItems(t *testing.T) {
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 
-	knifeMergeRecipe := MockRecipe(
-		tci, "knife merge recipe",
-		types.GENERATION,
-		types.CoinInputList{},
-		types.GenItemInputList("Knife", "Knife"),
-		types.WeightedParamList{},
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	knifeMergeRecipe := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, tci,
+		"knife merge recipe", cbData.CookbookID, sender1)
 
 	shieldMergeRecipe := MockRecipe(
 		tci, "shield merge recipe",
@@ -104,30 +95,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock coin to coin recipe
-	c2cRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenCoinOnlyEntry("chair"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	c2cRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock coin to item recipe
-	zeroInOneOutItemRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenItemOnlyEntry("Raichu"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	zeroInOneOutItemRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_1xRAICHU_BUY, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
@@ -155,17 +126,8 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender1,
 	)
 
-	itemUpgradeRecipeData := MockRecipe(
-		mockedCoinInput, "item upgrade recipe",
-		types.UPGRADE,
-		types.CoinInputList{},
-		types.GenItemInputList("Raichu"),
-		types.WeightedParamList{},
-		types.GenToUpgradeForString("Name", "RaichuV2"),
-		cbData.CookbookID,
-		0,
-		sender1,
-	)
+	// item upgrade recipe
+	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		cookbookID               string

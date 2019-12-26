@@ -25,18 +25,10 @@ func TestGetExecution(t *testing.T) {
 
 	// mock cookbook
 	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
-	// mock execution
-	c2cRecipeData := handlers.MockRecipe(
-		mockedCoinInput, "GET_EXECUTION_TEST_RECIPE",
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenCoinOnlyEntry("chair"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		5,
-		senderAccAddress,
-	)
+	// mock recipe
+	c2cRecipeData := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
+		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, senderAccAddress)
+
 	execRcpResponse, err := handlers.MockExecution(mockedCoinInput, c2cRecipeData.RecipeID,
 		senderAccAddress,
 		[]string{}, // empty itemIDs

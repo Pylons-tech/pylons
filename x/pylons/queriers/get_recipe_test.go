@@ -28,19 +28,8 @@ func TestGetRecipe(t *testing.T) {
 
 	// mock recipe
 	mockRecipeName := "GET_RECIPE_MOCK_TEST_NAME"
-	rcpData := handlers.MockRecipe(
-		mockedCoinInput, mockRecipeName,
-		types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenCoinOnlyEntry("chair"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		5,
-		senderAccAddress,
-	)
-	// mockedItem := keep.GenItem(cbData.CookbookID, senderAccAddress, mockItemName)
-	// mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *mockedItem)
+	rcpData := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
+		mockRecipeName, cbData.CookbookID, senderAccAddress)
 
 	cases := map[string]struct {
 		path          []string

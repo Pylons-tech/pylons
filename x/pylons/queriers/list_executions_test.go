@@ -26,16 +26,8 @@ func TestListExecution(t *testing.T) {
 	// mock cookbook
 	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
 
-	recipeResp := handlers.MockRecipe(
-		mockedCoinInput, "recipe0001", types.GENERATION,
-		types.GenCoinInputList("wood", 5),
-		types.ItemInputList{},
-		types.GenEntries("chair", "Raichu"),
-		types.ItemUpgradeParams{},
-		cbData.CookbookID,
-		5,
-		senderAccAddress,
-	)
+	recipeResp := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
+		"recipe0001", cbData.CookbookID, senderAccAddress)
 
 	_, err := handlers.MockExecution(
 		mockedCoinInput, recipeResp.RecipeID,
