@@ -93,10 +93,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
 
-	// TODO: implement rollback strategy
 	for _, item := range refreshedOutputItems {
 		item.Sender = msg.Sender
-		// TODO: implement rollback strategy here
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
 			return errInternal(err2)
@@ -105,7 +103,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	for _, item := range matchedItems {
 		item.Sender = trade.Sender
-		// TODO: implement rollback strategy here
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
 			return errInternal(err2)
@@ -118,7 +115,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	_, err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
 
 	if err != nil {
-		// TODO: implement rollback strategy here
 		return errInternal(err2)
 	}
 
@@ -126,7 +122,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	_, err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
 
 	if err != nil {
-		// TODO: implement rollback strategy here
 		return errInternal(err2)
 	}
 
@@ -134,7 +129,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	trade.Completed = true
 	err2 = keeper.SetTrade(ctx, trade)
 	if err != nil {
-		// TODO: implement rollback strategy here
 		return errInternal(err2)
 	}
 
