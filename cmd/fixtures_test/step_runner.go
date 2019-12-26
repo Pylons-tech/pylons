@@ -188,6 +188,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 	}
 }
 
+// RunExecuteRecipe is executed when an action "execute_recipe" is called
 func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	// TODO should check item ID is returned
 	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
@@ -254,4 +255,38 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			}
 		}
 	}
+}
+
+func RunCreateTrade(step FixtureStep, t *testing.T) {
+
+	if step.ParamsRef != "" {
+		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
+		newByteValue := UpdateSenderName(byteValue, t)
+
+		var trdType types.Trade
+		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+		if err != nil {
+			t.Fatal("error reading using GetAminoCdc ", trdType, string(newByteValue), err)
+		}
+		t.MustTrue(err == nil)
+		createTrd := msgs.NewMsgCreateTrade(
+			trdType.CoinInputs,
+			trdType.ItemInputs,
+			trdType.CoinOutputs,
+			trdType.ItemOutputs,
+			"some extra info",
+			trdType.Sender,
+		)
+		txhash := intTest.TestTxWithMsgWithNonce(t, createTrd, createTrd.Sender.String(), true)
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error while creating trade %+v", err)
+
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+			hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
+			t.MustTrue(hmrErrMsg == step.Output.TxResult.ErrorLog)
+		}
+
+	}
+
 }
