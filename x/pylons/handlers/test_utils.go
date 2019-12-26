@@ -50,15 +50,28 @@ func MockRecipe(
 	return recipeData
 }
 
+type PopularRecipeType int
+
+const (
+	RCP_DEFAULT                                   PopularRecipeType = 0
+	RCP_5xWOODCOIN_TO_1xCHAIRCOIN                 PopularRecipeType = 1
+	RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN PopularRecipeType = 2
+	RCP_5xWOODCOIN_1xRAICHU_BUY                   PopularRecipeType = 3
+	RCP_RAICHU_NAME_UPGRADE                       PopularRecipeType = 4
+	RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE             PopularRecipeType = 5
+	RCP_2_BLOCK_DELAYED_KNIFE_MERGE               PopularRecipeType = 6
+	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 7
+)
+
 func MockPopularRecipe(
-	hfrt string,
+	hfrt PopularRecipeType,
 	tci keep.TestCoinInput,
 	rcpName string,
 	cbID string,
 	sender sdk.AccAddress,
 ) CreateRecipeResponse {
 	switch hfrt {
-	case "5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE": // 5 x woodcoin -> 1 x chair coin recipe
+	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
 		return MockRecipe(
 			tci, rcpName,
 			types.GENERATION,
@@ -70,7 +83,7 @@ func MockPopularRecipe(
 			0,
 			sender,
 		)
-	case "5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE": // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
+	case RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
 		return MockRecipe(
 			tci, rcpName,
 			types.GENERATION,
@@ -82,7 +95,7 @@ func MockPopularRecipe(
 			5,
 			sender,
 		)
-	case "5xWOODCOIN_1xRAICHU_BUY_RECIPE":
+	case RCP_5xWOODCOIN_1xRAICHU_BUY:
 		return MockRecipe(
 			tci, rcpName,
 			types.GENERATION,
@@ -94,7 +107,7 @@ func MockPopularRecipe(
 			0,
 			sender,
 		)
-	case "RAICHU_NAME_UPGRADE_RECIPE":
+	case RCP_RAICHU_NAME_UPGRADE:
 		return MockRecipe(
 			tci, rcpName,
 			types.UPGRADE,
@@ -106,7 +119,7 @@ func MockPopularRecipe(
 			0,
 			sender,
 		)
-	case "2_BLOCK_DELAYED_KNIFE_UPGRADE_RECIPE":
+	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
 		return MockRecipe(
 			tci, rcpName,
 			types.UPGRADE,
@@ -118,7 +131,7 @@ func MockPopularRecipe(
 			2,
 			sender,
 		)
-	case "2_BLOCK_DELAYED_KNIFE_MERGE_RECIPE":
+	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
 		return MockRecipe(
 			tci, rcpName,
 			types.GENERATION,
@@ -130,7 +143,7 @@ func MockPopularRecipe(
 			2,
 			sender,
 		)
-	case "2_BLOCK_DELAYED_KNIFE_BUYER_RECIPE":
+	case RCP_2_BLOCK_DELAYED_KNIFE_BUYER:
 		return MockRecipe(
 			tci, rcpName,
 			types.GENERATION,

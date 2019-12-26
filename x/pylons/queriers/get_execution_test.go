@@ -26,7 +26,7 @@ func TestGetExecution(t *testing.T) {
 	// mock cookbook
 	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
 	// mock recipe
-	c2cRecipeData := handlers.MockPopularRecipe("5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput,
+	c2cRecipeData := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
 		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, senderAccAddress)
 
 	execRcpResponse, err := handlers.MockExecution(mockedCoinInput, c2cRecipeData.RecipeID,

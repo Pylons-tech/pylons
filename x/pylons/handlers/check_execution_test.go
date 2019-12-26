@@ -24,18 +24,18 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock delayed coin to coin recipe
-	c2cRecipeData := MockPopularRecipe("5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock delayed more than 1 item input recipe
-	knifeMergeRecipeData := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_MERGE_RECIPE", mockedCoinInput,
+	knifeMergeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, mockedCoinInput,
 		"knife merge recipe", cbData.CookbookID, sender1)
 
 	// mock delayed item upgrade recipe
-	knifeUpgradeRecipeData := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_UPGRADE_RECIPE", mockedCoinInput,
+	knifeUpgradeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE, mockedCoinInput,
 		"knife upgrade recipe", cbData.CookbookID, sender1)
 
 	// mock delayed knife buyer recipe
-	knifeBuyerRecipeData := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_BUYER_RECIPE", mockedCoinInput,
+	knifeBuyerRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_BUYER, mockedCoinInput,
 		"knife upgrade recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {

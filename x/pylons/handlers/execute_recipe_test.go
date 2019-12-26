@@ -30,7 +30,7 @@ func TestGetMatchedItems(t *testing.T) {
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 
-	knifeMergeRecipe := MockPopularRecipe("2_BLOCK_DELAYED_KNIFE_MERGE_RECIPE", tci,
+	knifeMergeRecipe := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, tci,
 		"knife merge recipe", cbData.CookbookID, sender1)
 
 	shieldMergeRecipe := MockRecipe(
@@ -95,10 +95,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(mockedCoinInput, sender1)
 
 	// mock coin to coin recipe
-	c2cRecipeData := MockPopularRecipe("5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock coin to item recipe
-	zeroInOneOutItemRecipeData := MockPopularRecipe("5xWOODCOIN_1xRAICHU_BUY_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	zeroInOneOutItemRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_1xRAICHU_BUY, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
@@ -127,7 +127,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	)
 
 	// item upgrade recipe
-	itemUpgradeRecipeData := MockPopularRecipe("RAICHU_NAME_UPGRADE_RECIPE", mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		cookbookID               string

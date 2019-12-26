@@ -26,7 +26,7 @@ func TestListRecipe(t *testing.T) {
 	// mock cookbook
 	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
 
-	handlers.MockPopularRecipe("5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN_RECIPE", mockedCoinInput,
+	handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
 		"recipe0001", cbData.CookbookID, senderAccAddress)
 
 	cases := map[string]struct {
