@@ -30,7 +30,7 @@ func TestListRecipeViaCLI(originT *originT.T) {
 			recipes, err := TestQueryListRecipe(t)
 			ErrValidation(t, "error listing recipes %+v", err)
 
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			t.MustTrue(len(recipes) > 0)
 
 			WaitForNextBlock()

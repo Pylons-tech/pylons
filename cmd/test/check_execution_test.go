@@ -118,11 +118,11 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc TestCase, t *testing.T) {
 	ErrValidation(t, "error mocking recipe %+v", err)
 
 	rcp, err := GetRecipeByGUID(guid)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 	txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
@@ -134,13 +134,13 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc TestCase, t *testing.T) {
 	}
 
 	txHandleResBytes, err := GetTxData(txhash, t)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	execResp := handlers.ExecuteRecipeResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	if len(tc.currentItemName) > 0 { // when item input is set
 		items, err := ListItemsViaCLI("")
@@ -157,10 +157,10 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc TestCase, t *testing.T) {
 	WaitForNextBlock()
 
 	txHandleResBytes, err = GetTxData(txhash, t)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	resp := handlers.CheckExecutionResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	t.MustTrue(resp.Status == tc.expectedStatus)
 	t.MustTrue(resp.Message == tc.expectedMessage)
 
@@ -181,10 +181,10 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc TestCase, t *testing.T) {
 		WaitForNextBlock()
 
 		txHandleResBytes, err = GetTxData(txhash, t)
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 		resp := handlers.CheckExecutionResp{}
 		err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 		t.MustTrue(resp.Status == tc.expectedRetryResStatus)
 		t.MustTrue(resp.Message == tc.expectedRetryResMessage)
 		// This is automatically checking OwnerRecipeID lock status ;)

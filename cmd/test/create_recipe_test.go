@@ -33,7 +33,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			txhash := TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
@@ -54,10 +54,10 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 			ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 			txHandleResBytes, err := GetTxData(txhash, t)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			resp := handlers.CreateRecipeResponse{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			t.MustTrue(resp.RecipeID != "")
 		})
 	}

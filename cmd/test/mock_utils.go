@@ -24,7 +24,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	}
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
@@ -43,10 +43,10 @@ func MockCookbook(t *testing.T) (string, error) {
 	ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
 	txHandleResBytes, err := GetTxData(txhash, t)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	resp := handlers.CreateCBResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	return resp.CookbookID, nil
 }
@@ -126,7 +126,7 @@ func MockDetailedRecipeGUID(
 
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	txhash := TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			rcpName,
@@ -147,10 +147,10 @@ func MockDetailedRecipeGUID(
 	ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 	txHandleResBytes, err := GetTxData(txhash, t)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	resp := handlers.CreateRecipeResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	return resp.RecipeID, nil
 }
@@ -172,7 +172,7 @@ func MockItemGUID(name string, t *testing.T) string {
 
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(mCB.ID,
 		[]types.DoubleKeyValue{},
@@ -193,10 +193,10 @@ func MockItemGUID(name string, t *testing.T) string {
 	ErrValidation(t, "error waiting for creating item %+v", err)
 
 	txHandleResBytes, err := GetTxData(txhash, t)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	resp := handlers.FiatItemResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	return resp.ItemID
 }

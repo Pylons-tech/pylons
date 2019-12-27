@@ -32,7 +32,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		if err != nil {
 			t.Fatal("error reading using GetAminoCdc ", execType, err)
 		}
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 
 		chkExecMsg := msgs.NewMsgCheckExecution(
 			execType.ExecID,
@@ -72,7 +72,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		if err != nil {
 			t.Fatal("error reading using GetAminoCdc ", itemType, err)
 		}
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 
 		itmMsg := msgs.NewMsgFiatItem(
 			itemType.CookbookID,
@@ -109,7 +109,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		if err != nil {
 			t.Fatal("error reading using GetAminoCdc ", cbType, string(newByteValue), err)
 		}
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 
 		cbMsg := msgs.NewMsgCreateCookbook(
 			cbType.Name,
@@ -157,7 +157,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		if err != nil {
 			t.Fatal("error reading using GetAminoCdc ", rcpTempl, err)
 		}
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 
 		rcpMsg := msgs.NewMsgCreateRecipe(
 			rcpTempl.Name,
@@ -178,7 +178,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
 		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 
 		CheckErrorOnTx(txhash, t)
 		resp := handlers.CreateRecipeResponse{}
@@ -211,7 +211,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		if err != nil {
 			t.Fatal("error reading using GetAminoCdc ", execType, err)
 		}
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 
 		// t.Log("Executed recipe with below params", execType.RecipeID, execType.Sender, ItemIDs)
 		execMsg := msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
@@ -225,7 +225,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			t.MustTrue(hmrErrMsg == step.Output.TxResult.ErrorLog)
 		} else {
 			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			CheckErrorOnTx(txhash, t)
 			resp := handlers.ExecuteRecipeResp{}
 			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -241,11 +241,11 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 				var scheduleRes handlers.ExecuteRecipeScheduleOutput
 
 				err := json.Unmarshal(resp.Output, &scheduleRes)
-				t.MustTrue(err == nil)
+				t.MustNil(err)
 				execIDs[step.ID] = scheduleRes.ExecID
 				for _, itemID := range ItemIDs {
 					item, err := intTest.GetItemByGUID(itemID)
-					t.MustTrue(err == nil)
+					t.MustNil(err)
 					t.MustTrue(len(item.OwnerRecipeID) != 0)
 				}
 				t.Log("scheduled execution", scheduleRes.ExecID)
