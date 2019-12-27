@@ -30,6 +30,9 @@ func (t *T) Fatalf(format string, args ...interface{}) {
 }
 
 func (t *T) MustTrue(value bool) {
+	if value == false {
+		t.DispatchEvent("FAIL")
+	}
 	require.True(t.origin, value)
 }
 
