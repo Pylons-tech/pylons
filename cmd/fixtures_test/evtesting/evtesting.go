@@ -37,7 +37,7 @@ func (t *T) MustNil(err error) {
 	if err != nil {
 		t.Log("comparing \"", err, "\" to nil")
 	}
-	t.MustNil(err)
+	t.MustTrue(err == nil)
 }
 
 func (t *T) Parallel() {
