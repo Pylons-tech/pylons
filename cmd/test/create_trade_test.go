@@ -29,7 +29,7 @@ func TestCreateTradeViaCL(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,

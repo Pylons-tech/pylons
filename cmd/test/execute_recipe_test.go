@@ -29,15 +29,15 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			guid, err := MockRecipeWithName(tc.rcpName, tc.desiredItemName, t)
+			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			rcp, err := GetRecipeByGUID(guid)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),

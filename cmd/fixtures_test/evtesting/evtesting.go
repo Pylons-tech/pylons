@@ -33,6 +33,13 @@ func (t *T) MustTrue(value bool) {
 	require.True(t.origin, value)
 }
 
+func (t *T) MustNil(err error) {
+	if err != nil {
+		t.Log("comparing \"", err, "\" to nil")
+	}
+	t.MustTrue(err == nil)
+}
+
 func (t *T) Parallel() {
 	t.origin.Parallel()
 }

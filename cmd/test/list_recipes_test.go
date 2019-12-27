@@ -24,13 +24,13 @@ func TestListRecipeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := MockRecipeWithName(tc.rcpName, tc.outputItemName, t)
+			_, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.outputItemName, t)
 			ErrValidation(t, "error mocking recipe %+v", err)
 
 			recipes, err := TestQueryListRecipe(t)
 			ErrValidation(t, "error listing recipes %+v", err)
 
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			t.MustTrue(len(recipes) > 0)
 
 			WaitForNextBlock()

@@ -40,7 +40,7 @@ func UpdateSenderName(bytes []byte, t *testing.T) []byte {
 	t.MustTrue(ok)
 	raw["Sender"] = intTest.GetAccountAddr(senderName, t)
 	newBytes, err := json.Marshal(raw)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	return newBytes
 }
 
@@ -51,10 +51,10 @@ func UpdateCookbookName(bytes []byte, t *testing.T) []byte {
 	t.MustTrue(ok)
 	cbID, exist, err := intTest.GetCookbookIDFromName(cbName, "")
 	t.MustTrue(exist)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	raw["CookbookID"] = cbID
 	newBytes, err := json.Marshal(raw)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	return newBytes
 }
 
@@ -65,10 +65,10 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	t.MustTrue(ok)
 	rcpID, exist, err := intTest.GetRecipeIDFromName(rcpName)
 	t.MustTrue(exist)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	raw["RecipeID"] = rcpID
 	newBytes, err := json.Marshal(raw)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	return newBytes
 }
 
@@ -88,7 +88,7 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 		t.Fatal("execID not available for ref=", execRefReader.ExecRef)
 	}
 	newBytes, err := json.Marshal(raw)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	return newBytes
 }
 
@@ -104,7 +104,7 @@ func GetItemIDsFromNames(bytes []byte, includeLockedByRcp bool, t *testing.T) []
 	for _, itemName := range itemNamesResp.ItemNames {
 		itemID, exist, err := intTest.GetItemIDFromName(itemName, includeLockedByRcp)
 		t.MustTrue(exist)
-		t.MustTrue(err == nil)
+		t.MustNil(err)
 		ItemIDs = append(ItemIDs, itemID)
 	}
 	return ItemIDs

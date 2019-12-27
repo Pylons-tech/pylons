@@ -99,9 +99,9 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	signedTxFile := filepath.Join(tmpDir, "signed_tx.json")
 
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
@@ -155,13 +155,13 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	}
 	nonceMap[signer] = nonce + 1
 	nonceOutput, err := json.Marshal(nonceMap)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	ioutil.WriteFile(nonceFile, nonceOutput, 0644)
 
 	txModel, err := GenTxWithMsg([]sdk.Msg{msgValue})
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 	output, err := GetAminoCdc().MarshalJSON(txModel)
-	t.MustTrue(err == nil)
+	t.MustNil(err)
 
 	rawTxFile := filepath.Join(tmpDir, "raw_tx_"+strconv.FormatUint(nonce, 10)+".json")
 	signedTxFile := filepath.Join(tmpDir, "signed_tx_"+strconv.FormatUint(nonce, 10)+".json")
@@ -177,7 +177,6 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
 	}
-	t.Log("transaction sign", string(output), signer, strconv.FormatUint(accInfo.GetAccountNumber(), 10))
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")
 	// t.Log("TX sign result msg=", msgValue, "output=", string(output))
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)

@@ -29,7 +29,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"this has to meet character limits lol",
@@ -47,10 +47,10 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
 			txHandleResBytes, err := GetTxData(txhash, t)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			resp := handlers.CreateCBResponse{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.MustTrue(err == nil)
+			t.MustNil(err)
 			t.MustTrue(resp.CookbookID != "")
 		})
 	}

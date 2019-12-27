@@ -34,6 +34,34 @@ func GenCoinOnlyEntry(coinName string) WeightedParamList {
 	}
 }
 
+func GenSingleItemInputList(itemName string) ItemInputList {
+	return ItemInputList{
+		ItemInput{
+			Doubles: DoubleInputParamList{},
+			Longs:   LongInputParamList{},
+			Strings: StringInputParamList{
+				StringInputParam{
+					Key:   "Name",
+					Value: itemName,
+				},
+			},
+		},
+	}
+}
+
+func GenItemNameUpgradeParams(desItemName string) ItemUpgradeParams {
+	return ItemUpgradeParams{
+		Doubles: DoubleParamList{},
+		Longs:   LongParamList{},
+		Strings: StringParamList{
+			StringParam{
+				Key:   "Name",
+				Value: desItemName,
+			},
+		},
+	}
+}
+
 func GenItemOnlyEntry(itemName string) WeightedParamList {
 	return WeightedParamList{
 		ItemOutput{
