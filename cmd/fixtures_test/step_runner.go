@@ -282,10 +282,13 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 		err = intTest.WaitForNextBlock()
 		intTest.ErrValidation(t, "error while creating trade %+v", err)
 
-		if len(step.Output.TxResult.ErrorLog) > 0 {
-			hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
-			t.MustTrue(hmrErrMsg == step.Output.TxResult.ErrorLog)
-		}
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
+
+		CheckErrorOnTx(txhash, t)
+		resp := handlers.CreateTradeResponse{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
+		t.MustTrue(resp.TradeID != "")
 
 	}
 
