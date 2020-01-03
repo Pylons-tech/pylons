@@ -87,6 +87,7 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 	t.Run(strconv.Itoa(idx)+"_"+step.ID, func(t *testing.T) {
 		t.Parallel()
 		WaitForCondition(file, idx, step, t)
+
 		switch step.Action {
 		case "fiat_item":
 			RunFiatItem(step, t)
@@ -98,6 +99,9 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 			RunExecuteRecipe(step, t)
 		case "check_execution":
 			RunCheckExecution(step, t)
+		case "create_trade":
+			RunCreateTrade(step, t)
+
 		default:
 			t.Fatalf("step with unrecognizable action found %s", step.Action)
 		}
