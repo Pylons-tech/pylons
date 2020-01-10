@@ -9,6 +9,8 @@ import (
 
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
+	// optional RecipeID if someone
+	RecipeID      string `json:",omitempty"`
 	Name          string
 	CookbookID    string // the cookbook guid
 	RType         types.RecipeType
