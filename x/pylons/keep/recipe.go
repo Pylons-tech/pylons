@@ -24,10 +24,24 @@ func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 	return recipe, err
 }
 
-// GetRecipesIterator returns an iterator for all the recipe
-func (k Keeper) GetRecipesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+// GetRecipes returns an iterator for all the recipe
+func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
 	store := ctx.KVStore(k.RecipeKey)
-	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
+
+	var recipes []types.Recipe
+	for ; iterator.Valid(); iterator.Next() {
+		var recipe types.Recipe
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &recipe)
+		if err != nil {
+			// this happens because we have multiple versions of breaking recipes at times
+			continue
+		}
+
+		recipes = append(recipes, recipe)
+	}
+	return recipes
 }
 
 // GetRecipesBySender returns an iterator for recipes created by sender

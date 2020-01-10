@@ -19,13 +19,18 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 	}
 	addr := path[0]
 	var recipeList types.RecipeList
+	var recipes []types.Recipe
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}
 
-	recipes := keeper.GetRecipesBySender(ctx, accAddr)
+	if accAddr.Empty() {
+		recipes = keeper.GetRecipes(ctx)
+	} else {
+		recipes = keeper.GetRecipesBySender(ctx, accAddr)
+	}
 
 	recipeList = types.RecipeList{
 		Recipes: recipes,
