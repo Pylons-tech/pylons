@@ -81,5 +81,18 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 }
 
 func TestSameCookbookIDCreation(t *testing.T) {
+	mockedCoinInput := keep.SetupTestCoinInput()
+	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(10000000))
+
+	result := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	cbData := CreateCBResponse{}
+	err := json.Unmarshal(result.Data, &cbData)
+	require.True(t, err == nil)
+	require.True(t, len(cbData.CookbookID) > 0)
+
+	secondResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	require.True(t, strings.Contains(secondResult.Log, "A cookbook with CookbookID samecookbookID-0001 already exists"))
 
 }
