@@ -120,3 +120,41 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		})
 	}
 }
+
+func TestSameRecipeIDCreation(t *testing.T) {
+	mockedCoinInput := keep.SetupTestCoinInput()
+	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(10000000))
+
+	result := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	cbData := CreateCBResponse{}
+	err := json.Unmarshal(result.Data, &cbData)
+	require.True(t, err == nil)
+	require.True(t, len(cbData.CookbookID) > 0)
+
+	mEntries := types.GenEntries("chair", "Raichu")
+	mInputList := types.GenItemInputList("Raichu")
+
+	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
+		types.GENERATION,
+		types.GenCoinInputList("wood", 5),
+		mInputList,
+		mEntries,
+		types.ItemUpgradeParams{},
+		0,
+		sender1,
+	)
+
+	rcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+
+	recipeData := CreateRecipeResponse{}
+	err = json.Unmarshal(rcpResult.Data, &recipeData)
+	require.True(t, err == nil)
+	require.True(t, len(recipeData.RecipeID) > 0)
+
+	// try creating it 2nd time
+	secondRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+	require.True(t, strings.Contains(secondRcpResult.Log, "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
+
+}
