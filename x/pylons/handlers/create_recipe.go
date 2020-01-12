@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/msgs"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -34,6 +36,13 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		msg.Entries,
 		msg.ToUpgrade,
 		msg.BlockInterval, msg.Sender)
+
+	if msg.RecipeID != "" {
+		if keeper.HasRecipeWithCookbookID(ctx, msg.CookbookID, msg.RecipeID) {
+			return errInternal(fmt.Errorf("The recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
+		}
+		recipe.ID = msg.RecipeID
+	}
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
 		return errInternal(err)
 	}

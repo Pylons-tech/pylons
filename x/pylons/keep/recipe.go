@@ -44,6 +44,24 @@ func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
 	return recipes
 }
 
+// HasRecipeWithCookbookID checks if a recipe with the provided id and cookbook id is present or not
+func (k Keeper) HasRecipeWithCookbookID(ctx sdk.Context, cookbookID, recipeID string) bool {
+	store := ctx.KVStore(k.RecipeKey)
+	mRecipe := store.Get([]byte(recipeID))
+	if mRecipe == nil {
+		return false
+	}
+
+	recipe := types.Recipe{}
+
+	err := json.Unmarshal(mRecipe, &recipe)
+	if err != nil {
+		return false
+	}
+
+	return recipe.CookbookID == cookbookID
+}
+
 // GetRecipesBySender returns an iterator for recipes created by sender
 func (k Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []types.Recipe {
 	store := ctx.KVStore(k.RecipeKey)

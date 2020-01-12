@@ -23,6 +23,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 	cases := map[string]struct {
 		cookbookName   string
 		createCookbook bool
+		recipeID       string
 		recipeDesc     string
 		recipeType     types.RecipeType
 		sender         sdk.AccAddress
@@ -75,7 +76,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
-				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
+				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.recipeID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
 				cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 
 				err := json.Unmarshal(cookbookResult.Data, &cbData)
@@ -97,7 +98,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				mInputList = types.GenItemInputList("Raichu", "Knife")
 			}
 
-			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, tc.recipeDesc,
+			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
 				tc.recipeType,
 				types.GenCoinInputList("wood", 5),
 				mInputList,

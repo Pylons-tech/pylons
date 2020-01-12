@@ -64,7 +64,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgCreateCookbook(tc.name, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender)
+			msg := msgs.NewMsgCreateCookbook(tc.name, "", tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender)
 
 			result := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
@@ -78,4 +78,8 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSameCookbookIDCreation(t *testing.T) {
+
 }

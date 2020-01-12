@@ -1,8 +1,6 @@
 package queriers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -21,24 +19,15 @@ func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper 
 	}
 	addr := path[0]
 	var cookbookList types.CookbookList
-	var cookbooks []types.Cookbook
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
 	if err != nil {
 		return nil, sdk.ErrInternal(err.Error())
 	}
 
-	iterator := keeper.GetCookbooksIterator(ctx, accAddr)
-
-	for ; iterator.Valid(); iterator.Next() {
-		var cookbook types.Cookbook
-		mCB := iterator.Value()
-		err = json.Unmarshal(mCB, &cookbook)
-		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
-		}
-
-		cookbooks = append(cookbooks, cookbook)
+	cookbooks, err := keeper.GetCookbookBySender(ctx, accAddr)
+	if err != nil {
+		return nil, sdk.ErrInternal(err.Error())
 	}
 
 	cookbookList = types.CookbookList{

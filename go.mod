@@ -1,6 +1,7 @@
 module github.com/MikeSofaer/pylons
 
 require (
+	github.com/Workiva/go-datastructures v1.0.50
 	github.com/cosmos/cosmos-sdk v0.35.0
 	github.com/ethereum/go-ethereum v1.8.23 // indirect
 	github.com/google/gofuzz v1.0.0 // indirect

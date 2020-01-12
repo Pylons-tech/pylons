@@ -16,7 +16,7 @@ func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBRespons
 
 func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCBResponse {
 	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
+	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cbResult := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	cbData := CreateCBResponse{}
 	json.Unmarshal(cbResult.Data, &cbData)
@@ -35,7 +35,7 @@ func MockRecipe(
 	blockInterval int64,
 	sender sdk.AccAddress,
 ) CreateRecipeResponse {
-	newRcpMsg := msgs.NewMsgCreateRecipe(rcpName, cbID, "this has to meet character limits",
+	newRcpMsg := msgs.NewMsgCreateRecipe(rcpName, cbID, "", "this has to meet character limits",
 		rcpType,
 		coinInputList,
 		itemInputList,
