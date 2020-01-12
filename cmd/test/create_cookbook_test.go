@@ -32,6 +32,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			t.MustNil(err)
 			txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
+				"",
 				"this has to meet character limits lol",
 				"SketchyCo",
 				"1.0.0",

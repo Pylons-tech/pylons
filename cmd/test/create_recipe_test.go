@@ -38,6 +38,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
 					mCB.ID,
+					"",
 					"this has to meet character limits lol",
 					types.GENERATION,
 					types.GenCoinInputList("wood", 5),
