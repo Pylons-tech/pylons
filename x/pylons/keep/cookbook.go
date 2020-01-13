@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -23,6 +24,12 @@ func (k Keeper) GetCookbook(ctx sdk.Context, id string) (types.Cookbook, error) 
 	return cookbook, err
 }
 
+// HasCookbook returns cookbook based on UUID
+func (k Keeper) HasCookbook(ctx sdk.Context, id string) bool {
+	store := ctx.KVStore(k.CookbookKey)
+	return store.Has([]byte(id))
+}
+
 // UpdateCookbook is used to update the cookbook using the id
 func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbook) error {
 	if cookbook.Sender.Empty() {
@@ -33,9 +40,29 @@ func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbo
 }
 
 // GetCookbooksIterator returns an iterator for all the cookbooks
-func (k Keeper) GetCookbooksIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+func (k Keeper) GetCookbooksIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.CookbookKey)
-	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+	return sdk.KVStorePrefixIterator(store, []byte(""))
+}
+
+// GetCookbookBySender returns an cookbooks created by the sender
+func (k Keeper) GetCookbookBySender(ctx sdk.Context, sender sdk.AccAddress) ([]types.Cookbook, error) {
+
+	var cookbooks []types.Cookbook
+	iterator := k.GetCookbooksIterator(ctx)
+	for ; iterator.Valid(); iterator.Next() {
+		var cookbook types.Cookbook
+		mCB := iterator.Value()
+		err := json.Unmarshal(mCB, &cookbook)
+		if err != nil {
+			return nil, sdk.ErrInternal(err.Error())
+		}
+
+		cookbooks = append(cookbooks, cookbook)
+	}
+
+	return cookbooks, nil
+
 }
 
 // DeleteCookbook is used to delete a cookbook based on the id

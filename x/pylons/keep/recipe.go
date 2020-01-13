@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/MikeSofaer/pylons/x/pylons/types"
@@ -23,10 +24,63 @@ func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 	return recipe, err
 }
 
-// GetRecipesIterator returns an iterator for all the iterator
-func (k Keeper) GetRecipesIterator(ctx sdk.Context, sender sdk.AccAddress) sdk.Iterator {
+// GetRecipes returns an iterator for all the recipe
+func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
 	store := ctx.KVStore(k.RecipeKey)
-	return sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
+
+	var recipes []types.Recipe
+	for ; iterator.Valid(); iterator.Next() {
+		var recipe types.Recipe
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &recipe)
+		if err != nil {
+			// this happens because we have multiple versions of breaking recipes at times
+			continue
+		}
+
+		recipes = append(recipes, recipe)
+	}
+	return recipes
+}
+
+// HasRecipeWithCookbookID checks if a recipe with the provided id and cookbook id is present or not
+func (k Keeper) HasRecipeWithCookbookID(ctx sdk.Context, cookbookID, recipeID string) bool {
+	store := ctx.KVStore(k.RecipeKey)
+	mRecipe := store.Get([]byte(recipeID))
+	if mRecipe == nil {
+		return false
+	}
+
+	recipe := types.Recipe{}
+
+	err := json.Unmarshal(mRecipe, &recipe)
+	if err != nil {
+		return false
+	}
+
+	return recipe.CookbookID == cookbookID
+}
+
+// GetRecipesBySender returns an iterator for recipes created by sender
+func (k Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []types.Recipe {
+	store := ctx.KVStore(k.RecipeKey)
+	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
+	var recipes []types.Recipe
+	for ; iterator.Valid(); iterator.Next() {
+		var recipe types.Recipe
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &recipe)
+		if err != nil {
+			// this happens because we have multiple versions of breaking recipes at times
+			continue
+		}
+
+		if recipe.Sender.Equals(sender) {
+			recipes = append(recipes, recipe)
+		}
+	}
+	return recipes
 }
 
 // UpdateRecipe is used to update the recipe using the id

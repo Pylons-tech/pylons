@@ -113,6 +113,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 
 		cbMsg := msgs.NewMsgCreateCookbook(
 			cbType.Name,
+			cbType.ID,
 			cbType.Description,
 			cbType.Developer,
 			cbType.Version,
@@ -162,6 +163,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		rcpMsg := msgs.NewMsgCreateRecipe(
 			rcpTempl.Name,
 			rcpTempl.CookbookID,
+			rcpTempl.ID,
 			rcpTempl.Description,
 			rcpTempl.RType,
 			rcpTempl.CoinInputs,

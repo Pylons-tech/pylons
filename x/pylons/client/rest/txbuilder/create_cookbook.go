@@ -24,7 +24,7 @@ func CreateCookbookTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeN
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgCreateCookbook("name", "this has to meet character limits lol", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender)
+		msg := msgs.NewMsgCreateCookbook("name", "", "this has to meet character limits lol", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

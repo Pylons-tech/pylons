@@ -12,6 +12,8 @@ const DefaultCostPerBlock = 50 // Pylons
 
 // MsgCreateCookbook defines a CreateCookbook message
 type MsgCreateCookbook struct {
+	// optinal id which can be provided by the developer
+	CookbookID   string
 	Name         string
 	Description  string
 	Version      types.SemVer
@@ -24,8 +26,9 @@ type MsgCreateCookbook struct {
 }
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
-func NewMsgCreateCookbook(name, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
+func NewMsgCreateCookbook(name, cookbookID, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
+		CookbookID:   cookbookID,
 		Name:         name,
 		Description:  desc,
 		Developer:    devel,

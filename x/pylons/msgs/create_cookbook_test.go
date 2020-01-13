@@ -14,6 +14,7 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
 	cases := map[string]struct {
+		cbID         string
 		name         string
 		desc         string
 		devel        string
@@ -104,7 +105,7 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := NewMsgCreateCookbook(tc.name, tc.desc, tc.devel, tc.version, tc.sEmail, tc.level, DefaultCostPerBlock, tc.sender)
+			msg := NewMsgCreateCookbook(tc.name, tc.cbID, tc.desc, tc.devel, tc.version, tc.sEmail, tc.level, DefaultCostPerBlock, tc.sender)
 			validation := msg.ValidateBasic()
 			if !tc.showError {
 				require.True(t, validation == nil)

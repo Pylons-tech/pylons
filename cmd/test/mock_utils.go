@@ -28,6 +28,7 @@ func MockCookbook(t *testing.T) (string, error) {
 
 	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
+		"",
 		"this has to meet character limits lol",
 		"SketchyCo",
 		"1.0.0",
@@ -131,6 +132,7 @@ func MockDetailedRecipeGUID(
 		msgs.NewMsgCreateRecipe(
 			rcpName,
 			mCB.ID,
+			"",
 			"this has to meet character limits lol",
 			rcpType,
 			ciL,

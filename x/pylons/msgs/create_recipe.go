@@ -9,6 +9,8 @@ import (
 
 // MsgCreateRecipe defines a CreateRecipe message
 type MsgCreateRecipe struct {
+	// optional RecipeID if someone
+	RecipeID      string `json:",omitempty"`
 	Name          string
 	CookbookID    string // the cookbook guid
 	RType         types.RecipeType
@@ -22,7 +24,7 @@ type MsgCreateRecipe struct {
 }
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
-func NewMsgCreateRecipe(recipeName, cookbookID, description string,
+func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	rType types.RecipeType,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
@@ -33,6 +35,7 @@ func NewMsgCreateRecipe(recipeName, cookbookID, description string,
 	return MsgCreateRecipe{
 		Name:          recipeName,
 		CookbookID:    cookbookID,
+		RecipeID:      recipeID,
 		Description:   description,
 		RType:         rType,
 		CoinInputs:    coinInputs,

@@ -1,8 +1,6 @@
 package queriers
 
 import (
-	"encoding/json"
-
 	"github.com/MikeSofaer/pylons/x/pylons/keep"
 	"github.com/MikeSofaer/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -28,18 +26,10 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 		return nil, sdk.ErrInternal(err.Error())
 	}
 
-	iterator := keeper.GetRecipesIterator(ctx, accAddr)
-
-	for ; iterator.Valid(); iterator.Next() {
-		var recipe types.Recipe
-		mRCP := iterator.Value()
-		err = json.Unmarshal(mRCP, &recipe)
-		if err != nil {
-			// this happens because we have multiple versions of breaking recipes at times
-			continue
-		}
-
-		recipes = append(recipes, recipe)
+	if accAddr.Empty() {
+		recipes = keeper.GetRecipes(ctx)
+	} else {
+		recipes = keeper.GetRecipesBySender(ctx, accAddr)
 	}
 
 	recipeList = types.RecipeList{
