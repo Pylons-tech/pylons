@@ -3,7 +3,7 @@ package intTest
 import (
 	originT "testing"
 
-	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 )
 
 func TestListRecipeViaCLI(originT *originT.T) {

@@ -1,8 +1,8 @@
 package pylons
 
 import (
-	"github.com/MikeSofaer/pylons/x/pylons/keep"
-	"github.com/MikeSofaer/pylons/x/pylons/queriers"
+	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"

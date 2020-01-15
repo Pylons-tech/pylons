@@ -3,7 +3,7 @@ package queriers
 import (
 	"encoding/hex"
 
-	"github.com/MikeSofaer/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"

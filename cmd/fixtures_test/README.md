@@ -62,7 +62,7 @@ To ignore txResult Message, which is because it's ambitious to get which message
 
 ## How a game producer write test 
 
-Before reading this, he/she should know well about pylons eco system. Please read [DEVELOPER DOC](https://github.com/MikeSofaer/pylons/blob/master/DEVELOPER_DOC.md) and [README](https://github.com/MikeSofaer/pylons/blob/master/README.md) before reading this.
+Before reading this, he/she should know well about pylons eco system. Please read [DEVELOPER DOC](https://github.com/Pylons-tech/pylons/blob/master/DEVELOPER_DOC.md) and [README](https://github.com/Pylons-tech/pylons/blob/master/README.md) before reading this.
 
 Game producers should create cookbooks, items, recipes, executions, check_executions and scenarios in JSON to test.  
 You can check `scenarios`, `cookbooks`, `items`, `recipes`, `executions`, `check_executions` to get sample JSON formats you want to be aware of.

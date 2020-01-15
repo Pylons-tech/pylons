@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/MikeSofaer/pylons/x/pylons/keep"
-	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
