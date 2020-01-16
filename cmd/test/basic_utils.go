@@ -19,6 +19,11 @@ import (
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 )
 
+type CLIOptions struct {
+	CustomNode string
+}
+
+var CLIOpts CLIOptions
 var cliMux sync.Mutex
 
 func ReadFile(fileURL string, t *testing.T) []byte {
@@ -38,6 +43,11 @@ func GetAminoCdc() *amino.Codec {
 }
 
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
+	if len(CLIOpts.CustomNode) > 0 {
+		if args[0] == "query" {
+			args = append(args, "--node", CLIOpts.CustomNode)
+		}
+	}
 	cliMux.Lock()
 	cmd := exec.Command(path.Join(os.Getenv("GOPATH"), "/bin/pylonscli"), args...)
 	cmd.Stdin = strings.NewReader(stdinInput)
