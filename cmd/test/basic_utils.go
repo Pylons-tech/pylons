@@ -44,7 +44,7 @@ func GetAminoCdc() *amino.Codec {
 
 func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
 	if len(CLIOpts.CustomNode) > 0 {
-		if args[0] == "query" || args[0] == "tx" {
+		if args[0] == "query" || args[0] == "tx" || args[0] == "status" {
 			args = append(args, "--node", CLIOpts.CustomNode)
 		}
 	}
