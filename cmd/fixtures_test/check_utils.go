@@ -50,6 +50,14 @@ type FixtureStep struct {
 	} `json:"output"`
 }
 
+type FixtureTestOptions struct {
+	IsParallel bool
+}
+
+var FixtureTestOpts FixtureTestOptions = FixtureTestOptions{
+	IsParallel: true,
+}
+
 func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
 	for _, sK := range stringKeys {
 		keyExist := false
@@ -233,7 +241,9 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 
 func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *testing.T) {
 	t.Run(strconv.Itoa(idx)+"_"+step.ID, func(t *testing.T) {
-		t.Parallel()
+		if FixtureTestOpts.IsParallel {
+			t.Parallel()
+		}
 		WaitForCondition(file, idx, step, t)
 
 		switch step.Action {
@@ -260,7 +270,9 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 
 func RunSingleFixtureTest(file string, t *testing.T) {
 	t.Run(file, func(t *testing.T) {
-		t.Parallel()
+		if FixtureTestOpts.IsParallel {
+			t.Parallel()
+		}
 		var fixtureSteps []FixtureStep
 		byteValue := ReadFile(file, t)
 		json.Unmarshal([]byte(byteValue), &fixtureSteps)
