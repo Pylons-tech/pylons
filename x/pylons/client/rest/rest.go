@@ -3,7 +3,7 @@ package rest
 import (
 	"fmt"
 
-	"github.com/MikeSofaer/pylons/x/pylons/client/rest/txbuilder"
+	"github.com/Pylons-tech/pylons/x/pylons/client/rest/txbuilder"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 

@@ -1,4 +1,4 @@
-module github.com/MikeSofaer/pylons
+module github.com/Pylons-tech/pylons
 
 require (
 	github.com/Workiva/go-datastructures v1.0.50

@@ -12,7 +12,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
 
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type TestCoinInput struct {

@@ -8,9 +8,9 @@ import (
 	"strconv"
 	"sync"
 
-	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/utils"

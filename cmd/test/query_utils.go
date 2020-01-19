@@ -4,10 +4,10 @@ import (
 	"encoding/hex"
 	"errors"
 
-	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
-	"github.com/MikeSofaer/pylons/x/pylons/queriers"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/queriers"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

@@ -3,7 +3,7 @@ package query
 import (
 	"fmt"
 
-	"github.com/MikeSofaer/pylons/x/pylons/queriers"
+	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/spf13/cobra"

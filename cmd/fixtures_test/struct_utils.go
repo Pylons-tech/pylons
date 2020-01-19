@@ -5,10 +5,10 @@ import (
 	"io/ioutil"
 	"os"
 
-	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
-	intTest "github.com/MikeSofaer/pylons/cmd/test"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	intTest "github.com/Pylons-tech/pylons/cmd/test"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var execIDs map[string]string = make(map[string]string)

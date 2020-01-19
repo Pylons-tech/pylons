@@ -1,7 +1,7 @@
 package queriers
 
 import (
-	"github.com/MikeSofaer/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 )

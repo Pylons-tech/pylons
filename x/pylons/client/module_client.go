@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/MikeSofaer/pylons/x/pylons/client/cli/query"
-	"github.com/MikeSofaer/pylons/x/pylons/client/cli/tx"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli/query"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"

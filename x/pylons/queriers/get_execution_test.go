@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/MikeSofaer/pylons/x/pylons/handlers"
-	"github.com/MikeSofaer/pylons/x/pylons/keep"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
