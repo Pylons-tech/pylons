@@ -33,6 +33,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		msg.RType,
 		msg.CoinInputs,
 		msg.ItemInputs,
+		msg.CatalystItems,
 		msg.Entries,
 		msg.ToUpgrade,
 		msg.BlockInterval, msg.Sender)
