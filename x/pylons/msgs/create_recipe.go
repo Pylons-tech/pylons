@@ -16,6 +16,7 @@ type MsgCreateRecipe struct {
 	RType         types.RecipeType
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
+	CatalystItems types.CatalystItemInputList
 	Entries       types.WeightedParamList
 	ToUpgrade     types.ItemUpgradeParams
 	BlockInterval int64
