@@ -36,6 +36,7 @@ type Item struct {
 	Sender        sdk.AccAddress
 	OwnerRecipeID string
 	Tradable      bool
+	Lost          bool
 }
 
 // ItemList is a list of items
@@ -120,7 +121,8 @@ func (it Item) String() string {
 		Longs: %+v,
 		Strings: %+v,
 		CookbookID: %+v,
-	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID)
+		Lost: %+v,
+	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID, it.Lost)
 }
 
 // Equals compares two items

@@ -7,6 +7,8 @@ type CatalystItemInput struct {
 	ItemInput `json:",inline"`
 	// If this is set to true then
 	Required bool `json:"required"`
+	// the chance of an item to be lost
+	LostPerCent int
 }
 
 // CatalystItemInputList is a list of CatalystItemInputs for convinience
