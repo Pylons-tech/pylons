@@ -14,9 +14,9 @@ import (
 	amino "github.com/tendermint/go-amino"
 	"github.com/tendermint/tendermint/libs/cli"
 
-	app "github.com/MikeSofaer/pylons/app"
-	plnclient "github.com/MikeSofaer/pylons/x/pylons/client"
-	plnrest "github.com/MikeSofaer/pylons/x/pylons/client/rest"
+	app "github.com/Pylons-tech/pylons/app"
+	plnclient "github.com/Pylons-tech/pylons/x/pylons/client"
+	plnrest "github.com/Pylons-tech/pylons/x/pylons/client/rest"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
 	auth "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
