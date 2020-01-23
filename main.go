@@ -9,6 +9,7 @@ import (
 
 	clkeys "github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+
 	// "github.com/cosmos/cosmos-sdk/crypto/keys/mintkey"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
@@ -81,7 +82,7 @@ func main() {
 	copy(pubKeyBytes33[:], pubKeyBytes)
 	pubKey := crypto.PubKeySecp256k1(pubKeyBytes33)
 	pubKey.Address()
-
+	fmt.Println("GIRISH", pubKey.Address())
 	bech32PubKey := sdk.MustBech32ifyAccPub(pubKey)
 	fmt.Println("bech32PubKey:", bech32PubKey)
 
@@ -89,7 +90,8 @@ func main() {
 	if err != nil {
 		return
 	}
-	infott, err := keybase.Get("jack")
+	infott, err := keybase.Get("girish")
+	fmt.Println(infott.GetPubKey().Address())
 	ttt, _ := json.Marshal(infott)
 	tmp := make(map[string]interface{})
 	json.Unmarshal(ttt, &tmp)

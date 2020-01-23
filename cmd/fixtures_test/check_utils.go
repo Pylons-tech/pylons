@@ -8,9 +8,9 @@ import (
 
 	originT "testing"
 
-	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
-	intTest "github.com/MikeSofaer/pylons/cmd/test"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+	intTest "github.com/Pylons-tech/pylons/cmd/test"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

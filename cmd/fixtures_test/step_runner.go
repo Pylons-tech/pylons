@@ -3,13 +3,13 @@ package fixtureTest
 import (
 	"encoding/json"
 
-	testing "github.com/MikeSofaer/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
-	intTest "github.com/MikeSofaer/pylons/cmd/test"
-	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	intTest "github.com/Pylons-tech/pylons/cmd/test"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 
-	"github.com/MikeSofaer/pylons/x/pylons/handlers"
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

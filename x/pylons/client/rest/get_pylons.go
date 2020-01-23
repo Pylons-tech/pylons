@@ -9,9 +9,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
-	"github.com/MikeSofaer/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/MikeSofaer/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 )
 
 type getPylonsReq struct {

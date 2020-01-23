@@ -7,7 +7,7 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
-    working_directory: /go/src/github.com/MikeSofaer/pylons
+    working_directory: /go/src/github.com/Pylons-tech/pylons
     steps:
       - checkout
 
@@ -17,7 +17,7 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
-    working_directory: /go/src/github.com/MikeSofaer/pylons
+    working_directory: /go/src/github.com/Pylons-tech/pylons
     steps:
       - checkout
 
@@ -38,7 +38,7 @@ jobs:
     docker:
       # specify the version
       - image: circleci/golang:1.12.5
-    working_directory: /go/src/github.com/MikeSofaer/pylons
+    working_directory: /go/src/github.com/Pylons-tech/pylons
     steps:
       - checkout
 
