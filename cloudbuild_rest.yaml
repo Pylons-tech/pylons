@@ -8,7 +8,6 @@ steps:
   - '-f'
   - 'Dockerfile.rest'
   - '.'
-  - '--verbosity=debug'
 
 # This step pushes the image to Container Registry
 # The PROJECT_ID and SHORT_SHA variables are automatically
