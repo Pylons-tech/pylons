@@ -21,7 +21,7 @@ COPY . .
 # Build the Go app
 RUN go build ./cmd/pylonsd/
 
-RUN ./unit_test.sh
+RUN GO111MODULE=on make unit_tests
 
 RUN ./pylonsd init --chain-id pylonschain
 
