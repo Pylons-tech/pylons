@@ -6,6 +6,7 @@ const webhook = new IncomingWebhook(url);
 // subscribeSlack is the main function called by Cloud Functions.
 module.exports.subscribeSlack = (pubSubEvent, context) => {
   const build = eventToBuild(pubSubEvent.data);
+  //console.log(build);
 
   // Skip if the current status is not in the status list.
   // Add additional statuses to list if you'd like:
@@ -29,19 +30,19 @@ const eventToBuild = (data) => {
 // createSlackMessage creates a message from a build object.
 const createSlackMessage = (build) => {
   const message = {
-    text: `Build \`${build.id}\``,
+    text: build.substitutions.REPO_NAME + " " + build.substitutions.BRANCH_NAME,
     mrkdwn: true,
     attachments: [
       {
-        title: 'Build logs for ' + build.buildTriggerId,
+        title: `Build logs for \`${build.buildTriggerId}\``,
         title_link: build.logUrl,
         fields: [{
           title: 'Status',
-          value: build.statusDetail
+          value: build.status
         },
         {
             title: 'Results',
-            value: build.results
+            value: build.steps
           }
     ]
       }
