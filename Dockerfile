@@ -21,6 +21,8 @@ COPY . .
 # Build the Go app
 RUN go build ./cmd/pylonsd/
 
+RUN ./unit_test.sh
+
 RUN ./pylonsd init --chain-id pylonschain
 
 # Command to run the executable
