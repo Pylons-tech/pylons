@@ -33,12 +33,17 @@ const createSlackMessage = (build) => {
     mrkdwn: true,
     attachments: [
       {
-        title: 'Build logs',
+        title: 'Build logs for ' + build.buildTriggerId,
         title_link: build.logUrl,
         fields: [{
           title: 'Status',
-          value: build.status
-        }]
+          value: build.statusDetail
+        },
+        {
+            title: 'Results',
+            value: build.results
+          }
+    ]
       }
     ]
   };
