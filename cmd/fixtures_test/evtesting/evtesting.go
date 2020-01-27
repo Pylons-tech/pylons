@@ -1,39 +1,61 @@
 package evtesting
 
 import (
+	"log"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
 type T struct {
-	origin *testing.T
+	origin    *testing.T
+	useLogPkg bool
 }
 
 var listeners = make(map[string]func())
 
 func NewT(origin *testing.T) T {
 	newT := T{
-		origin: origin,
+		origin:    origin,
+		useLogPkg: false,
+	}
+	if origin == nil {
+		orgT := testing.T{}
+		newT.origin = &orgT
+		newT.useLogPkg = true
 	}
 	return newT
 }
 
 func (t *T) Fatal(args ...interface{}) {
 	t.DispatchEvent("FAIL")
-	t.origin.Fatal(args...)
+	if t.useLogPkg {
+		log.Fatal(args...)
+	} else {
+		t.origin.Fatal(args...)
+	}
 }
 
 func (t *T) Fatalf(format string, args ...interface{}) {
 	t.DispatchEvent("FAIL")
-	t.origin.Fatalf(format, args...)
+	if t.useLogPkg {
+		log.Fatalf(format, args...)
+	} else {
+		t.origin.Fatalf(format, args...)
+	}
 }
 
 func (t *T) MustTrue(value bool) {
 	if value == false {
 		t.DispatchEvent("FAIL")
 	}
-	require.True(t.origin, value)
+	if t.useLogPkg {
+		if value == false {
+			log.Fatal("MustTrue validation failed")
+		}
+	} else {
+		require.True(t.origin, value)
+	}
 }
 
 func (t *T) MustNil(err error) {
@@ -48,7 +70,11 @@ func (t *T) Parallel() {
 }
 
 func (t *T) Log(args ...interface{}) {
-	t.origin.Log(args...)
+	if t.useLogPkg {
+		log.Println(args...)
+	} else {
+		t.origin.Log(args...)
+	}
 }
 
 func (t *T) Run(name string, f func(t *T)) bool {

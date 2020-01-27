@@ -21,6 +21,12 @@ func NewModuleClient(storeKey string, cdc *amino.Codec) ModuleClient {
 }
 
 // GetTxCmd returns the transaction commands for this module
+// get-pylons      ask for pylons. 500 pylons per request
+// send-pylons     send pylons of specific amount to the name provided
+// create-cookbook create cookbook by providing the args
+// update-cookbook update cookbook by providing the args
+// fiat-item       create item and assign it to sender
+
 func (mc ModuleClient) GetTxCmd() *cobra.Command {
 	pylonsTxCmd := &cobra.Command{
 		Use:   "pylons",
@@ -39,6 +45,15 @@ func (mc ModuleClient) GetTxCmd() *cobra.Command {
 }
 
 // GetQueryCmd returns the cli query commands for this module
+// balance         get pylons balance
+// get_cookbook    get a cookbook by id
+// get_execution   get an execution by id
+// get_item        get an item by id
+// get_recipe      get a recipe by id
+// list_cookbook   get all cookbooks for a user
+// list_recipe     get all recipes for a user
+// items_by_sender get all items for a user
+// list_executions get all executions for a user
 func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 	// Group pulons queries under a subcommand
 	pylonsQueryCmd := &cobra.Command{
@@ -55,6 +70,7 @@ func (mc ModuleClient) GetQueryCmd() *cobra.Command {
 		query.ListRecipes(mc.storeKey, mc.cdc),
 		query.ItemsBySender(mc.storeKey, mc.cdc),
 		query.ListExecutions(mc.storeKey, mc.cdc),
+		query.ListTrade(mc.storeKey, mc.cdc),
 	)...)
 
 	return pylonsQueryCmd

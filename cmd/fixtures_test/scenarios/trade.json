@@ -1,0 +1,52 @@
+[
+    {
+        "ID": "CREATE_TRADE_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/trade.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "cookbooks": ["tradecookbook"]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_SELL_ORDER_EUGENCOIN_FOR_PYLON_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/sell_order_eugencoin_for_pylon.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "trades": ["Trade for selling eugencoin from pylon"]
+            }
+        }
+    },
+    {
+        "ID": "RUN_FULFILL_SELL_ORDER_EUGENCOIN_FOR_PYLON",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_SELL_ORDER_EUGENCOIN_FOR_PYLON_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/sell_order_eugencoin_for_pylon.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            }
+        }
+    }
+]

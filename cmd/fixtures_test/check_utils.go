@@ -259,7 +259,8 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 			RunCheckExecution(step, t)
 		case "create_trade":
 			RunCreateTrade(step, t)
-
+		case "fulfill_trade":
+			RunFulfillTrade(step, t)
 		default:
 			t.Fatalf("step with unrecognizable action found %s", step.Action)
 		}

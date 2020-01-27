@@ -11,6 +11,32 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func ListTradeViaCLI(account string) ([]types.Trade, error) {
+	queryParams := []string{"query", "pylons", "list_trade"}
+	if len(account) != 0 {
+		queryParams = append(queryParams, "--account", account)
+	}
+	output, err := RunPylonsCli(queryParams, "")
+	if err != nil {
+		return []types.Trade{}, err
+	}
+	listTradesResp := types.TradeList{}
+	err = GetAminoCdc().UnmarshalJSON(output, &listTradesResp)
+	if err != nil {
+		return []types.Trade{}, err
+	}
+	return listTradesResp.Trades, nil
+}
+
+func GetTradeIDFromExtraInfo(tradeExtraInfo string) (string, bool, error) {
+	trdList, err := ListTradeViaCLI("")
+	if err != nil {
+		return "", false, err
+	}
+	trade, exist := FindTradeFromArrayByExtraInfo(trdList, tradeExtraInfo)
+	return trade.ID, exist, nil
+}
+
 func ListCookbookViaCLI(account string) ([]types.Cookbook, error) {
 	queryParams := []string{"query", "pylons", "list_cookbook"}
 	if len(account) != 0 {
@@ -125,6 +151,15 @@ func WaitAndGetTxData(txhash string, maximum_wait_block int64, t *testing.T) ([]
 		}
 	}
 	return txHandleResBytes, nil
+}
+
+func FindTradeFromArrayByExtraInfo(trades []types.Trade, extraInfo string) (types.Trade, bool) {
+	for _, trade := range trades {
+		if trade.ExtraInfo == extraInfo {
+			return trade, true
+		}
+	}
+	return types.Trade{}, false
 }
 
 func FindCookbookFromArrayByName(cbList []types.Cookbook, name string) (types.Cookbook, bool) {

@@ -277,7 +277,7 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 			trdType.ItemInputs,
 			trdType.CoinOutputs,
 			trdType.ItemOutputs,
-			"some extra info",
+			"some extra info", // TODO should use identifier so that user can check on fixture test
 			trdType.Sender,
 		)
 		txhash := intTest.TestTxWithMsgWithNonce(t, createTrd, createTrd.Sender.String(), true)
@@ -291,7 +291,15 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
 		t.MustTrue(resp.TradeID != "")
-
 	}
+}
 
+func RunFulfillTrade(step FixtureStep, t *testing.T) {
+	// TODO check pylon amount and eugencoin amount
+	// "coins": [
+	// 	{
+	// 		"denom": "submcoin",
+	// 		"amount": 100
+	// 	}
+	// ]
 }

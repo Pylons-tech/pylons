@@ -27,6 +27,24 @@ Sample Result
 }
 ```
 
+### trades
+
+Format
+```
+http://${HOST}/pylons/list_trade/${ownerKeyName}
+```
+Sample
+```
+http://localhost:1317/pylons/list_trade/cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2
+```
+
+Sample Result
+```
+{
+    "Trades": []
+}
+```
+
 ### recipes
 
 Format
