@@ -224,7 +224,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error waiting for executing recipe %+v", err)
 
 		if len(step.Output.TxResult.ErrorLog) > 0 {
-			hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
+			hmrErrMsg := intTest.GetHumanReadableErrorFromTxHash(txhash, t)
 			t.MustTrue(hmrErrMsg == step.Output.TxResult.ErrorLog)
 		} else {
 			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)

@@ -202,3 +202,45 @@ func MockItemGUID(name string, t *testing.T) string {
 
 	return resp.ItemID
 }
+
+//////////// TRADE //////////////////////////
+
+func MockCoin2CoinTradeGUID(
+	inputCoinName string, inputCoinAmount int64,
+	outputCoinName string, outputCoinAmount int64,
+	extraInfo string,
+	t *testing.T,
+) string {
+	eugenAddr := GetAccountAddr("eugen", t)
+	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
+	t.MustNil(err)
+	inputCoins := types.CoinInputList{
+		types.CoinInput{
+			Coin:  inputCoinName,
+			Count: inputCoinAmount,
+		},
+	}
+
+	outputCoins := sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
+
+	TestTxWithMsgWithNonce(t,
+		msgs.NewMsgCreateTrade(
+			inputCoins,
+			nil,
+			outputCoins,
+			nil,
+			extraInfo,
+			sdkAddr),
+		"eugen",
+		false,
+	)
+
+	err = WaitForNextBlock()
+	ErrValidation(t, "error waiting for creating trade %+v", err)
+	// check trade created after 1 block
+	tradeID, exist, err := GetTradeIDFromExtraInfo(extraInfo)
+	t.MustNil(err)
+	t.MustTrue(exist)
+	t.MustTrue(len(tradeID) > 0)
+	return tradeID
+}

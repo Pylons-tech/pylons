@@ -4,11 +4,27 @@ import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type FulfillTradeTestCase struct {
 	name      string
 	extraInfo string
+
+	hasInputCoin    bool
+	inputCoinName   string
+	inputCoinAmount int64
+
+	hasOutputCoin    bool
+	outputCoinName   string
+	outputCoinAmount int64
+
+	expectedStatus      string
+	expectedMessage     string
+	expectedRetryErrMsg string
 }
 
 func TestFulfillTradeViaCLI(originT *originT.T) {
@@ -19,6 +35,15 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 		{
 			"coin->coin fullfill trade test", // coin-coin create trade test
 			"TESTTRD_FulfillTrade_001",
+			true,
+			"eugencoin",
+			200,
+			true,
+			"pylon",
+			1,
+			"Success",
+			"successfully fulfilled the trade",
+			"this trade is already completed",
 		},
 		// TODO enrich create trade test with more cases item-item, item-coin, coin-item
 	}
@@ -33,111 +58,32 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 
-	// eugenAddr := GetAccountAddr("eugen", t)
-	// sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	// t.MustNil(err)
-	// TestTxWithMsgWithNonce(t,
-	// 	msgs.NewMsgCreateTrade(
-	// 		nil,
-	// 		types.GenItemInputList("Raichu"),
-	// 		types.NewPylon(1000),
-	// 		nil,
-	// 		tc.extraInfo,
-	// 		sdkAddr),
-	// 	"eugen",
-	// 	false,
-	// )
+	itemIDs := []string{}
+	// TODO for item as input trading, should create an item and change itemIDs
 
-	// err = WaitForNextBlock()
-	// ErrValidation(t, "error waiting for creating trade %+v", err)
-	// // check trade created after 1 block
-	// tradeID, exist, err := GetTradeIDFromExtraInfo(tc.extraInfo)
-	// t.MustNil(err)
-	// t.MustTrue(exist)
-	// t.MustTrue(len(tradeID) > 0)
+	trdGuid := MockCoin2CoinTradeGUID(tc.inputCoinName, tc.inputCoinAmount, tc.outputCoinName, tc.outputCoinAmount, tc.extraInfo, t)
 
-	// CheckExecution code
+	eugenAddr := GetAccountAddr("eugen", t)
+	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
+	t.MustNil(err)
 
-	// itemIDs := []string{}
-	// if len(tc.currentItemName) > 0 { // when item input is set
-	// 	itemIDs = []string{
-	// 		MockItemGUID(tc.currentItemName, t),
-	// 	}
-	// }
-	// rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
-	// guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpType, rcpName, tc.currentItemName, tc.desiredItemName, t)
-	// ErrValidation(t, "error mocking recipe %+v", err)
+	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGuid, sdkAddr, itemIDs)
+	txhash := TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
 
-	// rcp, err := GetRecipeByGUID(guid)
-	// t.MustNil(err)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
+	t.MustNil(err)
+	t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
+	ffTrdResp := handlers.FulfillTradeResp{}
+	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
+	t.MustNil(err)
 
-	// eugenAddr := GetAccountAddr("eugen", t)
-	// sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	// t.MustNil(err)
+	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
+	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
 
-	// execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
-	// txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
-
-	// if tc.waitForBlockInterval {
-	// 	WaitForBlockInterval(tc.blockInterval)
-	// } else {
-	// 	WaitForNextBlock()
-	// }
-
-	// txHandleResBytes, err := GetTxData(txhash, t)
-	// t.MustNil(err)
-	// execResp := handlers.ExecuteRecipeResp{}
-	// err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
-	// t.MustNil(err)
-	// schedule := handlers.ExecuteRecipeScheduleOutput{}
-	// err = json.Unmarshal(execResp.Output, &schedule)
-	// t.MustNil(err)
-
-	// if len(tc.currentItemName) > 0 { // when item input is set
-	// 	items, err := ListItemsViaCLI("")
-	// 	ErrValidation(t, "error listing items via cli ::: %+v", err)
-
-	// 	item, ok := FindItemFromArrayByName(items, tc.currentItemName, true)
-	// 	t.MustTrue(ok)
-	// 	t.MustTrue(item.OwnerRecipeID == guid)
-	// }
-
-	// chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	// txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
-
-	// WaitForNextBlock()
-
-	// txHandleResBytes, err = GetTxData(txhash, t)
-	// t.MustNil(err)
-	// resp := handlers.CheckExecutionResp{}
-	// err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	// t.MustNil(err)
-	// t.MustTrue(resp.Status == tc.expectedStatus)
-	// t.MustTrue(resp.Message == tc.expectedMessage)
-
-	// // Here desiredItemName should be different across tests cases and across test files
-	// items, err := ListItemsViaCLI("")
-	// ErrValidation(t, "error listing items via cli ::: %+v", err)
-
-	// _, ok := FindItemFromArrayByName(items, tc.desiredItemName, false)
-	// t.MustTrue(ok == tc.shouldSuccess)
-
-	// exec, err := GetExecutionByGUID(schedule.ExecID)
-	// if err != nil {
-	// 	t.Fatalf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
-	// }
-	// t.MustTrue(exec.Completed == tc.shouldSuccess)
-	// if tc.tryFinishedExecution {
-	// 	txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
-	// 	WaitForNextBlock()
-
-	// 	txHandleResBytes, err = GetTxData(txhash, t)
-	// 	t.MustNil(err)
-	// 	resp := handlers.CheckExecutionResp{}
-	// 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	// 	t.MustNil(err)
-	// 	t.MustTrue(resp.Status == tc.expectedRetryResStatus)
-	// 	t.MustTrue(resp.Message == tc.expectedRetryResMessage)
-	// 	// This is automatically checking OwnerRecipeID lock status ;)
-	// }
+	// Try again after fulfill trade
+	txhash = TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	WaitForNextBlock()
+	t.Log("FulfillTrade again txhash=", txhash)
+	hmrErr := GetHumanReadableErrorFromTxHash(txhash, t)
+	t.MustTrue(hmrErr == tc.expectedRetryErrMsg)
 }

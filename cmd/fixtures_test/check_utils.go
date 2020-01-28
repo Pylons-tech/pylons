@@ -148,24 +148,8 @@ func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
 	return true
 }
 
-func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
-	txErrorBytes, err := intTest.GetTxError(txhash, t)
-	t.MustNil(err)
-	hmrErr := struct {
-		Codespace string `json:"codespace"`
-		Code      int    `json:"code"`
-		Message   string `json:"message"`
-	}{}
-	if len(txErrorBytes) == 0 {
-		return ""
-	}
-	err = json.Unmarshal(txErrorBytes, &hmrErr)
-	t.MustNil(err)
-	return hmrErr.Message
-}
-
 func CheckErrorOnTx(txhash string, t *testing.T) {
-	hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
+	hmrErrMsg := intTest.GetHumanReadableErrorFromTxHash(txhash, t)
 	if len(hmrErrMsg) > 0 {
 		t.Fatal("txhash=", txhash, "hmrErrMsg=", hmrErrMsg)
 	}
