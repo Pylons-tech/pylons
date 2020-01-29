@@ -23,7 +23,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			"item->coin create trade test", // item to coin create trade test
 			"TESTTRD_CreateTrade_001",
 		},
-		// TODO enrich create trade test with more cases like coin-coin, item-item, coin-item
+		// For coin-coin, item-item, coin-item trading, it is implemented in fulfill trade test already.
 	}
 
 	for _, tc := range tests {

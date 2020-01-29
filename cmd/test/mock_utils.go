@@ -205,30 +205,47 @@ func MockItemGUID(name string, t *testing.T) string {
 
 //////////// TRADE //////////////////////////
 
-func MockCoin2CoinTradeGUID(
-	inputCoinName string, inputCoinAmount int64,
-	outputCoinName string, outputCoinAmount int64,
+func MockDetailedTradeGUID(
+	hasInputCoin bool, inputCoinName string, inputCoinAmount int64,
+	hasInputItem bool, inputItemName string,
+	hasOutputCoin bool, outputCoinName string, outputCoinAmount int64,
+	hasOutputItem bool, outputItemID string,
 	extraInfo string,
 	t *testing.T,
 ) string {
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
-	inputCoins := types.CoinInputList{
-		types.CoinInput{
-			Coin:  inputCoinName,
-			Count: inputCoinAmount,
-		},
-	}
 
-	outputCoins := sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
+	inputCoinList := types.GenCoinInputList(inputCoinName, inputCoinAmount)
+	if !hasInputCoin {
+		inputCoinList = nil
+	}
+	inputItemList := types.GenItemInputList(inputItemName)
+	if !hasInputItem {
+		inputItemList = nil
+	}
+	outputCoins := sdk.Coins{}
+	if !hasOutputCoin {
+		outputCoins = nil
+	} else {
+		outputCoins = sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
+	}
+	var outputItems types.ItemList = nil
+	if hasOutputItem {
+		outputItem, err := GetItemByGUID(outputItemID)
+		t.MustNil(err)
+		outputItems = types.ItemList{outputItem}
+	} else {
+		outputItems = nil
+	}
 
 	TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateTrade(
-			inputCoins,
-			nil,
+			inputCoinList,
+			inputItemList,
 			outputCoins,
-			nil,
+			outputItems,
 			extraInfo,
 			sdkAddr),
 		"eugen",

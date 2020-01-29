@@ -14,6 +14,9 @@ type FulfillTradeTestCase struct {
 	name      string
 	extraInfo string
 
+	hasInputItem  bool
+	inputItemName string
+
 	hasInputCoin    bool
 	inputCoinName   string
 	inputCoinAmount int64
@@ -21,6 +24,9 @@ type FulfillTradeTestCase struct {
 	hasOutputCoin    bool
 	outputCoinName   string
 	outputCoinAmount int64
+
+	hasOutputItem  bool
+	outputItemName string
 
 	expectedStatus      string
 	expectedMessage     string
@@ -33,19 +39,73 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 
 	tests := []FulfillTradeTestCase{
 		{
-			"coin->coin fullfill trade test", // coin-coin create trade test
-			"TESTTRD_FulfillTrade_001",
+			"coin->coin fullfill trade test", // coin-coin fulfill trade test
+			"TESTTRD_FulfillTrade__001_TC1",
+			false,
+			"",
 			true,
 			"eugencoin",
 			200,
 			true,
 			"pylon",
 			1,
+			false,
+			"",
 			"Success",
 			"successfully fulfilled the trade",
 			"this trade is already completed",
 		},
-		// TODO enrich create trade test with more cases item-item, item-coin, coin-item
+		{
+			"item->coin fullfill trade test", // item-coin fulfill trade test
+			"TESTTRD_FulfillTrade__001_TC2",
+			true,
+			"TESTITEM_FulfillTrade__001_TC2",
+			false,
+			"",
+			0,
+			true,
+			"pylon",
+			1,
+			false,
+			"",
+			"Success",
+			"successfully fulfilled the trade",
+			"this trade is already completed",
+		},
+		{
+			"coin->item fullfill trade test", // coin-item fulfill trade test
+			"TESTTRD_FulfillTrade__001_TC3",
+			false,
+			"",
+			true,
+			"eugencoin",
+			200,
+			false,
+			"",
+			0,
+			true,
+			"TESTITEM_FulfillTrade__001_TC3",
+			"Success",
+			"successfully fulfilled the trade",
+			"this trade is already completed",
+		},
+		{
+			"coin->item fullfill trade test", // item-item fulfill trade test
+			"TESTTRD_FulfillTrade__001_TC4",
+			true,
+			"TESTITEM_FulfillTrade__001_TC4_INPUT",
+			true,
+			"eugencoin",
+			200,
+			false,
+			"",
+			0,
+			true,
+			"TESTITEM_FulfillTrade__001_TC4_OUTPUT",
+			"Success",
+			"successfully fulfilled the trade",
+			"this trade is already completed",
+		},
 	}
 
 	for tcNum, tc := range tests {
@@ -58,14 +118,28 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 
-	itemIDs := []string{}
-	// TODO for item as input trading, should create an item and change itemIDs
+	outputItemID := ""
+	if tc.hasOutputItem {
+		outputItemID = MockItemGUID(tc.outputItemName, t)
+	}
 
-	trdGuid := MockCoin2CoinTradeGUID(tc.inputCoinName, tc.inputCoinAmount, tc.outputCoinName, tc.outputCoinAmount, tc.extraInfo, t)
+	trdGuid := MockDetailedTradeGUID(tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
+		tc.hasInputItem, tc.inputItemName,
+		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
+		tc.hasOutputItem, outputItemID,
+		tc.extraInfo,
+		t)
 
 	eugenAddr := GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
+
+	itemIDs := []string{}
+	if len(tc.inputItemName) > 0 {
+		itemIDs = []string{
+			MockItemGUID(tc.inputItemName, t),
+		}
+	}
 
 	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGuid, sdkAddr, itemIDs)
 	txhash := TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
