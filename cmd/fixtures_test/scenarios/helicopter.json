@@ -18,7 +18,7 @@
         }
     },
     {
-        "ID": "CREATE_HELI_KNIFE_RECIPE",        
+        "ID": "CREATE_HELI_KNIFE",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
             "blockWait": 0

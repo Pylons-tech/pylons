@@ -18,34 +18,277 @@
         }
     },
     {
-        "ID": "CREATE_SELL_ORDER_EUGENCOIN_FOR_PYLON_TRADE",        
+        "ID": "CREATE_TRADING_KNIFE_V1",        
         "runAfter": {
             "precondition": ["CREATE_TRADE_COOKBOOK"],
             "blockWait": 0
         },
-        "action": "create_trade",
-        "paramsRef": "./trades/sell_order_eugencoin_for_pylon.json",
+        "action": "fiat_item",
+        "paramsRef": "./items/trading_knife_v1.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": {
                 "owner": "eugen",
-                "trades": ["Trade for selling eugencoin from pylon"]
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v1" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
             }
         }
     },
     {
-        "ID": "RUN_FULFILL_SELL_ORDER_EUGENCOIN_FOR_PYLON",        
+        "ID": "CREATE_TRADING_KNIFE_V2",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_SELL_ORDER_EUGENCOIN_FOR_PYLON_TRADE"],
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
             "blockWait": 0
         },
-        "action": "fulfill_trade",
-        "paramsRef": "./fulfill_trades/sell_order_eugencoin_for_pylon.json",
+        "action": "fiat_item",
+        "paramsRef": "./items/trading_knife_v2.json",
         "output": {
             "txResult": {
                 "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v2" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_TRADING_KNIFE_V3",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/trading_knife_v3.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "michael",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v3" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_TRADING_KNIFE_V4",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/trading_knife_v4.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "michael",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v4" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_COIN_COIN_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_coin_coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "trades": ["coin to coin trading"]
+            }
+        }
+    },
+    {
+        "ID": "FULFILL_COIN_COIN_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_COIN_COIN_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_coin_coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            }
+        }
+    },
+    {
+        "ID": "CREATE_COIN_ITEM_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V1"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_coin_item.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "trades": ["coin to item trading"]
+            }
+        }
+    },
+    {
+        "ID": "FULFILL_COIN_ITEM_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_COIN_ITEM_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_coin_item.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "michael",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v1" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_COIN_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V3"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "trades": ["item to coin trading"]
+            }
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_COIN_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_coin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v3" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
+            }
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_ITEM_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V2", "CREATE_TRADING_KNIFE_V4"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_item.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "trades": ["item to item trading"]
+            }
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_ITEM_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_ITEM_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_item.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": {
+                "owner": "eugen",
+                "items": [
+                    {
+                        "stringKeys": [],
+                        "stringValues": { "Name": "Trading Knife v4" },
+                        "dblKeys": [],
+                        "dblValues": {},
+                        "longKeys": [],
+                        "longValues": {}
+                    }
+                ]
             }
         }
     }

@@ -1,0 +1,14 @@
+{
+  "CoinInputs":[
+      {
+          "Coin": "pylon",
+          "Count": "1"
+      }
+  ],
+  "ItemInputRefs": null,
+  "CoinOutputs": null,
+  "ItemOutputNames": ["Trading Knife v1"],
+  "ExtraInfo":"coin to item trading",
+  "Sender":"eugen",
+  "CookbookName": "tradecookbook"
+}

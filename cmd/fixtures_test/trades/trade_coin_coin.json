@@ -1,0 +1,17 @@
+{
+  "CoinInputs":[
+      {
+          "Coin": "pylon",
+          "Count": "1"
+      }
+  ],
+  "ItemInputRefs": [],
+  "CoinOutputs": [{
+      "denom":"eugencoin",
+      "amount": "200"
+  }],
+  "ItemOutputNames": [],
+  "ExtraInfo":"coin to coin trading",
+  "Sender":"eugen",
+  "CookbookName": "tradecookbook"
+}

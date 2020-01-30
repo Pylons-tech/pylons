@@ -1,0 +1,11 @@
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./trades/item_input/trading_knife_v4.json"
+    ],
+    "CoinOutputs": [],
+    "ItemOutputNames": ["Trading Knife v2"],
+    "ExtraInfo":"item to item trading",
+    "Sender":"eugen",
+    "CookbookName": "tradecookbook"
+}
