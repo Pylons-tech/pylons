@@ -1,0 +1,7 @@
+{
+    "Doubles": [{ "Key": "attack", "Value": "4" }],
+    "Longs": [{ "Key": "level", "Value": "4" }],
+    "Strings": [{ "Key": "Name","Value": "Trading Knife v4"}],
+    "CookbookName": "tradecookbook",
+    "Sender": "michael"
+}

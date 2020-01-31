@@ -11,18 +11,19 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestCreateTradeViaCL(originT *originT.T) {
+func TestCreateTradeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
 	tests := []struct {
-		name    string
-		rcpName string
+		name      string
+		extraInfo string
 	}{
 		{
-			"basic flow test",
-			"TESTRCP_CreateTrade_001",
+			"item->coin create trade test", // item to coin create trade test
+			"TESTTRD_CreateTrade_001",
 		},
+		// For coin-coin, item-item, coin-item trading, it is implemented in fulfill trade test already.
 	}
 
 	for _, tc := range tests {
@@ -36,12 +37,19 @@ func TestCreateTradeViaCL(originT *originT.T) {
 					types.GenItemInputList("Raichu"),
 					types.NewPylon(1000),
 					nil,
-					"",
+					tc.extraInfo,
 					sdkAddr),
 				"eugen",
 				false,
 			)
-			// TODO check response by txhash
+
+			err = WaitForNextBlock()
+			ErrValidation(t, "error waiting for creating trade %+v", err)
+			// check trade created after 1 block
+			tradeID, exist, err := GetTradeIDFromExtraInfo(tc.extraInfo)
+			t.MustNil(err)
+			t.MustTrue(exist)
+			t.MustTrue(len(tradeID) > 0)
 		})
 	}
 }

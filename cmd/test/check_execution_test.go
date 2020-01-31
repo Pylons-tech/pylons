@@ -14,7 +14,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type TestCase struct {
+type CheckExecutionTestCase struct {
 	name                    string
 	rcpType                 types.RecipeType
 	blockInterval           int64
@@ -34,7 +34,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
-	tests := []TestCase{
+	tests := []CheckExecutionTestCase{
 		{
 			"basic flow test",
 			types.GENERATION,
@@ -104,7 +104,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 	}
 }
 
-func RunSingleCheckExecutionTestCase(tcNum int, tc TestCase, t *testing.T) {
+func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
 	t.Parallel()
 
 	itemIDs := []string{}

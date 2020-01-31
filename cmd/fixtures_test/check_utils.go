@@ -148,24 +148,8 @@ func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
 	return true
 }
 
-func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
-	txErrorBytes, err := intTest.GetTxError(txhash, t)
-	t.MustNil(err)
-	hmrErr := struct {
-		Codespace string `json:"codespace"`
-		Code      int    `json:"code"`
-		Message   string `json:"message"`
-	}{}
-	if len(txErrorBytes) == 0 {
-		return ""
-	}
-	err = json.Unmarshal(txErrorBytes, &hmrErr)
-	t.MustNil(err)
-	return hmrErr.Message
-}
-
 func CheckErrorOnTx(txhash string, t *testing.T) {
-	hmrErrMsg := GetHumanReadableErrorFromTxHash(txhash, t)
+	hmrErrMsg := intTest.GetHumanReadableErrorFromTxHash(txhash, t)
 	if len(hmrErrMsg) > 0 {
 		t.Fatal("txhash=", txhash, "hmrErrMsg=", hmrErrMsg)
 	}
@@ -259,7 +243,8 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 			RunCheckExecution(step, t)
 		case "create_trade":
 			RunCreateTrade(step, t)
-
+		case "fulfill_trade":
+			RunFulfillTrade(step, t)
 		default:
 			t.Fatalf("step with unrecognizable action found %s", step.Action)
 		}

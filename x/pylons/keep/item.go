@@ -3,6 +3,7 @@ package keep
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,7 +27,7 @@ func (k Keeper) GetItem(ctx sdk.Context, id string) (types.Item, error) {
 // GetItemsBySender returns all items by sender
 func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]types.Item, error) {
 	store := ctx.KVStore(k.ItemKey)
-	iter := sdk.KVStorePrefixIterator(store, []byte(sender.String()))
+	iter := sdk.KVStorePrefixIterator(store, []byte(""))
 
 	var items []types.Item
 	for ; iter.Valid(); iter.Next() {
@@ -36,8 +37,9 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 		if err != nil {
 			return nil, sdk.ErrInternal(err.Error())
 		}
-
-		items = append(items, item)
+		if strings.Contains(item.Sender.String(), sender.String()) { // considered empty sender
+			items = append(items, item)
+		}
 	}
 	return items, nil
 }

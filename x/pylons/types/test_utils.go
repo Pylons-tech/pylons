@@ -13,11 +13,8 @@ func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
 		iiL = append(iiL, ItemInput{
-			DoubleInputParamList{DoubleInputParam{Key: "endurance",
-				MinValue: "100.00",
-				MaxValue: "500.00",
-			}},
-			LongInputParamList{LongInputParam{Key: "HP", MinValue: 100, MaxValue: 500}},
+			nil,
+			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
 		})
 	}

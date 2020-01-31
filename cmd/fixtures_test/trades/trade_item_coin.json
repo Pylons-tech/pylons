@@ -1,0 +1,14 @@
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./trades/item_input/trading_knife_v3.json"
+    ],
+    "CoinOutputs": [{
+        "denom":"eugencoin",
+        "amount": "200"
+    }],
+    "ItemOutputNames": [],
+    "ExtraInfo":"item to coin trading",
+    "Sender":"eugen",
+    "CookbookName": "tradecookbook"
+}

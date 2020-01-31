@@ -44,7 +44,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		matched := false
 		index := 0
 		for i, item := range items {
-			if item.MatchItemInput(inpItem) {
+			if inpItem.Matches(item) {
 				matched = true
 				index = i
 				break

@@ -72,6 +72,20 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 	return newBytes
 }
 
+func UpdateTradeExtraInfoToID(bytes []byte, t *testing.T) []byte {
+	raw := UnmarshalIntoEmptyInterface(bytes, t)
+
+	trdInfo, ok := raw["TradeInfo"].(string)
+	t.MustTrue(ok)
+	trdID, exist, err := intTest.GetTradeIDFromExtraInfo(trdInfo)
+	t.MustTrue(exist)
+	t.MustNil(err)
+	raw["TradeID"] = trdID
+	newBytes, err := json.Marshal(raw)
+	t.MustNil(err)
+	return newBytes
+}
+
 func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
 
@@ -130,6 +144,28 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		itemInputs = append(itemInputs, ii)
 	}
 	return itemInputs
+}
+
+func GetItemOutputsFromBytes(bytes []byte, sender string, t *testing.T) types.ItemList {
+	var itemOutputNamesReader struct {
+		ItemOutputNames []string
+	}
+	if err := json.Unmarshal(bytes, &itemOutputNamesReader); err != nil {
+		t.Fatal("read itemOutputNamesReader using json.Unmarshal:", err)
+	}
+
+	var itemOutputs types.ItemList
+
+	for _, iN := range itemOutputNamesReader.ItemOutputNames {
+		var io types.Item
+		iID, ok, err := intTest.GetItemIDFromName(iN, false)
+		t.MustNil(err)
+		t.MustTrue(ok)
+		io, err = intTest.GetItemByGUID(iID)
+		t.MustNil(err)
+		itemOutputs = append(itemOutputs, io)
+	}
+	return itemOutputs
 }
 
 func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
