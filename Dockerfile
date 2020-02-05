@@ -45,10 +45,8 @@ RUN pylonscli config trust-node true
 RUN ./pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make int_tests)
 
 # Run fixture test
-RUN ./pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make fixture_tests)
+RUN ./pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make fixture_tests ARGS="-runserial")
 
-# Kill pylonsd process if available
-RUN killall pylonsd
 
 # Command to run the executable
 #Run please, GCB
