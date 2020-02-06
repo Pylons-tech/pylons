@@ -15,6 +15,7 @@ func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) typ
 		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
+		types.GenCatalystItemInputList("Thunderstone"),
 		types.GenEntries("chair", "Raichu"),
 		types.ItemUpgradeParams{},
 		0,
