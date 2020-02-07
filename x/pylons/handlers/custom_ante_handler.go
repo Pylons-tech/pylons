@@ -137,30 +137,30 @@ func NewCustomAnteHandler(ak auth.AccountKeeper, fck auth.FeeCollectionKeeper, l
 		// When simulating, this would just be a 0-length slice.
 		stdSigs := stdTx.GetSignatures()
 
-		for i := 0; i < len(stdSigs); i++ {
-			// skip the fee payer, account is cached and fees were deducted already
-			if i != 0 {
-				signerAccs[i], res = auth.GetSignerAcc(newCtx, ak, signerAddrs[i])
-				if !res.IsOK() {
-					return newCtx, res, true
+		if stdTx.Msgs[0].Type() == "get_pylons" {
+			logger.Error("we are ignoring signing for get_pylons message")
+		} else {
+
+			for i := 0; i < len(stdSigs); i++ {
+				// skip the fee payer, account is cached and fees were deducted already
+				if i != 0 {
+					signerAccs[i], res = auth.GetSignerAcc(newCtx, ak, signerAddrs[i])
+					if !res.IsOK() {
+						return newCtx, res, true
+					}
 				}
-			}
 
-			// check signature, return account with incremented nonce
-			signBytes := auth.GetSignBytes(newCtx.ChainID(), stdTx, signerAccs[i], isGenesis)
+				// check signature, return account with incremented nonce
+				signBytes := auth.GetSignBytes(newCtx.ChainID(), stdTx, signerAccs[i], isGenesis)
 
-			// we ignore signing for get_pylons
-			if stdTx.Msgs[0].Type() != "get_pylons" {
+				// we ignore signing for get_pylons
 				signerAccs[i], res = processSig(newCtx, signerAccs[i], stdSigs[i], signBytes, simulate, params)
 				if !res.IsOK() {
 					return newCtx, res, true
 				}
-			} else {
-				logger.Error("we are ignoring signing for pylons message")
-				signerAccs[i].SetSequence(signerAccs[i].GetSequence() + 1)
-			}
 
-			ak.SetAccount(newCtx, signerAccs[i])
+				ak.SetAccount(newCtx, signerAccs[i])
+			}
 		}
 
 		// TODO: tx tags (?)
