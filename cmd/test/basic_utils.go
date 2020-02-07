@@ -20,7 +20,8 @@ import (
 )
 
 type CLIOptions struct {
-	CustomNode string
+	CustomNode   string
+	RestEndpoint string
 }
 
 var CLIOpts CLIOptions

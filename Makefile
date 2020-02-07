@@ -17,7 +17,7 @@ reset_chain:
 
 int_tests:
 	rm ./cmd/test/nonce.json || true
-	go test -v ./cmd/test/
+	go test -v ./cmd/test/ ${ARGS}
 
 fixture_tests:
 	rm ./cmd/fixtures_test/nonce.json || true
