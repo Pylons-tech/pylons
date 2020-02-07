@@ -1,8 +1,10 @@
 package intTest
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -75,19 +77,45 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 }
 
 func broadcastTxFile(signedTxFile string, t *testing.T) string {
-	// pylonscli tx broadcast signedCreateCookbookTx.json
-	txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
-	output, err := RunPylonsCli(txBroadcastArgs, "")
+	if len(CLIOpts.RestEndpoint) == 0 { // broadcast using cli
+		// pylonscli tx broadcast signedCreateCookbookTx.json
+		txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
+		output, err := RunPylonsCli(txBroadcastArgs, "")
 
-	successTxResp := SuccessTxResp{}
+		successTxResp := SuccessTxResp{}
 
-	err = json.Unmarshal(output, &successTxResp)
-	// This can happen when "pylonscli config output json" is not set or when real issue is available
-	ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
+		err = json.Unmarshal(output, &successTxResp)
+		// This can happen when "pylonscli config output json" is not set or when real issue is available
+		ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
 
-	t.MustTrue(len(successTxResp.TxHash) == 64)
-	t.MustTrue(len(successTxResp.Height) > 0)
-	return successTxResp.TxHash
+		t.MustTrue(len(successTxResp.TxHash) == 64)
+		t.MustTrue(len(successTxResp.Height) > 0)
+		return successTxResp.TxHash
+	} else { // broadcast using rest endpoint
+		signedTx := ReadFile(signedTxFile, t)
+		postBodyJSON := make(map[string]interface{})
+		json.Unmarshal(signedTx, &postBodyJSON)
+		postBodyJSON["tx"] = postBodyJSON["value"]
+		postBodyJSON["value"] = nil
+		postBodyJSON["mode"] = "sync"
+		postBody, err := json.Marshal(postBodyJSON)
+
+		if err != nil {
+			t.Fatal(err)
+		}
+		resp, err := http.Post(CLIOpts.RestEndpoint+"/txs", "application/json", bytes.NewBuffer(postBody))
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		var result map[string]string
+
+		json.NewDecoder(resp.Body).Decode(&result)
+		defer resp.Body.Close()
+		t.Log("get_pylons_api_response", result)
+		t.MustTrue(len(result["txhash"]) == 64)
+		return result["txhash"]
+	}
 }
 
 func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
