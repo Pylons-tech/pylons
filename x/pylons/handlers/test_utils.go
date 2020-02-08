@@ -148,7 +148,7 @@ func MockExecution(
 	sender sdk.AccAddress,
 	itemIDs []string,
 ) (ExecuteRecipeResp, error) {
-	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
+	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs, []string{})
 	result := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 	execRcpResponse := ExecuteRecipeResp{}

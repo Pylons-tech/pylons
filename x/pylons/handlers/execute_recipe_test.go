@@ -22,7 +22,7 @@ func TestGetMatchedItems(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// Generate initial items
-	initItemNames := []string{"Knife", "Knife", "Shield"}
+	initItemNames := []string{"Knife", "Knife", "Shield", "Sword", "Gem"}
 	initItemIDs := []string{}
 	for _, iN := range initItemNames {
 		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
@@ -46,11 +46,12 @@ func TestGetMatchedItems(t *testing.T) {
 	)
 
 	cases := map[string]struct {
-		itemIDs      []string
-		recipeID     string
-		sender       sdk.AccAddress
-		desiredError string
-		showError    bool
+		itemIDs         []string
+		catalystItemIDs []string
+		recipeID        string
+		sender          sdk.AccAddress
+		desiredError    string
+		showError       bool
 	}{
 		"correct same item merge recipe": {
 			itemIDs:      []string{initItemIDs[0], initItemIDs[1]},
@@ -69,10 +70,10 @@ func TestGetMatchedItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
+			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs, tc.catalystItemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.True(t, err == nil)
-			_, err = GetMatchedItems(tci.Ctx, tci.PlnK, msg, rcp)
+			_, err = GetMatchedItems(tci.Ctx, tci.PlnK, msg.ItemIDs, rcp.ItemInputs, msg.Sender)
 			if tc.showError {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -145,6 +146,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cases := map[string]struct {
 		cookbookID               string
 		itemIDs                  []string
+		catalystItemIDs          []string
 		dynamicItemSet           bool
 		dynamicItemName          string
 		addInputCoin             bool
@@ -294,7 +296,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				tc.itemIDs = []string{dynamicItem.ID}
 			}
 
-			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
+			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs, tc.catalystItemIDs)
 			result := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {

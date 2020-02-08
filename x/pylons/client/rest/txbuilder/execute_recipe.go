@@ -23,7 +23,7 @@ func ExecuteRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgExecuteRecipe("id0001", sender, []string{"alpha", "beta", "gamma"})
+		msg := msgs.NewMsgExecuteRecipe("id0001", sender, []string{"alpha", "beta", "gamma"}, []string{"catalyst"})
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

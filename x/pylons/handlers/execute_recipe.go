@@ -36,13 +36,13 @@ type ExecuteRecipeScheduleOutput struct {
 	ExecID string
 }
 
-func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe) ([]types.Item, error) {
+func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msgItemIDs []string, recipeInputItems types.ItemInputList, sender sdk.AccAddress) ([]types.Item, error) {
 	// TODO: need to check it's working correctly when it is recipe for merging to same items
 
 	var inputItems []types.Item
 	keys := make(map[string]bool)
 
-	for _, id := range msg.ItemIDs {
+	for _, id := range msgItemIDs {
 		if _, value := keys[id]; !value {
 			keys[id] = true
 
@@ -50,7 +50,7 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 			if err != nil {
 				return nil, err
 			}
-			if !item.Sender.Equals(msg.Sender) {
+			if !item.Sender.Equals(sender) {
 				return nil, errors.New("item owner is not same as sender")
 			}
 
@@ -63,7 +63,7 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 	// we validate and match items
 	var matchedItems []types.Item
 	var matches bool
-	for _, itemInput := range recipe.ItemInputs {
+	for _, itemInput := range recipeInputItems {
 		matches = false
 
 		for _, item := range inputItems {
@@ -282,6 +282,11 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	return targetItem, nil
 }
 
+// HandleLoosingCatalystItems handles the chances of loosing the catalyst item
+func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystItems types.CatalystItemInputList) error {
+	return nil
+}
+
 func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
 	if len(matchedItems) != 1 {
@@ -325,7 +330,22 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
 	}
 
-	matchedItems, err2 := GetMatchedItems(ctx, keeper, msg, recipe)
+	if len(recipe.CatalystInputs) != 0 {
+		// if not catalyst items are provided then we error out early
+		if len(msg.CatalystItemIDs) == 0 {
+			return errInternal(fmt.Errorf("The recipe expects catalyst items for its execution. None provided"))
+		}
+		matchedCatalystItems, err := GetMatchedItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs.ToItemInputList(), msg.Sender)
+		if err != nil {
+			return errInternal(err)
+		}
+		// all catalystItems haven't matched
+		if len(matchedCatalystItems) != len(msg.CatalystItemIDs) {
+			return errInternal(fmt.Errorf("the catalyst items user provided do not match the recipe"))
+		}
+	}
+
+	matchedItems, err2 := GetMatchedItems(ctx, keeper, msg.ItemIDs, recipe.ItemInputs, msg.Sender)
 	if err2 != nil {
 		return errInternal(err2)
 	}

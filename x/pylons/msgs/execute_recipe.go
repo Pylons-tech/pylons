@@ -9,17 +9,19 @@ import (
 
 // MsgExecuteRecipe defines a SetName message
 type MsgExecuteRecipe struct {
-	RecipeID string
-	Sender   sdk.AccAddress
-	ItemIDs  []string
+	RecipeID        string
+	Sender          sdk.AccAddress
+	ItemIDs         []string
+	CatalystItemIDs []string
 }
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe {
+func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []string, catalystItemIDs []string) MsgExecuteRecipe {
 	msg := MsgExecuteRecipe{
-		RecipeID: recipeID,
-		Sender:   sender,
-		ItemIDs:  itemIDs,
+		RecipeID:        recipeID,
+		Sender:          sender,
+		ItemIDs:         itemIDs,
+		CatalystItemIDs: catalystItemIDs,
 	}
 	return msg
 }
