@@ -18,7 +18,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 
 	cases := map[string]struct {
 		cookbookName   string
@@ -76,10 +75,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
+				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.recipeID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
 				cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 
 				err := json.Unmarshal(cookbookResult.Data, &cbData)
+				if err != nil {
+					t.Log("cookbook result log", cookbookResult.Log)
+				}
 				require.True(t, err == nil)
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
