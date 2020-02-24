@@ -219,5 +219,6 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
 
+	t.Log("txhash = ", txhash)
 	return txhash
 }
