@@ -11,10 +11,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "cookbooks": ["tradecookbook"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["tradecookbook"]
+                }
+            ]
         }
     },
     {
@@ -29,19 +31,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v1" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v1" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -56,19 +60,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v2" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v2" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -83,19 +89,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v3" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v3" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -110,19 +118,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v4" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v4" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -137,10 +147,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "trades": ["coin to coin trading"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "trades": ["coin to coin trading"]
+                }
+            ]
         }
     },
     {
@@ -169,10 +181,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "trades": ["coin to item trading"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "trades": ["coin to item trading"]
+                }
+            ]
         }
     },
     {
@@ -187,19 +201,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v1" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v1" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -214,10 +230,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "trades": ["item to coin trading"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "trades": ["item to coin trading"]
+                }
+            ]
         }
     },
     {
@@ -232,19 +250,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v3" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v3" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -259,10 +279,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "trades": ["item to item trading"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "trades": ["item to item trading"]
+                }
+            ]
         }
     },
     {
@@ -277,19 +299,34 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Trading Knife v4" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v4" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                },
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Trading Knife v2" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     }
 ]

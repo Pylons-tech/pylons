@@ -22,19 +22,21 @@ Here's sample scenario's step in JSON
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "eugen",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     }
 ```

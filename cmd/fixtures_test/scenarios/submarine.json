@@ -11,10 +11,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "cookbooks": ["submarine"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["submarine"]
+                }
+            ]
         }
     },
     {
@@ -29,19 +31,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -57,19 +61,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -84,19 +90,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Shield" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Shield" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -111,10 +119,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Straight Attack Knife Generation Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Straight Attack Knife Generation Recipe"]
+                }
+            ]
         }
     },
     {
@@ -129,10 +139,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Delayed Attack Knife Generation Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Delayed Attack Knife Generation Recipe"]
+                }
+            ]
         }
     },
     {
@@ -147,10 +159,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Submarine Coin Generation Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Submarine Coin Generation Recipe"]
+                }
+            ]
         }
     },
     {
@@ -165,10 +179,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Knife Shield Generation Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Knife Shield Generation Recipe"]
+                }
+            ]
         }
     },
     {
@@ -183,10 +199,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Knife buyer recipe from submcoin"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Knife buyer recipe from submcoin"]
+                }
+            ]
         }
     },
     {
@@ -202,19 +220,21 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Straight Attack Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Straight Attack Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -230,7 +250,7 @@
                 "status": "Success",
                 "message": "scheduled the recipe"
             },
-            "property": {}
+            "property": []
         }
     },
     {
@@ -245,7 +265,7 @@
             "txResult": {
                 "errLog": "the item IDs count doesn't match the recipe input"
             },
-            "property": {}
+            "property": []
         }
     },
     {
@@ -261,19 +281,21 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Knife Shield" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Knife Shield" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -289,19 +311,21 @@
                 "status": "Success",
                 "message": "successfully completed the execution"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Delayed Attack Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Delayed Attack Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -317,15 +341,17 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "michael",
-                "coins": [
-                    {
-                        "denom": "submcoin",
-                        "amount": 100
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "coins": [
+                        {
+                            "denom": "submcoin",
+                            "amount": 100
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -341,25 +367,27 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "michael",
-                "coins": [
-                    {
-                        "denom": "submcoin",
-                        "amount": 99
-                    }
-                ],
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": { "level": 2 }
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "coins": [
+                        {
+                            "denom": "submcoin",
+                            "amount": 99
+                        }
+                    ],
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": { "level": 2 }
+                        }
+                    ]
+                }
+            ]
         }
     }
 ]
