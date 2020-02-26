@@ -22,15 +22,6 @@ func (ciil CatalystItemInputList) Validate() error {
 	return nil
 }
 
-// ToItemInputList is used at places where we have to compare catalyst item with an item
-func (ciil CatalystItemInputList) ToItemInputList() ItemInputList {
-	iil := ItemInputList{}
-	for _, ci := range ciil {
-		iil = append(iil, ci.ItemInput)
-	}
-	return iil
-}
-
 func (ciil CatalystItemInputList) String() string {
 	itm := "CatalystItemInputList{"
 

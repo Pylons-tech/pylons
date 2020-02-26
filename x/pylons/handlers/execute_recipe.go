@@ -5,10 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-<<<<<<< HEAD
-=======
 	"time"
->>>>>>> add catalyst item
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -297,6 +294,7 @@ func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystIte
 		// for example the lost per cent is 70% then if the number is less then 70 then the item
 		// is lost
 		if ci.LostPerCent < randomInt {
+
 			keeper.DeleteItem(ctx, ci.ID)
 		}
 	}
@@ -346,11 +344,11 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	}
 
 	if len(recipe.CatalystInputs) != 0 {
-		// if not catalyst items are provided then we error out early
+		// if no catalyst items are provided then we error out early
 		if len(msg.CatalystItemIDs) == 0 {
 			return errInternal(fmt.Errorf("The recipe expects catalyst items for its execution. None provided"))
 		}
-		matchedCatalystItems, err := GetMatchedItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs.ToItemInputList(), msg.Sender)
+		matchedCatalystItems, err := GetMatchedCatalystItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs, msg.Sender)
 		if err != nil {
 			return errInternal(err)
 		}
