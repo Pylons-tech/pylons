@@ -11,10 +11,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "cookbooks": ["helicopter"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["helicopter"]
+                }
+            ]
         }
     },
     {
@@ -29,19 +31,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Helicopter's Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Helicopter's Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -56,19 +60,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Adventurer" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Adventurer" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -83,10 +89,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Helicopter's Straight Attack Knife Generation Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Helicopter's Straight Attack Knife Generation Recipe"]
+                }
+            ]
         }
     },
     {
@@ -101,10 +109,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Helicopter's Coin Generation Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Helicopter's Coin Generation Recipe"]
+                }
+            ]
         }
     },
     {
@@ -119,10 +129,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Adventurer Upgrade Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Adventurer Upgrade Recipe"]
+                }
+            ]
         }
     },
     {
@@ -137,10 +149,12 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "eugen",
-                "recipes": ["Delayed Adventurer Upgrade Recipe"]
-            }
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Delayed Adventurer Upgrade Recipe"]
+                }
+            ]
         }
     },
     {
@@ -156,19 +170,21 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
-                        "dblKeys": [],
-                        "dblValues": {},
-                        "longKeys": [],
-                        "longValues": {}
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -184,15 +200,17 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": {
-                "owner": "michael",
-                "coins": [
-                    {
-                        "denom": "helicoin",
-                        "amount": 1
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "coins": [
+                        {
+                            "denom": "helicoin",
+                            "amount": 1
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -208,19 +226,21 @@
                 "status": "Success",
                 "message": "successfully upgraded the item"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
-                        "dblKeys": [],
-                        "dblValues": { "attack": "3.0" },
-                        "longKeys": [],
-                        "longValues": { "level": 2 }
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
+                            "dblKeys": [],
+                            "dblValues": { "attack": "3.0" },
+                            "longKeys": [],
+                            "longValues": { "level": 2 }
+                        }
+                    ]
+                }
+            ]
         }
     },
     {
@@ -236,7 +256,7 @@
                 "status": "Success",
                 "message": "scheduled the recipe"
             },
-            "property": {}
+            "property": []
         }
     },
     {
@@ -251,19 +271,21 @@
             "txResult": {
                 "status": "Success"
             },
-            "property": {
-                "owner": "michael",
-                "items": [
-                    {
-                        "stringKeys": [],
-                        "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
-                        "dblKeys": [],
-                        "dblValues": { "attack": "5.0" },
-                        "longKeys": [],
-                        "longValues": { "level": 3 }
-                    }
-                ]
-            }
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
+                            "dblKeys": [],
+                            "dblValues": { "attack": "5.0" },
+                            "longKeys": [],
+                            "longValues": { "level": 3 }
+                        }
+                    ]
+                }
+            ]
         }
     }
 ]
