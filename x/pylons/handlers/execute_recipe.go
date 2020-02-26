@@ -5,6 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+<<<<<<< HEAD
+=======
+	"time"
+>>>>>>> add catalyst item
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -283,8 +287,19 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 }
 
 // HandleLoosingCatalystItems handles the chances of loosing the catalyst item
-func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystItems types.CatalystItemInputList) error {
-	return nil
+func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystItems types.CatalystItemList) {
+	for _, ci := range catalystItems {
+		s1 := rand.NewSource(time.Now().UnixNano())
+		r1 := rand.New(s1)
+		// select a random number between 0 and 100 (including both ends)
+		randomInt := r1.Intn(101)
+
+		// for example the lost per cent is 70% then if the number is less then 70 then the item
+		// is lost
+		if ci.LostPerCent < randomInt {
+			keeper.DeleteItem(ctx, ci.ID)
+		}
+	}
 }
 
 func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {

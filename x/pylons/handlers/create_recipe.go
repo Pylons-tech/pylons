@@ -44,6 +44,10 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		}
 		recipe.ID = msg.RecipeID
 	}
+
+	if err := recipe.CatalystInputs.Validate(); err != nil {
+		return errInternal(err)
+	}
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
 		return errInternal(err)
 	}
