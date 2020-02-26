@@ -213,20 +213,6 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 	return outputSTR, nil
 }
 
-func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
-
-	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe.Entries)
-	if err != nil {
-		return errInternal(err)
-	}
-
-	return marshalJson(ExecuteRecipeResp{
-		Message: "successfully executed the recipe",
-		Status:  "Success",
-		Output:  outputSTR,
-	})
-}
-
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
 
@@ -300,26 +286,23 @@ func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystIte
 	}
 }
 
-func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) error {
 
 	if len(matchedItems) != 1 {
-		return sdk.ErrInternal("matched items shouldn't be 0 or more than one for upgrade recipe").Result()
+		return fmt.Errorf("matched items shouldn't be 0 or more than one for upgrade recipe")
 	}
 
 	targetItem := matchedItems[0]
 	targetItem, err := UpdateItemFromUpgradeParams(targetItem, recipe.ToUpgrade)
 	if err != nil {
-		return errInternal(err)
+		return err
 	}
 
 	if err := keeper.SetItem(ctx, targetItem); err != nil {
-		return errInternal(err)
+		return err
 	}
 
-	return marshalJson(ExecuteRecipeResp{
-		Message: "successfully upgraded the item",
-		Status:  "Success",
-	})
+	return nil
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
@@ -342,13 +325,15 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
 	}
-
+	var matchedCatalystItems types.CatalystItemList
 	if len(recipe.CatalystInputs) != 0 {
+
+		var err error
 		// if no catalyst items are provided then we error out early
 		if len(msg.CatalystItemIDs) == 0 {
 			return errInternal(fmt.Errorf("The recipe expects catalyst items for its execution. None provided"))
 		}
-		matchedCatalystItems, err := GetMatchedCatalystItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs, msg.Sender)
+		matchedCatalystItems, err = GetMatchedCatalystItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs, msg.Sender)
 		if err != nil {
 			return errInternal(err)
 		}
@@ -406,8 +391,38 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	}
 
 	if recipe.RType == types.GENERATION {
-		return HandlerItemGenerationRecipe(ctx, keeper, msg, recipe, matchedItems)
+		outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe.Entries)
+		if err != nil {
+			return errInternal(err)
+		}
+
+		// we have some catalyst items which matched
+		if len(matchedCatalystItems) != 0 {
+			HandleLoosingCatalystItems(ctx, keeper, matchedCatalystItems)
+
+		}
+
+		return marshalJson(ExecuteRecipeResp{
+			Message: "successfully executed the recipe",
+			Status:  "Success",
+			Output:  outputSTR,
+		})
 	} else {
-		return HandlerItemUpgradeRecipe(ctx, keeper, msg, recipe, matchedItems)
+		err := HandlerItemUpgradeRecipe(ctx, keeper, msg, recipe, matchedItems)
+		if err != nil {
+			return errInternal(err)
+		}
+
+		// we have some catalyst items which matched
+		if len(matchedCatalystItems) != 0 {
+			HandleLoosingCatalystItems(ctx, keeper, matchedCatalystItems)
+
+		}
+
+		return marshalJson(ExecuteRecipeResp{
+			Message: "successfully upgraded the item",
+			Status:  "Success",
+		})
+
 	}
 }
