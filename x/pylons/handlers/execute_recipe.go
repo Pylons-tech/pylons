@@ -155,20 +155,24 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
 	// TODO should setup variables of go-cel program here from targetItem
 
-	variables := [](*exprpb.Decl){}
+	varDefs := [](*exprpb.Decl){}
+	variables := map[string]interface{}{}
 	for _, dbli := range targetItem.Doubles {
-		variables = append(variables, decls.NewIdent(dbli.Key, decls.Double, nil))
+		varDefs = append(varDefs, decls.NewIdent(dbli.Key, decls.Double, nil))
+		variables[dbli.Key] = dbli.Value.Float()
 	}
 	for _, inti := range targetItem.Longs {
-		variables = append(variables, decls.NewIdent(inti.Key, decls.Int, nil))
+		varDefs = append(varDefs, decls.NewIdent(inti.Key, decls.Int, nil))
+		variables[inti.Key] = inti.Value
 	}
 	for _, stri := range targetItem.Strings {
-		variables = append(variables, decls.NewIdent(stri.Key, decls.String, nil))
+		varDefs = append(varDefs, decls.NewIdent(stri.Key, decls.String, nil))
+		variables[stri.Key] = stri.Value
 	}
 
 	env, err := cel.NewEnv(
 		cel.Declarations(
-			variables...,
+			varDefs...,
 		),
 	)
 	if err != nil {
@@ -176,7 +180,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	}
 	fmt.Println("go-cel env debug", env)
 
-	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(); err != nil {
+	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing double upgrade values")
 	} else {
 		for _, dbl := range dblKeyValues {
@@ -190,7 +194,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		}
 	}
 
-	if lngKeyValues, err := ToUpgrade.Longs.Actualize(); err != nil {
+	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing long upgrade values")
 	} else {
 		for _, lng := range lngKeyValues {
@@ -202,7 +206,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		}
 	}
 
-	for _, str := range ToUpgrade.Strings.Actualize() {
+	for _, str := range ToUpgrade.Strings.Actualize(env, variables) {
 		strKey, ok := targetItem.FindStringKey(str.Key)
 		if !ok {
 			return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")

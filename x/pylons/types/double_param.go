@@ -2,6 +2,8 @@ package types
 
 import (
 	"fmt"
+
+	"github.com/google/cel-go/cel"
 )
 
 // DoubleParam describes the bounds on an item input/output parameter of type float64
@@ -37,10 +39,13 @@ func (dpm DoubleParamList) String() string {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize() ([]DoubleKeyValue, error) {
+func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface{}) ([]DoubleKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue
 	for _, param := range dpm {
+		if len(param.Program) > 0 {
+			CheckAndExecuteProgram(env, variables, param.Program)
+		}
 		val, err := param.Generate()
 		// TODO if param.Program is available then need to use that
 		if err != nil {

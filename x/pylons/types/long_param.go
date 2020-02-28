@@ -2,6 +2,8 @@ package types
 
 import (
 	"fmt"
+
+	"github.com/google/cel-go/cel"
 )
 
 // LongParam describes the bounds on an item input/output parameter of type int64
@@ -38,12 +40,15 @@ func (lpm LongParamList) String() string {
 }
 
 // Actualize builds the params
-func (lpm LongParamList) Actualize() ([]LongKeyValue, error) {
+func (lpm LongParamList) Actualize(env cel.Env, variables map[string]interface{}) ([]LongKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []LongKeyValue
 	for _, param := range lpm {
 		val, err := param.Generate()
 		// TODO if param.Program is available then need to use that
+		if len(param.Program) > 0 {
+			CheckAndExecuteProgram(env, variables, param.Program)
+		}
 		if err != nil {
 			return m, err
 		}

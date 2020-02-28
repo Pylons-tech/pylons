@@ -20,6 +20,7 @@ require (
 	github.com/zondax/ledger-go v0.8.0 // indirect
 	golang.org/x/sync v0.0.0-20190227155943-e225da77a7e6 // indirect
 	golang.org/x/sys v0.0.0-20190329044733-9eb1bfa1ce65 // indirect
+	google.golang.org/genproto v0.0.0-20190819201941-24fa4b261c55
 	google.golang.org/grpc v1.19.1 // indirect
 )
 

@@ -30,14 +30,14 @@ func (io ItemOutput) GetWeight() int {
 func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress) (*Item, error) {
 	// This function is used on ExecuteRecipe's AddExecutedResult, and it's
 	// not acceptable to provide predefined GUID
-	dblActualize, err := io.Doubles.Actualize()
+	dblActualize, err := io.Doubles.Actualize(nil, nil)
 	if err != nil {
 		return nil, err
 	}
-	longActualize, err := io.Longs.Actualize()
+	longActualize, err := io.Longs.Actualize(nil, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return NewItem(cookbook, dblActualize, longActualize, io.Strings.Actualize(), sender), nil
+	return NewItem(cookbook, dblActualize, longActualize, io.Strings.Actualize(nil, nil), sender), nil
 }
