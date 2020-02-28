@@ -4,7 +4,7 @@ require (
 	github.com/Workiva/go-datastructures v1.0.50
 	github.com/cosmos/cosmos-sdk v0.35.0
 	github.com/ethereum/go-ethereum v1.8.23 // indirect
-	github.com/google/cel-go v0.3.2 // indirect
+	github.com/google/cel-go v0.3.2
 	github.com/google/gofuzz v1.0.0 // indirect
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.0

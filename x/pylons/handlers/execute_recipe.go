@@ -3,11 +3,15 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/checker/decls"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 // ExecuteRecipeResp is the response for executeRecipe
@@ -150,6 +154,27 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
 	// TODO should setup variables of go-cel program here from targetItem
+
+	variables := [](*exprpb.Decl){}
+	for _, dbli := range targetItem.Doubles {
+		variables = append(variables, decls.NewIdent(dbli.Key, decls.Double, nil))
+	}
+	for _, inti := range targetItem.Longs {
+		variables = append(variables, decls.NewIdent(inti.Key, decls.Int, nil))
+	}
+	for _, stri := range targetItem.Strings {
+		variables = append(variables, decls.NewIdent(stri.Key, decls.String, nil))
+	}
+
+	env, err := cel.NewEnv(
+		cel.Declarations(
+			variables...,
+		),
+	)
+	if err != nil {
+		return targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
+	}
+	fmt.Println("go-cel env debug", env)
 
 	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing double upgrade values")
