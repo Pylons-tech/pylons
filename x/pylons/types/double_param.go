@@ -10,6 +10,8 @@ type DoubleParam struct {
 	Rate FloatString
 	Key  string
 	DoubleWeightTable
+	// When program is not empty, DoubleWeightTable is ignored
+	Program string
 }
 
 // DoubleParamList is a list of DoubleParam
@@ -40,6 +42,7 @@ func (dpm DoubleParamList) Actualize() ([]DoubleKeyValue, error) {
 	var m []DoubleKeyValue
 	for _, param := range dpm {
 		val, err := param.Generate()
+		// TODO if param.Program is available then need to use that
 		if err != nil {
 			return m, err
 		}

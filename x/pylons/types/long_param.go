@@ -11,6 +11,8 @@ type LongParam struct {
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate FloatString
 	IntWeightTable
+	// When program is not empty, IntWeightTable is ignored
+	Program string
 }
 
 // LongParamList is a list of LongParam
@@ -41,6 +43,7 @@ func (lpm LongParamList) Actualize() ([]LongKeyValue, error) {
 	var m []LongKeyValue
 	for _, param := range lpm {
 		val, err := param.Generate()
+		// TODO if param.Program is available then need to use that
 		if err != nil {
 			return m, err
 		}
