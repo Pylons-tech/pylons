@@ -86,7 +86,7 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 					Weight: 2,
 				},
 			}}}},
-			StringParamList{StringParam{"Name", itemName, "1.0"}},
+			StringParamList{StringParam{"Name", itemName, "1.0", ""}},
 			1,
 		},
 	}

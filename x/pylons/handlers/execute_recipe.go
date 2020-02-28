@@ -109,6 +109,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 
 func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, entries types.WeightedParamList) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
+	// TODO should setup variables of go-cel program here from matchedItems; think of how to handle multiple items
 
 	// we delete all the matched items as those get converted to output items
 	for _, item := range matchedItems {
@@ -148,6 +149,8 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 }
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
+	// TODO should setup variables of go-cel program here from targetItem
+
 	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing double upgrade values")
 	} else {
@@ -174,7 +177,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		}
 	}
 
-	for _, str := range ToUpgrade.Strings {
+	for _, str := range ToUpgrade.Strings.Actualize() {
 		strKey, ok := targetItem.FindStringKey(str.Key)
 		if !ok {
 			return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
