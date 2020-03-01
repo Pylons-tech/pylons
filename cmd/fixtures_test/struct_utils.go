@@ -117,6 +117,7 @@ func GetItemIDsFromNames(bytes []byte, includeLockedByRcp bool, t *testing.T) []
 
 	for _, itemName := range itemNamesResp.ItemNames {
 		itemID, exist, err := intTest.GetItemIDFromName(itemName, includeLockedByRcp)
+		t.Log("no item named=", itemName, "and includeLockedByRcp=", includeLockedByRcp)
 		t.MustTrue(exist)
 		t.MustNil(err)
 		ItemIDs = append(ItemIDs, itemID)

@@ -18,18 +18,20 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	)
 	variables := map[string]interface{}{
 		"name":   "shield",
-		"attack": 1.5,
-		"level":  1,
+		"attack": 5.0,
+		"level":  3,
 	}
 	t.Log("NewEnv.err", err)
-	out, err := CheckAndExecuteProgram(env, variables, `attack * 2.0`)
-	t.Log("attack x 2.err", out, err)
+	out, err := CheckAndExecuteProgram(env, variables, `attack + 2.0`)
+	flo64, _ := getFloat(out.Value())
+	t.Logf("attack x 2.err %f %v", flo64, err)
 	require.True(t, err == nil)
 	out, err = CheckAndExecuteProgram(env, variables, `level + 1`)
-	t.Log("attack + 1.err", out, err)
+	val64, _ := out.Value().(int64)
+	t.Logf("attack + 1.err %d %v", val64, err)
 	require.True(t, err == nil)
 	out, err = CheckAndExecuteProgram(env, variables, `name + "old"`)
-	t.Log(`name + "old".err`, out, err)
+	t.Log(`name + "old".err`, out.Value(), err)
 	require.True(t, err == nil)
 	out, err = CheckAndExecuteProgram(env, variables, `level + attack`)
 	t.Log(`level + attack`, out, err)

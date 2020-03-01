@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -178,41 +177,53 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	if err != nil {
 		return targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
 	}
-	fmt.Println("go-cel env debug", env)
 
 	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing double upgrade values")
+		return targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
-		for _, dbl := range dblKeyValues {
+		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
 				return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
 			}
-			originValue := targetItem.Doubles[dblKey].Value.Float()
-			upgradeAmount := dbl.Value.Float()
-			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+			if len(ToUpgrade.Doubles[idx].Program) == 0 { // NO PROGRAM
+				originValue := targetItem.Doubles[dblKey].Value.Float()
+				upgradeAmount := dbl.Value.Float()
+				targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+			} else {
+				targetItem.Doubles[dblKey].Value = dbl.Value
+			}
 		}
 	}
 
 	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing long upgrade values")
+		return targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
-		for _, lng := range lngKeyValues {
+		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
 				return targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
 			}
-			targetItem.Longs[lngKey].Value += lng.Value
+			if len(ToUpgrade.Longs[idx].Program) == 0 { // NO PROGRAM
+				targetItem.Longs[lngKey].Value += lng.Value
+			} else {
+				targetItem.Longs[lngKey].Value = lng.Value
+			}
 		}
 	}
 
-	for _, str := range ToUpgrade.Strings.Actualize(env, variables) {
-		strKey, ok := targetItem.FindStringKey(str.Key)
-		if !ok {
-			return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+	if strKeyValues, err := ToUpgrade.Strings.Actualize(env, variables); err != nil {
+		return targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
+	} else {
+		for _, str := range strKeyValues {
+			strKey, ok := targetItem.FindStringKey(str.Key)
+			if !ok {
+				return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+			}
+			targetItem.Strings[strKey].Value = str.Value
 		}
-		targetItem.Strings[strKey].Value = str.Value
 	}
+
 	return targetItem, nil
 }
 

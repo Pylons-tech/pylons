@@ -22,6 +22,6 @@ func CheckAndExecuteProgram(env cel.Env, variables map[string]interface{}, progr
 		return nil, errors.New("program construction error: " + err.Error())
 	}
 	out, details, err := prg.Eval(variables)
-	fmt.Println(out, details)
+	fmt.Println("CheckAndExecuteProgram::", out, details, variables)
 	return out, nil
 }

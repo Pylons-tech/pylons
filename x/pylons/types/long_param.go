@@ -1,6 +1,7 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/google/cel-go/cel"
@@ -44,10 +45,21 @@ func (lpm LongParamList) Actualize(env cel.Env, variables map[string]interface{}
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []LongKeyValue
 	for _, param := range lpm {
-		val, err := param.Generate()
+		var val int
+		var err error
 		// TODO if param.Program is available then need to use that
 		if len(param.Program) > 0 {
-			CheckAndExecuteProgram(env, variables, param.Program)
+			refVal, refErr := CheckAndExecuteProgram(env, variables, param.Program)
+			if refErr != nil {
+				return m, refErr
+			}
+			val64, ok := refVal.Value().(int64)
+			if !ok {
+				return m, errors.New("returned result from program is not convertable to int")
+			}
+			val = int(val64)
+		} else {
+			val, err = param.Generate()
 		}
 		if err != nil {
 			return m, err

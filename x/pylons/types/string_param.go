@@ -38,18 +38,26 @@ func (spm StringParamList) String() string {
 	return sp
 }
 
-func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface{}) []StringKeyValue {
+func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface{}) ([]StringKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []StringKeyValue
 	for _, param := range spm {
+		var val string
+
 		// TODO if param.Program is available then need to use that rather than value
 		if len(param.Program) > 0 {
-			CheckAndExecuteProgram(env, variables, param.Program)
+			refVal, refErr := CheckAndExecuteProgram(env, variables, param.Program)
+			if refErr != nil {
+				return m, refErr
+			}
+			val = fmt.Sprintf("%v", refVal.Value())
+		} else {
+			val = param.Value
 		}
 		m = append(m, StringKeyValue{
 			Key:   param.Key,
-			Value: param.Value,
+			Value: val,
 		})
 	}
-	return m
+	return m, nil
 }

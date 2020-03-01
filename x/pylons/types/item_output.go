@@ -38,6 +38,10 @@ func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress) (*Item, error)
 	if err != nil {
 		return nil, err
 	}
+	stringActualize, err := io.Strings.Actualize(nil, nil)
+	if err != nil {
+		return nil, err
+	}
 
-	return NewItem(cookbook, dblActualize, longActualize, io.Strings.Actualize(nil, nil), sender), nil
+	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender), nil
 }

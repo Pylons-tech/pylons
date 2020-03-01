@@ -158,6 +158,26 @@
         }
     },
     {
+        "ID": "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/adventurer_upgrader_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Adventurer Upgrade Program Recipe"]
+                }
+            ]
+        }
+    },
+    {
         "ID": "EXECUTE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE"],
@@ -282,6 +302,39 @@
                             "dblValues": { "attack": "5.0" },
                             "longKeys": [],
                             "longValues": { "level": 3 }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CHECK_EXECUTION_DELAYED_ADVENTURER_UPDATE_RECIPE", 
+                "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/adventurer_upgrader_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully upgraded the item"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Adventurer",  "LastName": "Program Upgraded Adventurer" },
+                            "dblKeys": [],
+                            "dblValues": { "attack": "10.0" },
+                            "longKeys": [],
+                            "longValues": { "level": 4 }
                         }
                     ]
                 }
