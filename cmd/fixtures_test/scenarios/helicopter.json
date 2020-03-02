@@ -78,6 +78,64 @@
         }
     },
     {
+        "ID": "CREATE_HELI_SHIELD_LV1",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/heli_shield_lv1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Helicopter's Shield lv1" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_HELI_SHIELD_LV2",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/heli_shield_lv2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Helicopter's Shield lv2" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
         "ID": "CREATE_ADVENTURER_LV1",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
@@ -222,6 +280,26 @@
                 {
                     "owner": "eugen",
                     "recipes": ["Helicopter's sell two knives Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_MERGE_TWO_SHIELDS_PROGRAM_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/heli_merge_two_shields_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Helicopter's merge two shields Recipe"]
                 }
             ]
         }
@@ -415,6 +493,40 @@
                         {
                             "denom": "helicoin",
                             "amount": 31
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_MERGE_TWO_SHIELDS_PROGRAM_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_HELI_SHIELD_LV1", 
+                "CREATE_HELI_SHIELD_LV2",
+                "CREATE_MERGE_TWO_SHIELDS_PROGRAM_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/heli_merge_two_shields_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Shield",  "LastName": "Program Merged Shield" },
+                            "dblKeys": [],
+                            "dblValues": { "defense": "3.0" },
+                            "longKeys": [],
+                            "longValues": { "level": 3 }
                         }
                     ]
                 }
