@@ -270,3 +270,12 @@ Sample ToUpgrade JSON
 ```
 
 This recipe is to upgrade item's level, LastName, and attack.
+
+#### Program 
+
+1) for first input, it can be used without setting `attack = input0.attack`
+2) for multiple input cases, it can call `input1.attack` etc.
+3) I have tested `+`, `*`  in double/long and merge string operation using `+` for now
+`input0.attack + input1.attack`
+`(input0.attack + input1.attack) * 0.7`
+`"Old " + "Knife"`
