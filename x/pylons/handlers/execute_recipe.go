@@ -165,7 +165,6 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 
 func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, entries types.WeightedParamList) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
-	// TODO should setup variables of go-cel program here from matchedItems; think of how to handle multiple items
 
 	env, variables, err := GenerateCelEnvVarFromInputItems(matchedItems)
 	// we delete all the matched items as those get converted to output items

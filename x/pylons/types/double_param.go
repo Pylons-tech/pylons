@@ -87,7 +87,7 @@ func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface
 	for _, param := range dpm {
 		var val float64
 		var err error
-		// TODO if param.Program is available then need to use that
+
 		if len(param.Program) > 0 {
 			refVal, refErr := CheckAndExecuteProgram(env, variables, param.Program)
 			if refErr != nil {

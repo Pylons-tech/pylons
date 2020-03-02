@@ -47,7 +47,7 @@ func (lpm LongParamList) Actualize(env cel.Env, variables map[string]interface{}
 	for _, param := range lpm {
 		var val int
 		var err error
-		// TODO if param.Program is available then need to use that
+
 		if len(param.Program) > 0 {
 			refVal, refErr := CheckAndExecuteProgram(env, variables, param.Program)
 			if refErr != nil {

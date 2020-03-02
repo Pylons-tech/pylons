@@ -44,7 +44,6 @@ func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface
 	for _, param := range spm {
 		var val string
 
-		// TODO if param.Program is available then need to use that rather than value
 		if len(param.Program) > 0 {
 			refVal, refErr := CheckAndExecuteProgram(env, variables, param.Program)
 			if refErr != nil {
