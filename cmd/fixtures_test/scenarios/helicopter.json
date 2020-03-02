@@ -20,13 +20,13 @@
         }
     },
     {
-        "ID": "CREATE_HELI_KNIFE",        
+        "ID": "CREATE_HELI_KNIFE_LV1",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife.json",
+        "paramsRef": "./items/heli_knife_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -37,7 +37,36 @@
                     "items": [
                         {
                             "stringKeys": [],
-                            "stringValues": { "Name": "Helicopter's Knife" },
+                            "stringValues": { "Name": "Helicopter's Knife lv1" },
+                            "dblKeys": [],
+                            "dblValues": {},
+                            "longKeys": [],
+                            "longValues": {}
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_HELI_KNIFE_LV2",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/heli_knife_lv2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringKeys": [],
+                            "stringValues": { "Name": "Helicopter's Knife lv2" },
                             "dblKeys": [],
                             "dblValues": {},
                             "longKeys": [],
@@ -173,6 +202,26 @@
                 {
                     "owner": "eugen",
                     "recipes": ["Adventurer Upgrade Program Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/heli_sell_two_knives_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Helicopter's sell two knives Recipe"]
                 }
             ]
         }
@@ -335,6 +384,37 @@
                             "dblValues": { "attack": "10.0" },
                             "longKeys": [],
                             "longValues": { "level": 4 }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_SELL_TWO_KNIVES_PROGRAM_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_HELI_KNIFE_LV1", 
+                "CREATE_HELI_KNIFE_LV2",
+                "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE",
+                "EXECUTE_HELI_COIN_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/heli_sell_two_knives_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "coins": [
+                        {
+                            "denom": "helicoin",
+                            "amount": 31
                         }
                     ]
                 }
