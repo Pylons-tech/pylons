@@ -227,11 +227,12 @@ Sample ItemOutputs JSON
 #### CoinOutputs
 This describes coin which can be generated from recipe.
 
-| No | Field  | type   | sample     | description                                                         |
-|----|--------|--------|------------|---------------------------------------------------------------------|
-| 1  | Coin   | string | "goldcoin" | This shows the name of coin to be generated.                        |
-| 2  | Count  | int    | 1          | This shows the number of coins to be generated.                     |
-| 3  | Weight | int    | 1          | This is used to describe the percentage of coin could be generated. |
+| No | Field   | type   | sample       | description                                                         |
+|----|---------|--------|--------------|---------------------------------------------------------------------|
+| 1  | Coin    | string | "goldcoin"   | This shows the name of coin to be generated.                        |
+| 2  | Count   | int    | 1            | This shows the number of coins to be generated.                     |
+| 3  | Program | string | "attack x 2" | This is showing that user will collect attack x 2 amount of gold    |
+| 4  | Weight  | int    | 1            | This is used to describe the percentage of coin could be generated. |
 
 Sample CoinOutputs JSON
 ```
@@ -241,6 +242,16 @@ Sample CoinOutputs JSON
   "Weight":1
 }
 ```
+Sample CoinOutputs JSON with Program
+```
+{
+  "Coin":"submcoin",
+  "Program":"attack x 2",
+  "Weight":1
+}
+```
+
+Here when program field is available, Count is ignored.
 
 #### ToUpgrade
 This describes the fields of ToUpgrade field of item upgrade recipe.
