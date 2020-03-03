@@ -333,3 +333,9 @@ Sample ToUpgrade JSON with Program
 `input0.attack + input1.attack`
 `(input0.attack + input1.attack) * 0.7`
 `"Old " + "Knife"`
+
+Program field is available for CoinOutputs, Doubles, Longs and Strings (output related fields now).
+When Program field is available, other fields like "Value", "Count", "WeightRangeTable" are ignored.
+
+Program field is needed for itemInput also?
+Need to discuss and implement if needed.
