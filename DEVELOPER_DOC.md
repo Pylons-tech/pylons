@@ -192,12 +192,13 @@ Sample Entries JSON
 #### ItemOutputs
 This describes item which can be generated from recipe.
 
-| No | Field        | type   | sample         | description                                                                      |
-|----|--------------|--------|----------------|----------------------------------------------------------------------------------|
-| 1  | Key          | string | attack         | attribute which want to describe.                                                |
-| 2  | Rate         | double | 0.5            | This describes the percentage of the attribute is available or not.              |
-| 3  | Value        | string | "Knife Shield" | string attribute of item output.                                                 |
-| 4  | WeightRanges | array  | 3-5            | the recipe has randomness in output and this field is for int/double attributes. |
+| No | Field        | type   | sample         | description                                                                                |
+|----|--------------|--------|----------------|--------------------------------------------------------------------------------------------|
+| 1  | Key          | string | attack         | attribute which want to describe.                                                          |
+| 2  | Rate         | double | 0.5            | This describes the percentage of the attribute is available or not.                        |
+| 3  | Value        | string | "Knife Shield" | string attribute of item output.                                                           |
+| 4  | Program      | string | "attack x 2"   | Program is used when output is based on input value; Value is ignored when it is not empty |
+| 5  | WeightRanges | array  | 3-5            | the recipe has randomness in output and this field is for int/double attributes.           |
 
 Sample ItemOutputs JSON
 ```
@@ -222,6 +223,32 @@ Sample ItemOutputs JSON
         }
     ],
     "Strings":[{ "Key":"Name", "Value":"Knife Shield", "Rate":"1.0" }]
+}]
+```
+
+Sample ItemOutputs JSON using Program
+```
+[{
+    "Doubles":[
+        {
+            "Rate":"1.0",
+            "Key":"attack",
+            "Program": "input0.attack + input1.attack"
+        },
+        {
+            "Rate":"1.0",
+            "Key":"defence",
+            "Program": "input0.defence + input1.defence"
+        }
+    ],
+    "Longs":[
+        {
+            "Rate":"1.0",
+            "Key":"level",
+            "Program": "input0.level + input1.level"
+        }
+    ],
+    "Strings":[{ "Key":"Name", "Program":"\"Merged \" + input0.name + input1.name", "Rate":"1.0" }]
 }]
 ```
 #### CoinOutputs
@@ -281,6 +308,22 @@ Sample ToUpgrade JSON
 ```
 
 This recipe is to upgrade item's level, LastName, and attack.
+
+Sample ToUpgrade JSON with Program
+
+```
+{
+  "Doubles": [{
+    "Key": "attack", 
+    "Program": "attack + 1"
+  }],
+  "Longs": [{
+    "Key": "level", 
+    "WeightRanges": "level + 1"
+  }],
+  "Strings": [{"Key": "LastName", "Program": "\"Upgraded Adventurer\""}]
+}
+```
 
 #### Program 
 
