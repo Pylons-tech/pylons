@@ -31,6 +31,16 @@ func GenCoinOnlyEntry(coinName string) WeightedParamList {
 	}
 }
 
+func GenCoinOnlyEntryRand(coinName string) WeightedParamList {
+	return WeightedParamList{
+		CoinOutput{
+			Coin:    coinName,
+			Program: `randi(10)`,
+			Weight:  1,
+		},
+	}
+}
+
 func GenSingleItemInputList(itemName string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
@@ -92,10 +102,36 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 	}
 }
 
+func GenItemOnlyEntryRand(itemName string) WeightedParamList {
+	return WeightedParamList{
+		ItemOutput{
+			DoubleParamList{DoubleParam{
+				Key:     "endurance",
+				Program: `500.00`,
+				Rate:    "1.0",
+			}},
+			LongParamList{LongParam{
+				Key:     "HP",
+				Program: `500 + randi(300)`,
+				Rate:    "1.0",
+			}},
+			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
+			1,
+		},
+	}
+}
+
 func GenEntries(coinName string, itemName string) WeightedParamList {
 	return WeightedParamList{
 		GenCoinOnlyEntry(coinName)[0],
 		GenItemOnlyEntry(itemName)[0],
+	}
+}
+
+func GenEntriesRand(coinName, itemName string) WeightedParamList {
+	return WeightedParamList{
+		GenCoinOnlyEntryRand(coinName)[0],
+		GenItemOnlyEntryRand(itemName)[0],
 	}
 }
 

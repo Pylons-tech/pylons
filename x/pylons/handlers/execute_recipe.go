@@ -162,6 +162,12 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 		}
 	}
 
+	varDefs = append(varDefs, decls.NewFunction("randi",
+		decls.NewOverload("randi_int",
+			[]*exprpb.Type{decls.Int},
+			decls.Int),
+	))
+
 	funcs := cel.Functions(&functions.Overload{
 		// operator for 1 param
 		Operator: "randi_int",
