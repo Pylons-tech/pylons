@@ -327,9 +327,10 @@ Sample ToUpgrade JSON with Program
 
 #### Program 
 
-1) for first input, it can be used without setting `attack = input0.attack`
-2) for multiple input cases, it can call `input1.attack` etc.
-3) I have tested `+`, `*`  in double/long and merge string operation using `+` for now
+##### How program works in general
+1) For first input, it can be used without setting `attack = input0.attack`
+2) For multiple input cases, it can call `input1.attack` etc.
+3) Have tested `+`, `*`  in double/long and merge string operation using `+` for now
 `input0.attack + input1.attack`
 `(input0.attack + input1.attack) * 0.7`
 `"Old " + "Knife"`
@@ -339,3 +340,14 @@ When Program field is available, other fields like "Value", "Count", "WeightRang
 
 Program field is needed for itemInput also?
 Need to discuss and implement if needed.
+
+##### Custom functions within program
+
+- `randi` function
+Usecase: generate random value.
+Example:  
+```
+randi(10)
+```
+
+Above code is for generation of random number from 1 - 10.
