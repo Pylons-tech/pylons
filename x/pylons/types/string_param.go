@@ -45,7 +45,7 @@ func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface
 		var val string
 
 		if len(param.Program) > 0 {
-			refVal, refErr := CheckAndExecuteProgram(env, variables, param.Program)
+			refVal, refErr := CheckAndExecuteProgram(env, variables, nil, param.Program)
 			if refErr != nil {
 				return m, refErr
 			}

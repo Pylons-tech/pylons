@@ -84,7 +84,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 		coinOutput, _ := output.(types.CoinOutput)
 		var ocl sdk.Coins
 		if len(coinOutput.Program) > 0 {
-			refVal, refErr := types.CheckAndExecuteProgram(env, variables, coinOutput.Program)
+			refVal, refErr := types.CheckAndExecuteProgram(env, variables, nil, coinOutput.Program)
 			if refErr != nil {
 				return ers, sdk.ErrInternal(refErr.Error())
 			}

@@ -8,7 +8,7 @@ import (
 	"github.com/google/cel-go/common/types/ref"
 )
 
-func CheckAndExecuteProgram(env cel.Env, variables map[string]interface{}, program string) (ref.Val, error) {
+func CheckAndExecuteProgram(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption, program string) (ref.Val, error) {
 	parsed, issues := env.Parse(program)
 	if issues != nil && issues.Err() != nil {
 		return nil, errors.New("parse error: " + issues.Err().Error())
@@ -17,7 +17,7 @@ func CheckAndExecuteProgram(env cel.Env, variables map[string]interface{}, progr
 	if issues != nil && issues.Err() != nil {
 		return nil, errors.New("type-check error: " + issues.Err().Error())
 	}
-	prg, err := env.Program(checked)
+	prg, err := env.Program(checked, funcs)
 	if err != nil {
 		return nil, errors.New("program construction error: " + err.Error())
 	}
