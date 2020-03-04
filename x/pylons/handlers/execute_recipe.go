@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -11,6 +12,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker/decls"
+	celTypes "github.com/google/cel-go/common/types"
+	"github.com/google/cel-go/common/types/ref"
+	"github.com/google/cel-go/interpreter/functions"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
@@ -77,14 +81,17 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 	return matchedItems, nil
 }
 
-func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, env cel.Env, variables map[string]interface{}, sender sdk.AccAddress, cbID string) (ExecuteRecipeSerialize, sdk.Error) {
+func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam,
+	env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption,
+	sender sdk.AccAddress, cbID string,
+) (ExecuteRecipeSerialize, sdk.Error) {
 	var ers ExecuteRecipeSerialize
 	switch output.(type) {
 	case types.CoinOutput:
 		coinOutput, _ := output.(types.CoinOutput)
 		var ocl sdk.Coins
 		if len(coinOutput.Program) > 0 {
-			refVal, refErr := types.CheckAndExecuteProgram(env, variables, nil, coinOutput.Program)
+			refVal, refErr := types.CheckAndExecuteProgram(env, variables, funcs, coinOutput.Program)
 			if refErr != nil {
 				return ers, sdk.ErrInternal(refErr.Error())
 			}
@@ -108,7 +115,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	case types.ItemOutput:
 		itemOutput, _ := output.(types.ItemOutput)
 
-		outputItem, err := itemOutput.Item(cbID, sender, env, variables)
+		outputItem, err := itemOutput.Item(cbID, sender, env, variables, funcs)
 		if err != nil {
 			return ers, sdk.ErrInternal(err.Error())
 		}
@@ -123,7 +130,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	}
 }
 
-func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[string]interface{}, error) {
+func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[string]interface{}, cel.ProgramOption, error) {
 	// create environment variables from matched items
 	varDefs := [](*exprpb.Decl){}
 	variables := map[string]interface{}{}
@@ -155,18 +162,26 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 		}
 	}
 
+	funcs := cel.Functions(&functions.Overload{
+		// operator for 1 param
+		Operator: "randi_int",
+		Unary: func(arg ref.Val) ref.Val {
+			return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
+		},
+	})
+
 	env, err := cel.NewEnv(
 		cel.Declarations(
 			varDefs...,
 		),
 	)
-	return env, variables, err
+	return env, variables, funcs, err
 }
 
 func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, entries types.WeightedParamList) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 
-	env, variables, err := GenerateCelEnvVarFromInputItems(matchedItems)
+	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
 	// we delete all the matched items as those get converted to output items
 	for _, item := range matchedItems {
 		keeper.DeleteItem(ctx, item.ID)
@@ -176,7 +191,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 	if err != nil {
 		return []byte{}, err
 	}
-	ers, err := AddExecutedResult(ctx, keeper, output, env, variables, sender, cbID)
+	ers, err := AddExecutedResult(ctx, keeper, output, env, variables, funcs, sender, cbID)
 
 	if err != nil {
 		return []byte{}, err
@@ -205,13 +220,13 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 }
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
-	env, variables, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
+	env, variables, funcs, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
 
 	if err != nil {
 		return targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
 	}
 
-	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables); err != nil {
+	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables, funcs); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
 		for idx, dbl := range dblKeyValues {
@@ -229,7 +244,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		}
 	}
 
-	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables); err != nil {
+	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables, funcs); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
 		for idx, lng := range lngKeyValues {
@@ -245,7 +260,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		}
 	}
 
-	if strKeyValues, err := ToUpgrade.Strings.Actualize(env, variables); err != nil {
+	if strKeyValues, err := ToUpgrade.Strings.Actualize(env, variables, funcs); err != nil {
 		return targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
 	} else {
 		for _, str := range strKeyValues {

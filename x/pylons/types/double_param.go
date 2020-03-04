@@ -81,7 +81,7 @@ func getFloat(unk interface{}) (float64, error) {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface{}) ([]DoubleKeyValue, error) {
+func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) ([]DoubleKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue
 	for _, param := range dpm {
@@ -89,7 +89,7 @@ func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface
 		var err error
 
 		if len(param.Program) > 0 {
-			refVal, refErr := CheckAndExecuteProgram(env, variables, nil, param.Program)
+			refVal, refErr := CheckAndExecuteProgram(env, variables, funcs, param.Program)
 			if refErr != nil {
 				return m, refErr
 			}

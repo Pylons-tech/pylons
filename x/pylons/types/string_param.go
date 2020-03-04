@@ -38,14 +38,14 @@ func (spm StringParamList) String() string {
 	return sp
 }
 
-func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface{}) ([]StringKeyValue, error) {
+func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) ([]StringKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []StringKeyValue
 	for _, param := range spm {
 		var val string
 
 		if len(param.Program) > 0 {
-			refVal, refErr := CheckAndExecuteProgram(env, variables, nil, param.Program)
+			refVal, refErr := CheckAndExecuteProgram(env, variables, funcs, param.Program)
 			if refErr != nil {
 				return m, refErr
 			}

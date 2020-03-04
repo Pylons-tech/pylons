@@ -28,18 +28,18 @@ func (io ItemOutput) GetWeight() int {
 	return io.Weight
 }
 
-func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, env cel.Env, variables map[string]interface{}) (*Item, error) {
+func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) (*Item, error) {
 	// This function is used on ExecuteRecipe's AddExecutedResult, and it's
 	// not acceptable to provide predefined GUID
-	dblActualize, err := io.Doubles.Actualize(env, variables)
+	dblActualize, err := io.Doubles.Actualize(env, variables, funcs)
 	if err != nil {
 		return nil, err
 	}
-	longActualize, err := io.Longs.Actualize(env, variables)
+	longActualize, err := io.Longs.Actualize(env, variables, funcs)
 	if err != nil {
 		return nil, err
 	}
-	stringActualize, err := io.Strings.Actualize(env, variables)
+	stringActualize, err := io.Strings.Actualize(env, variables, funcs)
 	if err != nil {
 		return nil, err
 	}

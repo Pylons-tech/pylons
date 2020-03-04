@@ -41,7 +41,7 @@ func (lpm LongParamList) String() string {
 }
 
 // Actualize builds the params
-func (lpm LongParamList) Actualize(env cel.Env, variables map[string]interface{}) ([]LongKeyValue, error) {
+func (lpm LongParamList) Actualize(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) ([]LongKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []LongKeyValue
 	for _, param := range lpm {
@@ -49,7 +49,7 @@ func (lpm LongParamList) Actualize(env cel.Env, variables map[string]interface{}
 		var err error
 
 		if len(param.Program) > 0 {
-			refVal, refErr := CheckAndExecuteProgram(env, variables, nil, param.Program)
+			refVal, refErr := CheckAndExecuteProgram(env, variables, funcs, param.Program)
 			if refErr != nil {
 				return m, refErr
 			}
