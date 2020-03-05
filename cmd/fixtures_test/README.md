@@ -80,3 +80,17 @@ Steps can wait more than one other steps and all the IDs can be added to the arr
 `blockWait` field is number of blocks to wait after precondition is ok.
 
 There's circular dependency checker and it will automatically fail if it's found by testing system.
+
+## fixture test options
+
+- runserial
+Run fixture test in serial mode.
+```
+make fixture_tests -runserial
+```
+
+- userest
+Send transactions by using rest endpoint.
+```
+make fixture_tests -userest
+```
