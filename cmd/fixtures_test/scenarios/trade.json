@@ -36,12 +36,7 @@
                     "owner": "eugen",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v1" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v1" }
                         }
                     ]
                 }
@@ -65,12 +60,7 @@
                     "owner": "eugen",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v2" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v2" }
                         }
                     ]
                 }
@@ -94,12 +84,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v3" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v3" }
                         }
                     ]
                 }
@@ -123,12 +108,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v4" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v4" }
                         }
                     ]
                 }
@@ -206,12 +186,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v1" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v1" }
                         }
                     ]
                 }
@@ -255,12 +230,7 @@
                     "owner": "eugen",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v3" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v3" }
                         }
                     ]
                 }
@@ -304,12 +274,7 @@
                     "owner": "eugen",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v4" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v4" }
                         }
                     ]
                 },
@@ -317,12 +282,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Trading Knife v2" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Trading Knife v2" }
                         }
                     ]
                 }

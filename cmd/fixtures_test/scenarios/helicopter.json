@@ -36,12 +36,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Helicopter's Knife lv1" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Helicopter's Knife lv1" }
                         }
                     ]
                 }
@@ -65,12 +60,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Helicopter's Knife lv2" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Helicopter's Knife lv2" }
                         }
                     ]
                 }
@@ -94,12 +84,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Helicopter's Shield lv1" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Helicopter's Shield lv1" }
                         }
                     ]
                 }
@@ -123,12 +108,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Helicopter's Shield lv2" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Helicopter's Shield lv2" }
                         }
                     ]
                 }
@@ -152,12 +132,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Adventurer" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Adventurer" }
                         }
                     ]
                 }
@@ -342,12 +317,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Helicopter's Straight Attack Knife" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Helicopter's Straight Attack Knife" }
                         }
                     ]
                 }
@@ -398,11 +368,8 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
                             "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
-                            "dblKeys": [],
                             "dblValues": { "attack": "3.0" },
-                            "longKeys": [],
                             "longValues": { "level": 2 }
                         }
                     ]
@@ -443,11 +410,8 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
                             "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
-                            "dblKeys": [],
                             "dblValues": { "attack": "5.0" },
-                            "longKeys": [],
                             "longValues": { "level": 3 }
                         }
                     ]
@@ -476,11 +440,8 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
                             "stringValues": { "Name": "Adventurer",  "LastName": "Program Upgraded Adventurer" },
-                            "dblKeys": [],
                             "dblValues": { "attack": "10.0" },
-                            "longKeys": [],
                             "longValues": { "level": 4 }
                         }
                     ]
@@ -541,11 +502,8 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
                             "stringValues": { "Name": "Shield",  "LastName": "Program Merged Shield" },
-                            "dblKeys": [],
                             "dblValues": { "defense": "3.0" },
-                            "longKeys": [],
                             "longValues": { "level": 3 }
                         }
                     ]
