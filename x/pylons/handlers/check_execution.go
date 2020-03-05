@@ -46,6 +46,8 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 			return nil, err
 		}
 
+		targetItem.OwnerRecipeID = ""
+
 		if err := keeper.SetItem(ctx, targetItem); err != nil {
 			return nil, err
 		}

@@ -126,6 +126,19 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender1,
 	)
 
+	// mock no input 1 coin | 1 item output recipe
+	noInput1Coin1ItemRandRecipeData := MockRecipe(
+		mockedCoinInput, "existing recipe",
+		types.GENERATION,
+		types.CoinInputList{},
+		types.ItemInputList{},
+		types.GenEntriesRand("zmbr", "ZombieRand"),
+		types.ItemUpgradeParams{},
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
 	// item upgrade recipe
 	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
@@ -231,7 +244,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"randomness test on no input (1 coin | 1) item output recipe": {
 			itemIDs:                  []string{},
 			dynamicItemSet:           false,
-			dynamicItemName:          "Raichu",
+			dynamicItemName:          "",
 			addInputCoin:             true,
 			recipeID:                 noInput1Coin1ItemRecipeData.RecipeID, // available ID
 			sender:                   sender1,
@@ -240,6 +253,20 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			showError:                false,
 			checkCoinName:            "chaira",
 			checkItemName:            "ZombieA",
+			checkItemOrCoinAvailable: true,
+		},
+		"random function test on program on no input (1 coin | 1) item output recipe": {
+			itemIDs:                  []string{},
+			dynamicItemSet:           false,
+			dynamicItemName:          "",
+			addInputCoin:             true,
+			recipeID:                 noInput1Coin1ItemRandRecipeData.RecipeID, // available ID
+			sender:                   sender1,
+			desiredError:             "",
+			successMsg:               "successfully executed the recipe",
+			showError:                false,
+			checkCoinName:            "zmbr",
+			checkItemName:            "ZombieRand",
 			checkItemOrCoinAvailable: true,
 		},
 		"item upgrade test": {
@@ -274,6 +301,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				execRcpResponse := ExecuteRecipeResp{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
+				if err != nil {
+					t.Log(err, result)
+				}
 				require.True(t, err == nil)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == tc.successMsg)
@@ -291,6 +321,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				itemAvailability := false
 				for _, item := range items {
 					itemName, ok := item.FindString("Name")
+					if !ok {
+						t.Log("name not available for item=", item)
+					}
 					require.True(t, ok)
 					if itemName == tc.checkItemName {
 						itemAvailability = true

@@ -192,12 +192,13 @@ Sample Entries JSON
 #### ItemOutputs
 This describes item which can be generated from recipe.
 
-| No | Field        | type   | sample         | description                                                                      |
-|----|--------------|--------|----------------|----------------------------------------------------------------------------------|
-| 1  | Key          | string | attack         | attribute which want to describe.                                                |
-| 2  | Rate         | double | 0.5            | This describes the percentage of the attribute is available or not.              |
-| 3  | Value        | string | "Knife Shield" | string attribute of item output.                                                 |
-| 4  | WeightRanges | array  | 3-5            | the recipe has randomness in output and this field is for int/double attributes. |
+| No | Field        | type   | sample         | description                                                                                |
+|----|--------------|--------|----------------|--------------------------------------------------------------------------------------------|
+| 1  | Key          | string | attack         | attribute which want to describe.                                                          |
+| 2  | Rate         | double | 0.5            | This describes the percentage of the attribute is available or not.                        |
+| 3  | Value        | string | "Knife Shield" | string attribute of item output.                                                           |
+| 4  | Program      | string | "attack x 2"   | Program is used when output is based on input value; Value is ignored when it is not empty |
+| 5  | WeightRanges | array  | 3-5            | the recipe has randomness in output and this field is for int/double attributes.           |
 
 Sample ItemOutputs JSON
 ```
@@ -224,14 +225,41 @@ Sample ItemOutputs JSON
     "Strings":[{ "Key":"Name", "Value":"Knife Shield", "Rate":"1.0" }]
 }]
 ```
+
+Sample ItemOutputs JSON using Program
+```
+[{
+    "Doubles":[
+        {
+            "Rate":"1.0",
+            "Key":"attack",
+            "Program": "input0.attack + input1.attack"
+        },
+        {
+            "Rate":"1.0",
+            "Key":"defence",
+            "Program": "input0.defence + input1.defence"
+        }
+    ],
+    "Longs":[
+        {
+            "Rate":"1.0",
+            "Key":"level",
+            "Program": "input0.level + input1.level"
+        }
+    ],
+    "Strings":[{ "Key":"Name", "Program":"\"Merged \" + input0.name + input1.name", "Rate":"1.0" }]
+}]
+```
 #### CoinOutputs
 This describes coin which can be generated from recipe.
 
-| No | Field  | type   | sample     | description                                                         |
-|----|--------|--------|------------|---------------------------------------------------------------------|
-| 1  | Coin   | string | "goldcoin" | This shows the name of coin to be generated.                        |
-| 2  | Count  | int    | 1          | This shows the number of coins to be generated.                     |
-| 3  | Weight | int    | 1          | This is used to describe the percentage of coin could be generated. |
+| No | Field   | type   | sample       | description                                                         |
+|----|---------|--------|--------------|---------------------------------------------------------------------|
+| 1  | Coin    | string | "goldcoin"   | This shows the name of coin to be generated.                        |
+| 2  | Count   | int    | 1            | This shows the number of coins to be generated.                     |
+| 3  | Program | string | "attack x 2" | This is showing that user will collect attack x 2 amount of gold    |
+| 4  | Weight  | int    | 1            | This is used to describe the percentage of coin could be generated. |
 
 Sample CoinOutputs JSON
 ```
@@ -241,6 +269,16 @@ Sample CoinOutputs JSON
   "Weight":1
 }
 ```
+Sample CoinOutputs JSON with Program
+```
+{
+  "Coin":"submcoin",
+  "Program":"attack x 2",
+  "Weight":1
+}
+```
+
+Here when program field is available, Count is ignored.
 
 #### ToUpgrade
 This describes the fields of ToUpgrade field of item upgrade recipe.
@@ -270,3 +308,46 @@ Sample ToUpgrade JSON
 ```
 
 This recipe is to upgrade item's level, LastName, and attack.
+
+Sample ToUpgrade JSON with Program
+
+```
+{
+  "Doubles": [{
+    "Key": "attack", 
+    "Program": "attack + 1"
+  }],
+  "Longs": [{
+    "Key": "level", 
+    "WeightRanges": "level + 1"
+  }],
+  "Strings": [{"Key": "LastName", "Program": "\"Upgraded Adventurer\""}]
+}
+```
+
+#### Program 
+
+##### How program works in general
+1) For first input, it can be used without setting `attack = input0.attack`
+2) For multiple input cases, it can call `input1.attack` etc.
+3) Have tested `+`, `*`  in double/long and merge string operation using `+` for now
+`input0.attack + input1.attack`
+`(input0.attack + input1.attack) * 0.7`
+`"Old " + "Knife"`
+
+Program field is available for CoinOutputs, Doubles, Longs and Strings (output related fields now).
+When Program field is available, other fields like "Value", "Count", "WeightRangeTable" are ignored.
+
+Program field is needed for itemInput also?
+Need to discuss and implement if needed.
+
+##### Custom functions within program
+
+- `randi` function
+Usecase: generate random value.
+Example:  
+```
+randi(10)
+```
+
+Above code is for generation of random number from 1 - 10.

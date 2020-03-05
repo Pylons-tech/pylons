@@ -53,7 +53,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		{
 			"early payment test",
 			types.GENERATION,
-			2,
+			4,
 			"",
 			"TESTITEM_CheckExecution__007_TC2",
 			true,
@@ -68,7 +68,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		{
 			"no wait direct check execution test",
 			types.GENERATION,
-			2,
+			4,
 			"",
 			"TESTITEM_CheckExecution__007_TC3",
 			false,

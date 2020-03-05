@@ -3,11 +3,19 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
+	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/checker/decls"
+	celTypes "github.com/google/cel-go/common/types"
+	"github.com/google/cel-go/common/types/ref"
+	"github.com/google/cel-go/interpreter/functions"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 // ExecuteRecipeResp is the response for executeRecipe
@@ -73,13 +81,28 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 	return matchedItems, nil
 }
 
-func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam, sender sdk.AccAddress, cbID string) (ExecuteRecipeSerialize, sdk.Error) {
+func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam,
+	env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption,
+	sender sdk.AccAddress, cbID string,
+) (ExecuteRecipeSerialize, sdk.Error) {
 	var ers ExecuteRecipeSerialize
 	switch output.(type) {
 	case types.CoinOutput:
 		coinOutput, _ := output.(types.CoinOutput)
 		var ocl sdk.Coins
-		ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinOutput.Count)))
+		if len(coinOutput.Program) > 0 {
+			refVal, refErr := types.CheckAndExecuteProgram(env, variables, funcs, coinOutput.Program)
+			if refErr != nil {
+				return ers, sdk.ErrInternal(refErr.Error())
+			}
+			val64, ok := refVal.Value().(int64)
+			if !ok {
+				return ers, sdk.ErrInternal("returned result from program is not convertable to int")
+			}
+			ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(val64)))
+		} else {
+			ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinOutput.Count)))
+		}
 
 		_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
 		if err != nil {
@@ -92,7 +115,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	case types.ItemOutput:
 		itemOutput, _ := output.(types.ItemOutput)
 
-		outputItem, err := itemOutput.Item(cbID, sender)
+		outputItem, err := itemOutput.Item(cbID, sender, env, variables, funcs)
 		if err != nil {
 			return ers, sdk.ErrInternal(err.Error())
 		}
@@ -107,9 +130,64 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	}
 }
 
+func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[string]interface{}, cel.ProgramOption, error) {
+	// create environment variables from matched items
+	varDefs := [](*exprpb.Decl){}
+	variables := map[string]interface{}{}
+	for idx, item := range matchedItems {
+		iPrefix := fmt.Sprintf("input%d.", idx)
+		for _, dbli := range item.Doubles {
+			varDefs = append(varDefs, decls.NewIdent(iPrefix+dbli.Key, decls.Double, nil))
+			variables[iPrefix+dbli.Key] = dbli.Value.Float() // input0.attack
+			if idx == 0 {
+				varDefs = append(varDefs, decls.NewIdent(dbli.Key, decls.Double, nil))
+				variables[dbli.Key] = dbli.Value.Float() // attack
+			}
+		}
+		for _, inti := range item.Longs {
+			varDefs = append(varDefs, decls.NewIdent(iPrefix+inti.Key, decls.Int, nil))
+			variables[iPrefix+inti.Key] = inti.Value // input0.level
+			if idx == 0 {
+				varDefs = append(varDefs, decls.NewIdent(inti.Key, decls.Int, nil))
+				variables[inti.Key] = inti.Value // level
+			}
+		}
+		for _, stri := range item.Strings {
+			varDefs = append(varDefs, decls.NewIdent(iPrefix+stri.Key, decls.String, nil))
+			variables[iPrefix+stri.Key] = stri.Value // input0.name
+			if idx == 0 {
+				varDefs = append(varDefs, decls.NewIdent(stri.Key, decls.String, nil))
+				variables[stri.Key] = stri.Value // name
+			}
+		}
+	}
+
+	varDefs = append(varDefs, decls.NewFunction("randi",
+		decls.NewOverload("randi_int",
+			[]*exprpb.Type{decls.Int},
+			decls.Int),
+	))
+
+	funcs := cel.Functions(&functions.Overload{
+		// operator for 1 param
+		Operator: "randi_int",
+		Unary: func(arg ref.Val) ref.Val {
+			return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
+		},
+	})
+
+	env, err := cel.NewEnv(
+		cel.Declarations(
+			varDefs...,
+		),
+	)
+	return env, variables, funcs, err
+}
+
 func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, entries types.WeightedParamList) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 
+	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
 	// we delete all the matched items as those get converted to output items
 	for _, item := range matchedItems {
 		keeper.DeleteItem(ctx, item.ID)
@@ -119,7 +197,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 	if err != nil {
 		return []byte{}, err
 	}
-	ers, err := AddExecutedResult(ctx, keeper, output, sender, cbID)
+	ers, err := AddExecutedResult(ctx, keeper, output, env, variables, funcs, sender, cbID)
 
 	if err != nil {
 		return []byte{}, err
@@ -148,39 +226,58 @@ func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 }
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
-	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing double upgrade values")
+	env, variables, funcs, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
+
+	if err != nil {
+		return targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
+	}
+
+	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables, funcs); err != nil {
+		return targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
-		for _, dbl := range dblKeyValues {
+		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
 				return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
 			}
-			originValue := targetItem.Doubles[dblKey].Value.Float()
-			upgradeAmount := dbl.Value.Float()
-			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+			if len(ToUpgrade.Doubles[idx].Program) == 0 { // NO PROGRAM
+				originValue := targetItem.Doubles[dblKey].Value.Float()
+				upgradeAmount := dbl.Value.Float()
+				targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+			} else {
+				targetItem.Doubles[dblKey].Value = dbl.Value
+			}
 		}
 	}
 
-	if lngKeyValues, err := ToUpgrade.Longs.Actualize(); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing long upgrade values")
+	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables, funcs); err != nil {
+		return targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
-		for _, lng := range lngKeyValues {
+		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
 				return targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
 			}
-			targetItem.Longs[lngKey].Value += lng.Value
+			if len(ToUpgrade.Longs[idx].Program) == 0 { // NO PROGRAM
+				targetItem.Longs[lngKey].Value += lng.Value
+			} else {
+				targetItem.Longs[lngKey].Value = lng.Value
+			}
 		}
 	}
 
-	for _, str := range ToUpgrade.Strings {
-		strKey, ok := targetItem.FindStringKey(str.Key)
-		if !ok {
-			return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+	if strKeyValues, err := ToUpgrade.Strings.Actualize(env, variables, funcs); err != nil {
+		return targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
+	} else {
+		for _, str := range strKeyValues {
+			strKey, ok := targetItem.FindStringKey(str.Key)
+			if !ok {
+				return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+			}
+			targetItem.Strings[strKey].Value = str.Value
 		}
-		targetItem.Strings[strKey].Value = str.Value
 	}
+
 	return targetItem, nil
 }
 

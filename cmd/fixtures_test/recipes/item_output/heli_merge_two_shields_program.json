@@ -1,0 +1,20 @@
+{
+    "Doubles":[
+        {
+            "Rate":"1.0",
+            "Key":"defense",
+            "Program": "input0.defense + input1.defense"
+        }
+    ],
+    "Longs":[
+        {
+            "Rate":"1.0",
+            "Key":"level",
+            "Program": "input0.level + input1.level"
+        }
+    ],
+    "Strings":[
+        { "Key":"Name", "Value":"Shield", "Rate":"1.0" },
+        { "Key":"LastName", "Value":"Program Merged Shield", "Rate":"1.0" }
+    ]
+}
