@@ -2,6 +2,7 @@ package fixtureTest
 
 import (
 	"encoding/json"
+	"strings"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -229,7 +230,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			hmrErrMsg := intTest.GetHumanReadableErrorFromTxHash(txhash, t)
-			t.MustTrue(hmrErrMsg == step.Output.TxResult.ErrorLog)
+			t.MustTrue(strings.Contains(hmrErrMsg, step.Output.TxResult.ErrorLog))
 		} else {
 			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
