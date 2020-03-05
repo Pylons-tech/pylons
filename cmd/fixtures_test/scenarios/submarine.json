@@ -36,12 +36,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Knife" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Knife" }
                         }
                     ]
                 }
@@ -66,12 +61,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Knife" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Knife" }
                         }
                     ]
                 }
@@ -95,12 +85,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Shield" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Shield" }
                         }
                     ]
                 }
@@ -225,12 +210,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Straight Attack Knife" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Straight Attack Knife" }
                         }
                     ]
                 }
@@ -286,12 +266,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Knife Shield" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Knife Shield" }
                         }
                     ]
                 }
@@ -316,12 +291,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringKeys": [],
-                            "stringValues": { "Name": "Delayed Attack Knife" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
-                            "longValues": {}
+                            "stringValues": { "Name": "Delayed Attack Knife" }
                         }
                     ]
                 }
@@ -378,11 +348,7 @@
                     ],
                     "items": [
                         {
-                            "stringKeys": [],
                             "stringValues": { "Name": "Knife" },
-                            "dblKeys": [],
-                            "dblValues": {},
-                            "longKeys": [],
                             "longValues": { "level": 2 }
                         }
                     ]
