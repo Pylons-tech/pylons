@@ -305,6 +305,26 @@
         }
     },
     {
+        "ID": "CREATE_HELI_COIN_INVALID_PROGRAM_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/heli_coin_invalid_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Helicopter's Invalid Program Coin Generation Recipe"]
+                }
+            ]
+        }
+    },
+    {
         "ID": "EXECUTE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE"],
@@ -531,6 +551,23 @@
                     ]
                 }
             ]
+        }
+    },
+    {
+        "ID": "EXECUTE_HELI_COIN_INVALID_PROGRAM_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_HELI_COIN_INVALID_PROGRAM_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/heli_coin_invalid_program.json",
+        "output": {
+            "txResult": {
+                "errLog": "Syntax error: extraneous input 'Program' expecting"
+            },
+            "property": []
         }
     }
 ]
