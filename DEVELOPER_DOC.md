@@ -341,6 +341,17 @@ When Program field is available, other fields like "Value", "Count", "WeightRang
 Program field is needed for itemInput also?
 Need to discuss and implement if needed.
 
+##### Type conversion
+
+To convert to integer type
+`int(2.1) * 2`
+
+To convert to double type
+`double(2) * 2.5`
+
+To convert to string type
+`string(2.0 + 0.5)`
+
 ##### Custom functions within program
 
 - `randi` function
