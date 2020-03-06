@@ -113,6 +113,24 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, out.Value().(int64) == 132)
 	require.True(t, err == nil)
 
+	// int type conversion test
+	out, err = CheckAndExecuteProgram(env, variables, funcs, `int(2.1) * 2`)
+	t.Log(`int(2.1) * 2`, out, err)
+	require.True(t, out.Value().(int64) == 4)
+	require.True(t, err == nil)
+
+	// float type conversion test
+	out, err = CheckAndExecuteProgram(env, variables, funcs, `double(2) * 2.5`)
+	t.Log(`double(2) * 2.5`, out, err)
+	require.True(t, out.Value().(float64) == 5)
+	require.True(t, err == nil)
+
+	// string type conversion test
+	out, err = CheckAndExecuteProgram(env, variables, funcs, `string(2.0 + 0.5)`)
+	t.Log(`string(2.0 + 0.5)`, out, err)
+	require.True(t, out.Value().(string) == "2.5")
+	require.True(t, err == nil)
+
 	// failing test
 	out, err = CheckAndExecuteProgram(env, variables, funcs, `level + attack`)
 	t.Log(`level + attack`, out, err)
