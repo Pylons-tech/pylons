@@ -89,7 +89,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 	switch output.(type) {
 	case types.CoinOutput:
 		coinOutput, _ := output.(types.CoinOutput)
-		var ocl sdk.Coins
+		var coinAmount int64
 		if len(coinOutput.Program) > 0 {
 			refVal, refErr := types.CheckAndExecuteProgram(env, variables, funcs, coinOutput.Program)
 			if refErr != nil {
@@ -99,10 +99,11 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 			if !ok {
 				return ers, sdk.ErrInternal("returned result from program is not convertable to int")
 			}
-			ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(val64)))
+			coinAmount = val64
 		} else {
-			ocl = append(ocl, sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinOutput.Count)))
+			coinAmount = coinOutput.Count
 		}
+		ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 
 		_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
 		if err != nil {
@@ -110,7 +111,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 		}
 		ers.Type = "COIN"
 		ers.Coin = coinOutput.Coin
-		ers.Amount = coinOutput.Count
+		ers.Amount = coinAmount
 		return ers, nil
 	case types.ItemOutput:
 		itemOutput, _ := output.(types.ItemOutput)
