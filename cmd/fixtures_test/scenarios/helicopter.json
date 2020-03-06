@@ -68,6 +68,30 @@
         }
     },
     {
+        "ID": "CREATE_HELI_KNIFE_LV3",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/heli_knife_lv3.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Helicopter's Knife lv3" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
         "ID": "CREATE_HELI_SHIELD_LV1",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
@@ -300,6 +324,26 @@
         }
     },
     {
+        "ID": "CREATE_HLG_COIN_PROGRAM_WITH_INPUT_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/hlg_coin_program_with_input.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Helicopter's Hlg Coin Generation From Input Recipe"]
+                }
+            ]
+        }
+    },
+    {
         "ID": "EXECUTE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE"],
@@ -526,6 +570,35 @@
                 "errLog": "Syntax error: extraneous input 'Program' expecting"
             },
             "property": []
+        }
+    },
+    {
+        "ID": "EXECUTE_HLG_COIN_PROGRAM_WITH_INPUT_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_HELI_KNIFE_LV3",
+                "CREATE_HLG_COIN_PROGRAM_WITH_INPUT_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/hlg_coin_program_with_input.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "coins": [
+                        {
+                            "denom": "hlgcoin",
+                            "amount": 15
+                        }
+                    ]
+                }
+            ]
         }
     }
 ]

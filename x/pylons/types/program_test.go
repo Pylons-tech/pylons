@@ -131,6 +131,13 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, out.Value().(string) == "2.5")
 	require.True(t, err == nil)
 
+	// randi, double, multiply and int merge test
+	out, err = CheckAndExecuteProgram(env, variables, funcs, `int(5.0 * double(randi(2)+4) )`)
+	t.Log(`int(5.0 * double(randi(2)+4) )`, out, err)
+	val64 = out.Value().(int64)
+	require.True(t, val64 == 20 || val64 == 25 || val64 == 30)
+	require.True(t, err == nil)
+
 	// failing test
 	out, err = CheckAndExecuteProgram(env, variables, funcs, `level + attack`)
 	t.Log(`level + attack`, out, err)
