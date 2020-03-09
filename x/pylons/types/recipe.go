@@ -24,7 +24,7 @@ type Recipe struct {
 	RType          RecipeType // GENERATION | UPGRADE
 	CoinInputs     CoinInputList
 	ItemInputs     ItemInputList
-	CatalystInputs CatalystItemInputList
+	CatalystInputs ItemInputList
 	Entries        WeightedParamList
 	ToUpgrade      ItemUpgradeParams
 	Description    string
@@ -53,7 +53,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 	rcpType RecipeType,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
-	catalystInputs CatalystItemInputList,
+	catalystInputs ItemInputList,
 	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
 	toUpgrade ItemUpgradeParams,
 	execTime int64, sender sdk.AccAddress) Recipe {

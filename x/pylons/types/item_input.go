@@ -7,6 +7,8 @@ type ItemInput struct {
 	Doubles DoubleInputParamList
 	Longs   LongInputParamList
 	Strings StringInputParamList
+	// the chance of an item to be lost in %
+	LostPerCent int
 }
 
 // Matches checks if all the constraint match the given item
@@ -60,4 +62,13 @@ func (iil ItemInputList) String() string {
 
 	itm += "}"
 	return itm
+}
+
+func (iil ItemInputList) Validate() error {
+	for _, cii := range iil {
+		if cii.LostPerCent < 0 || cii.LostPerCent > 100 {
+			return fmt.Errorf("the lost percentage cannot be more then 100 or less then 0")
+		}
+	}
+	return nil
 }
