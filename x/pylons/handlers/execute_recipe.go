@@ -70,6 +70,7 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msgItemIDs []string, r
 		for _, item := range inputItems {
 			if itemInput.Matches(item) && len(item.OwnerRecipeID) == 0 {
 				matchedItems = append(matchedItems, item)
+				item.LostPerCent = itemInput.LostPerCent
 				matches = true
 				break
 			}
@@ -270,7 +271,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 }
 
 // HandleLoosingCatalystItems handles the chances of loosing the catalyst item
-func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystItems types.CatalystItemList) {
+func HandleLoosingCatalystItems(ctx sdk.Context, keeper keep.Keeper, catalystItems types.ItemList) {
 	for _, ci := range catalystItems {
 		s1 := rand.NewSource(time.Now().UnixNano())
 		r1 := rand.New(s1)
@@ -325,7 +326,8 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
 	}
-	var matchedCatalystItems types.CatalystItemList
+
+	var matchedCatalystItems []types.Item
 	if len(recipe.CatalystInputs) != 0 {
 
 		var err error
@@ -333,7 +335,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if len(msg.CatalystItemIDs) == 0 {
 			return errInternal(fmt.Errorf("The recipe expects catalyst items for its execution. None provided"))
 		}
-		matchedCatalystItems, err = GetMatchedCatalystItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs, msg.Sender)
+		matchedCatalystItems, err = GetMatchedItems(ctx, keeper, msg.CatalystItemIDs, recipe.CatalystInputs, msg.Sender)
 		if err != nil {
 			return errInternal(err)
 		}

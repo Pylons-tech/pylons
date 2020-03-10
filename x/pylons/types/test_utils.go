@@ -16,24 +16,10 @@ func GenItemInputList(names ...string) ItemInputList {
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
+			0,
 		})
 	}
 	return iiL
-}
-
-func GenCatalystItemInputList(names ...string) CatalystItemInputList {
-	ciinpl := CatalystItemInputList{}
-	for _, name := range names {
-		ciinpl = append(ciinpl, CatalystItemInput{
-			ItemInput{
-				nil,
-				nil,
-				StringInputParamList{StringInputParam{"Name", name}}},
-			0,
-		})
-
-	}
-	return ciinpl
 }
 
 func GenCoinOnlyEntry(coinName string) WeightedParamList {

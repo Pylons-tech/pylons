@@ -37,6 +37,7 @@ type Item struct {
 	OwnerRecipeID string
 	Tradable      bool
 	Lost          bool
+	LostPerCent   int
 }
 
 // ItemList is a list of items
