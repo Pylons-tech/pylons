@@ -58,9 +58,10 @@ const (
 	RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN PopularRecipeType = 2
 	RCP_5xWOODCOIN_1xRAICHU_BUY                   PopularRecipeType = 3
 	RCP_RAICHU_NAME_UPGRADE                       PopularRecipeType = 4
-	RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE             PopularRecipeType = 5
-	RCP_2_BLOCK_DELAYED_KNIFE_MERGE               PopularRecipeType = 6
-	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 7
+	RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST         PopularRecipeType = 5
+	RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE             PopularRecipeType = 6
+	RCP_2_BLOCK_DELAYED_KNIFE_MERGE               PopularRecipeType = 7
+	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 8
 )
 
 func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.RecipeType, types.CoinInputList, types.ItemInputList, types.WeightedParamList, types.ItemUpgradeParams, int64) {
@@ -92,6 +93,13 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.RecipeType, types.
 			types.GenItemInputList(100, "Raichu"),
 			types.WeightedParamList{},
 			types.GenToUpgradeForString("Name", "RaichuV2"),
+			0
+	case RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST:
+		return types.UPGRADE,
+			types.CoinInputList{},
+			types.GenItemInputList(100, "RaichuTC", "catalyst"),
+			types.WeightedParamList{},
+			types.GenToUpgradeForString("Name", "RaichuTCV2"),
 			0
 	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
 		return types.UPGRADE,

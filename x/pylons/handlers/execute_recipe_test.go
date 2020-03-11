@@ -113,6 +113,19 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender1,
 	)
 
+	// mock 1 catalyst input 1 output recipe
+	oneCatalystOneOutputRecipeData := MockRecipe(
+		mockedCoinInput, "existing recipe",
+		types.GENERATION,
+		types.GenCoinInputList("wood", 5),
+		types.GenItemInputList(100, "catalyst"), // for catalyst item alivepercent is 100
+		types.GenItemOnlyEntry("Catalyst2"),
+		types.ItemUpgradeParams{},
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
 	// mock no input 1 coin | 1 item output recipe
 	noInput1Coin1ItemRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
@@ -142,11 +155,14 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// item upgrade recipe
 	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
 
+	// item upgrade recipe with catalyst item
+	itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+
 	cases := map[string]struct {
 		cookbookID               string
 		itemIDs                  []string
 		dynamicItemSet           bool
-		dynamicItemName          string
+		dynamicItemNames         []string
 		addInputCoin             bool
 		recipeID                 string
 		sender                   sdk.AccAddress
@@ -206,7 +222,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"not existing item in input": {
 			itemIDs:            []string{"invaliditemID"},
 			dynamicItemSet:     false,
-			dynamicItemName:    "Raichu",
+			dynamicItemNames:   []string{"Raichu"},
 			addInputCoin:       true,
 			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
@@ -218,7 +234,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"Wrong item in input": {
 			itemIDs:            []string{"invaliditemID"},
 			dynamicItemSet:     true,
-			dynamicItemName:    "NoRaichu",
+			dynamicItemNames:   []string{"NoRaichu"},
 			addInputCoin:       true,
 			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
@@ -231,7 +247,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"1 input item and 1 output item recipe test": {
 			itemIDs:            []string{},
 			dynamicItemSet:     true,
-			dynamicItemName:    "Raichu",
+			dynamicItemNames:   []string{"Raichu"},
 			addInputCoin:       true,
 			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
@@ -241,10 +257,22 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "Zombie",
 			checkItemAvailable: true,
 		},
+		"item generation with catalyst item test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"catalyst"},
+			addInputCoin:       true,
+			recipeID:           oneCatalystOneOutputRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkItemName:      "catalyst", // "catalyst" item should be kept
+			checkItemAvailable: true,
+		},
 		"randomness test on no input (1 coin | 1) item output recipe": {
 			itemIDs:                  []string{},
 			dynamicItemSet:           false,
-			dynamicItemName:          "",
 			addInputCoin:             true,
 			recipeID:                 noInput1Coin1ItemRecipeData.RecipeID, // available ID
 			sender:                   sender1,
@@ -258,7 +286,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"random function test on program on no input (1 coin | 1) item output recipe": {
 			itemIDs:                  []string{},
 			dynamicItemSet:           false,
-			dynamicItemName:          "",
 			addInputCoin:             true,
 			recipeID:                 noInput1Coin1ItemRandRecipeData.RecipeID, // available ID
 			sender:                   sender1,
@@ -272,7 +299,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"item upgrade test": {
 			itemIDs:            []string{},
 			dynamicItemSet:     true,
-			dynamicItemName:    "Raichu",
+			dynamicItemNames:   []string{"Raichu"},
 			addInputCoin:       true,
 			recipeID:           itemUpgradeRecipeData.RecipeID, // available ID
 			sender:             sender1,
@@ -282,6 +309,19 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "RaichuV2",
 			checkItemAvailable: true,
 		},
+		"item upgrade with catalyst item test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"RaichuTC", "catalyst"},
+			addInputCoin:       true,
+			recipeID:           itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully upgraded the item",
+			showError:          false,
+			checkItemName:      "RaichuTCV2",
+			checkItemAvailable: true,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -289,9 +329,12 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 			}
 			if tc.dynamicItemSet {
-				dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.dynamicItemName)
-				mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
-				tc.itemIDs = []string{dynamicItem.ID}
+				tc.itemIDs = []string{}
+				for _, diN := range tc.dynamicItemNames {
+					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
+					mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
+					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
+				}
 			}
 
 			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
