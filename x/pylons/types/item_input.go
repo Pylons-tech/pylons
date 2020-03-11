@@ -70,5 +70,6 @@ func (iil ItemInputList) Validate() error {
 			return fmt.Errorf("the lost percentage cannot be more then 100 or less then 0")
 		}
 	}
+	// TODO should check program is valid for go-cel part during recipe creation
 	return nil
 }
