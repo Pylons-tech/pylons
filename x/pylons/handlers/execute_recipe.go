@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -26,10 +27,11 @@ type ExecuteRecipeResp struct {
 }
 
 type ExecuteRecipeSerialize struct {
-	Type   string `json:"type"`   // COIN or ITEM
-	Coin   string `json:"coin"`   // used when type is ITEM
-	Amount int64  `json:"amount"` // used when type is COIN
-	ItemID string `json:"itemID"` // used when type is ITEM
+	Type           string `json:"type"`           // COIN or ITEM
+	Coin           string `json:"coin"`           // used when type is ITEM
+	Amount         int64  `json:"amount"`         // used when type is COIN
+	ItemID         string `json:"itemID"`         // used when type is ITEM
+	ItemLoseResult []bool `json:"itemLoseResult"` // used when there are input items
 }
 
 type ExecuteRecipeScheduleOutput struct {
@@ -79,6 +81,26 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 		}
 	}
 	return matchedItems, nil
+}
+
+func HandleLoseItems(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.Item, recipe types.Recipe) []bool {
+
+	itemLoseResult := []bool{}
+	for idx, ci := range matchedItems {
+		s1 := rand.NewSource(time.Now().UnixNano())
+		r1 := rand.New(s1)
+		// select a random number between 0 and 100 (including both ends)
+		randomInt := r1.Intn(101)
+
+		// for example the alive percent is 70% then if the number is less then 70 then the item is alive
+		if recipe.ItemInputs[idx].AlivePercent < randomInt { // alive
+			itemLoseResult = append(itemLoseResult, false)
+		} else { // lose
+			keeper.DeleteItem(ctx, ci.ID)
+			itemLoseResult = append(itemLoseResult, true)
+		}
+	}
+	return itemLoseResult
 }
 
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam,
@@ -185,16 +207,12 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 	return env, variables, funcs, err
 }
 
-func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, entries types.WeightedParamList) ([]byte, error) {
+func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, recipe types.Recipe) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
-	// we delete all the matched items as those get converted to output items
-	for _, item := range matchedItems {
-		keeper.DeleteItem(ctx, item.ID)
-	}
 
-	output, err := entries.Actualize()
+	output, err := recipe.Entries.Actualize()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -203,6 +221,8 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 	if err != nil {
 		return []byte{}, err
 	}
+
+	ers.ItemLoseResult = HandleLoseItems(ctx, keeper, matchedItems, recipe)
 
 	outputSTR, err2 := json.Marshal(ers)
 
@@ -214,7 +234,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 
 func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
-	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe.Entries)
+	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe)
 	if err != nil {
 		return errInternal(err)
 	}
@@ -284,8 +304,8 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 
 func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
-	if len(matchedItems) != 1 {
-		return sdk.ErrInternal("matched items shouldn't be 0 or more than one for upgrade recipe").Result()
+	if len(matchedItems) == 0 {
+		return sdk.ErrInternal("matched items shouldn't be 0 for upgrade recipe").Result()
 	}
 
 	targetItem := matchedItems[0]
@@ -298,9 +318,20 @@ func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgE
 		return errInternal(err)
 	}
 
+	var ers ExecuteRecipeSerialize
+	ers.Type = "ITEM"
+	ers.ItemID = targetItem.ID
+	ers.ItemLoseResult = HandleLoseItems(ctx, keeper, matchedItems, recipe)
+
+	outputSTR, err2 := json.Marshal(ers)
+	if err2 != nil {
+		return errInternal(err2)
+	}
+
 	return marshalJson(ExecuteRecipeResp{
 		Message: "successfully upgraded the item",
 		Status:  "Success",
+		Output:  outputSTR,
 	})
 }
 
