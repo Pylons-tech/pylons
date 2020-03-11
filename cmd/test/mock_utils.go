@@ -88,7 +88,7 @@ func MockRecipeGUID(interval int64, rcpType types.RecipeType, name, curItemName,
 	} else { // UPGRADE recipe
 		return MockDetailedRecipeGUID(name, rcpType,
 			types.GenCoinInputList("pylon", 5),
-			types.GenSingleItemInputList(curItemName),
+			types.GenSingleItemInputList(100, curItemName),
 			types.WeightedParamList{},
 			types.GenItemNameUpgradeParams(desItemName),
 			interval,
@@ -221,7 +221,8 @@ func MockDetailedTradeGUID(
 	if !hasInputCoin {
 		inputCoinList = nil
 	}
-	inputItemList := types.GenItemInputList(inputItemName)
+	// We are not losing items when trading
+	inputItemList := types.GenItemInputList(100, inputItemName)
 	if !hasInputItem {
 		inputItemList = nil
 	}

@@ -42,7 +42,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					"this has to meet character limits lol",
 					types.GENERATION,
 					types.GenCoinInputList("wood", 5),
-					types.GenItemInputList("Raichu"),
+					types.GenItemInputList(0, "Raichu"),
 					types.GenEntries("chair", "Raichu"),
 					types.ItemUpgradeParams{},
 					0,

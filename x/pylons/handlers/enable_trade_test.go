@@ -27,7 +27,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	// add 3 trades. one open trade by each sender and one closed trade
 	mockedCoinInput.PlnK.SetTrade(mockedCoinInput.Ctx, types.Trade{
 		ID:          id.String(),
-		ItemInputs:  types.GenItemInputList("Pikachu"),
+		ItemInputs:  types.GenItemInputList(0, "Pikachu"),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender,
 		Disabled:    true, // we disable this trade initially
@@ -35,7 +35,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 
 	mockedCoinInput.PlnK.SetTrade(mockedCoinInput.Ctx, types.Trade{
 		ID:          id2.String(),
-		ItemInputs:  types.GenItemInputList("Richu"),
+		ItemInputs:  types.GenItemInputList(0, "Richu"),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2,
 	})

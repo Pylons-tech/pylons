@@ -89,15 +89,17 @@ func HandleLoseItems(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.I
 	for idx, ci := range matchedItems {
 		s1 := rand.NewSource(time.Now().UnixNano())
 		r1 := rand.New(s1)
-		// select a random number between 0 and 100 (including both ends)
-		randomInt := r1.Intn(101)
+		// select a random number between 1 and 100 (including both ends)
+		randomInt := r1.Intn(100) + 1
 
-		// for example the alive percent is 70% then if the number is less then 70 then the item is alive
-		if recipe.ItemInputs[idx].AlivePercent < randomInt { // alive
-			itemLoseResult = append(itemLoseResult, false)
-		} else { // lose
+		// for example the alive percent is 70% then if the number should be less than 70 for the item to be alive
+		// 0 -> alivepercent => alive
+		// alivepercent + 1 -> 100 => lose
+		if recipe.ItemInputs[idx].AlivePercent < randomInt { // lose
 			keeper.DeleteItem(ctx, ci.ID)
 			itemLoseResult = append(itemLoseResult, true)
+		} else { // alive
+			itemLoseResult = append(itemLoseResult, false)
 		}
 	}
 	return itemLoseResult

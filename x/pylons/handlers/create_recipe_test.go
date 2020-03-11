@@ -60,14 +60,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			desiredError:   "",
 			showError:      false,
 		},
-		"item upgrade recipe more than 2 input failure check": {
+		"item upgrade recipe no input failure check": {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
 			recipeType:     types.UPGRADE,
-			numItemInput:   2,
+			numItemInput:   0,
 			sender:         sender,
-			desiredError:   "For item upgrade recipe, item input should be one",
+			desiredError:   "For item upgrade recipe, item input should be at least one",
 			showError:      true,
 		},
 	}
@@ -89,16 +89,18 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			mEntries := types.WeightedParamList{}
 			mUpgrades := types.ItemUpgradeParams{}
+			alivePercent := 0
 			if tc.recipeType == types.GENERATION {
 				mEntries = types.GenEntries("chair", "Raichu")
 			} else {
 				mUpgrades = types.GenToUpgradeForString("Name", "RaichuV2")
+				alivePercent = 100
 			}
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
-				mInputList = types.GenItemInputList("Raichu")
-			} else {
-				mInputList = types.GenItemInputList("Raichu", "Knife")
+				mInputList = types.GenItemInputList(alivePercent, "Raichu")
+			} else if tc.numItemInput != 0 { // > 1
+				mInputList = types.GenItemInputList(alivePercent, "Raichu", "Knife")
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
@@ -137,7 +139,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
-	mInputList := types.GenItemInputList("Raichu")
+	mInputList := types.GenItemInputList(0, "Raichu")
 
 	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
 		types.GENERATION,
