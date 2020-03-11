@@ -7,7 +7,7 @@ type ItemInput struct {
 	Doubles DoubleInputParamList
 	Longs   LongInputParamList
 	Strings StringInputParamList
-	// the chance of an item to be lost in %
+	// the chance of an item to be alive during recipe execution in %
 	AlivePercent int
 }
 
