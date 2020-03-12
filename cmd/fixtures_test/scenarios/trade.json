@@ -189,6 +189,15 @@
                             "stringValues": { "Name": "Trading Knife v1" }
                         }
                     ]
+                },
+                {
+                    "owner": "eugen",
+                    "shouldNotExist": true,
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Trading Knife v1" }
+                        }
+                    ]
                 }
             ]
         }
@@ -228,6 +237,15 @@
             "property": [
                 {
                     "owner": "eugen",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Trading Knife v3" }
+                        }
+                    ]
+                },
+                {
+                    "owner": "michael",
+                    "shouldNotExist": true,
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v3" }
@@ -285,6 +303,24 @@
                             "stringValues": { "Name": "Trading Knife v2" }
                         }
                     ]
+                },
+                {
+                    "owner": "eugen",
+                    "shouldNotExist": true,
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Trading Knife v2" }
+                        }
+                    ] 
+                },
+                {
+                    "owner": "michael",
+                    "shouldNotExist": true,
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Trading Knife v4" }
+                        }
+                    ] 
                 }
             ]
         }

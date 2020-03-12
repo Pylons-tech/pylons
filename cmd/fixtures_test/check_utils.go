@@ -31,10 +31,11 @@ type FixtureStep struct {
 			ErrorLog string `json:"errLog"`
 		} `json:"txResult"`
 		Property []struct {
-			Owner     string   `json:"owner"`
-			Cookbooks []string `json:"cookbooks"`
-			Recipes   []string `json:"recipes"`
-			Items     []struct {
+			Owner          string   `json:"owner"`
+			ShouldNotExist bool     `json:"shouldNotExist"`
+			Cookbooks      []string `json:"cookbooks"`
+			Recipes        []string `json:"recipes"`
+			Items          []struct {
 				StringKeys   []string                     `json:"stringKeys"`
 				StringValues map[string]string            `json:"stringValues"`
 				DblKeys      []string                     `json:"dblKeys"`
@@ -157,6 +158,7 @@ func CheckErrorOnTx(txhash string, t *testing.T) {
 
 func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	for _, pCheck := range step.Output.Property {
+		shouldNotExist := pCheck.ShouldNotExist
 		var pOwnerAddr string
 		if len(pCheck.Owner) == 0 {
 			pOwnerAddr = ""
@@ -169,10 +171,18 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 				if err != nil {
 					t.Fatal("error checking cookbook exist", err)
 				}
-				if exist {
-					t.Log("checked existance")
+				if !shouldNotExist {
+					if exist {
+						t.Log("checked existance of cookbook name=", cbName)
+					} else {
+						t.Fatal("cookbook with name=", cbName, "does not exist")
+					}
 				} else {
-					t.Fatal("cookbook with name=", cbName, "does not exist")
+					if exist {
+						t.Fatal("cookbook with name=", cbName, "should not exist but it exist")
+					} else {
+						t.Log("cookbook with name=", cbName, "does not exist as expected")
+					}
 				}
 			}
 		}
@@ -181,10 +191,18 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 				guid, err := intTest.GetRecipeGUIDFromName(rcpName, pOwnerAddr)
 				intTest.ErrValidation(t, "error checking if recipe already exist %+v", err)
 
-				if len(guid) > 0 {
-					t.Log("checked existance")
+				if !shouldNotExist {
+					if len(guid) > 0 {
+						t.Log("checked existence of recipe name=", rcpName)
+					} else {
+						t.Fatal("recipe with name=", rcpName, "does not exist")
+					}
 				} else {
-					t.Fatal("recipe with name=", rcpName, "does not exist")
+					if len(guid) > 0 {
+						t.Fatal("recipe with name=", rcpName, "should not exist but it exist")
+					} else {
+						t.Log("recipe with name=", rcpName, "does not exist as expected")
+					}
 				}
 			}
 		}
@@ -206,10 +224,18 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 				}
 				intTest.ErrValidation(t, "error checking items with string keys %+v", err)
 
-				if fitItemExist {
-					t.Log("checked item existence")
+				if !shouldNotExist {
+					if fitItemExist {
+						t.Log("checked item existence")
+					} else {
+						t.Fatal("no item exist which fit item spec for", pOwnerAddr, itemCheck)
+					}
 				} else {
-					t.Fatal("no item exist which fit item spec for", pOwnerAddr, itemCheck)
+					if fitItemExist {
+						t.Fatal("item should not be available but available with spec=", pOwnerAddr, itemCheck)
+					} else {
+						t.Log("item is not available as expected")
+					}
 				}
 			}
 		}
