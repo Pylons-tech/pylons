@@ -9,13 +9,14 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
-func GenItemInputList(names ...string) ItemInputList {
+func GenItemInputList(alivePercent int, names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
 		iiL = append(iiL, ItemInput{
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
+			alivePercent,
 		})
 	}
 	return iiL
@@ -41,7 +42,7 @@ func GenCoinOnlyEntryRand(coinName string) WeightedParamList {
 	}
 }
 
-func GenSingleItemInputList(itemName string) ItemInputList {
+func GenSingleItemInputList(alivePercent int, itemName string) ItemInputList {
 	return ItemInputList{
 		ItemInput{
 			Doubles: DoubleInputParamList{},
@@ -52,6 +53,7 @@ func GenSingleItemInputList(itemName string) ItemInputList {
 					Value: itemName,
 				},
 			},
+			AlivePercent: alivePercent,
 		},
 	}
 }

@@ -7,6 +7,8 @@ type ItemInput struct {
 	Doubles DoubleInputParamList
 	Longs   LongInputParamList
 	Strings StringInputParamList
+	// the chance of an item to be alive during recipe execution in %
+	AlivePercent int
 }
 
 // Matches checks if all the constraint match the given item
@@ -60,4 +62,14 @@ func (iil ItemInputList) String() string {
 
 	itm += "}"
 	return itm
+}
+
+func (iil ItemInputList) Validate() error {
+	for _, cii := range iil {
+		if cii.AlivePercent < 0 || cii.AlivePercent > 100 {
+			return fmt.Errorf("the lost percentage cannot be more then 100 or less then 0")
+		}
+	}
+	// TODO should check program is valid for go-cel part during recipe creation
+	return nil
 }

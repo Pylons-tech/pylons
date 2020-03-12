@@ -64,8 +64,8 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 		return sdk.ErrInternal("the description should have more than 20 characters")
 	}
 
-	if msg.RType == types.UPGRADE && len(msg.ItemInputs) != 1 {
-		return sdk.ErrInternal("For item upgrade recipe, item input should be one")
+	if msg.RType == types.UPGRADE && len(msg.ItemInputs) < 1 {
+		return sdk.ErrInternal("For item upgrade recipe, item input should be at least one")
 	}
 
 	return nil
