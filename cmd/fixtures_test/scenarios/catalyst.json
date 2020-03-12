@@ -1,0 +1,115 @@
+[
+    {
+        "ID": "CREATE_CATALYST_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/catalyst.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["catalyst"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_MONSTER_LV1",        
+        "runAfter": {
+            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/monster_lv1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Monster" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_CATALYST_ITEM",        
+        "runAfter": {
+            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/catalyst.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "catalyst" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_MONSTER_CATALYST_UPGRADE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/monster_upgrader_catalyst.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Monster Upgrade Catalyst Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_MONSTER_CATALYST_UPGRADE_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_MONSTER_CATALYST_UPGRADE_RECIPE", "CREATE_MONSTER_LV1", "CREATE_CATALYST_ITEM"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/monster_upgrader_catalyst.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully upgraded the item"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "LastName": "Catalyst Upgraded Monster" }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]

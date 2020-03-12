@@ -1,0 +1,7 @@
+{
+    "Doubles": [{ "Key": "effect", "Value": "1" }],
+    "Longs": [{ "Key": "level", "Value": "1" }],
+    "Strings": [{ "Key": "Name","Value": "catalyst"}],
+    "CookbookName": "catalyst",
+    "Sender": "michael"
+}
