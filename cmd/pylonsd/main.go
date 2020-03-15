@@ -24,15 +24,16 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	abci "github.com/tendermint/tendermint/abci/types"
-	dbm "github.com/tendermint/tendermint/libs/db"
 	tmtypes "github.com/tendermint/tendermint/types"
+	dbm "github.com/tendermint/tm-db"
 )
 
 // DefaultNodeHome sets the folder where the application data and configuration will be stored
 var DefaultNodeHome = os.ExpandEnv("$HOME/.pylonsd")
 
 const (
-	flagOverwrite = "overwrite"
+	flagOverwrite  = "overwrite"
+	flagClientHome = "home-client"
 )
 
 func main() {
