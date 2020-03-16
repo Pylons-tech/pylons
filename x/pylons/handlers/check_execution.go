@@ -28,29 +28,10 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err2
 	}
 
-	if recipe.RType == types.GENERATION {
-		outputSTR, err2 = GenerateItemFromRecipe(ctx, keeper, msg.Sender, exec.CookbookID, exec.ItemInputs, recipe)
+	outputSTR, err2 = GenerateItemFromRecipe(ctx, keeper, msg.Sender, exec.CookbookID, exec.ItemInputs, recipe)
 
-		if err2 != nil {
-			return nil, err2
-		}
-	} else {
-		if len(exec.ItemInputs) != 1 {
-			return nil, sdk.ErrInternal("item inputs shouldn't be 0 or more than one for upgrade recipe")
-		}
-
-		targetItem := exec.ItemInputs[0]
-		targetItem, err := UpdateItemFromUpgradeParams(targetItem, recipe.ToUpgrade)
-
-		if err != nil {
-			return nil, err
-		}
-
-		targetItem.OwnerRecipeID = ""
-
-		if err := keeper.SetItem(ctx, targetItem); err != nil {
-			return nil, err
-		}
+	if err2 != nil {
+		return nil, err2
 	}
 	// confirm that the execution was completed
 	exec.Completed = true

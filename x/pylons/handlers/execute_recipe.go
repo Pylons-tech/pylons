@@ -228,7 +228,7 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 	return env, variables, funcs, err
 }
 
-func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, msg msgs.MsgExecuteRecipe, recipe types.Recipe) ([]byte, error) {
+func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, recipe types.Recipe) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
@@ -243,7 +243,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 		return []byte{}, err
 	}
 
-	ers.ItemUpgradeResult, ers.ItemLoseResult, err = HandleItemUpgrade(ctx, keeper, msg, recipe, matchedItems)
+	ers.ItemUpgradeResult, ers.ItemLoseResult, err = HandleItemUpgrade(ctx, keeper, recipe, matchedItems)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -258,7 +258,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 
 func HandleItemGeneration(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
-	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, msg, recipe)
+	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe)
 	if err != nil {
 		return errInternal(err)
 	}
@@ -323,10 +323,13 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 		}
 	}
 
+	// after upgrading is done, OwnerRecipe is not set
+	targetItem.OwnerRecipeID = ""
+
 	return targetItem, nil
 }
 
-func HandleItemUpgrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) ([]ItemUpgradeResult, []bool, error) {
+func HandleItemUpgrade(ctx sdk.Context, keeper keep.Keeper, recipe types.Recipe, matchedItems []types.Item) ([]ItemUpgradeResult, []bool, error) {
 
 	itemUpgradeResult := []ItemUpgradeResult{}
 	if len(matchedItems) == 0 {
