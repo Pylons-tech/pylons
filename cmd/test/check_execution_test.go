@@ -6,17 +6,16 @@ import (
 
 	originT "testing"
 
+	"github.com/MikeSofaer/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type CheckExecutionTestCase struct {
 	name                    string
-	rcpType                 types.RecipeType
 	blockInterval           int64
 	currentItemName         string
 	desiredItemName         string
@@ -37,7 +36,6 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 	tests := []CheckExecutionTestCase{
 		{
 			"basic flow test",
-			types.GENERATION,
 			2,
 			"",
 			"TESTITEM_CheckExecution__007_TC1",
@@ -52,7 +50,6 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		},
 		{
 			"early payment test",
-			types.GENERATION,
 			4,
 			"",
 			"TESTITEM_CheckExecution__007_TC2",
@@ -67,7 +64,6 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		},
 		{
 			"no wait direct check execution test",
-			types.GENERATION,
 			4,
 			"",
 			"TESTITEM_CheckExecution__007_TC3",
@@ -114,7 +110,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
-	guid, err := MockRecipeGUID(tc.blockInterval, tc.rcpType, rcpName, tc.currentItemName, tc.desiredItemName, t)
+	guid, err := MockRecipeGUID(tc.blockInterval, rcpName, tc.currentItemName, tc.desiredItemName, t)
 	ErrValidation(t, "error mocking recipe %+v", err)
 
 	rcp, err := GetRecipeByGUID(guid)

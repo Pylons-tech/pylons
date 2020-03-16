@@ -13,7 +13,6 @@ type MsgCreateRecipe struct {
 	RecipeID      string `json:",omitempty"`
 	Name          string
 	CookbookID    string // the cookbook guid
-	RType         types.RecipeType
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
 	Entries       types.WeightedParamList
@@ -25,7 +24,6 @@ type MsgCreateRecipe struct {
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
-	rType types.RecipeType,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
@@ -37,7 +35,6 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 		CookbookID:    cookbookID,
 		RecipeID:      recipeID,
 		Description:   description,
-		RType:         rType,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,

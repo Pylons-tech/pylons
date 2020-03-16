@@ -26,7 +26,6 @@ func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookN
 func MockRecipe(
 	tci keep.TestCoinInput,
 	rcpName string,
-	rcpType types.RecipeType,
 	coinInputList types.CoinInputList,
 	itemInputList types.ItemInputList,
 	entries types.WeightedParamList,
@@ -67,22 +66,19 @@ const (
 func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.RecipeType, types.CoinInputList, types.ItemInputList, types.WeightedParamList, types.ItemUpgradeParams, int64) {
 	switch hfrt {
 	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
-		return types.GENERATION,
-			types.GenCoinInputList("wood", 5),
+		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
 			types.ItemUpgradeParams{},
 			0
 	case RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
-		return types.GENERATION,
-			types.GenCoinInputList("wood", 5),
+		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
 			types.ItemUpgradeParams{},
 			5
 	case RCP_5xWOODCOIN_1xRAICHU_BUY:
-		return types.GENERATION,
-			types.GenCoinInputList("wood", 5),
+		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Raichu"),
 			types.ItemUpgradeParams{},
@@ -109,22 +105,19 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.RecipeType, types.
 			types.GenToUpgradeForString("Name", "KnifeV2"),
 			2
 	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
-		return types.GENERATION,
-			types.CoinInputList{},
+		return types.CoinInputList{},
 			types.GenItemInputList(0, "Knife", "Knife"),
 			types.GenItemOnlyEntry("KnifeMRG"),
 			types.ItemUpgradeParams{},
 			2
 	case RCP_2_BLOCK_DELAYED_KNIFE_BUYER:
-		return types.GENERATION,
-			types.GenCoinInputList("wood", 5),
+		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Knife"),
 			types.ItemUpgradeParams{},
 			2
 	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
-		return types.GENERATION,
-			types.GenCoinInputList("wood", 5),
+		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenEntries("chair", "Raichu"),
 			types.ItemUpgradeParams{},

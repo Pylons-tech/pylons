@@ -73,7 +73,7 @@ func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 ///////////RECIPE//////////////////////////////////////////////
 
 func MockNoDelayItemGenRecipeGUID(name string, outputItemName string, t *testing.T) (string, error) {
-	return MockRecipeGUID(0, types.GENERATION, name, "", outputItemName, t)
+	return MockRecipeGUID(0, name, "", outputItemName, t)
 }
 
 func MockRecipeGUID(
