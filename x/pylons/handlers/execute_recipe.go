@@ -26,12 +26,31 @@ type ExecuteRecipeResp struct {
 	Output  []byte
 }
 
+type ItemUpgradeResult struct {
+	ItemID  string
+	Doubles struct {
+		Key  string
+		From float64
+		To   float64
+	}
+	Longs struct {
+		Key  string
+		From int
+		To   int
+	}
+	Strings struct {
+		Key  string
+		From string
+		To   string
+	}
+}
 type ExecuteRecipeSerialize struct {
-	Type           string `json:"type"`           // COIN or ITEM
-	Coin           string `json:"coin"`           // used when type is ITEM
-	Amount         int64  `json:"amount"`         // used when type is COIN
-	ItemID         string `json:"itemID"`         // used when type is ITEM
-	ItemLoseResult []bool `json:"itemLoseResult"` // used when there are input items
+	Type              string              `json:"type"`              // COIN or ITEM
+	Coin              string              `json:"coin"`              // used when type is ITEM
+	Amount            int64               `json:"amount"`            // used when type is COIN
+	ItemID            string              `json:"itemID"`            // used when type is ITEM
+	ItemLoseResult    []bool              `json:"itemLoseResult"`    // used when there are input items
+	ItemUpgradeResult []ItemUpgradeResult `json:"itemUpgradeResult"` // used when there are input items
 }
 
 type ExecuteRecipeScheduleOutput struct {
@@ -209,7 +228,7 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 	return env, variables, funcs, err
 }
 
-func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, recipe types.Recipe) ([]byte, error) {
+func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, msg msgs.MsgExecuteRecipe, recipe types.Recipe) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
@@ -224,7 +243,10 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 		return []byte{}, err
 	}
 
-	ers.ItemLoseResult = HandleLoseItems(ctx, keeper, matchedItems, recipe)
+	ers.ItemUpgradeResult, ers.ItemLoseResult, err = HandleItemUpgrade(ctx, keeper, msg, recipe, matchedItems)
+	if err != nil {
+		return []byte{}, err
+	}
 
 	outputSTR, err2 := json.Marshal(ers)
 
@@ -234,9 +256,9 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 	return outputSTR, nil
 }
 
-func HandlerItemGenerationRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+func HandleItemGeneration(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
 
-	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, recipe)
+	outputSTR, err := GenerateItemFromRecipe(ctx, keeper, msg.Sender, recipe.CookbookID, matchedItems, msg, recipe)
 	if err != nil {
 		return errInternal(err)
 	}
@@ -304,37 +326,54 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	return targetItem, nil
 }
 
-func HandlerItemUpgradeRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) sdk.Result {
+func HandleItemUpgrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe, matchedItems []types.Item) ([]ItemUpgradeResult, []bool, error) {
 
+	itemUpgradeResult := []ItemUpgradeResult{}
 	if len(matchedItems) == 0 {
-		return sdk.ErrInternal("matched items shouldn't be 0 for upgrade recipe").Result()
+		return nil, nil, errors.New("matched items shouldn't be 0 for upgrade recipe")
+	}
+	for idx, _ := range matchedItems {
+		mItem := matchedItems[idx]
+		iur := ItemUpgradeResult{}
+		iur.ItemID = mItem.ID
+		for _, dbl := range mItem.Doubles {
+			iur.Doubles.Key = dbl.Key
+			iur.Doubles.From = dbl.Value.Float()
+		}
+		for _, lng := range mItem.Longs {
+			iur.Longs.Key = lng.Key
+			iur.Longs.From = lng.Value
+		}
+		for _, str := range mItem.Strings {
+			iur.Strings.Key = str.Key
+			iur.Strings.From = str.Value
+		}
+
+		toUpgrade := recipe.ItemInputs[idx].ToUpgrade
+		targetItem, err := UpdateItemFromUpgradeParams(mItem, toUpgrade)
+		if err != nil {
+			return nil, nil, err
+		}
+
+		if err := keeper.SetItem(ctx, targetItem); err != nil {
+			return nil, nil, err
+		}
+
+		for _, dbl := range targetItem.Doubles {
+			iur.Doubles.To = dbl.Value.Float()
+		}
+		for _, lng := range targetItem.Longs {
+			iur.Longs.To = lng.Value
+		}
+		for _, str := range targetItem.Strings {
+			iur.Strings.To = str.Value
+		}
+		itemUpgradeResult = append(itemUpgradeResult, iur)
 	}
 
-	targetItem := matchedItems[0]
-	targetItem, err := UpdateItemFromUpgradeParams(targetItem, recipe.ToUpgrade)
-	if err != nil {
-		return errInternal(err)
-	}
+	ItemLoseResult := HandleLoseItems(ctx, keeper, matchedItems, recipe)
 
-	if err := keeper.SetItem(ctx, targetItem); err != nil {
-		return errInternal(err)
-	}
-
-	var ers ExecuteRecipeSerialize
-	ers.Type = "ITEM"
-	ers.ItemID = targetItem.ID
-	ers.ItemLoseResult = HandleLoseItems(ctx, keeper, matchedItems, recipe)
-
-	outputSTR, err2 := json.Marshal(ers)
-	if err2 != nil {
-		return errInternal(err2)
-	}
-
-	return marshalJson(ExecuteRecipeResp{
-		Message: "successfully upgraded the item",
-		Status:  "Success",
-		Output:  outputSTR,
-	})
+	return itemUpgradeResult, ItemLoseResult, nil
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
@@ -405,9 +444,5 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return err.Result()
 	}
 
-	if recipe.RType == types.GENERATION {
-		return HandlerItemGenerationRecipe(ctx, keeper, msg, recipe, matchedItems)
-	} else {
-		return HandlerItemUpgradeRecipe(ctx, keeper, msg, recipe, matchedItems)
-	}
+	return HandleItemGeneration(ctx, keeper, msg, recipe, matchedItems)
 }
