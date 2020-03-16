@@ -17,6 +17,7 @@ func GenItemInputList(alivePercent int, names ...string) ItemInputList {
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
 			alivePercent,
+			ItemUpgradeParams{},
 		})
 	}
 	return iiL

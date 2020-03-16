@@ -30,11 +30,9 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 
 	recipe := types.NewRecipe(
 		msg.Name, msg.CookbookID, msg.Description,
-		msg.RType,
 		msg.CoinInputs,
 		msg.ItemInputs,
 		msg.Entries,
-		msg.ToUpgrade,
 		msg.BlockInterval, msg.Sender)
 
 	if msg.RecipeID != "" {
