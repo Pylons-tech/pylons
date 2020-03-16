@@ -24,7 +24,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		createCookbook bool
 		recipeID       string
 		recipeDesc     string
-		recipeType     types.RecipeType
 		sender         sdk.AccAddress
 		numItemInput   int // 0 | 1 | 2
 		desiredError   string
@@ -34,7 +33,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: false,
 			recipeDesc:     "this has to meet character limits",
-			recipeType:     types.GENERATION,
 			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "The cookbook doesn't exist",
@@ -44,7 +42,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
-			recipeType:     types.GENERATION,
 			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "",
@@ -104,7 +101,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
-				tc.recipeType,
 				types.GenCoinInputList("wood", 5),
 				mInputList,
 				mEntries,
@@ -142,7 +138,6 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	mInputList := types.GenItemInputList(0, "Raichu")
 
 	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
-		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		mInputList,
 		mEntries,

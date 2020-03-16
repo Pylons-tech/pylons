@@ -76,25 +76,17 @@ func MockNoDelayItemGenRecipeGUID(name string, outputItemName string, t *testing
 	return MockRecipeGUID(0, types.GENERATION, name, "", outputItemName, t)
 }
 
-func MockRecipeGUID(interval int64, rcpType types.RecipeType, name, curItemName, desItemName string, t *testing.T) (string, error) {
-	if rcpType == types.GENERATION {
-		return MockDetailedRecipeGUID(name, rcpType,
-			types.GenCoinInputList("pylon", 5),
-			types.ItemInputList{}, types.GenItemOnlyEntry(desItemName),
-			types.ItemUpgradeParams{},
-			interval,
-			t,
-		)
-	} else { // UPGRADE recipe
-		return MockDetailedRecipeGUID(name, rcpType,
-			types.GenCoinInputList("pylon", 5),
-			types.GenSingleItemInputList(100, curItemName),
-			types.WeightedParamList{},
-			types.GenItemNameUpgradeParams(desItemName),
-			interval,
-			t,
-		)
-	}
+func MockRecipeGUID(
+	interval int64,
+	name, curItemName, desItemName string,
+	t *testing.T) (string, error) {
+	return MockDetailedRecipeGUID(name,
+		types.GenCoinInputList("pylon", 5),
+		types.ItemInputList{}, types.GenItemOnlyEntry(desItemName),
+		types.ItemUpgradeParams{},
+		interval,
+		t,
+	)
 }
 
 func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
@@ -107,7 +99,6 @@ func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
 
 func MockDetailedRecipeGUID(
 	rcpName string,
-	rcpType types.RecipeType,
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
 	entries types.WeightedParamList,
@@ -134,7 +125,6 @@ func MockDetailedRecipeGUID(
 			mCB.ID,
 			"",
 			"this has to meet character limits lol",
-			rcpType,
 			ciL,
 			iiL,
 			entries,

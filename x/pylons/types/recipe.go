@@ -7,8 +7,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type RecipeType int
-
 const TypeRecipe = "recipe"
 
 // Recipe is a game state machine step abstracted out as a cooking terminology
