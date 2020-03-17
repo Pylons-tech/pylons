@@ -40,6 +40,10 @@ func (wpl WeightedParamList) Actualize() (WeightedParam, sdk.Error) {
 		lastWeight += wp.GetWeight()
 		weights = append(weights, lastWeight)
 	}
+	if len(wpl) == 0 {
+		return nil, nil
+	}
+
 	if lastWeight == 0 {
 		return nil, sdk.ErrInternal("total weight of weighted param list shouldn't be zero")
 	}

@@ -58,16 +58,6 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			desiredError:   "",
 			showError:      false,
 		},
-		"item upgrade recipe no input failure check": {
-			cookbookName:   "book000001",
-			createCookbook: true,
-			recipeDesc:     "this has to meet character limits",
-			isUpgrdRecipe:  true,
-			numItemInput:   0,
-			sender:         sender,
-			desiredError:   "For item upgrade recipe, item input should be at least one",
-			showError:      true,
-		},
 		// TODO should add case for multiple input item upgrade test
 	}
 	for testName, tc := range cases {

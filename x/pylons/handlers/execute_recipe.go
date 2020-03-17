@@ -130,6 +130,8 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.Weighte
 ) (ExecuteRecipeSerialize, sdk.Error) {
 	var ers ExecuteRecipeSerialize
 	switch output.(type) {
+	case nil:
+		return ers, nil
 	case types.CoinOutput:
 		coinOutput, _ := output.(types.CoinOutput)
 		var coinAmount int64
@@ -332,9 +334,6 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 func HandleItemUpgrade(ctx sdk.Context, keeper keep.Keeper, recipe types.Recipe, matchedItems []types.Item) ([]ItemUpgradeResult, []bool, error) {
 
 	itemUpgradeResult := []ItemUpgradeResult{}
-	if len(matchedItems) == 0 {
-		return nil, nil, errors.New("matched items shouldn't be 0 for upgrade recipe")
-	}
 	for idx, _ := range matchedItems {
 		mItem := matchedItems[idx]
 		iur := ItemUpgradeResult{}

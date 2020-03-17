@@ -98,7 +98,7 @@
         "output": {
             "txResult": {
                 "status": "Success",
-                "message": "successfully upgraded the item"
+                "message": "successfully executed the recipe"
             },
             "property": [
                 {

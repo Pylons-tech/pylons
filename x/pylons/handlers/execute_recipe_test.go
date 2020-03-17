@@ -294,7 +294,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeID:           itemUpgradeRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
-			successMsg:         "successfully upgraded the item",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkItemName:      "RaichuV2",
 			checkItemAvailable: true,
@@ -307,7 +307,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeID:           itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
-			successMsg:         "successfully upgraded the item",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkItemName:      "RaichuTCV2",
 			checkItemAvailable: true,
