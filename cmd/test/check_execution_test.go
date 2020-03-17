@@ -104,7 +104,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
-	guid, err := MockRecipeGUID(tc.blockInterval, rcpName, tc.currentItemName, tc.desiredItemName, t)
+	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
 	ErrValidation(t, "error mocking recipe %+v", err)
 
 	rcp, err := GetRecipeByGUID(guid)
