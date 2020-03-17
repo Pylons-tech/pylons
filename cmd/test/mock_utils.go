@@ -73,20 +73,36 @@ func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 ///////////RECIPE//////////////////////////////////////////////
 
 func MockNoDelayItemGenRecipeGUID(name string, outputItemName string, t *testing.T) (string, error) {
-	return MockRecipeGUID(0, name, "", outputItemName, t)
+	return MockRecipeGUID(0, false, name, "", outputItemName, t)
 }
 
 func MockRecipeGUID(
 	interval int64,
+	isUpgrdRecipe bool,
 	name, curItemName, desItemName string,
 	t *testing.T) (string, error) {
-	return MockDetailedRecipeGUID(name,
-		types.GenCoinInputList("pylon", 5),
-		types.ItemInputList{}, types.GenItemOnlyEntry(desItemName),
-		types.ItemUpgradeParams{},
-		interval,
-		t,
-	)
+	if !isUpgrdRecipe {
+		return MockDetailedRecipeGUID(name,
+			types.GenCoinInputList("pylon", 5),
+			types.ItemInputList{}, types.GenItemOnlyEntry(desItemName),
+			types.ItemUpgradeParams{},
+			interval,
+			t,
+		)
+	} else {
+		return MockDetailedRecipeGUID(name,
+			types.GenCoinInputList("pylon", 5),
+			types.GenDetailedItemInputList(
+				alivePercent, 
+				[]type.ItemUpgradeParams{ types.GenItemNameUpgradeParams(desItemName) }, 
+				"Raichu", "Knife"
+			),
+			types.GenSingleItemInputList(100, curItemName),
+			types.WeightedParamList{},
+			interval,
+			t,
+		)
+	}
 }
 
 func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
@@ -102,7 +118,6 @@ func MockDetailedRecipeGUID(
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
 	entries types.WeightedParamList,
-	upgrades types.ItemUpgradeParams,
 	interval int64,
 	t *testing.T,
 ) (string, error) {
@@ -128,7 +143,6 @@ func MockDetailedRecipeGUID(
 			ciL,
 			iiL,
 			entries,
-			upgrades,
 			interval,
 			sdkAddr),
 		"eugen",

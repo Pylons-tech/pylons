@@ -27,7 +27,6 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
-	toUpgrade types.ItemUpgradeParams,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
@@ -38,7 +37,6 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
-		ToUpgrade:     toUpgrade,
 		BlockInterval: int64(blockInterval),
 		Sender:        sender,
 	}

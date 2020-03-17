@@ -6,7 +6,6 @@ import (
 
 	originT "testing"
 
-	"github.com/MikeSofaer/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
@@ -16,6 +15,7 @@ import (
 
 type CheckExecutionTestCase struct {
 	name                    string
+	isUpgrdRecipe           bool
 	blockInterval           int64
 	currentItemName         string
 	desiredItemName         string
@@ -35,61 +35,55 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 
 	tests := []CheckExecutionTestCase{
 		{
-			"basic flow test",
-			2,
-			"",
-			"TESTITEM_CheckExecution__007_TC1",
-			false,
-			true,
-			true,
-			"Success",
-			"successfully completed the execution",
-			false,
-			"",
-			"",
+			name:                 "basic flow test",
+			blockInterval:        2,
+			currentItemName:      "",
+			desiredItemName:      "TESTITEM_CheckExecution__007_TC1",
+			payToComplete:        false,
+			waitForBlockInterval: true,
+			shouldSuccess:        true,
+			expectedStatus:       "Success",
+			expectedMessage:      "successfully completed the execution",
+			tryFinishedExecution: false,
 		},
 		{
-			"early payment test",
-			4,
-			"",
-			"TESTITEM_CheckExecution__007_TC2",
-			true,
-			false,
-			true,
-			"Success",
-			"successfully paid to complete the execution",
-			true,
-			"execution already completed",
-			"Completed",
+			name:                    "early payment test",
+			blockInterval:           4,
+			currentItemName:         "",
+			desiredItemName:         "TESTITEM_CheckExecution__007_TC2",
+			payToComplete:           true,
+			waitForBlockInterval:    false,
+			shouldSuccess:           true,
+			expectedStatus:          "Success",
+			expectedMessage:         "successfully paid to complete the execution",
+			tryFinishedExecution:    true,
+			expectedRetryResMessage: "execution already completed",
+			expectedRetryResStatus:  "Completed",
 		},
 		{
-			"no wait direct check execution test",
-			4,
-			"",
-			"TESTITEM_CheckExecution__007_TC3",
-			false,
-			false,
-			false,
-			"Pending",
-			"execution pending",
-			false,
-			"",
-			"",
+			name:                 "no wait direct check execution test",
+			blockInterval:        4,
+			currentItemName:      "",
+			desiredItemName:      "TESTITEM_CheckExecution__007_TC3",
+			payToComplete:        false,
+			waitForBlockInterval: false,
+			shouldSuccess:        false,
+			expectedStatus:       "Pending",
+			expectedMessage:      "execution pending",
+			tryFinishedExecution: false,
 		},
 		{
-			"item upgrade check execution test and OwnerRecipeID check",
-			types.UPGRADE,
-			2,
-			"TESTITEM_CheckExecution__007_TC4_CUR",
-			"TESTITEM_CheckExecution__007_TC4",
-			false,
-			false,
-			false,
-			"Pending",
-			"execution pending",
-			false,
-			"",
-			"",
+			name:                 "item upgrade check execution test and OwnerRecipeID check",
+			isUpgrdRecipe:        true,
+			blockInterval:        2,
+			currentItemName:      "TESTITEM_CheckExecution__007_TC4_CUR",
+			desiredItemName:      "TESTITEM_CheckExecution__007_TC4",
+			payToComplete:        false,
+			waitForBlockInterval: false,
+			shouldSuccess:        false,
+			expectedStatus:       "Pending",
+			expectedMessage:      "execution pending",
+			tryFinishedExecution: false,
 		},
 	}
 

@@ -43,7 +43,6 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					types.GenCoinInputList("wood", 5),
 					types.GenItemInputList(0, "Raichu"),
 					types.GenEntries("chair", "Raichu"),
-					types.ItemUpgradeParams{},
 					0,
 					sdkAddr),
 				"eugen",

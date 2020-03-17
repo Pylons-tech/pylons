@@ -24,6 +24,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		createCookbook bool
 		recipeID       string
 		recipeDesc     string
+		isUpgrdRecipe  bool
 		sender         sdk.AccAddress
 		numItemInput   int // 0 | 1 | 2
 		desiredError   string
@@ -51,7 +52,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
-			recipeType:     types.UPGRADE,
+			isUpgrdRecipe:  true,
 			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "",
@@ -61,12 +62,13 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
-			recipeType:     types.UPGRADE,
+			isUpgrdRecipe:  true,
 			numItemInput:   0,
 			sender:         sender,
 			desiredError:   "For item upgrade recipe, item input should be at least one",
 			showError:      true,
 		},
+		// TODO should add case for multiple input item upgrade test
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -87,7 +89,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			mEntries := types.WeightedParamList{}
 			mUpgrades := types.ItemUpgradeParams{}
 			alivePercent := 0
-			if tc.recipeType == types.GENERATION {
+			if !tc.isUpgrdRecipe {
 				mEntries = types.GenEntries("chair", "Raichu")
 			} else {
 				mUpgrades = types.GenToUpgradeForString("Name", "RaichuV2")
@@ -95,16 +97,31 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			}
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
-				mInputList = types.GenItemInputList(alivePercent, "Raichu")
+				if tc.isUpgrdRecipe {
+					mInputList = types.GenDetailedItemInputList(
+						alivePercent,
+						[]types.ItemUpgradeParams{mUpgrades},
+						"Raichu",
+					)
+				} else {
+					mInputList = types.GenItemInputList(alivePercent, "Raichu")
+				}
 			} else if tc.numItemInput != 0 { // > 1
-				mInputList = types.GenItemInputList(alivePercent, "Raichu", "Knife")
+				if tc.isUpgrdRecipe {
+					mInputList = types.GenDetailedItemInputList(
+						alivePercent,
+						[]types.ItemUpgradeParams{mUpgrades},
+						"Raichu", "Knife",
+					)
+				} else {
+					mInputList = types.GenItemInputList(alivePercent, "Raichu", "Knife")
+				}
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
 				types.GenCoinInputList("wood", 5),
 				mInputList,
 				mEntries,
-				mUpgrades,
 				0,
 				tc.sender,
 			)
@@ -141,7 +158,6 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		types.GenCoinInputList("wood", 5),
 		mInputList,
 		mEntries,
-		types.ItemUpgradeParams{},
 		0,
 		sender1,
 	)
