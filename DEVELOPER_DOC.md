@@ -121,9 +121,8 @@ Sample upgrader JSON
   "RType": "1",
   "CoinInputs":[],
   "ItemInputRefs": [
-    "./recipes/item_input/adventurer.json"
+    "./recipes/item_input/adventurer_upgrade.json"
   ],
-  "ToUpgradeRef": "./recipes/upgrader/adventurer.json",
   "ExtraInfo":"",
   "Sender":"eugen",
   "Name": "Adventurer Upgrade Recipe",
