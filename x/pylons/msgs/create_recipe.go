@@ -13,7 +13,6 @@ type MsgCreateRecipe struct {
 	RecipeID      string `json:",omitempty"`
 	Name          string
 	CookbookID    string // the cookbook guid
-	RType         types.RecipeType
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
 	Entries       types.WeightedParamList
@@ -25,11 +24,9 @@ type MsgCreateRecipe struct {
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
-	rType types.RecipeType,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.WeightedParamList,
-	toUpgrade types.ItemUpgradeParams,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
@@ -37,11 +34,9 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 		CookbookID:    cookbookID,
 		RecipeID:      recipeID,
 		Description:   description,
-		RType:         rType,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
-		ToUpgrade:     toUpgrade,
 		BlockInterval: int64(blockInterval),
 		Sender:        sender,
 	}
@@ -62,10 +57,6 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 
 	if len(msg.Description) < 20 {
 		return sdk.ErrInternal("the description should have more than 20 characters")
-	}
-
-	if msg.RType == types.UPGRADE && len(msg.ItemInputs) < 1 {
-		return sdk.ErrInternal("For item upgrade recipe, item input should be at least one")
 	}
 
 	return nil

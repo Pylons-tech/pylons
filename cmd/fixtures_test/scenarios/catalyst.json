@@ -98,14 +98,14 @@
         "output": {
             "txResult": {
                 "status": "Success",
-                "message": "successfully upgraded the item"
+                "message": "successfully executed the recipe"
             },
             "property": [
                 {
                     "owner": "michael",
                     "items": [
                         {
-                            "stringValues": { "LastName": "Catalyst Upgraded Monster" }
+                            "stringValues": { "LastName": "Upgraded Monster" }
                         }
                     ]
                 }

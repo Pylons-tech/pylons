@@ -154,8 +154,6 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		itemInputs := GetItemInputsFromBytes(newByteValue, t)
 		// get entries from fileNames
 		entries := GetEntriesFromBytes(newByteValue, t)
-		// get toUpgrade from fileName
-		toUpgrade := GetToUpgradeFromBytes(newByteValue, t)
 
 		var rcpTempl types.Recipe
 		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpTempl)
@@ -169,11 +167,9 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpTempl.CookbookID,
 			rcpTempl.ID,
 			rcpTempl.Description,
-			rcpTempl.RType,
 			rcpTempl.CoinInputs,
 			itemInputs,
 			entries,
-			toUpgrade,
 			rcpTempl.BlockInterval,
 			rcpTempl.Sender,
 		)

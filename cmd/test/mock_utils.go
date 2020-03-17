@@ -73,24 +73,30 @@ func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 ///////////RECIPE//////////////////////////////////////////////
 
 func MockNoDelayItemGenRecipeGUID(name string, outputItemName string, t *testing.T) (string, error) {
-	return MockRecipeGUID(0, types.GENERATION, name, "", outputItemName, t)
+	return MockRecipeGUID(0, false, name, "", outputItemName, t)
 }
 
-func MockRecipeGUID(interval int64, rcpType types.RecipeType, name, curItemName, desItemName string, t *testing.T) (string, error) {
-	if rcpType == types.GENERATION {
-		return MockDetailedRecipeGUID(name, rcpType,
+func MockRecipeGUID(
+	interval int64,
+	isUpgrdRecipe bool,
+	name, curItemName, desItemName string,
+	t *testing.T) (string, error) {
+	if !isUpgrdRecipe {
+		return MockDetailedRecipeGUID(name,
 			types.GenCoinInputList("pylon", 5),
 			types.ItemInputList{}, types.GenItemOnlyEntry(desItemName),
-			types.ItemUpgradeParams{},
 			interval,
 			t,
 		)
-	} else { // UPGRADE recipe
-		return MockDetailedRecipeGUID(name, rcpType,
+	} else {
+		return MockDetailedRecipeGUID(name,
 			types.GenCoinInputList("pylon", 5),
-			types.GenSingleItemInputList(100, curItemName),
+			types.GenDetailedItemInputList(
+				100,
+				[]types.ItemUpgradeParams{types.GenItemNameUpgradeParams(desItemName)},
+				curItemName,
+			),
 			types.WeightedParamList{},
-			types.GenItemNameUpgradeParams(desItemName),
 			interval,
 			t,
 		)
@@ -101,17 +107,15 @@ func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
 	rcpName string,
 	t *testing.T,
 ) (string, error) {
-	rcpType, ciL, iiL, entries, upgrades, bI := handlers.GetParamsForPopularRecipe(hfrt)
-	return MockDetailedRecipeGUID(rcpName, rcpType, ciL, iiL, entries, upgrades, bI, t)
+	ciL, iiL, entries, bI := handlers.GetParamsForPopularRecipe(hfrt)
+	return MockDetailedRecipeGUID(rcpName, ciL, iiL, entries, bI, t)
 }
 
 func MockDetailedRecipeGUID(
 	rcpName string,
-	rcpType types.RecipeType,
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
 	entries types.WeightedParamList,
-	upgrades types.ItemUpgradeParams,
 	interval int64,
 	t *testing.T,
 ) (string, error) {
@@ -134,11 +138,9 @@ func MockDetailedRecipeGUID(
 			mCB.ID,
 			"",
 			"this has to meet character limits lol",
-			rcpType,
 			ciL,
 			iiL,
 			entries,
-			upgrades,
 			interval,
 			sdkAddr),
 		"eugen",

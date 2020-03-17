@@ -17,6 +17,25 @@ func GenItemInputList(alivePercent int, names ...string) ItemInputList {
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
 			alivePercent,
+			ItemUpgradeParams{},
+		})
+	}
+	return iiL
+}
+
+func GenDetailedItemInputList(alivePercent int, itemUpgrades []ItemUpgradeParams, names ...string) ItemInputList {
+	iiL := ItemInputList{}
+	for idx, name := range names {
+		toUpgrade := ItemUpgradeParams{}
+		if idx < len(itemUpgrades) {
+			toUpgrade = itemUpgrades[idx]
+		}
+		iiL = append(iiL, ItemInput{
+			nil,
+			nil,
+			StringInputParamList{StringInputParam{"Name", name}},
+			alivePercent,
+			toUpgrade,
 		})
 	}
 	return iiL

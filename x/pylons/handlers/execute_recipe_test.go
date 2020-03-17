@@ -35,11 +35,9 @@ func TestGetMatchedItems(t *testing.T) {
 
 	shieldMergeRecipe := MockRecipe(
 		tci, "shield merge recipe",
-		types.GENERATION,
 		types.CoinInputList{},
 		types.GenItemInputList(0, "Shield", "Shield"),
 		types.WeightedParamList{},
-		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -103,11 +101,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
-		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList(0, "Raichu"),
 		types.GenItemOnlyEntry("Zombie"),
-		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -116,11 +112,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock 1 catalyst input 1 output recipe
 	oneCatalystOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
-		types.GENERATION,
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList(100, "catalyst"), // for catalyst item alivepercent is 100
 		types.GenItemOnlyEntry("Catalyst2"),
-		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -129,11 +123,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock no input 1 coin | 1 item output recipe
 	noInput1Coin1ItemRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
-		types.GENERATION,
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntries("chaira", "ZombieA"),
-		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -142,11 +134,9 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock no input 1 coin | 1 item output recipe
 	noInput1Coin1ItemRandRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
-		types.GENERATION,
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntriesRand("zmbr", "ZombieRand"),
-		types.ItemUpgradeParams{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -304,7 +294,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeID:           itemUpgradeRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
-			successMsg:         "successfully upgraded the item",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkItemName:      "RaichuV2",
 			checkItemAvailable: true,
@@ -317,7 +307,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			recipeID:           itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
-			successMsg:         "successfully upgraded the item",
+			successMsg:         "successfully executed the recipe",
 			showError:          false,
 			checkItemName:      "RaichuTCV2",
 			checkItemAvailable: true,

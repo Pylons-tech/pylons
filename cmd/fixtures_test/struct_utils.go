@@ -144,6 +144,8 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		if err != nil {
 			t.Fatal("error parsing item input provided via fixture error=", err)
 		}
+		// get toUpgrade from fileName
+		ii.ToUpgrade = GetToUpgradeFromBytes(iiBytes, t)
 		itemInputs = append(itemInputs, ii)
 	}
 	return itemInputs

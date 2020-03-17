@@ -2,9 +2,8 @@
     "RType": "1",
     "CoinInputs": [],
     "ItemInputRefs": [
-        "./recipes/item_input/adventurer.json"
+        "./recipes/item_input/adventurer_program_upgrade.json"
     ],
-    "ToUpgradeRef": "./recipes/upgrader/adventurer_program.json",
     "ExtraInfo": "",
     "Sender": "eugen",
     "Name": "Adventurer Upgrade Program Recipe",
