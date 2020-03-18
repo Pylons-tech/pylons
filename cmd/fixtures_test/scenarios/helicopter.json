@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife_lv1.json",
+        "paramsRef": "./items/helicopter/heli_knife_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife_lv2.json",
+        "paramsRef": "./items/helicopter/heli_knife_lv2.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -74,7 +74,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife_lv3.json",
+        "paramsRef": "./items/helicopter/heli_knife_lv3.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -98,7 +98,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_shield_lv1.json",
+        "paramsRef": "./items/helicopter/heli_shield_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -122,7 +122,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_shield_lv2.json",
+        "paramsRef": "./items/helicopter/heli_shield_lv2.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -146,7 +146,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/adventurer_lv1.json",
+        "paramsRef": "./items/helicopter/adventurer_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"

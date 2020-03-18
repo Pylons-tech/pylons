@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/monster_lv1.json",
+        "paramsRef": "./items/catalyst/monster_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/catalyst.json",
+        "paramsRef": "./items/catalyst/catalyst.json",
         "output": {
             "txResult": {
                 "status": "Success"

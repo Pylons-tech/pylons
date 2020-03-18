@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/javelin_lv1.json",
+        "paramsRef": "./items/javelin/javelin_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"

@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/spear_lv1.json",
+        "paramsRef": "./items/spear/spear_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"

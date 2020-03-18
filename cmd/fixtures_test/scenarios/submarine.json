@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/knife.json",
+        "paramsRef": "./items/submarine/knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/knife.json",
+        "paramsRef": "./items/submarine/knife.json",
         "paramsRefDescription": "here Sender param should be translated from account name to account address",
         "output": {
             "txResult": {
@@ -75,7 +75,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/shield.json",
+        "paramsRef": "./items/submarine/shield.json",
         "output": {
             "txResult": {
                 "status": "Success"
