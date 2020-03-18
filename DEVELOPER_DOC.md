@@ -82,8 +82,7 @@ Recipe consists of below fields.
 | 5  | CoinInputs    | array  | "goldcoin": 1, "silvercoin": 1                               | required coins to run recipe.                                      |
 | 6  | ItemInputs    | array  | level 1 knife, level 1 shield                                | required items to run recipe. This can also describe item upgrade. |
 | 7  | Entries       | array  | level 1 knife-shield                                         | Items and coins which can be generated from this recipe.           |
-| 8  | ToUpgrade     | array  | attack: +1, level: +1, name: 'updated item'                  | modification values for all fields which need updates.             |
-| 9  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time.         |
+| 8  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time.         |
 
 Sample Recipe JSON
 
