@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/trading_knife_v1.json",
+        "paramsRef": "./items/trading/trading_knife_v1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/trading_knife_v2.json",
+        "paramsRef": "./items/trading/trading_knife_v2.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -74,7 +74,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/trading_knife_v3.json",
+        "paramsRef": "./items/trading/trading_knife_v3.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -98,7 +98,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/trading_knife_v4.json",
+        "paramsRef": "./items/trading/trading_knife_v4.json",
         "output": {
             "txResult": {
                 "status": "Success"

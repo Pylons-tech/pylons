@@ -1,0 +1,12 @@
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./recipes/helicopter/item_input/adventurer_upgrade.json"
+    ],
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "Adventurer Upgrade Recipe",
+    "CookbookName": "helicopter",
+    "Description": "this recipe is used to upgrade adventurer which can update all versions of adventurer.",
+    "BlockInterval":"0"
+}

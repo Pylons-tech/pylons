@@ -26,7 +26,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife_lv1.json",
+        "paramsRef": "./items/helicopter/heli_knife_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife_lv2.json",
+        "paramsRef": "./items/helicopter/heli_knife_lv2.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -74,7 +74,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_knife_lv3.json",
+        "paramsRef": "./items/helicopter/heli_knife_lv3.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -98,7 +98,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_shield_lv1.json",
+        "paramsRef": "./items/helicopter/heli_shield_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -122,7 +122,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/heli_shield_lv2.json",
+        "paramsRef": "./items/helicopter/heli_shield_lv2.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -146,7 +146,7 @@
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/adventurer_lv1.json",
+        "paramsRef": "./items/helicopter/adventurer_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -170,7 +170,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_straight_attack_knife.json",
+        "paramsRef": "./recipes/helicopter/heli_straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -190,7 +190,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_coin.json",
+        "paramsRef": "./recipes/helicopter/heli_coin.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -210,7 +210,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/adventurer_upgrader.json",
+        "paramsRef": "./recipes/helicopter/adventurer_upgrader.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -224,53 +224,13 @@
         }
     },
     {
-        "ID": "CREATE_DELAYED_ADVENTURER_UPDATE_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/delayed_adventurer_upgrader.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "eugen",
-                    "recipes": ["Delayed Adventurer Upgrade Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/adventurer_upgrader_program.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "eugen",
-                    "recipes": ["Adventurer Upgrade Program Recipe"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_sell_two_knives_program.json",
+        "paramsRef": "./recipes/helicopter/heli_sell_two_knives_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -290,7 +250,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_merge_two_shields_program.json",
+        "paramsRef": "./recipes/helicopter/heli_merge_two_shields_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -310,7 +270,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_coin_invalid_program.json",
+        "paramsRef": "./recipes/helicopter/heli_coin_invalid_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -330,7 +290,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/hlg_coin_program_with_input.json",
+        "paramsRef": "./recipes/helicopter/hlg_coin_program_with_input.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -350,7 +310,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_straight_attack_knife.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -375,7 +335,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_coin.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_coin.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -401,7 +361,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/adventurer_upgrader.json",
+        "paramsRef": "./recipes/helicopter/executions/adventurer_upgrader.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -422,78 +382,6 @@
         }
     },
     {
-        "ID": "EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_DELAYED_ADVENTURER_UPDATE_RECIPE", "EXECUTE_ADVENTURER_UPDATE_RECIPE"],
-            "blockWait": 0
-        },
-        "action": "execute_recipe",
-        "paramsRef": "./executions/delayed_adventurer_upgrader.json",
-        "output": {
-            "txResult": {
-                "status": "Success",
-                "message": "scheduled the recipe"
-            },
-            "property": []
-        }
-    },
-    {
-        "ID": "CHECK_EXECUTION_DELAYED_ADVENTURER_UPDATE_RECIPE",
-        "runAfter": {
-            "precondition": ["EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE"],
-            "blockWait": 0
-        },
-        "action": "check_execution",
-        "paramsRef": "./check_executions/upgrader_check.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "michael",
-                    "items": [
-                        {
-                            "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
-                            "dblValues": { "attack": "5.0" },
-                            "longValues": { "level": 3 }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "EXECUTE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",
-        "runAfter": {
-            "precondition": [
-                "CHECK_EXECUTION_DELAYED_ADVENTURER_UPDATE_RECIPE", 
-                "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE"
-            ],
-            "blockWait": 0
-        },
-        "action": "execute_recipe",
-        "paramsRef": "./executions/adventurer_upgrader_program.json",
-        "output": {
-            "txResult": {
-                "status": "Success",
-                "message": "successfully executed the recipe"
-            },
-            "property": [
-                {
-                    "owner": "michael",
-                    "items": [
-                        {
-                            "stringValues": { "Name": "Adventurer",  "LastName": "Program Upgraded Adventurer" },
-                            "dblValues": { "attack": "10.0" },
-                            "longValues": { "level": 4 }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
         "ID": "EXECUTE_SELL_TWO_KNIVES_PROGRAM_RECIPE",
         "runAfter": {
             "precondition": [
@@ -505,7 +393,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_sell_two_knives_program.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_sell_two_knives_program.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -535,7 +423,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_merge_two_shields_program.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_merge_two_shields_program.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -564,7 +452,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_coin_invalid_program.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_coin_invalid_program.json",
         "output": {
             "txResult": {
                 "errLog": "Syntax error: extraneous input 'Program' expecting"
@@ -582,7 +470,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/hlg_coin_program_with_input.json",
+        "paramsRef": "./recipes/helicopter/executions/hlg_coin_program_with_input.json",
         "output": {
             "txResult": {
                 "status": "Success",

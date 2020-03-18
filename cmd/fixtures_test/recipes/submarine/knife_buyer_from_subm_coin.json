@@ -1,0 +1,24 @@
+{
+    "CoinInputs":[
+        {
+            "Coin": "submcoin",
+            "Count": "1"
+        }
+    ],
+    "ItemInputRefs": [],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[
+            {
+                "Ref": "./recipes/submarine/item_output/knife_lv2.json",
+                "Weight":1
+            }
+        ]
+    },
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "Knife buyer recipe from submcoin",
+    "CookbookName": "submarine",
+    "Description": "this has to meet character limits lol",
+    "BlockInterval":"0"
+}

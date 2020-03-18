@@ -94,3 +94,8 @@ Send transactions by using rest endpoint.
 ```
 make fixture_tests -userest
 ```
+
+## To make fixture test scenarios clean
+
+- Always try to make a new scenario when it is going to increase fixture test running time much.
+- Always try to split scenarios to manage tests easily. 

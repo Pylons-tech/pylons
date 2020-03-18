@@ -1,12 +1,12 @@
 [
     {
-        "ID": "CREATE_CATALYST_COOKBOOK",
+        "ID": "CREATE_JAVELIN_COOKBOOK",
         "runAfter": {
             "precondition": [],
             "blockWait": 0
         },
         "action": "create_cookbook",
-        "paramsRef": "./cookbooks/catalyst.json",
+        "paramsRef": "./cookbooks/javelin.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -14,19 +14,19 @@
             "property": [
                 {
                     "owner": "eugen",
-                    "cookbooks": ["catalyst"]
+                    "cookbooks": ["javelincb"]
                 }
             ]
         }
     },
     {
-        "ID": "CREATE_MONSTER_LV1",        
+        "ID": "CREATE_JAVELIN_LV1",        
         "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/catalyst/monster_lv1.json",
+        "paramsRef": "./items/javelin/javelin_lv1.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -36,7 +36,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringValues": { "Name": "Monster" }
+                            "stringValues": { "Name": "Javelin" }
                         }
                     ]
                 }
@@ -44,37 +44,13 @@
         }
     },
     {
-        "ID": "CREATE_CATALYST_ITEM",        
+        "ID": "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE",        
         "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/catalyst/catalyst.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "michael",
-                    "items": [
-                        {
-                            "stringValues": { "Name": "catalyst" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_MONSTER_CATALYST_UPGRADE_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/catalyst/monster_upgrader_catalyst.json",
+        "paramsRef": "./recipes/javelin/javelin_upgrader_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -82,19 +58,22 @@
             "property": [
                 {
                     "owner": "eugen",
-                    "recipes": ["Monster Upgrade Catalyst Recipe"]
+                    "recipes": ["Javelin Upgrade Program Recipe"]
                 }
             ]
         }
     },
     {
-        "ID": "EXECUTE_MONSTER_CATALYST_UPGRADE_RECIPE",        
+        "ID": "EXECUTE_JAVELIN_UPGRADER_PROGRAM_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_MONSTER_CATALYST_UPGRADE_RECIPE", "CREATE_MONSTER_LV1", "CREATE_CATALYST_ITEM"],
+            "precondition": [
+                "CREATE_JAVELIN_LV1", 
+                "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE"
+            ],
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./recipes/catalyst/executions/monster_upgrader_catalyst.json",
+        "paramsRef": "./recipes/javelin/executions/javelin_upgrader_program.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -105,7 +84,9 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringValues": { "LastName": "Upgraded Monster" }
+                            "stringValues": { "Name": "Javelin",  "LastName": "Program Upgraded Javelin" },
+                            "dblValues": { "attack": "2.0" },
+                            "longValues": { "level": 2 }
                         }
                     ]
                 }

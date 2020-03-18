@@ -1,0 +1,12 @@
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./recipes/spear/item_input/spear_upgrade.json"
+    ],
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "Delayed Spear Upgrade Recipe",
+    "CookbookName": "spearcookbook",
+    "Description": "this recipe is delayed upgrader, used to upgrade spear which can update all versions of spear.",
+    "BlockInterval":"2"
+}

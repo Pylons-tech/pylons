@@ -1,0 +1,22 @@
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./recipes/helicopter/item_input/heli_knife_lv3.json"
+    ],
+    "Entries":{
+        "CoinOutputs":[
+            {
+                "Coin": "hlgcoin",
+                "Program": "int(attack * double(5))",
+                "Weight": 1
+            }
+        ],
+        "ItemOutputs":[]
+    },
+    "ExtraInfo":"",
+    "Sender":"eugen",
+    "Name": "Helicopter's Hlg Coin Generation From Input Recipe",
+    "CookbookName": "helicopter",
+    "Description": "this has to meet character limits lol",
+    "BlockInterval":"0"
+}
