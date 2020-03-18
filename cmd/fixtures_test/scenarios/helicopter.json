@@ -224,26 +224,6 @@
         }
     },
     {
-        "ID": "CREATE_DELAYED_ADVENTURER_UPDATE_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/delayed_adventurer_upgrader.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "eugen",
-                    "recipes": ["Delayed Adventurer Upgrade Recipe"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
@@ -422,52 +402,10 @@
         }
     },
     {
-        "ID": "EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_DELAYED_ADVENTURER_UPDATE_RECIPE", "EXECUTE_ADVENTURER_UPDATE_RECIPE"],
-            "blockWait": 0
-        },
-        "action": "execute_recipe",
-        "paramsRef": "./executions/delayed_adventurer_upgrader.json",
-        "output": {
-            "txResult": {
-                "status": "Success",
-                "message": "scheduled the recipe"
-            },
-            "property": []
-        }
-    },
-    {
-        "ID": "CHECK_EXECUTION_DELAYED_ADVENTURER_UPDATE_RECIPE",
-        "runAfter": {
-            "precondition": ["EXECUTE_DELAYED_ADVENTURER_UPDATE_RECIPE"],
-            "blockWait": 0
-        },
-        "action": "check_execution",
-        "paramsRef": "./check_executions/upgrader_check.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "michael",
-                    "items": [
-                        {
-                            "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
-                            "dblValues": { "attack": "5.0" },
-                            "longValues": { "level": 3 }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
         "ID": "EXECUTE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",
         "runAfter": {
             "precondition": [
-                "CHECK_EXECUTION_DELAYED_ADVENTURER_UPDATE_RECIPE", 
+                "EXECUTE_ADVENTURER_UPDATE_RECIPE", 
                 "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE"
             ],
             "blockWait": 0
@@ -485,8 +423,8 @@
                     "items": [
                         {
                             "stringValues": { "Name": "Adventurer",  "LastName": "Program Upgraded Adventurer" },
-                            "dblValues": { "attack": "10.0" },
-                            "longValues": { "level": 4 }
+                            "dblValues": { "attack": "6.0" },
+                            "longValues": { "level": 3 }
                         }
                     ]
                 }

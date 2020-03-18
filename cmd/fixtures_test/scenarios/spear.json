@@ -1,0 +1,108 @@
+[
+    {
+        "ID": "CREATE_SPEAR_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/spear.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["spearcookbook"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_SPEAR_LV1",        
+        "runAfter": {
+            "precondition": ["CREATE_SPEAR_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/spear_lv1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Spear" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DELAYED_SPEAR_UPDATE_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_SPEAR_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/delayed_spear_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Delayed Spear Upgrade Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_DELAYED_SPEAR_UPDATE_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DELAYED_SPEAR_UPDATE_RECIPE", "CREATE_SPEAR_LV1"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/delayed_spear_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "scheduled the recipe"
+            },
+            "property": []
+        }
+    },
+    {
+        "ID": "CHECK_EXECUTION_DELAYED_SPEAR_UPDATE_RECIPE",
+        "runAfter": {
+            "precondition": ["EXECUTE_DELAYED_SPEAR_UPDATE_RECIPE"],
+            "blockWait": 0
+        },
+        "action": "check_execution",
+        "paramsRef": "./check_executions/spear_upgrader_check.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Spear",  "LastName": "Upgraded Spear" },
+                            "dblValues": { "attack": "3.0" },
+                            "longValues": { "level": 2 }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
