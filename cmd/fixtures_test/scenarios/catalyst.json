@@ -94,7 +94,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/monster_upgrader_catalyst.json",
+        "paramsRef": "./recipes/catalyst/executions/monster_upgrader_catalyst.json",
         "output": {
             "txResult": {
                 "status": "Success",

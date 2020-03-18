@@ -70,7 +70,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/delayed_spear_upgrader.json",
+        "paramsRef": "./recipes/spear/executions/delayed_spear_upgrader.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -86,7 +86,7 @@
             "blockWait": 0
         },
         "action": "check_execution",
-        "paramsRef": "./check_executions/spear_upgrader_check.json",
+        "paramsRef": "./recipes/spear/check_executions/spear_upgrader_check.json",
         "output": {
             "txResult": {
                 "status": "Success"

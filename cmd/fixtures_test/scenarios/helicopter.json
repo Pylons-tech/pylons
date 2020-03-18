@@ -310,7 +310,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_straight_attack_knife.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -335,7 +335,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_coin.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_coin.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -361,7 +361,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/adventurer_upgrader.json",
+        "paramsRef": "./recipes/helicopter/executions/adventurer_upgrader.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -393,7 +393,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_sell_two_knives_program.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_sell_two_knives_program.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -423,7 +423,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_merge_two_shields_program.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_merge_two_shields_program.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -452,7 +452,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/heli_coin_invalid_program.json",
+        "paramsRef": "./recipes/helicopter/executions/heli_coin_invalid_program.json",
         "output": {
             "txResult": {
                 "errLog": "Syntax error: extraneous input 'Program' expecting"
@@ -470,7 +470,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/hlg_coin_program_with_input.json",
+        "paramsRef": "./recipes/helicopter/executions/hlg_coin_program_with_input.json",
         "output": {
             "txResult": {
                 "status": "Success",

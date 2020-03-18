@@ -199,7 +199,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/straight_attack_knife.json",
+        "paramsRef": "./recipes/submarine/executions/straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -224,7 +224,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/delayed_attack_knife.json",
+        "paramsRef": "./recipes/submarine/executions/delayed_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -240,7 +240,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/wrong_inputs_count.json",
+        "paramsRef": "./recipes/submarine/executions/wrong_inputs_count.json",
         "output": {
             "txResult": {
                 "errLog": "the item IDs count doesn't match the recipe input"
@@ -255,7 +255,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/knife_shield.json",
+        "paramsRef": "./recipes/submarine/executions/knife_shield.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -280,7 +280,7 @@
             "blockWait": 2
         },
         "action": "check_execution",
-        "paramsRef": "./check_executions/check_execution.json",
+        "paramsRef": "./recipes/submarine/check_executions/check_execution.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -305,7 +305,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/subm_coin.json",
+        "paramsRef": "./recipes/submarine/executions/subm_coin.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -331,7 +331,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./executions/knife_buyer_from_subm_coin.json",
+        "paramsRef": "./recipes/submarine/executions/knife_buyer_from_subm_coin.json",
         "output": {
             "txResult": {
                 "status": "Success",
