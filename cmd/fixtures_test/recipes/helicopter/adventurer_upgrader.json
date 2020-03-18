@@ -1,5 +1,4 @@
 {
-    "RType": "1",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./recipes/helicopter/item_input/adventurer_upgrade.json"

@@ -1,5 +1,4 @@
 {
-    "RType": "0",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./recipes/helicopter/item_input/heli_knife_lv1.json",

@@ -1,5 +1,4 @@
 {
-    "RType": "1",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./recipes/spear/item_input/spear_upgrade.json"

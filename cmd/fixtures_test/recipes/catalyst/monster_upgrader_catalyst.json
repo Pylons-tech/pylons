@@ -1,5 +1,4 @@
 {
-    "RType": "1",
     "CoinInputs": [],
     "ItemInputRefs": [
         "./recipes/catalyst/item_input/monster.json",
