@@ -145,11 +145,15 @@ Sample ItemInputs JSON
 
 This describes the fields of ToUpgrade field of item upgrade recipe.
 
-| No | Field         | Type       | Sample               | Description                        |
-|----|---------------|------------|----------------------|------------------------------------|
-| 1  | Doubles       | array      | attack: +1.0         | contains double attributes updates |
-| 2  | Longs         | array      | level: +1            | contains int attributes updates    |
-| 3  | Strings       | array      | name: "Level2 Knife" | contains string attributes updates |
+| No | Field        | Type   | Sample               | Description                                |
+|----|--------------|--------|----------------------|--------------------------------------------|
+| 1  | Doubles      | array  | attack: +1.0         | contains double attributes updates         |
+| 2  | Longs        | array  | level: +1            | contains int attributes updates            |
+| 3  | Strings      | array  | name: "Level2 Knife" | contains string attributes updates         |
+| 4  | Key          | string | attack               | attribute which needs to be changed        |
+| 5  | Value        | string | "Upgraded Knife"     | Target value when string attr is changed   |
+| 6  | WeightRanges | array  | 3-5                  | range which describe delta between initial |
+| 7  | Program      | string | "attack x 2"         | target value when upgraded by program.     |
 
 Upgrade also has random effect and for that, weightRanges are used for Doubles and Longs.
 
@@ -181,7 +185,7 @@ Sample ToUpgrade JSON with Program
   }],
   "Longs": [{
     "Key": "level", 
-    "WeightRanges": "level + 1"
+    "Program": "level + 1"
   }],
   "Strings": [{"Key": "LastName", "Program": "\"Upgraded Adventurer\""}]
 }
@@ -346,3 +350,11 @@ randi(10)
 ```
 
 Above code is for generation of random number from 1 - 10.
+
+## Execution of recipes
+
+TODO: should add description here
+
+## Trading
+
+TODO: should add description here
