@@ -224,26 +224,6 @@
         }
     },
     {
-        "ID": "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/adventurer_upgrader_program.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "eugen",
-                    "recipes": ["Adventurer Upgrade Program Recipe"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
@@ -395,36 +375,6 @@
                             "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
                             "dblValues": { "attack": "3.0" },
                             "longValues": { "level": 2 }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "EXECUTE_ADVENTURER_UPGRADER_PROGRAM_RECIPE",
-        "runAfter": {
-            "precondition": [
-                "EXECUTE_ADVENTURER_UPDATE_RECIPE", 
-                "CREATE_ADVENTURER_UPGRADER_PROGRAM_RECIPE"
-            ],
-            "blockWait": 0
-        },
-        "action": "execute_recipe",
-        "paramsRef": "./executions/adventurer_upgrader_program.json",
-        "output": {
-            "txResult": {
-                "status": "Success",
-                "message": "successfully executed the recipe"
-            },
-            "property": [
-                {
-                    "owner": "michael",
-                    "items": [
-                        {
-                            "stringValues": { "Name": "Adventurer",  "LastName": "Program Upgraded Adventurer" },
-                            "dblValues": { "attack": "6.0" },
-                            "longValues": { "level": 3 }
                         }
                     ]
                 }

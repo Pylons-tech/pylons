@@ -1,0 +1,96 @@
+[
+    {
+        "ID": "CREATE_JAVELIN_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/javelin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["javelincb"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_JAVELIN_LV1",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/javelin_lv1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Javelin" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/javelin_upgrader_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Javelin Upgrade Program Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_JAVELIN_UPGRADER_PROGRAM_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_JAVELIN_LV1", 
+                "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./executions/javelin_upgrader_program.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Javelin",  "LastName": "Program Upgraded Javelin" },
+                            "dblValues": { "attack": "2.0" },
+                            "longValues": { "level": 2 }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
