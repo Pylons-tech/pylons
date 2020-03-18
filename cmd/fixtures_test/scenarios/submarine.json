@@ -99,7 +99,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/straight_attack_knife.json",
+        "paramsRef": "./recipes/submarine/straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -119,7 +119,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/delayed_attack_knife.json",
+        "paramsRef": "./recipes/submarine/delayed_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -139,7 +139,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/subm_coin.json",
+        "paramsRef": "./recipes/submarine/subm_coin.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -159,7 +159,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/knife_shield.json",
+        "paramsRef": "./recipes/submarine/knife_shield.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -179,7 +179,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/knife_buyer_from_subm_coin.json",
+        "paramsRef": "./recipes/submarine/knife_buyer_from_subm_coin.json",
         "output": {
             "txResult": {
                 "status": "Success"

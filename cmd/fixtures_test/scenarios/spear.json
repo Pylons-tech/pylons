@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/delayed_spear_upgrader.json",
+        "paramsRef": "./recipes/spear/delayed_spear_upgrader.json",
         "output": {
             "txResult": {
                 "status": "Success"

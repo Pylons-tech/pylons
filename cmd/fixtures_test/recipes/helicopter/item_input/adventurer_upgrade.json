@@ -3,5 +3,5 @@
     "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "2000"}],
     "Strings": [{"Key": "Name", "Value": "Adventurer"}],
     "AlivePercent": "100",
-    "ToUpgradeRef": "./recipes/upgrader/adventurer.json"
+    "ToUpgradeRef": "./recipes/helicopter/upgrader/adventurer.json"
 }

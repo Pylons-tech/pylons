@@ -50,7 +50,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/javelin_upgrader_program.json",
+        "paramsRef": "./recipes/javelin/javelin_upgrader_program.json",
         "output": {
             "txResult": {
                 "status": "Success"

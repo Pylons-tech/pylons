@@ -2,10 +2,10 @@
     "RType": "1",
     "CoinInputs": [],
     "ItemInputRefs": [
-        "./recipes/item_input/monster.json",
-        "./recipes/item_input/catalyst.json"
+        "./recipes/catalyst/item_input/monster.json",
+        "./recipes/catalyst/item_input/catalyst.json"
     ],
-    "ToUpgradeRef": "./recipes/upgrader/monster_catalyst.json",
+    "ToUpgradeRef": "./recipes/catalyst/upgrader/monster_catalyst.json",
     "ExtraInfo": "",
     "Sender": "eugen",
     "Name": "Monster Upgrade Catalyst Recipe",

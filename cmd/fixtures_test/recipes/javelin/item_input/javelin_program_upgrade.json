@@ -1,7 +1,7 @@
 {
     "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "2000"}],
     "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "2000"}],
-    "Strings": [{"Key": "Name", "Value": "Monster"}],
+    "Strings": [{"Key": "Name", "Value": "Javelin"}],
     "AlivePercent": "100",
-    "ToUpgradeRef": "./recipes/upgrader/monster.json"
+    "ToUpgradeRef": "./recipes/javelin/upgrader/javelin_program.json"
 }

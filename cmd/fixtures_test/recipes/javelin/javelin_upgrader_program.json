@@ -2,7 +2,7 @@
     "RType": "1",
     "CoinInputs": [],
     "ItemInputRefs": [
-        "./recipes/item_input/javelin_program_upgrade.json"
+        "./recipes/javelin/item_input/javelin_program_upgrade.json"
     ],
     "ExtraInfo": "",
     "Sender": "eugen",

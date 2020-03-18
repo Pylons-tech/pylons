@@ -2,21 +2,22 @@
     "RType": "0",
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/item_input/heli_knife_lv3.json"
+        "./recipes/helicopter/item_input/heli_knife_lv1.json",
+        "./recipes/helicopter/item_input/heli_knife_lv2.json"
     ],
     "Entries":{
         "CoinOutputs":[
             {
-                "Coin": "hlgcoin",
-                "Program": "int(attack * double(5))",
-                "Weight": 1
+                "Coin":"helicoin",
+                "Program": "(input0.level + input1.level) * 10",
+                "Weight":1
             }
         ],
         "ItemOutputs":[]
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "Helicopter's Hlg Coin Generation From Input Recipe",
+    "Name": "Helicopter's sell two knives Recipe",
     "CookbookName": "helicopter",
     "Description": "this has to meet character limits lol",
     "BlockInterval":"0"

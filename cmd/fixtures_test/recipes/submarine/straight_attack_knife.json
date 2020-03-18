@@ -6,15 +6,15 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/item_output/delayed_attack_knife.json",
+                "Ref": "./recipes/submarine/item_output/straight_attack_knife.json",
                 "Weight":1
             }
         ]
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "Delayed Attack Knife Generation Recipe",
+    "Name": "Straight Attack Knife Generation Recipe",
     "CookbookName": "submarine",
     "Description": "this has to meet character limits lol",
-    "BlockInterval":"2"
+    "BlockInterval":"0"
 }

@@ -170,7 +170,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_straight_attack_knife.json",
+        "paramsRef": "./recipes/helicopter/heli_straight_attack_knife.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -190,7 +190,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_coin.json",
+        "paramsRef": "./recipes/helicopter/heli_coin.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -210,7 +210,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/adventurer_upgrader.json",
+        "paramsRef": "./recipes/helicopter/adventurer_upgrader.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -230,7 +230,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_sell_two_knives_program.json",
+        "paramsRef": "./recipes/helicopter/heli_sell_two_knives_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -250,7 +250,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_merge_two_shields_program.json",
+        "paramsRef": "./recipes/helicopter/heli_merge_two_shields_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -270,7 +270,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/heli_coin_invalid_program.json",
+        "paramsRef": "./recipes/helicopter/heli_coin_invalid_program.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -290,7 +290,7 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/hlg_coin_program_with_input.json",
+        "paramsRef": "./recipes/helicopter/hlg_coin_program_with_input.json",
         "output": {
             "txResult": {
                 "status": "Success"

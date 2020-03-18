@@ -6,15 +6,15 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/item_output/straight_attack_knife.json",
+                "Ref": "./recipes/helicopter/item_output/heli_straight_attack_knife.json",
                 "Weight":1
             }
         ]
     },
     "ExtraInfo":"",
     "Sender":"eugen",
-    "Name": "Straight Attack Knife Generation Recipe",
-    "CookbookName": "submarine",
+    "Name": "Helicopter's Straight Attack Knife Generation Recipe",
+    "CookbookName": "helicopter",
     "Description": "this has to meet character limits lol",
     "BlockInterval":"0"
 }

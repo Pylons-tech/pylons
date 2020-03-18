@@ -3,5 +3,5 @@
     "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "2000"}],
     "Strings": [{"Key": "Name", "Value": "Spear"}],
     "AlivePercent": "100",
-    "ToUpgradeRef": "./recipes/upgrader/spear.json"
+    "ToUpgradeRef": "./recipes/spear/upgrader/spear.json"
 }

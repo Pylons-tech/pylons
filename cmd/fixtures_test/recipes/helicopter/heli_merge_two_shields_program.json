@@ -2,14 +2,14 @@
     "RType": "0",
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/item_input/heli_shield_lv1.json",
-        "./recipes/item_input/heli_shield_lv2.json"
+        "./recipes/helicopter/item_input/heli_shield_lv1.json",
+        "./recipes/helicopter/item_input/heli_shield_lv2.json"
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/item_output/heli_merge_two_shields_program.json",
+                "Ref": "./recipes/helicopter/item_output/heli_merge_two_shields_program.json",
                 "Weight":1
             }
         ]

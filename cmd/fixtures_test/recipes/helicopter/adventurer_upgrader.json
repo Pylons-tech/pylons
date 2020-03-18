@@ -2,7 +2,7 @@
     "RType": "1",
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/item_input/adventurer_upgrade.json"
+        "./recipes/helicopter/item_input/adventurer_upgrade.json"
     ],
     "ExtraInfo":"",
     "Sender":"eugen",

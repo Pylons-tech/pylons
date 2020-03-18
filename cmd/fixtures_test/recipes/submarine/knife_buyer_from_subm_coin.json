@@ -11,7 +11,7 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/item_output/knife_lv2.json",
+                "Ref": "./recipes/submarine/item_output/knife_lv2.json",
                 "Weight":1
             }
         ]
