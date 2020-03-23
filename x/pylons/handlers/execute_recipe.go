@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -100,28 +99,6 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 		}
 	}
 	return matchedItems, nil
-}
-
-func HandleLoseItems(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.Item, recipe types.Recipe) []bool {
-
-	itemLoseResult := []bool{}
-	for idx, ci := range matchedItems {
-		s1 := rand.NewSource(time.Now().UnixNano())
-		r1 := rand.New(s1)
-		// select a random number between 1 and 100 (including both ends)
-		randomInt := r1.Intn(100) + 1
-
-		// for example the alive percent is 70% then if the number should be less than 70 for the item to be alive
-		// 0 -> alivepercent => alive
-		// alivepercent + 1 -> 100 => lose
-		if recipe.ItemInputs[idx].AlivePercent < randomInt { // lose
-			keeper.DeleteItem(ctx, ci.ID)
-			itemLoseResult = append(itemLoseResult, true)
-		} else { // alive
-			itemLoseResult = append(itemLoseResult, false)
-		}
-	}
-	return itemLoseResult
 }
 
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.Item, entries types.EntriesList, outputs []int,

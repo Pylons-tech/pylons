@@ -58,6 +58,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			desiredError:   "",
 			showError:      false,
 		},
+		// TODO should add case for no input item upgrade test
 		// TODO should add case for multiple input item upgrade test
 	}
 	for testName, tc := range cases {
@@ -77,41 +78,22 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			}
 
 			mEntries := types.EntriesList{}
-			mUpgrades := types.ItemModifyParams{}
-			alivePercent := 0
 			if !tc.isUpgrdRecipe {
 				mEntries = types.GenEntries("chair", "Raichu")
 			} else {
-				mUpgrades = types.GenToUpgradeForString("Name", "RaichuV2")
-				alivePercent = 100
+				mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
 			}
+			mOutputs := types.GenOneOutput(len(mEntries))
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
-				if tc.isUpgrdRecipe {
-					mInputList = types.GenDetailedItemInputList(
-						alivePercent,
-						[]types.ItemModifyParams{mUpgrades},
-						"Raichu",
-					)
-				} else {
-					mInputList = types.GenItemInputList(alivePercent, "Raichu")
-				}
-			} else if tc.numItemInput != 0 { // > 1
-				if tc.isUpgrdRecipe {
-					mInputList = types.GenDetailedItemInputList(
-						alivePercent,
-						[]types.ItemModifyParams{mUpgrades},
-						"Raichu", "Knife",
-					)
-				} else {
-					mInputList = types.GenItemInputList(alivePercent, "Raichu", "Knife")
-				}
+				mInputList = types.GenItemInputList("Raichu")
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
 				types.GenCoinInputList("wood", 5),
 				mInputList,
 				mEntries,
+				mOutputs,
 				0,
 				tc.sender,
 			)
@@ -142,12 +124,14 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
-	mInputList := types.GenItemInputList(0, "Raichu")
+	mOutputs := types.GenOneOutput(len(mEntries))
+	mInputList := types.GenItemInputList("Raichu")
 
 	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
 		types.GenCoinInputList("wood", 5),
 		mInputList,
 		mEntries,
+		mOutputs,
 		0,
 		sender1,
 	)

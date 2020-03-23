@@ -85,18 +85,16 @@ func MockRecipeGUID(
 		return MockDetailedRecipeGUID(name,
 			types.GenCoinInputList("pylon", 5),
 			types.ItemInputList{}, types.GenItemOnlyEntry(desItemName),
+			types.GenOneOutput(1),
 			interval,
 			t,
 		)
 	} else {
 		return MockDetailedRecipeGUID(name,
 			types.GenCoinInputList("pylon", 5),
-			types.GenDetailedItemInputList(
-				100,
-				[]types.ItemModifyParams{types.GenItemNameUpgradeParams(desItemName)},
-				curItemName,
-			),
+			types.GenItemInputList(curItemName),
 			types.EntriesList{},
+			types.GenOneOutput(1),
 			interval,
 			t,
 		)
@@ -107,8 +105,8 @@ func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
 	rcpName string,
 	t *testing.T,
 ) (string, error) {
-	ciL, iiL, entries, bI := handlers.GetParamsForPopularRecipe(hfrt)
-	return MockDetailedRecipeGUID(rcpName, ciL, iiL, entries, bI, t)
+	ciL, iiL, entries, outputs, bI := handlers.GetParamsForPopularRecipe(hfrt)
+	return MockDetailedRecipeGUID(rcpName, ciL, iiL, entries, outputs, bI, t)
 }
 
 func MockDetailedRecipeGUID(
@@ -116,6 +114,7 @@ func MockDetailedRecipeGUID(
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
 	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	interval int64,
 	t *testing.T,
 ) (string, error) {
@@ -141,6 +140,7 @@ func MockDetailedRecipeGUID(
 			ciL,
 			iiL,
 			entries,
+			outputs,
 			interval,
 			sdkAddr),
 		"eugen",
@@ -224,7 +224,7 @@ func MockDetailedTradeGUID(
 		inputCoinList = nil
 	}
 	// We are not losing items when trading
-	inputItemList := types.GenItemInputList(100, inputItemName)
+	inputItemList := types.GenItemInputList(inputItemName)
 	if !hasInputItem {
 		inputItemList = nil
 	}

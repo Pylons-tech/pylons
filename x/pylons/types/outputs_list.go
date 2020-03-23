@@ -10,7 +10,7 @@ import (
 // WeightedParam is to make structs which is using weight to be based on
 type OutputsList struct {
 	Result []int
-	Weight int
+	Weight int // TODO should upgrade to string and execute program to calculate weight
 }
 
 func (ol OutputsList) String() string {
@@ -18,6 +18,10 @@ func (ol OutputsList) String() string {
 }
 
 func (ol OutputsList) GetWeight() int {
+	// TODO should handle < 0 weight when upgrading Weight as Program
+	if ol.Weight < 0 {
+		return 0
+	}
 	return ol.Weight
 }
 
@@ -37,7 +41,6 @@ func (wpl WeightedOutputsList) String() string {
 }
 
 func (wol WeightedOutputsList) Actualize() ([]int, sdk.Error) {
-	// TODO should handle <0 weight
 	lastWeight := 0
 	var weights []int
 	for _, wp := range wol {

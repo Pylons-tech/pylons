@@ -27,6 +27,7 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
@@ -37,6 +38,7 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		Outputs:       outputs,
 		BlockInterval: int64(blockInterval),
 		Sender:        sender,
 	}
@@ -51,6 +53,7 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 // ValidateBasic validates the Msg
 func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 	// TODO should basic validation for the item input index overflow on item outputs
+	// TODO should do basic validation for program of ItemOutput and ToModify
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())

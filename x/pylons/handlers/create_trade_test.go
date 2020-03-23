@@ -47,7 +47,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	}{
 		"trade with only items": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList(0, "Pikachu"),
+			inputItemList: types.GenItemInputList("Pikachu"),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -55,7 +55,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with item and coins": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList(0, "Pikachu"),
+			inputItemList: types.GenItemInputList("Pikachu"),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -64,7 +64,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with only items failure due to sender not being owner": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList(0, "Pikachu"),
+			inputItemList: types.GenItemInputList("Pikachu"),
 			outputItemList: types.ItemList{
 				*item2,
 			},
@@ -73,7 +73,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with coin and item failure due to low balance": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList(0, "Pikachu"),
+			inputItemList: types.GenItemInputList("Pikachu"),
 			outputItemList: types.ItemList{
 				*item,
 			},

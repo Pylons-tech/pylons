@@ -34,7 +34,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
-					types.GenItemInputList(0, "Raichu"),
+					types.GenItemInputList("Raichu"),
 					types.NewPylon(1000),
 					nil,
 					tc.extraInfo,

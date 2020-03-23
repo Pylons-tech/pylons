@@ -142,6 +142,16 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 	}
 }
 
+func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
+	ItemInputRef := 0
+	return EntriesList{
+		ItemOutput{
+			ItemInputRef: &ItemInputRef,
+			ToModify:     GenToUpgradeForString("Name", targetValue),
+		},
+	}
+}
+
 func GenToUpgradeForString(targetKey, targetValue string) ItemModifyParams {
 	return ItemModifyParams{
 		Strings: StringParamList{

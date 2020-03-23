@@ -15,6 +15,7 @@ type MsgUpdateRecipe struct {
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
 	Entries       types.EntriesList
+	Outputs       types.WeightedOutputsList
 	BlockInterval int64
 	Sender        sdk.AccAddress
 	Description   string
@@ -25,6 +26,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		Name:          recipeName,
@@ -34,6 +36,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		Outputs:       outputs,
 		BlockInterval: 0,
 		Sender:        sender,
 	}

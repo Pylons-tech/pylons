@@ -29,6 +29,7 @@ func MockRecipe(
 	coinInputList types.CoinInputList,
 	itemInputList types.ItemInputList,
 	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	cbID string,
 	blockInterval int64,
 	sender sdk.AccAddress,
@@ -37,6 +38,7 @@ func MockRecipe(
 		coinInputList,
 		itemInputList,
 		entries,
+		outputs,
 		blockInterval,
 		sender,
 	)
@@ -60,61 +62,61 @@ const (
 	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 8
 )
 
-func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, types.ItemInputList, types.EntriesList, int64) {
+func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, types.ItemInputList, types.EntriesList, types.WeightedOutputsList, int64) {
 	switch hfrt {
 	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
+			types.GenOneOutput(1),
 			0
 	case RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
+			types.GenOneOutput(1),
 			5
 	case RCP_5xWOODCOIN_1xRAICHU_BUY:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Raichu"),
+			types.GenOneOutput(1),
 			0
 	case RCP_RAICHU_NAME_UPGRADE:
 		return types.CoinInputList{},
-			types.GenDetailedItemInputList(
-				100,
-				[]types.ItemModifyParams{types.GenToUpgradeForString("Name", "RaichuV2")},
-				"Raichu"),
+			types.GenItemInputList("Raichu"),
 			types.EntriesList{},
+			types.GenOneOutput(1),
 			0
 	case RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST:
 		return types.CoinInputList{},
-			types.GenDetailedItemInputList(
-				100,
-				[]types.ItemModifyParams{types.GenToUpgradeForString("Name", "RaichuTCV2")},
-				"RaichuTC", "catalyst"),
+			types.GenItemInputList("RaichuTC", "catalyst"),
 			types.EntriesList{},
+			types.GenOneOutput(1),
 			0
 	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
 		return types.CoinInputList{},
-			types.GenDetailedItemInputList(
-				100,
-				[]types.ItemModifyParams{types.GenToUpgradeForString("Name", "KnifeV2")},
-				"Knife"),
+			types.GenItemInputList("Knife"),
 			types.EntriesList{},
+			types.GenOneOutput(1),
 			2
 	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
 		return types.CoinInputList{},
-			types.GenItemInputList(0, "Knife", "Knife"),
+			types.GenItemInputList("Knife", "Knife"),
 			types.GenItemOnlyEntry("KnifeMRG"),
+			types.GenOneOutput(1),
 			2
 	case RCP_2_BLOCK_DELAYED_KNIFE_BUYER:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Knife"),
+			types.GenOneOutput(1),
 			2
 	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenEntries("chair", "Raichu"),
+			types.GenOneOutput(1),
 			0
 	}
 }
@@ -126,10 +128,10 @@ func MockPopularRecipe(
 	cbID string,
 	sender sdk.AccAddress,
 ) CreateRecipeResponse {
-	ciL, iiL, entries, bI := GetParamsForPopularRecipe(hfrt)
+	ciL, iiL, entries, outputs, bI := GetParamsForPopularRecipe(hfrt)
 	return MockRecipe(
 		tci, rcpName,
-		ciL, iiL, entries,
+		ciL, iiL, entries, outputs,
 		cbID,
 		bI,
 		sender,
