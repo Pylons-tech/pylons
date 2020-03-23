@@ -81,7 +81,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 		return types.CoinInputList{},
 			types.GenDetailedItemInputList(
 				100,
-				[]types.ItemUpgradeParams{types.GenToUpgradeForString("Name", "RaichuV2")},
+				[]types.ItemModifyParams{types.GenToUpgradeForString("Name", "RaichuV2")},
 				"Raichu"),
 			types.EntriesList{},
 			0
@@ -89,7 +89,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 		return types.CoinInputList{},
 			types.GenDetailedItemInputList(
 				100,
-				[]types.ItemUpgradeParams{types.GenToUpgradeForString("Name", "RaichuTCV2")},
+				[]types.ItemModifyParams{types.GenToUpgradeForString("Name", "RaichuTCV2")},
 				"RaichuTC", "catalyst"),
 			types.EntriesList{},
 			0
@@ -97,7 +97,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 		return types.CoinInputList{},
 			types.GenDetailedItemInputList(
 				100,
-				[]types.ItemUpgradeParams{types.GenToUpgradeForString("Name", "KnifeV2")},
+				[]types.ItemModifyParams{types.GenToUpgradeForString("Name", "KnifeV2")},
 				"Knife"),
 			types.EntriesList{},
 			2

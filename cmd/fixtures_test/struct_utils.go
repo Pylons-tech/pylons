@@ -207,7 +207,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 	return wpl
 }
 
-func GetToUpgradeFromBytes(bytes []byte, t *testing.T) types.ItemUpgradeParams {
+func GetToUpgradeFromBytes(bytes []byte, t *testing.T) types.ItemModifyParams {
 	var upgradeReader struct {
 		ToUpgradeRef string
 	}
@@ -216,7 +216,7 @@ func GetToUpgradeFromBytes(bytes []byte, t *testing.T) types.ItemUpgradeParams {
 		t.Fatal("read upgradeReader using json.Unmarshal:", err)
 	}
 
-	var iup types.ItemUpgradeParams
+	var iup types.ItemModifyParams
 	if len(upgradeReader.ToUpgradeRef) == 0 {
 		return iup
 	}

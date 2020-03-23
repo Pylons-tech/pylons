@@ -1,6 +1,6 @@
 package types
 
-type ItemUpgradeParams struct {
+type ItemModifyParams struct {
 	Doubles DoubleParamList
 	Longs   LongParamList
 	Strings StringParamList

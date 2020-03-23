@@ -77,7 +77,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			}
 
 			mEntries := types.EntriesList{}
-			mUpgrades := types.ItemUpgradeParams{}
+			mUpgrades := types.ItemModifyParams{}
 			alivePercent := 0
 			if !tc.isUpgrdRecipe {
 				mEntries = types.GenEntries("chair", "Raichu")
@@ -90,7 +90,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				if tc.isUpgrdRecipe {
 					mInputList = types.GenDetailedItemInputList(
 						alivePercent,
-						[]types.ItemUpgradeParams{mUpgrades},
+						[]types.ItemModifyParams{mUpgrades},
 						"Raichu",
 					)
 				} else {
@@ -100,7 +100,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				if tc.isUpgrdRecipe {
 					mInputList = types.GenDetailedItemInputList(
 						alivePercent,
-						[]types.ItemUpgradeParams{mUpgrades},
+						[]types.ItemModifyParams{mUpgrades},
 						"Raichu", "Knife",
 					)
 				} else {

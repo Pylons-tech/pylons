@@ -119,8 +119,7 @@ This field is showing required items to run recipe.
 | 1  | Doubles      | array      | "attack": 1         | required conditions for double attributes.     |
 | 2  | Longs        | array      | "level": 1          | required conditions for int attributes.        |
 | 3  | Strings      | array      | "name": "shield"    | required conditions for string attributes.     |
-| 4  | AlivePercent | int(0-100) | 100                 | alive percentage after running recipe.         |
-| 5  | ToUpgrade    | object     | attack = attack * 2 | Describe what is updated after running recipe. |
+| 4  | ToUpgrade    | object     | attack = attack * 2 | Describe what is updated after running recipe. |
 
 | No | Field    | Type       | sample   | description                                                                         |
 |----|----------|------------|----------|-------------------------------------------------------------------------------------|
@@ -136,7 +135,6 @@ Sample ItemInputs JSON
     "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "2000"}],
     "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "2000"}],
     "Strings": [{"Key": "Name", "Value": "Monster"}],
-    "AlivePercent": "100",
     "ToUpgradeRef": "./recipes/catalyst/upgrader/monster.json"
 }]
 ```

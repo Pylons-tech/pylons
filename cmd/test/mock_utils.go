@@ -93,7 +93,7 @@ func MockRecipeGUID(
 			types.GenCoinInputList("pylon", 5),
 			types.GenDetailedItemInputList(
 				100,
-				[]types.ItemUpgradeParams{types.GenItemNameUpgradeParams(desItemName)},
+				[]types.ItemModifyParams{types.GenItemNameUpgradeParams(desItemName)},
 				curItemName,
 			),
 			types.EntriesList{},

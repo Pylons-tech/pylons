@@ -4,11 +4,9 @@ import "fmt"
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
-	Doubles      DoubleInputParamList
-	Longs        LongInputParamList
-	Strings      StringInputParamList
-	AlivePercent int // chance of an item to be alive during recipe execution in %
-	ToUpgrade    ItemUpgradeParams
+	Doubles DoubleInputParamList
+	Longs   LongInputParamList
+	Strings StringInputParamList
 }
 
 // Matches checks if all the constraint match the given item

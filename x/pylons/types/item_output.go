@@ -10,7 +10,7 @@ import (
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
 type ItemOutput struct {
 	ItemInputRef *int `json:",omitempty"`
-	ToModify     ItemUpgradeParams
+	ToModify     ItemModifyParams
 	Doubles      DoubleParamList
 	Longs        LongParamList
 	Strings      StringParamList

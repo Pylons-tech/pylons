@@ -9,33 +9,13 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
-func GenItemInputList(alivePercent int, names ...string) ItemInputList {
+func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
 		iiL = append(iiL, ItemInput{
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
-			alivePercent,
-			ItemUpgradeParams{},
-		})
-	}
-	return iiL
-}
-
-func GenDetailedItemInputList(alivePercent int, itemUpgrades []ItemUpgradeParams, names ...string) ItemInputList {
-	iiL := ItemInputList{}
-	for idx, name := range names {
-		toUpgrade := ItemUpgradeParams{}
-		if idx < len(itemUpgrades) {
-			toUpgrade = itemUpgrades[idx]
-		}
-		iiL = append(iiL, ItemInput{
-			nil,
-			nil,
-			StringInputParamList{StringInputParam{"Name", name}},
-			alivePercent,
-			toUpgrade,
 		})
 	}
 	return iiL
@@ -70,13 +50,12 @@ func GenSingleItemInputList(alivePercent int, itemName string) ItemInputList {
 					Value: itemName,
 				},
 			},
-			AlivePercent: alivePercent,
 		},
 	}
 }
 
-func GenItemNameUpgradeParams(desItemName string) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
+	return ItemModifyParams{
 		Doubles: DoubleParamList{},
 		Longs:   LongParamList{},
 		Strings: StringParamList{
@@ -163,16 +142,16 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 	}
 }
 
-func GenToUpgradeForString(targetKey, targetValue string) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenToUpgradeForString(targetKey, targetValue string) ItemModifyParams {
+	return ItemModifyParams{
 		Strings: StringParamList{
 			{Key: targetKey, Value: targetValue},
 		},
 	}
 }
 
-func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemModifyParams {
+	return ItemModifyParams{
 		Longs: []LongParam{
 			{
 				Key: targetKey,
@@ -188,8 +167,8 @@ func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams 
 	}
 }
 
-func GenToUpgradeForDouble(targetKey string, upgradeAmount FloatString) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenToUpgradeForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
+	return ItemModifyParams{
 		Doubles: []DoubleParam{
 			{
 				Key: targetKey,

@@ -283,7 +283,7 @@ func HandleItemGeneration(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecu
 	})
 }
 
-func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (*types.Item, sdk.Error) {
+func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModifyParams) (*types.Item, sdk.Error) {
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
 
 	if err != nil {
