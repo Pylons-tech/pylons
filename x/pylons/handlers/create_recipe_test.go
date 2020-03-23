@@ -76,7 +76,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 
-			mEntries := types.WeightedParamList{}
+			mEntries := types.EntriesList{}
 			mUpgrades := types.ItemUpgradeParams{}
 			alivePercent := 0
 			if !tc.isUpgrdRecipe {

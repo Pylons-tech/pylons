@@ -28,7 +28,7 @@ func MockRecipe(
 	rcpName string,
 	coinInputList types.CoinInputList,
 	itemInputList types.ItemInputList,
-	entries types.WeightedParamList,
+	entries types.EntriesList,
 	cbID string,
 	blockInterval int64,
 	sender sdk.AccAddress,
@@ -60,7 +60,7 @@ const (
 	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 8
 )
 
-func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, types.ItemInputList, types.WeightedParamList, int64) {
+func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, types.ItemInputList, types.EntriesList, int64) {
 	switch hfrt {
 	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
 		return types.GenCoinInputList("wood", 5),
@@ -83,7 +83,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 				100,
 				[]types.ItemUpgradeParams{types.GenToUpgradeForString("Name", "RaichuV2")},
 				"Raichu"),
-			types.WeightedParamList{},
+			types.EntriesList{},
 			0
 	case RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST:
 		return types.CoinInputList{},
@@ -91,7 +91,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 				100,
 				[]types.ItemUpgradeParams{types.GenToUpgradeForString("Name", "RaichuTCV2")},
 				"RaichuTC", "catalyst"),
-			types.WeightedParamList{},
+			types.EntriesList{},
 			0
 	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
 		return types.CoinInputList{},
@@ -99,7 +99,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 				100,
 				[]types.ItemUpgradeParams{types.GenToUpgradeForString("Name", "KnifeV2")},
 				"Knife"),
-			types.WeightedParamList{},
+			types.EntriesList{},
 			2
 	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
 		return types.CoinInputList{},

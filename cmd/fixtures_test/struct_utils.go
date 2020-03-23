@@ -173,7 +173,7 @@ func GetItemOutputsFromBytes(bytes []byte, sender string, t *testing.T) types.It
 	return itemOutputs
 }
 
-func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
+func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 	var entriesReader struct {
 		Entries struct {
 			CoinOutputs []types.CoinOutput
@@ -188,7 +188,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
 		t.Fatal("read entriesReader using json.Unmarshal:", err)
 	}
 
-	var wpl types.WeightedParamList
+	var wpl types.EntriesList
 	for _, co := range entriesReader.Entries.CoinOutputs {
 		wpl = append(wpl, co)
 	}
@@ -200,7 +200,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.WeightedParamList {
 		if err != nil {
 			t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
 		}
-		pio.Weight = io.Weight
+		// pio.Weight = io.Weight
 		wpl = append(wpl, pio)
 	}
 

@@ -7,17 +7,11 @@ type CoinOutput struct {
 	Coin    string
 	Count   int64
 	Program string
-	Weight  int
-}
-
-func (op CoinOutput) GetWeight() int {
-	return op.Weight
 }
 
 func (op CoinOutput) String() string {
 	return fmt.Sprintf(`CoinOutput{
 		Coin: %s,
 		Count: %d,
-		Weight: %d,
-	}`, op.Coin, op.Count, op.Weight)
+	}`, op.Coin, op.Count)
 }

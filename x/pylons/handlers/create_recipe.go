@@ -33,6 +33,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		msg.CoinInputs,
 		msg.ItemInputs,
 		msg.Entries,
+		msg.Outputs,
 		msg.BlockInterval, msg.Sender)
 
 	if msg.RecipeID != "" {

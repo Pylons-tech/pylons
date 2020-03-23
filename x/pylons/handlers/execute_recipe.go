@@ -124,56 +124,72 @@ func HandleLoseItems(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.I
 	return itemLoseResult
 }
 
-func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, output types.WeightedParam,
+func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.Item, entries types.EntriesList, outputs []int,
 	env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption,
 	sender sdk.AccAddress, cbID string,
-) (ExecuteRecipeSerialize, sdk.Error) {
-	var ers ExecuteRecipeSerialize
-	switch output.(type) {
-	case nil:
-		return ers, nil
-	case types.CoinOutput:
-		coinOutput, _ := output.(types.CoinOutput)
-		var coinAmount int64
-		if len(coinOutput.Program) > 0 {
-			refVal, refErr := types.CheckAndExecuteProgram(env, variables, funcs, coinOutput.Program)
-			if refErr != nil {
-				return ers, sdk.ErrInternal(refErr.Error())
-			}
-			val64, ok := refVal.Value().(int64)
-			if !ok {
-				return ers, sdk.ErrInternal("returned result from program is not convertable to int")
-			}
-			coinAmount = val64
-		} else {
-			coinAmount = coinOutput.Count
-		}
-		ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
+) ([]ExecuteRecipeSerialize, sdk.Error) {
+	var ersl []ExecuteRecipeSerialize
+	var err error
+	for _, outputIndex := range outputs {
+		output := entries[outputIndex]
 
-		_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
-		if err != nil {
-			return ers, err
-		}
-		ers.Type = "COIN"
-		ers.Coin = coinOutput.Coin
-		ers.Amount = coinAmount
-		return ers, nil
-	case types.ItemOutput:
-		itemOutput, _ := output.(types.ItemOutput)
+		switch output.(type) {
+		case types.CoinOutput:
+			coinOutput, _ := output.(types.CoinOutput)
+			var coinAmount int64
+			if len(coinOutput.Program) > 0 {
+				refVal, refErr := types.CheckAndExecuteProgram(env, variables, funcs, coinOutput.Program)
+				if refErr != nil {
+					return ersl, sdk.ErrInternal(refErr.Error())
+				}
+				val64, ok := refVal.Value().(int64)
+				if !ok {
+					return ersl, sdk.ErrInternal("returned result from program is not convertable to int")
+				}
+				coinAmount = val64
+			} else {
+				coinAmount = coinOutput.Count
+			}
+			ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 
-		outputItem, err := itemOutput.Item(cbID, sender, env, variables, funcs)
-		if err != nil {
-			return ers, sdk.ErrInternal(err.Error())
+			_, _, err := keeper.CoinKeeper.AddCoins(ctx, sender, ocl)
+			if err != nil {
+				return ersl, err
+			}
+			ersl = append(ersl, ExecuteRecipeSerialize{
+				Type:   "COIN",
+				Coin:   coinOutput.Coin,
+				Amount: coinAmount,
+			})
+			return ersl, nil
+		case types.ItemOutput:
+			itemOutput, _ := output.(types.ItemOutput)
+			var outputItem *types.Item
+
+			if itemOutput.ItemInputRef == nil {
+				outputItem, err = itemOutput.Item(cbID, sender, env, variables, funcs)
+				if err != nil {
+					return ersl, sdk.ErrInternal(err.Error())
+				}
+			} else {
+				outputItem, err = UpdateItemFromUpgradeParams(matchedItems[*itemOutput.ItemInputRef], itemOutput.ToModify)
+				if err != nil {
+					return ersl, sdk.ErrInternal(err.Error())
+				}
+			}
+			if err = keeper.SetItem(ctx, *outputItem); err != nil {
+				return ersl, sdk.ErrInternal(err.Error())
+			}
+			ersl = append(ersl, ExecuteRecipeSerialize{
+				Type:   "ITEM",
+				ItemID: outputItem.ID,
+			})
+			return ersl, nil
+		default:
+			return ersl, sdk.ErrInternal("no item nor coin type created")
 		}
-		if err = keeper.SetItem(ctx, *outputItem); err != nil {
-			return ers, sdk.ErrInternal(err.Error())
-		}
-		ers.Type = "ITEM"
-		ers.ItemID = outputItem.ID
-		return ers, nil
-	default:
-		return ers, sdk.ErrInternal("no item nor coin type created")
 	}
+	return ersl, nil
 }
 
 func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[string]interface{}, cel.ProgramOption, error) {
@@ -235,22 +251,17 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
 
-	output, err := recipe.Entries.Actualize()
+	output, err := recipe.Outputs.Actualize()
 	if err != nil {
 		return []byte{}, err
 	}
-	ers, err := AddExecutedResult(ctx, keeper, output, env, variables, funcs, sender, cbID)
+	ersl, err := AddExecutedResult(ctx, keeper, matchedItems, recipe.Entries, output, env, variables, funcs, sender, cbID)
 
 	if err != nil {
 		return []byte{}, err
 	}
 
-	ers.ItemUpgradeResult, ers.ItemLoseResult, err = HandleItemUpgrade(ctx, keeper, recipe, matchedItems)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	outputSTR, err2 := json.Marshal(ers)
+	outputSTR, err2 := json.Marshal(ersl)
 
 	if err2 != nil {
 		return []byte{}, err2
@@ -272,20 +283,20 @@ func HandleItemGeneration(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecu
 	})
 }
 
-func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (types.Item, sdk.Error) {
+func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgradeParams) (*types.Item, sdk.Error) {
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
 
 	if err != nil {
-		return targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
+		return &targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
 	}
 
 	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables, funcs); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
+		return &targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
 		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
-				return targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
+				return &targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
 			}
 			if len(ToUpgrade.Doubles[idx].Program) == 0 { // NO PROGRAM
 				originValue := targetItem.Doubles[dblKey].Value.Float()
@@ -298,12 +309,12 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	}
 
 	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables, funcs); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
+		return &targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
 		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
-				return targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
+				return &targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
 			}
 			if len(ToUpgrade.Longs[idx].Program) == 0 { // NO PROGRAM
 				targetItem.Longs[lngKey].Value += lng.Value
@@ -314,12 +325,12 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	}
 
 	if strKeyValues, err := ToUpgrade.Strings.Actualize(env, variables, funcs); err != nil {
-		return targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
+		return &targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
 	} else {
 		for _, str := range strKeyValues {
 			strKey, ok := targetItem.FindStringKey(str.Key)
 			if !ok {
-				return targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+				return &targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
 			}
 			targetItem.Strings[strKey].Value = str.Value
 		}
@@ -328,54 +339,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemUpgr
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
 
-	return targetItem, nil
-}
-
-func HandleItemUpgrade(ctx sdk.Context, keeper keep.Keeper, recipe types.Recipe, matchedItems []types.Item) ([]ItemUpgradeResult, []bool, error) {
-
-	itemUpgradeResult := []ItemUpgradeResult{}
-	for idx, _ := range matchedItems {
-		mItem := matchedItems[idx]
-		iur := ItemUpgradeResult{}
-		iur.ItemID = mItem.ID
-		for _, dbl := range mItem.Doubles {
-			iur.Doubles.Key = dbl.Key
-			iur.Doubles.From = dbl.Value.Float()
-		}
-		for _, lng := range mItem.Longs {
-			iur.Longs.Key = lng.Key
-			iur.Longs.From = lng.Value
-		}
-		for _, str := range mItem.Strings {
-			iur.Strings.Key = str.Key
-			iur.Strings.From = str.Value
-		}
-
-		toUpgrade := recipe.ItemInputs[idx].ToUpgrade
-		targetItem, err := UpdateItemFromUpgradeParams(mItem, toUpgrade)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		if err := keeper.SetItem(ctx, targetItem); err != nil {
-			return nil, nil, err
-		}
-
-		for _, dbl := range targetItem.Doubles {
-			iur.Doubles.To = dbl.Value.Float()
-		}
-		for _, lng := range targetItem.Longs {
-			iur.Longs.To = lng.Value
-		}
-		for _, str := range targetItem.Strings {
-			iur.Strings.To = str.Value
-		}
-		itemUpgradeResult = append(itemUpgradeResult, iur)
-	}
-
-	ItemLoseResult := HandleLoseItems(ctx, keeper, matchedItems, recipe)
-
-	return itemUpgradeResult, ItemLoseResult, nil
+	return &targetItem, nil
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe

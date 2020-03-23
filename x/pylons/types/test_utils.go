@@ -41,22 +41,20 @@ func GenDetailedItemInputList(alivePercent int, itemUpgrades []ItemUpgradeParams
 	return iiL
 }
 
-func GenCoinOnlyEntry(coinName string) WeightedParamList {
-	return WeightedParamList{
+func GenCoinOnlyEntry(coinName string) EntriesList {
+	return EntriesList{
 		CoinOutput{
-			Coin:   coinName,
-			Count:  1,
-			Weight: 1,
+			Coin:  coinName,
+			Count: 1,
 		},
 	}
 }
 
-func GenCoinOnlyEntryRand(coinName string) WeightedParamList {
-	return WeightedParamList{
+func GenCoinOnlyEntryRand(coinName string) EntriesList {
+	return EntriesList{
 		CoinOutput{
 			Coin:    coinName,
 			Program: `randi(10)`,
-			Weight:  1,
 		},
 	}
 }
@@ -90,10 +88,10 @@ func GenItemNameUpgradeParams(desItemName string) ItemUpgradeParams {
 	}
 }
 
-func GenItemOnlyEntry(itemName string) WeightedParamList {
-	return WeightedParamList{
+func GenItemOnlyEntry(itemName string) EntriesList {
+	return EntriesList{
 		ItemOutput{
-			DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+			Doubles: DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 				DoubleWeightRange{
 					Lower:  "100.00",
 					Upper:  "500.00",
@@ -105,7 +103,7 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 					Weight: 2,
 				},
 			}}, Rate: "1.0"}},
-			LongParamList{LongParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+			Longs: LongParamList{LongParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				IntWeightRange{
 					Lower:  100,
 					Upper:  500,
@@ -117,40 +115,49 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 					Weight: 2,
 				},
 			}}}},
-			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-			1,
+			Strings: StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
 		},
 	}
 }
 
-func GenItemOnlyEntryRand(itemName string) WeightedParamList {
-	return WeightedParamList{
+func GenItemOnlyEntryRand(itemName string) EntriesList {
+	return EntriesList{
 		ItemOutput{
-			DoubleParamList{DoubleParam{
+			Doubles: DoubleParamList{DoubleParam{
 				Key:     "endurance",
 				Program: `500.00`,
 				Rate:    "1.0",
 			}},
-			LongParamList{LongParam{
+			Longs: LongParamList{LongParam{
 				Key:     "HP",
 				Program: `500 + randi(300)`,
 				Rate:    "1.0",
 			}},
-			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-			1,
+			Strings: StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
 		},
 	}
 }
 
-func GenEntries(coinName string, itemName string) WeightedParamList {
-	return WeightedParamList{
+func GenOneOutput(n int) WeightedOutputsList {
+	wol := WeightedOutputsList{}
+	for i := 0; i < n; i++ {
+		wol = append(wol, OutputsList{
+			Result: []int{i},
+			Weight: 1,
+		})
+	}
+	return wol
+}
+
+func GenEntries(coinName string, itemName string) EntriesList {
+	return EntriesList{
 		GenCoinOnlyEntry(coinName)[0],
 		GenItemOnlyEntry(itemName)[0],
 	}
 }
 
-func GenEntriesRand(coinName, itemName string) WeightedParamList {
-	return WeightedParamList{
+func GenEntriesRand(coinName, itemName string) EntriesList {
+	return EntriesList{
 		GenCoinOnlyEntryRand(coinName)[0],
 		GenItemOnlyEntryRand(itemName)[0],
 	}

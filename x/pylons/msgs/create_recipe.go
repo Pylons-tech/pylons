@@ -15,8 +15,8 @@ type MsgCreateRecipe struct {
 	CookbookID    string // the cookbook guid
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
-	Entries       types.WeightedParamList
-	ToUpgrade     types.ItemUpgradeParams
+	Entries       types.EntriesList
+	Outputs       types.WeightedOutputsList
 	BlockInterval int64
 	Sender        sdk.AccAddress
 	Description   string
@@ -26,7 +26,7 @@ type MsgCreateRecipe struct {
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
-	entries types.WeightedParamList,
+	entries types.EntriesList,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
@@ -50,6 +50,7 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 
 // ValidateBasic validates the Msg
 func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
+	// TODO should basic validation for the item input index overflow on item outputs
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())

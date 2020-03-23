@@ -37,7 +37,7 @@ func TestGetMatchedItems(t *testing.T) {
 		tci, "shield merge recipe",
 		types.CoinInputList{},
 		types.GenItemInputList(0, "Shield", "Shield"),
-		types.WeightedParamList{},
+		types.EntriesList{},
 		cbData.CookbookID,
 		0,
 		sender1,

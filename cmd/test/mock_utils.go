@@ -96,7 +96,7 @@ func MockRecipeGUID(
 				[]types.ItemUpgradeParams{types.GenItemNameUpgradeParams(desItemName)},
 				curItemName,
 			),
-			types.WeightedParamList{},
+			types.EntriesList{},
 			interval,
 			t,
 		)
@@ -115,7 +115,7 @@ func MockDetailedRecipeGUID(
 	rcpName string,
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
-	entries types.WeightedParamList,
+	entries types.EntriesList,
 	interval int64,
 	t *testing.T,
 ) (string, error) {
