@@ -1,5 +1,7 @@
 package types
 
+var FirstItemInputRef int = 0
+
 func GenCoinInputList(name string, count int64) CoinInputList {
 	return CoinInputList{
 		CoinInput{
@@ -143,10 +145,9 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 }
 
 func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
-	ItemInputRef := 0
 	return EntriesList{
 		ItemOutput{
-			ItemInputRef: &ItemInputRef,
+			ItemInputRef: &FirstItemInputRef,
 			ToModify:     GenToUpgradeForString("Name", targetValue),
 		},
 	}

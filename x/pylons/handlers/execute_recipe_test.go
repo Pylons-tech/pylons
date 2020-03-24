@@ -13,6 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+var FirstItemInputRef int = 0
+
 func TestGetMatchedItems(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
@@ -112,7 +114,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	)
 
 	// mock 1 catalyst input 1 output recipe
-	firstIndex := 0
 	oneCatalystOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
@@ -120,7 +121,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 		types.EntriesList{
 			types.ItemOutput{
-				ItemInputRef: &firstIndex,
+				ItemInputRef: &FirstItemInputRef,
 			},
 			types.GenItemOnlyEntry("Catalyst2")[0],
 		},
