@@ -9,7 +9,7 @@ import (
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
 type ItemOutput struct {
-	ItemInputRef *int `json:",omitempty"`
+	ItemInputRef int
 	ToModify     ItemModifyParams
 	Doubles      DoubleParamList
 	Longs        LongParamList
@@ -18,10 +18,12 @@ type ItemOutput struct {
 
 func (io ItemOutput) String() string {
 	return fmt.Sprintf(`ItemOutput{
+		ItemInputRef: %d,
+		ToModify: %+v,
 		Doubles: %+v,
 		Longs:   %+v,
 		Strings: %+v,
-	}`, io.Doubles, io.Longs, io.Strings)
+	}`, io.ItemInputRef, io.ToModify, io.Doubles, io.Longs, io.Strings)
 }
 
 func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) (*Item, error) {
