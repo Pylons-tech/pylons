@@ -56,6 +56,15 @@ type ExecuteRecipeScheduleOutput struct {
 	ExecID string
 }
 
+func Contains(arr []int, it int) bool {
+	for _, a := range arr {
+		if a == it {
+			return true
+		}
+	}
+	return false
+}
+
 func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe) ([]types.Item, error) {
 	// TODO: need to check it's working correctly when it is recipe for merging to same items
 
@@ -107,6 +116,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 ) ([]ExecuteRecipeSerialize, sdk.Error) {
 	var ersl []ExecuteRecipeSerialize
 	var err error
+	usedItemInputIndexes := []int{}
 	for _, outputIndex := range outputs {
 		output := entries[outputIndex]
 
@@ -149,6 +159,10 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 					return ersl, sdk.ErrInternal(err.Error())
 				}
 			} else {
+				// Collect itemInputRefs that are used on output
+				usedItemInputIndexes = append(usedItemInputIndexes, *itemOutput.ItemInputRef)
+
+				// Modify item according to ToModify section
 				outputItem, err = UpdateItemFromUpgradeParams(matchedItems[*itemOutput.ItemInputRef], itemOutput.ToModify)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
@@ -164,6 +178,13 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 			return ersl, nil
 		default:
 			return ersl, sdk.ErrInternal("no item nor coin type created")
+		}
+	}
+
+	// Remove items which are not referenced on output
+	for idx, ci := range matchedItems {
+		if Contains(usedItemInputIndexes, idx) {
+			keeper.DeleteItem(ctx, ci.ID)
 		}
 	}
 	return ersl, nil

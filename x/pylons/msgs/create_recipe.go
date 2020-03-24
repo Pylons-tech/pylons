@@ -54,6 +54,7 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 	// TODO should basic validation for the item input index overflow on item outputs
 	// TODO should do basic validation for program of ItemOutput and ToModify
+	// TODO there shoud be validation for same ItemInputRef on entries
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
