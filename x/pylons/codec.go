@@ -27,5 +27,5 @@ func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(types.CoinOutput{}, "pylons/Recipe/CoinOutput", nil)
 	cdc.RegisterConcrete(types.ItemOutput{}, "pylons/Recipe/ItemOutput", nil)
 
-	cdc.RegisterInterface(types.WeightedOutputsList{}, nil)
+	cdc.RegisterInterface((*types.Entry)(nil), nil)
 }
