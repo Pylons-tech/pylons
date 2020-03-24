@@ -93,7 +93,7 @@ func MockRecipeGUID(
 		return MockDetailedRecipeGUID(name,
 			types.GenCoinInputList("pylon", 5),
 			types.GenItemInputList(curItemName),
-			types.EntriesList{},
+			types.GenEntriesFirstItemNameUpgrade(desItemName),
 			types.GenOneOutput(1),
 			interval,
 			t,

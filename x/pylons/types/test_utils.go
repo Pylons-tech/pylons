@@ -39,21 +39,6 @@ func GenCoinOnlyEntryRand(coinName string) EntriesList {
 	}
 }
 
-func GenSingleItemInputList(alivePercent int, itemName string) ItemInputList {
-	return ItemInputList{
-		ItemInput{
-			Doubles: DoubleInputParamList{},
-			Longs:   LongInputParamList{},
-			Strings: StringInputParamList{
-				StringInputParam{
-					Key:   "Name",
-					Value: itemName,
-				},
-			},
-		},
-	}
-}
-
 func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 	return ItemModifyParams{
 		Doubles: DoubleParamList{},
@@ -124,6 +109,21 @@ func GenOneOutput(n int) WeightedOutputsList {
 			Result: []int{i},
 			Weight: 1,
 		})
+	}
+	return wol
+}
+
+func GenAllOutput(n int) WeightedOutputsList {
+
+	result := []int{}
+	for i := 0; i < n; i++ {
+		result = append(result, i)
+	}
+	wol := WeightedOutputsList{
+		OutputsList{
+			Result: result,
+			Weight: 1,
+		},
 	}
 	return wol
 }

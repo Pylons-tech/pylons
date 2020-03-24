@@ -37,7 +37,7 @@ func TestGetMatchedItems(t *testing.T) {
 		tci, "shield merge recipe",
 		types.CoinInputList{},
 		types.GenItemInputList("Shield", "Shield"),
-		types.EntriesList{},
+		types.GenItemOnlyEntry("MRGShield"),
 		types.GenOneOutput(1),
 		cbData.CookbookID,
 		0,
@@ -112,12 +112,19 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	)
 
 	// mock 1 catalyst input 1 output recipe
+	firstIndex := 0
 	oneCatalystOneOutputRecipeData := MockRecipe(
 		mockedCoinInput, "existing recipe",
 		types.GenCoinInputList("wood", 5),
-		types.GenItemInputList("catalyst"), // for catalyst item alivepercent is 100
-		types.GenItemOnlyEntry("Catalyst2"),
-		types.GenOneOutput(2),
+		types.GenItemInputList("catalyst"),
+
+		types.EntriesList{
+			types.ItemOutput{
+				ItemInputRef: &firstIndex,
+			},
+			types.GenItemOnlyEntry("Catalyst2")[0],
+		},
+		types.GenAllOutput(2),
 		cbData.CookbookID,
 		0,
 		sender1,
