@@ -52,9 +52,59 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 
 // ValidateBasic validates the Msg
 func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
-	// TODO should basic validation for the item input index overflow on item outputs
-	// TODO should do basic validation for program of ItemOutput and ToModify
-	// TODO there shoud be validation for same ItemInputRef on entries
+
+	// validation for the item input index overflow on entries
+	for _, entry := range msg.Entries {
+		switch entry.(type) {
+		case types.CoinOutput:
+		case types.ItemOutput:
+			itemOutput, _ := entry.(types.ItemOutput)
+			if itemOutput.ItemInputRef > 0 {
+				if itemOutput.ItemInputRef > len(msg.ItemInputs) {
+					return sdk.ErrInternal("ItemInputRef overflow length of ItemInputs")
+				}
+				if itemOutput.ItemInputRef < 0 {
+					return sdk.ErrInternal("ItemInputRef is less than 0 which is invalid")
+				}
+			}
+			// TODO should do basic validation for program of ItemOutput weight
+			// TODO should do basic validation coin output program
+			// TODO should do basic validation double param program for ToModify
+			// TODO should do basic validation string param program for ToModify
+			// TODO should do basic validation long param program for ToModify
+			// TODO should do basic validation double param program for ItemOutput (generation)
+			// TODO should do basic validation string param program for ItemOutput (generation)
+			// TODO should do basic validation long param program for ItemOutput (generation)
+		default:
+			return sdk.ErrInternal("invalid entry type available")
+		}
+	}
+
+	// validation for same ItemInputRef on output
+	for _, output := range msg.Outputs {
+		usedItemInputRefs := make(map[int]bool)
+		usedEntries := make(map[int]bool)
+		for _, result := range output.Result {
+			if result >= len(msg.Entries) || result < 0 {
+				return sdk.ErrInternal("output is refering to index which is out of entries range")
+			}
+			if usedEntries[result] {
+				return sdk.ErrInternal("double use of entries within single output result")
+			}
+			usedEntries[result] = true
+			entry := msg.Entries[result]
+			switch entry.(type) {
+			case types.ItemOutput:
+				itemOutput, _ := entry.(types.ItemOutput)
+				if itemOutput.ItemInputRef > 0 {
+					if usedItemInputRefs[itemOutput.ItemInputRef] {
+						return sdk.ErrInternal("double use of item input within single output result")
+					}
+					usedItemInputRefs[itemOutput.ItemInputRef] = true
+				}
+			}
+		}
+	}
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
