@@ -5,12 +5,17 @@
         "CoinOutputs":[
             {
                 "Coin":"helicoin",
-                "Count":1,
-                "Weight":1
+                "Count":1
             }
         ],
         "ItemOutputs":[]
     },
+    "Outputs": [
+        {
+            "Result": ["1"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Helicopter's Coin Generation Recipe",

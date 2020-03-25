@@ -5,11 +5,16 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/submarine/item_output/delayed_attack_knife.json",
-                "Weight":1
+                "Ref": "./recipes/submarine/item_output/delayed_attack_knife.json"
             }
         ]
     },
+    "Outputs": [
+        {
+            "Result": ["1"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Delayed Attack Knife Generation Recipe",

@@ -144,8 +144,6 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		if err != nil {
 			t.Fatal("error parsing item input provided via fixture error=", err)
 		}
-		// get toUpgrade from fileName
-		// ii.ToUpgrade = GetToUpgradeFromBytes(iiBytes, t)
 		itemInputs = append(itemInputs, ii)
 	}
 	return itemInputs
@@ -200,27 +198,28 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		if err != nil {
 			t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
 		}
-		// pio.Weight = io.Weight
+
+		pio.ToModify = GetToModifyFromBytes(ioBytes, t)
 		wpl = append(wpl, pio)
 	}
 
 	return wpl
 }
 
-func GetToUpgradeFromBytes(bytes []byte, t *testing.T) types.ItemModifyParams {
-	var upgradeReader struct {
-		ToUpgradeRef string
+func GetToModifyFromBytes(bytes []byte, t *testing.T) types.ItemModifyParams {
+	var modReader struct {
+		ToModifyRef string
 	}
 
-	if err := json.Unmarshal(bytes, &upgradeReader); err != nil {
+	if err := json.Unmarshal(bytes, &modReader); err != nil {
 		t.Fatal("read upgradeReader using json.Unmarshal:", err)
 	}
 
 	var iup types.ItemModifyParams
-	if len(upgradeReader.ToUpgradeRef) == 0 {
+	if len(modReader.ToModifyRef) == 0 {
 		return iup
 	}
-	ioBytes := ReadFile(upgradeReader.ToUpgradeRef, t)
+	ioBytes := ReadFile(modReader.ToModifyRef, t)
 	err := json.Unmarshal(ioBytes, &iup)
 	if err != nil {
 		t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)

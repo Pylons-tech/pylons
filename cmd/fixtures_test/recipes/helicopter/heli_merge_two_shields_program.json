@@ -8,11 +8,15 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/helicopter/item_output/heli_merge_two_shields_program.json",
-                "Weight":1
-            }
+                "Ref": "./recipes/helicopter/item_output/heli_merge_two_shields_program.json"            }
         ]
     },
+    "Outputs": [
+        {
+            "Result": ["1"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Helicopter's merge two shields Recipe",

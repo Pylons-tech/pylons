@@ -5,11 +5,16 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/helicopter/item_output/heli_straight_attack_knife.json",
-                "Weight":1
+                "Ref": "./recipes/helicopter/item_output/heli_straight_attack_knife.json"
             }
         ]
     },
+    "Outputs": [
+        {
+            "Result": ["1"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Helicopter's Straight Attack Knife Generation Recipe",

@@ -135,7 +135,6 @@ Sample ItemInputs JSON
     "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "2000"}],
     "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "2000"}],
     "Strings": [{"Key": "Name", "Value": "Monster"}],
-    "ToUpgradeRef": "./recipes/catalyst/upgrader/monster.json"
 }]
 ```
 

@@ -1,7 +1,21 @@
 {
     "CoinInputs": [],
     "ItemInputRefs": [
-        "./recipes/javelin/item_input/javelin_program_upgrade.json"
+        "./recipes/javelin/item_input/javelin.json"
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[
+            {
+                "Ref": "./recipes/javelin/item_output/javelin_program_upgrade.json"
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "Result": ["1"],
+            "Weight": "1"
+        }
     ],
     "ExtraInfo": "",
     "Sender": "eugen",

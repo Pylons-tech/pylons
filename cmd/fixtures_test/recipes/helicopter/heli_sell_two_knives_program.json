@@ -8,12 +8,17 @@
         "CoinOutputs":[
             {
                 "Coin":"helicoin",
-                "Program": "(input0.level + input1.level) * 10",
-                "Weight":1
+                "Program": "(input0.level + input1.level) * 10"
             }
         ],
         "ItemOutputs":[]
     },
+    "Outputs": [
+        {
+            "Result": ["1"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Helicopter's sell two knives Recipe",
