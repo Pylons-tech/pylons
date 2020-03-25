@@ -1,4 +1,3 @@
 {
-    "ItemInputRef": 2,
-    "ToModifyRef": "./recipes/catalyst/upgrader/monster.json"
+    "ItemInputRef": 2
 }
