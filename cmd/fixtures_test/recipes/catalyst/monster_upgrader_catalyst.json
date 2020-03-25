@@ -8,7 +8,7 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/catalyst/item_output/monster_upgrade.json"
+                "Ref": "./recipes/catalyst/item_output/monster_upgrader.json"
             },
             {
                 "Ref": "./recipes/catalyst/item_output/catalyst_input.json"
@@ -17,7 +17,7 @@
     },
     "Outputs": [
         {
-            "Result": ["1", "2"],
+            "Result": ["0", "1"],
             "Weight": "1"
         }
     ],

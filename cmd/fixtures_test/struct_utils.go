@@ -219,10 +219,10 @@ func GetToModifyFromBytes(bytes []byte, t *testing.T) types.ItemModifyParams {
 	if len(modReader.ToModifyRef) == 0 {
 		return iup
 	}
-	ioBytes := ReadFile(modReader.ToModifyRef, t)
-	err := json.Unmarshal(ioBytes, &iup)
+	modBytes := ReadFile(modReader.ToModifyRef, t)
+	err := json.Unmarshal(modBytes, &iup)
 	if err != nil {
-		t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
+		t.Fatal("error parsing modBytes provided via fixture Bytes=", string(modBytes), "error=", err)
 	}
 
 	return iup

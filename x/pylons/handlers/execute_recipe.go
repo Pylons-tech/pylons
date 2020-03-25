@@ -118,6 +118,9 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 	var err error
 	usedItemInputIndexes := []int{}
 	for _, outputIndex := range outputs {
+		if len(entries) <= outputIndex || outputIndex < 0 {
+			return ersl, sdk.ErrInternal(fmt.Sprintf("index out of range entries[%d] with length %d on output", outputIndex, len(entries)))
+		}
 		output := entries[outputIndex]
 
 		switch output.(type) {

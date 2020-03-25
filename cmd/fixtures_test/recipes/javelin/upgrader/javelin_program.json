@@ -1,16 +1,14 @@
 {
     "Doubles": [{
         "Key": "attack", 
-        "WeightRanges":[],
         "Program": "attack * 2.0"
     }],
     "Longs": [{
         "Key": "level", 
-        "WeightRanges":[],
         "Program": "level + 1"
     }],
     "Strings": [{
-        "Key": "LastName", 
+        "Key": "LastName",
         "Program": "\"Program Upgraded Javelin\""
     }]
 }
