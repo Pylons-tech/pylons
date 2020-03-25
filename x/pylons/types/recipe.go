@@ -16,8 +16,8 @@ type Recipe struct {
 	Name          string
 	CoinInputs    CoinInputList
 	ItemInputs    ItemInputList
-	Entries       EntriesList         // TODO should remove weight from Entries
-	Outputs       WeightedOutputsList // TODO think of outputs field should be WeightedOutputsList or other
+	Entries       EntriesList
+	Outputs       WeightedOutputsList
 	Description   string
 	BlockInterval int64
 	Sender        sdk.AccAddress

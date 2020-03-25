@@ -12,7 +12,7 @@ type Entry interface {
 // EntriesList is a struct to keep list of items and coins
 type EntriesList []Entry
 
-type serializeEntriesList struct { // TODO entries should have coin, item generation output and item input output
+type serializeEntriesList struct {
 	CoinOutputs []CoinOutput
 	ItemOutputs []ItemOutput
 }
