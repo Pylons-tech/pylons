@@ -54,8 +54,8 @@ func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 
 func GenItemOnlyEntry(itemName string) EntriesList {
 	return EntriesList{
-		ItemOutput{
-			Doubles: DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+		NewItemOutput(
+			DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 				DoubleWeightRange{
 					Lower:  "100.00",
 					Upper:  "500.00",
@@ -67,7 +67,7 @@ func GenItemOnlyEntry(itemName string) EntriesList {
 					Weight: 2,
 				},
 			}}, Rate: "1.0"}},
-			Longs: LongParamList{LongParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+			LongParamList{LongParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				IntWeightRange{
 					Lower:  100,
 					Upper:  500,
@@ -79,26 +79,26 @@ func GenItemOnlyEntry(itemName string) EntriesList {
 					Weight: 2,
 				},
 			}}}},
-			Strings: StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-		},
+			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
+		),
 	}
 }
 
 func GenItemOnlyEntryRand(itemName string) EntriesList {
 	return EntriesList{
-		ItemOutput{
-			Doubles: DoubleParamList{DoubleParam{
+		NewItemOutput(
+			DoubleParamList{DoubleParam{
 				Key:     "endurance",
 				Program: `500.00`,
 				Rate:    "1.0",
 			}},
-			Longs: LongParamList{LongParam{
+			LongParamList{LongParam{
 				Key:     "HP",
 				Program: `500 + randi(300)`,
 				Rate:    "1.0",
 			}},
-			Strings: StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-		},
+			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
+		),
 	}
 }
 
@@ -144,10 +144,9 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 
 func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	return EntriesList{
-		ItemOutput{
-			ItemInputRef: 1,
-			ToModify:     GenToUpgradeForString("Name", targetValue),
-		},
+		NewInputRefOutput(
+			0, GenToUpgradeForString("Name", targetValue),
+		),
 	}
 }
 

@@ -17,6 +17,22 @@ type ItemOutput struct {
 	Strings      StringParamList
 }
 
+func NewInputRefOutput(ItemInputRef int, ToModify ItemModifyParams) ItemOutput {
+	return ItemOutput{
+		ItemInputRef: ItemInputRef,
+		ToModify:     ToModify,
+	}
+}
+
+func NewItemOutput(Doubles DoubleParamList, Longs LongParamList, Strings StringParamList) ItemOutput {
+	return ItemOutput{
+		ItemInputRef: -1,
+		Doubles:      Doubles,
+		Longs:        Longs,
+		Strings:      Strings,
+	}
+}
+
 type SerializeItemOutput struct {
 	ItemInputRef *int `json:",omitempty"`
 	ToModify     ItemModifyParams
@@ -62,7 +78,7 @@ func (io *ItemOutput) MarshalJSON() ([]byte, error) {
 		Longs:        io.Longs,
 		Strings:      io.Strings,
 	}
-	if io.ItemInputRef != 0 {
+	if io.ItemInputRef != -1 {
 		sio.ItemInputRef = &io.ItemInputRef
 	}
 	return json.Marshal(sio)
@@ -75,7 +91,7 @@ func (io *ItemOutput) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	if sio.ItemInputRef == nil {
-		io.ItemInputRef = 0
+		io.ItemInputRef = -1
 	} else {
 		io.ItemInputRef = *sio.ItemInputRef
 	}

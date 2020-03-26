@@ -153,17 +153,17 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 			itemOutput, _ := output.(types.ItemOutput)
 			var outputItem *types.Item
 
-			if itemOutput.ItemInputRef == 0 {
+			if itemOutput.ItemInputRef == -1 {
 				outputItem, err = itemOutput.Item(cbID, sender, env, variables, funcs)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
 			} else {
 				// Collect itemInputRefs that are used on output
-				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ItemInputRef-1)
+				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ItemInputRef)
 
 				// Modify item according to ToModify section
-				outputItem, err = UpdateItemFromUpgradeParams(matchedItems[itemOutput.ItemInputRef-1], itemOutput.ToModify)
+				outputItem, err = UpdateItemFromUpgradeParams(matchedItems[itemOutput.ItemInputRef], itemOutput.ToModify)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}

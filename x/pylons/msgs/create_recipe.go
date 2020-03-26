@@ -59,11 +59,11 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 		case types.CoinOutput:
 		case types.ItemOutput:
 			itemOutput, _ := entry.(types.ItemOutput)
-			if itemOutput.ItemInputRef > 0 {
-				if itemOutput.ItemInputRef > len(msg.ItemInputs) {
+			if itemOutput.ItemInputRef != -1 {
+				if itemOutput.ItemInputRef >= len(msg.ItemInputs) {
 					return sdk.ErrInternal("ItemInputRef overflow length of ItemInputs")
 				}
-				if itemOutput.ItemInputRef < 0 {
+				if itemOutput.ItemInputRef < -1 {
 					return sdk.ErrInternal("ItemInputRef is less than 0 which is invalid")
 				}
 			}
@@ -96,7 +96,7 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 			switch entry.(type) {
 			case types.ItemOutput:
 				itemOutput, _ := entry.(types.ItemOutput)
-				if itemOutput.ItemInputRef > 0 {
+				if itemOutput.ItemInputRef != -1 {
 					if usedItemInputRefs[itemOutput.ItemInputRef] {
 						return sdk.ErrInternal("double use of item input within single output result")
 					}
