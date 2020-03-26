@@ -1,6 +1,7 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 	"math/rand"
 
@@ -25,7 +26,10 @@ func (ol OutputsList) GetWeight(env cel.Env, variables map[string]interface{}, f
 	}
 
 	val64, ok := refVal.Value().(int64)
-	if !ok || val64 < 0 {
+	if !ok {
+		return 0, errors.New("error converting weight value to int64")
+	}
+	if val64 < 0 {
 		return 0, nil
 	}
 	return int(val64), nil
