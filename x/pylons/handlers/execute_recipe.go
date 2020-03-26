@@ -252,7 +252,7 @@ func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccA
 
 	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
 
-	output, err := recipe.Outputs.Actualize()
+	output, err := recipe.Outputs.Actualize(env, variables, funcs)
 	if err != nil {
 		return []byte{}, err
 	}
