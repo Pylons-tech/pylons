@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/cel-go/cel"
 )
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
@@ -51,18 +50,18 @@ func (io ItemOutput) String() string {
 	}`, io.ItemInputRef, io.ToModify, io.Doubles, io.Longs, io.Strings)
 }
 
-func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) (*Item, error) {
+func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvCollection) (*Item, error) {
 	// This function is used on ExecuteRecipe's AddExecutedResult, and it's
 	// not acceptable to provide predefined GUID
-	dblActualize, err := io.Doubles.Actualize(env, variables, funcs)
+	dblActualize, err := io.Doubles.Actualize(ec)
 	if err != nil {
 		return nil, err
 	}
-	longActualize, err := io.Longs.Actualize(env, variables, funcs)
+	longActualize, err := io.Longs.Actualize(ec)
 	if err != nil {
 		return nil, err
 	}
-	stringActualize, err := io.Strings.Actualize(env, variables, funcs)
+	stringActualize, err := io.Strings.Actualize(ec)
 	if err != nil {
 		return nil, err
 	}

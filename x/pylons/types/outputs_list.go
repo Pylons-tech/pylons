@@ -6,7 +6,6 @@ import (
 	"math/rand"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/cel-go/cel"
 )
 
 // WeightedParam is to make structs which is using weight to be based on
@@ -19,8 +18,8 @@ func (ol OutputsList) String() string {
 	return fmt.Sprintf("OutputsList{Result: %v, Weight: %v}", ol.Result, ol.Weight)
 }
 
-func (ol OutputsList) GetWeight(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) (int, error) {
-	refVal, refErr := CheckAndExecuteProgram(env, variables, funcs, ol.Weight)
+func (ol OutputsList) GetWeight(ec CelEnvCollection) (int, error) {
+	refVal, refErr := ec.Eval(ol.Weight)
 	if refErr != nil {
 		return 0, refErr
 	}
@@ -50,11 +49,11 @@ func (wpl WeightedOutputsList) String() string {
 	return itm
 }
 
-func (wol WeightedOutputsList) Actualize(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) ([]int, sdk.Error) {
+func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]int, sdk.Error) {
 	lastWeight := 0
 	var weights []int
 	for _, wp := range wol {
-		w, err := wp.GetWeight(env, variables, funcs)
+		w, err := wp.GetWeight(ec)
 		if err != nil {
 			return nil, sdk.ErrInternal(err.Error())
 		}

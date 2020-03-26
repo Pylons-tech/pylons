@@ -5,8 +5,6 @@ import (
 	"math"
 	"reflect"
 	"strconv"
-
-	"github.com/google/cel-go/cel"
 )
 
 // DoubleParam describes the bounds on an item input/output parameter of type float64
@@ -81,7 +79,7 @@ func getFloat(unk interface{}) (float64, error) {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) ([]DoubleKeyValue, error) {
+func (dpm DoubleParamList) Actualize(ec CelEnvCollection) ([]DoubleKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue
 	for _, param := range dpm {
@@ -89,11 +87,7 @@ func (dpm DoubleParamList) Actualize(env cel.Env, variables map[string]interface
 		var err error
 
 		if len(param.Program) > 0 {
-			refVal, refErr := CheckAndExecuteProgram(env, variables, funcs, param.Program)
-			if refErr != nil {
-				return m, refErr
-			}
-			val, err = getFloat(refVal.Value())
+			val, err = ec.EvalFloat64(param.Program)
 		} else {
 			val, err = param.Generate()
 		}

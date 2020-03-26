@@ -109,7 +109,7 @@ func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRec
 }
 
 func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types.Item, entries types.EntriesList, outputs []int,
-	env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption,
+	ec types.CelEnvCollection,
 	sender sdk.AccAddress, cbID string,
 ) ([]ExecuteRecipeSerialize, sdk.Error) {
 	var ersl []ExecuteRecipeSerialize
@@ -126,13 +126,9 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 			coinOutput, _ := output.(types.CoinOutput)
 			var coinAmount int64
 			if len(coinOutput.Program) > 0 {
-				refVal, refErr := types.CheckAndExecuteProgram(env, variables, funcs, coinOutput.Program)
-				if refErr != nil {
-					return ersl, sdk.ErrInternal(refErr.Error())
-				}
-				val64, ok := refVal.Value().(int64)
-				if !ok {
-					return ersl, sdk.ErrInternal("returned result from program is not convertable to int")
+				val64, err := ec.EvalInt64(coinOutput.Program)
+				if err != nil {
+					return ersl, sdk.ErrInternal(err.Error())
 				}
 				coinAmount = val64
 			} else {
@@ -154,7 +150,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 			var outputItem *types.Item
 
 			if itemOutput.ItemInputRef == -1 {
-				outputItem, err = itemOutput.Item(cbID, sender, env, variables, funcs)
+				outputItem, err = itemOutput.Item(cbID, sender, ec)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
@@ -189,7 +185,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 	return ersl, nil
 }
 
-func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[string]interface{}, cel.ProgramOption, error) {
+func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (types.CelEnvCollection, error) {
 	// create environment variables from matched items
 	varDefs := [](*exprpb.Decl){}
 	variables := map[string]interface{}{}
@@ -240,19 +236,19 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (cel.Env, map[st
 			varDefs...,
 		),
 	)
-	return env, variables, funcs, err
+	return types.NewCelEnvCollection(env, variables, funcs), err
 }
 
 func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, recipe types.Recipe) ([]byte, error) {
 	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
 
-	env, variables, funcs, err := GenerateCelEnvVarFromInputItems(matchedItems)
+	ec, err := GenerateCelEnvVarFromInputItems(matchedItems)
 
-	output, err := recipe.Outputs.Actualize(env, variables, funcs)
+	output, err := recipe.Outputs.Actualize(ec)
 	if err != nil {
 		return []byte{}, err
 	}
-	ersl, err := AddExecutedResult(ctx, keeper, matchedItems, recipe.Entries, output, env, variables, funcs, sender, cbID)
+	ersl, err := AddExecutedResult(ctx, keeper, matchedItems, recipe.Entries, output, ec, sender, cbID)
 
 	if err != nil {
 		return []byte{}, err
@@ -281,13 +277,13 @@ func HandleItemGeneration(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecu
 }
 
 func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModifyParams) (*types.Item, sdk.Error) {
-	env, variables, funcs, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
+	ec, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
 
 	if err != nil {
 		return &targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
 	}
 
-	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(env, variables, funcs); err != nil {
+	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
 		for idx, dbl := range dblKeyValues {
@@ -305,7 +301,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModi
 		}
 	}
 
-	if lngKeyValues, err := ToUpgrade.Longs.Actualize(env, variables, funcs); err != nil {
+	if lngKeyValues, err := ToUpgrade.Longs.Actualize(ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
 		for idx, lng := range lngKeyValues {
@@ -321,7 +317,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModi
 		}
 	}
 
-	if strKeyValues, err := ToUpgrade.Strings.Actualize(env, variables, funcs); err != nil {
+	if strKeyValues, err := ToUpgrade.Strings.Actualize(ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
 	} else {
 		for _, str := range strKeyValues {
