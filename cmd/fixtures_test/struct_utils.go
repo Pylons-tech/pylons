@@ -176,8 +176,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		Entries struct {
 			CoinOutputs []types.CoinOutput
 			ItemOutputs []struct {
-				Ref    string
-				Weight int
+				Ref string
 			}
 		}
 	}
