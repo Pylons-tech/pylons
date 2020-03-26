@@ -44,12 +44,10 @@ type ItemUpgradeResult struct {
 	}
 }
 type ExecuteRecipeSerialize struct {
-	Type              string              `json:"type"`              // COIN or ITEM
-	Coin              string              `json:"coin"`              // used when type is ITEM
-	Amount            int64               `json:"amount"`            // used when type is COIN
-	ItemID            string              `json:"itemID"`            // used when type is ITEM
-	ItemLoseResult    []bool              `json:"itemLoseResult"`    // used when there are input items
-	ItemUpgradeResult []ItemUpgradeResult `json:"itemUpgradeResult"` // used when there are input items
+	Type   string `json:"type"`   // COIN or ITEM
+	Coin   string `json:"coin"`   // used when type is ITEM
+	Amount int64  `json:"amount"` // used when type is COIN
+	ItemID string `json:"itemID"` // used when type is ITEM
 }
 
 type ExecuteRecipeScheduleOutput struct {
@@ -151,7 +149,6 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 				Coin:   coinOutput.Coin,
 				Amount: coinAmount,
 			})
-			return ersl, nil
 		case types.ItemOutput:
 			itemOutput, _ := output.(types.ItemOutput)
 			var outputItem *types.Item
@@ -178,7 +175,6 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})
-			return ersl, nil
 		default:
 			return ersl, sdk.ErrInternal("no item nor coin type created")
 		}
@@ -186,7 +182,7 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 
 	// Remove items which are not referenced on output
 	for idx, ci := range matchedItems {
-		if Contains(usedItemInputIndexes, idx) {
+		if !Contains(usedItemInputIndexes, idx) {
 			keeper.DeleteItem(ctx, ci.ID)
 		}
 	}

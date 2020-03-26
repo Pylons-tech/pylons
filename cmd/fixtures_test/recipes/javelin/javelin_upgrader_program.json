@@ -4,7 +4,12 @@
         "./recipes/javelin/item_input/javelin.json"
     ],
     "Entries":{
-        "CoinOutputs":[],
+        "CoinOutputs":[
+            {
+                "Coin":"javecoin",
+                "Count":100
+            }
+        ],
         "ItemOutputs":[
             {
                 "Ref": "./recipes/javelin/item_output/javelin_program_upgrade.json"
@@ -13,8 +18,12 @@
     },
     "Outputs": [
         {
-            "Result": ["0"],
+            "Result": ["1"],
             "Weight": "1"
+        },
+        {
+            "Result": ["0", "1"],
+            "Weight": "int(attack) * 2 + 1"
         }
     ],
     "ExtraInfo": "",
