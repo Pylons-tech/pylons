@@ -1,0 +1,20 @@
+{
+    "CoinInputs": [],
+    "ItemInputRefs": [
+        "./recipes/javelin/item_input/300old_javelin.json"
+    ],
+    "Entries":{
+    },
+    "Outputs": [
+        {
+            "Result": [],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo": "",
+    "Sender": "eugen",
+    "Name": "300 Old Javelin Throw Away Recipe",
+    "CookbookName": "javelincb",
+    "Description": "this recipe is used to throw away old javelin.",
+    "BlockInterval": "0"
+}
