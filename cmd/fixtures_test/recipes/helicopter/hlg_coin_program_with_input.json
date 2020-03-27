@@ -7,7 +7,7 @@
         "CoinOutputs":[
             {
                 "Coin": "hlgcoin",
-                "Program": "int(attack * double(5))"
+                "Count": "int(attack * double(5))"
             }
         ],
         "ItemOutputs":[]

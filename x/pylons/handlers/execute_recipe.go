@@ -125,14 +125,14 @@ func AddExecutedResult(ctx sdk.Context, keeper keep.Keeper, matchedItems []types
 		case types.CoinOutput:
 			coinOutput, _ := output.(types.CoinOutput)
 			var coinAmount int64
-			if len(coinOutput.Program) > 0 {
-				val64, err := ec.EvalInt64(coinOutput.Program)
+			if len(coinOutput.Count) > 0 {
+				val64, err := ec.EvalInt64(coinOutput.Count)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
 				coinAmount = val64
 			} else {
-				coinAmount = coinOutput.Count
+				return ersl, sdk.ErrInternal("length of coin output program shouldn't be zero")
 			}
 			ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 

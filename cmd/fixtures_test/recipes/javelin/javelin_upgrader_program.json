@@ -7,7 +7,7 @@
         "CoinOutputs":[
             {
                 "Coin":"javecoin",
-                "Count":100
+                "Count":"100"
             }
         ],
         "ItemOutputs":[

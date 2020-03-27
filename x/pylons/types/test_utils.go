@@ -25,7 +25,7 @@ func GenCoinOnlyEntry(coinName string) EntriesList {
 	return EntriesList{
 		CoinOutput{
 			Coin:  coinName,
-			Count: 1,
+			Count: "1",
 		},
 	}
 }
@@ -33,8 +33,8 @@ func GenCoinOnlyEntry(coinName string) EntriesList {
 func GenCoinOnlyEntryRand(coinName string) EntriesList {
 	return EntriesList{
 		CoinOutput{
-			Coin:    coinName,
-			Program: `randi(10)`,
+			Coin:  coinName,
+			Count: `randi(10)`,
 		},
 	}
 }

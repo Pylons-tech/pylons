@@ -5,7 +5,7 @@
         "CoinOutputs":[
             {
                 "Coin":"helicoin",
-                "Count":1
+                "Count":"1"
             }
         ],
         "ItemOutputs":[]

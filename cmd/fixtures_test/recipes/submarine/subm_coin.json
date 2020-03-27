@@ -5,7 +5,7 @@
         "CoinOutputs":[
             {
                 "Coin":"submcoin",
-                "Count":100
+                "Count":"100"
             }
         ],
         "ItemOutputs":[]
