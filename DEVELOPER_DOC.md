@@ -82,7 +82,8 @@ Recipe consists of below fields.
 | 5  | CoinInputs    | array  | "goldcoin": 1, "silvercoin": 1                               | required coins to run recipe.                                      |
 | 6  | ItemInputs    | array  | level 1 knife, level 1 shield                                | required items to run recipe. This can also describe item upgrade. |
 | 7  | Entries       | array  | level 1 knife-shield                                         | Items and coins which can be generated from this recipe.           |
-| 8  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time.         |
+| 8  | Outputs       | array  | Weight: "100 - HP", Result: chararacter, coin                | This provides the weighted list of results that can be outputted.  |
+| 9  | BlockInterval | int    | 2                                                            | Recipe is able to produce output after BlockInterval time.         |
 
 Sample Recipe JSON
 
@@ -97,11 +98,16 @@ Sample Recipe JSON
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/submarine/item_output/knife_shield_lv1.json",
-                "Weight":1
+                "Ref": "./recipes/submarine/item_output/knife_shield_lv1.json"
             }
         ]
     },
+    "Outputs": [
+        {
+            "Result": ["0"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Knife Shield Generation Recipe",
@@ -119,7 +125,6 @@ This field is showing required items to run recipe.
 | 1  | Doubles      | array      | "attack": 1         | required conditions for double attributes.     |
 | 2  | Longs        | array      | "level": 1          | required conditions for int attributes.        |
 | 3  | Strings      | array      | "name": "shield"    | required conditions for string attributes.     |
-| 4  | ToUpgrade    | object     | attack = attack * 2 | Describe what is updated after running recipe. |
 
 | No | Field    | Type       | sample   | description                                                                         |
 |----|----------|------------|----------|-------------------------------------------------------------------------------------|
@@ -136,56 +141,6 @@ Sample ItemInputs JSON
     "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "2000"}],
     "Strings": [{"Key": "Name", "Value": "Monster"}],
 }]
-```
-
-#### ToUpgrade
-
-This describes the fields of ToUpgrade field of item upgrade recipe.
-
-| No | Field        | Type   | Sample               | Description                                |
-|----|--------------|--------|----------------------|--------------------------------------------|
-| 1  | Doubles      | array  | attack: +1.0         | contains double attributes updates         |
-| 2  | Longs        | array  | level: +1            | contains int attributes updates            |
-| 3  | Strings      | array  | name: "Level2 Knife" | contains string attributes updates         |
-| 4  | Key          | string | attack               | attribute which needs to be changed        |
-| 5  | Value        | string | "Upgraded Knife"     | Target value when string attr is changed   |
-| 6  | WeightRanges | array  | 3-5                  | range which describe delta between initial |
-| 7  | Program      | string | "attack x 2"         | target value when upgraded by program.     |
-
-Upgrade also has random effect and for that, weightRanges are used for Doubles and Longs.
-
-Sample ToUpgrade JSON
-
-```
-{
-  "Doubles": [{
-    "Key": "attack", 
-    "WeightRanges":[{ "Lower": "2.0", "Upper": "2.0","Weight":1 }]
-  }],
-  "Longs": [{
-    "Key": "level", 
-    "WeightRanges":[{ "Lower": 1, "Upper":1,"Weight":1 }]
-  }],
-  "Strings": [{"Key": "LastName", "Value": "Upgraded Adventurer"}]
-}
-```
-
-This recipe is to upgrade item's level, LastName, and attack.
-
-Sample ToUpgrade JSON with Program
-
-```
-{
-  "Doubles": [{
-    "Key": "attack", 
-    "Program": "attack + 1"
-  }],
-  "Longs": [{
-    "Key": "level", 
-    "Program": "level + 1"
-  }],
-  "Strings": [{"Key": "LastName", "Program": "\"Upgraded Adventurer\""}]
-}
 ```
 
 ### CoinInputs
@@ -214,7 +169,6 @@ Sample Entries JSON
   "ItemOutputs":[
     {
       "Ref": "./recipes/item_output/knife_shield_lv1.json",
-      "Weight":1
     }
   ]
 }
@@ -281,6 +235,84 @@ Sample ItemOutputs JSON using Program
     "Strings":[{ "Key":"Name", "Program":"\"Merged \" + input0.name + input1.name", "Rate":"1.0" }]
 }]
 ```
+
+Sample ItemOutputs JSON using ItemInputRef and ToModify
+```
+{
+    "ItemInputRef": 0,
+    "ToModify": {
+        "Doubles": [{
+            "Key": "attack", 
+            "Program": "attack * 2.0"
+        }],
+        "Longs": [{
+            "Key": "level", 
+            "Program": "level + 1"
+        }],
+        "Strings": [{
+            "Key": "LastName",
+            "Program": "\"Upgraded Monster\""
+        }]
+    }
+}
+```
+
+##### ItemInputRef
+
+`ItemInputRef` is referencing to index of item input starting from 0.
+When `ItemInputRef` is -1, it means it's generating item without from input item.
+For JSON, if you don't specify a field for ItemInputRef, it's default value is set to -1.
+
+##### ToModify
+
+This describes the fields of ToUpgrade field of item upgrade recipe.
+
+| No | Field        | Type   | Sample               | Description                                |
+|----|--------------|--------|----------------------|--------------------------------------------|
+| 1  | Doubles      | array  | attack: +1.0         | contains double attributes updates         |
+| 2  | Longs        | array  | level: +1            | contains int attributes updates            |
+| 3  | Strings      | array  | name: "Level2 Knife" | contains string attributes updates         |
+| 4  | Key          | string | attack               | attribute which needs to be changed        |
+| 5  | Value        | string | "Upgraded Knife"     | Target value when string attr is changed   |
+| 6  | WeightRanges | array  | 3-5                  | range which describe delta between initial |
+| 7  | Program      | string | "attack x 2"         | target value when upgraded by program.     |
+
+Upgrade also has random effect and for that, weightRanges are used for Doubles and Longs.
+
+Sample ToUpgrade JSON
+
+```
+{
+  "Doubles": [{
+    "Key": "attack", 
+    "WeightRanges":[{ "Lower": "2.0", "Upper": "2.0","Weight":1 }]
+  }],
+  "Longs": [{
+    "Key": "level", 
+    "WeightRanges":[{ "Lower": 1, "Upper":1,"Weight":1 }]
+  }],
+  "Strings": [{"Key": "LastName", "Value": "Upgraded Adventurer"}]
+}
+```
+
+This recipe is to upgrade item's level, LastName, and attack.
+
+Sample ToUpgrade JSON with Program
+
+```
+{
+  "Doubles": [{
+    "Key": "attack", 
+    "Program": "attack + 1"
+  }],
+  "Longs": [{
+    "Key": "level", 
+    "Program": "level + 1"
+  }],
+  "Strings": [{"Key": "LastName", "Program": "\"Upgraded Adventurer\""}]
+}
+```
+
 #### CoinOutputs
 This describes coin which can be generated from recipe.
 
@@ -347,6 +379,25 @@ randi(10)
 ```
 
 Above code is for generation of random number from 1 - 10.
+
+### Outputs
+
+Outputs is an array of result sets by weights.
+
+| No | Field  | type   | sample   | description                                                         |
+|----|--------|--------|----------|---------------------------------------------------------------------|
+| 1  | Result | array  | [0, 1]   | This contains the result set that is consists of entry indexes.     |
+| 2  | Weight | string | "100-HP" | This is cel program which determines weight of specific result set. |
+
+Sample Outputs JSON
+```
+  "Outputs": [
+      {
+          "Result": ["0"],
+          "Weight": "1"
+      }
+  ],
+```
 
 ## Execution of recipes
 
