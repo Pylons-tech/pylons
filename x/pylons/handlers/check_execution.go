@@ -28,8 +28,8 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err2
 	}
 
-	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe}
-	outputSTR, err2 = p.GenerateItemFromRecipe(msg.Sender, exec.ItemInputs)
+	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe, matchedItems: exec.ItemInputs}
+	outputSTR, err2 = p.Run(msg.Sender)
 
 	if err2 != nil {
 		return nil, err2

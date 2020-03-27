@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestGetMatchedItems(t *testing.T) {
+func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
@@ -71,7 +71,7 @@ func TestGetMatchedItems(t *testing.T) {
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.True(t, err == nil)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
-			_, err = p.GetMatchedItems(msg)
+			err = p.SetMatchedItemsFromExecMsg(msg)
 			if tc.showError {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

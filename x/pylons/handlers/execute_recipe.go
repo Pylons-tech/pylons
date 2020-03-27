@@ -50,7 +50,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
 	}
 
-	matchedItems, err2 := p.GetMatchedItems(msg)
+	err2 = p.SetMatchedItemsFromExecMsg(msg)
 	if err2 != nil {
 		return errInternal(err2)
 	}
@@ -60,7 +60,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if recipe.BlockInterval > 0 {
 		// set matchedItem's owner recipe
 		var rcpOwnMatchedItems []types.Item
-		for _, item := range matchedItems {
+		for _, item := range p.matchedItems {
 			item.OwnerRecipeID = recipe.ID
 			if err := keeper.SetItem(ctx, item); err != nil {
 				return sdk.ErrInternal("error updating item's owner recipe").Result()
@@ -97,7 +97,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return err.Result()
 	}
 
-	outputSTR, err2 := p.GenerateItemFromRecipe(msg.Sender, matchedItems)
+	outputSTR, err2 := p.Run(msg.Sender)
 	if err2 != nil {
 		return errInternal(err2)
 	}

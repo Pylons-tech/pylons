@@ -29,7 +29,7 @@ func TestProgramWorkAsExpected(t *testing.T) {
 			),
 			// global function for 1 param
 			decls.NewFunction("randi",
-				decls.NewOverload("randi_int",
+				decls.NewOverload("rand_int",
 					[]*exprpb.Type{decls.Int},
 					decls.Int),
 			),
@@ -58,7 +58,7 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		},
 	}, &functions.Overload{
 		// operator for 1 param
-		Operator: "randi_int",
+		Operator: "rand_int",
 		Unary: func(arg ref.Val) ref.Val {
 			return types.Int(rand.Intn(int(arg.Value().(int64))))
 		},

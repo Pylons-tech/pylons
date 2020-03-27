@@ -105,7 +105,7 @@ func GenItemOnlyEntryRand(itemName string) EntriesList {
 func GenOneOutput(n int) WeightedOutputsList {
 	wol := WeightedOutputsList{}
 	for i := 0; i < n; i++ {
-		wol = append(wol, OutputsList{
+		wol = append(wol, WeightedOutputs{
 			Result: []int{i},
 			Weight: "1",
 		})
@@ -120,7 +120,7 @@ func GenAllOutput(n int) WeightedOutputsList {
 		result = append(result, i)
 	}
 	wol := WeightedOutputsList{
-		OutputsList{
+		WeightedOutputs{
 			Result: result,
 			Weight: "1",
 		},

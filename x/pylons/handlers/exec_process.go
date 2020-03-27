@@ -20,9 +20,11 @@ import (
 )
 
 type ExecProcess struct {
-	ctx    sdk.Context
-	keeper keep.Keeper
-	recipe types.Recipe
+	ctx          sdk.Context
+	keeper       keep.Keeper
+	recipe       types.Recipe
+	matchedItems []types.Item
+	ec           types.CelEnvCollection
 }
 
 func Contains(arr []int, it int) bool {
@@ -34,7 +36,7 @@ func Contains(arr []int, it int) bool {
 	return false
 }
 
-func (p *ExecProcess) GetMatchedItems(msg msgs.MsgExecuteRecipe) ([]types.Item, error) {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
 
 	var inputItems []types.Item
 	keys := make(map[string]bool)
@@ -45,15 +47,15 @@ func (p *ExecProcess) GetMatchedItems(msg msgs.MsgExecuteRecipe) ([]types.Item, 
 
 			item, err := p.keeper.GetItem(p.ctx, id)
 			if err != nil {
-				return nil, err
+				return err
 			}
 			if !item.Sender.Equals(msg.Sender) {
-				return nil, errors.New("item owner is not same as sender")
+				return errors.New("item owner is not same as sender")
 			}
 
 			inputItems = append(inputItems, item)
 		} else {
-			return nil, errors.New("multiple use of same item as item inputs")
+			return errors.New("multiple use of same item as item inputs")
 		}
 	}
 
@@ -72,20 +74,21 @@ func (p *ExecProcess) GetMatchedItems(msg msgs.MsgExecuteRecipe) ([]types.Item, 
 		}
 
 		if !matches {
-			return nil, errors.New("the item inputs dont match any items provided")
+			return errors.New("the item inputs dont match any items provided")
 		}
 	}
-	return matchedItems, nil
+	p.matchedItems = matchedItems
+	return nil
 }
 
-func (p *ExecProcess) GenerateItemFromRecipe(sender sdk.AccAddress, matchedItems []types.Item) ([]byte, error) {
-	ec, err := GenerateCelEnvVarFromInputItems(matchedItems)
+func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
+	err := p.GenerateCelEnvVarFromInputItems()
 
-	output, err := p.recipe.Outputs.Actualize(ec)
+	outputs, err := p.recipe.Outputs.Actualize(p.ec)
 	if err != nil {
 		return []byte{}, err
 	}
-	ersl, err := p.AddExecutedResult(matchedItems, p.recipe.Entries, output, ec, sender, p.recipe.CookbookID)
+	ersl, err := p.AddExecutedResult(sender, outputs)
 
 	if err != nil {
 		return []byte{}, err
@@ -99,25 +102,22 @@ func (p *ExecProcess) GenerateItemFromRecipe(sender sdk.AccAddress, matchedItems
 	return outputSTR, nil
 }
 
-func (p *ExecProcess) AddExecutedResult(matchedItems []types.Item, entries types.EntriesList, outputs []int,
-	ec types.CelEnvCollection,
-	sender sdk.AccAddress, cbID string,
-) ([]ExecuteRecipeSerialize, sdk.Error) {
+func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([]ExecuteRecipeSerialize, sdk.Error) {
 	var ersl []ExecuteRecipeSerialize
 	var err error
 	usedItemInputIndexes := []int{}
 	for _, outputIndex := range outputs {
-		if len(entries) <= outputIndex || outputIndex < 0 {
-			return ersl, sdk.ErrInternal(fmt.Sprintf("index out of range entries[%d] with length %d on output", outputIndex, len(entries)))
+		if len(p.recipe.Entries) <= outputIndex || outputIndex < 0 {
+			return ersl, sdk.ErrInternal(fmt.Sprintf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries)))
 		}
-		output := entries[outputIndex]
+		output := p.recipe.Entries[outputIndex]
 
 		switch output.(type) {
 		case types.CoinOutput:
 			coinOutput, _ := output.(types.CoinOutput)
 			var coinAmount int64
 			if len(coinOutput.Count) > 0 {
-				val64, err := ec.EvalInt64(coinOutput.Count)
+				val64, err := p.ec.EvalInt64(coinOutput.Count)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
@@ -141,7 +141,7 @@ func (p *ExecProcess) AddExecutedResult(matchedItems []types.Item, entries types
 			var outputItem *types.Item
 
 			if itemOutput.ItemInputRef == -1 {
-				outputItem, err = itemOutput.Item(cbID, sender, ec)
+				outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
@@ -150,7 +150,7 @@ func (p *ExecProcess) AddExecutedResult(matchedItems []types.Item, entries types
 				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ItemInputRef)
 
 				// Modify item according to ToModify section
-				outputItem, err = UpdateItemFromModifyParams(matchedItems[itemOutput.ItemInputRef], itemOutput.ToModify)
+				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ItemInputRef], itemOutput.ToModify)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
@@ -168,7 +168,7 @@ func (p *ExecProcess) AddExecutedResult(matchedItems []types.Item, entries types
 	}
 
 	// Remove items which are not referenced on output
-	for idx, ci := range matchedItems {
+	for idx, ci := range p.matchedItems {
 		if !Contains(usedItemInputIndexes, idx) {
 			p.keeper.DeleteItem(p.ctx, ci.ID)
 		}
@@ -176,14 +176,9 @@ func (p *ExecProcess) AddExecutedResult(matchedItems []types.Item, entries types
 	return ersl, nil
 }
 
-func UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyParams) (*types.Item, sdk.Error) {
-	ec, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
+func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyParams) (*types.Item, sdk.Error) {
 
-	if err != nil {
-		return &targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
-	}
-
-	if dblKeyValues, err := toMod.Doubles.Actualize(ec); err != nil {
+	if dblKeyValues, err := toMod.Doubles.Actualize(p.ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
 		for idx, dbl := range dblKeyValues {
@@ -201,7 +196,7 @@ func UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyPar
 		}
 	}
 
-	if lngKeyValues, err := toMod.Longs.Actualize(ec); err != nil {
+	if lngKeyValues, err := toMod.Longs.Actualize(p.ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
 		for idx, lng := range lngKeyValues {
@@ -217,7 +212,7 @@ func UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyPar
 		}
 	}
 
-	if strKeyValues, err := toMod.Strings.Actualize(ec); err != nil {
+	if strKeyValues, err := toMod.Strings.Actualize(p.ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
 	} else {
 		for _, str := range strKeyValues {
@@ -235,11 +230,11 @@ func UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyPar
 	return &targetItem, nil
 }
 
-func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (types.CelEnvCollection, error) {
+func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
 	varDefs := [](*exprpb.Decl){}
 	variables := map[string]interface{}{}
-	for idx, item := range matchedItems {
+	for idx, item := range p.matchedItems {
 		iPrefix := fmt.Sprintf("input%d.", idx)
 		for _, dbli := range item.Doubles {
 			varDefs = append(varDefs, decls.NewIdent(iPrefix+dbli.Key, decls.Double, nil))
@@ -268,14 +263,14 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (types.CelEnvCol
 	}
 
 	varDefs = append(varDefs, decls.NewFunction("randi",
-		decls.NewOverload("randi_int",
+		decls.NewOverload("rand_int",
 			[]*exprpb.Type{decls.Int},
 			decls.Int),
 	))
 
 	funcs := cel.Functions(&functions.Overload{
 		// operator for 1 param
-		Operator: "randi_int",
+		Operator: "rand_int",
 		Unary: func(arg ref.Val) ref.Val {
 			return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
 		},
@@ -286,5 +281,7 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (types.CelEnvCol
 			varDefs...,
 		),
 	)
-	return types.NewCelEnvCollection(env, variables, funcs), err
+
+	p.ec = types.NewCelEnvCollection(env, variables, funcs)
+	return err
 }
