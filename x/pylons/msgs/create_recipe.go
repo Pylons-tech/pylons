@@ -57,6 +57,10 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 	for _, entry := range msg.Entries {
 		switch entry.(type) {
 		case types.CoinOutput:
+			coinOutput, _ := entry.(types.CoinOutput)
+			if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
+				return sdk.ErrInternal("CoinOuput: " + err.Error())
+			}
 		case types.ItemOutput:
 			itemOutput, _ := entry.(types.ItemOutput)
 			if itemOutput.ItemInputRef != -1 {
@@ -67,21 +71,15 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 					return sdk.ErrInternal("ItemInputRef is less than 0 which is invalid")
 				}
 			}
+
 			// TODO should do basic validation for program of ItemOutput weight
-			// TODO should do basic validation coin output program
-			// TODO should do basic validation double param program for ToModify
-			// TODO should do basic validation string param program for ToModify
-			// TODO should do basic validation long param program for ToModify
-			// TODO should do basic validation double param program for ItemOutput (generation)
-			// TODO should do basic validation string param program for ItemOutput (generation)
-			// TODO should do basic validation long param program for ItemOutput (generation)
 		default:
 			return sdk.ErrInternal("invalid entry type available")
 		}
 	}
 
-	// validation for same ItemInputRef on output
 	for _, output := range msg.Outputs {
+		// validation for same ItemInputRef on output
 		usedItemInputRefs := make(map[int]bool)
 		usedEntries := make(map[int]bool)
 		for _, result := range output.Result {
@@ -103,6 +101,10 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 					usedItemInputRefs[itemOutput.ItemInputRef] = true
 				}
 			}
+		}
+		// validation for weight program
+		if err := types.ProgramValidateBasic(output.Weight); err != nil {
+			return sdk.ErrInternal("Output Weight: " + err.Error())
 		}
 	}
 

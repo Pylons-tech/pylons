@@ -68,3 +68,10 @@ func (ec *CelEnvCollection) EvalString(program string) (string, error) {
 	}
 	return fmt.Sprintf("%v", refVal.Value()), nil
 }
+
+func ProgramValidateBasic(program string) error {
+	if len(program) == 0 {
+		return errors.New("length of program code shouldn't be 0")
+	}
+	return nil
+}
