@@ -371,11 +371,11 @@ To convert to string type
 
 ##### Custom functions within program
 
-- `randi` function
+- `rand_int` function
 Usecase: generate random value.
 Example:  
 ```
-randi(10)
+rand_int(10)
 ```
 
 Above code is for generation of random number from 1 - 10.

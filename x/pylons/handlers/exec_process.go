@@ -262,7 +262,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 		}
 	}
 
-	varDefs = append(varDefs, decls.NewFunction("randi",
+	varDefs = append(varDefs, decls.NewFunction("rand_int",
 		decls.NewOverload("rand_int",
 			[]*exprpb.Type{decls.Int},
 			decls.Int),

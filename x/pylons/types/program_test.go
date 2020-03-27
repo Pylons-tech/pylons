@@ -28,7 +28,7 @@ func TestProgramWorkAsExpected(t *testing.T) {
 					decls.Int),
 			),
 			// global function for 1 param
-			decls.NewFunction("randi",
+			decls.NewFunction("rand_int",
 				decls.NewOverload("rand_int",
 					[]*exprpb.Type{decls.Int},
 					decls.Int),
@@ -102,8 +102,8 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, err == nil)
 
 	// random generation test with 1 param
-	val64, err = ec.EvalInt64(`randi(11)`)
-	t.Log(`randi(11)`, val64, err)
+	val64, err = ec.EvalInt64(`rand_int(11)`)
+	t.Log(`rand_int(11)`, val64, err)
 	require.True(t, err == nil)
 
 	// multiply function test with 2 param
@@ -130,9 +130,9 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, valstr == "2.5")
 	require.True(t, err == nil)
 
-	// randi, double, multiply and int merge test
-	val64, err = ec.EvalInt64(`int(5.0 * double(randi(2)+4) )`)
-	t.Log(`int(5.0 * double(randi(2)+4) )`, val64, err)
+	// rand_int, double, multiply and int merge test
+	val64, err = ec.EvalInt64(`int(5.0 * double(rand_int(2)+4) )`)
+	t.Log(`int(5.0 * double(rand_int(2)+4) )`, val64, err)
 	require.True(t, val64 == 20 || val64 == 25 || val64 == 30)
 	require.True(t, err == nil)
 
