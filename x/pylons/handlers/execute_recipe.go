@@ -64,7 +64,6 @@ func Contains(arr []int, it int) bool {
 }
 
 func GetMatchedItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe, recipe types.Recipe) ([]types.Item, error) {
-	// TODO: need to check it's working correctly when it is recipe for merging to same items
 
 	var inputItems []types.Item
 	keys := make(map[string]bool)
@@ -240,8 +239,6 @@ func GenerateCelEnvVarFromInputItems(matchedItems []types.Item) (types.CelEnvCol
 }
 
 func GenerateItemFromRecipe(ctx sdk.Context, keeper keep.Keeper, sender sdk.AccAddress, cbID string, matchedItems []types.Item, recipe types.Recipe) ([]byte, error) {
-	// TODO should reset item.OwnerRecipeID to "" when this item is used as catalyst
-
 	ec, err := GenerateCelEnvVarFromInputItems(matchedItems)
 
 	output, err := recipe.Outputs.Actualize(ec)
@@ -276,14 +273,14 @@ func HandleItemGeneration(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecu
 	})
 }
 
-func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModifyParams) (*types.Item, sdk.Error) {
+func UpdateItemFromUpgradeParams(targetItem types.Item, toMod types.ItemModifyParams) (*types.Item, sdk.Error) {
 	ec, err := GenerateCelEnvVarFromInputItems([]types.Item{targetItem})
 
 	if err != nil {
 		return &targetItem, sdk.ErrInternal("error creating environment for go-cel program" + err.Error())
 	}
 
-	if dblKeyValues, err := ToUpgrade.Doubles.Actualize(ec); err != nil {
+	if dblKeyValues, err := toMod.Doubles.Actualize(ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
 	} else {
 		for idx, dbl := range dblKeyValues {
@@ -291,7 +288,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModi
 			if !ok {
 				return &targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
 			}
-			if len(ToUpgrade.Doubles[idx].Program) == 0 { // NO PROGRAM
+			if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
 				originValue := targetItem.Doubles[dblKey].Value.Float()
 				upgradeAmount := dbl.Value.Float()
 				targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
@@ -301,7 +298,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModi
 		}
 	}
 
-	if lngKeyValues, err := ToUpgrade.Longs.Actualize(ec); err != nil {
+	if lngKeyValues, err := toMod.Longs.Actualize(ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
 	} else {
 		for idx, lng := range lngKeyValues {
@@ -309,7 +306,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModi
 			if !ok {
 				return &targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
 			}
-			if len(ToUpgrade.Longs[idx].Program) == 0 { // NO PROGRAM
+			if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
 				targetItem.Longs[lngKey].Value += lng.Value
 			} else {
 				targetItem.Longs[lngKey].Value = lng.Value
@@ -317,7 +314,7 @@ func UpdateItemFromUpgradeParams(targetItem types.Item, ToUpgrade types.ItemModi
 		}
 	}
 
-	if strKeyValues, err := ToUpgrade.Strings.Actualize(ec); err != nil {
+	if strKeyValues, err := toMod.Strings.Actualize(ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
 	} else {
 		for _, str := range strKeyValues {

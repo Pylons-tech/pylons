@@ -72,7 +72,6 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 				}
 			}
 
-			// TODO should do basic validation for program of ItemOutput weight
 		default:
 			return sdk.ErrInternal("invalid entry type available")
 		}
