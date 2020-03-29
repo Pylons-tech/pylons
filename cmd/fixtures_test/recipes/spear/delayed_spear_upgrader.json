@@ -7,7 +7,8 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/spear/item_output/spear_upgrade.json"
+                "ItemInputRef": 0,
+                "ToModifyRef": "./recipes/spear/upgrader/spear.json"
             }
         ]
     },

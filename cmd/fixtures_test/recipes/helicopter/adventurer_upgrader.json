@@ -7,7 +7,8 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/helicopter/item_output/adventurer_upgrade.json"
+                "ItemInputRef": 0,
+                "ToModifyRef": "./recipes/helicopter/upgrader/adventurer.json"
             }
         ]
     },

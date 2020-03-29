@@ -8,10 +8,11 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/catalyst/item_output/monster_upgrader.json"
+                "ItemInputRef": 0,
+                "ToModifyRef": "./recipes/catalyst/upgrader/monster.json"
             },
             {
-                "Ref": "./recipes/catalyst/item_output/catalyst_input.json"
+                "ItemInputRef": 1
             }
         ]
     },
