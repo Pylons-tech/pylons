@@ -36,13 +36,13 @@ type ItemOutput struct {
 	Strings    StringParamList
 }
 
-func NewInputRefOutput(ItemInputRef int, ToModify ItemModifyParams) ItemOutput {
+func NewInputRefOutput(ItemInputRef int, ModifyParams ItemModifyParams) ItemOutput {
 	return ItemOutput{
 		ModifyItem: ModifyItemType{
 			ItemInputRef: ItemInputRef,
-			Doubles:      ToModify.Doubles,
-			Longs:        ToModify.Longs,
-			Strings:      ToModify.Strings,
+			Doubles:      ModifyParams.Doubles,
+			Longs:        ModifyParams.Longs,
+			Strings:      ModifyParams.Strings,
 		},
 	}
 }

@@ -236,7 +236,7 @@ Sample ItemOutputs JSON using Program
 }]
 ```
 
-Sample ItemOutputs JSON using ItemInputRef and ToModify
+Sample ItemOutputs JSON using ModifyItem
 ```
 {
   "ModifyItem": {
@@ -257,15 +257,17 @@ Sample ItemOutputs JSON using ItemInputRef and ToModify
 }
 ```
 
-##### ItemInputRef
+##### ModifyItem
+
+###### ItemInputRef
 
 `ItemInputRef` is referencing to index of item input starting from 0.
 When `ItemInputRef` is -1, it means it's generating item without from input item.
 For JSON, if you don't specify a field for ItemInputRef, it's default value is set to -1.
 
-##### ToModify
+###### ModifyParams 
 
-This describes the fields of ToUpgrade field of item upgrade recipe.
+This describes the fields of ModifyParams field.
 
 | No | Field        | Type   | Sample               | Description                                |
 |----|--------------|--------|----------------------|--------------------------------------------|
@@ -279,7 +281,7 @@ This describes the fields of ToUpgrade field of item upgrade recipe.
 
 Upgrade also has random effect and for that, weightRanges are used for Doubles and Longs.
 
-Sample ToUpgrade JSON
+Sample ModifyParams JSON
 
 ```
 {
@@ -297,7 +299,7 @@ Sample ToUpgrade JSON
 
 This recipe is to upgrade item's level, LastName, and attack.
 
-Sample ToUpgrade JSON with Program
+Sample ModifyParams JSON with Program
 
 ```
 {

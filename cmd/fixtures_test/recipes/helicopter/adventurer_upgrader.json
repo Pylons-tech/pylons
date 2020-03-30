@@ -9,7 +9,7 @@
             {
                 "ModifyItem": {
                     "ItemInputRef": 0,
-                    "ToModifyRef": "./recipes/helicopter/upgrader/adventurer.json"
+                    "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
                 }
             }
         ]

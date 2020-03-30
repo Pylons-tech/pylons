@@ -145,12 +145,12 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	return EntriesList{
 		NewInputRefOutput(
-			0, GenToUpgradeForString("Name", targetValue),
+			0, GenModifyParamsForString("Name", targetValue),
 		),
 	}
 }
 
-func GenToUpgradeForString(targetKey, targetValue string) ItemModifyParams {
+func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
 	return ItemModifyParams{
 		Strings: StringParamList{
 			{Key: targetKey, Value: targetValue},
@@ -158,7 +158,7 @@ func GenToUpgradeForString(targetKey, targetValue string) ItemModifyParams {
 	}
 }
 
-func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemModifyParams {
+func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParams {
 	return ItemModifyParams{
 		Longs: []LongParam{
 			{
@@ -175,7 +175,7 @@ func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemModifyParams {
 	}
 }
 
-func GenToUpgradeForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
+func GenModifyParamsForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
 	return ItemModifyParams{
 		Doubles: []DoubleParam{
 			{

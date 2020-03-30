@@ -149,7 +149,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 				// Collect itemInputRefs that are used on output
 				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ModifyItem.ItemInputRef)
 
-				// Modify item according to ToModify section
+				// Modify item according to ModifyParams section
 				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ModifyItem.ItemInputRef], itemOutput.ModifyItem)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())

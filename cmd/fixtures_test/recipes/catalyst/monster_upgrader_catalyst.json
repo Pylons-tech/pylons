@@ -10,7 +10,7 @@
             {
                 "ModifyItem": {
                     "ItemInputRef": 0,
-                    "ToModifyRef": "./recipes/catalyst/upgrader/monster.json"
+                    "ModifyParamsRef": "./recipes/catalyst/upgrader/monster.json"
                 }
             },
             {

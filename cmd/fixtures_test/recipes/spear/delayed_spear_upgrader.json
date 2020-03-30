@@ -9,7 +9,7 @@
             {
                 "ModifyItem": {
                     "ItemInputRef": 0,
-                    "ToModifyRef": "./recipes/spear/upgrader/spear.json"
+                    "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
                 }
             }
         ]

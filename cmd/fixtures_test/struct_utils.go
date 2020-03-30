@@ -178,8 +178,8 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 			ItemOutputs []struct {
 				Ref        string
 				ModifyItem struct {
-					ItemInputRef *int
-					ToModifyRef  string
+					ItemInputRef    *int
+					ModifyParamsRef string
 				}
 			}
 		}
@@ -208,17 +208,17 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		} else {
 			pio.ModifyItem.ItemInputRef = *io.ModifyItem.ItemInputRef
 		}
-		ToModify := GetToModifyFromRef(io.ModifyItem.ToModifyRef, t)
-		pio.ModifyItem.Doubles = ToModify.Doubles
-		pio.ModifyItem.Longs = ToModify.Longs
-		pio.ModifyItem.Strings = ToModify.Strings
+		ModifyParams := GetModifyParamsFromRef(io.ModifyItem.ModifyParamsRef, t)
+		pio.ModifyItem.Doubles = ModifyParams.Doubles
+		pio.ModifyItem.Longs = ModifyParams.Longs
+		pio.ModifyItem.Strings = ModifyParams.Strings
 		wpl = append(wpl, pio)
 	}
 
 	return wpl
 }
 
-func GetToModifyFromRef(ref string, t *testing.T) types.ItemModifyParams {
+func GetModifyParamsFromRef(ref string, t *testing.T) types.ItemModifyParams {
 	var iup types.ItemModifyParams
 	if len(ref) == 0 {
 		return iup
