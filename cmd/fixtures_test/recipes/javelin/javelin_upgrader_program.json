@@ -19,11 +19,11 @@
     },
     "Outputs": [
         {
-            "Result": ["1"],
+            "ResultEntries": ["1"],
             "Weight": "1"
         },
         {
-            "Result": ["0", "1"],
+            "ResultEntries": ["0", "1"],
             "Weight": "int(attack) * 2 + 1"
         }
     ],

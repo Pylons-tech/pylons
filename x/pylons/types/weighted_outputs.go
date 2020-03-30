@@ -10,12 +10,12 @@ import (
 
 // WeightedOutputs is to make structs which is using weight to be based on
 type WeightedOutputs struct {
-	Result []int
-	Weight string
+	ResultEntries []int
+	Weight        string
 }
 
 func (ol WeightedOutputs) String() string {
-	return fmt.Sprintf("WeightedOutputs{Result: %v, Weight: %v}", ol.Result, ol.Weight)
+	return fmt.Sprintf("WeightedOutputs{ResultEntries: %v, Weight: %v}", ol.ResultEntries, ol.Weight)
 }
 
 func (ol WeightedOutputs) GetWeight(ec CelEnvCollection) (int, error) {
@@ -78,5 +78,5 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]int, sdk.Error)
 		}
 		first = weight
 	}
-	return wol[chosenIndex].Result, nil
+	return wol[chosenIndex].ResultEntries, nil
 }

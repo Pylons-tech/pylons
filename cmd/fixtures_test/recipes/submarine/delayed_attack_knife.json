@@ -11,7 +11,7 @@
     },
     "Outputs": [
         {
-            "Result": ["0"],
+            "ResultEntries": ["0"],
             "Weight": "1"
         }
     ],

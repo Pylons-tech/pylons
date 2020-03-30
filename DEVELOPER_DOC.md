@@ -104,7 +104,7 @@ Sample Recipe JSON
     },
     "Outputs": [
         {
-            "Result": ["0"],
+            "ResultEntries": ["0"],
             "Weight": "1"
         }
     ],
@@ -384,16 +384,16 @@ Above code is for generation of random number from 1 - 10.
 
 Outputs is an array of result sets by weights.
 
-| No | Field  | type   | sample   | description                                                         |
-|----|--------|--------|----------|---------------------------------------------------------------------|
-| 1  | Result | array  | [0, 1]   | This contains the result set that is consists of entry indexes.     |
-| 2  | Weight | string | "100-HP" | This is cel program which determines weight of specific result set. |
+| No | Field         | type   | sample   | description                                                         |
+|----|---------------|--------|----------|---------------------------------------------------------------------|
+| 1  | ResultEntries | array  | [0, 1]   | This contains the result set that is consists of entry indexes.     |
+| 2  | Weight        | string | "100-HP" | This is cel program which determines weight of specific result set. |
 
 Sample Outputs JSON
 ```
   "Outputs": [
       {
-          "Result": ["0"],
+          "ResultEntries": ["0"],
           "Weight": "1"
       }
   ],

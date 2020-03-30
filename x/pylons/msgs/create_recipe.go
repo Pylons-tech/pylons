@@ -81,7 +81,7 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 		// validation for same ItemInputRef on output
 		usedItemInputRefs := make(map[int]bool)
 		usedEntries := make(map[int]bool)
-		for _, result := range output.Result {
+		for _, result := range output.ResultEntries {
 			if result >= len(msg.Entries) || result < 0 {
 				return sdk.ErrInternal("output is refering to index which is out of entries range")
 			}

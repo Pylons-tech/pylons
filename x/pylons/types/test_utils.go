@@ -106,8 +106,8 @@ func GenOneOutput(n int) WeightedOutputsList {
 	wol := WeightedOutputsList{}
 	for i := 0; i < n; i++ {
 		wol = append(wol, WeightedOutputs{
-			Result: []int{i},
-			Weight: "1",
+			ResultEntries: []int{i},
+			Weight:        "1",
 		})
 	}
 	return wol
@@ -121,8 +121,8 @@ func GenAllOutput(n int) WeightedOutputsList {
 	}
 	wol := WeightedOutputsList{
 		WeightedOutputs{
-			Result: result,
-			Weight: "1",
+			ResultEntries: result,
+			Weight:        "1",
 		},
 	}
 	return wol
