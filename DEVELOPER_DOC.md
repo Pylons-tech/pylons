@@ -401,6 +401,37 @@ Sample Outputs JSON
   ],
 ```
 
+When both CoinOutputs and ItemOutputs are available, indexing start from CoinOutputs.
+```
+    "Entries":{
+        "CoinOutputs":[
+            {
+                "Coin":"javecoin",
+                "Count":"100"
+            }
+        ],
+        "ItemOutputs":[
+            {
+                "ModifyItem": {
+                    "ItemInputRef": 0,
+                    "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
+                }
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "ResultEntries": ["1"],
+            "Weight": "1"
+        },
+        {
+            "ResultEntries": ["0", "1"],
+            "Weight": "int(attack) * 2 + 1"
+        }
+    ],
+```
+e.g. on above, ResultEntries `[0, 1]` means javecoin + javelin, `[1]` means javelin
+
 ## Execution of recipes
 
 TODO: should add description here
