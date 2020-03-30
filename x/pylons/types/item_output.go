@@ -8,46 +8,76 @@ import (
 )
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
-type ItemOutput struct {
+
+type ItemModifyParams struct {
+	Doubles DoubleParamList
+	Longs   LongParamList
+	Strings StringParamList
+}
+
+type ModifyItemType struct {
 	ItemInputRef int
-	ToModify     ItemModifyParams
 	Doubles      DoubleParamList
 	Longs        LongParamList
 	Strings      StringParamList
 }
 
+type SerializeModifyItemType struct {
+	ItemInputRef *int `json:",omitempty"`
+	Doubles      DoubleParamList
+	Longs        LongParamList
+	Strings      StringParamList
+}
+
+type ItemOutput struct {
+	ModifyItem ModifyItemType
+	Doubles    DoubleParamList
+	Longs      LongParamList
+	Strings    StringParamList
+}
+
 func NewInputRefOutput(ItemInputRef int, ToModify ItemModifyParams) ItemOutput {
 	return ItemOutput{
-		ItemInputRef: ItemInputRef,
-		ToModify:     ToModify,
+		ModifyItem: ModifyItemType{
+			ItemInputRef: ItemInputRef,
+			Doubles:      ToModify.Doubles,
+			Longs:        ToModify.Longs,
+			Strings:      ToModify.Strings,
+		},
 	}
 }
 
 func NewItemOutput(Doubles DoubleParamList, Longs LongParamList, Strings StringParamList) ItemOutput {
 	return ItemOutput{
-		ItemInputRef: -1,
-		Doubles:      Doubles,
-		Longs:        Longs,
-		Strings:      Strings,
+		ModifyItem: ModifyItemType{
+			ItemInputRef: -1,
+		},
+		Doubles: Doubles,
+		Longs:   Longs,
+		Strings: Strings,
 	}
 }
 
 type SerializeItemOutput struct {
-	ItemInputRef *int `json:",omitempty"`
-	ToModify     ItemModifyParams
-	Doubles      DoubleParamList
-	Longs        LongParamList
-	Strings      StringParamList
+	ModifyItem SerializeModifyItemType
+	Doubles    DoubleParamList
+	Longs      LongParamList
+	Strings    StringParamList
 }
 
 func (io ItemOutput) String() string {
 	return fmt.Sprintf(`ItemOutput{
-		ItemInputRef: %d,
-		ToModify: %+v,
+		ModifyItem{
+			ItemInputRef: %d,
+			Doubles: %+v,
+			Longs: %+v,
+			Strings: %+v,
+		}
 		Doubles: %+v,
 		Longs:   %+v,
 		Strings: %+v,
-	}`, io.ItemInputRef, io.ToModify, io.Doubles, io.Longs, io.Strings)
+	}`, io.ModifyItem.ItemInputRef, io.ModifyItem.Doubles, io.ModifyItem.Longs, io.ModifyItem.Strings,
+		io.Doubles, io.Longs, io.Strings)
 }
 
 func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvCollection) (*Item, error) {
@@ -71,14 +101,18 @@ func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvColle
 
 func (io *ItemOutput) MarshalJSON() ([]byte, error) {
 	sio := SerializeItemOutput{
-		ItemInputRef: nil,
-		ToModify:     io.ToModify,
-		Doubles:      io.Doubles,
-		Longs:        io.Longs,
-		Strings:      io.Strings,
+		ModifyItem: SerializeModifyItemType{
+			ItemInputRef: nil,
+			Doubles:      io.ModifyItem.Doubles,
+			Longs:        io.ModifyItem.Longs,
+			Strings:      io.ModifyItem.Strings,
+		},
+		Doubles: io.Doubles,
+		Longs:   io.Longs,
+		Strings: io.Strings,
 	}
-	if io.ItemInputRef != -1 {
-		sio.ItemInputRef = &io.ItemInputRef
+	if io.ModifyItem.ItemInputRef != -1 {
+		sio.ModifyItem.ItemInputRef = &io.ModifyItem.ItemInputRef
 	}
 	return json.Marshal(sio)
 }
@@ -89,12 +123,14 @@ func (io *ItemOutput) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-	if sio.ItemInputRef == nil {
-		io.ItemInputRef = -1
+	if sio.ModifyItem.ItemInputRef == nil {
+		io.ModifyItem.ItemInputRef = -1
 	} else {
-		io.ItemInputRef = *sio.ItemInputRef
+		io.ModifyItem.ItemInputRef = *sio.ModifyItem.ItemInputRef
 	}
-	io.ToModify = sio.ToModify
+	io.ModifyItem.Doubles = sio.ModifyItem.Doubles
+	io.ModifyItem.Longs = sio.ModifyItem.Longs
+	io.ModifyItem.Strings = sio.ModifyItem.Strings
 	io.Doubles = sio.Doubles
 	io.Longs = sio.Longs
 	io.Strings = sio.Strings

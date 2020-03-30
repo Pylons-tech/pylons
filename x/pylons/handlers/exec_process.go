@@ -140,17 +140,17 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 			itemOutput, _ := output.(types.ItemOutput)
 			var outputItem *types.Item
 
-			if itemOutput.ItemInputRef == -1 {
+			if itemOutput.ModifyItem.ItemInputRef == -1 {
 				outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
 			} else {
 				// Collect itemInputRefs that are used on output
-				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ItemInputRef)
+				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ModifyItem.ItemInputRef)
 
 				// Modify item according to ToModify section
-				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ItemInputRef], itemOutput.ToModify)
+				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ModifyItem.ItemInputRef], itemOutput.ModifyItem)
 				if err != nil {
 					return ersl, sdk.ErrInternal(err.Error())
 				}
@@ -176,7 +176,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 	return ersl, nil
 }
 
-func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyParams) (*types.Item, sdk.Error) {
+func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ModifyItemType) (*types.Item, sdk.Error) {
 
 	if dblKeyValues, err := toMod.Doubles.Actualize(p.ec); err != nil {
 		return &targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())

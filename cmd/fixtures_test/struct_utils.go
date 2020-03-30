@@ -176,9 +176,11 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		Entries struct {
 			CoinOutputs []types.CoinOutput
 			ItemOutputs []struct {
-				Ref          string
-				ItemInputRef *int
-				ToModifyRef  string
+				Ref        string
+				ModifyItem struct {
+					ItemInputRef *int
+					ToModifyRef  string
+				}
 			}
 		}
 	}
@@ -201,12 +203,15 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 				t.Fatal("error parsing item output provided via fixture Bytes=", string(ioBytes), "error=", err)
 			}
 		}
-		if io.ItemInputRef == nil {
-			pio.ItemInputRef = -1
+		if io.ModifyItem.ItemInputRef == nil {
+			pio.ModifyItem.ItemInputRef = -1
 		} else {
-			pio.ItemInputRef = *io.ItemInputRef
+			pio.ModifyItem.ItemInputRef = *io.ModifyItem.ItemInputRef
 		}
-		pio.ToModify = GetToModifyFromRef(io.ToModifyRef, t)
+		ToModify := GetToModifyFromRef(io.ModifyItem.ToModifyRef, t)
+		pio.ModifyItem.Doubles = ToModify.Doubles
+		pio.ModifyItem.Longs = ToModify.Longs
+		pio.ModifyItem.Strings = ToModify.Strings
 		wpl = append(wpl, pio)
 	}
 

@@ -239,21 +239,21 @@ Sample ItemOutputs JSON using Program
 Sample ItemOutputs JSON using ItemInputRef and ToModify
 ```
 {
+  "ModifyItem": {
     "ItemInputRef": 0,
-    "ToModify": {
-        "Doubles": [{
-            "Key": "attack", 
-            "Program": "attack * 2.0"
-        }],
-        "Longs": [{
-            "Key": "level", 
-            "Program": "level + 1"
-        }],
-        "Strings": [{
-            "Key": "LastName",
-            "Program": "\"Upgraded Monster\""
-        }]
-    }
+    "Doubles": [{
+        "Key": "attack", 
+        "Program": "attack * 2.0"
+    }],
+    "Longs": [{
+        "Key": "level", 
+        "Program": "level + 1"
+    }],
+    "Strings": [{
+        "Key": "LastName",
+        "Program": "\"Upgraded Monster\""
+    }]
+  }
 }
 ```
 
