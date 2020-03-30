@@ -5,12 +5,17 @@
         "CoinOutputs":[
             {
                 "Coin":"submcoin",
-                "Count":100,
-                "Weight":1
+                "Count":"100"
             }
         ],
         "ItemOutputs":[]
     },
+    "Outputs": [
+        {
+            "ResultEntries": ["0"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Submarine Coin Generation Recipe",

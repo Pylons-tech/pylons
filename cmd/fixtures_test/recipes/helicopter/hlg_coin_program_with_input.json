@@ -7,12 +7,17 @@
         "CoinOutputs":[
             {
                 "Coin": "hlgcoin",
-                "Program": "int(attack * double(5))",
-                "Weight": 1
+                "Count": "int(attack * double(5))"
             }
         ],
         "ItemOutputs":[]
     },
+    "Outputs": [
+        {
+            "ResultEntries": ["0"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Helicopter's Hlg Coin Generation From Input Recipe",

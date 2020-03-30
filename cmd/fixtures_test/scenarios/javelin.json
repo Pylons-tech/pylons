@@ -44,6 +44,81 @@
         }
     },
     {
+        "ID": "CREATE_200OLD_JAVELIN",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/javelin/200old_javelin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "200 Old Javelin" },
+                            "longValues": { "level": 1 }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_300OLD_JAVELIN",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/javelin/300old_javelin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "300 Old Javelin" },
+                            "longValues": { "level": 1 }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_400OLD_JAVELIN",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/javelin/400old_javelin.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "400 Old Javelin" },
+                            "longValues": { "level": 1 }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
         "ID": "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_JAVELIN_COOKBOOK"],
@@ -59,6 +134,66 @@
                 {
                     "owner": "eugen",
                     "recipes": ["Javelin Upgrade Program Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_200OLD_JAVELIN_THROW_AWAY_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/javelin/200old_javelin_throw_away.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["200 Old Javelin Throw Away Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_300OLD_JAVELIN_THROW_AWAY_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/javelin/300old_javelin_throw_away.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["300 Old Javelin Throw Away Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_400OLD_JAVELIN_THROW_AWAY_INVALID_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/javelin/400old_javelin_throw_away_invalid.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["400 Old Javelin Throw Away Invalid Recipe"]
                 }
             ]
         }
@@ -91,6 +226,81 @@
                     ]
                 }
             ]
+        }
+    },
+    {
+        "ID": "EXECUTE_200OLD_JAVELIN_THROW_AWAY_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_200OLD_JAVELIN", 
+                "CREATE_200OLD_JAVELIN_THROW_AWAY_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./recipes/javelin/executions/200old_javelin_throw_away.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "shouldNotExist": true,
+                    "items": [
+                        {
+                            "stringValues": { "Name": "200 Old Javelin" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },    
+    {
+        "ID": "EXECUTE_300OLD_JAVELIN_THROW_AWAY_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_300OLD_JAVELIN", 
+                "CREATE_300OLD_JAVELIN_THROW_AWAY_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./recipes/javelin/executions/300old_javelin_throw_away.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "shouldNotExist": true,
+                    "items": [
+                        {
+                            "stringValues": { "Name": "300 Old Javelin" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },    
+    {
+        "ID": "EXECUTE_400OLD_JAVELIN_THROW_AWAY_INVALID_RECIPE",
+        "runAfter": {
+            "precondition": [
+                "CREATE_400OLD_JAVELIN", 
+                "CREATE_400OLD_JAVELIN_THROW_AWAY_INVALID_RECIPE"
+            ],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./recipes/javelin/executions/400old_javelin_throw_away_invalid.json",
+        "output": {
+            "txResult": {
+                "errLog": "error converting weight value to int64"
+            }
         }
     }
 ]

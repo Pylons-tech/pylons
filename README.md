@@ -67,11 +67,29 @@ pylonscli tx pylons get-pylons --from alice
 pylonscli rest-server --chain-id pylonschain --trust-node
 ```
 
-## Unit test
+## Running tests
 - Unit test command
 
 ```
-bash ./unit_test.sh
+make unit_tests
+```
+- Integration test with local daemon command
+```
+make int_tests
+```
+- Fixture test with local daemon command
+```
+make fixture_tests
+```
+
+### Before running integration and fixture test initialize blockchain status and start daemon
+Resets the blockchain database  
+```
+make reset_chain
+```
+Start daemon  
+```
+pylonsd start
 ```
 
 ## Deploying for production
@@ -99,21 +117,6 @@ Available Commands:
   send-pylons     send pylons of specific amount to the name provided
   create-cookbook create cookbook by providing the args
   update-cookbook update cookbook by providing the args
-```
-
-### Integration test process on local environment
-
-Resets the blockchain database  
-```
-make reset_chain
-```
-Start daemon  
-```
-pylonsd start
-```
-Run integration test  
-```
-go test ./cmd/test
 ```
 
 ### To generate a transaction json, use below command

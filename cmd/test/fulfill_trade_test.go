@@ -90,7 +90,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			"this trade is already completed",
 		},
 		{
-			"coin->item fullfill trade test", // item-item fulfill trade test
+			"item->item fullfill trade test", // item-item fulfill trade test
 			"TESTTRD_FulfillTrade__001_TC4",
 			true,
 			"TESTITEM_FulfillTrade__001_TC4_INPUT",

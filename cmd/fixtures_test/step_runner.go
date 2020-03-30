@@ -170,6 +170,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			rcpTempl.CoinInputs,
 			itemInputs,
 			entries,
+			rcpTempl.Outputs,
 			rcpTempl.BlockInterval,
 			rcpTempl.Sender,
 		)
@@ -226,6 +227,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			hmrErrMsg := intTest.GetHumanReadableErrorFromTxHash(txhash, t)
+			t.Log("hmrErrMsg=", hmrErrMsg)
 			t.MustTrue(strings.Contains(hmrErrMsg, step.Output.TxResult.ErrorLog))
 		} else {
 			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)

@@ -1,7 +1,24 @@
 {
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/helicopter/item_input/adventurer_upgrade.json"
+        "./recipes/helicopter/item_input/adventurer.json"
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[
+            {
+                "ModifyItem": {
+                    "ItemInputRef": 0,
+                    "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
+                }
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "ResultEntries": ["0"],
+            "Weight": "1"
+        }
     ],
     "ExtraInfo":"",
     "Sender":"eugen",

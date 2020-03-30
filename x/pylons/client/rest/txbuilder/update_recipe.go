@@ -23,8 +23,9 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 
 		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol",
 			types.GenCoinInputList("wood", 5),
-			types.GenItemInputList(0, "Raichu"),
+			types.GenItemInputList("Raichu"),
 			types.GenEntries("chair", "Raichu"),
+			types.GenOneOutput(2),
 			sender,
 		)
 

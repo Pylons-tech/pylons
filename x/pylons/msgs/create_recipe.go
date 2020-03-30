@@ -15,8 +15,8 @@ type MsgCreateRecipe struct {
 	CookbookID    string // the cookbook guid
 	CoinInputs    types.CoinInputList
 	ItemInputs    types.ItemInputList
-	Entries       types.WeightedParamList
-	ToUpgrade     types.ItemUpgradeParams
+	Entries       types.EntriesList
+	Outputs       types.WeightedOutputsList
 	BlockInterval int64
 	Sender        sdk.AccAddress
 	Description   string
@@ -26,7 +26,8 @@ type MsgCreateRecipe struct {
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
-	entries types.WeightedParamList,
+	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgCreateRecipe {
 	return MsgCreateRecipe{
@@ -37,6 +38,7 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		Outputs:       outputs,
 		BlockInterval: int64(blockInterval),
 		Sender:        sender,
 	}
@@ -50,6 +52,60 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 
 // ValidateBasic validates the Msg
 func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
+
+	// validation for the item input index overflow on entries
+	for _, entry := range msg.Entries {
+		switch entry.(type) {
+		case types.CoinOutput:
+			coinOutput, _ := entry.(types.CoinOutput)
+			if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
+				return sdk.ErrInternal("CoinOuput: " + err.Error())
+			}
+		case types.ItemOutput:
+			itemOutput, _ := entry.(types.ItemOutput)
+			if itemOutput.ModifyItem.ItemInputRef != -1 {
+				if itemOutput.ModifyItem.ItemInputRef >= len(msg.ItemInputs) {
+					return sdk.ErrInternal("ItemInputRef overflow length of ItemInputs")
+				}
+				if itemOutput.ModifyItem.ItemInputRef < -1 {
+					return sdk.ErrInternal("ItemInputRef is less than 0 which is invalid")
+				}
+			}
+
+		default:
+			return sdk.ErrInternal("invalid entry type available")
+		}
+	}
+
+	for _, output := range msg.Outputs {
+		// validation for same ItemInputRef on output
+		usedItemInputRefs := make(map[int]bool)
+		usedEntries := make(map[int]bool)
+		for _, result := range output.ResultEntries {
+			if result >= len(msg.Entries) || result < 0 {
+				return sdk.ErrInternal("output is refering to index which is out of entries range")
+			}
+			if usedEntries[result] {
+				return sdk.ErrInternal("double use of entries within single output result")
+			}
+			usedEntries[result] = true
+			entry := msg.Entries[result]
+			switch entry.(type) {
+			case types.ItemOutput:
+				itemOutput, _ := entry.(types.ItemOutput)
+				if itemOutput.ModifyItem.ItemInputRef != -1 {
+					if usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] {
+						return sdk.ErrInternal("double use of item input within single output result")
+					}
+					usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] = true
+				}
+			}
+		}
+		// validation for weight program
+		if err := types.ProgramValidateBasic(output.Weight); err != nil {
+			return sdk.ErrInternal("Output Weight: " + err.Error())
+		}
+	}
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())

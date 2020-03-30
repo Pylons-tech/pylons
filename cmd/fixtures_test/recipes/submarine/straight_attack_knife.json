@@ -5,11 +5,16 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
-                "Ref": "./recipes/submarine/item_output/straight_attack_knife.json",
-                "Weight":1
+                "Ref": "./recipes/submarine/item_output/straight_attack_knife.json"
             }
         ]
     },
+    "Outputs": [
+        {
+            "ResultEntries": ["0"],
+            "Weight": "1"
+        }
+    ],
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Straight Attack Knife Generation Recipe",

@@ -28,8 +28,8 @@ func TestProgramWorkAsExpected(t *testing.T) {
 					decls.Int),
 			),
 			// global function for 1 param
-			decls.NewFunction("randi",
-				decls.NewOverload("randi_int",
+			decls.NewFunction("rand_int",
+				decls.NewOverload("rand_int",
 					[]*exprpb.Type{decls.Int},
 					decls.Int),
 			),
@@ -58,7 +58,7 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		},
 	}, &functions.Overload{
 		// operator for 1 param
-		Operator: "randi_int",
+		Operator: "rand_int",
 		Unary: func(arg ref.Val) ref.Val {
 			return types.Int(rand.Intn(int(arg.Value().(int64))))
 		},
@@ -70,76 +70,74 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		},
 	})
 
+	ec := NewCelEnvCollection(env, variables, funcs)
+
 	// double test
-	out, err := CheckAndExecuteProgram(env, variables, funcs, `attack + 2.0`)
-	flo64, _ := getFloat(out.Value())
+	flo64, err := ec.EvalFloat64(`attack + 2.0`)
 	t.Logf("attack x 2.err %f %v", flo64, err)
 	require.True(t, flo64 == 7.0)
 	require.True(t, err == nil)
 
 	// integer test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `level + 1`)
-	val64, _ := out.Value().(int64)
+	val64, err := ec.EvalInt64(`level + 1`)
 	t.Logf("attack + 1.err %d %v", val64, err)
 	require.True(t, val64 == 4)
 	require.True(t, err == nil)
 
 	// string test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `name + "old"`)
-	t.Log(`name + "old".err`, out.Value(), err)
-	require.True(t, out.Value() == "shieldold")
+	valstr, err := ec.EvalString(`name + "old"`)
+	t.Log(`name + "old".err`, valstr, err)
+	require.True(t, valstr == "shieldold")
 	require.True(t, err == nil)
 
 	// array env test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `input0.attack + input1.attack`)
-	val64, _ = out.Value().(int64)
+	val64, err = ec.EvalInt64(`input0.attack + input1.attack`)
 	t.Log(`input0.attack + input1.attack`, val64, err)
 	require.True(t, val64 == 5)
 	require.True(t, err == nil)
 
 	// random generation test with no param
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `rand10()`)
-	t.Log(`rand10`, out, err)
+	val64, err = ec.EvalInt64(`rand10()`)
+	t.Log(`rand10`, val64, err)
 	require.True(t, err == nil)
 
 	// random generation test with 1 param
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `randi(11)`)
-	t.Log(`randi(11)`, out, err)
+	val64, err = ec.EvalInt64(`rand_int(11)`)
+	t.Log(`rand_int(11)`, val64, err)
 	require.True(t, err == nil)
 
 	// multiply function test with 2 param
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `multiply(11, 12)`)
-	t.Log(`multiply(11, 12)`, out, err)
-	require.True(t, out.Value().(int64) == 132)
+	val64, err = ec.EvalInt64(`multiply(11, 12)`)
+	t.Log(`multiply(11, 12)`, val64, err)
+	require.True(t, val64 == 132)
 	require.True(t, err == nil)
 
 	// int type conversion test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `int(2.1) * 2`)
-	t.Log(`int(2.1) * 2`, out, err)
-	require.True(t, out.Value().(int64) == 4)
+	val64, err = ec.EvalInt64(`int(2.1) * 2`)
+	t.Log(`int(2.1) * 2`, val64, err)
+	require.True(t, val64 == 4)
 	require.True(t, err == nil)
 
 	// float type conversion test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `double(2) * 2.5`)
-	t.Log(`double(2) * 2.5`, out, err)
-	require.True(t, out.Value().(float64) == 5)
+	flo64, err = ec.EvalFloat64(`double(2) * 2.5`)
+	t.Log(`double(2) * 2.5`, flo64, err)
+	require.True(t, flo64 == 5)
 	require.True(t, err == nil)
 
 	// string type conversion test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `string(2.0 + 0.5)`)
-	t.Log(`string(2.0 + 0.5)`, out, err)
-	require.True(t, out.Value().(string) == "2.5")
+	valstr, err = ec.EvalString(`string(2.0 + 0.5)`)
+	t.Log(`string(2.0 + 0.5)`, valstr, err)
+	require.True(t, valstr == "2.5")
 	require.True(t, err == nil)
 
-	// randi, double, multiply and int merge test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `int(5.0 * double(randi(2)+4) )`)
-	t.Log(`int(5.0 * double(randi(2)+4) )`, out, err)
-	val64 = out.Value().(int64)
+	// rand_int, double, multiply and int merge test
+	val64, err = ec.EvalInt64(`int(5.0 * double(rand_int(2)+4) )`)
+	t.Log(`int(5.0 * double(rand_int(2)+4) )`, val64, err)
 	require.True(t, val64 == 20 || val64 == 25 || val64 == 30)
 	require.True(t, err == nil)
 
 	// failing test
-	out, err = CheckAndExecuteProgram(env, variables, funcs, `level + attack`)
+	out, err := ec.Eval(`level + attack`)
 	t.Log(`level + attack`, out, err)
 	require.True(t, err != nil)
 }

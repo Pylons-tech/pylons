@@ -9,76 +9,38 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
-func GenItemInputList(alivePercent int, names ...string) ItemInputList {
+func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
 		iiL = append(iiL, ItemInput{
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
-			alivePercent,
-			ItemUpgradeParams{},
 		})
 	}
 	return iiL
 }
 
-func GenDetailedItemInputList(alivePercent int, itemUpgrades []ItemUpgradeParams, names ...string) ItemInputList {
-	iiL := ItemInputList{}
-	for idx, name := range names {
-		toUpgrade := ItemUpgradeParams{}
-		if idx < len(itemUpgrades) {
-			toUpgrade = itemUpgrades[idx]
-		}
-		iiL = append(iiL, ItemInput{
-			nil,
-			nil,
-			StringInputParamList{StringInputParam{"Name", name}},
-			alivePercent,
-			toUpgrade,
-		})
-	}
-	return iiL
-}
-
-func GenCoinOnlyEntry(coinName string) WeightedParamList {
-	return WeightedParamList{
+func GenCoinOnlyEntry(coinName string) EntriesList {
+	return EntriesList{
 		CoinOutput{
-			Coin:   coinName,
-			Count:  1,
-			Weight: 1,
+			Coin:  coinName,
+			Count: "1",
 		},
 	}
 }
 
-func GenCoinOnlyEntryRand(coinName string) WeightedParamList {
-	return WeightedParamList{
+func GenCoinOnlyEntryRand(coinName string) EntriesList {
+	return EntriesList{
 		CoinOutput{
-			Coin:    coinName,
-			Program: `randi(10)`,
-			Weight:  1,
+			Coin:  coinName,
+			Count: `rand_int(10)`,
 		},
 	}
 }
 
-func GenSingleItemInputList(alivePercent int, itemName string) ItemInputList {
-	return ItemInputList{
-		ItemInput{
-			Doubles: DoubleInputParamList{},
-			Longs:   LongInputParamList{},
-			Strings: StringInputParamList{
-				StringInputParam{
-					Key:   "Name",
-					Value: itemName,
-				},
-			},
-			AlivePercent: alivePercent,
-		},
-	}
-}
-
-func GenItemNameUpgradeParams(desItemName string) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
+	return ItemModifyParams{
 		Doubles: DoubleParamList{},
 		Longs:   LongParamList{},
 		Strings: StringParamList{
@@ -90,9 +52,9 @@ func GenItemNameUpgradeParams(desItemName string) ItemUpgradeParams {
 	}
 }
 
-func GenItemOnlyEntry(itemName string) WeightedParamList {
-	return WeightedParamList{
-		ItemOutput{
+func GenItemOnlyEntry(itemName string) EntriesList {
+	return EntriesList{
+		NewItemOutput(
 			DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 				DoubleWeightRange{
 					Lower:  "100.00",
@@ -118,14 +80,13 @@ func GenItemOnlyEntry(itemName string) WeightedParamList {
 				},
 			}}}},
 			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-			1,
-		},
+		),
 	}
 }
 
-func GenItemOnlyEntryRand(itemName string) WeightedParamList {
-	return WeightedParamList{
-		ItemOutput{
+func GenItemOnlyEntryRand(itemName string) EntriesList {
+	return EntriesList{
+		NewItemOutput(
 			DoubleParamList{DoubleParam{
 				Key:     "endurance",
 				Program: `500.00`,
@@ -133,39 +94,72 @@ func GenItemOnlyEntryRand(itemName string) WeightedParamList {
 			}},
 			LongParamList{LongParam{
 				Key:     "HP",
-				Program: `500 + randi(300)`,
+				Program: `500 + rand_int(300)`,
 				Rate:    "1.0",
 			}},
 			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-			1,
-		},
+		),
 	}
 }
 
-func GenEntries(coinName string, itemName string) WeightedParamList {
-	return WeightedParamList{
+func GenOneOutput(n int) WeightedOutputsList {
+	wol := WeightedOutputsList{}
+	for i := 0; i < n; i++ {
+		wol = append(wol, WeightedOutputs{
+			ResultEntries: []int{i},
+			Weight:        "1",
+		})
+	}
+	return wol
+}
+
+func GenAllOutput(n int) WeightedOutputsList {
+
+	result := []int{}
+	for i := 0; i < n; i++ {
+		result = append(result, i)
+	}
+	wol := WeightedOutputsList{
+		WeightedOutputs{
+			ResultEntries: result,
+			Weight:        "1",
+		},
+	}
+	return wol
+}
+
+func GenEntries(coinName string, itemName string) EntriesList {
+	return EntriesList{
 		GenCoinOnlyEntry(coinName)[0],
 		GenItemOnlyEntry(itemName)[0],
 	}
 }
 
-func GenEntriesRand(coinName, itemName string) WeightedParamList {
-	return WeightedParamList{
+func GenEntriesRand(coinName, itemName string) EntriesList {
+	return EntriesList{
 		GenCoinOnlyEntryRand(coinName)[0],
 		GenItemOnlyEntryRand(itemName)[0],
 	}
 }
 
-func GenToUpgradeForString(targetKey, targetValue string) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
+	return EntriesList{
+		NewInputRefOutput(
+			0, GenModifyParamsForString("Name", targetValue),
+		),
+	}
+}
+
+func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
+	return ItemModifyParams{
 		Strings: StringParamList{
 			{Key: targetKey, Value: targetValue},
 		},
 	}
 }
 
-func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParams {
+	return ItemModifyParams{
 		Longs: []LongParam{
 			{
 				Key: targetKey,
@@ -181,8 +175,8 @@ func GenToUpgradeForLong(targetKey string, upgradeAmount int) ItemUpgradeParams 
 	}
 }
 
-func GenToUpgradeForDouble(targetKey string, upgradeAmount FloatString) ItemUpgradeParams {
-	return ItemUpgradeParams{
+func GenModifyParamsForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
+	return ItemModifyParams{
 		Doubles: []DoubleParam{
 			{
 				Key: targetKey,

@@ -28,21 +28,21 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	// add 3 trades. one open trade by each sender and one closed trade
 	mockedCoinInput.PlnK.SetTrade(mockedCoinInput.Ctx, types.Trade{
 		ID:          id.String(),
-		ItemInputs:  types.GenItemInputList(0, "Pikachu"),
+		ItemInputs:  types.GenItemInputList("Pikachu"),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender,
 	})
 
 	mockedCoinInput.PlnK.SetTrade(mockedCoinInput.Ctx, types.Trade{
 		ID:          id2.String(),
-		ItemInputs:  types.GenItemInputList(0, "Richu"),
+		ItemInputs:  types.GenItemInputList("Richu"),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2,
 	})
 
 	mockedCoinInput.PlnK.SetTrade(mockedCoinInput.Ctx, types.Trade{
 		ID:          id3.String(),
-		ItemInputs:  types.GenItemInputList(0, "Pichu"),
+		ItemInputs:  types.GenItemInputList("Pichu"),
 		CoinOutputs: types.NewPylon(1000),
 		Sender:      sender2,
 		FulFiller:   sender,

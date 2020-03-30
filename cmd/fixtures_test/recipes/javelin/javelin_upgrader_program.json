@@ -1,7 +1,33 @@
 {
     "CoinInputs": [],
     "ItemInputRefs": [
-        "./recipes/javelin/item_input/javelin_program_upgrade.json"
+        "./recipes/javelin/item_input/javelin.json"
+    ],
+    "Entries":{
+        "CoinOutputs":[
+            {
+                "Coin":"javecoin",
+                "Count":"100"
+            }
+        ],
+        "ItemOutputs":[
+            {
+                "ModifyItem": {
+                    "ItemInputRef": 0,
+                    "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
+                }
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "ResultEntries": ["1"],
+            "Weight": "1"
+        },
+        {
+            "ResultEntries": ["0", "1"],
+            "Weight": "int(attack) * 2 + 1"
+        }
     ],
     "ExtraInfo": "",
     "Sender": "eugen",

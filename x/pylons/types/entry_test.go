@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestWeightedParamListSerialize(t *testing.T) {
+func TestEntriesListSerialize(t *testing.T) {
 	entries := GenEntries("chair", "Raichu")
 
 	cases := map[string]struct {
@@ -19,7 +19,7 @@ func TestWeightedParamListSerialize(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			data, err := json.Marshal(entries)
 			require.True(t, err == nil)
-			var serializedEntries WeightedParamList
+			var serializedEntries EntriesList
 			err2 := json.Unmarshal(data, &serializedEntries)
 			require.True(t, err2 == nil)
 			require.True(t, reflect.DeepEqual(entries, serializedEntries))

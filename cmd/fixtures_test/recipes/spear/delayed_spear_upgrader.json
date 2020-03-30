@@ -1,7 +1,24 @@
 {
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/spear/item_input/spear_upgrade.json"
+        "./recipes/spear/item_input/spear.json"
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[
+            {
+                "ModifyItem": {
+                    "ItemInputRef": 0,
+                    "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
+                }
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "ResultEntries": ["0"],
+            "Weight": "1"
+        }
     ],
     "ExtraInfo":"",
     "Sender":"eugen",

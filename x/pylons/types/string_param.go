@@ -2,8 +2,6 @@ package types
 
 import (
 	"fmt"
-
-	"github.com/google/cel-go/cel"
 )
 
 // StringParam describes an item input/output parameter of type string
@@ -38,20 +36,20 @@ func (spm StringParamList) String() string {
 	return sp
 }
 
-func (spm StringParamList) Actualize(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) ([]StringKeyValue, error) {
+func (spm StringParamList) Actualize(ec CelEnvCollection) ([]StringKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []StringKeyValue
 	for _, param := range spm {
 		var val string
+		var err error
 
 		if len(param.Program) > 0 {
-			refVal, refErr := CheckAndExecuteProgram(env, variables, funcs, param.Program)
-			if refErr != nil {
-				return m, refErr
-			}
-			val = fmt.Sprintf("%v", refVal.Value())
+			val, err = ec.EvalString(param.Program)
 		} else {
 			val = param.Value
+		}
+		if err != nil {
+			return m, err
 		}
 		m = append(m, StringKeyValue{
 			Key:   param.Key,

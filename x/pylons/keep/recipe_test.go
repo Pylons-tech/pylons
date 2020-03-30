@@ -13,8 +13,9 @@ import (
 func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) types.Recipe {
 	return types.NewRecipe(name, cbID, desc,
 		types.GenCoinInputList("wood", 5),
-		types.GenItemInputList(0, "Raichu"),
+		types.GenItemInputList("Raichu"),
 		types.GenEntries("chair", "Raichu"),
+		types.GenOneOutput(2),
 		0,
 		sender,
 	)

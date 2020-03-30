@@ -16,7 +16,8 @@ type Recipe struct {
 	Name          string
 	CoinInputs    CoinInputList
 	ItemInputs    ItemInputList
-	Entries       WeightedParamList
+	Entries       EntriesList
+	Outputs       WeightedOutputsList
 	Description   string
 	BlockInterval int64
 	Sender        sdk.AccAddress
@@ -42,7 +43,8 @@ func (rl RecipeList) String() string {
 func NewRecipe(recipeName, cookbookID, description string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
 	itemInputs ItemInputList, // itemOutputs ItemOutputList,
-	entries WeightedParamList, // newly created param instead of coinOutputs and itemOutputs
+	entries EntriesList,
+	outputs WeightedOutputsList,
 	execTime int64, sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		Name:          recipeName,
@@ -50,6 +52,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 		CoinInputs:    coinInputs,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
+		Outputs:       outputs,
 		BlockInterval: execTime,
 		Description:   description,
 		Sender:        sender,
