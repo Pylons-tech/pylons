@@ -218,12 +218,12 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 	return wpl
 }
 
-func GetToModifyFromRef(ToModifyRef string, t *testing.T) types.ItemModifyParams {
+func GetToModifyFromRef(ref string, t *testing.T) types.ItemModifyParams {
 	var iup types.ItemModifyParams
-	if len(ToModifyRef) == 0 {
+	if len(ref) == 0 {
 		return iup
 	}
-	modBytes := ReadFile(ToModifyRef, t)
+	modBytes := ReadFile(ref, t)
 	err := json.Unmarshal(modBytes, &iup)
 	if err != nil {
 		t.Fatal("error parsing modBytes provided via fixture Bytes=", string(modBytes), "error=", err)
