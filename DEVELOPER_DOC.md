@@ -562,3 +562,17 @@ Item to item trading
     "Sender":"eugen"
 }
 ```
+
+Trading order can be fulfilled by running MsgFulfillTrade
+Sample JSON
+```
+{
+  "TradeID": "ValidTradeIDXXXX",
+  "Sender":"cosmos1mkk2q586y5pz263u5v8dv59723u58059ytprs9",
+  "ItemIDs":[]
+}
+```
+
+Here `TradeID` can be the one fetched from `list_trade` command.
+`Sender` is fulfiller address.
+`ItemIDs` field is used to mention which items of filfiller is going to participate in fulfilling trades.
