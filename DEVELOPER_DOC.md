@@ -1,5 +1,7 @@
 # Introduction
 
+🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿🌿
+
 Pylons eco system consists of cookbooks, items, coin and recipes.
 
 Here's detailed description of how to use cookbooks, items, coins and recipes which are compatible with pylons eco system.
@@ -89,6 +91,7 @@ Sample Recipe JSON
 
 ```
 {
+    "ID": "Submarine-knife-shield-generation-recipe-v0.0.0-1583801800",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./recipes/submarine/item_input/knife_lv1.json",
@@ -116,6 +119,9 @@ Sample Recipe JSON
     "BlockInterval":"0"
 }
 ```
+
+When creating recipe, on MsgCreateRecipe, ID field is optional.
+If ID field is provided, it will be using the provided ID and if not, just generate a new ID.
 
 ### ItemInputs
 This field is showing required items to run recipe.
@@ -434,8 +440,139 @@ e.g. on above, ResultEntries `[0, 1]` means javecoin + javelin, `[1]` means jave
 
 ## Execution of recipes
 
-TODO: should add description here
+Sampe Execution JSON
+```
+{
+    "RecipeID": "Submarine-knife-shield-generation-recipe-v0.0.0-1583801800",
+    "Sender":"cosmos1mkk2q586y5pz263u5v8dv59723u58059ytprs9",
+    "ItemIDs":[]
+}
+```
+
+When running recipes, it needs to provide recipe executor address, RecipeID and ItemIDs which participate in recipe execution.
+RecipeID should be valid ID of recipe which is returned when creating recipe or one which is returned by list_recipes command.
+
+The result of excution could be two cases.
+1. Not delayed recipe
+When not delayed recipes run where BlockInterval is 0, it provide results directly in result's output field.
+
+| No | Field   | type       | sample                             | description                                          |
+|----|---------|------------|------------------------------------|------------------------------------------------------|
+| 1  | Message | String     | "Successfully executed the recipe" | Execution result message                             |
+| 2  | Status  | String     | "Success"                          | Execution result status                              |
+| 3  | Output  | byte array | char, 200 gold, goblin ear         | Output is providing the result of execution as JSON. |
+
+Output is an array of ExecuteRecipeSerialize and it looks like below.
+
+| No | Field  | type   | sample                     | description                                    |
+|----|--------|--------|----------------------------|------------------------------------------------|
+| 1  | Type   | String | COIN or ITEM               | type of output                                 |
+| 2  | Coin   | String | loudcoin                   | generated coin name, valid when type is COIN   |
+| 3  | Amount | int64  | char, 200 gold, goblin ear | generated coin amount, valid when type is COIN |
+| 4  | ItemID | String | "itemIDXXXX"               | generated item ID, valid when type is ITEM     |
+
+2. Delayed recipe
+When delayed recipes run where BlockInterval is more than 1, user should run MsgCheckExecution using the ExecID returned by execution of recipe.
+Result of check execution is same as Not delayed recipe execution
+
+Sample check execution JSON
+```
+{
+    "PayToComplete": false,
+    "ExecID": "ValidExecIDXXXX",
+    "Sender":"cosmos1mkk2q586y5pz263u5v8dv59723u58059ytprs9"
+}
+```
+
+For delayed recipes which can take very long time, user can pay for the waiting time and get the result done before waiting.
+PayToComplete is the option for that.
 
 ## Trading
 
-TODO: should add description here
+Trading consists of order creation by using MsgCreateTrade and order execution by using MsgFulfillTrade.
+
+Order creator can set CoinInputs for the coin he want to give on this trading.
+Order creator can set ItemInputs for the items he want to give on this trading.
+Order creator can set CoinOutputs for the coin he want to receive on this trading.
+Order creator can set ItemOutputs for the item he want to receive on this trading.
+
+Tradings by example
+
+Coin to coin trading
+```
+{
+  "CoinInputs":[
+      {
+          "Coin": "pylon",
+          "Count": "1"
+      }
+  ],
+  "ItemInputRefs": [],
+  "CoinOutputs": [{
+      "denom":"eugencoin",
+      "amount": "200"
+  }],
+  "ItemOutputNames": [],
+  "ExtraInfo":"coin to coin trading",
+  "Sender":"eugen"  
+}
+```
+Coin to item trading
+```
+{
+  "CoinInputs":[
+      {
+          "Coin": "pylon",
+          "Count": "1"
+      }
+  ],
+  "ItemInputRefs": null,
+  "CoinOutputs": null,
+  "ItemOutputNames": ["Trading Knife v1"],
+  "ExtraInfo":"coin to item trading",
+  "Sender":"eugen"
+}
+```
+Item to coin trading
+```
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./trades/item_input/trading_knife_v3.json"
+    ],
+    "CoinOutputs": [{
+        "denom":"eugencoin",
+        "amount": "200"
+    }],
+    "ItemOutputNames": [],
+    "ExtraInfo":"item to coin trading",
+    "Sender":"eugen"
+}
+```
+Item to item trading
+```
+{
+    "CoinInputs":[],
+    "ItemInputRefs": [
+        "./trades/item_input/trading_knife_v4.json"
+    ],
+    "CoinOutputs": [],
+    "ItemOutputNames": ["Trading Knife v2"],
+    "ExtraInfo":"item to item trading",
+    "Sender":"eugen"
+}
+```
+
+Trading order can be fulfilled by running MsgFulfillTrade
+Sample JSON
+```
+{
+  "TradeID": "ValidTradeIDXXXX",
+  "Sender":"cosmos1mkk2q586y5pz263u5v8dv59723u58059ytprs9",
+  "ItemIDs":[]
+}
+```
+
+Here `TradeID` can be the one fetched from `list_trade` command.
+`Sender` is fulfiller address.
+`ItemIDs` field is used to mention which items of filfiller is going to participate in fulfilling trades.
