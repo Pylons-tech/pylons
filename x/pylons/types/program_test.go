@@ -39,6 +39,11 @@ func TestProgramWorkAsExpected(t *testing.T) {
 					[]*exprpb.Type{decls.Int, decls.Int},
 					decls.Int),
 			),
+			decls.NewFunction("min_int",
+				decls.NewOverload("min_int",
+					[]*exprpb.Type{decls.Int, decls.Int},
+					decls.Int),
+			),
 		),
 	)
 	t.Log("NewEnv.err", err)
@@ -67,6 +72,17 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		Operator: "multiply_int_int",
 		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
 			return types.Int(lhs.Value().(int64) * rhs.Value().(int64))
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "min_int",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := lhs.Value().(int64)
+			rgtInt64 := rhs.Value().(int64)
+			if lftInt64 > rgtInt64 {
+				return types.Int(rgtInt64)
+			}
+			return types.Int(lftInt64)
 		},
 	})
 
@@ -110,6 +126,12 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	val64, err = ec.EvalInt64(`multiply(11, 12)`)
 	t.Log(`multiply(11, 12)`, val64, err)
 	require.True(t, val64 == 132)
+	require.True(t, err == nil)
+
+	// multiply function test with 2 param
+	val64, err = ec.EvalInt64(`min_int(10, 11)`)
+	t.Log(`min_int(10, 11)`, val64, err)
+	require.True(t, val64 == 10)
 	require.True(t, err == nil)
 
 	// int type conversion test

@@ -385,8 +385,23 @@ Example:
 ```
 rand_int(10)
 ```
-
 Above code is for generation of random number from 1 - 10.
+
+- `min_int` function
+Usecase: get minimum value from two integer values
+Example:
+```
+min_int(10, 11)
+```
+Above code's return value is 10
+
+- `ax_int` function
+Usecase: get maximum value from two integer values
+Example:
+```
+max_int(10, 11)
+```
+Above code's return value is 11
 
 ### Outputs
 
