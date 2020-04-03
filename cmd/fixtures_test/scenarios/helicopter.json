@@ -433,7 +433,7 @@
                     "owner": "michael",
                     "items": [
                         {
-                            "stringValues": { "Name": "Shield",  "LastName": "Program Merged Shield" },
+                            "stringValues": { "Name": "HShield",  "LastName": "Program Merged Shield" },
                             "dblValues": { "defense": "3.0" },
                             "longValues": { "level": 3 }
                         }

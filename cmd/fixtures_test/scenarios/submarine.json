@@ -44,14 +44,13 @@
         }
     },
     {
-        "ID": "KNIFE_ITEM_CREATION_2",
+        "ID": "KNIFE2_ITEM_CREATION",
         "runAfter": {
             "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/submarine/knife.json",
-        "paramsRefDescription": "here Sender param should be translated from account name to account address",
+        "paramsRef": "./items/submarine/knife2.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -236,7 +235,7 @@
     {
         "ID": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE_WRONG_INPUTS_COUNT",
         "runAfter": {
-            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE", "KNIFE_ITEM_CREATION_2"],
+            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE", "KNIFE2_ITEM_CREATION"],
             "blockWait": 0
         },
         "action": "execute_recipe",

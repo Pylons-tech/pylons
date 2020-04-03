@@ -14,7 +14,7 @@
         }
     ],
     "Strings":[
-        { "Key":"Name", "Value":"Shield", "Rate":"1.0" },
+        { "Key":"Name", "Value":"HShield", "Rate":"1.0" },
         { "Key":"LastName", "Value":"Program Merged Shield", "Rate":"1.0" }
     ]
 }
