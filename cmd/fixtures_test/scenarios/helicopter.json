@@ -387,8 +387,7 @@
             "precondition": [
                 "CREATE_HELI_KNIFE_LV1", 
                 "CREATE_HELI_KNIFE_LV2",
-                "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE",
-                "EXECUTE_HELI_COIN_RECIPE"
+                "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE"
             ],
             "blockWait": 0
         },
@@ -404,8 +403,8 @@
                     "owner": "michael",
                     "coins": [
                         {
-                            "denom": "helicoin",
-                            "amount": 31
+                            "denom": "hllgcoin",
+                            "amount": 30
                         }
                     ]
                 }
