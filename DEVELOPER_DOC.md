@@ -395,7 +395,7 @@ min_int(10, 11)
 ```
 Above code's return value is 10
 
-- `ax_int` function
+- `max_int` function
 Usecase: get maximum value from two integer values
 Example:
 ```
