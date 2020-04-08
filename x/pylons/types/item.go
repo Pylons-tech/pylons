@@ -36,6 +36,7 @@ type Item struct {
 	Sender        sdk.AccAddress
 	OwnerRecipeID string
 	Tradable      bool
+	LastUpdate    int64
 }
 
 // ItemList is a list of items
@@ -140,7 +141,7 @@ func (it Item) MatchItemInput(other ItemInput) bool {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress) *Item {
+func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, BlockHeight int64) *Item {
 	item := &Item{
 		CookbookID: cookbookID,
 		Doubles:    doubles,
@@ -148,7 +149,8 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Strings:    strings,
 		Sender:     sender,
 		// By default all items are tradable
-		Tradable: true,
+		Tradable:   true,
+		LastUpdate: BlockHeight,
 	}
 	item.ID = item.KeyGen()
 	return item
