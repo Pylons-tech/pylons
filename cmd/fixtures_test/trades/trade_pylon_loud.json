@@ -1,0 +1,16 @@
+{
+    "CoinInputs":[
+        {
+            "Coin": "pylon",
+            "Count": "1"
+        }
+    ],
+    "ItemInputRefs": [],
+    "CoinOutputs": [{
+        "denom":"loudcoin",
+        "amount": "200"
+    }],
+    "ItemOutputNames": [],
+    "ExtraInfo":"pylon to loud trading",
+    "Sender":"eugen"
+  }

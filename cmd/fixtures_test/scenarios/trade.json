@@ -136,6 +136,40 @@
         }
     },
     {
+        "ID": "CREATE_PYLON_LOUD_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_pylon_loud.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "trades": ["pylon to loud trading"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "DISABLE_PYLON_LOUD_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_PYLON_LOUD_TRADE"],
+            "blockWait": 0
+        },
+        "action": "disable_trade",
+        "paramsRef": "./disable_trades/trade_pylon_loud.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            }
+        }
+    },
+    {
         "ID": "FULFILL_COIN_COIN_TRADE",        
         "runAfter": {
             "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_COIN_COIN_TRADE"],
