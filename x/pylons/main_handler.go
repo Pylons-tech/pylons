@@ -40,6 +40,10 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 			return handlers.HandlerMsgCreateTrade(ctx, keeper, msg)
 		case msgs.MsgFulfillTrade:
 			return handlers.HandlerMsgFulfillTrade(ctx, keeper, msg)
+		case msgs.MsgDisableTrade:
+			return handlers.HandlerMsgDisableTrade(ctx, keeper, msg)
+		case msgs.MsgEnableTrade:
+			return handlers.HandlerMsgEnableTrade(ctx, keeper, msg)
 		default:
 			errMsg := fmt.Sprintf("unrecognized pylons Msg type: %v", msg.Type())
 			return sdk.ErrUnknownRequest(errMsg).Result()
