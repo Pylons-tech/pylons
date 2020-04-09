@@ -232,6 +232,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 }
 
 func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
+	varDefs = append(varDefs, decls.NewIdent(prefix+"lastUpdate", decls.Int, nil))
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 
 	for _, dbli := range item.Doubles {
@@ -286,7 +287,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 		),
 		decls.NewFunction("block_since",
 			decls.NewOverload("block_since",
-				[]*exprpb.Type{decls.Int, decls.Int},
+				[]*exprpb.Type{decls.Int},
 				decls.Int),
 		),
 	)
@@ -321,7 +322,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 				return celTypes.Int(lftInt64)
 			},
 		}, &functions.Overload{
-			// operator for 2 param
+			// operator for 1 param
 			Operator: "block_since",
 			Unary: func(arg ref.Val) ref.Val {
 				return celTypes.Int(p.ctx.BlockHeight() - arg.Value().(int64))
