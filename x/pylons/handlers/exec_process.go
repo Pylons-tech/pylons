@@ -226,40 +226,47 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
+	targetItem.LastUpdate = p.ctx.BlockHeight()
 
 	return &targetItem, nil
+}
+
+func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
+	varDefs = append(varDefs, decls.NewIdent(prefix+"lastUpdate", decls.Int, nil))
+	variables[prefix+"lastUpdate"] = item.LastUpdate
+
+	for _, dbli := range item.Doubles {
+		varDefs = append(varDefs, decls.NewIdent(prefix+dbli.Key, decls.Double, nil))
+		variables[prefix+dbli.Key] = dbli.Value.Float()
+	}
+	for _, inti := range item.Longs {
+		varDefs = append(varDefs, decls.NewIdent(prefix+inti.Key, decls.Int, nil))
+		variables[prefix+inti.Key] = inti.Value
+	}
+	for _, stri := range item.Strings {
+		varDefs = append(varDefs, decls.NewIdent(prefix+stri.Key, decls.String, nil))
+		variables[prefix+stri.Key] = stri.Value
+	}
+	return varDefs, variables
 }
 
 func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
 	varDefs := [](*exprpb.Decl){}
 	variables := map[string]interface{}{}
+
+	varDefs = append(varDefs, decls.NewIdent("lastBlockHeight", decls.Int, nil))
+	variables["lastBlockHeight"] = p.ctx.BlockHeight()
+
 	for idx, item := range p.matchedItems {
 		iPrefix := fmt.Sprintf("input%d.", idx)
-		for _, dbli := range item.Doubles {
-			varDefs = append(varDefs, decls.NewIdent(iPrefix+dbli.Key, decls.Double, nil))
-			variables[iPrefix+dbli.Key] = dbli.Value.Float() // input0.attack
-			if idx == 0 {
-				varDefs = append(varDefs, decls.NewIdent(dbli.Key, decls.Double, nil))
-				variables[dbli.Key] = dbli.Value.Float() // attack
-			}
-		}
-		for _, inti := range item.Longs {
-			varDefs = append(varDefs, decls.NewIdent(iPrefix+inti.Key, decls.Int, nil))
-			variables[iPrefix+inti.Key] = inti.Value // input0.level
-			if idx == 0 {
-				varDefs = append(varDefs, decls.NewIdent(inti.Key, decls.Int, nil))
-				variables[inti.Key] = inti.Value // level
-			}
-		}
-		for _, stri := range item.Strings {
-			varDefs = append(varDefs, decls.NewIdent(iPrefix+stri.Key, decls.String, nil))
-			variables[iPrefix+stri.Key] = stri.Value // input0.name
-			if idx == 0 {
-				varDefs = append(varDefs, decls.NewIdent(stri.Key, decls.String, nil))
-				variables[stri.Key] = stri.Value // name
-			}
-		}
+
+		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix, item) // input0.level, input1.attack, input2.HP
+	}
+
+	if len(p.matchedItems) > 0 {
+		// first matched item
+		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.matchedItems[0]) // HP, level, attack
 	}
 
 	varDefs = append(varDefs,
@@ -277,7 +284,13 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			decls.NewOverload("max_int",
 				[]*exprpb.Type{decls.Int, decls.Int},
 				decls.Int),
-		))
+		),
+		decls.NewFunction("block_since",
+			decls.NewOverload("block_since",
+				[]*exprpb.Type{decls.Int},
+				decls.Int),
+		),
+	)
 
 	funcs := cel.Functions(
 		&functions.Overload{
@@ -307,6 +320,12 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 					return celTypes.Int(rgtInt64)
 				}
 				return celTypes.Int(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 1 param
+			Operator: "block_since",
+			Unary: func(arg ref.Val) ref.Val {
+				return celTypes.Int(p.ctx.BlockHeight() - arg.Value().(int64))
 			},
 		})
 

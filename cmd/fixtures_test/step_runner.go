@@ -350,3 +350,47 @@ func RunFulfillTrade(step FixtureStep, t *testing.T) {
 		}
 	}
 }
+
+func RunDisableTrade(step FixtureStep, t *testing.T) {
+
+	if step.ParamsRef != "" {
+		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
+		newByteValue := UpdateSenderName(byteValue, t)
+		// translate extra info to trade id
+		newByteValue = UpdateTradeExtraInfoToID(newByteValue, t)
+
+		var trdType struct {
+			TradeID string
+			Sender  sdk.AccAddress
+		}
+
+		err := intTest.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+		if err != nil {
+			t.Fatal("error reading using GetAminoCdc ", trdType, err)
+		}
+		t.MustNil(err)
+
+		dsTrdMsg := msgs.NewMsgDisableTrade(trdType.TradeID, trdType.Sender)
+		txhash := intTest.TestTxWithMsgWithNonce(t, dsTrdMsg, trdType.Sender.String(), true)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for disabling trade %+v", err)
+
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+		} else {
+			txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
+			t.MustNil(err)
+			CheckErrorOnTx(txhash, t)
+			resp := handlers.DisableTradeResp{}
+			err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			if err != nil {
+				t.Fatal("failed to parse transaction result txhash=", txhash)
+			}
+			t.MustTrue(resp.Status == step.Output.TxResult.Status)
+			if len(step.Output.TxResult.Message) > 0 {
+				t.MustTrue(resp.Message == step.Output.TxResult.Message)
+			}
+		}
+	}
+}

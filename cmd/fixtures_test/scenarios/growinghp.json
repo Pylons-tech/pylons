@@ -1,0 +1,107 @@
+[
+    {
+        "ID": "CREATE_GROWINGHP_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/growinghp.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["growinghp"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_GROWINGHP_CHARACTER",  
+        "runAfter": {
+            "precondition": ["CREATE_GROWINGHP_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/growinghp/character.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "GrowingHPCharacter" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_CHARACTER_RESTORE_HEALTH_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_GROWINGHP_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/growinghp/restore_health.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Growing HP Character Health Restore Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_CHARACTER_RESTORE_HEALTH_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_CHARACTER_RESTORE_HEALTH_RECIPE", "CREATE_GROWINGHP_CHARACTER"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./recipes/growinghp/executions/restore_health.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "scheduled the recipe"
+            },
+            "property": []
+        }
+    },
+    {
+        "ID": "CHECK_EXECUTION_CHARACTER_RESTORE_HEALTH_RECIPE",
+        "runAfter": {
+            "precondition": ["EXECUTE_CHARACTER_RESTORE_HEALTH_RECIPE"],
+            "blockWait": 2
+        },
+        "action": "check_execution",
+        "paramsRef": "./recipes/growinghp/check_executions/restore_health.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "GrowingHPCharacter" }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]

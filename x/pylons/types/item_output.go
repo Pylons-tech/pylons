@@ -95,8 +95,9 @@ func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvColle
 	if err != nil {
 		return nil, err
 	}
+	lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
 
-	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender), nil
+	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender, lastBlockHeight), nil
 }
 
 func (io *ItemOutput) MarshalJSON() ([]byte, error) {
