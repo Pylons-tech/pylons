@@ -35,15 +35,15 @@ func (msg MsgSetItemFieldString) ValidateBasic() sdk.Error {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
 	}
 
-	if len(msg.ItemID) > 0 {
+	if len(msg.ItemID) == 0 {
 		return sdk.ErrUnknownRequest("item id length should be more than 0")
 	}
 
-	if len(msg.Field) > 0 {
+	if len(msg.Field) == 0 {
 		return sdk.ErrUnknownRequest("field length should be more than 0")
 	}
 
-	if len(msg.Value) > 0 {
+	if len(msg.Value) == 0 {
 		return sdk.ErrUnknownRequest("value length should be more than 0")
 	}
 	return nil

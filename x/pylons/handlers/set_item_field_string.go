@@ -37,13 +37,13 @@ func HandleMsgSetItemFieldString(ctx sdk.Context, keeper keep.Keeper, msg msgs.M
 
 	kID, ok := item.FindStringKey(msg.Field)
 	if !ok {
-		return errInternal(errors.New("field provided does not existing within the item"))
+		return errInternal(errors.New("Provided field does not exist within the item"))
 	}
 
 	item.Strings[kID].Value = msg.Value
 
 	if err := keeper.SetItem(ctx, item); err != nil {
-		return errInternal(errors.New("error updating item inside keeper"))
+		return errInternal(errors.New("Error updating item inside keeper"))
 	}
 
 	return marshalJson(CheckExecutionResp{
