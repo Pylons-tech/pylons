@@ -259,6 +259,8 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 		switch step.Action {
 		case "fiat_item":
 			RunFiatItem(step, t)
+		case "set_item_field_string":
+			RunSetItemFieldString(step, t)
 		case "create_cookbook":
 			RunCreateCookbook(step, t)
 		case "create_recipe":

@@ -15,10 +15,10 @@ func TestSetItemFieldStringViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name       string
-		itemName   string
-		fieldName  string
-		fieldValue string
+		name     string
+		itemName string
+		field    string
+		value    string
 	}{
 		{
 			"basic flow test",
@@ -37,7 +37,7 @@ func TestSetItemFieldStringViaCLI(originT *originT.T) {
 			t.MustNil(err)
 			txhash := TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgSetItemFieldString(itemID, tc.fieldName, tc.fieldValue, sdkAddr),
+				msgs.NewMsgSetItemFieldString(itemID, tc.field, tc.value, sdkAddr),
 				"eugen",
 				false,
 			)
