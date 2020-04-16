@@ -5,6 +5,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -37,7 +38,7 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 		case queriers.KeyListTrade:
 			return queriers.ListTrade(ctx, path[1:], req, keeper)
 		default:
-			return nil, sdk.ErrUnknownRequest("unknown pylons query endpoint")
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown pylons query endpoint")
 		}
 	}
 }
