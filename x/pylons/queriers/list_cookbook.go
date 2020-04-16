@@ -4,6 +4,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -13,21 +14,21 @@ const (
 )
 
 // ListCookbook returns a cookbook based on the cookbook id
-func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 	if len(path) == 0 {
-		return nil, sdk.ErrInternal("no address is provided in path")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
 	addr := path[0]
 	var cookbookList types.CookbookList
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	cookbooks, err := keeper.GetCookbookBySender(ctx, accAddr)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	cookbookList = types.CookbookList{
@@ -36,7 +37,7 @@ func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper 
 
 	cbl, err := keeper.Cdc.MarshalJSON(cookbookList)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return cbl, nil
