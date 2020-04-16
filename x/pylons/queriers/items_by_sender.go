@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -14,20 +15,20 @@ const (
 )
 
 // ItemsBySender returns all items based on the sender address
-func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 	if len(path) == 0 {
-		return nil, sdk.ErrInternal("no sender is provided in path")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no sender is provided in path")
 	}
 	sender := path[0]
 	senderAddr, err := sdk.AccAddressFromBech32(sender)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	items, err := keeper.GetItemsBySender(ctx, senderAddr)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	itemResp := ItemResp{
@@ -36,7 +37,7 @@ func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 	// if we cannot find the value then it should return an error
 	mItems, err := json.Marshal(itemResp)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return mItems, nil

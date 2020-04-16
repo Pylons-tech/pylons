@@ -6,6 +6,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // SetCookbook sets the cookbook with the name as the key
@@ -55,7 +56,7 @@ func (k Keeper) GetCookbookBySender(ctx sdk.Context, sender sdk.AccAddress) ([]t
 		mCB := iterator.Value()
 		err := json.Unmarshal(mCB, &cookbook)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 
 		cookbooks = append(cookbooks, cookbook)

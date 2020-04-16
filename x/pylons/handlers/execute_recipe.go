@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -28,15 +29,15 @@ type ExecuteRecipeScheduleOutput struct {
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
-func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) sdk.Result {
+func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) (*sdk.Result, error) {
 	err := msg.ValidateBasic()
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	recipe, err2 := keeper.GetRecipe(ctx, msg.RecipeID)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe}
@@ -47,12 +48,12 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	}
 
 	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
-		return sdk.ErrInternal("the item IDs count doesn't match the recipe input").Result()
+		return nil, errInternal(errors.New("the item IDs count doesn't match the recipe input"))
 	}
 
 	err2 = p.SetMatchedItemsFromExecMsg(msg)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 	// TODO: validate 1-1 correspondence for item input and output - check ids
 
@@ -63,7 +64,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		for _, item := range p.matchedItems {
 			item.OwnerRecipeID = recipe.ID
 			if err := keeper.SetItem(ctx, item); err != nil {
-				return sdk.ErrInternal("error updating item's owner recipe").Result()
+				return nil, errInternal(errors.New("error updating item's owner recipe"))
 			}
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
@@ -73,13 +74,13 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		err2 := keeper.SetExecution(ctx, exec)
 
 		if err2 != nil {
-			return errInternal(err2)
+			return nil, errInternal(err2)
 		}
 		outputSTR, err3 := json.Marshal(ExecuteRecipeScheduleOutput{
 			ExecID: exec.ID,
 		})
 		if err3 != nil {
-			return errInternal(err2)
+			return nil, errInternal(err2)
 		}
 		return marshalJson(ExecuteRecipeResp{
 			Message: "scheduled the recipe",
@@ -88,18 +89,18 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		})
 	}
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
-		return sdk.ErrInternal("insufficient coin balance").Result()
+		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
-	_, _, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
+	_, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	outputSTR, err2 := p.Run(msg.Sender)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	return marshalJson(ExecuteRecipeResp{

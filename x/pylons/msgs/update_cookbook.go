@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgUpdateCookbook defines a UpdateCookbook message
@@ -36,26 +37,27 @@ func (msg MsgUpdateCookbook) Route() string { return "pylons" }
 func (msg MsgUpdateCookbook) Type() string { return "update_cookbook" }
 
 // ValidateBasic validates the Msg
-func (msg MsgUpdateCookbook) ValidateBasic() sdk.Error {
+func (msg MsgUpdateCookbook) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	if msg.ID == "" {
-		return sdk.ErrInternal("the id of the cookbook should not be blank")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the id of the cookbook should not be blank")
 	}
 
 	if len(msg.Description) < 20 {
-		return sdk.ErrInternal("the description should have more than 20 characters")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
 	if err := msg.SupportEmail.Validate(); err != nil {
-		return sdk.ErrInternal(err.Error())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err := msg.Version.Validate(); err != nil {
-		return sdk.ErrInternal(err.Error())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return nil

@@ -4,6 +4,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 type UpdateRecipeResponse struct {
@@ -11,22 +12,22 @@ type UpdateRecipeResponse struct {
 }
 
 // HandlerMsgUpdateRecipe is used to update recipe by a developer
-func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateRecipe) sdk.Result {
+func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateRecipe) (*sdk.Result, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	rc, err2 := keeper.GetRecipe(ctx, msg.ID)
 
 	// only the original sender (owner) of the cookbook can update the cookbook
 	if !rc.Sender.Equals(msg.Sender) {
-		return sdk.ErrUnauthorized("the owner of the recipe is different then the current sender").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the recipe is different then the current sender")
 	}
 
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	rc.Description = msg.Description
@@ -38,7 +39,7 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	rc.Name = msg.Name
 
 	if err := keeper.UpdateRecipe(ctx, msg.ID, rc); err != nil {
-		return errInternal(err)
+		return nil, errInternal(err)
 	}
 
 	return marshalJson(UpdateRecipeResponse{
