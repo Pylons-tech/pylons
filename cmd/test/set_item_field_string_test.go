@@ -55,7 +55,7 @@ func TestSetItemFieldStringViaCLI(originT *originT.T) {
 			items, err := ListItemsViaCLI("")
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok := FindItemFromArrayByName(items, tc.fieldValue, false)
+			_, ok := FindItemFromArrayByName(items, tc.value, false)
 			t.MustTrue(ok)
 		})
 	}
