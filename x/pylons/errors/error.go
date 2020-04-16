@@ -1,3 +1,0 @@
-package errors
-
-func ErrInternal()

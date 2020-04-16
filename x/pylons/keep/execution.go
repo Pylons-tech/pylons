@@ -6,6 +6,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // SetExecution sets a exec in the key store
@@ -43,7 +44,7 @@ func (k Keeper) GetExecutionsBySender(ctx sdk.Context, sender sdk.AccAddress) ([
 		mExec := iter.Value()
 		err := json.Unmarshal(mExec, &exec)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		execs = append(execs, exec)
 	}

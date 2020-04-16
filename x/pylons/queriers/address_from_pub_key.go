@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
@@ -15,16 +16,16 @@ const (
 )
 
 // AddrFromPubKey returns a bech32 public address from the public key
-func AddrFromPubKey(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func AddrFromPubKey(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 
 	if len(path) < 1 {
-		return nil, sdk.ErrInternal("The hex pub key not provided")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "The hex pub key not provided")
 	}
 	hexPubKey := path[0]
 
 	pubKeyBytes, err := hex.DecodeString(hexPubKey)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	var pubKeyBytes33 [33]byte
@@ -37,7 +38,7 @@ func AddrFromPubKey(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 	// if we cannot find the value then it should return an error
 	bz, err := keeper.Cdc.MarshalJSON(addrResp)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return bz, nil

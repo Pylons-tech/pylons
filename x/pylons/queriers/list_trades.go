@@ -6,7 +6,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
+
 	db "github.com/tendermint/tm-db"
 )
 
@@ -16,7 +18,7 @@ const (
 )
 
 // ListTrade returns a trade based on the trade id
-func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 
 	var tradeList types.TradeList
 	var trades []types.Trade
@@ -27,7 +29,7 @@ func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper kee
 		addr := path[0]
 		senderAccAddress, err := sdk.AccAddressFromBech32(addr)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		iterator = keeper.GetTradesIteratorByCreator(ctx, senderAccAddress)
 	} else {
@@ -55,7 +57,7 @@ func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper kee
 
 	rcpl, err := keeper.Cdc.MarshalJSON(tradeList)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return rcpl, nil

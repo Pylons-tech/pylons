@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 type MsgFiatItem struct {
@@ -33,9 +34,10 @@ func (msg MsgFiatItem) Route() string { return "pylons" }
 func (msg MsgFiatItem) Type() string { return "fiat_item" }
 
 // ValidateBasic validates the Msg
-func (msg MsgFiatItem) ValidateBasic() sdk.Error {
+func (msg MsgFiatItem) ValidateBasic() error {
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	return nil

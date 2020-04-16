@@ -8,11 +8,12 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // NewHandler returns a handler for "pylons" type messages.
 func NewHandler(keeper keep.Keeper) sdk.Handler {
-	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
+	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		switch msg := msg.(type) {
 		case msgs.MsgGetPylons:
 			return handlers.HandleMsgGetPylons(ctx, keeper, msg)
@@ -47,8 +48,8 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgEnableTrade:
 			return handlers.HandlerMsgEnableTrade(ctx, keeper, msg)
 		default:
-			errMsg := fmt.Sprintf("unrecognized pylons Msg type: %v", msg.Type())
-			return sdk.ErrUnknownRequest(errMsg).Result()
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, fmt.Sprintf("Unrecognized pylons Msg type: %v", msg.Type()))
+
 		}
 	}
 }

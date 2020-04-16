@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgGetPylons defines a GetPylons message
@@ -25,13 +26,13 @@ func (msg MsgGetPylons) Route() string { return "pylons" }
 // Type should return the action
 func (msg MsgGetPylons) Type() string { return "get_pylons" }
 
-func (msg MsgGetPylons) ValidateBasic() sdk.Error {
+func (msg MsgGetPylons) ValidateBasic() error {
 
 	if msg.Requester.Empty() {
-		return sdk.ErrInvalidAddress(msg.Requester.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
 	}
 	if !msg.Amount.IsAllPositive() {
-		return sdk.ErrUnknownRequest("Amount cannot be less than 0/negative")
+		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "Amount cannot be less than 0/negative")
 	}
 	return nil
 }
