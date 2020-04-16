@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 type CreateCBResponse struct {
@@ -14,11 +16,11 @@ type CreateCBResponse struct {
 }
 
 // HandlerMsgCreateCookbook is used to create cookbook by a developer
-func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) sdk.Result {
+func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) (*sdk.Result, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	var fee sdk.Coins
@@ -27,11 +29,11 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	} else if msg.Level == types.PremiumTier.Level {
 		fee = types.PremiumTier.Fee
 	} else {
-		return sdk.ErrInternal("invalid level").Result()
+		return nil, errInternal(errors.New("invalid level"))
 	}
 
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, fee) {
-		return sdk.ErrInsufficientCoins("the user doesn't have enough pylons").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
 	keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, fee)
@@ -44,13 +46,13 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 
 	if msg.CookbookID != "" {
 		if keeper.HasCookbook(ctx, msg.CookbookID) {
-			return errInternal(fmt.Errorf("A cookbook with CookbookID %s already exists", msg.CookbookID))
+			return nil, errInternal(fmt.Errorf("A cookbook with CookbookID %s already exists", msg.CookbookID))
 		}
 		cb.ID = msg.CookbookID
 	}
 
 	if err := keeper.SetCookbook(ctx, cb); err != nil {
-		return errInternal(err)
+		return nil, errInternal(err)
 	}
 
 	return marshalJson(CreateCBResponse{

@@ -7,6 +7,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // SetItem sets a item in the key store
@@ -35,7 +36,7 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 		mIT := iter.Value()
 		err := json.Unmarshal(mIT, &item)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		if strings.Contains(item.Sender.String(), sender.String()) { // considered empty sender
 			items = append(items, item)
@@ -69,7 +70,7 @@ func (k Keeper) ItemsByCookbook(ctx sdk.Context, cookbookID string) ([]types.Ite
 		mIT := iter.Value()
 		err := json.Unmarshal(mIT, &item)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 
 		if cookbookID == item.CookbookID {

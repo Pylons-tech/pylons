@@ -4,6 +4,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -13,9 +14,9 @@ const (
 )
 
 // ListRecipe returns a recipe based on the recipe id
-func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 	if len(path) == 0 {
-		return nil, sdk.ErrInternal("no address is provided in path")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
 	addr := path[0]
 	var recipeList types.RecipeList
@@ -23,7 +24,7 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if accAddr.Empty() {
@@ -38,7 +39,7 @@ func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper ke
 
 	rcpl, err := keeper.Cdc.MarshalJSON(recipeList)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return rcpl, nil

@@ -6,6 +6,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -30,15 +31,15 @@ func (ir ItemResp) String() string {
 }
 
 // ItemsByCookbook returns a cookbook based on the cookbook id
-func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 	if len(path) == 0 {
-		return nil, sdk.ErrInternal("no cookbook id is provided in path")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no cookbook id is provided in path")
 	}
 	cookbookID := path[0]
 	items, err := keeper.ItemsByCookbook(ctx, cookbookID)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	itemResp := ItemResp{
@@ -48,7 +49,7 @@ func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keep
 	// if we cannot find the value then it should return an error
 	mItems, err := json.Marshal(itemResp)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return mItems, nil

@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // DefaultCostPerBlock the amount of pylons to be charged by default
@@ -47,30 +48,31 @@ func (msg MsgCreateCookbook) Route() string { return "pylons" }
 func (msg MsgCreateCookbook) Type() string { return "create_cookbook" }
 
 // ValidateBasic validates the Msg
-func (msg MsgCreateCookbook) ValidateBasic() sdk.Error {
+func (msg MsgCreateCookbook) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	if len(msg.Name) < 8 {
-		return sdk.ErrInternal("the name of the cookbook should have more than 8 characters")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
 	}
 
 	if len(msg.Description) < 20 {
-		return sdk.ErrInternal("the description should have more than 20 characters")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
 	if err := msg.SupportEmail.Validate(); err != nil {
-		return sdk.ErrInternal(err.Error())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err := msg.Level.Validate(); err != nil {
-		return sdk.ErrInternal(err.Error())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err := msg.Version.Validate(); err != nil {
-		return sdk.ErrInternal(err.Error())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return nil

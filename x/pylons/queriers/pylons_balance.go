@@ -2,10 +2,11 @@ package queriers
 
 import (
 	"encoding/json"
-	
+
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -15,15 +16,15 @@ const (
 )
 
 // PylonsBalance provides balances in pylons
-func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) (res []byte, err sdk.Error) {
+func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) (res []byte, err error) {
 	if len(path) == 0 {
-		return nil, sdk.ErrInternal("no sender is provided in path")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no sender is provided in path")
 	}
 	addr := path[0]
 	accAddr, err1 := sdk.AccAddressFromBech32(addr)
 
 	if err1 != nil {
-		return []byte{}, sdk.ErrInternal(err1.Error())
+		return []byte{}, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err1.Error())
 	}
 	coins := keeper.CoinKeeper.GetCoins(ctx, accAddr)
 

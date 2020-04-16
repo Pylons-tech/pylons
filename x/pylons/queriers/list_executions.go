@@ -5,6 +5,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -29,21 +30,21 @@ func (er ExecResp) String() string {
 }
 
 // ListExecutions lists all the executions based on the sender address
-func ListExecutions(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, sdk.Error) {
+func ListExecutions(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 	if len(path) == 0 {
-		return nil, sdk.ErrInternal("no address is provided in path")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
 
 	sender := path[0]
 	senderAddr, err := sdk.AccAddressFromBech32(sender)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	execs, err := keeper.GetExecutionsBySender(ctx, senderAddr)
 
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	execResp := ExecResp{
@@ -53,7 +54,7 @@ func ListExecutions(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 	// if we cannot find the value then it should return an error
 	mItems, err := keeper.Cdc.MarshalJSON(execResp)
 	if err != nil {
-		return nil, sdk.ErrInternal(err.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return mItems, nil

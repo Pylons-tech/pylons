@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/uuid"
 )
 
@@ -37,10 +38,11 @@ func (msg MsgExecuteRecipe) Route() string { return "pylons" }
 func (msg MsgExecuteRecipe) Type() string { return "execute_recipe" }
 
 // ValidateBasic validates the Msg
-func (msg MsgExecuteRecipe) ValidateBasic() sdk.Error {
+func (msg MsgExecuteRecipe) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	return nil
