@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHandlerMsgSetItemFieldString(t *testing.T) {
+func TestHandlerMsgUpdateItemString(t *testing.T) {
 	mockedCoinInput := keep.SetupTestCoinInput()
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
@@ -97,11 +97,11 @@ func TestHandlerMsgSetItemFieldString(t *testing.T) {
 				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(int64(len(tc.value))))
 			}
 
-			msg := msgs.NewMsgSetItemFieldString(tc.itemID, tc.field, tc.value, sender1)
-			result := HandleMsgSetItemFieldString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
+			result := HandleMsgUpdateItemString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
-				resp := SetItemFieldStringResp{}
+				resp := UpdateItemStringResp{}
 				err := json.Unmarshal(result.Data, &resp)
 
 				if err != nil {

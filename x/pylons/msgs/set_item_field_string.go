@@ -7,15 +7,15 @@ import (
 )
 
 // MsgSendPylons defines a SendPylons message
-type MsgSetItemFieldString struct {
+type MsgUpdateItemString struct {
 	Field  string
 	Value  string
 	Sender sdk.AccAddress
 	ItemID string
 }
 
-func NewMsgSetItemFieldString(ItemID, Field, Value string, Sender sdk.AccAddress) MsgSetItemFieldString {
-	return MsgSetItemFieldString{
+func NewMsgUpdateItemString(ItemID, Field, Value string, Sender sdk.AccAddress) MsgUpdateItemString {
+	return MsgUpdateItemString{
 		ItemID: ItemID,
 		Field:  Field,
 		Value:  Value,
@@ -24,12 +24,12 @@ func NewMsgSetItemFieldString(ItemID, Field, Value string, Sender sdk.AccAddress
 }
 
 // Route should return the name of the module
-func (msg MsgSetItemFieldString) Route() string { return "pylons" }
+func (msg MsgUpdateItemString) Route() string { return "pylons" }
 
 // Type should return the action
-func (msg MsgSetItemFieldString) Type() string { return "set_item_field_string" }
+func (msg MsgUpdateItemString) Type() string { return "update_item_string" }
 
-func (msg MsgSetItemFieldString) ValidateBasic() sdk.Error {
+func (msg MsgUpdateItemString) ValidateBasic() sdk.Error {
 
 	if msg.Sender.Empty() {
 		return sdk.ErrInvalidAddress(msg.Sender.String())
@@ -50,7 +50,7 @@ func (msg MsgSetItemFieldString) ValidateBasic() sdk.Error {
 }
 
 // GetSignBytes encodes the message for signing
-func (msg MsgSetItemFieldString) GetSignBytes() []byte {
+func (msg MsgUpdateItemString) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
@@ -58,6 +58,6 @@ func (msg MsgSetItemFieldString) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-func (msg MsgSetItemFieldString) GetSigners() []sdk.AccAddress {
+func (msg MsgUpdateItemString) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }

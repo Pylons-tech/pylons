@@ -101,7 +101,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 	}
 }
 
-func RunSetItemFieldString(step FixtureStep, t *testing.T) {
+func RunUpdateItemString(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		byteValue := ReadFile(step.ParamsRef, t)
@@ -110,7 +110,7 @@ func RunSetItemFieldString(step FixtureStep, t *testing.T) {
 		// translate item name to item ID
 		newByteValue = UpdateItemIDFromName(newByteValue, false, t)
 
-		var sTypeMsg msgs.MsgSetItemFieldString
+		var sTypeMsg msgs.MsgUpdateItemString
 		err := json.Unmarshal(newByteValue, &sTypeMsg)
 		if err != nil {
 			t.Fatal("error reading using GetAminoCdc ", sTypeMsg, string(newByteValue), err)
@@ -126,7 +126,7 @@ func RunSetItemFieldString(step FixtureStep, t *testing.T) {
 		intTest.ErrValidation(t, "error getting tx result bytes %+v", err)
 
 		CheckErrorOnTx(txhash, t)
-		resp := handlers.SetItemFieldStringResp{}
+		resp := handlers.UpdateItemStringResp{}
 		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 
 		t.Log("txhash=", txhash)

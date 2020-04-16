@@ -9,13 +9,13 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-type SetItemFieldStringResp struct {
+type UpdateItemStringResp struct {
 	Status  string
 	Message string
 }
 
-// HandleMsgSetItemFieldString is used to transact pylons between people
-func HandleMsgSetItemFieldString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSetItemFieldString) sdk.Result {
+// HandleMsgUpdateItemString is used to transact pylons between people
+func HandleMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) sdk.Result {
 
 	err := msg.ValidateBasic()
 

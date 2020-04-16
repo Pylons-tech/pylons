@@ -49,8 +49,8 @@
             "precondition": ["CREATE_UNNAMED_SWORD_LV1"],
             "blockWait": 0
         },
-        "action": "set_item_field_string",
-        "paramsRef": "./setitemfieldstring/rename/rename.json",
+        "action": "update_item_string",
+        "paramsRef": "./updateitemstring/rename/rename.json",
         "output": {
             "txResult": {
                 "status": "Success"

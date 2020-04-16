@@ -10,7 +10,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestSetItemFieldStringViaCLI(originT *originT.T) {
+func TestUpdateItemStringViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
@@ -37,7 +37,7 @@ func TestSetItemFieldStringViaCLI(originT *originT.T) {
 			t.MustNil(err)
 			txhash := TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgSetItemFieldString(itemID, tc.field, tc.value, sdkAddr),
+				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
 				"eugen",
 				false,
 			)
@@ -46,7 +46,7 @@ func TestSetItemFieldStringViaCLI(originT *originT.T) {
 
 			txHandleResBytes, err := GetTxData(txhash, t)
 			t.MustNil(err)
-			resp := handlers.SetItemFieldStringResp{}
+			resp := handlers.UpdateItemStringResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.Message == "successfully updated the item field")
