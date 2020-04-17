@@ -7,11 +7,11 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 )
 
 // DisableRecipeTxBuilder returns the fixtures which can be used to create a disable recipe transaction
@@ -21,7 +21,7 @@ func DisableRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgDisableRecipe("id0001", sender)
 
