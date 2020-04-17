@@ -6,10 +6,18 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
 	"github.com/cosmos/cosmos-sdk/x/bank"
+	distr "github.com/cosmos/cosmos-sdk/x/distribution"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
 	"github.com/cosmos/cosmos-sdk/x/params"
+	"github.com/cosmos/cosmos-sdk/x/slashing"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+	"github.com/cosmos/cosmos-sdk/x/supply"
+	"github.com/cosmos/sdk-tutorials/nameservice/x/nameservice"
 	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons"
@@ -31,79 +39,139 @@ type PylonsApp struct {
 	*bam.BaseApp
 	cdc *codec.Codec
 
-	keyMain           *sdk.KVStoreKey
-	keyAccount        *sdk.KVStoreKey
-	keyPylonsCookbook *sdk.KVStoreKey
-	keyPylonsRecipe   *sdk.KVStoreKey
-	keyPylonsItem     *sdk.KVStoreKey
-	keyFeeCollection  *sdk.KVStoreKey
-	keyParams         *sdk.KVStoreKey
-	keyExecution      *sdk.KVStoreKey
-	keyTrade          *sdk.KVStoreKey
-	tkeyParams        *sdk.TransientStoreKey
+	// keys to access the substores
+	keys  map[string]*sdk.KVStoreKey
+	tkeys map[string]*sdk.TransientStoreKey
 
-	accountKeeper       auth.AccountKeeper
-	bankKeeper          bank.Keeper
-	feeCollectionKeeper auth.FeeCollectionKeeper
-	paramsKeeper        params.Keeper
-	plnKeeper           keep.Keeper
+	// subspaces
+	subspaces map[string]params.Subspace
+
+	// Keepers
+	accountKeeper  auth.AccountKeeper
+	bankKeeper     bank.Keeper
+	stakingKeeper  staking.Keeper
+	slashingKeeper slashing.Keeper
+	distrKeeper    distr.Keeper
+	supplyKeeper   supply.Keeper
+	paramsKeeper   params.Keeper
+	plnKeeper      keep.Keeper
+
+	// Module Manager
+	mm *module.Manager
+
+	// simulation manager
+	sm *module.SimulationManager
 }
 
+// verify app interface at compile time
+var _ simapp.App = (*PylonsApp)(nil)
+
 // NewPylonsApp is a constructor function for PylonsApp
-func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
+func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.BaseApp)) *PylonsApp {
 	// First define the top level codec that will be shared by the different modules
 	cdc := MakeCodec()
 
 	// BaseApp handles interactions with Tendermint through the ABCI protocol
 	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
 
+	bApp.SetAppVersion("v0.0.1")
+
+	keys := sdk.NewKVStoreKeys(bam.MainStoreKey, auth.StoreKey, staking.StoreKey,
+		supply.StoreKey, distr.StoreKey, slashing.StoreKey, params.StoreKey,
+		// pylons keys
+		pylons.KeyPylonsCookbook,
+		pylons.KeyPylonsRecipe,
+		pylons.KeyPylonsItem,
+		pylons.KeyPylonsExecution,
+		pylons.KeyPylonsTrade,
+	)
+
+	tkeys := sdk.NewTransientStoreKeys(params.TStoreKey)
+
 	// Here you initialize your application with the store keys it requires
 	var app = &PylonsApp{
-		BaseApp: bApp,
-		cdc:     cdc,
-
-		keyMain:           sdk.NewKVStoreKey("main"),
-		keyAccount:        sdk.NewKVStoreKey("acc"),
-		keyPylonsCookbook: sdk.NewKVStoreKey("pylons"),
-		keyPylonsRecipe:   sdk.NewKVStoreKey("pylons_recipe"),
-		keyPylonsItem:     sdk.NewKVStoreKey("pylons_item"),
-		keyExecution:      sdk.NewKVStoreKey("pylons_execution"),
-		keyTrade:          sdk.NewKVStoreKey("pylons_trade"),
-		keyFeeCollection:  sdk.NewKVStoreKey("fee_collection"),
-		keyParams:         sdk.NewKVStoreKey("params"),
-		tkeyParams:        sdk.NewTransientStoreKey("transient_params"),
+		BaseApp:   bApp,
+		cdc:       cdc,
+		keys:      keys,
+		tkeys:     tkeys,
+		subspaces: make(map[string]params.Subspace),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
-	app.paramsKeeper = params.NewKeeper(app.cdc, app.keyParams, app.tkeyParams)
+	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey])
+	// Set specific supspaces
+	app.subspaces[auth.ModuleName] = app.paramsKeeper.Subspace(auth.DefaultParamspace)
+	app.subspaces[bank.ModuleName] = app.paramsKeeper.Subspace(bank.DefaultParamspace)
+	app.subspaces[staking.ModuleName] = app.paramsKeeper.Subspace(staking.DefaultParamspace)
+	app.subspaces[distr.ModuleName] = app.paramsKeeper.Subspace(distr.DefaultParamspace)
+	app.subspaces[slashing.ModuleName] = app.paramsKeeper.Subspace(slashing.DefaultParamspace)
 
 	// The AccountKeeper handles address -> account lookups
 	app.accountKeeper = auth.NewAccountKeeper(
 		app.cdc,
-		app.keyAccount,
-		app.paramsKeeper.Subspace(auth.DefaultParamspace),
+		keys[auth.StoreKey],
+		app.subspaces[auth.ModuleName],
 		auth.ProtoBaseAccount,
 	)
 
 	// The BankKeeper allows you perform sdk.Coins interactions
 	app.bankKeeper = bank.NewBaseKeeper(
 		app.accountKeeper,
-		app.paramsKeeper.Subspace(bank.DefaultParamspace),
-		bank.DefaultCodespace,
+		app.subspaces[bank.ModuleName],
+		app.ModuleAccountAddrs(),
 	)
 
-	// The FeeCollectionKeeper collects transaction fees and renders them to the fee distribution module
-	app.feeCollectionKeeper = auth.NewFeeCollectionKeeper(cdc, app.keyFeeCollection)
+	// The SupplyKeeper collects transaction fees and renders them to the fee distribution module
+	app.supplyKeeper = supply.NewKeeper(
+		app.cdc,
+		keys[supply.StoreKey],
+		app.accountKeeper,
+		app.bankKeeper,
+		maccPerms,
+	)
+
+	// The staking keeper
+	stakingKeeper := staking.NewKeeper(
+		app.cdc,
+		keys[staking.StoreKey],
+		app.supplyKeeper,
+		app.subspaces[staking.ModuleName],
+	)
+
+	app.distrKeeper = distr.NewKeeper(
+		app.cdc,
+		keys[distr.StoreKey],
+		app.subspaces[distr.ModuleName],
+		&stakingKeeper,
+		app.supplyKeeper,
+		auth.FeeCollectorName,
+		app.ModuleAccountAddrs(),
+	)
+
+	app.slashingKeeper = slashing.NewKeeper(
+		app.cdc,
+		keys[slashing.StoreKey],
+		&stakingKeeper,
+		app.subspaces[slashing.ModuleName],
+	)
+
+	// register the staking hooks
+	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
+	app.stakingKeeper = *stakingKeeper.SetHooks(
+		staking.NewMultiStakingHooks(
+			app.distrKeeper.Hooks(),
+			app.slashingKeeper.Hooks()),
+	)
 
 	// The pylonsKeeper is the Keeper from the module for this tutorial
 	// It handles interactions with the namestore
 	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
-		app.keyPylonsCookbook,
-		app.keyPylonsRecipe,
-		app.keyPylonsItem,
-		app.keyExecution,
-		app.keyTrade,
+		app.keys[pylons.KeyPylonsCookbook],
+		app.keys[pylons.KeyPylonsRecipe],
+		app.keys[pylons.KeyPylonsItem],
+		app.keys[pylons.KeyPylonsExecution],
+		app.keys[pylons.KeyPylonsTrade],
 		app.cdc,
 	)
 
@@ -115,28 +183,28 @@ func NewPylonsApp(logger log.Logger, db dbm.DB) *PylonsApp {
 		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
 		AddRoute("pylons", pylons.NewHandler(app.plnKeeper))
 
-	// The app.QueryRouter is the main query router where each module registers its routes
-	app.QueryRouter().
-		AddRoute("acc", auth.NewQuerier(app.accountKeeper)).
-		AddRoute("pylons", pylons.NewQuerier(app.plnKeeper))
+	// register all module routes and module queriers
+	app.mm.RegisterRoutes(app.Router(), app.QueryRouter())
 
 	// The initChainer handles translating the genesis.json file into initial state for the network
-	app.SetInitChainer(app.initChainer)
+	app.SetInitChainer(app.InitChainer)
+	app.SetBeginBlocker(app.BeginBlocker)
+	app.SetEndBlocker(app.EndBlocker)
 
-	app.MountStores(
-		app.keyMain,
-		app.keyAccount,
-		app.keyPylonsCookbook,
-		app.keyPylonsRecipe,
-		app.keyFeeCollection,
-		app.keyPylonsItem,
-		app.keyExecution,
-		app.keyTrade,
-		app.keyParams,
-		app.tkeyParams,
+	// The AnteHandler handles signature verification and transaction pre-processing
+	app.SetAnteHandler(
+		auth.NewAnteHandler(
+			app.accountKeeper,
+			app.supplyKeeper,
+			auth.DefaultSigVerificationGasConsumer,
+		),
 	)
 
-	err := app.LoadLatestVersion(app.keyMain)
+	// initialize stores
+	app.MountKVStores(keys)
+	app.MountTransientStores(tkeys)
+
+	err := app.LoadLatestVersion(app.keys[bam.MainStoreKey])
 	if err != nil {
 		tmos.Exit(err.Error())
 	}
@@ -206,11 +274,12 @@ func (app *PylonsApp) ExportAppStateAndValidators() (appState json.RawMessage, v
 // MakeCodec generates the necessary codecs for Amino
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
-	auth.RegisterCodec(cdc)
-	bank.RegisterCodec(cdc)
+
+	ModuleBasics.RegisterCodec(cdc)
 	pylons.RegisterCodec(cdc)
-	staking.RegisterCodec(cdc)
+	vesting.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
+
 	return cdc
 }
