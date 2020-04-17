@@ -21,6 +21,6 @@ func addrFromPubkeyHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

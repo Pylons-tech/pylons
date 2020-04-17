@@ -1,6 +1,7 @@
 package tx
 
 import (
+	"bufio"
 	"errors"
 
 	"github.com/spf13/cobra"
@@ -24,9 +25,10 @@ func SendPylons(cdc *codec.Codec) *cobra.Command {
 		Short: "send pylons of specific amount to the name provided",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			inBuf := bufio.NewReader(cmd.InOrStdin())
+			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
@@ -60,7 +62,7 @@ func SendPylons(cdc *codec.Codec) *cobra.Command {
 
 			cliCtx.PrintResponse = true
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg}, false)
+			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}
 }
