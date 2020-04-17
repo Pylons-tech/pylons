@@ -3,6 +3,7 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -24,7 +25,7 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgCreateRecipe("name", "id001", "", "this has to meet character limits lol",
 			types.GenCoinInputList("wood", 5),
@@ -41,6 +42,6 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		rest.PostProcessResponse(w, cdc, signMsg.Bytes(), cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, signMsg.Bytes())
 	}
 }

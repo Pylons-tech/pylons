@@ -21,6 +21,6 @@ func listRecipesHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

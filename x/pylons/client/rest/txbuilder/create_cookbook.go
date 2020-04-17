@@ -3,6 +3,7 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -22,7 +23,7 @@ func CreateCookbookTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeN
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgCreateCookbook("name", "", "this has to meet character limits lol", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender)
 
@@ -32,6 +33,6 @@ func CreateCookbookTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeN
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		rest.PostProcessResponse(w, cdc, signMsg.Bytes(), cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, signMsg.Bytes())
 	}
 }

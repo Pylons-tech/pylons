@@ -20,7 +20,7 @@ func ItemsBySender(queryRoute string, cdc *codec.Codec) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_sender/%s", queryRoute, accAddr), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_sender/%s", queryRoute, accAddr), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}

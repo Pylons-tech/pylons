@@ -21,6 +21,6 @@ func itemsByCookbookHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }
