@@ -1,6 +1,7 @@
 package txbuilder
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -19,7 +20,7 @@ func SendPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName 
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		recv, err := sdk.AccAddressFromBech32("cosmos13rkt5rzf4gz8dvmwxxxn2kqy6p94hkpgluh8dj")
 
-		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgSendPylons(types.NewPylon(5), sender, recv)
 
@@ -29,6 +30,6 @@ func SendPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName 
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		rest.PostProcessResponse(w, cdc, signMsg.Bytes(), cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, signMsg.Bytes())
 	}
 }

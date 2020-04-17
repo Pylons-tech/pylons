@@ -1,6 +1,7 @@
 package txbuilder
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 
@@ -29,7 +30,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		vars := mux.Vars(r)
 		requester := vars[TxGPRequesterKey]
 		addr, err := sdk.AccAddressFromBech32(requester)
-		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -59,7 +60,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, eGB, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, eGB)
 	}
 }
 

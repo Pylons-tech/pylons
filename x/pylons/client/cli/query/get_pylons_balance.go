@@ -31,7 +31,7 @@ func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return errors.New(err.Error())
 			}
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/balance/%s", queryRoute, info.GetAddress()), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/balance/%s", queryRoute, info.GetAddress()), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}
