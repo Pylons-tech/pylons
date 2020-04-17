@@ -1,6 +1,7 @@
 package txbuilder
 
 import (
+	"bytes"
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -19,7 +20,7 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 	return func(w http.ResponseWriter, r *http.Request) {
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgUpdateRecipe("recipeName", "name", "id001", "this has to meet character limits lol",
 			types.GenCoinInputList("wood", 5),
@@ -35,6 +36,6 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		rest.PostProcessResponse(w, cdc, signMsg.Bytes(), cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, signMsg.Bytes())
 	}
 }

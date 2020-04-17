@@ -45,7 +45,7 @@ func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 	cdc := GetAminoCdc()
 	cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-	txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
+	txBldr := authtxb.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
 	if txBldr.SimulateAndExecute() {
 		txBldr, err = utils.EnrichWithGas(txBldr, cliCtx, messages)
 		if err != nil {

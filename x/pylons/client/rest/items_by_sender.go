@@ -21,6 +21,6 @@ func itemsBySenderHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }
