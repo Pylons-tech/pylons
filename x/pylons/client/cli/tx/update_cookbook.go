@@ -31,9 +31,6 @@ func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
 			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
-			if err := cliCtx.EnsureAccountExists(); err != nil {
-				return err
-			}
 			msgCCB.Sender = cliCtx.GetFromAddress()
 			msgCCB.Version = types.SemVer(tmpVersion)
 			msgCCB.SupportEmail = types.Email(tmpEmail)
@@ -42,8 +39,6 @@ func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			cliCtx.PrintResponse = true
 
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgCCB})
 		},
