@@ -13,7 +13,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/bank"
-	"github.com/cosmos/cosmos-sdk/x/gov/client/cli"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -54,7 +53,7 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 
 // RegisterRESTRoutes rest routes
 func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	rest.RegisterRoutes(ctx, rtr, StoreKey)
+	rest.RegisterRoutes(ctx, rtr, ModuleCdc, StoreKey)
 }
 
 // Get the root query command of this module
@@ -63,7 +62,7 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		Use:   "pylons",
 		Short: "Querying commands for the pylons module",
 	}
-	pylonsQueryCmd.AddCommand(client.GetCommands(
+	pylonsQueryCmd.AddCommand(
 		query.GetPylonsBalance(StoreKey, cdc),
 		query.GetCookbook(StoreKey, cdc),
 		query.GetExecution(StoreKey, cdc),
@@ -73,10 +72,9 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		query.ListRecipes(StoreKey, cdc),
 		query.ItemsBySender(StoreKey, cdc),
 		query.ListExecutions(StoreKey, cdc),
-		query.ListTrade(StoreKey, cdc),
-	)...)
+		query.ListTrade(StoreKey, cdc))
 
-	return cli.GetQueryCmd(StoreKey, cdc)
+	return pylonsQueryCmd
 }
 
 // Get the root tx command of this module
@@ -86,13 +84,12 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		Short: "Pylons transactions subcommands",
 	}
 
-	pylonsTxCmd.AddCommand(client.PostCommands(
+	pylonsTxCmd.AddCommand(
 		tx.GetPylons(cdc),
 		tx.SendPylons(cdc),
 		tx.CreateCookbook(cdc),
 		tx.UpdateCookbook(cdc),
-		tx.FiatItem(cdc),
-	)...)
+		tx.FiatItem(cdc))
 
 	return pylonsTxCmd
 }
