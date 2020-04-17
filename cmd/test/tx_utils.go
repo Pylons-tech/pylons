@@ -15,11 +15,10 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/client/utils"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
 type SuccessTxResp struct {
@@ -46,7 +45,7 @@ func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 	cdc := GetAminoCdc()
 	cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-	txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
+	txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
 	if txBldr.SimulateAndExecute() {
 		txBldr, err = utils.EnrichWithGas(txBldr, cliCtx, messages)
 		if err != nil {
