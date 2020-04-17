@@ -8,11 +8,11 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	// "github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
 )
 
 // CreateCookbook is the client cli command for creating cookbook
@@ -29,12 +29,12 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// This command is automatically setting the sender with --from address
-			// If we set level, version, support_email, tmp_level name and description separately, 
+			// If we set level, version, support_email, tmp_level name and description separately,
 			// it can be very complex, especially for other commands like create_recipe, fiat_item
 
 			cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
 
-			txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 			if err := cliCtx.EnsureAccountExists(); err != nil {
 				return err
@@ -51,7 +51,7 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			
+
 			// msgCCB.Level = types.Level(lvl)
 			// msgCCB.Version = types.SemVer(tmpVersion)
 			// msgCCB.SupportEmail = types.Email(tmpEmail)
