@@ -9,12 +9,11 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/client/utils"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	authtxb "github.com/cosmos/cosmos-sdk/x/auth/client/txbuilder"
+	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 	"github.com/gorilla/mux"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
@@ -30,7 +29,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		vars := mux.Vars(r)
 		requester := vars[TxGPRequesterKey]
 		addr, err := sdk.AccAddressFromBech32(requester)
-		txBldr := authtxb.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
@@ -83,7 +82,7 @@ func GetPrivateKeyFromHex(hexKey string) (*crypto.PrivKeySecp256k1, error) {
 // GPTxBuilder gives all the necessary fixtures for creating a get pylons transaction
 type GPTxBuilder struct {
 	// MsgJSON is the transaction with nil signature
-	SignMsg     authtxb.StdSignMsg
+	SignMsg     auth.StdSignMsg
 	SignTx      auth.StdTx
 	SignerBytes string
 }
