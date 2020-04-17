@@ -27,10 +27,6 @@ func FiatItem(cdc *codec.Codec) *cobra.Command {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
 			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
 
-			if err := cliCtx.EnsureAccountExists(); err != nil {
-				return err
-			}
-
 			byteValue, err := ReadFile(args[0])
 			if err != nil {
 				return err
@@ -45,8 +41,6 @@ func FiatItem(cdc *codec.Codec) *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			cliCtx.PrintResponse = true
 
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgFI})
 		},
