@@ -34,7 +34,7 @@ func GenCoinOnlyEntryRand(coinName string) EntriesList {
 	return EntriesList{
 		CoinOutput{
 			Coin:  coinName,
-			Count: `rand_int(10)`,
+			Count: `rand_int(10)+1`,
 		},
 	}
 }
