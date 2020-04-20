@@ -385,7 +385,7 @@ Example:
 ```
 rand_int(10)
 ```
-Above code is for generation of random number from 1 - 10.
+Above code is for generation of random number from 0 - 9.
 
 - `min_int` function
 Usecase: get minimum value from two integer values
