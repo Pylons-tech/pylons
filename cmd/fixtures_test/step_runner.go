@@ -101,6 +101,39 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 	}
 }
 
+func RunUpdateItemString(step FixtureStep, t *testing.T) {
+
+	if step.ParamsRef != "" {
+		byteValue := ReadFile(step.ParamsRef, t)
+		// translate sender from account name to account address
+		newByteValue := UpdateSenderName(byteValue, t)
+		// translate item name to item ID
+		newByteValue = UpdateItemIDFromName(newByteValue, false, t)
+
+		var sTypeMsg msgs.MsgUpdateItemString
+		err := json.Unmarshal(newByteValue, &sTypeMsg)
+		if err != nil {
+			t.Fatal("error reading using GetAminoCdc ", sTypeMsg, string(newByteValue), err)
+		}
+		t.MustNil(err)
+
+		txhash := intTest.TestTxWithMsgWithNonce(t, sTypeMsg, sTypeMsg.Sender.String(), true)
+
+		err = intTest.WaitForNextBlock()
+		intTest.ErrValidation(t, "error waiting for set item field string %+v", err)
+
+		txHandleResBytes, err := intTest.WaitAndGetTxData(txhash, 3, t)
+		intTest.ErrValidation(t, "error getting tx result bytes %+v", err)
+
+		CheckErrorOnTx(txhash, t)
+		resp := handlers.UpdateItemStringResp{}
+		err = intTest.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+
+		t.Log("txhash=", txhash)
+		intTest.ErrValidation(t, "error unmarshaling tx response %+v", err)
+	}
+}
+
 func RunCreateCookbook(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		byteValue := ReadFile(step.ParamsRef, t)

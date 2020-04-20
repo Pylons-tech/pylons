@@ -106,6 +106,24 @@ func UpdateExecID(bytes []byte, t *testing.T) []byte {
 	return newBytes
 }
 
+func UpdateItemIDFromName(bytes []byte, includeLockedByRcp bool, t *testing.T) []byte {
+	raw := UnmarshalIntoEmptyInterface(bytes, t)
+
+	itemName, ok := raw["ItemName"].(string)
+
+	t.MustTrue(ok)
+	itemID, exist, err := intTest.GetItemIDFromName(itemName, includeLockedByRcp)
+	if !exist {
+		t.Log("no item named=", itemName, "and includeLockedByRcp=", includeLockedByRcp)
+	}
+	t.MustTrue(exist)
+	t.MustNil(err)
+	raw["ItemID"] = itemID
+	newBytes, err := json.Marshal(raw)
+	t.MustNil(err)
+	return newBytes
+}
+
 func GetItemIDsFromNames(bytes []byte, includeLockedByRcp bool, t *testing.T) []string {
 	var itemNamesResp struct {
 		ItemNames []string

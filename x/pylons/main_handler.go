@@ -36,6 +36,8 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 			return handlers.HandlerMsgCheckExecution(ctx, keeper, msg)
 		case msgs.MsgFiatItem:
 			return handlers.HandlerMsgFiatItem(ctx, keeper, msg)
+		case msgs.MsgUpdateItemString:
+			return handlers.HandleMsgUpdateItemString(ctx, keeper, msg)
 		case msgs.MsgCreateTrade:
 			return handlers.HandlerMsgCreateTrade(ctx, keeper, msg)
 		case msgs.MsgFulfillTrade:

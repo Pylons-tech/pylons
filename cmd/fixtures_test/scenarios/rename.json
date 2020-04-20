@@ -1,0 +1,70 @@
+[
+    {
+        "ID": "CREATE_RENAME_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/rename.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["renamecb"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_UNNAMED_SWORD_LV1",        
+        "runAfter": {
+            "precondition": ["CREATE_RENAME_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/rename/unnamed_lv1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Unnamed Sword" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "RENAME_UNNAMED_RENAMED",        
+        "runAfter": {
+            "precondition": ["CREATE_UNNAMED_SWORD_LV1"],
+            "blockWait": 0
+        },
+        "action": "update_item_string",
+        "paramsRef": "./updateitemstring/rename/rename.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Renamed Sword" }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
