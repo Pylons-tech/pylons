@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
@@ -87,6 +88,17 @@ type PylonsApp struct {
 
 	// simulation manager
 	sm *module.SimulationManager
+}
+
+func MakeCodec() *codec.Codec {
+	var cdc = codec.New()
+
+	ModuleBasics.RegisterCodec(cdc)
+	vesting.RegisterCodec(cdc)
+	sdk.RegisterCodec(cdc)
+	codec.RegisterCrypto(cdc)
+
+	return cdc
 }
 
 // verify app interface at compile time
