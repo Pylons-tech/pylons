@@ -34,7 +34,7 @@ RUN go install ./cmd/pylonscli
 RUN GO111MODULE=on make unit_tests
 
 # Basic installation for daemon and cli
-RUN ./pylonsd init --chain-id pylonschain
+RUN ./pylonsd init masternode --chain-id pylonschain
 RUN make init_accounts
 RUN pylonscli config chain-id pylonschain
 RUN pylonscli config output json
