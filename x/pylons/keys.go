@@ -10,7 +10,7 @@ const (
 
 const (
 	// ModuleName is the name of the module
-	ModuleName = "pylons"
+	ModuleName = "Pylons"
 
 	// StoreKey to be used when creating the KVStore
 	StoreKey = ModuleName
