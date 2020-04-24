@@ -220,15 +220,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 		distr.NewAppModule(app.distrKeeper, app.accountKeeper, app.supplyKeeper, app.stakingKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.accountKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
+		pylons.NewAppModule(app.plnKeeper, app.bankKeeper),
 	)
-
-	// The Custom AnteHandler handles signature verification and transaction pre-processing
-	// and gives an exception for get pylons message
-	// The app.Router is the main transaction router where each module registers its routes
-	// Register the bank and pylons routes here
-	app.Router().
-		AddRoute("bank", bank.NewHandler(app.bankKeeper)).
-		AddRoute("pylons", pylons.NewHandler(app.plnKeeper))
 
 	// register all module routes and module queriers
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter())
