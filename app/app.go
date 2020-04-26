@@ -21,6 +21,7 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
@@ -233,7 +234,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 
 	// The AnteHandler handles signature verification and transaction pre-processing
 	app.SetAnteHandler(
-		auth.NewAnteHandler(
+		handlers.NewAnteHandler(
 			app.accountKeeper,
 			app.supplyKeeper,
 			auth.DefaultSigVerificationGasConsumer,
