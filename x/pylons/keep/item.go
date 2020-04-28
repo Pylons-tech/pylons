@@ -69,7 +69,6 @@ func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 		return errors.New("UpdateItem: the sender cannot be empty")
 
 	}
-
 	return k.UpdateObject(ctx, types.TypeItem, id, k.ItemKey, item)
 }
 
