@@ -52,6 +52,7 @@ var (
 		params.AppModuleBasic{},
 		slashing.AppModuleBasic{},
 		supply.AppModuleBasic{},
+		pylons.AppModuleBasic{},
 	)
 	// account permissions
 	maccPerms = map[string][]string{
@@ -61,6 +62,17 @@ var (
 		staking.NotBondedPoolName: {supply.Burner, supply.Staking},
 	}
 )
+
+func MakeCodec() *codec.Codec {
+	var cdc = codec.New()
+
+	ModuleBasics.RegisterCodec(cdc)
+	vesting.RegisterCodec(cdc)
+	sdk.RegisterCodec(cdc)
+	codec.RegisterCrypto(cdc)
+
+	return cdc
+}
 
 // PylonsApp is the top level pylons app
 type PylonsApp struct {
@@ -89,17 +101,6 @@ type PylonsApp struct {
 
 	// simulation manager
 	sm *module.SimulationManager
-}
-
-func MakeCodec() *codec.Codec {
-	var cdc = codec.New()
-
-	ModuleBasics.RegisterCodec(cdc)
-	vesting.RegisterCodec(cdc)
-	sdk.RegisterCodec(cdc)
-	codec.RegisterCrypto(cdc)
-
-	return cdc
 }
 
 // verify app interface at compile time
@@ -218,10 +219,27 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 		auth.NewAppModule(app.accountKeeper),
 		bank.NewAppModule(app.bankKeeper, app.accountKeeper),
 		supply.NewAppModule(app.supplyKeeper, app.accountKeeper),
+		pylons.NewAppModule(app.plnKeeper, app.bankKeeper),
 		distr.NewAppModule(app.distrKeeper, app.accountKeeper, app.supplyKeeper, app.stakingKeeper),
 		slashing.NewAppModule(app.slashingKeeper, app.accountKeeper, app.stakingKeeper),
 		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
-		pylons.NewAppModule(app.plnKeeper, app.bankKeeper),
+	)
+
+	app.mm.SetOrderBeginBlockers(distr.ModuleName, slashing.ModuleName)
+	app.mm.SetOrderEndBlockers(staking.ModuleName)
+
+	// Sets the order of Genesis - Order matters, genutil is to always come last
+	// NOTE: The genutils moodule must occur after staking so that pools are
+	// properly initialized with tokens from genesis accounts.
+	app.mm.SetOrderInitGenesis(
+		distr.ModuleName,
+		staking.ModuleName,
+		auth.ModuleName,
+		bank.ModuleName,
+		slashing.ModuleName,
+		pylons.ModuleName,
+		supply.ModuleName,
+		genutil.ModuleName,
 	)
 
 	// register all module routes and module queriers
