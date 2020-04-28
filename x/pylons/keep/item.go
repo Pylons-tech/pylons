@@ -45,6 +45,24 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 	return items, nil
 }
 
+// GetAllItems returns all items
+func (k Keeper) GetAllItems(ctx sdk.Context) ([]types.Item, error) {
+	store := ctx.KVStore(k.ItemKey)
+	iter := sdk.KVStorePrefixIterator(store, []byte(""))
+
+	var items []types.Item
+	for ; iter.Valid(); iter.Next() {
+		var item types.Item
+		mIT := iter.Value()
+		err := json.Unmarshal(mIT, &item)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+		items = append(items, item)
+	}
+	return items, nil
+}
+
 // UpdateItem is used to update the item using the id
 func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 	if item.Sender.Empty() {
