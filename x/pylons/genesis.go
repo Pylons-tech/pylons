@@ -49,20 +49,17 @@ func ExportGenesis(ctx sdk.Context, k keep.Keeper) GenesisState {
 	for ; iterator.Valid(); iterator.Next() {
 
 		name := string(iterator.Key())
-		cookbook := k.GetCookbook(ctx, name)
-		cookbooks = append(records, cookbook)
+		cookbook, _ := k.GetCookbook(ctx, name)
+		cookbooks = append(cookbooks, cookbook)
 
 	}
 
 	recipes := k.GetRecipes(ctx)
-	
+
 	items, err := k.GetAllItems(ctx)
 	if err != nil {
 		log.Panicln("error while getting items in exportGenesis:", err.Error())
 	}
-	
-	return GenesisState{Cookbooks: cookbooks, Recipies: recipes, Items: items}
-}
 
-	return GenesisState{}
+	return GenesisState{Cookbooks: cookbooks, Recipies: recipes, Items: items}
 }
