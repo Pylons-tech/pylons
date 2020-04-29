@@ -67,7 +67,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			if tc.createCookbook {
 				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.recipeID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
+				cookbookResult, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 
 				err := json.Unmarshal(cookbookResult.Data, &cbData)
 				if err != nil {
@@ -98,7 +98,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				tc.sender,
 			)
 
-			result := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 			if !tc.showError {
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
@@ -117,7 +117,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(10000000))
 
-	result := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	result, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 	cbData := CreateCBResponse{}
 	err := json.Unmarshal(result.Data, &cbData)
 	require.True(t, err == nil)
@@ -136,7 +136,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		sender1,
 	)
 
-	rcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+	rcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
 
 	recipeData := CreateRecipeResponse{}
 	err = json.Unmarshal(rcpResult.Data, &recipeData)
@@ -144,7 +144,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(recipeData.RecipeID) > 0)
 
 	// try creating it 2nd time
-	secondRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+	secondRcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
 	require.True(t, strings.Contains(secondRcpResult.Log, "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
 }

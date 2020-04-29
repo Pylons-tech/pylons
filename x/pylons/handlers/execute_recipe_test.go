@@ -270,7 +270,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
-			result := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				execRcpResponse := ExecuteRecipeResp{}
