@@ -9,3 +9,5 @@ main
 **/.DS_Store
 sample_transaction.json
 signed_transaction.json
+/vendor
+/.idea
