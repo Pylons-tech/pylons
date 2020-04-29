@@ -54,7 +54,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgEnableRecipe(tc.recipeID, tc.sender)
-			result := HandlerMsgEnableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandlerMsgEnableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				enableRcpResponse := EnableRecipeResp{}

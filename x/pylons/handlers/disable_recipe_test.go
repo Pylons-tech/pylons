@@ -55,7 +55,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgDisableRecipe(tc.recipeID, tc.sender)
-			result := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			// t.Errorf("DisableRecipeTEST LOG:: %+v", result)
 
