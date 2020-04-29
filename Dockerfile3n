@@ -30,9 +30,6 @@ RUN go install ./cmd/pylonsd
 # Install the cli
 RUN go install ./cmd/pylonscli
 
-# Unit test
-RUN GO111MODULE=on make unit_tests
-
 # Basic installation for daemon and cli
 RUN ./pylonsd init --chain-id pylonschain
 RUN make init_accounts
