@@ -1,23 +1,29 @@
 version: '2.0'
 services:
-  node1:
+  pylonsdnode1:
     build:
       context: .
       dockerfile: Dockerfile3n
     ports:
-      - "26657:26657"
-      - "1317:1317"
-  node2:
+      - "26656-26657:26656-26657"
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.2
+  pylonsdnode2:
     build:
       context: .
       dockerfile: Dockerfile3n
     ports:
-      - "26658:26657"
-      - "1318:1317"
-  node3:
+      - "26659-26660:26656-26657"
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.3
+  pylonsdnode3:
     build:
       context: .
       dockerfile: Dockerfile3n
     ports:
-      - "26659:26657"
-      - "1319:1317"
+      - "26661-26662:26656-26657"
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.4
