@@ -46,7 +46,7 @@ func TestHandleMsgSendPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgSendPylons(types.NewPylon(tc.amount), tc.fromAddress, tc.toAddress)
-			result := HandleMsgSendPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandleMsgSendPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			// t.Errorf("HandleMsgGetPylonsTEST LOG:: %+v", result)
 

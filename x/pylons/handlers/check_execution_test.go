@@ -131,7 +131,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
 			if tc.coinAddition != 0 {
-				_, _, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
+				_, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
 				require.True(t, err == nil)
 			}
 
@@ -148,7 +148,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
 			futureContext := mockedCoinInput.Ctx.WithBlockHeight(mockedCoinInput.Ctx.BlockHeight() + tc.addHeight)
-			result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+			result, _ := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
 			checkExecResp := CheckExecutionResp{}
 			err = json.Unmarshal(result.Data, &checkExecResp)
 			require.True(t, err == nil)
@@ -171,7 +171,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if tc.retryExecution {
-				result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+				result, _ := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
 				checkExecResp := CheckExecutionResp{}
 				err = json.Unmarshal(result.Data, &checkExecResp)
 				require.True(t, err == nil)
