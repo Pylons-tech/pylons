@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -25,6 +26,8 @@ func HandleMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Msg
 	}
 
 	updateFee := types.NewPylon(int64(len(msg.Value)))
+	fmt.Println(keeper.CoinKeeper.GetCoins(ctx, msg.Sender))
+	fmt.Println(updateFee)
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, updateFee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
