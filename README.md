@@ -18,8 +18,8 @@ go install ./cmd/pylonscli
 
 ```
 
-# Initialize configuration files and genesis file
-pylonsd init --chain-id pylonschain
+# Initialize configuration files and genesis file, the name here is "masternode", you can call it anything
+pylonsd init masternode --chain-id pylonschain
 
 # Copy the `Address` output here and save it for later use 
 # [optional] add "--ledger" at the end to use a Ledger Nano S 
