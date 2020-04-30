@@ -12,6 +12,7 @@ import (
 	clientkeys "github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
 	"github.com/cosmos/cosmos-sdk/server"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,13 +27,13 @@ import (
 	tmconfig "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	tmos "github.com/tendermint/tendermint/libs/os"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
 	"github.com/tendermint/tendermint/types"
 	tmtime "github.com/tendermint/tendermint/types/time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
+	"github.com/tyler-smith/go-bip39"
 )
 
 var (
@@ -110,7 +111,7 @@ func InitTestnet(
 ) error {
 
 	if chainID == "" {
-		chainID = "chain-" + tmrand.NewRand().Str(6)
+		chainID = "pylonschain"
 	}
 
 	monikers := make([]string, numValidators)
@@ -190,7 +191,15 @@ func InitTestnet(
 			return err
 		}
 
-		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, secp256k1.GenPrivKey().PubKey(), 0, 0))
+		seed := bip39.NewSeed(secret, "")
+		master, ch := hd.ComputeMastersFromSeed(seed)
+		priv, err := hd.DerivePrivateKeyForPath(master, ch, "44'/118'/0'/0/0")
+		if err != nil {
+			return err
+		}
+		pub := secp256k1.PrivKeySecp256k1(priv).PubKey()
+
+		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, pub, 0, 0))
 		valTokens := sdk.TokensFromConsensusPower(100)
 		msg := staking.NewMsgCreateValidator(
 			sdk.ValAddress(addr),
@@ -204,6 +213,7 @@ func InitTestnet(
 		txBldr := auth.NewTxBuilderFromCLI(inBuf).WithChainID(chainID).WithMemo(memo).WithKeybase(kb)
 		signedTx, err := txBldr.SignStdTx(nodeDirName, clientkeys.DefaultKeyPass, tx, false)
 		if err != nil {
+			fmt.Println("txBldr.SignStdTx", signedTx)
 			_ = os.RemoveAll(outputDir)
 			return err
 		}
