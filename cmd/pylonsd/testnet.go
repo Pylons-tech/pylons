@@ -1,13 +1,17 @@
 package main
 
-import (
+import (	
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"net"
 	"os"
 	"path/filepath"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/flags"		
+	"github.com/cosmos/cosmos-sdk/x/staking"
+	clientkeys "github.com/cosmos/cosmos-sdk/client/keys"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/server"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
@@ -17,7 +21,7 @@ import (
 	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
-	gutypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
 	tmconfig "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
@@ -28,6 +32,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
 var (
@@ -41,7 +46,7 @@ var (
 
 // get cmd to initialize all files for tendermint testnet and application
 func testnetCmd(ctx *server.Context, cdc *codec.Codec,
-	mbm module.BasicManager, genAccIterator gutypes.GenesisAccountsIterator,
+	mbm module.BasicManager, genAccIterator genutiltypes.GenesisAccountsIterator,
 ) *cobra.Command {
 
 	cmd := &cobra.Command{
@@ -89,6 +94,8 @@ Example:
 	cmd.Flags().String(
 		server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 		"Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)")
+	
+	cmd.Flags().String(flags.FlagKeyringBackend, flags.DefaultKeyringBackend, "Select keyring's backend (os|file|test)")
 
 	return cmd
 }
@@ -98,7 +105,7 @@ const nodeDirPerm = 0755
 // Initialize the testnet
 func InitTestnet(
 	cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
-	mbm module.BasicManager, genAccIterator gutypes.GenesisAccountsIterator,
+	mbm module.BasicManager, genAccIterator genutiltypes.GenesisAccountsIterator,
 	outputDir, chainID, minGasPrices, nodeDirPrefix, nodeDaemonHome,
 	nodeCLIHome, startingIPAddress string, numValidators int,
 ) error {
@@ -120,11 +127,14 @@ func InitTestnet(
 		genFiles    []string
 	)
 
+	inBuf := bufio.NewReader(cmd.InOrStdin())
+
 	// generate private keys, node IDs, and initial transactions
 	for i := 0; i < numValidators; i++ {
 		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
 		nodeDir := filepath.Join(outputDir, nodeDirName, nodeDaemonHome)
 		clientDir := filepath.Join(outputDir, nodeDirName, nodeCLIHome)
+		gentxsDir := filepath.Join(outputDir, "gentxs")
 
 		config.SetRoot(nodeDir)
 		config.RPC.ListenAddress = "tcp://0.0.0.0:26657"
@@ -142,14 +152,73 @@ func InitTestnet(
 		monikers = append(monikers, nodeDirName)
 		config.Moniker = nodeDirName
 
-		var err error
+		ip, err := getIP(i, startingIPAddress)	
+		if err != nil {	
+			_ = os.RemoveAll(outputDir)	
+			return err	
+		}
+
 		nodeIDs[i], valPubKeys[i], err = genutil.InitializeNodeValidatorFiles(config)
 		if err != nil {
 			_ = os.RemoveAll(outputDir)
 			return err
 		}
 
+		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
 		genFiles = append(genFiles, config.GenesisFile())
+
+		kb, err := keys.NewKeyring(	
+			sdk.KeyringServiceName(),	
+			viper.GetString(flags.FlagKeyringBackend),	
+			clientDir,	
+			inBuf,	
+		)	
+		if err != nil {	
+			return err	
+		}	
+		keyPass := clientkeys.DefaultKeyPass	
+		addr, secret, err := server.GenerateSaveCoinKey(kb, nodeDirName, keyPass, true)	
+		if err != nil {	
+			_ = os.RemoveAll(outputDir)	
+			return err	
+		}	
+		info := map[string]string{"secret": secret}	
+		cliPrint, err := json.Marshal(info)	
+		if err != nil {	
+			return err	
+		}	
+		// save private key seed words	
+		if err := writeFile(fmt.Sprintf("%v.json", "key_seed"), clientDir, cliPrint); err != nil {	
+			return err	
+		}	
+
+		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, secp256k1.GenPrivKey().PubKey(), 0, 0))	
+		valTokens := sdk.TokensFromConsensusPower(100)	
+		msg := staking.NewMsgCreateValidator(	
+			sdk.ValAddress(addr),	
+			valPubKeys[i],	
+			sdk.NewCoin(sdk.DefaultBondDenom, valTokens),	
+			staking.NewDescription(nodeDirName, "", "", "", ""),	
+			staking.NewCommissionRates(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),	
+			sdk.OneInt(),	
+		)	
+		tx := auth.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)	
+		txBldr := auth.NewTxBuilderFromCLI(inBuf).WithChainID(chainID).WithMemo(memo).WithKeybase(kb)	
+		signedTx, err := txBldr.SignStdTx(nodeDirName, clientkeys.DefaultKeyPass, tx, false)	
+		if err != nil {	
+			_ = os.RemoveAll(outputDir)	
+			return err	
+		}	
+		txBytes, err := cdc.MarshalJSON(signedTx)	
+		if err != nil {	
+			_ = os.RemoveAll(outputDir)	
+			return err	
+		}	
+		// gather gentxs folder	
+		if err := writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBytes); err != nil {	
+			_ = os.RemoveAll(outputDir)	
+			return err	
+		}	
 
 		// TODO: Rename config file to server.toml as it's not particular to Gaia
 		// (REF: https://github.com/cosmos/cosmos-sdk/issues/4125).
@@ -219,7 +288,7 @@ func collectGenFiles(
 	cdc *codec.Codec, config *tmconfig.Config, chainID string,
 	monikers, nodeIDs []string, valPubKeys []crypto.PubKey,
 	numValidators int, outputDir, nodeDirPrefix, nodeDaemonHome string,
-	genAccIterator gutypes.GenesisAccountsIterator,
+	genAccIterator genutiltypes.GenesisAccountsIterator,
 ) error {
 
 	var appState json.RawMessage
