@@ -11,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clientkeys "github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/server"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -44,7 +43,7 @@ var (
 
 // get cmd to initialize all files for tendermint testnet and application
 func testnetCmd(ctx *server.Context, cdc *codec.Codec,
-	mbm module.BasicManager, genBalIterator bank.GenesisBalancesIterator,
+	mbm module.BasicManager,
 ) *cobra.Command {
 
 	cmd := &cobra.Command{
@@ -70,7 +69,7 @@ Example:
 			startingIPAddress := viper.GetString(flagStartingIPAddress)
 			numValidators := viper.GetInt(flagNumValidators)
 
-			return InitTestnet(cmd, config, cdc, mbm, genBalIterator, outputDir, chainID,
+			return InitTestnet(cmd, config, cdc, mbm, outputDir, chainID,
 				minGasPrices, nodeDirPrefix, nodeDaemonHome, nodeCLIHome, startingIPAddress, numValidators)
 		},
 	}
@@ -92,7 +91,6 @@ Example:
 	cmd.Flags().String(
 		server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 		"Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)")
-	cmd.Flags().String(flags.FlagKeyringBackend, flags.DefaultKeyringBackend, "Select keyring's backend (os|file|test)")
 
 	return cmd
 }
@@ -102,7 +100,7 @@ const nodeDirPerm = 0755
 // Initialize the testnet
 func InitTestnet(
 	cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
-	mbm module.BasicManager, genBalIterator bank.GenesisBalancesIterator,
+	mbm module.BasicManager,
 	outputDir, chainID, minGasPrices, nodeDirPrefix, nodeDaemonHome,
 	nodeCLIHome, startingIPAddress string, numValidators int,
 ) error {
@@ -121,7 +119,6 @@ func InitTestnet(
 	//nolint:prealloc
 	var (
 		genAccounts []authexported.GenesisAccount
-		genBalances []bank.Balance
 		genFiles    []string
 	)
 
@@ -164,32 +161,13 @@ func InitTestnet(
 		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
 		genFiles = append(genFiles, config.GenesisFile())
 
-		kb, err := keyring.New(
-			sdk.KeyringServiceName(),
-			viper.GetString(flags.FlagKeyringBackend),
-			clientDir,
-			inBuf,
-		)
 		if err != nil {
 			return err
 		}
 
 		keyPass := clientkeys.DefaultKeyPass
-		addr, secret, err := server.GenerateSaveCoinKey(kb, nodeDirName, keyPass, true)
 		if err != nil {
 			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		info := map[string]string{"secret": secret}
-
-		cliPrint, err := json.Marshal(info)
-		if err != nil {
-			return err
-		}
-
-		// save private key seed words
-		if err := writeFile(fmt.Sprintf("%v.json", "key_seed"), clientDir, cliPrint); err != nil {
 			return err
 		}
 
@@ -200,12 +178,9 @@ func InitTestnet(
 			sdk.NewCoin(sdk.DefaultBondDenom, accStakingTokens),
 		}
 
-		genBalances = append(genBalances, bank.Balance{Address: addr, Coins: coins.Sort()})
-		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, 0, 0))
-
 		valTokens := sdk.TokensFromConsensusPower(100)
 		msg := staking.NewMsgCreateValidator(
-			sdk.ValAddress(addr),
+			sdk.ValAddress("cosmos1x4z27mcq0ykvd8fl3ql70t335eqf65cgztv797"),
 			valPubKeys[i],
 			sdk.NewCoin(sdk.DefaultBondDenom, valTokens),
 			staking.NewDescription(nodeDirName, "", "", "", ""),
@@ -214,25 +189,6 @@ func InitTestnet(
 		)
 
 		tx := auth.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)
-		txBldr := auth.NewTxBuilderFromCLI(inBuf).WithChainID(chainID).WithMemo(memo).WithKeybase(kb)
-
-		signedTx, err := txBldr.SignStdTx(nodeDirName, clientkeys.DefaultKeyPass, tx, false)
-		if err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		txBytes, err := cdc.MarshalJSON(signedTx)
-		if err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
-
-		// gather gentxs folder
-		if err := writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBytes); err != nil {
-			_ = os.RemoveAll(outputDir)
-			return err
-		}
 
 		// TODO: Rename config file to server.toml as it's not particular to Gaia
 		// (REF: https://github.com/cosmos/cosmos-sdk/issues/4125).
@@ -240,13 +196,13 @@ func InitTestnet(
 		srvconfig.WriteConfigFile(gaiaConfigFilePath, gaiaConfig)
 	}
 
-	if err := initGenFiles(cdc, mbm, chainID, genAccounts, genBalances, genFiles, numValidators); err != nil {
+	if err := initGenFiles(cdc, mbm, chainID, genAccounts, genFiles, numValidators); err != nil {
 		return err
 	}
 
 	err := collectGenFiles(
 		cdc, config, chainID, monikers, nodeIDs, valPubKeys, numValidators,
-		outputDir, nodeDirPrefix, nodeDaemonHome, genBalIterator,
+		outputDir, nodeDirPrefix, nodeDaemonHome,
 	)
 	if err != nil {
 		return err
@@ -258,11 +214,11 @@ func InitTestnet(
 
 func initGenFiles(
 	cdc *codec.Codec, mbm module.BasicManager, chainID string,
-	genAccounts []authexported.GenesisAccount, genBalances []bank.Balance,
+	genAccounts []authexported.GenesisAccount,
 	genFiles []string, numValidators int,
 ) error {
 
-	appGenState := mbm.DefaultGenesis(cdc)
+	appGenState := mbm.DefaultGenesis()
 
 	// set the accounts in the genesis state
 	var authGenState auth.GenesisState
@@ -275,7 +231,6 @@ func initGenFiles(
 	var bankGenState bank.GenesisState
 	cdc.MustUnmarshalJSON(appGenState[bank.ModuleName], &bankGenState)
 
-	bankGenState.Balances = genBalances
 	appGenState[bank.ModuleName] = cdc.MustMarshalJSON(bankGenState)
 
 	appGenStateJSON, err := codec.MarshalJSONIndent(cdc, appGenState)
@@ -302,7 +257,6 @@ func collectGenFiles(
 	cdc *codec.Codec, config *tmconfig.Config, chainID string,
 	monikers, nodeIDs []string, valPubKeys []crypto.PubKey,
 	numValidators int, outputDir, nodeDirPrefix, nodeDaemonHome string,
-	genBalIterator bank.GenesisBalancesIterator,
 ) error {
 
 	var appState json.RawMessage
@@ -325,7 +279,7 @@ func collectGenFiles(
 			return err
 		}
 
-		nodeAppState, err := genutil.GenAppStateFromConfig(cdc, config, initCfg, *genDoc, genBalIterator)
+		nodeAppState, err := genutil.GenAppStateFromConfig(cdc, config, initCfg, *genDoc)
 		if err != nil {
 			return err
 		}
