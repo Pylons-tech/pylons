@@ -98,7 +98,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
-			result, _ := HandleMsgUpdateItemString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandleMsgUpdateItemString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				resp := UpdateItemStringResp{}
@@ -123,8 +123,9 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				// should check pylon is reduced correctly
 
 			} else {
-				t.Log("result.Log", result.Log, "tc.desiredError", tc.desiredError)
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+
+				t.Log("err.Error()", err, "tc.desiredError", tc.desiredError)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

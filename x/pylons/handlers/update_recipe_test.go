@@ -74,7 +74,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenOneOutput(2),
 				sender1)
 
-			result, _ := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}
@@ -82,7 +82,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				require.True(t, err == nil)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
