@@ -18,7 +18,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
