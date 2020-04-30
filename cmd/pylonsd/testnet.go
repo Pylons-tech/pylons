@@ -26,6 +26,7 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	tmrand "github.com/tendermint/tendermint/libs/rand"
 	"github.com/tendermint/tendermint/types"
+	gutypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	tmtime "github.com/tendermint/tendermint/types/time"
 
 	"github.com/spf13/cobra"
@@ -43,7 +44,7 @@ var (
 
 // get cmd to initialize all files for tendermint testnet and application
 func testnetCmd(ctx *server.Context, cdc *codec.Codec,
-	mbm module.BasicManager,
+	mbm module.BasicManager, genAccIterator gutypes.GenesisAccountsIterator,
 ) *cobra.Command {
 
 	cmd := &cobra.Command{
@@ -69,7 +70,7 @@ Example:
 			startingIPAddress := viper.GetString(flagStartingIPAddress)
 			numValidators := viper.GetInt(flagNumValidators)
 
-			return InitTestnet(cmd, config, cdc, mbm, outputDir, chainID,
+			return InitTestnet(cmd, config, cdc, mbm, genAccIterator, outputDir, chainID,
 				minGasPrices, nodeDirPrefix, nodeDaemonHome, nodeCLIHome, startingIPAddress, numValidators)
 		},
 	}
@@ -100,7 +101,7 @@ const nodeDirPerm = 0755
 // Initialize the testnet
 func InitTestnet(
 	cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
-	mbm module.BasicManager,
+	mbm module.BasicManager, genAccIterator gutypes.GenesisAccountsIterator,
 	outputDir, chainID, minGasPrices, nodeDirPrefix, nodeDaemonHome,
 	nodeCLIHome, startingIPAddress string, numValidators int,
 ) error {
@@ -203,6 +204,7 @@ func InitTestnet(
 	err := collectGenFiles(
 		cdc, config, chainID, monikers, nodeIDs, valPubKeys, numValidators,
 		outputDir, nodeDirPrefix, nodeDaemonHome,
+		genAccIterator,
 	)
 	if err != nil {
 		return err
@@ -257,6 +259,7 @@ func collectGenFiles(
 	cdc *codec.Codec, config *tmconfig.Config, chainID string,
 	monikers, nodeIDs []string, valPubKeys []crypto.PubKey,
 	numValidators int, outputDir, nodeDirPrefix, nodeDaemonHome string,
+	genAccIterator gutypes.GenesisAccountsIterator,
 ) error {
 
 	var appState json.RawMessage
@@ -279,7 +282,7 @@ func collectGenFiles(
 			return err
 		}
 
-		nodeAppState, err := genutil.GenAppStateFromConfig(cdc, config, initCfg, *genDoc)
+		nodeAppState, err := genutil.GenAppStateFromConfig(cdc, config, initCfg, *genDoc, genAccIterator)
 		if err != nil {
 			return err
 		}
