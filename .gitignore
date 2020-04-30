@@ -1,7 +1,6 @@
 cmd/fixtures_test/nonce.json
 cmd/test/nonce.json
-pylonsd
-pylonscli
+build
 .vscode
 main
 *.exe
