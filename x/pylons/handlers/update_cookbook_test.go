@@ -69,7 +69,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender)
 
-			result := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			// t.Errorf("UpdateCookbookTEST LOG:: %+v", result)
 			if !tc.showError {

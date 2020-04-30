@@ -44,7 +44,7 @@ func MockRecipe(
 		blockInterval,
 		sender,
 	)
-	newRcpResult := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
+	newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 	return recipeData
@@ -148,7 +148,7 @@ func MockExecution(
 	itemIDs []string,
 ) (ExecuteRecipeResp, error) {
 	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
-	result := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+	result, _ := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 	execRcpResponse := ExecuteRecipeResp{}
 	err := json.Unmarshal(result.Data, &execRcpResponse)
@@ -165,7 +165,7 @@ func MockTrade(
 	sender sdk.AccAddress,
 ) (CreateTradeResponse, error) {
 	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
-	result := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
+	result, _ := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
 	createTrdResponse := CreateTradeResponse{}
 	err := json.Unmarshal(result.Data, &createTrdResponse)
 	return createTrdResponse, err

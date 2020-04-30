@@ -33,7 +33,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		sender1,
 	)
 
-	newRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
+	newRcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 
@@ -74,7 +74,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenOneOutput(2),
 				sender1)
 
-			result := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, _ := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}

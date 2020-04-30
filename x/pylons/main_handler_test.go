@@ -12,7 +12,6 @@ import (
 func TestInvalidMsg(t *testing.T) {
 	h := NewHandler(keep.Keeper{})
 
-	res := h(sdk.Context{}, sdk.NewTestMsg())
-	require.False(t, res.IsOK())
+	res, _ := h(sdk.Context{}, sdk.NewTestMsg())
 	require.True(t, strings.Contains(res.Log, "unrecognized pylons Msg type"))
 }

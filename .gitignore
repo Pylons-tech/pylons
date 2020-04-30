@@ -1,7 +1,5 @@
 cmd/fixtures_test/nonce.json
 cmd/test/nonce.json
-pylonsd
-pylonscli
 .vscode
 main
 *.exe
@@ -9,3 +7,5 @@ main
 **/.DS_Store
 sample_transaction.json
 signed_transaction.json
+/vendor
+/.idea
