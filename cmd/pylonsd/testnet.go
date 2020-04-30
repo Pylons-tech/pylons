@@ -85,7 +85,7 @@ Example:
 		"Prefix the directory name for each node with (node results in node0, node1, ...)")
 	cmd.Flags().String(flagNodeDaemonHome, "pylonsd",
 		"Home directory of the node's daemon configuration")
-	cmd.Flags().String(flagNodeCLIHome, "gaiacli",
+	cmd.Flags().String(flagNodeCLIHome, "pylonscli",
 		"Home directory of the node's cli configuration")
 	cmd.Flags().String(flagStartingIPAddress, "192.168.0.1",
 		"Starting IP address (192.168.0.1 results in persistent peers list ID0@192.168.0.1:46656, ID1@192.168.0.2:46656, ...)")
@@ -117,8 +117,8 @@ func InitTestnet(
 	nodeIDs := make([]string, numValidators)
 	valPubKeys := make([]crypto.PubKey, numValidators)
 
-	gaiaConfig := srvconfig.DefaultConfig()
-	gaiaConfig.MinGasPrices = minGasPrices
+	pylonsConfig := srvconfig.DefaultConfig()
+	pylonsConfig.MinGasPrices = minGasPrices
 
 	//nolint:prealloc
 	var (
@@ -212,16 +212,16 @@ func InitTestnet(
 			_ = os.RemoveAll(outputDir)
 			return err
 		}
-		// gather gentxs folder	
+		// gather gentxs folder
 		if err := writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBytes); err != nil {
 			_ = os.RemoveAll(outputDir)
 			return err
 		}
 
-		// TODO: Rename config file to server.toml as it's not particular to Gaia
+		// TODO: Rename config file to server.toml as it's not particular to Pylons
 		// (REF: https://github.com/cosmos/cosmos-sdk/issues/4125).
-		gaiaConfigFilePath := filepath.Join(nodeDir, "config/gaiad.toml")
-		srvconfig.WriteConfigFile(gaiaConfigFilePath, gaiaConfig)
+		pylonsConfigFilePath := filepath.Join(nodeDir, "config/pylonsd.toml")
+		srvconfig.WriteConfigFile(pylonsConfigFilePath, pylonsConfig)
 	}
 
 	if err := initGenFiles(cdc, mbm, chainID, genAccounts, genFiles, numValidators); err != nil {
