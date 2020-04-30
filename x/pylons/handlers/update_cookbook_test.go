@@ -69,15 +69,14 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender)
 
-			result, _ := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			_, err := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
-			// t.Errorf("UpdateCookbookTEST LOG:: %+v", result)
 			if !tc.showError {
 				readCookbook, err2 := mockedCoinInput.PlnK.GetCookbook(mockedCoinInput.Ctx, tc.cbID)
 				require.True(t, err2 == nil)
 				require.True(t, readCookbook.Description == tc.desc)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
