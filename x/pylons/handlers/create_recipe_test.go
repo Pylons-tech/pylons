@@ -67,9 +67,9 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			if tc.createCookbook {
 				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.recipeID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
-
-				err := json.Unmarshal(cookbookResult.Data, &cbData)
+				cookbookResult, err := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
+				require.True(t, err == nil)
+				err = json.Unmarshal(cookbookResult.Data, &cbData)
 				if err != nil {
 					t.Log("cookbook result log", cookbookResult.Log)
 				}
@@ -98,14 +98,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				tc.sender,
 			)
 
-			result, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 			if !tc.showError {
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
 				require.True(t, err == nil)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
@@ -144,7 +144,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(recipeData.RecipeID) > 0)
 
 	// try creating it 2nd time
-	secondRcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
-	require.True(t, strings.Contains(secondRcpResult.Log, "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
+	_, err = HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
 }
