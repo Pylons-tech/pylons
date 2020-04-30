@@ -6,9 +6,9 @@ install: go.sum
 	GO111MODULE=on go install -tags "$(build_tags)" ./cmd/pylonsd
 	GO111MODULE=on go install -tags "$(build_tags)" ./cmd/pylonscli
 
-build-binary:
-	GO111MODULE=on go build -tags "$(build_tags)" -o build/pylonsd ./cmd/pylonsd
-	GO111MODULE=on go build -tags "$(build_tags)" -o build/pylonscli ./cmd/pylonscli
+build-binary: go.sum
+	go build -mod=readonly -tags "$(build_tags)" -o build/pylonsd ./cmd/pylonsd
+	go build -mod=readonly -tags "$(build_tags)" -o build/pylonscli ./cmd/pylonscli
 
 go.sum: go.mod
 	GO111MODULE=on go mod verify
