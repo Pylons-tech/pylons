@@ -5,14 +5,16 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/params"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/cosmos/cosmos-sdk/x/supply"
+	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 type TestCoinInput struct {
@@ -21,7 +23,6 @@ type TestCoinInput struct {
 	Ak   auth.AccountKeeper
 	Pk   params.Keeper
 	Bk   bank.Keeper
-	FcK  auth.FeeCollectionKeeper
 	PlnK Keeper
 }
 
@@ -35,16 +36,22 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 		0,
 	)
 }
+func createTestCodec() *codec.Codec {
+	cdc := codec.New()
+	codec.RegisterCrypto(cdc)
+	return cdc
+}
 
 func SetupTestCoinInput() TestCoinInput {
+	// parts from https://github.com/cosmos/cosmos-sdk/blob/release/v0.38.3/x/staking/keeper/test_common.go
+	cdc := createTestCodec()
 	db := dbm.NewMemDB()
 
-	cdc := codec.New()
-	auth.RegisterBaseAccount(cdc)
-
+	keyAcc := sdk.NewKVStoreKey(auth.StoreKey)
 	authCapKey := sdk.NewKVStoreKey("authCapKey")
 	fckCapKey := sdk.NewKVStoreKey("fckCapKey")
 	keyParams := sdk.NewKVStoreKey("params")
+	keySupply := sdk.NewKVStoreKey(supply.StoreKey)
 	tkeyParams := sdk.NewTransientStoreKey("transient_params")
 
 	fcKey := sdk.NewKVStoreKey("fee_collection")
@@ -55,6 +62,8 @@ func SetupTestCoinInput() TestCoinInput {
 	execKey := sdk.NewKVStoreKey("pylons_execution")
 
 	ms := store.NewCommitMultiStore(db)
+	ms.MountStoreWithDB(keySupply, sdk.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(keyAcc, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(authCapKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(fckCapKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyParams, sdk.StoreTypeIAVL, db)
@@ -69,21 +78,40 @@ func SetupTestCoinInput() TestCoinInput {
 
 	ms.GetKVStore(cbKey)
 
-	pk := params.NewKeeper(cdc, keyParams, tkeyParams)
-	ak := auth.NewAccountKeeper(
-		cdc, authCapKey, pk.Subspace(auth.DefaultParamspace), auth.ProtoBaseAccount,
-	)
 	ctx := sdk.NewContext(ms, abci.Header{ChainID: "test-chain-id"}, false, log.NewNopLogger())
 
-	ak.SetParams(ctx, auth.DefaultParams())
-
-	bk := bank.NewBaseKeeper(
-		ak,
-		pk.Subspace(bank.DefaultParamspace),
-		bank.DefaultCodespace,
+	ctx = ctx.WithConsensusParams(
+		&abci.ConsensusParams{
+			Validator: &abci.ValidatorParams{
+				PubKeyTypes: []string{tmtypes.ABCIPubKeyTypeEd25519},
+			},
+		},
 	)
 
-	fcK := auth.NewFeeCollectionKeeper(cdc, fcKey)
+	feeCollectorAcc := supply.NewEmptyModuleAccount(auth.FeeCollectorName)
+	notBondedPool := supply.NewEmptyModuleAccount(sttypes.NotBondedPoolName, supply.Burner, supply.Staking)
+	bondPool := supply.NewEmptyModuleAccount(sttypes.BondedPoolName, supply.Burner, supply.Staking)
+
+	blacklistedAddrs := make(map[string]bool)
+	blacklistedAddrs[feeCollectorAcc.GetAddress().String()] = true
+	blacklistedAddrs[notBondedPool.GetAddress().String()] = true
+	blacklistedAddrs[bondPool.GetAddress().String()] = true
+
+	pk := params.NewKeeper(cdc, keyParams, tkeyParams)
+	accountKeeper := auth.NewAccountKeeper(
+		cdc,    // amino codec
+		keyAcc, // target store
+		pk.Subspace(auth.DefaultParamspace),
+		auth.ProtoBaseAccount, // prototype
+	)
+
+	bk := bank.NewBaseKeeper(
+		accountKeeper,
+		pk.Subspace(bank.DefaultParamspace),
+		blacklistedAddrs,
+	)
+
+	accountKeeper.SetParams(ctx, auth.DefaultParams())
 
 	plnK := NewKeeper(
 		bk,
@@ -95,5 +123,5 @@ func SetupTestCoinInput() TestCoinInput {
 		cdc,
 	)
 
-	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: ak, Pk: pk, Bk: bk, FcK: fcK, PlnK: plnK}
+	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}
 }
