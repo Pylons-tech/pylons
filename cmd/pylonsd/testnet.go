@@ -1,6 +1,6 @@
 package main
 
-import (	
+import (
 	"bufio"
 	"encoding/json"
 	"fmt"
@@ -8,11 +8,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/cosmos/cosmos-sdk/client/flags"		
-	"github.com/cosmos/cosmos-sdk/x/staking"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	clientkeys "github.com/cosmos/cosmos-sdk/client/keys"
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/cosmos/cosmos-sdk/server"
 	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -21,6 +20,7 @@ import (
 	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
+	"github.com/cosmos/cosmos-sdk/x/staking"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
 	tmconfig "github.com/tendermint/tendermint/config"
@@ -94,7 +94,6 @@ Example:
 	cmd.Flags().String(
 		server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 		"Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)")
-	
 	cmd.Flags().String(flags.FlagKeyringBackend, flags.DefaultKeyringBackend, "Select keyring's backend (os|file|test)")
 
 	return cmd
@@ -128,7 +127,6 @@ func InitTestnet(
 	)
 
 	inBuf := bufio.NewReader(cmd.InOrStdin())
-
 	// generate private keys, node IDs, and initial transactions
 	for i := 0; i < numValidators; i++ {
 		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
@@ -152,10 +150,10 @@ func InitTestnet(
 		monikers = append(monikers, nodeDirName)
 		config.Moniker = nodeDirName
 
-		ip, err := getIP(i, startingIPAddress)	
-		if err != nil {	
-			_ = os.RemoveAll(outputDir)	
-			return err	
+		ip, err := getIP(i, startingIPAddress)
+		if err != nil {
+			_ = os.RemoveAll(outputDir)
+			return err
 		}
 
 		nodeIDs[i], valPubKeys[i], err = genutil.InitializeNodeValidatorFiles(config)
@@ -167,58 +165,58 @@ func InitTestnet(
 		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
 		genFiles = append(genFiles, config.GenesisFile())
 
-		kb, err := keys.NewKeyring(	
-			sdk.KeyringServiceName(),	
-			viper.GetString(flags.FlagKeyringBackend),	
-			clientDir,	
-			inBuf,	
-		)	
-		if err != nil {	
-			return err	
-		}	
-		keyPass := clientkeys.DefaultKeyPass	
-		addr, secret, err := server.GenerateSaveCoinKey(kb, nodeDirName, keyPass, true)	
-		if err != nil {	
-			_ = os.RemoveAll(outputDir)	
-			return err	
-		}	
-		info := map[string]string{"secret": secret}	
-		cliPrint, err := json.Marshal(info)	
-		if err != nil {	
-			return err	
-		}	
-		// save private key seed words	
-		if err := writeFile(fmt.Sprintf("%v.json", "key_seed"), clientDir, cliPrint); err != nil {	
-			return err	
-		}	
+		kb, err := keys.NewKeyring(
+			sdk.KeyringServiceName(),
+			viper.GetString(flags.FlagKeyringBackend),
+			clientDir,
+			inBuf,
+		)
+		if err != nil {
+			return err
+		}
+		keyPass := clientkeys.DefaultKeyPass
+		addr, secret, err := server.GenerateSaveCoinKey(kb, nodeDirName, keyPass, true)
+		if err != nil {
+			_ = os.RemoveAll(outputDir)
+			return err
+		}
+		info := map[string]string{"secret": secret}
+		cliPrint, err := json.Marshal(info)
+		if err != nil {
+			return err
+		}
+		// save private key seed words
+		if err := writeFile(fmt.Sprintf("%v.json", "key_seed"), clientDir, cliPrint); err != nil {
+			return err
+		}
 
-		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, secp256k1.GenPrivKey().PubKey(), 0, 0))	
-		valTokens := sdk.TokensFromConsensusPower(100)	
-		msg := staking.NewMsgCreateValidator(	
-			sdk.ValAddress(addr),	
-			valPubKeys[i],	
-			sdk.NewCoin(sdk.DefaultBondDenom, valTokens),	
-			staking.NewDescription(nodeDirName, "", "", "", ""),	
-			staking.NewCommissionRates(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),	
-			sdk.OneInt(),	
-		)	
-		tx := auth.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)	
-		txBldr := auth.NewTxBuilderFromCLI(inBuf).WithChainID(chainID).WithMemo(memo).WithKeybase(kb)	
-		signedTx, err := txBldr.SignStdTx(nodeDirName, clientkeys.DefaultKeyPass, tx, false)	
-		if err != nil {	
-			_ = os.RemoveAll(outputDir)	
-			return err	
-		}	
-		txBytes, err := cdc.MarshalJSON(signedTx)	
-		if err != nil {	
-			_ = os.RemoveAll(outputDir)	
-			return err	
-		}	
+		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, secp256k1.GenPrivKey().PubKey(), 0, 0))
+		valTokens := sdk.TokensFromConsensusPower(100)
+		msg := staking.NewMsgCreateValidator(
+			sdk.ValAddress(addr),
+			valPubKeys[i],
+			sdk.NewCoin(sdk.DefaultBondDenom, valTokens),
+			staking.NewDescription(nodeDirName, "", "", "", ""),
+			staking.NewCommissionRates(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),
+			sdk.OneInt(),
+		)
+		tx := auth.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)
+		txBldr := auth.NewTxBuilderFromCLI(inBuf).WithChainID(chainID).WithMemo(memo).WithKeybase(kb)
+		signedTx, err := txBldr.SignStdTx(nodeDirName, clientkeys.DefaultKeyPass, tx, false)
+		if err != nil {
+			_ = os.RemoveAll(outputDir)
+			return err
+		}
+		txBytes, err := cdc.MarshalJSON(signedTx)
+		if err != nil {
+			_ = os.RemoveAll(outputDir)
+			return err
+		}
 		// gather gentxs folder	
-		if err := writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBytes); err != nil {	
-			_ = os.RemoveAll(outputDir)	
-			return err	
-		}	
+		if err := writeFile(fmt.Sprintf("%v.json", nodeDirName), gentxsDir, txBytes); err != nil {
+			_ = os.RemoveAll(outputDir)
+			return err
+		}
 
 		// TODO: Rename config file to server.toml as it's not particular to Gaia
 		// (REF: https://github.com/cosmos/cosmos-sdk/issues/4125).
@@ -232,8 +230,7 @@ func InitTestnet(
 
 	err := collectGenFiles(
 		cdc, config, chainID, monikers, nodeIDs, valPubKeys, numValidators,
-		outputDir, nodeDirPrefix, nodeDaemonHome,
-		genAccIterator,
+		outputDir, nodeDirPrefix, nodeDaemonHome, genAccIterator,
 	)
 	if err != nil {
 		return err
