@@ -33,16 +33,14 @@ func TestHandleMsgGetPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgGetPylons(types.NewPylon(tc.reqAmount), tc.fromAddress)
-			result, _ := HandleMsgGetPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
-
-			// t.Errorf("HandleMsgGetPylonsTEST LOG:: %+v", result)
+			_, err := HandleMsgGetPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if !tc.showError {
 				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount)))
 				require.False(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount+1)))
 				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount-1)))
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

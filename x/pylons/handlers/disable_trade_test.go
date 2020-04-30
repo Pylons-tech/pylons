@@ -77,12 +77,12 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 
 			delTrdMsg := msgs.NewMsgDisableTrade(tc.tradeID, tc.sender)
-			result, _ := HandlerMsgDisableTrade(mockedCoinInput.Ctx, mockedCoinInput.PlnK, delTrdMsg)
+			_, err := HandlerMsgDisableTrade(mockedCoinInput.Ctx, mockedCoinInput.PlnK, delTrdMsg)
 			if tc.showError == false {
 				trd, _ := mockedCoinInput.PlnK.GetTrade(mockedCoinInput.Ctx, tc.tradeID)
 				require.True(t, trd.Disabled)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
