@@ -1,9 +1,9 @@
 package queriers
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
-	"encoding/json"
 
 	"github.com/stretchr/testify/require"
 
@@ -22,7 +22,7 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(mockedCoinInput, senderAccAddress, "cookbook-00001")
@@ -32,31 +32,31 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	cases := map[string]struct {
-		path    []string
+		path          []string
 		desiredError  string
 		desiredLength int
 		showError     bool
 	}{
 		"not existing cookbook id": {
-			path:    []string{"invalidCookbookID"},
+			path:          []string{"invalidCookbookID"},
 			desiredError:  "",
 			desiredLength: 0,
 			showError:     false,
 		},
 		"error check when not providing cookbookID": {
-			path:    []string{},
+			path:          []string{},
 			desiredError:  "no cookbook id is provided in path",
 			desiredLength: 0,
 			showError:     true,
 		},
 		"cookbook with no item": {
-			path:    []string{cbData1.CookbookID},
+			path:          []string{cbData1.CookbookID},
 			desiredError:  "",
 			desiredLength: 0,
 			showError:     false,
 		},
 		"cookbook with 1 item": {
-			path:    []string{cbData.CookbookID},
+			path:          []string{cbData.CookbookID},
 			desiredError:  "",
 			desiredLength: 1,
 			showError:     false,
