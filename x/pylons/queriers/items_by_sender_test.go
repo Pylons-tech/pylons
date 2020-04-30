@@ -1,9 +1,9 @@
 package queriers
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
-	"encoding/json"
 
 	"github.com/stretchr/testify/require"
 
@@ -23,7 +23,7 @@ func TestQueriersItemsBySender(t *testing.T) {
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 	sender2 := "cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc"
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(mockedCoinInput, senderAccAddress, "cookbook-00001")
@@ -32,31 +32,31 @@ func TestQueriersItemsBySender(t *testing.T) {
 	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	cases := map[string]struct {
-		path    []string
+		path          []string
 		desiredError  string
 		desiredLength int
 		showError     bool
 	}{
 		"not existing sender": {
-			path:    []string{"invalidSender"},
+			path:          []string{"invalidSender"},
 			desiredError:  "decoding bech32 failed: string not all lowercase or all uppercase",
 			desiredLength: 0,
 			showError:     true,
 		},
 		"error check when not providing sender": {
-			path:    []string{},
+			path:          []string{},
 			desiredError:  "no sender is provided in path",
 			desiredLength: 0,
 			showError:     true,
 		},
 		"sender with no item": {
-			path:    []string{sender2},
+			path:          []string{sender2},
 			desiredError:  "",
 			desiredLength: 0,
 			showError:     false,
 		},
 		"sender with 1 item": {
-			path:    []string{sender},
+			path:          []string{sender},
 			desiredError:  "",
 			desiredLength: 1,
 			showError:     false,

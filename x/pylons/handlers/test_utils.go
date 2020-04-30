@@ -19,9 +19,10 @@ func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookN
 	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cbResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	if err != nil {
+		panic(err.Error())
 	}
 	cbData := CreateCBResponse{}
-	json.Unmarshal(cbResult.Data, &cbData)
+	json.Unmarshal((*cbResult).Data, &cbData)
 	return cbData
 }
 
@@ -44,7 +45,10 @@ func MockRecipe(
 		blockInterval,
 		sender,
 	)
-	newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
+	newRcpResult, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
+	if err != nil {
+		panic(err.Error())
+	}
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 	return recipeData
