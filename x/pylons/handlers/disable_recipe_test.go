@@ -55,9 +55,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgDisableRecipe(tc.recipeID, tc.sender)
-			result, _ := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
-
-			// t.Errorf("DisableRecipeTEST LOG:: %+v", result)
+			result, err := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				disableRcpResponse := DisableRecipeResp{}
@@ -72,7 +70,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 				require.True(t, err2 == nil)
 				require.True(t, uRcp.Disabled == true)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

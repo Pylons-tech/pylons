@@ -46,9 +46,7 @@ func TestHandleMsgSendPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgSendPylons(types.NewPylon(tc.amount), tc.fromAddress, tc.toAddress)
-			result, _ := HandleMsgSendPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
-
-			// t.Errorf("HandleMsgGetPylonsTEST LOG:: %+v", result)
+			_, err := HandleMsgSendPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if !tc.showError {
 				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.toAddress, types.NewPylon(tc.amount)))
@@ -59,7 +57,7 @@ func TestHandleMsgSendPylons(t *testing.T) {
 				require.False(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount+1)))
 				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount-1)))
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

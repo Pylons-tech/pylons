@@ -66,7 +66,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, "", tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender)
 
-			result, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if !tc.showError {
 				cbData := CreateCBResponse{}
@@ -74,7 +74,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 				require.True(t, err == nil)
 				require.True(t, len(cbData.CookbookID) > 0)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
@@ -92,7 +92,7 @@ func TestSameCookbookIDCreation(t *testing.T) {
 	require.True(t, err == nil)
 	require.True(t, len(cbData.CookbookID) > 0)
 
-	secondResult, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
-	require.True(t, strings.Contains(secondResult.Log, "A cookbook with CookbookID samecookbookID-0001 already exists"))
+	_, err = HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	require.True(t, strings.Contains(err.Error(), "A cookbook with CookbookID samecookbookID-0001 already exists"))
 
 }
