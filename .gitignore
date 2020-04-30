@@ -1,5 +1,6 @@
 cmd/fixtures_test/nonce.json
 cmd/test/nonce.json
+build
 .vscode
 main
 *.exe
