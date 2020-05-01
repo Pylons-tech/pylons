@@ -62,7 +62,6 @@ func SetupTestCoinInput() TestCoinInput {
 	execKey := sdk.NewKVStoreKey("pylons_execution")
 
 	ms := store.NewCommitMultiStore(db)
-	ms.MountStoreWithDB(keySupply, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyAcc, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(authCapKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(fckCapKey, sdk.StoreTypeIAVL, db)
@@ -98,6 +97,7 @@ func SetupTestCoinInput() TestCoinInput {
 	)
 
 	bk := bank.NewBaseKeeper(
+		cdc,
 		accountKeeper,
 		pk.Subspace(bank.DefaultParamspace),
 		blacklistedAddrs,

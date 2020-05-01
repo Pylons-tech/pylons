@@ -2,7 +2,6 @@ package tx
 
 import (
 	"bufio"
-	"errors"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -13,12 +12,16 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
+const (
+	flagClientHome = "home-client"
 )
 
 func SendPylons(cdc *codec.Codec) *cobra.Command {
@@ -32,16 +35,20 @@ func SendPylons(cdc *codec.Codec) *cobra.Command {
 			inBuf := bufio.NewReader(cmd.InOrStdin())
 			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(authclient.GetTxEncoder(cdc))
 
-			kb, err := keys.NewKeyBaseFromDir(viper.GetString(flags.FlagHome))
+			kb, err := keyring.New(
+				sdk.KeyringServiceName(),
+				viper.GetString(flags.FlagKeyringBackend),
+				viper.GetString(flagClientHome),
+				inBuf,
+			)
 			if err != nil {
-				return errors.New("cannot get the keys from home")
+				return err
 			}
-
 			var addr sdk.AccAddress
 			addr, err = sdk.AccAddressFromBech32(args[0])
 			// if its not an address
 			if err != nil {
-				info, err := kb.Get(args[0])
+				info, err := kb.Key(args[0])
 				if err != nil {
 					return err
 				}
