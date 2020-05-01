@@ -13,7 +13,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
 )
 
 // CreateCookbookTxBuilder returns the fixtures which can be used to create a create cookbook transaction
@@ -23,7 +23,7 @@ func CreateCookbookTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeN
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
+		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(authclient.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgCreateCookbook("name", "", "this has to meet character limits lol", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender)
 

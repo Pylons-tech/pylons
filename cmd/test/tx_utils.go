@@ -15,7 +15,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -45,9 +45,9 @@ func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 	cdc := GetAminoCdc()
 	cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-	txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
+	txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(authclient.GetTxEncoder(cdc)).WithChainID("pylons")
 	if txBldr.SimulateAndExecute() {
-		txBldr, err = utils.EnrichWithGas(txBldr, cliCtx, messages)
+		txBldr, err = authclient.EnrichWithGas(txBldr, cliCtx, messages)
 		if err != nil {
 			return auth.StdTx{}, err
 		}

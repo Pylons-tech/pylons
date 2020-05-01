@@ -9,8 +9,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
-	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/cosmos/cosmos-sdk/x/supply"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmtypes "github.com/tendermint/tendermint/types"
@@ -40,7 +38,6 @@ func createTestCodec() *codec.Codec {
 	cdc := codec.New()
 	auth.RegisterCodec(cdc)
 	distr.RegisterCodec(cdc)
-	supply.RegisterCodec(cdc)
 	sdk.RegisterCodec(cdc)
 	codec.RegisterCrypto(cdc)
 	return cdc
@@ -55,7 +52,6 @@ func SetupTestCoinInput() TestCoinInput {
 	authCapKey := sdk.NewKVStoreKey("authCapKey")
 	fckCapKey := sdk.NewKVStoreKey("fckCapKey")
 	keyParams := sdk.NewKVStoreKey("params")
-	keySupply := sdk.NewKVStoreKey(supply.StoreKey)
 	tkeyParams := sdk.NewTransientStoreKey("transient_params")
 
 	fcKey := sdk.NewKVStoreKey("fee_collection")
@@ -92,15 +88,7 @@ func SetupTestCoinInput() TestCoinInput {
 		},
 	)
 
-	feeCollectorAcc := supply.NewEmptyModuleAccount(auth.FeeCollectorName)
-	notBondedPool := supply.NewEmptyModuleAccount(sttypes.NotBondedPoolName, supply.Burner, supply.Staking)
-	bondPool := supply.NewEmptyModuleAccount(sttypes.BondedPoolName, supply.Burner, supply.Staking)
-
 	blacklistedAddrs := make(map[string]bool)
-	blacklistedAddrs[feeCollectorAcc.GetAddress().String()] = true
-	blacklistedAddrs[notBondedPool.GetAddress().String()] = true
-	blacklistedAddrs[bondPool.GetAddress().String()] = true
-
 	pk := params.NewKeeper(cdc, keyParams, tkeyParams)
 	accountKeeper := auth.NewAccountKeeper(
 		cdc,    // amino codec
