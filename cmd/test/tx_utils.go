@@ -43,9 +43,9 @@ func fileExists(filename string) bool {
 func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 	var err error
 	cdc := GetAminoCdc()
-	cliCtx := context.NewCLIContext().WithCodec(cdc).WithAccountDecoder(cdc)
+	cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-	txBldr := authtxb.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
+	txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
 	if txBldr.SimulateAndExecute() {
 		txBldr, err = utils.EnrichWithGas(txBldr, cliCtx, messages)
 		if err != nil {
