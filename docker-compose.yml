@@ -1,35 +1,55 @@
 version: '2.0'
 services:
-  pylonsdnode1:
+  pylonsdnode0:
+    container_name: pylonsdnode0
+    image: pylonsdnode:latest
     build:
       context: .
       dockerfile: Dockerfile3n
     ports:
       - "26656-26657:26656-26657"
+    environment:
+      - ID=0
     volumes:
       - ./build:/pylonsd:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.2
-  pylonsdnode2:
+  pylonsdnode1:
+    container_name: pylonsdnode1
+    image: pylonsdnode:latest
     build:
       context: .
       dockerfile: Dockerfile3n
     ports:
       - "26659-26660:26656-26657"
+    environment:
+      - ID=1
     volumes:
       - ./build:/pylonsd:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.3
-  pylonsdnode3:
+  pylonsdnode2:
+    container_name: pylonsdnode2
+    image: pylonsdnode:latest
     build:
       context: .
       dockerfile: Dockerfile3n
     ports:
       - "26661-26662:26656-26657"
+    environment:
+      - ID=2
     volumes:
       - ./build:/pylonsd:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.4
+networks:
+  localnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.10.0/16
