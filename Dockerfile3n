@@ -9,6 +9,10 @@ LABEL maintainer="Michael Sofaer <m@pylons.tech>"
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
+# Set environment variable for this node
+ENV ID=$ID
+ENV PYLONSDHOME=/pylonsd/node$ID/pylonsd
+
 # Copy go mod and sum files
 COPY go.mod go.sum ./
 
@@ -31,12 +35,10 @@ RUN go install ./cmd/pylonsd
 RUN go install ./cmd/pylonscli
 
 # Basic installation for daemon and cli
-RUN ./pylonsd init --chain-id pylonschain
-RUN make init_accounts
-RUN pylonscli config chain-id pylonschain
-RUN pylonscli config output json
-RUN pylonscli config indent true
-RUN pylonscli config trust-node true
+RUN pylonscli config chain-id pylonschain --home $PYLONSDHOME
+RUN pylonscli config output json --home $PYLONSDHOME
+RUN pylonscli config indent true --home $PYLONSDHOME
+RUN pylonscli config trust-node true --home $PYLONSDHOME
 
 # Command to run the executable
-CMD ["/app/pylonsd", "start", "--rpc.laddr", "tcp://0.0.0.0:26657"]
+CMD ["pylonsd", "start", "--home", "$PYLONSDHOME", "--rpc.laddr", "tcp://0.0.0.0:26657"]
