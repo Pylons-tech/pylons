@@ -199,7 +199,15 @@ func InitTestnet(
 		}
 		pub := secp256k1.PrivKeySecp256k1(priv).PubKey()
 
-		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, nil, pub, 0, 0))
+		accTokens := sdk.TokensFromConsensusPower(1000)
+		accStakingTokens := sdk.TokensFromConsensusPower(500)
+		coins := sdk.Coins{
+			sdk.NewCoin(fmt.Sprintf("%stoken", nodeDirName), accTokens),
+			sdk.NewCoin(sdk.DefaultBondDenom, accStakingTokens),
+		}
+
+		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, coins.Sort(), pub, 0, 0))
+
 		valTokens := sdk.TokensFromConsensusPower(100)
 		msg := staking.NewMsgCreateValidator(
 			sdk.ValAddress(addr),
