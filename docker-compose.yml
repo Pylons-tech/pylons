@@ -1,50 +1,53 @@
-version: '2.0'
+version: '3'
 services:
-  pylonsdnode0:
-    container_name: pylonsdnode0
-    image: pylonsdnode:latest
+  pylonsdm1node0:
+    container_name: pylonsdm1node0
+    image: pylonsdm1node:latest
     build:
       context: .
       dockerfile: Dockerfile3n
+      args:
+        node_id: 0
+        pylonsd_home: /build/node0/pylonsd
     ports:
       - "26656-26657:26656-26657"
-    environment:
-      - ID=0
     volumes:
-      - ./build:/pylonsd:Z
+      - ./build:/build:Z
     networks:
       localnet:
         ipv4_address: 192.168.10.2
-  pylonsdnode1:
-    container_name: pylonsdnode1
-    image: pylonsdnode:latest
-    build:
-      context: .
-      dockerfile: Dockerfile3n
-    ports:
-      - "26659-26660:26656-26657"
-    environment:
-      - ID=1
-    volumes:
-      - ./build:/pylonsd:Z
-    networks:
-      localnet:
-        ipv4_address: 192.168.10.3
-  pylonsdnode2:
-    container_name: pylonsdnode2
-    image: pylonsdnode:latest
-    build:
-      context: .
-      dockerfile: Dockerfile3n
-    ports:
-      - "26661-26662:26656-26657"
-    environment:
-      - ID=2
-    volumes:
-      - ./build:/pylonsd:Z
-    networks:
-      localnet:
-        ipv4_address: 192.168.10.4
+  # pylonsdm1node1:
+  #   container_name: pylonsdm1node1
+  #   image: pylonsdm1node:latest
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile3n
+  #     args:
+  #       ID: 1
+  #       PYLONSDHOME: /build/node1/pylonsd
+  #   ports:
+  #     - "26659-26660:26656-26657"
+  #   volumes:
+  #     - ./build:/build:Z
+  #   networks:
+  #     localnet:
+  #       ipv4_address: 192.168.10.3
+  # pylonsdm1node2:
+  #   container_name: pylonsdm1node2
+  #   image: pylonsdm1node:latest
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile3n
+  #     args:
+  #       ID: 2
+  #       PYLONSDHOME: /build/node2/pylonsd
+  #   ports:
+  #     - "26661-26662:26656-26657"
+  #   volumes:
+  #     - ./build:/build:Z
+  #   networks:
+  #     localnet:
+  #       ipv4_address: 192.168.10.4
 networks:
   localnet:
     driver: bridge

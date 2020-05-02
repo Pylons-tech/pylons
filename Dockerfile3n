@@ -9,9 +9,12 @@ LABEL maintainer="Michael Sofaer <m@pylons.tech>"
 # Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Set environment variable for this node
-ENV ID=$ID
-ENV PYLONSDHOME=/pylonsd/node$ID/pylonsd
+# Defined args from docker-compose
+ARG node_id
+ARG pylonsd_home
+
+# Set home env
+ENV pylonsd_home $pylonsd_home
 
 # Copy go mod and sum files
 COPY go.mod go.sum ./
@@ -22,12 +25,6 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container
 COPY . .
 
-# Build the daemon
-RUN go build ./cmd/pylonsd/
-
-# Build the cli
-RUN go build ./cmd/pylonscli
-
 # Install the daemon
 RUN go install ./cmd/pylonsd
 
@@ -35,10 +32,10 @@ RUN go install ./cmd/pylonsd
 RUN go install ./cmd/pylonscli
 
 # Basic installation for daemon and cli
-RUN pylonscli config chain-id pylonschain --home $PYLONSDHOME
-RUN pylonscli config output json --home $PYLONSDHOME
-RUN pylonscli config indent true --home $PYLONSDHOME
-RUN pylonscli config trust-node true --home $PYLONSDHOME
+RUN pylonscli config chain-id pylonschain --home $pylonsd_home
+RUN pylonscli config output json --home $pylonsd_home
+RUN pylonscli config indent true --home $pylonsd_home
+RUN pylonscli config trust-node true --home $pylonsd_home
 
 # Command to run the executable
-CMD ["pylonsd", "start", "--home", "$PYLONSDHOME", "--rpc.laddr", "tcp://0.0.0.0:26657"]
+CMD pylonsd start --home $pylonsd_home --rpc.laddr tcp://0.0.0.0:26657
