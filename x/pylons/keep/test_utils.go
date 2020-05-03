@@ -2,13 +2,27 @@ package keep
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	codecstd "github.com/cosmos/cosmos-sdk/codec/std"
+	"github.com/cosmos/cosmos-sdk/types/module"
+
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/bank"
+	"github.com/cosmos/cosmos-sdk/x/capability"
+	"github.com/cosmos/cosmos-sdk/x/crisis"
 	distr "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	"github.com/cosmos/cosmos-sdk/x/evidence"
+	"github.com/cosmos/cosmos-sdk/x/genutil"
+	"github.com/cosmos/cosmos-sdk/x/gov"
+	"github.com/cosmos/cosmos-sdk/x/ibc"
+	transfer "github.com/cosmos/cosmos-sdk/x/ibc/20-transfer"
+	"github.com/cosmos/cosmos-sdk/x/mint"
 	"github.com/cosmos/cosmos-sdk/x/params"
+	"github.com/cosmos/cosmos-sdk/x/slashing"
+	"github.com/cosmos/cosmos-sdk/x/staking"
+	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmtypes "github.com/tendermint/tendermint/types"
@@ -43,9 +57,37 @@ func createTestCodec() *codec.Codec {
 	return cdc
 }
 
+// NewBasicManager is in charge of setting up basic module elemnets
+var ModuleBasics = module.NewBasicManager(
+	auth.AppModuleBasic{},
+	genutil.AppModuleBasic{},
+	bank.AppModuleBasic{},
+	capability.AppModuleBasic{},
+	staking.AppModuleBasic{},
+	mint.AppModuleBasic{},
+	params.AppModuleBasic{},
+	crisis.AppModuleBasic{},
+	slashing.AppModuleBasic{},
+	ibc.AppModuleBasic{},
+	upgrade.AppModuleBasic{},
+	evidence.AppModuleBasic{},
+	transfer.AppModuleBasic{},
+)
+
+var maccPerms = map[string][]string{
+	auth.FeeCollectorName:           nil,
+	distr.ModuleName:                nil,
+	mint.ModuleName:                 {auth.Minter},
+	staking.BondedPoolName:          {auth.Burner, auth.Staking},
+	staking.NotBondedPoolName:       {auth.Burner, auth.Staking},
+	gov.ModuleName:                  {auth.Burner},
+	transfer.GetModuleAccountName(): {auth.Minter, auth.Burner},
+}
+
 func SetupTestCoinInput() TestCoinInput {
 	// parts from https://github.com/cosmos/cosmos-sdk/blob/release/v0.38.3/x/staking/keeper/test_common.go
-	cdc := createTestCodec()
+	cdc := codecstd.MakeCodec(ModuleBasics)
+	appCodec := codecstd.NewAppCodec(cdc)
 	db := dbm.NewMemDB()
 
 	keyAcc := sdk.NewKVStoreKey(auth.StoreKey)
@@ -88,12 +130,13 @@ func SetupTestCoinInput() TestCoinInput {
 	)
 
 	blacklistedAddrs := make(map[string]bool)
-	pk := params.NewKeeper(cdc, keyParams, tkeyParams)
+	pk := params.NewKeeper(appCodec, keyParams, tkeyParams)
 	accountKeeper := auth.NewAccountKeeper(
-		cdc,    // amino codec
-		keyAcc, // target store
+		appCodec, // amino codec
+		keyAcc,   // target store
 		pk.Subspace(auth.DefaultParamspace),
 		auth.ProtoBaseAccount, // prototype
+		maccPerms,
 	)
 
 	bk := bank.NewBaseKeeper(

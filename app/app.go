@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 
+	codecstd "github.com/cosmos/cosmos-sdk/codec/std"
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/Pylons-tech/pylons/x/pylons"
@@ -149,7 +150,8 @@ var _ simapp.App = (*PylonsApp)(nil)
 // NewPylonsApp is a constructor function for PylonsApp
 func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*baseapp.BaseApp)) *PylonsApp {
 	// First define the top level codec that will be shared by the different modules
-	cdc := MakeCodec()
+	cdc := codecstd.MakeCodec(ModuleBasics)
+	appCodec := codecstd.NewAppCodec(cdc)
 
 	// BaseApp handles interactions with Tendermint through the ABCI protocol
 	bApp := baseapp.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
