@@ -83,8 +83,8 @@ func main() {
 	pubKey := crypto.PubKeySecp256k1(pubKeyBytes33)
 	pubKey.Address()
 	fmt.Println("GIRISH", pubKey.Address())
-	bech32PubKey := sdk.MustBech32ifyAccPub(pubKey)
-	fmt.Println("bech32PubKey:", bech32PubKey)
+	// bech32PubKey := sdk.MustBech32ifyAccPub(pubKey)
+	// fmt.Println("bech32PubKey:", bech32PubKey)
 
 	keybase, err := clkeys.NewKeyBaseFromDir("/home/girish/.plncli")
 	if err != nil {
