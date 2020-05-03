@@ -101,6 +101,7 @@ func SetupTestCoinInput() TestCoinInput {
 	rcKey := sdk.NewKVStoreKey("pylons_recipe")
 	tdKey := sdk.NewKVStoreKey("pylons_trade")
 	itKey := sdk.NewKVStoreKey("pylons_item")
+	bankKey := sdk.NewKVStoreKey(bank.StoreKey)
 	execKey := sdk.NewKVStoreKey("pylons_execution")
 
 	ms := store.NewCommitMultiStore(db)
@@ -140,7 +141,8 @@ func SetupTestCoinInput() TestCoinInput {
 	)
 
 	bk := bank.NewBaseKeeper(
-		cdc,
+		appCodec,
+		bankKey,
 		accountKeeper,
 		pk.Subspace(bank.DefaultParamspace),
 		blacklistedAddrs,
