@@ -29,7 +29,7 @@ var (
 type AppModuleBasic struct{}
 
 func (AppModuleBasic) Name() string {
-	return "Pylons"
+	return "pylons"
 }
 
 func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
