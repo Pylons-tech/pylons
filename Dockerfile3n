@@ -1,0 +1,41 @@
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+
+# Start from the latest golang base image
+FROM golang:latest
+
+# Add Maintainer Info
+LABEL maintainer="Michael Sofaer <m@pylons.tech>"
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Defined args from docker-compose
+ARG node_id
+ARG pylonsd_home
+
+# Set home env
+ENV pylonsd_home $pylonsd_home
+
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY . .
+
+# Install the daemon
+RUN go install ./cmd/pylonsd
+
+# Install the cli
+RUN go install ./cmd/pylonscli
+
+# Basic installation for daemon and cli
+RUN pylonscli config chain-id pylonschain --home $pylonsd_home
+RUN pylonscli config output json --home $pylonsd_home
+RUN pylonscli config indent true --home $pylonsd_home
+RUN pylonscli config trust-node true --home $pylonsd_home
+
+# Command to run the executable
+CMD pylonsd start --home $pylonsd_home --rpc.laddr tcp://0.0.0.0:26657
