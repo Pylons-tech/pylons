@@ -19,6 +19,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
+
+	"github.com/spf13/viper"
 )
 
 type SuccessTxResp struct {
@@ -44,6 +46,8 @@ func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 	var err error
 	cdc := GetAminoCdc()
 	cliCtx := context.NewCLIContext().WithCodec(cdc)
+
+	viper.Set("keyring-backend", "os")
 
 	txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylons")
 	if txBldr.SimulateAndExecute() {
@@ -203,6 +207,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--from", signer,
 		"--offline",
 		"--chain-id", "pylonschain",
+		"--keyring-backend", "os",
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
 	}
