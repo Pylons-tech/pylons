@@ -48,5 +48,9 @@ func FiatItem(cdc *codec.Codec) *cobra.Command {
 
 	ccb.PersistentFlags().StringVar(&msgFI.CookbookID, "cookbookID", "", "The ID of the cookbook for this item")
 
+	ccb.PersistentFlags().String(FlagKeyringBackend, "os", "Select keyring's backend (os|file|test)")
+	ccb.PersistentFlags().String(FlagFrom, "", "Name or address of private key with which to sign")
+	ccb.PersistentFlags().String(FlagBroadcastMode, BroadcastSync, "Transaction broadcasting mode (sync|async|block)")
+
 	return ccb
 }

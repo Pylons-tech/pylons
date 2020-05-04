@@ -22,7 +22,7 @@ import (
 )
 
 func SendPylons(cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
+	ccb := &cobra.Command{
 		Use:   "send-pylons [name] [amount]",
 		Short: "send pylons of specific amount to the name provided",
 		Args:  cobra.ExactArgs(2),
@@ -61,4 +61,8 @@ func SendPylons(cdc *codec.Codec) *cobra.Command {
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}
+	ccb.PersistentFlags().String(FlagKeyringBackend, "os", "Select keyring's backend (os|file|test)")
+	ccb.PersistentFlags().String(FlagFrom, "", "Name or address of private key with which to sign")
+	ccb.PersistentFlags().String(FlagBroadcastMode, BroadcastSync, "Transaction broadcasting mode (sync|async|block)")
+	return ccb
 }
