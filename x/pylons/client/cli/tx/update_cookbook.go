@@ -49,5 +49,8 @@ func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
 	ccb.PersistentFlags().StringVar(&tmpEmail, "email", "", "The support email")
 	ccb.PersistentFlags().StringVar(&tmpVersion, "version", "", "The version of the cookbook")
 
+	ccb.PersistentFlags().String(FlagKeyringBackend, "os", "Select keyring's backend (os|file|test)")
+	ccb.PersistentFlags().String(FlagFrom, "", "Name or address of private key with which to sign")
+	ccb.PersistentFlags().String(FlagBroadcastMode, BroadcastSync, "Transaction broadcasting mode (sync|async|block)")
 	return ccb
 }

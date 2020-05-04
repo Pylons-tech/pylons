@@ -21,7 +21,7 @@ const (
 )
 
 func GetPylons(cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
+	ccb := &cobra.Command{
 		Use:   "get-pylons",
 		Short: "ask for pylons. 500 pylons per request",
 		Args:  cobra.ExactArgs(0),
@@ -39,4 +39,8 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}
+	ccb.PersistentFlags().String(FlagKeyringBackend, "os", "Select keyring's backend (os|file|test)")
+	ccb.PersistentFlags().String(FlagFrom, "", "Name or address of private key with which to sign")
+	ccb.PersistentFlags().String(FlagBroadcastMode, BroadcastSync, "Transaction broadcasting mode (sync|async|block)")
+	return ccb
 }
