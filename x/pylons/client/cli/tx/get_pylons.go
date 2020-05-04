@@ -16,12 +16,28 @@ import (
 )
 
 const (
+	// BroadcastBlock defines a tx broadcasting mode where the client waits for
+	// the tx to be committed in a block.
+	BroadcastBlock = "block"
+	// BroadcastSync defines a tx broadcasting mode where the client waits for
+	// a CheckTx execution response only.
+	BroadcastSync = "sync"
+	// BroadcastAsync defines a tx broadcasting mode where the client returns
+	// immediately.
+	BroadcastAsync = "async"
+
+	FlagFrom               = "from"
+	FlagBroadcastMode      = "broadcast-mode"
+	FlagKeyringBackend     = "keyring-backend"
+)
+
+const (
 	// DefaultCoinPerRequest is the number of coins that will be sent per faucet request
 	DefaultCoinPerRequest = 500
 )
 
 func GetPylons(cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
+	ccb := &cobra.Command{
 		Use:   "get-pylons",
 		Short: "ask for pylons. 500 pylons per request",
 		Args:  cobra.ExactArgs(0),
@@ -39,4 +55,8 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}
+	ccb.PersistentFlags().String(FlagKeyringBackend, "os", "Select keyring's backend (os|file|test)")
+	ccb.PersistentFlags().String(FlagFrom, "", "Name or address of private key with which to sign")
+	ccb.PersistentFlags().String(FlagBroadcastMode, BroadcastSync, "Transaction broadcasting mode (sync|async|block)")
+	return ccb
 }
