@@ -214,7 +214,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	}
 	// t.Log("TX raw file output=", string(output))
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")
-	t.Log("TX sign result output=", string(output))
+	//t.Log("TX sign result output=", string(output))
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
