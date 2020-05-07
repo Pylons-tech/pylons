@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -142,6 +143,8 @@ func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
 
 func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	fmt.Println(err)
+	fmt.Println(output)
 	if err != nil {
 		return output, err
 	}
