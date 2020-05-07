@@ -44,7 +44,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 			WaitForNextBlock()
 
-			txHandleResBytes, err := GetTxData(txhash, t)
+			txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
 			resp := handlers.UpdateItemStringResp{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)

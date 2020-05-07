@@ -197,7 +197,7 @@ func MockItemGUID(name string, t *testing.T) string {
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating item %+v", err)
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.FiatItemResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)

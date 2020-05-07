@@ -109,6 +109,19 @@ func ListItemsViaCLI(account string) ([]types.Item, error) {
 	return itemResp.Items, err
 }
 
+func WaitAndGetTxError(txhash string, maximum_wait_block int64, t *testing.T) ([]byte, error) {
+	txErrorResBytes, err := GetTxError(txhash, t)
+	if err != nil { // maybe transaction is not contained in block
+		if maximum_wait_block == 0 {
+			return txErrorResBytes, errors.New("didn't get result waiting for maximum_wait_block")
+		} else {
+			WaitForNextBlock()
+			return WaitAndGetTxError(txhash, maximum_wait_block-1, t)
+		}
+	}
+	return txErrorResBytes, nil
+}
+
 func GetTxError(txhash string, t *testing.T) ([]byte, error) {
 	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
@@ -126,7 +139,7 @@ func GetTxError(txhash string, t *testing.T) ([]byte, error) {
 }
 
 func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
-	txErrorBytes, err := GetTxError(txhash, t)
+	txErrorBytes, err := WaitAndGetTxError(txhash, 3, t)
 	t.MustNil(err)
 	hmrErr := struct {
 		Codespace string `json:"codespace"`
@@ -153,6 +166,7 @@ func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
+	fmt.Println(tx)
 	bs, err := hex.DecodeString(tx.Data)
 	if err != nil {
 		return []byte{}, err
