@@ -1,0 +1,52 @@
+{
+  "type": "cosmos-sdk/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/CreateRecipe",
+        "value": {
+          "ID": "LOUD-hunt-rabbits-with-no-weapon-recipe-v0.1.0-1579053457",
+          "CoinInputs": [],
+          "ItemInputs": [],
+          "Entries": {
+            "CoinOutputs": [
+              {
+                "Coin": "loudcoin",
+                "Count": "rand_int(5)+1"
+              }
+            ],
+            "ItemOutputs": []
+          },
+          "Outputs": [
+            {
+              "ResultEntries": [
+                "0"
+              ],
+              "Weight": "1"
+            }
+          ],
+          "ExtraInfo": "",
+          "Sender": "eugen",
+          "Name": "LOUD's hunt rabbits without sword recipe",
+          "CookbookName": "Legend of Undead Dragon",
+          "Description": "this recipe is used to hunt rabbits without sword.",
+          "BlockInterval": "0"
+        }
+      }
+    ],
+    "fee": {
+      "amount": [],
+      "gas": "200000"
+    },
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "Ag04VJhm30Hnb4eDkySI5rqD9ajZWjlyYR5ERI21y41d"
+        },
+        "signature": "Vhj9ZLnLHl3D6Zze89cCwsVysK2rPwkQpaomcfoxDfJYbCWDrkxv1RmZEgRo+VQ2frPsSaTJvHW8xIFiLlusSA=="
+      }
+    ],
+    "memo": ""
+  }
+}
