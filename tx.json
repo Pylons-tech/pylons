@@ -1,0 +1,36 @@
+{
+          "type": "cosmos-sdk/StdTx",
+          "value": {
+            "msg": [
+              {
+                "type": "pylons/CreateCookbook",
+                "value": {
+                  "CookbookID": "",
+                  "Name": "TESTCB_CreateCookbook_001",
+                  "Description": "this has to meet character limits lol",
+                  "Version": "1.0.0",
+                  "Developer": "SketchyCo",
+                  "SupportEmail": "example@example.com",
+                  "Level": "0",
+                  "Sender": "cosmos12fn0ge8nr93sf7qdjcqy36n2epltsf7nq9mxu4",
+                  "CostPerBlock": "50"
+                }
+              }
+            ],
+            "fee": {
+              "amount": [],
+              "gas": "200000"
+            },
+            "signatures": [
+              {
+                "pub_key": {
+                  "type": "tendermint/PubKeySecp256k1",
+                  "value": "Ag04VJhm30Hnb4eDkySI5rqD9ajZWjlyYR5ERI21y41d"
+                },
+                "signature": "Vhj9ZLnLHl3D6Zze89cCwsVysK2rPwkQpaomcfoxDfJYbCWDrkxv1RmZEgRo+VQ2frPsSaTJvHW8xIFiLlusSA=="
+              }
+            ],
+            "memo": ""
+          }
+        }
+
