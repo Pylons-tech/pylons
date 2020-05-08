@@ -47,6 +47,9 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 
 // HandlerMsgCheckExecution is used to check the status of an execution
 func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCheckExecution) (*sdk.Result, error) {
+	// set random seed at the start point of recipe execution
+	rand.Seed(RandomSeed(ctx))
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
