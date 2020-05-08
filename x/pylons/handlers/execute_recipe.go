@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math/rand"
 	"encoding/json"
 	"errors"
 
@@ -30,6 +31,9 @@ type ExecuteRecipeScheduleOutput struct {
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
 func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) (*sdk.Result, error) {
+	// set random seed at the start point of recipe execution
+	rand.Seed(RandomSeed(ctx))
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
