@@ -5,7 +5,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/google/uuid"
 )
 
 // MsgExecuteRecipe defines a SetName message
@@ -23,12 +22,6 @@ func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []strin
 		ItemIDs:  itemIDs,
 	}
 	return msg
-}
-
-// KeyGen generates key for the store
-func (msg MsgExecuteRecipe) KeyGen() string {
-	id := uuid.New()
-	return msg.Sender.String() + id.String()
 }
 
 // Route should return the name of the module

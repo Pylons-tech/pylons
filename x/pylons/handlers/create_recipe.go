@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math/rand"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -16,7 +17,9 @@ type CreateRecipeResponse struct {
 
 // HandlerMsgCreateRecipe is used to create recipe by a developer
 func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) (*sdk.Result, error) {
-
+	// set random seed at the start point of handler
+	rand.Seed(types.RandomSeed(ctx))
+	
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

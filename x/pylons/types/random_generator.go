@@ -1,6 +1,8 @@
 package types
 
 import (
+	"math/rand"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -39,4 +41,21 @@ func RandomSeed(ctx sdk.Context) int64 {
 		seedValue = (i*i + 1) * intv
 	}
 	return int64(seedValue)
+}
+
+type Reader struct {
+}
+
+func NewEntropyReader() *Reader {
+	return &Reader{}
+}
+
+func (r Reader) Read(b []byte) (n int, err error) {
+	entropy := []byte{}
+	for i := 0; i < len(b); i ++ {
+		entropy = append(entropy, byte(rand.Intn(256)))
+	}
+
+	n = copy(b, entropy)
+	return n, nil
 }
