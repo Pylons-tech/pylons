@@ -38,7 +38,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			name:                 "basic flow test",
 			blockInterval:        2,
 			currentItemName:      "",
-			desiredItemName:      "TESTITEM_CheckExecution__007_TC0",
+			desiredItemName:      "TESTITEM_CheckExecution__007_TC1",
 			payToComplete:        false,
 			waitForBlockInterval: true,
 			shouldSuccess:        true,
@@ -50,7 +50,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			name:                    "early payment test",
 			blockInterval:           4,
 			currentItemName:         "",
-			desiredItemName:         "TESTITEM_CheckExecution__007_TC1",
+			desiredItemName:         "TESTITEM_CheckExecution__007_TC2",
 			payToComplete:           true,
 			waitForBlockInterval:    false,
 			shouldSuccess:           true,
@@ -64,7 +64,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			name:                 "no wait direct check execution test",
 			blockInterval:        4,
 			currentItemName:      "",
-			desiredItemName:      "TESTITEM_CheckExecution__007_TC2",
+			desiredItemName:      "TESTITEM_CheckExecution__007_TC3",
 			payToComplete:        false,
 			waitForBlockInterval: false,
 			shouldSuccess:        false,
@@ -95,7 +95,6 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 }
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
-	t.Parallel()
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
@@ -104,6 +103,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
+	t.Log(rcpName)
 	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
 	ErrValidation(t, "error mocking recipe %+v", err)
 
@@ -115,6 +115,11 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	t.MustNil(err)
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
+
+	WaitForBlockInterval(3)
+
+	t.Log(execMsg)
+
 	txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 	if tc.waitForBlockInterval {
@@ -144,9 +149,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
 	txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 
-	WaitForNextBlock()
-
-	txHandleResBytes, err = GetTxData(txhash, t)
+	txHandleResBytes, err = WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CheckExecutionResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
