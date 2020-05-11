@@ -27,13 +27,15 @@ import (
 	tmconfig "github.com/tendermint/tendermint/config"
 	"github.com/tendermint/tendermint/crypto"
 	tmos "github.com/tendermint/tendermint/libs/os"
-	"github.com/tendermint/tendermint/types"
+	tmTypes "github.com/tendermint/tendermint/types"
 	tmtime "github.com/tendermint/tendermint/types/time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 	"github.com/tyler-smith/go-bip39"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var (
@@ -59,7 +61,7 @@ necessary files (private validator, genesis, config, etc.).
 Note, strict routability for addresses is turned off in the config file.
 
 Example:
-	pylonsd testnet --v 4 --output-dir ./output --starting-ip-address 192.168.10.2
+	pylonsd testnet --v 3 --output-dir ./output --starting-ip-address 192.168.10.2
 	`,
 		RunE: func(cmd *cobra.Command, _ []string) error {
 			config := ctx.Config
@@ -201,8 +203,10 @@ func InitTestnet(
 
 		accTokens := sdk.TokensFromConsensusPower(1000)
 		accStakingTokens := sdk.TokensFromConsensusPower(500)
+		pylonsTokens := sdk.TokensFromConsensusPower(50000)
 		coins := sdk.Coins{
 			sdk.NewCoin(fmt.Sprintf("%stoken", nodeDirName), accTokens),
+			sdk.NewCoin(types.Pylon, pylonsTokens),
 			sdk.NewCoin(sdk.DefaultBondDenom, accStakingTokens),
 		}
 
@@ -284,7 +288,7 @@ func initGenFiles(
 		return err
 	}
 
-	genDoc := types.GenesisDoc{
+	genDoc := tmTypes.GenesisDoc{
 		ChainID:    chainID,
 		AppState:   appGenStateJSON,
 		Validators: nil,
@@ -321,7 +325,7 @@ func collectGenFiles(
 		nodeID, valPubKey := nodeIDs[i], valPubKeys[i]
 		initCfg := genutil.NewInitConfig(chainID, gentxsDir, moniker, nodeID, valPubKey)
 
-		genDoc, err := types.GenesisDocFromFile(config.GenesisFile())
+		genDoc, err := tmTypes.GenesisDocFromFile(config.GenesisFile())
 		if err != nil {
 			return err
 		}

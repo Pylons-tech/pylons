@@ -30,13 +30,13 @@ import (
 // XXX_unrecognized     []byte   `json:"-"`
 // XXX_sizecache        int32    `json:"-"`
 
-func RandomSeed(ctx sdk.Context) int {
+func RandomSeed(ctx sdk.Context) int64 {
 	header := ctx.BlockHeader()
 	appHash := header.AppHash
 	seedValue := 0
-	for i, bytv := range appHash {
+	for i, bytv := range appHash { // len(appHash) = 11
 		intv := int(bytv)
-		seedValue = (i + 1) * intv
+		seedValue = (i*i + 1) * intv
 	}
-	return seedValue
+	return int64(seedValue)
 }

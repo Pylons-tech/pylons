@@ -8,11 +8,11 @@
           "CookbookID": "LOUD-v0.1.0-1579053457",
           "Name": "Legend of Undead Dragon",
           "Description": "This is prototype game built to run on pylons eco system.",
+          "Version": "1.0.0",
           "Developer": "Pylons/LOUD Team",
+          "SupportEmail": "stalepresh121@outlook.com",
           "Level": "0",
           "Sender": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
-          "SupportEmail": "stalepresh121@outlook.com",
-          "Version": "1.0.0",
           "CostPerBlock": "50"
         }
       }
@@ -21,8 +21,15 @@
       "amount": [],
       "gas": "200000"
     },
-    "signatures": null,
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "Aq6/QouNg+fQ7lWmsxb9P1kS6Mzx53hr8BAXhy06s5u1"
+        },
+        "signature": "D5EFoN0Rb9jDvR/xDdpSLJw0FuR76Exx3bpCDBR+mi5kgBEDjJq9pQPLDBwa4Dw9L1JlopDudOiCtZWBX90ecw=="
+      }
+    ],
     "memo": ""
   }
 }
-
