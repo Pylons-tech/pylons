@@ -151,7 +151,7 @@ func MockDetailedRecipeGUID(
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CreateRecipeResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
