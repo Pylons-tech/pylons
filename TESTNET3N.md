@@ -261,6 +261,8 @@ http://127.0.0.1:26662/net_info
 pylonscli keys add node0 --recover
 ```
 
+For recovery keyword, use `./build/node0/pylonscli/key_seed.json`
+
 - Fresh blocks
 
 ```
