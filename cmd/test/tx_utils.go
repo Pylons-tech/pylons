@@ -171,7 +171,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	}
 
 	accInfo := GetAccountInfoFromAddr(signer, t)
-	t.Log("Account Info:", accInfo)
+	//t.Log("Account Info:", accInfo)
 	nonce := accInfo.Sequence
 
 	nonceMap := make(map[string]uint64)
