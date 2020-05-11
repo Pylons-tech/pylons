@@ -1,0 +1,35 @@
+{
+  "type": "cosmos-sdk/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/CreateCookbook",
+        "value": {
+          "CookbookID": "",
+          "Name": "Legend of Undead Dragon",
+          "Description": "This is prototype game built to run on pylons eco system.",
+          "Version": "1.0.0",
+          "Developer": "Pylons/LOUD Team",
+          "SupportEmail": "stalepresh121@outlook.com",
+          "Level": "0",
+          "Sender": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
+          "CostPerBlock": "50"
+        }
+      }
+    ],
+    "fee": {
+      "amount": [],
+      "gas": "200000"
+    },
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "Aq6/QouNg+fQ7lWmsxb9P1kS6Mzx53hr8BAXhy06s5u1"
+        },
+        "signature": "oUXbGE+vfvVmLwmRfCt+fg9kmNFX9JCTw43DBVtIobldcmW2ne+oihe8mk8RAL8Yp3XIC39tIUgOEbYDPRq8kw=="
+      }
+    ],
+    "memo": ""
+  }
+}

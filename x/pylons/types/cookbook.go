@@ -55,6 +55,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 
 // KeyGen generates key for the store
 func (cb Cookbook) KeyGen() string {
+	uuid.SetRand(NewEntropyReader())
 	id := uuid.New()
 	return cb.Sender.String() + id.String()
 }

@@ -255,47 +255,83 @@ http://127.0.0.1:26662/net_info
 
 # Multi-node randomness util commands
 
+- Key add on local
+
+```
+pylonscli keys add node0 --recover
+```
+
 - Fresh blocks
+
+```
 pylonsd unsafe-reset-all --home ./build/node0/pylonsd
 pylonsd unsafe-reset-all --home ./build/node1/pylonsd
 pylonsd unsafe-reset-all --home ./build/node2/pylonsd
+```
 
+- 3 node running
+
+```
+docker-compose down
+docker-compose build
+docker-compose up
+```
+
+- single node running
+
+```
 pylonsd unsafe-reset-all
 pylonsd add-genesis-account $(pylonscli keys show node0 -a) 10000000pylon
 pylonsd start
 pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+```
 
-- 3 node running
-docker-compose down
-docker-compose build
-docker-compose up
+- Query account
 
-- Key add on local
+```
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://127.0.0.1:26662
+```
 
-pylonscli keys add node0 --recover
-
-REPLACE tx_cook, tx_execute, tx_recipe, tx_get-pylons’s sender/requester attribute to $(pylonscli keys show -a node0) = cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+- REPLACE tx_cook, tx_execute, tx_recipe, tx_get-pylons’s sender/requester attribute to $(pylonscli keys show -a node0) = cosmos13p8890funv54hflk82ju0zv47tspglpk373453
 
 - Get 500000 pylons for testing
 
+```
 pylonscli tx sign tx_get-pylons.json --from node0 --chain-id pylonschain > signed_tx_get-pylons.json
 pylonscli tx broadcast signed_tx_get-pylons.json
 pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+```
+- Cookbook with ID
 
+```
 pylonscli tx sign tx_cook.json --from node0 --chain-id pylonschain > signed_tx_cook.json
 pylonscli tx broadcast signed_tx_cook.json
 pylonscli query tx $(RETURNED TXHASH)
 pylonscli query pylons list_cookbook
+```
+- Recipe with ID
 
+```
 pylonscli tx sign tx_recipe.json --from node0 --chain-id pylonschain > signed_tx_recipe.json
 pylonscli tx broadcast signed_tx_recipe.json
 pylonscli query tx $(RETURNED TXHASH)
 pylonscli query pylons list_recipe
+```
+- Recipe Execution which has rand_int
 
+```
 pylonscli tx sign tx_execute.json --from node0 --chain-id pylonschain > signed_tx_execute.json
 pylonscli tx broadcast signed_tx_execute.json
 pylonscli query tx $(RETURNED TXHASH)
+```
+- Cookbook without ID
 
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://127.0.0.1:26662
+```
+pylonscli tx sign tx_cook_noid.json --from node0 --chain-id pylonschain > signed_tx_cook_noid.json
+pylonscli tx broadcast signed_tx_cook_noid.json
+pylonscli query tx $(RETURNED TXHASH)
+pylonscli query pylons list_cookbook
+```
+
 
