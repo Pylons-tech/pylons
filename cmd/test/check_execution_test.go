@@ -123,7 +123,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		WaitForNextBlock()
 	}
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	execResp := handlers.ExecuteRecipeResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
