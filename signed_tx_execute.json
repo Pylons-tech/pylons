@@ -7,7 +7,7 @@
         "value": {
           "RecipeID": "LOUD-hunt-rabbits-with-no-weapon-recipe-v0.1.0-1579053457",
           "Sender": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
-          "Items": []
+          "ItemIDs": null
         }
       }
     ],
@@ -15,7 +15,15 @@
       "amount": [],
       "gas": "200000"
     },
-    "signatures": null,
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "Aq6/QouNg+fQ7lWmsxb9P1kS6Mzx53hr8BAXhy06s5u1"
+        },
+        "signature": "oqkdwU3nRHhsT/HJaP3+2QOXGek4+R2zcbR+GsNkao5+PwOr9rNxG9KnLDkilIKi0xhqvx6r88HMUPC2XFuYQg=="
+      }
+    ],
     "memo": ""
   }
 }
