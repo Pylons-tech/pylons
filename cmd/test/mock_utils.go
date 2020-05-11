@@ -43,7 +43,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CreateCBResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -156,6 +156,7 @@ func MockDetailedRecipeGUID(
 	resp := handlers.CreateRecipeResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
+	t.Log(resp)
 
 	return resp.RecipeID, nil
 }
