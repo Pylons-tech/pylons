@@ -6,8 +6,10 @@
         "type": "pylons/CreateRecipe",
         "value": {
           "RecipeID": "LOUD-hunt-rabbits-with-no-weapon-recipe-v0.1.0-1579053457",
-          "CoinInputs": [],
-          "ItemInputs": [],
+          "Name": "LOUD's hunt rabbits without sword recipe",
+          "CookbookID": "LOUD-v0.1.0-1579053457",
+          "CoinInputs": null,
+          "ItemInputs": null,
           "Entries": {
             "CoinOutputs": [
               {
@@ -15,7 +17,7 @@
                 "Count": "rand_int(5)+1"
               }
             ],
-            "ItemOutputs": []
+            "ItemOutputs": null
           },
           "Outputs": [
             {
@@ -25,12 +27,9 @@
               "Weight": "1"
             }
           ],
-          "ExtraInfo": "",
+          "BlockInterval": "0",
           "Sender": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
-          "Name": "LOUD's hunt rabbits without sword recipe",
-          "CookbookID": "LOUD-v0.1.0-1579053457",
-          "Description": "this recipe is used to hunt rabbits without sword.",
-          "BlockInterval": "0"
+          "Description": "this recipe is used to hunt rabbits without sword."
         }
       }
     ],
@@ -38,7 +37,15 @@
       "amount": [],
       "gas": "200000"
     },
-    "signatures": null,
+    "signatures": [
+      {
+        "pub_key": {
+          "type": "tendermint/PubKeySecp256k1",
+          "value": "Aq6/QouNg+fQ7lWmsxb9P1kS6Mzx53hr8BAXhy06s5u1"
+        },
+        "signature": "7uEKN6YO3KNZjUHJQu8ZnqkGG/uDCa8X1p+VRNqf2VNFDglLZz4VyJcg/Kc+gtvDXMJgWeQ2scFi0SYoEoabcA=="
+      }
+    ],
     "memo": ""
   }
 }
