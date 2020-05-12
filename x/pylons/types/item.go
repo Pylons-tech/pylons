@@ -108,7 +108,6 @@ func (it Item) SetString(key string, value string) bool {
 
 // KeyGen generates key for the store
 func (it Item) KeyGen() string {
-	uuid.SetRand(NewEntropyReader())
 	id := uuid.New()
 	return it.Sender.String() + id.String()
 }
