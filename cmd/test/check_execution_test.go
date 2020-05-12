@@ -2,6 +2,7 @@ package intTest
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
 
 	originT "testing"
@@ -80,9 +81,9 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 			desiredItemName:      "TESTITEM_CheckExecution__007_TC4",
 			payToComplete:        false,
 			waitForBlockInterval: false,
-			shouldSuccess:        false,
-			expectedStatus:       "Pending",
-			expectedMessage:      "execution pending",
+			shouldSuccess:        true,
+			expectedStatus:       "Success",
+			expectedMessage:      "successfully completed the execution",
 			tryFinishedExecution: false,
 		},
 	}
@@ -103,7 +104,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
-	t.Log(rcpName)
+
 	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
 	ErrValidation(t, "error mocking recipe %+v", err)
 
@@ -117,8 +118,6 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 
 	WaitForBlockInterval(3)
-
-	t.Log(execMsg)
 
 	txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
@@ -154,6 +153,8 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	resp := handlers.CheckExecutionResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
+	fmt.Println("resp::", resp.Status)
+	fmt.Println("resp::", resp.Message)
 	t.MustTrue(resp.Status == tc.expectedStatus)
 	t.MustTrue(resp.Message == tc.expectedMessage)
 
@@ -173,7 +174,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 		WaitForNextBlock()
 
-		txHandleResBytes, err = GetTxData(txhash, t)
+		txHandleResBytes, err = WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)
 		resp := handlers.CheckExecutionResp{}
 		err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)

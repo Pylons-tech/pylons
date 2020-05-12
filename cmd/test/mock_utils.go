@@ -156,7 +156,6 @@ func MockDetailedRecipeGUID(
 	resp := handlers.CreateRecipeResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
-	t.Log(resp)
 
 	return resp.RecipeID, nil
 }
