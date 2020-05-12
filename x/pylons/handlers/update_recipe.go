@@ -13,7 +13,7 @@ type UpdateRecipeResponse struct {
 
 // HandlerMsgUpdateRecipe is used to update recipe by a developer
 func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateRecipe) (*sdk.Result, error) {
-
+	
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

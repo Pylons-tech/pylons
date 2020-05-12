@@ -16,9 +16,9 @@ type UpdateItemStringResp struct {
 	Message string
 }
 
-// HandleMsgUpdateItemString is used to transact pylons between people
-func HandleMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
-
+// HandlerMsgUpdateItemString is used to transact pylons between people
+func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
+	
 	err := msg.ValidateBasic()
 
 	if err != nil {

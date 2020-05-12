@@ -9,7 +9,7 @@ import (
 
 // HandlerMsgUpdateCookbook is used to update cookbook by a developer
 func HandlerMsgUpdateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateCookbook) (*sdk.Result, error) {
-
+	
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

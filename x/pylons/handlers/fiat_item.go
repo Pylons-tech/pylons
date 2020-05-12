@@ -13,7 +13,7 @@ type FiatItemResponse struct {
 
 // HandlerMsgFiatItem is used to create item within 1 block execution
 func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatItem) (*sdk.Result, error) {
-
+	
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

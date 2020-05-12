@@ -16,7 +16,7 @@ type CreateRecipeResponse struct {
 
 // HandlerMsgCreateRecipe is used to create recipe by a developer
 func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) (*sdk.Result, error) {
-
+	
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

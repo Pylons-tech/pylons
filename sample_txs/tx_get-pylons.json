@@ -1,0 +1,25 @@
+{
+  "type": "cosmos-sdk/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/GetPylons",
+        "value": {
+          "Amount": [
+            {
+              "denom": "pylon",
+              "amount": "500000"
+            }
+          ],
+          "Requester": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453"
+        }
+      }
+    ],
+    "fee": {
+      "amount": [],
+      "gas": "200000"
+    },
+    "signatures": null,
+    "memo": ""
+  }
+}

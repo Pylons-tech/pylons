@@ -19,6 +19,7 @@ type FulfillTradeResp struct {
 
 // HandlerMsgFulfillTrade is used to fulfill a trade
 func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFulfillTrade) (*sdk.Result, error) {
+	
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
