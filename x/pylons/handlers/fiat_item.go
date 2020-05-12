@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"math/rand"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -15,8 +13,6 @@ type FiatItemResponse struct {
 
 // HandlerMsgFiatItem is used to create item within 1 block execution
 func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatItem) (*sdk.Result, error) {
-	// set random seed at the start point of handler
-	rand.Seed(types.RandomSeed(ctx))
 	
 	err := msg.ValidateBasic()
 	if err != nil {

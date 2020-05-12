@@ -98,7 +98,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
-			result, err := HandleMsgUpdateItemString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgUpdateItemString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				resp := UpdateItemStringResp{}

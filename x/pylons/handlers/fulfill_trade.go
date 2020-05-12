@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"math/rand"
 	"errors"
 	"fmt"
 
@@ -20,8 +19,6 @@ type FulfillTradeResp struct {
 
 // HandlerMsgFulfillTrade is used to fulfill a trade
 func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFulfillTrade) (*sdk.Result, error) {
-	// set random seed at the start point of handler
-	rand.Seed(types.RandomSeed(ctx))
 	
 	err := msg.ValidateBasic()
 	if err != nil {

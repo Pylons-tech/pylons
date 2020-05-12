@@ -48,7 +48,6 @@ func NewExecution(rcpID string, cbID string, ci sdk.Coins,
 
 // KeyGen generates key for the execution
 func (exec Execution) KeyGen() string {
-	uuid.SetRand(NewEntropyReader())
 	id := uuid.New()
 	return exec.Sender.String() + id.String()
 }
