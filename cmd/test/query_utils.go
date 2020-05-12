@@ -156,8 +156,6 @@ func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
 
 func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
-	fmt.Println(err)
-	fmt.Println(output)
 	if err != nil {
 		return output, err
 	}
