@@ -116,8 +116,6 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 }
 
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
-	t.Parallel()
-
 	outputItemID := ""
 	if tc.hasOutputItem {
 		outputItemID = MockItemGUID(tc.outputItemName, t)
