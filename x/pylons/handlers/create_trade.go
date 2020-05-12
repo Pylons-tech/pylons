@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"math/rand"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -17,8 +16,6 @@ type CreateTradeResponse struct {
 
 // HandlerMsgCreateTrade is used to create a trade by a user
 func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateTrade) (*sdk.Result, error) {
-	// set random seed at the start point of handler
-	rand.Seed(types.RandomSeed(ctx))
 	
 	err := msg.ValidateBasic()
 	if err != nil {

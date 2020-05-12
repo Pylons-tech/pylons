@@ -1,19 +1,14 @@
 package handlers
 
 import (
-	"math/rand"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandleMsgSendPylons is used to transact pylons between people
-func HandleMsgSendPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendPylons) (*sdk.Result, error) {
-	// set random seed at the start point of handler
-	rand.Seed(types.RandomSeed(ctx))
+// HandlerMsgSendPylons is used to transact pylons between people
+func HandlerMsgSendPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendPylons) (*sdk.Result, error) {
 	
 	err := msg.ValidateBasic()
 

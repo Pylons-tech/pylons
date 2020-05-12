@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"math/rand"
 	"errors"
 	"fmt"
 
@@ -18,9 +17,7 @@ type CreateCBResponse struct {
 
 // HandlerMsgCreateCookbook is used to create cookbook by a developer
 func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) (*sdk.Result, error) {
-	// set random seed at the start point of handler
-	rand.Seed(types.RandomSeed(ctx))
-	
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

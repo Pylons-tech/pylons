@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"math/rand"
 	"errors"
 	"fmt"
 
@@ -17,10 +16,8 @@ type UpdateItemStringResp struct {
 	Message string
 }
 
-// HandleMsgUpdateItemString is used to transact pylons between people
-func HandleMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
-	// set random seed at the start point of handler
-	rand.Seed(types.RandomSeed(ctx))
+// HandlerMsgUpdateItemString is used to transact pylons between people
+func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
 	
 	err := msg.ValidateBasic()
 

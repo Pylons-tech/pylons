@@ -80,7 +80,6 @@ func (rcp Recipe) String() string {
 
 // KeyGen generates key for the store
 func (rcp Recipe) KeyGen() string {
-	uuid.SetRand(NewEntropyReader())
 	id := uuid.New()
 	return rcp.Sender.String() + id.String()
 }

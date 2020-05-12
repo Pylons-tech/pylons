@@ -76,7 +76,6 @@ func (trd *Trade) String() string {
 
 // KeyGen generates key for the store
 func (trd Trade) KeyGen() string {
-	uuid.SetRand(NewEntropyReader())
 	id := uuid.New()
 	return trd.Sender.String() + id.String()
 }
