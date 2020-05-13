@@ -1,0 +1,6 @@
+#cloudbuild.yaml
+steps:
+- name: 'docker/compose:1.19.0'
+  args: ['up', '-d']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '.', '-f', 'Dockerfile_3n_test']
