@@ -261,7 +261,7 @@ brew cask install google-cloud-sdk
 gcloud components install docker-credential-gcr
 gcloud auth configure-docker
 gcloud components install cloud-build-local
-Nano ~/.bash_profile
+nano ~/.bash_profile
 export PATH=/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH
 
 gcloud auth login
