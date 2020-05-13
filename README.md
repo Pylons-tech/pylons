@@ -253,3 +253,19 @@ Successful result
   "txhash": "8A847C81B396B07578FAEB25AA3E01FA11F03F300ECDDC8E4918A1D6F883640A"
 }
 ```
+
+### 3 node local cloudbuild setup guide on OSX
+
+```
+brew cask install google-cloud-sdk
+gcloud components install docker-credential-gcr
+gcloud auth configure-docker
+gcloud components install cloud-build-local
+Nano ~/.bash_profile
+export PATH=/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PATH
+
+gcloud auth login
+gcloud projects create pylons-3nbuild
+gcloud config set project pylons-3nbuild
+cloud-build-local --config=cloudbuild_3n_test.yaml --dryrun=false .
+```
