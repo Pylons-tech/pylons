@@ -15,7 +15,7 @@ const (
 	// BroadcastAsync defines a tx broadcasting mode where the client returns
 	// immediately.
 	BroadcastAsync = "async"
-
+	FlagNode               = "node"
 	FlagFrom               = "from"
 	FlagBroadcastMode      = "broadcast-mode"
 	FlagKeyringBackend     = "keyring-backend"

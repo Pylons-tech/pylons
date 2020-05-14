@@ -22,7 +22,7 @@ COPY . .
 RUN go install ./cmd/pylonscli
 
 # Unit test
-RUN GO111MODULE=on make unit_tests
+# RUN GO111MODULE=on make unit_tests
 
 # Basic installation for daemon and cli
 RUN make init_accounts_3n_test
@@ -32,8 +32,8 @@ RUN pylonscli config indent true
 RUN pylonscli config trust-node true
 
 # Run daemon and do integration test
-RUN sleep 10 && GO111MODULE=on make int_tests
+RUN GO111MODULE=on make int_tests ARGS="--node=tcp://169.254.0.3:26657"
 
 # Run fixture test
-# RUN sleep 10 && GO111MODULE=on make fixture_tests ARGS="-runserial"
+# RUN GO111MODULE=on make fixture_tests ARGS="-runserial"
 
