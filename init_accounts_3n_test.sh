@@ -17,9 +17,28 @@ pylonscli keys add eugen --keyring-backend=test
 # pylonsd unsafe-reset-all --home ./testnet/node2/pylonsd
 
 pylonscli tx pylons send-pylons $(pylonscli keys show -a michael --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
-pylonscli tx pylons send-pylons $(pylonscli keys show -a eugen --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
-pylonscli tx pylons send-pylons $(pylonscli keys show -a iain --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
-pylonscli tx pylons send-pylons $(pylonscli keys show -a afti --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
-pylonscli tx pylons send-pylons $(pylonscli keys show -a girish --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
+sleep 6
 pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://169.254.0.3:26657
+pylonscli query account $(pylonscli keys show -a michael --keyring-backend=test) --node tcp://169.254.0.3:26657
+
+pylonscli tx pylons send-pylons $(pylonscli keys show -a eugen --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
+sleep 6
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://169.254.0.3:26657
+pylonscli query account $(pylonscli keys show -a eugen --keyring-backend=test) --node tcp://169.254.0.3:26657
+
+pylonscli tx pylons send-pylons $(pylonscli keys show -a iain --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
+sleep 6
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://169.254.0.3:26657
+pylonscli query account $(pylonscli keys show -a iain --keyring-backend=test) --node tcp://169.254.0.3:26657
+
+pylonscli tx pylons send-pylons $(pylonscli keys show -a afti --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
+sleep 6
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://169.254.0.3:26657
+pylonscli query account $(pylonscli keys show -a afti --keyring-backend=test) --node tcp://169.254.0.3:26657
+
+pylonscli tx pylons send-pylons $(pylonscli keys show -a girish --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://169.254.0.3:26657 <<< y
+sleep 6
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://169.254.0.3:26657
+pylonscli query account $(pylonscli keys show -a girish --keyring-backend=test) --node tcp://169.254.0.3:26657
+
 # sleep 1000;
