@@ -1,7 +1,15 @@
 #cloudbuild.yaml
 steps:
-- name: 'docker/compose:1.19.0'
+- id: 'build 3 node testnet'
+  name: 'docker/compose:1.19.0'
   # args: ['down']
-  args: ['up', '-d']
+  args: ['up', '--build', '-d']
+  # args: ['up', '-d']
+  # args: ['up', '--build']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '.', '-f', 'Dockerfile_3n_test']
+  args: ['build', '.', '-f', 'Dockerfile_3n_test', '--network', 'cloudbuild']
+  waitFor: ['build 3 node testnet']
+images:
+- pylonstestnode0
+- pylonstestnode1
+- pylonstestnode2

@@ -1,6 +1,7 @@
 package intTest
 
 import (
+	"flag"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
@@ -10,7 +11,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+func init() {
+	flag.StringVar(&CLIOpts.CustomNode, "node", "tcp://localhost:26657", "custom node url")
+}
+
 func TestCreateCookbookViaCLI(originT *originT.T) {
+	flag.Parse()
 	t := testing.NewT(originT)
 
 	tests := []struct {
