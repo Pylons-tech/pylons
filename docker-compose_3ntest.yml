@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile3n
       args:
         node_id: 0
-        pylonsd_home: /build/node0/pylonsd
+        pylonsd_home: ./testnet/node0/pylonsd
     ports:
       - "26656-26657:26656-26657"
     volumes:
@@ -15,6 +15,8 @@ services:
     networks:
       testnet:
         ipv4_address: 192.168.10.2
+      cloudbuildnet:
+        ipv4_address: 169.254.0.3
   pylonstestnode1:
     container_name: pylonstestnode1
     build:
@@ -22,7 +24,7 @@ services:
       dockerfile: Dockerfile3n
       args:
         node_id: 1
-        pylonsd_home: /build/node1/pylonsd
+        pylonsd_home: ./testnet/node1/pylonsd
     ports:
       - "26659-26660:26656-26657"
     volumes:
@@ -30,6 +32,8 @@ services:
     networks:
       testnet:
         ipv4_address: 192.168.10.3
+      cloudbuildnet:
+        ipv4_address: 169.254.0.4
   pylonstestnode2:
     container_name: pylonstestnode2
     build:
@@ -37,7 +41,7 @@ services:
       dockerfile: Dockerfile3n
       args:
         node_id: 2
-        pylonsd_home: /build/node2/pylonsd
+        pylonsd_home: ./testnet/node2/pylonsd
     ports:
       - "26661-26662:26656-26657"
     volumes:
@@ -45,6 +49,8 @@ services:
     networks:
       testnet:
         ipv4_address: 192.168.10.4
+      cloudbuildnet:
+        ipv4_address: 169.254.0.5
 networks:
   testnet:
     driver: bridge
@@ -53,3 +59,6 @@ networks:
       config:
       -
         subnet: 192.168.10.0/16
+  cloudbuildnet:
+    external:
+      name: cloudbuild
