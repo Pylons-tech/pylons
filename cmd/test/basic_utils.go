@@ -58,7 +58,7 @@ func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pyl
 }
 
 func GetAccountAddr(account string, t *testing.T) string {
-	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a"}, "")
+	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a", "--keyring-backend", "test"}, "")
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
 		t.Fatalf("error getting account address %+v, account=%s", err, account)
