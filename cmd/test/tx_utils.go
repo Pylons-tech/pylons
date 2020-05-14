@@ -47,7 +47,7 @@ func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 	cdc := GetAminoCdc()
 	cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-	viper.Set("keyring-backend", "os")
+	viper.Set("keyring-backend", "test")
 	viper.Set("chain-id", "pylonschain")
 
 	txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc)).WithChainID("pylonschain")
@@ -211,6 +211,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--chain-id", "pylonschain",
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
+		"--keyring-backend", "test",
 	}
 	// t.Log("TX raw file output=", string(output))
 	output, err = RunPylonsCli(txSignArgs, "11111111\n")

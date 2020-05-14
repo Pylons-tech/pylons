@@ -1,7 +1,7 @@
 version: '3'
 services:
-  pylonstestnode0:
-    container_name: pylonstestnode0
+  pylonsdm1node0:
+    container_name: pylonsdm1node0
     build:
       context: .
       dockerfile: Dockerfile3n
@@ -11,12 +11,12 @@ services:
     ports:
       - "26656-26657:26656-26657"
     volumes:
-      - ./testnet:/build:Z
+      - ./build:/build:Z
     networks:
-      testnet:
+      localnet:
         ipv4_address: 192.168.10.2
-  pylonstestnode1:
-    container_name: pylonstestnode1
+  pylonsdm1node1:
+    container_name: pylonsdm1node1
     build:
       context: .
       dockerfile: Dockerfile3n
@@ -26,12 +26,12 @@ services:
     ports:
       - "26659-26660:26656-26657"
     volumes:
-      - ./testnet:/build:Z
+      - ./build:/build:Z
     networks:
-      testnet:
+      localnet:
         ipv4_address: 192.168.10.3
-  pylonstestnode2:
-    container_name: pylonstestnode2
+  pylonsdm1node2:
+    container_name: pylonsdm1node2
     build:
       context: .
       dockerfile: Dockerfile3n
@@ -41,12 +41,12 @@ services:
     ports:
       - "26661-26662:26656-26657"
     volumes:
-      - ./testnet:/build:Z
+      - ./build:/build:Z
     networks:
-      testnet:
+      localnet:
         ipv4_address: 192.168.10.4
 networks:
-  testnet:
+  localnet:
     driver: bridge
     ipam:
       driver: default

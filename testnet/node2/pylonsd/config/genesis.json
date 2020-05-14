@@ -57,6 +57,10 @@
                 "amount": "1000000000"
               },
               {
+                "denom": "pylon",
+                "amount": "500000000"
+              },
+              {
                 "denom": "stake",
                 "amount": "500000000"
               }
