@@ -32,7 +32,6 @@ type CheckExecutionTestCase struct {
 
 func TestCheckExecutionViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
-	t.Parallel()
 
 	tests := []CheckExecutionTestCase{
 		{
