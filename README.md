@@ -267,5 +267,5 @@ export PATH=/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:$PA
 gcloud auth login
 gcloud projects create pylons-3nbuild
 gcloud config set project pylons-3nbuild
-cloud-build-local --config=cloudbuild_3ntest.yaml --dryrun=false .
+cloud-build-local --config=cloudbuild.3ntest.yaml --dryrun=false .
 ```

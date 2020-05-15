@@ -4,7 +4,7 @@ services:
     container_name: pylonsdm1node0
     build:
       context: .
-      dockerfile: Dockerfile3n
+      dockerfile: Dockerfile.3n
       args:
         node_id: 0
         pylonsd_home: /build/node0/pylonsd
@@ -19,7 +19,7 @@ services:
     container_name: pylonsdm1node1
     build:
       context: .
-      dockerfile: Dockerfile3n
+      dockerfile: Dockerfile.3n
       args:
         node_id: 1
         pylonsd_home: /build/node1/pylonsd
@@ -34,7 +34,7 @@ services:
     container_name: pylonsdm1node2
     build:
       context: .
-      dockerfile: Dockerfile3n
+      dockerfile: Dockerfile.3n
       args:
         node_id: 2
         pylonsd_home: /build/node2/pylonsd
