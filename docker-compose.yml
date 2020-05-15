@@ -4,7 +4,7 @@ services:
     container_name: pylonstestnode0
     build:
       context: .
-      dockerfile: Dockerfile3n
+      dockerfile: Dockerfile.3n
       args:
         node_id: 0
         pylonsd_home: ./testnet/node0/pylonsd
@@ -21,7 +21,7 @@ services:
     container_name: pylonstestnode1
     build:
       context: .
-      dockerfile: Dockerfile3n
+      dockerfile: Dockerfile.3n
       args:
         node_id: 1
         pylonsd_home: ./testnet/node1/pylonsd
@@ -38,7 +38,7 @@ services:
     container_name: pylonstestnode2
     build:
       context: .
-      dockerfile: Dockerfile3n
+      dockerfile: Dockerfile.3n
       args:
         node_id: 2
         pylonsd_home: ./testnet/node2/pylonsd

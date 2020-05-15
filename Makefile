@@ -16,8 +16,8 @@ go.sum: go.mod
 init_accounts:
 	bash ./init_accounts.sh
 
-init_accounts_3ntest:
-	bash ./init_accounts_3ntest.sh
+init_accounts.3ntest:
+	bash ./init_accounts.3ntest.sh
 
 reset_chain:
 	pylonsd unsafe-reset-all
