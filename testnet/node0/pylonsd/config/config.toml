@@ -50,7 +50,7 @@ proxy_app = "tcp://127.0.0.1:26658"
 
 [p2p]
   addr_book_file = "config/addrbook.json"
-  addr_book_strict = true
+  addr_book_strict = false
   allow_duplicate_ip = false
   dial_timeout = "3s"
   external_address = ""
