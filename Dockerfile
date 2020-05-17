@@ -34,28 +34,33 @@ RUN pylonscli config output json
 RUN pylonscli config indent true
 RUN pylonscli config trust-node true
 
+COPY Makefile .
+RUN make unit_tests
+
 # Final image
 FROM golang:latest as pylonsd
 
 WORKDIR /root
-
 COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /go/bin/pylonscli /usr/bin/pylonscli
 COPY --from=build /root/.plncli /root/.plncli
-
-# Command to run the executable
 CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
-FROM build as test
+#Test server
+FROM pylonsd as test_server
 
 COPY Makefile .
+RUN pylonsd init masternode --chain-id pylonschain
 COPY init_accounts.sh .
 RUN chmod +x init_accounts.sh
-
-# Run daemon and do integration test
-RUN make unit_tests
 RUN make init_accounts
-RUN GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.0.3:26657"
+CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
-# Run fixture test
-RUN GO111MODULE=on make fixture_tests ARGS="-runserial"
+#Run the tests
+FROM build as integration_test
+
+COPY --from=test_server /root/.plncli/keyring-test-cosmos/ /root/.plncli/keyring-test-cosmos
+CMD sleep 10 && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.3:26657"
+
+FROM test_server as fixture_test
+CMD sleep 10 && GO111MODULE=on make fixture_tests ARGS="-runserial"
