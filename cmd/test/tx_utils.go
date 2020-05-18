@@ -92,8 +92,6 @@ func broadcastTxFile(signedTxFile string, t *testing.T) string {
 		// This can happen when "pylonscli config output json" is not set or when real issue is available
 		ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
 
-		t.Log("successTxResp", string(output), err)
-
 		t.MustTrue(len(successTxResp.TxHash) == 64)
 		t.MustTrue(len(successTxResp.Height) > 0)
 		return successTxResp.TxHash
@@ -171,7 +169,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	}
 
 	accInfo := GetAccountInfoFromAddr(signer, t)
-	//t.Log("Account Info:", accInfo)
+	// t.Log("Account Info:", accInfo)
 	nonce := accInfo.Sequence
 
 	nonceMap := make(map[string]uint64)

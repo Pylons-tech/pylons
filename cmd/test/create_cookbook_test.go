@@ -18,6 +18,7 @@ func init() {
 func TestCreateCookbookViaCLI(originT *originT.T) {
 	flag.Parse()
 	t := testing.NewT(originT)
+	// t.Parallel()
 
 	tests := []struct {
 		name   string
