@@ -54,6 +54,9 @@ func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pyl
 	cmd.Stdin = strings.NewReader(stdinInput)
 	res, err := cmd.CombinedOutput()
 	cliMux.Unlock()
+	if err != nil {
+		return res, errors.New(err.Error()+string(res)+"pylonscli "+strings.Join(args, " "))
+	}
 	return res, err
 }
 

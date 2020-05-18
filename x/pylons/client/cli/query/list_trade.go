@@ -29,6 +29,7 @@ func ListTrade(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			return cliCtx.PrintOutput(out)
 		},
 	}
+	ccb.PersistentFlags().String(FlagNode, "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
 	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
 	return ccb
 }
