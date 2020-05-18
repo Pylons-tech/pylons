@@ -49,18 +49,21 @@ CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 #Test server
 FROM pylonsd as test_server
 
-COPY Makefile .
-RUN pylonsd init masternode --chain-id pylonschain
-COPY init_accounts.sh .
-RUN chmod +x init_accounts.sh
-RUN make init_accounts
+# COPY Makefile .
+# RUN pylonsd init masternode --chain-id pylonschain
+# COPY init_accounts.sh .
+# RUN chmod +x init_accounts.sh
+# RUN make init_accounts
 CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
 #Run the tests
 FROM build as integration_test
-
-COPY --from=test_server /root/.plncli/keyring-test-cosmos/ /root/.plncli/keyring-test-cosmos
-CMD sleep 10 && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.3:26657"
+COPY Makefile .
+COPY init_accounts.sh .
+RUN chmod +x init_accounts.sh
+# RUN make init_accounts
+# COPY --from=test_server /root/.plncli/keyring-test-cosmos/ /root/.plncli/keyring-test-cosmos
+CMD make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.3:26657"
 
 FROM test_server as fixture_test
-CMD sleep 10 && GO111MODULE=on make fixture_tests ARGS="-runserial"
+CMD make init_accounts && GO111MODULE=on make fixture_tests ARGS="-runserial"
