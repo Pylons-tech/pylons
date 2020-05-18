@@ -1,10 +1,9 @@
 package intTest
 
 import (
+	"strings"
 	"encoding/hex"
-	"encoding/json"
 	"errors"
-	"fmt"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -132,8 +131,9 @@ func GetTxError(txhash string, t *testing.T) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-	if len(tx.Logs) > 0 {
-		return []byte(tx.Logs[0].Log), nil
+
+	if strings.Contains(tx.RawLog, "invalid request") {
+		return []byte(tx.RawLog), nil
 	}
 	return []byte{}, nil
 }
@@ -141,17 +141,7 @@ func GetTxError(txhash string, t *testing.T) ([]byte, error) {
 func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
 	txErrorBytes, err := WaitAndGetTxError(txhash, 3, t)
 	t.MustNil(err)
-	hmrErr := struct {
-		Codespace string `json:"codespace"`
-		Code      int    `json:"code"`
-		Message   string `json:"message"`
-	}{}
-	if len(txErrorBytes) == 0 {
-		return ""
-	}
-	err = json.Unmarshal(txErrorBytes, &hmrErr)
-	t.MustNil(err)
-	return hmrErr.Message
+	return string(txErrorBytes)
 }
 
 func GetTxData(txhash string, t *testing.T) ([]byte, error) {
@@ -164,7 +154,6 @@ func GetTxData(txhash string, t *testing.T) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-	fmt.Println(tx)
 	bs, err := hex.DecodeString(tx.Data)
 	if err != nil {
 		return []byte{}, err
