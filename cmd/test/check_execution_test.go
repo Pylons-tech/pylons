@@ -2,7 +2,6 @@ package intTest
 
 import (
 	"encoding/json"
-	"fmt"
 	"strconv"
 
 	originT "testing"
@@ -32,6 +31,7 @@ type CheckExecutionTestCase struct {
 
 func TestCheckExecutionViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
+	// t.Parallel()
 
 	tests := []CheckExecutionTestCase{
 		{
@@ -75,14 +75,14 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		{
 			name:                 "item upgrade check execution test and OwnerRecipeID check",
 			isUpgrdRecipe:        true,
-			blockInterval:        2,
+			blockInterval:        4,
 			currentItemName:      "TESTITEM_CheckExecution__007_TC4_CUR",
 			desiredItemName:      "TESTITEM_CheckExecution__007_TC4",
 			payToComplete:        false,
 			waitForBlockInterval: false,
-			shouldSuccess:        true,
-			expectedStatus:       "Success",
-			expectedMessage:      "successfully completed the execution",
+			shouldSuccess:        false,
+			expectedStatus:       "Pending",
+			expectedMessage:      "execution pending",
 			tryFinishedExecution: false,
 		},
 	}
@@ -95,6 +95,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 }
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
+	// t.Parallel()
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
@@ -115,8 +116,6 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	t.MustNil(err)
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
-
-	WaitForBlockInterval(3)
 
 	txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
@@ -152,8 +151,8 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	resp := handlers.CheckExecutionResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
-	fmt.Println("resp::", resp.Status)
-	fmt.Println("resp::", resp.Message)
+	// t.Log("resp::", resp.Status)
+	// t.Log("resp::", resp.Message)
 	t.MustTrue(resp.Status == tc.expectedStatus)
 	t.MustTrue(resp.Message == tc.expectedMessage)
 

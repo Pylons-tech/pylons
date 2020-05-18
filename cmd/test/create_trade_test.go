@@ -13,6 +13,7 @@ import (
 
 func TestCreateTradeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
+	// t.Parallel()
 
 	tests := []struct {
 		name      string
