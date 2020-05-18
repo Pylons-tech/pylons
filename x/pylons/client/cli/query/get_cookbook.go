@@ -11,7 +11,7 @@ import (
 
 // GetCookbook get cookbook by GUID
 func GetCookbook(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
+	ccb := &cobra.Command{
 		Use:   "get_cookbook <id>",
 		Short: "get a cookbook by id",
 		Args:  cobra.ExactArgs(1),
@@ -28,4 +28,6 @@ func GetCookbook(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			return cliCtx.PrintOutput(out)
 		},
 	}
+	ccb.PersistentFlags().String(FlagNode, "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
+	return ccb
 }
