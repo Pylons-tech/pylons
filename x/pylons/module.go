@@ -92,6 +92,11 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		tx.CreateCookbook(cdc),
 		tx.UpdateCookbook(cdc),
 		tx.FiatItem(cdc))
+	
+	pylonsTxCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
+	pylonsTxCmd.PersistentFlags().String("keyring-backend", "os", "Select keyring's backend (os|file|test)")
+	pylonsTxCmd.PersistentFlags().String("from", "", "Name or address of private key with which to sign")
+	pylonsTxCmd.PersistentFlags().String("broadcast-mode", "sync", "Transaction broadcasting mode (sync|async|block)")
 
 	return pylonsTxCmd
 }
