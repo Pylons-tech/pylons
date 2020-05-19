@@ -1,7 +1,6 @@
 package intTest
 
 import (
-	"flag"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
