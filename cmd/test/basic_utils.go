@@ -27,6 +27,12 @@ type CLIOptions struct {
 var CLIOpts CLIOptions
 var cliMux sync.Mutex
 
+var customNode = flag.String("node", "tcp://localhost:26657", "custom node url")
+
+func init() {
+	CLIOpts.CustomNode = customNode
+}
+
 func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(fileURL)
 	if err != nil {
