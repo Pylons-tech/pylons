@@ -73,6 +73,8 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		query.ItemsBySender(StoreKey, cdc),
 		query.ListExecutions(StoreKey, cdc),
 		query.ListTrade(StoreKey, cdc))
+	
+	pylonsQueryCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
 
 	return pylonsQueryCmd
 }
