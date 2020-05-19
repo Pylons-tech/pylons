@@ -151,8 +151,6 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	resp := handlers.CheckExecutionResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
-	// t.Log("resp::", resp.Status)
-	// t.Log("resp::", resp.Message)
 	t.MustTrue(resp.Status == tc.expectedStatus)
 	t.MustTrue(resp.Message == tc.expectedMessage)
 

@@ -147,10 +147,9 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	t.Log("txHandleResBytes=", string(txHandleResBytes))
+	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
 	ffTrdResp := handlers.FulfillTradeResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
-	t.Log("GetAminoCdc().UnmarshalJSON=", err)
 	t.MustNil(err)
 
 	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
