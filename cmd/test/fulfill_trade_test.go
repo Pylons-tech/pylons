@@ -45,7 +45,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			false,
 			"",
 			true,
-			"eugencoin",
+			"node0token",
 			200,
 			true,
 			"pylon",
@@ -79,7 +79,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			false,
 			"",
 			true,
-			"eugencoin",
+			"node0token",
 			200,
 			false,
 			"",
@@ -96,7 +96,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			true,
 			"TESTITEM_FulfillTrade__001_TC4_INPUT",
 			true,
-			"eugencoin",
+			"node0token",
 			200,
 			false,
 			"",
@@ -147,8 +147,10 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
+	t.Log("txHandleResBytes=", string(txHandleResBytes))
 	ffTrdResp := handlers.FulfillTradeResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
+	t.Log("GetAminoCdc().UnmarshalJSON=", err)
 	t.MustNil(err)
 
 	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
