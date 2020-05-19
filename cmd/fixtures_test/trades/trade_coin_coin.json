@@ -7,7 +7,7 @@
   ],
   "ItemInputRefs": [],
   "CoinOutputs": [{
-      "denom":"eugencoin",
+      "denom":"node0token",
       "amount": "200"
   }],
   "ItemOutputNames": [],
