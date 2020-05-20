@@ -169,7 +169,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	}
 
 	accInfo := GetAccountInfoFromAddr(signer, t)
-	// t.Log("Account Info:", accInfo)
+	t.Log("Account Info:", accInfo)
 	nonce := accInfo.Sequence
 
 	nonceMap := make(map[string]uint64)
@@ -226,6 +226,6 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
 
-	t.Log("txhash = ", txhash)
+	t.Log("txhash = ", txhash, "nonce=", nonce)
 	return txhash
 }
