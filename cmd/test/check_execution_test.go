@@ -31,7 +31,7 @@ type CheckExecutionTestCase struct {
 
 func TestCheckExecutionViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
-	t.Parallel()
+	// t.Parallel()
 
 	tests := []CheckExecutionTestCase{
 		{
@@ -95,7 +95,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 }
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
-	t.Parallel()
+	// t.Parallel()
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
