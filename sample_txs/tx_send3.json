@@ -1,0 +1,26 @@
+{
+  "type": "cosmos-sdk/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "cosmos-sdk/MsgSend",
+        "value": {
+          "from_address": "cosmos10xgn8t2auxskrf2qjcht0hwq2h5chnrpx87dus",
+          "to_address": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
+          "amount": [
+            {
+              "denom": "pylon",
+              "amount": "10"
+            }
+          ]
+        }
+      }
+    ],
+    "fee": {
+      "amount": [],
+      "gas": "200000"
+    },
+    "signatures": null,
+    "memo": ""
+  }
+}
