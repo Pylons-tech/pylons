@@ -336,4 +336,10 @@ pylonscli query tx $(RETURNED TXHASH)
 pylonscli query pylons list_cookbook
 ```
 
+- Try to send multiple transactions in a block with same account
+
+```
+cd ./sample_txs
+sh ./tx_sender.sh
+```
 

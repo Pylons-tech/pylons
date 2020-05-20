@@ -36,7 +36,7 @@ type FulfillTradeTestCase struct {
 
 func TestFulfillTradeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
-	t.Parallel()
+	// t.Parallel()
 
 	tests := []FulfillTradeTestCase{
 		{
@@ -117,7 +117,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 }
 
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
-	t.Parallel()
+	// t.Parallel()
 
 	outputItemID := ""
 	if tc.hasOutputItem {
