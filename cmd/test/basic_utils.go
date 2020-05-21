@@ -1,6 +1,7 @@
 package intTest
 
 import (
+	"fmt"
 	"flag"
 	"errors"
 	"io/ioutil"
