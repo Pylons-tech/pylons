@@ -255,6 +255,29 @@ http://127.0.0.1:26662/net_info
 
 # Multi-node randomness util commands
 
+- Run integration test on multi-node and end after finish
+```
+docker-compose up --build --abort-on-container-exit
+```
+
+It shows log like this for failure
+```
+pylons_test_1 exited with code 2
+Aborting on container exit...
+Stopping pylons_node0_1  ... done
+Stopping pylons_node1_1  ... done
+Stopping pylons_node2_1  ... done
+```
+And for success
+```
+pylons_test_1 exited with code 0
+Aborting on container exit...
+Stopping pylons_node0_1  ... done
+Stopping pylons_node1_1  ... done
+Stopping pylons_node2_1  ... done
+```
+https://stackoverflow.com/questions/33799885/how-to-stop-all-containers-when-one-container-stops-with-docker-compose
+
 - Key add on local
 
 ```
