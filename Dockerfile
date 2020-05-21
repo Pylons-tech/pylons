@@ -54,7 +54,7 @@ FROM pylonsd as test_server
 # COPY init_accounts.sh .
 # RUN chmod +x init_accounts.sh
 # RUN make init_accounts
-CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
+CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --log_level main:info
 
 #Run the tests
 FROM build as integration_test
