@@ -17,7 +17,7 @@ func ListTradeViaCLI(account string) ([]types.Trade, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Trade{}, err
 	}
@@ -43,7 +43,7 @@ func ListCookbookViaCLI(account string) ([]types.Cookbook, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Cookbook{}, err
 	}
@@ -60,7 +60,7 @@ func ListRecipesViaCLI(account string) ([]types.Recipe, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Recipe{types.Recipe{}}, err
 	}
@@ -77,7 +77,7 @@ func ListExecutionsViaCLI(account string, t *testing.T) ([]types.Execution, erro
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		t.Fatalf("error running list_executions cli command ::: %+v", err)
 		return []types.Execution{}, err
@@ -96,7 +96,7 @@ func ListItemsViaCLI(account string) ([]types.Item, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return types.ItemList{}, err
 	}
@@ -122,7 +122,7 @@ func WaitAndGetTxError(txhash string, maximum_wait_block int64, t *testing.T) ([
 }
 
 func GetTxError(txhash string, t *testing.T) ([]byte, error) {
-	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
 		return []byte{}, err
 	}
@@ -145,7 +145,7 @@ func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
 }
 
 func GetTxData(txhash string, t *testing.T) ([]byte, error) {
-	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
 		return output, err
 	}
@@ -226,7 +226,7 @@ func FindItemFromArrayByName(items []types.Item, name string, includeLockedByRcp
 
 // GetCookbookByGUID is to get Cookbook from ID
 func GetCookbookByGUID(guid string) (types.Cookbook, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_cookbook", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_cookbook", guid}, "")
 	if err != nil {
 		return types.Cookbook{}, err
 	}
@@ -268,7 +268,7 @@ func GetItemIDFromName(itemName string, includeLockedByRcp bool) (string, bool, 
 
 // GetRecipeByGUID is to get Recipe from ID
 func GetRecipeByGUID(guid string) (types.Recipe, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_recipe", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_recipe", guid}, "")
 	if err != nil {
 		return types.Recipe{}, err
 	}
@@ -282,7 +282,7 @@ func GetRecipeByGUID(guid string) (types.Recipe, error) {
 
 // GetExecutionByGUID is to get Execution from ID
 func GetExecutionByGUID(guid string) (types.Execution, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_execution", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_execution", guid}, "")
 	if err != nil {
 		return types.Execution{}, err
 	}
@@ -296,7 +296,7 @@ func GetExecutionByGUID(guid string) (types.Execution, error) {
 
 // GetItemByGUID is to get Item from ID
 func GetItemByGUID(guid string) (types.Item, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_item", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_item", guid}, "")
 	if err != nil {
 		return types.Item{}, err
 	}

@@ -45,7 +45,7 @@ pylonscli config trust-node true
   sh init-accounts.sh
 ```
 
-`michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run. Here, account passwords are `11111111`.
+`michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run.
 And each account will have 10000000pylons and 10000000 owncoin.
 
 - start the `pylonsd` node

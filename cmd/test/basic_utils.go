@@ -9,6 +9,7 @@ import (
 	"path"
 	"sync"
 	"time"
+	"math/rand"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -48,10 +49,13 @@ func GetAminoCdc() *amino.Codec {
 	return app.MakeCodec()
 }
 
-func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pylonscli with specific params : helper function
+func RunPylonsCli(args []string, stdinInput string) ([]byte, error, string) { // run pylonscli with specific params : helper function
 	if len(CLIOpts.CustomNode) > 0 {
 		if args[0] == "query" || args[0] == "tx" || args[0] == "status" {
-			args = append(args, "--node", CLIOpts.CustomNode)
+			customNodes := strings.Split(CLIOpts.CustomNode, ",")
+			randNodeIndex := rand.Intn(len(customNodes))
+			randNode := customNodes[randNodeIndex]
+			args = append(args, "--node", randNode)
 		}
 	}
 	cliMux.Lock()
@@ -59,25 +63,22 @@ func RunPylonsCli(args []string, stdinInput string) ([]byte, error) { // run pyl
 	cmd.Stdin = strings.NewReader(stdinInput)
 	res, err := cmd.CombinedOutput()
 	cliMux.Unlock()
-	if err != nil {
-		return res, errors.New(err.Error()+string(res)+"pylonscli "+strings.Join(args, " "))
-	}
-	return res, err
+	return res, err, fmt.Sprintf("cmd is \"pylonscli %s\", result is \"%s\"", strings.Join(args, " "), string(res))
 }
 
 func GetAccountAddr(account string, t *testing.T) string {
-	addrBytes, err := RunPylonsCli([]string{"keys", "show", account, "-a", "--keyring-backend", "test"}, "")
+	addrBytes, err, logstr := RunPylonsCli([]string{"keys", "show", account, "-a", "--keyring-backend", "test"}, "")
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
-		t.Fatalf("error getting account address %+v, account=%s", err, account)
+		t.Fatalf("error getting account address, account=%s, err=%+v, logstr=%s", account, err, logstr)
 	}
 	return addr
 }
 
 func GetAccountInfoFromAddr(addr string, t *testing.T) auth.BaseAccount {
-	accBytes, err := RunPylonsCli([]string{"query", "account", addr}, "")
+	accBytes, err, logstr := RunPylonsCli([]string{"query", "account", addr}, "")
 	if t != nil && err != nil {
-		t.Fatalf("error getting account info addr=%+v err=%+v", addr, err)
+		t.Fatalf("error getting account info addr=%s err=%+v, logstr=%s", addr, err, logstr)
 	}
 	var accInfo auth.BaseAccount
 	GetAminoCdc().UnmarshalJSON(accBytes, &accInfo)
@@ -90,20 +91,20 @@ func GetAccountInfoFromName(account string, t *testing.T) auth.BaseAccount {
 	return GetAccountInfoFromAddr(addr, t)
 }
 
-func GetDaemonStatus() (*ctypes.ResultStatus, error) {
+func GetDaemonStatus() (*ctypes.ResultStatus, error, string) {
 	var ds ctypes.ResultStatus
 
-	dsBytes, err := RunPylonsCli([]string{"status"}, "")
+	dsBytes, err, logstr := RunPylonsCli([]string{"status"}, "")
 
 	if err != nil {
-		return nil, err
+		return nil, err, logstr
 	}
 	err = GetAminoCdc().UnmarshalJSON(dsBytes, &ds)
 
 	if err != nil {
-		return nil, err
+		return nil, err, logstr
 	}
-	return &ds, nil
+	return &ds, nil, logstr
 }
 
 func WaitForNextBlock() error {
@@ -111,7 +112,7 @@ func WaitForNextBlock() error {
 }
 
 func WaitForBlockInterval(interval int64) error {
-	ds, err := GetDaemonStatus()
+	ds, err, _ := GetDaemonStatus()
 	if err != nil {
 		return err // couldn't get daemon status.
 	}
@@ -120,7 +121,7 @@ func WaitForBlockInterval(interval int64) error {
 	var counter int64
 	counter = 1
 	for counter < 300*interval {
-		ds, err = GetDaemonStatus()
+		ds, err, _ = GetDaemonStatus()
 		if ds.SyncInfo.LatestBlockHeight >= currentBlock+interval {
 			return nil
 		}

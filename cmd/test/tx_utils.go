@@ -67,7 +67,7 @@ func GenTxWithMsg(messages []sdk.Msg) (auth.StdTx, error) {
 }
 
 func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "list_recipe"}, "")
 	if err != nil {
 		return []types.Recipe{types.Recipe{}}, err
 	}
@@ -84,7 +84,8 @@ func broadcastTxFile(signedTxFile string, t *testing.T) string {
 	if len(CLIOpts.RestEndpoint) == 0 { // broadcast using cli
 		// pylonscli tx broadcast signedCreateCookbookTx.json
 		txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
-		output, err := RunPylonsCli(txBroadcastArgs, "")
+		output, err, logstr := RunPylonsCli(txBroadcastArgs, "")
+		t.Log("transaction broadcast log", logstr)
 
 		successTxResp := SuccessTxResp{}
 
@@ -143,7 +144,7 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 		"--from", signer,
 		"--chain-id", "pylonschain",
 	}
-	output, err = RunPylonsCli(txSignArgs, "11111111\n")
+	output, err, _ = RunPylonsCli(txSignArgs, "")
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
@@ -212,7 +213,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--keyring-backend", "test",
 	}
 	// t.Log("TX raw file output=", string(output))
-	output, err = RunPylonsCli(txSignArgs, "11111111\n")
+	output, err, _ = RunPylonsCli(txSignArgs, "")
 	//t.Log("TX sign result output=", string(output))
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
