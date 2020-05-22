@@ -7,10 +7,10 @@
     ],
     "ItemInputRefs": [],
     "CoinOutputs": [{
-        "denom":"loudcoin",
+        "denom":"node0token",
         "amount": "200"
     }],
     "ItemOutputNames": [],
-    "ExtraInfo":"pylon to loud trading",
+    "ExtraInfo":"pylon to node0 trading for disable test",
     "Sender":"eugen"
   }
