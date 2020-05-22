@@ -9,3 +9,5 @@ pylonsd add-genesis-account $(pylonscli keys show iain -a) 10000000pylon,1000000
 pylonsd add-genesis-account $(pylonscli keys show afti -a) 10000000pylon,10000000afticoin,10000000loudcoin
 pylonsd add-genesis-account $(pylonscli keys show girish -a) 10000000pylon,10000000girishcoin,10000000loudcoin
 pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin,10000000loudcoin
+
+sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/g' ~/.pylonsd/config/config.toml
