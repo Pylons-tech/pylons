@@ -44,16 +44,17 @@ WORKDIR /root
 COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /go/bin/pylonscli /usr/bin/pylonscli
 COPY --from=build /root/.plncli /root/.plncli
+RUN pylonsd init masternode --chain-id pylonschain
 CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
 #Test server
 FROM pylonsd as test_server
 
 # COPY Makefile .
-# RUN pylonsd init masternode --chain-id pylonschain
 # COPY init_accounts.sh .
 # RUN chmod +x init_accounts.sh
 # RUN make init_accounts
+RUN sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/g' ~/.pylonsd/config/config.toml
 CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --log_level main:info
 
 #Run the tests
