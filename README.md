@@ -314,3 +314,12 @@ This means we can query this transaction by using
 pylonscli query txs --tags action:create_cookbook
 ```
 which is `pylonscli query txs --tags <key>:<value>` according to documentation.
+
+According to cosmos team discord channel, they said
+```
+<DOMAIN>/txs?sender=cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46
+```
+can be working.
+
+For giving custom tag to a transaction, I need to think and research for that. But we have what we want right now.
+The initial thought was to get transactions that are related to cookbook.
