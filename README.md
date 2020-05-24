@@ -269,3 +269,48 @@ gcloud projects create pylons-3nbuild
 gcloud config set project pylons-3nbuild
 cloud-build-local --config=cloudbuild.3ntest.yaml --dryrun=false .
 ```
+
+# How to query transactions
+
+These are useful commands to query transactions by tags.
+
+```
+pylonscli query txs --tags tx.hash:A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
+pylonscli query txs --tags tx.height:3344 --page 1 --limit 100
+pylonscli query txs --tags sender:cosmos1vy25zn267xwuecnrtqqqq8prr2qw6f477xz6s4 --page 1 --limit 100
+pylonscli query txs --tags action:send --page 1 --limit 100
+pylonscli query txs --tags action:fiat_item
+pylonscli query txs --tags action:create_cookbook
+pylonscli query txs --tags action:create_recipe
+pylonscli query txs --tags action:execute_recipe
+pylonscli query txs --tags action:check_execution
+pylonscli query txs --tags action:create_trade
+pylonscli query txs --tags action:fulfill_trade
+pylonscli query txs --tags action:disable_trade
+```
+
+## How to get tag of specific transaction
+
+If you run 
+```
+pylonscli query tx A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
+```
+
+It returns something like this
+```
+{
+  ...
+  "tags": [
+    {
+      "key": "action",
+      "value": "create_cookbook"
+    }
+  ],
+  ...
+}
+```
+This means we can query this transaction by using
+```
+pylonscli query txs --tags action:create_cookbook
+```
+which is `pylonscli query txs --tags <key>:<value>` according to documentation.
