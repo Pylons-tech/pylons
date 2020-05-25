@@ -33,13 +33,24 @@ services:
     networks:
       testnet:
         ipv4_address: 192.168.10.4
+  # test:
+  #   build:
+  #     context: .
+  #     target: integration_test
+  #   networks:
+  #     testnet:
+  #       ipv4_address: 192.168.10.5
+  #   depends_on:
+  #     - node0
+  #     - node1
+  #     - node2
   test:
     build:
       context: .
-      target: integration_test
+      target: fixture_test
     networks:
       testnet:
-        ipv4_address: 192.168.10.5
+        ipv4_address: 192.168.10.6
     depends_on:
       - node0
       - node1
