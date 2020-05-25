@@ -33,7 +33,7 @@ services:
     networks:
       testnet:
         ipv4_address: 192.168.10.4
-  # test:
+  # test1:
   #   build:
   #     context: .
   #     target: integration_test
@@ -44,7 +44,7 @@ services:
   #     - node0
   #     - node1
   #     - node2
-  test:
+  test2:
     build:
       context: .
       target: fixture_test
