@@ -1,16 +1,16 @@
 package intTest
 
 import (
-	"fmt"
-	"flag"
 	"errors"
+	"flag"
+	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"os"
 	"os/exec"
 	"path"
 	"sync"
 	"time"
-	"math/rand"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -50,7 +50,25 @@ func GetAminoCdc() *amino.Codec {
 	return app.MakeCodec()
 }
 
-func RunPylonsCli(args []string, stdinInput string) ([]byte, error, string) { // run pylonscli with specific params : helper function
+func KeyringBackendSetup(args []string) []string {
+	if len(args) == 0 {
+		return args
+	}
+	newArgs := append(args, "--keyring-backend", "test")
+	switch args[0] {
+	case "keys":
+		return newArgs
+	case "tx":
+		if args[1] == "sign" {
+			return newArgs
+		}
+		return args
+	default:
+		return args
+	}
+}
+
+func NodeFlagSetup(args []string) []string {
 	if len(CLIOpts.CustomNode) > 0 {
 		if args[0] == "query" || args[0] == "tx" || args[0] == "status" {
 			customNodes := strings.Split(CLIOpts.CustomNode, ",")
@@ -59,6 +77,12 @@ func RunPylonsCli(args []string, stdinInput string) ([]byte, error, string) { //
 			args = append(args, "--node", randNode)
 		}
 	}
+	return args
+}
+
+func RunPylonsCli(args []string, stdinInput string) ([]byte, error, string) { // run pylonscli with specific params : helper function
+	args = NodeFlagSetup(args)
+	args = KeyringBackendSetup(args)
 	cliMux.Lock()
 	cmd := exec.Command(path.Join(os.Getenv("GOPATH"), "/bin/pylonscli"), args...)
 	cmd.Stdin = strings.NewReader(stdinInput)
@@ -68,7 +92,7 @@ func RunPylonsCli(args []string, stdinInput string) ([]byte, error, string) { //
 }
 
 func GetAccountAddr(account string, t *testing.T) string {
-	addrBytes, err, logstr := RunPylonsCli([]string{"keys", "show", account, "-a", "--keyring-backend", "test"}, "")
+	addrBytes, err, logstr := RunPylonsCli([]string{"keys", "show", account, "-a"}, "")
 	addr := strings.Trim(string(addrBytes), "\n ")
 	if t != nil && err != nil {
 		t.Fatalf("error getting account address, account=%s, err=%+v, logstr=%s", account, err, logstr)

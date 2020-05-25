@@ -210,7 +210,6 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--chain-id", "pylonschain",
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
-		"--keyring-backend", "test",
 	}
 	// t.Log("TX raw file output=", string(output))
 	output, err, _ = RunPylonsCli(txSignArgs, "")
