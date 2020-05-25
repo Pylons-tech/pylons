@@ -33,6 +33,18 @@ func TestListTrades(t *testing.T) {
 		types.ItemList{},
 		senderAccAddress,
 	)
+
+	require.True(t, err == nil)
+
+	_, err = handlers.MockTrade(
+		mockedCoinInput,
+		types.GenCoinInputList("stone", 100),
+		types.ItemInputList{},
+		types.NewPylon(2000),
+		types.ItemList{},
+		senderAccAddress,
+	)
+
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -51,7 +63,7 @@ func TestListTrades(t *testing.T) {
 			path:          []string{sender},
 			showError:     false,
 			desiredError:  "",
-			desiredExcCnt: 1,
+			desiredExcCnt: 2,
 		},
 	}
 	for testName, tc := range cases {
