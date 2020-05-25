@@ -1,9 +1,9 @@
 package intTest
 
 import (
-	"strings"
 	"encoding/hex"
 	"errors"
+	"strings"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -306,4 +306,13 @@ func GetItemByGUID(guid string) (types.Item, error) {
 		return types.Item{}, err
 	}
 	return item, err
+}
+
+func GetRecipeGUIDFromName(name string, account string) (string, error) {
+	rcpList, err := ListRecipesViaCLI(account)
+	if err != nil {
+		return "", err
+	}
+	rcp, _ := FindRecipeFromArrayByName(rcpList, name)
+	return rcp.ID, nil
 }

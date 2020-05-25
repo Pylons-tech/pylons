@@ -160,15 +160,6 @@ func MockDetailedRecipeGUID(
 	return resp.RecipeID, nil
 }
 
-func GetRecipeGUIDFromName(name string, account string) (string, error) {
-	rcpList, err := ListRecipesViaCLI(account)
-	if err != nil {
-		return "", err
-	}
-	rcp, _ := FindRecipeFromArrayByName(rcpList, name)
-	return rcp.ID, nil
-}
-
 ///////////ITEM//////////////////////////////////////////////
 
 func MockItemGUID(name string, t *testing.T) string {
