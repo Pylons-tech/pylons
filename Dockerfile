@@ -67,4 +67,4 @@ RUN chmod +x init_accounts.sh
 CMD make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657"
 
 FROM test_server as fixture_test
-CMD make init_accounts && GO111MODULE=on make fixture_tests ARGS="-runserial"
+CMD make init_accounts && GO111MODULE=on make fixture_tests ARGS="-runserial --node=tcp://192.168.10.2:26657"
