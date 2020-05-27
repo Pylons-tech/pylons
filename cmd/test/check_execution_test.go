@@ -75,7 +75,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 		{
 			name:                 "item upgrade check execution test and OwnerRecipeID check",
 			isUpgrdRecipe:        true,
-			blockInterval:        2,
+			blockInterval:        4,
 			currentItemName:      "TESTITEM_CheckExecution__007_TC4_CUR",
 			desiredItemName:      "TESTITEM_CheckExecution__007_TC4",
 			payToComplete:        false,
