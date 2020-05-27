@@ -13,38 +13,18 @@ pylonscli keys add girish --keyring-backend=test
 pylonscli keys add eugen --keyring-backend=test
 
 # pylonscli tx pylons send-pylons $(pylonscli keys show -a michael --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a michael --keyring-backend=test) 100000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a michael --keyring-backend=test) 500000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished michael account initialization tx sending; waiting 6 seconds..."
 sleep 6
 pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
 pylonscli query account $(pylonscli keys show -a michael --keyring-backend=test) --node tcp://192.168.10.2:26657
 
 # pylonscli tx pylons send-pylons $(pylonscli keys show -a eugen --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a eugen --keyring-backend=test) 100000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a eugen --keyring-backend=test) 500000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished eugen account initialization tx sending; waiting 6 seconds..."
 sleep 6
 pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
 pylonscli query account $(pylonscli keys show -a eugen --keyring-backend=test) --node tcp://192.168.10.2:26657
 
-# pylonscli tx pylons send-pylons $(pylonscli keys show -a iain --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a iain --keyring-backend=test) 100000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-echo "finished iain account initialization tx sending; waiting 6 seconds..."
-sleep 6
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
-pylonscli query account $(pylonscli keys show -a iain --keyring-backend=test) --node tcp://192.168.10.2:26657
-
-# pylonscli tx pylons send-pylons $(pylonscli keys show -a afti --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a afti --keyring-backend=test) 100000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-echo "finished afti account initialization tx sending; waiting 6 seconds..."
-sleep 6
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
-pylonscli query account $(pylonscli keys show -a afti --keyring-backend=test) --node tcp://192.168.10.2:26657
-
-# pylonscli tx pylons send-pylons $(pylonscli keys show -a girish --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a girish --keyring-backend=test) 100000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
-echo "finished girish account initialization tx sending; waiting 6 seconds..."
-sleep 6
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
-pylonscli query account $(pylonscli keys show -a girish --keyring-backend=test) --node tcp://192.168.10.2:26657
 
 # sleep 1000;
