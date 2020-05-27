@@ -12,7 +12,7 @@ import (
 
 func TestUpdateItemStringViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
-	// t.Parallel()
+	t.Parallel()
 
 	tests := []struct {
 		name     string

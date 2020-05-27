@@ -59,7 +59,8 @@ func SetupTestCoinInput() TestCoinInput {
 	tkeyParams := sdk.NewTransientStoreKey("transient_params")
 
 	fcKey := sdk.NewKVStoreKey("fee_collection")
-	cbKey := sdk.NewKVStoreKey("pylons")
+	entKey := sdk.NewKVStoreKey("pylons_entity")
+	cbKey := sdk.NewKVStoreKey("pylons_cookbook")
 	rcKey := sdk.NewKVStoreKey("pylons_recipe")
 	tdKey := sdk.NewKVStoreKey("pylons_trade")
 	itKey := sdk.NewKVStoreKey("pylons_item")
@@ -72,6 +73,7 @@ func SetupTestCoinInput() TestCoinInput {
 	ms.MountStoreWithDB(fckCapKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyParams, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(fcKey, sdk.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(entKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(cbKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tdKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(rcKey, sdk.StoreTypeIAVL, db)
@@ -119,6 +121,7 @@ func SetupTestCoinInput() TestCoinInput {
 
 	plnK := NewKeeper(
 		bk,
+		entKey,  // entity
 		cbKey,   // cookbook
 		rcKey,   // recipe
 		itKey,   // item

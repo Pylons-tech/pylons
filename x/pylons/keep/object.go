@@ -15,6 +15,7 @@ func (k Keeper) SetObject(ctx sdk.Context, storageType, id string, keeperKey sdk
 	}
 	store := ctx.KVStore(keeperKey)
 	store.Set([]byte(id), mObject)
+	k.IncreaseEntityCount(ctx)
 	return nil
 }
 
