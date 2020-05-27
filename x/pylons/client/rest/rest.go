@@ -47,16 +47,34 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		pylonsSendHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),
+		listRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe/{%s}", storeName, ownerKeyName),
 		listRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks", storeName),
+		listCookbooksHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks/{%s}", storeName, ownerKeyName),
 		listCookbooksHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/list_trade", storeName),
+		listTradesHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_trade/{%s}", storeName, ownerKeyName),
 		listTradesHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/items_by_cookbook", storeName),
+		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/items_by_cookbook/{%s}", storeName, cookbookKeyName),
 		itemsByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/items_by_sender", storeName),
+		itemsBySenderHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/items_by_sender/{%s}", storeName, senderKey),
 		itemsBySenderHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/list_executions", storeName),
+		listExecutionsHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_executions/{%s}", storeName, senderKey),
 		listExecutionsHandler(cdc, cliCtx, storeName)).Methods("GET")
 
