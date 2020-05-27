@@ -50,9 +50,21 @@ func (msg MsgCreateTrade) ValidateBasic() sdk.Error {
 	if msg.CoinOutputs == nil && msg.ItemOutputs == nil {
 		return sdk.ErrInternal("sender not providing anything in exchange of the trade: empty outputs")
 	}
+	for _, coinOutput := range msg.CoinOutputs {
+		if !coinOutput.IsPositive() {
+			return sdk.ErrInternal("there should be no 0 amount denom on outputs")
+		}
+	}
 
-	if msg.CoinInputs == nil && msg.ItemInputs == nil {
-		return sdk.ErrInternal("sender not receiving anything for the trade: empty inputs")
+	if msg.ItemInputs == nil {
+		if msg.CoinInputs == nil {
+			return sdk.ErrInternal("sender not receiving anything for the trade: empty inputs")
+		}
+		for _, coinInput := range msg.CoinInputs {
+			if coinInput.Count == 0 {
+				return sdk.ErrInternal("there should be no 0 amount denom on coin inputs")
+			}
+		}
 	}
 
 	return nil
