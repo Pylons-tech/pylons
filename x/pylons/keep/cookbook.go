@@ -31,6 +31,20 @@ func (k Keeper) HasCookbook(ctx sdk.Context, id string) bool {
 	return store.Has([]byte(id))
 }
 
+// GetCookbookCount returns the cookbook count which have prefixID. returns 0 if no cookbook is found
+func (k Keeper) GetCookbookCount(ctx sdk.Context, prefixID string) int {
+	store := ctx.KVStore(k.CookbookKey)
+	iterator := sdk.KVStorePrefixIterator(store, []byte(prefixID))
+	count := 0
+
+	// consider iterator.Domain() here? if that makes sense
+	for ; iterator.Valid(); iterator.Next() {
+		count++
+	}
+
+	return count
+}
+
 // UpdateCookbook is used to update the cookbook using the id
 func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbook) error {
 	if cookbook.Sender.Empty() {

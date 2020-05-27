@@ -44,6 +44,12 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 
 	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 
+	// we use cookbook count as a suffix to the cookbook id so we can avoid conflicts
+	sequence := keeper.GetCookbookCount(ctx, cb.ID)
+
+	// maybe there could be a better way to do this?
+	cb.ID = cb.ID + string(sequence+1)
+
 	if msg.CookbookID != "" {
 		if keeper.HasCookbook(ctx, msg.CookbookID) {
 			return nil, errInternal(fmt.Errorf("A cookbook with CookbookID %s already exists", msg.CookbookID))
