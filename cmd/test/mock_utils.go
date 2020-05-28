@@ -234,7 +234,7 @@ func MockDetailedTradeGUID(
 		outputItems = nil
 	}
 
-	TestTxWithMsgWithNonce(t,
+	txhash := TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateTrade(
 			inputCoinList,
 			inputItemList,
@@ -246,7 +246,8 @@ func MockDetailedTradeGUID(
 		false,
 	)
 
-	err = WaitForNextBlock()
+	// err = WaitForBlockInterval(2)
+	_, err = WaitAndGetTxData(txhash, 3, t)
 	ErrValidation(t, "error waiting for creating trade %+v", err)
 	// check trade created after 1 block
 	tradeID, exist, err := GetTradeIDFromExtraInfo(extraInfo)

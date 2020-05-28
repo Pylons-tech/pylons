@@ -119,6 +119,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	keys := sdk.NewKVStoreKeys(bam.MainStoreKey, auth.StoreKey, staking.StoreKey,
 		supply.StoreKey, distr.StoreKey, slashing.StoreKey, params.StoreKey,
 		// pylons keys
+		pylons.KeyPylonsEntity,
 		pylons.KeyPylonsCookbook,
 		pylons.KeyPylonsRecipe,
 		pylons.KeyPylonsItem,
@@ -207,6 +208,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	// It handles interactions with the namestore
 	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
+		app.keys[pylons.KeyPylonsEntity],
 		app.keys[pylons.KeyPylonsCookbook],
 		app.keys[pylons.KeyPylonsRecipe],
 		app.keys[pylons.KeyPylonsItem],

@@ -10,6 +10,7 @@ import (
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
 	CoinKeeper   bank.Keeper
+	EntityKey    sdk.StoreKey
 	ExecutionKey sdk.StoreKey
 	CookbookKey  sdk.StoreKey
 	RecipeKey    sdk.StoreKey
@@ -19,9 +20,10 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new Keeper
-func NewKeeper(coinKeeper bank.Keeper, cookbookKey, recipeKey, itemKey, execKey sdk.StoreKey, tradeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, entityKey, cookbookKey, recipeKey, itemKey, execKey sdk.StoreKey, tradeKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		CoinKeeper:   coinKeeper,
+		EntityKey:    entityKey,
 		ExecutionKey: execKey,
 		CookbookKey:  cookbookKey,
 		RecipeKey:    recipeKey,

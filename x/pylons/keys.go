@@ -1,6 +1,7 @@
 package pylons
 
 const (
+	KeyPylonsEntity    = "pylons_entity"
 	KeyPylonsCookbook  = "pylons_cookbook"
 	KeyPylonsRecipe    = "pylons_recipe"
 	KeyPylonsItem      = "pylons_item"

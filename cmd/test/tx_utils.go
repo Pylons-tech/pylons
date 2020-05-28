@@ -1,6 +1,7 @@
 package intTest
 
 import (
+	"time"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
@@ -22,11 +23,6 @@ import (
 
 	"github.com/spf13/viper"
 )
-
-type SuccessTxResp struct {
-	Height string `json:"height"`
-	TxHash string `json:"txhash"`
-}
 
 var nonceMux sync.Mutex
 
@@ -80,22 +76,27 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func broadcastTxFile(signedTxFile string, t *testing.T) string {
+func broadcastTxFile(signedTxFile string, maxRetry int, t *testing.T) string {
 	if len(CLIOpts.RestEndpoint) == 0 { // broadcast using cli
 		// pylonscli tx broadcast signedCreateCookbookTx.json
 		txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
 		output, err, logstr := RunPylonsCli(txBroadcastArgs, "")
-		t.Log("transaction broadcast log", logstr)
+		output2, _, logstr2 := RunPylonsCli([]string{"query", "account", "cosmos10xgn8t2auxskrf2qjcht0hwq2h5chnrpx87dus"}, "")
+		t.Log("transaction broadcast log", logstr, "\npylonscli query account log", logstr2, string(output2))
 
-		successTxResp := SuccessTxResp{}
+		txResponse := sdk.TxResponse{}
 
-		err = json.Unmarshal(output, &successTxResp)
+		err = GetAminoCdc().UnmarshalJSON(output, &txResponse)
 		// This can happen when "pylonscli config output json" is not set or when real issue is available
 		ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
 
-		t.MustTrue(len(successTxResp.TxHash) == 64)
-		t.MustTrue(len(successTxResp.Height) > 0)
-		return successTxResp.TxHash
+		if txResponse.Code != 0 && maxRetry > 0 {
+			time.Sleep(1 * time.Second)
+			return broadcastTxFile(signedTxFile, maxRetry-1, t)
+		}
+		t.MustTrue(len(txResponse.TxHash) == 64)
+		t.MustTrue(txResponse.Code == 0)
+		return txResponse.TxHash
 	} else { // broadcast using rest endpoint
 		signedTx := ReadFile(signedTxFile, t)
 		postBodyJSON := make(map[string]interface{})
@@ -150,7 +151,7 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
 	ErrValidation(t, "error writing signed transaction %+v", err)
 
-	txhash := broadcastTxFile(signedTxFile, t)
+	txhash := broadcastTxFile(signedTxFile, 40, t)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
@@ -201,7 +202,6 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 	ioutil.WriteFile(rawTxFile, output, 0644)
 	ErrValidationWithOutputLog(t, "error writing raw transaction: %+v --- %+v", output, err)
 
-	t.Log("TX sign with nonce=", nonce)
 	// pylonscli tx sign sample_transaction.json --account-number 2 --sequence 10 --offline --from eugen
 	txSignArgs := []string{"tx", "sign", rawTxFile,
 		"--from", signer,
@@ -210,9 +210,9 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
 	}
-	// t.Log("TX raw file output=", string(output))
 	output, err, _ = RunPylonsCli(txSignArgs, "")
-	//t.Log("TX sign result output=", string(output))
+	// output, err, logstr := RunPylonsCli(txSignArgs, "")
+	// t.Log("TX sign:: err", err, ", logstr", logstr)
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
@@ -220,11 +220,10 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 
 	nonceMux.Unlock()
 
-	txhash := broadcastTxFile(signedTxFile, t)
+	txhash := broadcastTxFile(signedTxFile, 40, t)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
 
-	t.Log("txhash = ", txhash, "nonce=", nonce)
 	return txhash
 }

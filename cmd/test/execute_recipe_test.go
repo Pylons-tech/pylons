@@ -11,7 +11,7 @@ import (
 
 func TestExecuteRecipeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
-	// t.Parallel()
+	t.Parallel()
 
 	tests := []struct {
 		name            string
@@ -38,14 +38,16 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			TestTxWithMsgWithNonce(
+			txhash := TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
 				"eugen",
 				false,
 			)
 
-			WaitForNextBlock()
+			_, err = WaitAndGetTxData(txhash, 3, t)
+			ErrValidation(t, "error waiting for transaction %+v", err)
+			// WaitForNextBlock()
 			items, err := ListItemsViaCLI("")
 			ErrValidation(t, "error listing items via cli ::: %+v", err)
 

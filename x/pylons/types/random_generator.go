@@ -1,6 +1,7 @@
 package types
 
 import (
+	"fmt"
 	"math/rand"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,7 +13,7 @@ import (
 //   	...
 // }
 
-func RandomSeed(ctx sdk.Context) int64 {
+func RandomSeed(ctx sdk.Context, entityCount int) int64 {
 	header := ctx.BlockHeader()
 	appHash := header.AppHash
 	seedValue := 0
@@ -20,11 +21,11 @@ func RandomSeed(ctx sdk.Context) int64 {
 		intv := int(bytv)
 		seedValue = (i*i + 1) * intv
 	}
-	return int64(seedValue)
+	fmt.Println("RandomSeed entityCount:", entityCount, "BlockHeight:", header.Height)
+	return int64(seedValue+entityCount)
 }
 
-type Reader struct {
-}
+type Reader struct {}
 
 func NewEntropyReader() *Reader {
 	return &Reader{}

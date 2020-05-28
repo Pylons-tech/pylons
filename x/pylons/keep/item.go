@@ -63,6 +63,11 @@ func (k Keeper) GetAllItems(ctx sdk.Context) ([]types.Item, error) {
 	return items, nil
 }
 
+func (k Keeper) GetAllItemsCount(ctx sdk.Context) int {
+	items, _ := k.GetAllItems(ctx)
+	return len(items)
+}
+
 // UpdateItem is used to update the item using the id
 func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 	if item.Sender.Empty() {

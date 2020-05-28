@@ -18,7 +18,7 @@ import (
 func NewHandler(keeper keep.Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		// set random seed before running handlers
-		rand.Seed(types.RandomSeed(ctx))
+		rand.Seed(types.RandomSeed(ctx, keeper.GetEntityCount(ctx)))
 		// set entropy reader for uuid before running handlers
 		uuid.SetRand(types.NewEntropyReader())
 

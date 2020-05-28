@@ -13,7 +13,7 @@ import (
 
 func TestCreateTradeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
-	// t.Parallel()
+	t.Parallel()
 
 	tests := []struct {
 		name      string
@@ -31,7 +31,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			eugenAddr := GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			TestTxWithMsgWithNonce(t,
+			txhash := TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
 					types.GenItemInputList("Raichu"),
@@ -43,7 +43,8 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				false,
 			)
 
-			err = WaitForNextBlock()
+			// err = WaitForBlockInterval(4)
+			_, err = WaitAndGetTxData(txhash, 3, t)
 			ErrValidation(t, "error waiting for creating trade %+v", err)
 			// check trade created after 1 block
 			tradeID, exist, err := GetTradeIDFromExtraInfo(tc.extraInfo)
