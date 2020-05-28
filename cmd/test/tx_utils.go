@@ -76,7 +76,7 @@ func TestQueryListRecipe(t *testing.T) ([]types.Recipe, error) {
 	return listRCPResp.Recipes, err
 }
 
-func broadcastTxFile(signedTxFile string, t *testing.T) string {
+func broadcastTxFile(signedTxFile string, maxRetry int, t *testing.T) string {
 	if len(CLIOpts.RestEndpoint) == 0 { // broadcast using cli
 		// pylonscli tx broadcast signedCreateCookbookTx.json
 		txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
@@ -90,9 +90,9 @@ func broadcastTxFile(signedTxFile string, t *testing.T) string {
 		// This can happen when "pylonscli config output json" is not set or when real issue is available
 		ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
 
-		if txResponse.Code != 0 {
+		if txResponse.Code != 0 && maxRetry > 0 {
 			time.Sleep(1 * time.Second)
-			return broadcastTxFile(signedTxFile, t)
+			return broadcastTxFile(signedTxFile, maxRetry-1, t)
 		}
 		t.MustTrue(len(txResponse.TxHash) == 64)
 		t.MustTrue(txResponse.Code == 0)
@@ -151,7 +151,7 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
 	ErrValidation(t, "error writing signed transaction %+v", err)
 
-	txhash := broadcastTxFile(signedTxFile, t)
+	txhash := broadcastTxFile(signedTxFile, 40, t)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
@@ -210,9 +210,9 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 		"--sequence", strconv.FormatUint(nonce, 10),
 		"--account-number", strconv.FormatUint(accInfo.GetAccountNumber(), 10),
 	}
-	// t.Log("TX raw file output=", string(output))
-	output, err, logstr := RunPylonsCli(txSignArgs, "")
-	t.Log("TX sign:: err", err, ", logstr", logstr)
+	output, err, _ = RunPylonsCli(txSignArgs, "")
+	// output, err, logstr := RunPylonsCli(txSignArgs, "")
+	// t.Log("TX sign:: err", err, ", logstr", logstr)
 	ErrValidationWithOutputLog(t, "error signing transaction: %+v --- %+v", output, err)
 
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
@@ -220,7 +220,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 
 	nonceMux.Unlock()
 
-	txhash := broadcastTxFile(signedTxFile, t)
+	txhash := broadcastTxFile(signedTxFile, 40, t)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)

@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"strings"
 	"encoding/json"
 	"errors"
 
@@ -58,8 +59,9 @@ func (k Keeper) GetCookbookBySender(ctx sdk.Context, sender sdk.AccAddress) ([]t
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		// TODO: this is not returning cookbooks by id but returns whole cookbook
-		cookbooks = append(cookbooks, cookbook)
+		if strings.Contains(cookbook.Sender.String(), sender.String()) { // considered empty sender
+			cookbooks = append(cookbooks, cookbook)
+		}
 	}
 
 	return cookbooks, nil
