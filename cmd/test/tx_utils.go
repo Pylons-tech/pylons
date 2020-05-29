@@ -91,6 +91,7 @@ func broadcastTxFile(signedTxFile string, maxRetry int, t *testing.T) string {
 		ErrValidationWithOutputLog(t, "error in broadcasting signed transaction output: %+v, err: %+v", output, err)
 
 		if txResponse.Code != 0 && maxRetry > 0 {
+			t.Log("rebroadcasting after 1s...", maxRetry, "left")
 			time.Sleep(1 * time.Second)
 			return broadcastTxFile(signedTxFile, maxRetry-1, t)
 		}
@@ -151,7 +152,7 @@ func TestTxWithMsg(t *testing.T, msgValue sdk.Msg, signer string) string {
 	err = ioutil.WriteFile(signedTxFile, output, 0644)
 	ErrValidation(t, "error writing signed transaction %+v", err)
 
-	txhash := broadcastTxFile(signedTxFile, 40, t)
+	txhash := broadcastTxFile(signedTxFile, 50, t)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)
@@ -220,7 +221,7 @@ func TestTxWithMsgWithNonce(t *testing.T, msgValue sdk.Msg, signer string, isBec
 
 	nonceMux.Unlock()
 
-	txhash := broadcastTxFile(signedTxFile, 40, t)
+	txhash := broadcastTxFile(signedTxFile, 50, t)
 
 	CleanFile(rawTxFile, t)
 	CleanFile(signedTxFile, t)

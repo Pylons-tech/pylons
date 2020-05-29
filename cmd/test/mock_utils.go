@@ -246,7 +246,6 @@ func MockDetailedTradeGUID(
 		false,
 	)
 
-	// err = WaitForBlockInterval(2)
 	_, err = WaitAndGetTxData(txhash, 3, t)
 	ErrValidation(t, "error waiting for creating trade %+v", err)
 	// check trade created after 1 block
