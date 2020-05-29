@@ -80,9 +80,9 @@ func broadcastTxFile(signedTxFile string, maxRetry int, t *testing.T) string {
 	if len(CLIOpts.RestEndpoint) == 0 { // broadcast using cli
 		// pylonscli tx broadcast signedCreateCookbookTx.json
 		txBroadcastArgs := []string{"tx", "broadcast", signedTxFile}
-		output, err, logstr := RunPylonsCli(txBroadcastArgs, "")
-		output2, _, logstr2 := RunPylonsCli([]string{"query", "account", "cosmos10xgn8t2auxskrf2qjcht0hwq2h5chnrpx87dus"}, "")
-		t.Log("transaction broadcast log", logstr, "\npylonscli query account log", logstr2, string(output2))
+		output, err, _ := RunPylonsCli(txBroadcastArgs, "")
+		// output2, _, logstr2 := RunPylonsCli([]string{"query", "account", "cosmos10xgn8t2auxskrf2qjcht0hwq2h5chnrpx87dus"}, "")
+		// t.Log("transaction broadcast log", logstr, "\npylonscli query account log", logstr2, string(output2))
 
 		txResponse := sdk.TxResponse{}
 
