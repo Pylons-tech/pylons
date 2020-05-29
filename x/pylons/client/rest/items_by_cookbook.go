@@ -15,12 +15,12 @@ func itemsByCookbookHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 		vars := mux.Vars(r)
 		cbName := vars[cookbookKeyName]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_cookbook/%s", storeName, cbName), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_cookbook/%s", storeName, cbName), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

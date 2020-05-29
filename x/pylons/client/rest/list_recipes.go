@@ -15,12 +15,12 @@ func listRecipesHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		vars := mux.Vars(r)
 		ownerKey := vars[ownerKeyName]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_recipe/%s", storeName, ownerKey), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_recipe/%s", storeName, ownerKey), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

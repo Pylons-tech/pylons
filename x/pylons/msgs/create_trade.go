@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgCreateTrade defines a CreateTrade message
@@ -42,31 +43,32 @@ func (msg MsgCreateTrade) Route() string { return "pylons" }
 func (msg MsgCreateTrade) Type() string { return "create_trade" }
 
 // ValidateBasic validates the Msg
-func (msg MsgCreateTrade) ValidateBasic() sdk.Error {
+func (msg MsgCreateTrade) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 	if msg.CoinOutputs == nil && msg.ItemOutputs == nil {
-		return sdk.ErrInternal("sender not providing anything in exchange of the trade: empty outputs")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not providing anything in exchange of the trade: empty outputs")
 	}
 
 	if msg.CoinOutputs != nil {
 		for _, coinOutput := range msg.CoinOutputs {
 			if !coinOutput.IsPositive() {
-				return sdk.ErrInternal("there should be no 0 amount denom on outputs")
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
 			}
 		}
 	}
 
 	if msg.ItemInputs == nil && msg.CoinInputs == nil {
-		return sdk.ErrInternal("sender not receiving anything for the trade: empty inputs")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
 	}
 
 	if msg.CoinInputs != nil {
 		for _, coinInput := range msg.CoinInputs {
 			if coinInput.Count == 0 {
-				return sdk.ErrInternal("there should be no 0 amount denom on coin inputs")
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
 			}
 		}
 	}

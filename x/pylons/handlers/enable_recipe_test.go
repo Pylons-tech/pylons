@@ -18,7 +18,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
@@ -54,7 +54,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgEnableRecipe(tc.recipeID, tc.sender)
-			result := HandlerMsgEnableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgEnableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				enableRcpResponse := EnableRecipeResp{}
@@ -69,7 +69,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 				require.True(t, uRcp.Disabled == false)
 			} else {
 				// t.Errorf("EnableRecipeTEST LOG:: %+v", result)
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

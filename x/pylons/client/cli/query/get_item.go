@@ -11,14 +11,14 @@ import (
 
 // GetItem get an item by GUID
 func GetItem(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
+	ccb := &cobra.Command{
 		Use:   "get_item <id>",
 		Short: "get an item by id",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, args[0]), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, args[0]), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}
@@ -28,4 +28,5 @@ func GetItem(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			return cliCtx.PrintOutput(out)
 		},
 	}
+	return ccb
 }

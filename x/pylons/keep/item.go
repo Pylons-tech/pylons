@@ -7,6 +7,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // SetItem sets a item in the key store
@@ -35,7 +36,7 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 		mIT := iter.Value()
 		err := json.Unmarshal(mIT, &item)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 		if strings.Contains(item.Sender.String(), sender.String()) { // considered empty sender
 			items = append(items, item)
@@ -44,13 +45,35 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 	return items, nil
 }
 
+// GetAllItems returns all items
+func (k Keeper) GetAllItems(ctx sdk.Context) ([]types.Item, error) {
+	store := ctx.KVStore(k.ItemKey)
+	iter := sdk.KVStorePrefixIterator(store, []byte(""))
+
+	var items []types.Item
+	for ; iter.Valid(); iter.Next() {
+		var item types.Item
+		mIT := iter.Value()
+		err := json.Unmarshal(mIT, &item)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+		items = append(items, item)
+	}
+	return items, nil
+}
+
+func (k Keeper) GetAllItemsCount(ctx sdk.Context) int {
+	items, _ := k.GetAllItems(ctx)
+	return len(items)
+}
+
 // UpdateItem is used to update the item using the id
 func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 	if item.Sender.Empty() {
 		return errors.New("UpdateItem: the sender cannot be empty")
 
 	}
-
 	return k.UpdateObject(ctx, types.TypeItem, id, k.ItemKey, item)
 }
 
@@ -69,7 +92,7 @@ func (k Keeper) ItemsByCookbook(ctx sdk.Context, cookbookID string) ([]types.Ite
 		mIT := iter.Value()
 		err := json.Unmarshal(mIT, &item)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 
 		if cookbookID == item.CookbookID {

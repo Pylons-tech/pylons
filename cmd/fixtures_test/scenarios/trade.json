@@ -136,13 +136,13 @@
         }
     },
     {
-        "ID": "CREATE_PYLON_LOUD_TRADE",        
+        "ID": "CREATE_PYLON_NODE0_TRADE_DISABLE_TEST",        
         "runAfter": {
             "precondition": ["CREATE_TRADE_COOKBOOK"],
             "blockWait": 0
         },
         "action": "create_trade",
-        "paramsRef": "./trades/trade_pylon_loud.json",
+        "paramsRef": "./trades/trade_pylon_node0_disable_test.json",
         "output": {
             "txResult": {
                 "status": "Success"
@@ -150,19 +150,19 @@
             "property": [
                 {
                     "owner": "eugen",
-                    "trades": ["pylon to loud trading"]
+                    "trades": ["pylon to node0 trading for disable test"]
                 }
             ]
         }
     },
     {
-        "ID": "DISABLE_PYLON_LOUD_TRADE",        
+        "ID": "DISABLE_PYLON_NODE0_TRADE",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_PYLON_LOUD_TRADE"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_PYLON_NODE0_TRADE_DISABLE_TEST"],
             "blockWait": 0
         },
         "action": "disable_trade",
-        "paramsRef": "./disable_trades/trade_pylon_loud.json",
+        "paramsRef": "./disable_trades/trade_pylon_node0.json",
         "output": {
             "txResult": {
                 "status": "Success"

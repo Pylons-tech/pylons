@@ -2,11 +2,13 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 type UpdateItemStringResp struct {
@@ -14,36 +16,38 @@ type UpdateItemStringResp struct {
 	Message string
 }
 
-// HandleMsgUpdateItemString is used to transact pylons between people
-func HandleMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) sdk.Result {
-
+// HandlerMsgUpdateItemString is used to transact pylons between people
+func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
+	
 	err := msg.ValidateBasic()
 
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	updateFee := types.NewPylon(int64(len(msg.Value)))
+	fmt.Println(keeper.CoinKeeper.GetCoins(ctx, msg.Sender))
+	fmt.Println(updateFee)
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, updateFee) {
-		return sdk.ErrInsufficientCoins("Sender does not have enough coins for this action").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
 
 	keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, updateFee)
 
 	item, err2 := keeper.GetItem(ctx, msg.ItemID)
 	if err2 != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	kID, ok := item.FindStringKey(msg.Field)
 	if !ok {
-		return errInternal(errors.New("Provided field does not exist within the item"))
+		return nil, errInternal(errors.New("Provided field does not exist within the item"))
 	}
 
 	item.Strings[kID].Value = msg.Value
 
 	if err := keeper.SetItem(ctx, item); err != nil {
-		return errInternal(errors.New("Error updating item inside keeper"))
+		return nil, errInternal(errors.New("Error updating item inside keeper"))
 	}
 
 	return marshalJson(CheckExecutionResp{

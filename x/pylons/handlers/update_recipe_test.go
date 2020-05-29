@@ -18,7 +18,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
@@ -33,7 +33,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		sender1,
 	)
 
-	newRcpResult := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
+	newRcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 
@@ -74,7 +74,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenOneOutput(2),
 				sender1)
 
-			result := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}
@@ -82,7 +82,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				require.True(t, err == nil)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

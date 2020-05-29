@@ -2,8 +2,8 @@ package intTest
 
 import (
 	"encoding/hex"
-	"encoding/json"
 	"errors"
+	"strings"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
 
@@ -17,7 +17,7 @@ func ListTradeViaCLI(account string) ([]types.Trade, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Trade{}, err
 	}
@@ -43,7 +43,7 @@ func ListCookbookViaCLI(account string) ([]types.Cookbook, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Cookbook{}, err
 	}
@@ -60,7 +60,7 @@ func ListRecipesViaCLI(account string) ([]types.Recipe, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return []types.Recipe{types.Recipe{}}, err
 	}
@@ -77,7 +77,7 @@ func ListExecutionsViaCLI(account string, t *testing.T) ([]types.Execution, erro
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		t.Fatalf("error running list_executions cli command ::: %+v", err)
 		return []types.Execution{}, err
@@ -96,7 +96,7 @@ func ListItemsViaCLI(account string) ([]types.Item, error) {
 	if len(account) != 0 {
 		queryParams = append(queryParams, "--account", account)
 	}
-	output, err := RunPylonsCli(queryParams, "")
+	output, err, _ := RunPylonsCli(queryParams, "")
 	if err != nil {
 		return types.ItemList{}, err
 	}
@@ -108,8 +108,21 @@ func ListItemsViaCLI(account string) ([]types.Item, error) {
 	return itemResp.Items, err
 }
 
+func WaitAndGetTxError(txhash string, maximum_wait_block int64, t *testing.T) ([]byte, error) {
+	txErrorResBytes, err := GetTxError(txhash, t)
+	if err != nil { // maybe transaction is not contained in block
+		if maximum_wait_block == 0 {
+			return txErrorResBytes, errors.New("didn't get result waiting for maximum_wait_block")
+		} else {
+			WaitForNextBlock()
+			return WaitAndGetTxError(txhash, maximum_wait_block-1, t)
+		}
+	}
+	return txErrorResBytes, nil
+}
+
 func GetTxError(txhash string, t *testing.T) ([]byte, error) {
-	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
 		return []byte{}, err
 	}
@@ -118,30 +131,21 @@ func GetTxError(txhash string, t *testing.T) ([]byte, error) {
 	if err != nil {
 		return []byte{}, err
 	}
-	if len(tx.Logs) > 0 {
-		return []byte(tx.Logs[0].Log), nil
+
+	if strings.Contains(tx.RawLog, "invalid request") {
+		return []byte(tx.RawLog), nil
 	}
 	return []byte{}, nil
 }
 
 func GetHumanReadableErrorFromTxHash(txhash string, t *testing.T) string {
-	txErrorBytes, err := GetTxError(txhash, t)
+	txErrorBytes, err := WaitAndGetTxError(txhash, 3, t)
 	t.MustNil(err)
-	hmrErr := struct {
-		Codespace string `json:"codespace"`
-		Code      int    `json:"code"`
-		Message   string `json:"message"`
-	}{}
-	if len(txErrorBytes) == 0 {
-		return ""
-	}
-	err = json.Unmarshal(txErrorBytes, &hmrErr)
-	t.MustNil(err)
-	return hmrErr.Message
+	return string(txErrorBytes)
 }
 
 func GetTxData(txhash string, t *testing.T) ([]byte, error) {
-	output, err := RunPylonsCli([]string{"query", "tx", txhash}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "tx", txhash}, "")
 	if err != nil {
 		return output, err
 	}
@@ -222,7 +226,7 @@ func FindItemFromArrayByName(items []types.Item, name string, includeLockedByRcp
 
 // GetCookbookByGUID is to get Cookbook from ID
 func GetCookbookByGUID(guid string) (types.Cookbook, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_cookbook", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_cookbook", guid}, "")
 	if err != nil {
 		return types.Cookbook{}, err
 	}
@@ -264,7 +268,7 @@ func GetItemIDFromName(itemName string, includeLockedByRcp bool) (string, bool, 
 
 // GetRecipeByGUID is to get Recipe from ID
 func GetRecipeByGUID(guid string) (types.Recipe, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_recipe", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_recipe", guid}, "")
 	if err != nil {
 		return types.Recipe{}, err
 	}
@@ -278,7 +282,7 @@ func GetRecipeByGUID(guid string) (types.Recipe, error) {
 
 // GetExecutionByGUID is to get Execution from ID
 func GetExecutionByGUID(guid string) (types.Execution, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_execution", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_execution", guid}, "")
 	if err != nil {
 		return types.Execution{}, err
 	}
@@ -292,7 +296,7 @@ func GetExecutionByGUID(guid string) (types.Execution, error) {
 
 // GetItemByGUID is to get Item from ID
 func GetItemByGUID(guid string) (types.Item, error) {
-	output, err := RunPylonsCli([]string{"query", "pylons", "get_item", guid}, "")
+	output, err, _ := RunPylonsCli([]string{"query", "pylons", "get_item", guid}, "")
 	if err != nil {
 		return types.Item{}, err
 	}
@@ -302,4 +306,13 @@ func GetItemByGUID(guid string) (types.Item, error) {
 		return types.Item{}, err
 	}
 	return item, err
+}
+
+func GetRecipeGUIDFromName(name string, account string) (string, error) {
+	rcpList, err := ListRecipesViaCLI(account)
+	if err != nil {
+		return "", err
+	}
+	rcp, _ := FindRecipeFromArrayByName(rcpList, name)
+	return rcp.ID, nil
 }

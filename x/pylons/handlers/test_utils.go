@@ -17,9 +17,12 @@ func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBRespons
 func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCBResponse {
 	cookbookDesc := "this has to meet character limits"
 	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
-	cbResult := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
+	cbResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
+	if err != nil {
+		panic(err.Error())
+	}
 	cbData := CreateCBResponse{}
-	json.Unmarshal(cbResult.Data, &cbData)
+	json.Unmarshal((*cbResult).Data, &cbData)
 	return cbData
 }
 
@@ -42,7 +45,10 @@ func MockRecipe(
 		blockInterval,
 		sender,
 	)
-	newRcpResult := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
+	newRcpResult, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
+	if err != nil {
+		panic(err.Error())
+	}
 	recipeData := CreateRecipeResponse{}
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 	return recipeData
@@ -146,7 +152,7 @@ func MockExecution(
 	itemIDs []string,
 ) (ExecuteRecipeResp, error) {
 	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
-	result := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+	result, _ := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 	execRcpResponse := ExecuteRecipeResp{}
 	err := json.Unmarshal(result.Data, &execRcpResponse)
@@ -163,7 +169,7 @@ func MockTrade(
 	sender sdk.AccAddress,
 ) (CreateTradeResponse, error) {
 	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
-	result := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
+	result, _ := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
 	createTrdResponse := CreateTradeResponse{}
 	err := json.Unmarshal(result.Data, &createTrdResponse)
 	return createTrdResponse, err

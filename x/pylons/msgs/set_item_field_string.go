@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgSendPylons defines a SendPylons message
@@ -29,22 +30,22 @@ func (msg MsgUpdateItemString) Route() string { return "pylons" }
 // Type should return the action
 func (msg MsgUpdateItemString) Type() string { return "update_item_string" }
 
-func (msg MsgUpdateItemString) ValidateBasic() sdk.Error {
+func (msg MsgUpdateItemString) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
 	}
 
 	if len(msg.ItemID) == 0 {
-		return sdk.ErrUnknownRequest("item id length should be more than 0")
+		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "item id length should be more than 0")
 	}
 
 	if len(msg.Field) == 0 {
-		return sdk.ErrUnknownRequest("field length should be more than 0")
+		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "field length should be more than 0")
 	}
 
 	if len(msg.Value) == 0 {
-		return sdk.ErrUnknownRequest("value length should be more than 0")
+		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "value length should be more than 0")
 	}
 	return nil
 }

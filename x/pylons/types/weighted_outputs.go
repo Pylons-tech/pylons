@@ -4,8 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // WeightedOutputs is to make structs which is using weight to be based on
@@ -49,13 +47,13 @@ func (wpl WeightedOutputsList) String() string {
 	return itm
 }
 
-func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]int, sdk.Error) {
+func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]int, error) {
 	lastWeight := 0
 	var weights []int
 	for _, wp := range wol {
 		w, err := wp.GetWeight(ec)
 		if err != nil {
-			return nil, sdk.ErrInternal(err.Error())
+			return nil, err
 		}
 		lastWeight += w
 		weights = append(weights, lastWeight)
@@ -65,7 +63,7 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]int, sdk.Error)
 	}
 
 	if lastWeight == 0 {
-		return nil, sdk.ErrInternal("total weight of weighted param list shouldn't be zero")
+		return nil, errors.New("total weight of weighted param list shouldn't be zero")
 	}
 	randWeight := rand.Intn(lastWeight)
 

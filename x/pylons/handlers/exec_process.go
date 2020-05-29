@@ -102,13 +102,13 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 	return outputSTR, nil
 }
 
-func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([]ExecuteRecipeSerialize, sdk.Error) {
+func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([]ExecuteRecipeSerialize, error) {
 	var ersl []ExecuteRecipeSerialize
 	var err error
 	usedItemInputIndexes := []int{}
 	for _, outputIndex := range outputs {
 		if len(p.recipe.Entries) <= outputIndex || outputIndex < 0 {
-			return ersl, sdk.ErrInternal(fmt.Sprintf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries)))
+			return ersl, errors.New(fmt.Sprintf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries)))
 		}
 		output := p.recipe.Entries[outputIndex]
 
@@ -119,15 +119,15 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 			if len(coinOutput.Count) > 0 {
 				val64, err := p.ec.EvalInt64(coinOutput.Count)
 				if err != nil {
-					return ersl, sdk.ErrInternal(err.Error())
+					return ersl, errInternal(err)
 				}
 				coinAmount = val64
 			} else {
-				return ersl, sdk.ErrInternal("length of coin output program shouldn't be zero")
+				return ersl, errInternal(errors.New("length of coin output program shouldn't be zero"))
 			}
 			ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 
-			_, _, err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
+			_, err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
 			if err != nil {
 				return ersl, err
 			}
@@ -143,7 +143,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 			if itemOutput.ModifyItem.ItemInputRef == -1 {
 				outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
 				if err != nil {
-					return ersl, sdk.ErrInternal(err.Error())
+					return ersl, errInternal(err)
 				}
 			} else {
 				// Collect itemInputRefs that are used on output
@@ -152,18 +152,19 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 				// Modify item according to ModifyParams section
 				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ModifyItem.ItemInputRef], itemOutput.ModifyItem)
 				if err != nil {
-					return ersl, sdk.ErrInternal(err.Error())
+					return ersl, errInternal(err)
 				}
 			}
 			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
-				return ersl, sdk.ErrInternal(err.Error())
+				return ersl, errInternal(err)
+
 			}
 			ersl = append(ersl, ExecuteRecipeSerialize{
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})
 		default:
-			return ersl, sdk.ErrInternal("no item nor coin type created")
+			return ersl, errInternal(errors.New("no item nor coin type created"))
 		}
 	}
 
@@ -176,15 +177,15 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 	return ersl, nil
 }
 
-func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ModifyItemType) (*types.Item, sdk.Error) {
+func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ModifyItemType) (*types.Item, error) {
 
 	if dblKeyValues, err := toMod.Doubles.Actualize(p.ec); err != nil {
-		return &targetItem, sdk.ErrInternal("error actualizing double upgrade values: " + err.Error())
+		return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
 	} else {
 		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
-				return &targetItem, sdk.ErrInternal("double key does not exist which needs to be upgraded")
+				return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
 			}
 			if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
 				originValue := targetItem.Doubles[dblKey].Value.Float()
@@ -197,12 +198,12 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	}
 
 	if lngKeyValues, err := toMod.Longs.Actualize(p.ec); err != nil {
-		return &targetItem, sdk.ErrInternal("error actualizing long upgrade values: " + err.Error())
+		return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
 	} else {
 		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
-				return &targetItem, sdk.ErrInternal("long key does not exist which needs to be upgraded")
+				return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
 			}
 			if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
 				targetItem.Longs[lngKey].Value += lng.Value
@@ -213,12 +214,12 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	}
 
 	if strKeyValues, err := toMod.Strings.Actualize(p.ec); err != nil {
-		return &targetItem, sdk.ErrInternal("error actualizing string upgrade values: " + err.Error())
+		return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
 	} else {
 		for _, str := range strKeyValues {
 			strKey, ok := targetItem.FindStringKey(str.Key)
 			if !ok {
-				return &targetItem, sdk.ErrInternal("string key does not exist which needs to be upgraded")
+				return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
 			}
 			targetItem.Strings[strKey].Value = str.Value
 		}

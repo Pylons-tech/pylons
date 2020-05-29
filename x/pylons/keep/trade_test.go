@@ -25,7 +25,7 @@ func TestGetTrade(t *testing.T) {
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
 
 	item := GenItem(cbData.ID, sender, "Raichu")
 	err := mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)

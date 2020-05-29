@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgExecuteRecipe defines a SetName message
@@ -24,12 +24,6 @@ func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []strin
 	return msg
 }
 
-// KeyGen generates key for the store
-func (msg MsgExecuteRecipe) KeyGen() string {
-	id := uuid.New()
-	return msg.Sender.String() + id.String()
-}
-
 // Route should return the name of the module
 func (msg MsgExecuteRecipe) Route() string { return "pylons" }
 
@@ -37,10 +31,11 @@ func (msg MsgExecuteRecipe) Route() string { return "pylons" }
 func (msg MsgExecuteRecipe) Type() string { return "execute_recipe" }
 
 // ValidateBasic validates the Msg
-func (msg MsgExecuteRecipe) ValidateBasic() sdk.Error {
+func (msg MsgExecuteRecipe) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	return nil

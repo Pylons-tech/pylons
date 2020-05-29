@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // FulfillTradeResp is the response for fulfillRecipe
@@ -16,25 +18,26 @@ type FulfillTradeResp struct {
 }
 
 // HandlerMsgFulfillTrade is used to fulfill a trade
-func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFulfillTrade) sdk.Result {
+func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFulfillTrade) (*sdk.Result, error) {
+	
 	err := msg.ValidateBasic()
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	trade, err2 := keeper.GetTrade(ctx, msg.TradeID)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	if trade.Completed {
-		return sdk.ErrInternal("this trade is already completed").Result()
+		return nil, errInternal(errors.New("this trade is already completed"))
 
 	}
 
 	items, err2 := keeper.GetItemsBySender(ctx, msg.Sender)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	// check if the sender has all condition met
@@ -53,21 +56,21 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		if matched {
 			matchedItem := items[index]
 			if !matchedItem.Tradable {
-				return errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
+				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
 			matchedItems = append(matchedItems, matchedItem)
 		} else {
-			return sdk.ErrInternal(fmt.Sprintf("the sender doesn't have the trade item attributes %+v", inpItem)).Result()
+			return nil, errInternal(errors.New(fmt.Sprintf("the sender doesn't have the trade item attributes %+v", inpItem)))
 		}
 	}
 
 	inputCoins := trade.CoinInputs.ToCoins()
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, inputCoins) {
-		return sdk.ErrInsufficientCoins("the sender doesn't have sufficient coins").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 	}
 
 	if !keeper.CoinKeeper.HasCoins(ctx, trade.Sender, trade.CoinOutputs) {
-		return sdk.ErrInsufficientCoins("the trade creator doesn't have sufficient coins").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the trade creator doesn't have sufficient coins")
 	}
 
 	// -------------------- handle Item interactions ----------------
@@ -79,15 +82,15 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		// verify if its still owned by the initiator
 		storedItem, err := keeper.GetItem(ctx, item.ID)
 		if err != nil {
-			return errInternal(err)
+			return nil, errInternal(err)
 		}
 		// if it isn't then we error out as there hasn't been any state changes so far
 		if !storedItem.Sender.Equals(trade.Sender) {
-			return sdk.ErrUnauthorized(fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID)).Result()
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID))
 		}
 
 		if !storedItem.Tradable {
-			return errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
+			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
@@ -97,7 +100,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		item.Sender = msg.Sender
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
-			return errInternal(err2)
+			return nil, errInternal(err2)
 		}
 	}
 
@@ -105,31 +108,31 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		item.Sender = trade.Sender
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
-			return errInternal(err2)
+			return nil, errInternal(err2)
 		}
 	}
 
 	// ----------------- handle coin interaction ----------------------
 
 	// trade creator to trade acceptor the coin output
-	_, err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
+	err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
 
 	if err != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	// trade acceptor to trade creator the coin input
-	_, err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
+	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
 
 	if err != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	trade.FulFiller = msg.Sender
 	trade.Completed = true
 	err2 = keeper.SetTrade(ctx, trade)
 	if err != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	return marshalJson(FulfillTradeResp{

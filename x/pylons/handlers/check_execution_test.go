@@ -18,7 +18,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
@@ -131,7 +131,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
 			if tc.coinAddition != 0 {
-				_, _, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
+				_, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
 				require.True(t, err == nil)
 			}
 
@@ -148,7 +148,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
 			futureContext := mockedCoinInput.Ctx.WithBlockHeight(mockedCoinInput.Ctx.BlockHeight() + tc.addHeight)
-			result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+			result, _ := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
 			checkExecResp := CheckExecutionResp{}
 			err = json.Unmarshal(result.Data, &checkExecResp)
 			require.True(t, err == nil)
@@ -171,7 +171,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if tc.retryExecution {
-				result := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+				result, _ := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
 				checkExecResp := CheckExecutionResp{}
 				err = json.Unmarshal(result.Data, &checkExecResp)
 				require.True(t, err == nil)

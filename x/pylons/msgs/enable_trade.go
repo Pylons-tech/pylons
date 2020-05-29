@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgEnableTrade defines a EnableTrade message
@@ -27,10 +28,11 @@ func (msg MsgEnableTrade) Route() string { return "pylons" }
 func (msg MsgEnableTrade) Type() string { return "enable_trade" }
 
 // ValidateBasic validates the Msg
-func (msg MsgEnableTrade) ValidateBasic() sdk.Error {
+func (msg MsgEnableTrade) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	return nil

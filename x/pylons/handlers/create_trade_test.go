@@ -23,7 +23,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender2, types.NewPylon(100000))
 
 	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
-	cookbookResult := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
+	cookbookResult, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 	err := json.Unmarshal(cookbookResult.Data, &cbData)
 	require.True(t, err == nil)
 	require.True(t, len(cbData.CookbookID) > 0)
@@ -86,14 +86,14 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 
 			msg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
-			result := HandlerMsgCreateTrade(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgCreateTrade(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 			if !tc.showError {
 				ctRespData := CreateTradeResponse{}
 				err := json.Unmarshal(result.Data, &ctRespData)
 				require.True(t, err == nil)
 				require.True(t, len(ctRespData.TradeID) > 0)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

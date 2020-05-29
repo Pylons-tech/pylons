@@ -2,22 +2,32 @@ package pylons
 
 import (
 	"fmt"
+	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
+	"github.com/google/uuid"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // NewHandler returns a handler for "pylons" type messages.
 func NewHandler(keeper keep.Keeper) sdk.Handler {
-	return func(ctx sdk.Context, msg sdk.Msg) sdk.Result {
+	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
+		// set random seed before running handlers
+		rand.Seed(types.RandomSeed(ctx, keeper.GetEntityCount(ctx)))
+		// set entropy reader for uuid before running handlers
+		uuid.SetRand(types.NewEntropyReader())
+
+		// handle custom messages
 		switch msg := msg.(type) {
 		case msgs.MsgGetPylons:
-			return handlers.HandleMsgGetPylons(ctx, keeper, msg)
+			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
 		case msgs.MsgSendPylons:
-			return handlers.HandleMsgSendPylons(ctx, keeper, msg)
+			return handlers.HandlerMsgSendPylons(ctx, keeper, msg)
 		case msgs.MsgCreateCookbook:
 			return handlers.HandlerMsgCreateCookbook(ctx, keeper, msg)
 		case msgs.MsgUpdateCookbook:
@@ -37,7 +47,7 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgFiatItem:
 			return handlers.HandlerMsgFiatItem(ctx, keeper, msg)
 		case msgs.MsgUpdateItemString:
-			return handlers.HandleMsgUpdateItemString(ctx, keeper, msg)
+			return handlers.HandlerMsgUpdateItemString(ctx, keeper, msg)
 		case msgs.MsgCreateTrade:
 			return handlers.HandlerMsgCreateTrade(ctx, keeper, msg)
 		case msgs.MsgFulfillTrade:
@@ -47,8 +57,7 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgEnableTrade:
 			return handlers.HandlerMsgEnableTrade(ctx, keeper, msg)
 		default:
-			errMsg := fmt.Sprintf("unrecognized pylons Msg type: %v", msg.Type())
-			return sdk.ErrUnknownRequest(errMsg).Result()
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, fmt.Sprintf("Unrecognized pylons Msg type: %v", msg.Type()))
 		}
 	}
 }

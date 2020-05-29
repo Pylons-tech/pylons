@@ -7,21 +7,24 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 
 	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // GetPylonsBalance queries the pylons balance
 func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	return &cobra.Command{
+	ccb := &cobra.Command{
 		Use:   "balance [name]",
 		Short: "get pylons balance",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			kb, err := keys.NewKeyBaseFromHomeFlag()
+			kb, err := keys.NewKeyBaseFromDir(viper.GetString(flags.FlagHome))
+
 			if err != nil {
 				return errors.New("cannot get the keys from home")
 			}
@@ -31,7 +34,7 @@ func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return errors.New(err.Error())
 			}
 
-			res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/balance/%s", queryRoute, info.GetAddress()), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/balance/%s", queryRoute, info.GetAddress()), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}
@@ -41,4 +44,5 @@ func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			return cliCtx.PrintOutput(out)
 		},
 	}
+	return ccb
 }

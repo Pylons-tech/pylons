@@ -1,13 +1,30 @@
 #!/bin/sh
-pylonscli keys add michael <<< 11111111
-pylonscli keys add iain <<< 11111111
-pylonscli keys add afti <<< 11111111
-pylonscli keys add girish <<< 11111111
-pylonscli keys add eugen <<< 11111111
-pylonsd add-genesis-account $(pylonscli keys show michael -a) 10000000pylon,10000000michaelcoin,10000000loudcoin
-pylonsd add-genesis-account $(pylonscli keys show iain -a) 10000000pylon,10000000iaincoin,10000000loudcoin
-pylonsd add-genesis-account $(pylonscli keys show afti -a) 10000000pylon,10000000afticoin,10000000loudcoin
-pylonsd add-genesis-account $(pylonscli keys show girish -a) 10000000pylon,10000000girishcoin,10000000loudcoin
-pylonsd add-genesis-account $(pylonscli keys show eugen -a) 10000000pylon,10000000eugencoin,10000000loudcoin
 
-sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/g' ~/.pylonsd/config/config.toml
+pylonscli config chain-id pylonschain
+pylonscli config output json
+pylonscli config indent true
+pylonscli config trust-node true
+
+pylonscli keys add node0 --keyring-backend=test --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
+pylonscli keys add michael --keyring-backend=test
+pylonscli keys add iain --keyring-backend=test
+pylonscli keys add afti --keyring-backend=test
+pylonscli keys add girish --keyring-backend=test
+pylonscli keys add eugen --keyring-backend=test
+
+# pylonscli tx pylons send-pylons $(pylonscli keys show -a michael --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a michael --keyring-backend=test) 500000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+echo "finished michael account initialization tx sending; waiting 6 seconds..."
+sleep 6
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
+pylonscli query account $(pylonscli keys show -a michael --keyring-backend=test) --node tcp://192.168.10.2:26657
+
+# pylonscli tx pylons send-pylons $(pylonscli keys show -a eugen --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a eugen --keyring-backend=test) 500000pylon,10000node0token --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+echo "finished eugen account initialization tx sending; waiting 6 seconds..."
+sleep 6
+pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
+pylonscli query account $(pylonscli keys show -a eugen --keyring-backend=test) --node tcp://192.168.10.2:26657
+
+
+# sleep 1000;

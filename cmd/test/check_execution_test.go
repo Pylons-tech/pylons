@@ -104,6 +104,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
+
 	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
 	ErrValidation(t, "error mocking recipe %+v", err)
 
@@ -115,6 +116,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	t.MustNil(err)
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
+
 	txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 	if tc.waitForBlockInterval {
@@ -123,7 +125,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		WaitForNextBlock()
 	}
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	execResp := handlers.ExecuteRecipeResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
@@ -144,9 +146,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
 	txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 
-	WaitForNextBlock()
-
-	txHandleResBytes, err = GetTxData(txhash, t)
+	txHandleResBytes, err = WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CheckExecutionResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -170,7 +170,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 		WaitForNextBlock()
 
-		txHandleResBytes, err = GetTxData(txhash, t)
+		txHandleResBytes, err = WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)
 		resp := handlers.CheckExecutionResp{}
 		err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)

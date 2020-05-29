@@ -43,7 +43,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CreateCBResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -151,22 +151,13 @@ func MockDetailedRecipeGUID(
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CreateRecipeResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 
 	return resp.RecipeID, nil
-}
-
-func GetRecipeGUIDFromName(name string, account string) (string, error) {
-	rcpList, err := ListRecipesViaCLI(account)
-	if err != nil {
-		return "", err
-	}
-	rcp, _ := FindRecipeFromArrayByName(rcpList, name)
-	return rcp.ID, nil
 }
 
 ///////////ITEM//////////////////////////////////////////////
@@ -197,7 +188,7 @@ func MockItemGUID(name string, t *testing.T) string {
 	err = WaitForNextBlock()
 	ErrValidation(t, "error waiting for creating item %+v", err)
 
-	txHandleResBytes, err := GetTxData(txhash, t)
+	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.FiatItemResponse{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
@@ -243,7 +234,7 @@ func MockDetailedTradeGUID(
 		outputItems = nil
 	}
 
-	TestTxWithMsgWithNonce(t,
+	txhash := TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateTrade(
 			inputCoinList,
 			inputItemList,
@@ -255,7 +246,7 @@ func MockDetailedTradeGUID(
 		false,
 	)
 
-	err = WaitForNextBlock()
+	_, err = WaitAndGetTxData(txhash, 3, t)
 	ErrValidation(t, "error waiting for creating trade %+v", err)
 	// check trade created after 1 block
 	tradeID, exist, err := GetTradeIDFromExtraInfo(extraInfo)

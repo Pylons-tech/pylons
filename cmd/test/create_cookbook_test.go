@@ -47,7 +47,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			err = WaitForNextBlock()
 			ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-			txHandleResBytes, err := GetTxData(txhash, t)
+			txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
 			resp := handlers.CreateCBResponse{}
 			err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)

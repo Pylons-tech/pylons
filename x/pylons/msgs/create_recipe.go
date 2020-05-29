@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgCreateRecipe defines a CreateRecipe message
@@ -51,7 +52,7 @@ func (msg MsgCreateRecipe) Route() string { return "pylons" }
 func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 
 // ValidateBasic validates the Msg
-func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
+func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	// validation for the item input index overflow on entries
 	for _, entry := range msg.Entries {
@@ -59,21 +60,21 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 		case types.CoinOutput:
 			coinOutput, _ := entry.(types.CoinOutput)
 			if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
-				return sdk.ErrInternal("CoinOuput: " + err.Error())
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "CoinOuput: "+err.Error())
 			}
 		case types.ItemOutput:
 			itemOutput, _ := entry.(types.ItemOutput)
 			if itemOutput.ModifyItem.ItemInputRef != -1 {
 				if itemOutput.ModifyItem.ItemInputRef >= len(msg.ItemInputs) {
-					return sdk.ErrInternal("ItemInputRef overflow length of ItemInputs")
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef overflow length of ItemInputs")
 				}
 				if itemOutput.ModifyItem.ItemInputRef < -1 {
-					return sdk.ErrInternal("ItemInputRef is less than 0 which is invalid")
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef is less than 0 which is invalid")
 				}
 			}
 
 		default:
-			return sdk.ErrInternal("invalid entry type available")
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid entry type available")
 		}
 	}
 
@@ -83,10 +84,10 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 		usedEntries := make(map[int]bool)
 		for _, result := range output.ResultEntries {
 			if result >= len(msg.Entries) || result < 0 {
-				return sdk.ErrInternal("output is refering to index which is out of entries range")
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "output is refering to index which is out of entries range")
 			}
 			if usedEntries[result] {
-				return sdk.ErrInternal("double use of entries within single output result")
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of entries within single output result")
 			}
 			usedEntries[result] = true
 			entry := msg.Entries[result]
@@ -95,7 +96,7 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 				itemOutput, _ := entry.(types.ItemOutput)
 				if itemOutput.ModifyItem.ItemInputRef != -1 {
 					if usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] {
-						return sdk.ErrInternal("double use of item input within single output result")
+						return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")
 					}
 					usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] = true
 				}
@@ -103,16 +104,17 @@ func (msg MsgCreateRecipe) ValidateBasic() sdk.Error {
 		}
 		// validation for weight program
 		if err := types.ProgramValidateBasic(output.Weight); err != nil {
-			return sdk.ErrInternal("Output Weight: " + err.Error())
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Output Weight: "+err.Error())
 		}
 	}
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	if len(msg.Description) < 20 {
-		return sdk.ErrInternal("the description should have more than 20 characters")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
 	return nil

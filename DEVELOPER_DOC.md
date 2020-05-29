@@ -524,7 +524,7 @@ Coin to coin trading
   ],
   "ItemInputRefs": [],
   "CoinOutputs": [{
-      "denom":"eugencoin",
+      "denom":"node0token",
       "amount": "200"
   }],
   "ItemOutputNames": [],
@@ -556,7 +556,7 @@ Item to coin trading
         "./trades/item_input/trading_knife_v3.json"
     ],
     "CoinOutputs": [{
-        "denom":"eugencoin",
+        "denom":"node0token",
         "amount": "200"
     }],
     "ItemOutputNames": [],

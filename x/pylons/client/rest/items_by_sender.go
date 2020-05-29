@@ -15,12 +15,12 @@ func itemsBySenderHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName
 		vars := mux.Vars(r)
 		sender := vars[senderKey]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_sender/%s", storeName, sender), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_sender/%s", storeName, sender), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

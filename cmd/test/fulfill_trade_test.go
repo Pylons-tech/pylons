@@ -1,6 +1,7 @@
 package intTest
 
 import (
+	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
@@ -44,7 +45,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			false,
 			"",
 			true,
-			"eugencoin",
+			"node0token",
 			200,
 			true,
 			"pylon",
@@ -78,7 +79,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			false,
 			"",
 			true,
-			"eugencoin",
+			"node0token",
 			200,
 			false,
 			"",
@@ -95,7 +96,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			true,
 			"TESTITEM_FulfillTrade__001_TC4_INPUT",
 			true,
-			"eugencoin",
+			"node0token",
 			200,
 			false,
 			"",
@@ -146,7 +147,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
+	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
 	ffTrdResp := handlers.FulfillTradeResp{}
 	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	t.MustNil(err)
@@ -157,7 +158,6 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	// Try again after fulfill trade
 	txhash = TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
 	WaitForNextBlock()
-	t.Log("FulfillTrade again txhash=", txhash)
 	hmrErr := GetHumanReadableErrorFromTxHash(txhash, t)
-	t.MustTrue(hmrErr == tc.expectedRetryErrMsg)
+	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 }

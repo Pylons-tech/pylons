@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgDisableRecipe defines a DisableRecipe message
@@ -27,10 +28,11 @@ func (msg MsgDisableRecipe) Route() string { return "pylons" }
 func (msg MsgDisableRecipe) Type() string { return "disable_recipe" }
 
 // ValidateBasic validates the Msg
-func (msg MsgDisableRecipe) ValidateBasic() sdk.Error {
+func (msg MsgDisableRecipe) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
-		return sdk.ErrInvalidAddress(msg.Sender.String())
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+
 	}
 
 	return nil

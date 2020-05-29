@@ -15,12 +15,12 @@ func addrFromPubkeyHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 		vars := mux.Vars(r)
 		hexPubKey := vars[pubKeyName]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/addr_from_pub_key/%s", storeName, hexPubKey), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/addr_from_pub_key/%s", storeName, hexPubKey), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

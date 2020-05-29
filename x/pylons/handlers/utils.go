@@ -4,19 +4,20 @@ import (
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-func errInternal(err error) sdk.Result {
+func errInternal(err error) error {
 
-	return sdk.ErrInternal(err.Error()).Result()
+	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 }
 
-func marshalJson(intf interface{}) sdk.Result {
+func marshalJson(intf interface{}) (*sdk.Result, error) {
 	mData, err := json.Marshal(intf)
 
 	if err != nil {
-		return errInternal(err)
+		return nil, errInternal(err)
 	}
 
-	return sdk.Result{Data: mData}
+	return &sdk.Result{Data: mData}, nil
 }

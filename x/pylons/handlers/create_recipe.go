@@ -7,6 +7,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 type CreateRecipeResponse struct {
@@ -14,18 +15,18 @@ type CreateRecipeResponse struct {
 }
 
 // HandlerMsgCreateRecipe is used to create recipe by a developer
-func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) sdk.Result {
-
+func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) (*sdk.Result, error) {
+	
 	err := msg.ValidateBasic()
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 	if !cook.Sender.Equals(msg.Sender) {
-		return sdk.ErrUnauthorized("cookbook not owned by the sender").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "cookbook not owned by the sender")
 	}
 
 	recipe := types.NewRecipe(
@@ -38,16 +39,16 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 
 	if msg.RecipeID != "" {
 		if keeper.HasRecipeWithCookbookID(ctx, msg.CookbookID, msg.RecipeID) {
-			return errInternal(fmt.Errorf("The recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
+			return nil, errInternal(fmt.Errorf("The recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
 		}
 		recipe.ID = msg.RecipeID
 	}
 	if err := recipe.ItemInputs.Validate(); err != nil {
-		return errInternal(err)
+		return nil, errInternal(err)
 	}
 
 	if err := keeper.SetRecipe(ctx, recipe); err != nil {
-		return errInternal(err)
+		return nil, errInternal(err)
 	}
 
 	return marshalJson(CreateRecipeResponse{

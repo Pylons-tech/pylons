@@ -15,12 +15,12 @@ func listExecutionsHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 		vars := mux.Vars(r)
 		sender := vars[senderKey]
 
-		res, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_executions/%s", storeName, sender), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_executions/%s", storeName, sender), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return
 		}
 
-		rest.PostProcessResponse(w, cdc, res, cliCtx.Indent)
+		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }

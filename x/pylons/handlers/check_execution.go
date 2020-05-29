@@ -5,6 +5,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // CheckExecutionResp is the response for checkExecution
@@ -18,7 +19,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
 	var outputSTR []byte
-	_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
+	_, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
 	if err != nil {
 		return nil, err
 	}
@@ -45,19 +46,20 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 }
 
 // HandlerMsgCheckExecution is used to check the status of an execution
-func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCheckExecution) sdk.Result {
+func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCheckExecution) (*sdk.Result, error) {
+
 	err := msg.ValidateBasic()
 	if err != nil {
-		return err.Result()
+		return nil, errInternal(err)
 	}
 
 	exec, err2 := keeper.GetExecution(ctx, msg.ExecID)
 	if err2 != nil {
-		return errInternal(err2)
+		return nil, errInternal(err2)
 	}
 
 	if !msg.Sender.Equals(exec.Sender) {
-		return sdk.ErrUnauthorized("The current sender is different from the executor").Result()
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "The current sender is different from the executor")
 	}
 
 	if exec.Completed {
@@ -70,7 +72,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if ctx.BlockHeight() >= exec.BlockHeight {
 		outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
 		if err != nil {
-			return errInternal(err2)
+			return nil, errInternal(err2)
 		}
 
 		return marshalJson(CheckExecutionResp{
@@ -81,11 +83,11 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	} else if msg.PayToComplete {
 		recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
 		if err != nil {
-			return errInternal(err)
+			return nil, errInternal(err)
 		}
 		cookbook, err := keeper.GetCookbook(ctx, recipe.CookbookID)
 		if err != nil {
-			return errInternal(err)
+			return nil, errInternal(err)
 		}
 		blockDiff := exec.BlockHeight - ctx.BlockHeight()
 		if blockDiff < 0 { // check if already waited for block interval
@@ -94,14 +96,14 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
 
 		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
-			_, _, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
+			_, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
 			if err != nil {
-				return errInternal(err2)
+				return nil, errInternal(err2)
 			}
 
 			outputSTR, err2 := SafeExecute(ctx, keeper, exec, msg)
 			if err2 != nil {
-				return errInternal(err2)
+				return nil, errInternal(err2)
 			}
 
 			return marshalJson(CheckExecutionResp{

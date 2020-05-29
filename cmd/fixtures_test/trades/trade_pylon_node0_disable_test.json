@@ -1,0 +1,16 @@
+{
+    "CoinInputs":[
+        {
+            "Coin": "pylon",
+            "Count": "1"
+        }
+    ],
+    "ItemInputRefs": [],
+    "CoinOutputs": [{
+        "denom":"node0token",
+        "amount": "200"
+    }],
+    "ItemOutputNames": [],
+    "ExtraInfo":"pylon to node0 trading for disable test",
+    "Sender":"eugen"
+  }

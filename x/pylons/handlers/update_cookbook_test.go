@@ -18,7 +18,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
 
 	cb := types.NewCookbook(
 		"example@example.com",
@@ -69,15 +69,14 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender)
 
-			result := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			_, err := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
 
-			// t.Errorf("UpdateCookbookTEST LOG:: %+v", result)
 			if !tc.showError {
 				readCookbook, err2 := mockedCoinInput.PlnK.GetCookbook(mockedCoinInput.Ctx, tc.cbID)
 				require.True(t, err2 == nil)
 				require.True(t, readCookbook.Description == tc.desc)
 			} else {
-				require.True(t, strings.Contains(result.Log, tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
