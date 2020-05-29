@@ -249,12 +249,12 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	}
 }
 
-func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *testing.T) {
-	t.Run(strconv.Itoa(idx)+"_"+step.ID, func(t *testing.T) {
+func ProcessSingleFixtureQueueItem(file string, idx int, fixtureSteps []FixtureStep, lv1t *testing.T) {
+	step := fixtureSteps[idx]
+	lv1t.Run(strconv.Itoa(idx)+"_"+step.ID, func(t *testing.T) {
 		if FixtureTestOpts.IsParallel {
 			t.Parallel()
 		}
-		WaitForCondition(file, idx, step, t)
 
 		switch step.Action {
 		case "fiat_item":
@@ -279,7 +279,7 @@ func ProcessSingleFixtureQueueItem(file string, idx int, step FixtureStep, t *te
 			t.Fatalf("step with unrecognizable action found %s", step.Action)
 		}
 		PropertyExistCheck(step, t)
-		UpdateWorkQueueStatus(file, idx, step, DONE, t)
+		UpdateWorkQueueStatus(file, idx, fixtureSteps, DONE, lv1t)
 	})
 }
 
@@ -302,9 +302,8 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 				status:          NOT_STARTED,
 			})
 		}
-		for idx, step := range fixtureSteps {
-			UpdateWorkQueueStatus(file, idx, step, IN_PROGRESS, t)
-			ProcessSingleFixtureQueueItem(file, idx, step, t)
+		for idx, _ := range fixtureSteps {
+			UpdateWorkQueueStatus(file, idx, fixtureSteps, IN_PROGRESS, t)
 		}
 	})
 }

@@ -70,10 +70,10 @@ FROM build as fixture_test
 COPY Makefile .
 COPY init_accounts.sh .
 RUN chmod +x init_accounts.sh
-CMD sleep 5 && make init_accounts && GO111MODULE=on make fixture_tests ARGS="-runserial --node=tcp://192.168.10.2:26657"
+CMD sleep 5 && make init_accounts && GO111MODULE=on make fixture_tests ARGS="--node=tcp://192.168.10.2:26657"
 
 FROM build as all_test
 COPY Makefile .
 COPY init_accounts.sh .
 RUN chmod +x init_accounts.sh
-CMD sleep 5 && make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657" && GO111MODULE=on make fixture_tests ARGS="-runserial --node=tcp://192.168.10.2:26657"
+CMD sleep 5 && make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657" && GO111MODULE=on make fixture_tests ARGS="--node=tcp://192.168.10.2:26657"

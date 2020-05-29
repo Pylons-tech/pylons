@@ -17,6 +17,9 @@ func (k Keeper) IncreaseEntityCount(ctx sdk.Context) {
 }
 
 func (k Keeper) GetEntityCount(ctx sdk.Context) int {
+	if k.EntityKey == nil {
+		return 0
+	}
 	store := ctx.KVStore(k.EntityKey)
 
 	countStr := store.Get([]byte(KeyEntityCount))
