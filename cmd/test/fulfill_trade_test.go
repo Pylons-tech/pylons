@@ -4,11 +4,12 @@ import (
 	"strings"
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 type FulfillTradeTestCase struct {
@@ -131,7 +132,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		tc.extraInfo,
 		t)
 
-	eugenAddr := GetAccountAddr("eugen", t)
+	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
@@ -143,21 +144,21 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGuid, sdkAddr, itemIDs)
-	txhash := TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	txhash := intTestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
 
-	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
 	ffTrdResp := handlers.FulfillTradeResp{}
-	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
+	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	t.MustNil(err)
 
 	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
 	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
 
 	// Try again after fulfill trade
-	txhash = TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
-	WaitForNextBlock()
-	hmrErr := GetHumanReadableErrorFromTxHash(txhash, t)
+	txhash = intTestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	intTestSDK.WaitForNextBlock()
+	hmrErr := intTestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
 	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 }

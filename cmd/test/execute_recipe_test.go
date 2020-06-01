@@ -3,10 +3,11 @@ package intTest
 import (
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestExecuteRecipeViaCLI(originT *originT.T) {
@@ -30,28 +31,28 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
-			ErrValidation(t, "error mocking recipe %+v", err)
+			intTestSDK.ErrValidation(t, "error mocking recipe %+v", err)
 
-			rcp, err := GetRecipeByGUID(guid)
+			rcp, err := intTestSDK.GetRecipeByGUID(guid)
 			t.MustNil(err)
 
-			eugenAddr := GetAccountAddr("eugen", t)
+			eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := TestTxWithMsgWithNonce(
+			txhash := intTestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
 				"eugen",
 				false,
 			)
 
-			_, err = WaitAndGetTxData(txhash, 3, t)
-			ErrValidation(t, "error waiting for transaction %+v", err)
-			// WaitForNextBlock()
-			items, err := ListItemsViaCLI("")
-			ErrValidation(t, "error listing items via cli ::: %+v", err)
+			_, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
+			intTestSDK.ErrValidation(t, "error waiting for transaction %+v", err)
+			// intTestSDK.WaitForNextBlock()
+			items, err := intTestSDK.ListItemsViaCLI("")
+			intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok := FindItemFromArrayByName(items, tc.desiredItemName, false)
+			_, ok := intTestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 			t.MustTrue(ok)
 		})
 	}

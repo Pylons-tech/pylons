@@ -6,11 +6,12 @@ import (
 
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 type CheckExecutionTestCase struct {
@@ -106,74 +107,74 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
 
 	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
-	ErrValidation(t, "error mocking recipe %+v", err)
+	intTestSDK.ErrValidation(t, "error mocking recipe %+v", err)
 
-	rcp, err := GetRecipeByGUID(guid)
+	rcp, err := intTestSDK.GetRecipeByGUID(guid)
 	t.MustNil(err)
 
-	eugenAddr := GetAccountAddr("eugen", t)
+	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 
-	txhash := TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
+	txhash := intTestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 	if tc.waitForBlockInterval {
-		WaitForBlockInterval(tc.blockInterval)
+		intTestSDK.WaitForBlockInterval(tc.blockInterval)
 	} else {
-		WaitForNextBlock()
+		intTestSDK.WaitForNextBlock()
 	}
 
-	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	execResp := handlers.ExecuteRecipeResp{}
-	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
+	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
 	t.MustNil(err)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.MustNil(err)
 
 	if len(tc.currentItemName) > 0 { // when item input is set
-		items, err := ListItemsViaCLI("")
-		ErrValidation(t, "error listing items via cli ::: %+v", err)
+		items, err := intTestSDK.ListItemsViaCLI("")
+		intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-		item, ok := FindItemFromArrayByName(items, tc.currentItemName, true)
+		item, ok := intTestSDK.FindItemFromArrayByName(items, tc.currentItemName, true)
 		t.MustTrue(ok)
 		t.MustTrue(item.OwnerRecipeID == guid)
 	}
 
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+	txhash = intTestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 
-	txHandleResBytes, err = WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CheckExecutionResp{}
-	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 	t.MustTrue(resp.Status == tc.expectedStatus)
 	t.MustTrue(resp.Message == tc.expectedMessage)
 
 	// Here desiredItemName should be different across tests cases and across test files
-	items, err := ListItemsViaCLI("")
-	ErrValidation(t, "error listing items via cli ::: %+v", err)
+	items, err := intTestSDK.ListItemsViaCLI("")
+	intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-	_, ok := FindItemFromArrayByName(items, tc.desiredItemName, false)
+	_, ok := intTestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 	t.MustTrue(ok == tc.shouldSuccess)
 
-	exec, err := GetExecutionByGUID(schedule.ExecID)
+	exec, err := intTestSDK.GetExecutionByGUID(schedule.ExecID)
 	if err != nil {
 		t.Fatalf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
 	}
 	t.MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
-		txhash = TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
-		WaitForNextBlock()
+		txhash = intTestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+		intTestSDK.WaitForNextBlock()
 
-		txHandleResBytes, err = WaitAndGetTxData(txhash, 3, t)
+		txHandleResBytes, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)
 		resp := handlers.CheckExecutionResp{}
-		err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		t.MustNil(err)
 		t.MustTrue(resp.Status == tc.expectedRetryResStatus)
 		t.MustTrue(resp.Message == tc.expectedRetryResMessage)
