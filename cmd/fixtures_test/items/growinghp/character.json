@@ -2,6 +2,6 @@
     "Doubles": [{ "Key": "attack", "Value": "1" }],
     "Longs": [{ "Key": "HP", "Value": "10" }, { "Key": "MaxHP", "Value": "100" }],
     "Strings": [{ "Key": "Name","Value": "GrowingHPCharacter"}],
-    "CookbookName": "growinghp",
+    "CookbookID": "growinghp-1589853709",
     "Sender": "michael"
 }

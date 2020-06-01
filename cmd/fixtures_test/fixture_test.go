@@ -4,7 +4,8 @@ import (
 	"flag"
 	"testing"
 
-	intTest "github.com/Pylons-tech/pylons/cmd/test"
+	fixtureTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test"
+	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 var runSerialMode bool = false
@@ -17,9 +18,10 @@ func init() {
 
 func TestFixturesViaCLI(t *testing.T) {
 	flag.Parse()
-	FixtureTestOpts.IsParallel = !runSerialMode
+	fixtureTestSDK.FixtureTestOpts.CreateNewCookbook = true
+	fixtureTestSDK.FixtureTestOpts.IsParallel = !runSerialMode
 	if useRest {
-		intTest.CLIOpts.RestEndpoint = "http://localhost:1317"
+		intTestSDK.CLIOpts.RestEndpoint = "http://localhost:1317"
 	}
-	RunTestScenarios("scenarios", t)
+	fixtureTestSDK.RunTestScenarios("scenarios", t)
 }
