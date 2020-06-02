@@ -5,7 +5,6 @@ go 1.13
 require (
 	github.com/Pylons-tech/pylons_sdk v0.0.0-20200531033214-1b666c206442
 	github.com/cosmos/cosmos-sdk v0.38.4
-	github.com/golang/mock v1.4.3 // indirect
 	github.com/google/cel-go v0.3.2
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.4
@@ -16,6 +15,5 @@ require (
 	github.com/tendermint/tendermint v0.33.3
 	github.com/tendermint/tm-db v0.5.1
 	github.com/tyler-smith/go-bip39 v1.0.2
-	go.etcd.io/bbolt v1.3.4 // indirect
 	google.golang.org/genproto v0.0.0-20200313141609-30c55424f95d
 )
