@@ -1,10 +1,11 @@
 {
-    "Name": "catalyst",
-    "Description": "this has to meet character limits lol",
-    "Developer": "SketchyCo",
-    "Level": "0",
-    "Sender": "eugen",
-    "SupportEmail": "example@example.com",
-    "Version": "1.0.0",
-    "CostPerBlock": "50"
+  "ID": "catalyst-1589853709",
+  "Name": "catalyst",
+  "Description": "this has to meet character limits lol",
+  "Developer": "SketchyCo",
+  "Level": "0",
+  "Sender": "eugen",
+  "SupportEmail": "example@example.com",
+  "Version": "1.0.0",
+  "CostPerBlock": "50"
 }

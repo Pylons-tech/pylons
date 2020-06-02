@@ -3,12 +3,13 @@ package intTest
 import (
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestCreateTradeViaCLI(originT *originT.T) {
@@ -28,10 +29,10 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := GetAccountAddr("eugen", t)
+			eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := TestTxWithMsgWithNonce(t,
+			txhash := intTestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
 					types.GenItemInputList("Raichu"),
@@ -43,10 +44,10 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				false,
 			)
 
-			_, err = WaitAndGetTxData(txhash, 3, t)
-			ErrValidation(t, "error waiting for creating trade %+v", err)
+			_, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
+			intTestSDK.ErrValidation(t, "error waiting for creating trade %+v", err)
 			// check trade created after 1 block
-			tradeID, exist, err := GetTradeIDFromExtraInfo(tc.extraInfo)
+			tradeID, exist, err := intTestSDK.GetTradeIDFromExtraInfo(tc.extraInfo)
 			t.MustNil(err)
 			t.MustTrue(exist)
 			t.MustTrue(len(tradeID) > 0)

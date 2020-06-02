@@ -29,7 +29,7 @@
     "ExtraInfo": "",
     "Sender": "eugen",
     "Name": "Monster Upgrade Catalyst Recipe",
-    "CookbookName": "catalyst",
+    "CookbookID": "catalyst-1589853709",
     "Description": "this recipe is used to upgrade monster using catalyst.",
     "BlockInterval": "0"
 }

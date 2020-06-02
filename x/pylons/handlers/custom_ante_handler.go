@@ -7,6 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	"github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -27,7 +28,7 @@ func NewAnteHandler(ak keeper.AccountKeeper, supplyKeeper types.SupplyKeeper, si
 		ante.NewValidateSigCountDecorator(ak),
 		ante.NewDeductFeeDecorator(ak, supplyKeeper),
 		ante.NewSigGasConsumeDecorator(ak, sigGasConsumer),
-		ante.NewSigVerificationDecorator(ak),
+		NewCustomSigVerificationDecorator(ak),
 		ante.NewIncrementSequenceDecorator(ak), // innermost AnteDecorator
 	)
 }
@@ -44,16 +45,15 @@ func NewAccountCreationDecorator(ak keeper.AccountKeeper) AccountCreationDecorat
 }
 
 func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	// no need to verify signatures on recheck tx
-	if ctx.IsReCheckTx() {
-		return next(ctx, tx, simulate)
-	}
+	fmt.Println("Running NewAccountCreationDecorator...")
 	sigTx, ok := tx.(types.StdTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 	messages := sigTx.GetMsgs()
-	if len(messages) > 0 && messages[0].Type() == "get_pylons" {
+
+	if len(messages) == 1 && messages[0].Type() == "get_pylons" {
+		// we don't support multi-message transaction for get_pylons
 		pubkey := sigTx.Signatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
 
@@ -70,7 +70,69 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 			}
 			svd.ak.SetAccount(ctx, acc)
 		}
-
 	}
+	return next(ctx, tx, simulate)
+}
+
+type CustomSigVerificationDecorator struct {
+	ak keeper.AccountKeeper
+}
+
+func NewCustomSigVerificationDecorator(ak keeper.AccountKeeper) CustomSigVerificationDecorator {
+	return CustomSigVerificationDecorator{
+		ak: ak,
+	}
+}
+
+func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	// no need to verify signatures on recheck tx
+	if ctx.IsReCheckTx() {
+		return next(ctx, tx, simulate)
+	}
+	sigTx, ok := tx.(ante.SigVerifiableTx)
+	if !ok {
+		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
+	}
+
+	// stdSigs contains the sequence number, account number, and signatures.
+	// When simulating, this would just be a 0-length slice.
+	sigs := sigTx.GetSignatures()
+
+	// stdSigs contains the sequence number, account number, and signatures.
+	// When simulating, this would just be a 0-length slice.
+	signerAddrs := sigTx.GetSigners()
+	signerAccs := make([]exported.Account, len(signerAddrs))
+
+	// check that signer length and signature length are the same
+	if len(sigs) != len(signerAddrs) {
+		return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "invalid number of signer;  expected: %d, got %d", len(signerAddrs), len(sigs))
+	}
+
+	for i, sig := range sigs {
+		signerAccs[i], err = ante.GetSignerAcc(ctx, svd.ak, signerAddrs[i])
+		if err != nil {
+			return ctx, err
+		}
+
+		// retrieve signBytes of tx
+		signBytes := sigTx.GetSignBytes(ctx, signerAccs[i])
+
+		// retrieve pubkey
+		pubKey := signerAccs[i].GetPubKey()
+		if !simulate && pubKey == nil {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
+		}
+
+		messages := sigTx.GetMsgs()
+		if len(messages) == 1 && messages[0].Type() == "get_pylons" {
+			continue
+		}
+
+		// verify signature
+		if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
+		}
+	}
+
 	return next(ctx, tx, simulate)
 }

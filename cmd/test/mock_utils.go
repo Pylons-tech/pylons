@@ -1,13 +1,14 @@
 package intTest
 
 import (
-	testing "github.com/Pylons-tech/pylons/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 ///////////COOKBOOK//////////////////////////////////////////////
@@ -22,11 +23,11 @@ func MockCookbook(t *testing.T) (string, error) {
 	if exist { // finish mock if already available
 		return guid, nil
 	}
-	eugenAddr := GetAccountAddr("eugen", t)
+	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
-	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
+	txhash := intTestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
 		"",
 		"this has to meet character limits lol",
@@ -40,20 +41,20 @@ func MockCookbook(t *testing.T) (string, error) {
 		false,
 	)
 
-	err = WaitForNextBlock()
-	ErrValidation(t, "error waiting for creating cookbook %+v", err)
+	err = intTestSDK.WaitForNextBlock()
+	intTestSDK.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CreateCBResponse{}
-	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 
 	return resp.CookbookID, nil
 }
 
 func CheckCookbookExist() (string, bool, error) {
-	cbList, err := ListCookbookViaCLI("")
+	cbList, err := intTestSDK.ListCookbookViaCLI("")
 	if err != nil {
 		return "", false, err
 	}
@@ -65,9 +66,9 @@ func CheckCookbookExist() (string, bool, error) {
 
 func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 	guid, err := MockCookbook(t)
-	ErrValidation(t, "error mocking cookbook %+v", err)
+	intTestSDK.ErrValidation(t, "error mocking cookbook %+v", err)
 
-	return GetCookbookByGUID(guid)
+	return intTestSDK.GetCookbookByGUID(guid)
 }
 
 ///////////RECIPE//////////////////////////////////////////////
@@ -119,20 +120,20 @@ func MockDetailedRecipeGUID(
 	interval int64,
 	t *testing.T,
 ) (string, error) {
-	guid, err := GetRecipeGUIDFromName(rcpName, "")
-	ErrValidation(t, "error checking if recipe already exist %+v", err)
+	guid, err := intTestSDK.GetRecipeGUIDFromName(rcpName, "")
+	intTestSDK.ErrValidation(t, "error checking if recipe already exist %+v", err)
 
 	if len(guid) > 0 { // finish mock if already available
 		return guid, nil
 	}
 
 	mCB, err := GetMockedCookbook(t)
-	ErrValidation(t, "error getting mocked cookbook %+v", err)
+	intTestSDK.ErrValidation(t, "error getting mocked cookbook %+v", err)
 
-	eugenAddr := GetAccountAddr("eugen", t)
+	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
-	txhash := TestTxWithMsgWithNonce(t,
+	txhash := intTestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			rcpName,
 			mCB.ID,
@@ -148,13 +149,13 @@ func MockDetailedRecipeGUID(
 		false,
 	)
 
-	err = WaitForNextBlock()
-	ErrValidation(t, "error waiting for creating recipe %+v", err)
+	err = intTestSDK.WaitForNextBlock()
+	intTestSDK.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CreateRecipeResponse{}
-	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 
 	return resp.RecipeID, nil
@@ -164,13 +165,13 @@ func MockDetailedRecipeGUID(
 
 func MockItemGUID(name string, t *testing.T) string {
 	mCB, err := GetMockedCookbook(t)
-	ErrValidation(t, "error getting mocked cookbook %+v", err)
+	intTestSDK.ErrValidation(t, "error getting mocked cookbook %+v", err)
 
-	eugenAddr := GetAccountAddr("eugen", t)
+	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
-	txhash := TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(mCB.ID,
+	txhash := intTestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(mCB.ID,
 		[]types.DoubleKeyValue{},
 		[]types.LongKeyValue{},
 		[]types.StringKeyValue{
@@ -185,13 +186,13 @@ func MockItemGUID(name string, t *testing.T) string {
 		false,
 	)
 
-	err = WaitForNextBlock()
-	ErrValidation(t, "error waiting for creating item %+v", err)
+	err = intTestSDK.WaitForNextBlock()
+	intTestSDK.ErrValidation(t, "error waiting for creating item %+v", err)
 
-	txHandleResBytes, err := WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.FiatItemResponse{}
-	err = GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 
 	return resp.ItemID
@@ -207,7 +208,7 @@ func MockDetailedTradeGUID(
 	extraInfo string,
 	t *testing.T,
 ) string {
-	eugenAddr := GetAccountAddr("eugen", t)
+	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
@@ -227,14 +228,14 @@ func MockDetailedTradeGUID(
 	}
 	var outputItems types.ItemList = nil
 	if hasOutputItem {
-		outputItem, err := GetItemByGUID(outputItemID)
+		outputItem, err := intTestSDK.GetItemByGUID(outputItemID)
 		t.MustNil(err)
 		outputItems = types.ItemList{outputItem}
 	} else {
 		outputItems = nil
 	}
 
-	txhash := TestTxWithMsgWithNonce(t,
+	txhash := intTestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateTrade(
 			inputCoinList,
 			inputItemList,
@@ -246,10 +247,10 @@ func MockDetailedTradeGUID(
 		false,
 	)
 
-	_, err = WaitAndGetTxData(txhash, 3, t)
-	ErrValidation(t, "error waiting for creating trade %+v", err)
+	_, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
+	intTestSDK.ErrValidation(t, "error waiting for creating trade %+v", err)
 	// check trade created after 1 block
-	tradeID, exist, err := GetTradeIDFromExtraInfo(extraInfo)
+	tradeID, exist, err := intTestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.MustNil(err)
 	t.MustTrue(exist)
 	t.MustTrue(len(tradeID) > 0)

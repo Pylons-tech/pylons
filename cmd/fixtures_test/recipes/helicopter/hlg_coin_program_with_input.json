@@ -21,7 +21,7 @@
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Helicopter's Hlg Coin Generation From Input Recipe",
-    "CookbookName": "helicopter",
+    "CookbookID": "helicopter-1589853709",
     "Description": "this has to meet character limits lol",
     "BlockInterval":"0"
 }
