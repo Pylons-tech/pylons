@@ -124,7 +124,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
 		}
 
-		if len(messages) == 1 && messages[i].Type() == "get_pylons" {
+		if len(messages) == 1 && messages[0].Type() == "get_pylons" {
 			continue
 		}
 
