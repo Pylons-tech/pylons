@@ -94,7 +94,6 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 
-	messages := sigTx.GetMsgs()
 	// stdSigs contains the sequence number, account number, and signatures.
 	// When simulating, this would just be a 0-length slice.
 	sigs := sigTx.GetSignatures()
@@ -124,6 +123,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
 		}
 
+		messages := sigTx.GetMsgs()
 		if len(messages) == 1 && messages[0].Type() == "get_pylons" {
 			continue
 		}
