@@ -123,8 +123,6 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				// should check pylon is reduced correctly
 
 			} else {
-
-				t.Log("err.Error()", err, "tc.desiredError", tc.desiredError)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
