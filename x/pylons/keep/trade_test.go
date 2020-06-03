@@ -21,15 +21,11 @@ func GenTrade(sender sdk.AccAddress, itemList types.ItemList, pylonsAmount int64
 
 func TestGetTrade(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 
 	require.True(t, err == nil)
 

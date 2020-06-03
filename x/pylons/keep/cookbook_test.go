@@ -25,14 +25,10 @@ func GenCookbook(sender sdk.AccAddress, name string, desc string) types.Cookbook
 
 func TestKeeperGetCookbook(t *testing.T) {
 	tci := SetupTestCoinInput()
-
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cb := GenCookbook(sender, "cookbook-00001", "this has to meet character limits")
-	err = tci.PlnK.SetCookbook(tci.Ctx, cb)
+	err := tci.PlnK.SetCookbook(tci.Ctx, cb)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

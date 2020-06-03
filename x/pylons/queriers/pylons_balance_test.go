@@ -11,12 +11,11 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 )
 
 func TestQuerierPylonsBalance(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2 := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000))
+	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000))
 
 	cases := map[string]struct {
 		path    []string

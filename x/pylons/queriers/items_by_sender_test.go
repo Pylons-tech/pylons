@@ -14,7 +14,7 @@ import (
 
 func TestQueriersItemsBySender(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2 := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(tci, sender1, "cookbook-00001")

@@ -2,14 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
-	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/stretchr/testify/require"
 )
 
 func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBResponse {
@@ -177,15 +175,4 @@ func MockTrade(
 	createTrdResponse := CreateTradeResponse{}
 	err := json.Unmarshal(result.Data, &createTrdResponse)
 	return createTrdResponse, err
-}
-
-func SetupTestAccounts(t *testing.T, tci keep.TestCoinInput, s1coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress, ) {
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	if s1coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins)
-		require.True(t, err == nil)
-	}
-	return sender1, sender2
 }

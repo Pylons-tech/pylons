@@ -39,8 +39,7 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 
 func TestKeeperSetExecution(t *testing.T) {
 	tci := SetupTestCoinInput()
-
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender, _ := SetupTestAccounts(t, tci, nil)
 
 	cases := map[string]struct {
 		sender       sdk.AccAddress
@@ -76,8 +75,8 @@ func TestKeeperSetExecution(t *testing.T) {
 
 func TestKeeperGetExecution(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, nil)
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	exec := GenExecution(sender, tci)
 	err := tci.PlnK.SetExecution(tci.Ctx, exec)
 	require.True(t, err == nil)
@@ -118,8 +117,8 @@ func TestKeeperGetExecution(t *testing.T) {
 
 func TestKeeperUpdateExecution(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, nil)
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	exec := GenExecution(sender, tci)
 	err := tci.PlnK.SetExecution(tci.Ctx, exec)
 	require.True(t, err == nil)
@@ -163,14 +162,14 @@ func TestKeeperUpdateExecution(t *testing.T) {
 
 func TestKeeperGetExecutionsBySender(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender, sender2 := SetupTestAccounts(t, tci, nil)
+
 	for i := 0; i < 5; i++ {
 		exec := GenExecution(sender, tci)
 		err := tci.PlnK.SetExecution(tci.Ctx, exec)
 		require.True(t, err == nil)
 	}
 
-	sender2, _ := sdk.AccAddressFromBech32("cosmos1alp8y6rmywahtmjsd9gxrfcz304s0mppujl2q6")
 	for i := 0; i < 2; i++ {
 		exec := GenExecution(sender2, tci)
 		err := tci.PlnK.SetExecution(tci.Ctx, exec)

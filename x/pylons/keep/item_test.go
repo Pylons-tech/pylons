@@ -12,12 +12,9 @@ import (
 
 func TestKeeperSetItem(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		name         string
@@ -57,15 +54,11 @@ func TestKeeperSetItem(t *testing.T) {
 
 func TestKeeperGetItem(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -102,16 +95,11 @@ func TestKeeperGetItem(t *testing.T) {
 
 func TestKeeperGetItemsBySender(t *testing.T) {
 	tci := SetupTestCoinInput()
-
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
+	sender, sender2 := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -149,18 +137,14 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 
 func TestKeeperUpdateItem(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
-
 	item := GenItem(cbData.ID, sender, "Raichu")
 	noSenderItem := GenItem(cbData.ID, nil, "Raichu")
 	newItem := GenItem(cbData.ID, sender, "Raichu")
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
 	item.SetString("Name", "RC")
@@ -219,15 +203,11 @@ func TestKeeperUpdateItem(t *testing.T) {
 
 func TestKeeperDeleteItem(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -261,16 +241,13 @@ func TestKeeperDeleteItem(t *testing.T) {
 
 func TestKeeperItemsByCookbook(t *testing.T) {
 	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	cbData1 := GenCookbook(sender, "cookbook-0002", "this has to meet character limits")
 
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-	require.True(t, err == nil)
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
