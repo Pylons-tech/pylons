@@ -16,7 +16,8 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	cbData := MockCookbook(tci, sender1)
 
@@ -25,7 +26,8 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	initItemIDs := []string{}
 	for _, iN := range initItemNames {
 		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
-		tci.PlnK.SetItem(tci.Ctx, *newItem)
+		err := tci.PlnK.SetItem(tci.Ctx, *newItem)
+		require.True(t, err == nil)
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 

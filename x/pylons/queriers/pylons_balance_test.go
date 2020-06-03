@@ -22,7 +22,8 @@ func TestQuerierPylonsBalance(t *testing.T) {
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 	sender2 := "cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc"
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(int64(1000)))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(int64(1000)))
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		path    []string

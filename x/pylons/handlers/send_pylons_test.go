@@ -19,7 +19,8 @@ func TestHandlerMsgSendPylons(t *testing.T) {
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
 	initialAmount := int64(50000)
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(initialAmount))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(initialAmount))
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		amount       int64

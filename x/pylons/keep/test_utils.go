@@ -80,6 +80,7 @@ func SetupTestCoinInput() TestCoinInput {
 	ms.MountStoreWithDB(itKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(execKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tkeyParams, sdk.StoreTypeTransient, db)
+	//nolint:errcheck
 	ms.LoadLatestVersion()
 
 	ms.GetKVStore(cbKey)

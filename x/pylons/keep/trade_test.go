@@ -29,7 +29,7 @@ func TestGetTrade(t *testing.T) {
 	require.True(t, err == nil)
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err := mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
 
 	require.True(t, err == nil)
 

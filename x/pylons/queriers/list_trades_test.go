@@ -21,11 +21,13 @@ func TestListTrades(t *testing.T) {
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(100000))
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
-	// mock cookbook
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(100000))
+	require.True(t, err == nil)
+	_, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
+	require.True(t, err == nil)
 
-	_, err := handlers.MockTrade(
+	// mock cookbook
+	_, err = handlers.MockTrade(
 		mockedCoinInput,
 		types.GenCoinInputList("wood", 100),
 		types.ItemInputList{},

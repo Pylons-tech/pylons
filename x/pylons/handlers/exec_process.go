@@ -83,6 +83,9 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 
 func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 	err := p.GenerateCelEnvVarFromInputItems()
+	if err != nil {
+		return []byte{}, err
+	}
 
 	outputs, err := p.recipe.Outputs.Actualize(p.ec)
 	if err != nil {

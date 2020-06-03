@@ -121,9 +121,11 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	txhash := intTestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 	if tc.waitForBlockInterval {
-		intTestSDK.WaitForBlockInterval(tc.blockInterval)
+		err := intTestSDK.WaitForBlockInterval(tc.blockInterval)
+		t.MustNil(err)
 	} else {
-		intTestSDK.WaitForNextBlock()
+		err := intTestSDK.WaitForNextBlock()
+		t.MustNil(err)
 	}
 
 	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
@@ -169,7 +171,8 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	t.MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
 		txhash = intTestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
-		intTestSDK.WaitForNextBlock()
+		err := intTestSDK.WaitForNextBlock()
+		t.MustNil(err)
 
 		txHandleResBytes, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)

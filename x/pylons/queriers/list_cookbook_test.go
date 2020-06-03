@@ -21,7 +21,8 @@ func TestListCookbook(t *testing.T) {
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	// mock cookbook
 	handlers.MockCookbook(mockedCoinInput, senderAccAddress)

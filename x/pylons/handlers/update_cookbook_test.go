@@ -18,7 +18,8 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	cb := types.NewCookbook(
 		"example@example.com",
@@ -29,7 +30,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		"SketchyCo",
 		msgs.DefaultCostPerBlock,
 	)
-	err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
+	err = mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

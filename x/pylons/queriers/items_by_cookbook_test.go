@@ -22,14 +22,16 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(mockedCoinInput, senderAccAddress, "cookbook-00001")
 	cbData1 := handlers.MockCookbookByName(mockedCoinInput, senderAccAddress, "cookbook-00002")
 
 	item := keep.GenItem(cbData.CookbookID, senderAccAddress, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		path          []string

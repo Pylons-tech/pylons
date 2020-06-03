@@ -33,12 +33,15 @@ func DefaultGenesisState() GenesisState {
 
 func InitGenesis(ctx sdk.Context, keeper keep.Keeper, data GenesisState) {
 	for _, record := range data.Cookbooks {
+		//nolint:errcheck
 		keeper.SetCookbook(ctx, record)
 	}
 	for _, record := range data.Recipies {
+		//nolint:errcheck
 		keeper.SetRecipe(ctx, record)
 	}
 	for _, record := range data.Items {
+		//nolint:errcheck
 		keeper.SetItem(ctx, record)
 	}
 }

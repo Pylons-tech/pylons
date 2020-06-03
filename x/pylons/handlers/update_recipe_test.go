@@ -18,7 +18,8 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
@@ -35,7 +36,8 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 
 	newRcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
-	json.Unmarshal(newRcpResult.Data, &recipeData)
+	err = json.Unmarshal(newRcpResult.Data, &recipeData)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		cookbookID   string

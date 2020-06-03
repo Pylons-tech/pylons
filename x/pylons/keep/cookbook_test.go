@@ -32,7 +32,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 	require.True(t, err == nil)
 
 	cb := GenCookbook(sender, "cookbook-00001", "this has to meet character limits")
-	err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
+	err = mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

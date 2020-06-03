@@ -22,6 +22,7 @@ func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookN
 		panic(err.Error())
 	}
 	cbData := CreateCBResponse{}
+	//nolint:errcheck
 	json.Unmarshal((*cbResult).Data, &cbData)
 	return cbData
 }
@@ -50,6 +51,7 @@ func MockRecipe(
 		panic(err.Error())
 	}
 	recipeData := CreateRecipeResponse{}
+	//nolint:errcheck
 	json.Unmarshal(newRcpResult.Data, &recipeData)
 	return recipeData
 }

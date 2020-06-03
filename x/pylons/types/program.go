@@ -33,7 +33,7 @@ func (ec *CelEnvCollection) Eval(program string) (ref.Val, error) {
 	}
 	out, details, err := prg.Eval(ec.variables)
 	fmt.Println("CelEnvCollection.Eval::", out, details, ec.variables)
-	return out, nil
+	return out, err
 }
 
 func (ec *CelEnvCollection) EvalInt64(program string) (int64, error) {

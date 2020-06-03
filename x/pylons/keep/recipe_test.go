@@ -63,11 +63,12 @@ func TestKeeperGetRecipe(t *testing.T) {
 			require.True(t, err == nil)
 
 			recipe := GenRecipe(tc.sender, cb.ID, tc.recipeName, tc.desc)
-			mockedCoinInput.PlnK.SetRecipe(mockedCoinInput.Ctx, recipe)
+			err = mockedCoinInput.PlnK.SetRecipe(mockedCoinInput.Ctx, recipe)
+			require.True(t, err == nil)
+
 			readRecipe, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, recipe.ID)
 			// t.Errorf("recipe_test err LOG:: %+v %+v", readRecipe, err2)
 
-			require.True(t, err2 == nil)
 			require.True(t, err2 == nil)
 			require.True(t, reflect.DeepEqual(recipe, readRecipe))
 		})

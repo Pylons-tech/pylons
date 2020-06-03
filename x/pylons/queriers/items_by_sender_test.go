@@ -23,13 +23,15 @@ func TestQueriersItemsBySender(t *testing.T) {
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 	sender2 := "cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc"
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(mockedCoinInput, senderAccAddress, "cookbook-00001")
 
 	item := keep.GenItem(cbData.CookbookID, senderAccAddress, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		path          []string

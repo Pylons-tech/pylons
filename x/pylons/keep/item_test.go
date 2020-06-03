@@ -65,7 +65,8 @@ func TestKeeperGetItem(t *testing.T) {
 	require.True(t, err == nil)
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		itemID       string
@@ -110,7 +111,8 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 	require.True(t, err == nil)
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		sender        sdk.AccAddress
@@ -158,7 +160,9 @@ func TestKeeperUpdateItem(t *testing.T) {
 	noSenderItem := GenItem(cbData.ID, nil, "Raichu")
 	newItem := GenItem(cbData.ID, sender, "Raichu")
 
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
+
 	item.SetString("Name", "RC")
 
 	cases := map[string]struct {
@@ -223,7 +227,8 @@ func TestKeeperDeleteItem(t *testing.T) {
 	require.True(t, err == nil)
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		itemID       string
@@ -265,7 +270,8 @@ func TestKeeperItemsByCookbook(t *testing.T) {
 	require.True(t, err == nil)
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		cookbookID    string

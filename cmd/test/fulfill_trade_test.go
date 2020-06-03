@@ -158,7 +158,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	// Try again after fulfill trade
 	txhash = intTestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
-	intTestSDK.WaitForNextBlock()
+	err = intTestSDK.WaitForNextBlock()
+	t.MustNil(err)
 	hmrErr := intTestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
 	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 }

@@ -36,7 +36,11 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
-	keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, fee)
+	_, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, fee)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
 	cpb := msgs.DefaultCostPerBlock
 	if msg.CostPerBlock != nil {
 		cpb = *msg.CostPerBlock

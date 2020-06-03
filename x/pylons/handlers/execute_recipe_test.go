@@ -19,7 +19,8 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	require.True(t, err == nil)
 
 	// mock cookbook
 	cbData := MockCookbook(mockedCoinInput, sender1)
@@ -258,13 +259,15 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+				_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+				require.True(t, err == nil)
 			}
 			if tc.dynamicItemSet {
 				tc.itemIDs = []string{}
 				for _, diN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
-					mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
+					err := mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
+					require.True(t, err == nil)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
