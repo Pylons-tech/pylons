@@ -11,19 +11,12 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 )
 
 func TestQuerierPylonsBalance(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-	sender2 := "cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc"
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(int64(1000)))
-	require.True(t, err == nil)
+	sender1, sender2 := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000))
 
 	cases := map[string]struct {
 		path    []string
@@ -44,13 +37,13 @@ func TestQuerierPylonsBalance(t *testing.T) {
 			showError:     true,
 		},
 		"sender with no balance": {
-			path:    []string{sender2},
+			path:    []string{sender2.String()},
 			desiredError:  "",
 			desiredAmount: 0,
 			showError:     false,
 		},
 		"sender with balance": {
-			path:    []string{sender},
+			path:    []string{sender1.String()},
 			desiredError:  "",
 			desiredAmount: 1000,
 			showError:     false,

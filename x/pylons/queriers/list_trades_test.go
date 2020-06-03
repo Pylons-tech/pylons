@@ -11,19 +11,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestListTrades(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	sender1, _ := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(100000))
-	require.True(t, err == nil)
-	_, err = tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
 	require.True(t, err == nil)
 
 	// mock cookbook
@@ -33,7 +27,7 @@ func TestListTrades(t *testing.T) {
 		types.ItemInputList{},
 		types.NewPylon(1000),
 		types.ItemList{},
-		senderAccAddress,
+		sender1,
 	)
 
 	require.True(t, err == nil)
@@ -44,7 +38,7 @@ func TestListTrades(t *testing.T) {
 		types.ItemInputList{},
 		types.NewPylon(2000),
 		types.ItemList{},
-		senderAccAddress,
+		sender1,
 	)
 
 	require.True(t, err == nil)
@@ -62,7 +56,7 @@ func TestListTrades(t *testing.T) {
 			desiredExcCnt: 0,
 		},
 		"list trade successful check": {
-			path:          []string{sender},
+			path:          []string{sender1.String()},
 			showError:     false,
 			desiredError:  "",
 			desiredExcCnt: 2,
@@ -74,7 +68,7 @@ func TestListTrades(t *testing.T) {
 				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
-					Path: sender,
+					Path: sender1.String(),
 					Data: []byte{},
 				},
 				tci.PlnK,

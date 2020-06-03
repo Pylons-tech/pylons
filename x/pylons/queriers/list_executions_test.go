@@ -11,30 +11,24 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestListExecution(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	sender1, _ := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
-	require.True(t, err == nil)
-	_, err = tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
 	require.True(t, err == nil)
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(tci, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, sender1)
 
 	recipeResp := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
-		"recipe0001", cbData.CookbookID, senderAccAddress)
+		"recipe0001", cbData.CookbookID, sender1)
 
 	_, err = handlers.MockExecution(
 		tci, recipeResp.RecipeID,
-		senderAccAddress,
+		sender1,
 		[]string{},
 	)
 	require.True(t, err == nil)
@@ -58,7 +52,7 @@ func TestListExecution(t *testing.T) {
 			desiredExcCnt: 0,
 		},
 		"list recipe successful check": {
-			path:          []string{sender},
+			path:          []string{sender1.String()},
 			showError:     false,
 			desiredError:  "",
 			desiredExcCnt: 1,
@@ -70,7 +64,7 @@ func TestListExecution(t *testing.T) {
 				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
-					Path: sender,
+					Path: sender1.String(),
 					Data: []byte{},
 				},
 				tci.PlnK,
