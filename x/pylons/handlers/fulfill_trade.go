@@ -60,7 +60,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			}
 			matchedItems = append(matchedItems, matchedItem)
 		} else {
-			return nil, errInternal(errors.New(fmt.Sprintf("the sender doesn't have the trade item attributes %+v", inpItem)))
+			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", inpItem))
 		}
 	}
 

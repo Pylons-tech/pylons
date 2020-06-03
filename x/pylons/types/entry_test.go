@@ -15,7 +15,7 @@ func TestEntriesListSerialize(t *testing.T) {
 	}{
 		"basic flow test": {},
 	}
-	for testName, _ := range cases {
+	for testName := range cases {
 		t.Run(testName, func(t *testing.T) {
 			data, err := json.Marshal(entries)
 			require.True(t, err == nil)

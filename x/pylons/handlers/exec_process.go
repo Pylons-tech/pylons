@@ -108,13 +108,13 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 	usedItemInputIndexes := []int{}
 	for _, outputIndex := range outputs {
 		if len(p.recipe.Entries) <= outputIndex || outputIndex < 0 {
-			return ersl, errors.New(fmt.Sprintf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries)))
+			return ersl, fmt.Errorf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries))
 		}
 		output := p.recipe.Entries[outputIndex]
 
-		switch output.(type) {
+		switch output := output.(type) {
 		case types.CoinOutput:
-			coinOutput, _ := output.(types.CoinOutput)
+			coinOutput := output
 			var coinAmount int64
 			if len(coinOutput.Count) > 0 {
 				val64, err := p.ec.EvalInt64(coinOutput.Count)
@@ -137,7 +137,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 				Amount: coinAmount,
 			})
 		case types.ItemOutput:
-			itemOutput, _ := output.(types.ItemOutput)
+			itemOutput := output
 			var outputItem *types.Item
 
 			if itemOutput.ModifyItem.ItemInputRef == -1 {

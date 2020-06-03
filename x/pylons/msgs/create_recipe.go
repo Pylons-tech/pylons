@@ -56,14 +56,14 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	// validation for the item input index overflow on entries
 	for _, entry := range msg.Entries {
-		switch entry.(type) {
+		switch entry := entry.(type) {
 		case types.CoinOutput:
-			coinOutput, _ := entry.(types.CoinOutput)
+			coinOutput := entry
 			if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "CoinOuput: "+err.Error())
 			}
 		case types.ItemOutput:
-			itemOutput, _ := entry.(types.ItemOutput)
+			itemOutput := entry
 			if itemOutput.ModifyItem.ItemInputRef != -1 {
 				if itemOutput.ModifyItem.ItemInputRef >= len(msg.ItemInputs) {
 					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef overflow length of ItemInputs")
@@ -91,9 +91,9 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			}
 			usedEntries[result] = true
 			entry := msg.Entries[result]
-			switch entry.(type) {
+			switch entry := entry.(type) {
 			case types.ItemOutput:
-				itemOutput, _ := entry.(types.ItemOutput)
+				itemOutput := entry
 				if itemOutput.ModifyItem.ItemInputRef != -1 {
 					if usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] {
 						return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")

@@ -22,13 +22,15 @@ func CreateCookbookTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeN
 		// vars := mux.Vars(r)
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		}
+	
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgCreateCookbook("name", "", "this has to meet character limits lol", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
-
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
