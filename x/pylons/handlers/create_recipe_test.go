@@ -15,7 +15,7 @@ import (
 
 func TestHandlerMsgCreateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender, _ := SetupTestAccounts(t, tci, nil)
 
 	cases := map[string]struct {
 		cookbookName   string
