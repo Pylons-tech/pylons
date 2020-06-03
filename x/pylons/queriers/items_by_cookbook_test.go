@@ -6,31 +6,22 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
 	abci "github.com/tendermint/tendermint/abci/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestQueriersItemsByCookbook(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	sender1, _ := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := handlers.MockCookbookByName(tci, senderAccAddress, "cookbook-00001")
-	cbData1 := handlers.MockCookbookByName(tci, senderAccAddress, "cookbook-00002")
+	cbData := handlers.MockCookbookByName(tci, sender1, "cookbook-00001")
+	cbData1 := handlers.MockCookbookByName(tci, sender1, "cookbook-00002")
 
-	item := keep.GenItem(cbData.CookbookID, senderAccAddress, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	item := keep.GenItem(cbData.CookbookID, sender1, "Raichu")
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

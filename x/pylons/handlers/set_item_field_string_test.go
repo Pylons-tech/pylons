@@ -15,7 +15,7 @@ import (
 
 func TestHandlerMsgUpdateItemString(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := setupTestAccounts(t, tci, types.PremiumTier.Fee)
+	sender1, _ := SetupTestAccounts(t, tci, types.PremiumTier.Fee)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)

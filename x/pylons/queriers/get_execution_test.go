@@ -10,28 +10,21 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/stretchr/testify/require"
 )
 
 func TestGetExecution(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	sender1, _ := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(tci, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, sender1)
 	// mock recipe
 	c2cRecipeData := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
-		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, senderAccAddress)
+		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, sender1)
 
 	execRcpResponse, err := handlers.MockExecution(tci, c2cRecipeData.RecipeID,
-		senderAccAddress,
+		sender1,
 		[]string{}, // empty itemIDs
 	)
 	require.True(t, err == nil)

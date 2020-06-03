@@ -179,7 +179,7 @@ func MockTrade(
 	return createTrdResponse, err
 }
 
-func setupTestAccounts(t *testing.T, tci keep.TestCoinInput, s1coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress, ) {
+func SetupTestAccounts(t *testing.T, tci keep.TestCoinInput, s1coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress, ) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
 

@@ -11,26 +11,19 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestGetItem(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	sender1, _ := handlers.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(tci, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, sender1)
 
 	// mock item
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
-	mockedItem := keep.GenItem(cbData.CookbookID, senderAccAddress, mockItemName)
-	err = tci.PlnK.SetItem(tci.Ctx, *mockedItem)
+	mockedItem := keep.GenItem(cbData.CookbookID, sender1, mockItemName)
+	err := tci.PlnK.SetItem(tci.Ctx, *mockedItem)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

@@ -14,7 +14,7 @@ import (
 
 func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := setupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cbData := MockCookbook(tci, sender1)
 

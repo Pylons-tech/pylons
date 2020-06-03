@@ -14,7 +14,7 @@ import (
 
 func TestHandlerMsgUpdateCookbook(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2 := setupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, sender2 := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cb := types.NewCookbook(
 		"example@example.com",
