@@ -28,7 +28,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	cb := GenCookbook(sender, "cookbook-00001", "this has to meet character limits")

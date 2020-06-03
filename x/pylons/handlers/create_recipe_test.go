@@ -65,10 +65,10 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
-				err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+				_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
 				require.True(t, err == nil)
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.recipeID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult, err = HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
+				cookbookResult, err := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
 				require.True(t, err == nil)
 				err = json.Unmarshal(cookbookResult.Data, &cbData)
 				if err != nil {
