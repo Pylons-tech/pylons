@@ -14,13 +14,9 @@ import (
 
 func TestHandlerMsgDisableTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	sender, sender2 := SetupTestAccounts(t, tci, types.NewPylon(100000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(100000))
-	require.True(t, err == nil)
-	_, err = tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.True(t, err == nil)
 
 	id := uuid.New()
