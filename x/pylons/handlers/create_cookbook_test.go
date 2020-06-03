@@ -14,13 +14,8 @@ import (
 )
 
 func TestHandlerMsgCreateCookbook(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	tci := keep.SetupTestCoinInput()
+	sender1, sender2 := setupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cases := map[string]struct {
 		name         string
@@ -67,7 +62,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, "", tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender)
 
-			result, err := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
 				cbData := CreateCBResponse{}
@@ -82,19 +77,19 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 }
 
 func TestSameCookbookIDCreation(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(10000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(10000000))
 	require.True(t, err == nil)
 
-	result, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	cbData := CreateCBResponse{}
 	err = json.Unmarshal(result.Data, &cbData)
 	require.True(t, err == nil)
 	require.True(t, len(cbData.CookbookID) > 0)
 
-	_, err = HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	_, err = HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	require.True(t, strings.Contains(err.Error(), "A cookbook with CookbookID samecookbookID-0001 already exists"))
 
 }

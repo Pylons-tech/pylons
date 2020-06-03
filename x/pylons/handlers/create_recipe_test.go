@@ -15,7 +15,7 @@ import (
 
 func TestHandlerMsgCreateRecipe(t *testing.T) {
 
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
@@ -65,10 +65,10 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
-				_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+				_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 				require.True(t, err == nil)
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.recipeID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult, err := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
+				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 				require.True(t, err == nil)
 				err = json.Unmarshal(cookbookResult.Data, &cbData)
 				if err != nil {
@@ -99,7 +99,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				tc.sender,
 			)
 
-			result, err := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
@@ -113,14 +113,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 }
 
 func TestSameRecipeIDCreation(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(10000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(10000000))
 	require.True(t, err == nil)
 
 
-	result, _ := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	cbData := CreateCBResponse{}
 	err = json.Unmarshal(result.Data, &cbData)
 	require.True(t, err == nil)
@@ -139,7 +139,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		sender1,
 	)
 
-	rcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+	rcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, rcpMsg)
 
 	recipeData := CreateRecipeResponse{}
 	err = json.Unmarshal(rcpResult.Data, &recipeData)
@@ -147,7 +147,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(recipeData.RecipeID) > 0)
 
 	// try creating it 2nd time
-	_, err = HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, rcpMsg)
+	_, err = HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, rcpMsg)
 	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
 }

@@ -16,16 +16,16 @@ import (
 )
 
 func TestListCookbook(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	// mock cookbook
-	handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	handlers.MockCookbook(tci, senderAccAddress)
 
 	cases := map[string]struct {
 		path         []string
@@ -51,13 +51,13 @@ func TestListCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := ListCookbook(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			if tc.showError {
 				// t.Errorf("ListCookbook err LOG:: %+v", err)
@@ -65,7 +65,7 @@ func TestListCookbook(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				cbList := types.CookbookList{}
-				cbListErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &cbList)
+				cbListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &cbList)
 
 				require.True(t, cbListErr == nil)
 				require.True(t, len(cbList.Cookbooks) == 1)

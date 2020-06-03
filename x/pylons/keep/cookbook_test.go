@@ -24,15 +24,15 @@ func GenCookbook(sender sdk.AccAddress, name string, desc string) types.Cookbook
 }
 
 func TestKeeperGetCookbook(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	cb := GenCookbook(sender, "cookbook-00001", "this has to meet character limits")
-	err = mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
+	err = tci.PlnK.SetCookbook(tci.Ctx, cb)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -54,7 +54,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			readCookbook, err2 := mockedCoinInput.PlnK.GetCookbook(mockedCoinInput.Ctx, tc.cbID)
+			readCookbook, err2 := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
 			// t.Errorf("CookbookTEST LOG:: %+v", err2)
 			if tc.showError {
 				require.True(t, strings.Contains(err2.Error(), tc.desiredError))

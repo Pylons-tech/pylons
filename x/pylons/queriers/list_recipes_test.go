@@ -16,18 +16,18 @@ import (
 )
 
 func TestListRecipe(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, senderAccAddress)
 
-	handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
+	handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
 		"recipe0001", cbData.CookbookID, senderAccAddress)
 
 	cases := map[string]struct {
@@ -60,20 +60,20 @@ func TestListRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := ListRecipe(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
 				rcpList := types.RecipeList{}
-				rcpListErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &rcpList)
+				rcpListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &rcpList)
 
 				require.True(t, rcpListErr == nil)
 				require.True(t, len(rcpList.Recipes) == tc.desiredRcpCnt)

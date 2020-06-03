@@ -16,19 +16,19 @@ import (
 )
 
 func TestListTrades(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(100000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(100000))
 	require.True(t, err == nil)
-	_, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
+	_, err = tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
 	require.True(t, err == nil)
 
 	// mock cookbook
 	_, err = handlers.MockTrade(
-		mockedCoinInput,
+		tci,
 		types.GenCoinInputList("wood", 100),
 		types.ItemInputList{},
 		types.NewPylon(1000),
@@ -39,7 +39,7 @@ func TestListTrades(t *testing.T) {
 	require.True(t, err == nil)
 
 	_, err = handlers.MockTrade(
-		mockedCoinInput,
+		tci,
 		types.GenCoinInputList("stone", 100),
 		types.ItemInputList{},
 		types.NewPylon(2000),
@@ -71,20 +71,20 @@ func TestListTrades(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := ListTrade(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: sender,
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
 				trdList := types.TradeList{}
-				trdListErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &trdList)
+				trdListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &trdList)
 
 				require.True(t, trdListErr == nil)
 				require.True(t, len(trdList.Trades) == tc.desiredExcCnt)

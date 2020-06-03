@@ -14,26 +14,21 @@ import (
 )
 
 func TestHandlerMsgExecuteRecipe(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	tci := keep.SetupTestCoinInput()
+	sender1, sender2 := setupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := MockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(tci, sender1)
 
 	// mock coin to coin recipe
-	c2cRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_TO_1xCHAIRCOIN, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock coin to item recipe
-	zeroInOneOutItemRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_1xRAICHU_BUY, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	zeroInOneOutItemRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_1xRAICHU_BUY, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
+		tci, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenItemOnlyEntry("Zombie"),
@@ -45,7 +40,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 	// mock 1 catalyst input 1 output recipe
 	oneCatalystOneOutputRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
+		tci, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("catalyst"),
 
@@ -63,7 +58,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 	// mock no input 1 coin | 1 item output recipe
 	noInput1Coin1ItemRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
+		tci, "existing recipe",
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntries("chaira", "ZombieA"),
@@ -75,7 +70,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 	// mock no input 1 coin | 1 item output recipe
 	noInput1Coin1ItemRandRecipeData := MockRecipe(
-		mockedCoinInput, "existing recipe",
+		tci, "existing recipe",
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntriesRand("zmbr", "ZombieRand"),
@@ -86,10 +81,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	)
 
 	// item upgrade recipe
-	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// item upgrade recipe with catalyst item
-	itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		cookbookID               string
@@ -259,21 +254,21 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 				require.True(t, err == nil)
 			}
 			if tc.dynamicItemSet {
 				tc.itemIDs = []string{}
 				for _, diN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
-					err := mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
 					require.True(t, err == nil)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
 
 			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
-			result, err := HandlerMsgExecuteRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
 				execRcpResponse := ExecuteRecipeResp{}
@@ -289,11 +284,11 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				// calc generated coin availability
 				coinAvailability := false
 				if tc.checkCoinAvailable || tc.checkItemOrCoinAvailable {
-					coinAvailability = mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
+					coinAvailability = tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
 				}
 
 				// calc generated item availability
-				items, err := mockedCoinInput.PlnK.GetItemsBySender(mockedCoinInput.Ctx, tc.sender)
+				items, err := tci.PlnK.GetItemsBySender(tci.Ctx, tc.sender)
 				require.True(t, err == nil)
 
 				itemAvailability := false

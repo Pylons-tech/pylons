@@ -22,11 +22,11 @@ func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) typ
 }
 
 func TestKeeperGetRecipe(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -59,14 +59,14 @@ func TestKeeperGetRecipe(t *testing.T) {
 				"SketchyCo",           // msg.Developer,
 				50,                    // msg.CostPerBlock,
 			)
-			err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
+			err := tci.PlnK.SetCookbook(tci.Ctx, cb)
 			require.True(t, err == nil)
 
 			recipe := GenRecipe(tc.sender, cb.ID, tc.recipeName, tc.desc)
-			err = mockedCoinInput.PlnK.SetRecipe(mockedCoinInput.Ctx, recipe)
+			err = tci.PlnK.SetRecipe(tci.Ctx, recipe)
 			require.True(t, err == nil)
 
-			readRecipe, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, recipe.ID)
+			readRecipe, err2 := tci.PlnK.GetRecipe(tci.Ctx, recipe.ID)
 			// t.Errorf("recipe_test err LOG:: %+v %+v", readRecipe, err2)
 
 			require.True(t, err2 == nil)

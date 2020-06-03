@@ -16,13 +16,13 @@ import (
 )
 
 func TestQuerierPylonsBalance(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 	sender2 := "cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc"
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(int64(1000)))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(int64(1000)))
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -59,13 +59,13 @@ func TestQuerierPylonsBalance(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := PylonsBalance(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 
 			// t.Errorf("Querier.ItemsByCookbookTest LOG:: %+v", err)

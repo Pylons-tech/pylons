@@ -14,10 +14,7 @@ import (
 
 func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(1000000))
-	require.True(t, err == nil)
+	sender1, _ := setupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cbData := MockCookbook(tci, sender1)
 

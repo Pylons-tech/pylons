@@ -16,16 +16,16 @@ import (
 )
 
 func TestGetCookbook(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, senderAccAddress)
 
 	cases := map[string]struct {
 		path          []string
@@ -57,13 +57,13 @@ func TestGetCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := GetCookbook(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			// t.Errorf("GetCookbookTEST LOG:: %+v", err)
 			if tc.showError {
@@ -71,7 +71,7 @@ func TestGetCookbook(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				readCookbook := types.Cookbook{}
-				readCookbookErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &readCookbook)
+				readCookbookErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readCookbook)
 
 				require.True(t, readCookbookErr == nil)
 				require.True(t, readCookbook.Name == tc.cbName)

@@ -16,21 +16,21 @@ import (
 )
 
 func TestGetItem(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, senderAccAddress)
 
 	// mock item
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
 	mockedItem := keep.GenItem(cbData.CookbookID, senderAccAddress, mockItemName)
-	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *mockedItem)
+	err = tci.PlnK.SetItem(tci.Ctx, *mockedItem)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -63,13 +63,13 @@ func TestGetItem(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := GetItem(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			// t.Errorf("GetItemTEST LOG:: %+v", err)
 			if tc.showError {
@@ -77,7 +77,7 @@ func TestGetItem(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				readItem := types.Item{}
-				readItemErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &readItem)
+				readItemErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readItem)
 
 				require.True(t, readItemErr == nil)
 

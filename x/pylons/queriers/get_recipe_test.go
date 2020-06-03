@@ -16,20 +16,20 @@ import (
 )
 
 func TestGetRecipe(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, senderAccAddress)
 
 	// mock recipe
 	mockRecipeName := "GET_RECIPE_MOCK_TEST_NAME"
-	rcpData := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
+	rcpData := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
 		mockRecipeName, cbData.CookbookID, senderAccAddress)
 
 	cases := map[string]struct {
@@ -62,13 +62,13 @@ func TestGetRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := GetRecipe(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			// t.Errorf("GetRecipeTEST LOG:: %+v, %+v", err, result)
 			if tc.showError {
@@ -76,7 +76,7 @@ func TestGetRecipe(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				readRecipe := types.Recipe{}
-				readRecipeErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &readRecipe)
+				readRecipeErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readRecipe)
 
 				require.True(t, readRecipeErr == nil)
 				require.True(t, readRecipe.Name == tc.rcpName)

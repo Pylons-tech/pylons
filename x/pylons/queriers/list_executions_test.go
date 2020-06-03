@@ -16,24 +16,24 @@ import (
 )
 
 func TestListExecution(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
 
 	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.NewPylon(1000000))
 	require.True(t, err == nil)
-	_, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
+	_, err = tci.Bk.AddCoins(tci.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
 	require.True(t, err == nil)
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, senderAccAddress)
 
-	recipeResp := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
+	recipeResp := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
 		"recipe0001", cbData.CookbookID, senderAccAddress)
 
 	_, err = handlers.MockExecution(
-		mockedCoinInput, recipeResp.RecipeID,
+		tci, recipeResp.RecipeID,
 		senderAccAddress,
 		[]string{},
 	)
@@ -67,20 +67,20 @@ func TestListExecution(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := ListExecutions(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: sender,
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
 				excList := types.ExecutionList{}
-				excListErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &excList)
+				excListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &excList)
 
 				require.True(t, excListErr == nil)
 				require.True(t, len(excList.Executions) == tc.desiredExcCnt)

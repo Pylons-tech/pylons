@@ -20,16 +20,16 @@ func GenTrade(sender sdk.AccAddress, itemList types.ItemList, pylonsAmount int64
 }
 
 func TestGetTrade(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
 
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
-	_, err := mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 	require.True(t, err == nil)
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err = mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err = tci.PlnK.SetItem(tci.Ctx, *item)
 
 	require.True(t, err == nil)
 
@@ -60,13 +60,13 @@ func TestGetTrade(t *testing.T) {
 	for name, test := range cases {
 		t.Run(name, func(t *testing.T) {
 			trade := GenTrade(test.sender, test.itemList, test.pylonsAmount)
-			err := mockedCoinInput.PlnK.SetTrade(mockedCoinInput.Ctx, trade)
+			err := tci.PlnK.SetTrade(tci.Ctx, trade)
 
 			if test.showError {
 				require.True(t, err != nil)
 			} else {
 				require.True(t, err == nil)
-				storedTrade, err := mockedCoinInput.PlnK.GetTrade(mockedCoinInput.Ctx, trade.ID)
+				storedTrade, err := tci.PlnK.GetTrade(tci.Ctx, trade.ID)
 				require.True(t, err == nil)
 				require.True(t, reflect.DeepEqual(trade.CoinOutputs, storedTrade.CoinOutputs))
 				require.True(t, reflect.DeepEqual(trade.CoinInputs, storedTrade.CoinInputs))
