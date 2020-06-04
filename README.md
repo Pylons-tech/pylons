@@ -110,7 +110,7 @@ Result is as follows
 Pylons transactions subcommands
 
 Usage:
-  plncli tx pylons [command]
+  pylonscli tx pylons [command]
 
 Available Commands:
   get-pylons      ask for pylons. 500 pylons per request

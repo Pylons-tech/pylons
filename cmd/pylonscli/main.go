@@ -23,7 +23,7 @@ import (
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 )
 
-var defaultCLIHome = os.ExpandEnv("$HOME/.plncli")
+var defaultCLIHome = os.ExpandEnv("$HOME/.pylonscli")
 
 func main() {
 	cobra.EnableCommandSorting = false
@@ -38,7 +38,7 @@ func main() {
 	config.Seal()
 
 	rootCmd := &cobra.Command{
-		Use:   "plncli",
+		Use:   "pylonscli",
 		Short: "The Pylons Client",
 	}
 
