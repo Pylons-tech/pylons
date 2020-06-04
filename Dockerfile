@@ -45,6 +45,7 @@ COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /go/bin/pylonscli /usr/bin/pylonscli
 COPY --from=build /root/.plncli /root/.plncli
 RUN pylonsd init masternode --chain-id pylonschain
+COPY init_accounts.sh ./
 RUN bash ./init_accounts.sh
 CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
