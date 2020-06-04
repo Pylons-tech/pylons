@@ -3,6 +3,8 @@ steps:
   id: Build
   args:
   - 'build'
+  - '--target'
+  - 'pylonsd'
   - '-t'
   - 'gcr.io/$PROJECT_ID/node:$SHORT_SHA'
   - '.'
