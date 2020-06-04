@@ -43,7 +43,7 @@ FROM golang:latest as pylonsd
 WORKDIR /root
 COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /go/bin/pylonscli /usr/bin/pylonscli
-COPY --from=build /root/.plncli /root/.plncli
+COPY --from=build /root/.pylonscli /root/.pylonscli
 RUN pylonsd init masternode --chain-id pylonschain
 COPY init_accounts.local.sh ./
 RUN bash ./init_accounts.local.sh
@@ -65,7 +65,7 @@ COPY Makefile .
 COPY init_accounts.sh .
 RUN chmod +x init_accounts.sh
 # RUN make init_accounts
-# COPY --from=test_server /root/.plncli/keyring-test-cosmos/ /root/.plncli/keyring-test-cosmos
+# COPY --from=test_server /root/.pylonscli/keyring-test-cosmos/ /root/.pylonscli/keyring-test-cosmos
 CMD sleep 5 && make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657"
 
 FROM build as fixture_test
