@@ -11,23 +11,17 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestListRecipe(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, sender1)
 
-	handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput,
-		"recipe0001", cbData.CookbookID, senderAccAddress)
+	handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
+		"recipe0001", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		path          []string
@@ -49,7 +43,7 @@ func TestListRecipe(t *testing.T) {
 			desiredRcpCnt: 0,
 		},
 		"list recipe successful check": {
-			path:          []string{sender},
+			path:          []string{sender1.String()},
 			showError:     false,
 			desiredError:  "",
 			desiredRcpCnt: 1,
@@ -59,20 +53,20 @@ func TestListRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := ListRecipe(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
 				rcpList := types.RecipeList{}
-				rcpListErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &rcpList)
+				rcpListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &rcpList)
 
 				require.True(t, rcpListErr == nil)
 				require.True(t, len(rcpList.Recipes) == tc.desiredRcpCnt)

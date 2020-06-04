@@ -13,29 +13,25 @@ import (
 )
 
 func TestHandlerMsgCheckExecution(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := MockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(tci, sender1)
 
 	// mock delayed coin to coin recipe
-	c2cRecipeData := MockPopularRecipe(RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock delayed more than 1 item input recipe
-	knifeMergeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, mockedCoinInput,
+	knifeMergeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, tci,
 		"knife merge recipe", cbData.CookbookID, sender1)
 
 	// mock delayed item upgrade recipe
-	knifeUpgradeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE, mockedCoinInput,
+	knifeUpgradeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE, tci,
 		"knife upgrade recipe", cbData.CookbookID, sender1)
 
 	// mock delayed knife buyer recipe
-	knifeBuyerRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_BUYER, mockedCoinInput,
+	knifeBuyerRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_BUYER, tci,
 		"knife upgrade recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
@@ -116,13 +112,15 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				tc.itemIDs = []string{}
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
-					mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					require.True(t, err == nil)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
-			mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
+			_, err := tci.Bk.AddCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
+			require.True(t, err == nil)
 
-			execRcpResponse, err := MockExecution(mockedCoinInput, tc.rcpID,
+			execRcpResponse, err := MockExecution(tci, tc.rcpID,
 				tc.sender,
 				tc.itemIDs,
 			)
@@ -131,7 +129,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
 			if tc.coinAddition != 0 {
-				_, err = mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
+				_, err = tci.Bk.AddCoins(tci.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
 				require.True(t, err == nil)
 			}
 
@@ -140,15 +138,15 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, err == nil)
 
 			if tc.dynamicItemSet {
-				usedItem, err := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemIDs[0])
+				usedItem, err := tci.PlnK.GetItem(tci.Ctx, tc.itemIDs[0])
 				require.True(t, err == nil)
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
 			}
 
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
-			futureContext := mockedCoinInput.Ctx.WithBlockHeight(mockedCoinInput.Ctx.BlockHeight() + tc.addHeight)
-			result, _ := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
+			result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
 			checkExecResp := CheckExecutionResp{}
 			err = json.Unmarshal(result.Data, &checkExecResp)
 			require.True(t, err == nil)
@@ -163,7 +161,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if len(tc.desiredUpgradedName) > 0 {
-				updatedItem, err := mockedCoinInput.PlnK.GetItem(futureContext, tc.itemIDs[0])
+				updatedItem, err := tci.PlnK.GetItem(futureContext, tc.itemIDs[0])
 				require.True(t, err == nil)
 				updatedName, ok := updatedItem.FindString("Name")
 				require.True(t, ok)
@@ -171,7 +169,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if tc.retryExecution {
-				result, _ := HandlerMsgCheckExecution(futureContext, mockedCoinInput.PlnK, checkExec)
+				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
 				checkExecResp := CheckExecutionResp{}
 				err = json.Unmarshal(result.Data, &checkExecResp)
 				require.True(t, err == nil)

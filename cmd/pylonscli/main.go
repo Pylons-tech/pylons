@@ -23,11 +23,6 @@ import (
 	bankcmd "github.com/cosmos/cosmos-sdk/x/bank/client/cli"
 )
 
-const (
-	storeAcc = "acc"
-	storeNS  = "pylons"
-)
-
 var defaultCLIHome = os.ExpandEnv("$HOME/.plncli")
 
 func main() {

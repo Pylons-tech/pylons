@@ -11,25 +11,20 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestGetItem(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, sender1)
 
 	// mock item
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
-	mockedItem := keep.GenItem(cbData.CookbookID, senderAccAddress, mockItemName)
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *mockedItem)
+	mockedItem := keep.GenItem(cbData.CookbookID, sender1, mockItemName)
+	err := tci.PlnK.SetItem(tci.Ctx, *mockedItem)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		path          []string
@@ -61,13 +56,13 @@ func TestGetItem(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := GetItem(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			// t.Errorf("GetItemTEST LOG:: %+v", err)
 			if tc.showError {
@@ -75,7 +70,7 @@ func TestGetItem(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				readItem := types.Item{}
-				readItemErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &readItem)
+				readItemErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readItem)
 
 				require.True(t, readItemErr == nil)
 

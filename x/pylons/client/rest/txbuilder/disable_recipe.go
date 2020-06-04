@@ -21,7 +21,10 @@ func DisableRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 		// vars := mux.Vars(r)
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		}
+	
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgDisableRecipe("id0001", sender)

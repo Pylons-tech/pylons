@@ -24,7 +24,10 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 		// vars := mux.Vars(r)
 		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+		}
+	
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
 		msg := msgs.NewMsgCreateRecipe("name", "id001", "", "this has to meet character limits lol",

@@ -13,9 +13,8 @@ import (
 )
 
 func TestHandlerMsgGetPylons(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, nil)
 
 	cases := map[string]struct {
 		reqAmount    int64
@@ -33,12 +32,12 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgGetPylons(types.NewPylon(tc.reqAmount), tc.fromAddress)
-			_, err := HandlerMsgGetPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			_, err := HandlerMsgGetPylons(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount)))
-				require.False(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount+1)))
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount-1)))
+				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount)))
+				require.False(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount+1)))
+				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount-1)))
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}

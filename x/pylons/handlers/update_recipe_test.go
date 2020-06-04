@@ -14,14 +14,11 @@ import (
 )
 
 func TestHandlerMsgUpdateRecipe(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := MockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(tci, sender1)
 
 	// mock new recipe
 	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
@@ -33,9 +30,10 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		sender1,
 	)
 
-	newRcpResult, _ := HandlerMsgCreateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, newRcpMsg)
+	newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
-	json.Unmarshal(newRcpResult.Data, &recipeData)
+	err := json.Unmarshal(newRcpResult.Data, &recipeData)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		cookbookID   string
@@ -74,7 +72,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenOneOutput(2),
 				sender1)
 
-			result, err := HandlerMsgUpdateRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgUpdateRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}

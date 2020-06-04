@@ -13,12 +13,8 @@ import (
 )
 
 func TestHandlerMsgUpdateCookbook(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cb := types.NewCookbook(
 		"example@example.com",
@@ -29,7 +25,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		"SketchyCo",
 		msgs.DefaultCostPerBlock,
 	)
-	err := mockedCoinInput.PlnK.SetCookbook(mockedCoinInput.Ctx, cb)
+	err := tci.PlnK.SetCookbook(tci.Ctx, cb)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -69,10 +65,10 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender)
 
-			_, err := HandlerMsgUpdateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			_, err := HandlerMsgUpdateCookbook(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
-				readCookbook, err2 := mockedCoinInput.PlnK.GetCookbook(mockedCoinInput.Ctx, tc.cbID)
+				readCookbook, err2 := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
 				require.True(t, err2 == nil)
 				require.True(t, readCookbook.Description == tc.desc)
 			} else {

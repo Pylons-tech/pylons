@@ -14,10 +14,8 @@ import (
 )
 
 func TestHandlerMsgFiatItem(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	cases := map[string]struct {
 		cookbookName    string
@@ -42,7 +40,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 			cbData := CreateCBResponse{}
 			if tc.createCookbook {
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult, err := HandlerMsgCreateCookbook(mockedCoinInput.Ctx, mockedCoinInput.PlnK, cookbookMsg)
+				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 				require.True(t, err == nil)
 				err = json.Unmarshal(cookbookResult.Data, &cbData)
 				require.True(t, err == nil)
@@ -50,7 +48,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
 			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender)
-			result, err := HandlerMsgFiatItem(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgFiatItem(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
 				diRespData := FiatItemResponse{}

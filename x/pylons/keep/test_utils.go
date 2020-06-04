@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"testing"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -15,6 +16,7 @@ import (
 	"github.com/tendermint/tendermint/libs/log"
 	tmtypes "github.com/tendermint/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
+	"github.com/stretchr/testify/require"
 )
 
 type TestCoinInput struct {
@@ -80,6 +82,7 @@ func SetupTestCoinInput() TestCoinInput {
 	ms.MountStoreWithDB(itKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(execKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tkeyParams, sdk.StoreTypeTransient, db)
+	//nolint:errcheck
 	ms.LoadLatestVersion()
 
 	ms.GetKVStore(cbKey)
@@ -131,4 +134,15 @@ func SetupTestCoinInput() TestCoinInput {
 	)
 
 	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}
+}
+
+func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress) {
+	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
+
+	if s1coins != nil {
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins)
+		require.True(t, err == nil)
+	}
+	return sender1, sender2
 }

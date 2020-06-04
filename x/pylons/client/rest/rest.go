@@ -11,7 +11,6 @@ import (
 )
 
 const (
-	restName = "pylons"
 
 	// DefaultCoinPerRequest is the number of coins the faucet sends per req
 	DefaultCoinPerRequest = 500

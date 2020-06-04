@@ -34,7 +34,8 @@ func TestListRecipeViaCLI(originT *originT.T) {
 			t.MustNil(err)
 			t.MustTrue(len(recipes) > 0)
 
-			intTestSDK.WaitForNextBlock()
+			err = intTestSDK.WaitForNextBlock()
+			t.MustNil(err)
 			_, ok := intTestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
 				t.Fatalf("error getting recipe with name %+v", tc.rcpName)

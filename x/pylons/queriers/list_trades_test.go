@@ -11,38 +11,34 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestListTrades(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
+	require.True(t, err == nil)
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(100000))
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.GenCoinInputList("wood", 100).ToCoins())
 	// mock cookbook
-
-	_, err := handlers.MockTrade(
-		mockedCoinInput,
+	_, err = handlers.MockTrade(
+		tci,
 		types.GenCoinInputList("wood", 100),
 		types.ItemInputList{},
 		types.NewPylon(1000),
 		types.ItemList{},
-		senderAccAddress,
+		sender1,
 	)
 
 	require.True(t, err == nil)
 
 	_, err = handlers.MockTrade(
-		mockedCoinInput,
+		tci,
 		types.GenCoinInputList("stone", 100),
 		types.ItemInputList{},
 		types.NewPylon(2000),
 		types.ItemList{},
-		senderAccAddress,
+		sender1,
 	)
 
 	require.True(t, err == nil)
@@ -60,7 +56,7 @@ func TestListTrades(t *testing.T) {
 			desiredExcCnt: 0,
 		},
 		"list trade successful check": {
-			path:          []string{sender},
+			path:          []string{sender1.String()},
 			showError:     false,
 			desiredError:  "",
 			desiredExcCnt: 2,
@@ -69,20 +65,20 @@ func TestListTrades(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := ListTrade(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
-					Path: sender,
+					Path: sender1.String(),
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
 				trdList := types.TradeList{}
-				trdListErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &trdList)
+				trdListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &trdList)
 
 				require.True(t, trdListErr == nil)
 				require.True(t, len(trdList.Trades) == tc.desiredExcCnt)

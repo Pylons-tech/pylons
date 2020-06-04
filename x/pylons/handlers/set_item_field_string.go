@@ -32,7 +32,10 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
 
-	keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, updateFee)
+	_, subErr := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, updateFee)
+	if subErr != nil {
+		return nil, errInternal(subErr)
+	}
 
 	item, err2 := keeper.GetItem(ctx, msg.ItemID)
 	if err2 != nil {

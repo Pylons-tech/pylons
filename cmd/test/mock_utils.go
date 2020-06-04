@@ -220,7 +220,7 @@ func MockDetailedTradeGUID(
 	if !hasInputItem {
 		inputItemList = nil
 	}
-	outputCoins := sdk.Coins{}
+	var outputCoins sdk.Coins
 	if !hasOutputCoin {
 		outputCoins = nil
 	} else {
@@ -231,8 +231,6 @@ func MockDetailedTradeGUID(
 		outputItem, err := intTestSDK.GetItemByGUID(outputItemID)
 		t.MustNil(err)
 		outputItems = types.ItemList{outputItem}
-	} else {
-		outputItems = nil
 	}
 
 	txhash := intTestSDK.TestTxWithMsgWithNonce(t,

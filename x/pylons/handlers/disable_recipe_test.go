@@ -14,18 +14,14 @@ import (
 )
 
 func TestHandlerMsgDisableRecipe(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := MockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(tci, sender1)
 
 	// mock recipe
-	rcpData := MockPopularRecipe(RCP_DEFAULT, mockedCoinInput, "existing recipe", cbData.CookbookID, sender1)
+	rcpData := MockPopularRecipe(RCP_DEFAULT, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		recipeID     string
@@ -55,7 +51,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgDisableRecipe(tc.recipeID, tc.sender)
-			result, err := HandlerMsgDisableRecipe(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgDisableRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
 				disableRcpResponse := DisableRecipeResp{}
@@ -65,7 +61,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 				require.True(t, disableRcpResponse.Status == "Success")
 				require.True(t, disableRcpResponse.Message == "successfully disabled the recipe")
 
-				uRcp, err2 := mockedCoinInput.PlnK.GetRecipe(mockedCoinInput.Ctx, tc.recipeID)
+				uRcp, err2 := tci.PlnK.GetRecipe(tci.Ctx, tc.recipeID)
 				// t.Errorf("DisableRecipeTEST LOG:: %+v", uRcp)
 				require.True(t, err2 == nil)
 				require.True(t, uRcp.Disabled == true)

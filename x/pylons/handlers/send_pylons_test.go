@@ -13,13 +13,10 @@ import (
 )
 
 func TestHandlerMsgSendPylons(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
+	tci := keep.SetupTestCoinInput()
 
 	initialAmount := int64(50000)
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(initialAmount))
+	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(initialAmount))
 
 	cases := map[string]struct {
 		amount       int64
@@ -46,16 +43,16 @@ func TestHandlerMsgSendPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgSendPylons(types.NewPylon(tc.amount), tc.fromAddress, tc.toAddress)
-			_, err := HandlerMsgSendPylons(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			_, err := HandlerMsgSendPylons(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.toAddress, types.NewPylon(tc.amount)))
-				require.False(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.toAddress, types.NewPylon(tc.amount+1)))
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.toAddress, types.NewPylon(tc.amount-1)))
+				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.toAddress, types.NewPylon(tc.amount)))
+				require.False(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.toAddress, types.NewPylon(tc.amount+1)))
+				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.toAddress, types.NewPylon(tc.amount-1)))
 
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount)))
-				require.False(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount+1)))
-				require.True(t, mockedCoinInput.PlnK.CoinKeeper.HasCoins(mockedCoinInput.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount-1)))
+				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount)))
+				require.False(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount+1)))
+				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount-1)))
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}

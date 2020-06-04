@@ -11,20 +11,14 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestGetCookbook(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender := "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	senderAccAddress, _ := sdk.AccAddressFromBech32(sender)
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, senderAccAddress, types.NewPylon(1000000))
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
 	// mock cookbook
-	cbData := handlers.MockCookbook(mockedCoinInput, senderAccAddress)
+	cbData := handlers.MockCookbook(tci, sender1)
 
 	cases := map[string]struct {
 		path          []string
@@ -56,13 +50,13 @@ func TestGetCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			result, err := GetCookbook(
-				mockedCoinInput.Ctx,
+				tci.Ctx,
 				tc.path,
 				abci.RequestQuery{
 					Path: "",
 					Data: []byte{},
 				},
-				mockedCoinInput.PlnK,
+				tci.PlnK,
 			)
 			// t.Errorf("GetCookbookTEST LOG:: %+v", err)
 			if tc.showError {
@@ -70,7 +64,7 @@ func TestGetCookbook(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				readCookbook := types.Cookbook{}
-				readCookbookErr := mockedCoinInput.PlnK.Cdc.UnmarshalJSON(result, &readCookbook)
+				readCookbookErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readCookbook)
 
 				require.True(t, readCookbookErr == nil)
 				require.True(t, readCookbook.Name == tc.cbName)

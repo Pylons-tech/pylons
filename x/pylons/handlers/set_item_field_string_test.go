@@ -14,17 +14,15 @@ import (
 )
 
 func TestHandlerMsgUpdateItemString(t *testing.T) {
-	mockedCoinInput := keep.SetupTestCoinInput()
-
-	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.PremiumTier.Fee)
+	tci := keep.SetupTestCoinInput()
+	sender1, _ := keep.SetupTestAccounts(t, tci, types.PremiumTier.Fee)
 
 	// mock cookbook
-	cbData := MockCookbook(mockedCoinInput, sender1)
+	cbData := MockCookbook(tci, sender1)
 
 	item := keep.GenItem(cbData.CookbookID, sender1, "????????")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		itemID       string
@@ -94,11 +92,12 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender1, types.NewPylon(int64(len(tc.value))))
+				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(int64(len(tc.value))))
+				require.True(t, err == nil)
 			}
 
 			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
-			result, err := HandlerMsgUpdateItemString(mockedCoinInput.Ctx, mockedCoinInput.PlnK, msg)
+			result, err := HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
 				resp := UpdateItemStringResp{}
@@ -111,7 +110,9 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				require.True(t, resp.Status == "Success")
 				require.True(t, resp.Message == tc.successMsg)
 
-				item, err := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemID)
+				item, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
+				require.True(t, err == nil)
+
 				itemName, ok := item.FindString("Name")
 				if !ok {
 					t.Log("name not available for item=", item)
@@ -121,10 +122,8 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 					t.Error("item name does not match after successfully updating the field")
 				}
 				// should check pylon is reduced correctly
-
 			} else {
-
-				t.Log("err.Error()", err, "tc.desiredError", tc.desiredError)
+				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})

@@ -11,12 +11,10 @@ import (
 )
 
 func TestKeeperSetItem(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
 
 	cases := map[string]struct {
 		name         string
@@ -43,7 +41,7 @@ func TestKeeperSetItem(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			item := GenItem(cbData.ID, tc.sender, "Raichu")
-			err := mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+			err := tci.PlnK.SetItem(tci.Ctx, *item)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -55,15 +53,13 @@ func TestKeeperSetItem(t *testing.T) {
 }
 
 func TestKeeperGetItem(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		itemID       string
@@ -84,7 +80,7 @@ func TestKeeperGetItem(t *testing.T) {
 
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			gItem, err := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemID)
+			gItem, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
@@ -98,16 +94,13 @@ func TestKeeperGetItem(t *testing.T) {
 }
 
 func TestKeeperGetItemsBySender(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
-
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
+	tci := SetupTestCoinInput()
+	sender, sender2 := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		sender        sdk.AccAddress
@@ -132,7 +125,7 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			itemsBySender, err := mockedCoinInput.PlnK.GetItemsBySender(mockedCoinInput.Ctx, tc.sender)
+			itemsBySender, err := tci.PlnK.GetItemsBySender(tci.Ctx, tc.sender)
 			if tc.showError {
 			} else {
 				require.True(t, err == nil)
@@ -143,18 +136,17 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 }
 
 func TestKeeperUpdateItem(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
-
 	item := GenItem(cbData.ID, sender, "Raichu")
 	noSenderItem := GenItem(cbData.ID, nil, "Raichu")
 	newItem := GenItem(cbData.ID, sender, "Raichu")
 
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
+
 	item.SetString("Name", "RC")
 
 	cases := map[string]struct {
@@ -192,12 +184,12 @@ func TestKeeperUpdateItem(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			err := mockedCoinInput.PlnK.UpdateItem(mockedCoinInput.Ctx, tc.itemID, *tc.item)
+			err := tci.PlnK.UpdateItem(tci.Ctx, tc.itemID, *tc.item)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
-				gItem, err2 := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemID)
+				gItem, err2 := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
 				require.True(t, err2 == nil)
 				originItemStr, ok := tc.item.FindString("Name")
 				require.True(t, ok == true)
@@ -210,15 +202,13 @@ func TestKeeperUpdateItem(t *testing.T) {
 }
 
 func TestKeeperDeleteItem(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
-
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		itemID       string
@@ -239,10 +229,10 @@ func TestKeeperDeleteItem(t *testing.T) {
 
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			mockedCoinInput.PlnK.DeleteItem(mockedCoinInput.Ctx, tc.itemID)
+			tci.PlnK.DeleteItem(tci.Ctx, tc.itemID)
 			if tc.showError {
 			} else {
-				_, err := mockedCoinInput.PlnK.GetItem(mockedCoinInput.Ctx, tc.itemID)
+				_, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
 				require.True(t, strings.Contains(err.Error(), "The item doesn't exist"))
 			}
 		})
@@ -250,16 +240,15 @@ func TestKeeperDeleteItem(t *testing.T) {
 }
 
 func TestKeeperItemsByCookbook(t *testing.T) {
-	mockedCoinInput := SetupTestCoinInput()
+	tci := SetupTestCoinInput()
+	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
 
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	cbData1 := GenCookbook(sender, "cookbook-0002", "this has to meet character limits")
 
-	mockedCoinInput.Bk.AddCoins(mockedCoinInput.Ctx, sender, types.NewPylon(1000000))
-
 	item := GenItem(cbData.ID, sender, "Raichu")
-	mockedCoinInput.PlnK.SetItem(mockedCoinInput.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
 
 	cases := map[string]struct {
 		cookbookID    string
@@ -289,7 +278,7 @@ func TestKeeperItemsByCookbook(t *testing.T) {
 
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cItems, err := mockedCoinInput.PlnK.ItemsByCookbook(mockedCoinInput.Ctx, tc.cookbookID)
+			cItems, err := tci.PlnK.ItemsByCookbook(tci.Ctx, tc.cookbookID)
 			if tc.showError {
 			} else {
 				require.True(t, err == nil)

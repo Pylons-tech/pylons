@@ -25,7 +25,6 @@ import (
 var DefaultNodeHome = os.ExpandEnv("$HOME/.pylonsd")
 
 const (
-	flagOverwrite  = "overwrite"
 	flagClientHome = "home-client"
 )
 

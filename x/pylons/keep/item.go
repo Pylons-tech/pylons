@@ -79,6 +79,7 @@ func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
 
 // DeleteItem is used to delete the item
 func (k Keeper) DeleteItem(ctx sdk.Context, id string) {
+	//nolint:errcheck
 	k.DeleteObject(ctx, types.TypeItem, id, k.ItemKey)
 }
 

@@ -43,7 +43,8 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 				false,
 			)
 
-			intTestSDK.WaitForNextBlock()
+			err = intTestSDK.WaitForNextBlock()
+			t.MustNil(err)
 
 			txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
