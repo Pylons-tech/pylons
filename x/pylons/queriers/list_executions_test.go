@@ -23,7 +23,7 @@ func TestListExecution(t *testing.T) {
 	// mock cookbook
 	cbData := handlers.MockCookbook(tci, sender1)
 
-	recipeResp := handlers.MockPopularRecipe(handlers.RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci,
+	recipeResp := handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
 		"recipe0001", cbData.CookbookID, sender1)
 
 	_, err = handlers.MockExecution(

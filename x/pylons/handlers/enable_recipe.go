@@ -15,7 +15,7 @@ type EnableRecipeResp struct {
 
 // HandlerMsgEnableRecipe is used to enable recipe by a developer
 func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnableRecipe) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -37,7 +37,7 @@ func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEna
 		return nil, errInternal(err2)
 	}
 
-	return marshalJson(EnableRecipeResp{
+	return marshalJSON(EnableRecipeResp{
 		Message: "successfully enabled the recipe",
 		Status:  "Success",
 	})

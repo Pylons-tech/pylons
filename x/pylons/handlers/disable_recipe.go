@@ -15,7 +15,7 @@ type DisableRecipeResp struct {
 
 // HandlerMsgDisableRecipe is used to disable recipe by a developer
 func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDisableRecipe) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -36,7 +36,7 @@ func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDi
 		return nil, errInternal(err2)
 	}
 
-	return marshalJson(DisableRecipeResp{
+	return marshalJSON(DisableRecipeResp{
 		Message: "successfully disabled the recipe",
 		Status:  "Success",
 	})

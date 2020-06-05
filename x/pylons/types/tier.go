@@ -9,6 +9,7 @@ import (
 // Level is the kind of cookbook a developer can create
 type Level int
 
+// Tier defines the kind of cookbook this is
 const (
 	// Basic is the free level which does allow developers to use pylons ( paid currency ) in their
 	// games
@@ -25,6 +26,7 @@ func (l Level) Validate() error {
 	return errors.New("Invalid cookbook plan")
 }
 
+// tier fee types
 var (
 
 	// BasicFee is the fee charged to create a basic cookbook
@@ -47,6 +49,7 @@ var BasicTier = Tier{
 	Fee:   BasicFee,
 }
 
+// PremiumTier the cookbook tier which does allow paid receipes
 var PremiumTier = Tier{
 	Level: Premium,
 	Fee:   PremiumFee,

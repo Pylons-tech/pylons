@@ -5,16 +5,19 @@ import (
 	"math/rand"
 )
 
+// DoubleWeightTable describes weight loot table that produce double value
 type DoubleWeightTable struct {
 	WeightRanges []DoubleWeightRange
 }
 
+// DoubleWeightRange describes weight range that produce double value
 type DoubleWeightRange struct {
 	Lower  FloatString // This is added due to amino.Marshal does not support float variable
 	Upper  FloatString
 	Weight int
 }
 
+// Has check if an input is between double weight range
 func (wr DoubleWeightRange) Has(number float64) bool {
 	return number >= wr.Lower.Float() && number < wr.Upper.Float()
 }

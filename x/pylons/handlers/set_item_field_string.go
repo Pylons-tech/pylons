@@ -11,6 +11,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// UpdateItemStringResp is a struct to control update item string response
 type UpdateItemStringResp struct {
 	Status  string
 	Message string
@@ -18,7 +19,7 @@ type UpdateItemStringResp struct {
 
 // HandlerMsgUpdateItemString is used to transact pylons between people
 func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 
 	if err != nil {
@@ -53,7 +54,7 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 		return nil, errInternal(errors.New("Error updating item inside keeper"))
 	}
 
-	return marshalJson(CheckExecutionResp{
+	return marshalJSON(CheckExecutionResp{
 		Message: "successfully updated the item field",
 		Status:  "Success",
 	})

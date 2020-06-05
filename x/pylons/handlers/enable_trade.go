@@ -15,7 +15,7 @@ type EnableTradeResp struct {
 
 // HandlerMsgEnableTrade is used to enable trade by a developer
 func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnableTrade) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -37,7 +37,7 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 		return nil, errInternal(err2)
 	}
 
-	return marshalJson(EnableTradeResp{
+	return marshalJSON(EnableTradeResp{
 		Message: "successfully enabled the trade",
 		Status:  "Success",
 	})

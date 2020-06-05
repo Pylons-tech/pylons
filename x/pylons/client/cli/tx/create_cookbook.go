@@ -54,6 +54,6 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgCCB})
 		},
 	}
-	
+
 	return ccb
 }

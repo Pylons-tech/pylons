@@ -5,16 +5,19 @@ import (
 	"math/rand"
 )
 
+// IntWeightTable describes weight loot table that produce int value
 type IntWeightTable struct {
 	WeightRanges []IntWeightRange
 }
 
+// IntWeightRange describes weight range that produce int value
 type IntWeightRange struct {
 	Lower  int
 	Upper  int
 	Weight int
 }
 
+// Has check if a number is under IntWeightRange
 func (wr IntWeightRange) Has(number int) bool {
 	return number >= wr.Lower && number < wr.Upper
 }

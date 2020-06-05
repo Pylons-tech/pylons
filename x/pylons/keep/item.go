@@ -63,6 +63,7 @@ func (k Keeper) GetAllItems(ctx sdk.Context) ([]types.Item, error) {
 	return items, nil
 }
 
+// GetAllItemsCount returns items count
 func (k Keeper) GetAllItemsCount(ctx sdk.Context) int {
 	items, _ := k.GetAllItems(ctx)
 	return len(items)

@@ -36,6 +36,7 @@ func (spm StringParamList) String() string {
 	return sp
 }
 
+// Actualize actualize string param using cel program
 func (spm StringParamList) Actualize(ec CelEnvCollection) ([]StringKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []StringKeyValue

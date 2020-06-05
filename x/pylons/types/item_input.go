@@ -62,6 +62,7 @@ func (iil ItemInputList) String() string {
 	return itm
 }
 
+// Validate is a function to check ItemInputList is valid
 func (iil ItemInputList) Validate() error {
 	return nil
 }

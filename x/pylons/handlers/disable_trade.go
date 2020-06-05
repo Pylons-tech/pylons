@@ -43,7 +43,7 @@ func HandlerMsgDisableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDis
 		return nil, errInternal(err2)
 	}
 
-	return marshalJson(DisableTradeResp{
+	return marshalJSON(DisableTradeResp{
 		Message: "successfully disabled the trade",
 		Status:  "Success",
 	})

@@ -12,7 +12,7 @@ func errInternal(err error) error {
 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 }
 
-func marshalJson(intf interface{}) (*sdk.Result, error) {
+func marshalJSON(intf interface{}) (*sdk.Result, error) {
 	mData, err := json.Marshal(intf)
 
 	if err != nil {
@@ -20,4 +20,14 @@ func marshalJson(intf interface{}) (*sdk.Result, error) {
 	}
 
 	return &sdk.Result{Data: mData}, nil
+}
+
+// Contains is a utility function to find an int value from int array
+func Contains(arr []int, it int) bool {
+	for _, a := range arr {
+		if a == it {
+			return true
+		}
+	}
+	return false
 }

@@ -21,7 +21,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock recipe
-	rcpData := MockPopularRecipe(RCP_DEFAULT, tci, "existing recipe", cbData.CookbookID, sender1)
+	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		recipeID     string

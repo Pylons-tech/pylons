@@ -7,14 +7,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// ItemOutput models the continuum of valid outcomes for item generation in recipes
-
+// ItemModifyParams describes the fields that needs to be modified
 type ItemModifyParams struct {
 	Doubles DoubleParamList
 	Longs   LongParamList
 	Strings StringParamList
 }
 
+// ModifyItemType describes what is modified from item input
 type ModifyItemType struct {
 	ItemInputRef int
 	Doubles      DoubleParamList
@@ -22,6 +22,7 @@ type ModifyItemType struct {
 	Strings      StringParamList
 }
 
+// SerializeModifyItemType describes the serialized format of ModifyItemType
 type SerializeModifyItemType struct {
 	ItemInputRef *int `json:",omitempty"`
 	Doubles      DoubleParamList
@@ -29,6 +30,7 @@ type SerializeModifyItemType struct {
 	Strings      StringParamList
 }
 
+// ItemOutput models the continuum of valid outcomes for item generation in recipes
 type ItemOutput struct {
 	ModifyItem ModifyItemType
 	Doubles    DoubleParamList
@@ -36,6 +38,7 @@ type ItemOutput struct {
 	Strings    StringParamList
 }
 
+// NewInputRefOutput returns ItemOutput that is modified from item input
 func NewInputRefOutput(ItemInputRef int, ModifyParams ItemModifyParams) ItemOutput {
 	return ItemOutput{
 		ModifyItem: ModifyItemType{
@@ -47,6 +50,7 @@ func NewInputRefOutput(ItemInputRef int, ModifyParams ItemModifyParams) ItemOutp
 	}
 }
 
+// NewItemOutput returns new ItemOutput generated from recipe
 func NewItemOutput(Doubles DoubleParamList, Longs LongParamList, Strings StringParamList) ItemOutput {
 	return ItemOutput{
 		ModifyItem: ModifyItemType{
@@ -58,6 +62,7 @@ func NewItemOutput(Doubles DoubleParamList, Longs LongParamList, Strings StringP
 	}
 }
 
+// SerializeItemOutput describes the item output in serialize format
 type SerializeItemOutput struct {
 	ModifyItem SerializeModifyItemType
 	Doubles    DoubleParamList
@@ -80,6 +85,7 @@ func (io ItemOutput) String() string {
 		io.Doubles, io.Longs, io.Strings)
 }
 
+// Item function acualize an item from item output data
 func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvCollection) (*Item, error) {
 	// This function is used on ExecuteRecipe's AddExecutedResult, and it's
 	// not acceptable to provide predefined GUID
@@ -100,6 +106,7 @@ func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvColle
 	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender, lastBlockHeight), nil
 }
 
+// MarshalJSON is a custom marshal function
 func (io *ItemOutput) MarshalJSON() ([]byte, error) {
 	sio := SerializeItemOutput{
 		ModifyItem: SerializeModifyItemType{
@@ -118,6 +125,7 @@ func (io *ItemOutput) MarshalJSON() ([]byte, error) {
 	return json.Marshal(sio)
 }
 
+// UnmarshalJSON is a custom unmarshal function
 func (io *ItemOutput) UnmarshalJSON(data []byte) error {
 	sio := SerializeItemOutput{}
 	err := json.Unmarshal(data, &sio)

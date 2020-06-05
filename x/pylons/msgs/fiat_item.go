@@ -8,6 +8,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// MsgFiatItem is a msg struct to be used to fiat item
 type MsgFiatItem struct {
 	CookbookID string
 	Doubles    []types.DoubleKeyValue

@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// TypeExecution is a store key for execution
 const TypeExecution = "execution"
 
 // Execution is a recipe execution used for tracking the execution - specifically a
@@ -22,6 +23,7 @@ type Execution struct {
 	Completed   bool
 }
 
+// ExecutionList describes executions list
 type ExecutionList struct {
 	Executions []Execution
 }
@@ -47,9 +49,9 @@ func NewExecution(rcpID string, cbID string, ci sdk.Coins,
 }
 
 // KeyGen generates key for the execution
-func (exec Execution) KeyGen() string {
+func (e Execution) KeyGen() string {
 	id := uuid.New()
-	return exec.Sender.String() + id.String()
+	return e.Sender.String() + id.String()
 }
 
 func (e Execution) String() string {

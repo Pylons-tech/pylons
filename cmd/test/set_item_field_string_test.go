@@ -1,14 +1,14 @@
-package intTest
+package inttest
 
 import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestUpdateItemStringViaCLI(originT *originT.T) {
@@ -33,31 +33,31 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			itemID := MockItemGUID(tc.itemName, t)
 
-			eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
+			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := intTestSDK.TestTxWithMsgWithNonce(
+			txhash := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
 				"eugen",
 				false,
 			)
 
-			err = intTestSDK.WaitForNextBlock()
+			err = inttestSDK.WaitForNextBlock()
 			t.MustNil(err)
 
-			txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
+			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
 			resp := handlers.UpdateItemStringResp{}
-			err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.Message == "successfully updated the item field")
 			t.MustTrue(resp.Status == "Success")
 
-			items, err := intTestSDK.ListItemsViaCLI("")
-			intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+			items, err := inttestSDK.ListItemsViaCLI("")
+			inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok := intTestSDK.FindItemFromArrayByName(items, tc.value, false)
+			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false)
 			t.MustTrue(ok)
 		})
 	}

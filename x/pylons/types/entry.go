@@ -28,6 +28,7 @@ func (wpl EntriesList) String() string {
 	return itm
 }
 
+// MarshalJSON is a custom marshal function
 func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	var sel serializeEntriesList
 	for _, wp := range wpl {
@@ -44,7 +45,8 @@ func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	return json.Marshal(sel)
 }
 
-func (el *EntriesList) UnmarshalJSON(data []byte) error {
+// UnmarshalJSON is a custom Unmarshal function
+func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 	var sel serializeEntriesList
 	err := json.Unmarshal(data, &sel)
 	if err != nil {
@@ -52,10 +54,10 @@ func (el *EntriesList) UnmarshalJSON(data []byte) error {
 	}
 
 	for _, co := range sel.CoinOutputs {
-		*el = append(*el, co)
+		*wpl = append(*wpl, co)
 	}
 	for _, io := range sel.ItemOutputs {
-		*el = append(*el, io)
+		*wpl = append(*wpl, io)
 	}
 	return nil
 }

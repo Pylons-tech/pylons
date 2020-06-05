@@ -14,6 +14,7 @@ type MsgSendPylons struct {
 	Receiver sdk.AccAddress
 }
 
+// NewMsgSendPylons is a function to get MsgSendPylons msg from required params
 func NewMsgSendPylons(amount sdk.Coins, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendPylons {
 	return MsgSendPylons{
 		Amount:   amount,
@@ -28,6 +29,7 @@ func (msg MsgSendPylons) Route() string { return "pylons" }
 // Type should return the action
 func (msg MsgSendPylons) Type() string { return "send_pylons" }
 
+// ValidateBasic is a function to validate MsgSendPylons msg
 func (msg MsgSendPylons) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
@@ -57,6 +59,7 @@ func (msg MsgSendPylons) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
+// GetSigners is a function to get signers from MsgSendPylons msg
 func (msg MsgSendPylons) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }

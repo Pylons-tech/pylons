@@ -25,22 +25,25 @@ var (
 	_ module.AppModuleBasic = AppModuleBasic{}
 )
 
-// app module Basics object
+// AppModuleBasic is app module basics object
 type AppModuleBasic struct{}
 
+// Name returns AppModuleBasic name
 func (AppModuleBasic) Name() string {
 	return "pylons"
 }
 
+// RegisterCodec implements RegisterCodec
 func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
 	RegisterCodec(cdc)
 }
 
+// DefaultGenesis return GenesisState in JSON
 func (AppModuleBasic) DefaultGenesis() json.RawMessage {
 	return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
 }
 
-// Validation check of the Genesis
+// ValidateGenesis do validation check of the Genesis
 func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 	var data GenesisState
 	err := ModuleCdc.UnmarshalJSON(bz, &data)
@@ -56,7 +59,7 @@ func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router
 	rest.RegisterRoutes(ctx, rtr, ModuleCdc, StoreKey)
 }
 
-// Get the root query command of this module
+// GetQueryCmd get the root query command of this module
 func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 	pylonsQueryCmd := &cobra.Command{
 		Use:   "pylons",
@@ -73,13 +76,13 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		query.ItemsBySender(StoreKey, cdc),
 		query.ListExecutions(StoreKey, cdc),
 		query.ListTrade(StoreKey, cdc))
-	
+
 	pylonsQueryCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
 
 	return pylonsQueryCmd
 }
 
-// Get the root tx command of this module
+// GetTxCmd get the root tx command of this module
 func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 	pylonsTxCmd := &cobra.Command{
 		Use:   "pylons",
@@ -92,7 +95,7 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		tx.CreateCookbook(cdc),
 		tx.UpdateCookbook(cdc),
 		tx.FiatItem(cdc))
-	
+
 	pylonsTxCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
 	pylonsTxCmd.PersistentFlags().String("keyring-backend", "os", "Select keyring's backend (os|file|test)")
 	pylonsTxCmd.PersistentFlags().String("from", "", "Name or address of private key with which to sign")
@@ -101,6 +104,7 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 	return pylonsTxCmd
 }
 
+// AppModule manages keeper and bankKeeper along with AppModuleBasic
 type AppModule struct {
 	AppModuleBasic
 	keeper     keep.Keeper
@@ -116,33 +120,43 @@ func NewAppModule(k keep.Keeper, bankKeeper bank.Keeper) AppModule {
 	}
 }
 
+// Name returns AppModule name
 func (AppModule) Name() string {
 	return ModuleName
 }
 
+// RegisterInvariants registers invariants
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
+// Route returns router key
 func (am AppModule) Route() string {
 	return RouterKey
 }
 
+// NewHandler returns module handler
 func (am AppModule) NewHandler() sdk.Handler {
 	return NewHandler(am.keeper)
 }
+
+// QuerierRoute returns QuerierRoute
 func (am AppModule) QuerierRoute() string {
 	return QuerierRoute
 }
 
+// NewQuerierHandler return NewQuerier
 func (am AppModule) NewQuerierHandler() sdk.Querier {
 	return NewQuerier(am.keeper)
 }
 
+// BeginBlock is a begin block function
 func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
+// EndBlock is a end block function
 func (am AppModule) EndBlock(sdk.Context, abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
 }
 
+// InitGenesis is a function for init genesis
 func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	ModuleCdc.MustUnmarshalJSON(data, &genesisState)
@@ -150,6 +164,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.Va
 	return []abci.ValidatorUpdate{}
 }
 
+// ExportGenesis is a function for export genesis
 func (am AppModule) ExportGenesis(ctx sdk.Context) json.RawMessage {
 	gs := ExportGenesis(ctx, am.keeper)
 	return ModuleCdc.MustMarshalJSON(gs)

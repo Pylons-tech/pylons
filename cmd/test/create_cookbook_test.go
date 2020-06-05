@@ -1,14 +1,14 @@
-package intTest
+package inttest
 
 import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestCreateCookbookViaCLI(originT *originT.T) {
@@ -27,11 +27,11 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
+			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 
 			t.MustNil(err)
-			txhash := intTestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
+			txhash := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"",
 				"this has to meet character limits lol",
@@ -45,13 +45,13 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				false,
 			)
 
-			err = intTestSDK.WaitForNextBlock()
-			intTestSDK.ErrValidation(t, "error waiting for creating cookbook %+v", err)
+			err = inttestSDK.WaitForNextBlock()
+			inttestSDK.ErrValidation(t, "error waiting for creating cookbook %+v", err)
 
-			txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
+			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
 			resp := handlers.CreateCBResponse{}
-			err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.CookbookID != "")
 		})

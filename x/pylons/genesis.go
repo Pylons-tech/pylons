@@ -15,14 +15,17 @@ type GenesisState struct {
 	Items     []types.Item
 }
 
+// NewGenesisState returns new genesis state
 func NewGenesisState() GenesisState {
 	return GenesisState{}
 }
 
+// ValidateGenesis do validate genesis
 func ValidateGenesis(data GenesisState) error {
 	return nil
 }
 
+// DefaultGenesisState returns default genesis state
 func DefaultGenesisState() GenesisState {
 	return GenesisState{
 		Cookbooks: []types.Cookbook{},
@@ -31,6 +34,7 @@ func DefaultGenesisState() GenesisState {
 	}
 }
 
+// InitGenesis init genesis for a context
 func InitGenesis(ctx sdk.Context, keeper keep.Keeper, data GenesisState) {
 	for _, record := range data.Cookbooks {
 		//nolint:errcheck
@@ -46,6 +50,7 @@ func InitGenesis(ctx sdk.Context, keeper keep.Keeper, data GenesisState) {
 	}
 }
 
+// ExportGenesis export genesis
 func ExportGenesis(ctx sdk.Context, k keep.Keeper) GenesisState {
 	var cookbooks []types.Cookbook
 	iterator := k.GetCookbooksIterator(ctx)

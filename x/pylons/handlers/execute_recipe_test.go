@@ -21,10 +21,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock coin to coin recipe
-	c2cRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_TO_1xCHAIRCOIN, tci, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xRaichuItemBuy, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock coin to item recipe
-	zeroInOneOutItemRecipeData := MockPopularRecipe(RCP_5xWOODCOIN_1xRAICHU_BUY, tci, "existing recipe", cbData.CookbookID, sender1)
+	zeroInOneOutItemRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xRaichuItemBuy, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock 1 input 1 output recipe
 	oneInputOneOutputRecipeData := MockRecipe(
@@ -81,10 +81,10 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	)
 
 	// item upgrade recipe
-	itemUpgradeRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE, tci, "existing recipe", cbData.CookbookID, sender1)
+	itemUpgradeRecipeData := MockPopularRecipe(RcpRaichuNameUpgrade, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// item upgrade recipe with catalyst item
-	itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST, tci, "existing recipe", cbData.CookbookID, sender1)
+	itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RcpRaichuNameUpgradeWithCatalyst, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
 		cookbookID               string

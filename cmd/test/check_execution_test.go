@@ -1,4 +1,4 @@
-package intTest
+package inttest
 
 import (
 	"encoding/json"
@@ -8,10 +8,10 @@ import (
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 type CheckExecutionTestCase struct {
@@ -107,77 +107,77 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
 
 	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
-	intTestSDK.ErrValidation(t, "error mocking recipe %+v", err)
+	inttestSDK.ErrValidation(t, "error mocking recipe %+v", err)
 
-	rcp, err := intTestSDK.GetRecipeByGUID(guid)
+	rcp, err := inttestSDK.GetRecipeByGUID(guid)
 	t.MustNil(err)
 
-	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 
-	txhash := intTestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
+	txhash := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 
 	if tc.waitForBlockInterval {
-		err := intTestSDK.WaitForBlockInterval(tc.blockInterval)
+		err := inttestSDK.WaitForBlockInterval(tc.blockInterval)
 		t.MustNil(err)
 	} else {
-		err := intTestSDK.WaitForNextBlock()
+		err := inttestSDK.WaitForNextBlock()
 		t.MustNil(err)
 	}
 
-	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	execResp := handlers.ExecuteRecipeResp{}
-	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
+	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
 	t.MustNil(err)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.MustNil(err)
 
 	if len(tc.currentItemName) > 0 { // when item input is set
-		items, err := intTestSDK.ListItemsViaCLI("")
-		intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+		items, err := inttestSDK.ListItemsViaCLI("")
+		inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-		item, ok := intTestSDK.FindItemFromArrayByName(items, tc.currentItemName, true)
+		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true)
 		t.MustTrue(ok)
 		t.MustTrue(item.OwnerRecipeID == guid)
 	}
 
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	txhash = intTestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+	txhash = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 
-	txHandleResBytes, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	resp := handlers.CheckExecutionResp{}
-	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 	t.MustTrue(resp.Status == tc.expectedStatus)
 	t.MustTrue(resp.Message == tc.expectedMessage)
 
 	// Here desiredItemName should be different across tests cases and across test files
-	items, err := intTestSDK.ListItemsViaCLI("")
-	intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+	items, err := inttestSDK.ListItemsViaCLI("")
+	inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-	_, ok := intTestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
+	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 	t.MustTrue(ok == tc.shouldSuccess)
 
-	exec, err := intTestSDK.GetExecutionByGUID(schedule.ExecID)
+	exec, err := inttestSDK.GetExecutionByGUID(schedule.ExecID)
 	if err != nil {
 		t.Fatalf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
 	}
 	t.MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
-		txhash = intTestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
-		err := intTestSDK.WaitForNextBlock()
+		txhash = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+		err := inttestSDK.WaitForNextBlock()
 		t.MustNil(err)
 
-		txHandleResBytes, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
+		txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)
 		resp := handlers.CheckExecutionResp{}
-		err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		t.MustNil(err)
 		t.MustTrue(resp.Status == tc.expectedRetryResStatus)
 		t.MustTrue(resp.Message == tc.expectedRetryResMessage)

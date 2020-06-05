@@ -35,6 +35,7 @@ const (
 	appName = "pylons"
 )
 
+// basic configurations to manage app
 var (
 	// default home directories for the application CLI
 	DefaultCLIHome = os.ExpandEnv("$HOME/.pylonscli")
@@ -63,6 +64,7 @@ var (
 	}
 )
 
+// MakeCodec make codec for message marshal/unmarshal
 func MakeCodec() *codec.Codec {
 	var cdc = codec.New()
 
@@ -277,10 +279,12 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 // GenesisState represents chain state at the start of the chain. Any initial state (account balances) are stored here.
 type GenesisState map[string]json.RawMessage
 
+// NewDefaultGenesisState returns new default genesis state
 func NewDefaultGenesisState() GenesisState {
 	return ModuleBasics.DefaultGenesis()
 }
 
+// InitChainer init chain with genesis state
 func (app *PylonsApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
 	var genesisState GenesisState
 
@@ -292,10 +296,12 @@ func (app *PylonsApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) ab
 	return app.mm.InitGenesis(ctx, genesisState)
 }
 
+// BeginBlocker is a function to begin block
 func (app *PylonsApp) BeginBlocker(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
 	return app.mm.BeginBlock(ctx, req)
 }
 
+// EndBlocker is a function to end block
 func (app *PylonsApp) EndBlocker(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
 	return app.mm.EndBlock(ctx, req)
 }
@@ -310,6 +316,7 @@ func (app *PylonsApp) GetTKey(storeKey string) *sdk.TransientStoreKey {
 	return app.tkeys[storeKey]
 }
 
+// LoadHeight loads data at a height
 func (app *PylonsApp) LoadHeight(height int64) error {
 	return app.LoadVersion(height, app.keys[bam.MainStoreKey])
 }
@@ -334,8 +341,7 @@ func (app *PylonsApp) ModuleAccountAddrs() map[string]bool {
 	return modAccAddrs
 }
 
-//_________________________________________________________
-
+// ExportAppStateAndValidators export app state and validators
 func (app *PylonsApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string,
 ) (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
 

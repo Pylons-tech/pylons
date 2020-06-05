@@ -22,6 +22,7 @@ func (lp LongInputParam) String() string {
 	}`, lp.MinValue, lp.MaxValue)
 }
 
+// Has validate if input is between min max range
 func (lp LongInputParam) Has(input int) bool {
 	return input >= lp.MinValue && input <= lp.MaxValue
 }
@@ -37,6 +38,7 @@ func (lpm LongInputParamList) String() string {
 	return lp
 }
 
+// Actualize generate a value from range
 func (lpm LongInputParamList) Actualize() []LongKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []LongKeyValue

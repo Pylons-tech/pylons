@@ -20,6 +20,7 @@ const (
 	DefaultCoinPerRequest = 500
 )
 
+// GetPylons implements GetPylons msg transaction
 func GetPylons(cdc *codec.Codec) *cobra.Command {
 	ccb := &cobra.Command{
 		Use:   "get-pylons",

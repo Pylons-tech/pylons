@@ -2,6 +2,7 @@ package keep
 
 import (
 	"testing"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store"
@@ -12,13 +13,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/cosmos-sdk/x/supply"
+	"github.com/stretchr/testify/require"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmtypes "github.com/tendermint/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
-	"github.com/stretchr/testify/require"
 )
 
+// TestCoinInput is a struct that hodl mocked chain env
 type TestCoinInput struct {
 	Cdc  *codec.Codec
 	Ctx  sdk.Context
@@ -28,6 +30,7 @@ type TestCoinInput struct {
 	PlnK Keeper
 }
 
+// GenItem generate an item with name
 func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 	return types.NewItem(
 		cbID,
@@ -48,6 +51,7 @@ func createTestCodec() *codec.Codec {
 	return cdc
 }
 
+// SetupTestCoinInput mock chain env
 func SetupTestCoinInput() TestCoinInput {
 	// parts from https://github.com/cosmos/cosmos-sdk/blob/release/v0.38.3/x/staking/keeper/test_common.go
 	cdc := createTestCodec()
@@ -136,6 +140,7 @@ func SetupTestCoinInput() TestCoinInput {
 	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}
 }
 
+// SetupTestAccounts do setup for test accounts
 func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")

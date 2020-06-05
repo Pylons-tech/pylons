@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// TypeTrade is a store key for trade
 const TypeTrade = "trade"
 
 // Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
