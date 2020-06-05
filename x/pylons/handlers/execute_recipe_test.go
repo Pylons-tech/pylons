@@ -21,7 +21,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock coin to coin recipe
-	c2cRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xRaichuItemBuy, tci, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xChaircoin, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock coin to item recipe
 	zeroInOneOutItemRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xRaichuItemBuy, tci, "existing recipe", cbData.CookbookID, sender1)
