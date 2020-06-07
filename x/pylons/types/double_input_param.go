@@ -24,6 +24,7 @@ func (dp DoubleInputParam) String() string {
 	}`, dp.MinValue, dp.MaxValue)
 }
 
+// Has check if an input is between double input param range
 func (dp DoubleInputParam) Has(input float64) bool {
 	return input >= dp.MinValue.Float() && input <= dp.MaxValue.Float()
 }

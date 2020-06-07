@@ -17,6 +17,7 @@ type ExecuteRecipeResp struct {
 	Output  []byte
 }
 
+// ExecuteRecipeSerialize is a struct for execute recipe result serialization
 type ExecuteRecipeSerialize struct {
 	Type   string `json:"type"`   // COIN or ITEM
 	Coin   string `json:"coin"`   // used when type is ITEM
@@ -24,6 +25,7 @@ type ExecuteRecipeSerialize struct {
 	ItemID string `json:"itemID"` // used when type is ITEM
 }
 
+// ExecuteRecipeScheduleOutput is a struct that shows how execute recipe schedule output works
 type ExecuteRecipeScheduleOutput struct {
 	ExecID string
 }
@@ -83,7 +85,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if err3 != nil {
 			return nil, errInternal(err2)
 		}
-		return marshalJson(ExecuteRecipeResp{
+		return marshalJSON(ExecuteRecipeResp{
 			Message: "scheduled the recipe",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -104,7 +106,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return nil, errInternal(err2)
 	}
 
-	return marshalJson(ExecuteRecipeResp{
+	return marshalJSON(ExecuteRecipeResp{
 		Message: "successfully executed the recipe",
 		Status:  "Success",
 		Output:  outputSTR,

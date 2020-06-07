@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// GenExecution generate execution
 func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	rcpData := GenRecipe(sender, cbData.ID, "new recipe", "this has to meet character limits; lol")
@@ -82,17 +83,17 @@ func TestKeeperGetExecution(t *testing.T) {
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
-		execId       string
+		execID       string
 		desiredError string
 		showError    bool
 	}{
 		"wrong exec id test": {
-			execId:       "invalidExecID",
+			execID:       "invalidExecID",
 			desiredError: "The execution doesn't exist",
 			showError:    true,
 		},
 		"successful get execution test": {
-			execId:       exec.ID,
+			execID:       exec.ID,
 			desiredError: "",
 			showError:    false,
 		},
@@ -100,7 +101,7 @@ func TestKeeperGetExecution(t *testing.T) {
 
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			execution, err := tci.PlnK.GetExecution(tci.Ctx, tc.execId)
+			execution, err := tci.PlnK.GetExecution(tci.Ctx, tc.execID)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -127,17 +128,17 @@ func TestKeeperUpdateExecution(t *testing.T) {
 	newExec.Completed = true
 
 	cases := map[string]struct {
-		execId       string
+		execID       string
 		desiredError string
 		showError    bool
 	}{
 		"wrong exec id test": {
-			execId:       "invalidExecID",
+			execID:       "invalidExecID",
 			desiredError: "The execution with gid invalidExecID does not exist",
 			showError:    true,
 		},
 		"successful update execution test": {
-			execId:       exec.ID,
+			execID:       exec.ID,
 			desiredError: "",
 			showError:    false,
 		},
@@ -145,14 +146,14 @@ func TestKeeperUpdateExecution(t *testing.T) {
 
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			err := tci.PlnK.UpdateExecution(tci.Ctx, tc.execId, newExec)
+			err := tci.PlnK.UpdateExecution(tci.Ctx, tc.execID, newExec)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				// t.Errorf("execution_test err LOG:: %+v", err)
 				require.True(t, err == nil)
-				uExec, err2 := tci.PlnK.GetExecution(tci.Ctx, tc.execId)
+				uExec, err2 := tci.PlnK.GetExecution(tci.Ctx, tc.execID)
 				require.True(t, err2 == nil)
 				require.True(t, uExec.Completed == true)
 			}

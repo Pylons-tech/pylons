@@ -1,4 +1,4 @@
-package intTest
+package inttest
 
 import (
 	"strings"
@@ -6,10 +6,10 @@ import (
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 type FulfillTradeTestCase struct {
@@ -125,14 +125,14 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		outputItemID = MockItemGUID(tc.outputItemName, t)
 	}
 
-	trdGuid := MockDetailedTradeGUID(tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
+	trdGUID := MockDetailedTradeGUID(tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
 		tc.extraInfo,
 		t)
 
-	eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
@@ -143,23 +143,23 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		}
 	}
 
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGuid, sdkAddr, itemIDs)
-	txhash := intTestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, sdkAddr, itemIDs)
+	txhash := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
 
-	txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
+	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
 	ffTrdResp := handlers.FulfillTradeResp{}
-	err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
+	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	t.MustNil(err)
 
 	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
 	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
 
 	// Try again after fulfill trade
-	txhash = intTestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
-	err = intTestSDK.WaitForNextBlock()
+	txhash = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	err = inttestSDK.WaitForNextBlock()
 	t.MustNil(err)
-	hmrErr := intTestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
+	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
 	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 }

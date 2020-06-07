@@ -21,6 +21,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// SendPylons implements SendPylons msg transaction
 func SendPylons(cdc *codec.Codec) *cobra.Command {
 	ccb := &cobra.Command{
 		Use:   "send-pylons [name] [amount]",

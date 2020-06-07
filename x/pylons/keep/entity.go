@@ -1,11 +1,13 @@
 package keep
 
 import (
-	"strconv"
 	"fmt"
+	"strconv"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+// KeyEntityCount is an entity key
 const KeyEntityCount = "key_entity_count"
 
 // IncreaseEntityCount sets a item in the key store
@@ -16,6 +18,7 @@ func (k Keeper) IncreaseEntityCount(ctx sdk.Context) {
 	store.Set([]byte(KeyEntityCount), []byte(fmt.Sprintf("%d", newCount)))
 }
 
+// GetEntityCount returns entity count
 func (k Keeper) GetEntityCount(ctx sdk.Context) int {
 	if k.EntityKey == nil {
 		return 0

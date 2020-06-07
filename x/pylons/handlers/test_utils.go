@@ -10,10 +10,12 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
+// MockCookbook mock cookbook
 func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBResponse {
 	return MockCookbookByName(tci, sender, "cookbook-00001")
 }
 
+// MockCookbookByName mock cookbook with specific name
 func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCBResponse {
 	cookbookDesc := "this has to meet character limits"
 	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
@@ -27,6 +29,7 @@ func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookN
 	return cbData
 }
 
+// MockRecipe mock recipe with details
 func MockRecipe(
 	tci keep.TestCoinInput,
 	rcpName string,
@@ -56,65 +59,77 @@ func MockRecipe(
 	return recipeData
 }
 
+// PopularRecipeType is a type for popular recipes
 type PopularRecipeType int
 
+// describes popular recipes
 const (
-	RCP_DEFAULT                                   PopularRecipeType = 0
-	RCP_5xWOODCOIN_TO_1xCHAIRCOIN                 PopularRecipeType = 1
-	RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN PopularRecipeType = 2
-	RCP_5xWOODCOIN_1xRAICHU_BUY                   PopularRecipeType = 3
-	RCP_RAICHU_NAME_UPGRADE                       PopularRecipeType = 4
-	RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST         PopularRecipeType = 5
-	RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE             PopularRecipeType = 6
-	RCP_2_BLOCK_DELAYED_KNIFE_MERGE               PopularRecipeType = 7
-	RCP_2_BLOCK_DELAYED_KNIFE_BUYER               PopularRecipeType = 8
+	// a default recipe
+	RcpDefault PopularRecipeType = 0
+	// a recipe to convert 5x woodcoin to chaircoin
+	Rcp5xWoodcoinTo1xChaircoin PopularRecipeType = 1
+	// a recipe to convert 5x woodcoin to chaircoin, which is 5 block delayed
+	Rcp5BlockDelayed5xWoodcoinTo1xChaircoin PopularRecipeType = 2
+	// a recipe to convert 5x woodcoin to 1x raichu item
+	Rcp5xWoodcoinTo1xRaichuItemBuy PopularRecipeType = 3
+	// a recipe to upgrade raichu's name
+	RcpRaichuNameUpgrade PopularRecipeType = 4
+	// a recipe to upgrade raichu's name with catalyst item
+	RcpRaichuNameUpgradeWithCatalyst PopularRecipeType = 5
+	// a recipe to upgrade knife, which is 2 block delayed
+	Rcp2BlockDelayedKnifeUpgrade PopularRecipeType = 6
+	// a recipe to merge two knives, which is 2 block delayed
+	Rcp2BlockDelayedKnifeMerge PopularRecipeType = 7
+	// a recipe to buy a knife, which is 2 block delayed
+	Rcp2BlockDelayedKnifeBuyer PopularRecipeType = 8
 )
 
+// GetParamsForPopularRecipe is a function to get popular recipe's attributes
 func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, types.ItemInputList, types.EntriesList, types.WeightedOutputsList, int64) {
 	switch hfrt {
-	case RCP_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe
+	case Rcp5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
 			types.GenOneOutput(1),
 			0
-	case RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
+	case Rcp5BlockDelayed5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
 			types.GenOneOutput(1),
 			5
-	case RCP_5xWOODCOIN_1xRAICHU_BUY:
+	case Rcp5xWoodcoinTo1xRaichuItemBuy:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Raichu"),
 			types.GenOneOutput(1),
 			0
-	case RCP_RAICHU_NAME_UPGRADE:
+	case RcpRaichuNameUpgrade:
 		return types.CoinInputList{},
 			types.GenItemInputList("Raichu"),
 			types.GenEntriesFirstItemNameUpgrade("RaichuV2"),
 			types.GenOneOutput(1),
 			0
-	case RCP_RAICHU_NAME_UPGRADE_WITH_CATALYST:
+	case RcpRaichuNameUpgradeWithCatalyst:
 		return types.CoinInputList{},
 			types.GenItemInputList("RaichuTC", "catalyst"),
 			types.GenEntriesFirstItemNameUpgrade("RaichuTCV2"),
 			types.GenOneOutput(1),
 			0
-	case RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE:
+	case Rcp2BlockDelayedKnifeUpgrade:
 		return types.CoinInputList{},
 			types.GenItemInputList("Knife"),
 			types.GenEntriesFirstItemNameUpgrade("KnifeV2"),
 			types.GenOneOutput(1),
 			2
-	case RCP_2_BLOCK_DELAYED_KNIFE_MERGE:
+	case Rcp2BlockDelayedKnifeMerge:
 		return types.CoinInputList{},
 			types.GenItemInputList("Knife", "Knife"),
 			types.GenItemOnlyEntry("KnifeMRG"),
 			types.GenOneOutput(1),
 			2
-	case RCP_2_BLOCK_DELAYED_KNIFE_BUYER:
+	case Rcp2BlockDelayedKnifeBuyer:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Knife"),
@@ -129,6 +144,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 	}
 }
 
+// MockPopularRecipe mock popular recipes
 func MockPopularRecipe(
 	hfrt PopularRecipeType,
 	tci keep.TestCoinInput,

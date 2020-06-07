@@ -44,6 +44,7 @@ func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
 	return recipes
 }
 
+// GetAllRecipesCount returns all recipes count
 func (k Keeper) GetAllRecipesCount(ctx sdk.Context) int {
 	recipes := k.GetRecipes(ctx)
 	return len(recipes)

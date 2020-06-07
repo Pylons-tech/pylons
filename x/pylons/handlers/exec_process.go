@@ -19,6 +19,7 @@ import (
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
+// ExecProcess store and handle all the activities of execution
 type ExecProcess struct {
 	ctx          sdk.Context
 	keeper       keep.Keeper
@@ -27,15 +28,7 @@ type ExecProcess struct {
 	ec           types.CelEnvCollection
 }
 
-func Contains(arr []int, it int) bool {
-	for _, a := range arr {
-		if a == it {
-			return true
-		}
-	}
-	return false
-}
-
+// SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
 
 	var inputItems []types.Item
@@ -81,6 +74,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	return nil
 }
 
+// Run execute the process and return result
 func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 	err := p.GenerateCelEnvVarFromInputItems()
 	if err != nil {
@@ -105,6 +99,7 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 	return outputSTR, nil
 }
 
+// AddExecutedResult add executed result from ExecProcess
 func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([]ExecuteRecipeSerialize, error) {
 	var ersl []ExecuteRecipeSerialize
 	var err error
@@ -180,52 +175,52 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 	return ersl, nil
 }
 
+// UpdateItemFromModifyParams is used to update item passed via item input from modify params
 func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ModifyItemType) (*types.Item, error) {
-
-	if dblKeyValues, err := toMod.Doubles.Actualize(p.ec); err != nil {
+	dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
+	if err != nil {
 		return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
-	} else {
-		for idx, dbl := range dblKeyValues {
-			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
-			if !ok {
-				return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
-			}
-			if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
-				originValue := targetItem.Doubles[dblKey].Value.Float()
-				upgradeAmount := dbl.Value.Float()
-				targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
-			} else {
-				targetItem.Doubles[dblKey].Value = dbl.Value
-			}
+	}
+	for idx, dbl := range dblKeyValues {
+		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+		if !ok {
+			return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
+		}
+		if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
+			originValue := targetItem.Doubles[dblKey].Value.Float()
+			upgradeAmount := dbl.Value.Float()
+			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+		} else {
+			targetItem.Doubles[dblKey].Value = dbl.Value
 		}
 	}
 
-	if lngKeyValues, err := toMod.Longs.Actualize(p.ec); err != nil {
+	lngKeyValues, err := toMod.Longs.Actualize(p.ec)
+	if err != nil {
 		return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
-	} else {
-		for idx, lng := range lngKeyValues {
-			lngKey, ok := targetItem.FindLongKey(lng.Key)
-			if !ok {
-				return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
-			}
-			if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
-				targetItem.Longs[lngKey].Value += lng.Value
-			} else {
-				targetItem.Longs[lngKey].Value = lng.Value
-			}
+	}
+	for idx, lng := range lngKeyValues {
+		lngKey, ok := targetItem.FindLongKey(lng.Key)
+		if !ok {
+			return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
+		}
+		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
+			targetItem.Longs[lngKey].Value += lng.Value
+		} else {
+			targetItem.Longs[lngKey].Value = lng.Value
 		}
 	}
 
-	if strKeyValues, err := toMod.Strings.Actualize(p.ec); err != nil {
+	strKeyValues, err := toMod.Strings.Actualize(p.ec)
+	if err != nil {
 		return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
-	} else {
-		for _, str := range strKeyValues {
-			strKey, ok := targetItem.FindStringKey(str.Key)
-			if !ok {
-				return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
-			}
-			targetItem.Strings[strKey].Value = str.Value
+	}
+	for _, str := range strKeyValues {
+		strKey, ok := targetItem.FindStringKey(str.Key)
+		if !ok {
+			return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
 		}
+		targetItem.Strings[strKey].Value = str.Value
 	}
 
 	// after upgrading is done, OwnerRecipe is not set
@@ -235,6 +230,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	return &targetItem, nil
 }
 
+// AddVariableFromItem collect variables from item inputs
 func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
 	varDefs = append(varDefs, decls.NewIdent(prefix+"lastUpdate", decls.Int, nil))
 	variables[prefix+"lastUpdate"] = item.LastUpdate
@@ -254,6 +250,7 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 	return varDefs, variables
 }
 
+// GenerateCelEnvVarFromInputItems generate cel env varaible from item inputs
 func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
 	varDefs := [](*exprpb.Decl){}

@@ -32,6 +32,7 @@ func (lpm StringInputParamList) String() string {
 	return lp
 }
 
+// Actualize actualize string from StringInputParamList
 func (lpm StringInputParamList) Actualize() []StringKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []StringKeyValue

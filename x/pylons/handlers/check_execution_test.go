@@ -20,18 +20,18 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock delayed coin to coin recipe
-	c2cRecipeData := MockPopularRecipe(RCP_5_BLOCK_DELAYED_5xWOODCOIN_TO_1xCHAIRCOIN, tci, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	// mock delayed more than 1 item input recipe
-	knifeMergeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, tci,
+	knifeMergeRecipeData := MockPopularRecipe(Rcp2BlockDelayedKnifeMerge, tci,
 		"knife merge recipe", cbData.CookbookID, sender1)
 
 	// mock delayed item upgrade recipe
-	knifeUpgradeRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_UPGRADE, tci,
+	knifeUpgradeRecipeData := MockPopularRecipe(Rcp2BlockDelayedKnifeUpgrade, tci,
 		"knife upgrade recipe", cbData.CookbookID, sender1)
 
 	// mock delayed knife buyer recipe
-	knifeBuyerRecipeData := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_BUYER, tci,
+	knifeBuyerRecipeData := MockPopularRecipe(Rcp2BlockDelayedKnifeBuyer, tci,
 		"knife upgrade recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {

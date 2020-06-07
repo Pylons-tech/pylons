@@ -28,7 +28,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 
-	knifeMergeRecipe := MockPopularRecipe(RCP_2_BLOCK_DELAYED_KNIFE_MERGE, tci,
+	knifeMergeRecipe := MockPopularRecipe(Rcp2BlockDelayedKnifeMerge, tci,
 		"knife merge recipe", cbData.CookbookID, sender1)
 
 	shieldMergeRecipe := MockRecipe(

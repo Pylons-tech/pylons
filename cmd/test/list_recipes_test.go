@@ -1,10 +1,10 @@
-package intTest
+package inttest
 
 import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestListRecipeViaCLI(originT *originT.T) {
@@ -26,17 +26,17 @@ func TestListRecipeViaCLI(originT *originT.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			_, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.outputItemName, t)
-			intTestSDK.ErrValidation(t, "error mocking recipe %+v", err)
+			inttestSDK.ErrValidation(t, "error mocking recipe %+v", err)
 
-			recipes, err := intTestSDK.TestQueryListRecipe(t)
-			intTestSDK.ErrValidation(t, "error listing recipes %+v", err)
+			recipes, err := inttestSDK.ListRecipesViaCLI("")
+			inttestSDK.ErrValidation(t, "error listing recipes %+v", err)
 
 			t.MustNil(err)
 			t.MustTrue(len(recipes) > 0)
 
-			err = intTestSDK.WaitForNextBlock()
+			err = inttestSDK.WaitForNextBlock()
 			t.MustNil(err)
-			_, ok := intTestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
+			_, ok := inttestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
 				t.Fatalf("error getting recipe with name %+v", tc.rcpName)
 			}

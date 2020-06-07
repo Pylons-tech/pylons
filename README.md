@@ -2,6 +2,15 @@
 
 Pylons daemon is the project responsible for providing rest api and amino endpoints necessary for interacting with pylons eco system
 
+## Setup development environment
+
+```
+git clone https://github.com/Pylons-tech/pylons
+brew install pre-commit
+brew install golangci/tap/golangci-lint
+go get -u golang.org/x/lint/golint
+pre-commit install
+```
 
 ## How to
 

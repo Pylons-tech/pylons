@@ -1,4 +1,4 @@
-package intTest
+package inttest
 
 import (
 	originT "testing"
@@ -7,10 +7,10 @@ import (
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestCreateRecipeViaCLI(originT *originT.T) {
@@ -28,14 +28,14 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 	}
 
 	mCB, err := GetMockedCookbook(&t)
-	intTestSDK.ErrValidation(&t, "error getting mocked cookbook %+v", err)
+	inttestSDK.ErrValidation(&t, "error getting mocked cookbook %+v", err)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
+			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := intTestSDK.TestTxWithMsgWithNonce(t,
+			txhash := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
 					mCB.ID,
@@ -51,13 +51,13 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				false,
 			)
 
-			err = intTestSDK.WaitForNextBlock()
-			intTestSDK.ErrValidation(t, "error waiting for creating recipe %+v", err)
+			err = inttestSDK.WaitForNextBlock()
+			inttestSDK.ErrValidation(t, "error waiting for creating recipe %+v", err)
 
-			txHandleResBytes, err := intTestSDK.WaitAndGetTxData(txhash, 3, t)
+			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
 			resp := handlers.CreateRecipeResponse{}
-			err = intTestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.RecipeID != "")
 		})

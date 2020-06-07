@@ -7,7 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgSendPylons defines a SendPylons message
+// MsgUpdateItemString defines a SendPylons message
 type MsgUpdateItemString struct {
 	Field  string
 	Value  string
@@ -15,6 +15,7 @@ type MsgUpdateItemString struct {
 	ItemID string
 }
 
+// NewMsgUpdateItemString is a function to get MsgUpdateItemString msg from required params
 func NewMsgUpdateItemString(ItemID, Field, Value string, Sender sdk.AccAddress) MsgUpdateItemString {
 	return MsgUpdateItemString{
 		ItemID: ItemID,
@@ -30,6 +31,7 @@ func (msg MsgUpdateItemString) Route() string { return "pylons" }
 // Type should return the action
 func (msg MsgUpdateItemString) Type() string { return "update_item_string" }
 
+// ValidateBasic is a function to validate MsgUpdateItemString msg
 func (msg MsgUpdateItemString) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
@@ -59,6 +61,7 @@ func (msg MsgUpdateItemString) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
+// GetSigners is a function to get signers from MsgUpdateItemString msg
 func (msg MsgUpdateItemString) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Sender}
 }

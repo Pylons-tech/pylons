@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// TypeRecipe is a store key for recipe
 const TypeRecipe = "recipe"
 
 // Recipe is a game state machine step abstracted out as a cooking terminology

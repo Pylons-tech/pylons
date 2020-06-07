@@ -7,6 +7,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// SetObject set custom object in ctx store
 func (k Keeper) SetObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
 
 	mObject, err := json.Marshal(object)
@@ -31,6 +32,7 @@ func (k Keeper) GetObject(ctx sdk.Context, storageType, id string, keeperKey sdk
 	return json.Unmarshal(mObject, object)
 }
 
+// UpdateObject update object in ctx store
 func (k Keeper) UpdateObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
 	store := ctx.KVStore(keeperKey)
 
@@ -45,6 +47,7 @@ func (k Keeper) UpdateObject(ctx sdk.Context, storageType, id string, keeperKey 
 	return nil
 }
 
+// DeleteObject delete object in ctx store
 func (k Keeper) DeleteObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey) error {
 	store := ctx.KVStore(keeperKey)
 

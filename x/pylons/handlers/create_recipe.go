@@ -10,13 +10,14 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// CreateRecipeResponse is struct of create recipe response
 type CreateRecipeResponse struct {
 	RecipeID string `json:"RecipeID"`
 }
 
 // HandlerMsgCreateRecipe is used to create recipe by a developer
 func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -51,7 +52,7 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 		return nil, errInternal(err)
 	}
 
-	return marshalJson(CreateRecipeResponse{
+	return marshalJSON(CreateRecipeResponse{
 		recipe.ID,
 	})
 }

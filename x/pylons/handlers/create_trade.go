@@ -10,13 +10,14 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// CreateTradeResponse is struct of create trade response
 type CreateTradeResponse struct {
 	TradeID string `json:"TradeID"`
 }
 
 // HandlerMsgCreateTrade is used to create a trade by a user
 func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateTrade) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -49,7 +50,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		return nil, errInternal(err)
 	}
 
-	return marshalJson(CreateTradeResponse{
+	return marshalJSON(CreateTradeResponse{
 		trade.ID,
 	})
 }

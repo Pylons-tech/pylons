@@ -1,5 +1,6 @@
 package types
 
+// GenCoinInputList is a utility function to genearte coin input list
 func GenCoinInputList(name string, count int64) CoinInputList {
 	return CoinInputList{
 		CoinInput{
@@ -9,6 +10,7 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
+// GenItemInputList is a utility function to genearte item input list
 func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
@@ -21,6 +23,7 @@ func GenItemInputList(names ...string) ItemInputList {
 	return iiL
 }
 
+// GenCoinOnlyEntry is a utility function to genearte coin only entry
 func GenCoinOnlyEntry(coinName string) EntriesList {
 	return EntriesList{
 		CoinOutput{
@@ -30,6 +33,7 @@ func GenCoinOnlyEntry(coinName string) EntriesList {
 	}
 }
 
+// GenCoinOnlyEntryRand is a utility function to genearte coin only entry with random count
 func GenCoinOnlyEntryRand(coinName string) EntriesList {
 	return EntriesList{
 		CoinOutput{
@@ -39,6 +43,7 @@ func GenCoinOnlyEntryRand(coinName string) EntriesList {
 	}
 }
 
+// GenItemNameUpgradeParams is a utility function to generate item name upgrade
 func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 	return ItemModifyParams{
 		Doubles: DoubleParamList{},
@@ -52,6 +57,7 @@ func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 	}
 }
 
+// GenItemOnlyEntry is a utility function to generate item only entry
 func GenItemOnlyEntry(itemName string) EntriesList {
 	return EntriesList{
 		NewItemOutput(
@@ -84,6 +90,7 @@ func GenItemOnlyEntry(itemName string) EntriesList {
 	}
 }
 
+// GenItemOnlyEntryRand is a function to generate item only entry with random value
 func GenItemOnlyEntryRand(itemName string) EntriesList {
 	return EntriesList{
 		NewItemOutput(
@@ -102,6 +109,7 @@ func GenItemOnlyEntryRand(itemName string) EntriesList {
 	}
 }
 
+// GenOneOutput is a function to generate output with one from entry list
 func GenOneOutput(n int) WeightedOutputsList {
 	wol := WeightedOutputsList{}
 	for i := 0; i < n; i++ {
@@ -113,6 +121,7 @@ func GenOneOutput(n int) WeightedOutputsList {
 	return wol
 }
 
+// GenAllOutput is a function to generate output with all of entry list
 func GenAllOutput(n int) WeightedOutputsList {
 
 	result := []int{}
@@ -128,6 +137,7 @@ func GenAllOutput(n int) WeightedOutputsList {
 	return wol
 }
 
+// GenEntries is a function to generate entries from coin name and item name
 func GenEntries(coinName string, itemName string) EntriesList {
 	return EntriesList{
 		GenCoinOnlyEntry(coinName)[0],
@@ -135,6 +145,7 @@ func GenEntries(coinName string, itemName string) EntriesList {
 	}
 }
 
+// GenEntriesRand is a function to generate entreis from coin name and item name and which has random attributes
 func GenEntriesRand(coinName, itemName string) EntriesList {
 	return EntriesList{
 		GenCoinOnlyEntryRand(coinName)[0],
@@ -142,6 +153,7 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 	}
 }
 
+// GenEntriesFirstItemNameUpgrade is a function to generate entries that update first item's name
 func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	return EntriesList{
 		NewInputRefOutput(
@@ -150,6 +162,7 @@ func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	}
 }
 
+// GenModifyParamsForString is a function to generate modify params from string key and value
 func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
 	return ItemModifyParams{
 		Strings: StringParamList{
@@ -158,6 +171,7 @@ func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
 	}
 }
 
+// GenModifyParamsForLong is a function to generate modify params from long key and value
 func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParams {
 	return ItemModifyParams{
 		Longs: []LongParam{
@@ -175,6 +189,7 @@ func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParam
 	}
 }
 
+// GenModifyParamsForDouble is a function to generate modify params from double key and value
 func GenModifyParamsForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
 	return ItemModifyParams{
 		Doubles: []DoubleParam{

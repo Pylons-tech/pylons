@@ -11,6 +11,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// CreateCBResponse is a struct of create cookbook response
 type CreateCBResponse struct {
 	CookbookID string `json:"CookbookID"`
 }
@@ -59,7 +60,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, errInternal(err)
 	}
 
-	return marshalJson(CreateCBResponse{
+	return marshalJSON(CreateCBResponse{
 		cb.ID,
 	})
 }

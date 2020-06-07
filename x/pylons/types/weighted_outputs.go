@@ -16,6 +16,7 @@ func (ol WeightedOutputs) String() string {
 	return fmt.Sprintf("WeightedOutputs{ResultEntries: %v, Weight: %v}", ol.ResultEntries, ol.Weight)
 }
 
+// GetWeight calculate weight value using program
 func (ol WeightedOutputs) GetWeight(ec CelEnvCollection) (int, error) {
 	refVal, refErr := ec.Eval(ol.Weight)
 	if refErr != nil {
@@ -36,10 +37,10 @@ func (ol WeightedOutputs) GetWeight(ec CelEnvCollection) (int, error) {
 // ItemOutput and CoinOutput is possible in current stage
 type WeightedOutputsList []WeightedOutputs
 
-func (wpl WeightedOutputsList) String() string {
+func (wol WeightedOutputsList) String() string {
 	itm := "WeightedOutputsList{"
 
-	for _, output := range wpl {
+	for _, output := range wol {
 		itm += output.String() + ",\n"
 	}
 
@@ -47,6 +48,7 @@ func (wpl WeightedOutputsList) String() string {
 	return itm
 }
 
+// Actualize generate result entries from WeightedOutputsList
 func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]int, error) {
 	lastWeight := 0
 	var weights []int

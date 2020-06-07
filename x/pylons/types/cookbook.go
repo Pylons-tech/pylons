@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
+// TypeCookbook is a store key for cookbook
 const TypeCookbook = "cookbook"
 
 // Cookbook is a struct that contains all the metadata of a cookbook

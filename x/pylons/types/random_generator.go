@@ -13,6 +13,7 @@ import (
 //   	...
 // }
 
+// RandomSeed calculate random seed from context and entity count
 func RandomSeed(ctx sdk.Context, entityCount int) int64 {
 	header := ctx.BlockHeader()
 	appHash := header.AppHash
@@ -22,18 +23,20 @@ func RandomSeed(ctx sdk.Context, entityCount int) int64 {
 		seedValue = (i*i + 1) * intv
 	}
 	fmt.Println("RandomSeed entityCount:", entityCount, "BlockHeight:", header.Height)
-	return int64(seedValue+entityCount)
+	return int64(seedValue + entityCount)
 }
 
-type Reader struct {}
+// Reader struct is for entropy set on uuid
+type Reader struct{}
 
+// NewEntropyReader create an entropy reader
 func NewEntropyReader() *Reader {
 	return &Reader{}
 }
 
 func (r Reader) Read(b []byte) (n int, err error) {
 	entropy := []byte{}
-	for i := 0; i < len(b); i ++ {
+	for i := 0; i < len(b); i++ {
 		entropy = append(entropy, byte(rand.Intn(256)))
 	}
 

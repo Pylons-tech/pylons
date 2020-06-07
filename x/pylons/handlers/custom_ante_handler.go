@@ -38,12 +38,14 @@ type AccountCreationDecorator struct {
 	ak keeper.AccountKeeper
 }
 
+// NewAccountCreationDecorator automatically create account if account is not exist already
 func NewAccountCreationDecorator(ak keeper.AccountKeeper) AccountCreationDecorator {
 	return AccountCreationDecorator{
 		ak: ak,
 	}
 }
 
+// AnteHandle is a handler for NewAccountCreationDecorator
 func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
 	fmt.Println("Running NewAccountCreationDecorator...")
 	sigTx, ok := tx.(types.StdTx)
@@ -74,16 +76,19 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	return next(ctx, tx, simulate)
 }
 
+// CustomSigVerificationDecorator is a custom verification decorator designed for get_pylons
 type CustomSigVerificationDecorator struct {
 	ak keeper.AccountKeeper
 }
 
+// NewCustomSigVerificationDecorator automatically sign transaction if it's get-pylons msg
 func NewCustomSigVerificationDecorator(ak keeper.AccountKeeper) CustomSigVerificationDecorator {
 	return CustomSigVerificationDecorator{
 		ak: ak,
 	}
 }
 
+// AnteHandle is a handler for CustomSigVerificationDecorator
 func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
 	// no need to verify signatures on recheck tx
 	if ctx.IsReCheckTx() {

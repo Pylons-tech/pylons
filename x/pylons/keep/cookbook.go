@@ -1,9 +1,9 @@
 package keep
 
 import (
-	"strings"
 	"encoding/json"
 	"errors"
+	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -67,7 +67,7 @@ func (k Keeper) GetCookbookBySender(ctx sdk.Context, sender sdk.AccAddress) ([]t
 	return cookbooks, nil
 }
 
-// GetCookbooks returns all cookbooks
+// GetAllCookbooks returns all cookbooks
 func (k Keeper) GetAllCookbooks(ctx sdk.Context) ([]types.Cookbook, error) {
 
 	var cookbooks []types.Cookbook
@@ -85,7 +85,7 @@ func (k Keeper) GetAllCookbooks(ctx sdk.Context) ([]types.Cookbook, error) {
 	return cookbooks, nil
 }
 
-// GetCookbookCount returns the cookbook count returns 0 if no cookbook is found
+// GetAllCookbooksCount returns the cookbook count returns 0 if no cookbook is found
 func (k Keeper) GetAllCookbooksCount(ctx sdk.Context) int {
 	cookbooks, _ := k.GetAllCookbooks(ctx)
 	return len(cookbooks)

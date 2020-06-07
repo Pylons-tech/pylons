@@ -15,6 +15,7 @@ type CheckExecutionResp struct {
 	Output  []byte
 }
 
+// SafeExecute execute a msg and returns result
 func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
 	// TODO: send the coins to a master address instead of burning them
 	// think about making this adding and subtracting atomic using inputoutputcoins method
@@ -63,7 +64,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	}
 
 	if exec.Completed {
-		return marshalJson(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResp{
 			Message: "execution already completed",
 			Status:  "Completed",
 		})
@@ -75,7 +76,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 			return nil, errInternal(err2)
 		}
 
-		return marshalJson(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResp{
 			Message: "successfully completed the execution",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -106,19 +107,19 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 				return nil, errInternal(err2)
 			}
 
-			return marshalJson(CheckExecutionResp{
+			return marshalJSON(CheckExecutionResp{
 				Message: "successfully paid to complete the execution",
 				Status:  "Success",
 				Output:  outputSTR,
 			})
 		}
-		return marshalJson(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResp{
 			Message: "insufficient balance to complete the execution",
 			Status:  "Failure",
 		})
 
 	}
-	return marshalJson(CheckExecutionResp{
+	return marshalJSON(CheckExecutionResp{
 		Message: "execution pending",
 		Status:  "Pending",
 	})

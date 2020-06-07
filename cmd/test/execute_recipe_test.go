@@ -1,13 +1,13 @@
-package intTest
+package inttest
 
 import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	intTestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
 func TestExecuteRecipeViaCLI(originT *originT.T) {
@@ -31,28 +31,28 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
-			intTestSDK.ErrValidation(t, "error mocking recipe %+v", err)
+			inttestSDK.ErrValidation(t, "error mocking recipe %+v", err)
 
-			rcp, err := intTestSDK.GetRecipeByGUID(guid)
+			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.MustNil(err)
 
-			eugenAddr := intTestSDK.GetAccountAddr("eugen", t)
+			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := intTestSDK.TestTxWithMsgWithNonce(
+			txhash := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
 				"eugen",
 				false,
 			)
 
-			_, err = intTestSDK.WaitAndGetTxData(txhash, 3, t)
-			intTestSDK.ErrValidation(t, "error waiting for transaction %+v", err)
-			// intTestSDK.WaitForNextBlock()
-			items, err := intTestSDK.ListItemsViaCLI("")
-			intTestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
+			inttestSDK.ErrValidation(t, "error waiting for transaction %+v", err)
+			// inttestSDK.WaitForNextBlock()
+			items, err := inttestSDK.ListItemsViaCLI("")
+			inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
 
-			_, ok := intTestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
+			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 			t.MustTrue(ok)
 		})
 	}
