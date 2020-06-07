@@ -58,9 +58,10 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	for _, itemInput := range p.recipe.ItemInputs {
 		matches = false
 
-		for _, item := range inputItems {
+		for iii, item := range inputItems {
 			if itemInput.Matches(item) && len(item.OwnerRecipeID) == 0 {
 				matchedItems = append(matchedItems, item)
+				inputItems[iii].OwnerRecipeID = p.recipe.ID
 				matches = true
 				break
 			}
@@ -147,6 +148,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 				// Collect itemInputRefs that are used on output
 				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ModifyItem.ItemInputRef)
 
+				fmt.Println("itemOutput.ModifyItem.ItemInputRef", itemOutput.ModifyItem.ItemInputRef)
 				// Modify item according to ModifyParams section
 				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ModifyItem.ItemInputRef], itemOutput.ModifyItem)
 				if err != nil {
@@ -207,6 +209,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
 			targetItem.Longs[lngKey].Value += lng.Value
 		} else {
+			fmt.Printf("updating long key [%s] from %d to %d\n", lng.Key, targetItem.Longs[lngKey].Value, lng.Value)
 			targetItem.Longs[lngKey].Value = lng.Value
 		}
 	}
