@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
 )
 
 // TypeTrade is a store key for trade
@@ -56,7 +55,7 @@ func NewTrade(extraInfo string,
 		Sender:      sender,
 	}
 
-	trd.ID = trd.KeyGen()
+	trd.ID = KeyGen(sender)
 	return trd
 }
 
@@ -73,10 +72,4 @@ func (trd *Trade) String() string {
 		trd.CoinOutputs.String(),
 		trd.ItemOutputs,
 	)
-}
-
-// KeyGen generates key for the store
-func (trd Trade) KeyGen() string {
-	id := uuid.New()
-	return trd.Sender.String() + id.String()
 }

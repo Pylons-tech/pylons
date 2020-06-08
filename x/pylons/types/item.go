@@ -5,7 +5,6 @@ import (
 	"reflect"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
 )
 
 // TypeItem is a store key for item
@@ -117,12 +116,6 @@ func (it Item) SetString(key string, value string) bool {
 	return false
 }
 
-// KeyGen generates key for the store
-func (it Item) KeyGen() string {
-	id := uuid.New()
-	return it.Sender.String() + id.String()
-}
-
 func (it Item) String() string {
 	return fmt.Sprintf(`
 	Item{ 
@@ -163,6 +156,6 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Tradable:   true,
 		LastUpdate: BlockHeight,
 	}
-	item.ID = item.KeyGen()
+	item.ID = KeyGen(sender)
 	return item
 }
