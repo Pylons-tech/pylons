@@ -7,7 +7,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgUpdateItemString defines a SendPylons message
+// MsgUpdateItemString defines a UpdateItemString message
 type MsgUpdateItemString struct {
 	Field  string
 	Value  string
