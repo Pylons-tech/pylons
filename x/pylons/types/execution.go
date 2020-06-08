@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
 )
 
 // TypeExecution is a store key for execution
@@ -44,14 +43,8 @@ func NewExecution(rcpID string, cbID string, ci sdk.Coins,
 		Completed:   completed,
 	}
 
-	exec.ID = exec.KeyGen()
+	exec.ID = KeyGen(sender)
 	return exec
-}
-
-// KeyGen generates key for the execution
-func (e Execution) KeyGen() string {
-	id := uuid.New()
-	return e.Sender.String() + id.String()
 }
 
 func (e Execution) String() string {

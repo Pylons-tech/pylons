@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/google/uuid"
 )
 
 // TypeRecipe is a store key for recipe
@@ -59,7 +58,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 		Sender:        sender,
 	}
 
-	rcp.ID = rcp.KeyGen()
+	rcp.ID = KeyGen(sender)
 	return rcp
 }
 
@@ -77,10 +76,4 @@ func (rcp Recipe) String() string {
 		rcp.ItemInputs.String(),
 		rcp.Entries.String(),
 		rcp.BlockInterval)
-}
-
-// KeyGen generates key for the store
-func (rcp Recipe) KeyGen() string {
-	id := uuid.New()
-	return rcp.Sender.String() + id.String()
 }
