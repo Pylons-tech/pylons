@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"math"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -279,6 +280,11 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 				[]*exprpb.Type{decls.Int},
 				decls.Int),
 		),
+		decls.NewFunction("log_int",
+			decls.NewOverload("log_int",
+				[]*exprpb.Type{decls.Int},
+				decls.Double),
+		),
 		decls.NewFunction("min_int",
 			decls.NewOverload("min_int",
 				[]*exprpb.Type{decls.Int, decls.Int},
@@ -302,6 +308,12 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			Operator: "rand_int",
 			Unary: func(arg ref.Val) ref.Val {
 				return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
+			},
+		}, &functions.Overload{
+			// operator for 1 param
+			Operator: "log_int",
+			Unary: func(arg ref.Val) ref.Val {
+				return celTypes.Double(math.Log2(float64(arg.Value().(int64))))
 			},
 		}, &functions.Overload{
 			// operator for 2 param
