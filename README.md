@@ -48,14 +48,14 @@ pylonscli config indent true
 pylonscli config trust-node true
 ```
 
-- To create initial accounts which is going to used for local testing of integration test, Run
+- Multinode integration test is using init-account.sh. It does not use get-pylons but use the public genesis account for the tests accounts setup.
+- For local genesis accounts setup for integration test, you can use `init-accounts.local.sh` file.
 
 ```
-  sh init-accounts.sh
+sh init-accounts.local.sh
 ```
 
-`michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run.
-And each account will have 10000000pylons and 10000000 owncoin.
+`michael`, `eugen` account will be created after success run and will have loudcoin and pylons denom for tests.
 
 - start the `pylonsd` node
 
@@ -280,6 +280,8 @@ cloud-build-local --config=cloudbuild.3ntest.yaml --dryrun=false .
 ```
 
 # How to query transactions
+
+TODO: pylonscli query txs command is removed or updated for cosmos sdk upgrade. We need to find correct querying functions and update the document
 
 These are useful commands to query transactions by tags.
 
