@@ -281,6 +281,8 @@ cloud-build-local --config=cloudbuild.3ntest.yaml --dryrun=false .
 
 # How to query transactions
 
+TODO: pylonscli query txs command is removed or updated for cosmos sdk upgrade. We need to find correct querying functions and update the document
+
 These are useful commands to query transactions by tags.
 
 ```
