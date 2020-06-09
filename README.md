@@ -48,19 +48,14 @@ pylonscli config indent true
 pylonscli config trust-node true
 ```
 
-- To create initial accounts which is going to used for local testing of integration test. Run
-
-```
-sh init-accounts.sh
-```
-If you want to setup local genesis block, you can use `init-accounts.local.sh` file instead. Run
+- Multinode integration test is using init-account.sh. It does not use get-pylons but use the public genesis account for the tests accounts setup.
+- For local genesis accounts setup for integration test, you can use `init-accounts.local.sh` file.
 
 ```
 sh init-accounts.local.sh
 ```
 
-`michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run.
-And each account will have 10000000pylons and 10000000 owncoin.
+`michael`, `eugen` account will be created after success run and will have loudcoin and pylons denom for tests.
 
 - start the `pylonsd` node
 
