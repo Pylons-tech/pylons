@@ -23,5 +23,6 @@ func TestFixturesViaCLI(t *testing.T) {
 	if useRest {
 		inttestSDK.CLIOpts.RestEndpoint = "http://localhost:1317"
 	}
+	fixturetestSDK.RegisterDefaultActionRunners()
 	fixturetestSDK.RunTestScenarios("scenarios", t)
 }
