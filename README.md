@@ -48,10 +48,15 @@ pylonscli config indent true
 pylonscli config trust-node true
 ```
 
-- To create initial accounts which is going to used for local testing of integration test, Run
+- To create initial accounts which is going to used for local testing of integration test. Run
 
 ```
-  sh init-accounts.sh
+sh init-accounts.sh
+```
+If you want to setup local genesis block, you can use `init-accounts.local.sh` file instead. Run
+
+```
+sh init-accounts.local.sh
 ```
 
 `michael`, `iain`, `afti`, `girish`, `eugen` account will be created after success run.
