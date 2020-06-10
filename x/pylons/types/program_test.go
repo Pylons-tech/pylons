@@ -150,7 +150,7 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	// error check
 	flo64, err = ec.EvalFloat64(`log2(-1.0)`)
 	t.Log(`log2(-1.0)`, flo64, err)
-	// require.True(t, flo64 == math.Inf(-1))
+	require.True(t, math.IsNaN(flo64))
 	require.True(t, err == nil)
 
 	// multiply function test with 2 param
