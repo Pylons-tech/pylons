@@ -9,7 +9,7 @@ import (
 func TestIntWeightTable_NoRandomization(t *testing.T) {
 	iwt := IntWeightTable{
 		WeightRanges: []IntWeightRange{
-			IntWeightRange{
+			{
 				Lower:  100,
 				Upper:  100,
 				Weight: 1,

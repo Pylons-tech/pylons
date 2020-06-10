@@ -62,24 +62,24 @@ func GenItemOnlyEntry(itemName string) EntriesList {
 	return EntriesList{
 		NewItemOutput(
 			DoubleParamList{DoubleParam{Key: "endurance", DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
-				DoubleWeightRange{
+				{
 					Lower:  "100.00",
 					Upper:  "500.00",
 					Weight: 6,
 				},
-				DoubleWeightRange{
+				{
 					Lower:  "501.00",
 					Upper:  "800.00",
 					Weight: 2,
 				},
 			}}, Rate: "1.0"}},
 			LongParamList{LongParam{Key: "HP", IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
-				IntWeightRange{
+				{
 					Lower:  100,
 					Upper:  500,
 					Weight: 6,
 				},
-				IntWeightRange{
+				{
 					Lower:  501,
 					Upper:  800,
 					Weight: 2,
@@ -178,7 +178,7 @@ func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParam
 			{
 				Key: targetKey,
 				IntWeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
-					IntWeightRange{
+					{
 						Lower:  upgradeAmount,
 						Upper:  upgradeAmount,
 						Weight: 1,
@@ -196,7 +196,7 @@ func GenModifyParamsForDouble(targetKey string, upgradeAmount FloatString) ItemM
 			{
 				Key: targetKey,
 				DoubleWeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
-					DoubleWeightRange{
+					{
 						Lower:  upgradeAmount,
 						Upper:  upgradeAmount,
 						Weight: 1,
