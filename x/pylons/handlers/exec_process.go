@@ -288,15 +288,33 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 				[]*exprpb.Type{decls.Int},
 				decls.Double),
 		),
-		decls.NewFunction("min_int",
-			decls.NewOverload("min_int",
+		decls.NewFunction("min",
+			decls.NewOverload("min_int_int",
 				[]*exprpb.Type{decls.Int, decls.Int},
 				decls.Int),
+			decls.NewOverload("min_double_double",
+				[]*exprpb.Type{decls.Double, decls.Double},
+				decls.Double),
+			decls.NewOverload("min_int_double",
+				[]*exprpb.Type{decls.Int, decls.Double},
+				decls.Double),
+			decls.NewOverload("min_double_int",
+				[]*exprpb.Type{decls.Double, decls.Int},
+				decls.Double),
 		),
 		decls.NewFunction("max_int",
-			decls.NewOverload("max_int",
+			decls.NewOverload("max_int_int",
 				[]*exprpb.Type{decls.Int, decls.Int},
 				decls.Int),
+			decls.NewOverload("max_double_double",
+				[]*exprpb.Type{decls.Double, decls.Double},
+				decls.Double),
+			decls.NewOverload("max_int_double",
+				[]*exprpb.Type{decls.Int, decls.Double},
+				decls.Double),
+			decls.NewOverload("max_double_int",
+				[]*exprpb.Type{decls.Double, decls.Int},
+				decls.Double),
 		),
 		decls.NewFunction("block_since",
 			decls.NewOverload("block_since",
@@ -326,7 +344,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			},
 		}, &functions.Overload{
 			// operator for 2 param
-			Operator: "min_int",
+			Operator: "min_int_int",
 			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
 				lftInt64 := lhs.Value().(int64)
 				rgtInt64 := rhs.Value().(int64)
@@ -334,6 +352,39 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 					return celTypes.Int(rgtInt64)
 				}
 				return celTypes.Int(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 2 param
+			Operator: "min_double_double",
+			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+				lftInt64 := lhs.Value().(float64)
+				rgtInt64 := rhs.Value().(float64)
+				if lftInt64 > rgtInt64 {
+					return celTypes.Double(rgtInt64)
+				}
+				return celTypes.Double(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 2 param
+			Operator: "min_int_double",
+			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+				lftInt64 := float64(lhs.Value().(int64))
+				rgtInt64 := rhs.Value().(float64)
+				if lftInt64 > rgtInt64 {
+					return celTypes.Double(rgtInt64)
+				}
+				return celTypes.Double(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 2 param
+			Operator: "min_double_int",
+			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+				lftInt64 := lhs.Value().(float64)
+				rgtInt64 := float64(rhs.Value().(int64))
+				if lftInt64 > rgtInt64 {
+					return celTypes.Double(rgtInt64)
+				}
+				return celTypes.Double(lftInt64)
 			},
 		}, &functions.Overload{
 			// operator for 2 param

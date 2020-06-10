@@ -49,10 +49,33 @@ func TestProgramWorkAsExpected(t *testing.T) {
 					[]*exprpb.Type{decls.Int, decls.Int},
 					decls.Int),
 			),
-			decls.NewFunction("min_int",
-				decls.NewOverload("min_int",
+			decls.NewFunction("min",
+				decls.NewOverload("min_int_int",
 					[]*exprpb.Type{decls.Int, decls.Int},
 					decls.Int),
+				decls.NewOverload("min_double_double",
+					[]*exprpb.Type{decls.Double, decls.Double},
+					decls.Double),
+				decls.NewOverload("min_int_double",
+					[]*exprpb.Type{decls.Int, decls.Double},
+					decls.Double),
+				decls.NewOverload("min_double_int",
+					[]*exprpb.Type{decls.Double, decls.Int},
+					decls.Double),
+			),
+			decls.NewFunction("max",
+				decls.NewOverload("max_int_int",
+					[]*exprpb.Type{decls.Int, decls.Int},
+					decls.Int),
+				decls.NewOverload("max_double_double",
+					[]*exprpb.Type{decls.Double, decls.Double},
+					decls.Double),
+				decls.NewOverload("max_int_double",
+					[]*exprpb.Type{decls.Int, decls.Double},
+					decls.Double),
+				decls.NewOverload("max_double_int",
+					[]*exprpb.Type{decls.Double, decls.Int},
+					decls.Double),
 			),
 		),
 	)
@@ -97,7 +120,7 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		},
 	}, &functions.Overload{
 		// operator for 2 param
-		Operator: "min_int",
+		Operator: "min_int_int",
 		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
 			lftInt64 := lhs.Value().(int64)
 			rgtInt64 := rhs.Value().(int64)
@@ -105,6 +128,83 @@ func TestProgramWorkAsExpected(t *testing.T) {
 				return types.Int(rgtInt64)
 			}
 			return types.Int(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "min_double_double",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := lhs.Value().(float64)
+			rgtInt64 := rhs.Value().(float64)
+			if lftInt64 > rgtInt64 {
+				return types.Double(rgtInt64)
+			}
+			return types.Double(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "min_int_double",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := float64(lhs.Value().(int64))
+			rgtInt64 := rhs.Value().(float64)
+			if lftInt64 > rgtInt64 {
+				return types.Double(rgtInt64)
+			}
+			return types.Double(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "min_double_int",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := lhs.Value().(float64)
+			rgtInt64 := float64(rhs.Value().(int64))
+			if lftInt64 > rgtInt64 {
+				return types.Double(rgtInt64)
+			}
+			return types.Double(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "max_int_int",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := lhs.Value().(int64)
+			rgtInt64 := rhs.Value().(int64)
+			if lftInt64 < rgtInt64 {
+				return types.Int(rgtInt64)
+			}
+			return types.Int(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "max_double_double",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := lhs.Value().(float64)
+			rgtInt64 := rhs.Value().(float64)
+			if lftInt64 < rgtInt64 {
+				return types.Double(rgtInt64)
+			}
+			return types.Double(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "max_int_double",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := float64(lhs.Value().(int64))
+			rgtInt64 := rhs.Value().(float64)
+			if lftInt64 < rgtInt64 {
+				return types.Double(rgtInt64)
+			}
+			return types.Double(lftInt64)
+		},
+	}, &functions.Overload{
+		// operator for 2 param
+		Operator: "max_double_int",
+		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+			lftInt64 := lhs.Value().(float64)
+			rgtInt64 := float64(rhs.Value().(int64))
+			if lftInt64 < rgtInt64 {
+				return types.Double(rgtInt64)
+			}
+			return types.Double(lftInt64)
 		},
 	})
 
@@ -173,10 +273,46 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, val64 == 132)
 	require.True(t, err == nil)
 
-	// multiply function test with 2 param
-	val64, err = ec.EvalInt64(`min_int(10, 11)`)
-	t.Log(`min_int(10, 11)`, val64, err)
+	// min function test with 2 param
+	val64, err = ec.EvalInt64(`min(10, 11)`)
+	t.Log(`min(10, 11)`, val64, err)
 	require.True(t, val64 == 10)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`min(9.67, 10)`)
+	t.Log(`min(9.67, 10)`, flo64, err)
+	require.True(t, flo64 == 9.67)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`min(12.322, 8)`)
+	t.Log(`min(12.322, 8)`, flo64, err)
+	require.True(t, flo64 == 8)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`min(7.86, 8.9)`)
+	t.Log(`min(7.86, 8.9)`, flo64, err)
+	require.True(t, flo64 == 7.86)
+	require.True(t, err == nil)
+
+	// max function test with 2 param
+	val64, err = ec.EvalInt64(`max(10, 11)`)
+	t.Log(`max(10, 11)`, val64, err)
+	require.True(t, val64 == 11)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`max(9.67, 10)`)
+	t.Log(`max(9.67, 10)`, flo64, err)
+	require.True(t, flo64 == 10)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`max(12.322, 8)`)
+	t.Log(`max(12.322, 8)`, flo64, err)
+	require.True(t, flo64 == 12.322)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`max(7.86, 8.9)`)
+	t.Log(`max(7.86, 8.9)`, flo64, err)
+	require.True(t, flo64 == 8.9)
 	require.True(t, err == nil)
 
 	// int type conversion test
