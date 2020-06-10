@@ -281,8 +281,11 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 				decls.Int),
 		),
 		decls.NewFunction("log2",
-			decls.NewOverload("log2",
+			decls.NewOverload("log2_double",
 				[]*exprpb.Type{decls.Double},
+				decls.Double),
+			decls.NewOverload("log2_int",
+				[]*exprpb.Type{decls.Int},
 				decls.Double),
 		),
 		decls.NewFunction("min_int",
@@ -311,9 +314,15 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			},
 		}, &functions.Overload{
 			// operator for 1 param
-			Operator: "log2",
+			Operator: "log2_double",
 			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Double(math.Log2(float64(arg.Value().(float64))))
+				return celTypes.Double(math.Log2(arg.Value().(float64)))
+			},
+		}, &functions.Overload{
+			// operator for 1 param
+			Operator: "log2_int",
+			Unary: func(arg ref.Val) ref.Val {
+				return celTypes.Double(math.Log2(float64(arg.Value().(int64))))
 			},
 		}, &functions.Overload{
 			// operator for 2 param
