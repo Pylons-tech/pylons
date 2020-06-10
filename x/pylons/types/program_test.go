@@ -1,8 +1,8 @@
 package types
 
 import (
-	"math/rand"
 	"math"
+	"math/rand"
 	"testing"
 
 	"github.com/google/cel-go/cel"
@@ -35,9 +35,9 @@ func TestProgramWorkAsExpected(t *testing.T) {
 					decls.Int),
 			),
 			// global function for 1 param
-			decls.NewFunction("log_int",
-				decls.NewOverload("log_int",
-					[]*exprpb.Type{decls.Int},
+			decls.NewFunction("log2",
+				decls.NewOverload("log2",
+					[]*exprpb.Type{decls.Double},
 					decls.Double),
 			),
 			// global function for 2 param
@@ -76,9 +76,9 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		},
 	}, &functions.Overload{
 		// operator for 1 param
-		Operator: "log_int",
+		Operator: "log2",
 		Unary: func(arg ref.Val) ref.Val {
-			return types.Double(math.Log2(float64(arg.Value().(int64))))
+			return types.Double(math.Log2(float64(arg.Value().(float64))))
 		},
 	}, &functions.Overload{
 		// operator for 2 param
@@ -136,8 +136,8 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, err == nil)
 
 	// random generation test with 1 param
-	flo64, err = ec.EvalFloat64(`log_int(1024)`)
-	t.Log(`log_int(1024)`, flo64, err)
+	flo64, err = ec.EvalFloat64(`log2(1024.0)`)
+	t.Log(`log2(1024)`, flo64, err)
 	require.True(t, flo64 == 10)
 	require.True(t, err == nil)
 

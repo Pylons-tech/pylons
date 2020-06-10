@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"math/rand"
 	"math"
+	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -280,9 +280,9 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 				[]*exprpb.Type{decls.Int},
 				decls.Int),
 		),
-		decls.NewFunction("log_int",
-			decls.NewOverload("log_int",
-				[]*exprpb.Type{decls.Int},
+		decls.NewFunction("log2",
+			decls.NewOverload("log2",
+				[]*exprpb.Type{decls.Double},
 				decls.Double),
 		),
 		decls.NewFunction("min_int",
@@ -311,9 +311,9 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			},
 		}, &functions.Overload{
 			// operator for 1 param
-			Operator: "log_int",
+			Operator: "log2",
 			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Double(math.Log2(float64(arg.Value().(int64))))
+				return celTypes.Double(math.Log2(float64(arg.Value().(float64))))
 			},
 		}, &functions.Overload{
 			// operator for 2 param
