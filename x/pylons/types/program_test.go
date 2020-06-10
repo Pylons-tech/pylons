@@ -36,8 +36,11 @@ func TestProgramWorkAsExpected(t *testing.T) {
 			),
 			// global function for 1 param
 			decls.NewFunction("log2",
-				decls.NewOverload("log2",
+				decls.NewOverload("log2_double",
 					[]*exprpb.Type{decls.Double},
+					decls.Double),
+				decls.NewOverload("log2_int",
+					[]*exprpb.Type{decls.Int},
 					decls.Double),
 			),
 			// global function for 2 param
@@ -76,9 +79,15 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		},
 	}, &functions.Overload{
 		// operator for 1 param
-		Operator: "log2",
+		Operator: "log2_double",
 		Unary: func(arg ref.Val) ref.Val {
-			return types.Double(math.Log2(float64(arg.Value().(float64))))
+			return types.Double(math.Log2(arg.Value().(float64)))
+		},
+	}, &functions.Overload{
+		// operator for 1 param
+		Operator: "log2_int",
+		Unary: func(arg ref.Val) ref.Val {
+			return types.Double(math.Log2(float64(arg.Value().(int64))))
 		},
 	}, &functions.Overload{
 		// operator for 2 param
@@ -141,9 +150,14 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, flo64 == 10)
 	require.True(t, err == nil)
 
+	flo64, err = ec.EvalFloat64(`log2(1024)`)
+	t.Log(`log2(1024)`, flo64, err)
+	require.True(t, flo64 == 10)
+	require.True(t, err == nil)
+
 	// error check
-	flo64, err = ec.EvalFloat64(`log2(0.0)`)
-	t.Log(`log2(0.0)`, flo64, err)
+	flo64, err = ec.EvalFloat64(`log2(0)`)
+	t.Log(`log2(0)`, flo64, err)
 	require.True(t, flo64 == math.Inf(-1))
 	require.True(t, err == nil)
 
