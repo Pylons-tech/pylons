@@ -38,7 +38,7 @@ func GenCoinOnlyEntryRand(coinName string) EntriesList {
 	return EntriesList{
 		CoinOutput{
 			Coin:  coinName,
-			Count: `rand_int(10)+1`,
+			Count: `rand(10)+1`,
 		},
 	}
 }
@@ -101,7 +101,7 @@ func GenItemOnlyEntryRand(itemName string) EntriesList {
 			}},
 			LongParamList{LongParam{
 				Key:     "HP",
-				Program: `500 + rand_int(300)`,
+				Program: `500 + rand(300)`,
 				Rate:    "1.0",
 			}},
 			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},

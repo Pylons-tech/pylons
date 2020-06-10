@@ -29,10 +29,13 @@ func TestProgramWorkAsExpected(t *testing.T) {
 					decls.Int),
 			),
 			// global function for 1 param
-			decls.NewFunction("rand_int",
+			decls.NewFunction("rand",
 				decls.NewOverload("rand_int",
 					[]*exprpb.Type{decls.Int},
 					decls.Int),
+				decls.NewOverload("rand",
+					[]*exprpb.Type{},
+					decls.Double),
 			),
 			// global function for 1 param
 			decls.NewFunction("log2",
@@ -99,6 +102,12 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		Operator: "rand_int",
 		Unary: func(arg ref.Val) ref.Val {
 			return types.Int(rand.Intn(int(arg.Value().(int64))))
+		},
+	}, &functions.Overload{
+		// operator for 1 param
+		Operator: "rand",
+		Function: func(args ...ref.Val) ref.Val {
+			return types.Double(rand.Float64())
 		},
 	}, &functions.Overload{
 		// operator for 1 param
@@ -240,8 +249,12 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, err == nil)
 
 	// random generation test with 1 param
-	val64, err = ec.EvalInt64(`rand_int(11)`)
-	t.Log(`rand_int(11)`, val64, err)
+	val64, err = ec.EvalInt64(`rand(11)`)
+	t.Log(`rand(11)`, val64, err)
+	require.True(t, err == nil)
+
+	flo64, err = ec.EvalFloat64(`rand()`)
+	t.Log(`rand()`, flo64, err)
 	require.True(t, err == nil)
 
 	// random generation test with 1 param
@@ -333,9 +346,9 @@ func TestProgramWorkAsExpected(t *testing.T) {
 	require.True(t, valstr == "2.5")
 	require.True(t, err == nil)
 
-	// rand_int, double, multiply and int merge test
-	val64, err = ec.EvalInt64(`int(5.0 * double(rand_int(2)+4) )`)
-	t.Log(`int(5.0 * double(rand_int(2)+4) )`, val64, err)
+	// rand, double, multiply and int merge test
+	val64, err = ec.EvalInt64(`int(5.0 * double(rand(2)+4) )`)
+	t.Log(`int(5.0 * double(rand(2)+4) )`, val64, err)
 	require.True(t, val64 == 20 || val64 == 25 || val64 == 30)
 	require.True(t, err == nil)
 

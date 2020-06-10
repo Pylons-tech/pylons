@@ -12,7 +12,7 @@
             "CoinOutputs": [
               {
                 "Coin": "loudcoin",
-                "Count": "rand_int(5)+1"
+                "Count": "rand(5)+1"
               }
             ],
             "ItemOutputs": []

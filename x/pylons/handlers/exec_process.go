@@ -275,10 +275,13 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	}
 
 	varDefs = append(varDefs,
-		decls.NewFunction("rand_int",
+		decls.NewFunction("rand",
 			decls.NewOverload("rand_int",
 				[]*exprpb.Type{decls.Int},
 				decls.Int),
+			decls.NewOverload("rand",
+				[]*exprpb.Type{},
+				decls.Double),
 		),
 		decls.NewFunction("log2",
 			decls.NewOverload("log2_double",
@@ -329,6 +332,12 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			Operator: "rand_int",
 			Unary: func(arg ref.Val) ref.Val {
 				return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
+			},
+		}, &functions.Overload{
+			// operator for 1 param
+			Operator: "rand",
+			Function: func(args ...ref.Val) ref.Val {
+				return celTypes.Double(rand.Float64())
 			},
 		}, &functions.Overload{
 			// operator for 1 param
