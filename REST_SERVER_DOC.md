@@ -63,6 +63,25 @@ Sample Result
 }
 ```
 
+Shorten recipes
+```
+http://localhost:1317/pylons/list_shorten_recipe
+```
+Sample Result
+```
+{
+    "Recipes": [
+      {
+        "ID": "CosWar-expedition-fight-v0.0.0-1589853721",
+        "CookbookID": "coswar-v0.0.0-1589853721",
+        "Name": "this recipe is used to do expedition fight.",
+        "Description": "this recipe is used to do expedition fight.",
+        "Sender": "cosmos1tqvdp4rc28zklnk8mwxh94gdlel0s58tcwdrj9"
+      }
+    ]
+}
+```
+
 ### items
 
 Format
