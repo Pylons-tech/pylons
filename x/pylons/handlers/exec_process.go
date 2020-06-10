@@ -388,7 +388,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			},
 		}, &functions.Overload{
 			// operator for 2 param
-			Operator: "max_int",
+			Operator: "max_int_int",
 			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
 				lftInt64 := lhs.Value().(int64)
 				rgtInt64 := rhs.Value().(int64)
@@ -396,6 +396,39 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 					return celTypes.Int(rgtInt64)
 				}
 				return celTypes.Int(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 2 param
+			Operator: "max_double_double",
+			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+				lftInt64 := lhs.Value().(float64)
+				rgtInt64 := rhs.Value().(float64)
+				if lftInt64 < rgtInt64 {
+					return celTypes.Double(rgtInt64)
+				}
+				return celTypes.Double(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 2 param
+			Operator: "max_int_double",
+			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+				lftInt64 := float64(lhs.Value().(int64))
+				rgtInt64 := rhs.Value().(float64)
+				if lftInt64 < rgtInt64 {
+					return celTypes.Double(rgtInt64)
+				}
+				return celTypes.Double(lftInt64)
+			},
+		}, &functions.Overload{
+			// operator for 2 param
+			Operator: "max_double_int",
+			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
+				lftInt64 := lhs.Value().(float64)
+				rgtInt64 := float64(rhs.Value().(int64))
+				if lftInt64 < rgtInt64 {
+					return celTypes.Double(rgtInt64)
+				}
+				return celTypes.Double(lftInt64)
 			},
 		}, &functions.Overload{
 			// operator for 1 param
