@@ -305,7 +305,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 				[]*exprpb.Type{decls.Double, decls.Int},
 				decls.Double),
 		),
-		decls.NewFunction("max_int",
+		decls.NewFunction("max",
 			decls.NewOverload("max_int_int",
 				[]*exprpb.Type{decls.Int, decls.Int},
 				decls.Int),
