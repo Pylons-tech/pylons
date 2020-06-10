@@ -137,8 +137,20 @@ func TestProgramWorkAsExpected(t *testing.T) {
 
 	// random generation test with 1 param
 	flo64, err = ec.EvalFloat64(`log2(1024.0)`)
-	t.Log(`log2(1024)`, flo64, err)
+	t.Log(`log2(1024.0)`, flo64, err)
 	require.True(t, flo64 == 10)
+	require.True(t, err == nil)
+
+	// error check
+	flo64, err = ec.EvalFloat64(`log2(0.0)`)
+	t.Log(`log2(0.0)`, flo64, err)
+	require.True(t, flo64 == math.Inf(-1))
+	require.True(t, err == nil)
+
+	// error check
+	flo64, err = ec.EvalFloat64(`log2(-1.0)`)
+	t.Log(`log2(-1.0)`, flo64, err)
+	// require.True(t, flo64 == math.Inf(-1))
 	require.True(t, err == nil)
 
 	// multiply function test with 2 param
