@@ -2,16 +2,11 @@ package types
 
 import (
 	"math"
-	"math/rand"
 	"testing"
 
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker/decls"
-	"github.com/google/cel-go/common/types"
-	"github.com/google/cel-go/common/types/ref"
-	"github.com/google/cel-go/interpreter/functions"
 	"github.com/stretchr/testify/require"
-	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 func TestProgramWorkAsExpected(t *testing.T) {
@@ -23,63 +18,15 @@ func TestProgramWorkAsExpected(t *testing.T) {
 			decls.NewIdent("input0.attack", decls.Int, nil),
 			decls.NewIdent("input1.attack", decls.Int, nil),
 			// global function for no param
-			decls.NewFunction("rand10",
-				decls.NewOverload("rand10",
-					[]*exprpb.Type{},
-					decls.Int),
-			),
+			Rand10FuncDecls,
 			// global function for 1 param
-			decls.NewFunction("rand",
-				decls.NewOverload("rand_int",
-					[]*exprpb.Type{decls.Int},
-					decls.Int),
-				decls.NewOverload("rand",
-					[]*exprpb.Type{},
-					decls.Double),
-			),
+			RandFuncDecls,
 			// global function for 1 param
-			decls.NewFunction("log2",
-				decls.NewOverload("log2_double",
-					[]*exprpb.Type{decls.Double},
-					decls.Double),
-				decls.NewOverload("log2_int",
-					[]*exprpb.Type{decls.Int},
-					decls.Double),
-			),
+			Log2FuncDecls,
 			// global function for 2 param
-			decls.NewFunction("multiply",
-				decls.NewOverload("multiply_int_int",
-					[]*exprpb.Type{decls.Int, decls.Int},
-					decls.Int),
-			),
-			decls.NewFunction("min",
-				decls.NewOverload("min_int_int",
-					[]*exprpb.Type{decls.Int, decls.Int},
-					decls.Int),
-				decls.NewOverload("min_double_double",
-					[]*exprpb.Type{decls.Double, decls.Double},
-					decls.Double),
-				decls.NewOverload("min_int_double",
-					[]*exprpb.Type{decls.Int, decls.Double},
-					decls.Double),
-				decls.NewOverload("min_double_int",
-					[]*exprpb.Type{decls.Double, decls.Int},
-					decls.Double),
-			),
-			decls.NewFunction("max",
-				decls.NewOverload("max_int_int",
-					[]*exprpb.Type{decls.Int, decls.Int},
-					decls.Int),
-				decls.NewOverload("max_double_double",
-					[]*exprpb.Type{decls.Double, decls.Double},
-					decls.Double),
-				decls.NewOverload("max_int_double",
-					[]*exprpb.Type{decls.Int, decls.Double},
-					decls.Double),
-				decls.NewOverload("max_double_int",
-					[]*exprpb.Type{decls.Double, decls.Int},
-					decls.Double),
-			),
+			MultiplyFuncDecls,
+			MinFuncDecls,
+			MaxFuncDecls,
 		),
 	)
 	t.Log("NewEnv.err", err)
@@ -91,131 +38,22 @@ func TestProgramWorkAsExpected(t *testing.T) {
 		"input1.attack": 3,
 	}
 
-	funcs := cel.Functions(&functions.Overload{
-		// operator for no param
-		Operator: "rand10",
-		Function: func(args ...ref.Val) ref.Val {
-			return types.Int(rand.Intn(10))
-		},
-	}, &functions.Overload{
-		// operator for 1 param
-		Operator: "rand_int",
-		Unary: func(arg ref.Val) ref.Val {
-			return types.Int(rand.Intn(int(arg.Value().(int64))))
-		},
-	}, &functions.Overload{
-		// operator for 1 param
-		Operator: "rand",
-		Function: func(args ...ref.Val) ref.Val {
-			return types.Double(rand.Float64())
-		},
-	}, &functions.Overload{
-		// operator for 1 param
-		Operator: "log2_double",
-		Unary: func(arg ref.Val) ref.Val {
-			return types.Double(math.Log2(arg.Value().(float64)))
-		},
-	}, &functions.Overload{
-		// operator for 1 param
-		Operator: "log2_int",
-		Unary: func(arg ref.Val) ref.Val {
-			return types.Double(math.Log2(float64(arg.Value().(int64))))
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "multiply_int_int",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			return types.Int(lhs.Value().(int64) * rhs.Value().(int64))
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "min_int_int",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := lhs.Value().(int64)
-			rgtInt64 := rhs.Value().(int64)
-			if lftInt64 > rgtInt64 {
-				return types.Int(rgtInt64)
-			}
-			return types.Int(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "min_double_double",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := lhs.Value().(float64)
-			rgtInt64 := rhs.Value().(float64)
-			if lftInt64 > rgtInt64 {
-				return types.Double(rgtInt64)
-			}
-			return types.Double(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "min_int_double",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := float64(lhs.Value().(int64))
-			rgtInt64 := rhs.Value().(float64)
-			if lftInt64 > rgtInt64 {
-				return types.Double(rgtInt64)
-			}
-			return types.Double(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "min_double_int",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := lhs.Value().(float64)
-			rgtInt64 := float64(rhs.Value().(int64))
-			if lftInt64 > rgtInt64 {
-				return types.Double(rgtInt64)
-			}
-			return types.Double(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "max_int_int",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := lhs.Value().(int64)
-			rgtInt64 := rhs.Value().(int64)
-			if lftInt64 < rgtInt64 {
-				return types.Int(rgtInt64)
-			}
-			return types.Int(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "max_double_double",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := lhs.Value().(float64)
-			rgtInt64 := rhs.Value().(float64)
-			if lftInt64 < rgtInt64 {
-				return types.Double(rgtInt64)
-			}
-			return types.Double(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "max_int_double",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := float64(lhs.Value().(int64))
-			rgtInt64 := rhs.Value().(float64)
-			if lftInt64 < rgtInt64 {
-				return types.Double(rgtInt64)
-			}
-			return types.Double(lftInt64)
-		},
-	}, &functions.Overload{
-		// operator for 2 param
-		Operator: "max_double_int",
-		Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-			lftInt64 := lhs.Value().(float64)
-			rgtInt64 := float64(rhs.Value().(int64))
-			if lftInt64 < rgtInt64 {
-				return types.Double(rgtInt64)
-			}
-			return types.Double(lftInt64)
-		},
-	})
+	funcs := cel.Functions(
+		Rand10Func,
+		RandIntFunc,
+		RandFunc,
+		Log2DoubleFunc,
+		Log2IntFunc,
+		MaxDoubleDoubleFunc,
+		MaxDoubleIntFunc,
+		MaxIntDoubleFunc,
+		MaxIntIntFunc,
+		MinDoubleDoubleFunc,
+		MinDoubleIntFunc,
+		MinIntDoubleFunc,
+		MinIntIntFunc,
+		MultiplyFunc,
+	)
 
 	ec := NewCelEnvCollection(env, variables, funcs)
 

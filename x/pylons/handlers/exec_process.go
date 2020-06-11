@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"math"
-	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -275,50 +273,10 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	}
 
 	varDefs = append(varDefs,
-		decls.NewFunction("rand",
-			decls.NewOverload("rand_int",
-				[]*exprpb.Type{decls.Int},
-				decls.Int),
-			decls.NewOverload("rand",
-				[]*exprpb.Type{},
-				decls.Double),
-		),
-		decls.NewFunction("log2",
-			decls.NewOverload("log2_double",
-				[]*exprpb.Type{decls.Double},
-				decls.Double),
-			decls.NewOverload("log2_int",
-				[]*exprpb.Type{decls.Int},
-				decls.Double),
-		),
-		decls.NewFunction("min",
-			decls.NewOverload("min_int_int",
-				[]*exprpb.Type{decls.Int, decls.Int},
-				decls.Int),
-			decls.NewOverload("min_double_double",
-				[]*exprpb.Type{decls.Double, decls.Double},
-				decls.Double),
-			decls.NewOverload("min_int_double",
-				[]*exprpb.Type{decls.Int, decls.Double},
-				decls.Double),
-			decls.NewOverload("min_double_int",
-				[]*exprpb.Type{decls.Double, decls.Int},
-				decls.Double),
-		),
-		decls.NewFunction("max",
-			decls.NewOverload("max_int_int",
-				[]*exprpb.Type{decls.Int, decls.Int},
-				decls.Int),
-			decls.NewOverload("max_double_double",
-				[]*exprpb.Type{decls.Double, decls.Double},
-				decls.Double),
-			decls.NewOverload("max_int_double",
-				[]*exprpb.Type{decls.Int, decls.Double},
-				decls.Double),
-			decls.NewOverload("max_double_int",
-				[]*exprpb.Type{decls.Double, decls.Int},
-				decls.Double),
-		),
+		types.RandFuncDecls,
+		types.Log2FuncDecls,
+		types.MinFuncDecls,
+		types.MaxFuncDecls,
 		decls.NewFunction("block_since",
 			decls.NewOverload("block_since",
 				[]*exprpb.Type{decls.Int},
@@ -327,119 +285,19 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	)
 
 	funcs := cel.Functions(
+		types.RandIntFunc,
+		types.RandFunc,
+		types.Log2DoubleFunc,
+		types.Log2IntFunc,
+		types.MinIntIntFunc,
+		types.MinIntDoubleFunc,
+		types.MinDoubleIntFunc,
+		types.MinDoubleDoubleFunc,
+		types.MaxIntIntFunc,
+		types.MaxIntDoubleFunc,
+		types.MaxDoubleIntFunc,
+		types.MaxDoubleDoubleFunc,
 		&functions.Overload{
-			// operator for 1 param
-			Operator: "rand_int",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
-			},
-		}, &functions.Overload{
-			// operator for 1 param
-			Operator: "rand",
-			Function: func(args ...ref.Val) ref.Val {
-				return celTypes.Double(rand.Float64())
-			},
-		}, &functions.Overload{
-			// operator for 1 param
-			Operator: "log2_double",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Double(math.Log2(arg.Value().(float64)))
-			},
-		}, &functions.Overload{
-			// operator for 1 param
-			Operator: "log2_int",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Double(math.Log2(float64(arg.Value().(int64))))
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "min_int_int",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(int64)
-				rgtInt64 := rhs.Value().(int64)
-				if lftInt64 > rgtInt64 {
-					return celTypes.Int(rgtInt64)
-				}
-				return celTypes.Int(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "min_double_double",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(float64)
-				rgtInt64 := rhs.Value().(float64)
-				if lftInt64 > rgtInt64 {
-					return celTypes.Double(rgtInt64)
-				}
-				return celTypes.Double(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "min_int_double",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := float64(lhs.Value().(int64))
-				rgtInt64 := rhs.Value().(float64)
-				if lftInt64 > rgtInt64 {
-					return celTypes.Double(rgtInt64)
-				}
-				return celTypes.Double(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "min_double_int",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(float64)
-				rgtInt64 := float64(rhs.Value().(int64))
-				if lftInt64 > rgtInt64 {
-					return celTypes.Double(rgtInt64)
-				}
-				return celTypes.Double(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "max_int_int",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(int64)
-				rgtInt64 := rhs.Value().(int64)
-				if lftInt64 < rgtInt64 {
-					return celTypes.Int(rgtInt64)
-				}
-				return celTypes.Int(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "max_double_double",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(float64)
-				rgtInt64 := rhs.Value().(float64)
-				if lftInt64 < rgtInt64 {
-					return celTypes.Double(rgtInt64)
-				}
-				return celTypes.Double(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "max_int_double",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := float64(lhs.Value().(int64))
-				rgtInt64 := rhs.Value().(float64)
-				if lftInt64 < rgtInt64 {
-					return celTypes.Double(rgtInt64)
-				}
-				return celTypes.Double(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "max_double_int",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(float64)
-				rgtInt64 := float64(rhs.Value().(int64))
-				if lftInt64 < rgtInt64 {
-					return celTypes.Double(rgtInt64)
-				}
-				return celTypes.Double(lftInt64)
-			},
-		}, &functions.Overload{
 			// operator for 1 param
 			Operator: "block_since",
 			Unary: func(arg ref.Val) ref.Val {
