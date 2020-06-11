@@ -20,7 +20,7 @@ func RandomSeed(ctx sdk.Context, entityCount int) int64 {
 	seedValue := 0
 	for i, bytv := range appHash { // len(appHash) = 11
 		intv := int(bytv)
-		seedValue = (i*i + 1) * intv
+		seedValue += (i*i + 1) * intv
 	}
 	fmt.Println("RandomSeed entityCount:", entityCount, "BlockHeight:", header.Height)
 	return int64(seedValue + entityCount)
