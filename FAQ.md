@@ -32,3 +32,16 @@ FAQ is frequently asked questions for pylons ecosystem.
 ## What's the limitation of data processing amount per block?
 
 - Need to take time to figure this out.
+
+## FAQ in fixture test writing
+
+- You should create account using get-pylons message but this is not runnable by using cli.
+You should use POST ${REST_ENDPOINT}/txs to create account.
+For simplification this stuff is done by loud game if you run `make ARGS="account_key -locald" run`
+
+- All the keys are managed via `--keyring-backend=test` (which is an argument of pylonscli) for tests and you should use this for most of test related cli use and other actions that does not require user's system password.
+- You should reinstall pylonsd and pylonscli correctly before running fixture test.
+- You should reinit the chain before running fixture test. If you are using local daemon, try to run `sh init_accounts.local.sh`.
+- You should be careful of the result success messages when you write the fixture test as recipe return different messages according to result of execution. If copy paste from other recipe, there can be an issue. And it's the best practice to learn what kind of messages can be returned from recipes.
+- If you want to upgrade or generate an item or coin, you should create receipe first and then not forget to execute the receipe. create recipe is not something that run the recipe.
+- For trades, you need to create trade and fulfill the trade, please take care of trade return messages as they are different from recipes.
