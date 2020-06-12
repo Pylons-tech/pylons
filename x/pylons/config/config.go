@@ -34,7 +34,7 @@ func init() {
 	err := ReadConfig()
 	if err != nil {
 		fmt.Println("config reading error", err)
-
+		os.Exit(1)
 	}
 }
 
