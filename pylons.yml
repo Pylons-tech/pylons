@@ -1,0 +1,8 @@
+fees:
+  recipe_fee_percentage: 10 # Pylons fee percentage
+  cookbook_basic_fee: 10000 # Cookbook creation fee
+  cookbook_premium_fee: 50000 # Cookbook creation fee
+  pylons_trade_percentage: 10 # Pylons trade percentage
+  minimum_trade_price: 1 # Minimum trade price
+validators:
+  pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced

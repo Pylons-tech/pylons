@@ -31,3 +31,11 @@ func Contains(arr []int, it int) bool {
 	}
 	return false
 }
+
+// Max returns the larger of x or y.
+func Max(x, y int64) int64 {
+	if x < y {
+		return y
+	}
+	return x
+}

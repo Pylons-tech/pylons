@@ -94,9 +94,8 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
 		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
-	// TODO: send the coins to a master address instead of burning them
-	// think about making this adding and subtracting atomic using inputoutputcoins method
-	_, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
+
+	err = ProcessCoinInputs(ctx, keeper, msg.Sender, recipe.CookbookID, cl)
 	if err != nil {
 		return nil, errInternal(err)
 	}
