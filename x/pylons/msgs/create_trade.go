@@ -2,7 +2,9 @@ package msgs
 
 import (
 	"encoding/json"
+	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -44,6 +46,7 @@ func (msg MsgCreateTrade) Type() string { return "create_trade" }
 
 // ValidateBasic validates the Msg
 func (msg MsgCreateTrade) ValidateBasic() error {
+	tradePylonAmount := int64(0)
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
@@ -59,6 +62,7 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
 			}
 		}
+		tradePylonAmount += msg.CoinOutputs.AmountOf(types.Pylon).Int64()
 	}
 
 	if msg.ItemInputs == nil && msg.CoinInputs == nil {
@@ -71,6 +75,11 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
 			}
 		}
+		tradePylonAmount += msg.CoinInputs.ToCoins().AmountOf(types.Pylon).Int64()
+	}
+
+	if tradePylonAmount < config.Config.Fee.MinTradePrice {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
 	}
 
 	return nil

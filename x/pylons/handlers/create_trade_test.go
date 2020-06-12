@@ -51,7 +51,8 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			outputItemList: types.ItemList{
 				*item,
 			},
-			showError: false,
+			showError:    true,
+			desiredError: "there should be more than 10 amount of pylon per trade",
 		},
 		"trade with item and coins": {
 			sender:        sender,
@@ -62,9 +63,9 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			outputCoinList: types.NewPylon(10000),
 			showError:      false,
 		},
-		"trade with only items failure due to sender not being owner": {
+		"trade items failure due to sender not being owner": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputCoinList: types.GenCoinInputList(types.Pylon, 10),
 			outputItemList: types.ItemList{
 				*item2,
 			},
@@ -89,7 +90,9 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			result, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
 				ctRespData := CreateTradeResponse{}
-				err := json.Unmarshal(result.Data, &ctRespData)
+				require.True(t, err == nil)
+				t.Log("result.Data", result)
+				err = json.Unmarshal(result.Data, &ctRespData)
 				require.True(t, err == nil)
 				require.True(t, len(ctRespData.TradeID) > 0)
 			} else {
