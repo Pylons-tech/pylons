@@ -1,9 +1,9 @@
 package queriers
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
-	"encoding/json"
 
 	"github.com/stretchr/testify/require"
 
@@ -18,31 +18,31 @@ func TestQuerierPylonsBalance(t *testing.T) {
 	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000))
 
 	cases := map[string]struct {
-		path    []string
+		path          []string
 		desiredError  string
 		desiredAmount int64
 		showError     bool
 	}{
 		"not existing sender": {
-			path:    []string{"invalidSender"},
+			path:          []string{"invalidSender"},
 			desiredError:  "decoding bech32 failed: string not all lowercase or all uppercase",
 			desiredAmount: 0,
 			showError:     true,
 		},
 		"error check when not providing sender": {
-			path:    []string{},
+			path:          []string{},
 			desiredError:  "no sender is provided in path",
 			desiredAmount: 0,
 			showError:     true,
 		},
 		"sender with no balance": {
-			path:    []string{sender2.String()},
+			path:          []string{sender2.String()},
 			desiredError:  "",
 			desiredAmount: 0,
 			showError:     false,
 		},
 		"sender with balance": {
-			path:    []string{sender1.String()},
+			path:          []string{sender1.String()},
 			desiredError:  "",
 			desiredAmount: 1000,
 			showError:     false,
@@ -60,7 +60,7 @@ func TestQuerierPylonsBalance(t *testing.T) {
 				tci.PlnK,
 			)
 
-			// t.Errorf("Querier.ItemsByCookbookTest LOG:: %+v", err)
+			// t.Errorf("Querier.PylonsBalance LOG:: %+v", err)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
