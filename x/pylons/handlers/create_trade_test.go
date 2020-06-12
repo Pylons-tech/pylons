@@ -91,7 +91,6 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			if !tc.showError {
 				ctRespData := CreateTradeResponse{}
 				require.True(t, err == nil)
-				t.Log("result.Data", result)
 				err = json.Unmarshal(result.Data, &ctRespData)
 				require.True(t, err == nil)
 				require.True(t, len(ctRespData.TradeID) > 0)
