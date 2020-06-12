@@ -76,7 +76,17 @@
                 "status": "Success",
                 "message": "successfully executed the recipe"
             },
-            "property": []
+            "property": [
+              {
+                  "owner": "michael",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "InitialSword" },
+                          "dblValues": { "attack": "1034" }
+                      }
+                  ]
+              }
+            ]
         }
     }
 ]
