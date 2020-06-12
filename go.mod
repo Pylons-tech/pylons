@@ -16,4 +16,5 @@ require (
 	github.com/tendermint/tm-db v0.5.1
 	github.com/tyler-smith/go-bip39 v1.0.2
 	google.golang.org/genproto v0.0.0-20200313141609-30c55424f95d
+	gopkg.in/yaml.v2 v2.2.8
 )

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -37,7 +38,11 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
-	_, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, fee)
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, pylonsLLCAddress, fee)
 	if err != nil {
 		return nil, errInternal(err)
 	}
