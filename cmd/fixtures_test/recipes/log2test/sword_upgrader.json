@@ -1,0 +1,29 @@
+{
+  "CoinInputs":[],
+  "ItemInputRefs": [
+      "./items/log2test/initial.json"
+  ],
+  "Entries":{
+      "CoinOutputs":[],
+      "ItemOutputs":[
+          {
+              "ModifyItem": {
+                  "ItemInputRef": 0,
+                  "ModifyParamsRef": "./recipes/log2test/upgrader/sword_upgrader.json"
+              }
+          }
+      ]
+  },
+  "Outputs": [
+      {
+          "ResultEntries": ["0"],
+          "Weight": "1"
+      }
+  ],
+  "ExtraInfo":"",
+  "Sender":"eugen",
+  "Name": "Sword Upgrader Recipe",
+  "CookbookID": "log2testcb-1589853709",
+  "Description": "this recipe is used to upgrade attack of sword.",
+  "BlockInterval":"0"
+}

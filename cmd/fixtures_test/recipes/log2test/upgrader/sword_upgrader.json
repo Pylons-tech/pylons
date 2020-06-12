@@ -1,0 +1,6 @@
+{
+  "Doubles": [{
+      "Key": "attack", 
+      "Program": "attack + log2(attack)"
+  }]
+}

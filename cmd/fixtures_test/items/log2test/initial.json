@@ -1,0 +1,6 @@
+{
+  "Doubles": [{ "Key": "attack", "Value": "1024" }],
+  "Strings": [{ "Key": "Name","Value": "Initial Sword"}],
+  "CookbookID": "log2testcb-1589853709",
+  "Sender": "michael"
+}

@@ -1,0 +1,66 @@
+[
+    {
+        "ID": "CREATE_LOG2TEST_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/log2test.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["log2testcb"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_INITIAL_SWORD",        
+        "runAfter": {
+            "precondition": ["CREATE_LOG2TEST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/log2test/initial.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "dblValues": {"attack": "1024"}
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "UPDATE_SWORD_ATTACK",
+        "runAfter": {
+            "precondition": ["CREATE_INITIAL_SWORD"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/log2test/sword_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "recipes": ["Sword Upgrader Recipe"]
+                }
+            ]
+        }
+    }
+]

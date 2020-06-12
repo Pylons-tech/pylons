@@ -10,7 +10,7 @@ import (
 // HandlerMsgGetPylons is used to send pylons to requesters. This handler is part of the
 // faucet
 func HandlerMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPylons) (*sdk.Result, error) {
-	
+
 	err := msg.ValidateBasic()
 
 	if err != nil {
