@@ -1,6 +1,0 @@
-{
-    "Longs": [{
-        "Key": "HP", 
-        "Program": "max(HP + 10 * block_since(lastUpdate) + 20, MaxHP)"
-    }]
-}
