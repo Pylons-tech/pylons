@@ -45,7 +45,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		desiredError   string
 		showError      bool
 	}{
-		"trade with only items": {
+		"trade without pylon": {
 			sender:        sender,
 			inputItemList: types.GenItemInputList("Pikachu"),
 			outputItemList: types.ItemList{
