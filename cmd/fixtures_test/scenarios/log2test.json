@@ -44,9 +44,9 @@
         }
     },
     {
-        "ID": "UPDATE_SWORD_ATTACK",
+        "ID": "CREATE_SWORD_UPGRADER_RECEIPE",
         "runAfter": {
-            "precondition": ["CREATE_INITIAL_SWORD"],
+            "precondition": ["CREATE_LOG2TEST_COOKBOOK"],
             "blockWait": 0
         },
         "action": "create_recipe",
@@ -61,6 +61,22 @@
                     "recipes": ["Sword Upgrader Recipe"]
                 }
             ]
+        }
+    },
+    {
+        "ID": "EXECUTE_SWORD_UPGRADER_RECEIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_SWORD_UPGRADER_RECEIPE", "CREATE_INITIAL_SWORD"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./recipes/log2test/executions/sword_upgrader.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully executed the recipe"
+            },
+            "property": []
         }
     }
 ]
