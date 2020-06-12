@@ -22,10 +22,12 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	// validate cookbook id
+	cook, err := keeper.GetCookbook(ctx, msg.CookbookID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
+	// validate sender
 	if !cook.Sender.Equals(msg.Sender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "cookbook not owned by the sender")
 	}

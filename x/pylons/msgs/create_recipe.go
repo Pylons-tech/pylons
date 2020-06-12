@@ -62,6 +62,9 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "CoinOuput: "+err.Error())
 			}
+			if coinOutput.Coin == types.Pylon {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
+			}
 		case types.ItemOutput:
 			itemOutput := entry
 			if itemOutput.ModifyItem.ItemInputRef != -1 {
