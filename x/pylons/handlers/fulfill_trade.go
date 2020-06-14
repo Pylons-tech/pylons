@@ -25,9 +25,9 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return nil, errInternal(err)
 	}
 
-	trade, err2 := keeper.GetTrade(ctx, msg.TradeID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	trade, err := keeper.GetTrade(ctx, msg.TradeID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	if trade.Completed {
@@ -35,9 +35,9 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	}
 
-	items, err2 := keeper.GetItemsBySender(ctx, msg.Sender)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	items, err := keeper.GetItemsBySender(ctx, msg.Sender)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	// check if the sender has all condition met
@@ -100,7 +100,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		item.Sender = msg.Sender
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
-			return nil, errInternal(err2)
+			return nil, errInternal(err)
 		}
 	}
 
@@ -108,7 +108,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		item.Sender = trade.Sender
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
-			return nil, errInternal(err2)
+			return nil, errInternal(err)
 		}
 	}
 
@@ -118,21 +118,21 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
 
 	if err != nil {
-		return nil, errInternal(err2)
+		return nil, errInternal(err)
 	}
 
 	// trade acceptor to trade creator the coin input
 	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
 
 	if err != nil {
-		return nil, errInternal(err2)
+		return nil, errInternal(err)
 	}
 
 	trade.FulFiller = msg.Sender
 	trade.Completed = true
-	err2 = keeper.SetTrade(ctx, trade)
+	err = keeper.SetTrade(ctx, trade)
 	if err != nil {
-		return nil, errInternal(err2)
+		return nil, errInternal(err)
 	}
 
 	return marshalJSON(FulfillTradeResp{
