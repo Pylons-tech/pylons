@@ -1,0 +1,13 @@
+{
+    "Doubles": [{
+        "Key": "attack", 
+        "Program": "attack + log2(attack)"
+    }, {
+        "Key": "Mana", 
+        "Program": "max(Mana - rand() * 20.0, MinMana)"
+    }],
+    "Longs": [{
+        "Key": "HP", 
+        "Program": "min(HP + 10 * block_since(lastUpdate) + rand(20), MaxHP)"
+    }]
+}
