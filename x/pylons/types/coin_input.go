@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	"sort"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -25,6 +26,9 @@ type CoinInputList []CoinInput
 // ToCoins converts to coins
 func (cil CoinInputList) ToCoins() sdk.Coins {
 	var coins sdk.Coins
+	sort.SliceStable(cil, func(i, j int) bool {
+		return cil[i].Coin < cil[j].Coin
+	})
 	for _, ci := range cil {
 		coins = append(coins, sdk.NewInt64Coin(ci.Coin, ci.Count))
 	}

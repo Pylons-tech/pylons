@@ -1,7 +1,7 @@
 {
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/growinghp/item_input/character.json"
+        "./recipes/custom_func_test/item_input/character.json"
     ],
     "Entries":{
         "CoinOutputs":[],
@@ -9,7 +9,7 @@
             {
                 "ModifyItem": {
                     "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/growinghp/upgrader/restore_health.json"
+                    "ModifyParamsRef": "./recipes/custom_func_test/upgrader/custom_func_test.json"
                 }
             }
         ]
@@ -23,7 +23,7 @@
     "ExtraInfo":"",
     "Sender":"eugen",
     "Name": "Growing HP Character Health Restore Recipe",
-    "CookbookID": "growinghp-1589853709",
+    "CookbookID": "custom_func_test-1589853709",
     "Description": "this recipe is used to restore character's health using timed field.",
     "BlockInterval":"2"
 }

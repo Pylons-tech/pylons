@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"math/rand"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -274,21 +273,10 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	}
 
 	varDefs = append(varDefs,
-		decls.NewFunction("rand_int",
-			decls.NewOverload("rand_int",
-				[]*exprpb.Type{decls.Int},
-				decls.Int),
-		),
-		decls.NewFunction("min_int",
-			decls.NewOverload("min_int",
-				[]*exprpb.Type{decls.Int, decls.Int},
-				decls.Int),
-		),
-		decls.NewFunction("max_int",
-			decls.NewOverload("max_int",
-				[]*exprpb.Type{decls.Int, decls.Int},
-				decls.Int),
-		),
+		types.RandFuncDecls,
+		types.Log2FuncDecls,
+		types.MinFuncDecls,
+		types.MaxFuncDecls,
 		decls.NewFunction("block_since",
 			decls.NewOverload("block_since",
 				[]*exprpb.Type{decls.Int},
@@ -297,35 +285,19 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	)
 
 	funcs := cel.Functions(
+		types.RandIntFunc,
+		types.RandFunc,
+		types.Log2DoubleFunc,
+		types.Log2IntFunc,
+		types.MinIntIntFunc,
+		types.MinIntDoubleFunc,
+		types.MinDoubleIntFunc,
+		types.MinDoubleDoubleFunc,
+		types.MaxIntIntFunc,
+		types.MaxIntDoubleFunc,
+		types.MaxDoubleIntFunc,
+		types.MaxDoubleDoubleFunc,
 		&functions.Overload{
-			// operator for 1 param
-			Operator: "rand_int",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Int(rand.Intn(int(arg.Value().(int64))))
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "min_int",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(int64)
-				rgtInt64 := rhs.Value().(int64)
-				if lftInt64 > rgtInt64 {
-					return celTypes.Int(rgtInt64)
-				}
-				return celTypes.Int(lftInt64)
-			},
-		}, &functions.Overload{
-			// operator for 2 param
-			Operator: "max_int",
-			Binary: func(lhs ref.Val, rhs ref.Val) ref.Val {
-				lftInt64 := lhs.Value().(int64)
-				rgtInt64 := rhs.Value().(int64)
-				if lftInt64 < rgtInt64 {
-					return celTypes.Int(rgtInt64)
-				}
-				return celTypes.Int(lftInt64)
-			},
-		}, &functions.Overload{
 			// operator for 1 param
 			Operator: "block_since",
 			Unary: func(arg ref.Val) ref.Val {
