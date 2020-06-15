@@ -73,7 +73,7 @@ pylonscli tx pylons get-pylons --from alice
 
 - start the `rest-server` in dev mode
 ```
-pylonscli rest-server --chain-id pylonschain --trust-node
+pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 ```
 
 ## Running tests
@@ -103,9 +103,9 @@ pylonsd start
 
 ## Deploying for production
 
-- run the rest-server using `--cors` mode and use the `--laddr` as `0.0.0.0`
+- run the rest server using the `--laddr` as `0.0.0.0`
 ```
-pylonscli rest-server --chain-id pylonschain --trust-node --cors *
+pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 ```
 
 ## CLI based tx creation, sign and broadcast
