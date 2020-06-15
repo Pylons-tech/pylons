@@ -348,7 +348,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				if tc.checkPylonDistribution {
 					pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 					require.True(t, err == nil)
-					pylonAvailOnLLC := tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, tc.pylonsLLCDistribution)})
+					pylonAvailOnLLC := tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
 					require.True(t, pylonAvailOnLLC)
 				}
 			} else {
