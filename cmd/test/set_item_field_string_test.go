@@ -55,7 +55,11 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			t.MustTrue(resp.Status == "Success")
 
 			items, err := inttestSDK.ListItemsViaCLI("")
-			inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error listing items via cli")
+			}
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false)
 			t.MustTrue(ok)

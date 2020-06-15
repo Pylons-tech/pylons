@@ -28,7 +28,11 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 	}
 
 	mCB, err := GetMockedCookbook(&t)
-	inttestSDK.ErrValidation(&t, "error getting mocked cookbook %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error getting mocked cookbook")
+	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
@@ -52,7 +56,11 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 			)
 
 			err = inttestSDK.WaitForNextBlock()
-			inttestSDK.ErrValidation(t, "error waiting for creating recipe %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error waiting for creating recipe")
+			}
 
 			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)

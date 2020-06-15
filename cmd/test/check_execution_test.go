@@ -107,7 +107,11 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
 
 	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
-	inttestSDK.ErrValidation(t, "error mocking recipe %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error mocking recipe")
+	}
 
 	rcp, err := inttestSDK.GetRecipeByGUID(guid)
 	t.MustNil(err)
@@ -139,7 +143,11 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	if len(tc.currentItemName) > 0 { // when item input is set
 		items, err := inttestSDK.ListItemsViaCLI("")
-		inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+		if err != nil {
+			t.WithFields(testing.Fields{
+				"error": err,
+			}).Fatal("error listing items via cli")
+		}
 
 		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true)
 		t.MustTrue(ok)
@@ -159,7 +167,11 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	// Here desiredItemName should be different across tests cases and across test files
 	items, err := inttestSDK.ListItemsViaCLI("")
-	inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error listing items via cli")
+	}
 
 	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 	t.MustTrue(ok == tc.shouldSuccess)
