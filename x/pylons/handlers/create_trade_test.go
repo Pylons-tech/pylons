@@ -54,6 +54,16 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			showError:    true,
 			desiredError: "there should be more than 10 amount of pylon per trade",
 		},
+		"less than minimum amount pylons trading test": {
+			sender:        sender,
+			inputItemList: types.GenItemInputList("Pikachu"),
+			outputItemList: types.ItemList{
+				*item,
+			},
+			outputCoinList: types.NewPylon(1),
+			desiredError:   "there should be more than 10 amount of pylon per trade",
+			showError:      true,
+		},
 		"trade with item and coins": {
 			sender:        sender,
 			inputItemList: types.GenItemInputList("Pikachu"),
