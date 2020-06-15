@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -33,6 +34,18 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.GenItemInputList("Raichu"),
 		types.GenItemOnlyEntry("Zombie"),
 		types.GenOneOutput(1),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	// mock pylon input recipe
+	pylonInputRecipeData := MockRecipe(
+		tci, "existing recipe",
+		types.GenCoinInputList("pylon", 100),
+		types.ItemInputList{},
+		types.EntriesList{},
+		types.WeightedOutputsList{},
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -102,6 +115,8 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		checkCoinAvailable       bool
 		checkItemAvailable       bool
 		checkItemOrCoinAvailable bool
+		checkPylonDistribution   bool
+		pylonsLLCDistribution    int64
 	}{
 		"insufficient coin balance check": {
 			itemIDs:            []string{},
@@ -135,6 +150,21 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkCoinAvailable: true,
 			checkItemName:      "",
 			checkItemAvailable: false,
+		},
+		"pylon distribution check on pylon input recipes": {
+			itemIDs:                []string{},
+			addInputCoin:           false,
+			recipeID:               pylonInputRecipeData.RecipeID, // coin 2 coin Recipe ID
+			sender:                 sender1,
+			desiredError:           "",
+			successMsg:             "successfully executed the recipe",
+			showError:              false,
+			checkCoinName:          "pylon",
+			checkCoinAvailable:     true,
+			checkItemName:          "",
+			checkItemAvailable:     false,
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  100 * config.Config.Fee.RecipePercent / 100,
 		},
 		"zero input item and 1 output item recipe test": {
 			itemIDs:            []string{},
@@ -271,6 +301,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
+				require.True(t, err == nil)
 				execRcpResponse := ExecuteRecipeResp{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
@@ -313,6 +344,12 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				if tc.checkItemOrCoinAvailable {
 					require.True(t, itemAvailability || coinAvailability)
 					require.True(t, !(itemAvailability && coinAvailability))
+				}
+				if tc.checkPylonDistribution {
+					pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+					require.True(t, err == nil)
+					pylonAvailOnLLC := tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, tc.pylonsLLCDistribution)})
+					require.True(t, pylonAvailOnLLC)
 				}
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
