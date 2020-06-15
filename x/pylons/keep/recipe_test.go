@@ -62,10 +62,10 @@ func TestKeeperGetRecipe(t *testing.T) {
 			err = tci.PlnK.SetRecipe(tci.Ctx, recipe)
 			require.True(t, err == nil)
 
-			readRecipe, err2 := tci.PlnK.GetRecipe(tci.Ctx, recipe.ID)
-			// t.Errorf("recipe_test err LOG:: %+v %+v", readRecipe, err2)
+			readRecipe, err := tci.PlnK.GetRecipe(tci.Ctx, recipe.ID)
+			// t.Errorf("recipe_test err LOG:: %+v %+v", readRecipe, err)
 
-			require.True(t, err2 == nil)
+			require.True(t, err == nil)
 			require.True(t, reflect.DeepEqual(recipe, readRecipe))
 		})
 	}

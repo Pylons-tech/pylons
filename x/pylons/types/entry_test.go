@@ -20,8 +20,8 @@ func TestEntriesListSerialize(t *testing.T) {
 			data, err := json.Marshal(entries)
 			require.True(t, err == nil)
 			var serializedEntries EntriesList
-			err2 := json.Unmarshal(data, &serializedEntries)
-			require.True(t, err2 == nil)
+			err = json.Unmarshal(data, &serializedEntries)
+			require.True(t, err == nil)
 			require.True(t, reflect.DeepEqual(entries, serializedEntries))
 		})
 	}

@@ -50,12 +50,12 @@ func TestKeeperGetCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			readCookbook, err2 := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
-			// t.Errorf("CookbookTEST LOG:: %+v", err2)
+			readCookbook, err := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
+			// t.Errorf("CookbookTEST LOG:: %+v", err)
 			if tc.showError {
-				require.True(t, strings.Contains(err2.Error(), tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err2 == nil)
+				require.True(t, err == nil)
 				require.True(t, cb.SupportEmail == readCookbook.SupportEmail)
 				require.True(t, reflect.DeepEqual(cb, readCookbook))
 			}

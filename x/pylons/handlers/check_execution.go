@@ -9,8 +9,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CheckExecutionResp is the response for checkExecution
-type CheckExecutionResp struct {
+// CheckExecutionResponse is the response for checkExecution
+type CheckExecutionResponse struct {
 	Message string
 	Status  string
 	Output  []byte
@@ -82,9 +82,9 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, errInternal(err)
 	}
 
-	exec, err2 := keeper.GetExecution(ctx, msg.ExecID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	exec, err := keeper.GetExecution(ctx, msg.ExecID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	if !msg.Sender.Equals(exec.Sender) {
@@ -92,7 +92,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	}
 
 	if exec.Completed {
-		return marshalJSON(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResponse{
 			Message: "execution already completed",
 			Status:  "Completed",
 		})
@@ -101,10 +101,10 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if ctx.BlockHeight() >= exec.BlockHeight {
 		outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
 		if err != nil {
-			return nil, errInternal(err2)
+			return nil, errInternal(err)
 		}
 
-		return marshalJSON(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResponse{
 			Message: "successfully completed the execution",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -127,27 +127,27 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
 			_, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
 			if err != nil {
-				return nil, errInternal(err2)
+				return nil, errInternal(err)
 			}
 
-			outputSTR, err2 := SafeExecute(ctx, keeper, exec, msg)
-			if err2 != nil {
-				return nil, errInternal(err2)
+			outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
+			if err != nil {
+				return nil, errInternal(err)
 			}
 
-			return marshalJSON(CheckExecutionResp{
+			return marshalJSON(CheckExecutionResponse{
 				Message: "successfully paid to complete the execution",
 				Status:  "Success",
 				Output:  outputSTR,
 			})
 		}
-		return marshalJSON(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResponse{
 			Message: "insufficient balance to complete the execution",
 			Status:  "Failure",
 		})
 
 	}
-	return marshalJSON(CheckExecutionResp{
+	return marshalJSON(CheckExecutionResponse{
 		Message: "execution pending",
 		Status:  "Pending",
 	})

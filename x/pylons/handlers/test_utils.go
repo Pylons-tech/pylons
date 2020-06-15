@@ -11,19 +11,19 @@ import (
 )
 
 // MockCookbook mock cookbook
-func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCBResponse {
+func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCookbookResponse {
 	return MockCookbookByName(tci, sender, "cookbook-00001")
 }
 
 // MockCookbookByName mock cookbook with specific name
-func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCBResponse {
+func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCookbookResponse {
 	cookbookDesc := "this has to meet character limits"
 	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cbResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	if err != nil {
 		panic(err.Error())
 	}
-	cbData := CreateCBResponse{}
+	cbData := CreateCookbookResponse{}
 	//nolint:errcheck
 	json.Unmarshal((*cbResult).Data, &cbData)
 	return cbData
@@ -168,11 +168,11 @@ func MockExecution(
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
 	itemIDs []string,
-) (ExecuteRecipeResp, error) {
+) (ExecuteRecipeResponse, error) {
 	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
 	result, _ := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
-	execRcpResponse := ExecuteRecipeResp{}
+	execRcpResponse := ExecuteRecipeResponse{}
 	err := json.Unmarshal(result.Data, &execRcpResponse)
 	return execRcpResponse, err
 }

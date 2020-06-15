@@ -147,7 +147,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
 			result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-			checkExecResp := CheckExecutionResp{}
+			checkExecResp := CheckExecutionResponse{}
 			err = json.Unmarshal(result.Data, &checkExecResp)
 			require.True(t, err == nil)
 
@@ -170,7 +170,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 
 			if tc.retryExecution {
 				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-				checkExecResp := CheckExecutionResp{}
+				checkExecResp := CheckExecutionResponse{}
 				err = json.Unmarshal(result.Data, &checkExecResp)
 				require.True(t, err == nil)
 				require.True(t, checkExecResp.Status == "Completed")
