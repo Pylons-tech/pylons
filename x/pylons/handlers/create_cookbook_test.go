@@ -65,7 +65,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			result, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
-				cbData := CreateCBResponse{}
+				cbData := CreateCookbookResponse{}
 				err := json.Unmarshal(result.Data, &cbData)
 				require.True(t, err == nil)
 				require.True(t, len(cbData.CookbookID) > 0)
@@ -83,7 +83,7 @@ func TestSameCookbookIDCreation(t *testing.T) {
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
 
 	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
-	cbData := CreateCBResponse{}
+	cbData := CreateCookbookResponse{}
 	err := json.Unmarshal(result.Data, &cbData)
 	require.True(t, err == nil)
 	require.True(t, len(cbData.CookbookID) > 0)

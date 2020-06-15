@@ -153,8 +153,8 @@ func TestKeeperUpdateExecution(t *testing.T) {
 			} else {
 				// t.Errorf("execution_test err LOG:: %+v", err)
 				require.True(t, err == nil)
-				uExec, err2 := tci.PlnK.GetExecution(tci.Ctx, tc.execID)
-				require.True(t, err2 == nil)
+				uExec, err := tci.PlnK.GetExecution(tci.Ctx, tc.execID)
+				require.True(t, err == nil)
 				require.True(t, uExec.Completed == true)
 			}
 		})

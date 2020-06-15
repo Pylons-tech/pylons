@@ -7,8 +7,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// EnableTradeResp is the response for enableTrade
-type EnableTradeResp struct {
+// EnableTradeResponse is the response for enableTrade
+type EnableTradeResponse struct {
 	Message string
 	Status  string
 }
@@ -21,9 +21,9 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 		return nil, errInternal(err)
 	}
 
-	trade, err2 := keeper.GetTrade(ctx, msg.TradeID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	trade, err := keeper.GetTrade(ctx, msg.TradeID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	if !msg.Sender.Equals(trade.Sender) {
@@ -32,12 +32,12 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 
 	trade.Disabled = false
 
-	err2 = keeper.UpdateTrade(ctx, msg.TradeID, trade)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	err = keeper.UpdateTrade(ctx, msg.TradeID, trade)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
-	return marshalJSON(EnableTradeResp{
+	return marshalJSON(EnableTradeResponse{
 		Message: "successfully enabled the trade",
 		Status:  "Success",
 	})

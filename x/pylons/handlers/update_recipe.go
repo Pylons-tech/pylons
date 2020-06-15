@@ -10,6 +10,8 @@ import (
 // UpdateRecipeResponse is a struct to control update recipe response
 type UpdateRecipeResponse struct {
 	RecipeID string `json:"RecipeID"`
+	Message  string
+	Status   string
 }
 
 // HandlerMsgUpdateRecipe is used to update recipe by a developer
@@ -20,15 +22,15 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 		return nil, errInternal(err)
 	}
 
-	rc, err2 := keeper.GetRecipe(ctx, msg.ID)
+	rc, err := keeper.GetRecipe(ctx, msg.ID)
 
 	// only the original sender (owner) of the cookbook can update the cookbook
 	if !rc.Sender.Equals(msg.Sender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the recipe is different then the current sender")
 	}
 
-	if err2 != nil {
-		return nil, errInternal(err2)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	rc.Description = msg.Description
@@ -45,6 +47,8 @@ func HandlerMsgUpdateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpd
 	}
 
 	return marshalJSON(UpdateRecipeResponse{
-		msg.ID,
+		RecipeID: msg.ID,
+		Message:  "successfully updated the recipe",
+		Status:   "Success",
 	})
 }

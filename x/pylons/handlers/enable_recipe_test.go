@@ -53,15 +53,15 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 			result, err := HandlerMsgEnableRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
-				enableRcpResponse := EnableRecipeResp{}
+				enableRcpResponse := EnableRecipeResponse{}
 				err := json.Unmarshal(result.Data, &enableRcpResponse)
 
 				require.True(t, err == nil)
 				require.True(t, enableRcpResponse.Status == "Success")
 				require.True(t, enableRcpResponse.Message == "successfully enabled the recipe")
 
-				uRcp, err2 := tci.PlnK.GetRecipe(tci.Ctx, tc.recipeID)
-				require.True(t, err2 == nil)
+				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.recipeID)
+				require.True(t, err == nil)
 				require.True(t, uRcp.Disabled == false)
 			} else {
 				// t.Errorf("EnableRecipeTEST LOG:: %+v", result)

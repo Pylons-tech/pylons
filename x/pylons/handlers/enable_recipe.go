@@ -7,8 +7,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// EnableRecipeResp is the response for enableRecipe
-type EnableRecipeResp struct {
+// EnableRecipeResponse is the response for enableRecipe
+type EnableRecipeResponse struct {
 	Message string
 	Status  string
 }
@@ -21,9 +21,9 @@ func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEna
 		return nil, errInternal(err)
 	}
 
-	recipe, err2 := keeper.GetRecipe(ctx, msg.RecipeID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	recipe, err := keeper.GetRecipe(ctx, msg.RecipeID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	if !msg.Sender.Equals(recipe.Sender) {
@@ -32,12 +32,12 @@ func HandlerMsgEnableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEna
 
 	recipe.Disabled = false
 
-	err2 = keeper.UpdateRecipe(ctx, msg.RecipeID, recipe)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	err = keeper.UpdateRecipe(ctx, msg.RecipeID, recipe)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
-	return marshalJSON(EnableRecipeResp{
+	return marshalJSON(EnableRecipeResponse{
 		Message: "successfully enabled the recipe",
 		Status:  "Success",
 	})
