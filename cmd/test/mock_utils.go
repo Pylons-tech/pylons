@@ -42,7 +42,11 @@ func MockCookbook(t *testing.T) (string, error) {
 	)
 
 	err = inttestSDK.WaitForNextBlock()
-	inttestSDK.ErrValidation(t, "error waiting for creating cookbook %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error waiting for creating cookbook")
+	}
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
@@ -68,7 +72,11 @@ func CheckCookbookExist() (string, bool, error) {
 // GetMockedCookbook get mocked cookbook
 func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 	guid, err := MockCookbook(t)
-	inttestSDK.ErrValidation(t, "error mocking cookbook %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error mocking cookbook")
+	}
 
 	return inttestSDK.GetCookbookByGUID(guid)
 }
@@ -124,14 +132,22 @@ func MockDetailedRecipeGUID(
 	t *testing.T,
 ) (string, error) {
 	guid, err := inttestSDK.GetRecipeGUIDFromName(rcpName, "")
-	inttestSDK.ErrValidation(t, "error checking if recipe already exist %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error checking if recipe already exist")
+	}
 
 	if len(guid) > 0 { // finish mock if already available
 		return guid, nil
 	}
 
 	mCB, err := GetMockedCookbook(t)
-	inttestSDK.ErrValidation(t, "error getting mocked cookbook %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error getting mocked cookbook")
+	}
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
@@ -153,7 +169,11 @@ func MockDetailedRecipeGUID(
 	)
 
 	err = inttestSDK.WaitForNextBlock()
-	inttestSDK.ErrValidation(t, "error waiting for creating recipe %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error waiting for creating recipe")
+	}
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
@@ -167,7 +187,11 @@ func MockDetailedRecipeGUID(
 // MockItemGUID mock item and return item's GUID
 func MockItemGUID(name string, t *testing.T) string {
 	mCB, err := GetMockedCookbook(t)
-	inttestSDK.ErrValidation(t, "error getting mocked cookbook %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error getting mocked cookbook")
+	}
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
@@ -177,7 +201,7 @@ func MockItemGUID(name string, t *testing.T) string {
 		[]types.DoubleKeyValue{},
 		[]types.LongKeyValue{},
 		[]types.StringKeyValue{
-			types.StringKeyValue{
+			{
 				Key:   "Name",
 				Value: name,
 			},
@@ -189,7 +213,11 @@ func MockItemGUID(name string, t *testing.T) string {
 	)
 
 	err = inttestSDK.WaitForNextBlock()
-	inttestSDK.ErrValidation(t, "error waiting for creating item %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error waiting for creating item")
+	}
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
@@ -247,7 +275,11 @@ func MockDetailedTradeGUID(
 	)
 
 	_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	inttestSDK.ErrValidation(t, "error waiting for creating trade %+v", err)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error waiting for creating trade")
+	}
 	// check trade created after 1 block
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.MustNil(err)

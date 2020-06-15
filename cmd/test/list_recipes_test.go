@@ -26,10 +26,18 @@ func TestListRecipeViaCLI(originT *originT.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			_, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.outputItemName, t)
-			inttestSDK.ErrValidation(t, "error mocking recipe %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error mocking recipe")
+			}
 
 			recipes, err := inttestSDK.ListRecipesViaCLI("")
-			inttestSDK.ErrValidation(t, "error listing recipes %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error listing recipes")
+			}
 
 			t.MustNil(err)
 			t.MustTrue(len(recipes) > 0)

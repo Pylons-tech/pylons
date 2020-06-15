@@ -4,7 +4,7 @@ Using REST interface server is the easiest way to fetch results in REST interfac
 
 ## Running rest server
 ```
-pylonscli rest-server --chain-id pylonschain --trust-node
+pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 ```
 ## Fetching
 This describes regular format of REST endpoints and samples for all endpoints.

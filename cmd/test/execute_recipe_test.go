@@ -31,7 +31,11 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
-			inttestSDK.ErrValidation(t, "error mocking recipe %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error mocking recipe")
+			}
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.MustNil(err)
@@ -47,10 +51,18 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			)
 
 			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			inttestSDK.ErrValidation(t, "error waiting for transaction %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error waiting for transaction")
+			}
 			// inttestSDK.WaitForNextBlock()
 			items, err := inttestSDK.ListItemsViaCLI("")
-			inttestSDK.ErrValidation(t, "error listing items via cli ::: %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error listing items via cli")
+			}
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 			t.MustTrue(ok)

@@ -46,7 +46,11 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			)
 
 			err = inttestSDK.WaitForNextBlock()
-			inttestSDK.ErrValidation(t, "error waiting for creating cookbook %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error waiting for creating cookbook")
+			}
 
 			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)

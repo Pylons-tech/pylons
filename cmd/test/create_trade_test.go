@@ -45,7 +45,11 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			)
 
 			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			inttestSDK.ErrValidation(t, "error waiting for creating trade %+v", err)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error waiting for creating trade")
+			}
 			// check trade created after 1 block
 			tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(tc.extraInfo)
 			t.MustNil(err)
