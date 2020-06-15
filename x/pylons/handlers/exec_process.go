@@ -91,10 +91,10 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	outputSTR, err2 := json.Marshal(ersl)
+	outputSTR, err := json.Marshal(ersl)
 
-	if err2 != nil {
-		return []byte{}, err2
+	if err != nil {
+		return []byte{}, err
 	}
 	return outputSTR, nil
 }

@@ -13,6 +13,8 @@ import (
 // CreateRecipeResponse is struct of create recipe response
 type CreateRecipeResponse struct {
 	RecipeID string `json:"RecipeID"`
+	Message  string
+	Status   string
 }
 
 // HandlerMsgCreateRecipe is used to create recipe by a developer
@@ -55,6 +57,8 @@ func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCre
 	}
 
 	return marshalJSON(CreateRecipeResponse{
-		recipe.ID,
+		RecipeID: recipe.ID,
+		Message:  "successfully created a recipe",
+		Status:   "Success",
 	})
 }

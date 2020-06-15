@@ -75,7 +75,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cbData := CreateCBResponse{}
+			cbData := CreateCookbookResponse{}
 			if tc.createCookbook {
 				_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 				require.True(t, err == nil)
@@ -132,7 +132,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
 
 	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
-	cbData := CreateCBResponse{}
+	cbData := CreateCookbookResponse{}
 	err := json.Unmarshal(result.Data, &cbData)
 	require.True(t, err == nil)
 	require.True(t, len(cbData.CookbookID) > 0)

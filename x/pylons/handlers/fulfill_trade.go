@@ -12,8 +12,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// FulfillTradeResp is the response for fulfillRecipe
-type FulfillTradeResp struct {
+// FulfillTradeResponse is the response for fulfillRecipe
+type FulfillTradeResponse struct {
 	Message string
 	Status  string
 }
@@ -142,7 +142,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(FulfillTradeResp{
+	return marshalJSON(FulfillTradeResponse{
 		Message: "successfully fulfilled the trade",
 		Status:  "Success",
 	})

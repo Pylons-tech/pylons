@@ -37,8 +37,8 @@ func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 	}
 
 	// if we cannot find the value then it should return as 0
-	bz, err2 := json.Marshal(QueryResBalance{value})
-	if err2 != nil {
+	bz, err := json.Marshal(QueryResBalance{value})
+	if err != nil {
 		panic("could not marshal result to JSON")
 	}
 

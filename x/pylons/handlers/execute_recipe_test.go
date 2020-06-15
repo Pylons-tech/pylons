@@ -302,7 +302,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 			if tc.showError == false {
 				require.True(t, err == nil)
-				execRcpResponse := ExecuteRecipeResp{}
+				execRcpResponse := ExecuteRecipeResponse{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
 				if err != nil {

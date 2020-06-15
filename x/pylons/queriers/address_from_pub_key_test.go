@@ -31,10 +31,10 @@ func TestAddrFromPubKeyFromAfti(t *testing.T) {
 
 	var addrResp AddrResp
 
-	err2 := input.Cdc.UnmarshalJSON(addrRespBytes, &addrResp)
+	err = input.Cdc.UnmarshalJSON(addrRespBytes, &addrResp)
 
-	if err2 != nil {
-		t.Fatal(err2.Error())
+	if err != nil {
+		t.Fatal(err.Error())
 	}
 
 	require.Equal(t, addrResp.Bech32Addr, expectedBech32Addr)
@@ -62,10 +62,10 @@ func TestAddrFromPubKeyFromGirish(t *testing.T) {
 
 	var addrResp AddrResp
 
-	err2 := input.Cdc.UnmarshalJSON(addrRespBytes, &addrResp)
+	err = input.Cdc.UnmarshalJSON(addrRespBytes, &addrResp)
 
-	if err2 != nil {
-		t.Fatal(err2.Error())
+	if err != nil {
+		t.Fatal(err.Error())
 	}
 
 	require.Equal(t, addrResp.Bech32Addr, expectedBech32Addr)

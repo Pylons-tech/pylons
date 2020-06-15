@@ -13,6 +13,8 @@ import (
 // CreateTradeResponse is struct of create trade response
 type CreateTradeResponse struct {
 	TradeID string `json:"TradeID"`
+	Message string
+	Status  string
 }
 
 // HandlerMsgCreateTrade is used to create a trade by a user
@@ -51,6 +53,8 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 	}
 
 	return marshalJSON(CreateTradeResponse{
-		trade.ID,
+		TradeID: trade.ID,
+		Message: "successfully created a trade",
+		Status:  "Success",
 	})
 }

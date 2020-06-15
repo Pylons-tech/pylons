@@ -134,7 +134,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	execResp := handlers.ExecuteRecipeResp{}
+	execResp := handlers.ExecuteRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
 	t.MustNil(err)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
@@ -159,7 +159,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	resp := handlers.CheckExecutionResp{}
+	resp := handlers.CheckExecutionResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 	t.MustTrue(resp.Status == tc.expectedStatus)
@@ -188,7 +188,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 		txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)
-		resp := handlers.CheckExecutionResp{}
+		resp := handlers.CheckExecutionResponse{}
 		err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		t.MustNil(err)
 		t.MustTrue(resp.Status == tc.expectedRetryResStatus)

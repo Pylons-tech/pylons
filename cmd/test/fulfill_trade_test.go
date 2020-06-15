@@ -149,7 +149,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
-	ffTrdResp := handlers.FulfillTradeResp{}
+	ffTrdResp := handlers.FulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	t.MustNil(err)
 

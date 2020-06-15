@@ -189,8 +189,8 @@ func TestKeeperUpdateItem(t *testing.T) {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
-				gItem, err2 := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
-				require.True(t, err2 == nil)
+				gItem, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
+				require.True(t, err == nil)
 				originItemStr, ok := tc.item.FindString("Name")
 				require.True(t, ok == true)
 				gotItemStr, ok := gItem.FindString("Name")

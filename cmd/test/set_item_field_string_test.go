@@ -48,7 +48,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
-			resp := handlers.UpdateItemStringResp{}
+			resp := handlers.UpdateItemStringResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.Message == "successfully updated the item field")

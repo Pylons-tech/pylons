@@ -50,7 +50,7 @@ func MockCookbook(t *testing.T) (string, error) {
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	resp := handlers.CreateCBResponse{}
+	resp := handlers.CreateCookbookResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 

@@ -21,7 +21,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.True(t, err == nil)
 
-	cbData := CreateCBResponse{}
+	cbData := CreateCookbookResponse{}
 
 	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
@@ -94,7 +94,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			ffResult, err := HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
 			if !tc.showError {
 				require.True(t, err == nil)
-				ffRespData := FulfillTradeResp{}
+				ffRespData := FulfillTradeResponse{}
 				err = json.Unmarshal(ffResult.Data, &ffRespData)
 				require.True(t, err == nil)
 				require.True(t, ffRespData.Status == "Success")
