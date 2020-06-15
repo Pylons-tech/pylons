@@ -23,6 +23,7 @@ func TestFixturesViaCLI(t *testing.T) {
 	if useRest {
 		inttestSDK.CLIOpts.RestEndpoint = "http://localhost:1317"
 	}
+	inttestSDK.CLIOpts.MaxWaitBlock = 50
 	fixturetestSDK.RegisterDefaultActionRunners()
 	fixturetestSDK.RunTestScenarios("scenarios", t)
 }

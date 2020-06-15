@@ -3,7 +3,7 @@ module github.com/Pylons-tech/pylons
 go 1.13
 
 require (
-	github.com/Pylons-tech/pylons_sdk v0.0.0-20200612183351-ea974b6186ce
+	github.com/Pylons-tech/pylons_sdk v0.0.0-20200615121841-c51c6e8d5dca
 	github.com/cosmos/cosmos-sdk v0.38.4
 	github.com/google/cel-go v0.3.2
 	github.com/google/uuid v1.1.1
