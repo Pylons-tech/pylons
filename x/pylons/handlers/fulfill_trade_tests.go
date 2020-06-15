@@ -55,6 +55,31 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			showError:             false,
 			pylonsLLCDistribution: 10,
 		},
+		"trade unordered coin input test": {
+			sender: sender,
+			inputCoinList: types.CoinInputList{
+				types.CoinInput{
+					Coin:  types.Pylon,
+					Count: 100,
+				},
+				types.CoinInput{
+					Coin:  "aaaa",
+					Count: 100,
+				},
+				types.CoinInput{
+					Coin:  "zzzz",
+					Count: 100,
+				},
+				types.CoinInput{
+					Coin:  "cccc",
+					Count: 100,
+				},
+			},
+			outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			desiredError:          "",
+			showError:             false,
+			pylonsLLCDistribution: 10,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
