@@ -27,6 +27,10 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 			return nil, errInternal(errors.New("Item is not the sender's one"))
 		}
 
+		if item.OwnerRecipeID != "" {
+			return nil, errInternal(errors.New("Item is owned by a receipe"))
+		}
+
 		item.Sender = msg.Receiver
 		if err := keeper.SetItem(ctx, item); err != nil {
 			return nil, errInternal(errors.New("Error updating item inside keeper"))

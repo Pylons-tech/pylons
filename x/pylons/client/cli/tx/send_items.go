@@ -70,6 +70,10 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				if targetItem.Sender.String() != msg.Sender.String() {
 					return errors.New("Item is not the sender's one")
 				}
+
+				if targetItem.OwnerRecipeID != "" {
+					return errors.New("Item is owned by a receipe")
+				}
 			}
 
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
