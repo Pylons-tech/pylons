@@ -101,6 +101,28 @@ Start daemon
 pylonsd start
 ```
 
+### Configuration
+
+- File name: `pylons.yml`
+
+```
+fees:
+  recipe_fee_percentage: 10 # Pylons fee percentage
+  cookbook_basic_fee: 10000 # Cookbook creation fee
+  cookbook_premium_fee: 50000 # Cookbook creation fee
+  pylons_trade_percentage: 10 # Pylons trade percentage
+  minimum_trade_price: 10 # Minimum trade price
+validators:
+  pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
+```
+
+- `recipe_fee_percentage` refers to the percentage of pylons that needs to be  transfered to Pylons LLC validator address for every pylons denom paid recipe.  
+- `cookbook_basic_fee` refers to the amount of pylons that needs to be paid to Pylons LLC validator address to create a basic tier cookbook creation.  
+- `cookbook_premium_fee` refers to the amount of pylons that needs to be paid to Pylons LLC validator address to create a premium tier cookbook creation.  
+- `pylons_trade_percentage` refers to the percentage of pylons that needs to be transfered from pylons incomer's side.
+- `minimum_trade_price` refers to the minimum amount of pylons that needs to participate per trading.
+- `pylons_llc` refers to cosmos address for Pylons LLC validator.
+
 ## Deploying for production
 
 - run the rest server using the `--laddr` as `0.0.0.0`
