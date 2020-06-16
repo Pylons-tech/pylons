@@ -33,9 +33,13 @@ func (msg MsgSendItems) Type() string { return "send_items" }
 func (msg MsgSendItems) ValidateBasic() error {
 
 	for _, val := range msg.ItemIDs {
-		if val != "" {
+		if val == "" {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemID is invalid")
 		}
+	}
+
+	if msg.Sender.String() == msg.Receiver.String() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Sender and reciever should be different")
 	}
 
 	if msg.Sender.Empty() {
