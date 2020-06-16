@@ -9,15 +9,15 @@ import (
 
 // MsgSendItems defines a SendItems message
 type MsgSendItems struct {
-	ItemID   string
+	ItemIDs  []string
 	Sender   sdk.AccAddress
 	Receiver sdk.AccAddress
 }
 
 // NewMsgSendItems is a function to get MsgSendItems msg from required params
-func NewMsgSendItems(itemID string, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendItems {
+func NewMsgSendItems(itemIDs []string, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendItems {
 	return MsgSendItems{
-		ItemID:   itemID,
+		ItemIDs:  itemIDs,
 		Sender:   sender,
 		Receiver: receiver,
 	}
@@ -31,6 +31,12 @@ func (msg MsgSendItems) Type() string { return "send_items" }
 
 // ValidateBasic is a function to validate MsgSendItems msg
 func (msg MsgSendItems) ValidateBasic() error {
+
+	for _, val := range msg.ItemIDs {
+		if val != "" {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemID is invalid")
+		}
+	}
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())

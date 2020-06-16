@@ -38,8 +38,6 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return errors.New("cannot get the keys from home")
 			}
 
-			// return cliCtx.PrintOutput(out)
-
 			var addr sdk.AccAddress
 			addr, err = sdk.AccAddressFromBech32(args[0])
 			// if its not an address
@@ -51,26 +49,26 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				addr = info.GetAddress()
 			}
 
-			msg := msgs.NewMsgSendItems(args[1], cliCtx.GetFromAddress(), addr)
+			itemIDsArray := strings.Split(args[1], ",")
+
+			msg := msgs.NewMsgSendItems(itemIDsArray, cliCtx.GetFromAddress(), addr)
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			itemIDsArray := strings.Split(args[1], ",")
-
 			for _, val := range itemIDsArray {
 
 				res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, val), nil)
 				if err != nil {
-					return fmt.Errorf(err.Error())
+					return err
 				}
 
 				var targetItem types.Item
 				cdc.MustUnmarshalJSON(res, &targetItem)
 
 				if targetItem.Sender.String() != msg.Sender.String() {
-					return errors.New("Item is not the Sender's one")
+					return errors.New("Item is not the sender's one")
 				}
 			}
 

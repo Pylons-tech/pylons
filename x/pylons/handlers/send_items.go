@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -18,16 +17,14 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		return nil, errInternal(err)
 	}
 
-	itemIDsArray := strings.Split(msg.ItemID, ",")
-
-	for _, val := range itemIDsArray {
-		item, err2 := keeper.GetItem(ctx, val)
-		if err2 != nil {
+	for _, val := range msg.ItemIDs {
+		item, err := keeper.GetItem(ctx, val)
+		if err != nil {
 			return nil, errInternal(err)
 		}
 
 		if item.Sender.String() != msg.Sender.String() {
-			return nil, errInternal(errors.New("Item is not the Sender's one"))
+			return nil, errInternal(errors.New("Item is not the sender's one"))
 		}
 
 		item.Sender = msg.Receiver
