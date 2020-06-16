@@ -5,9 +5,12 @@
       {
         "type": "pylons/SendItems",
         "value": {
-          "ItemID": "cosmos1s8vfva7ax5stydzlw8g0p4pm2f2exvm4pw8ad955a0bd6f-5737-4c50-9ef2-6525cd408805,cosmos1s8vfva7ax5stydzlw8g0p4pm2f2exvm4pw8ad97bdd2579-f1a2-4c8c-afc2-e849c84476b0",
-          "Sender": "cosmos1wjka64elqf64qx72emawyeqq3hn7fydlv6j2v5",
-          "Receiver": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453"
+          "ItemIDs": [
+            "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2q3d6b4e7b-5589-4a65-88ad-7262a75b9782",
+            "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2qab539c55-d98a-4ede-9803-a36b93505bd6"
+          ],
+          "Sender": "cosmos1lmxetakze64vramcx0tc7yac743cf2cedqw027",
+          "Receiver": "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2q"
         }
       }
     ],

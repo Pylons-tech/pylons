@@ -24,7 +24,7 @@ import (
 // SendItems implements SendItems msg transaction
 func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	ccb := &cobra.Command{
-		Use:   "send-items [address] [item_id]",
+		Use:   "send-items [address] [item_ids]",
 		Short: "send items to the address provided",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
