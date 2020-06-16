@@ -11,7 +11,7 @@ import (
 // GenesisState empty genesis for pylons
 type GenesisState struct {
 	Cookbooks []types.Cookbook
-	Recipies  []types.Recipe
+	Recipes   []types.Recipe
 	Items     []types.Item
 }
 
@@ -29,7 +29,7 @@ func ValidateGenesis(data GenesisState) error {
 func DefaultGenesisState() GenesisState {
 	return GenesisState{
 		Cookbooks: []types.Cookbook{},
-		Recipies:  []types.Recipe{},
+		Recipes:   []types.Recipe{},
 		Items:     []types.Item{},
 	}
 }
@@ -40,7 +40,7 @@ func InitGenesis(ctx sdk.Context, keeper keep.Keeper, data GenesisState) {
 		//nolint:errcheck
 		keeper.SetCookbook(ctx, record)
 	}
-	for _, record := range data.Recipies {
+	for _, record := range data.Recipes {
 		//nolint:errcheck
 		keeper.SetRecipe(ctx, record)
 	}
@@ -69,5 +69,5 @@ func ExportGenesis(ctx sdk.Context, k keep.Keeper) GenesisState {
 		log.Panicln("error while getting items in exportGenesis:", err.Error())
 	}
 
-	return GenesisState{Cookbooks: cookbooks, Recipies: recipes, Items: items}
+	return GenesisState{Cookbooks: cookbooks, Recipes: recipes, Items: items}
 }
