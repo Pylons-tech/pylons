@@ -34,18 +34,11 @@ func (msg MsgSendItems) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	if msg.Receiver.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Receiver.String())
-
 	}
-
-	// if !msg.Amount.IsAllPositive() {
-	// 	return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "Amount cannot be less than 0/negative")
-
-	// }
 
 	return nil
 }
