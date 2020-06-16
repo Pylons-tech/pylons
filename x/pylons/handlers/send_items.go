@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -17,24 +18,23 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		return nil, errInternal(err)
 	}
 
-	// if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, msg.Amount) {
-	// 	return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins")
+	itemIDsArray := strings.Split(msg.ItemID, ",")
 
-	// }
-	// item, err2 := keeper.GetItem(ctx, msg.ItemID)
-	// if err2 != nil {
-	// 	return nil, errInternal(err)
-	// }
+	for _, val := range itemIDsArray {
+		item, err2 := keeper.GetItem(ctx, val)
+		if err2 != nil {
+			return nil, errInternal(err)
+		}
 
-	msg.TargetItem.Sender = msg.Sender
+		if item.Sender.String() != msg.Sender.String() {
+			return nil, errInternal(errors.New("Item is not the Sender's one"))
+		}
 
-	if err := keeper.SetItem(ctx, msg.TargetItem); err != nil {
-		return nil, errInternal(errors.New("Error updating item inside keeper"))
+		item.Sender = msg.Receiver
+		if err := keeper.SetItem(ctx, item); err != nil {
+			return nil, errInternal(errors.New("Error updating item inside keeper"))
+		}
 	}
-	// err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, msg.Receiver, msg.Amount) // If so, deduct the Bid amount from the sender
-	// if err != nil {
-	// 	return nil, errInternal(err)
-	// }
 
 	return &sdk.Result{}, nil
 }

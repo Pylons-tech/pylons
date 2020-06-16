@@ -3,24 +3,23 @@ package msgs
 import (
 	"encoding/json"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgSendItems defines a SendItems message
 type MsgSendItems struct {
-	TargetItem types.Item
-	Sender     sdk.AccAddress
-	Receiver   sdk.AccAddress
+	ItemID   string
+	Sender   sdk.AccAddress
+	Receiver sdk.AccAddress
 }
 
 // NewMsgSendItems is a function to get MsgSendItems msg from required params
-func NewMsgSendItems(targetItem types.Item, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendItems {
+func NewMsgSendItems(itemID string, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendItems {
 	return MsgSendItems{
-		TargetItem: targetItem,
-		Sender:     sender,
-		Receiver:   receiver,
+		ItemID:   itemID,
+		Sender:   sender,
+		Receiver: receiver,
 	}
 }
 

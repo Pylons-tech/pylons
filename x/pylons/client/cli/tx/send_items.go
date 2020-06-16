@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -37,13 +38,6 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				return errors.New("cannot get the keys from home")
 			}
 
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, args[1]), nil)
-			if err != nil {
-				return fmt.Errorf(err.Error())
-			}
-
-			var targetItem types.Item
-			cdc.MustUnmarshalJSON(res, &targetItem)
 			// return cliCtx.PrintOutput(out)
 
 			var addr sdk.AccAddress
@@ -57,10 +51,27 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				addr = info.GetAddress()
 			}
 
-			msg := msgs.NewMsgSendItems(targetItem, cliCtx.GetFromAddress(), addr)
+			msg := msgs.NewMsgSendItems(args[1], cliCtx.GetFromAddress(), addr)
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err
+			}
+
+			itemIDsArray := strings.Split(args[1], ",")
+
+			for _, val := range itemIDsArray {
+
+				res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, val), nil)
+				if err != nil {
+					return fmt.Errorf(err.Error())
+				}
+
+				var targetItem types.Item
+				cdc.MustUnmarshalJSON(res, &targetItem)
+
+				if targetItem.Sender.String() != msg.Sender.String() {
+					return errors.New("Item is not the Sender's one")
+				}
 			}
 
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
