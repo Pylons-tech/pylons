@@ -22,6 +22,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
 	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
 	item3 := keep.GenItem(cbData.CookbookID, sender1, "spear")
+	item4 := keep.GenItem(cbData.CookbookID, sender1, "bow")
 	item3.OwnerRecipeID = "????????"
 
 	err := tci.PlnK.SetItem(tci.Ctx, *item1)
@@ -31,6 +32,9 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	require.True(t, err == nil)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item3)
+	require.True(t, err == nil)
+
+	err = tci.PlnK.SetItem(tci.Ctx, *item4)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -62,9 +66,9 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			showError:    true,
 		},
 		"wrong item sender check": {
-			itemIDs:      []string{item1.ID, item2.ID},
-			fromAddress:  sender1,
-			toAddress:    sender2,
+			itemIDs:      []string{item4.ID},
+			fromAddress:  sender2,
+			toAddress:    sender1,
 			desiredError: "Item is not the sender's one",
 			showError:    true,
 		},
@@ -75,11 +79,11 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			desiredError: "Item is owned by a receipe",
 			showError:    true,
 		},
-		"duplicate item check": {
+		"duplicated items check": {
 			itemIDs:      []string{item1.ID, item1.ID},
 			fromAddress:  sender1,
 			toAddress:    sender2,
-			desiredError: "Duplicated items",
+			desiredError: "Duplicated items in items trasfer",
 			showError:    true,
 		},
 	}
