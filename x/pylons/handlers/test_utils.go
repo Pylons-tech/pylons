@@ -181,7 +181,7 @@ func MockExecution(
 func MockTrade(
 	tci keep.TestCoinInput,
 	coinInputList types.CoinInputList,
-	itemInputList types.ItemInputList,
+	itemInputList types.TradeItemInputList,
 	coinOutputs sdk.Coins,
 	itemOutputs types.ItemList,
 	sender sdk.AccAddress,

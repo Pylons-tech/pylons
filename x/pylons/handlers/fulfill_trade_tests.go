@@ -40,7 +40,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	cases := map[string]struct {
 		sender                sdk.AccAddress
 		inputCoinList         types.CoinInputList
-		inputItemList         types.ItemInputList
+		inputItemList         types.TradeItemInputList
 		outputCoinList        sdk.Coins
 		outputItemList        types.ItemList
 		desiredError          string

@@ -24,7 +24,7 @@ func TestListTrades(t *testing.T) {
 	_, err = handlers.MockTrade(
 		tci,
 		types.GenCoinInputList("wood", 100),
-		types.ItemInputList{},
+		types.TradeItemInputList{},
 		types.NewPylon(1000),
 		types.ItemList{},
 		sender1,
@@ -35,7 +35,7 @@ func TestListTrades(t *testing.T) {
 	_, err = handlers.MockTrade(
 		tci,
 		types.GenCoinInputList("stone", 100),
-		types.ItemInputList{},
+		types.TradeItemInputList{},
 		types.NewPylon(2000),
 		types.ItemList{},
 		sender1,

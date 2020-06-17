@@ -22,7 +22,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 
 	cbData := CreateCookbookResponse{}
 
-	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
+	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "cookbook-id-0001", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 	err = json.Unmarshal(cookbookResult.Data, &cbData)
 	require.True(t, err == nil)
@@ -39,7 +39,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	cases := map[string]struct {
 		sender         sdk.AccAddress
 		inputCoinList  types.CoinInputList
-		inputItemList  types.ItemInputList
+		inputItemList  types.TradeItemInputList
 		outputCoinList sdk.Coins
 		outputItemList types.ItemList
 		desiredError   string
@@ -47,7 +47,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	}{
 		"trade without pylon": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -56,7 +56,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"less than minimum amount pylons trading test": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -66,7 +66,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with item and coins": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -84,7 +84,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with coin and item failure due to low balance": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},

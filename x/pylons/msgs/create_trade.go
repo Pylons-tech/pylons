@@ -13,7 +13,7 @@ import (
 // MsgCreateTrade defines a CreateTrade message
 type MsgCreateTrade struct {
 	CoinInputs  types.CoinInputList
-	ItemInputs  types.ItemInputList
+	ItemInputs  types.TradeItemInputList
 	CoinOutputs sdk.Coins
 	ItemOutputs types.ItemList
 	ExtraInfo   string
@@ -23,7 +23,7 @@ type MsgCreateTrade struct {
 // NewMsgCreateTrade a constructor for CreateTrade msg
 func NewMsgCreateTrade(
 	coinInputs types.CoinInputList,
-	itemInputs types.ItemInputList,
+	itemInputs types.TradeItemInputList,
 	coinOutputs sdk.Coins,
 	itemOutputs types.ItemList,
 	extraInfo string,
@@ -80,6 +80,13 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 
 	if tradePylonAmount < config.Config.Fee.MinTradePrice {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
+	}
+
+	if msg.ItemInputs != nil {
+		err := msg.ItemInputs.Validate()
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
 	}
 
 	return nil
