@@ -48,5 +48,5 @@ For simplification this stuff is done by loud game if you run `make ARGS="accoun
 
 ## What is OwnerReceipeID of an item? 
 
-- When the item is scheduled to be handled in the future block by a receipe, the item's OwnerReceipeID is set as the receipe's ID. This menas that this item is locked until the appropriate future block is handled.
-- You can't send or receive items that is currently owned by a receipe. So you need to check if the OwnerReceipeID is empty before sending the item.
+- When the item is scheduled to be handled in the future block by a receipe, the item's OwnerReceipeID is set as the receipe's ID. This means that this item is locked until the appropriate future block is created.
+- You can't send or receive items that are currently owned by a receipe. So you need to check if the OwnerReceipeID is empty before sending the item.
