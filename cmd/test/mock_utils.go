@@ -255,7 +255,7 @@ func MockDetailedTradeGUID(
 	} else {
 		outputCoins = sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
 	}
-	var outputItems types.ItemList = nil
+	var outputItems types.ItemList
 	if hasOutputItem {
 		outputItem, err := inttestSDK.GetItemByGUID(outputItemID)
 		t.MustNil(err)
