@@ -1,5 +1,10 @@
 {
-    "CoinInputs":[],
+    "CoinInputs":[
+        {
+            "Coin": "pylon",
+            "Count": "10"
+        }
+    ],
     "ItemInputRefs": [
         "./trades/item_input/trading_knife_v4.json"
     ],
