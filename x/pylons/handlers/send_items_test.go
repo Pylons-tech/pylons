@@ -63,8 +63,8 @@ func TestHandlerMsgSendItems(t *testing.T) {
 		},
 		"wrong item sender check": {
 			itemIDs:      []string{item1.ID, item2.ID},
-			fromAddress:  sender2,
-			toAddress:    sender1,
+			fromAddress:  sender1,
+			toAddress:    sender2,
 			desiredError: "Item is not the sender's one",
 			showError:    true,
 		},
