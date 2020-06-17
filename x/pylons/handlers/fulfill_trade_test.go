@@ -16,9 +16,17 @@ import (
 // TestHandlerMsgFulfillTrade is fulfill trade test
 func TestHandlerMsgFulfillTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(100000))
+	sender, sender2 := keep.SetupTestAccounts(t, tci, sdk.Coins{
+		sdk.NewInt64Coin("chair", 100000),
+		sdk.NewInt64Coin(types.Pylon, 100000),
+	})
 
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
+	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, sdk.Coins{
+		sdk.NewInt64Coin("aaaa", 100000),
+		sdk.NewInt64Coin("cccc", 100000),
+		sdk.NewInt64Coin(types.Pylon, 100000),
+		sdk.NewInt64Coin("zzzz", 100000),
+	})
 	require.True(t, err == nil)
 
 	cbData := CreateCookbookResponse{}
@@ -39,8 +47,9 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 
 	cases := map[string]struct {
 		sender                sdk.AccAddress
+		fulfiller             sdk.AccAddress
 		inputCoinList         types.CoinInputList
-		inputItemList         types.ItemInputList
+		inputItemList         types.TradeItemInputList
 		outputCoinList        sdk.Coins
 		outputItemList        types.ItemList
 		desiredError          string
@@ -49,6 +58,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	}{
 		"trade pylon distribution test": {
 			sender:                sender,
+			fulfiller:             sender2,
 			inputCoinList:         types.GenCoinInputList(types.Pylon, 100),
 			outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
 			desiredError:          "",
@@ -56,7 +66,8 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			pylonsLLCDistribution: 10,
 		},
 		"trade unordered coin input test": {
-			sender: sender,
+			sender:    sender,
+			fulfiller: sender2,
 			inputCoinList: types.CoinInputList{
 				types.CoinInput{
 					Coin:  types.Pylon,
@@ -85,14 +96,20 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
 			ctResult, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, ctMsg)
+			if err != nil {
+				t.Log(err)
+			}
 			require.True(t, err == nil)
 			ctRespData := CreateTradeResponse{}
 			err = json.Unmarshal(ctResult.Data, &ctRespData)
 			require.True(t, err == nil)
 			require.True(t, len(ctRespData.TradeID) > 0)
-			ffMsg := msgs.NewMsgFulfillTrade(ctRespData.TradeID, tc.sender, []string{})
+			ffMsg := msgs.NewMsgFulfillTrade(ctRespData.TradeID, tc.fulfiller, []string{})
 			ffResult, err := HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
 			if !tc.showError {
+				if err != nil {
+					t.Log(err)
+				}
 				require.True(t, err == nil)
 				ffRespData := FulfillTradeResponse{}
 				err = json.Unmarshal(ffResult.Data, &ffRespData)
