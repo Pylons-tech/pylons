@@ -39,7 +39,7 @@ func (msg MsgSendItems) ValidateBasic() error {
 	}
 
 	if msg.Sender.String() == msg.Receiver.String() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Sender and reciever should be different")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Sender and receiver should be different")
 	}
 
 	if msg.Sender.Empty() {
