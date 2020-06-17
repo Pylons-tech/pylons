@@ -75,6 +75,13 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			desiredError: "Item is owned by a receipe",
 			showError:    true,
 		},
+		"duplicate item check": {
+			itemIDs:      []string{item1.ID, item1.ID},
+			fromAddress:  sender1,
+			toAddress:    sender2,
+			desiredError: "Duplicated items",
+			showError:    true,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
