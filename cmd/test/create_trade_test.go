@@ -35,7 +35,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			txhash := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
-					types.GenItemInputList("Raichu"),
+					types.GenTradeItemInputList("LOUD-CB-001", []string{"Raichu"}),
 					types.NewPylon(1000),
 					nil,
 					tc.extraInfo,

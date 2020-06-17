@@ -245,7 +245,7 @@ func MockDetailedTradeGUID(
 	if !hasInputCoin {
 		inputCoinList = nil
 	}
-	inputItemList := types.GenItemInputList(inputItemName)
+	inputItemList := types.GenTradeItemInputList("LOUD-CB-001", []string{inputItemName})
 	if !hasInputItem {
 		inputItemList = nil
 	}
