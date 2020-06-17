@@ -70,7 +70,7 @@ func CheckCookbookExist() (string, bool, error) {
 }
 
 // GetMockedCookbook get mocked cookbook
-func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
+func GetMockedCookbook(t *testing.T) types.Cookbook {
 	guid, err := MockCookbook(t)
 	if err != nil {
 		t.WithFields(testing.Fields{
@@ -78,7 +78,13 @@ func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 		}).Fatal("error mocking cookbook")
 	}
 
-	return inttestSDK.GetCookbookByGUID(guid)
+	cb, err := inttestSDK.GetCookbookByGUID(guid)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error mocking cookbook")
+	}
+	return cb
 }
 
 // MockNoDelayItemGenRecipeGUID mock no delay item generation recipe
@@ -142,7 +148,7 @@ func MockDetailedRecipeGUID(
 		return guid, nil
 	}
 
-	mCB, err := GetMockedCookbook(t)
+	mCB := GetMockedCookbook(t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,

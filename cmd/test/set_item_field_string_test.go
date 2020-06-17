@@ -31,12 +31,8 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB, err := GetMockedCookbook(t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error getting mocked cookbook")
-			}
+			mCB := GetMockedCookbook(t)
+
 			itemID := MockItemGUID(mCB.ID, tc.itemName, t)
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)

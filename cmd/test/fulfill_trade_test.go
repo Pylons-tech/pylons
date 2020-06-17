@@ -119,12 +119,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 
-	mCB, err := GetMockedCookbook(t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error getting mocked cookbook")
-	}
+	mCB := GetMockedCookbook(t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {
