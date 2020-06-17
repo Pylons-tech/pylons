@@ -19,9 +19,9 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 	cbData := MockCookbook(tci, sender1)
 
-	item1 := keep.GenItem(cbData.CookbookID, sender1, "????????")
-	item2 := keep.GenItem(cbData.CookbookID, sender1, "????????")
-	item3 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
+	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
+	item3 := keep.GenItem(cbData.CookbookID, sender1, "spear")
 	item3.OwnerRecipeID = "????????"
 
 	err := tci.PlnK.SetItem(tci.Ctx, *item1)
