@@ -4,7 +4,6 @@ import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
-
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"

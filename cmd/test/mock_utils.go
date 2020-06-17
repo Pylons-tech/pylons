@@ -70,7 +70,7 @@ func CheckCookbookExist() (string, bool, error) {
 }
 
 // GetMockedCookbook get mocked cookbook
-func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
+func GetMockedCookbook(t *testing.T) types.Cookbook {
 	guid, err := MockCookbook(t)
 	if err != nil {
 		t.WithFields(testing.Fields{
@@ -78,7 +78,13 @@ func GetMockedCookbook(t *testing.T) (types.Cookbook, error) {
 		}).Fatal("error mocking cookbook")
 	}
 
-	return inttestSDK.GetCookbookByGUID(guid)
+	cb, err := inttestSDK.GetCookbookByGUID(guid)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error mocking cookbook")
+	}
+	return cb
 }
 
 // MockNoDelayItemGenRecipeGUID mock no delay item generation recipe
@@ -142,7 +148,7 @@ func MockDetailedRecipeGUID(
 		return guid, nil
 	}
 
-	mCB, err := GetMockedCookbook(t)
+	mCB := GetMockedCookbook(t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
@@ -185,19 +191,14 @@ func MockDetailedRecipeGUID(
 }
 
 // MockItemGUID mock item and return item's GUID
-func MockItemGUID(name string, t *testing.T) string {
-	mCB, err := GetMockedCookbook(t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error getting mocked cookbook")
-	}
+func MockItemGUID(cbID string, name string, t *testing.T) string {
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(mCB.ID,
+	txhash := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
+		cbID,
 		[]types.DoubleKeyValue{},
 		[]types.LongKeyValue{},
 		[]types.StringKeyValue{
@@ -230,6 +231,7 @@ func MockItemGUID(name string, t *testing.T) string {
 
 // MockDetailedTradeGUID mock trade and return GUID
 func MockDetailedTradeGUID(
+	cbID string,
 	hasInputCoin bool, inputCoinName string, inputCoinAmount int64,
 	hasInputItem bool, inputItemName string,
 	hasOutputCoin bool, outputCoinName string, outputCoinAmount int64,
@@ -245,7 +247,7 @@ func MockDetailedTradeGUID(
 	if !hasInputCoin {
 		inputCoinList = nil
 	}
-	inputItemList := types.GenTradeItemInputList("LOUD-CB-001", []string{inputItemName})
+	inputItemList := types.GenTradeItemInputList(cbID, []string{inputItemName})
 	if !hasInputItem {
 		inputItemList = nil
 	}
@@ -255,7 +257,7 @@ func MockDetailedTradeGUID(
 	} else {
 		outputCoins = sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
 	}
-	var outputItems types.ItemList = nil
+	var outputItems types.ItemList
 	if hasOutputItem {
 		outputItem, err := inttestSDK.GetItemByGUID(outputItemID)
 		t.MustNil(err)
