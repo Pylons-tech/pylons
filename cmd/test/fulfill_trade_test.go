@@ -38,7 +38,6 @@ type FulfillTradeTestCase struct {
 func TestFulfillTradeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
-
 	tests := []FulfillTradeTestCase{
 		{
 			"coin->coin fullfill trade test", // coin-coin fulfill trade test
@@ -120,12 +119,19 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 
-	outputItemID := ""
-	if tc.hasOutputItem {
-		outputItemID = MockItemGUID(tc.outputItemName, t)
+	mCB, err := GetMockedCookbook(t)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error getting mocked cookbook")
 	}
 
-	trdGUID := MockDetailedTradeGUID(tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
+	outputItemID := ""
+	if tc.hasOutputItem {
+		outputItemID = MockItemGUID(mCB.ID, tc.outputItemName, t)
+	}
+
+	trdGUID := MockDetailedTradeGUID(mCB.ID, tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
@@ -139,7 +145,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
 		itemIDs = []string{
-			MockItemGUID(tc.inputItemName, t),
+			MockItemGUID(mCB.ID, tc.inputItemName, t),
 		}
 	}
 

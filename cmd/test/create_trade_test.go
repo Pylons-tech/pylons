@@ -29,13 +29,20 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			mCB, err := GetMockedCookbook(t)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("error getting mocked cookbook")
+			}
+
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
 			txhash := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
-					types.GenTradeItemInputList("LOUD-CB-001", []string{"Raichu"}),
+					types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
 					types.NewPylon(1000),
 					nil,
 					tc.extraInfo,

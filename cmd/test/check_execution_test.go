@@ -97,11 +97,17 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
 	t.Parallel()
+	mCB, err := GetMockedCookbook(t)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("error getting mocked cookbook")
+	}
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
 		itemIDs = []string{
-			MockItemGUID(tc.currentItemName, t),
+			MockItemGUID(mCB.ID, tc.currentItemName, t),
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)

@@ -27,12 +27,12 @@ type MsgCreateCookbook struct {
 }
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
-func NewMsgCreateCookbook(name, cookbookID, desc, devel string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
+func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
 		CookbookID:   cookbookID,
 		Name:         name,
 		Description:  desc,
-		Developer:    devel,
+		Developer:    developer,
 		Version:      version,
 		SupportEmail: sEmail,
 		Level:        level,
