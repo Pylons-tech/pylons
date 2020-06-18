@@ -4,7 +4,7 @@
         "./trades/item_input/trading_knife_v3.json"
     ],
     "CoinOutputs": [{
-        "denom":"node0token",
+        "denom":"pylon",
         "amount": "200"
     }],
     "ItemOutputNames": [],

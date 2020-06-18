@@ -100,7 +100,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			result, err := HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
-				resp := UpdateItemStringResp{}
+				resp := UpdateItemStringResponse{}
 				err := json.Unmarshal(result.Data, &resp)
 
 				if err != nil {

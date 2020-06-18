@@ -68,8 +68,8 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 			_, err := HandlerMsgUpdateCookbook(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
-				readCookbook, err2 := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
-				require.True(t, err2 == nil)
+				readCookbook, err := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
+				require.True(t, err == nil)
 				require.True(t, readCookbook.Description == tc.desc)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -11,8 +12,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// FulfillTradeResp is the response for fulfillRecipe
-type FulfillTradeResp struct {
+// FulfillTradeResponse is the response for fulfillRecipe
+type FulfillTradeResponse struct {
 	Message string
 	Status  string
 }
@@ -32,10 +33,13 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	if trade.Completed {
 		return nil, errInternal(errors.New("this trade is already completed"))
-
 	}
 
-	items, err := keeper.GetItemsBySender(ctx, msg.Sender)
+	if len(msg.ItemIDs) != len(trade.ItemInputs) {
+		return nil, errInternal(errors.New("the item IDs count doesn't match the trade input"))
+	}
+
+	items, err := GetItemsFromIDs(ctx, keeper, msg.ItemIDs, msg.Sender)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -55,7 +59,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 		if matched {
 			matchedItem := items[index]
-			if !matchedItem.Tradable {
+			if !matchedItem.IsTradable() {
 				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
 			matchedItems = append(matchedItems, matchedItem)
@@ -89,7 +93,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID))
 		}
 
-		if !storedItem.Tradable {
+		if !storedItem.IsTradable() {
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
@@ -116,14 +120,20 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// trade creator to trade acceptor the coin output
 	err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
-
+	if err != nil {
+		return nil, errInternal(err)
+	}
+	err = ProcessCoinIncomeFee(ctx, keeper, msg.Sender, trade.CoinOutputs)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	// trade acceptor to trade creator the coin input
 	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
-
+	if err != nil {
+		return nil, errInternal(err)
+	}
+	err = ProcessCoinIncomeFee(ctx, keeper, trade.Sender, inputCoins)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -135,8 +145,24 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(FulfillTradeResp{
+	return marshalJSON(FulfillTradeResponse{
 		Message: "successfully fulfilled the trade",
 		Status:  "Success",
 	})
+}
+
+// ProcessCoinIncomeFee process trading accepter fee
+func ProcessCoinIncomeFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddress, coins sdk.Coins) error {
+	// send pylon amount to PylonsLLC, validator
+	pylonAmount := coins.AmountOf(types.Pylon).Int64()
+	if pylonAmount > 0 {
+		tradePercent := config.Config.Fee.PylonsTradePercent
+		pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+		if err != nil {
+			return err
+		}
+		pylonsLLCAmount := Max(1, pylonAmount*tradePercent/100)
+		return keeper.CoinKeeper.SendCoins(ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
+	}
+	return nil
 }

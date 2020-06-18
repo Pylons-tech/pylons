@@ -31,7 +31,9 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			itemID := MockItemGUID(tc.itemName, t)
+			mCB := GetMockedCookbook(t)
+
+			itemID := MockItemGUID(mCB.ID, tc.itemName, t)
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
@@ -48,7 +50,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
-			resp := handlers.UpdateItemStringResp{}
+			resp := handlers.UpdateItemStringResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.Message == "successfully updated the item field")

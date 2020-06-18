@@ -1,10 +1,13 @@
 {
-    "Doubles":null,
-    "Longs":null,
-    "Strings":[
-        {
-            "Key":"Name",
-            "Value":"Trading Knife v3"
-        }
-    ]
+    "ItemInput": {
+        "Doubles":null,
+        "Longs":null,
+        "Strings":[
+            {
+                "Key":"Name",
+                "Value":"Trading Knife v3"
+            }
+        ]
+    },
+    "CookbookID": "tradecookbook-1589853709"
 }

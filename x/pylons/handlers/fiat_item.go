@@ -9,7 +9,9 @@ import (
 
 // FiatItemResponse is a struct to control fiat item response
 type FiatItemResponse struct {
-	ItemID string `json:"ItemID"`
+	ItemID  string `json:"ItemID"`
+	Message string
+	Status  string
 }
 
 // HandlerMsgFiatItem is used to create item within 1 block execution
@@ -21,9 +23,9 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 	}
 
 	// TODO: should enable it if fiat_item should only be signed by game dev
-	// cook, err2 := keeper.GetCookbook(ctx, msg.CookbookID)
-	// if err2 != nil {
-	// 	return nil, errInternal(err2)
+	// cook, err := keeper.GetCookbook(ctx, msg.CookbookID)
+	// if err != nil {
+	// 	return nil, errInternal(err)
 	// }
 	// if !cook.Sender.Equals(msg.Sender) {
 	// 	return sdkerrors.Wrap(sdkerrors.ErrUnauthorized,"cookbook not owned by the sender")
@@ -36,6 +38,8 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 	}
 
 	return marshalJSON(FiatItemResponse{
-		item.ID,
+		ItemID:  item.ID,
+		Message: "successfully created an item",
+		Status:  "Success",
 	})
 }

@@ -97,11 +97,12 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
 	t.Parallel()
+	mCB := GetMockedCookbook(t)
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
 		itemIDs = []string{
-			MockItemGUID(tc.currentItemName, t),
+			MockItemGUID(mCB.ID, tc.currentItemName, t),
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
@@ -134,7 +135,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	execResp := handlers.ExecuteRecipeResp{}
+	execResp := handlers.ExecuteRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
 	t.MustNil(err)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
@@ -159,7 +160,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
-	resp := handlers.CheckExecutionResp{}
+	resp := handlers.CheckExecutionResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	t.MustNil(err)
 	t.MustTrue(resp.Status == tc.expectedStatus)
@@ -188,7 +189,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 		txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 		t.MustNil(err)
-		resp := handlers.CheckExecutionResp{}
+		resp := handlers.CheckExecutionResponse{}
 		err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		t.MustNil(err)
 		t.MustTrue(resp.Status == tc.expectedRetryResStatus)

@@ -4,7 +4,6 @@ import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
-
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
@@ -54,7 +53,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 
 			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			t.MustNil(err)
-			resp := handlers.CreateCBResponse{}
+			resp := handlers.CreateCookbookResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			t.MustNil(err)
 			t.MustTrue(resp.CookbookID != "")

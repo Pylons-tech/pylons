@@ -38,7 +38,6 @@ type FulfillTradeTestCase struct {
 func TestFulfillTradeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
-
 	tests := []FulfillTradeTestCase{
 		{
 			"coin->coin fullfill trade test", // coin-coin fulfill trade test
@@ -50,7 +49,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			200,
 			true,
 			"pylon",
-			1,
+			100,
 			false,
 			"",
 			"Success",
@@ -67,7 +66,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			0,
 			true,
 			"pylon",
-			1,
+			100,
 			false,
 			"",
 			"Success",
@@ -80,7 +79,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			false,
 			"",
 			true,
-			"node0token",
+			"pylon",
 			200,
 			false,
 			"",
@@ -97,7 +96,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			true,
 			"TESTITEM_FulfillTrade__001_TC4_INPUT",
 			true,
-			"node0token",
+			"pylon",
 			200,
 			false,
 			"",
@@ -120,12 +119,14 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 
+	mCB := GetMockedCookbook(t)
+
 	outputItemID := ""
 	if tc.hasOutputItem {
-		outputItemID = MockItemGUID(tc.outputItemName, t)
+		outputItemID = MockItemGUID(mCB.ID, tc.outputItemName, t)
 	}
 
-	trdGUID := MockDetailedTradeGUID(tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
+	trdGUID := MockDetailedTradeGUID(mCB.ID, tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
@@ -139,7 +140,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
 		itemIDs = []string{
-			MockItemGUID(tc.inputItemName, t),
+			MockItemGUID(mCB.ID, tc.inputItemName, t),
 		}
 	}
 
@@ -149,7 +150,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
 	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
-	ffTrdResp := handlers.FulfillTradeResp{}
+	ffTrdResp := handlers.FulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	t.MustNil(err)
 

@@ -26,7 +26,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	// add 3 trades. one open trade by each sender and one closed trade
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id.String(),
-		ItemInputs:  types.GenItemInputList("Pikachu"),
+		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender,
 	})
@@ -34,7 +34,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id2.String(),
-		ItemInputs:  types.GenItemInputList("Richu"),
+		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Richu"}),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2,
 	})
@@ -42,7 +42,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id3.String(),
-		ItemInputs:  types.GenItemInputList("Pichu"),
+		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pichu"}),
 		CoinOutputs: types.NewPylon(1000),
 		Sender:      sender2,
 		FulFiller:   sender,

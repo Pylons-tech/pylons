@@ -20,9 +20,9 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.True(t, err == nil)
 
-	cbData := CreateCBResponse{}
+	cbData := CreateCookbookResponse{}
 
-	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
+	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "cookbook-id-0001", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 	err = json.Unmarshal(cookbookResult.Data, &cbData)
 	require.True(t, err == nil)
@@ -39,32 +39,60 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	cases := map[string]struct {
 		sender         sdk.AccAddress
 		inputCoinList  types.CoinInputList
-		inputItemList  types.ItemInputList
+		inputItemList  types.TradeItemInputList
 		outputCoinList sdk.Coins
 		outputItemList types.ItemList
 		desiredError   string
 		showError      bool
 	}{
-		"trade with only items": {
+		"empty cookbook trade input item validation": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList("", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
-			showError: false,
+			outputCoinList: types.NewPylon(1000000),
+			desiredError:   "There should be no empty cookbook ID inputs for trades",
+			showError:      true,
+		},
+		"wrong cookbook id item input validation": {
+			sender:         sender,
+			inputItemList:  types.GenTradeItemInputList("not-existing-cookbook-id-0001", []string{"Pikachu"}),
+			outputCoinList: types.NewPylon(10000),
+			showError:      true,
+			desiredError:   "You specified a cookbook that does not exist",
+		},
+		"trade without pylon": {
+			sender:        sender,
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputItemList: types.ItemList{
+				*item,
+			},
+			showError:    true,
+			desiredError: "there should be more than 10 amount of pylon per trade",
+		},
+		"less than minimum amount pylons trading test": {
+			sender:        sender,
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputItemList: types.ItemList{
+				*item,
+			},
+			outputCoinList: types.NewPylon(1),
+			desiredError:   "there should be more than 10 amount of pylon per trade",
+			showError:      true,
 		},
 		"trade with item and coins": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
 			outputCoinList: types.NewPylon(10000),
 			showError:      false,
 		},
-		"trade with only items failure due to sender not being owner": {
+		"trade items failure due to sender not being owner": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputCoinList: types.GenCoinInputList(types.Pylon, 10),
 			outputItemList: types.ItemList{
 				*item2,
 			},
@@ -73,7 +101,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with coin and item failure due to low balance": {
 			sender:        sender,
-			inputItemList: types.GenItemInputList("Pikachu"),
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -89,7 +117,8 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			result, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
 				ctRespData := CreateTradeResponse{}
-				err := json.Unmarshal(result.Data, &ctRespData)
+				require.True(t, err == nil)
+				err = json.Unmarshal(result.Data, &ctRespData)
 				require.True(t, err == nil)
 				require.True(t, len(ctRespData.TradeID) > 0)
 			} else {

@@ -10,8 +10,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// ExecuteRecipeResp is the response for executeRecipe
-type ExecuteRecipeResp struct {
+// ExecuteRecipeResponse is the response for executeRecipe
+type ExecuteRecipeResponse struct {
 	Message string
 	Status  string
 	Output  []byte
@@ -38,9 +38,9 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return nil, errInternal(err)
 	}
 
-	recipe, err2 := keeper.GetRecipe(ctx, msg.RecipeID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	recipe, err := keeper.GetRecipe(ctx, msg.RecipeID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe}
@@ -54,9 +54,9 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		return nil, errInternal(errors.New("the item IDs count doesn't match the recipe input"))
 	}
 
-	err2 = p.SetMatchedItemsFromExecMsg(msg)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	err = p.SetMatchedItemsFromExecMsg(msg)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 	// TODO: validate 1-1 correspondence for item input and output - check ids
 
@@ -74,18 +74,18 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		// store the execution as the interval
 		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
-		err2 := keeper.SetExecution(ctx, exec)
+		err := keeper.SetExecution(ctx, exec)
 
-		if err2 != nil {
-			return nil, errInternal(err2)
+		if err != nil {
+			return nil, errInternal(err)
 		}
-		outputSTR, err3 := json.Marshal(ExecuteRecipeScheduleOutput{
+		outputSTR, err := json.Marshal(ExecuteRecipeScheduleOutput{
 			ExecID: exec.ID,
 		})
-		if err3 != nil {
-			return nil, errInternal(err2)
+		if err != nil {
+			return nil, errInternal(err)
 		}
-		return marshalJSON(ExecuteRecipeResp{
+		return marshalJSON(ExecuteRecipeResponse{
 			Message: "scheduled the recipe",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -94,19 +94,18 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
 		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
-	// TODO: send the coins to a master address instead of burning them
-	// think about making this adding and subtracting atomic using inputoutputcoins method
-	_, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, cl)
+
+	err = ProcessCoinInputs(ctx, keeper, msg.Sender, recipe.CookbookID, cl)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	outputSTR, err2 := p.Run(msg.Sender)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	outputSTR, err := p.Run(msg.Sender)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
-	return marshalJSON(ExecuteRecipeResp{
+	return marshalJSON(ExecuteRecipeResponse{
 		Message: "successfully executed the recipe",
 		Status:  "Success",
 		Output:  outputSTR,

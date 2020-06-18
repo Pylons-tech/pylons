@@ -12,7 +12,7 @@ import (
 func GenTrade(sender sdk.AccAddress, itemList types.ItemList, pylonsAmount int64) types.Trade {
 	return types.NewTrade("extra info",
 		types.GenCoinInputList("wood", 5),
-		types.GenItemInputList("Raichu"),
+		types.GenTradeItemInputList("LOUD-CB-001", []string{"Raichu"}),
 		types.NewPylon(pylonsAmount),
 		itemList,
 		sender,

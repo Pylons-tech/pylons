@@ -14,7 +14,7 @@ const TypeTrade = "trade"
 type Trade struct {
 	ID          string // the recipe guid
 	CoinInputs  CoinInputList
-	ItemInputs  ItemInputList
+	ItemInputs  TradeItemInputList
 	CoinOutputs sdk.Coins
 	ItemOutputs ItemList
 	ExtraInfo   string
@@ -42,7 +42,7 @@ func (cbl TradeList) String() string {
 // NewTrade creates a new trade
 func NewTrade(extraInfo string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,
-	itemInputs ItemInputList, // itemOutputs ItemOutputList,
+	itemInputs TradeItemInputList, // itemOutputs ItemOutputList,
 	coinOutputs sdk.Coins, // newly created param instead of coinOutputs and itemOutputs
 	itemOutputs ItemList,
 	sender sdk.AccAddress) Trade {

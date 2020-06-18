@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -8,40 +9,67 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CheckExecutionResp is the response for checkExecution
-type CheckExecutionResp struct {
+// CheckExecutionResponse is the response for checkExecution
+type CheckExecutionResponse struct {
 	Message string
 	Status  string
 	Output  []byte
 }
 
+// ProcessCoinInputs process coin input distribution for recipe
+func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAddress, cbID string, coinInputs sdk.Coins) error {
+
+	cookbook, err := keeper.GetCookbook(ctx, cbID)
+	if err != nil {
+		return err
+	}
+
+	// send coins to cookbook owner
+	err = keeper.CoinKeeper.SendCoins(ctx, msgSender, cookbook.Sender, coinInputs)
+	if err != nil {
+		return err
+	}
+
+	// send pylon amount to PylonsLLC, validator
+	pylonAmount := coinInputs.AmountOf(types.Pylon).Int64()
+	if pylonAmount > 0 {
+		rcpPercent := config.Config.Fee.RecipePercent
+		pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+		if err != nil {
+			return err
+		}
+		pylonsLLCAmount := Max(1, pylonAmount*rcpPercent/100)
+		return keeper.CoinKeeper.SendCoins(ctx, cookbook.Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
+	}
+	return nil
+}
+
 // SafeExecute execute a msg and returns result
 func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
-	// TODO: send the coins to a master address instead of burning them
-	// think about making this adding and subtracting atomic using inputoutputcoins method
 	var outputSTR []byte
-	_, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, exec.CoinInputs)
+
+	recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
 	if err != nil {
 		return nil, err
 	}
 
-	recipe, err2 := keeper.GetRecipe(ctx, exec.RecipeID)
-	if err2 != nil {
-		return nil, err2
+	err = ProcessCoinInputs(ctx, keeper, msg.Sender, recipe.CookbookID, exec.CoinInputs)
+	if err != nil {
+		return nil, err
 	}
 
 	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe, matchedItems: exec.ItemInputs}
-	outputSTR, err2 = p.Run(msg.Sender)
+	outputSTR, err = p.Run(msg.Sender)
 
-	if err2 != nil {
-		return nil, err2
+	if err != nil {
+		return nil, err
 	}
 	// confirm that the execution was completed
 	exec.Completed = true
 
-	err2 = keeper.UpdateExecution(ctx, exec.ID, exec)
-	if err2 != nil {
-		return nil, err2
+	err = keeper.UpdateExecution(ctx, exec.ID, exec)
+	if err != nil {
+		return nil, err
 	}
 	return outputSTR, nil
 }
@@ -54,9 +82,9 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, errInternal(err)
 	}
 
-	exec, err2 := keeper.GetExecution(ctx, msg.ExecID)
-	if err2 != nil {
-		return nil, errInternal(err2)
+	exec, err := keeper.GetExecution(ctx, msg.ExecID)
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	if !msg.Sender.Equals(exec.Sender) {
@@ -64,7 +92,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	}
 
 	if exec.Completed {
-		return marshalJSON(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResponse{
 			Message: "execution already completed",
 			Status:  "Completed",
 		})
@@ -73,10 +101,10 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if ctx.BlockHeight() >= exec.BlockHeight {
 		outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
 		if err != nil {
-			return nil, errInternal(err2)
+			return nil, errInternal(err)
 		}
 
-		return marshalJSON(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResponse{
 			Message: "successfully completed the execution",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -99,27 +127,27 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
 			_, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
 			if err != nil {
-				return nil, errInternal(err2)
+				return nil, errInternal(err)
 			}
 
-			outputSTR, err2 := SafeExecute(ctx, keeper, exec, msg)
-			if err2 != nil {
-				return nil, errInternal(err2)
+			outputSTR, err := SafeExecute(ctx, keeper, exec, msg)
+			if err != nil {
+				return nil, errInternal(err)
 			}
 
-			return marshalJSON(CheckExecutionResp{
+			return marshalJSON(CheckExecutionResponse{
 				Message: "successfully paid to complete the execution",
 				Status:  "Success",
 				Output:  outputSTR,
 			})
 		}
-		return marshalJSON(CheckExecutionResp{
+		return marshalJSON(CheckExecutionResponse{
 			Message: "insufficient balance to complete the execution",
 			Status:  "Failure",
 		})
 
 	}
-	return marshalJSON(CheckExecutionResp{
+	return marshalJSON(CheckExecutionResponse{
 		Message: "execution pending",
 		Status:  "Pending",
 	})

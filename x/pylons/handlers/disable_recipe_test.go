@@ -54,16 +54,16 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 			result, err := HandlerMsgDisableRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
-				disableRcpResponse := DisableRecipeResp{}
+				disableRcpResponse := DisableRecipeResponse{}
 				err := json.Unmarshal(result.Data, &disableRcpResponse)
 
 				require.True(t, err == nil)
 				require.True(t, disableRcpResponse.Status == "Success")
 				require.True(t, disableRcpResponse.Message == "successfully disabled the recipe")
 
-				uRcp, err2 := tci.PlnK.GetRecipe(tci.Ctx, tc.recipeID)
+				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.recipeID)
 				// t.Errorf("DisableRecipeTEST LOG:: %+v", uRcp)
-				require.True(t, err2 == nil)
+				require.True(t, err == nil)
 				require.True(t, uRcp.Disabled == true)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -11,9 +12,11 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CreateCBResponse is a struct of create cookbook response
-type CreateCBResponse struct {
+// CreateCookbookResponse is a struct of create cookbook response
+type CreateCookbookResponse struct {
 	CookbookID string `json:"CookbookID"`
+	Message    string
+	Status     string
 }
 
 // HandlerMsgCreateCookbook is used to create cookbook by a developer
@@ -37,7 +40,11 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
-	_, err = keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, fee)
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, pylonsLLCAddress, fee)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -60,7 +67,9 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(CreateCBResponse{
-		cb.ID,
+	return marshalJSON(CreateCookbookResponse{
+		CookbookID: cb.ID,
+		Message:    "successfully created a cookbook",
+		Status:     "Success",
 	})
 }

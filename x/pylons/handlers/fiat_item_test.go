@@ -37,7 +37,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cbData := CreateCBResponse{}
+			cbData := CreateCookbookResponse{}
 			if tc.createCookbook {
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
 				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
