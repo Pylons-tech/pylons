@@ -39,7 +39,8 @@ type Item struct {
 	Sender        sdk.AccAddress
 	OwnerRecipeID string
 	Tradable      bool
-	LastUpdate    int64
+	// IsBeingTraded bool
+	LastUpdate int64
 }
 
 // ItemList is a list of items
@@ -142,6 +143,20 @@ func (it Item) MatchItemInput(other ItemInput) bool {
 	return reflect.DeepEqual(it.Doubles, other.Doubles) &&
 		reflect.DeepEqual(it.Strings, other.Strings) &&
 		reflect.DeepEqual(it.Longs, other.Longs)
+}
+
+// IsTradable check if an item can be sent to someone else
+func (it Item) IsTradable() bool {
+	if !it.Tradable {
+		return false
+	}
+	if it.OwnerRecipeID != "" {
+		return false
+	}
+	// if it.IsBeingTraded {
+	// 	return false
+	// }
+	return true
 }
 
 // NewItem create a new item with an auto generated ID
