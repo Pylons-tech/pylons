@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test"
-	inttest "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 )
 
@@ -29,7 +28,7 @@ func TestFixturesViaCLI(t *testing.T) {
 	if useRest {
 		inttestSDK.CLIOpts.RestEndpoint = "http://localhost:1317"
 	}
-	inttest.CLIOpts.MaxBroadcast = 50
+	inttestSDK.CLIOpts.MaxBroadcast = 50
 	fixturetestSDK.RegisterDefaultActionRunners()
 	// Register custom action runners
 	// fixturetestSDK.RegisterActionRunner("custom_action", CustomActionRunner)
