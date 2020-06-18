@@ -33,6 +33,24 @@ FAQ is frequently asked questions for pylons ecosystem.
 
 - Need to take time to figure this out.
 
+## How does minus weights work? 
+e.g. 
+```
+    "Outputs": [
+        {
+            "ResultEntries": [],
+            "Weight": "-11"
+        },
+        {
+            "ResultEntries": [],
+            "Weight": "Mana - rand() * 20.0"
+        }
+    ]
+```
+Minus weights are processed as 0.
+This is useful when the Weight is a kind of expression expression that has possibility of less than 0.
+It removes the expression max of 0 that's common.
+
 ## FAQ in fixture test writing
 
 - You should create account using get-pylons message but this is not runnable by using cli.
