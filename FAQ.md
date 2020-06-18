@@ -125,3 +125,10 @@ First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `
 
 - When the item is scheduled to be handled in the future block by a recipe, the item's OwnerRecipeID is set as the recipe's ID. This means that this item is locked until the appropriate future block is created.
 - You can't send or receive items that are currently owned by a recipe. So you need to check if the OwnerRecipeID is empty before sending the item.
+
+## FAQ in unit test writing
+
+- The test cases that are defined as the map of testcase struct inside the handler's test file are not run by sequence. 
+As they are defined as a map, there's no sequence so the test cases would be run in random order. 
+So if you have some interactive test cases in sequence, those cases won't run exactly in some cases. (in the case the order is opposite) So you should avoid interactive test cases or at least use separate items or dynamic items.
+- When you create a test item, you should name it as a meaningful name rather than ? or randomly generated name.
