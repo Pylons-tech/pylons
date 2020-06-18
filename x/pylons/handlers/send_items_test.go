@@ -72,11 +72,11 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			desiredError: "Item is not the sender's one",
 			showError:    true,
 		},
-		"owner receiper id check": {
+		"owner recipe id check": {
 			itemIDs:      []string{item3.ID},
 			fromAddress:  sender1,
 			toAddress:    sender2,
-			desiredError: "Item is owned by a receipe",
+			desiredError: "Item is owned by a recipe",
 			showError:    true,
 		},
 		"duplicated items check": {

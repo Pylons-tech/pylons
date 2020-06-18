@@ -42,14 +42,14 @@ type Tier struct {
 	Fee   sdk.Coins
 }
 
-// BasicTier is the cookbook tier which doesn't allow paid receipes which means
-// the developers cannot have receipes where they can actually carge a fee in pylons
+// BasicTier is the cookbook tier which doesn't allow paid recipes which means
+// the developers cannot have recipes where they can actually carge a fee in pylons
 var BasicTier = Tier{
 	Level: Basic,
 	Fee:   BasicFee,
 }
 
-// PremiumTier the cookbook tier which does allow paid receipes
+// PremiumTier the cookbook tier which does allow paid recipes
 var PremiumTier = Tier{
 	Level: Premium,
 	Fee:   PremiumFee,

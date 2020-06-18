@@ -71,8 +71,8 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 					return errors.New("Item is not the sender's one")
 				}
 
-				if targetItem.OwnerRecipeID != "" {
-					return errors.New("Item is owned by a receipe")
+				if err = targetItem.NewTradeError(); err != nil {
+					return err
 				}
 			}
 

@@ -1,6 +1,7 @@
 package types
 
 import (
+	"errors"
 	"fmt"
 	"reflect"
 
@@ -38,9 +39,9 @@ type Item struct {
 	CookbookID    string
 	Sender        sdk.AccAddress
 	OwnerRecipeID string
+	OwnerTradeID  string
 	Tradable      bool
-	// IsBeingTraded bool
-	LastUpdate int64
+	LastUpdate    int64
 }
 
 // ItemList is a list of items
@@ -145,18 +146,29 @@ func (it Item) MatchItemInput(other ItemInput) bool {
 		reflect.DeepEqual(it.Longs, other.Longs)
 }
 
-// IsTradable check if an item can be sent to someone else
-func (it Item) IsTradable() bool {
+// NewTradeError check if an item can be sent to someone else
+func (it Item) NewTradeError() error {
 	if !it.Tradable {
-		return false
+		return errors.New("Item Tradable flag is not set")
 	}
 	if it.OwnerRecipeID != "" {
-		return false
+		return errors.New("Item is owned by a recipe")
 	}
-	// if it.IsBeingTraded {
-	// 	return false
-	// }
-	return true
+	if it.OwnerTradeID != "" {
+		return errors.New("Item is owned by a trade")
+	}
+	return nil
+}
+
+// NewRecipeExecutionError is a utility that shows if Recipe is compatible with recipe execution
+func (it Item) NewRecipeExecutionError() error {
+	if it.OwnerRecipeID != "" {
+		return errors.New("Item is owned by a recipe")
+	}
+	if it.OwnerTradeID != "" {
+		return errors.New("Item is owned by a trade")
+	}
+	return nil
 }
 
 // NewItem create a new item with an auto generated ID
