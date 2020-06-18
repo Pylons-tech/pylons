@@ -10,6 +10,8 @@ github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Pylons-tech/pylons_sdk v0.0.0-20200617021555-545162025527 h1:JCFDByquo0vDegM6DAjpZlGLUBJfcLD5lSu5aDIbOCQ=
 github.com/Pylons-tech/pylons_sdk v0.0.0-20200617021555-545162025527/go.mod h1:ElzANmZzm2/cYMdhBB3leq/a+XF2BDdnkMdTnRjRShI=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200617131726-14ffc246c2dc h1:SjKaUe+Tf0Xv6vIaIIqCQ2dyuDTfA3iTkCS6h9aVFrA=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200617131726-14ffc246c2dc/go.mod h1:ElzANmZzm2/cYMdhBB3leq/a+XF2BDdnkMdTnRjRShI=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=
