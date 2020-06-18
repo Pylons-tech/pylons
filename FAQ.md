@@ -45,3 +45,8 @@ For simplification this stuff is done by loud game if you run `make ARGS="accoun
 - You should be careful of the result success messages when you write the fixture test as recipe return different messages according to result of execution. If copy paste from other recipe, there can be an issue. And it's the best practice to learn what kind of messages can be returned from recipes.
 - If you want to upgrade or generate an item or coin, you should create receipe first and then not forget to execute the receipe. create recipe is not something that run the recipe.
 - For trades, you need to create trade and fulfill the trade, please take care of trade return messages as they are different from recipes.
+
+## What is OwnerReceipeID of an item? 
+
+- When the item is scheduled to be handled in the future block by a receipe, the item's OwnerReceipeID is set as the receipe's ID. This means that this item is locked until the appropriate future block is created.
+- You can't send or receive items that are currently owned by a receipe. So you need to check if the OwnerReceipeID is empty before sending the item.
