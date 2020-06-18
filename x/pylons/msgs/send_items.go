@@ -31,15 +31,22 @@ func (msg MsgSendItems) Type() string { return "send_items" }
 
 // ValidateBasic is a function to validate MsgSendItems msg
 func (msg MsgSendItems) ValidateBasic() error {
+	checked := make(map[string]bool)
 
 	for _, val := range msg.ItemIDs {
 		if val == "" {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemID is invalid")
 		}
+
+		if checked[val] {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Duplicated items in items trasfer")
+		}
+
+		checked[val] = true
 	}
 
 	if msg.Sender.String() == msg.Receiver.String() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Sender and reciever should be different")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Sender and receiver should be different")
 	}
 
 	if msg.Sender.Empty() {
