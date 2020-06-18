@@ -45,9 +45,26 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		desiredError   string
 		showError      bool
 	}{
+		"empty cookbook trade input item validation": {
+			sender:        sender,
+			inputItemList: types.GenTradeItemInputList("", []string{"Pikachu"}),
+			outputItemList: types.ItemList{
+				*item,
+			},
+			outputCoinList: types.NewPylon(1000000),
+			desiredError:   "There should be no empty cookbook ID inputs for trades",
+			showError:      true,
+		},
+		"wrong cookbook id item input validation": {
+			sender:         sender,
+			inputItemList:  types.GenTradeItemInputList("not-existing-cookbook-id-0001", []string{"Pikachu"}),
+			outputCoinList: types.NewPylon(10000),
+			showError:      true,
+			desiredError:   "You specified a cookbook that does not exist",
+		},
 		"trade without pylon": {
 			sender:        sender,
-			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -56,7 +73,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"less than minimum amount pylons trading test": {
 			sender:        sender,
-			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -66,7 +83,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with item and coins": {
 			sender:        sender,
-			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},
@@ -84,7 +101,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		},
 		"trade with coin and item failure due to low balance": {
 			sender:        sender,
-			inputItemList: types.GenTradeItemInputList("cookbook-id-0001", []string{"Pikachu"}),
+			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
 				*item,
 			},

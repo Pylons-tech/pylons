@@ -11,6 +11,7 @@ import (
 type MsgFulfillTrade struct {
 	TradeID string
 	Sender  sdk.AccAddress
+	ItemIDs []string
 }
 
 // NewMsgFulfillTrade a constructor for FulfillTrade msg
@@ -18,6 +19,7 @@ func NewMsgFulfillTrade(TradeID string, sender sdk.AccAddress, itemIDs []string)
 	return MsgFulfillTrade{
 		TradeID: TradeID,
 		Sender:  sender,
+		ItemIDs: itemIDs,
 	}
 }
 
@@ -32,7 +34,6 @@ func (msg MsgFulfillTrade) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	return nil

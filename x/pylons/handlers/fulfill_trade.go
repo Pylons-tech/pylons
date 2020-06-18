@@ -33,10 +33,13 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	if trade.Completed {
 		return nil, errInternal(errors.New("this trade is already completed"))
-
 	}
 
-	items, err := keeper.GetItemsBySender(ctx, msg.Sender)
+	if len(msg.ItemIDs) != len(trade.ItemInputs) {
+		return nil, errInternal(errors.New("the item IDs count doesn't match the trade input"))
+	}
+
+	items, err := GetItemsFromIDs(ctx, keeper, msg.ItemIDs, msg.Sender)
 	if err != nil {
 		return nil, errInternal(err)
 	}

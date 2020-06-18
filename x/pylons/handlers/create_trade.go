@@ -25,6 +25,13 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		return nil, errInternal(err)
 	}
 
+	for _, tii := range msg.ItemInputs {
+		_, err := keeper.GetCookbook(ctx, tii.CookbookID)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("You specified a cookbook that does not exist where raw error is %+v", err))
+		}
+	}
+
 	for _, item := range msg.ItemOutputs {
 		itemFromStore, err := keeper.GetItem(ctx, item.ID)
 		if err != nil {

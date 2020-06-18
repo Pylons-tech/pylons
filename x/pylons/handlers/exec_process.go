@@ -30,25 +30,9 @@ type ExecProcess struct {
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
 
-	var inputItems []types.Item
-	keys := make(map[string]bool)
-
-	for _, id := range msg.ItemIDs {
-		if _, value := keys[id]; !value {
-			keys[id] = true
-
-			item, err := p.keeper.GetItem(p.ctx, id)
-			if err != nil {
-				return err
-			}
-			if !item.Sender.Equals(msg.Sender) {
-				return errors.New("item owner is not same as sender")
-			}
-
-			inputItems = append(inputItems, item)
-		} else {
-			return errors.New("multiple use of same item as item inputs")
-		}
+	inputItems, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
+	if err != nil {
+		return err
 	}
 
 	// we validate and match items

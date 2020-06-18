@@ -41,7 +41,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	err = tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
-	item2 := keep.GenItem(cbData.CookbookID, sender2, "Pichu")
+	item2 := keep.GenItem(cbData.CookbookID, sender2, "Pikachu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item2)
 	require.True(t, err == nil)
 
@@ -52,6 +52,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		inputItemList         types.TradeItemInputList
 		outputCoinList        sdk.Coins
 		outputItemList        types.ItemList
+		fulfillInputItemIDs   []string
 		desiredError          string
 		showError             bool
 		pylonsLLCDistribution int64
@@ -91,6 +92,38 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			showError:             false,
 			pylonsLLCDistribution: 10,
 		},
+		"empty fulfill item on item trading fulfill test": {
+			sender:                sender,
+			fulfiller:             sender2,
+			inputCoinList:         types.GenCoinInputList(types.Pylon, 100),
+			inputItemList:         types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			fulfillInputItemIDs:   []string{},
+			desiredError:          "the item IDs count doesn't match the trade input",
+			showError:             true,
+			pylonsLLCDistribution: 10,
+		},
+		"input item with wrong cookbook id fulfill trade test": {
+			sender:                sender,
+			fulfiller:             sender2,
+			inputCoinList:         types.GenCoinInputList(types.Pylon, 100),
+			inputItemList:         types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			desiredError:          "the sender doesn't have the trade item attributes",
+			showError:             true,
+			pylonsLLCDistribution: 10,
+		},
+		"correct item trading fulfill test": {
+			sender:                sender,
+			fulfiller:             sender2,
+			inputCoinList:         types.GenCoinInputList(types.Pylon, 100),
+			inputItemList:         types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			fulfillInputItemIDs:   []string{item2.ID},
+			desiredError:          "",
+			showError:             false,
+			pylonsLLCDistribution: 10,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -104,7 +137,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			err = json.Unmarshal(ctResult.Data, &ctRespData)
 			require.True(t, err == nil)
 			require.True(t, len(ctRespData.TradeID) > 0)
-			ffMsg := msgs.NewMsgFulfillTrade(ctRespData.TradeID, tc.fulfiller, []string{})
+			ffMsg := msgs.NewMsgFulfillTrade(ctRespData.TradeID, tc.fulfiller, tc.fulfillInputItemIDs)
 			ffResult, err := HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
 			if !tc.showError {
 				if err != nil {
