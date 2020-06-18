@@ -120,3 +120,8 @@ invalid request: the sender doesn't have the trade item attributes {ItemInput:{D
 ```
 It means sender does not have an item with name `"TESTITEM_FulfillTrade__001_TC4_INPUT"` with cookbook ID `"LOUD-CB-001"`.
 First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `"TESTITEM_FulfillTrade__001_TC4_INPUT"` on that cookbook.
+
+## What is OwnerReceipeID of an item? 
+
+- When the item is scheduled to be handled in the future block by a receipe, the item's OwnerReceipeID is set as the receipe's ID. This means that this item is locked until the appropriate future block is created.
+- You can't send or receive items that are currently owned by a receipe. So you need to check if the OwnerReceipeID is empty before sending the item.

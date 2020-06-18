@@ -1,0 +1,24 @@
+{
+  "type": "cosmos-sdk/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/SendItems",
+        "value": {
+          "ItemIDs": [
+            "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2q3d6b4e7b-5589-4a65-88ad-7262a75b9782",
+            "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2qab539c55-d98a-4ede-9803-a36b93505bd6"
+          ],
+          "Sender": "cosmos1lmxetakze64vramcx0tc7yac743cf2cedqw027",
+          "Receiver": "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2q"
+        }
+      }
+    ],
+    "fee": {
+      "amount": [],
+      "gas": "200000"
+    },
+    "signatures": null,
+    "memo": ""
+  }
+}

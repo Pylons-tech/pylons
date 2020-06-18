@@ -9,9 +9,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/google/uuid"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/google/uuid"
 )
 
 // NewHandler returns a handler for "pylons" type messages.
@@ -28,6 +28,8 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
 		case msgs.MsgSendPylons:
 			return handlers.HandlerMsgSendPylons(ctx, keeper, msg)
+		case msgs.MsgSendItems:
+			return handlers.HandlerMsgSendItems(ctx, keeper, msg)
 		case msgs.MsgCreateCookbook:
 			return handlers.HandlerMsgCreateCookbook(ctx, keeper, msg)
 		case msgs.MsgUpdateCookbook:
