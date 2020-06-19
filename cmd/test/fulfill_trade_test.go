@@ -145,7 +145,13 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, sdkAddr, itemIDs)
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return
+	}
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
@@ -158,7 +164,14 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
 
 	// Try again after fulfill trade
-	txhash = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return
+	}
+
 	err = inttestSDK.WaitForNextBlock()
 	t.MustNil(err)
 	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)

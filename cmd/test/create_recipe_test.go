@@ -34,7 +34,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := inttestSDK.TestTxWithMsgWithNonce(t,
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
 					mCB.ID,
@@ -49,6 +49,12 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				"eugen",
 				false,
 			)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("unexpected transaction broadcast error")
+				return
+			}
 
 			err = inttestSDK.WaitForNextBlock()
 			if err != nil {
