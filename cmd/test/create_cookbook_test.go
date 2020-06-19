@@ -30,7 +30,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 
 			t.MustNil(err)
-			txhash := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"",
 				"this has to meet character limits lol",
@@ -43,6 +43,12 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				"eugen",
 				false,
 			)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("unexpected transaction broadcast error")
+				return
+			}
 
 			err = inttestSDK.WaitForNextBlock()
 			if err != nil {

@@ -27,7 +27,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
 		"",
 		"this has to meet character limits lol",
@@ -40,6 +40,12 @@ func MockCookbook(t *testing.T) (string, error) {
 		"eugen",
 		false,
 	)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return "", err
+	}
 
 	err = inttestSDK.WaitForNextBlock()
 	if err != nil {
@@ -158,7 +164,7 @@ func MockDetailedRecipeGUID(
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t,
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			rcpName,
 			mCB.ID,
@@ -173,6 +179,12 @@ func MockDetailedRecipeGUID(
 		"eugen",
 		false,
 	)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return "", err
+	}
 
 	err = inttestSDK.WaitForNextBlock()
 	if err != nil {
@@ -197,7 +209,7 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
 		cbID,
 		[]types.DoubleKeyValue{},
 		[]types.LongKeyValue{},
@@ -212,6 +224,12 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 		"eugen",
 		false,
 	)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return ""
+	}
 
 	err = inttestSDK.WaitForNextBlock()
 	if err != nil {
@@ -264,7 +282,7 @@ func MockDetailedTradeGUID(
 		outputItems = types.ItemList{outputItem}
 	}
 
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t,
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateTrade(
 			inputCoinList,
 			inputItemList,
@@ -275,6 +293,12 @@ func MockDetailedTradeGUID(
 		"eugen",
 		false,
 	)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return ""
+	}
 
 	_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	if err != nil {
