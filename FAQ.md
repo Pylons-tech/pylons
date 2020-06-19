@@ -61,7 +61,7 @@ For simplification this stuff is done by loud game if you run `make ARGS="accoun
 - You should reinstall pylonsd and pylonscli correctly before running fixture test.
 - You should reinit the chain before running fixture test. If you are using local daemon, try to run `sh init_accounts.local.sh`.
 - You should be careful of the result success messages when you write the fixture test as recipe return different messages according to result of execution. If copy paste from other recipe, there can be an issue. And it's the best practice to learn what kind of messages can be returned from recipes.
-- If you want to upgrade or generate an item or coin, you should create receipe first and then not forget to execute the receipe. create recipe is not something that run the recipe.
+- If you want to upgrade or generate an item or coin, you should create recipe first and then not forget to execute the recipe. create recipe is not something that run the recipe.
 - For trades, you need to create trade and fulfill the trade, please take care of trade return messages as they are different from recipes.
 - How to debug long list of `signature verification failed` issue?
 ```json
@@ -121,7 +121,14 @@ invalid request: the sender doesn't have the trade item attributes {ItemInput:{D
 It means sender does not have an item with name `"TESTITEM_FulfillTrade__001_TC4_INPUT"` with cookbook ID `"LOUD-CB-001"`.
 First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `"TESTITEM_FulfillTrade__001_TC4_INPUT"` on that cookbook.
 
-## What is OwnerReceipeID of an item? 
+## What is OwnerRecipeID of an item? 
 
-- When the item is scheduled to be handled in the future block by a receipe, the item's OwnerReceipeID is set as the receipe's ID. This means that this item is locked until the appropriate future block is created.
-- You can't send or receive items that are currently owned by a receipe. So you need to check if the OwnerReceipeID is empty before sending the item.
+- When the item is scheduled to be handled in the future block by a recipe, the item's OwnerRecipeID is set as the recipe's ID. This means that this item is locked until the appropriate future block is created.
+- You can't send or receive items that are currently owned by a recipe. So you need to check if the OwnerRecipeID is empty before sending the item.
+
+## FAQ in unit test writing
+
+- The test cases that are defined as the map of testcase struct inside the handler's test file are not run by sequence. 
+As they are defined as a map, there's no sequence so the test cases would be run in random order. 
+So if you have some interactive test cases in sequence, those cases won't run exactly in some cases. (in the case the order is opposite) So you should avoid interactive test cases or at least use separate items or dynamic items.
+- When you create a test item, you should name it as a meaningful name rather than ? or randomly generated name.

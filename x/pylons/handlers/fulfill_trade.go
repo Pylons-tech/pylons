@@ -59,7 +59,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 		if matched {
 			matchedItem := items[index]
-			if !matchedItem.IsTradable() {
+			if err = matchedItem.NewTradeError(); err != nil {
 				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
 			matchedItems = append(matchedItems, matchedItem)
@@ -93,7 +93,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID))
 		}
 
-		if !storedItem.IsTradable() {
+		if err = storedItem.NewTradeError(); err != nil {
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 

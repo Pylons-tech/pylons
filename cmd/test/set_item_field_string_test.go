@@ -38,12 +38,18 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := inttestSDK.TestTxWithMsgWithNonce(
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
 				"eugen",
 				false,
 			)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("unexpected transaction broadcast error")
+				return
+			}
 
 			err = inttestSDK.WaitForNextBlock()
 			t.MustNil(err)

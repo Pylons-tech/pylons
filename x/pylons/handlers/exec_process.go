@@ -42,7 +42,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 		matches = false
 
 		for iii, item := range inputItems {
-			if itemInput.Matches(item) && len(item.OwnerRecipeID) == 0 {
+			if itemInput.Matches(item) && item.NewRecipeExecutionError() == nil {
 				matchedItems = append(matchedItems, item)
 				inputItems[iii].OwnerRecipeID = p.recipe.ID
 				matches = true

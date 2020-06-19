@@ -123,7 +123,13 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 
-	txhash := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return
+	}
 
 	if tc.waitForBlockInterval {
 		err := inttestSDK.WaitForBlockInterval(tc.blockInterval)
@@ -156,7 +162,13 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}
 
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	txhash = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+	if err != nil {
+		t.WithFields(testing.Fields{
+			"error": err,
+		}).Fatal("unexpected transaction broadcast error")
+		return
+	}
 
 	txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 	t.MustNil(err)
@@ -183,7 +195,14 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}
 	t.MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
-		txhash = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+		if err != nil {
+			t.WithFields(testing.Fields{
+				"error": err,
+			}).Fatal("unexpected transaction broadcast error")
+			return
+		}
+
 		err := inttestSDK.WaitForNextBlock()
 		t.MustNil(err)
 

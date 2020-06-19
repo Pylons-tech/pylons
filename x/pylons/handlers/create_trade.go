@@ -40,7 +40,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		if !itemFromStore.Sender.Equals(msg.Sender) {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("item with %s id is not owned by sender", item.ID))
 		}
-		if !itemFromStore.IsTradable() {
+		if err = itemFromStore.NewTradeError(); err != nil {
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", itemFromStore.ID))
 		}
 	}

@@ -34,7 +34,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err)
-			txhash := inttestSDK.TestTxWithMsgWithNonce(t,
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
 					types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
@@ -45,6 +45,12 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				"eugen",
 				false,
 			)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"error": err,
+				}).Fatal("unexpected transaction broadcast error")
+				return
+			}
 
 			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
 			if err != nil {
