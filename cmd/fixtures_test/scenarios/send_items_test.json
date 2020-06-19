@@ -1,0 +1,70 @@
+[
+    {
+        "ID": "CREATE_SEND_ITEM_TEST_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "create_cookbook",
+        "paramsRef": "./cookbooks/send_items_test.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "cookbooks": ["send_items_test"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_SWORD",        
+        "runAfter": {
+            "precondition": ["CREATE_SEND_ITEM_TEST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/send_items_test/sword.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Sword" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "SEND_SWORD",        
+        "runAfter": {
+            "precondition": ["CREATE_SWORD"],
+            "blockWait": 0
+        },
+        "action": "send_items",
+        "paramsRef": "./send_items_test/send_sword.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Sword" }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]
