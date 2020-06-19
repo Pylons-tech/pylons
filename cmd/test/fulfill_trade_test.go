@@ -4,6 +4,8 @@ import (
 	"strings"
 	originT "testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
@@ -33,6 +35,9 @@ type FulfillTradeTestCase struct {
 	expectedStatus      string
 	expectedMessage     string
 	expectedRetryErrMsg string
+
+	checkPylonDistribution bool
+	pylonsLLCDistribution  int64
 }
 
 func TestFulfillTradeViaCLI(originT *originT.T) {
@@ -40,72 +45,70 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 	t.Parallel()
 	tests := []FulfillTradeTestCase{
 		{
-			"coin->coin fullfill trade test", // coin-coin fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC1",
-			false,
-			"",
-			true,
-			"node0token",
-			200,
-			true,
-			"pylon",
-			100,
-			false,
-			"",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "coin->coin fullfill trade test", // coin-coin fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC1",
+			hasInputItem:           false,
+			hasInputCoin:           true,
+			inputCoinName:          "node0token",
+			inputCoinAmount:        200,
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  10,
 		},
 		{
-			"item->coin fullfill trade test", // item-coin fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC2",
-			true,
-			"TESTITEM_FulfillTrade__001_TC2",
-			false,
-			"",
-			0,
-			true,
-			"pylon",
-			100,
-			false,
-			"",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "item->coin fullfill trade test", // item-coin fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC2",
+			hasInputItem:           true,
+			inputItemName:          "TESTITEM_FulfillTrade__001_TC2",
+			hasInputCoin:           false,
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  10,
 		},
 		{
-			"coin->item fullfill trade test", // coin-item fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC3",
-			false,
-			"",
-			true,
-			"pylon",
-			200,
-			false,
-			"",
-			0,
-			true,
-			"TESTITEM_FulfillTrade__001_TC3",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "coin->item fullfill trade test", // coin-item fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC3",
+			hasInputItem:           false,
+			hasInputCoin:           true,
+			inputCoinName:          "pylon",
+			inputCoinAmount:        200,
+			hasOutputCoin:          false,
+			hasOutputItem:          true,
+			outputItemName:         "TESTITEM_FulfillTrade__001_TC3",
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  20,
 		},
 		{
-			"item->item fullfill trade test", // item-item fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC4",
-			true,
-			"TESTITEM_FulfillTrade__001_TC4_INPUT",
-			true,
-			"pylon",
-			200,
-			false,
-			"",
-			0,
-			true,
-			"TESTITEM_FulfillTrade__001_TC4_OUTPUT",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "item->item fullfill trade test", // item-item fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC4",
+			hasInputItem:           true,
+			inputItemName:          "TESTITEM_FulfillTrade__001_TC4_INPUT",
+			hasInputCoin:           true,
+			inputCoinName:          "pylon",
+			inputCoinAmount:        200,
+			hasOutputCoin:          false,
+			hasOutputItem:          true,
+			outputItemName:         "TESTITEM_FulfillTrade__001_TC4_OUTPUT",
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  20,
 		},
 	}
 
@@ -118,6 +121,9 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	t.MustNil(err)
+	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
 	mCB := GetMockedCookbook(t)
 
@@ -176,4 +182,11 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustNil(err)
 	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
 	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
+
+	if tc.checkPylonDistribution {
+		accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+		originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
+		pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
+		t.MustTrue(pylonAvailOnLLC)
+	}
 }

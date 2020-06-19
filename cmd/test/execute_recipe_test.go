@@ -3,6 +3,8 @@ package inttest
 import (
 	originT "testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
@@ -14,17 +16,25 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	t.MustNil(err)
+	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), &t)
+
 	tests := []struct {
-		name            string
-		rcpName         string
-		itemIDs         []string
-		desiredItemName string
+		name                   string
+		rcpName                string
+		itemIDs                []string
+		desiredItemName        string
+		checkPylonDistribution bool
+		pylonsLLCDistribution  int64
 	}{
 		{
-			"basic flow test",
-			"TESTRCP_ExecuteRecipe_003",
-			[]string{},
-			"TESTITEM_ExecuteRecipe_003",
+			name:                   "item build from pylons recipe",
+			rcpName:                "TESTRCP_ExecuteRecipe_003",
+			itemIDs:                []string{},
+			desiredItemName:        "TESTITEM_ExecuteRecipe_003",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  1,
 		},
 	}
 
@@ -72,6 +82,13 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
 			t.MustTrue(ok)
+
+			if tc.checkPylonDistribution {
+				accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+				originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
+				pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
+				t.MustTrue(pylonAvailOnLLC)
+			}
 		})
 	}
 }
