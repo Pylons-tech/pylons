@@ -1,6 +1,7 @@
 package inttest
 
 import (
+	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
@@ -17,12 +18,21 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name      string
-		extraInfo string
+		name        string
+		outputPylon int64
+		extraInfo   string
+		expectedErr string
 	}{
 		{
-			"item->coin create trade test", // item to coin create trade test
-			"TESTTRD_CreateTrade_001",
+			name:        "item->coin create trade test", // item to coin create trade test
+			outputPylon: 1000,
+			extraInfo:   "TESTTRD_CreateTrade_001",
+		},
+		{
+			name:        "less than minimum amount pylon trade test",
+			outputPylon: 1,
+			extraInfo:   "TESTTRD_CreateTrade_002",
+			expectedErr: "there should be more than 10 amount of pylon per trade",
 		},
 		// For coin-coin, item-item, coin-item trading, it is implemented in fulfill trade test already.
 	}
@@ -38,7 +48,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				msgs.NewMsgCreateTrade(
 					nil,
 					types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
-					types.NewPylon(1000),
+					types.NewPylon(tc.outputPylon),
 					nil,
 					tc.extraInfo,
 					sdkAddr),
@@ -46,9 +56,13 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("unexpected transaction broadcast error")
+				if len(tc.expectedErr) > 0 {
+					t.MustTrue(strings.Contains(err.Error(), tc.expectedErr))
+				} else {
+					t.WithFields(testing.Fields{
+						"error": err,
+					}).Fatal("unexpected transaction broadcast error")
+				}
 				return
 			}
 
