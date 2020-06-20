@@ -72,7 +72,7 @@ func (iil ItemInputList) Validate() error {
 
 // TradeItemInput is a wrapper struct for Item for trades
 type TradeItemInput struct {
-	ItemInput
+	ItemInput  ItemInput
 	CookbookID string
 }
 
