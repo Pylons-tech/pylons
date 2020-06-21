@@ -49,10 +49,10 @@ pylonscli config trust-node true
 ```
 
 - Multinode integration test is using init-account.sh. It does not use get-pylons but use the public genesis account for the tests accounts setup.
-- For local genesis accounts setup for integration test, you can use `init-accounts.local.sh` file.
+- For local genesis accounts setup for integration test, you can use `init_accounts.local.sh` file.
 
 ```
-sh init-accounts.local.sh
+sh init_accounts.local.sh
 ```
 
 `michael`, `eugen` account will be created after success run and will have loudcoin and pylons denom for tests.
