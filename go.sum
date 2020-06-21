@@ -22,6 +22,10 @@ github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/Pylons-tech/pylons_sdk v0.0.0-20200618150809-0f11dddc4bea h1:cGk1+Ja3xNv5tufM+Rp8gwXPzaAoFZanGaheIwq7q/M=
 github.com/Pylons-tech/pylons_sdk v0.0.0-20200618150809-0f11dddc4bea/go.mod h1:ElzANmZzm2/cYMdhBB3leq/a+XF2BDdnkMdTnRjRShI=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200618235750-61688fee9a45 h1:7H61oYXZCQ5hY+RsHaAUCJD/lsTGuqnfjgTFzb+UFSo=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200618235750-61688fee9a45/go.mod h1:ElzANmZzm2/cYMdhBB3leq/a+XF2BDdnkMdTnRjRShI=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200620022504-49c646c356b6 h1:aCRhu2x88JZNtzCKYc9qJaejUrCtuYeP1saQGsvXXks=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200620022504-49c646c356b6/go.mod h1:ElzANmZzm2/cYMdhBB3leq/a+XF2BDdnkMdTnRjRShI=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=

@@ -2,6 +2,6 @@
   "Doubles": [{ "Key": "attack", "Value": "1" }],
   "Longs": [{ "Key": "level", "Value": "1" }],
   "Strings": [{ "Key": "Name","Value": "Spear"}],
-  "CookbookID": "renamecb-1589853709",
+  "CookbookID": "send_items_test-1589853709",
   "Sender": "michael"
 }

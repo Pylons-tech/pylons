@@ -43,5 +43,8 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		}
 	}
 
-	return &sdk.Result{}, nil
+	return marshalJSON(SendItemsResponse{
+		Message: "successfully sent the items",
+		Status:  "Success",
+	})
 }
