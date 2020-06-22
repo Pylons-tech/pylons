@@ -39,7 +39,7 @@ func NewMsgCreateTrade(
 }
 
 // Route should return the name of the module
-func (msg MsgCreateTrade) Route() string { return "pylons" }
+func (msg MsgCreateTrade) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgCreateTrade) Type() string { return "create_trade" }

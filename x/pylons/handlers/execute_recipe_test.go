@@ -105,7 +105,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		dynamicItemSet           bool
 		dynamicItemNames         []string
 		addInputCoin             bool
-		recipeID                 string
+		rcpID                    string
 		sender                   sdk.AccAddress
 		desiredError             string
 		successMsg               string
@@ -121,7 +121,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"insufficient coin balance check": {
 			itemIDs:            []string{},
 			addInputCoin:       false,
-			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
 			sender:             sender2,
 			desiredError:       "insufficient coin balance",
 			showError:          true,
@@ -131,7 +131,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"the item IDs count doesn't match the recipe input": {
 			itemIDs:            []string{"Raichu"},
 			addInputCoin:       true,
-			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
 			sender:             sender1,
 			desiredError:       "the item IDs count doesn't match the recipe input",
 			showError:          true,
@@ -141,7 +141,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"coin to coin recipe execution test": {
 			itemIDs:            []string{},
 			addInputCoin:       true,
-			recipeID:           c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -154,7 +154,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"pylon distribution check on pylon input recipes": {
 			itemIDs:                []string{},
 			addInputCoin:           false,
-			recipeID:               pylonInputRecipeData.RecipeID, // coin 2 coin Recipe ID
+			rcpID:                  pylonInputRecipeData.RecipeID, // coin 2 coin Recipe ID
 			sender:                 sender1,
 			desiredError:           "",
 			successMsg:             "successfully executed the recipe",
@@ -169,7 +169,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		"zero input item and 1 output item recipe test": {
 			itemIDs:            []string{},
 			addInputCoin:       true,
-			recipeID:           zeroInOneOutItemRecipeData.RecipeID, // available ID
+			rcpID:              zeroInOneOutItemRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -182,7 +182,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemSet:     false,
 			dynamicItemNames:   []string{"Raichu"},
 			addInputCoin:       true,
-			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
+			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "The item doesn't exist",
 			showError:          true,
@@ -194,7 +194,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"NoRaichu"},
 			addInputCoin:       true,
-			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
+			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "the item inputs dont match any items provided",
 			successMsg:         "successfully executed the recipe",
@@ -207,7 +207,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"Raichu"},
 			addInputCoin:       true,
-			recipeID:           oneInputOneOutputRecipeData.RecipeID, // available ID
+			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -220,7 +220,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"catalyst"},
 			addInputCoin:       true,
-			recipeID:           oneCatalystOneOutputRecipeData.RecipeID, // available ID
+			rcpID:              oneCatalystOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -232,7 +232,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			itemIDs:                  []string{},
 			dynamicItemSet:           false,
 			addInputCoin:             true,
-			recipeID:                 noInput1Coin1ItemRecipeData.RecipeID, // available ID
+			rcpID:                    noInput1Coin1ItemRecipeData.RecipeID, // available ID
 			sender:                   sender1,
 			desiredError:             "",
 			successMsg:               "successfully executed the recipe",
@@ -245,7 +245,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			itemIDs:                  []string{},
 			dynamicItemSet:           false,
 			addInputCoin:             true,
-			recipeID:                 noInput1Coin1ItemRandRecipeData.RecipeID, // available ID
+			rcpID:                    noInput1Coin1ItemRandRecipeData.RecipeID, // available ID
 			sender:                   sender1,
 			desiredError:             "",
 			successMsg:               "successfully executed the recipe",
@@ -259,7 +259,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"Raichu"},
 			addInputCoin:       true,
-			recipeID:           itemUpgradeRecipeData.RecipeID, // available ID
+			rcpID:              itemUpgradeRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -272,7 +272,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"RaichuTC", "catalyst"},
 			addInputCoin:       true,
-			recipeID:           itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
+			rcpID:              itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
 			sender:             sender1,
 			desiredError:       "",
 			successMsg:         "successfully executed the recipe",
@@ -297,7 +297,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				}
 			}
 
-			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
+			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
 			result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {

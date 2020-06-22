@@ -36,27 +36,27 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
-		cookbookID   string
+		cbID         string
 		recipeName   string
-		recipeID     string
+		rcpID        string
 		recipeDesc   string
 		sender       sdk.AccAddress
 		desiredError string
 		showError    bool
 	}{
 		"update recipe check for not available recipe": {
-			cookbookID:   cbData.CookbookID,
+			cbID:         cbData.CookbookID,
 			recipeName:   "recipe0001",
-			recipeID:     "id001", // not available ID
+			rcpID:        "id001", // not available ID
 			recipeDesc:   "this has to meet character limits lol",
 			sender:       sender1,
 			desiredError: "the owner of the recipe is different then the current sender",
 			showError:    true,
 		},
 		"successful test for update recipe": {
-			cookbookID:   cbData.CookbookID,
+			cbID:         cbData.CookbookID,
 			recipeName:   "recipe0001",
-			recipeID:     recipeData.RecipeID, // available ID
+			rcpID:        recipeData.RecipeID, // available ID
 			recipeDesc:   "this has to meet character limits lol",
 			sender:       sender1,
 			desiredError: "",
@@ -65,7 +65,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgUpdateRecipe(tc.recipeName, tc.cookbookID, tc.recipeID, tc.recipeDesc,
+			msg := msgs.NewMsgUpdateRecipe(tc.recipeName, tc.cbID, tc.rcpID, tc.recipeDesc,
 				types.GenCoinInputList("wood", 5),
 				types.GenItemInputList("Raichu"),
 				types.GenEntries("chair", "Raichu"),

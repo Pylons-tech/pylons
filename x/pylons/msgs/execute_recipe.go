@@ -25,7 +25,7 @@ func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []strin
 }
 
 // Route should return the name of the module
-func (msg MsgExecuteRecipe) Route() string { return "pylons" }
+func (msg MsgExecuteRecipe) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgExecuteRecipe) Type() string { return "execute_recipe" }

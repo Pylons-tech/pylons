@@ -41,11 +41,12 @@ func (rl RecipeList) String() string {
 
 // NewRecipe creates a new recipe
 func NewRecipe(recipeName, cookbookID, description string,
-	coinInputs CoinInputList, // coinOutputs CoinOutputList,
-	itemInputs ItemInputList, // itemOutputs ItemOutputList,
-	entries EntriesList,
-	outputs WeightedOutputsList,
-	execTime int64, sender sdk.AccAddress) Recipe {
+	coinInputs CoinInputList, // coins to put on the recipe
+	itemInputs ItemInputList, // items to put on the recipe
+	entries EntriesList, // items that can be created from recipe
+	outputs WeightedOutputsList, // item outputs listing by weight value
+	blockInterval int64, // The amount of time to wait to finish running the recipe
+	sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
 		Name:          recipeName,
 		CookbookID:    cookbookID,
@@ -53,7 +54,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
 		Outputs:       outputs,
-		BlockInterval: execTime,
+		BlockInterval: blockInterval,
 		Description:   description,
 		Sender:        sender,
 	}

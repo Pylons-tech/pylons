@@ -31,7 +31,7 @@ func NewMsgUpdateCookbook(ID, desc, devel string, version types.SemVer, sEmail t
 }
 
 // Route should return the name of the module
-func (msg MsgUpdateCookbook) Route() string { return "pylons" }
+func (msg MsgUpdateCookbook) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgUpdateCookbook) Type() string { return "update_cookbook" }

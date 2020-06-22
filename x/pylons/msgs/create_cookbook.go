@@ -42,7 +42,7 @@ func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version type
 }
 
 // Route should return the name of the module
-func (msg MsgCreateCookbook) Route() string { return "pylons" }
+func (msg MsgCreateCookbook) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgCreateCookbook) Type() string { return "create_cookbook" }

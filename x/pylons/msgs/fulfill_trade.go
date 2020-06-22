@@ -24,7 +24,7 @@ func NewMsgFulfillTrade(TradeID string, sender sdk.AccAddress, itemIDs []string)
 }
 
 // Route should return the name of the module
-func (msg MsgFulfillTrade) Route() string { return "pylons" }
+func (msg MsgFulfillTrade) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgFulfillTrade) Type() string { return "fulfill_trade" }

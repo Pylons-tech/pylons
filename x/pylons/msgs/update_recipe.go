@@ -44,7 +44,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 }
 
 // Route should return the name of the module
-func (msg MsgUpdateRecipe) Route() string { return "pylons" }
+func (msg MsgUpdateRecipe) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgUpdateRecipe) Type() string { return "update_recipe" }

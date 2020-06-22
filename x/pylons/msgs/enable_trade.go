@@ -22,7 +22,7 @@ func NewMsgEnableTrade(tradeID string, sender sdk.AccAddress) MsgEnableTrade {
 }
 
 // Route should return the name of the module
-func (msg MsgEnableTrade) Route() string { return "pylons" }
+func (msg MsgEnableTrade) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgEnableTrade) Type() string { return "enable_trade" }

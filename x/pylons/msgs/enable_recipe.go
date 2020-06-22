@@ -22,7 +22,7 @@ func NewMsgEnableRecipe(recipeID string, sender sdk.AccAddress) MsgEnableRecipe 
 }
 
 // Route should return the name of the module
-func (msg MsgEnableRecipe) Route() string { return "pylons" }
+func (msg MsgEnableRecipe) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgEnableRecipe) Type() string { return "enable_recipe" }

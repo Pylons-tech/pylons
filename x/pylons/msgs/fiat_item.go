@@ -29,7 +29,7 @@ func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []t
 }
 
 // Route should return the name of the module
-func (msg MsgFiatItem) Route() string { return "pylons" }
+func (msg MsgFiatItem) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgFiatItem) Type() string { return "fiat_item" }

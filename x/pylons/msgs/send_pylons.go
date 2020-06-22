@@ -24,7 +24,7 @@ func NewMsgSendPylons(amount sdk.Coins, sender sdk.AccAddress, receiver sdk.AccA
 }
 
 // Route should return the name of the module
-func (msg MsgSendPylons) Route() string { return "pylons" }
+func (msg MsgSendPylons) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgSendPylons) Type() string { return "send_pylons" }
