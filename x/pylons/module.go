@@ -70,6 +70,7 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		query.GetCookbook(StoreKey, cdc),
 		query.GetExecution(StoreKey, cdc),
 		query.GetItem(StoreKey, cdc),
+		query.GetTrade(StoreKey, cdc),
 		query.GetRecipe(StoreKey, cdc),
 		query.ListCookbook(StoreKey, cdc),
 		query.ListRecipes(StoreKey, cdc),
