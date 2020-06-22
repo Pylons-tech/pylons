@@ -102,6 +102,26 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			checkPylonDistribution: true,
 			pylonsLLCDistribution:  20,
 		},
+		{
+			name:                   "trade unordered coin input test", // item-item fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC5",
+			hasInputItem:           true,
+			inputItemName:          "TESTITEM_FulfillTrade__001_TC5_INPUT",
+			coinInputList:          types.CoinInputList{
+				types.CoinInput{types.Pylon, 100},
+				types.CoinInput{"aaaa",100},
+				types.CoinInput{"zzzz",100},
+				types.CoinInput{"cccc",100},
+			},
+			hasOutputCoin:          false,
+			hasOutputItem:          true,
+			outputItemName:         "TESTITEM_FulfillTrade__001_TC5_OUTPUT",
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  20,
+		},
 	}
 
 	for tcNum, tc := range tests {
@@ -157,7 +177,9 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
 	ffTrdResp := handlers.FulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"txhash": txhash,
+	}).MustNil(err)
 
 	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
 	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
