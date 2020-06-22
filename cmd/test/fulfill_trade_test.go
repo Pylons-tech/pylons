@@ -108,7 +108,6 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			hasInputItem:           true,
 			inputItemName:          "TESTITEM_FulfillTrade__001_TC5_INPUT",
 			coinInputList:          types.CoinInputList{
-				types.CoinInput{types.Pylon, 100},
 				types.CoinInput{"aaaa",100},
 				types.CoinInput{"zzzz",100},
 				types.CoinInput{"cccc",100},
