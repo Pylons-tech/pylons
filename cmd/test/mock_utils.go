@@ -250,7 +250,7 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 // MockDetailedTradeGUID mock trade and return GUID
 func MockDetailedTradeGUID(
 	cbID string,
-	hasInputCoin bool, inputCoinName string, inputCoinAmount int64,
+	inputCoinList types.CoinInputList,
 	hasInputItem bool, inputItemName string,
 	hasOutputCoin bool, outputCoinName string, outputCoinAmount int64,
 	hasOutputItem bool, outputItemID string,
@@ -261,10 +261,6 @@ func MockDetailedTradeGUID(
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err)
 
-	inputCoinList := types.GenCoinInputList(inputCoinName, inputCoinAmount)
-	if !hasInputCoin {
-		inputCoinList = nil
-	}
 	inputItemList := types.GenTradeItemInputList(cbID, []string{inputItemName})
 	if !hasInputItem {
 		inputItemList = nil

@@ -5,7 +5,7 @@ import (
 	originT "testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
@@ -21,9 +21,7 @@ type FulfillTradeTestCase struct {
 	hasInputItem  bool
 	inputItemName string
 
-	hasInputCoin    bool
-	inputCoinName   string
-	inputCoinAmount int64
+	coinInputList types.CoinInputList
 
 	hasOutputCoin    bool
 	outputCoinName   string
@@ -48,9 +46,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			name:                   "coin->coin fullfill trade test", // coin-coin fulfill trade test
 			extraInfo:              "TESTTRD_FulfillTrade__001_TC1",
 			hasInputItem:           false,
-			hasInputCoin:           true,
-			inputCoinName:          "node0token",
-			inputCoinAmount:        200,
+			coinInputList:          types.GenCoinInputList("node0token", 200),
 			hasOutputCoin:          true,
 			outputCoinName:         "pylon",
 			outputCoinAmount:       100,
@@ -66,7 +62,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			extraInfo:              "TESTTRD_FulfillTrade__001_TC2",
 			hasInputItem:           true,
 			inputItemName:          "TESTITEM_FulfillTrade__001_TC2",
-			hasInputCoin:           false,
+			coinInputList:          nil,
 			hasOutputCoin:          true,
 			outputCoinName:         "pylon",
 			outputCoinAmount:       100,
@@ -81,9 +77,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			name:                   "coin->item fullfill trade test", // coin-item fulfill trade test
 			extraInfo:              "TESTTRD_FulfillTrade__001_TC3",
 			hasInputItem:           false,
-			hasInputCoin:           true,
-			inputCoinName:          "pylon",
-			inputCoinAmount:        200,
+			coinInputList:          types.GenCoinInputList("pylon", 200),
 			hasOutputCoin:          false,
 			hasOutputItem:          true,
 			outputItemName:         "TESTITEM_FulfillTrade__001_TC3",
@@ -98,9 +92,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			extraInfo:              "TESTTRD_FulfillTrade__001_TC4",
 			hasInputItem:           true,
 			inputItemName:          "TESTITEM_FulfillTrade__001_TC4_INPUT",
-			hasInputCoin:           true,
-			inputCoinName:          "pylon",
-			inputCoinAmount:        200,
+			coinInputList:          types.GenCoinInputList("pylon", 200),
 			hasOutputCoin:          false,
 			hasOutputItem:          true,
 			outputItemName:         "TESTITEM_FulfillTrade__001_TC4_OUTPUT",
@@ -132,7 +124,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		outputItemID = MockItemGUID(mCB.ID, tc.outputItemName, t)
 	}
 
-	trdGUID := MockDetailedTradeGUID(mCB.ID, tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
+	trdGUID := MockDetailedTradeGUID(mCB.ID, 
+		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
