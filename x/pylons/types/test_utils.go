@@ -24,13 +24,13 @@ func GenItemInputList(names ...string) ItemInputList {
 }
 
 // GenTradeItemInputList is a utility function to generate trade item input list
-func GenTradeItemInputList(cbID string, names []string) TradeItemInputList {
+func GenTradeItemInputList(cookbookID string, itemNames []string) TradeItemInputList {
 	tiiL := TradeItemInputList{}
-	iiL := GenItemInputList(names...)
+	iiL := GenItemInputList(itemNames...)
 	for _, ii := range iiL {
 		tiiL = append(tiiL, TradeItemInput{
 			ii,
-			cbID,
+			cookbookID,
 		})
 	}
 	return tiiL
