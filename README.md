@@ -102,9 +102,11 @@ pylonsd start
 ```
 
 ### If you wanna get the latest updates of Pylons-sdk, use the following commands
+Clean the cache
 ```
 go clean -modcache
 ```
+Get the latest pylons-sdk from github
 ```
 go get github.com/Pylons-tech/pylons_sdk
 ```
