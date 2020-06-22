@@ -5,8 +5,8 @@ import (
 	originT "testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
@@ -103,18 +103,19 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			pylonsLLCDistribution:  20,
 		},
 		{
-			name:                   "trade unordered coin input test", // item-item fulfill trade test
-			extraInfo:              "TESTTRD_FulfillTrade__001_TC5",
-			hasInputItem:           true,
-			inputItemName:          "TESTITEM_FulfillTrade__001_TC5_INPUT",
-			coinInputList:          types.CoinInputList{
-				types.CoinInput{"aaaa",100},
-				types.CoinInput{"zzzz",100},
-				types.CoinInput{"cccc",100},
+			name:          "trade unordered coin input test",
+			extraInfo:     "TESTTRD_FulfillTrade__001_TC5",
+			hasInputItem:  true,
+			inputItemName: "TESTITEM_FulfillTrade__001_TC5_INPUT",
+			coinInputList: types.CoinInputList{
+				types.CoinInput{Coin: "node0token", Count: 100},
+				types.CoinInput{Coin: "loudcoin", Count: 100},
+				types.CoinInput{Coin: "stake", Count: 100},
 			},
-			hasOutputCoin:          false,
-			hasOutputItem:          true,
-			outputItemName:         "TESTITEM_FulfillTrade__001_TC5_OUTPUT",
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
 			expectedStatus:         "Success",
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
@@ -143,13 +144,15 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		outputItemID = MockItemGUID(mCB.ID, tc.outputItemName, t)
 	}
 
-	trdGUID := MockDetailedTradeGUID(mCB.ID, 
+	trdGUID := MockDetailedTradeGUID(mCB.ID,
 		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
 		tc.extraInfo,
 		t)
+
+	t.MustTrue(trdGUID != "")
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
@@ -163,7 +166,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, sdkAddr, itemIDs)
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,

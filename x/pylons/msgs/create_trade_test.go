@@ -54,9 +54,9 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	require.True(t, err == nil)
 	msg := NewMsgCreateTrade(
 		types.CoinInputList{
-			types.CoinInput{"aaaa",100},
-			types.CoinInput{"zzzz",100},
-			types.CoinInput{"cccc",100},
+			types.CoinInput{Coin: "aaaa", Count: 100},
+			types.CoinInput{Coin: "zzzz", Count: 100},
+			types.CoinInput{Coin: "cccc", Count: 100},
 		},
 		nil,
 		types.NewPylon(10),
