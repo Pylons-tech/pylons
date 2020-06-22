@@ -1,6 +1,7 @@
 package inttest
 
 import (
+	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
@@ -20,10 +21,22 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 	tests := []struct {
 		name    string
 		rcpName string
+		outputDenom string
+		desiredError string
+		showError bool
 	}{
 		{
-			"basic flow test",
-			"TESTRCP_CreateRecipe_001",
+			name: "basic flow test",
+			rcpName: "TESTRCP_CreateRecipe_001",
+			outputDenom: "chair",
+			showError:      false,
+		},
+		{
+			name: "recipe with pylon denom as output",
+			rcpName: "TESTRCP_CreateRecipe_002",
+			outputDenom: "pylon",
+			desiredError:   "There should not be a recipe which generate pylon denom as an output",
+			showError:      true,
 		},
 	}
 
@@ -42,7 +55,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					"this has to meet character limits lol",
 					types.GenCoinInputList("wood", 5),
 					types.GenItemInputList("Raichu"),
-					types.GenEntries("chair", "Raichu"),
+					types.GenEntries(tc.outputDenom, "Raichu"),
 					types.GenOneOutput(2),
 					0,
 					sdkAddr),
@@ -50,9 +63,13 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("unexpected transaction broadcast error")
+				if tc.desiredError != "" {
+					t.MustTrue(strings.Contains(err.Error(), tc.desiredError))
+				} else {
+					t.WithFields(testing.Fields{
+						"error": err,
+					}).Fatal("unexpected transaction broadcast error")
+				}
 				return
 			}
 
