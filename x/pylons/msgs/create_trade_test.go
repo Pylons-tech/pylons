@@ -20,6 +20,9 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 		nil,
 		"Test CreateTrade GetSignBytes",
 		sdkAddr)
+	err = msg.ValidateBasic()
+	require.True(t, err == nil)
+
 	expectedSignBytes := `{
 			"CoinInputs":null,
 			"CoinOutputs":[{"amount":"10","denom":"pylon"}],
@@ -60,6 +63,9 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 		nil,
 		"Test CreateTrade GetSignBytes",
 		sdkAddr)
+	err = msg.ValidateBasic()
+	require.True(t, err == nil)
+
 	expectedSignBytes := `{
 		"CoinInputs": [
 			{
