@@ -8,6 +8,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// SendItemsResponse is the response for fulfillRecipe
+type SendItemsResponse struct {
+	Message string
+	Status  string
+}
+
 // HandlerMsgSendItems is used to send items between people
 func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendItems) (*sdk.Result, error) {
 
@@ -37,5 +43,8 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		}
 	}
 
-	return &sdk.Result{}, nil
+	return marshalJSON(SendItemsResponse{
+		Message: "successfully sent the items",
+		Status:  "Success",
+	})
 }
