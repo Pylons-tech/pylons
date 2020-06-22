@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestCreateTradeGetSignBytes(t *testing.T) {
+func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 	sdkAddr, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	require.True(t, err == nil)
 	msg := NewMsgCreateTrade(
@@ -40,6 +40,52 @@ func TestCreateTradeGetSignBytes(t *testing.T) {
 			"ItemOutputs":null,
 			"Sender":"cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 		}`
+	buffer := new(bytes.Buffer)
+	err = json.Compact(buffer, []byte(expectedSignBytes))
+	require.True(t, err == nil)
+	require.True(t, string(msg.GetSignBytes()) == buffer.String())
+}
+
+func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
+	sdkAddr, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	require.True(t, err == nil)
+	msg := NewMsgCreateTrade(
+		types.CoinInputList{
+			types.CoinInput{"aaaa",100},
+			types.CoinInput{"zzzz",100},
+			types.CoinInput{"cccc",100},
+		},
+		nil,
+		types.NewPylon(10),
+		nil,
+		"Test CreateTrade GetSignBytes",
+		sdkAddr)
+	expectedSignBytes := `{
+		"CoinInputs": [
+			{
+				"Coin": "aaaa",
+				"Count": "100"
+			},
+			{
+				"Coin": "zzzz",
+				"Count": "100"
+			},
+			{
+				"Coin": "cccc",
+				"Count": "100"
+			}
+		],
+		"CoinOutputs": [
+			{
+				"amount": "10",
+				"denom": "pylon"
+			}
+		],
+		"ExtraInfo": "Test CreateTrade GetSignBytes",
+		"ItemInputs": null,
+		"ItemOutputs": null,
+		"Sender": "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
+	}`
 	buffer := new(bytes.Buffer)
 	err = json.Compact(buffer, []byte(expectedSignBytes))
 	require.True(t, err == nil)
