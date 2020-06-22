@@ -101,6 +101,14 @@ Start daemon
 pylonsd start
 ```
 
+### If you wanna get the latest updates of Pylons-sdk, use the following commands
+```
+go clean -modcache
+```
+```
+go get github.com/Pylons-tech/pylons_sdk
+```
+
 ### Configuration
 
 - File name: `pylons.yml`
