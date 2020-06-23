@@ -138,8 +138,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 			"block_interval": tc.blockInterval,
 		}).MustNil(err, "error waiting for block interval")
 	} else {
-		err := inttestSDK.WaitForNextBlock()
-		t.MustNil(err, "error waiting for next block")
+		WaitOneBlockWithErrorCheck(t)
 	}
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
@@ -214,8 +213,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 			return
 		}
 
-		err := inttestSDK.WaitForNextBlock()
-		t.MustNil(err, "error waiting for next block")
+		WaitOneBlockWithErrorCheck(t)
 
 		txHandleResBytes = GetTxHandleResult(txhash, t)
 		resp := handlers.CheckExecutionResponse{}

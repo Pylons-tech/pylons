@@ -59,3 +59,9 @@ func TxBroadcastErrorExpected(txhash string, err error, desiredError string, t *
 		TxBroadcastErrorCheck(txhash, err, t)
 	}
 }
+
+// WaitOneBlockWithErrorCheck wait for a block with error checking
+func WaitOneBlockWithErrorCheck(t *testing.T) {
+	err := inttestSDK.WaitForNextBlock()
+	t.MustNil(err, "error waiting for next block")
+}

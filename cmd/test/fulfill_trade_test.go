@@ -185,8 +185,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		return
 	}
 
-	err = inttestSDK.WaitForNextBlock()
-	t.MustNil(err, "error waiting for next block")
+	WaitOneBlockWithErrorCheck(t)
 
 	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
 	t.WithFields(testing.Fields{

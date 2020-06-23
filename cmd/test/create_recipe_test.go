@@ -66,8 +66,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				return
 			}
 
-			err = inttestSDK.WaitForNextBlock()
-			t.MustNil(err, "error waiting for next block")
+			WaitOneBlockWithErrorCheck(t)
 
 			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.CreateRecipeResponse{}

@@ -45,8 +45,7 @@ func MockCookbook(t *testing.T) (string, error) {
 		return "", err
 	}
 
-	err = inttestSDK.WaitForNextBlock()
-	t.MustNil(err, "error waiting for next block")
+	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
 	resp := handlers.CreateCookbookResponse{}
@@ -176,8 +175,7 @@ func MockDetailedRecipeGUID(
 		return "", err
 	}
 
-	err = inttestSDK.WaitForNextBlock()
-	t.MustNil(err, "error waiting for next block")
+	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
 	resp := handlers.CreateRecipeResponse{}
@@ -214,8 +212,7 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 		return ""
 	}
 
-	err = inttestSDK.WaitForNextBlock()
-	t.MustNil(err, "error waiting for next block")
+	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
 	resp := handlers.FiatItemResponse{}

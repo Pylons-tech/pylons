@@ -36,8 +36,7 @@ func TestListRecipeViaCLI(originT *originT.T) {
 			t.MustNil(err, "error listing recipes")
 			t.MustTrue(len(recipes) > 0, "there should be at least 1 recipe")
 
-			err = inttestSDK.WaitForNextBlock()
-			t.MustNil(err, "error waiting for next block")
+			WaitOneBlockWithErrorCheck(t)
 
 			_, ok := inttestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
