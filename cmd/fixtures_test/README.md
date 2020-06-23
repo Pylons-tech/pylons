@@ -86,13 +86,29 @@ There's circular dependency checker and it will automatically fail if it's found
 - runserial
 Run fixture test in serial mode.
 ```
-make fixture_tests -runserial
+make fixture_tests ARGS="-runserial"
 ```
 
 - userest
 Send transactions by using rest endpoint.
 ```
-make fixture_tests -userest
+make fixture_tests ARGS="-userest"
+```
+
+- use-known-cookbook
+ignore create_cookbook message but just do update rest of them
+```
+make fixture_tests ARGS="-use-known-cookbook"
+```
+- specific scenarios test
+If not specify this param, it tests all scenario files. If specify only do specific tests.
+```
+make fixture_tests ARGS="--scenarios=multi_msg_tx,double_empty"
+```
+- set account names to be used for the fixture tests.
+The account names will replace all the placeholder account names in the fixture test files.
+```
+make fixture_tests ARGS="--accounts michael,eugen"
 ```
 
 ## To make fixture test scenarios clean
