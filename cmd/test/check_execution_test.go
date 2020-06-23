@@ -200,7 +200,10 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	exec, err := inttestSDK.GetExecutionByGUID(schedule.ExecID)
 	if err != nil {
-		t.Fatalf("error finding execution with ExecID :: ExecID=\"%s\" %+v", schedule.ExecID, err)
+		t.WithFields(testing.Fields{
+			"exec_id": schedule.ExecID,
+			"error":   err,
+		}).Fatal("error finding execution")
 	}
 	t.WithFields(testing.Fields{
 		"completed":       exec.Completed,

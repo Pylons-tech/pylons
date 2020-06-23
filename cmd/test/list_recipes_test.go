@@ -40,7 +40,9 @@ func TestListRecipeViaCLI(originT *originT.T) {
 
 			_, ok := inttestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
-				t.Fatalf("error getting recipe with name %+v", tc.rcpName)
+				t.WithFields(testing.Fields{
+					"recipe_name": tc.rcpName,
+				}).Fatal("error getting recipe from name")
 			}
 		})
 	}
