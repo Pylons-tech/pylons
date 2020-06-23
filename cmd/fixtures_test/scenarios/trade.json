@@ -116,6 +116,30 @@
         }
     },
     {
+        "ID": "CREATE_TRADING_KNIFE_V5",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/trading/trading_knife_v5.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "michael",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Trading Knife v5" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
         "ID": "CREATE_COIN_COIN_TRADE",        
         "runAfter": {
             "precondition": ["CREATE_TRADE_COOKBOOK"],
@@ -234,6 +258,40 @@
                     ]
                 }
             ]
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_COIN_TRADE2",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V5"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_coin2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "eugen",
+                    "trades": ["item to coin trading2"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_COIN_TRADE2",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE2"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_coin2.json",
+        "output": {
+            "txResult": {
+                "errLog": "the sender doesn't have the trade item attributes"
+            }
         }
     },
     {
