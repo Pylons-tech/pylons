@@ -1,7 +1,6 @@
 package inttest
 
 import (
-	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
@@ -19,24 +18,24 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name    string
-		rcpName string
-		outputDenom string
+		name         string
+		rcpName      string
+		outputDenom  string
 		desiredError string
-		showError bool
+		showError    bool
 	}{
 		{
-			name: "basic flow test",
-			rcpName: "TESTRCP_CreateRecipe_001",
+			name:        "basic flow test",
+			rcpName:     "TESTRCP_CreateRecipe_001",
 			outputDenom: "chair",
-			showError:      false,
+			showError:   false,
 		},
 		{
-			name: "recipe with pylon denom as output",
-			rcpName: "TESTRCP_CreateRecipe_002",
-			outputDenom: "pylon",
-			desiredError:   "There should not be a recipe which generate pylon denom as an output",
-			showError:      true,
+			name:         "recipe with pylon denom as output",
+			rcpName:      "TESTRCP_CreateRecipe_002",
+			outputDenom:  "pylon",
+			desiredError: "There should not be a recipe which generate pylon denom as an output",
+			showError:    true,
 		},
 	}
 
@@ -46,7 +45,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
@@ -63,29 +62,17 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				if tc.desiredError != "" {
-					t.MustTrue(strings.Contains(err.Error(), tc.desiredError))
-				} else {
-					t.WithFields(testing.Fields{
-						"error": err,
-					}).Fatal("unexpected transaction broadcast error")
-				}
+				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return
 			}
 
-			err = inttestSDK.WaitForNextBlock()
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error waiting for creating recipe")
-			}
+			WaitOneBlockWithErrorCheck(t)
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.MustNil(err)
+			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.CreateRecipeResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.MustNil(err)
-			t.MustTrue(resp.RecipeID != "")
+			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+			t.MustTrue(resp.RecipeID != "", "recipe id should exist")
 		})
 	}
 }

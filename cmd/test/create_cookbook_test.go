@@ -28,8 +28,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"",
@@ -44,25 +43,17 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("unexpected transaction broadcast error")
+				TxBroadcastErrorCheck(txhash, err, t)
 				return
 			}
 
-			err = inttestSDK.WaitForNextBlock()
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error waiting for creating cookbook")
-			}
+			WaitOneBlockWithErrorCheck(t)
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.MustNil(err)
+			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.CreateCookbookResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.MustNil(err)
-			t.MustTrue(resp.CookbookID != "")
+			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+			t.MustTrue(resp.CookbookID != "", "cookbook id should exist")
 		})
 	}
 }

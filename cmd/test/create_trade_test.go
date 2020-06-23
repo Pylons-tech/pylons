@@ -1,7 +1,6 @@
 package inttest
 
 import (
-	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
@@ -18,10 +17,10 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name        string
-		outputPylon int64
-		extraInfo   string
-		expectedErr string
+		name         string
+		outputPylon  int64
+		extraInfo    string
+		desiredError string
 	}{
 		{
 			name:        "item->coin create trade test", // item to coin create trade test
@@ -29,10 +28,10 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			extraInfo:   "TESTTRD_CreateTrade_001",
 		},
 		{
-			name:        "less than minimum amount pylon trade test",
-			outputPylon: 1,
-			extraInfo:   "TESTTRD_CreateTrade_002",
-			expectedErr: "there should be more than 10 amount of pylon per trade",
+			name:         "less than minimum amount pylon trade test",
+			outputPylon:  1,
+			extraInfo:    "TESTTRD_CreateTrade_002",
+			desiredError: "there should be more than 10 amount of pylon per trade",
 		},
 		// For coin-coin, item-item, coin-item trading, it is implemented in fulfill trade test already.
 	}
@@ -43,7 +42,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
@@ -56,27 +55,20 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				if len(tc.expectedErr) > 0 {
-					t.MustTrue(strings.Contains(err.Error(), tc.expectedErr))
-				} else {
-					t.WithFields(testing.Fields{
-						"error": err,
-					}).Fatal("unexpected transaction broadcast error")
-				}
+				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return
 			}
 
-			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error waiting for creating trade")
-			}
+			GetTxHandleResult(txhash, t)
 			// check trade created after 1 block
 			tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(tc.extraInfo)
-			t.MustNil(err)
-			t.MustTrue(exist)
-			t.MustTrue(len(tradeID) > 0)
+			t.WithFields(testing.Fields{
+				"extra_info": tc.extraInfo,
+			}).MustNil(err, "error getting trade id from extra info")
+			t.WithFields(testing.Fields{
+				"extra_info": tc.extraInfo,
+			}).MustTrue(exist, "trade should exist but not")
+			t.MustTrue(len(tradeID) > 0, "trade id shouldn't be empty")
 		})
 	}
 }

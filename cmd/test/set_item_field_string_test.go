@@ -37,7 +37,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
@@ -45,22 +45,17 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("unexpected transaction broadcast error")
+				TxBroadcastErrorCheck(txhash, err, t)
 				return
 			}
 
-			err = inttestSDK.WaitForNextBlock()
-			t.MustNil(err)
+			WaitOneBlockWithErrorCheck(t)
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.MustNil(err)
+			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.UpdateItemStringResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.MustNil(err)
-			t.MustTrue(resp.Message == "successfully updated the item field")
-			t.MustTrue(resp.Status == "Success")
+			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully updated the item field", t)
 
 			items, err := inttestSDK.ListItemsViaCLI("")
 			if err != nil {
@@ -70,7 +65,9 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			}
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false)
-			t.MustTrue(ok)
+			t.WithFields(testing.Fields{
+				"item_name": tc.value,
+			}).MustTrue(ok, "item id with specific name does not exist")
 		})
 	}
 }
