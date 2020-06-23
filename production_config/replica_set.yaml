@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: node
+spec:
+  selector:
+    matchLabels:
+      app: node # Label selector that determines which Pods belong to the StatefulSet
+                 # Must match spec: template: metadata: labels
+  serviceName: "node"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: node # Pod template's label selector
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: pylons
+        image: gcr.io/zinc-interface-241613/node:21d9070
+        volumeMounts:
+        - mountPath: /root/.pylonsd/data/state
+          name: data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Gi
