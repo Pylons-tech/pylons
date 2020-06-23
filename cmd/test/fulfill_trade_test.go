@@ -20,6 +20,7 @@ type FulfillTradeTestCase struct {
 
 	hasInputItem  bool
 	inputItemName string
+	wrongCBFulfill bool
 
 	coinInputList types.CoinInputList
 
@@ -30,6 +31,7 @@ type FulfillTradeTestCase struct {
 	hasOutputItem  bool
 	outputItemName string
 
+	desiredError        string
 	expectedStatus      string
 	expectedMessage     string
 	expectedRetryErrMsg string
@@ -120,7 +122,22 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  20,
+			pylonsLLCDistribution:  10,
+		},
+		{
+			name:          "same item with different cookbook id fulfill trade test",
+			extraInfo:     "TESTTRD_FulfillTrade__001_TC6",
+			hasInputItem:  true,
+			inputItemName: "TESTITEM_FulfillTrade__001_TC6_INPUT",
+			wrongCBFulfill: true,
+			coinInputList: nil,
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
+			desiredError:           "the sender doesn't have the trade item attributes",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  10,
 		},
 	}
 
@@ -137,7 +154,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	mCB := GetMockedCookbook(t)
+	mCB := GetMockedCookbook(false, t)
+	mCB2 := GetMockedCookbook(true, t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {
@@ -160,15 +178,17 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
-		itemIDs = []string{
-			MockItemGUID(mCB.ID, tc.inputItemName, t),
+		useCBID := mCB.ID
+		if tc.wrongCBFulfill {
+			useCBID = mCB2.ID
 		}
+		itemIDs = []string{MockItemGUID(useCBID, tc.inputItemName, t)}
 	}
 
 	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, sdkAddr, itemIDs)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
 	if err != nil {
-		TxBroadcastErrorCheck(txhash, err, t)
+		TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 		return
 	}
 
@@ -179,20 +199,22 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.expectedStatus, tc.expectedMessage, t)
 
 	// Try again after fulfill trade
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
-	if err != nil {
-		TxBroadcastErrorCheck(txhash, err, t)
-		return
+	if tc.expectedRetryErrMsg != "" {
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+		if err != nil {
+			TxBroadcastErrorCheck(txhash, err, t)
+			return
+		}
+	
+		WaitOneBlockWithErrorCheck(t)
+	
+		hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
+		t.WithFields(testing.Fields{
+			"txhash":         txhash,
+			"hmrErr":         hmrErr,
+			"expectedHmrErr": tc.expectedRetryErrMsg,
+		}).MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 	}
-
-	WaitOneBlockWithErrorCheck(t)
-
-	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
-	t.WithFields(testing.Fields{
-		"txhash":         txhash,
-		"hmrErr":         hmrErr,
-		"expectedHmrErr": tc.expectedRetryErrMsg,
-	}).MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 
 	if tc.checkPylonDistribution {
 		accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)

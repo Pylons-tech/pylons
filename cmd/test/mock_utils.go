@@ -15,12 +15,12 @@ import (
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(t *testing.T) (string, error) {
+func MockCookbook(createNew bool, t *testing.T) (string, error) {
 	guid, exist, err := CheckCookbookExist()
 	if err != nil {
 		return "", err
 	}
-	if exist { // finish mock if already available
+	if exist && !createNew { // finish mock if already available
 		return guid, nil
 	}
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
@@ -67,8 +67,8 @@ func CheckCookbookExist() (string, bool, error) {
 }
 
 // GetMockedCookbook get mocked cookbook
-func GetMockedCookbook(t *testing.T) types.Cookbook {
-	guid, err := MockCookbook(t)
+func GetMockedCookbook(createNew bool, t *testing.T) types.Cookbook {
+	guid, err := MockCookbook(createNew, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
@@ -145,7 +145,7 @@ func MockDetailedRecipeGUID(
 		return guid, nil
 	}
 
-	mCB := GetMockedCookbook(t)
+	mCB := GetMockedCookbook(false, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,

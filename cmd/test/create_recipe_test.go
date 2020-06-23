@@ -39,7 +39,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 		},
 	}
 
-	mCB := GetMockedCookbook(&t)
+	mCB := GetMockedCookbook(false, &t)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
