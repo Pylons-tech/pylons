@@ -1,7 +1,6 @@
 package inttest
 
 import (
-	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
@@ -63,34 +62,17 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				if tc.desiredError != "" {
-					t.WithFields(testing.Fields{
-						"txhash":        txhash,
-						"error":         err,
-						"desired_error": tc.desiredError,
-					}).MustTrue(strings.Contains(err.Error(), tc.desiredError))
-				} else {
-					t.WithFields(testing.Fields{
-						"txhash": txhash,
-						"error":  err,
-					}).Fatal("unexpected transaction broadcast error")
-				}
+				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return
 			}
 
 			err = inttestSDK.WaitForNextBlock()
 			t.MustNil(err, "error waiting for next block")
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error geting transaction data")
+			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.CreateRecipeResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.WithFields(testing.Fields{
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error unmarshaling transaction result")
+			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.RecipeID != "", "recipe id should exist")
 		})
 	}

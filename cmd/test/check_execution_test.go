@@ -127,10 +127,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
@@ -145,17 +142,10 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		t.MustNil(err, "error waiting for next block")
 	}
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	txHandleResBytes := GetTxHandleResult(txhash, t)
 	execResp := handlers.ExecuteRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error unmarshaling tx response")
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.WithFields(testing.Fields{
@@ -184,34 +174,15 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
 	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
-	txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	txHandleResBytes = GetTxHandleResult(txhash, t)
 	resp := handlers.CheckExecutionResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error unmarshaling transaction result")
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"original_status": resp.Status,
-		"target_status":   tc.expectedStatus,
-	}).MustTrue(resp.Status == tc.expectedStatus, "transaction result status is different from expected")
-	t.WithFields(testing.Fields{
-		"txhash":           txhash,
-		"original_message": resp.Message,
-		"target_message":   tc.expectedMessage,
-	}).MustTrue(resp.Message == tc.expectedMessage, "transaction result message is different from expected")
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedStatus, tc.expectedMessage, t)
 
 	// Here desiredItemName should be different across tests cases and across test files
 	items, err := inttestSDK.ListItemsViaCLI("")
@@ -239,37 +210,18 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	if tc.tryFinishedExecution {
 		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
 		if err != nil {
-			t.WithFields(testing.Fields{
-				"txhash": txhash,
-				"error":  err,
-			}).Fatal("unexpected transaction broadcast error")
+			TxBroadcastErrorCheck(txhash, err, t)
 			return
 		}
 
 		err := inttestSDK.WaitForNextBlock()
 		t.MustNil(err, "error waiting for next block")
 
-		txHandleResBytes, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-		t.WithFields(testing.Fields{
-			"txhash":          txhash,
-			"tx_result_bytes": string(txHandleResBytes),
-		}).MustNil(err, "error geting transaction data")
+		txHandleResBytes = GetTxHandleResult(txhash, t)
 		resp := handlers.CheckExecutionResponse{}
 		err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-		t.WithFields(testing.Fields{
-			"txhash":          txhash,
-			"tx_result_bytes": string(txHandleResBytes),
-		}).MustNil(err, "error unmarshaling transaction result")
-		t.WithFields(testing.Fields{
-			"txhash":          txhash,
-			"original_status": resp.Status,
-			"target_status":   tc.expectedRetryResStatus,
-		}).MustTrue(resp.Status == tc.expectedRetryResStatus, "transaction result status is different from expected")
-		t.WithFields(testing.Fields{
-			"txhash":           txhash,
-			"original_message": resp.Message,
-			"target_message":   tc.expectedRetryResMessage,
-		}).MustTrue(resp.Message == tc.expectedRetryResMessage, "transaction result message is different from expected")
+		TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+		TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedRetryResStatus, tc.expectedRetryResMessage, t)
 		// This is automatically checking OwnerRecipeID lock status ;)
 	}
 }

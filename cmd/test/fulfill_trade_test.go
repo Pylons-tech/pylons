@@ -168,43 +168,20 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, sdkAddr, itemIDs)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	txHandleResBytes := GetTxHandleResult(txhash, t)
 	ffTrdResp := handlers.FulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error unmarshaling transaction result")
-
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"original_status": ffTrdResp.Status,
-		"target_status":   tc.expectedStatus,
-	}).MustTrue(ffTrdResp.Status == tc.expectedStatus, "transaction result status is different from expected")
-	t.WithFields(testing.Fields{
-		"txhash":           txhash,
-		"original_message": ffTrdResp.Message,
-		"target_message":   tc.expectedMessage,
-	}).MustTrue(ffTrdResp.Message == tc.expectedMessage, "transaction result message is different from expected")
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.expectedStatus, tc.expectedMessage, t)
 
 	// Try again after fulfill trade
 	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 

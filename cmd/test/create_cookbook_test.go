@@ -43,27 +43,17 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"txhash": txhash,
-					"error":  err,
-				}).Fatal("unexpected transaction broadcast error")
+				TxBroadcastErrorCheck(txhash, err, t)
 				return
 			}
 
 			err = inttestSDK.WaitForNextBlock()
 			t.MustNil(err, "error waiting for next block")
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error geting transaction data")
+			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.CreateCookbookResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error unmarshaling transaction result")
+			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.CookbookID != "", "cookbook id should exist")
 		})
 	}

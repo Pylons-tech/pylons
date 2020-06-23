@@ -62,18 +62,11 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"txhash": txhash,
-					"error":  err,
-				}).Fatal("unexpected transaction broadcast error")
+				TxBroadcastErrorCheck(txhash, err, t)
 				return
 			}
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error geting transaction data")
+			GetTxHandleResult(txhash, t)
 
 			items, err := inttestSDK.ListItemsViaCLI("")
 			if err != nil {

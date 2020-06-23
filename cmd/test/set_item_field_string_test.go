@@ -45,37 +45,18 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				t.WithFields(testing.Fields{
-					"txhash": txhash,
-					"error":  err,
-				}).Fatal("unexpected transaction broadcast error")
+				TxBroadcastErrorCheck(txhash, err, t)
 				return
 			}
 
 			err = inttestSDK.WaitForNextBlock()
 			t.MustNil(err, "error waiting for next block")
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error geting transaction data")
+			txHandleResBytes := GetTxHandleResult(txhash, t)
 			resp := handlers.UpdateItemStringResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error unmarshaling transaction result")
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"original_status": resp.Status,
-				"target_status":   "Success",
-			}).MustTrue(resp.Status == "Success", "transaction result status is different from expected")
-			t.WithFields(testing.Fields{
-				"txhash":           txhash,
-				"original_message": resp.Message,
-				"target_message":   "successfully updated the item field",
-			}).MustTrue(resp.Message == "successfully updated the item field", "transaction result message is different from expected")
+			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully updated the item field", t)
 
 			items, err := inttestSDK.ListItemsViaCLI("")
 			if err != nil {

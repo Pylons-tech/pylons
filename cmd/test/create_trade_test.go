@@ -1,7 +1,6 @@
 package inttest
 
 import (
-	"strings"
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
@@ -18,10 +17,10 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name        string
-		outputPylon int64
-		extraInfo   string
-		expectedErr string
+		name         string
+		outputPylon  int64
+		extraInfo    string
+		desiredError string
 	}{
 		{
 			name:        "item->coin create trade test", // item to coin create trade test
@@ -29,10 +28,10 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			extraInfo:   "TESTTRD_CreateTrade_001",
 		},
 		{
-			name:        "less than minimum amount pylon trade test",
-			outputPylon: 1,
-			extraInfo:   "TESTTRD_CreateTrade_002",
-			expectedErr: "there should be more than 10 amount of pylon per trade",
+			name:         "less than minimum amount pylon trade test",
+			outputPylon:  1,
+			extraInfo:    "TESTTRD_CreateTrade_002",
+			desiredError: "there should be more than 10 amount of pylon per trade",
 		},
 		// For coin-coin, item-item, coin-item trading, it is implemented in fulfill trade test already.
 	}
@@ -56,26 +55,11 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				false,
 			)
 			if err != nil {
-				if len(tc.expectedErr) > 0 {
-					t.WithFields(testing.Fields{
-						"txhash":         txhash,
-						"error":          err,
-						"expected_error": tc.expectedErr,
-					}).MustTrue(strings.Contains(err.Error(), tc.expectedErr))
-				} else {
-					t.WithFields(testing.Fields{
-						"txhash": txhash,
-						"error":  err,
-					}).Fatal("unexpected transaction broadcast error")
-				}
+				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return
 			}
 
-			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.WithFields(testing.Fields{
-				"txhash":          txhash,
-				"tx_result_bytes": string(txHandleResBytes),
-			}).MustNil(err, "error geting transaction data")
+			GetTxHandleResult(txhash, t)
 			// check trade created after 1 block
 			tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(tc.extraInfo)
 			t.WithFields(testing.Fields{

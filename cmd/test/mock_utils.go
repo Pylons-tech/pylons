@@ -41,26 +41,17 @@ func MockCookbook(t *testing.T) (string, error) {
 		false,
 	)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return "", err
 	}
 
 	err = inttestSDK.WaitForNextBlock()
 	t.MustNil(err, "error waiting for next block")
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	txHandleResBytes := GetTxHandleResult(txhash, t)
 	resp := handlers.CreateCookbookResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.WithFields(testing.Fields{
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error unmarshaling transaction result")
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	return resp.CookbookID, nil
 }
 
@@ -181,26 +172,17 @@ func MockDetailedRecipeGUID(
 		false,
 	)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return "", err
 	}
 
 	err = inttestSDK.WaitForNextBlock()
 	t.MustNil(err, "error waiting for next block")
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	txHandleResBytes := GetTxHandleResult(txhash, t)
 	resp := handlers.CreateRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.WithFields(testing.Fields{
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error unmarshaling transaction result")
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
 	return resp.RecipeID, nil
 }
@@ -228,27 +210,17 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 		false,
 	)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return ""
 	}
 
 	err = inttestSDK.WaitForNextBlock()
 	t.MustNil(err, "error waiting for next block")
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	txHandleResBytes := GetTxHandleResult(txhash, t)
 	resp := handlers.FiatItemResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error unmarshaling transaction result")
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
 	return resp.ItemID
 }
@@ -298,18 +270,11 @@ func MockDetailedTradeGUID(
 		false,
 	)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"txhash": txhash,
-			"error":  err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorCheck(txhash, err, t)
 		return ""
 	}
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.WithFields(testing.Fields{
-		"txhash":          txhash,
-		"tx_result_bytes": string(txHandleResBytes),
-	}).MustNil(err, "error geting transaction data")
+	GetTxHandleResult(txhash, t)
 	// check trade created after 1 block
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.WithFields(testing.Fields{
