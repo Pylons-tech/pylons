@@ -37,7 +37,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
@@ -46,21 +46,36 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			)
 			if err != nil {
 				t.WithFields(testing.Fields{
-					"error": err,
+					"txhash": txhash,
+					"error":  err,
 				}).Fatal("unexpected transaction broadcast error")
 				return
 			}
 
 			err = inttestSDK.WaitForNextBlock()
-			t.MustNil(err)
+			t.MustNil(err, "error waiting for next block")
 
 			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			t.MustNil(err)
+			t.WithFields(testing.Fields{
+				"txhash":          txhash,
+				"tx_result_bytes": string(txHandleResBytes),
+			}).MustNil(err, "error geting transaction data")
 			resp := handlers.UpdateItemStringResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-			t.MustNil(err)
-			t.MustTrue(resp.Message == "successfully updated the item field")
-			t.MustTrue(resp.Status == "Success")
+			t.WithFields(testing.Fields{
+				"txhash":          txhash,
+				"tx_result_bytes": string(txHandleResBytes),
+			}).MustNil(err, "error unmarshaling transaction result")
+			t.WithFields(testing.Fields{
+				"txhash":          txhash,
+				"original_status": resp.Status,
+				"target_status":   "Success",
+			}).MustTrue(resp.Status == "Success", "transaction result status is different from expected")
+			t.WithFields(testing.Fields{
+				"txhash":           txhash,
+				"original_message": resp.Message,
+				"target_message":   "successfully updated the item field",
+			}).MustTrue(resp.Message == "successfully updated the item field", "transaction result message is different from expected")
 
 			items, err := inttestSDK.ListItemsViaCLI("")
 			if err != nil {
@@ -70,7 +85,9 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			}
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false)
-			t.MustTrue(ok)
+			t.WithFields(testing.Fields{
+				"item_name": tc.value,
+			}).MustTrue(ok, "item id with specific name does not exist")
 		})
 	}
 }

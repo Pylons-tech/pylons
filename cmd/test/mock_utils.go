@@ -25,7 +25,7 @@ func MockCookbook(t *testing.T) (string, error) {
 	}
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
@@ -42,24 +42,25 @@ func MockCookbook(t *testing.T) (string, error) {
 	)
 	if err != nil {
 		t.WithFields(testing.Fields{
-			"error": err,
+			"txhash": txhash,
+			"error":  err,
 		}).Fatal("unexpected transaction broadcast error")
 		return "", err
 	}
 
 	err = inttestSDK.WaitForNextBlock()
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error waiting for creating cookbook")
-	}
+	t.MustNil(err, "error waiting for next block")
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error geting transaction data")
 	resp := handlers.CreateCookbookResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustNil(err)
-
+	t.WithFields(testing.Fields{
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error unmarshaling transaction result")
 	return resp.CookbookID, nil
 }
 
@@ -163,7 +164,7 @@ func MockDetailedRecipeGUID(
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			rcpName,
@@ -181,23 +182,25 @@ func MockDetailedRecipeGUID(
 	)
 	if err != nil {
 		t.WithFields(testing.Fields{
-			"error": err,
+			"txhash": txhash,
+			"error":  err,
 		}).Fatal("unexpected transaction broadcast error")
 		return "", err
 	}
 
 	err = inttestSDK.WaitForNextBlock()
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error waiting for creating recipe")
-	}
+	t.MustNil(err, "error waiting for next block")
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error geting transaction data")
 	resp := handlers.CreateRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error unmarshaling transaction result")
 
 	return resp.RecipeID, nil
 }
@@ -207,7 +210,7 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
 		cbID,
@@ -226,23 +229,26 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 	)
 	if err != nil {
 		t.WithFields(testing.Fields{
-			"error": err,
+			"txhash": txhash,
+			"error":  err,
 		}).Fatal("unexpected transaction broadcast error")
 		return ""
 	}
 
 	err = inttestSDK.WaitForNextBlock()
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error waiting for creating item")
-	}
+	t.MustNil(err, "error waiting for next block")
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error geting transaction data")
 	resp := handlers.FiatItemResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error unmarshaling transaction result")
 
 	return resp.ItemID
 }
@@ -259,7 +265,7 @@ func MockDetailedTradeGUID(
 ) string {
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	inputItemList := types.GenTradeItemInputList(cbID, []string{inputItemName})
 	if !hasInputItem {
@@ -274,7 +280,9 @@ func MockDetailedTradeGUID(
 	var outputItems types.ItemList
 	if hasOutputItem {
 		outputItem, err := inttestSDK.GetItemByGUID(outputItemID)
-		t.MustNil(err)
+		t.WithFields(testing.Fields{
+			"item_guid": outputItemID,
+		}).MustNil(err, "error getting item with target guid")
 		outputItems = types.ItemList{outputItem}
 	}
 
@@ -291,21 +299,25 @@ func MockDetailedTradeGUID(
 	)
 	if err != nil {
 		t.WithFields(testing.Fields{
-			"error": err,
+			"txhash": txhash,
+			"error":  err,
 		}).Fatal("unexpected transaction broadcast error")
 		return ""
 	}
 
-	_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error waiting for creating trade")
-	}
+	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error geting transaction data")
 	// check trade created after 1 block
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
-	t.MustNil(err)
-	t.MustTrue(exist)
-	t.MustTrue(len(tradeID) > 0)
+	t.WithFields(testing.Fields{
+		"extra_info": extraInfo,
+	}).MustNil(err, "error getting trade id from extra info")
+	t.WithFields(testing.Fields{
+		"extra_info": extraInfo,
+	}).MustTrue(exist, "trade id with the extra info does not exist")
+	t.MustTrue(len(tradeID) > 0, "trade id should not be empty")
 	return tradeID
 }

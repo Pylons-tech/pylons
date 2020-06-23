@@ -43,7 +43,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
 					nil,
@@ -57,26 +57,34 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			)
 			if err != nil {
 				if len(tc.expectedErr) > 0 {
-					t.MustTrue(strings.Contains(err.Error(), tc.expectedErr))
+					t.WithFields(testing.Fields{
+						"txhash":         txhash,
+						"error":          err,
+						"expected_error": tc.expectedErr,
+					}).MustTrue(strings.Contains(err.Error(), tc.expectedErr))
 				} else {
 					t.WithFields(testing.Fields{
-						"error": err,
+						"txhash": txhash,
+						"error":  err,
 					}).Fatal("unexpected transaction broadcast error")
 				}
 				return
 			}
 
-			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error waiting for creating trade")
-			}
+			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
+			t.WithFields(testing.Fields{
+				"txhash":          txhash,
+				"tx_result_bytes": string(txHandleResBytes),
+			}).MustNil(err, "error geting transaction data")
 			// check trade created after 1 block
 			tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(tc.extraInfo)
-			t.MustNil(err)
-			t.MustTrue(exist)
-			t.MustTrue(len(tradeID) > 0)
+			t.WithFields(testing.Fields{
+				"extra_info": tc.extraInfo,
+			}).MustNil(err, "error getting trade id from extra info")
+			t.WithFields(testing.Fields{
+				"extra_info": tc.extraInfo,
+			}).MustTrue(exist, "trade should exist but not")
+			t.MustTrue(len(tradeID) > 0, "trade id shouldn't be empty")
 		})
 	}
 }

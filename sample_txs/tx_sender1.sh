@@ -1,0 +1,2 @@
+pylonscli tx sign tx_validate_basic_error.json --from $(pylonscli keys show -a eugen --keyring-backend=test) --offline --chain-id pylonschain --sequence 1 --account-number 5 --keyring-backend test > signed_tx_validate_basic_error.json
+pylonscli tx broadcast signed_tx_validate_basic_error.json

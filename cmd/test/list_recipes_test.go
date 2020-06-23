@@ -33,17 +33,12 @@ func TestListRecipeViaCLI(originT *originT.T) {
 			}
 
 			recipes, err := inttestSDK.ListRecipesViaCLI("")
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error listing recipes")
-			}
-
-			t.MustNil(err)
-			t.MustTrue(len(recipes) > 0)
+			t.MustNil(err, "error listing recipes")
+			t.MustTrue(len(recipes) > 0, "there should be at least 1 recipe")
 
 			err = inttestSDK.WaitForNextBlock()
-			t.MustNil(err)
+			t.MustNil(err, "error waiting for next block")
+
 			_, ok := inttestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
 				t.Fatalf("error getting recipe with name %+v", tc.rcpName)

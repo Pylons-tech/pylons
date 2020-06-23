@@ -17,7 +17,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), &t)
 
 	tests := []struct {
@@ -48,11 +48,13 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			}
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
-			t.MustNil(err)
+			t.WithFields(testing.Fields{
+				"recipe_guid": guid,
+			}).MustNil(err, "error getting recipe from guid")
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err)
+			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
@@ -61,18 +63,18 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			)
 			if err != nil {
 				t.WithFields(testing.Fields{
-					"error": err,
+					"txhash": txhash,
+					"error":  err,
 				}).Fatal("unexpected transaction broadcast error")
 				return
 			}
 
-			_, err = inttestSDK.WaitAndGetTxData(txhash, 3, t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error waiting for transaction")
-			}
-			// inttestSDK.WaitForNextBlock()
+			txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
+			t.WithFields(testing.Fields{
+				"txhash":          txhash,
+				"tx_result_bytes": string(txHandleResBytes),
+			}).MustNil(err, "error geting transaction data")
+
 			items, err := inttestSDK.ListItemsViaCLI("")
 			if err != nil {
 				t.WithFields(testing.Fields{
@@ -81,13 +83,15 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			}
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
-			t.MustTrue(ok)
+			t.WithFields(testing.Fields{
+				"item_name": tc.desiredItemName,
+			}).MustTrue(ok, "item id with specific name does not exist")
 
 			if tc.checkPylonDistribution {
 				accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 				originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 				pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
-				t.MustTrue(pylonAvailOnLLC)
+				t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 			}
 		})
 	}

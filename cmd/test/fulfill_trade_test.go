@@ -134,7 +134,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
 	mCB := GetMockedCookbook(t)
@@ -152,11 +152,11 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		tc.extraInfo,
 		t)
 
-	t.MustTrue(trdGUID != "")
+	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
 
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
@@ -169,40 +169,59 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
 	if err != nil {
 		t.WithFields(testing.Fields{
-			"error": err,
+			"txhash": txhash,
+			"error":  err,
 		}).Fatal("unexpected transaction broadcast error")
 		return
 	}
 
 	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.MustNil(err)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error geting transaction data")
 	ffTrdResp := handlers.FulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	t.WithFields(testing.Fields{
-		"txhash": txhash,
-	}).MustNil(err)
+		"txhash":          txhash,
+		"tx_result_bytes": string(txHandleResBytes),
+	}).MustNil(err, "error unmarshaling transaction result")
 
-	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
-	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
+	t.WithFields(testing.Fields{
+		"txhash":          txhash,
+		"original_status": ffTrdResp.Status,
+		"target_status":   tc.expectedStatus,
+	}).MustTrue(ffTrdResp.Status == tc.expectedStatus, "transaction result status is different from expected")
+	t.WithFields(testing.Fields{
+		"txhash":           txhash,
+		"original_message": ffTrdResp.Message,
+		"target_message":   tc.expectedMessage,
+	}).MustTrue(ffTrdResp.Message == tc.expectedMessage, "transaction result message is different from expected")
 
 	// Try again after fulfill trade
 	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
 	if err != nil {
 		t.WithFields(testing.Fields{
-			"error": err,
+			"txhash": txhash,
+			"error":  err,
 		}).Fatal("unexpected transaction broadcast error")
 		return
 	}
 
 	err = inttestSDK.WaitForNextBlock()
-	t.MustNil(err)
+	t.MustNil(err, "error waiting for next block")
+
 	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
-	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
+	t.WithFields(testing.Fields{
+		"txhash":         txhash,
+		"hmrErr":         hmrErr,
+		"expectedHmrErr": tc.expectedRetryErrMsg,
+	}).MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 
 	if tc.checkPylonDistribution {
 		accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 		originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 		pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
-		t.MustTrue(pylonAvailOnLLC)
+		t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 	}
 }
