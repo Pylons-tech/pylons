@@ -102,7 +102,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
 		itemIDs = []string{
-			MockItemGUID(mCB.ID, tc.currentItemName, t),
+			MockItemGUID(mCB.ID, "eugen", tc.currentItemName, t),
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)

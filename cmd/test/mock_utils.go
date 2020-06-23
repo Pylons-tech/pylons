@@ -186,9 +186,9 @@ func MockDetailedRecipeGUID(
 }
 
 // MockItemGUID mock item and return item's GUID
-func MockItemGUID(cbID string, name string, t *testing.T) string {
+func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr(sender, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 
@@ -204,7 +204,7 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 		},
 		sdkAddr,
 	),
-		"eugen",
+		sender,
 		false,
 	)
 	if err != nil {

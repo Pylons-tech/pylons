@@ -33,7 +33,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			mCB := GetMockedCookbook(false, t)
 
-			itemID := MockItemGUID(mCB.ID, tc.itemName, t)
+			itemID := MockItemGUID(mCB.ID, "eugen", tc.itemName, t)
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
