@@ -23,7 +23,7 @@ steps:
   args:
   - 'set'
   - 'image'
-  - 'deployment/node'
+  - 'statefulset/node'
   - 'pylons=gcr.io/$PROJECT_ID/node:$SHORT_SHA'
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
