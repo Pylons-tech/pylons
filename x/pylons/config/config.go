@@ -9,11 +9,12 @@ import (
 
 // FeeConfiguration is a struct to manage fee configuration
 type FeeConfiguration struct {
-	RecipePercent       int64 `yaml:"recipe_fee_percentage"`
-	BasicTierCookbook   int64 `yaml:"cookbook_basic_fee"`
-	PremiumTireCookbook int64 `yaml:"cookbook_premium_fee"`
-	PylonsTradePercent  int64 `yaml:"pylons_trade_percentage"`
-	MinTradePrice       int64 `yaml:"minimum_trade_price"`
+	RecipePercent         int64 `yaml:"recipe_fee_percentage"`
+	BasicTierCookbook     int64 `yaml:"cookbook_basic_fee"`
+	PremiumTireCookbook   int64 `yaml:"cookbook_premium_fee"`
+	PylonsTradePercent    int64 `yaml:"pylons_trade_percentage"`
+	MinTradePrice         int64 `yaml:"minimum_trade_price"`
+	UpdateItemFieldString int64 `yaml:"update_item_string_field_fee"`
 }
 
 // ValidatorsConfiguration is a struct to manage validators configuration
@@ -51,11 +52,12 @@ func ReadConfig() error {
 	}
 	Config = Configuration{
 		Fee: FeeConfiguration{
-			RecipePercent:       10,
-			BasicTierCookbook:   10000,
-			PremiumTireCookbook: 50000,
-			PylonsTradePercent:  10,
-			MinTradePrice:       10,
+			RecipePercent:         10,
+			BasicTierCookbook:     10000,
+			PremiumTireCookbook:   50000,
+			PylonsTradePercent:    10,
+			MinTradePrice:         10,
+			UpdateItemFieldString: 10,
 		},
 		Validators: ValidatorsConfiguration{
 			PylonsLLC: "cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7",

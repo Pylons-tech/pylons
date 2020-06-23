@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -92,7 +93,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(int64(len(tc.value))))
+				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(config.Config.Fee.UpdateItemFieldString))
 				require.True(t, err == nil)
 			}
 
@@ -100,6 +101,10 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			result, err := HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
+				if err != nil {
+					t.Log("HandlerMsgUpdateItemString.err", err)
+				}
+				require.True(t, err == nil)
 				resp := UpdateItemStringResponse{}
 				err := json.Unmarshal(result.Data, &resp)
 
