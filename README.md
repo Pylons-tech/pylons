@@ -112,6 +112,7 @@ fees:
   cookbook_premium_fee: 50000 # Cookbook creation fee
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
+  update_item_string_field_fee: 10 # Item string field update fee
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
 ```
@@ -121,6 +122,7 @@ validators:
 - `cookbook_premium_fee` refers to the amount of pylons that needs to be paid to Pylons LLC validator address to create a premium tier cookbook creation.  
 - `pylons_trade_percentage` refers to the percentage of pylons that needs to be transfered from pylons incomer's side.
 - `minimum_trade_price` refers to the minimum amount of pylons that needs to participate per trading.
+- `update_item_string_field_fee` refers to item string field update fee per field
 - `pylons_llc` refers to cosmos address for Pylons LLC validator.
 
 ## Deploying for production
