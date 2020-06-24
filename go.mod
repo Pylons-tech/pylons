@@ -3,9 +3,9 @@ module github.com/Pylons-tech/pylons
 go 1.13
 
 require (
-	github.com/Pylons-tech/pylons_sdk v0.0.0-20200622102115-fbe1ca725f0d
+	github.com/Pylons-tech/pylons_sdk v0.0.0-20200624120824-52f674a9d87b
 	github.com/cosmos/cosmos-sdk v0.38.4
-	github.com/google/cel-go v0.3.2
+	github.com/google/cel-go v0.5.1
 	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.7.4
 	github.com/spf13/cobra v1.0.0
