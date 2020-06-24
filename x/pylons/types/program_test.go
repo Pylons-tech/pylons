@@ -12,11 +12,11 @@ import (
 func TestProgramWorkAsExpected(t *testing.T) {
 	env, err := cel.NewEnv(
 		cel.Declarations(
-			decls.NewIdent("attack", decls.Double, nil),
-			decls.NewIdent("level", decls.Int, nil),
-			decls.NewIdent("name", decls.String, nil),
-			decls.NewIdent("input0.attack", decls.Int, nil),
-			decls.NewIdent("input1.attack", decls.Int, nil),
+			decls.NewVar("attack", decls.Double),
+			decls.NewVar("level", decls.Int),
+			decls.NewVar("name", decls.String),
+			decls.NewVar("input0.attack", decls.Int),
+			decls.NewVar("input1.attack", decls.Int),
 			// global function for no param
 			Rand10FuncDecls,
 			// global function for 1 param
