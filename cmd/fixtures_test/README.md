@@ -24,7 +24,7 @@ Here's sample scenario's step in JSON
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringKeys": [],

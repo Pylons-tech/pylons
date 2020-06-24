@@ -3,5 +3,5 @@
     "Longs": [{ "Key": "HP", "Value": "10" }, { "Key": "MaxHP", "Value": "100" }],
     "Strings": [{ "Key": "Name","Value": "Custom Function TestCharacter"}],
     "CookbookID": "custom_func_test-1589853709",
-    "Sender": "michael"
+    "Sender": "account1"
 }

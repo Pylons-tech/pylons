@@ -13,7 +13,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "cookbooks": ["tradecookbook"]
                 }
             ]
@@ -33,7 +33,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v1" }
@@ -57,7 +57,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v2" }
@@ -81,7 +81,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v3" }
@@ -105,7 +105,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v4" }
@@ -129,7 +129,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v5" }
@@ -153,7 +153,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["coin to coin trading"]
                 }
             ]
@@ -173,7 +173,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["pylon to node0 trading for disable test"]
                 }
             ]
@@ -221,7 +221,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["coin to item trading"]
                 }
             ]
@@ -241,7 +241,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v1" }
@@ -249,7 +249,7 @@
                     ]
                 },
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -274,7 +274,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["item to coin trading2"]
                 }
             ]
@@ -308,7 +308,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["item to coin trading"]
                 }
             ]
@@ -328,7 +328,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v3" }
@@ -336,7 +336,7 @@
                     ]
                 },
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -361,7 +361,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["item to item trading"]
                 }
             ]
@@ -381,7 +381,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v4" }
@@ -389,7 +389,7 @@
                     ]
                 },
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v2" }
@@ -397,7 +397,7 @@
                     ]
                 },
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -406,7 +406,7 @@
                     ] 
                 },
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "shouldNotExist": true,
                     "items": [
                         {
