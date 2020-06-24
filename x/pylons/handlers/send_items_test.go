@@ -15,9 +15,14 @@ import (
 func TestHandlerMsgSendItems(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 
-	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.PremiumTier.Fee)
+	sender1, sender2 := keep.SetupTestAccountsWithCoins(t, tci, types.NewPylon(10000000), types.PremiumTier.Fee)
 
+	t.Log("\n\n\n=========       initial amount        =========\n\n\n")
+	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender1, types.NewPylon(10000000)))
+	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender2, types.PremiumTier.Fee))
 	cbData := MockCookbook(tci, sender1)
+
+	// sender1coins := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender1)
 
 	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
 	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
@@ -96,6 +101,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 				for _, itemID := range tc.itemIDs {
 					item, err := tci.PlnK.GetItem(tci.Ctx, itemID)
 					require.True(t, err == nil)
+					t.Log("\n\n===================                here                      ==============\n\n")
 					require.True(t, item.Sender.String() == sender2.String())
 				}
 			} else {

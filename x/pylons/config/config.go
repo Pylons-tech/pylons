@@ -59,7 +59,7 @@ func ReadConfig() error {
 			PylonsTradePercent:    10,
 			MinTradePrice:         10,
 			UpdateItemFieldString: 10,
-			BasicItemTransfer:     345,
+			BasicItemTransfer:     3,
 		},
 		Validators: ValidatorsConfiguration{
 			PylonsLLC: "cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7",
