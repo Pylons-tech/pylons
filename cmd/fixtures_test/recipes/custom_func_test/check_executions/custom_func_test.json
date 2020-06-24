@@ -1,5 +1,5 @@
 {
     "PayToComplete": false,
     "ExecRef": "EXECUTE_CHARACTER_CUSTOM_FUNC_TEST_RECIPE",
-    "Sender":"michael"
+    "Sender":"account1"
 }

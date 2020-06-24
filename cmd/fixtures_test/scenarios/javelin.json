@@ -13,7 +13,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "cookbooks": ["javelincb"]
                 }
             ]
@@ -33,7 +33,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Javelin" }
@@ -57,7 +57,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "200 Old Javelin" },
@@ -82,7 +82,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "300 Old Javelin" },
@@ -107,7 +107,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "400 Old Javelin" },
@@ -132,7 +132,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Javelin Upgrade Program Recipe"]
                 }
             ]
@@ -152,7 +152,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["200 Old Javelin Throw Away Recipe"]
                 }
             ]
@@ -172,7 +172,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["300 Old Javelin Throw Away Recipe"]
                 }
             ]
@@ -192,7 +192,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["400 Old Javelin Throw Away Invalid Recipe"]
                 }
             ]
@@ -216,7 +216,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Javelin",  "LastName": "Program Upgraded Javelin" },
@@ -246,7 +246,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -275,7 +275,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "shouldNotExist": true,
                     "items": [
                         {
