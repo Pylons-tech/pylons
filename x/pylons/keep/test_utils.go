@@ -39,6 +39,7 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 		(types.StringInputParamList{types.StringInputParam{Key: "Name", Value: name}}).Actualize(),
 		sender,
 		0,
+		0,
 	)
 }
 func createTestCodec() *codec.Codec {

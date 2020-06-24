@@ -31,7 +31,7 @@ func HandlerMsgFiatItem(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFiatIte
 	// 	return sdkerrors.Wrap(sdkerrors.ErrUnauthorized,"cookbook not owned by the sender")
 	// }
 
-	item := types.NewItem(msg.CookbookID, msg.Doubles, msg.Longs, msg.Strings, msg.Sender, ctx.BlockHeight())
+	item := types.NewItem(msg.CookbookID, msg.Doubles, msg.Longs, msg.Strings, msg.Sender, ctx.BlockHeight(), msg.AdditionalTransferFee)
 
 	if err := keeper.SetItem(ctx, *item); err != nil {
 		return nil, errInternal(err)

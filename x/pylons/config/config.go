@@ -15,6 +15,7 @@ type FeeConfiguration struct {
 	PylonsTradePercent    int64 `yaml:"pylons_trade_percentage"`
 	MinTradePrice         int64 `yaml:"minimum_trade_price"`
 	UpdateItemFieldString int64 `yaml:"update_item_string_field_fee"`
+	BasicItemTransfer     int64 `yaml:"basic_item_transfer_fee"`
 }
 
 // ValidatorsConfiguration is a struct to manage validators configuration
@@ -58,6 +59,7 @@ func ReadConfig() error {
 			PylonsTradePercent:    10,
 			MinTradePrice:         10,
 			UpdateItemFieldString: 10,
+			BasicItemTransfer:     345,
 		},
 		Validators: ValidatorsConfiguration{
 			PylonsLLC: "cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7",
