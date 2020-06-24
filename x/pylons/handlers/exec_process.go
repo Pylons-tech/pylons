@@ -218,19 +218,19 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 
 // AddVariableFromItem collect variables from item inputs
 func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
-	varDefs = append(varDefs, decls.NewIdent(prefix+"lastUpdate", decls.Int, nil))
+	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 
 	for _, dbli := range item.Doubles {
-		varDefs = append(varDefs, decls.NewIdent(prefix+dbli.Key, decls.Double, nil))
+		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
 		variables[prefix+dbli.Key] = dbli.Value.Float()
 	}
 	for _, inti := range item.Longs {
-		varDefs = append(varDefs, decls.NewIdent(prefix+inti.Key, decls.Int, nil))
+		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
 		variables[prefix+inti.Key] = inti.Value
 	}
 	for _, stri := range item.Strings {
-		varDefs = append(varDefs, decls.NewIdent(prefix+stri.Key, decls.String, nil))
+		varDefs = append(varDefs, decls.NewVar(prefix+stri.Key, decls.String))
 		variables[prefix+stri.Key] = stri.Value
 	}
 	return varDefs, variables
@@ -242,7 +242,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	varDefs := [](*exprpb.Decl){}
 	variables := map[string]interface{}{}
 
-	varDefs = append(varDefs, decls.NewIdent("lastBlockHeight", decls.Int, nil))
+	varDefs = append(varDefs, decls.NewVar("lastBlockHeight", decls.Int))
 	variables["lastBlockHeight"] = p.ctx.BlockHeight()
 
 	for idx, item := range p.matchedItems {
