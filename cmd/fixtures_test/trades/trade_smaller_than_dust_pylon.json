@@ -1,0 +1,16 @@
+{
+  "CoinInputs":[
+      {
+          "Coin": "pylon",
+          "Count": "1"
+      }
+  ],
+  "ItemInputRefs": [],
+  "CoinOutputs": [{
+      "denom":"node0token",
+      "amount": "200"
+  }],
+  "ItemOutputNames": [],
+  "ExtraInfo":"smaller than dust pylon trading",
+  "Sender":"account2"
+}
