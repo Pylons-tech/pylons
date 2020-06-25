@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -63,8 +62,7 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 
 		err = ProcessSendItemsFee(ctx, keeper, msg.Sender, cookbook.Sender, coins)
 		if err != nil {
-			fmt.Print(err)
-			return nil, errInternal(err)
+			return nil, errInternal(errors.New("Error sending fees to send items"))
 		}
 	}
 
