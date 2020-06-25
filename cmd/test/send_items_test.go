@@ -18,14 +18,18 @@ func TestSendItemsViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name         string
-		itemNames    []string
-		transferFees []int64
+		name           string
+		itemNames      []string
+		transferFees   []int64
+		LLCResult      int64
+		cbSenderResult int64
 	}{
 		{
 			"basic send items test",
 			[]string{"SEND_ITEMS_TEST_ITEM1", "SEND_ITEMS_TEST_ITEM2"},
 			[]int64{700, 700},
+			200,
+			1800,
 		},
 	}
 
@@ -89,7 +93,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 			t.Log("origin pylons amount")
 			t.Log(originPylonAmount)
-			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + 200))
+			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.LLCResult))
 			t.Log(accInfo.Coins.AmountOf(types.Pylon))
 			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 
@@ -97,7 +101,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			originEugenAmount := eugenAccInfo.Coins.AmountOf(types.Pylon)
 			t.Log("origin eugen amount")
 			t.Log(originEugenAmount)
-			availOnEugen := eugenAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originEugenAmount.Int64() + 1800))
+			availOnEugen := eugenAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originEugenAmount.Int64() + tc.cbSenderResult))
 			t.Log(eugenAccInfoAfter.Coins.AmountOf(types.Pylon))
 			t.MustTrue(availOnEugen, "Cookbook sender should get correct revenue")
 
