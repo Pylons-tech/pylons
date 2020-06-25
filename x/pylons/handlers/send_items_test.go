@@ -87,9 +87,9 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			toAddress:       sender1,
 			desiredError:    "",
 			showError:       false,
-			differSender:    1827,
-			differPylonsLLC: 182,
-			differCBOwner:   1645,
+			differSender:    1827, // differSender = differPylonsLLC + differCBOwner = 182 + 1645 = 1827
+			differPylonsLLC: 182,  // differPylonsLLC = (basicSendItemsFee + item6.AdditionalTransferFee) * pylonsLLCSendIemsPercent / 100 + ...(item7) = (300 + 342) * 10 / 100 + (300 + 887) * 10 / 100 = 64 + 118 = 182
+			differCBOwner:   1645, // differPylonsLLC = (basicSendItemsFee + item6.AdditionalTransferFee) * cbOwnerSendIemsPercent / 100 + ...(item7) = (300 + 342) * 90 / 100 + (300 + 887) * 90 / 100 = 577 + 1068 = 1645
 		},
 		"not enough coins for fee check": {
 			itemIDs:         []string{item5.ID},

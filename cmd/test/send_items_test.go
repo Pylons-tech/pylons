@@ -53,6 +53,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
+			// TODO should be reverted after SetupTestAccounts upgrade
 			// eugenAccInfo := inttestSDK.GetAccountInfoFromAddr(eugenSdkAddr.String(), t)
 
 			mikeAddr := inttestSDK.GetAccountAddr("michael", t)
@@ -89,6 +90,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.LLCResult))
 			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 
+			// TODO should be reverted after SetupTestAccounts upgrade
 			// eugenAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(eugenSdkAddr.String(), t)
 			// originEugenAmount := eugenAccInfo.Coins.AmountOf(types.Pylon)
 
