@@ -101,9 +101,11 @@ func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvColle
 	if err != nil {
 		return nil, err
 	}
+
 	lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
 
-	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender, lastBlockHeight), nil
+	// TODO additionalTransferFee defaults 0. Afterward, this should be changed by a value from receipe
+	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender, lastBlockHeight, 0), nil
 }
 
 // MarshalJSON is a custom marshal function

@@ -203,6 +203,45 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 			},
 		},
 		sdkAddr,
+		0,
+	),
+		sender,
+		false,
+	)
+	if err != nil {
+		TxBroadcastErrorCheck(txhash, err, t)
+		return ""
+	}
+
+	WaitOneBlockWithErrorCheck(t)
+
+	txHandleResBytes := GetTxHandleResult(txhash, t)
+	resp := handlers.FiatItemResponse{}
+	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+
+	return resp.ItemID
+}
+
+// MockItemGUIDWithFee mock item with additional transfer fee and return item's GUID
+func MockItemGUIDWithFee(cbID, sender, name string, additionalFee int64, t *testing.T) string {
+
+	senderAddr := inttestSDK.GetAccountAddr(sender, t)
+	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
+		cbID,
+		[]types.DoubleKeyValue{},
+		[]types.LongKeyValue{},
+		[]types.StringKeyValue{
+			{
+				Key:   "Name",
+				Value: name,
+			},
+		},
+		sdkAddr,
+		additionalFee,
 	),
 		sender,
 		false,
