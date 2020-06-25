@@ -49,12 +49,6 @@ func TestSendItemsViaCLI(originT *originT.T) {
 				itemIDs[idx] = itemID
 			}
 
-			t.Log("\n\n=======      itemIDs         =======\n\n")
-			t.Log(itemIDs)
-			t.Log(len(itemIDs))
-			t.Log(len(tc.itemNames))
-			t.Log(tc.itemNames)
-
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
@@ -83,7 +77,6 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully sent the items", t)
 
-			// inttestSDK.GetItemByGUID()
 			for _, itemID := range itemIDs {
 				item, err := inttestSDK.GetItemByGUID(itemID)
 				t.MustNil(err)
@@ -92,31 +85,15 @@ func TestSendItemsViaCLI(originT *originT.T) {
 
 			accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 			originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
-			t.Log("origin pylons amount")
-			t.Log(originPylonAmount)
+
 			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.LLCResult))
-			t.Log(accInfo.Coins.AmountOf(types.Pylon))
 			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 
 			eugenAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(eugenSdkAddr.String(), t)
 			originEugenAmount := eugenAccInfo.Coins.AmountOf(types.Pylon)
-			t.Log("origin eugen amount")
-			t.Log(originEugenAmount)
+
 			availOnEugen := eugenAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originEugenAmount.Int64() + tc.cbSenderResult))
-			t.Log(eugenAccInfoAfter.Coins.AmountOf(types.Pylon))
 			t.MustTrue(availOnEugen, "Cookbook sender should get correct revenue")
-
-			// items, err := inttestSDK.ListItemsViaCLI("")
-			// if err != nil {
-			// 	t.WithFields(testing.Fields{
-			// 		"error": err,
-			// 	}).Fatal("error listing items via cli")
-			// }
-
-			// _, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false)
-			// t.WithFields(testing.Fields{
-			// 	"item_name": tc.value,
-			// }).MustTrue(ok, "item id with specific name does not exist")
 		})
 	}
 }
