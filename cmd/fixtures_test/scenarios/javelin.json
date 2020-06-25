@@ -119,6 +119,20 @@
         }
     },
     {
+        "ID": "CREATE_PYLON_FARM_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/javelin/pylon_farm.json",
+        "output": {
+            "txResult": {
+                "broadcastError": "There should not be a recipe which generate pylon denom as an output"
+            }
+        }
+    },
+    {
         "ID": "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE",        
         "runAfter": {
             "precondition": ["CREATE_JAVELIN_COOKBOOK"],

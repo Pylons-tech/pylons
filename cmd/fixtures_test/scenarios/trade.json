@@ -416,5 +416,19 @@
                 }
             ]
         }
+    },
+    {
+        "ID": "CREATE_SMALLER_THAN_DUST_PYLON_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_smaller_than_dust_pylon.json",
+        "output": {
+            "txResult": {
+                "broadcastError": "there should be more than 10 amount of pylon per trade"
+            }
+        }
     }
 ]
