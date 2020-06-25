@@ -45,9 +45,7 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		}
 
 		basicItemTransferFee := config.Config.Fee.BasicItemTransferFee
-		coins := sdk.Coins{
-			sdk.NewCoin(types.Pylon, sdk.NewInt(basicItemTransferFee+item.AdditionalTransferFee)),
-		}
+		coins := types.NewPylon(basicItemTransferFee + item.AdditionalTransferFee)
 
 		haveEnoughCoins := keeper.CoinKeeper.HasCoins(ctx, msg.Sender, coins)
 
@@ -73,7 +71,7 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 }
 
 // ProcessSendItemsFee process send items fee
-func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddress, Receiver sdk.AccAddress, coins sdk.Coins) error {
+func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddress, CookbookOwner sdk.AccAddress, coins sdk.Coins) error {
 	// send pylon amount to PylonsLLC, validator
 	pylonAmount := coins.AmountOf(types.Pylon).Int64()
 
@@ -86,20 +84,16 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 			return err
 		}
 
-		pylonsCoins := sdk.Coins{
-			sdk.NewCoin(types.Pylon, sdk.NewInt(pylonAmount*pylonsItemTransferPercent/100)),
-		}
+		pylonsCoins := types.NewPylon(pylonAmount * pylonsItemTransferPercent / 100)
 
-		cbSenderCoins := sdk.Coins{
-			sdk.NewCoin(types.Pylon, sdk.NewInt(pylonAmount*cbSenderItemTransferPercent/100)),
-		}
+		cbSenderCoins := types.NewPylon(pylonAmount * cbSenderItemTransferPercent / 100)
 
 		err = keeper.CoinKeeper.SendCoins(ctx, Sender, pylonsLLCAddress, pylonsCoins)
 		if err != nil {
 			return err
 		}
 
-		err = keeper.CoinKeeper.SendCoins(ctx, Sender, Receiver, cbSenderCoins)
+		err = keeper.CoinKeeper.SendCoins(ctx, Sender, CookbookOwner, cbSenderCoins)
 		if err != nil {
 			return err
 		}

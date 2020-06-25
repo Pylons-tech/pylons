@@ -29,11 +29,16 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	item3 := keep.GenItem(cbData.CookbookID, sender2, "spear")
 	item4 := keep.GenItem(cbData.CookbookID, sender2, "bow")
 	item5 := keep.GenItem(cbData.CookbookID, sender3, "bow1")
+	item6 := keep.GenItem(cbData.CookbookID, sender2, "bow2")
+	item7 := keep.GenItem(cbData.CookbookID, sender2, "bow3")
 
 	item2.OwnerRecipeID = "????????"
 
 	item3.AdditionalTransferFee = 700
 	item4.AdditionalTransferFee = 700
+
+	item6.AdditionalTransferFee = 342
+	item7.AdditionalTransferFee = 887
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item1)
 	require.True(t, err == nil)
@@ -50,61 +55,101 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	err = tci.PlnK.SetItem(tci.Ctx, *item5)
 	require.True(t, err == nil)
 
+	err = tci.PlnK.SetItem(tci.Ctx, *item6)
+	require.True(t, err == nil)
+
+	err = tci.PlnK.SetItem(tci.Ctx, *item7)
+	require.True(t, err == nil)
+
 	cases := map[string]struct {
-		itemIDs      []string
-		fromAddress  sdk.AccAddress
-		toAddress    sdk.AccAddress
-		desiredError string
-		showError    bool
+		itemIDs         []string
+		fromAddress     sdk.AccAddress
+		toAddress       sdk.AccAddress
+		desiredError    string
+		showError       bool
+		differSender    int64
+		differPylonsLLC int64
+		differCBOwner   int64
 	}{
 		"successful check": {
-			itemIDs:      []string{item3.ID, item4.ID},
-			fromAddress:  sender2,
-			toAddress:    sender1,
-			desiredError: "",
-			showError:    false,
+			itemIDs:         []string{item3.ID, item4.ID},
+			fromAddress:     sender2,
+			toAddress:       sender1,
+			desiredError:    "",
+			showError:       false,
+			differSender:    2000,
+			differPylonsLLC: 200,
+			differCBOwner:   1800,
+		},
+		"successful check1": {
+			itemIDs:         []string{item6.ID, item7.ID},
+			fromAddress:     sender2,
+			toAddress:       sender1,
+			desiredError:    "",
+			showError:       false,
+			differSender:    1827,
+			differPylonsLLC: 182,
+			differCBOwner:   1645,
 		},
 		"not enough coins for fee check": {
-			itemIDs:      []string{item5.ID},
-			fromAddress:  sender3,
-			toAddress:    sender2,
-			desiredError: "Sender does not have enough coins for fees",
-			showError:    true,
+			itemIDs:         []string{item5.ID},
+			fromAddress:     sender3,
+			toAddress:       sender2,
+			desiredError:    "Sender does not have enough coins for fees",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
 		},
 		"empty item id check": {
-			itemIDs:      []string{item1.ID, item2.ID, ""},
-			fromAddress:  sender1,
-			toAddress:    sender2,
-			desiredError: "ItemID is invalid",
-			showError:    true,
+			itemIDs:         []string{item1.ID, item2.ID, ""},
+			fromAddress:     sender1,
+			toAddress:       sender2,
+			desiredError:    "ItemID is invalid",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
 		},
 		"same sender and receiver check": {
-			itemIDs:      []string{item1.ID, item2.ID},
-			fromAddress:  sender1,
-			toAddress:    sender1,
-			desiredError: "Sender and receiver should be different",
-			showError:    true,
+			itemIDs:         []string{item1.ID, item2.ID},
+			fromAddress:     sender1,
+			toAddress:       sender1,
+			desiredError:    "Sender and receiver should be different",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
 		},
 		"wrong item sender check": {
-			itemIDs:      []string{item1.ID},
-			fromAddress:  sender2,
-			toAddress:    sender1,
-			desiredError: "Item is not the sender's one",
-			showError:    true,
+			itemIDs:         []string{item1.ID},
+			fromAddress:     sender2,
+			toAddress:       sender1,
+			desiredError:    "Item is not the sender's one",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
 		},
 		"owner recipe id check": {
-			itemIDs:      []string{item2.ID},
-			fromAddress:  sender1,
-			toAddress:    sender2,
-			desiredError: "Item is owned by a recipe",
-			showError:    true,
+			itemIDs:         []string{item2.ID},
+			fromAddress:     sender1,
+			toAddress:       sender2,
+			desiredError:    "Item is owned by a recipe",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
 		},
 		"duplicated items check": {
-			itemIDs:      []string{item1.ID, item1.ID},
-			fromAddress:  sender1,
-			toAddress:    sender2,
-			desiredError: "Duplicated items in items trasfer",
-			showError:    true,
+			itemIDs:         []string{item1.ID, item1.ID},
+			fromAddress:     sender1,
+			toAddress:       sender2,
+			desiredError:    "Duplicated items in items trasfer",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
 		},
 	}
 	for testName, tc := range cases {
@@ -115,15 +160,15 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 			require.True(t, err == nil)
 
-			coinsBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
-			coinsLLCBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
-			coinsCBBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
+			coinsSenderBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
+			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
+			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
 
 			_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
 
-			coinsAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
-			coinsLLCAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
-			coinsCBAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
+			coinsSenderAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
+			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
+			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
 
 			if !tc.showError {
 				for _, itemID := range tc.itemIDs {
@@ -132,13 +177,13 @@ func TestHandlerMsgSendItems(t *testing.T) {
 					require.True(t, item.Sender.String() == tc.toAddress.String())
 				}
 
-				differ := coinsBefore.AmountOf(types.Pylon).Int64() - coinsAfter.AmountOf(types.Pylon).Int64()
-				differLLC := coinsLLCAfter.AmountOf(types.Pylon).Int64() - coinsLLCBefore.AmountOf(types.Pylon).Int64()
-				differCB := coinsCBAfter.AmountOf(types.Pylon).Int64() - coinsCBBefore.AmountOf(types.Pylon).Int64()
+				differSender := coinsSenderBefore.AmountOf(types.Pylon).Int64() - coinsSenderAfter.AmountOf(types.Pylon).Int64()
+				differPylonsLLC := coinsPylonsLLCAfter.AmountOf(types.Pylon).Int64() - coinsPylonsLLCBefore.AmountOf(types.Pylon).Int64()
+				differCBOwner := coinsCBOwnerAfter.AmountOf(types.Pylon).Int64() - coinsCBOwnerBefore.AmountOf(types.Pylon).Int64()
 
-				require.True(t, differ == 2000)
-				require.True(t, differLLC == 200)
-				require.True(t, differCB == 1800)
+				require.True(t, differSender == tc.differSender)
+				require.True(t, differPylonsLLC == tc.differPylonsLLC)
+				require.True(t, differCBOwner == tc.differCBOwner)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
