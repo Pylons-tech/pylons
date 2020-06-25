@@ -203,6 +203,7 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 			},
 		},
 		sdkAddr,
+		0,
 	),
 		sender,
 		false,
