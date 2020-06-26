@@ -53,8 +53,7 @@ func GetTxHandleError(txhash string, t *testing.T) []byte {
 func TxBroadcastErrorCheck(txhash string, err error, t *testing.T) {
 	t.WithFields(testing.Fields{
 		"txhash": txhash,
-		"error":  err,
-	}).Fatal("unexpected transaction broadcast error")
+	}).MustNil(err, "unexpected transaction broadcast error")
 }
 
 // TxBroadcastErrorExpected check error on tx broadcast
