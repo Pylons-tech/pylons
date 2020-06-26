@@ -14,7 +14,7 @@ import (
 
 func TestHandlerMsgEnableTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(100000))
+	sender, sender2, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.True(t, err == nil)

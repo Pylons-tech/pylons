@@ -15,7 +15,7 @@ import (
 
 func TestQuerierPylonsBalance(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000))
+	sender1, sender2, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000), nil, nil)
 
 	cases := map[string]struct {
 		path          []string

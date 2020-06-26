@@ -14,7 +14,7 @@ import (
 
 func TestHandlerMsgGetPylons(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := keep.SetupTestAccounts(t, tci, nil)
+	sender1, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil)
 
 	cases := map[string]struct {
 		reqAmount    int64
