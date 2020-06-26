@@ -15,7 +15,8 @@ import (
 
 func TestHandlerMsgFiatItem(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cases := map[string]struct {
 		cookbookName    string

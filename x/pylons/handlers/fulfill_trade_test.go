@@ -16,10 +16,14 @@ import (
 // TestHandlerMsgFulfillTrade is fulfill trade test
 func TestHandlerMsgFulfillTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, sender2 := keep.SetupTestAccounts(t, tci, sdk.Coins{
+	// sender, sender2 := keep.SetupTestAccounts(t, tci, sdk.Coins{
+	// 	sdk.NewInt64Coin("chair", 100000),
+	// 	sdk.NewInt64Coin(types.Pylon, 100000),
+	// })
+	sender, sender2, _ := keep.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
 		sdk.NewInt64Coin(types.Pylon, 100000),
-	})
+	}, nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, sdk.Coins{
 		sdk.NewInt64Coin("aaaa", 100000),

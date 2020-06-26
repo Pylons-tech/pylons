@@ -15,7 +15,8 @@ import (
 
 func TestHandlerMsgCreateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, _ := keep.SetupTestAccounts(t, tci, nil)
+	// sender, _ := keep.SetupTestAccounts(t, tci, nil)
+	sender, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil)
 
 	cases := map[string]struct {
 		cookbookName   string
@@ -127,7 +128,8 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 func TestSameRecipeIDCreation(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000))
+	// sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000))
+	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil)
 
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
 

@@ -16,7 +16,7 @@ import (
 func TestHandlerMsgSendItems(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 
-	sender1, sender2, sender3 := keep.SetupTestAccountsWithCoins(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10))
+	sender1, sender2, sender3 := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10))
 
 	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender1, types.NewPylon(10000000)))
 	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender2, types.NewPylon(10000000)))

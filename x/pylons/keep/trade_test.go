@@ -21,7 +21,8 @@ func GenTrade(sender sdk.AccAddress, itemList types.ItemList, pylonsAmount int64
 
 func TestGetTrade(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")

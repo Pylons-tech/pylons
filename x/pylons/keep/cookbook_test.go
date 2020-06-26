@@ -25,7 +25,8 @@ func GenCookbook(sender sdk.AccAddress, name string, desc string) types.Cookbook
 
 func TestKeeperGetCookbook(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cb := GenCookbook(sender, "cookbook-00001", "this has to meet character limits")
 	err := tci.PlnK.SetCookbook(tci.Ctx, cb)

@@ -15,7 +15,8 @@ import (
 
 func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)

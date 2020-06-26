@@ -12,7 +12,8 @@ import (
 
 func TestKeeperSetItem(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
@@ -54,7 +55,8 @@ func TestKeeperSetItem(t *testing.T) {
 
 func TestKeeperGetItem(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")
@@ -95,7 +97,9 @@ func TestKeeperGetItem(t *testing.T) {
 
 func TestKeeperGetItemsBySender(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, sender2 := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, sender2 := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, sender2, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
 	item := GenItem(cbData.ID, sender, "Raichu")
@@ -137,7 +141,8 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 
 func TestKeeperUpdateItem(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")
@@ -203,7 +208,8 @@ func TestKeeperUpdateItem(t *testing.T) {
 
 func TestKeeperDeleteItem(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")
@@ -241,7 +247,8 @@ func TestKeeperDeleteItem(t *testing.T) {
 
 func TestKeeperItemsByCookbook(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	// sender, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	cbData1 := GenCookbook(sender, "cookbook-0002", "this has to meet character limits")
