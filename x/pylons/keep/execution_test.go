@@ -40,7 +40,6 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 
 func TestKeeperSetExecution(t *testing.T) {
 	tci := SetupTestCoinInput()
-	// sender, _ := SetupTestAccounts(t, tci, nil)
 	sender, _, _ := SetupTestAccounts(t, tci, nil, nil, nil)
 
 	cases := map[string]struct {
@@ -77,7 +76,6 @@ func TestKeeperSetExecution(t *testing.T) {
 
 func TestKeeperGetExecution(t *testing.T) {
 	tci := SetupTestCoinInput()
-	// sender, _ := SetupTestAccounts(t, tci, nil)
 	sender, _, _ := SetupTestAccounts(t, tci, nil, nil, nil)
 
 	exec := GenExecution(sender, tci)
@@ -120,7 +118,6 @@ func TestKeeperGetExecution(t *testing.T) {
 
 func TestKeeperUpdateExecution(t *testing.T) {
 	tci := SetupTestCoinInput()
-	// sender, _ := SetupTestAccounts(t, tci, nil)
 	sender, _, _ := SetupTestAccounts(t, tci, nil, nil, nil)
 
 	exec := GenExecution(sender, tci)
@@ -166,7 +163,6 @@ func TestKeeperUpdateExecution(t *testing.T) {
 
 func TestKeeperGetExecutionsBySender(t *testing.T) {
 	tci := SetupTestCoinInput()
-	// sender, sender2 := SetupTestAccounts(t, tci, nil)
 	sender, sender2, _ := SetupTestAccounts(t, tci, nil, nil, nil)
 
 	for i := 0; i < 5; i++ {
