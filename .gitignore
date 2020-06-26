@@ -10,3 +10,4 @@ sample_transaction.json
 signed_transaction.json
 /vendor
 /.idea
+/testnet
