@@ -430,5 +430,39 @@
                 "broadcastError": "there should be more than 10 amount of pylon per trade"
             }
         }
+    },
+    {
+        "ID": "CREATE_ITEM_COIN_TRADE3",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V3"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_coin3.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account2",
+                    "trades": ["item to coin trading"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_COIN_TRADE3",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE3"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_coin3.json",
+        "output": {
+            "txResult": {
+                "errLog": "the item IDs count doesn't match the trade input"
+            }
+        }
     }
 ]
