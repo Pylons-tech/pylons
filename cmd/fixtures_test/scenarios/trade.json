@@ -464,5 +464,39 @@
                 "errLog": "the item IDs count doesn't match the trade input"
             }
         }
+    },
+    {
+        "ID": "CREATE_UNORDERED_COIN_INPUT_LIST_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_unordered_coin_input_list.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account2",
+                    "trades": ["unordered coin input list trading"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_UNORDERED_COIN_INPUT_LIST_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_UNORDERED_COIN_INPUT_LIST_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_unordered_coin_input_list.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            }
+        }
     }
 ]
