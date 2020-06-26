@@ -297,6 +297,29 @@ Successful result
 }
 ```
 
+### single node docker test local
+
+Test daemon build
+```
+docker build . --target pylonsd
+docker run <id>
+```
+Test daemon build with integration test
+```
+docker build . --target integration_test
+docker run <id>
+```
+Test daemon build with fixture test
+```
+docker build . --target fixture_test
+docker run <id>
+```
+Test daemon build with both integration test and fixture test
+```
+docker build . --target all_test
+docker run <id>
+```
+
 ### 3 node local cloudbuild setup guide on OSX
 
 ```
