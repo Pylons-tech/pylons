@@ -125,19 +125,17 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			pylonsLLCDistribution:  10,
 		},
 		{
-			name:                   "same item with different cookbook id fulfill trade test",
-			extraInfo:              "TESTTRD_FulfillTrade__001_TC6",
-			hasInputItem:           true,
-			inputItemName:          "TESTITEM_FulfillTrade__001_TC6_INPUT",
-			wrongCBFulfill:         true,
-			coinInputList:          nil,
-			hasOutputCoin:          true,
-			outputCoinName:         "pylon",
-			outputCoinAmount:       100,
-			hasOutputItem:          false,
-			desiredError:           "the sender doesn't have the trade item attributes",
-			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			name:             "same item with different cookbook id fulfill trade test",
+			extraInfo:        "TESTTRD_FulfillTrade__001_TC6",
+			hasInputItem:     true,
+			inputItemName:    "TESTITEM_FulfillTrade__001_TC6_INPUT",
+			wrongCBFulfill:   true,
+			coinInputList:    nil,
+			hasOutputCoin:    true,
+			outputCoinName:   "pylon",
+			outputCoinAmount: 100,
+			hasOutputItem:    false,
+			desiredError:     "the sender doesn't have the trade item attributes",
 		},
 	}
 
@@ -162,6 +160,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		outputItemID = MockItemGUID(mCB.ID, "eugen", tc.outputItemName, t)
 	}
 
+	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
 	trdGUID := MockDetailedTradeGUID(mCB.ID,
 		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
