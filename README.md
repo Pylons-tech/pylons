@@ -88,7 +88,7 @@ make int_tests
 ```
 - Fixture test with local daemon command
 ```
-make fixture_tests
+make fixture_tests ARGS="--accounts=michael,eugen"
 ```
 
 ### Before running integration and fixture test initialize blockchain status and start daemon
