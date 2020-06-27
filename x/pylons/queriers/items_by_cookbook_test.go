@@ -5,16 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/stretchr/testify/require"
+	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 func TestQueriersItemsByCookbook(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(tci, sender1, "cookbook-00001")

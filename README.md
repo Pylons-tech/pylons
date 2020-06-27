@@ -88,7 +88,7 @@ make int_tests
 ```
 - Fixture test with local daemon command
 ```
-make fixture_tests
+make fixture_tests ARGS="--accounts=michael,eugen"
 ```
 
 ### Before running integration and fixture test initialize blockchain status and start daemon
@@ -295,6 +295,29 @@ Successful result
   "height": "0",
   "txhash": "8A847C81B396B07578FAEB25AA3E01FA11F03F300ECDDC8E4918A1D6F883640A"
 }
+```
+
+### single node docker test local
+
+Test daemon build
+```
+docker build . --target pylonsd
+docker run <id>
+```
+Test daemon build with integration test
+```
+docker build . --target integration_test
+docker run <id>
+```
+Test daemon build with fixture test
+```
+docker build . --target fixture_test
+docker run <id>
+```
+Test daemon build with both integration test and fixture test
+```
+docker build . --target all_test
+docker run <id>
 ```
 
 ### 3 node local cloudbuild setup guide on OSX

@@ -121,6 +121,14 @@ invalid request: the sender doesn't have the trade item attributes {ItemInput:{D
 It means sender does not have an item with name `"TESTITEM_FulfillTrade__001_TC4_INPUT"` with cookbook ID `"LOUD-CB-001"`.
 First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `"TESTITEM_FulfillTrade__001_TC4_INPUT"` on that cookbook.
 
+- Meaning of this issue
+```log
+=== CONT  TestFixturesViaCLI/scenarios/trade.json/0_CREATE_TRADE_COOKBOOK
+    TestFixturesViaCLI/scenarios/custom_func_test.json/0_CREATE_CUSTOMFUNCTEST_COOKBOOK: evtesting.go:152: level=debug func=github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test.CheckErrorOnTxFromTxHash file_line=/Users/administrator/go/pkg/mod/github.com/!pylons-tech/pylons_sdk@v0.0.0-20200626091049-b41e257e5478/cmd/fixtures_test/check_utils.go:176 
+    TestFixturesViaCLI/scenarios/custom_func_test.json/0_CREATE_CUSTOMFUNCTEST_COOKBOOK: evtesting.go:274: level=fatal txhash=17E33613FC98371C5C92C804EEB88321B29A79ED5157C1C86740D413E8BB6A1E tx_error=insufficient funds: the user doesn't have enough pylons: failed to execute message; message index: 0 msg=tx_error exist
+```
+It means the sender does not have enough pylons to create recipes.
+
 ## What is OwnerRecipeID of an item? 
 
 - When the item is scheduled to be handled in the future block by a recipe, the item's OwnerRecipeID is set as the recipe's ID. This means that this item is locked until the appropriate future block is created.

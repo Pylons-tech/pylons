@@ -5,5 +5,8 @@ fees:
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
   update_item_string_field_fee: 10 # Item string field update fee
+  basic_item_transfer_fee: 300 # Basic item transfer fee
+  pylons_item_transfer_percent: 10 # Pylons item transfer percent
+  cb_sender_item_transfer_percent: 90 # Cookbook sender item transfer percent
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced

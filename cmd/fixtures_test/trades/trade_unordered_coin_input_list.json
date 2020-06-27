@@ -1,0 +1,24 @@
+{
+  "CoinInputs":[
+      {
+          "Coin": "node0token",
+          "Count": "100"
+      },
+      {
+          "Coin": "loudcoin",
+          "Count": "100"
+      },
+      {
+          "Coin": "stake",
+          "Count": "100"
+      }
+  ],
+  "ItemInputRefs": [],
+  "CoinOutputs": [{
+      "denom": "pylon",
+      "amount": "100"
+  }],
+  "ItemOutputNames": [],
+  "ExtraInfo":"unordered coin input list trading",
+  "Sender":"account2"
+}

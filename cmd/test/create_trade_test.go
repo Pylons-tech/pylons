@@ -23,22 +23,29 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 		desiredError string
 	}{
 		{
-			name:        "item->coin create trade test", // item to coin create trade test
+			name:        "item->coin create trade test", // item to coin create trade success test
 			outputPylon: 1000,
 			extraInfo:   "TESTTRD_CreateTrade_001",
 		},
 		{
-			name:         "less than minimum amount pylon trade test",
+			name:         "less than minimum amount pylon trade test", // handler validation
 			outputPylon:  1,
 			extraInfo:    "TESTTRD_CreateTrade_002",
 			desiredError: "there should be more than 10 amount of pylon per trade",
 		},
-		// For coin-coin, item-item, coin-item trading, it is implemented in fulfill trade test already.
+		{
+			name:         "zero denom output test", // msg validate basic
+			outputPylon:  0,
+			extraInfo:    "TESTTRD_CreateTrade_003",
+			desiredError: "there should be no 0 amount denom on outputs",
+		},
+		// TODO should add more msg level validation and create trade handler error checks
+		// for coin-coin, item-item, coin-item trading, msg.
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB := GetMockedCookbook(t)
+			mCB := GetMockedCookbook(false, t)
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)

@@ -10,13 +10,13 @@ import (
 
 // CelEnvCollection struct manage cel program work flow
 type CelEnvCollection struct {
-	env       cel.Env
+	env       *cel.Env
 	variables map[string]interface{}
 	funcs     cel.ProgramOption
 }
 
 // NewCelEnvCollection generate a new CelEnvCollection
-func NewCelEnvCollection(env cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) CelEnvCollection {
+func NewCelEnvCollection(env *cel.Env, variables map[string]interface{}, funcs cel.ProgramOption) CelEnvCollection {
 	return CelEnvCollection{env, variables, funcs}
 }
 

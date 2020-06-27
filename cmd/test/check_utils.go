@@ -39,12 +39,21 @@ func GetTxHandleResult(txhash string, t *testing.T) []byte {
 	return txHandleResBytes
 }
 
+// GetTxHandleError check error on tx by hash and return handle result
+func GetTxHandleError(txhash string, t *testing.T) []byte {
+	txHandleErrorBytes, err := inttestSDK.WaitAndGetTxError(txhash, 3, t)
+	t.WithFields(testing.Fields{
+		"txhash":         txhash,
+		"tx_error_bytes": string(txHandleErrorBytes),
+	}).MustNil(err, "error getting transaction error")
+	return txHandleErrorBytes
+}
+
 // TxBroadcastErrorCheck check error on tx broadcast
 func TxBroadcastErrorCheck(txhash string, err error, t *testing.T) {
 	t.WithFields(testing.Fields{
 		"txhash": txhash,
-		"error":  err,
-	}).Fatal("unexpected transaction broadcast error")
+	}).MustNil(err, "unexpected transaction broadcast error")
 }
 
 // TxBroadcastErrorExpected check error on tx broadcast
@@ -54,7 +63,7 @@ func TxBroadcastErrorExpected(txhash string, err error, desiredError string, t *
 			"txhash":        txhash,
 			"error":         err,
 			"desired_error": desiredError,
-		}).MustTrue(strings.Contains(err.Error(), desiredError))
+		}).MustTrue(strings.Contains(err.Error(), desiredError), "error is different from expected")
 	} else {
 		TxBroadcastErrorCheck(txhash, err, t)
 	}

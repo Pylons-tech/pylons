@@ -13,7 +13,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "cookbooks": ["submarine"]
                 }
             ]
@@ -33,7 +33,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Knife" }
@@ -57,7 +57,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Knife2" }
@@ -81,7 +81,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Shield" }
@@ -105,7 +105,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Straight Attack Knife Generation Recipe"]
                 }
             ]
@@ -125,7 +125,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Delayed Attack Knife Generation Recipe"]
                 }
             ]
@@ -145,7 +145,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Submarine Coin Generation Recipe"]
                 }
             ]
@@ -165,7 +165,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Knife Shield Generation Recipe"]
                 }
             ]
@@ -185,7 +185,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Knife buyer recipe from submcoin"]
                 }
             ]
@@ -206,7 +206,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Straight Attack Knife" }
@@ -262,7 +262,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Knife Shield" }
@@ -287,7 +287,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Delayed Attack Knife" }
@@ -312,7 +312,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "coins": [
                         {
                             "denom": "submcoin",
@@ -338,7 +338,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "coins": [
                         {
                             "denom": "submcoin",

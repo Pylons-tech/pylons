@@ -15,12 +15,12 @@ import (
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(t *testing.T) (string, error) {
+func MockCookbook(createNew bool, t *testing.T) (string, error) {
 	guid, exist, err := CheckCookbookExist()
 	if err != nil {
 		return "", err
 	}
-	if exist { // finish mock if already available
+	if exist && !createNew { // finish mock if already available
 		return guid, nil
 	}
 	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
@@ -67,8 +67,8 @@ func CheckCookbookExist() (string, bool, error) {
 }
 
 // GetMockedCookbook get mocked cookbook
-func GetMockedCookbook(t *testing.T) types.Cookbook {
-	guid, err := MockCookbook(t)
+func GetMockedCookbook(createNew bool, t *testing.T) types.Cookbook {
+	guid, err := MockCookbook(createNew, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
@@ -145,7 +145,7 @@ func MockDetailedRecipeGUID(
 		return guid, nil
 	}
 
-	mCB := GetMockedCookbook(t)
+	mCB := GetMockedCookbook(false, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
@@ -186,9 +186,9 @@ func MockDetailedRecipeGUID(
 }
 
 // MockItemGUID mock item and return item's GUID
-func MockItemGUID(cbID string, name string, t *testing.T) string {
+func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr(sender, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 
@@ -203,8 +203,47 @@ func MockItemGUID(cbID string, name string, t *testing.T) string {
 			},
 		},
 		sdkAddr,
+		0,
 	),
-		"eugen",
+		sender,
+		false,
+	)
+	if err != nil {
+		TxBroadcastErrorCheck(txhash, err, t)
+		return ""
+	}
+
+	WaitOneBlockWithErrorCheck(t)
+
+	txHandleResBytes := GetTxHandleResult(txhash, t)
+	resp := handlers.FiatItemResponse{}
+	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+
+	return resp.ItemID
+}
+
+// MockItemGUIDWithFee mock item with additional transfer fee and return item's GUID
+func MockItemGUIDWithFee(cbID, sender, name string, additionalFee int64, t *testing.T) string {
+
+	senderAddr := inttestSDK.GetAccountAddr(sender, t)
+	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
+		cbID,
+		[]types.DoubleKeyValue{},
+		[]types.LongKeyValue{},
+		[]types.StringKeyValue{
+			{
+				Key:   "Name",
+				Value: name,
+			},
+		},
+		sdkAddr,
+		additionalFee,
+	),
+		sender,
 		false,
 	)
 	if err != nil {

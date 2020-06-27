@@ -36,12 +36,13 @@ type Item struct {
 	Longs   []LongKeyValue
 	Strings []StringKeyValue
 	// as items are unique per cookbook
-	CookbookID    string
-	Sender        sdk.AccAddress
-	OwnerRecipeID string
-	OwnerTradeID  string
-	Tradable      bool
-	LastUpdate    int64
+	CookbookID            string
+	Sender                sdk.AccAddress
+	OwnerRecipeID         string
+	OwnerTradeID          string
+	Tradable              bool
+	LastUpdate            int64
+	AdditionalTransferFee int64
 }
 
 // ItemList is a list of items
@@ -172,7 +173,7 @@ func (it Item) NewRecipeExecutionError() error {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, BlockHeight int64) *Item {
+func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, BlockHeight int64, additionalTransferFee int64) *Item {
 	item := &Item{
 		CookbookID: cookbookID,
 		Doubles:    doubles,
@@ -180,8 +181,9 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Strings:    strings,
 		Sender:     sender,
 		// By default all items are tradable
-		Tradable:   true,
-		LastUpdate: BlockHeight,
+		Tradable:              true,
+		LastUpdate:            BlockHeight,
+		AdditionalTransferFee: additionalTransferFee,
 	}
 	item.ID = KeyGen(sender)
 	return item
