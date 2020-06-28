@@ -38,7 +38,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	// we validate and match items
 	var matchedItems []types.Item
 	var matches bool
-	for _, itemInput := range p.recipe.ItemInputs {
+	for i, itemInput := range p.recipe.ItemInputs {
 		matches = false
 
 		for iii, item := range inputItems {
@@ -51,7 +51,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 		}
 
 		if !matches {
-			return errors.New("the item inputs dont match any items provided")
+			return fmt.Errorf("the [%d] item input don't match any items provided", i)
 		}
 	}
 	p.matchedItems = matchedItems
