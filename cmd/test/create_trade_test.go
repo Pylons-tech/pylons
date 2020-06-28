@@ -18,6 +18,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 
 	tests := []struct {
 		name         string
+		inputPylon   int64
 		outputPylon  int64
 		extraInfo    string
 		desiredError string
@@ -39,6 +40,12 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			extraInfo:    "TESTTRD_CreateTrade_003",
 			desiredError: "there should be no 0 amount denom on outputs",
 		},
+		{
+			name:        "coin->coin create trade test", // coin to coin create trade success test
+			inputPylon:  1,
+			outputPylon: 1000,
+			extraInfo:   "TESTTRD_CreateTrade_001",
+		},
 		// TODO should add more msg level validation and create trade handler error checks
 		// for coin-coin, item-item, coin-item trading, msg.
 	}
@@ -50,9 +57,16 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
+			var inputCoins types.CoinInputList
+			if tc.inputPylon > 0 {
+				inputCoins = types.GenCoinInputList("pylon", tc.inputPylon)
+			} else {
+				inputCoins = nil
+			}
+
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateTrade(
-					nil,
+					inputCoins,
 					types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
 					types.NewPylon(tc.outputPylon),
 					nil,
