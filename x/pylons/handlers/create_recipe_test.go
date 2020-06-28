@@ -26,6 +26,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		isUpgrdRecipe  bool
 		sender         sdk.AccAddress
 		numItemInput   int // 0 | 1 | 2
+		numItemOutput  int // 0 | 1 | 2
 		desiredError   string
 		showError      bool
 	}{
@@ -81,7 +82,17 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			desiredError:   "ItemInputRef overflow length of ItemInputs",
 			showError:      true,
 		},
-		// TODO should add case for multiple input item upgrade test
+		"multiple item upgrade recipe success creation test": {
+			cookbookName:   "book000001",
+			createCookbook: true,
+			recipeDesc:     "this has to meet character limits",
+			outputDenom:    "chair",
+			isUpgrdRecipe:  true,
+			numItemInput:   2,
+			sender:         sender,
+			desiredError:   "",
+			showError:      false,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -104,12 +115,18 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			if !tc.isUpgrdRecipe {
 				mEntries = types.GenEntries(tc.outputDenom, "Raichu")
 			} else {
-				mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
+				if tc.numItemOutput == 2 {
+					mEntries = types.GenEntriesTwoItemNameUpgrade("RaichuV2", "PikachuV2")
+				} else {
+					mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
+				}
 			}
 			mOutputs := types.GenOneOutput(len(mEntries))
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
 				mInputList = types.GenItemInputList("Raichu")
+			} else if tc.numItemInput == 2 {
+				mInputList = types.GenItemInputList("Raichu", "Pikachu")
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,

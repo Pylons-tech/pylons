@@ -175,6 +175,18 @@ func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	}
 }
 
+// GenEntriesTwoItemNameUpgrade is a function to generate entries that update two items' names
+func GenEntriesTwoItemNameUpgrade(targetValue1, targetValue2 string) EntriesList {
+	return EntriesList{
+		NewInputRefOutput(
+			0, GenModifyParamsForString("Name", targetValue1),
+		),
+		NewInputRefOutput(
+			1, GenModifyParamsForString("Name", targetValue2),
+		),
+	}
+}
+
 // GenModifyParamsForString is a function to generate modify params from string key and value
 func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
 	return ItemModifyParams{
