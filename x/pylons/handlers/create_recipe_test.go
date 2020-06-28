@@ -70,7 +70,17 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			desiredError:   "There should not be a recipe which generate pylon denom as an output",
 			showError:      true,
 		},
-		// TODO should add case for no input item upgrade test
+		"no item upgrade test": {
+			cookbookName:   "book000001",
+			createCookbook: true,
+			recipeDesc:     "this has to meet character limits",
+			outputDenom:    "chair",
+			isUpgrdRecipe:  true,
+			numItemInput:   0,
+			sender:         sender,
+			desiredError:   "ItemInputRef overflow length of ItemInputs",
+			showError:      true,
+		},
 		// TODO should add case for multiple input item upgrade test
 	}
 	for testName, tc := range cases {
@@ -113,13 +123,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			result, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
+				require.True(t, err == nil)
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
 				require.True(t, err == nil)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
 				require.True(t, err != nil)
-				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
 			}
 		})
 	}
