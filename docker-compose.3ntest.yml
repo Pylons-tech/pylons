@@ -1,56 +1,20 @@
 version: '3'
 services:
-  pylonstestnode0:
-    container_name: pylonstestnode0
+  node0:
     build:
       context: .
-      dockerfile: Dockerfile.3n
-      args:
-        node_id: 0
-        pylonsd_home: ./testnet/node0/pylonsd
+      target: pylonsd
+    secrets:
+      - source: val_key
+        target: /root/.pylonds/config/priv_validator_key.json
     ports:
       - "26656-26657:26656-26657"
-    volumes:
-      - ./testnet:/build:Z
     networks:
       testnet:
         ipv4_address: 192.168.10.2
-      cloudbuildnet:
-        ipv4_address: 169.254.0.3
-  pylonstestnode1:
-    container_name: pylonstestnode1
-    build:
-      context: .
-      dockerfile: Dockerfile.3n
-      args:
-        node_id: 1
-        pylonsd_home: ./testnet/node1/pylonsd
-    ports:
-      - "26659-26660:26656-26657"
-    volumes:
-      - ./testnet:/build:Z
-    networks:
-      testnet:
-        ipv4_address: 192.168.10.3
-      cloudbuildnet:
-        ipv4_address: 169.254.0.4
-  pylonstestnode2:
-    container_name: pylonstestnode2
-    build:
-      context: .
-      dockerfile: Dockerfile.3n
-      args:
-        node_id: 2
-        pylonsd_home: ./testnet/node2/pylonsd
-    ports:
-      - "26661-26662:26656-26657"
-    volumes:
-      - ./testnet:/build:Z
-    networks:
-      testnet:
-        ipv4_address: 192.168.10.4
-      cloudbuildnet:
-        ipv4_address: 169.254.0.5
+secrets:
+  val_key:
+    file: ./production_config/pylonsd/val_0_key.json
 networks:
   testnet:
     driver: bridge
@@ -59,6 +23,3 @@ networks:
       config:
       -
         subnet: 192.168.10.0/16
-  cloudbuildnet:
-    external:
-      name: cloudbuild

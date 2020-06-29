@@ -44,10 +44,13 @@ WORKDIR /root
 COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /go/bin/pylonscli /usr/bin/pylonscli
 COPY --from=build /root/.pylonscli /root/.pylonscli
-RUN pylonsd init masternode --chain-id pylonschain
-COPY init_accounts.local.sh ./
-RUN bash ./init_accounts.local.sh
-CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
+RUN pylonsd init masternode --chain-id pylons
+CMD  /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
+
+FROM pylonsd as genesis
+COPY init_accounts.local.sh init_accounts.local.sh
+RUN bash init_accounts.local.sh
+
 
 #Test server
 FROM pylonsd as test_server
