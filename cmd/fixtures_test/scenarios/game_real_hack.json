@@ -1,0 +1,82 @@
+[
+  {
+      "ID": "CREATE_GAMEREAL_COOKBOOK",
+      "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+      },
+      "action": "create_cookbook",
+      "paramsRef": "./cookbooks/game_real.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "cookbooks": ["Game Real"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_GAMEHACK_COOKBOOK",
+      "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+      },
+      "action": "create_cookbook",
+      "paramsRef": "./cookbooks/game_hack.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "cookbooks": ["Game Hack"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_ISSUE_GOLD_GAMEREAL_RECIPE",
+      "runAfter": {
+          "precondition": ["CREATE_GAMEREAL_COOKBOOK"],
+          "blockWait": 0
+      },
+      "action": "create_recipe",
+      "paramsRef": "./recipes/game_real/issue_gold.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "recipes": ["GameReal's issue gold recipe"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_ISSUE_GOLD_GAMEHACK_RECIPE",
+      "runAfter": {
+          "precondition": ["CREATE_GAMEHACK_COOKBOOK", "CREATE_ISSUE_GOLD_GAMEREAL_RECIPE"],
+          "blockWait": 0
+      },
+      "action": "create_recipe",
+      "paramsRef": "./recipes/game_hack/issue_gold.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "recipes": ["GameHack's issue gold recipe"]
+              }
+          ]
+      }
+  }
+]

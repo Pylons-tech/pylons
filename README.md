@@ -78,17 +78,44 @@ pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 
 ## Running tests
 - Unit test command
-
 ```
 make unit_tests
 ```
+- Specific unit test (regular expression filter)
+```
+make unit_tests ARGS="-run TestKeeperSetExecutio.*/empty_sender_tes"
+--- PASS: TestKeeperSetExecution (0.00s)
+    --- PASS: TestKeeperSetExecution/empty_sender_test (0.00s)
+PASS
+ok  	github.com/Pylons-tech/pylons/x/pylons/keep	0.050s
+```
+
 - Integration test with local daemon command
 ```
 make int_tests
 ```
+- Specific integration test (regular expression filter)
+```
+make int_tests ARGS="-run TestFulfillTradeViaCLI"
+--- PASS: TestFulfillTradeViaCLI (0.00s)
+    --- PASS: TestFulfillTradeViaCLI/same_item_with_different_cookbook_id_fulfill_trade_test (31.76s)
+    --- PASS: TestFulfillTradeViaCLI/coin->coin_fullfill_trade_test (37.59s)
+    --- PASS: TestFulfillTradeViaCLI/trade_unordered_coin_input_test (43.35s)
+    --- PASS: TestFulfillTradeViaCLI/item->item_fullfill_trade_test (49.27s)
+    --- PASS: TestFulfillTradeViaCLI/item->coin_fullfill_trade_test (33.78s)
+    --- PASS: TestFulfillTradeViaCLI/coin->item_fullfill_trade_test (39.66s)
+PASS
+ok  	github.com/Pylons-tech/pylons/cmd/test	71.481s
+```
+
 - Fixture test with local daemon command
 ```
 make fixture_tests ARGS="--accounts=michael,eugen"
+```
+- Specific fixture test (scenario name filter)
+If not specify this param, it tests all scenario files. If specify only do specific tests.
+```
+make fixture_tests ARGS="--scenarios=multi_msg_tx,double_empty --accounts=michael,eugen"
 ```
 
 ### Before running integration and fixture test initialize blockchain status and start daemon

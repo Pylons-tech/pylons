@@ -1,0 +1,24 @@
+{
+  "CoinInputs": [],
+  "ItemInputRefs": [],
+  "Entries":{
+      "CoinOutputs":[
+          {
+              "Coin": "gold",
+              "Count": "100"
+          }
+      ]
+  },
+  "Outputs": [
+      {
+          "ResultEntries": ["0"],
+          "Weight": "1"
+      }
+  ],
+  "ExtraInfo": "",
+  "Sender": "account2",
+  "Name": "GameHack's issue gold recipe",
+  "CookbookID": "game-hack-1589853709",
+  "Description": "this recipe is used to issue gold on GameHack.",
+  "BlockInterval": "0"
+}
