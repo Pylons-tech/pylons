@@ -18,11 +18,11 @@ func TestSendItemsViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name           string
-		itemNames      []string
-		transferFees   []int64
-		LLCResult      int64
-		cbSenderResult int64
+		name            string
+		itemNames       []string
+		transferFees    []int64
+		differPylonsLLC int64
+		differCBOwner   int64
 	}{
 		{
 			"basic send items test",
@@ -40,7 +40,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-			mCB := GetMockedCookbook(false, t)
+			mCB := GetMockedCookbook("node0", false, t)
 
 			itemIDs := make([]string, len(tc.itemNames))
 
@@ -87,7 +87,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 			originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 
-			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.LLCResult))
+			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.differPylonsLLC))
 			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 
 			// TODO should be reverted after SetupTestAccounts upgrade
