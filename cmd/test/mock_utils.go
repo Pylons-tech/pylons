@@ -22,6 +22,7 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 	if err != nil {
 		return "", err
 	}
+
 	if exist && !createNew { // finish mock if already available
 		return guid, nil
 	}
