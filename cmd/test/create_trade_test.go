@@ -52,7 +52,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB := GetMockedCookbook(false, t)
+			mCB := GetMockedCookbook("eugen", false, t)
 
 			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)

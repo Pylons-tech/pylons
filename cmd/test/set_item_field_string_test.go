@@ -31,7 +31,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB := GetMockedCookbook(false, t)
+			mCB := GetMockedCookbook("eugen", false, t)
 
 			itemID := MockItemGUID(mCB.ID, "eugen", tc.itemName, t)
 
