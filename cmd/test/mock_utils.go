@@ -30,7 +30,7 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 	t.MustNil(err, fmt.Sprintf("error converting %s to AccAddress struct", senderName))
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
-		"COOKBOOK_MOCK_001",
+		"COOKBOOK_MOCK_001_"+senderName,
 		"",
 		"this has to meet character limits lol",
 		"SketchyCo",
