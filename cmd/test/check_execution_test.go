@@ -97,7 +97,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
 	t.Parallel()
-	mCB := GetMockedCookbook(false, t)
+	mCB := GetMockedCookbook("eugen", false, t)
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set

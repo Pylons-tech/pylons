@@ -152,8 +152,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	mCB := GetMockedCookbook(false, t)
-	mCB2 := GetMockedCookbook(true, t)
+	mCB := GetMockedCookbook("eugen", false, t)
+	mCB2 := GetMockedCookbook("eugen", true, t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {

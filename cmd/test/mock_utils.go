@@ -1,6 +1,8 @@
 package inttest
 
 import (
+	"fmt"
+
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
@@ -15,7 +17,7 @@ import (
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(createNew bool, t *testing.T) (string, error) {
+func MockCookbook(senderName string, createNew bool, t *testing.T) (string, error) {
 	guid, exist, err := CheckCookbookExist()
 	if err != nil {
 		return "", err
@@ -23,9 +25,9 @@ func MockCookbook(createNew bool, t *testing.T) (string, error) {
 	if exist && !createNew { // finish mock if already available
 		return guid, nil
 	}
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
+	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
+	t.MustNil(err, fmt.Sprintf("error converting %s to AccAddress struct", senderName))
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001",
@@ -37,7 +39,7 @@ func MockCookbook(createNew bool, t *testing.T) (string, error) {
 		0,
 		msgs.DefaultCostPerBlock,
 		sdkAddr),
-		"eugen",
+		senderName,
 		false,
 	)
 	if err != nil {
@@ -67,8 +69,8 @@ func CheckCookbookExist() (string, bool, error) {
 }
 
 // GetMockedCookbook get mocked cookbook
-func GetMockedCookbook(createNew bool, t *testing.T) types.Cookbook {
-	guid, err := MockCookbook(createNew, t)
+func GetMockedCookbook(senderName string, createNew bool, t *testing.T) types.Cookbook {
+	guid, err := MockCookbook(senderName, createNew, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
@@ -145,7 +147,7 @@ func MockDetailedRecipeGUID(
 		return guid, nil
 	}
 
-	mCB := GetMockedCookbook(false, t)
+	mCB := GetMockedCookbook("eugen", false, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
