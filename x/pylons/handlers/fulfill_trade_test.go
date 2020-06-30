@@ -124,6 +124,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			showError:             false,
 			pylonsLLCDistribution: 10,
 		},
+		// TODO should add item output success fulfill trade test
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
