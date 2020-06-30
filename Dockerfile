@@ -48,8 +48,8 @@ RUN pylonsd init masternode --chain-id pylons
 CMD  /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
 FROM pylonsd as genesis
-COPY init_accounts.local.sh init_accounts.local.sh
-RUN bash init_accounts.local.sh
+# this generate the genesis configurations and secrets 
+RUN pylonsd testnet --v 3 --output-dir ./build --starting-ip-address 192.168.10.2 --keyring-backend=test
 
 
 #Test server
