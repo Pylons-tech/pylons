@@ -40,12 +40,12 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-			mCB := GetMockedCookbook("node0", false, t)
+			mCB := GetMockedCookbook("jose", true, t)
 
 			itemIDs := make([]string, len(tc.itemNames))
 
 			for idx, itemName := range tc.itemNames {
-				itemID := MockItemGUIDWithFee(mCB.ID, "michael", itemName, tc.transferFees[idx], t)
+				itemID := MockItemGUIDWithFee(mCB.ID, "eugen", itemName, tc.transferFees[idx], t)
 				itemIDs[idx] = itemID
 			}
 
@@ -53,16 +53,16 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
-			// TODO should be reverted after SetupTestAccounts upgrade
-			// eugenAccInfo := inttestSDK.GetAccountInfoFromAddr(eugenSdkAddr.String(), t)
-
-			mikeAddr := inttestSDK.GetAccountAddr("michael", t)
-			mikeSdkAddr, err := sdk.AccAddressFromBech32(mikeAddr)
+			joseAddr := inttestSDK.GetAccountAddr("jose", t)
+			joseSdkAddr, err := sdk.AccAddressFromBech32(joseAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
+
+			joseAccInfo := inttestSDK.GetAccountInfoFromAddr(joseSdkAddr.String(), t)
+
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgSendItems(itemIDs, mikeSdkAddr, eugenSdkAddr),
-				"michael",
+				msgs.NewMsgSendItems(itemIDs, eugenSdkAddr, joseSdkAddr),
+				"eugen",
 				false,
 			)
 			if err != nil {
@@ -73,6 +73,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			WaitOneBlockWithErrorCheck(t)
 
 			txHandleResBytes := GetTxHandleResult(txhash, t)
+
 			resp := handlers.SendItemsResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
@@ -81,21 +82,20 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			for _, itemID := range itemIDs {
 				item, err := inttestSDK.GetItemByGUID(itemID)
 				t.MustNil(err)
-				t.MustTrue(item.Sender.String() == eugenSdkAddr.String())
+				t.MustTrue(item.Sender.String() == joseSdkAddr.String())
 			}
 
-			accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+			pylonsLLCAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 			originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 
-			pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.differPylonsLLC))
+			pylonAvailOnLLC := pylonsLLCAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.differPylonsLLC))
 			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 
-			// TODO should be reverted after SetupTestAccounts upgrade
-			// eugenAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(eugenSdkAddr.String(), t)
-			// originEugenAmount := eugenAccInfo.Coins.AmountOf(types.Pylon)
+			joseAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(joseSdkAddr.String(), t)
+			originJoseAmount := joseAccInfo.Coins.AmountOf(types.Pylon)
 
-			// availOnEugen := eugenAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originEugenAmount.Int64() + tc.cbSenderResult))
-			// t.MustTrue(availOnEugen, "Cookbook sender should get correct revenue")
+			availOnJose := joseAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originJoseAmount.Int64() + tc.differCBOwner))
+			t.MustTrue(availOnJose, "Cookbook sender should get correct revenue")
 		})
 	}
 }

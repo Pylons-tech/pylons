@@ -18,10 +18,11 @@ import (
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
 func MockCookbook(senderName string, createNew bool, t *testing.T) (string, error) {
-	guid, exist, err := CheckCookbookExist()
+	guid, exist, err := CheckCookbookExist(senderName, t)
 	if err != nil {
 		return "", err
 	}
+
 	if exist && !createNew { // finish mock if already available
 		return guid, nil
 	}
@@ -30,7 +31,7 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 	t.MustNil(err, fmt.Sprintf("error converting %s to AccAddress struct", senderName))
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
-		"COOKBOOK_MOCK_001",
+		"COOKBOOK_MOCK_001_"+senderName,
 		"",
 		"this has to meet character limits lol",
 		"SketchyCo",
@@ -57,8 +58,15 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 }
 
 // CheckCookbookExist is a cookbook existence checker
-func CheckCookbookExist() (string, bool, error) {
-	cbList, err := inttestSDK.ListCookbookViaCLI("")
+func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
+	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
+	senderSdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
+
+	if err != nil {
+		return "", false, err
+	}
+
+	cbList, err := inttestSDK.ListCookbookViaCLI(senderSdkAddr.String())
 	if err != nil {
 		return "", false, err
 	}
