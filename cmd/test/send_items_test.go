@@ -40,7 +40,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-			mCB := GetMockedCookbook("michael", true, t)
+			mCB := GetMockedCookbook("jose", true, t)
 
 			itemIDs := make([]string, len(tc.itemNames))
 
@@ -53,7 +53,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
-			mikeAddr := inttestSDK.GetAccountAddr("michael", t)
+			mikeAddr := inttestSDK.GetAccountAddr("jose", t)
 			mikeSdkAddr, err := sdk.AccAddressFromBech32(mikeAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
