@@ -61,6 +61,11 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
 	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
 	senderSdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
+
+	if err != nil {
+		return "", false, err
+	}
+
 	cbList, err := inttestSDK.ListCookbookViaCLI(senderSdkAddr.String())
 	if err != nil {
 		return "", false, err
