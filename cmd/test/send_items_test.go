@@ -53,15 +53,15 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
-			mikeAddr := inttestSDK.GetAccountAddr("jose", t)
-			mikeSdkAddr, err := sdk.AccAddressFromBech32(mikeAddr)
+			joseAddr := inttestSDK.GetAccountAddr("jose", t)
+			joseSdkAddr, err := sdk.AccAddressFromBech32(joseAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
-			mikeAccInfo := inttestSDK.GetAccountInfoFromAddr(mikeSdkAddr.String(), t)
+			joseAccInfo := inttestSDK.GetAccountInfoFromAddr(joseSdkAddr.String(), t)
 
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgSendItems(itemIDs, eugenSdkAddr, mikeSdkAddr),
+				msgs.NewMsgSendItems(itemIDs, eugenSdkAddr, joseSdkAddr),
 				"eugen",
 				false,
 			)
@@ -82,7 +82,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			for _, itemID := range itemIDs {
 				item, err := inttestSDK.GetItemByGUID(itemID)
 				t.MustNil(err)
-				t.MustTrue(item.Sender.String() == mikeSdkAddr.String())
+				t.MustTrue(item.Sender.String() == joseSdkAddr.String())
 			}
 
 			pylonsLLCAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
@@ -91,11 +91,11 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			pylonAvailOnLLC := pylonsLLCAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.differPylonsLLC))
 			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 
-			mikeAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(mikeSdkAddr.String(), t)
-			originMikeAmount := mikeAccInfo.Coins.AmountOf(types.Pylon)
+			joseAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(joseSdkAddr.String(), t)
+			originJoseAmount := joseAccInfo.Coins.AmountOf(types.Pylon)
 
-			availOnMike := mikeAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originMikeAmount.Int64() + tc.differCBOwner))
-			t.MustTrue(availOnMike, "Cookbook sender should get correct revenue")
+			availOnJose := joseAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originJoseAmount.Int64() + tc.differCBOwner))
+			t.MustTrue(availOnJose, "Cookbook sender should get correct revenue")
 		})
 	}
 }
