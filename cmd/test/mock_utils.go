@@ -18,7 +18,7 @@ import (
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
 func MockCookbook(senderName string, createNew bool, t *testing.T) (string, error) {
-	guid, exist, err := CheckCookbookExist()
+	guid, exist, err := CheckCookbookExist(senderName, t)
 	if err != nil {
 		return "", err
 	}
@@ -58,8 +58,10 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 }
 
 // CheckCookbookExist is a cookbook existence checker
-func CheckCookbookExist() (string, bool, error) {
-	cbList, err := inttestSDK.ListCookbookViaCLI("")
+func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
+	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
+	senderSdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
+	cbList, err := inttestSDK.ListCookbookViaCLI(senderSdkAddr.String())
 	if err != nil {
 		return "", false, err
 	}
