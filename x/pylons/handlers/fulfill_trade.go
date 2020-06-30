@@ -102,6 +102,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	for _, item := range refreshedOutputItems {
 		item.Sender = msg.Sender
+		item.OwnerTradeID = ""
 		err := keeper.SetItem(ctx, item)
 		if err != nil {
 			return nil, errInternal(err)
