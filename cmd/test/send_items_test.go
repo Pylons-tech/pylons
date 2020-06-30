@@ -57,7 +57,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			mikeSdkAddr, err := sdk.AccAddressFromBech32(mikeAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
-			mikeAccInfo := inttestSDK.GetAccountInfoFromAddr(eugenSdkAddr.String(), t)
+			mikeAccInfo := inttestSDK.GetAccountInfoFromAddr(mikeSdkAddr.String(), t)
 
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
