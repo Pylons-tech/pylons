@@ -44,7 +44,7 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 				return err
 			}
 
-			// custom transaction sender customized from utils.GenerateOrBroadcastMsgs
+			// custom transaction sender for get-pylons to avoid account existance check
 			return GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}
