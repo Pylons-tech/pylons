@@ -124,7 +124,7 @@ First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `
 - Meaning of this issue
 ```log
 === CONT  TestFixturesViaCLI/scenarios/trade.json/0_CREATE_TRADE_COOKBOOK
-    TestFixturesViaCLI/scenarios/custom_func_test.json/0_CREATE_CUSTOMFUNCTEST_COOKBOOK: evtesting.go:152: level=debug func=github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test.CheckErrorOnTxFromTxHash file_line=/Users/administrator/go/pkg/mod/github.com/!pylons-tech/pylons_sdk@v0.0.0-20200626091049-b41e257e5478/cmd/fixtures_test/check_utils.go:176 
+    TestFixturesViaCLI/scenarios/custom_func_test.json/0_CREATE_CUSTOMFUNCTEST_COOKBOOK: evtesting.go:152: level=debug func=github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils.CheckErrorOnTxFromTxHash file_line=/Users/administrator/go/pkg/mod/github.com/!pylons-tech/pylons_sdk@v0.0.0-20200626091049-b41e257e5478/cmd/fixtures_test/check_utils.go:176 
     TestFixturesViaCLI/scenarios/custom_func_test.json/0_CREATE_CUSTOMFUNCTEST_COOKBOOK: evtesting.go:274: level=fatal txhash=17E33613FC98371C5C92C804EEB88321B29A79ED5157C1C86740D413E8BB6A1E tx_error=insufficient funds: the user doesn't have enough pylons: failed to execute message; message index: 0 msg=tx_error exist
 ```
 It means the sender does not have enough pylons to create recipes.
