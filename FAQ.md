@@ -53,9 +53,11 @@ It removes the expression max of 0 that's common.
 
 ## FAQ in fixture test writing
 
-- You should create account using get-pylons message but this is not runnable by using cli.
-You should use POST ${REST_ENDPOINT}/txs to create account.
-For simplification this stuff is done by loud game if you run `make ARGS="account_key -locald" run`
+- You should create account using get-pylons message.
+```
+pylonscli keys add jack --keyring-backend=test
+pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
+```
 
 - All the keys are managed via `--keyring-backend=test` (which is an argument of pylonscli) for tests and you should use this for most of test related cli use and other actions that does not require user's system password.
 - You should reinstall pylonsd and pylonscli correctly before running fixture test.

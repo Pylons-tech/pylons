@@ -32,7 +32,7 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 	var customBalance int64
 	ccb := &cobra.Command{
 		Use:   "get-pylons",
-		Short: "ask for pylons. 500 pylons per request",
+		Short: "ask for pylons. 500 default pylons per request",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
