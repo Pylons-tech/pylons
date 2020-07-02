@@ -75,7 +75,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				}).Fatal("error listing items via cli")
 			}
 
-			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
+			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false, false)
 			t.WithFields(testing.Fields{
 				"item_name": tc.desiredItemName,
 			}).MustTrue(ok, "item id with specific name does not exist")

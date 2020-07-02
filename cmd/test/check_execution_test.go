@@ -160,7 +160,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 			}).Fatal("error listing items via cli")
 		}
 
-		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true)
+		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true, false)
 		t.WithFields(testing.Fields{
 			"item_name": tc.currentItemName,
 		}).MustTrue(ok, "item id with specific name does not exist")
@@ -191,7 +191,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}).Fatal("error listing items via cli")
 	}
 
-	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
+	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false, false)
 	t.WithFields(testing.Fields{
 		"item_name":   tc.desiredItemName,
 		"exist":       ok,
