@@ -15,6 +15,7 @@ func init() {
 
 // RegisterCodec registers concrete types on wire codec
 func RegisterCodec(cdc *codec.Codec) {
+	cdc.RegisterConcrete(msgs.MsgCreateAccount, "pylons/CreateAccount", nil)
 	cdc.RegisterConcrete(msgs.MsgGetPylons{}, "pylons/GetPylons", nil)
 	cdc.RegisterConcrete(msgs.MsgSendPylons{}, "pylons/SendPylons", nil)
 	cdc.RegisterConcrete(msgs.MsgSendItems{}, "pylons/SendItems", nil)

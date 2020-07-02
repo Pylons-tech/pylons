@@ -21,14 +21,14 @@ import (
 
 // query endpoints supported by the nameservice Querier
 const (
-	TxGPRequesterKey = "gp_requester"
+	TxCARequesterKey = "gp_requester"
 )
 
-// GetPylonsTxBuilder returns the fixtures which can be used to create a get pylons transaction
-func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+// CreateAccountTxBuilder returns the fixtures which can be used to create a get pylons transaction
+func CreateAccountTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		requester := vars[TxGPRequesterKey]
+		requester := vars[TxCARequesterKey]
 		addr, err := sdk.AccAddressFromBech32(requester)
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
@@ -37,7 +37,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr)
+		msg := msgs.NewMsgCreateAccount(addr)
 
 		// sigs := []auth.StdSignature{{}}
 
@@ -48,7 +48,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		}
 
 		stdTx := auth.NewStdTx(signMsg.Msgs, signMsg.Fee, []auth.StdSignature{}, signMsg.Memo)
-		gb := GPTxBuilder{
+		gb := CATxBuilder{
 			SignerBytes: hex.EncodeToString(signMsg.Bytes()),
 			SignMsg:     signMsg,
 			SignTx:      stdTx,
@@ -64,25 +64,8 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 	}
 }
 
-// GetPrivateKeyFromHex get private key from hex
-func GetPrivateKeyFromHex(hexKey string) (*crypto.PrivKeySecp256k1, error) {
-	hexPrivKey := hexKey
-	privKeyBytes, err := hex.DecodeString(hexPrivKey)
-	if err != nil {
-		return nil, err
-	}
-	var privKeyBytes32 [32]byte
-	copy(privKeyBytes32[:], privKeyBytes)
-	privKey := crypto.PrivKeySecp256k1(privKeyBytes32)
-	if err != nil {
-		fmt.Printf("error: \n %+v \n", err)
-	}
-
-	return &privKey, nil
-}
-
-// GPTxBuilder gives all the necessary fixtures for creating a get pylons transaction
-type GPTxBuilder struct {
+// CATxBuilder gives all the necessary fixtures for creating a get pylons transaction
+type CATxBuilder struct {
 	// MsgJSON is the transaction with nil signature
 	SignMsg     auth.StdSignMsg
 	SignTx      auth.StdTx
