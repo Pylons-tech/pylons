@@ -5,54 +5,72 @@ services:
       context: .
       target: pylonsd
     secrets:
-      - source: val_key
+      - source: node0_val_key
         target: /root/.pylonsd/config/priv_validator_key.json
       - source: genesis
         target: /root/.pylonsd/config/genesis.json
-      - source: config
+      - source: node0_config
         target: /root/.pylonsd/config/config.toml
+      - source: node0_key
+        target: /root/.pylonsd/config/node_key.json
     networks:
       testnet:
-        ipv4_address: 192.168.10.0
-
+        ipv4_address: 192.168.10.2
   node1:
     build:
       context: .
       target: pylonsd
     secrets:
-      - source: val_key
+      - source: node1_val_key
         target: /root/.pylonsd/config/priv_validator_key.json
       - source: genesis
         target: /root/.pylonsd/config/genesis.json
-      - source: config
+      - source: node1_config
         target: /root/.pylonsd/config/config.toml
+      - source: node1_key
+        target: /root/.pylonsd/config/node_key.json
     networks:
       testnet:
-        ipv4_address: 192.168.10.1
+        ipv4_address: 192.168.10.3
   node2:
     build:
       context: .
       target: pylonsd
     secrets:
-      - source: val_key
+      - source: node2_val_key
         target: /root/.pylonsd/config/priv_validator_key.json
       - source: genesis
         target: /root/.pylonsd/config/genesis.json
-      - source: config
+      - source: node2_config
         target: /root/.pylonsd/config/config.toml
+      - source: node2_key
+        target: /root/.pylonsd/config/node_key.json
     ports:
       - "26656-26657:26656-26657"
     networks:
       testnet:
-        ipv4_address: 192.168.10.2
-
+        ipv4_address: 192.168.10.4
 secrets:
-  val_key:
-    file: ./production_config/pylonsd/val_0_key.json
   genesis:
-    file: ./production_config/pylonsd/genesis.json
-  config:
-    file: ./production_config/pylonsd/config.toml
+    file: ./production_config/genesis.json
+  node0_val_key:
+    file: ./production_config/node0/pylonsd/config/priv_validator_key.json
+  node0_config:
+    file: ./production_config/node0/pylonsd/config/config.toml
+  node0_key:
+    file: ./production_config/node0/pylonsd/config/node_key.json
+  node1_val_key:
+    file: ./production_config/node1/pylonsd/config/priv_validator_key.json
+  node1_config:
+    file: ./production_config/node1/pylonsd/config/config.toml
+  node1_key:
+    file: ./production_config/node1/pylonsd/config/node_key.json
+  node2_val_key:
+    file: ./production_config/node2/pylonsd/config/priv_validator_key.json
+  node2_config:
+    file: ./production_config/node2/pylonsd/config/config.toml
+  node2_key:
+    file: ./production_config/node2/pylonsd/config/node_key.json
 networks:
   testnet:
     driver: bridge
