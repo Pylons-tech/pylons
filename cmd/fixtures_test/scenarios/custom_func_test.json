@@ -98,7 +98,8 @@
                     "items": [
                         {
                             "stringValues": { "Name": "Custom Function TestCharacter" },
-                            "dblValues": { "attack": "1034" }
+                            "dblValues": { "attack": "1034" },
+                            "additionalItemSendFee": "13221"
                         }
                     ]
                 }
