@@ -161,6 +161,20 @@ func (it Item) NewTradeError() error {
 	return nil
 }
 
+// FulfillTradeError check if an item can be sent to someone else
+func (it Item) FulfillTradeError(tradeID string) error {
+	if !it.Tradable {
+		return errors.New("Item Tradable flag is not set")
+	}
+	if it.OwnerRecipeID != "" {
+		return errors.New("Item is owned by a recipe")
+	}
+	if it.OwnerTradeID != tradeID {
+		return errors.New("Item is not owned by the trade")
+	}
+	return nil
+}
+
 // NewRecipeExecutionError is a utility that shows if Recipe is compatible with recipe execution
 func (it Item) NewRecipeExecutionError() error {
 	if it.OwnerRecipeID != "" {

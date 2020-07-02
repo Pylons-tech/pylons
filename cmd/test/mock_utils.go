@@ -3,13 +3,13 @@ package inttest
 import (
 	"fmt"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

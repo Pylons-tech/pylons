@@ -23,7 +23,7 @@ pylonsd add-genesis-account $(pylonscli keys show node0 -a --keyring-backend=tes
 pylonsd gentx --name node0 --keyring-backend=test
 pylonsd collect-gentxs
 
-pylonscli tx pylons get-pylons
+pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
 pylonscli tx pylons send-pylons
 ```
 ## Fetching pylons data
