@@ -25,8 +25,8 @@ spec:
         io.kompose.service: node0
     spec:
       containers:
-      - image: node0
-        imagePullPolicy: ""
+      - image: pylons_node0
+        imagePullPolicy: Never
         name: node0
         resources: {}
       restartPolicy: Always
