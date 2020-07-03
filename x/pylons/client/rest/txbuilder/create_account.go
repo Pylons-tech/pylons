@@ -18,7 +18,7 @@ import (
 
 // query endpoints supported by the nameservice Querier
 const (
-	TxCARequesterKey = "gp_requester"
+	TxCARequesterKey = "ca_requester"
 )
 
 // CreateAccountTxBuilder returns the fixtures which can be used to create a get pylons transaction

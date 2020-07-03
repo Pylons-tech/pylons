@@ -47,7 +47,6 @@ func NewAccountCreationDecorator(ak keeper.AccountKeeper) AccountCreationDecorat
 
 // AnteHandle is a handler for NewAccountCreationDecorator
 func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	fmt.Println("Running NewAccountCreationDecorator...")
 	sigTx, ok := tx.(types.StdTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
@@ -55,6 +54,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	messages := sigTx.GetMsgs()
 
 	if len(messages) == 1 && messages[0].Type() == "create_account" {
+		fmt.Println("Running NewAccountCreationDecorator...")
 		// we don't support multi-message transaction for create_account
 		pubkey := sigTx.Signatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
@@ -62,7 +62,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		fmt.Println(address.String() + " received")
 		// if the account doesnt exist we set it
 		if svd.ak.GetAccount(ctx, address) == nil {
-			fmt.Println("Account not found")
+			fmt.Println("Creating new account")
 			acc := &auth.BaseAccount{
 				Sequence:      0,
 				Coins:         sdk.Coins{},
@@ -81,7 +81,7 @@ type CustomSigVerificationDecorator struct {
 	ak keeper.AccountKeeper
 }
 
-// NewCustomSigVerificationDecorator automatically sign transaction if it's get-pylons msg
+// NewCustomSigVerificationDecorator automatically sign transaction if it's create-account msg
 func NewCustomSigVerificationDecorator(ak keeper.AccountKeeper) CustomSigVerificationDecorator {
 	return CustomSigVerificationDecorator{
 		ak: ak,
