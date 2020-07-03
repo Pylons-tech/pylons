@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   annotations:
     kompose.cmd: kompose convert --file docker-compose.prod-like.yml
@@ -9,11 +9,11 @@ metadata:
     io.kompose.service: node0
   name: node0
 spec:
-  replicas: 1
   selector:
     matchLabels:
       io.kompose.service: node0
-  strategy: {}
+  serviceName: "node"
+  replicas: 1
   template:
     metadata:
       annotations:
@@ -25,11 +25,91 @@ spec:
         io.kompose.service: node0
     spec:
       containers:
-      - image: pylons_node0
+      - image: node3
         imagePullPolicy: Never
         name: node0
         resources: {}
+        volumeMounts:
+          - mountPath: /root/.pylonsd/config
+            name: node0-all-keys
+            readOnly: true
+          # - mountPath: /root/.pylonsd/config
+          #   name: genesis
+          #   readOnly: true
+          # - mountPath: /root/.pylonsd/config
+          #   name: node0-val-key
+          #   readOnly: true
+          # - mountPath: /root/.pylonsd/config
+          #   name: node0-config
+          #   readOnly: true
+          # - mountPath: /root/.pylonsd/config
+          #   name: node0-key
+          #   readOnly: true
+
+          - mountPath: /root/.pylonsd/config/genesis.json
+            name: genesis
+            readOnly: true
+          # - mountPath: /root/.pylonsd/config/priv_validator_key.json
+          #   name: node0-val-key
+          #   readOnly: true
+          # - mountPath: /root/.pylonsd/config/config.toml
+          #   name: node0-config
+          #   readOnly: true
+          # - mountPath: /root/.pylonsd/config/node_key.json
+          #   name: node0-key
+          #   readOnly: true
       restartPolicy: Always
       serviceAccountName: ""
-      volumes: null
-status: {}
+      volumes:
+        # - name: node0-val-key
+        #   hostPath:
+        #     path: /Users/pro/Documents/Pylons-tech/pylons/production_config/node0/pylonsd/config/priv_validator_key.json
+        #     type: File
+        # - name: node0-config
+        #   hostPath:
+        #     path: /Users/pro/Documents/Pylons-tech/pylons/production_config/node0/pylonsd/config/config.toml
+        #     type: File
+        # - name: node0-key
+        #   hostPath:
+        #     path: /Users/pro/Documents/Pylons-tech/pylons/production_config/node0/pylonsd/config/node_key.json
+        #     type: File
+        - name: genesis
+          hostPath:
+            path: /Users/pro/Documents/Pylons-tech/pylons/production_config/genesis.json
+            type: File
+        # - name: node0-val-key
+        #   secret:
+        #     secretName: node0-val-key
+        # - name: node0-config
+        #   secret:
+        #     secretName: node0-config
+        # - name: node0-key
+        #   secret:
+        #     secretName: node0-key
+        # - name: genesis
+        #   configMap:
+        #     name: genesis
+        - name: node0-all-keys
+          secret:
+            secretName: node0-all-keys
+        # - name: node0-config-volume
+        #   projected:
+        #     sources:
+        #     - secret:
+        #         name: node0-val-key
+        #     - secret:
+        #         name: node0-config
+        #     - secret:
+        #         name: node0-key
+            # - secret:
+            #     name: genesis
+  volumeClaimTemplates:
+  - metadata:
+      name: node0-config-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Gi
+status:
+  replicas: 1
