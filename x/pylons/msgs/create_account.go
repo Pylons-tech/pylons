@@ -23,7 +23,7 @@ func NewMsgCreateAccount(requester sdk.AccAddress) MsgCreateAccount {
 func (msg MsgCreateAccount) Route() string { return RouterKey }
 
 // Type should return the action
-func (msg MsgCreateAccount) Type() string { return "get_pylons" }
+func (msg MsgCreateAccount) Type() string { return "create_account" }
 
 // ValidateBasic is a function to validate MsgCreateAccount msg
 func (msg MsgCreateAccount) ValidateBasic() error {

@@ -54,8 +54,8 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	}
 	messages := sigTx.GetMsgs()
 
-	if len(messages) == 1 && messages[0].Type() == "get_pylons" {
-		// we don't support multi-message transaction for get_pylons
+	if len(messages) == 1 && messages[0].Type() == "create_account" {
+		// we don't support multi-message transaction for create_account
 		pubkey := sigTx.Signatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
 
@@ -76,7 +76,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	return next(ctx, tx, simulate)
 }
 
-// CustomSigVerificationDecorator is a custom verification decorator designed for get_pylons
+// CustomSigVerificationDecorator is a custom verification decorator designed for create_account
 type CustomSigVerificationDecorator struct {
 	ak keeper.AccountKeeper
 }
@@ -129,7 +129,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 		}
 
 		messages := sigTx.GetMsgs()
-		if len(messages) == 1 && messages[0].Type() == "get_pylons" {
+		if len(messages) == 1 && messages[0].Type() == "create_account" {
 			continue
 		}
 
