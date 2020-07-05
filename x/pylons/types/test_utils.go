@@ -18,6 +18,10 @@ func GenItemInputList(names ...string) ItemInputList {
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
+			FeeInputParam{
+				MaxValue: 10000,
+				MinValue: 0,
+			},
 		})
 	}
 	return iiL
@@ -99,7 +103,7 @@ func GenItemOnlyEntry(itemName string) EntriesList {
 				},
 			}}}},
 			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
-			0,
+			1232,
 		),
 	}
 }

@@ -42,7 +42,7 @@ type Item struct {
 	OwnerTradeID          string
 	Tradable              bool
 	LastUpdate            int64
-	AdditionalTransferFee int64
+	AdditionalItemSendFee int64
 }
 
 // ItemList is a list of items
@@ -128,7 +128,8 @@ func (it Item) String() string {
 		Longs: %+v,
 		Strings: %+v,
 		CookbookID: %+v,
-	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID)
+		AdditionalItemSendFee: %d,
+	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID, it.AdditionalItemSendFee)
 }
 
 // Equals compares two items
@@ -187,7 +188,8 @@ func (it Item) NewRecipeExecutionError() error {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, BlockHeight int64, additionalTransferFee int64) *Item {
+func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, BlockHeight int64, additionalItemSendFee int64) *Item {
+
 	item := &Item{
 		CookbookID: cookbookID,
 		Doubles:    doubles,
@@ -197,8 +199,9 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		// By default all items are tradable
 		Tradable:              true,
 		LastUpdate:            BlockHeight,
-		AdditionalTransferFee: additionalTransferFee,
+		AdditionalItemSendFee: additionalItemSendFee,
 	}
 	item.ID = KeyGen(sender)
+
 	return item
 }
