@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -69,15 +68,10 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 		desiredError               string
 		successMsg                 string
 		showError                  bool
-		checkCoinName              string
 		checkItemName              string
-		checkCoinAvailable         bool
 		checkItemAvailable         bool
-		checkItemOrCoinAvailable   bool
-		checkPylonDistribution     bool
 		checkAdditionalItemSendFee bool
 		additionalItemSendFees     int64
-		pylonsLLCDistribution      int64
 	}{
 		"item generation with catalyst item test": {
 			itemIDs:                    []string{},
@@ -145,12 +139,6 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == tc.successMsg)
 
-				// calc generated coin availability
-				coinAvailability := false
-				if tc.checkCoinAvailable || tc.checkItemOrCoinAvailable {
-					coinAvailability = tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
-				}
-
 				// calc generated item availability
 				items, err := tci.PlnK.GetItemsBySender(tci.Ctx, tc.sender)
 				require.True(t, err == nil)
@@ -177,24 +165,11 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 					}
 				}
 
-				if tc.checkCoinAvailable {
-					require.True(t, coinAvailability)
-				}
 				if tc.checkItemAvailable {
 					require.True(t, itemAvailability)
 					fmt.Print(itemAvailability)
 				}
-				if tc.checkItemOrCoinAvailable {
-					require.True(t, itemAvailability || coinAvailability)
-					require.True(t, !(itemAvailability && coinAvailability))
-				}
-				if tc.checkPylonDistribution {
-					pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-					require.True(t, err == nil)
-					pylonAvailOnLLC := tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
 
-					require.True(t, pylonAvailOnLLC)
-				}
 				if tc.checkAdditionalItemSendFee {
 					require.True(t, additionalItemSendFeeCorrect)
 				}
