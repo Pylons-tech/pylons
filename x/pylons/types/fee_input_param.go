@@ -25,16 +25,3 @@ func (lp FeeInputParam) Has(input int) bool {
 	}
 	return input >= lp.MinValue && input <= lp.MaxValue
 }
-
-// // Actualize generate a value from range
-// func (lpm FeeInputParamList) Actualize() []LongKeyValue {
-// 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-// 	var m []LongKeyValue
-// 	for _, param := range lpm {
-// 		m = append(m, LongKeyValue{
-// 			Key:   param.Key,
-// 			Value: (param.MinValue + param.MaxValue) / 2,
-// 		})
-// 	}
-// 	return m
-// }
