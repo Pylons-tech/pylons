@@ -6,8 +6,8 @@ import (
 
 // FeeInputParam describes the bounds on an item input/output parameter of type int64
 type FeeInputParam struct {
-	MinValue int
-	MaxValue int
+	MinValue int64
+	MaxValue int64
 }
 
 func (lp FeeInputParam) String() string {
@@ -19,7 +19,7 @@ func (lp FeeInputParam) String() string {
 }
 
 // Has validate if input is between min max range
-func (lp FeeInputParam) Has(input int) bool {
+func (lp FeeInputParam) Has(input int64) bool {
 	if lp.MinValue == 0 && lp.MaxValue == 0 {
 		return true
 	}

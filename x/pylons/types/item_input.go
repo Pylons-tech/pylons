@@ -49,7 +49,7 @@ func (ii ItemInput) Matches(item Item) bool {
 		}
 	}
 
-	if !ii.AdditionalItemSendFee.Has(int(item.AdditionalItemSendFee)) {
+	if !ii.AdditionalItemSendFee.Has(item.AdditionalItemSendFee) {
 		return false
 	}
 

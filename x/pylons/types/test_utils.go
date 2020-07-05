@@ -19,8 +19,8 @@ func GenItemInputList(names ...string) ItemInputList {
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
 			FeeInputParam{
-				MaxValue: 10000,
 				MinValue: 0,
+				MaxValue: 10000,
 			},
 		})
 	}

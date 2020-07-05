@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHandlerMsgExecuteRecipe1(t *testing.T) {
+func TestRecipeItemSendFee(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
 
@@ -70,7 +70,7 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 		checkItemName              string
 		checkItemAvailable         bool
 		checkAdditionalItemSendFee bool
-		additionalItemSendFees     int64
+		additionalItemSendFee      int64
 	}{
 		"item generation with catalyst item test": {
 			itemIDs:                    []string{},
@@ -86,7 +86,7 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 			checkItemName:              "Catalyst2", // "catalyst" item should be kept
 			checkItemAvailable:         true,
 			checkAdditionalItemSendFee: true,
-			additionalItemSendFees:     1232,
+			additionalItemSendFee:      1232,
 		},
 		"modify items test with one dynamic item": {
 			itemIDs:                    []string{},
@@ -99,7 +99,7 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 			successMsg:                 "successfully executed the recipe",
 			showError:                  false,
 			checkAdditionalItemSendFee: true,
-			additionalItemSendFees:     1232,
+			additionalItemSendFee:      1232,
 		},
 	}
 	for testName, tc := range cases {
@@ -159,7 +159,7 @@ func TestHandlerMsgExecuteRecipe1(t *testing.T) {
 
 				for _, item := range items {
 
-					if item.AdditionalItemSendFee != tc.additionalItemSendFees {
+					if item.AdditionalItemSendFee != tc.additionalItemSendFee {
 						additionalItemSendFeeCorrect = false
 					}
 				}

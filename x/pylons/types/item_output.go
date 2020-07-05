@@ -114,7 +114,7 @@ func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvColle
 	additionalItemSendFee := io.AdditionalItemSendFee
 
 	lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
-	// TODO additionalItemSendFee defaults 0. Afterward, this should be changed by a value from receipe
+
 	return NewItem(cookbook, dblActualize, longActualize, stringActualize, sender, lastBlockHeight, additionalItemSendFee), nil
 }
 
