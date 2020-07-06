@@ -10,6 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 )
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
@@ -33,12 +34,12 @@ func NewAnteHandler(ak keeper.AccountKeeper, supplyKeeper types.SupplyKeeper, si
 	)
 }
 
-// AccountCreationDecorator by passes the signature verification
+// AccountCreationDecorator create an account if it does not exist
 type AccountCreationDecorator struct {
 	ak keeper.AccountKeeper
 }
 
-// NewAccountCreationDecorator automatically create account if account is not exist already
+// NewAccountCreationDecorator create account if account does not exist already
 func NewAccountCreationDecorator(ak keeper.AccountKeeper) AccountCreationDecorator {
 	return AccountCreationDecorator{
 		ak: ak,
@@ -53,11 +54,19 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	}
 	messages := sigTx.GetMsgs()
 
-	if len(messages) == 1 && messages[0].Type() == "create_account" {
+	if len(messages) == 1 && messages[0].Type() == "create_account" && sigTx.Signatures != nil && len(sigTx.Signatures) > 0{
 		fmt.Println("Running NewAccountCreationDecorator...")
 		// we don't support multi-message transaction for create_account
 		pubkey := sigTx.Signatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
+		msgCreateAccount, ok := messages[0].(msgs.MsgCreateAccount)
+		if !ok {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "error msg conversion to MsgCreateAccount")
+		}
+		
+		if address.String() != msgCreateAccount.Requester.String() {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
+		}
 
 		fmt.Println(address.String() + " received")
 		// if the account doesnt exist we set it
@@ -71,6 +80,8 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 				Address:       address,
 			}
 			svd.ak.SetAccount(ctx, acc)
+		} else {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account already exist")
 		}
 	}
 	return next(ctx, tx, simulate)
@@ -130,6 +141,17 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 		messages := sigTx.GetMsgs()
 		if len(messages) == 1 && messages[0].Type() == "create_account" {
+			acc := &auth.BaseAccount{
+				Sequence:      0,
+				Coins:         sdk.Coins{},
+				AccountNumber: 0, // we do check account number 0 for create_account message
+				PubKey:        pubKey,
+				Address:       pubKey.Address().Bytes(),
+			}
+			signBytes := sigTx.GetSignBytes(ctx, acc)
+			if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
+				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
+			}
 			continue
 		}
 
