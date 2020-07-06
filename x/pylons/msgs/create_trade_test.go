@@ -31,7 +31,7 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 				{
 					"CookbookID":"UTestCreateTrade-CB-001",
 					"ItemInput":{
-						"AdditionalItemSendFee":{"MinValue":0,"MaxValue":10000},
+						"AdditionalItemSendFee":{"MaxValue":10000,"MinValue":0},
 						"Doubles":null,
 						"Longs":null,
 						"Strings":[{
