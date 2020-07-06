@@ -45,7 +45,7 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		}
 
 		basicItemTransferFee := config.Config.Fee.BasicItemTransferFee
-		coins := types.NewPylon(basicItemTransferFee + item.AdditionalTransferFee)
+		coins := types.NewPylon(basicItemTransferFee + item.AdditionalItemSendFee)
 
 		haveEnoughCoins := keeper.CoinKeeper.HasCoins(ctx, msg.Sender, coins)
 

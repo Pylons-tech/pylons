@@ -7,9 +7,10 @@ import (
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
-	Doubles DoubleInputParamList
-	Longs   LongInputParamList
-	Strings StringInputParamList
+	Doubles               DoubleInputParamList
+	Longs                 LongInputParamList
+	Strings               StringInputParamList
+	AdditionalItemSendFee FeeInputParam
 }
 
 // Matches checks if all the constraint match the given item
@@ -46,6 +47,10 @@ func (ii ItemInput) Matches(item Item) bool {
 		if str != param.Value {
 			return false
 		}
+	}
+
+	if !ii.AdditionalItemSendFee.Has(item.AdditionalItemSendFee) {
+		return false
 	}
 
 	return true

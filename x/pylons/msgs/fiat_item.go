@@ -15,18 +15,18 @@ type MsgFiatItem struct {
 	Longs                 []types.LongKeyValue
 	Strings               []types.StringKeyValue
 	Sender                sdk.AccAddress
-	AdditionalTransferFee int64
+	AdditionalItemSendFee int64
 }
 
 // NewMsgFiatItem a constructor for MsgFiatItem msg
-func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress, additionalTransferFee int64) MsgFiatItem {
+func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress, additionalItemSendFee int64) MsgFiatItem {
 	return MsgFiatItem{
 		CookbookID:            cookbookID,
 		Doubles:               doubles,
 		Longs:                 longs,
 		Strings:               strings,
 		Sender:                sender,
-		AdditionalTransferFee: additionalTransferFee,
+		AdditionalItemSendFee: additionalItemSendFee,
 	}
 }
 

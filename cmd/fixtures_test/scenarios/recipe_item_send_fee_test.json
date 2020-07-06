@@ -1,0 +1,154 @@
+[
+  {
+      "ID": "CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK",
+      "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+      },
+      "action": "create_cookbook",
+      "paramsRef": "./cookbooks/recipe_item_send_fee_test.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "cookbooks": ["recipe_item_send_fee_test"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_CHARACTER",  
+      "runAfter": {
+          "precondition": ["CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK"],
+          "blockWait": 0
+      },
+      "action": "fiat_item",
+      "paramsRef": "./items/recipe_item_send_fee_test/character.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account1",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "RecipeItemSendFeeTestCharacter" }
+                      }
+                  ]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_KNIFE_RECIPE",
+      "runAfter": {
+          "precondition": ["CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK"],
+          "blockWait": 0
+      },
+      "action": "create_recipe",
+      "paramsRef": "./recipes/recipe_item_send_fee_test/straight_attack_knife.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "recipes": ["Knife Generation Recipe"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "EXECUTE_KNIFE_RECIPE",
+      "runAfter": {
+          "precondition": ["CREATE_KNIFE_RECIPE"],
+          "blockWait": 0
+      },
+      "action": "execute_recipe",
+      "paramsRef": "./recipes/recipe_item_send_fee_test/executions/straight_attack_knife.json",
+      "output": {
+          "txResult": {
+              "status": "Success",
+              "message": "successfully executed the recipe"
+          },
+          "property": [
+              {
+                  "owner": "account1",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "Knife" },
+                          "additionalItemSendFee": "1000"
+                      }
+                  ]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE",
+      "runAfter": {
+          "precondition": ["CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK"],
+          "blockWait": 0
+      },
+      "action": "create_recipe",
+      "paramsRef": "./recipes/recipe_item_send_fee_test/recipe_item_send_fee_test.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "account2",
+                  "recipes": ["Recipe Item Send Fee Test Recipe"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "EXECUTE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE",        
+      "runAfter": {
+          "precondition": ["CREATE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE", "CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_CHARACTER"],
+          "blockWait": 0
+      },
+      "action": "execute_recipe",
+      "paramsRef": "./recipes/recipe_item_send_fee_test/executions/recipe_item_send_fee_test.json",
+      "output": {
+          "txResult": {
+              "status": "Success",
+              "message": "scheduled the recipe"
+          },
+          "property": []
+      }
+  },
+  {
+      "ID": "CHECK_EXECUTION_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE",
+      "runAfter": {
+          "precondition": ["EXECUTE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE"],
+          "blockWait": 2
+      },
+      "action": "check_execution",
+      "paramsRef": "./recipes/recipe_item_send_fee_test/check_executions/recipe_item_send_fee_test.json",
+      "output": {
+          "txResult": {
+              "status": "Success",
+              "message": "successfully completed the execution"
+          },
+          "property": [
+              {
+                  "owner": "account1",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "RecipeItemSendFeeTestCharacter" },
+                          "additionalItemSendFee": "1200"
+                      }
+                  ]
+              }
+          ]
+      }
+  }
+]
