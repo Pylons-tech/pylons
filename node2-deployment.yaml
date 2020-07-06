@@ -3,17 +3,19 @@ kind: Service
 metadata:
   name: node2
 spec:
+  type: NodePort
   ports:
-  - name: "26661"
-    port: 26661
+  - name: "26656"
+    port: 26656
     targetPort: 26656
-  - name: "26662"
-    port: 26662
+    nodePort: 30010
+  - name: "26657"
+    port: 26657
     targetPort: 26657
+    nodePort: 30011 # pylonscli query account cosmos1em8z0zk8ekjhx9asnlg20x35wcm52xjr9u26qw --node tcp://$(minikube ip):30011
+  clusterIP: 10.107.138.4
   selector:
     app: node2
-status:
-  loadBalancer: {}
 ---
 apiVersion: apps/v1
 kind: StatefulSet
