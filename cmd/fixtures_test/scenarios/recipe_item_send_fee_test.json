@@ -1,6 +1,6 @@
 [
   {
-      "ID": "CREATE_RECIPE_ITEM_SEND_FEE_TEST_COOKBOOK",
+      "ID": "CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK",
       "runAfter": {
           "precondition": [],
           "blockWait": 0
@@ -20,9 +20,9 @@
       }
   },
   {
-      "ID": "CREATE_RECIPE_ITEM_SEND_FEE_TEST_CHARACTER",  
+      "ID": "CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_CHARACTER",  
       "runAfter": {
-          "precondition": ["CREATE_RECIPE_ITEM_SEND_FEE_TEST_COOKBOOK"],
+          "precondition": ["CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK"],
           "blockWait": 0
       },
       "action": "fiat_item",
@@ -46,7 +46,7 @@
   {
       "ID": "CREATE_KNIFE_RECIPE",
       "runAfter": {
-          "precondition": ["CREATE_RECIPE_ITEM_SEND_FEE_TEST_COOKBOOK"],
+          "precondition": ["CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK"],
           "blockWait": 0
       },
       "action": "create_recipe",
@@ -90,9 +90,9 @@
       }
   },
   {
-      "ID": "CREATE_CHARACTER_RECIPE_ITEM_SEND_FEE_TEST_RECIPE",
+      "ID": "CREATE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE",
       "runAfter": {
-          "precondition": ["CREATE_RECIPE_ITEM_SEND_FEE_TEST_COOKBOOK"],
+          "precondition": ["CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_COOKBOOK"],
           "blockWait": 0
       },
       "action": "create_recipe",
@@ -110,9 +110,9 @@
       }
   },
   {
-      "ID": "EXECUTE_CHARACTER_RECIPE_ITEM_SEND_FEE_TEST_RECIPE",        
+      "ID": "EXECUTE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE",        
       "runAfter": {
-          "precondition": ["CREATE_CHARACTER_RECIPE_ITEM_SEND_FEE_TEST_RECIPE", "CREATE_RECIPE_ITEM_SEND_FEE_TEST_CHARACTER"],
+          "precondition": ["CREATE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE", "CREATE_ADDITIONAL_ITEM_SEND_FEE_TEST_CHARACTER"],
           "blockWait": 0
       },
       "action": "execute_recipe",
@@ -126,9 +126,9 @@
       }
   },
   {
-      "ID": "CHECK_EXECUTION_CHARACTER_RECIPE_ITEM_SEND_FEE_TEST_RECIPE",
+      "ID": "CHECK_EXECUTION_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE",
       "runAfter": {
-          "precondition": ["EXECUTE_CHARACTER_RECIPE_ITEM_SEND_FEE_TEST_RECIPE"],
+          "precondition": ["EXECUTE_CHARACTER_ADDITIONAL_ITEM_SEND_FEE_TEST_RECIPE"],
           "blockWait": 2
       },
       "action": "check_execution",

@@ -72,7 +72,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 		checkAdditionalItemSendFee bool
 		additionalItemSendFee      int64
 	}{
-		"item generation with catalyst item test": {
+		"additional item send fee check test": {
 			itemIDs:                    []string{},
 			dynamicItemSet:             true,
 			dynamicItemNames:           []string{"catalyst"},
@@ -88,7 +88,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 			checkAdditionalItemSendFee: true,
 			additionalItemSendFee:      1232,
 		},
-		"modify items test with one dynamic item": {
+		"additional item send fee check item upgrade test": {
 			itemIDs:                    []string{},
 			dynamicItemSet:             true,
 			dynamicItemNames:           []string{"sword", "knife"},
