@@ -1,111 +1,85 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: node0
+spec:
+  ports:
+  - name: "26656"
+    protocol: TCP
+    port: 26656
+    targetPort: 26656
+  - name: "26657"
+    protocol: TCP
+    port: 26657
+    targetPort: 26657
+  selector:
+    app: node0
+  # clusterIP: 10.0.171.239
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 192.168.10.2
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --file docker-compose.prod-like.yml
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: node0
   name: node0
 spec:
   selector:
     matchLabels:
-      io.kompose.service: node0
-  serviceName: "node"
+      app: node0
+  serviceName: node0
   replicas: 1
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert --file docker-compose.prod-like.yml
-        kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
       labels:
-        io.kompose.network/testnet: "true"
-        io.kompose.service: node0
+        app: node0
     spec:
       containers:
-      - image: node3
+      - image: pylons_node
         imagePullPolicy: Never
         name: node0
         resources: {}
         volumeMounts:
-          - mountPath: /root/.pylonsd/config
-            name: node0-all-keys
+          - mountPath: /root/.pylonsd/config/config.toml
+            subPath: config.toml
+            name: all-secret-keys
             readOnly: true
-          # - mountPath: /root/.pylonsd/config
-          #   name: genesis
-          #   readOnly: true
-          # - mountPath: /root/.pylonsd/config
-          #   name: node0-val-key
-          #   readOnly: true
-          # - mountPath: /root/.pylonsd/config
-          #   name: node0-config
-          #   readOnly: true
-          # - mountPath: /root/.pylonsd/config
-          #   name: node0-key
-          #   readOnly: true
-
           - mountPath: /root/.pylonsd/config/genesis.json
+            subPath: genesis.json
             name: genesis
             readOnly: true
-          # - mountPath: /root/.pylonsd/config/priv_validator_key.json
-          #   name: node0-val-key
-          #   readOnly: true
-          # - mountPath: /root/.pylonsd/config/config.toml
-          #   name: node0-config
-          #   readOnly: true
-          # - mountPath: /root/.pylonsd/config/node_key.json
-          #   name: node0-key
-          #   readOnly: true
+          - mountPath: /root/.pylonsd/config/node_key.json
+            subPath: node_key.json
+            name: all-secret-keys
+            readOnly: true
+          - mountPath: /root/.pylonsd/config/priv_validator_key.json
+            subPath: priv_validator_key.json
+            name: all-secret-keys
+            readOnly: true
       restartPolicy: Always
       serviceAccountName: ""
       volumes:
-        # - name: node0-val-key
-        #   hostPath:
-        #     path: /Users/pro/Documents/Pylons-tech/pylons/production_config/node0/pylonsd/config/priv_validator_key.json
-        #     type: File
-        # - name: node0-config
-        #   hostPath:
-        #     path: /Users/pro/Documents/Pylons-tech/pylons/production_config/node0/pylonsd/config/config.toml
-        #     type: File
-        # - name: node0-key
-        #   hostPath:
-        #     path: /Users/pro/Documents/Pylons-tech/pylons/production_config/node0/pylonsd/config/node_key.json
-        #     type: File
-        - name: genesis
-          hostPath:
-            path: /Users/pro/Documents/Pylons-tech/pylons/production_config/genesis.json
-            type: File
-        # - name: node0-val-key
-        #   secret:
-        #     secretName: node0-val-key
-        # - name: node0-config
-        #   secret:
-        #     secretName: node0-config
-        # - name: node0-key
-        #   secret:
-        #     secretName: node0-key
-        # - name: genesis
-        #   configMap:
-        #     name: genesis
-        - name: node0-all-keys
+        - name: all-secret-keys
           secret:
             secretName: node0-all-keys
-        # - name: node0-config-volume
-        #   projected:
-        #     sources:
-        #     - secret:
-        #         name: node0-val-key
-        #     - secret:
-        #         name: node0-config
-        #     - secret:
-        #         name: node0-key
-            # - secret:
-            #     name: genesis
+            items:
+              - key: config.toml
+                path: config.toml
+              - key: node_key.json
+                path: node_key.json
+              - key: priv_validator_key.json
+                path: priv_validator_key.json
+        - name: genesis
+          configMap:
+            name: genesis
+            items:
+              - key: genesis.json
+                path: genesis.json
   volumeClaimTemplates:
   - metadata:
-      name: node0-config-volume
+      name: node-config-volume
     spec:
       accessModes: [ "ReadWriteOnce" ]
       resources:

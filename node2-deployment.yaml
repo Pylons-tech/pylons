@@ -1,38 +1,83 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert --file docker-compose.prod-like.yml
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
-  labels:
-    io.kompose.service: node2
   name: node2
 spec:
-  replicas: 1
+  ports:
+  - name: "26661"
+    port: 26661
+    targetPort: 26656
+  - name: "26662"
+    port: 26662
+    targetPort: 26657
+  selector:
+    app: node2
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: node2
+spec:
   selector:
     matchLabels:
-      io.kompose.service: node2
-  strategy: {}
+      app: node2
+  serviceName: node2
+  replicas: 1
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert --file docker-compose.prod-like.yml
-        kompose.version: 1.21.0 (992df58d8)
-      creationTimestamp: null
       labels:
-        io.kompose.network/testnet: "true"
-        io.kompose.service: node2
+        app: node2
     spec:
       containers:
-      - image: node2
-        imagePullPolicy: ""
+      - image: pylons_node
+        imagePullPolicy: Never
         name: node2
-        ports:
-        - containerPort: 26656
-        - containerPort: 26657
         resources: {}
+        volumeMounts:
+          - mountPath: /root/.pylonsd/config/config.toml
+            subPath: config.toml
+            name: all-secret-keys
+            readOnly: true
+          - mountPath: /root/.pylonsd/config/genesis.json
+            subPath: genesis.json
+            name: genesis
+            readOnly: true
+          - mountPath: /root/.pylonsd/config/node_key.json
+            subPath: node_key.json
+            name: all-secret-keys
+            readOnly: true
+          - mountPath: /root/.pylonsd/config/priv_validator_key.json
+            subPath: priv_validator_key.json
+            name: all-secret-keys
+            readOnly: true
       restartPolicy: Always
       serviceAccountName: ""
-      volumes: null
-status: {}
+      volumes:
+        - name: all-secret-keys
+          secret:
+            secretName: node2-all-keys
+            items:
+              - key: config.toml
+                path: config.toml
+              - key: node_key.json
+                path: node_key.json
+              - key: priv_validator_key.json
+                path: priv_validator_key.json
+        - name: genesis
+          configMap:
+            name: genesis
+            items:
+              - key: genesis.json
+                path: genesis.json
+  volumeClaimTemplates:
+  - metadata:
+      name: node-config-volume
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 100Gi
+status:
+  replicas: 1

@@ -47,12 +47,12 @@ COPY --from=build /root/.pylonscli /root/.pylonscli
 RUN pylonsd init masternode --chain-id pylons
 CMD  /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
-FROM pylonsd as genesis
-# this generate the genesis configurations and secrets
-COPY production_config ./production_config
-COPY collect_checkin_files.sh .
-RUN chmod +x collect_checkin_files.sh
-RUN ./collect_checkin_files.sh
+# FROM pylonsd as genesis
+# # this generate the genesis configurations and secrets
+# COPY production_config ./production_config
+# COPY collect_checkin_files.sh .
+# RUN chmod +x collect_checkin_files.sh
+# RUN ./collect_checkin_files.sh
 
 #Test server
 FROM pylonsd as test_server
@@ -61,8 +61,10 @@ FROM pylonsd as test_server
 # COPY init_accounts.sh .
 # RUN chmod +x init_accounts.sh
 # RUN make init_accounts
+COPY tree_root_dir.sh .
+RUN chmod +x tree_root_dir.sh
 RUN sed -i 's/timeout_commit = "5s"/timeout_commit = "2s"/g' ~/.pylonsd/config/config.toml
-CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --log_level main:info
+CMD ./tree_root_dir.sh && /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --log_level main:info
 
 #Run the tests
 FROM build as integration_test
