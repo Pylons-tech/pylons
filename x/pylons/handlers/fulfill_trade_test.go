@@ -152,7 +152,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			outputCoinList:      types.NewPylon(10),
 			outputItemList:      types.ItemList{*item3},
 			fulfillInputItemIDs: []string{item4.ID},
-			desiredError:        "",
+			desiredError:        "total pylons amount is not enough to pay fees",
 			showError:           true,
 		},
 		"correct item trading fulfill test": {
