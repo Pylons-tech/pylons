@@ -1,13 +1,22 @@
 package handlers
 
 import (
+	"testing"
 	"encoding/json"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tyler-smith/go-bip39"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
+	"github.com/tendermint/tendermint/crypto/secp256k1"
+	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+)
+
+const (
+	mnemonicEntropySize = 256
 )
 
 // MockCookbook mock cookbook
@@ -191,4 +200,28 @@ func MockTrade(
 	createTrdResponse := CreateTradeResponse{}
 	err := json.Unmarshal(result.Data, &createTrdResponse)
 	return createTrdResponse, err
+}
+
+// AnteHandle is a handler for NewAccountCreationDecorator
+func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, error) {
+	return ctx, nil
+}
+
+func genAccount(t *testing.T) (secp256k1.PrivKeySecp256k1, sdk.AccAddress) {
+	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
+	require.True(t, err == nil)
+	mnemonic, err := bip39.NewMnemonic(entropySeed)
+	require.True(t, err == nil)
+
+	// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
+	seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")
+	require.True(t, err == nil)
+
+	masterPriv, ch := hd.ComputeMastersFromSeed(seed)
+	derivedPriv, err := hd.DerivePrivateKeyForPath(masterPriv, ch, "44'/118'/0'/0/0")
+	require.True(t, err == nil)
+
+	priv := secp256k1.PrivKeySecp256k1(derivedPriv)
+	cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes())
+	return priv, cosmosAddr
 }

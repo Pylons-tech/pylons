@@ -8,41 +8,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authTypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/require"
-	"github.com/tyler-smith/go-bip39"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
-
-const (
-	mnemonicEntropySize = 256
-)
-
-// AnteHandle is a handler for NewAccountCreationDecorator
-func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, error) {
-	return ctx, nil
-}
-
-func genAccount(t *testing.T) (secp256k1.PrivKeySecp256k1, sdk.AccAddress) {
-	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
-	require.True(t, err == nil)
-	mnemonic, err := bip39.NewMnemonic(entropySeed)
-	require.True(t, err == nil)
-
-	// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
-	seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")
-	require.True(t, err == nil)
-
-	masterPriv, ch := hd.ComputeMastersFromSeed(seed)
-	derivedPriv, err := hd.DerivePrivateKeyForPath(masterPriv, ch, "44'/118'/0'/0/0")
-	require.True(t, err == nil)
-
-	priv := secp256k1.PrivKeySecp256k1(derivedPriv)
-	cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes())
-	return priv, cosmosAddr
-}
 
 // TestNewAccountCreationDecoratorAnteHandle is a test for NewAccountCreationDecorator handler
 func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
@@ -132,46 +101,42 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 		putSignature bool
 		accountNumber uint64
 		accountSequence uint64
+		registerAccount bool
 		additionMsgType       string
 		desiredError  string
 	}{
-		// "pubkey on account is not set": {
-
-		// },
-		// "unauthorized: invalid number of signer": {
-		// 	putSignature: false,
-		// 	accountNumber: 0,
-		// 	accountSequence: 0,
-		// 	desiredError: "unauthorized: invalid number of signer",
-		// },
 		"create_account signature verification no signature msg test": {
 			putSignature: false,
+			accountSequence: 0,
+			desiredError: "unauthorized: invalid number of signer;  expected: 1, got 0", // no signature error msg
+		},
+		"unknown address signature verification test": {
+			putSignature: true,
 			accountNumber: 0,
 			accountSequence: 0,
-			desiredError: "signature verification failed; verify correct account sequence and chain-id",
+			desiredError: "unknown address:",
 		},
-		// "create_account account_number=0, sequence=0 signature verification test": {
-		// 	putSignature: true,
-		// 	accountNumber: 0,
-		// 	accountSequence: 0,
-		// 	desiredError: "signature verification failed; verify correct account sequence and chain-id",
-		// },
-		// "create_account account_number=1, sequence=0 signature verification test": {
-		// 	putSignature: true,
-		// 	accountNumber: 1,
-		// 	accountSequence: 0,
-		// 	desiredError: "signature verification failed; verify correct account sequence and chain-id",
-		// },
-		// "create_account account_number=0, sequence=1 signature verification test": {
-		// 	putSignature: true,
-		// 	accountNumber: 0,
-		// 	accountSequence: 1,
-		// 	desiredError: "signature verification failed; verify correct account sequence and chain-id",
-		// },
-		// "create_cookbook signature verification test": {
-		// 	putSignature: true,
-		// 	additionMsgType: "create_cookbook"
-		// },
+		"create_account account_number=0, sequence=0 signature verification test": {
+			putSignature: true,
+			registerAccount: true,
+			accountNumber: 0,
+			accountSequence: 0,
+			additionMsgType: "create_cookbook",
+		},
+		"create_account account_number=1, sequence=0 signature verification test": {
+			putSignature: true,
+			registerAccount: true,
+			accountNumber: 1,
+			accountSequence: 0,
+			desiredError: "create_account signature verification failed; verify correct account sequence and chain-id",
+		},
+		"create_account account_number=0, sequence=1 signature verification test": {
+			putSignature: true,
+			registerAccount: true,
+			accountNumber: 0,
+			accountSequence: 1,
+			desiredError: "create_account signature verification failed; verify correct account sequence and chain-id",
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -193,10 +158,20 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				tx.Signatures = sigs
 			}
 
+			if tc.registerAccount {
+				acc := &auth.BaseAccount{
+					Sequence:      0,
+					Coins:         sdk.Coins{},
+					AccountNumber: tci.Ak.GetNextAccountNumber(tci.Ctx),
+					PubKey:        priv.PubKey(),
+					Address:       cosmosAddr,
+				}
+				tci.Ak.SetAccount(tci.Ctx, acc)
+			}
+
 			_, err := csvd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
 			if len(tc.desiredError) > 0 {
 				require.True(t, err != nil)
-				t.Log("err.Error(), tc.desiredError", err.Error(), tc.desiredError)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)

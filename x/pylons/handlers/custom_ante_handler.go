@@ -150,7 +150,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			}
 			signBytes := sigTx.GetSignBytes(ctx, acc)
 			if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
+				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
 			}
 			continue
 		}
