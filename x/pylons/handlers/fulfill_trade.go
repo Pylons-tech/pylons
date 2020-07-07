@@ -201,10 +201,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	// err = ProcessCoinIncomeFee(ctx, keeper, msg.Sender, trade.CoinOutputs)
-	// if err != nil {
-	// 	return nil, errInternal(err)
-	// }
 
 	// trade acceptor to trade creator the coin input
 	// Send input coin from fullfiller to sender (trade creator)
@@ -212,10 +208,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	// err = ProcessCoinIncomeFee(ctx, keeper, trade.Sender, inputCoins)
-	// if err != nil {
-	// 	return nil, errInternal(err)
-	// }
 
 	trade.FulFiller = msg.Sender
 	trade.Completed = true
@@ -228,20 +220,4 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		Message: "successfully fulfilled the trade",
 		Status:  "Success",
 	})
-}
-
-// ProcessCoinIncomeFee process trading accepter fee
-func ProcessCoinIncomeFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddress, coins sdk.Coins) error {
-	// send pylon amount to PylonsLLC, validator
-	pylonAmount := coins.AmountOf(types.Pylon).Int64()
-	if pylonAmount > 0 {
-		tradePercent := config.Config.Fee.PylonsTradePercent
-		pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-		if err != nil {
-			return err
-		}
-		pylonsLLCAmount := Max(1, pylonAmount*tradePercent/100)
-		return keeper.CoinKeeper.SendCoins(ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
-	}
-	return nil
 }
