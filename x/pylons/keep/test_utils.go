@@ -154,7 +154,7 @@ func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins, s2coi
 	}
 
 	if s2coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s1coins)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins)
 		require.True(t, err == nil)
 	}
 
@@ -164,7 +164,7 @@ func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins, s2coi
 	}
 
 	if s4coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins)
 		require.True(t, err == nil)
 	}
 	return sender1, sender2, sender3, sender4
