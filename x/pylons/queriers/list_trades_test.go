@@ -15,7 +15,7 @@ import (
 
 func TestListTrades(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
 	require.True(t, err == nil)

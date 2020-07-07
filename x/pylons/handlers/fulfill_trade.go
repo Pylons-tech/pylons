@@ -44,13 +44,29 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return nil, errInternal(err)
 	}
 
+	// get pylons LLC address
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	// fmt.Print("\n\n----------          Amount of accounts at first       ----------\n")
+	// fmt.Print("\n\nsender amount:\n", keeper.CoinKeeper.GetCoins(ctx, trade.Sender).AmountOf(types.Pylon).Int64(), "\n\n")
+	// fmt.Print("\n\nfulfiller amount:\n", keeper.CoinKeeper.GetCoins(ctx, msg.Sender).AmountOf(types.Pylon).Int64(), "\n\n")
+	// fmt.Print("\n\nPylons LLC amount:\n", keeper.CoinKeeper.GetCoins(ctx, pylonsLLCAddress).AmountOf(types.Pylon).Int64(), "\n\n")
+
 	// check if the sender has all condition met
+
+	var totalAdditionalItemSendFee int64
+	totalAdditionalItemSendFee = 0
 
 	matchedItems := types.ItemList{}
 	for _, inpItem := range trade.ItemInputs {
+		// fmt.Print("\n\n\n\n===========        full fill trade matched items       ===========\n\n\n\n", trade.String(), "\n\n\n", msg, "\n\n\n")
 		matched := false
 		index := 0
 		for i, item := range items {
+			// fmt.Print("item:\n", item, "\n\n\ninpItem:\n", inpItem, "\n\n\n")
 			if inpItem.Matches(item) {
 				matched = true
 				index = i
@@ -62,6 +78,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			if err = matchedItem.NewTradeError(); err != nil {
 				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
+			totalAdditionalItemSendFee += matchedItem.AdditionalItemSendFee
 			matchedItems = append(matchedItems, matchedItem)
 		} else {
 			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", inpItem))
@@ -97,21 +114,86 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
+		totalAdditionalItemSendFee += storedItem.AdditionalItemSendFee
+
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
 
+	inputPylonsAmount := inputCoins.AmountOf("pylon")
+	outputPylonsAmount := trade.CoinOutputs.AmountOf("pylon")
+	totalPylonsAmount := inputPylonsAmount.Int64() + outputPylonsAmount.Int64()
+
+	// Select bigger one between total additional fee and total pylons amount
+	var totalFee int64
+	tradePercent := config.Config.Fee.PylonsTradePercent
+	totalPylonsAmountFee := totalPylonsAmount * tradePercent / 100
+
+	totalFee = Max(totalAdditionalItemSendFee, totalPylonsAmountFee)
+	// if total fee exceeds the total pylons amount, it fails
+	if totalFee > totalPylonsAmount {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "total pylons amount is not enough to pay fees")
+	}
+
+	// divide total fee between the sender and fullfiller
+
+	senderFee := totalFee * inputPylonsAmount.Int64() / totalPylonsAmount
+
+	if senderFee != 0 {
+		err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, pylonsLLCAddress, types.NewPylon(senderFee))
+		if err != nil {
+			return nil, errInternal(err)
+		}
+	}
+
+	fulfillerFee := totalFee - senderFee
+
+	if fulfillerFee != 0 {
+		err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
+		if err != nil {
+			return nil, errInternal(err)
+		}
+	}
+
+	totalFeeForCBOwners := totalFee * config.Config.Fee.CbSenderItemTransferPercent / 100
+
 	for _, item := range refreshedOutputItems {
+
+		feeForCB := totalFeeForCBOwners * item.AdditionalItemSendFee / totalAdditionalItemSendFee
+
+		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
+		if err != nil {
+			return nil, errInternal(errors.New("Invalid cookbook id"))
+		}
+
+		err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
 		item.Sender = msg.Sender
 		item.OwnerTradeID = ""
-		err := keeper.SetItem(ctx, item)
+		err = keeper.SetItem(ctx, item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 	}
 
 	for _, item := range matchedItems {
+
+		feeForCB := totalFeeForCBOwners * item.AdditionalItemSendFee / totalAdditionalItemSendFee
+
+		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
+		if err != nil {
+			return nil, errInternal(errors.New("Invalid cookbook id"))
+		}
+
+		err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
 		item.Sender = trade.Sender
-		err := keeper.SetItem(ctx, item)
+		err = keeper.SetItem(ctx, item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -120,24 +202,26 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	// ----------------- handle coin interaction ----------------------
 
 	// trade creator to trade acceptor the coin output
+	// Send output coin from sender to fullfiller
 	err = keeper.CoinKeeper.SendCoins(ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = ProcessCoinIncomeFee(ctx, keeper, msg.Sender, trade.CoinOutputs)
-	if err != nil {
-		return nil, errInternal(err)
-	}
+	// err = ProcessCoinIncomeFee(ctx, keeper, msg.Sender, trade.CoinOutputs)
+	// if err != nil {
+	// 	return nil, errInternal(err)
+	// }
 
 	// trade acceptor to trade creator the coin input
+	// Send input coin from fullfiller to sender (trade creator)
 	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, trade.Sender, inputCoins)
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = ProcessCoinIncomeFee(ctx, keeper, trade.Sender, inputCoins)
-	if err != nil {
-		return nil, errInternal(err)
-	}
+	// err = ProcessCoinIncomeFee(ctx, keeper, trade.Sender, inputCoins)
+	// if err != nil {
+	// 	return nil, errInternal(err)
+	// }
 
 	trade.FulFiller = msg.Sender
 	trade.Completed = true
