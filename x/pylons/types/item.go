@@ -150,7 +150,6 @@ func (it Item) MatchItemInput(other ItemInput) bool {
 
 // NewTradeError check if an item can be sent to someone else
 func (it Item) NewTradeError() error {
-	fmt.Print("\n\n---- New Trade Error ----\n\ntradable:\n", it.Tradable, "\n\nowner recipe:\n", it.OwnerRecipeID, "\n\nowner trade:\n", it.OwnerTradeID, "\n\n")
 	if !it.Tradable {
 		return errors.New("Item Tradable flag is not set")
 	}
