@@ -52,8 +52,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// check if the sender has all condition met
 
-	var totalAdditionalItemSendFee int64
-	totalAdditionalItemSendFee = 0
+	totalAdditionalItemSendFee := int64(0)
 
 	matchedItems := types.ItemList{}
 	for _, inpItem := range trade.ItemInputs {
@@ -113,16 +112,15 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
 
-	inputPylonsAmount := inputCoins.AmountOf("pylon")
-	outputPylonsAmount := trade.CoinOutputs.AmountOf("pylon")
+	inputPylonsAmount := inputCoins.AmountOf(types.Pylon)
+	outputPylonsAmount := trade.CoinOutputs.AmountOf(types.Pylon)
 	totalPylonsAmount := inputPylonsAmount.Int64() + outputPylonsAmount.Int64()
 
 	// Select bigger one between total additional fee and total pylons amount
-	var totalFee int64
 	tradePercent := config.Config.Fee.PylonsTradePercent
 	totalPylonsAmountFee := totalPylonsAmount * tradePercent / 100
 
-	totalFee = Max(totalAdditionalItemSendFee, totalPylonsAmountFee)
+	totalFee := Max(totalAdditionalItemSendFee, totalPylonsAmountFee)
 	// if total fee exceeds the total pylons amount, it fails
 	if totalFee > totalPylonsAmount {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "total pylons amount is not enough to pay fees")
@@ -159,9 +157,11 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
-		err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
-		if err != nil {
-			return nil, errInternal(err)
+		if feeForCB > 0 {
+			err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+			if err != nil {
+				return nil, errInternal(err)
+			}
 		}
 
 		item.Sender = msg.Sender
@@ -181,9 +181,11 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
-		err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
-		if err != nil {
-			return nil, errInternal(err)
+		if feeForCB > 0 {
+			err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+			if err != nil {
+				return nil, errInternal(err)
+			}
 		}
 
 		item.Sender = trade.Sender
