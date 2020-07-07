@@ -92,58 +92,58 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		sender4AmountDiffer   int64
 		pylonsLLCAmountDiffer int64
 	}{
-		// "trade pylon distribution test": {
-		// 	sender:         sender,
-		// 	fulfiller:      sender2,
-		// 	inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
-		// 	outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-		// 	desiredError:   "",
-		// 	showError:      false,
-		// },
-		// "trade unordered coin input test": {
-		// 	sender:    sender,
-		// 	fulfiller: sender2,
-		// 	inputCoinList: types.CoinInputList{
-		// 		types.CoinInput{
-		// 			Coin:  types.Pylon,
-		// 			Count: 100,
-		// 		},
-		// 		types.CoinInput{
-		// 			Coin:  "aaaa",
-		// 			Count: 100,
-		// 		},
-		// 		types.CoinInput{
-		// 			Coin:  "zzzz",
-		// 			Count: 100,
-		// 		},
-		// 		types.CoinInput{
-		// 			Coin:  "cccc",
-		// 			Count: 100,
-		// 		},
-		// 	},
-		// 	outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-		// 	desiredError:   "",
-		// 	showError:      false,
-		// },
-		// "empty fulfill item on item trading fulfill test": {
-		// 	sender:              sender,
-		// 	fulfiller:           sender2,
-		// 	inputCoinList:       types.GenCoinInputList(types.Pylon, 100),
-		// 	inputItemList:       types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-		// 	outputCoinList:      sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-		// 	fulfillInputItemIDs: []string{},
-		// 	desiredError:        "the item IDs count doesn't match the trade input",
-		// 	showError:           true,
-		// },
-		// "input item with wrong cookbook id fulfill trade test": {
-		// 	sender:         sender,
-		// 	fulfiller:      sender2,
-		// 	inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
-		// 	inputItemList:  types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-		// 	outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-		// 	desiredError:   "the sender doesn't have the trade item attributes",
-		// 	showError:      true,
-		// },
+		"trade pylon distribution test": {
+			sender:         sender,
+			fulfiller:      sender2,
+			inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
+			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			desiredError:   "",
+			showError:      false,
+		},
+		"trade unordered coin input test": {
+			sender:    sender,
+			fulfiller: sender2,
+			inputCoinList: types.CoinInputList{
+				types.CoinInput{
+					Coin:  types.Pylon,
+					Count: 100,
+				},
+				types.CoinInput{
+					Coin:  "aaaa",
+					Count: 100,
+				},
+				types.CoinInput{
+					Coin:  "zzzz",
+					Count: 100,
+				},
+				types.CoinInput{
+					Coin:  "cccc",
+					Count: 100,
+				},
+			},
+			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			desiredError:   "",
+			showError:      false,
+		},
+		"empty fulfill item on item trading fulfill test": {
+			sender:              sender,
+			fulfiller:           sender2,
+			inputCoinList:       types.GenCoinInputList(types.Pylon, 100),
+			inputItemList:       types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:      sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			fulfillInputItemIDs: []string{},
+			desiredError:        "the item IDs count doesn't match the trade input",
+			showError:           true,
+		},
+		"input item with wrong cookbook id fulfill trade test": {
+			sender:         sender,
+			fulfiller:      sender2,
+			inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
+			inputItemList:  types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			desiredError:   "the sender doesn't have the trade item attributes",
+			showError:      true,
+		},
 		"item trade with small pylons amout": {
 			sender:              sender2,
 			fulfiller:           sender4,
