@@ -1,13 +1,13 @@
 #!/bin/sh
 
-# export PROD_DIR=./production_config_temp
-export PROD_DIR=./production_config
+export PROD_DIR=./production_config_temp
+# export PROD_DIR=./production_config
 export NODE0_CONFIG_PATH=$PROD_DIR/node0/pylonsd/config
 export NODE1_CONFIG_PATH=$PROD_DIR/node1/pylonsd/config
 export NODE2_CONFIG_PATH=$PROD_DIR/node2/pylonsd/config
 
 # # build configuration into production_config_temp directory
-# docker-compose --file docker-compose.genesis.yml up --build 
+docker-compose --file docker-compose.genesis.yml up --build --remove-orphans
 
 # minikube env setup
 eval $(minikube docker-env)
@@ -16,12 +16,12 @@ eval $(minikube docker-env)
 
 # build docker image
 echo '-------building the image-----'
-docker build -t pylons_node . --target test_server --remove-orphans
+docker build -t pylons_node . --target test_server
 
 # generate genesis config map
 echo '-------genesis config map-----'
 kubectl delete configmap genesis
-kubectl create configmap genesis --from-file=./production_config/genesis.json
+kubectl create configmap genesis --from-file=$PROD_DIR/genesis.json
 
 # secrets generation
 echo '-------node0 secrets-----'
