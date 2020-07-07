@@ -50,11 +50,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return nil, errInternal(err)
 	}
 
-	// fmt.Print("\n\n----------          Amount of accounts at first       ----------\n")
-	// fmt.Print("\n\nsender amount:\n", keeper.CoinKeeper.GetCoins(ctx, trade.Sender).AmountOf(types.Pylon).Int64(), "\n\n")
-	// fmt.Print("\n\nfulfiller amount:\n", keeper.CoinKeeper.GetCoins(ctx, msg.Sender).AmountOf(types.Pylon).Int64(), "\n\n")
-	// fmt.Print("\n\nPylons LLC amount:\n", keeper.CoinKeeper.GetCoins(ctx, pylonsLLCAddress).AmountOf(types.Pylon).Int64(), "\n\n")
-
 	// check if the sender has all condition met
 
 	var totalAdditionalItemSendFee int64
@@ -62,11 +57,10 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	matchedItems := types.ItemList{}
 	for _, inpItem := range trade.ItemInputs {
-		// fmt.Print("\n\n\n\n===========        full fill trade matched items       ===========\n\n\n\n", trade.String(), "\n\n\n", msg, "\n\n\n")
 		matched := false
 		index := 0
 		for i, item := range items {
-			// fmt.Print("item:\n", item, "\n\n\ninpItem:\n", inpItem, "\n\n\n")
+
 			if inpItem.Matches(item) {
 				matched = true
 				index = i
