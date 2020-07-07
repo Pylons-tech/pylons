@@ -49,11 +49,7 @@ func (ii ItemInput) Matches(item Item) bool {
 		}
 	}
 
-	if !ii.AdditionalItemSendFee.Has(item.AdditionalItemSendFee) {
-		return false
-	}
-
-	return true
+	return ii.AdditionalItemSendFee.Has(item.AdditionalItemSendFee)
 }
 
 // ItemInputList is a list of ItemInputs for convinience

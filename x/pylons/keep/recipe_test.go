@@ -23,7 +23,7 @@ func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) typ
 
 func TestKeeperGetRecipe(t *testing.T) {
 	tci := SetupTestCoinInput()
-	sender, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+	sender, _, _, _ := SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cases := map[string]struct {
 		cookbookName string
