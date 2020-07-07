@@ -52,6 +52,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	err = tci.PlnK.SetItem(tci.Ctx, *item3)
 	require.True(t, err == nil)
 
+	item5 := keep.GenItem(cbData.CookbookID, sender2, "Pychu")
+	item5.AdditionalItemSendFee = 50
+	err = tci.PlnK.SetItem(tci.Ctx, *item5)
+	require.True(t, err == nil)
+
 	// Create cookbook for sender3
 	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender3)
 	cookbookResult1, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg1)
@@ -62,6 +67,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	item4 := keep.GenItem(cbData1.CookbookID, sender4, "Tachu")
 	item4.AdditionalItemSendFee = 70
 	err = tci.PlnK.SetItem(tci.Ctx, *item4)
+	require.True(t, err == nil)
+
+	item6 := keep.GenItem(cbData1.CookbookID, sender4, "Bhachu")
+	item6.AdditionalItemSendFee = 70
+	err = tci.PlnK.SetItem(tci.Ctx, *item6)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -134,30 +144,41 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		// 	desiredError:   "the sender doesn't have the trade item attributes",
 		// 	showError:      true,
 		// },
-		// "correct item trading fulfill test": {
-		// 	sender:                sender,
-		// 	fulfiller:             sender2,
-		// 	inputCoinList:         types.GenCoinInputList(types.Pylon, 800),
-		// 	inputItemList:         types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-		// 	outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-		// 	fulfillInputItemIDs:   []string{item2.ID},
-		// 	desiredError:          "",
-		// 	showError:             false,
-		// 	checkAmountDiffer:     true,
-		// 	senderAmountDiffer:    780,
-		// 	sender2AmountDiffer:   -800,
-		// 	sender3AmountDiffer:   0,
-		// 	sender4AmountDiffer:   0,
-		// 	pylonsLLCAmountDiffer: 20,
-		// },
+		"item trade with small pylons amout": {
+			sender:              sender2,
+			fulfiller:           sender4,
+			inputCoinList:       types.GenCoinInputList(types.Pylon, 20),
+			inputItemList:       types.GenTradeItemInputList(cbData1.CookbookID, []string{"Tachu"}),
+			outputCoinList:      types.NewPylon(10),
+			outputItemList:      types.ItemList{*item3},
+			fulfillInputItemIDs: []string{item4.ID},
+			desiredError:        "",
+			showError:           true,
+		},
+		"correct item trading fulfill test": {
+			sender:                sender,
+			fulfiller:             sender2,
+			inputCoinList:         types.GenCoinInputList(types.Pylon, 800),
+			inputItemList:         types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:        sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			fulfillInputItemIDs:   []string{item2.ID},
+			desiredError:          "",
+			showError:             false,
+			checkAmountDiffer:     true,
+			senderAmountDiffer:    780,
+			sender2AmountDiffer:   -800,
+			sender3AmountDiffer:   0,
+			sender4AmountDiffer:   0,
+			pylonsLLCAmountDiffer: 20,
+		},
 		"correct item trading fulfill test with 2 items and 2 amounts": {
 			sender:                sender2,
 			fulfiller:             sender4,
 			inputCoinList:         types.GenCoinInputList(types.Pylon, 50),
-			inputItemList:         types.GenTradeItemInputList(cbData1.CookbookID, []string{"Tachu"}),
+			inputItemList:         types.GenTradeItemInputList(cbData1.CookbookID, []string{"Bhachu"}),
 			outputCoinList:        types.NewPylon(200),
-			outputItemList:        types.ItemList{*item3},
-			fulfillInputItemIDs:   []string{item4.ID},
+			outputItemList:        types.ItemList{*item5},
+			fulfillInputItemIDs:   []string{item6.ID},
 			desiredError:          "",
 			showError:             false,
 			checkAmountDiffer:     true,
