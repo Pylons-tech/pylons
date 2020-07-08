@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -46,20 +47,18 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 
 		coins := types.NewPylon(item.GetTransferFee())
 
-		haveEnoughCoins := keeper.CoinKeeper.HasCoins(ctx, msg.Sender, coins)
-
-		if !haveEnoughCoins {
-			return nil, errInternal(errors.New("Sender does not have enough coins for fees"))
+		if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, coins) {
+			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
 		}
 
 		item.Sender = msg.Receiver
 		if err := keeper.SetItem(ctx, item); err != nil {
-			return nil, errInternal(errors.New("Error updating item inside keeper"))
+			return nil, errInternal(fmt.Errorf("Error updating item inside keeper; %s", err.Error()))
 		}
 
 		err = ProcessSendItemsFee(ctx, keeper, msg.Sender, cookbook.Sender, coins)
 		if err != nil {
-			return nil, errInternal(errors.New("Error sending fees to send items"))
+			return nil, errInternal(fmt.Errorf("Error sending fees to send items; %s", err.Error()))
 		}
 	}
 
@@ -74,27 +73,25 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 	// send pylon amount to PylonsLLC, validator
 	pylonAmount := coins.AmountOf(types.Pylon).Int64()
 
-	pylonsItemTransferPercent := config.Config.Fee.PylonsItemTransferPercent
-	cbSenderItemTransferPercent := config.Config.Fee.CbSenderItemTransferPercent
-
 	if pylonAmount > 0 {
 		pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 		if err != nil {
 			return err
 		}
 
-		pylonsCoins := types.NewPylon(pylonAmount * pylonsItemTransferPercent / 100)
-
-		cbSenderCoins := types.NewPylon(pylonAmount * cbSenderItemTransferPercent / 100)
-
-		err = keeper.CoinKeeper.SendCoins(ctx, Sender, pylonsLLCAddress, pylonsCoins)
+		err = keeper.CoinKeeper.SendCoins(ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
 		if err != nil {
 			return err
 		}
 
-		err = keeper.CoinKeeper.SendCoins(ctx, Sender, CookbookOwner, cbSenderCoins)
-		if err != nil {
-			return err
+		cbOwnerProfitPercent := config.Config.Fee.ItemTransferCookbookOwnerProfitPercent
+		cbOwnerProfit := pylonAmount * cbOwnerProfitPercent / 100
+		if cbOwnerProfit > 0 {
+			cbSenderCoins := types.NewPylon(cbOwnerProfit)
+			err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

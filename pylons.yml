@@ -7,7 +7,6 @@ fees:
   update_item_string_field_fee: 10 # Item string field update fee
   min_item_transfer_fee: 1 # Basic item transfer fee
   max_item_transfer_fee: 100000
-  pylons_item_transfer_percent: 10 # Pylons item transfer percent
-  cb_sender_item_transfer_percent: 90 # Cookbook sender item transfer percent
+  item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced

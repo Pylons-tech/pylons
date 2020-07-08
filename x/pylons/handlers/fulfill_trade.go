@@ -149,7 +149,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 	}
 
-	totalFeeForCBOwners := totalFee * config.Config.Fee.CbSenderItemTransferPercent / 100
+	totalFeeForCBOwners := totalFee * config.Config.Fee.ItemTransferCookbookOwnerProfitPercent / 100
 
 	for _, item := range refreshedOutputItems {
 
