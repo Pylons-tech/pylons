@@ -29,6 +29,11 @@ func (mit *ModifyItemType) SetTransferFee(transferFee int64) {
 	mit.TransferFee = transferFee
 }
 
+// GetTransferFee set item's TransferFee
+func (mit ModifyItemType) GetTransferFee() int64 {
+	return mit.TransferFee
+}
+
 // SerializeModifyItemType describes the serialized format of ModifyItemType
 type SerializeModifyItemType struct {
 	ItemInputRef *int `json:",omitempty"`
@@ -50,6 +55,11 @@ type ItemOutput struct {
 // SetTransferFee set generate item's transfer fee
 func (io *ItemOutput) SetTransferFee(transferFee int64) {
 	io.TransferFee = transferFee
+}
+
+// GetTransferFee set item's TransferFee
+func (io ItemOutput) GetTransferFee() int64 {
+	return io.TransferFee
 }
 
 // NewInputRefOutput returns ItemOutput that is modified from item input
@@ -161,13 +171,15 @@ func (io *ItemOutput) UnmarshalJSON(data []byte) error {
 	} else {
 		io.ModifyItem.ItemInputRef = *sio.ModifyItem.ItemInputRef
 	}
+
 	io.ModifyItem.Doubles = sio.ModifyItem.Doubles
 	io.ModifyItem.Longs = sio.ModifyItem.Longs
 	io.ModifyItem.Strings = sio.ModifyItem.Strings
-	io.ModifyItem.TransferFee = sio.ModifyItem.TransferFee
+	io.ModifyItem.SetTransferFee(sio.ModifyItem.TransferFee)
+
 	io.Doubles = sio.Doubles
 	io.Longs = sio.Longs
 	io.Strings = sio.Strings
-	io.TransferFee = sio.TransferFee
+	io.SetTransferFee(sio.TransferFee)
 	return nil
 }

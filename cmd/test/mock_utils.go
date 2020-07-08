@@ -234,7 +234,7 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 }
 
 // MockItemGUIDWithFee mock item with additional transfer fee and return item's GUID
-func MockItemGUIDWithFee(cbID, sender, name string, additionalFee int64, t *testing.T) string {
+func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testing.T) string {
 
 	senderAddr := inttestSDK.GetAccountAddr(sender, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
@@ -251,7 +251,7 @@ func MockItemGUIDWithFee(cbID, sender, name string, additionalFee int64, t *test
 			},
 		},
 		sdkAddr,
-		additionalFee,
+		transferFee,
 	),
 		sender,
 		false,

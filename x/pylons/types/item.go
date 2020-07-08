@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -48,6 +49,29 @@ type Item struct {
 // SetTransferFee set item's TransferFee
 func (it *Item) SetTransferFee(transferFee int64) {
 	it.TransferFee = transferFee
+}
+
+// Max returns the larger of x or y.
+func Max(x, y int64) int64 {
+	if x < y {
+		return y
+	}
+	return x
+}
+
+// Min returns the larger of x or y.
+func Min(x, y int64) int64 {
+	if x > y {
+		return y
+	}
+	return x
+}
+
+// GetTransferFee set item's TransferFee
+func (it Item) GetTransferFee() int64 {
+	minItemTransferFee := config.Config.Fee.MinItemTransferFee
+	maxItemTransferFee := config.Config.Fee.MaxItemTransferFee
+	return Min(Max(it.TransferFee, minItemTransferFee), maxItemTransferFee)
 }
 
 // ItemList is a list of items

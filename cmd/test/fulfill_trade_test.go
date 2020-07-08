@@ -57,7 +57,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			pylonsLLCDistribution:  1,
 		},
 		{
 			name:                   "item->coin fullfill trade test", // item-coin fulfill trade test
@@ -73,7 +73,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			pylonsLLCDistribution:  1,
 		},
 		{
 			name:                   "coin->item fullfill trade test", // coin-item fulfill trade test
@@ -87,7 +87,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  20,
+			pylonsLLCDistribution:  2,
 		},
 		{
 			name:                   "item->item fullfill trade test", // item-item fulfill trade test
@@ -102,7 +102,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  20,
+			pylonsLLCDistribution:  2,
 		},
 		{
 			name:          "trade unordered coin input test",
@@ -122,7 +122,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			pylonsLLCDistribution:  1,
 		},
 		{
 			name:             "same item with different cookbook id fulfill trade test",

@@ -71,8 +71,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			if err = matchedItem.NewTradeError(); err != nil {
 				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
-			// TODO should use validated fee
-			totalItemTransferFee += matchedItem.TransferFee
+			totalItemTransferFee += matchedItem.GetTransferFee()
 			matchedItems = append(matchedItems, matchedItem)
 		} else {
 			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", inpItem))
@@ -108,8 +107,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
-		// TODO should use validated fee
-		totalItemTransferFee += storedItem.TransferFee
+		totalItemTransferFee += storedItem.GetTransferFee()
 
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
@@ -130,6 +128,9 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// divide total fee between the sender and fullfiller
 
+	if totalPylonsAmount == 0 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalPylonsAmount is 0 unexpectedly")
+	}
 	senderFee := totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
 
 	if senderFee != 0 {
@@ -152,8 +153,10 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	for _, item := range refreshedOutputItems {
 
-		// TODO should use validated fee
-		feeForCB := totalFeeForCBOwners * item.TransferFee / totalItemTransferFee
+		if totalItemTransferFee == 0 {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
+		}
+		feeForCB := totalFeeForCBOwners * item.GetTransferFee() / totalItemTransferFee
 
 		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
 		if err != nil {
@@ -176,9 +179,10 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	}
 
 	for _, item := range matchedItems {
-
-		// TODO should use validated fee
-		feeForCB := totalFeeForCBOwners * item.TransferFee / totalItemTransferFee
+		if totalItemTransferFee == 0 {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
+		}
+		feeForCB := totalFeeForCBOwners * item.GetTransferFee() / totalItemTransferFee
 
 		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
 		if err != nil {

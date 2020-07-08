@@ -27,7 +27,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 		{
 			"basic send items test",
 			[]string{"SEND_ITEMS_TEST_ITEM1", "SEND_ITEMS_TEST_ITEM2"},
-			[]int64{700, 700},
+			[]int64{1000, 1000},
 			200,
 			1800,
 		},
