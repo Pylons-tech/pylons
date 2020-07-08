@@ -212,7 +212,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
 	targetItem.LastUpdate = p.ctx.BlockHeight()
-	targetItem.AdditionalItemSendFee += toMod.AdditionalItemSendFee
+	targetItem.SetTransferFee(targetItem.TransferFee + toMod.TransferFee)
 
 	return &targetItem, nil
 }
@@ -222,7 +222,7 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 
 	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
 	variables[prefix+"lastUpdate"] = item.LastUpdate
-	variables[prefix+"additionalItemSendFee"] = item.AdditionalItemSendFee
+	variables[prefix+"transferFee"] = item.TransferFee
 
 	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))

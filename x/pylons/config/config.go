@@ -15,7 +15,8 @@ type FeeConfiguration struct {
 	PylonsTradePercent          int64 `yaml:"pylons_trade_percentage"`
 	MinTradePrice               int64 `yaml:"minimum_trade_price"`
 	UpdateItemFieldString       int64 `yaml:"update_item_string_field_fee"`
-	BasicItemTransferFee        int64 `yaml:"basic_item_transfer_fee"`
+	MinItemTransferFee          int64 `yaml:"min_item_transfer_fee"`
+	MaxItemTransferFee          int64 `yaml:"max_item_transfer_fee"`
 	PylonsItemTransferPercent   int64 `yaml:"pylons_item_transfer_percent"`
 	CbSenderItemTransferPercent int64 `yaml:"cb_sender_item_transfer_percent"`
 }
@@ -61,7 +62,8 @@ func ReadConfig() error {
 			PylonsTradePercent:          10,
 			MinTradePrice:               10,
 			UpdateItemFieldString:       10,
-			BasicItemTransferFee:        300,
+			MinItemTransferFee:          1,
+			MaxItemTransferFee:          100000,
 			PylonsItemTransferPercent:   10,
 			CbSenderItemTransferPercent: 90,
 		},

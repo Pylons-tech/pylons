@@ -82,7 +82,7 @@
                   "items": [
                       {
                           "stringValues": { "Name": "Knife" },
-                          "additionalItemSendFee": "1000"
+                          "transferFee": "1000"
                       }
                   ]
               }
@@ -144,7 +144,7 @@
                   "items": [
                       {
                           "stringValues": { "Name": "RecipeItemSendFeeTestCharacter" },
-                          "additionalItemSendFee": "1200"
+                          "transferFee": "1200"
                       }
                   ]
               }

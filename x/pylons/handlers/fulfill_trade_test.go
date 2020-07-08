@@ -43,17 +43,17 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	require.True(t, err == nil)
 
 	item2 := keep.GenItem(cbData.CookbookID, sender2, "Pikachu")
-	item2.AdditionalItemSendFee = 200
+	item2.SetTransferFee(200)
 	err = tci.PlnK.SetItem(tci.Ctx, *item2)
 	require.True(t, err == nil)
 
 	item3 := keep.GenItem(cbData.CookbookID, sender2, "Rikchu")
-	item3.AdditionalItemSendFee = 50
+	item3.SetTransferFee(50)
 	err = tci.PlnK.SetItem(tci.Ctx, *item3)
 	require.True(t, err == nil)
 
 	item5 := keep.GenItem(cbData.CookbookID, sender2, "Pychu")
-	item5.AdditionalItemSendFee = 50
+	item5.SetTransferFee(50)
 	err = tci.PlnK.SetItem(tci.Ctx, *item5)
 	require.True(t, err == nil)
 
@@ -65,12 +65,12 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	require.True(t, len(cbData1.CookbookID) > 0)
 
 	item4 := keep.GenItem(cbData1.CookbookID, sender4, "Tachu")
-	item4.AdditionalItemSendFee = 70
+	item4.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, *item4)
 	require.True(t, err == nil)
 
 	item6 := keep.GenItem(cbData1.CookbookID, sender4, "Bhachu")
-	item6.AdditionalItemSendFee = 70
+	item6.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, *item6)
 	require.True(t, err == nil)
 

@@ -10,5 +10,5 @@
         "Key": "HP", 
         "Program": "min(HP + 10 * block_since(lastUpdate) + rand(20), MaxHP)"
     }],
-    "AdditionalItemSendFee": 200
+    "TransferFee": 200
 }

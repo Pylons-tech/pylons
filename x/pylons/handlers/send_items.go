@@ -44,8 +44,10 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 			return nil, errInternal(err)
 		}
 
-		basicItemTransferFee := config.Config.Fee.BasicItemTransferFee
-		coins := types.NewPylon(basicItemTransferFee + item.AdditionalItemSendFee)
+		// TODO should use validated fee
+		// minItemTransferFee := config.Config.Fee.MinItemTransferFee
+		// maxItemTransferFee := config.Config.Fee.MaxItemTransferFee
+		coins := types.NewPylon(item.TransferFee)
 
 		haveEnoughCoins := keeper.CoinKeeper.HasCoins(ctx, msg.Sender, coins)
 

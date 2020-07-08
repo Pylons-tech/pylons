@@ -52,7 +52,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// check if the sender has all condition met
 
-	totalAdditionalItemSendFee := int64(0)
+	totalItemTransferFee := int64(0)
 
 	matchedItems := types.ItemList{}
 	for _, inpItem := range trade.ItemInputs {
@@ -71,7 +71,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			if err = matchedItem.NewTradeError(); err != nil {
 				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
-			totalAdditionalItemSendFee += matchedItem.AdditionalItemSendFee
+			// TODO should use validated fee
+			totalItemTransferFee += matchedItem.TransferFee
 			matchedItems = append(matchedItems, matchedItem)
 		} else {
 			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", inpItem))
@@ -107,7 +108,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
-		totalAdditionalItemSendFee += storedItem.AdditionalItemSendFee
+		// TODO should use validated fee
+		totalItemTransferFee += storedItem.TransferFee
 
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
@@ -120,7 +122,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	tradePercent := config.Config.Fee.PylonsTradePercent
 	totalPylonsAmountFee := totalPylonsAmount * tradePercent / 100
 
-	totalFee := Max(totalAdditionalItemSendFee, totalPylonsAmountFee)
+	totalFee := Max(totalItemTransferFee, totalPylonsAmountFee)
 	// if total fee exceeds the total pylons amount, it fails
 	if totalFee > totalPylonsAmount {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "total pylons amount is not enough to pay fees")
@@ -150,7 +152,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	for _, item := range refreshedOutputItems {
 
-		feeForCB := totalFeeForCBOwners * item.AdditionalItemSendFee / totalAdditionalItemSendFee
+		// TODO should use validated fee
+		feeForCB := totalFeeForCBOwners * item.TransferFee / totalItemTransferFee
 
 		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
 		if err != nil {
@@ -174,7 +177,8 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	for _, item := range matchedItems {
 
-		feeForCB := totalFeeForCBOwners * item.AdditionalItemSendFee / totalAdditionalItemSendFee
+		// TODO should use validated fee
+		feeForCB := totalFeeForCBOwners * item.TransferFee / totalItemTransferFee
 
 		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
 		if err != nil {

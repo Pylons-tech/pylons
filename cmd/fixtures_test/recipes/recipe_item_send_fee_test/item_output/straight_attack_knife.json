@@ -41,5 +41,5 @@
           "Rate":"1.0"
       }
   ],
-  "AdditionalItemSendFee": 1000
+  "TransferFee": 1000
 }

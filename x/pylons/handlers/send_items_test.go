@@ -34,11 +34,12 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 	item2.OwnerRecipeID = "????????"
 
-	item3.AdditionalItemSendFee = 700
-	item4.AdditionalItemSendFee = 700
+	item3.SetTransferFee(1000)
+	item4.SetTransferFee(1000)
+	item5.SetTransferFee(300)
 
-	item6.AdditionalItemSendFee = 342
-	item7.AdditionalItemSendFee = 887
+	item6.SetTransferFee(642)
+	item7.SetTransferFee(1187)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item1)
 	require.True(t, err == nil)
@@ -88,8 +89,8 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			desiredError:    "",
 			showError:       false,
 			differSender:    1827, // differSender = differPylonsLLC + differCBOwner = 182 + 1645 = 1827
-			differPylonsLLC: 182,  // differPylonsLLC = (basicSendItemsFee + item6.AdditionalItemSendFee) * pylonsLLCSendIemsPercent / 100 + ...(item7) = (300 + 342) * 10 / 100 + (300 + 887) * 10 / 100 = 64 + 118 = 182
-			differCBOwner:   1645, // differPylonsLLC = (basicSendItemsFee + item6.AdditionalItemSendFee) * cbOwnerSendIemsPercent / 100 + ...(item7) = (300 + 342) * 90 / 100 + (300 + 887) * 90 / 100 = 577 + 1068 = 1645
+			differPylonsLLC: 182,  // differPylonsLLC = (basicSendItemsFee + item6.TransferFee) * pylonsLLCSendIemsPercent / 100 + ...(item7) = (300 + 342) * 10 / 100 + (300 + 887) * 10 / 100 = 64 + 118 = 182
+			differCBOwner:   1645, // differPylonsLLC = (basicSendItemsFee + item6.TransferFee) * cbOwnerSendIemsPercent / 100 + ...(item7) = (300 + 342) * 90 / 100 + (300 + 887) * 90 / 100 = 577 + 1068 = 1645
 		},
 		"not enough coins for fee check": {
 			itemIDs:         []string{item5.ID},
@@ -185,6 +186,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 				require.True(t, differPylonsLLC == tc.differPylonsLLC)
 				require.True(t, differCBOwner == tc.differCBOwner)
 			} else {
+				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})

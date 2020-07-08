@@ -29,7 +29,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 
 		types.EntriesList{
 			types.NewInputRefOutput(
-				0, types.ItemModifyParams{AdditionalItemSendFee: 300},
+				0, types.ItemModifyParams{TransferFee: 300},
 			),
 			types.GenItemOnlyEntry("Catalyst2")[0],
 		},
@@ -46,7 +46,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 
 		types.EntriesList{
 			types.NewInputRefOutput(
-				0, types.ItemModifyParams{AdditionalItemSendFee: 300},
+				0, types.ItemModifyParams{TransferFee: 300},
 			),
 		},
 		types.GenAllOutput(1),
@@ -56,50 +56,50 @@ func TestRecipeItemSendFee(t *testing.T) {
 	)
 
 	cases := map[string]struct {
-		cookbookID                 string
-		itemIDs                    []string
-		dynamicItemSet             bool
-		dynamicItemNames           []string
-		dynamicItemFees            []int64
-		addInputCoin               bool
-		rcpID                      string
-		sender                     sdk.AccAddress
-		desiredError               string
-		successMsg                 string
-		showError                  bool
-		checkItemName              string
-		checkItemAvailable         bool
-		checkAdditionalItemSendFee bool
-		additionalItemSendFee      int64
+		cookbookID          string
+		itemIDs             []string
+		dynamicItemSet      bool
+		dynamicItemNames    []string
+		dynamicItemFees     []int64
+		addInputCoin        bool
+		rcpID               string
+		sender              sdk.AccAddress
+		desiredError        string
+		successMsg          string
+		showError           bool
+		checkItemName       string
+		checkItemAvailable  bool
+		checkItemTrasferFee bool
+		transferFee         int64
 	}{
 		"additional item send fee check test": {
-			itemIDs:                    []string{},
-			dynamicItemSet:             true,
-			dynamicItemNames:           []string{"catalyst"},
-			dynamicItemFees:            []int64{932},
-			addInputCoin:               true,
-			rcpID:                      oneCatalystOneOutputRecipeData.RecipeID, // available ID
-			sender:                     sender1,
-			desiredError:               "",
-			successMsg:                 "successfully executed the recipe",
-			showError:                  false,
-			checkItemName:              "Catalyst2", // "catalyst" item should be kept
-			checkItemAvailable:         true,
-			checkAdditionalItemSendFee: true,
-			additionalItemSendFee:      1232,
+			itemIDs:             []string{},
+			dynamicItemSet:      true,
+			dynamicItemNames:    []string{"catalyst"},
+			dynamicItemFees:     []int64{932},
+			addInputCoin:        true,
+			rcpID:               oneCatalystOneOutputRecipeData.RecipeID, // available ID
+			sender:              sender1,
+			desiredError:        "",
+			successMsg:          "successfully executed the recipe",
+			showError:           false,
+			checkItemName:       "Catalyst2", // "catalyst" item should be kept
+			checkItemAvailable:  true,
+			checkItemTrasferFee: true,
+			transferFee:         1232,
 		},
 		"additional item send fee check item upgrade test": {
-			itemIDs:                    []string{},
-			dynamicItemSet:             true,
-			dynamicItemNames:           []string{"sword", "knife"},
-			dynamicItemFees:            []int64{932, 932},
-			rcpID:                      oneCatalystOneOutputRecipeData1.RecipeID, // available ID
-			sender:                     sender1,
-			desiredError:               "",
-			successMsg:                 "successfully executed the recipe",
-			showError:                  false,
-			checkAdditionalItemSendFee: true,
-			additionalItemSendFee:      1232,
+			itemIDs:             []string{},
+			dynamicItemSet:      true,
+			dynamicItemNames:    []string{"sword", "knife"},
+			dynamicItemFees:     []int64{932, 932},
+			rcpID:               oneCatalystOneOutputRecipeData1.RecipeID, // available ID
+			sender:              sender1,
+			desiredError:        "",
+			successMsg:          "successfully executed the recipe",
+			showError:           false,
+			checkItemTrasferFee: true,
+			transferFee:         1232,
 		},
 	}
 	for testName, tc := range cases {
@@ -114,7 +114,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
 
 					if len(tc.dynamicItemFees) > idx {
-						dynamicItem.AdditionalItemSendFee = tc.dynamicItemFees[idx]
+						dynamicItem.SetTransferFee(tc.dynamicItemFees[idx])
 					}
 					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
 					require.True(t, err == nil)
@@ -143,7 +143,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 				require.True(t, err == nil)
 
 				itemAvailability := false
-				additionalItemSendFeeCorrect := true
+				itemTransferFeeCorrect := true
 
 				for _, item := range items {
 					itemName, ok := item.FindString("Name")
@@ -159,8 +159,8 @@ func TestRecipeItemSendFee(t *testing.T) {
 
 				for _, item := range items {
 
-					if item.AdditionalItemSendFee != tc.additionalItemSendFee {
-						additionalItemSendFeeCorrect = false
+					if item.TransferFee != tc.transferFee {
+						itemTransferFeeCorrect = false
 					}
 				}
 
@@ -169,8 +169,8 @@ func TestRecipeItemSendFee(t *testing.T) {
 					fmt.Print(itemAvailability)
 				}
 
-				if tc.checkAdditionalItemSendFee {
-					require.True(t, additionalItemSendFeeCorrect)
+				if tc.checkItemTrasferFee {
+					require.True(t, itemTransferFeeCorrect)
 				}
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
