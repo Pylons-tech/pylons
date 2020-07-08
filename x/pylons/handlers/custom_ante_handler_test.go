@@ -1,16 +1,16 @@
 package handlers
 
 import (
-	"testing"
 	"strings"
+	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authTypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/require"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // TestNewAccountCreationDecoratorAnteHandle is a test for NewAccountCreationDecorator handler
@@ -21,33 +21,35 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 	acd := AccountCreationDecorator{tci.Ak}
 
 	cases := map[string]struct {
-		putSignature bool
-		shouldAccountExist bool
+		putSignature         bool
+		shouldAccountExist   bool
 		retryAccountCreation bool
-		genNewAccount bool
-		desiredError  string
+		genNewAccount        bool
+		desiredError         string
 	}{
 		"create_account no signature msg test": {
-			putSignature: false,
+			putSignature:       false,
 			shouldAccountExist: false,
-			genNewAccount: true,
+			genNewAccount:      true,
 		},
 		"create_account for the address that does not exist": {
-			putSignature: true,
-			shouldAccountExist: true,
-			genNewAccount: true,
+			putSignature:         true,
+			shouldAccountExist:   true,
+			genNewAccount:        true,
 			retryAccountCreation: true,
 		},
 		"create_account wrong address of public key": {
-			putSignature: true,
+			putSignature:       true,
 			shouldAccountExist: false,
-			genNewAccount: false,
-			desiredError: "mismatch between signature pubkey and requester address",
+			genNewAccount:      false,
+			desiredError:       "mismatch between signature pubkey and requester address",
 		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			priv, cosmosAddr := genAccount(t)
+			priv, cosmosAddr, err := GenAccount()
+			require.True(t, err == nil)
+
 			if tc.genNewAccount == false {
 				cosmosAddr = sender1
 			}
@@ -61,13 +63,13 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 				require.True(t, err == nil)
 				sigs := []auth.StdSignature{
 					{
-						PubKey: priv.PubKey(),
+						PubKey:    priv.PubKey(),
 						Signature: sig,
 					},
 				}
 				tx.Signatures = sigs
 			}
-		
+
 			newCtx, err := acd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
 			if len(tc.desiredError) > 0 {
 				require.True(t, err != nil)
@@ -98,49 +100,50 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 	csvd := CustomSigVerificationDecorator{tci.Ak}
 
 	cases := map[string]struct {
-		putSignature bool
-		accountNumber uint64
+		putSignature    bool
+		accountNumber   uint64
 		accountSequence uint64
 		registerAccount bool
-		additionMsgType       string
-		desiredError  string
+		additionMsgType string
+		desiredError    string
 	}{
 		"create_account signature verification no signature msg test": {
-			putSignature: false,
+			putSignature:    false,
 			accountSequence: 0,
-			desiredError: "unauthorized: invalid number of signer;  expected: 1, got 0", // no signature error msg
+			desiredError:    "unauthorized: invalid number of signer;  expected: 1, got 0", // no signature error msg
 		},
 		"unknown address signature verification test": {
-			putSignature: true,
-			accountNumber: 0,
+			putSignature:    true,
+			accountNumber:   0,
 			accountSequence: 0,
-			desiredError: "unknown address:",
+			desiredError:    "unknown address:",
 		},
 		"create_account account_number=0, sequence=0 signature verification test": {
-			putSignature: true,
+			putSignature:    true,
 			registerAccount: true,
-			accountNumber: 0,
+			accountNumber:   0,
 			accountSequence: 0,
 			additionMsgType: "create_cookbook",
 		},
 		"create_account account_number=1, sequence=0 signature verification test": {
-			putSignature: true,
+			putSignature:    true,
 			registerAccount: true,
-			accountNumber: 1,
+			accountNumber:   1,
 			accountSequence: 0,
-			desiredError: "create_account signature verification failed; verify correct account sequence and chain-id",
+			desiredError:    "create_account signature verification failed; verify correct account sequence and chain-id",
 		},
 		"create_account account_number=0, sequence=1 signature verification test": {
-			putSignature: true,
+			putSignature:    true,
 			registerAccount: true,
-			accountNumber: 0,
+			accountNumber:   0,
 			accountSequence: 1,
-			desiredError: "create_account signature verification failed; verify correct account sequence and chain-id",
+			desiredError:    "create_account signature verification failed; verify correct account sequence and chain-id",
 		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			priv, cosmosAddr := genAccount(t)
+			priv, cosmosAddr, err := GenAccount()
+			require.True(t, err == nil)
 
 			fee := authTypes.NewStdFee(0, sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
 			memo := ""
@@ -151,7 +154,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				require.True(t, err == nil)
 				sigs := []auth.StdSignature{
 					{
-						PubKey: priv.PubKey(),
+						PubKey:    priv.PubKey(),
 						Signature: sig,
 					},
 				}
@@ -182,7 +185,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 					require.True(t, err == nil)
 					sigs := []auth.StdSignature{
 						{
-							PubKey: priv.PubKey(),
+							PubKey:    priv.PubKey(),
 							Signature: sig,
 						},
 					}
