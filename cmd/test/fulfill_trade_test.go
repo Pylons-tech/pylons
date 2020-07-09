@@ -5,10 +5,10 @@ import (
 	originT "testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -57,7 +57,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			pylonsLLCDistribution:  1,
 		},
 		{
 			name:                   "item->coin fullfill trade test", // item-coin fulfill trade test
@@ -73,7 +73,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			pylonsLLCDistribution:  1,
 		},
 		{
 			name:                   "coin->item fullfill trade test", // coin-item fulfill trade test
@@ -87,7 +87,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  20,
+			pylonsLLCDistribution:  2,
 		},
 		{
 			name:                   "item->item fullfill trade test", // item-item fulfill trade test
@@ -102,7 +102,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  20,
+			pylonsLLCDistribution:  2,
 		},
 		{
 			name:          "trade unordered coin input test",
@@ -122,7 +122,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedMessage:        "successfully fulfilled the trade",
 			expectedRetryErrMsg:    "this trade is already completed",
 			checkPylonDistribution: true,
-			pylonsLLCDistribution:  10,
+			pylonsLLCDistribution:  1,
 		},
 		{
 			name:             "same item with different cookbook id fulfill trade test",
@@ -152,8 +152,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	mCB := GetMockedCookbook(false, t)
-	mCB2 := GetMockedCookbook(true, t)
+	mCB := GetMockedCookbook("eugen", false, t)
+	mCB2 := GetMockedCookbook("eugen", true, t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {

@@ -15,7 +15,7 @@ import (
 
 func TestHandlerMsgCreateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil)
+	sender, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
 		cookbookName   string
@@ -26,6 +26,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 		isUpgrdRecipe  bool
 		sender         sdk.AccAddress
 		numItemInput   int // 0 | 1 | 2
+		numItemOutput  int // 0 | 1 | 2
 		desiredError   string
 		showError      bool
 	}{
@@ -70,8 +71,28 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			desiredError:   "There should not be a recipe which generate pylon denom as an output",
 			showError:      true,
 		},
-		// TODO should add case for no input item upgrade test
-		// TODO should add case for multiple input item upgrade test
+		"no item upgrade test": {
+			cookbookName:   "book000001",
+			createCookbook: true,
+			recipeDesc:     "this has to meet character limits",
+			outputDenom:    "chair",
+			isUpgrdRecipe:  true,
+			numItemInput:   0,
+			sender:         sender,
+			desiredError:   "ItemInputRef overflow length of ItemInputs",
+			showError:      true,
+		},
+		"multiple item upgrade recipe success creation test": {
+			cookbookName:   "book000001",
+			createCookbook: true,
+			recipeDesc:     "this has to meet character limits",
+			outputDenom:    "chair",
+			isUpgrdRecipe:  true,
+			numItemInput:   2,
+			sender:         sender,
+			desiredError:   "",
+			showError:      false,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -94,12 +115,18 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			if !tc.isUpgrdRecipe {
 				mEntries = types.GenEntries(tc.outputDenom, "Raichu")
 			} else {
-				mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
+				if tc.numItemOutput == 2 {
+					mEntries = types.GenEntriesTwoItemNameUpgrade("RaichuV2", "PikachuV2")
+				} else {
+					mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
+				}
 			}
 			mOutputs := types.GenOneOutput(len(mEntries))
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
 				mInputList = types.GenItemInputList("Raichu")
+			} else if tc.numItemInput == 2 {
+				mInputList = types.GenItemInputList("Raichu", "Pikachu")
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
@@ -113,13 +140,14 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			result, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
+				require.True(t, err == nil)
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
 				require.True(t, err == nil)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
 				require.True(t, err != nil)
-				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
 			}
 		})
 	}
@@ -127,7 +155,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 func TestSameRecipeIDCreation(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil)
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil, nil)
 
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
 

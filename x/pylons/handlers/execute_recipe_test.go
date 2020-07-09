@@ -16,7 +16,7 @@ import (
 
 func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
@@ -196,7 +196,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			addInputCoin:       true,
 			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
-			desiredError:       "the item inputs dont match any items provided",
+			desiredError:       "the [0] item input don't match any items provided",
 			successMsg:         "successfully executed the recipe",
 			showError:          true,
 			checkItemName:      "",

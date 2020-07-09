@@ -3,9 +3,9 @@ package inttest
 import (
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -31,7 +31,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB := GetMockedCookbook(false, t)
+			mCB := GetMockedCookbook("eugen", false, t)
 
 			itemID := MockItemGUID(mCB.ID, "eugen", tc.itemName, t)
 
@@ -64,7 +64,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 				}).Fatal("error listing items via cli")
 			}
 
-			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false)
+			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false, false)
 			t.WithFields(testing.Fields{
 				"item_name": tc.value,
 			}).MustTrue(ok, "item id with specific name does not exist")

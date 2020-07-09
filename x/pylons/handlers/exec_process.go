@@ -38,7 +38,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	// we validate and match items
 	var matchedItems []types.Item
 	var matches bool
-	for _, itemInput := range p.recipe.ItemInputs {
+	for i, itemInput := range p.recipe.ItemInputs {
 		matches = false
 
 		for iii, item := range inputItems {
@@ -51,7 +51,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 		}
 
 		if !matches {
-			return errors.New("the item inputs dont match any items provided")
+			return fmt.Errorf("the [%d] item input don't match any items provided", i)
 		}
 	}
 	p.matchedItems = matchedItems
@@ -212,14 +212,17 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
 	targetItem.LastUpdate = p.ctx.BlockHeight()
+	targetItem.SetTransferFee(targetItem.TransferFee + toMod.TransferFee)
 
 	return &targetItem, nil
 }
 
 // AddVariableFromItem collect variables from item inputs
 func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
+
 	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
 	variables[prefix+"lastUpdate"] = item.LastUpdate
+	variables[prefix+"transferFee"] = item.TransferFee
 
 	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))

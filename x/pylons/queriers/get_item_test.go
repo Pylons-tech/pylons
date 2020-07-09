@@ -15,7 +15,7 @@ import (
 
 func TestGetItem(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbook(tci, sender1)

@@ -36,7 +36,8 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 						"Strings":[{
 							"Key":"Name",
 							"Value":"Raichu"
-						}]
+						}],
+						"TransferFee":{"MaxValue":10000,"MinValue":0}
 					}
 				}
 			],

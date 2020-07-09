@@ -6,9 +6,9 @@ import (
 
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -97,7 +97,7 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
 	t.Parallel()
-	mCB := GetMockedCookbook(false, t)
+	mCB := GetMockedCookbook("eugen", false, t)
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
@@ -160,7 +160,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 			}).Fatal("error listing items via cli")
 		}
 
-		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true)
+		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true, false)
 		t.WithFields(testing.Fields{
 			"item_name": tc.currentItemName,
 		}).MustTrue(ok, "item id with specific name does not exist")
@@ -191,7 +191,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}).Fatal("error listing items via cli")
 	}
 
-	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
+	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false, false)
 	t.WithFields(testing.Fields{
 		"item_name":   tc.desiredItemName,
 		"exist":       ok,

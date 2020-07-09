@@ -1,0 +1,24 @@
+{
+  "CoinInputs": [],
+  "ItemInputRefs": [],
+  "Entries":{
+      "CoinOutputs":[
+          {
+              "Coin":"gold",
+              "Count":"100"
+          }
+      ]
+  },
+  "Outputs": [
+      {
+          "ResultEntries": ["0"],
+          "Weight": "1"
+      }
+  ],
+  "ExtraInfo": "",
+  "Sender": "account2",
+  "Name": "GameReal's issue gold recipe",
+  "CookbookID": "game-real-1589853709",
+  "Description": "this recipe is used to issue gold on GameReal.",
+  "BlockInterval": "0"
+}

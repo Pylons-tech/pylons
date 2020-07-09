@@ -9,5 +9,6 @@
     "Longs": [{
         "Key": "HP", 
         "Program": "min(HP + 10 * block_since(lastUpdate) + rand(20), MaxHP)"
-    }]
+    }],
+    "TransferFee": 200
 }

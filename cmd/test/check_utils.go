@@ -3,8 +3,8 @@ package inttest
 import (
 	"strings"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 )
 
 // TxResultStatusMessageCheck check result status and message

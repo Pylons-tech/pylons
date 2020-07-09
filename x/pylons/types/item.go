@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -36,13 +37,41 @@ type Item struct {
 	Longs   []LongKeyValue
 	Strings []StringKeyValue
 	// as items are unique per cookbook
-	CookbookID            string
-	Sender                sdk.AccAddress
-	OwnerRecipeID         string
-	OwnerTradeID          string
-	Tradable              bool
-	LastUpdate            int64
-	AdditionalTransferFee int64
+	CookbookID    string
+	Sender        sdk.AccAddress
+	OwnerRecipeID string
+	OwnerTradeID  string
+	Tradable      bool
+	LastUpdate    int64
+	TransferFee   int64
+}
+
+// SetTransferFee set item's TransferFee
+func (it *Item) SetTransferFee(transferFee int64) {
+	it.TransferFee = transferFee
+}
+
+// Max returns the larger of x or y.
+func Max(x, y int64) int64 {
+	if x < y {
+		return y
+	}
+	return x
+}
+
+// Min returns the larger of x or y.
+func Min(x, y int64) int64 {
+	if x > y {
+		return y
+	}
+	return x
+}
+
+// GetTransferFee set item's TransferFee
+func (it Item) GetTransferFee() int64 {
+	minItemTransferFee := config.Config.Fee.MinItemTransferFee
+	maxItemTransferFee := config.Config.Fee.MaxItemTransferFee
+	return Min(Max(it.TransferFee, minItemTransferFee), maxItemTransferFee)
 }
 
 // ItemList is a list of items
@@ -128,7 +157,8 @@ func (it Item) String() string {
 		Longs: %+v,
 		Strings: %+v,
 		CookbookID: %+v,
-	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID)
+		TransferFee: %d,
+	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID, it.TransferFee)
 }
 
 // Equals compares two items
@@ -161,6 +191,20 @@ func (it Item) NewTradeError() error {
 	return nil
 }
 
+// FulfillTradeError check if an item can be sent to someone else
+func (it Item) FulfillTradeError(tradeID string) error {
+	if !it.Tradable {
+		return errors.New("Item Tradable flag is not set")
+	}
+	if it.OwnerRecipeID != "" {
+		return errors.New("Item is owned by a recipe")
+	}
+	if it.OwnerTradeID != tradeID {
+		return errors.New("Item is not owned by the trade")
+	}
+	return nil
+}
+
 // NewRecipeExecutionError is a utility that shows if Recipe is compatible with recipe execution
 func (it Item) NewRecipeExecutionError() error {
 	if it.OwnerRecipeID != "" {
@@ -173,7 +217,8 @@ func (it Item) NewRecipeExecutionError() error {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, BlockHeight int64, additionalTransferFee int64) *Item {
+func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
+
 	item := &Item{
 		CookbookID: cookbookID,
 		Doubles:    doubles,
@@ -181,10 +226,11 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Strings:    strings,
 		Sender:     sender,
 		// By default all items are tradable
-		Tradable:              true,
-		LastUpdate:            BlockHeight,
-		AdditionalTransferFee: additionalTransferFee,
+		Tradable:    true,
+		LastUpdate:  blockHeight,
+		TransferFee: transferFee,
 	}
 	item.ID = KeyGen(sender)
+
 	return item
 }

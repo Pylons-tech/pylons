@@ -16,7 +16,7 @@ func TestHandlerMsgSendPylons(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 
 	initialAmount := int64(50000)
-	sender1, sender2, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(initialAmount), nil, nil)
+	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(initialAmount), nil, nil, nil)
 
 	cases := map[string]struct {
 		amount       int64

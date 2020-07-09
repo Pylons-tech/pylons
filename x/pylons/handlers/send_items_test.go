@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -16,7 +17,7 @@ import (
 func TestHandlerMsgSendItems(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 
-	sender1, sender2, sender3 := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10))
+	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
 
 	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender1, types.NewPylon(10000000)))
 	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender2, types.NewPylon(10000000)))
@@ -34,11 +35,12 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 	item2.OwnerRecipeID = "????????"
 
-	item3.AdditionalTransferFee = 700
-	item4.AdditionalTransferFee = 700
+	item3.SetTransferFee(1000)
+	item4.SetTransferFee(1000)
+	item5.SetTransferFee(300)
 
-	item6.AdditionalTransferFee = 342
-	item7.AdditionalTransferFee = 887
+	item6.SetTransferFee(642)
+	item7.SetTransferFee(1187)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item1)
 	require.True(t, err == nil)
@@ -68,8 +70,8 @@ func TestHandlerMsgSendItems(t *testing.T) {
 		desiredError    string
 		showError       bool
 		differSender    int64
-		differPylonsLLC int64
 		differCBOwner   int64
+		differPylonsLLC int64
 	}{
 		"successful check": {
 			itemIDs:         []string{item3.ID, item4.ID},
@@ -77,19 +79,19 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			toAddress:       sender1,
 			desiredError:    "",
 			showError:       false,
-			differSender:    2000,
-			differPylonsLLC: 200,
-			differCBOwner:   1800,
+			differSender:    2000, // differSender = item6.TransferFee + item7.TransferFee = 1000 + 1000 = 2000
+			differCBOwner:   1800, // differCBOwner = 1000 * 0.9 + 1000 * 0.9 = 1800
+			differPylonsLLC: 200,  // differPylonsLLC = differSender - differCBOwner = 2000 - 1800 = 200
 		},
-		"successful check1": {
+		"non divide fully case successful check": {
 			itemIDs:         []string{item6.ID, item7.ID},
 			fromAddress:     sender2,
 			toAddress:       sender1,
 			desiredError:    "",
 			showError:       false,
-			differSender:    1827, // differSender = differPylonsLLC + differCBOwner = 182 + 1645 = 1827
-			differPylonsLLC: 182,  // differPylonsLLC = (basicSendItemsFee + item6.AdditionalTransferFee) * pylonsLLCSendIemsPercent / 100 + ...(item7) = (300 + 342) * 10 / 100 + (300 + 887) * 10 / 100 = 64 + 118 = 182
-			differCBOwner:   1645, // differPylonsLLC = (basicSendItemsFee + item6.AdditionalTransferFee) * cbOwnerSendIemsPercent / 100 + ...(item7) = (300 + 342) * 90 / 100 + (300 + 887) * 90 / 100 = 577 + 1068 = 1645
+			differSender:    1829, // differSender = item6.TransferFee + item7.TransferFee = 642 + 1187 = 1829
+			differCBOwner:   1645, // differCBOwner = 642 * 0.9 + 1187 * 0.9 = 577 + 1068 = 1645
+			differPylonsLLC: 184,  // differPylonsLLC = differSender - differCBOwner = 1829 - 1645 = 184
 		},
 		"not enough coins for fee check": {
 			itemIDs:         []string{item5.ID},
@@ -181,10 +183,11 @@ func TestHandlerMsgSendItems(t *testing.T) {
 				differPylonsLLC := coinsPylonsLLCAfter.AmountOf(types.Pylon).Int64() - coinsPylonsLLCBefore.AmountOf(types.Pylon).Int64()
 				differCBOwner := coinsCBOwnerAfter.AmountOf(types.Pylon).Int64() - coinsCBOwnerBefore.AmountOf(types.Pylon).Int64()
 
-				require.True(t, differSender == tc.differSender)
-				require.True(t, differPylonsLLC == tc.differPylonsLLC)
-				require.True(t, differCBOwner == tc.differCBOwner)
+				require.True(t, differSender == tc.differSender, fmt.Sprintln(differSender, "!=", tc.differSender))
+				require.True(t, differPylonsLLC == tc.differPylonsLLC, fmt.Sprintln(differPylonsLLC, "!=", tc.differPylonsLLC))
+				require.True(t, differCBOwner == tc.differCBOwner, fmt.Sprintln(differCBOwner, "!=", tc.differCBOwner))
 			} else {
+				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})

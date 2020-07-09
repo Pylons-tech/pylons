@@ -59,6 +59,19 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		return nil, errInternal(err)
 	}
 
+	// set items' owner trade id
+	for _, item := range msg.ItemOutputs {
+		itemFromStore, err := keeper.GetItem(ctx, item.ID)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+		itemFromStore.OwnerTradeID = trade.ID
+		err = keeper.SetItem(ctx, itemFromStore)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+	}
+
 	return marshalJSON(CreateTradeResponse{
 		TradeID: trade.ID,
 		Message: "successfully created a trade",

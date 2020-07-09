@@ -5,9 +5,9 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -75,7 +75,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				}).Fatal("error listing items via cli")
 			}
 
-			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false)
+			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false, false)
 			t.WithFields(testing.Fields{
 				"item_name": tc.desiredItemName,
 			}).MustTrue(ok, "item id with specific name does not exist")

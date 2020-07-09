@@ -58,7 +58,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	// TODO: validate 1-1 correspondence for item input and output - check ids
 
 	// we set the inputs and outputs for storing the execution
 	if recipe.BlockInterval > 0 {
