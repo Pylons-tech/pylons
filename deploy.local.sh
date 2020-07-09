@@ -14,6 +14,7 @@ echo '-------remove production directory-----'
 rm -rf $PROD_DIR
 
 # build configuration into production_config_temp directory
+echo '-------building the genesis-----'
 docker-compose --file docker-compose.genesis.yml up --build --remove-orphans
 # docker-compose --file docker-compose.genesis.yml up
 
@@ -72,18 +73,23 @@ kubectl delete statefulset.apps/node2
 kubectl delete pod/node2-0
 
 # nodes deployment
-echo '-------node0 deployment-----'
-kubectl apply -f node0-deployment.yaml
+echo '-------node deployment-----'
+kubectl apply -f node-deployment.yaml
 kubectl get all
 
-echo '-------node1 deployment-----'
-kubectl apply -f node1-deployment.yaml
-kubectl get all
+# echo '-------node0 deployment-----'
+# kubectl apply -f node0-deployment.yaml
+# kubectl get all
 
-echo '-------node2 deployment-----'
-kubectl apply -f node2-deployment.yaml
-kubectl get all
+# echo '-------node1 deployment-----'
+# kubectl apply -f node1-deployment.yaml
+# kubectl get all
 
+# echo '-------node2 deployment-----'
+# kubectl apply -f node2-deployment.yaml
+# kubectl get all
+
+sleep 5
 # node logs
 echo '-------node0 logs-----'
 kubectl logs pod/node0-0
