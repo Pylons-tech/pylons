@@ -7,6 +7,12 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// GetPylonsResponse is the response for get-pylons
+type GetPylonsResponse struct {
+	Message string
+	Status  string
+}
+
 // HandlerMsgGetPylons is used to send pylons to requesters. This handler is part of the
 // faucet
 func HandlerMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPylons) (*sdk.Result, error) {
@@ -22,5 +28,8 @@ func HandlerMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPyl
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Buyer does not have enough coins")
 	}
 
-	return &sdk.Result{}, nil
+	return marshalJSON(GetPylonsResponse{
+		Message: "successfully got the pylons",
+		Status:  "Success",
+	})
 }

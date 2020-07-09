@@ -172,7 +172,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				tci.Ak.SetAccount(tci.Ctx, acc)
 			}
 
-			_, err := csvd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
+			_, err = csvd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
 			if len(tc.desiredError) > 0 {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

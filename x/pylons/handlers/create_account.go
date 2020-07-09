@@ -6,6 +6,12 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// CreateAccountResponse is the response for get-pylons
+type CreateAccountResponse struct {
+	Message string
+	Status  string
+}
+
 // HandlerMsgCreateAccount is used to send pylons to requesters. This handler is part of the
 // faucet
 func HandlerMsgCreateAccount(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateAccount) (*sdk.Result, error) {
@@ -16,5 +22,8 @@ func HandlerMsgCreateAccount(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCr
 		return nil, errInternal(err)
 	}
 
-	return &sdk.Result{}, nil
+	return marshalJSON(CreateAccountResponse{
+		Message: "successfully created the account",
+		Status:  "Success",
+	})
 }
