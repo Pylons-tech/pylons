@@ -17,7 +17,7 @@ import (
 func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 
 	tci := keep.SetupTestCoinInput()
-	sender1, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 	acd := AccountCreationDecorator{tci.Ak}
 
 	cases := map[string]struct {
@@ -96,7 +96,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 
 	tci := keep.SetupTestCoinInput()
-	keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil)
+	keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 	csvd := CustomSigVerificationDecorator{tci.Ak}
 
 	cases := map[string]struct {

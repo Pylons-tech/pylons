@@ -13,7 +13,7 @@ import (
 
 func TestHandlerMsgCreateAccount(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil)
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
 		fromAddress  sdk.AccAddress
