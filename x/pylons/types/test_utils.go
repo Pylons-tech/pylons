@@ -18,19 +18,23 @@ func GenItemInputList(names ...string) ItemInputList {
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
+			FeeInputParam{
+				MinValue: 0,
+				MaxValue: 10000,
+			},
 		})
 	}
 	return iiL
 }
 
 // GenTradeItemInputList is a utility function to generate trade item input list
-func GenTradeItemInputList(cbID string, names []string) TradeItemInputList {
+func GenTradeItemInputList(cookbookID string, itemNames []string) TradeItemInputList {
 	tiiL := TradeItemInputList{}
-	iiL := GenItemInputList(names...)
+	iiL := GenItemInputList(itemNames...)
 	for _, ii := range iiL {
 		tiiL = append(tiiL, TradeItemInput{
 			ii,
-			cbID,
+			cookbookID,
 		})
 	}
 	return tiiL
@@ -99,6 +103,7 @@ func GenItemOnlyEntry(itemName string) EntriesList {
 				},
 			}}}},
 			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
+			1232,
 		),
 	}
 }
@@ -118,6 +123,7 @@ func GenItemOnlyEntryRand(itemName string) EntriesList {
 				Rate:    "1.0",
 			}},
 			StringParamList{StringParam{Key: "Name", Value: itemName, Rate: "1.0", Program: ""}},
+			0,
 		),
 	}
 }
@@ -171,6 +177,18 @@ func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	return EntriesList{
 		NewInputRefOutput(
 			0, GenModifyParamsForString("Name", targetValue),
+		),
+	}
+}
+
+// GenEntriesTwoItemNameUpgrade is a function to generate entries that update two items' names
+func GenEntriesTwoItemNameUpgrade(targetValue1, targetValue2 string) EntriesList {
+	return EntriesList{
+		NewInputRefOutput(
+			0, GenModifyParamsForString("Name", targetValue1),
+		),
+		NewInputRefOutput(
+			1, GenModifyParamsForString("Name", targetValue2),
 		),
 	}
 }

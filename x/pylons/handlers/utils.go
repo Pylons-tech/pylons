@@ -43,6 +43,14 @@ func Max(x, y int64) int64 {
 	return x
 }
 
+// Min returns the larger of x or y.
+func Min(x, y int64) int64 {
+	if x > y {
+		return y
+	}
+	return x
+}
+
 // GetItemsFromIDs get items from IDs
 func GetItemsFromIDs(ctx sdk.Context, keeper keep.Keeper, itemIDs []string, sender sdk.AccAddress) ([]types.Item, error) {
 	var inputItems []types.Item

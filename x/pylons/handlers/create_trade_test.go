@@ -15,7 +15,7 @@ import (
 
 func TestHandlerMsgCreateTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(100000))
+	sender, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.True(t, err == nil)
@@ -32,8 +32,16 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	err = tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
+	item1 := keep.GenItem(cbData.CookbookID, sender, "Raichu")
+	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	require.True(t, err == nil)
+
 	item2 := keep.GenItem(cbData.CookbookID, sender2, "Pichu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	require.True(t, err == nil)
+
+	item3 := keep.GenItem(cbData.CookbookID, sender, "Raichu")
+	err = tci.PlnK.SetItem(tci.Ctx, *item3)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -49,7 +57,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList("", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				*item,
+				*item1,
 			},
 			outputCoinList: types.NewPylon(1000000),
 			desiredError:   "There should be no empty cookbook ID inputs for trades",
@@ -66,7 +74,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				*item,
+				*item1,
 			},
 			showError:    true,
 			desiredError: "there should be more than 10 amount of pylon per trade",
@@ -75,7 +83,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				*item,
+				*item1,
 			},
 			outputCoinList: types.NewPylon(1),
 			desiredError:   "there should be more than 10 amount of pylon per trade",
@@ -103,7 +111,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				*item,
+				*item3,
 			},
 			outputCoinList: types.NewPylon(1000000),
 			desiredError:   "sender doesn't have enough coins for the trade",
@@ -123,7 +131,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 				require.True(t, len(ctRespData.TradeID) > 0)
 			} else {
 				require.True(t, err != nil)
-				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
 			}
 		})
 	}

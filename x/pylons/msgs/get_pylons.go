@@ -22,7 +22,7 @@ func NewMsgGetPylons(amount sdk.Coins, requester sdk.AccAddress) MsgGetPylons {
 }
 
 // Route should return the name of the module
-func (msg MsgGetPylons) Route() string { return "pylons" }
+func (msg MsgGetPylons) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgGetPylons) Type() string { return "get_pylons" }

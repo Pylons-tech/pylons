@@ -1,0 +1,24 @@
+{
+  "CoinInputs": [],
+  "ItemInputRefs": [],
+  "Entries":{
+      "CoinOutputs":[
+          {
+              "Coin":"pylon",
+              "Count":"100"
+          }
+      ]
+  },
+  "Outputs": [
+      {
+          "ResultEntries": ["0"],
+          "Weight": "1"
+      }
+  ],
+  "ExtraInfo": "",
+  "Sender": "account2",
+  "Name": "Pylon Farming Recipe",
+  "CookbookID": "javelincb-1589853709",
+  "Description": "this recipe is used to generate pylon from recipe.",
+  "BlockInterval": "0"
+}

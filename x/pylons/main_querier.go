@@ -23,6 +23,8 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 			return queriers.GetRecipe(ctx, path[1:], req, keeper)
 		case queriers.KeyGetExecution:
 			return queriers.GetExecution(ctx, path[1:], req, keeper)
+		case queriers.KeyGetTrade:
+			return queriers.GetTrade(ctx, path[1:], req, keeper)
 		case queriers.KeyListCookbook:
 			return queriers.ListCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyAddrFromPubKey:

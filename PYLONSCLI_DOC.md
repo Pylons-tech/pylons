@@ -23,7 +23,7 @@ pylonsd add-genesis-account $(pylonscli keys show node0 -a --keyring-backend=tes
 pylonsd gentx --name node0 --keyring-backend=test
 pylonsd collect-gentxs
 
-pylonscli tx pylons get-pylons
+pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
 pylonscli tx pylons send-pylons
 ```
 ## Fetching pylons data
@@ -53,6 +53,7 @@ pylonscli query pylons list_shorten_recipe --account cosmos1tqvdp4rc28zklnk8mwxh
 ```
 pylonscli query pylons list_trade
 pylonscli query pylons list_trade --account cosmos1tqvdp4rc28zklnk8mwxh94gdlel0s58tcwdrj9
+pylonscli query pylons get_trade cosmos17gepewvvynfvxslaplzd8xcd8klj6rmh9a6qu7c326e2a1-fc53-4b20-bf02-56707d4fc532
 ```
 
 

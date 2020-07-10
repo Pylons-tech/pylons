@@ -14,7 +14,7 @@ import (
 
 func TestHandlerMsgEnableRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2 := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
@@ -23,25 +23,25 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
-		recipeID     string
+		rcpID        string
 		sender       sdk.AccAddress
 		desiredError string
 		showError    bool
 	}{
 		"wrong recipe check": {
-			recipeID:     "invalidRecipeID",
+			rcpID:        "invalidRecipeID",
 			sender:       sender1,
 			desiredError: "The recipe doesn't exist",
 			showError:    true,
 		},
 		"owner of recipe check": {
-			recipeID:     rcpData.RecipeID,
+			rcpID:        rcpData.RecipeID,
 			sender:       sender2,
 			desiredError: "msg sender is not the owner of the recipe",
 			showError:    true,
 		},
 		"successful update check": {
-			recipeID:     rcpData.RecipeID,
+			rcpID:        rcpData.RecipeID,
 			sender:       sender1,
 			desiredError: "",
 			showError:    false,
@@ -49,7 +49,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgEnableRecipe(tc.recipeID, tc.sender)
+			msg := msgs.NewMsgEnableRecipe(tc.rcpID, tc.sender)
 			result, err := HandlerMsgEnableRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
@@ -60,7 +60,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 				require.True(t, enableRcpResponse.Status == "Success")
 				require.True(t, enableRcpResponse.Message == "successfully enabled the recipe")
 
-				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.recipeID)
+				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
 				require.True(t, err == nil)
 				require.True(t, uRcp.Disabled == false)
 			} else {

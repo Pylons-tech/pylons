@@ -45,6 +45,58 @@ Sample Result
 }
 ```
 
+Format
+```
+http://${HOST}/pylons/get_trade/{tradeKeyName}
+```
+Sample
+```
+http://localhost:1317/pylons/get_trade/cosmos17gepewvvynfvxslaplzd8xcd8klj6rmh9a6qu7c326e2a1-fc53-4b20-bf02-56707d4fc532
+```
+Sample Result
+```
+{
+  "height": "0",
+  "result": {
+    "ID": "cosmos17gepewvvynfvxslaplzd8xcd8klj6rmh9a6qu7c326e2a1-fc53-4b20-bf02-56707d4fc532",
+    "CoinInputs": null,
+    "ItemInputs": [
+      {
+        "ItemInput": {
+          "Doubles": null,
+          "Longs": [
+            {
+              "Key": "level",
+              "MinValue": "1",
+              "MaxValue": "1"
+            }
+          ],
+          "Strings": [
+            {
+              "Key": "Name",
+              "Value": "Copper sword"
+            }
+          ]
+        },
+        "CookbookID": "LOUD-v0.0.0-1579053457"
+      }
+    ],
+    "CoinOutputs": [
+      {
+        "denom": "pylon",
+        "amount": "200"
+      }
+    ],
+    "ItemOutputs": null,
+    "ExtraInfo": "sword to pylon trading created by loud game",
+    "Sender": "cosmos17gepewvvynfvxslaplzd8xcd8klj6rmh9a6qu7",
+    "FulFiller": "",
+    "Disabled": false,
+    "Completed": false
+  }
+}
+```
+
 ### recipes
 
 Format

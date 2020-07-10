@@ -13,7 +13,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "cookbooks": ["renamecb"]
                 }
             ]
@@ -33,7 +33,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Unnamed Sword" }
@@ -57,7 +57,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Renamed Sword" }

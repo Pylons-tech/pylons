@@ -52,7 +52,7 @@ jobs:
       - run: pylonscli config indent true
       - run: pylonscli config trust-node true
       - run: 
-          command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make fixture_tests)
+          command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make fixture_tests ARGS="--accounts=michael,eugen")
           no_output_timeout: 10m
 workflows:
   version: 2

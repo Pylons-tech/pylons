@@ -39,6 +39,7 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 		(types.StringInputParamList{types.StringInputParam{Key: "Name", Value: name}}).Actualize(),
 		sender,
 		0,
+		0,
 	)
 }
 func createTestCodec() *codec.Codec {
@@ -140,14 +141,31 @@ func SetupTestCoinInput() TestCoinInput {
 	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}
 }
 
-// SetupTestAccounts do setup for test accounts
-func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress) {
+// SetupTestAccounts do setup for test accounts with coins
+func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins, s2coins sdk.Coins, s3coins sdk.Coins, s4coins sdk.Coins) (sdk.AccAddress, sdk.AccAddress, sdk.AccAddress, sdk.AccAddress) {
 	sender1, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	sender2, _ := sdk.AccAddressFromBech32("cosmos16wfryel63g7axeamw68630wglalcnk3l0zuadc")
+	sender3, _ := sdk.AccAddressFromBech32("cosmos17aspkwytc3j5a3zhzdh20d6m8kc28eed6gdl6t")
+	sender4, _ := sdk.AccAddressFromBech32("cosmos13p8890funv54hflk82ju0zv47tspglpk373453")
 
 	if s1coins != nil {
 		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins)
 		require.True(t, err == nil)
 	}
-	return sender1, sender2
+
+	if s2coins != nil {
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins)
+		require.True(t, err == nil)
+	}
+
+	if s3coins != nil {
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins)
+		require.True(t, err == nil)
+	}
+
+	if s4coins != nil {
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins)
+		require.True(t, err == nil)
+	}
+	return sender1, sender2, sender3, sender4
 }

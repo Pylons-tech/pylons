@@ -13,7 +13,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "cookbooks": ["tradecookbook"]
                 }
             ]
@@ -33,7 +33,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v1" }
@@ -57,7 +57,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v2" }
@@ -81,7 +81,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v3" }
@@ -105,10 +105,34 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v4" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_TRADING_KNIFE_V5",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/trading/trading_knife_v5.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account1",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Trading Knife v5" }
                         }
                     ]
                 }
@@ -129,7 +153,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["coin to coin trading"]
                 }
             ]
@@ -149,7 +173,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["pylon to node0 trading for disable test"]
                 }
             ]
@@ -197,7 +221,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["coin to item trading"]
                 }
             ]
@@ -217,7 +241,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v1" }
@@ -225,7 +249,7 @@
                     ]
                 },
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -234,6 +258,40 @@
                     ]
                 }
             ]
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_COIN_TRADE2",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V5"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_coin2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account2",
+                    "trades": ["item to coin trading2"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_COIN_TRADE2",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE2"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_coin2.json",
+        "output": {
+            "txResult": {
+                "errLog": "the sender doesn't have the trade item attributes"
+            }
         }
     },
     {
@@ -250,7 +308,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["item to coin trading"]
                 }
             ]
@@ -270,7 +328,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v3" }
@@ -278,7 +336,7 @@
                     ]
                 },
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -303,7 +361,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "trades": ["item to item trading"]
                 }
             ]
@@ -323,7 +381,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v4" }
@@ -331,7 +389,7 @@
                     ]
                 },
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v2" }
@@ -339,7 +397,7 @@
                     ]
                 },
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -348,7 +406,7 @@
                     ] 
                 },
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -357,6 +415,88 @@
                     ] 
                 }
             ]
+        }
+    },
+    {
+        "ID": "CREATE_SMALLER_THAN_DUST_PYLON_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_smaller_than_dust_pylon.json",
+        "output": {
+            "txResult": {
+                "broadcastError": "there should be more than 10 amount of pylon per trade"
+            }
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_COIN_TRADE3",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V3"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_coin3.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account2",
+                    "trades": ["item to coin trading"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_COIN_TRADE3",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE3"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_coin3.json",
+        "output": {
+            "txResult": {
+                "errLog": "the item IDs count doesn't match the trade input"
+            }
+        }
+    },
+    {
+        "ID": "CREATE_UNORDERED_COIN_INPUT_LIST_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_unordered_coin_input_list.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account2",
+                    "trades": ["unordered coin input list trading"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_UNORDERED_COIN_INPUT_LIST_TRADE",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_UNORDERED_COIN_INPUT_LIST_TRADE"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_unordered_coin_input_list.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            }
         }
     }
 ]

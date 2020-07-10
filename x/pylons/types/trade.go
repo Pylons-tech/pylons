@@ -12,16 +12,16 @@ const TypeTrade = "trade"
 // Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
 // the FulFiller.
 type Trade struct {
-	ID          string // the recipe guid
-	CoinInputs  CoinInputList
-	ItemInputs  TradeItemInputList
-	CoinOutputs sdk.Coins
-	ItemOutputs ItemList
-	ExtraInfo   string
-	Sender      sdk.AccAddress
-	FulFiller   sdk.AccAddress
-	Disabled    bool
-	Completed   bool
+	ID          string             // the trade guid
+	CoinInputs  CoinInputList      // coins that the fulfiller should send to creator
+	ItemInputs  TradeItemInputList // items that the fulfiller should send to creator
+	CoinOutputs sdk.Coins          // coins that the creator should send to fulfiller
+	ItemOutputs ItemList           // items that the creator should send to fulfiller
+	ExtraInfo   string             // custom trade info text
+	Sender      sdk.AccAddress     // trade creator address
+	FulFiller   sdk.AccAddress     // trade fulfiller address (acceptor)
+	Disabled    bool               // disabled flag
+	Completed   bool               // completed flag
 }
 
 // TradeList is a list of trades
@@ -66,10 +66,14 @@ func (trd *Trade) String() string {
 		ItemInputs: %s,
 		CoinOutputs: %s,
 		ItemOutputs: %+v,
+		ExtraInfo: %s,
+		Sender: %+v,
 	}`, trd.ID,
 		trd.CoinInputs.String(),
 		trd.ItemInputs.String(),
 		trd.CoinOutputs.String(),
 		trd.ItemOutputs,
+		trd.ExtraInfo,
+		trd.Sender,
 	)
 }

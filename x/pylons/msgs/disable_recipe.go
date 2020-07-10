@@ -22,7 +22,7 @@ func NewMsgDisableRecipe(recipeID string, sender sdk.AccAddress) MsgDisableRecip
 }
 
 // Route should return the name of the module
-func (msg MsgDisableRecipe) Route() string { return "pylons" }
+func (msg MsgDisableRecipe) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgDisableRecipe) Type() string { return "disable_recipe" }

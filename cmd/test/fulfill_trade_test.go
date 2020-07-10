@@ -4,9 +4,11 @@ import (
 	"strings"
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -16,12 +18,11 @@ type FulfillTradeTestCase struct {
 	name      string
 	extraInfo string
 
-	hasInputItem  bool
-	inputItemName string
+	hasInputItem   bool
+	inputItemName  string
+	wrongCBFulfill bool
 
-	hasInputCoin    bool
-	inputCoinName   string
-	inputCoinAmount int64
+	coinInputList types.CoinInputList
 
 	hasOutputCoin    bool
 	outputCoinName   string
@@ -30,9 +31,13 @@ type FulfillTradeTestCase struct {
 	hasOutputItem  bool
 	outputItemName string
 
+	desiredError        string
 	expectedStatus      string
 	expectedMessage     string
 	expectedRetryErrMsg string
+
+	checkPylonDistribution bool
+	pylonsLLCDistribution  int64
 }
 
 func TestFulfillTradeViaCLI(originT *originT.T) {
@@ -40,72 +45,97 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 	t.Parallel()
 	tests := []FulfillTradeTestCase{
 		{
-			"coin->coin fullfill trade test", // coin-coin fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC1",
-			false,
-			"",
-			true,
-			"node0token",
-			200,
-			true,
-			"pylon",
-			100,
-			false,
-			"",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "coin->coin fullfill trade test", // coin-coin fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC1",
+			hasInputItem:           false,
+			coinInputList:          types.GenCoinInputList("node0token", 200),
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  1,
 		},
 		{
-			"item->coin fullfill trade test", // item-coin fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC2",
-			true,
-			"TESTITEM_FulfillTrade__001_TC2",
-			false,
-			"",
-			0,
-			true,
-			"pylon",
-			100,
-			false,
-			"",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "item->coin fullfill trade test", // item-coin fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC2",
+			hasInputItem:           true,
+			inputItemName:          "TESTITEM_FulfillTrade__001_TC2",
+			coinInputList:          nil,
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  1,
 		},
 		{
-			"coin->item fullfill trade test", // coin-item fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC3",
-			false,
-			"",
-			true,
-			"pylon",
-			200,
-			false,
-			"",
-			0,
-			true,
-			"TESTITEM_FulfillTrade__001_TC3",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "coin->item fullfill trade test", // coin-item fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC3",
+			hasInputItem:           false,
+			coinInputList:          types.GenCoinInputList("pylon", 200),
+			hasOutputCoin:          false,
+			hasOutputItem:          true,
+			outputItemName:         "TESTITEM_FulfillTrade__001_TC3",
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  2,
 		},
 		{
-			"item->item fullfill trade test", // item-item fulfill trade test
-			"TESTTRD_FulfillTrade__001_TC4",
-			true,
-			"TESTITEM_FulfillTrade__001_TC4_INPUT",
-			true,
-			"pylon",
-			200,
-			false,
-			"",
-			0,
-			true,
-			"TESTITEM_FulfillTrade__001_TC4_OUTPUT",
-			"Success",
-			"successfully fulfilled the trade",
-			"this trade is already completed",
+			name:                   "item->item fullfill trade test", // item-item fulfill trade test
+			extraInfo:              "TESTTRD_FulfillTrade__001_TC4",
+			hasInputItem:           true,
+			inputItemName:          "TESTITEM_FulfillTrade__001_TC4_INPUT",
+			coinInputList:          types.GenCoinInputList("pylon", 200),
+			hasOutputCoin:          false,
+			hasOutputItem:          true,
+			outputItemName:         "TESTITEM_FulfillTrade__001_TC4_OUTPUT",
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  2,
+		},
+		{
+			name:          "trade unordered coin input test",
+			extraInfo:     "TESTTRD_FulfillTrade__001_TC5",
+			hasInputItem:  true,
+			inputItemName: "TESTITEM_FulfillTrade__001_TC5_INPUT",
+			coinInputList: types.CoinInputList{
+				types.CoinInput{Coin: "node0token", Count: 100},
+				types.CoinInput{Coin: "loudcoin", Count: 100},
+				types.CoinInput{Coin: "stake", Count: 100},
+			},
+			hasOutputCoin:          true,
+			outputCoinName:         "pylon",
+			outputCoinAmount:       100,
+			hasOutputItem:          false,
+			expectedStatus:         "Success",
+			expectedMessage:        "successfully fulfilled the trade",
+			expectedRetryErrMsg:    "this trade is already completed",
+			checkPylonDistribution: true,
+			pylonsLLCDistribution:  1,
+		},
+		{
+			name:             "same item with different cookbook id fulfill trade test",
+			extraInfo:        "TESTTRD_FulfillTrade__001_TC6",
+			hasInputItem:     true,
+			inputItemName:    "TESTITEM_FulfillTrade__001_TC6_INPUT",
+			wrongCBFulfill:   true,
+			coinInputList:    nil,
+			hasOutputCoin:    true,
+			outputCoinName:   "pylon",
+			outputCoinAmount: 100,
+			hasOutputItem:    false,
+			desiredError:     "the sender doesn't have the trade item attributes",
 		},
 	}
 
@@ -118,62 +148,87 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	mCB := GetMockedCookbook(t)
+	mCB := GetMockedCookbook("eugen", false, t)
+	mCB2 := GetMockedCookbook("eugen", true, t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {
-		outputItemID = MockItemGUID(mCB.ID, tc.outputItemName, t)
+		outputItemID = MockItemGUID(mCB.ID, "eugen", tc.outputItemName, t)
 	}
 
-	trdGUID := MockDetailedTradeGUID(mCB.ID, tc.hasInputCoin, tc.inputCoinName, tc.inputCoinAmount,
+	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
+	trdGUID := MockDetailedTradeGUID(mCB.ID,
+		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
 		tc.extraInfo,
 		t)
 
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err)
+	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
+
+	michaelAddr := inttestSDK.GetAccountAddr("michael", t)
+	michaelSdkAddr, err := sdk.AccAddressFromBech32(michaelAddr)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
-		itemIDs = []string{
-			MockItemGUID(mCB.ID, tc.inputItemName, t),
+		useCBID := mCB.ID
+		if tc.wrongCBFulfill {
+			useCBID = mCB2.ID
 		}
+		itemIDs = []string{MockItemGUID(useCBID, "michael", tc.inputItemName, t)}
 	}
 
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, sdkAddr, itemIDs)
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
+	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, michaelSdkAddr, itemIDs)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
 	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("unexpected transaction broadcast error")
+		TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 		return
 	}
 
-	txHandleResBytes, err := inttestSDK.WaitAndGetTxData(txhash, 3, t)
-	t.MustNil(err)
-	// t.Log("FulfillTrade txhash=", txhash, string(txHandleResBytes))
+	if tc.desiredError != "" {
+		txHandleErrBytes := GetTxHandleError(txhash, t)
+		t.WithFields(testing.Fields{
+			"txhash":         txhash,
+			"tx_error_bytes": string(txHandleErrBytes),
+			"desired_error":  tc.desiredError,
+		}).MustTrue(strings.Contains(string(txHandleErrBytes), tc.desiredError), "error is different from expected")
+		return
+	}
+
+	txHandleResBytes := GetTxHandleResult(txhash, t)
 	ffTrdResp := handlers.FulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
-	t.MustNil(err)
-
-	t.MustTrue(ffTrdResp.Status == tc.expectedStatus)
-	t.MustTrue(ffTrdResp.Message == tc.expectedMessage)
+	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
+	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.expectedStatus, tc.expectedMessage, t)
 
 	// Try again after fulfill trade
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "eugen", false)
-	if err != nil {
+	if tc.expectedRetryErrMsg != "" {
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
+		if err != nil {
+			TxBroadcastErrorCheck(txhash, err, t)
+			return
+		}
+
+		WaitOneBlockWithErrorCheck(t)
+
+		hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
 		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("unexpected transaction broadcast error")
-		return
+			"txhash":         txhash,
+			"hmrErr":         hmrErr,
+			"expectedHmrErr": tc.expectedRetryErrMsg,
+		}).MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
 	}
 
-	err = inttestSDK.WaitForNextBlock()
-	t.MustNil(err)
-	hmrErr := inttestSDK.GetHumanReadableErrorFromTxHash(txhash, t)
-	t.MustTrue(strings.Contains(hmrErr, tc.expectedRetryErrMsg))
+	if tc.checkPylonDistribution {
+		accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+		originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
+		pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
+		t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
+	}
 }

@@ -10,26 +10,28 @@ import (
 
 // MsgFiatItem is a msg struct to be used to fiat item
 type MsgFiatItem struct {
-	CookbookID string
-	Doubles    []types.DoubleKeyValue
-	Longs      []types.LongKeyValue
-	Strings    []types.StringKeyValue
-	Sender     sdk.AccAddress
+	CookbookID  string
+	Doubles     []types.DoubleKeyValue
+	Longs       []types.LongKeyValue
+	Strings     []types.StringKeyValue
+	Sender      sdk.AccAddress
+	TransferFee int64
 }
 
 // NewMsgFiatItem a constructor for MsgFiatItem msg
-func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress) MsgFiatItem {
+func NewMsgFiatItem(cookbookID string, doubles []types.DoubleKeyValue, longs []types.LongKeyValue, strings []types.StringKeyValue, sender sdk.AccAddress, transferFee int64) MsgFiatItem {
 	return MsgFiatItem{
-		CookbookID: cookbookID,
-		Doubles:    doubles,
-		Longs:      longs,
-		Strings:    strings,
-		Sender:     sender,
+		CookbookID:  cookbookID,
+		Doubles:     doubles,
+		Longs:       longs,
+		Strings:     strings,
+		Sender:      sender,
+		TransferFee: transferFee,
 	}
 }
 
 // Route should return the name of the module
-func (msg MsgFiatItem) Route() string { return "pylons" }
+func (msg MsgFiatItem) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgFiatItem) Type() string { return "fiat_item" }

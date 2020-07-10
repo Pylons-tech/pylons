@@ -25,7 +25,7 @@ func NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress) MsgChe
 }
 
 // Route should return the name of the module
-func (msg MsgCheckExecution) Route() string { return "pylons" }
+func (msg MsgCheckExecution) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgCheckExecution) Type() string { return "check_execution" }

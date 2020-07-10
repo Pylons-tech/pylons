@@ -49,10 +49,10 @@ pylonscli config trust-node true
 ```
 
 - Multinode integration test is using init-account.sh. It does not use get-pylons but use the public genesis account for the tests accounts setup.
-- For local genesis accounts setup for integration test, you can use `init-accounts.local.sh` file.
+- For local genesis accounts setup for integration test, you can use `init_accounts.local.sh` file.
 
 ```
-sh init-accounts.local.sh
+sh init_accounts.local.sh
 ```
 
 `michael`, `eugen` account will be created after success run and will have loudcoin and pylons denom for tests.
@@ -78,17 +78,44 @@ pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 
 ## Running tests
 - Unit test command
-
 ```
 make unit_tests
 ```
+- Specific unit test (regular expression filter)
+```
+make unit_tests ARGS="-run TestKeeperSetExecutio.*/empty_sender_tes"
+--- PASS: TestKeeperSetExecution (0.00s)
+    --- PASS: TestKeeperSetExecution/empty_sender_test (0.00s)
+PASS
+ok  	github.com/Pylons-tech/pylons/x/pylons/keep	0.050s
+```
+
 - Integration test with local daemon command
 ```
 make int_tests
 ```
+- Specific integration test (regular expression filter)
+```
+make int_tests ARGS="-run TestFulfillTradeViaCLI"
+--- PASS: TestFulfillTradeViaCLI (0.00s)
+    --- PASS: TestFulfillTradeViaCLI/same_item_with_different_cookbook_id_fulfill_trade_test (31.76s)
+    --- PASS: TestFulfillTradeViaCLI/coin->coin_fullfill_trade_test (37.59s)
+    --- PASS: TestFulfillTradeViaCLI/trade_unordered_coin_input_test (43.35s)
+    --- PASS: TestFulfillTradeViaCLI/item->item_fullfill_trade_test (49.27s)
+    --- PASS: TestFulfillTradeViaCLI/item->coin_fullfill_trade_test (33.78s)
+    --- PASS: TestFulfillTradeViaCLI/coin->item_fullfill_trade_test (39.66s)
+PASS
+ok  	github.com/Pylons-tech/pylons/cmd/test	71.481s
+```
+
 - Fixture test with local daemon command
 ```
-make fixture_tests
+make fixture_tests ARGS="--accounts=michael,eugen"
+```
+- Specific fixture test (scenario name filter)
+If not specify this param, it tests all scenario files. If specify only do specific tests.
+```
+make fixture_tests ARGS="--scenarios=multi_msg_tx,double_empty --accounts=michael,eugen"
 ```
 
 ### Before running integration and fixture test initialize blockchain status and start daemon
@@ -99,6 +126,16 @@ make reset_chain
 Start daemon  
 ```
 pylonsd start
+```
+
+### If you wanna get the latest updates of pylons_sdk, use the following commands
+Clean the cache
+```
+go clean -modcache
+```
+Get the latest pylons_sdk from github
+```
+go get github.com/Pylons-tech/pylons_sdk
 ```
 
 ### Configuration
@@ -112,6 +149,7 @@ fees:
   cookbook_premium_fee: 50000 # Cookbook creation fee
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
+  update_item_string_field_fee: 10 # Item string field update fee
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
 ```
@@ -121,6 +159,7 @@ validators:
 - `cookbook_premium_fee` refers to the amount of pylons that needs to be paid to Pylons LLC validator address to create a premium tier cookbook creation.  
 - `pylons_trade_percentage` refers to the percentage of pylons that needs to be transfered from pylons incomer's side.
 - `minimum_trade_price` refers to the minimum amount of pylons that needs to participate per trading.
+- `update_item_string_field_fee` refers to item string field update fee per field
 - `pylons_llc` refers to cosmos address for Pylons LLC validator.
 
 ## Deploying for production
@@ -283,6 +322,29 @@ Successful result
   "height": "0",
   "txhash": "8A847C81B396B07578FAEB25AA3E01FA11F03F300ECDDC8E4918A1D6F883640A"
 }
+```
+
+### single node docker test local
+
+Test daemon build
+```
+docker build . --target pylonsd
+docker run <id>
+```
+Test daemon build with integration test
+```
+docker build . --target integration_test
+docker run <id>
+```
+Test daemon build with fixture test
+```
+docker build . --target fixture_test
+docker run <id>
+```
+Test daemon build with both integration test and fixture test
+```
+docker build . --target all_test
+docker run <id>
 ```
 
 ### 3 node local cloudbuild setup guide on OSX

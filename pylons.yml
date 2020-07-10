@@ -4,5 +4,9 @@ fees:
   cookbook_premium_fee: 50000 # Cookbook creation fee
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
+  update_item_string_field_fee: 10 # Item string field update fee
+  min_item_transfer_fee: 1 # Basic item transfer fee
+  max_item_transfer_fee: 100000
+  item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced

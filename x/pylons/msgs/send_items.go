@@ -24,7 +24,7 @@ func NewMsgSendItems(itemIDs []string, sender sdk.AccAddress, receiver sdk.AccAd
 }
 
 // Route should return the name of the module
-func (msg MsgSendItems) Route() string { return "pylons" }
+func (msg MsgSendItems) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgSendItems) Type() string { return "send_items" }

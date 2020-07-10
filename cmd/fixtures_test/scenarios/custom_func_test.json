@@ -13,7 +13,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "cookbooks": ["custom_func_test"]
                 }
             ]
@@ -33,7 +33,7 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Custom Function TestCharacter" }
@@ -57,7 +57,7 @@
             },
             "property": [
                 {
-                    "owner": "eugen",
+                    "owner": "account2",
                     "recipes": ["Growing HP Character Health Restore Recipe"]
                 }
             ]
@@ -94,11 +94,12 @@
             },
             "property": [
                 {
-                    "owner": "michael",
+                    "owner": "account1",
                     "items": [
                         {
                             "stringValues": { "Name": "Custom Function TestCharacter" },
-                            "dblValues": { "attack": "1034" }
+                            "dblValues": { "attack": "1034" },
+                            "transferFee": "1200"
                         }
                     ]
                 }

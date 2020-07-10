@@ -26,7 +26,7 @@ func NewMsgUpdateItemString(ItemID, Field, Value string, Sender sdk.AccAddress) 
 }
 
 // Route should return the name of the module
-func (msg MsgUpdateItemString) Route() string { return "pylons" }
+func (msg MsgUpdateItemString) Route() string { return RouterKey }
 
 // Type should return the action
 func (msg MsgUpdateItemString) Type() string { return "update_item_string" }

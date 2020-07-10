@@ -28,14 +28,14 @@ type ExecutionList struct {
 }
 
 // NewExecution return a new Execution
-func NewExecution(rcpID string, cbID string, ci sdk.Coins,
+func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 	itemInputs []Item,
 	blockHeight int64, sender sdk.AccAddress,
 	completed bool) Execution {
 
 	exec := Execution{
-		RecipeID:    rcpID,
-		CookbookID:  cbID,
+		RecipeID:    recipeID,
+		CookbookID:  cookbookID,
 		CoinInputs:  ci,
 		ItemInputs:  itemInputs,
 		BlockHeight: blockHeight,

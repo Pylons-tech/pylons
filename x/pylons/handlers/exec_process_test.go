@@ -14,7 +14,7 @@ import (
 
 func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cbData := MockCookbook(tci, sender1)
 
@@ -44,21 +44,21 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 
 	cases := map[string]struct {
 		itemIDs      []string
-		recipeID     string
+		rcpID        string
 		sender       sdk.AccAddress
 		desiredError string
 		showError    bool
 	}{
 		"correct same item merge recipe": {
 			itemIDs:      []string{initItemIDs[0], initItemIDs[1]},
-			recipeID:     knifeMergeRecipe.RecipeID,
+			rcpID:        knifeMergeRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "",
 			showError:    false,
 		},
 		"wrong same item merge recipe": {
 			itemIDs:      []string{initItemIDs[2], initItemIDs[2]},
-			recipeID:     shieldMergeRecipe.RecipeID,
+			rcpID:        shieldMergeRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "multiple use of same item as item inputs",
 			showError:    true,
@@ -66,7 +66,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgExecuteRecipe(tc.recipeID, tc.sender, tc.itemIDs)
+			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.True(t, err == nil)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}

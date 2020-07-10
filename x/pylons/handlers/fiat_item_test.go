@@ -15,7 +15,7 @@ import (
 
 func TestHandlerMsgFiatItem(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000))
+	sender, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cases := map[string]struct {
 		cookbookName    string
@@ -47,7 +47,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
-			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender)
+			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender, 0)
 			result, err := HandlerMsgFiatItem(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {

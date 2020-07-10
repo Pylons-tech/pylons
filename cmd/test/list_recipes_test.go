@@ -3,8 +3,8 @@ package inttest
 import (
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/fixtures_test/evtesting"
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 )
 
 func TestListRecipeViaCLI(originT *originT.T) {
@@ -33,20 +33,16 @@ func TestListRecipeViaCLI(originT *originT.T) {
 			}
 
 			recipes, err := inttestSDK.ListRecipesViaCLI("")
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error listing recipes")
-			}
+			t.MustNil(err, "error listing recipes")
+			t.MustTrue(len(recipes) > 0, "there should be at least 1 recipe")
 
-			t.MustNil(err)
-			t.MustTrue(len(recipes) > 0)
+			WaitOneBlockWithErrorCheck(t)
 
-			err = inttestSDK.WaitForNextBlock()
-			t.MustNil(err)
 			_, ok := inttestSDK.FindRecipeFromArrayByName(recipes, tc.rcpName)
 			if !ok {
-				t.Fatalf("error getting recipe with name %+v", tc.rcpName)
+				t.WithFields(testing.Fields{
+					"recipe_name": tc.rcpName,
+				}).Fatal("error getting recipe from name")
 			}
 		})
 	}

@@ -1,5 +1,10 @@
 package pylons
 
+import (
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+)
+
 // store keys
 const (
 	KeyPylonsEntity    = "pylons_entity"
@@ -12,13 +17,13 @@ const (
 
 const (
 	// ModuleName is the name of the module
-	ModuleName = "pylons"
+	ModuleName = types.ModuleName
 
 	// StoreKey to be used when creating the KVStore
 	StoreKey = ModuleName
 
 	// RouterKey is the module name router key
-	RouterKey = ModuleName
+	RouterKey = msgs.RouterKey
 
 	// QuerierRoute to be used for querierer msgs
 	QuerierRoute = ModuleName

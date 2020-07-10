@@ -1,0 +1,27 @@
+{
+  "type": "cosmos-sdk/StdTx",
+  "value": {
+    "msg": [
+      {
+        "type": "pylons/CreateCookbook",
+        "value": {
+          "CookbookID": "LOUD-v0.1.0-1579053457",
+          "Name": "Legend of Undead Dragon",
+          "Description": "Legend of Undead DragonLegend of Undead DragonLegend of Undead DragonLegend of Undead Dragon",
+          "Developer": "Pylons/LOUD Team",
+          "Level": "0",
+          "Sender": "cosmos17uqtawan3jrn0jgwlhchmszd9ve07qfkyruvp2",
+          "SupportEmail": "stalepresh121@outlook.com",
+          "Version": "1.0.0",
+          "CostPerBlock": "50"
+        }
+      }
+    ],
+    "fee": {
+      "amount": [],
+      "gas": "200000"
+    },
+    "signatures": null,
+    "memo": ""
+  }
+}
