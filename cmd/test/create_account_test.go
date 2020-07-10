@@ -1,13 +1,13 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateAccountViaCLI(originT *originT.T) {
@@ -15,41 +15,44 @@ func TestCreateAccountViaCLI(originT *originT.T) {
 	t.Parallel()
 
 	tests := []struct {
-		name            string
-		wrongSigner     bool
-		existingAccount bool
-		desiredError    string
+		name         string
+		wrongSigner  bool
+		genNewKey    bool
+		desiredError string
 	}{
 		{
-			name: "successful account creation",
+			name:      "successful account creation",
+			genNewKey: true,
 		},
 		{
 			name:        "account creation wrong signer",
+			genNewKey:   true,
 			wrongSigner: true,
 		},
 		{
-			name:            "account creation wrong signer",
-			existingAccount: true,
+			name:      "account creation existing account",
+			genNewKey: false,
 		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-				msgs.NewMsgCreateAccount(sdkAddr),
-				"eugen",
-				false,
-			)
-			if err != nil {
-				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
-				return
+			key := "eugen"
+			if tc.genNewKey {
+				key = fmt.Sprintf("car%d", time.Now().Unix())
+				_, err := inttestSDK.AddNewLocalKey(key)
+				t.MustNil(err)
 			}
+			result, logstr, err := inttestSDK.CreateChainAccount(key)
+			t.WithFields(testing.Fields{
+				"result": result,
+				"logstr": logstr,
+			}).MustNil(err, "error creating account on chain")
 
-			GetTxHandleResult(txhash, t)
+			err = inttestSDK.WaitForBlockInterval(2)
+			t.MustNil(err, "error waiting for block interval")
+			strAddr := inttestSDK.GetAccountAddr(key, t)
+			inttestSDK.GetAccountInfoFromAddr(strAddr, t)
 		})
 	}
 }
