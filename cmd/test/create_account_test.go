@@ -24,15 +24,15 @@ func TestCreateAccountViaCLI(originT *originT.T) {
 			name:      "successful account creation",
 			genNewKey: true,
 		},
-		{
-			name:        "account creation wrong signer",
-			genNewKey:   true,
-			wrongSigner: true,
-		},
-		{
-			name:      "account creation existing account",
-			genNewKey: false,
-		},
+		// {
+		// 	name:        "account creation wrong signer",
+		// 	genNewKey:   true,
+		// 	wrongSigner: true,
+		// },
+		// {
+		// 	name:      "account creation existing account",
+		// 	genNewKey: false,
+		// },
 	}
 
 	for _, tc := range tests {
