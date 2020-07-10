@@ -86,11 +86,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		showError           bool
 
 		checkAmountDiffer     bool
-		senderAmountDiffer    int64
-		sender2AmountDiffer   int64
-		sender3AmountDiffer   int64
-		sender4AmountDiffer   int64
-		pylonsLLCAmountDiffer int64
+		senderAmountDiffer    types.CoinInputList
+		sender2AmountDiffer   types.CoinInputList
+		sender3AmountDiffer   types.CoinInputList
+		sender4AmountDiffer   types.CoinInputList
+		pylonsLLCAmountDiffer types.CoinInputList
 	}{
 		"trade pylon distribution test": {
 			sender:         sender,
@@ -103,20 +103,20 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		"trade unordered coin input test": {
 			sender:    sender,
 			fulfiller: sender2,
-			inputCoinList: types.CoinInputList{
-				types.CoinInput{
+			inputCoinList: []types.CoinInput{
+				{
 					Coin:  types.Pylon,
 					Count: 100,
 				},
-				types.CoinInput{
+				{
 					Coin:  "aaaa",
 					Count: 100,
 				},
-				types.CoinInput{
+				{
 					Coin:  "zzzz",
 					Count: 100,
 				},
-				types.CoinInput{
+				{
 					Coin:  "cccc",
 					Count: 100,
 				},
@@ -165,11 +165,9 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			desiredError:          "",
 			showError:             false,
 			checkAmountDiffer:     true,
-			senderAmountDiffer:    780,
-			sender2AmountDiffer:   -800,
-			sender3AmountDiffer:   0,
-			sender4AmountDiffer:   0,
-			pylonsLLCAmountDiffer: 20,
+			senderAmountDiffer:    []types.CoinInput{{Coin: types.Pylon, Count: 780}},
+			sender2AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: -800}},
+			pylonsLLCAmountDiffer: []types.CoinInput{{Coin: types.Pylon, Count: 20}},
 		},
 		"correct item trading fulfill test with 2 items and 2 amounts": {
 			sender:                sender2,
@@ -182,27 +180,27 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			desiredError:          "",
 			showError:             false,
 			checkAmountDiffer:     true,
-			senderAmountDiffer:    45,
-			sender2AmountDiffer:   -174,
-			sender3AmountDiffer:   63,
-			sender4AmountDiffer:   54,
-			pylonsLLCAmountDiffer: 12,
+			senderAmountDiffer:    []types.CoinInput{{Coin: types.Pylon, Count: 45}},
+			sender2AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: -174}},
+			sender3AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: 63}},
+			sender4AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: 54}},
+			pylonsLLCAmountDiffer: []types.CoinInput{{Coin: types.Pylon, Count: 12}},
 		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			// get pylons amount of all accounts
-			senderAmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender).AmountOf(types.Pylon).Int64()
-			sender2AmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender2).AmountOf(types.Pylon).Int64()
-			sender3AmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender3).AmountOf(types.Pylon).Int64()
-			sender4AmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender4).AmountOf(types.Pylon).Int64()
+			senderAmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender)
+			sender2AmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender2)
+			sender3AmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender3)
+			sender4AmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender4)
 
 			// get pylons LLC address
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 			require.True(t, err == nil)
 
 			// get pylons amount of pylons LLC amount
-			pylonsLLCAmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress).AmountOf(types.Pylon).Int64()
+			pylonsLLCAmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
 
 			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
 			ctResult, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, ctMsg)
@@ -228,29 +226,27 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 				require.True(t, ffRespData.Message == "successfully fulfilled the trade")
 
 				if tc.checkAmountDiffer {
-					// get difference from the first amount of accounts
-					senderAmountDiffer := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender).AmountOf(types.Pylon).Int64() - senderAmountFirst
-					sender2AmountDiffer := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender2).AmountOf(types.Pylon).Int64() - sender2AmountFirst
-					sender3AmountDiffer := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender3).AmountOf(types.Pylon).Int64() - sender3AmountFirst
-					sender4AmountDiffer := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender4).AmountOf(types.Pylon).Int64() - sender4AmountFirst
 
-					// get difference from the first amount of pylons LLC address
-					pylonsLLCAmountDiffer := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress).AmountOf(types.Pylon).Int64() - pylonsLLCAmountFirst
-
-					if tc.senderAmountDiffer > 0 {
-						require.True(t, senderAmountDiffer == tc.senderAmountDiffer)
+					for _, diff := range tc.senderAmountDiffer {
+						d := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender).AmountOf(diff.Coin).Int64() - senderAmountFirst.AmountOf(diff.Coin).Int64()
+						require.True(t, d == diff.Count)
 					}
-					if tc.sender2AmountDiffer > 0 {
-						require.True(t, sender2AmountDiffer == tc.sender2AmountDiffer)
+					for _, diff := range tc.sender2AmountDiffer {
+						d := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender2).AmountOf(diff.Coin).Int64() - sender2AmountFirst.AmountOf(diff.Coin).Int64()
+						require.True(t, d == diff.Count)
 					}
-					if tc.sender3AmountDiffer > 0 {
-						require.True(t, sender3AmountDiffer == tc.sender3AmountDiffer)
+					for _, diff := range tc.sender3AmountDiffer {
+						d := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender3).AmountOf(diff.Coin).Int64() - sender3AmountFirst.AmountOf(diff.Coin).Int64()
+						require.True(t, d == diff.Count)
 					}
-					if tc.sender4AmountDiffer > 0 {
-						require.True(t, sender4AmountDiffer == tc.sender4AmountDiffer)
+					for _, diff := range tc.sender4AmountDiffer {
+						d := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, sender4).AmountOf(diff.Coin).Int64() - sender4AmountFirst.AmountOf(diff.Coin).Int64()
+						require.True(t, d == diff.Count)
 					}
-
-					require.True(t, pylonsLLCAmountDiffer == tc.pylonsLLCAmountDiffer)
+					for _, diff := range tc.pylonsLLCAmountDiffer {
+						d := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress).AmountOf(diff.Coin).Int64() - pylonsLLCAmountFirst.AmountOf(diff.Coin).Int64()
+						require.True(t, d == diff.Count)
+					}
 				}
 			}
 		})
