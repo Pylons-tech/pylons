@@ -1,6 +1,9 @@
 #!/bin/sh
-​
-pylonsd testnet --v 3 --output-dir ./build --starting-ip-address 10.107.138.2 --keyring-backend=test
+echo "pylonsd testnet --v 3 --output-dir ./build --keyring-backend=test --starting-ip-address $1 --node-ip-addresses $2"
+
+pylonsd testnet --v 3 --output-dir ./build --keyring-backend=test \
+    --starting-ip-address $1 \
+    --node-ip-addresses $2
 
 # public configurations
 cp ./build/node0/pylonsd/config/config.toml /root/production_config

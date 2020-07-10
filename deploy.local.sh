@@ -15,7 +15,7 @@ rm -rf $PROD_DIR
 
 # build configuration into production_config_temp directory
 echo '-------building the genesis-----'
-docker-compose --file docker-compose.genesis.yml up --build --remove-orphans
+STARTINGIP=$NODE0_IP NODEIPS="$NODE1_IP,$NODE2_IP" docker-compose --file docker-compose.genesis.yml up --build --remove-orphans
 # docker-compose --file docker-compose.genesis.yml up
 
 # minikube env setup
@@ -36,24 +36,24 @@ kubectl create configmap genesis --from-file=$PROD_DIR/genesis.json
 echo '-------node0 secrets-----'
 kubectl delete secret node0-all-keys
 sed -i '' 's/addr_book_strict = true/addr_book_strict = false/g' $NODE0_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.2/$NODE0_IP/g" $NODE0_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.3/$NODE1_IP/g" $NODE0_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.4/$NODE2_IP/g" $NODE0_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.2/$NODE0_IP/g" $NODE0_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.3/$NODE1_IP/g" $NODE0_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.4/$NODE2_IP/g" $NODE0_CONFIG_PATH/config.toml
 kubectl create secret generic node0-all-keys --from-file=$NODE0_CONFIG_PATH/priv_validator_key.json --from-file=$NODE0_CONFIG_PATH/config.toml --from-file=$NODE0_CONFIG_PATH/node_key.json
 
 echo '-------node1 secrets-----'
 kubectl delete secret node1-all-keys
 sed -i '' 's/addr_book_strict = true/addr_book_strict = false/g' $NODE1_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.2/$NODE0_IP/g" $NODE1_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.3/$NODE1_IP/g" $NODE1_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.4/$NODE2_IP/g" $NODE1_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.2/$NODE0_IP/g" $NODE1_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.3/$NODE1_IP/g" $NODE1_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.4/$NODE2_IP/g" $NODE1_CONFIG_PATH/config.toml
 kubectl create secret generic node1-all-keys --from-file=$NODE1_CONFIG_PATH/priv_validator_key.json --from-file=$NODE1_CONFIG_PATH/config.toml --from-file=$NODE1_CONFIG_PATH/node_key.json
 echo '-------node2 secrets-----'
 kubectl delete secret node2-all-keys
 sed -i '' 's/addr_book_strict = true/addr_book_strict = false/g' $NODE2_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.2/$NODE0_IP/g" $NODE2_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.3/$NODE1_IP/g" $NODE2_CONFIG_PATH/config.toml
-sed -i '' "s/10.107.138.4/$NODE2_IP/g" $NODE2_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.2/$NODE0_IP/g" $NODE2_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.3/$NODE1_IP/g" $NODE2_CONFIG_PATH/config.toml
+# sed -i '' "s/10.107.138.4/$NODE2_IP/g" $NODE2_CONFIG_PATH/config.toml
 kubectl create secret generic node2-all-keys --from-file=$NODE2_CONFIG_PATH/priv_validator_key.json --from-file=$NODE2_CONFIG_PATH/config.toml --from-file=$NODE2_CONFIG_PATH/node_key.json
 
 # nodes cleanup
@@ -74,6 +74,9 @@ kubectl delete pod/node2-0
 
 # nodes deployment
 echo '-------node deployment-----'
+sed -i '' "s/10.107.138.2/$NODE0_IP/g" node-deployment.yaml
+sed -i '' "s/10.107.138.3/$NODE1_IP/g" node-deployment.yaml
+sed -i '' "s/10.107.138.4/$NODE2_IP/g" node-deployment.yaml
 kubectl apply -f node-deployment.yaml
 kubectl get all
 

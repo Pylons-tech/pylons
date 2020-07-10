@@ -6,3 +6,6 @@ services:
       target: genesis
     volumes:
       - ./production_config_temp:/root/production_config
+    environment:
+      STARTINGIP: "$STARTINGIP"
+      NODEIPS: "$NODEIPS"

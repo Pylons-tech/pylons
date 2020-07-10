@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clientkeys "github.com/cosmos/cosmos-sdk/client/keys"
@@ -45,6 +46,7 @@ var (
 	flagNodeDaemonHome    = "node-daemon-home"
 	flagNodeCLIHome       = "node-cli-home"
 	flagStartingIPAddress = "starting-ip-address"
+	flagNodeIPAddresses   = "node-ip-addresses"
 )
 
 // get cmd to initialize all files for tendermint testnet and application
@@ -73,10 +75,11 @@ Example:
 			nodeDaemonHome := viper.GetString(flagNodeDaemonHome)
 			nodeCLIHome := viper.GetString(flagNodeCLIHome)
 			startingIPAddress := viper.GetString(flagStartingIPAddress)
+			nodeIPAddresses := viper.GetString(flagNodeIPAddresses)
 			numValidators := viper.GetInt(flagNumValidators)
 
 			return InitTestnet(cmd, config, cdc, mbm, genAccIterator, outputDir, chainID,
-				minGasPrices, nodeDirPrefix, nodeDaemonHome, nodeCLIHome, startingIPAddress, numValidators)
+				minGasPrices, nodeDirPrefix, nodeDaemonHome, nodeCLIHome, startingIPAddress, strings.Split(nodeIPAddresses, ","), numValidators)
 		},
 	}
 
@@ -92,6 +95,8 @@ Example:
 		"Home directory of the node's cli configuration")
 	cmd.Flags().String(flagStartingIPAddress, "192.168.0.1",
 		"Starting IP address (192.168.0.1 results in persistent peers list ID0@192.168.0.1:46656, ID1@192.168.0.2:46656, ...)")
+	cmd.Flags().String(flagNodeIPAddresses, "",
+		"custom following IP addresses like 192.168.0.3,192.168.0.10")
 	cmd.Flags().String(
 		flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
 	cmd.Flags().String(
@@ -109,7 +114,7 @@ func InitTestnet(
 	cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 	mbm module.BasicManager, genAccIterator genutiltypes.GenesisAccountsIterator,
 	outputDir, chainID, minGasPrices, nodeDirPrefix, nodeDaemonHome,
-	nodeCLIHome, startingIPAddress string, numValidators int,
+	nodeCLIHome, startingIPAddress string, nodeIPAddresses []string, numValidators int,
 ) error {
 
 	if chainID == "" {
@@ -153,7 +158,7 @@ func InitTestnet(
 		monikers = append(monikers, nodeDirName)
 		config.Moniker = nodeDirName
 
-		ip, err := getIP(i, startingIPAddress)
+		ip, err := getIP(i, startingIPAddress, nodeIPAddresses)
 		if err != nil {
 			_ = os.RemoveAll(outputDir)
 			return err
@@ -351,7 +356,7 @@ func collectGenFiles(
 	return nil
 }
 
-func getIP(i int, startingIPAddr string) (ip string, err error) {
+func getIP(i int, startingIPAddr string, nodeIPAddresses []string) (ip string, err error) {
 	if len(startingIPAddr) == 0 {
 		ip, err = server.ExternalIP()
 		if err != nil {
@@ -359,13 +364,21 @@ func getIP(i int, startingIPAddr string) (ip string, err error) {
 		}
 		return ip, nil
 	}
-	return calculateIP(startingIPAddr, i)
+	return calculateIP(startingIPAddr, nodeIPAddresses, i)
 }
 
-func calculateIP(ip string, i int) (string, error) {
+func calculateIP(ip string, nodeIPAddresses []string, i int) (string, error) {
 	ipv4 := net.ParseIP(ip).To4()
 	if ipv4 == nil {
 		return "", fmt.Errorf("%v: non ipv4 address", ip)
+	}
+
+	if i > 0 && len(nodeIPAddresses) >= i {
+		ipv4 := net.ParseIP(nodeIPAddresses[i-1]).To4()
+		if ipv4 == nil {
+			return "", fmt.Errorf("%v: non ipv4 address", ip)
+		}
+		return ipv4.String(), nil
 	}
 
 	for j := 0; j < i; j++ {

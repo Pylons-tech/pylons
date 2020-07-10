@@ -66,7 +66,7 @@ FROM pylonsd as genesis
 COPY production_config ./production_config
 COPY collect_checkin_files.sh .
 RUN chmod +x collect_checkin_files.sh
-CMD ./collect_checkin_files.sh
+CMD ./collect_checkin_files.sh $STARTINGIP $NODEIPS
 
 #Run the tests
 FROM build as integration_test
