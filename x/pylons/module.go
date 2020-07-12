@@ -96,6 +96,7 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		tx.SendPylons(cdc),
 		tx.SendItems(StoreKey, cdc),
 		tx.CreateCookbook(cdc),
+		tx.PrivateKeySign(cdc),
 		tx.UpdateCookbook(cdc),
 		tx.FiatItem(cdc))
 
