@@ -61,7 +61,7 @@ func ListShortenRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, ke
 
 	for _, rcp := range recipes {
 		shortenRecipes = append(shortenRecipes, NewShortenRecipe(
-			rcp.ID, rcp.CookbookID, rcp.Description, rcp.Description, rcp.Sender))
+			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender))
 	}
 
 	shortenRecipeList = ShortenRecipeList{
