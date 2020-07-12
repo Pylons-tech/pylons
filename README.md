@@ -280,7 +280,10 @@ pylonscli keys add aaa --keyring-backend=test
 pylonscli tx pylons compute-private "wait teach develop tumble glance crash habit lonely army liar exit indoor cancel wedding scan face easy anxiety final run logic raw wife flight"
 ```
 Private key based sign process for mobile side check.
-```
+```sh
+# online private key based sign
+pylonscli tx pylons sign sample_txs/tx_sign_privkey.json --private-key be8cec408a01f5d1ad9981c4153f0f037eff6014cff774f230517822c3ed2127
+# offline private key based sign
 pylonscli tx pylons sign sample_txs/tx_sign_privkey.json --offline --account-number 0 --sequence 0 --private-key 276c784fe02abd8438cb9275ea22771dc7259b075d2404618ea6ec41736664c3
 ```
 Here `account-number`, `sequence` and `offline` param was added. When we are using multi-node mode, we will need to find a way to broadcast multiple transactions within one account without using offline feature.
