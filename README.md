@@ -267,6 +267,25 @@ Offline sign process to sign more than 1 transactions with 1 account within 1 bl
 ```
 pylonscli tx sign sample_transaction.json --account-number 2 --sequence 10 --offline --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2
 ```
+Compute private key from mnemonic.
+```
+pylonscli keys add aaa --keyring-backend=test
+{
+  "name": "aaa",
+  "type": "local",
+  "address": "cosmos193tx7cz09yf7xsd0tj3ts5c2v3vumjmmzdvk0g",
+  "pubkey": "cosmospub1addwnpepqv2c5ew9td4tjz8t9qyukat844kmpmdq6hkqse4kfs3aag63r8hw5uxf07j",
+  "mnemonic": "wait teach develop tumble glance crash habit lonely army liar exit indoor cancel wedding scan face easy anxiety final run logic raw wife flight"
+}
+pylonscli tx pylons compute-private "wait teach develop tumble glance crash habit lonely army liar exit indoor cancel wedding scan face easy anxiety final run logic raw wife flight"
+```
+Private key based sign process for mobile side check.
+```sh
+# online private key based sign
+pylonscli tx pylons sign sample_txs/tx_sign_privkey.json --private-key be8cec408a01f5d1ad9981c4153f0f037eff6014cff774f230517822c3ed2127
+# offline private key based sign
+pylonscli tx pylons sign sample_txs/tx_sign_privkey.json --offline --account-number 0 --sequence 0 --private-key 276c784fe02abd8438cb9275ea22771dc7259b075d2404618ea6ec41736664c3
+```
 Here `account-number`, `sequence` and `offline` param was added. When we are using multi-node mode, we will need to find a way to broadcast multiple transactions within one account without using offline feature.
 
 It means signing create_cookbook tx with cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 (`pylonscli keys show jack -a`).
