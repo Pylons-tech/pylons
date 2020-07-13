@@ -10,6 +10,9 @@ pylonscli keys add michael --keyring-backend=test
 pylonscli keys add eugen --keyring-backend=test
 pylonscli keys add jose --keyring-backend=test
 
+echo "waiting for block height 1 ..."
+sleep 6
+
 pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a michael --keyring-backend=test) 500000pylon,10000node0token,10000stake --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished michael account initialization tx sending; waiting 6 seconds..."
 sleep 6
