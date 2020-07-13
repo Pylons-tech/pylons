@@ -10,19 +10,16 @@ pylonscli keys add michael --keyring-backend=test
 pylonscli keys add eugen --keyring-backend=test
 pylonscli keys add jose --keyring-backend=test
 
-pylonscli tx pylons send-pylons $(pylonscli keys show -a michael --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a michael --keyring-backend=test) 500000pylon,10000node0token,10000stake --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished michael account initialization tx sending; waiting 6 seconds..."
 sleep 6
 pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
 pylonscli query account $(pylonscli keys show -a michael --keyring-backend=test) --node tcp://192.168.10.2:26657
 
-pylonscli tx pylons send-pylons $(pylonscli keys show -a eugen --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a eugen --keyring-backend=test) 500000pylon,10000node0token,10000stake --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished eugen account initialization tx sending; waiting 6 seconds..."
 sleep 6
 
-pylonscli tx pylons send-pylons $(pylonscli keys show -a jose --keyring-backend=test) 100000 --from cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 pylonscli tx send cosmos13p8890funv54hflk82ju0zv47tspglpk373453 $(pylonscli keys show -a jose --keyring-backend=test) 500000pylon,10000node0token,10000stake --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished jose account initialization tx sending; waiting 6 seconds..."
 sleep 6
