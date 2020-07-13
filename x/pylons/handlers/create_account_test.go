@@ -25,15 +25,21 @@ func TestHandlerMsgCreateAccount(t *testing.T) {
 			desiredError: "",
 			showError:    false,
 		},
+		"empty requester": {
+			fromAddress:  nil,
+			desiredError: "invalid address",
+			showError:    true,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateAccount(tc.fromAddress)
 			_, err := HandlerMsgCreateAccount(tci.Ctx, tci.PlnK, msg)
 
-			if !tc.showError {
-			} else {
+			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			} else {
+				require.True(t, err == nil)
 			}
 		})
 	}

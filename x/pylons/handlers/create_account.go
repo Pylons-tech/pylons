@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// CreateAccountResponse is the response for get-pylons
+// CreateAccountResponse is the response for create-account
 type CreateAccountResponse struct {
 	Message string
 	Status  string
