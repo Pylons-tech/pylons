@@ -152,6 +152,80 @@ func TestCoinLock(t *testing.T) {
 			testSecondExecuteRecipe:      true,
 			testSecondExecuteRecipeError: false,
 		},
+
+		"create trade & fulfill trade & execute recipe & check execution coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testFulfillTrade:             true,
+			testFulfillTradeInputItemIDs: []string{},
+			testFulfillTradeLockDiffer:   types.NewPylon(100),
+
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testCheckExecution:           true,
+			testCheckExecutionLockDiffer: types.NewPylon(100),
+		},
+		"create trade & fulfill trade & execute recipe & check execution and send items coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testFulfillTrade:             true,
+			testFulfillTradeInputItemIDs: []string{},
+			testFulfillTradeLockDiffer:   types.NewPylon(100),
+
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testCheckExecution:           true,
+			testCheckExecutionLockDiffer: types.NewPylon(100),
+
+			testSendItems:      true,
+			testSendItemsError: false,
+		},
+		"create trade & fulfill trade & execute recipe & check execution and send coins coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testFulfillTrade:             true,
+			testFulfillTradeInputItemIDs: []string{},
+			testFulfillTradeLockDiffer:   types.NewPylon(100),
+
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testCheckExecution:           true,
+			testCheckExecutionLockDiffer: types.NewPylon(100),
+
+			testSendCoins:      true,
+			testSendCoinsError: false,
+		},
+		"create trade & fulfill trade & execute recipe & check execution and execute recipe coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testFulfillTrade:             true,
+			testFulfillTradeInputItemIDs: []string{},
+			testFulfillTradeLockDiffer:   types.NewPylon(100),
+
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testCheckExecution:           true,
+			testCheckExecutionLockDiffer: types.NewPylon(100),
+
+			testSecondExecuteRecipe:      true,
+			testSecondExecuteRecipeError: false,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
