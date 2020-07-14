@@ -72,6 +72,7 @@ func SetupTestCoinInput() TestCoinInput {
 	tdKey := sdk.NewKVStoreKey("pylons_trade")
 	itKey := sdk.NewKVStoreKey("pylons_item")
 	execKey := sdk.NewKVStoreKey("pylons_execution")
+	lockedCoinKey := sdk.NewKVStoreKey("pylons_locked_coin")
 
 	ms := store.NewCommitMultiStore(db)
 	ms.MountStoreWithDB(keySupply, sdk.StoreTypeIAVL, db)
@@ -86,6 +87,7 @@ func SetupTestCoinInput() TestCoinInput {
 	ms.MountStoreWithDB(rcKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(itKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(execKey, sdk.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(lockedCoinKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tkeyParams, sdk.StoreTypeTransient, db)
 	//nolint:errcheck
 	ms.LoadLatestVersion()
@@ -135,6 +137,7 @@ func SetupTestCoinInput() TestCoinInput {
 		itKey,   // item
 		execKey, // exec
 		tdKey,
+		lockedCoinKey,
 		cdc,
 	)
 

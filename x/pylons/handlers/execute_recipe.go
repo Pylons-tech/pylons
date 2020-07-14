@@ -90,7 +90,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			Output:  outputSTR,
 		})
 	}
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
+	if !keep.HasCoins(keeper, ctx, msg.Sender, cl) {
 		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
 
