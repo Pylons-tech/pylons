@@ -1,8 +1,6 @@
 package keep
 
 import (
-	"fmt"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 
@@ -41,27 +39,18 @@ func NewKeeper(coinKeeper bank.Keeper, entityKey, cookbookKey, recipeKey, itemKe
 
 // HasCoins checks if the send has enough coins
 func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amt sdk.Coins) bool {
-	fmt.Print("\n\n\n----------      keep.HasCoins begin     ----------\n\nsender's balance:\n",
-		keeper.CoinKeeper.GetCoins(ctx, sender).String(),
-		"\n\namt:\n", amt.String())
-
 	lockedCoin, err := keeper.GetLockedCoin(ctx, sender)
-	fmt.Print("\n\nlocked coin:\n", lockedCoin.String(), "\n", err)
 
 	if err == nil {
 		newAmount := lockedCoin.Amount.Sort().Add(amt.Sort()...)
-		fmt.Print("\n\nnewAmount:\n", newAmount.String())
 
-		fmt.Print("\n\n----------      keep.HasCoins end     ----------\n\n")
 		return keeper.CoinKeeper.HasCoins(ctx, sender, newAmount)
 	}
 
 	if lockedCoin.Amount.Empty() {
-		fmt.Print("\n\n----------      EMPTY!   keep.HasCoins end     ----------\n\n")
 		return keeper.CoinKeeper.HasCoins(ctx, sender, amt)
 	}
 
-	fmt.Print("\n\n----------      keep.HasCoins end     ----------\n\n")
 	return false
 }
 

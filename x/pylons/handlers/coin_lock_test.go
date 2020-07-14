@@ -13,8 +13,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-// TestHandlerMsgFulfillTrade is fulfill trade test
-func TestHandlerMsgFulfillTrade(t *testing.T) {
+// TestCoinLock is coin lock test
+func TestCoinLock(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender, sender2, sender3, sender4 := keep.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin("chair", 10),
@@ -75,111 +75,23 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
-		sender                sdk.AccAddress
-		fulfiller             sdk.AccAddress
-		inputCoinList         types.CoinInputList
-		inputItemList         types.TradeItemInputList
-		outputCoinList        sdk.Coins
-		outputItemList        types.ItemList
-		fulfillInputItemIDs   []string
-		desiredError          string
-		showError             bool
-		senderAmountDiffer    types.CoinInputList
-		sender2AmountDiffer   types.CoinInputList
-		sender3AmountDiffer   types.CoinInputList
-		sender4AmountDiffer   types.CoinInputList
-		pylonsLLCAmountDiffer types.CoinInputList
+		sender                            sdk.AccAddress
+		fulfiller                         sdk.AccAddress
+		inputCoinList                     types.CoinInputList
+		inputItemList                     types.TradeItemInputList
+		outputCoinList                    sdk.Coins
+		outputItemList                    types.ItemList
+		fulfillInputItemIDs               []string
+		desiredError                      string
+		showError                         bool
+		senderAmountDiffer                types.CoinInputList
+		sender2AmountDiffer               types.CoinInputList
+		sender3AmountDiffer               types.CoinInputList
+		sender4AmountDiffer               types.CoinInputList
+		pylonsLLCAmountDiffer             types.CoinInputList
+		sendCoinsAfterTradeCreation       bool
+		sendCoinsAfterTradeCreationAmount sdk.Coins
 	}{
-		"trade pylon distribution test": {
-			sender:         sender,
-			fulfiller:      sender2,
-			inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
-			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-			desiredError:   "",
-			showError:      false,
-			senderAmountDiffer: []types.CoinInput{
-				{Coin: types.Pylon, Count: 90},
-				{Coin: "chair", Count: -10},
-			},
-			sender2AmountDiffer: []types.CoinInput{
-				{Coin: types.Pylon, Count: -100},
-				{Coin: "chair", Count: 10},
-			},
-		},
-		"trade unordered coin input test": {
-			sender:    sender,
-			fulfiller: sender2,
-			inputCoinList: []types.CoinInput{
-				{Coin: types.Pylon, Count: 100},
-				{Coin: "aaaa", Count: 100},
-				{Coin: "zzzz", Count: 100},
-				{Coin: "cccc", Count: 100},
-			},
-			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-			desiredError:   "",
-			showError:      false,
-			senderAmountDiffer: []types.CoinInput{
-				{Coin: types.Pylon, Count: 90},
-				{Coin: "aaaa", Count: 100},
-				{Coin: "zzzz", Count: 100},
-				{Coin: "cccc", Count: 100},
-			},
-			sender2AmountDiffer: []types.CoinInput{
-				{Coin: types.Pylon, Count: -100},
-				{Coin: "aaaa", Count: -100},
-				{Coin: "zzzz", Count: -100},
-				{Coin: "cccc", Count: -100},
-			},
-		},
-		"empty fulfill item on item trading fulfill test": {
-			sender:              sender,
-			fulfiller:           sender2,
-			inputCoinList:       types.GenCoinInputList(types.Pylon, 100),
-			inputItemList:       types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-			outputCoinList:      sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-			fulfillInputItemIDs: []string{},
-			desiredError:        "the item IDs count doesn't match the trade input",
-			showError:           true,
-		},
-		"input item with wrong cookbook id fulfill trade test": {
-			sender:         sender,
-			fulfiller:      sender2,
-			inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
-			inputItemList:  types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-			desiredError:   "the sender doesn't have the trade item attributes",
-			showError:      true,
-		},
-		"item trade with small pylons amout": {
-			sender:              sender2,
-			fulfiller:           sender4,
-			inputCoinList:       types.GenCoinInputList(types.Pylon, 20),
-			inputItemList:       types.GenTradeItemInputList(cbData1.CookbookID, []string{"Tachu"}),
-			outputCoinList:      types.NewPylon(10),
-			outputItemList:      types.ItemList{*item3},
-			fulfillInputItemIDs: []string{item4.ID},
-			desiredError:        "total pylons amount is not enough to pay fees",
-			showError:           true,
-		},
-		"correct item trading fulfill test": {
-			sender:              sender,
-			fulfiller:           sender2,
-			inputCoinList:       types.GenCoinInputList(types.Pylon, 800),
-			inputItemList:       types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-			outputCoinList:      sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-			fulfillInputItemIDs: []string{item2.ID},
-			desiredError:        "",
-			showError:           false,
-			senderAmountDiffer: []types.CoinInput{
-				{Coin: types.Pylon, Count: 780},
-				{Coin: "chair", Count: -10},
-			},
-			sender2AmountDiffer: []types.CoinInput{
-				{Coin: types.Pylon, Count: -800},
-				{Coin: "chair", Count: 10},
-			},
-			pylonsLLCAmountDiffer: []types.CoinInput{{Coin: types.Pylon, Count: 20}},
-		},
 		"correct item trading fulfill test with 2 items and 2 amounts": {
 			sender:                sender2,
 			fulfiller:             sender4,
@@ -195,6 +107,18 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			sender3AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: 63}},
 			sender4AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: 54}},
 			pylonsLLCAmountDiffer: []types.CoinInput{{Coin: types.Pylon, Count: 12}},
+		},
+		"send coins after trade": {
+			sender:                            sender,
+			fulfiller:                         sender2,
+			inputCoinList:                     types.GenCoinInputList(types.Pylon, 800),
+			inputItemList:                     types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:                    sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			fulfillInputItemIDs:               []string{item2.ID},
+			sendCoinsAfterTradeCreation:       true,
+			sendCoinsAfterTradeCreationAmount: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			desiredError:                      "",
+			showError:                         true,
 		},
 	}
 	for testName, tc := range cases {
@@ -217,7 +141,21 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			if err != nil {
 				t.Log(err)
 			}
+
 			require.True(t, err == nil)
+
+			// send coins after trade creation
+			if tc.sendCoinsAfterTradeCreation {
+				err := keep.SendCoins(tci.PlnK, tci.Ctx, sender, sender2, tc.sendCoinsAfterTradeCreationAmount)
+
+				if err != nil {
+					t.Log(err)
+					if tc.showError {
+						return
+					}
+				}
+			}
+
 			ctRespData := CreateTradeResponse{}
 			err = json.Unmarshal(ctResult.Data, &ctRespData)
 			require.True(t, err == nil)
