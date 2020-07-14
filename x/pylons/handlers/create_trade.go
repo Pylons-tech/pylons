@@ -80,45 +80,6 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		}
 	}
 
-	// oldLc, err := keeper.GetLockedCoin(ctx, msg.Sender)
-	// fmt.Print("\n\n\n---------       old locked coin       ------\n\n\n", oldLc.String(), "\n\nerr:\n", err, "\n\n")
-
-	// lc := types.NewLockedCoin(msg.Sender, msg.CoinOutputs)
-	// fmt.Print("\n\n\n---------       locked coin       ------\n\n\n", lc.String(), "\n\n")
-
-	// keeper.LockCoin(ctx, lc)
-
-	// newLc, err := keeper.GetLockedCoin(ctx, msg.Sender)
-	// fmt.Print("\n\n\n---------       new locked coin       ------\n\n\n", newLc.String(), "\n\nerr:\n", err, "\n\n")
-
-	// coins := sdk.Coins{
-	// 	sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1000)),
-	// 	sdk.NewCoin(types.Pylon, sdk.NewInt(2000)),
-	// }
-
-	// lc1 := types.NewLockedCoin(msg.Sender, coins)
-
-	// keeper.LockCoin(ctx, lc1)
-
-	// lc2 := types.NewLockedCoin(msg.Sender, types.NewPylon(4200))
-
-	// keeper.UnlockCoin(ctx, lc2)
-
-	// lc3 := types.NewLockedCoin(msg.Sender, types.NewPylon(7800))
-
-	// keeper.UnlockCoin(ctx, lc3)
-
-	// lc4 := types.NewLockedCoin(msg.Sender, sdk.Coins{
-	// 	sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(3000)),
-	// })
-
-	// err = keeper.UnlockCoin(ctx, lc4)
-
-	// fmt.Print("\n\nerror:\n", err, "\n\n")
-
-	// newLc, err = keeper.GetLockedCoin(ctx, msg.Sender)
-	// fmt.Print("\n\n\n---------       new locked coin1       ------\n\n\n", newLc.String(), "\n\nerr:\n", err, "\n\n")
-
 	return marshalJSON(CreateTradeResponse{
 		TradeID: trade.ID,
 		Message: "successfully created a trade",
