@@ -3,7 +3,6 @@ package keep
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -22,10 +21,7 @@ func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	var newAmount sdk.Coins
 
 	if err == nil {
-		fmt.Print("\n\n---------    new amount    ----------\n\noldAmount:\n", oldLc.Amount.String(), "lockedCoin.Amount...:\n", lockedCoin.Amount)
 		newAmount = oldLc.Amount.Add(lockedCoin.Amount.Sort()...)
-
-		fmt.Print("\nnewAmount:\n", newAmount, "\noldLC amount:\n", oldLc.Amount.String(), "\n\n")
 
 		lc := types.LockedCoin{}
 
@@ -77,7 +73,6 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 // GetLockedCoin returns lockedCoin based on UUID
 func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) (types.LockedCoin, error) {
 	lockedCoin := types.LockedCoin{}
-	// fmt.Print("\n\n\n---------          GetLockedCoin         ----------\n\n\nLockedCoinKey:\n", k.LockedCoinKey.String(), "\n\n")
 	err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
 
 	return lockedCoin, err

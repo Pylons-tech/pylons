@@ -17,7 +17,7 @@ import (
 func TestHandlerMsgFulfillTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender, sender2, sender3, sender4 := keep.SetupTestAccounts(t, tci, sdk.Coins{
-		sdk.NewInt64Coin("chair", 10),
+		sdk.NewInt64Coin("chair", 10000),
 		sdk.NewInt64Coin(types.Pylon, 100000),
 	}, types.NewPylon(100000), types.NewPylon(100000), types.NewPylon(100000))
 
