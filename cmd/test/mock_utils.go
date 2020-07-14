@@ -13,6 +13,54 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+///////////ACCOUNT///////////////////////////////////////////////
+
+// MockAccount generate local key and do initial get-pylons to create cookbook
+func MockAccount(key string, t *testing.T) {
+	// add local key
+	localKeyResult, err := inttestSDK.AddNewLocalKey(key)
+	t.WithFields(testing.Fields{
+		"key":              key,
+		"local_key_result": localKeyResult,
+	}).MustNil(err, "error creating local Key")
+
+	addr := localKeyResult["address"]
+
+	// send message for creating account
+	result, logstr, err := inttestSDK.CreateChainAccount(key)
+	t.WithFields(testing.Fields{
+		"result": result,
+		"logstr": logstr,
+	}).MustNil(err, "error creating account on chain")
+
+	// fetch txhash from result log
+	caTxHash := inttestSDK.GetTxHashFromLog(result)
+	t.MustTrue(caTxHash != "", "error fetching txhash from result")
+	t.WithFields(testing.Fields{
+		"txhash": caTxHash,
+	}).Info("waiting for create account transaction")
+
+	// wait for txhash to be confirmed
+	txResponseBytes, err := inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for create account transaction")
+	inttestSDK.GetAccountInfoFromAddr(addr, t)
+
+	// get initial balance
+	sdkAddr, err := sdk.AccAddressFromBech32(addr)
+	getPylonsMsg := msgs.NewMsgGetPylons(types.PremiumTier.Fee, sdkAddr)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, getPylonsMsg, key, false)
+	t.WithFields(testing.Fields{
+		"txhash": txhash,
+	}).MustNil(err, "error sending transaction")
+
+	txResponseBytes, err = inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for get pylons transaction")
+}
+
 ///////////COOKBOOK//////////////////////////////////////////////
 
 // MockCookbook mock a cookbook which can refer to on all tests
