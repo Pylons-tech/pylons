@@ -78,21 +78,21 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 	}
 
-	traderLC, err := keeper.GetLockedCoin(ctx, trade.Sender)
-	senderLC, err := keeper.GetLockedCoin(ctx, msg.Sender)
+	// traderLC, err := keeper.GetLockedCoin(ctx, trade.Sender)
+	// senderLC, err := keeper.GetLockedCoin(ctx, msg.Sender)
 
-	fmt.Print("\n\n\n-----------     fulfill trade     --------------\n\n\ntrade creator locked coin:\n",
-		traderLC.String(), "\n\n",
-		"sender locked coin:\n", senderLC.String(), "\n\n")
+	// fmt.Print("\n\n\n-----------     fulfill trade     --------------\n\n\ntrade creator locked coin:\n",
+	// 	traderLC.String(), "\n\n",
+	// 	"sender locked coin:\n", senderLC.String(), "\n\n")
 
 	// Unlock trade creator's coins
 	lockedCoin := types.NewLockedCoin(trade.Sender, trade.CoinOutputs)
 	keeper.UnlockCoin(ctx, lockedCoin)
 
-	fmt.Print("\n\nlocked coin:\n", lockedCoin.String(), "\n\n")
+	// fmt.Print("\n\nlocked coin:\n", lockedCoin.String(), "\n\n")
 
-	traderLC1, err := keeper.GetLockedCoin(ctx, trade.Sender)
-	fmt.Print("\n\ntrader locked coin after:\n", traderLC1.String(), "\n\n")
+	// traderLC1, err := keeper.GetLockedCoin(ctx, trade.Sender)
+	// fmt.Print("\n\ntrader locked coin after:\n", traderLC1.String(), "\n\n")
 
 	inputCoins := trade.CoinInputs.ToCoins()
 	if !keep.HasCoins(keeper, ctx, msg.Sender, inputCoins) {
