@@ -46,13 +46,13 @@ func TestHandlerMsgSendPylons(t *testing.T) {
 			_, err := HandlerMsgSendPylons(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
-				require.True(t, keep.HasCoins(tci.Plnk, tci.Ctx, tc.toAddress, types.NewPylon(tc.amount)))
-				require.False(t, keep.HasCoins(tci.Plnk, tci.Ctx, tc.toAddress, types.NewPylon(tc.amount+1)))
-				require.True(t, keep.HasCoins(tci.Plnk, tci.Ctx, tc.toAddress, types.NewPylon(tc.amount-1)))
+				require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.toAddress, types.NewPylon(tc.amount)))
+				require.False(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.toAddress, types.NewPylon(tc.amount+1)))
+				require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.toAddress, types.NewPylon(tc.amount-1)))
 
-				require.True(t, keep.HasCoins(tci.Plnk, tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount)))
-				require.False(t, keep.HasCoins(tci.Plnk, tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount+1)))
-				require.True(t, keep.HasCoins(tci.Plnk, tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount-1)))
+				require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount)))
+				require.False(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount+1)))
+				require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.fromAddress, types.NewPylon(initialAmount-tc.amount-1)))
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}

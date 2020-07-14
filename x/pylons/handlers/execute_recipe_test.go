@@ -315,7 +315,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				// calc generated coin availability
 				coinAvailability := false
 				if tc.checkCoinAvailable || tc.checkItemOrCoinAvailable {
-					coinAvailability = keep.HasCoins(tci.Plnk, tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
+					coinAvailability = keep.HasCoins(tci.PlnK, tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
 				}
 
 				// calc generated item availability
@@ -348,7 +348,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				if tc.checkPylonDistribution {
 					pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 					require.True(t, err == nil)
-					pylonAvailOnLLC := keep.HasCoins(tci.Plnk, tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
+					pylonAvailOnLLC := keep.HasCoins(tci.PlnK, tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
 					require.True(t, pylonAvailOnLLC)
 				}
 			} else {
