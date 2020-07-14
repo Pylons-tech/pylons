@@ -283,9 +283,6 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock {
 				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
-				// t.Log("\n\n\n------         Create trade coin lock test      ---------\n\n\n")
-				// t.Log("\nlcFirst:\n", lcFirst.String(), "\n\n")
-
 				ctRespData, err = MockTrade(
 					tci,
 					types.GenCoinInputList("chair", 100),
@@ -302,11 +299,8 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil)
 
 				lcAfterCreateTrade, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-				// t.Log("\nlcAfterCreateTrade:\n", lcAfterCreateTrade.String(), "\n\n")
 
 				lcDiffer := lcAfterCreateTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
-
-				// t.Log("\nlcDiffer:\n", lcDiffer.String(), "\n\n")
 
 				require.True(t, lcDiffer.IsEqual(tc.testCreateTradeLockDiffer))
 
@@ -316,17 +310,6 @@ func TestCoinLock(t *testing.T) {
 			if tc.testExecuteRecipeLock {
 				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
-				t.Log("\n\n\n------         Execute recipe coin lock test      ---------\n\n\n")
-				t.Log("\nlcFirst:\n", lcFirst.String(), "\n\n")
-				/*
-				   types.CoinInputList{},
-				   			types.GenItemInputList("Knife", "Knife"),
-				   			types.GenItemOnlyEntry("KnifeMRG"),
-				   			types.GenOneOutput(1),
-				   			2
-				   				recipeData := MockPopularRecipe(types.CoinInputList{}, tci,
-				   					"knife merge recipe", cbData.CookbookID, sender1)
-				*/
 				item := keep.GenItem(cbData.CookbookID, sender1, "Knife")
 				err = tci.PlnK.SetItem(tci.Ctx, *item)
 				require.True(t, err == nil)
@@ -364,14 +347,10 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil)
 
 				lcAfterExecRcp, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-				t.Log("\nlcAfterExecRcp:\n", lcAfterExecRcp.String(), "\n\n")
 
 				lcDiffer := lcAfterExecRcp.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
-				t.Log("\nlcDiffer:\n", lcDiffer.String(), "\n\n")
-
 				require.True(t, lcDiffer.IsEqual(tc.testExecuteRecipeLockDiffer))
-
 			}
 
 			// test send items after coin lock
@@ -426,8 +405,6 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testFulfillTrade {
 				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
-				// t.Log("\n\n\n------         Fulfill trade coin lock test      ---------\n\n\n")
-
 				ffMsg := msgs.NewMsgFulfillTrade(
 					ctRespData.TradeID,
 					sender2,
@@ -442,7 +419,6 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil)
 
 				lcAfterFulfillTrade, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-				// t.Log("\nlcAfterFulfillTrade:\n", lcAfterFulfillTrade.String(), "\n\n")
 
 				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterFulfillTrade.Amount.Sort())
 
@@ -454,9 +430,6 @@ func TestCoinLock(t *testing.T) {
 			if tc.testExecuteRecipeLock && tc.testCheckExecution {
 				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
-				t.Log("\n\n\n------         Check execution coin lock test      ---------\n\n\n")
-				t.Log("\n\nlcFirst:\n", lcFirst.String(), "\n\n")
-
 				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, sender1)
 				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
 				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
@@ -467,11 +440,8 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, checkExecResp.Status == "Success")
 
 				lcAfter, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-				t.Log("\n\n\nlcAfterCheckExecution:\n", lcAfter.String(), "\n\n")
 
 				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfter.Amount.Sort())
-
-				t.Log("\nlcDiffer:\n", lcDiffer.String(), "\n\n")
 
 				require.True(t, lcDiffer.IsEqual(tc.testCheckExecutionLockDiffer))
 
