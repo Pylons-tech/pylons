@@ -256,8 +256,10 @@ http://127.0.0.1:26662/net_info
 # Multi-node randomness util commands
 
 - Run integration test on multi-node and end after finish
-```
+```sh
 docker-compose up --build --abort-on-container-exit
+# when run again remove orphans
+docker-compose up --build --abort-on-container-exit --remove-orphans
 ```
 
 It shows log like this for failure

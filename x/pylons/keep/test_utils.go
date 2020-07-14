@@ -92,7 +92,7 @@ func SetupTestCoinInput() TestCoinInput {
 
 	ms.GetKVStore(cbKey)
 
-	ctx := sdk.NewContext(ms, abci.Header{ChainID: "test-chain-id"}, false, log.NewNopLogger())
+	ctx := sdk.NewContext(ms, abci.Header{ChainID: "pylonschain"}, false, log.NewNopLogger())
 
 	ctx = ctx.WithConsensusParams(
 		&abci.ConsensusParams{

@@ -24,6 +24,8 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 
 		// handle custom messages
 		switch msg := msg.(type) {
+		case msgs.MsgCreateAccount:
+			return handlers.HandlerMsgCreateAccount(ctx, keeper, msg)
 		case msgs.MsgGetPylons:
 			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
 		case msgs.MsgSendPylons:

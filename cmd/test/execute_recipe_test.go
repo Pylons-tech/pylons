@@ -21,20 +21,20 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), &t)
 
 	tests := []struct {
-		name                   string
-		rcpName                string
-		itemIDs                []string
-		desiredItemName        string
-		checkPylonDistribution bool
-		pylonsLLCDistribution  int64
+		name                  string
+		rcpName               string
+		itemIDs               []string
+		desiredItemName       string
+		pylonsLLCDistribution int64
+		// cbOwnerDistribution   int64
 	}{
 		{
-			name:                   "item build from pylons recipe",
-			rcpName:                "TESTRCP_ExecuteRecipe_003",
-			itemIDs:                []string{},
-			desiredItemName:        "TESTITEM_ExecuteRecipe_003",
-			checkPylonDistribution: true,
-			pylonsLLCDistribution:  1,
+			name:                  "item build from pylons recipe",
+			rcpName:               "TESTRCP_ExecuteRecipe_003",
+			itemIDs:               []string{},
+			desiredItemName:       "TESTITEM_ExecuteRecipe_003",
+			pylonsLLCDistribution: 1,
+			// cbOwnerDistribution:   4,
 		},
 	}
 
@@ -47,18 +47,23 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				}).Fatal("error mocking recipe")
 			}
 
+			// eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+			// cbOwnerAddress, err := sdk.AccAddressFromBech32(eugenAddr)
+			t.MustNil(err, "error converting string address to AccAddress struct")
+			// cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.WithFields(testing.Fields{
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
+			michaelAddr := inttestSDK.GetAccountAddr("michael", t)
+			michaelSdkAddress, err := sdk.AccAddressFromBech32(michaelAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
-				"eugen",
+				msgs.NewMsgExecuteRecipe(rcp.ID, michaelSdkAddress, tc.itemIDs),
+				"michael",
 				false,
 			)
 			if err != nil {
@@ -80,12 +85,20 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"item_name": tc.desiredItemName,
 			}).MustTrue(ok, "item id with specific name does not exist")
 
-			if tc.checkPylonDistribution {
+			if tc.pylonsLLCDistribution > 0 {
 				accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 				originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 				pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
 				t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 			}
+			// TODO should enable this when we create new account per cookbook and per recipes for parallel
+			// if tc.cbOwnerDistribution > 0 {
+			// 	accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+			// 	originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
+			// 	t.Log("originPylonAmount.Int64() + tc.cbOwnerDistribution", originPylonAmount.Int64(), tc.cbOwnerDistribution, accInfo.Coins.AmountOf(types.Pylon))
+			// 	pylonAvailOnCBOwner := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
+			// 	t.MustTrue(pylonAvailOnCBOwner, "cookbook owner should get correct revenue")
+			// }
 		})
 	}
 }
