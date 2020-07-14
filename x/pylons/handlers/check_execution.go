@@ -53,6 +53,13 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err
 	}
 
+	lockedCoin := types.NewLockedCoin(msg.Sender, exec.CoinInputs)
+
+	err = keeper.UnlockCoin(ctx, lockedCoin)
+	if err != nil {
+		return nil, err
+	}
+
 	err = ProcessCoinInputs(ctx, keeper, msg.Sender, recipe.CookbookID, exec.CoinInputs)
 	if err != nil {
 		return nil, err

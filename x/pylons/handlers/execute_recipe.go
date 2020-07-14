@@ -70,6 +70,11 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			}
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
+
+		lockedCoin := types.NewLockedCoin(msg.Sender, msg.CoinInputs)
+
+		err = keeper.LockCoin(ctx, lockedCoin)
+
 		// store the execution as the interval
 		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
