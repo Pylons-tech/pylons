@@ -43,7 +43,7 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 
 	// the locked coin doesn't exist
 	if err != nil {
-		return err
+		return nil
 	}
 
 	// Compare already locked amount and unlocking amount
