@@ -6,9 +6,9 @@ pylonscli config indent true
 pylonscli config trust-node true
 
 pylonscli keys add node0 --keyring-backend=test --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
-pylonscli keys add michael --keyring-backend=test
-pylonscli keys add eugen --keyring-backend=test
-pylonscli keys add jose --keyring-backend=test
+pylonscli keys add michael --keyring-backend=test --recover <<< "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
+pylonscli keys add eugen --keyring-backend=test --recover <<< "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
+pylonscli keys add jose --keyring-backend=test --recover <<< "rib voyage drop call choose frame seven misery reform settle myth shoot skirt night discover critic search thank dolphin couple suspect feed soul patient"
 
 echo "waiting for block height 1 ..."
 sleep 6
