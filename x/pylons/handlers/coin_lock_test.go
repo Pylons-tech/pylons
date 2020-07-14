@@ -128,6 +128,30 @@ func TestCoinLock(t *testing.T) {
 			testCheckExecution:           true,
 			testCheckExecutionLockDiffer: types.NewPylon(100),
 		},
+		"execute recipe and send items coin lock test": {
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testSendItems:      true,
+			testSendItemsError: false,
+		},
+		"execute recipe and send coins coin lock test": {
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testSendCoins:      true,
+			testSendCoinsError: false,
+		},
+		"execute recipe and execute recipe coin lock test": {
+			testExecuteRecipeLock:       true,
+			testExecuteRecipeCoinInput:  types.GenCoinInputList("pylon", 100),
+			testExecuteRecipeLockDiffer: types.NewPylon(100),
+
+			testSecondExecuteRecipe:      true,
+			testSecondExecuteRecipeError: false,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
