@@ -312,34 +312,6 @@ func TestCoinLock(t *testing.T) {
 
 			}
 
-			// test fulfill trade coin unlock
-			if tc.testCreateTradeLock && tc.testFulfillTrade {
-				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-
-				// t.Log("\n\n\n------         Fulfill trade coin lock test      ---------\n\n\n")
-
-				ffMsg := msgs.NewMsgFulfillTrade(
-					ctRespData.TradeID,
-					sender2,
-					tc.testFulfillTradeInputItemIDs,
-				)
-				_, err = HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
-
-				if err != nil {
-					t.Log(err)
-				}
-
-				require.True(t, err == nil)
-
-				lcAfterFulfillTrade, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-				// t.Log("\nlcAfterFulfillTrade:\n", lcAfterFulfillTrade.String(), "\n\n")
-
-				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterFulfillTrade.Amount.Sort())
-
-				require.True(t, lcDiffer.IsEqual(tc.testFulfillTradeLockDiffer))
-
-			}
-
 			// test execute recipe coin lock
 			if tc.testExecuteRecipeLock {
 				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
@@ -402,33 +374,6 @@ func TestCoinLock(t *testing.T) {
 
 			}
 
-			// test fulfill trade coin unlock
-			if tc.testExecuteRecipeLock && tc.testCheckExecution {
-				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-
-				t.Log("\n\n\n------         Check execution coin lock test      ---------\n\n\n")
-				t.Log("\n\nlcFirst:\n", lcFirst.String(), "\n\n")
-
-				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, sender1)
-				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
-				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-				checkExecResp := CheckExecutionResponse{}
-
-				err = json.Unmarshal(result.Data, &checkExecResp)
-				require.True(t, err == nil)
-				require.True(t, checkExecResp.Status == "Success")
-
-				lcAfter, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-				t.Log("\n\n\nlcAfterCheckExecution:\n", lcAfter.String(), "\n\n")
-
-				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfter.Amount.Sort())
-
-				t.Log("\nlcDiffer:\n", lcDiffer.String(), "\n\n")
-
-				require.True(t, lcDiffer.IsEqual(tc.testCheckExecutionLockDiffer))
-
-			}
-
 			// test send items after coin lock
 			if tc.testSendItems {
 				item := keep.GenItem(cbData.CookbookID, sender1, "sword")
@@ -475,6 +420,61 @@ func TestCoinLock(t *testing.T) {
 				if !tc.testSecondExecuteRecipeError {
 					require.True(t, err == nil)
 				}
+			}
+
+			// test fulfill trade coin unlock
+			if tc.testCreateTradeLock && tc.testFulfillTrade {
+				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+
+				// t.Log("\n\n\n------         Fulfill trade coin lock test      ---------\n\n\n")
+
+				ffMsg := msgs.NewMsgFulfillTrade(
+					ctRespData.TradeID,
+					sender2,
+					tc.testFulfillTradeInputItemIDs,
+				)
+				_, err = HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
+
+				if err != nil {
+					t.Log(err)
+				}
+
+				require.True(t, err == nil)
+
+				lcAfterFulfillTrade, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				// t.Log("\nlcAfterFulfillTrade:\n", lcAfterFulfillTrade.String(), "\n\n")
+
+				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterFulfillTrade.Amount.Sort())
+
+				require.True(t, lcDiffer.IsEqual(tc.testFulfillTradeLockDiffer))
+
+			}
+
+			// test check execution coin unlock
+			if tc.testExecuteRecipeLock && tc.testCheckExecution {
+				lcFirst, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+
+				t.Log("\n\n\n------         Check execution coin lock test      ---------\n\n\n")
+				t.Log("\n\nlcFirst:\n", lcFirst.String(), "\n\n")
+
+				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, sender1)
+				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
+				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
+				checkExecResp := CheckExecutionResponse{}
+
+				err = json.Unmarshal(result.Data, &checkExecResp)
+				require.True(t, err == nil)
+				require.True(t, checkExecResp.Status == "Success")
+
+				lcAfter, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				t.Log("\n\n\nlcAfterCheckExecution:\n", lcAfter.String(), "\n\n")
+
+				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfter.Amount.Sort())
+
+				t.Log("\nlcDiffer:\n", lcDiffer.String(), "\n\n")
+
+				require.True(t, lcDiffer.IsEqual(tc.testCheckExecutionLockDiffer))
+
 			}
 		})
 	}
