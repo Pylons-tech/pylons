@@ -71,7 +71,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 
-		lockedCoin := types.NewLockedCoin(msg.Sender, msg.CoinInputs)
+		lockedCoin := types.NewLockedCoin(msg.Sender, recipe.CoinInputs.ToCoins())
 
 		err = keeper.LockCoin(ctx, lockedCoin)
 
@@ -95,6 +95,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			Output:  outputSTR,
 		})
 	}
+
 	if !keep.HasCoins(keeper, ctx, msg.Sender, cl) {
 		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
