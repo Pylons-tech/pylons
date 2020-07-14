@@ -81,7 +81,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 					require.True(t, account != nil)
 					require.True(t, account.GetSequence() == 0)
 					if tc.retryAccountCreation {
-						newCtx, err = acd.AnteHandle(newCtx, tx, false, emptyAnteHandle)
+						_, err = acd.AnteHandle(newCtx, tx, false, emptyAnteHandle)
 						require.True(t, strings.Contains(err.Error(), "account already exist"))
 					}
 				} else {

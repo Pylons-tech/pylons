@@ -13,12 +13,13 @@ import (
 )
 
 type createAccountReq struct {
-	Requester string `json:"requester"`
+	BaseReq   rest.BaseReq `json:"base_req"`
+	Requester string       `json:"requester"`
 }
 
 func createAccountHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req getPylonsReq
+		var req createAccountReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
