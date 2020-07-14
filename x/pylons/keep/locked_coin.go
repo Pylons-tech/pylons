@@ -3,7 +3,6 @@ package keep
 import (
 	"encoding/json"
 	"errors"
-	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -18,21 +17,18 @@ func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 
 	oldLc, err := k.GetLockedCoin(ctx, lockedCoin.Sender)
 
-	var newAmount sdk.Coins
-
-	if err == nil {
-		newAmount = oldLc.Amount.Add(lockedCoin.Amount.Sort()...)
-
-		lc := types.LockedCoin{}
-
-		lc.Sender = lockedCoin.Sender
-		lc.Amount = newAmount
-
-		return k.UpdateLockedCoin(ctx, lc)
-
+	if err != nil {
+		return k.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
 	}
 
-	return k.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
+	newAmount := oldLc.Amount.Add(lockedCoin.Amount.Sort()...)
+
+	lc := types.LockedCoin{}
+
+	lc.Sender = lockedCoin.Sender
+	lc.Amount = newAmount
+
+	return k.updateLockedCoin(ctx, lc)
 }
 
 // UnlockCoin unlock coin from keeper
@@ -45,29 +41,28 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 
 	var newAmount sdk.Coins
 
-	// the locked coin exists
-	if err == nil {
-		// Compare already locked amount and unlocking amount
-		if oldLc.Amount.IsAllGTE(lockedCoin.Amount) {
-			newAmount = oldLc.Amount.Sub(lockedCoin.Amount.Sort())
-
-			if newAmount.IsZero() {
-				return k.DeleteLockedCoin(ctx, oldLc.Sender)
-			}
-
-			lc := types.LockedCoin{}
-
-			lc.Sender = lockedCoin.Sender
-			lc.Amount = newAmount
-
-			return k.UpdateLockedCoin(ctx, lc)
-		}
-
-		return errors.New("Unlocking amount exceeds the locked amount")
-
+	// the locked coin doesn't exist
+	if err != nil {
+		return err
 	}
 
-	return err
+	// Compare already locked amount and unlocking amount
+	if oldLc.Amount.IsAllGTE(lockedCoin.Amount) {
+		newAmount = oldLc.Amount.Sub(lockedCoin.Amount.Sort())
+
+		if newAmount.IsZero() {
+			return k.DeleteLockedCoin(ctx, oldLc.Sender)
+		}
+
+		lc := types.LockedCoin{}
+
+		lc.Sender = lockedCoin.Sender
+		lc.Amount = newAmount
+
+		return k.updateLockedCoin(ctx, lc)
+	}
+
+	return errors.New("Unlocking amount exceeds the locked amount")
 }
 
 // GetLockedCoin returns lockedCoin based on UUID
@@ -78,16 +73,9 @@ func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) (types.Loc
 	return lockedCoin, err
 }
 
-// HasLockedCoin returns lockedCoin based on UUID
-func (k Keeper) HasLockedCoin(ctx sdk.Context, id string) bool {
-	store := ctx.KVStore(k.LockedCoinKey)
-	return store.Has([]byte(id))
-}
-
-// UpdateLockedCoin is used to update the lockedCoin using the id
-func (k Keeper) UpdateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
+func (k Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	if lockedCoin.Sender.Empty() {
-		return errors.New("UpdateLockedCoin: the sender cannot be empty")
+		return errors.New("updateLockedCoin: the sender cannot be empty")
 	}
 
 	return k.UpdateObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
@@ -97,26 +85,6 @@ func (k Keeper) UpdateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) e
 func (k Keeper) GetLockedCoinsIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.LockedCoinKey)
 	return sdk.KVStorePrefixIterator(store, []byte(""))
-}
-
-// GetLockedCoinBySender returns lockedCoins created by the sender
-func (k Keeper) GetLockedCoinBySender(ctx sdk.Context, sender sdk.AccAddress) ([]types.LockedCoin, error) {
-
-	var lockedCoins []types.LockedCoin
-	iterator := k.GetLockedCoinsIterator(ctx)
-	for ; iterator.Valid(); iterator.Next() {
-		var lockedCoin types.LockedCoin
-		mCB := iterator.Value()
-		err := json.Unmarshal(mCB, &lockedCoin)
-		if err != nil {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-		}
-		if strings.Contains(lockedCoin.Sender.String(), sender.String()) { // considered empty sender
-			lockedCoins = append(lockedCoins, lockedCoin)
-		}
-	}
-
-	return lockedCoins, nil
 }
 
 // GetAllLockedCoins returns all lockedCoins

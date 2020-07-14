@@ -87,7 +87,10 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// Unlock trade creator's coins
 	lockedCoin := types.NewLockedCoin(trade.Sender, trade.CoinOutputs)
-	keeper.UnlockCoin(ctx, lockedCoin)
+	err = keeper.UnlockCoin(ctx, lockedCoin)
+	if err != nil {
+		return nil, errInternal(err)
+	}
 
 	// fmt.Print("\n\nlocked coin:\n", lockedCoin.String(), "\n\n")
 

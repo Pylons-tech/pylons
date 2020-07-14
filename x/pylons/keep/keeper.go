@@ -37,7 +37,7 @@ func NewKeeper(coinKeeper bank.Keeper, entityKey, cookbookKey, recipeKey, itemKe
 	}
 }
 
-// HasCoins checks if the send has enough coins
+// HasCoins checks if the sender has enough coins
 func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amt sdk.Coins) bool {
 	lockedCoin, err := keeper.GetLockedCoin(ctx, sender)
 

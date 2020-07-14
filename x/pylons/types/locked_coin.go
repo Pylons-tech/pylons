@@ -15,26 +15,12 @@ type LockedCoin struct {
 	Amount sdk.Coins
 }
 
-// LockedCoinList is a list of LockedCoin
-type LockedCoinList []LockedCoin
-
 func (lc LockedCoin) String() string {
 	return fmt.Sprintf(`
 	LockedCoin{ 
 		Address: %s,
 		Amount: %s,
 	}`, lc.Sender.String(), lc.Amount.String())
-}
-
-func (lcl LockedCoinList) String() string {
-	lc := "LockedCoinList{"
-
-	for _, param := range lcl {
-		lc += param.String() + ",\n"
-	}
-
-	lc += "}"
-	return lc
 }
 
 // NewLockedCoin return a new locked coin
