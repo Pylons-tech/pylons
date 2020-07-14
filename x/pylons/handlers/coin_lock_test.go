@@ -83,9 +83,8 @@ func TestCoinLock(t *testing.T) {
 		testSendCoins      bool
 		testSendCoinsError bool
 		// Execute Receipe Coin Unlock Test
-		testSecondExecuteRecipe       bool
-		testSecondExecuteRecipeAmount sdk.Coins
-		testSecondExecuteRecipeError  bool
+		testSecondExecuteRecipe      bool
+		testSecondExecuteRecipeError bool
 	}{
 		"create trade and fulfill trade coin lock test": {
 			testCreateTradeLock:       true,
@@ -95,6 +94,30 @@ func TestCoinLock(t *testing.T) {
 			testFulfillTrade:             true,
 			testFulfillTradeInputItemIDs: []string{},
 			testFulfillTradeLockDiffer:   types.NewPylon(100),
+		},
+		"create trade and send items coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testSendItems:      true,
+			testSendItemsError: false,
+		},
+		"create trade and send coins coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testSendCoins:      true,
+			testSendCoinsError: false,
+		},
+		"create trade and execute recipe coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testSecondExecuteRecipe:      true,
+			testSecondExecuteRecipeError: false,
 		},
 	}
 	for testName, tc := range cases {
@@ -161,6 +184,51 @@ func TestCoinLock(t *testing.T) {
 
 				require.True(t, lcDiffer.IsEqual(tc.testFulfillTradeLockDiffer))
 
+			}
+
+			if tc.testSendItems {
+				item := keep.GenItem(cbData.CookbookID, sender1, "sword")
+				err = tci.PlnK.SetItem(tci.Ctx, *item)
+				require.True(t, err == nil)
+
+				msg := msgs.NewMsgSendItems([]string{item.ID}, sender1, sender2)
+				_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
+
+				if !tc.testSendItemsError {
+					require.True(t, err == nil)
+				}
+			}
+
+			if tc.testSendCoins {
+				err = keep.SendCoins(tci.PlnK, tci.Ctx, sender1, sender2, types.NewPylon(100))
+
+				if !tc.testSendCoinsError {
+					require.True(t, err == nil)
+				}
+			}
+
+			if tc.testSecondExecuteRecipe {
+				pylonInputRecipeData := MockRecipe(
+					tci, "existing recipe",
+					types.GenCoinInputList("pylon", 100),
+					types.ItemInputList{},
+					types.EntriesList{},
+					types.WeightedOutputsList{},
+					cbData.CookbookID,
+					0,
+					sender1,
+				)
+
+				msg := msgs.NewMsgExecuteRecipe(
+					pylonInputRecipeData.RecipeID,
+					sender1,
+					[]string{},
+				)
+				_, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+
+				if !tc.testSecondExecuteRecipeError {
+					require.True(t, err == nil)
+				}
 			}
 		})
 	}
