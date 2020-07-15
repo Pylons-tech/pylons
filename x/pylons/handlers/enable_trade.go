@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -31,6 +33,28 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 	}
 
 	trade.Disabled = false
+
+	// reset items' owner trade id
+	for idx, item := range trade.ItemOutputs {
+		itemFromStore, err := keeper.GetItem(ctx, item.ID)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
+		if !itemFromStore.Sender.Equals(trade.Sender) {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", itemFromStore.ID))
+		}
+
+		if err = itemFromStore.NewTradeError(); err != nil {
+			return nil, errInternal(fmt.Errorf("%s item id is not tradable", itemFromStore.ID))
+		}
+		itemFromStore.OwnerTradeID = trade.ID
+		err = keeper.SetItem(ctx, itemFromStore)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+		trade.ItemOutputs[idx] = itemFromStore
+	}
 
 	err = keeper.UpdateTrade(ctx, msg.TradeID, trade)
 	if err != nil {
