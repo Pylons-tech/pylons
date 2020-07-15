@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
@@ -23,9 +25,11 @@ func TestListRecipeViaCLI(originT *originT.T) {
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			_, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.outputItemName, t)
+			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
+			_, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.outputItemName, t)
 			if err != nil {
 				t.WithFields(testing.Fields{
 					"error": err,

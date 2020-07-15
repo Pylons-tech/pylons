@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
@@ -33,8 +35,10 @@ func TestSendItemsViaCLI(originT *originT.T) {
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
 
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 			t.MustNil(err, "error converting string address to AccAddress struct")
@@ -45,11 +49,11 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			itemIDs := make([]string, len(tc.itemNames))
 
 			for idx, itemName := range tc.itemNames {
-				itemID := MockItemGUIDWithFee(mCB.ID, "eugen", itemName, tc.transferFees[idx], t)
+				itemID := MockItemGUIDWithFee(mCB.ID, cbOwnerKey, itemName, tc.transferFees[idx], t)
 				itemIDs[idx] = itemID
 			}
 
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+			eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 
@@ -62,7 +66,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgSendItems(itemIDs, eugenSdkAddr, joseSdkAddr),
-				"eugen",
+				cbOwnerKey,
 				false,
 			)
 			if err != nil {

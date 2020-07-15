@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
@@ -24,9 +26,11 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+			cbOwnerKey := fmt.Sprintf("TestCreateCookbookViaCLI%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
+			eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
@@ -39,7 +43,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				0,
 				msgs.DefaultCostPerBlock,
 				sdkAddr),
-				"eugen",
+				cbOwnerKey,
 				false,
 			)
 			if err != nil {

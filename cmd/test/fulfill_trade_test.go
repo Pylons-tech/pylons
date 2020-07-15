@@ -1,8 +1,10 @@
 package inttest
 
 import (
+	"fmt"
 	"strings"
 	originT "testing"
+	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
@@ -151,16 +153,25 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	mCB := GetMockedCookbook("eugen", false, t)
-	mCB2 := GetMockedCookbook("eugen", true, t)
+	cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
+	MockAccount(cbOwnerKey, t) // mock account with initial balance
+
+	mCB := GetMockedCookbook(cbOwnerKey, false, t)
+	mCB2 := GetMockedCookbook(cbOwnerKey, true, t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {
-		outputItemID = MockItemGUID(mCB.ID, "eugen", tc.outputItemName, t)
+		outputItemID = MockItemGUID(mCB.ID, cbOwnerKey, tc.outputItemName, t)
 	}
 
+	tradeCreatorKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
+	MockAccount(tradeCreatorKey, t) // mock account with initial balance
+	// FaucetGameCoins(tradeCreatorKey, tc.CoinOutputs, t)
+
 	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
-	trdGUID := MockDetailedTradeGUID(mCB.ID,
+	trdGUID := MockDetailedTradeGUID(
+		tradeCreatorKey,
+		mCB.ID,
 		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
@@ -170,8 +181,14 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
 
-	michaelAddr := inttestSDK.GetAccountAddr("michael", t)
-	michaelSdkAddr, err := sdk.AccAddressFromBech32(michaelAddr)
+	tradeFulfillerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
+	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
+	if tc.coinInputList != nil {
+		FaucetGameCoins(tradeFulfillerKey, tc.coinInputList.ToCoins(), t)
+	}
+
+	tradeFulfillerAddr := inttestSDK.GetAccountAddr(tradeFulfillerKey, t)
+	tradeFulfillerSdkAddr, err := sdk.AccAddressFromBech32(tradeFulfillerAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	itemIDs := []string{}
@@ -180,11 +197,11 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		if tc.wrongCBFulfill {
 			useCBID = mCB2.ID
 		}
-		itemIDs = []string{MockItemGUID(useCBID, "michael", tc.inputItemName, t)}
+		itemIDs = []string{MockItemGUID(useCBID, tradeFulfillerKey, tc.inputItemName, t)}
 	}
 
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, michaelSdkAddr, itemIDs)
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
+	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddr, itemIDs)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
 	if err != nil {
 		TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 		return
@@ -208,7 +225,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	// Try again after fulfill trade
 	if tc.expectedRetryErrMsg != "" {
-		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, "michael", false)
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
 		if err != nil {
 			TxBroadcastErrorCheck(txhash, err, t)
 			return
