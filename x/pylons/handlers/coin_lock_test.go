@@ -399,9 +399,7 @@ func TestCoinLock(t *testing.T) {
 
 				require.True(t, err == nil)
 
-				lcAfterFulfillTrade, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-
-				require.True(t, err == nil)
+				lcAfterFulfillTrade, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterFulfillTrade.Amount.Sort())
 
