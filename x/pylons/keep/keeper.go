@@ -19,7 +19,6 @@ type Keeper struct {
 	TradeKey      sdk.StoreKey
 	LockedCoinKey sdk.StoreKey
 	Cdc           *codec.Codec // The wire codec for binary encoding/decoding
-	// LockedCoinList types.LockedCoinList
 }
 
 // NewKeeper creates a new Keeper
@@ -38,26 +37,25 @@ func NewKeeper(coinKeeper bank.Keeper, entityKey, cookbookKey, recipeKey, itemKe
 }
 
 // HasCoins checks if the sender has enough coins
-func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amt sdk.Coins) bool {
+func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coins) bool {
 	lockedCoin, err := keeper.GetLockedCoin(ctx, sender)
 
 	if err == nil {
-		newAmount := lockedCoin.Amount.Sort().Add(amt.Sort()...)
-
+		newAmount := lockedCoin.Amount.Sort().Add(amount.Sort()...)
 		return keeper.CoinKeeper.HasCoins(ctx, sender, newAmount)
 	}
 
 	if lockedCoin.Amount.Empty() {
-		return keeper.CoinKeeper.HasCoins(ctx, sender, amt)
+		return keeper.CoinKeeper.HasCoins(ctx, sender, amount)
 	}
 
 	return false
 }
 
 // SendCoins send coins
-func SendCoins(keeper Keeper, ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amt sdk.Coins) error {
-	if HasCoins(keeper, ctx, fromAddr, amt) {
-		return keeper.CoinKeeper.SendCoins(ctx, fromAddr, toAddr, amt)
+func SendCoins(keeper Keeper, ctx sdk.Context, fromAddr sdk.AccAddress, toAddr sdk.AccAddress, amount sdk.Coins) error {
+	if HasCoins(keeper, ctx, fromAddr, amount) {
+		return keeper.CoinKeeper.SendCoins(ctx, fromAddr, toAddr, amount)
 	}
 
 	return sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
