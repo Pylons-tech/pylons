@@ -153,20 +153,20 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
+	cbOwnerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
 
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 	mCB2 := GetMockedCookbook(cbOwnerKey, true, t)
 
-	outputItemID := ""
-	if tc.hasOutputItem {
-		outputItemID = MockItemGUID(mCB.ID, cbOwnerKey, tc.outputItemName, t)
-	}
-
-	tradeCreatorKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
+	tradeCreatorKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
 	MockAccount(tradeCreatorKey, t) // mock account with initial balance
 	// FaucetGameCoins(tradeCreatorKey, tc.CoinOutputs, t)
+
+	outputItemID := ""
+	if tc.hasOutputItem {
+		outputItemID = MockItemGUID(mCB.ID, tradeCreatorKey, tc.outputItemName, t)
+	}
 
 	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
 	trdGUID := MockDetailedTradeGUID(
@@ -176,12 +176,12 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		tc.hasInputItem, tc.inputItemName,
 		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
 		tc.hasOutputItem, outputItemID,
-		tc.extraInfo,
+		fmt.Sprintf("%s%d", tc.extraInfo, time.Now().Unix()),
 		t)
 
 	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
 
-	tradeFulfillerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
+	tradeFulfillerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
 	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
 	if tc.coinInputList != nil {
 		FaucetGameCoins(tradeFulfillerKey, tc.coinInputList.ToCoins(), t)

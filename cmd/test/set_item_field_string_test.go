@@ -33,7 +33,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_%d", tcNum, time.Now().Unix())
+			cbOwnerKey := fmt.Sprintf("TestUpdateItemStringViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 			mCB := GetMockedCookbook(cbOwnerKey, false, t)
 

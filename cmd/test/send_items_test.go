@@ -37,7 +37,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_%d", tcNum, time.Now().Unix())
+			cbOwnerKey := fmt.Sprintf("TestSendItemsViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)

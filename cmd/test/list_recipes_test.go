@@ -27,7 +27,7 @@ func TestListRecipeViaCLI(originT *originT.T) {
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_%d", tcNum, time.Now().Unix())
+			cbOwnerKey := fmt.Sprintf("TestListRecipeViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 			_, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.outputItemName, t)
 			if err != nil {

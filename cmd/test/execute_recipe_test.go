@@ -42,7 +42,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
+			cbOwnerKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 			guid, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
 			if err != nil {
@@ -61,7 +61,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			rcpExecutorKey := fmt.Sprintf("TestCreateTradeViaCLI%d_RCP_EXECUTOR_%d", tcNum, time.Now().Unix())
+			rcpExecutorKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_RCP_EXECUTOR_%d", tcNum, time.Now().Unix())
 			MockAccount(rcpExecutorKey, t) // mock account with initial balance
 			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
 			rcpExecutorSdkAddress, err := sdk.AccAddressFromBech32(rcpExecutorAddr)
