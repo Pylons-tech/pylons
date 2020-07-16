@@ -279,6 +279,17 @@ func TestCoinLock(t *testing.T) {
 			testDisableTrade:           true,
 			testDisableTradeLockDiffer: types.NewPylon(100),
 		},
+		"create trade & disable trade & enable trade coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testDisableTrade:           true,
+			testDisableTradeLockDiffer: types.NewPylon(100),
+
+			testEnableTradeLock:       true,
+			testEnableTradeLockDiffer: types.NewPylon(100),
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
