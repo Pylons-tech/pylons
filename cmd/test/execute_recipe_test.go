@@ -45,11 +45,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			cbOwnerKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 			guid, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error mocking recipe")
-			}
+			t.MustNil(err, "error mocking recipe")
 
 			ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 			cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
@@ -94,19 +90,28 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			if tc.pylonsLLCDistribution > 0 {
 				accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 				originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
-				pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
-				t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
+				balanceOk := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
+				t.WithFields(testing.Fields{
+					"pylons_llc_address":  pylonsLLCAddress.String(),
+					"origin_amount":       originPylonAmount.Int64(),
+					"target_distribution": tc.pylonsLLCDistribution,
+					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
+				}).Log("Pylons LLC amount change")
+				t.MustTrue(balanceOk, "Pylons LLC should get correct revenue")
 			}
 			if tc.cbOwnerDistribution > 0 {
 				accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
 				originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
-				pylonAvailOnCBOwner := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
+				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
 				t.WithFields(testing.Fields{
+					"cbowner_key":         cbOwnerKey,
+					"cbowner_address":     cbOwnerAddress.String(),
 					"origin_amount":       originPylonAmount.Int64(),
 					"target_distribution": tc.cbOwnerDistribution,
 					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
-				}).MustTrue(pylonAvailOnCBOwner, "cookbook owner should get correct revenue")
+				}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
 			}
+			// TODO should check also recipe executor change
 		})
 	}
 }
