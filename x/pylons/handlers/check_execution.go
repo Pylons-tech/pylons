@@ -38,7 +38,10 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 		if err != nil {
 			return err
 		}
-		pylonsLLCAmount := Max(1, pylonAmount*rcpPercent/100)
+		// when pylon amount is 5 and rcpPercent is 10, cbOwnerAmount = 5 * 90 / 100 = 4
+		cbOwnerAmount := pylonAmount * (100 - rcpPercent) / 100
+		// when pylon amount is 5 and rcpPercent is 10, pylonsLLCAmount = 5 - 4 = 1
+		pylonsLLCAmount := pylonAmount - cbOwnerAmount
 		return keeper.CoinKeeper.SendCoins(ctx, cookbook.Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
 	}
 	return nil

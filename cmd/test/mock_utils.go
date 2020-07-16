@@ -57,7 +57,7 @@ func MockAccount(key string, t *testing.T) {
 		"txhash": txhash,
 	}).MustNil(err, "error sending transaction")
 
-	txResponseBytes, err = inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
+	txResponseBytes, err = inttestSDK.WaitAndGetTxData(txhash, inttestSDK.GetMaxWaitBlock(), t)
 	t.WithFields(testing.Fields{
 		"result": string(txResponseBytes),
 	}).MustNil(err, "error waiting for get pylons transaction")
@@ -151,18 +151,10 @@ func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
 // GetMockedCookbook get mocked cookbook
 func GetMockedCookbook(senderName string, createNew bool, t *testing.T) types.Cookbook {
 	guid, err := MockCookbook(senderName, createNew, t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error mocking cookbook")
-	}
+	t.MustNil(err, "error mocking cookbook")
 
 	cb, err := inttestSDK.GetCookbookByGUID(guid)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error mocking cookbook")
-	}
+	t.MustNil(err, "error mocking cookbook")
 	return cb
 }
 
@@ -224,23 +216,7 @@ func MockDetailedRecipeGUID(
 	interval int64,
 	t *testing.T,
 ) (string, error) {
-	guid, err := inttestSDK.GetRecipeGUIDFromName(rcpName, "")
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error checking if recipe already exist")
-	}
-
-	if len(guid) > 0 { // finish mock if already available
-		return guid, nil
-	}
-
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error getting mocked cookbook")
-	}
 
 	eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
