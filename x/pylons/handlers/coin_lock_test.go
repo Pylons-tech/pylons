@@ -78,6 +78,12 @@ func TestCoinLock(t *testing.T) {
 		// Execute Receipe Coin Unlock Test
 		testSecondExecuteRecipe      bool
 		testSecondExecuteRecipeError bool
+		// Enable trade Coin Lock Test
+		testEnableTradeLock       bool
+		testEnableTradeLockDiffer sdk.Coins
+		// Disable trade Coin Unlock Test
+		testDisableTrade           bool
+		testDisableTradeLockDiffer sdk.Coins
 	}{
 		"create trade and fulfill trade coin lock test": {
 			testCreateTradeLock:       true,
@@ -265,6 +271,14 @@ func TestCoinLock(t *testing.T) {
 			testSecondExecuteRecipe:      true,
 			testSecondExecuteRecipeError: false,
 		},
+		"create trade & disable trade coin lock test": {
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			testCreateTradeLockDiffer: types.NewPylon(100),
+
+			testDisableTrade:           true,
+			testDisableTradeLockDiffer: types.NewPylon(100),
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -294,6 +308,40 @@ func TestCoinLock(t *testing.T) {
 				lcDiffer := lcAfterCreateTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
 				require.True(t, lcDiffer.IsEqual(tc.testCreateTradeLockDiffer))
+
+			}
+
+			// test disable recipe coin unlock
+			if tc.testCreateTradeLock && tc.testDisableTrade {
+				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+
+				disableTrdMsg := msgs.NewMsgDisableTrade(ctRespData.TradeID, sender1)
+				_, err := HandlerMsgDisableTrade(tci.Ctx, tci.PlnK, disableTrdMsg)
+
+				require.True(t, err == nil)
+
+				lcAfterDisalbeTrade, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+
+				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterDisalbeTrade.Amount.Sort())
+
+				require.True(t, lcDiffer.IsEqual(tc.testDisableTradeLockDiffer))
+
+			}
+
+			// test enable recipe coin lock
+			if tc.testCreateTradeLock && tc.testDisableTrade && tc.testEnableTradeLock {
+				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+
+				enableTrdMsg := msgs.NewMsgEnableTrade(ctRespData.TradeID, sender1)
+				_, err := HandlerMsgEnableTrade(tci.Ctx, tci.PlnK, enableTrdMsg)
+
+				require.True(t, err == nil)
+
+				lcAfterEnableTrade, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+
+				lcDiffer := lcAfterEnableTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
+
+				require.True(t, lcDiffer.IsEqual(tc.testEnableTradeLockDiffer))
 
 			}
 
