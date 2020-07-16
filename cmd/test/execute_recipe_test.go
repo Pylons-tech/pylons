@@ -28,7 +28,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 		itemIDs               []string
 		desiredItemName       string
 		pylonsLLCDistribution int64
-		// cbOwnerDistribution   int64
+		cbOwnerDistribution   int64
 	}{
 		{
 			name:                  "item build from pylons recipe",
@@ -36,7 +36,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			itemIDs:               []string{},
 			desiredItemName:       "TESTITEM_ExecuteRecipe_003",
 			pylonsLLCDistribution: 1,
-			// cbOwnerDistribution:   4,
+			cbOwnerDistribution:   4,
 		},
 	}
 
@@ -51,10 +51,10 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				}).Fatal("error mocking recipe")
 			}
 
-			// ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-			// cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
+			ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+			cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
-			// cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+			cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.WithFields(testing.Fields{
@@ -97,14 +97,16 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
 				t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
 			}
-			// TODO should enable this when we create new account per cookbook and per recipes for parallel
-			// if tc.cbOwnerDistribution > 0 {
-			// 	accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
-			// 	originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
-			// 	t.Log("originPylonAmount.Int64() + tc.cbOwnerDistribution", originPylonAmount.Int64(), tc.cbOwnerDistribution, accInfo.Coins.AmountOf(types.Pylon))
-			// 	pylonAvailOnCBOwner := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
-			// 	t.MustTrue(pylonAvailOnCBOwner, "cookbook owner should get correct revenue")
-			// }
+			if tc.cbOwnerDistribution > 0 {
+				accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+				originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
+				pylonAvailOnCBOwner := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
+				t.WithFields(testing.Fields{
+					"origin_amount":       originPylonAmount.Int64(),
+					"target_distribution": tc.cbOwnerDistribution,
+					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
+				}).MustTrue(pylonAvailOnCBOwner, "cookbook owner should get correct revenue")
+			}
 		})
 	}
 }
