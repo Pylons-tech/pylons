@@ -39,7 +39,7 @@ func MockAccount(key string, t *testing.T) {
 	t.MustTrue(caTxHash != "", "error fetching txhash from result")
 	t.WithFields(testing.Fields{
 		"txhash": caTxHash,
-	}).Info("waiting for create account transaction")
+	}).Info("started waiting for create account transaction")
 
 	// wait for txhash to be confirmed
 	txResponseBytes, err := inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
@@ -50,6 +50,7 @@ func MockAccount(key string, t *testing.T) {
 
 	// get initial balance
 	sdkAddr, err := sdk.AccAddressFromBech32(addr)
+	t.MustNil(err, "error converting string cosmos address to sdk struct")
 	getPylonsMsg := msgs.NewMsgGetPylons(types.PremiumTier.Fee, sdkAddr)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, getPylonsMsg, key, false)
 	t.WithFields(testing.Fields{
@@ -66,9 +67,11 @@ func MockAccount(key string, t *testing.T) {
 func FaucetGameCoins(key string, amount sdk.Coins, t *testing.T) {
 	fromAddress := inttestSDK.GetAccountAddr("node0", t)
 	fromSdkAddr, err := sdk.AccAddressFromBech32(fromAddress)
+	t.MustNil(err, "error converting string cosmos address to sdk struct")
 
 	toAddress := inttestSDK.GetAccountAddr(key, t)
 	toSdkAddr, err := sdk.AccAddressFromBech32(toAddress)
+	t.MustNil(err, "error converting string cosmos address to sdk struct")
 
 	sendCoinsMsg := bank.NewMsgSend(fromSdkAddr, toSdkAddr, amount)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, sendCoinsMsg, "node0", false)

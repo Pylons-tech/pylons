@@ -145,6 +145,12 @@ First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `
 ```
 It means the sender does not have enough pylons to create recipes.
 
+## Sometimes list_recipes, list_cookbook are shown as empty with remote server and sometimes not
+
+We have experienced this issue when remote server has 2 separate nodes which run separately without connection.
+It sometimes connect to one node and sometimes connect to another node which cause unexpected result in cli run.
+The solution is on server side, connect two of them or only run 1 node.
+
 ## What is OwnerRecipeID of an item? 
 
 - When the item is scheduled to be handled in the future block by a recipe, the item's OwnerRecipeID is set as the recipe's ID. This means that this item is locked until the appropriate future block is created.
