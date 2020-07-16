@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
@@ -39,13 +41,15 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 		},
 	}
 
-	mCB := GetMockedCookbook("eugen", false, &t)
+	cbOwnerKey := fmt.Sprintf("TestCreateRecipeViaCLI%d", time.Now().Unix())
+	MockAccount(cbOwnerKey, &t) // mock account with initial balance
+	ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, &t)
+	sdkAddr, err := sdk.AccAddressFromBech32(ownerAddr)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	mCB := GetMockedCookbook(cbOwnerKey, false, &t)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
@@ -58,7 +62,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					types.GenOneOutput(2),
 					0,
 					sdkAddr),
-				"eugen",
+				cbOwnerKey,
 				false,
 			)
 			if err != nil {

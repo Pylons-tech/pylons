@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -21,11 +22,26 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 
 	id := uuid.New()
 	id2 := uuid.New()
+	id3 := uuid.New()
+
+	cbData := CreateCookbookResponse{}
+
+	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "cookbook-id-0001", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
+	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
+	err = json.Unmarshal(cookbookResult.Data, &cbData)
+	require.True(t, err == nil)
+	require.True(t, len(cbData.CookbookID) > 0)
+
+	item := keep.GenItem(cbData.CookbookID, sender, "Raichu")
+	// item.OwnerTradeID = id.String()
+	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	require.True(t, err == nil)
 
 	// add 3 trades. one open trade by each sender and one closed trade
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
+		ItemOutputs: types.ItemList{*item},
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender,
 		Disabled:    true, // we disable this trade initially
@@ -37,6 +53,16 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Richu"}),
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2,
+	})
+	require.True(t, err == nil)
+
+	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
+		ID:          id3.String(),
+		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
+		ItemOutputs: types.ItemList{*item},
+		CoinOutputs: types.NewPylon(10000),
+		Sender:      sender2,
+		Disabled:    true, // we disable this trade initially
 	})
 	require.True(t, err == nil)
 
@@ -56,6 +82,12 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 			sender:       sender,
 			desiredError: "Trade initiator is not the same as sender",
 		},
+		"enable wrong item id owner trade with failure": {
+			tradeID:      id3.String(),
+			showError:    true,
+			sender:       sender2,
+			desiredError: "is not owned by the trade creator",
+		},
 	}
 
 	for name, tc := range cases {
@@ -65,9 +97,13 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 			_, err := HandlerMsgEnableTrade(tci.Ctx, tci.PlnK, delTrdMsg)
 			if tc.showError == false {
 				trd, _ := tci.PlnK.GetTrade(tci.Ctx, tc.tradeID)
-				require.False(t, trd.Disabled)
+				require.True(t, !trd.Disabled)
+				if trd.ItemOutputs != nil && len(trd.ItemOutputs) > 0 {
+					require.True(t, trd.ItemOutputs[0].OwnerTradeID != "")
+				}
 			} else {
-				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+				require.True(t, err != nil)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
 			}
 		})
 	}

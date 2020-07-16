@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -21,44 +23,49 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), &t)
 
 	tests := []struct {
-		name                   string
-		rcpName                string
-		itemIDs                []string
-		desiredItemName        string
-		checkPylonDistribution bool
-		pylonsLLCDistribution  int64
+		name                  string
+		rcpName               string
+		itemIDs               []string
+		desiredItemName       string
+		pylonsLLCDistribution int64
+		cbOwnerDistribution   int64
 	}{
 		{
-			name:                   "item build from pylons recipe",
-			rcpName:                "TESTRCP_ExecuteRecipe_003",
-			itemIDs:                []string{},
-			desiredItemName:        "TESTITEM_ExecuteRecipe_003",
-			checkPylonDistribution: true,
-			pylonsLLCDistribution:  1,
+			name:                  "item build from pylons recipe",
+			rcpName:               "TESTRCP_ExecuteRecipe_003",
+			itemIDs:               []string{},
+			desiredItemName:       "TESTITEM_ExecuteRecipe_003",
+			pylonsLLCDistribution: 1,
+			cbOwnerDistribution:   4,
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error mocking recipe")
-			}
+			cbOwnerKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
+			guid, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
+			t.MustNil(err, "error mocking recipe")
+
+			ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+			cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
+			t.MustNil(err, "error converting string address to AccAddress struct")
+			cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.WithFields(testing.Fields{
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
+			rcpExecutorKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_RCP_EXECUTOR_%d", tcNum, time.Now().Unix())
+			MockAccount(rcpExecutorKey, t) // mock account with initial balance
+			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
+			rcpExecutorSdkAddress, err := sdk.AccAddressFromBech32(rcpExecutorAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, tc.itemIDs),
-				"eugen",
+				msgs.NewMsgExecuteRecipe(rcp.ID, rcpExecutorSdkAddress, tc.itemIDs),
+				rcpExecutorKey,
 				false,
 			)
 			if err != nil {
@@ -80,12 +87,31 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"item_name": tc.desiredItemName,
 			}).MustTrue(ok, "item id with specific name does not exist")
 
-			if tc.checkPylonDistribution {
+			if tc.pylonsLLCDistribution > 0 {
 				accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 				originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
-				pylonAvailOnLLC := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
-				t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
+				balanceOk := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
+				t.WithFields(testing.Fields{
+					"pylons_llc_address":  pylonsLLCAddress.String(),
+					"origin_amount":       originPylonAmount.Int64(),
+					"target_distribution": tc.pylonsLLCDistribution,
+					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
+				}).Log("Pylons LLC amount change")
+				t.MustTrue(balanceOk, "Pylons LLC should get correct revenue")
 			}
+			if tc.cbOwnerDistribution > 0 {
+				accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+				originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
+				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
+				t.WithFields(testing.Fields{
+					"cbowner_key":         cbOwnerKey,
+					"cbowner_address":     cbOwnerAddress.String(),
+					"origin_amount":       originPylonAmount.Int64(),
+					"target_distribution": tc.cbOwnerDistribution,
+					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
+				}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
+			}
+			// TODO should check also recipe executor change
 		})
 	}
 }

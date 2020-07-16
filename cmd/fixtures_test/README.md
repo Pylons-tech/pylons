@@ -102,9 +102,14 @@ make fixture_tests ARGS="-userest --accounts=michael,eugen"
 ```
 
 - use-known-cookbook
-ignore create_cookbook message but just do update rest of them
+Ignore create_cookbook message but just do update rest of them
 ```
 make fixture_tests ARGS="-use-known-cookbook --accounts=michael,eugen"
+```
+- verify-only
+Verification stuff for fixture test
+```
+make fixture_tests ARGS="-verify-only --accounts=michael,eugen"
 ```
 - specific scenarios test
 If not specify this param, it tests all scenario files. If specify only do specific tests.

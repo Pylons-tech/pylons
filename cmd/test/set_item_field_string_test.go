@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
@@ -29,19 +31,21 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB := GetMockedCookbook("eugen", false, t)
+			cbOwnerKey := fmt.Sprintf("TestUpdateItemStringViaCLI%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
+			mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
-			itemID := MockItemGUID(mCB.ID, "eugen", tc.itemName, t)
+			itemID := MockItemGUID(mCB.ID, cbOwnerKey, tc.itemName, t)
 
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+			eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
-				"eugen",
+				cbOwnerKey,
 				false,
 			)
 			if err != nil {
