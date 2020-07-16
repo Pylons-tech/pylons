@@ -11,7 +11,76 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 )
+
+///////////ACCOUNT///////////////////////////////////////////////
+
+// MockAccount generate local key and do initial get-pylons to create cookbook
+func MockAccount(key string, t *testing.T) {
+	// add local key
+	localKeyResult, err := inttestSDK.AddNewLocalKey(key)
+	t.WithFields(testing.Fields{
+		"key":              key,
+		"local_key_result": localKeyResult,
+	}).MustNil(err, "error creating local Key")
+
+	addr := localKeyResult["address"]
+
+	// send message for creating account
+	result, logstr, err := inttestSDK.CreateChainAccount(key)
+	t.WithFields(testing.Fields{
+		"result": result,
+		"logstr": logstr,
+	}).MustNil(err, "error creating account on chain")
+
+	// fetch txhash from result log
+	caTxHash := inttestSDK.GetTxHashFromLog(result)
+	t.MustTrue(caTxHash != "", "error fetching txhash from result")
+	t.WithFields(testing.Fields{
+		"txhash": caTxHash,
+	}).Info("waiting for create account transaction")
+
+	// wait for txhash to be confirmed
+	txResponseBytes, err := inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for create account transaction")
+	inttestSDK.GetAccountInfoFromAddr(addr, t)
+
+	// get initial balance
+	sdkAddr, err := sdk.AccAddressFromBech32(addr)
+	getPylonsMsg := msgs.NewMsgGetPylons(types.PremiumTier.Fee, sdkAddr)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, getPylonsMsg, key, false)
+	t.WithFields(testing.Fields{
+		"txhash": txhash,
+	}).MustNil(err, "error sending transaction")
+
+	txResponseBytes, err = inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for get pylons transaction")
+}
+
+// FaucetGameCoins get faucet game coins from faucet server
+func FaucetGameCoins(key string, amount sdk.Coins, t *testing.T) {
+	fromAddress := inttestSDK.GetAccountAddr("node0", t)
+	fromSdkAddr, err := sdk.AccAddressFromBech32(fromAddress)
+
+	toAddress := inttestSDK.GetAccountAddr(key, t)
+	toSdkAddr, err := sdk.AccAddressFromBech32(toAddress)
+
+	sendCoinsMsg := bank.NewMsgSend(fromSdkAddr, toSdkAddr, amount)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, sendCoinsMsg, "node0", false)
+	t.WithFields(testing.Fields{
+		"txhash": txhash,
+	}).MustNil(err, "error sending transaction")
+
+	txResponseBytes, err := inttestSDK.WaitAndGetTxData(txhash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for getting faucet transaction")
+}
 
 ///////////COOKBOOK//////////////////////////////////////////////
 
@@ -95,18 +164,21 @@ func GetMockedCookbook(senderName string, createNew bool, t *testing.T) types.Co
 }
 
 // MockNoDelayItemGenRecipeGUID mock no delay item generation recipe
-func MockNoDelayItemGenRecipeGUID(name string, outputItemName string, t *testing.T) (string, error) {
-	return MockRecipeGUID(0, false, name, "", outputItemName, t)
+func MockNoDelayItemGenRecipeGUID(cbOwnerKey, name string, outputItemName string, t *testing.T) (string, error) {
+	return MockRecipeGUID(cbOwnerKey, 0, false, name, "", outputItemName, t)
 }
 
 // MockRecipeGUID mock recipe and returns GUID
 func MockRecipeGUID(
+	cbOwnerKey string,
 	interval int64,
 	isUpgrdRecipe bool,
 	name, curItemName, desItemName string,
 	t *testing.T) (string, error) {
 	if !isUpgrdRecipe {
-		return MockDetailedRecipeGUID(name,
+		return MockDetailedRecipeGUID(
+			cbOwnerKey,
+			name,
 			types.GenCoinInputList("pylon", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry(desItemName),
@@ -115,7 +187,9 @@ func MockRecipeGUID(
 			t,
 		)
 	}
-	return MockDetailedRecipeGUID(name,
+	return MockDetailedRecipeGUID(
+		cbOwnerKey,
+		name,
 		types.GenCoinInputList("pylon", 5),
 		types.GenItemInputList(curItemName),
 		types.GenEntriesFirstItemNameUpgrade(desItemName),
@@ -126,16 +200,19 @@ func MockRecipeGUID(
 }
 
 // MockPopularRecipeGUID mock popular recipe and returns GUID
-func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
+func MockPopularRecipeGUID(
+	cbOwnerKey string,
+	hfrt handlers.PopularRecipeType,
 	rcpName string,
 	t *testing.T,
 ) (string, error) {
 	ciL, iiL, entries, outputs, bI := handlers.GetParamsForPopularRecipe(hfrt)
-	return MockDetailedRecipeGUID(rcpName, ciL, iiL, entries, outputs, bI, t)
+	return MockDetailedRecipeGUID(cbOwnerKey, rcpName, ciL, iiL, entries, outputs, bI, t)
 }
 
 // MockDetailedRecipeGUID mock detailed recipe and returns GUID
 func MockDetailedRecipeGUID(
+	cbOwnerKey string,
 	rcpName string,
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
@@ -155,14 +232,14 @@ func MockDetailedRecipeGUID(
 		return guid, nil
 	}
 
-	mCB := GetMockedCookbook("eugen", false, t)
+	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
 		}).Fatal("error getting mocked cookbook")
 	}
 
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
@@ -177,7 +254,7 @@ func MockDetailedRecipeGUID(
 			outputs,
 			interval,
 			sdkAddr),
-		"eugen",
+		cbOwnerKey,
 		false,
 	)
 	if err != nil {
@@ -273,6 +350,7 @@ func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testin
 
 // MockDetailedTradeGUID mock trade and return GUID
 func MockDetailedTradeGUID(
+	tradeCreatorKey string,
 	cbID string,
 	inputCoinList types.CoinInputList,
 	hasInputItem bool, inputItemName string,
@@ -281,7 +359,7 @@ func MockDetailedTradeGUID(
 	extraInfo string,
 	t *testing.T,
 ) string {
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 
@@ -312,7 +390,7 @@ func MockDetailedTradeGUID(
 			outputItems,
 			extraInfo,
 			sdkAddr),
-		"eugen",
+		tradeCreatorKey,
 		false,
 	)
 	if err != nil {

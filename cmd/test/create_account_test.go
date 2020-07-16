@@ -37,7 +37,7 @@ func TestCreateAccountViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			key := "eugen"
+			key := fmt.Sprintf("TestCreateAccountViaCLI_%d", time.Now().Unix())
 			if tc.genNewKey {
 				key = fmt.Sprintf("car%d", time.Now().Unix())
 				_, err := inttestSDK.AddNewLocalKey(key)

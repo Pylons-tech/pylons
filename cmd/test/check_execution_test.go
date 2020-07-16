@@ -2,7 +2,9 @@ package inttest
 
 import (
 	"encoding/json"
+	"fmt"
 	"strconv"
+	"time"
 
 	originT "testing"
 
@@ -97,17 +99,19 @@ func TestCheckExecutionViaCLI(originT *originT.T) {
 
 func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *testing.T) {
 	t.Parallel()
-	mCB := GetMockedCookbook("eugen", false, t)
+	cbOwnerKey := fmt.Sprintf("TestCheckExecutionViaCLI%d_%d", tcNum, time.Now().Unix())
+	MockAccount(cbOwnerKey, t) // mock account with initial balance
+	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
 	itemIDs := []string{}
 	if len(tc.currentItemName) > 0 { // when item input is set
 		itemIDs = []string{
-			MockItemGUID(mCB.ID, "eugen", tc.currentItemName, t),
+			MockItemGUID(mCB.ID, cbOwnerKey, tc.currentItemName, t),
 		}
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
 
-	guid, err := MockRecipeGUID(tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
+	guid, err := MockRecipeGUID(cbOwnerKey, tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
 	if err != nil {
 		t.WithFields(testing.Fields{
 			"error": err,
@@ -119,13 +123,13 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		"recipe_guid": guid,
 	}).MustNil(err, "recipe with target guid does not exist")
 
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
+	eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, "eugen", false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
@@ -171,7 +175,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}
 
 	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
@@ -210,7 +214,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		"shouldCompleted": tc.shouldSuccess,
 	}).MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
-		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, "eugen", false)
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
 		if err != nil {
 			TxBroadcastErrorCheck(txhash, err, t)
 			return

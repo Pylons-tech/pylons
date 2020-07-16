@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -38,17 +40,19 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			guid, err := MockNoDelayItemGenRecipeGUID(tc.rcpName, tc.desiredItemName, t)
+			cbOwnerKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
+			guid, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
 			if err != nil {
 				t.WithFields(testing.Fields{
 					"error": err,
 				}).Fatal("error mocking recipe")
 			}
 
-			// eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			// cbOwnerAddress, err := sdk.AccAddressFromBech32(eugenAddr)
+			// ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+			// cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			// cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
 
@@ -57,13 +61,15 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			michaelAddr := inttestSDK.GetAccountAddr("michael", t)
-			michaelSdkAddress, err := sdk.AccAddressFromBech32(michaelAddr)
+			rcpExecutorKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_RCP_EXECUTOR_%d", tcNum, time.Now().Unix())
+			MockAccount(rcpExecutorKey, t) // mock account with initial balance
+			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
+			rcpExecutorSdkAddress, err := sdk.AccAddressFromBech32(rcpExecutorAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, michaelSdkAddress, tc.itemIDs),
-				"michael",
+				msgs.NewMsgExecuteRecipe(rcp.ID, rcpExecutorSdkAddress, tc.itemIDs),
+				rcpExecutorKey,
 				false,
 			)
 			if err != nil {
