@@ -29,6 +29,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 		desiredItemName       string
 		pylonsLLCDistribution int64
 		cbOwnerDistribution   int64
+		rcpExecutorSpend      int64
 	}{
 		{
 			name:                  "item build from pylons recipe",
@@ -37,6 +38,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			desiredItemName:       "TESTITEM_ExecuteRecipe_003",
 			pylonsLLCDistribution: 1,
 			cbOwnerDistribution:   4,
+			rcpExecutorSpend:      5,
 		},
 	}
 
@@ -62,6 +64,8 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
 			rcpExecutorSdkAddress, err := sdk.AccAddressFromBech32(rcpExecutorAddr)
 			t.MustNil(err, "error converting string address to AccAddress struct")
+			rcpExecutorAccInfo := inttestSDK.GetAccountInfoFromAddr(rcpExecutorSdkAddress.String(), t)
+
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgExecuteRecipe(rcp.ID, rcpExecutorSdkAddress, tc.itemIDs),
@@ -111,7 +115,18 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
 				}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
 			}
-			// TODO should check also recipe executor change
+			if tc.rcpExecutorSpend != 0 {
+				accInfo := inttestSDK.GetAccountInfoFromAddr(rcpExecutorSdkAddress.String(), t)
+				originPylonAmount := rcpExecutorAccInfo.Coins.AmountOf(types.Pylon)
+				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() - tc.rcpExecutorSpend))
+				t.WithFields(testing.Fields{
+					"executor_key":     rcpExecutorKey,
+					"executor_address": rcpExecutorSdkAddress.String(),
+					"origin_amount":    originPylonAmount.Int64(),
+					"target_spend":     tc.rcpExecutorSpend,
+					"actual_amount":    accInfo.Coins.AmountOf(types.Pylon).Int64(),
+				}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
+			}
 		})
 	}
 }
