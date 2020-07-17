@@ -23,6 +23,12 @@ func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 
 	newAmount := oldLc.Amount.Add(lockedCoin.Amount.Sort()...)
 
+	senderAmount := k.CoinKeeper.GetCoins(ctx, lockedCoin.Sender)
+
+	if !senderAmount.IsAllGTE(newAmount) {
+		return errors.New("LockCoin: the sender does not have enough amount to lock")
+	}
+
 	lc := types.LockedCoin{}
 
 	lc.Sender = lockedCoin.Sender
