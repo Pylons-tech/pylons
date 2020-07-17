@@ -125,7 +125,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 					"origin_amount":    originPylonAmount.Int64(),
 					"target_spend":     tc.rcpExecutorSpend,
 					"actual_amount":    accInfo.Coins.AmountOf(types.Pylon).Int64(),
-				}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
+				}).MustTrue(balanceOk, "recipe executor should spend correct amount")
 			}
 		})
 	}
