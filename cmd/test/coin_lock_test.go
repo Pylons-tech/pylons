@@ -96,7 +96,6 @@ func TestCoinLockViaCLI(originT *originT.T) {
 }
 
 func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T) {
-	t.Parallel()
 
 	cbOwnerKey := fmt.Sprintf("TestCoinLockViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
@@ -161,7 +160,6 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 }
 
 func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T) {
-	t.Parallel()
 	cbOwnerKey := fmt.Sprintf("TestCheckExecutionCoinLockViaCLI%d_%d", tcNum, time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
 
