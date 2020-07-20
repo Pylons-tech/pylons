@@ -111,6 +111,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 
 	// check locked coin after fulfilling trade
 	lockedCoinsFirst, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	t.MustNil(err, "error listing locked coins")
 
 	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
 	trdGUID := MockDetailedTradeGUID(
@@ -127,6 +128,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 
 	// check locked coin after fulfilling trade
 	lockedCoinsAfterCreateTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	t.MustNil(err, "error listing locked coins")
 
 	lcDiffer := lockedCoinsAfterCreateTrade.Amount.Sort().Sub(lockedCoinsFirst.Amount.Sort())
 	t.MustTrue(lcDiffer.IsEqual(tc.tradeLockDifferAfterCreate), "locked coin is invalid after creating trade")
@@ -154,6 +156,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 
 	// check locked coin after fulfilling trade
 	lockedCoinsAfterFulFillTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	t.MustNil(err, "error listing locked coins")
 
 	lcDiffer = lockedCoinsAfterCreateTrade.Amount.Sort().Sub(lockedCoinsAfterFulFillTrade.Amount.Sort())
 	t.MustTrue(lcDiffer.IsEqual(tc.tradeLockDifferAfterTrade), "locked coin is invalid after creating trade")
@@ -199,6 +202,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	}
 
 	lockedCoinsFirst, err := inttestSDK.ListLockedCoinsViaCLI(sdkAddr.String())
+	t.MustNil(err, "error listing locked coins")
 
 	if tc.recipeWaitForBlockInterval {
 		err := inttestSDK.WaitForBlockInterval(tc.recipeBlockInterval)
@@ -211,6 +215,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	}
 
 	lockedCoinsAfterRecipe, err := inttestSDK.ListLockedCoinsViaCLI(sdkAddr.String())
+	t.MustNil(err, "error listing locked coins")
 
 	lcDiffer := lockedCoinsAfterRecipe.Amount.Sort().Sub(lockedCoinsFirst.Amount.Sort())
 	t.MustTrue(lcDiffer.IsEqual(tc.recipeLockDifferAfterRecipe), "locked coin is invalid after creating trade")
@@ -268,6 +273,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	}).MustTrue(exec.Completed == true)
 
 	lockedCoinsAfterCheckExecution, err := inttestSDK.ListLockedCoinsViaCLI(sdkAddr.String())
+	t.MustNil(err, "error listing locked coins")
 
 	lcDiffer = lockedCoinsAfterRecipe.Amount.Sort().Sub(lockedCoinsAfterCheckExecution.Amount.Sort())
 	t.MustTrue(lcDiffer.IsEqual(tc.recipeLockDifferAfterCheckExecution), "locked coin is invalid after creating trade")

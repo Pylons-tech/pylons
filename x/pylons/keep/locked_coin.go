@@ -76,7 +76,7 @@ func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) (types.Loc
 	lockedCoin := types.LockedCoin{}
 	err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
 
-	return lockedCoin, err.Error()
+	return lockedCoin, err
 }
 
 func (k Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
