@@ -19,76 +19,62 @@ import (
 type CoinLockTestCase struct {
 	name string
 
-	tradeTest      bool
-	tradeExtraInfo string
-
-	tradeCoinInputList types.CoinInputList
-
+	tradeTest             bool
+	tradeExtraInfo        string
+	tradeCoinInputList    types.CoinInputList
 	tradeOutputCoinName   string
 	tradeOutputCoinAmount int64
+	tradeExpectedStatus   string
+	tradeExpectedMessage  string
+	lockDiffTradeCreate   sdk.Coins
+	lockDiffAfterFulfill  sdk.Coins
 
-	tradeExpectedStatus  string
-	tradeExpectedMessage string
-
-	tradeLockDifferAfterCreate sdk.Coins
-	tradeLockDifferAfterTrade  sdk.Coins
-
-	recipeTest bool
-
+	recipeTest                 bool
 	recipeBlockInterval        int64
 	currentItemName            string
 	recipeDesiredItemName      string
 	recipeWaitForBlockInterval bool
 	recipeExpectedStatus       string
 	recipeExpectedMessage      string
-
-	recipeLockDifferAfterRecipe         sdk.Coins
-	recipeLockDifferAfterCheckExecution sdk.Coins
+	lockDiffAfterSchedule      sdk.Coins
+	lockDiffAfterCheckExec     sdk.Coins
 }
 
 func TestCoinLockViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
+
 	tests := []CoinLockTestCase{
 		{
-			name: "fullfill trade coin lock test",
-
-			tradeTest:      true,
-			tradeExtraInfo: "TESTTRD_FulfillTrade__001_TC1",
-
-			tradeCoinInputList: types.GenCoinInputList("node0token", 200),
-
+			name:                  "fullfill trade coin lock test",
+			tradeTest:             true,
+			tradeExtraInfo:        "TESTTRD_FulfillTrade__001_TC1",
+			tradeCoinInputList:    types.GenCoinInputList("node0token", 200),
 			tradeOutputCoinName:   "pylon",
 			tradeOutputCoinAmount: 100,
-
-			tradeExpectedStatus:  "Success",
-			tradeExpectedMessage: "successfully fulfilled the trade",
-
-			tradeLockDifferAfterCreate: types.NewPylon(100),
-			tradeLockDifferAfterTrade:  types.NewPylon(100),
+			tradeExpectedStatus:   "Success",
+			tradeExpectedMessage:  "successfully fulfilled the trade",
+			lockDiffTradeCreate:   types.NewPylon(100),
+			lockDiffAfterFulfill:  types.NewPylon(100),
 		},
 		{
-			name: "check execution coin lock test",
-
+			name:                       "check execution coin lock test",
 			recipeTest:                 true,
-			recipeBlockInterval:        2,
+			recipeBlockInterval:        3,
 			recipeDesiredItemName:      "TESTITEM_CheckExecution__007_TC1",
 			recipeWaitForBlockInterval: true,
 			recipeExpectedStatus:       "Success",
 			recipeExpectedMessage:      "successfully completed the execution",
-
-			recipeLockDifferAfterRecipe:         types.NewPylon(5),
-			recipeLockDifferAfterCheckExecution: types.NewPylon(5),
+			lockDiffAfterSchedule:      types.NewPylon(5),
+			lockDiffAfterCheckExec:     types.NewPylon(5),
 		},
 	}
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			t.Parallel()
 			if tc.tradeTest {
 				RunSingleTradeCoinLockTestCase(tcNum, tc, t)
-			}
-			if tc.recipeTest {
+			} else if tc.recipeTest {
 				RunSingleCheckExecutionCoinLockTestCase(tcNum, tc, t)
 			}
 		})
@@ -96,9 +82,12 @@ func TestCoinLockViaCLI(originT *originT.T) {
 }
 
 func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T) {
+	t.Parallel()
 
 	cbOwnerKey := fmt.Sprintf("TestCoinLockViaCLI%d_CBOwner_%d", tcNum, time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
+
+	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
 	tradeFulfillerKey := fmt.Sprintf("TestCoinLockViaCLI%d_Creator_%d", tcNum, time.Now().Unix())
 	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
@@ -106,14 +95,12 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	tradeCreatorKey := fmt.Sprintf("TestCoinLockViaCLI%d_Fulfiller_%d", tcNum, time.Now().Unix())
 	MockAccount(tradeCreatorKey, t) // mock account with initial balance
 
-	mCB := GetMockedCookbook(cbOwnerKey, false, t)
-
 	tradeCreatorAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
 	tradeCreatorSdkAddress, err := sdk.AccAddressFromBech32(tradeCreatorAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	// check locked coin after fulfilling trade
-	lockedCoinsFirst, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	initialLock, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
 	t.MustNil(err, "error listing locked coins")
 
 	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
@@ -132,11 +119,16 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
 
 	// check locked coin after fulfilling trade
-	lockedCoinsAfterCreateTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	lockAfterCreateTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
 	t.MustNil(err, "error listing locked coins")
 
-	lcDiffer := lockedCoinsAfterCreateTrade.Amount.Sort().Sub(lockedCoinsFirst.Amount.Sort())
-	t.MustTrue(lcDiffer.IsEqual(tc.tradeLockDifferAfterCreate), "locked coin is invalid after creating trade")
+	lcDiff := lockAfterCreateTrade.Amount.Sort().Sub(initialLock.Amount.Sort())
+	t.WithFields(testing.Fields{
+		"initialLock":            initialLock.Amount,
+		"lockAfterCreateTrade":   lockAfterCreateTrade.Amount,
+		"tc.lockDiffTradeCreate": tc.lockDiffTradeCreate,
+		"tradeCreatorSdkAddress": tradeCreatorSdkAddress.String(),
+	}).MustTrue(lcDiff.IsEqual(tc.lockDiffTradeCreate), "locked coin is invalid after creating trade")
 
 	if tc.tradeCoinInputList != nil {
 		FaucetGameCoins(tradeFulfillerKey, tc.tradeCoinInputList.ToCoins(), t)
@@ -158,16 +150,27 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.tradeExpectedStatus, tc.tradeExpectedMessage, t)
 
 	// check locked coin after fulfilling trade
-	lockedCoinsAfterFulFillTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	lockAfterFulFillTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
 	t.MustNil(err, "error listing locked coins")
 
-	lcDiffer = lockedCoinsAfterCreateTrade.Amount.Sort().Sub(lockedCoinsAfterFulFillTrade.Amount.Sort())
-	t.MustTrue(lcDiffer.IsEqual(tc.tradeLockDifferAfterTrade), "locked coin is invalid after creating trade")
+	lcDiff = lockAfterCreateTrade.Amount.Sort().Sub(lockAfterFulFillTrade.Amount.Sort())
+	t.WithFields(testing.Fields{
+		"lockAfterCreateTrade":    lockAfterCreateTrade.Amount,
+		"lockAfterFulFillTrade":   lockAfterFulFillTrade.Amount,
+		"tc.lockDiffAfterFulfill": tc.lockDiffAfterFulfill,
+		"tradeCreatorSdkAddress":  tradeCreatorSdkAddress.String(),
+	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterFulfill), "locked coin is invalid after creating trade")
 }
 
 func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T) {
-	cbOwnerKey := fmt.Sprintf("TestCheckExecutionCoinLockViaCLI%d_%d", tcNum, time.Now().Unix())
+	t.Parallel()
+
+	cbOwnerKey := fmt.Sprintf("TestCheckExecutionCoinLockViaCLI_%d", time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
+
+	cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+	cbOwnerSdkAddr, err := sdk.AccAddressFromBech32(cbOwnerAddr)
+	t.MustNil(err, "error converting string address to AccAddress struct")
 
 	rcpName := "TESTRCP_CheckExecutionCoinLock__007_TC" + strconv.Itoa(tcNum)
 
@@ -187,11 +190,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"recipe_guid": guid,
 	}).MustNil(err, "recipe with target guid does not exist")
 
-	cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(cbOwnerAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, []string{})
+	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr, []string{})
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
 	if err != nil {
@@ -199,7 +198,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		return
 	}
 
-	lockedCoinsFirst, err := inttestSDK.ListLockedCoinsViaCLI(sdkAddr.String())
+	initialLock, err := inttestSDK.ListLockedCoinsViaCLI(cbOwnerSdkAddr.String())
 	t.MustNil(err, "error listing locked coins")
 
 	if tc.recipeWaitForBlockInterval {
@@ -212,11 +211,16 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		WaitOneBlockWithErrorCheck(t)
 	}
 
-	lockedCoinsAfterRecipe, err := inttestSDK.ListLockedCoinsViaCLI(sdkAddr.String())
+	lockAfterSchedule, err := inttestSDK.ListLockedCoinsViaCLI(cbOwnerSdkAddr.String())
 	t.MustNil(err, "error listing locked coins")
 
-	lcDiffer := lockedCoinsAfterRecipe.Amount.Sort().Sub(lockedCoinsFirst.Amount.Sort())
-	t.MustTrue(lcDiffer.IsEqual(tc.recipeLockDifferAfterRecipe), "locked coin is invalid after creating trade")
+	lcDiff := lockAfterSchedule.Amount.Sort().Sub(initialLock.Amount.Sort())
+	t.WithFields(testing.Fields{
+		"initialLock":              initialLock.Amount,
+		"lockAfterSchedule":        lockAfterSchedule.Amount,
+		"tc.lockDiffAfterSchedule": tc.lockDiffAfterSchedule,
+		"cbOwnerSdkAddr":           cbOwnerSdkAddr.String(),
+	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterSchedule), "locked coin is invalid after creating trade")
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
 	execResp := handlers.ExecuteRecipeResponse{}
@@ -229,7 +233,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"schedule_output": string(execResp.Output),
 	}).MustNil(err, "error unmarshaling schedule output")
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, false, sdkAddr)
+	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr)
 
 	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
 	if err != nil {
@@ -263,9 +267,14 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"shouldCompleted": true,
 	}).MustTrue(exec.Completed == true)
 
-	lockedCoinsAfterCheckExecution, err := inttestSDK.ListLockedCoinsViaCLI(sdkAddr.String())
+	lockAfterCheckExec, err := inttestSDK.ListLockedCoinsViaCLI(cbOwnerSdkAddr.String())
 	t.MustNil(err, "error listing locked coins")
 
-	lcDiffer = lockedCoinsAfterRecipe.Amount.Sort().Sub(lockedCoinsAfterCheckExecution.Amount.Sort())
-	t.MustTrue(lcDiffer.IsEqual(tc.recipeLockDifferAfterCheckExecution), "locked coin is invalid after creating trade")
+	lcDiff = lockAfterSchedule.Amount.Sort().Sub(lockAfterCheckExec.Amount.Sort())
+	t.WithFields(testing.Fields{
+		"lockAfterSchedule":         lockAfterSchedule.Amount,
+		"lockAfterCheckExec":        lockAfterCheckExec.Amount,
+		"tc.lockDiffAfterCheckExec": tc.lockDiffAfterCheckExec,
+		"cbOwnerSdkAddr":            cbOwnerSdkAddr.String(),
+	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterCheckExec), "locked coin is invalid after creating trade")
 }
