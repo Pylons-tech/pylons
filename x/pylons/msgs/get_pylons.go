@@ -30,17 +30,19 @@ type MsgGetPylons struct {
 	PurchaseTime  int64
 	PurchaseState int64
 	PurchaseToken string // TODO: for now, token with prefix "TrueToken" is correct
+	Signature     string
 	Requester     sdk.AccAddress
 }
 
 // NewMsgGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGetPylons(OrderID, PackageName, ProductID string, PurchaseTime, PurchaseState int64, PurchaseToken string, requester sdk.AccAddress) MsgGetPylons {
+func NewMsgGetPylons(OrderID, PackageName, ProductID string, PurchaseTime, PurchaseState int64, PurchaseToken, Signature string, requester sdk.AccAddress) MsgGetPylons {
 	return MsgGetPylons{
 		OrderID:       OrderID,
 		PackageName:   PackageName,
 		ProductID:     ProductID,
 		PurchaseTime:  PurchaseTime,
 		PurchaseToken: PurchaseToken,
+		Signature:     Signature,
 		Requester:     requester,
 	}
 }

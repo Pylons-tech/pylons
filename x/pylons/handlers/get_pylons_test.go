@@ -20,8 +20,9 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 	cases := map[string]struct {
 		packageName     string
 		productID       string
-		fromAddress     sdk.AccAddress
+		purchaseToken   string
 		signature       string
+		fromAddress     sdk.AccAddress
 		showError       bool
 		desiredError    string
 		reqAmount       int64
@@ -31,7 +32,8 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 		"successful check": {
 			packageName:     "com.pylons.loud",
 			productID:       "pylons_55000",
-			signature:       "TrueToken0833XweaU==", // Correct token
+			purchaseToken:   "TrueToken0833XweaU==",
+			signature:       "TrueToken0833XweaU==", // Correct signature
 			fromAddress:     sender1,
 			showError:       false,
 			desiredError:    "",
@@ -42,7 +44,8 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 		"different package successful check": {
 			packageName:     "com.pylons.loud",
 			productID:       "pylons_1000",
-			signature:       "TrueToken0833XweaU==", // Correct token
+			purchaseToken:   "TrueToken0833XweaU==",
+			signature:       "TrueToken0833XweaU==", // Correct signature
 			fromAddress:     sender2,
 			showError:       false,
 			desiredError:    "",
@@ -53,7 +56,8 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 		"wrong signature check": {
 			packageName:     "com.pylons.loud",
 			productID:       "pylons_55000",
-			signature:       "FakeToken0833XweaU==", // Incorrect token
+			purchaseToken:   "FakeToken0833XweaU==",
+			signature:       "FakeToken0833XweaU==", // Incorrect signature
 			fromAddress:     sender3,
 			showError:       true,
 			desiredError:    "wrong purchase token",
@@ -70,6 +74,7 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 				tc.productID,
 				1526476218113,
 				0,
+				tc.purchaseToken,
 				tc.signature,
 				tc.fromAddress)
 			_, err := HandlerMsgGetPylons(tci.Ctx, tci.PlnK, msg)

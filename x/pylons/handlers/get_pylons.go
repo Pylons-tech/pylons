@@ -39,6 +39,7 @@ func HandlerMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPyl
 		msg.PurchaseTime,
 		msg.PurchaseState,
 		msg.PurchaseToken,
+		msg.Signature,
 		msg.Requester,
 	)
 	err = keeper.RegisterGoogleIAPOrder(ctx, iap)

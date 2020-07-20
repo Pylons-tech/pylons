@@ -15,6 +15,7 @@ func TestGoogleIAPSignatureVerification(t *testing.T) {
 		productID     string
 		purchaseTime  int64
 		purchaseState int64
+		purchaseToken string
 		signature     string
 		sender        sdk.AccAddress
 		desiredError  string
@@ -26,7 +27,8 @@ func TestGoogleIAPSignatureVerification(t *testing.T) {
 			productID:     "pylons_1000",
 			purchaseTime:  1595031050407,
 			purchaseState: 0,
-			// Correct token
+			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
+			// Correct signature
 			signature:    "HEo0RYQeH0+8nmYa6ETKP9f3S/W/cUuQTBme7VSh3Lzm+1+1GwJIl1pdF1dh32YGhd3BtyMoLVGzr9ZajfHhhznIvbowS/XIlyJJCE6dI+zg68mKo5rDt0wB2BY8azk0+WCkc5XT5y8biRNXe5RyvmuqYKPXmEsgHaYKo6x3mHs6oXrECckKv/c9T9MHCvdAqVFrml9W7K41sRHbpOdFmYnO33bkNITCCaf/C1PDGMVOItxvq7uXi+F0DpjXwXko9AU6L3pK6zDICcD38HblbzumOg6LGsuWCjOw8QwNobYOUNtrdj01fEXqkKhfYzFZcwxM6xsphN38gnO0ksDdyw==",
 			sender:       sender,
 			showError:    false,
@@ -38,7 +40,8 @@ func TestGoogleIAPSignatureVerification(t *testing.T) {
 			productID:     "pylons_1000",
 			purchaseTime:  1595031050410,
 			purchaseState: 0,
-			signature:     "FakeToken0833XweaU==", // Incorrect token
+			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
+			signature:     "FakeToken0833XweaU==", // Incorrect signature
 			sender:        sender,
 			desiredError:  "wrong purchase token",
 			showError:     true,
@@ -47,7 +50,7 @@ func TestGoogleIAPSignatureVerification(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			t.Log(tc)
-			// msg := NewMsgGetPylons(tc.orderID, tc.packageName, tc.productID, tc.purchaseTime, tc.purchaseState, tc.signature, tc.sender)
+			// msg := NewMsgGetPylons(tc.orderID, tc.packageName, tc.productID, tc.purchaseTime, tc.purchaseState, tc.purchaseToken, tc.signature, tc.sender)
 			// validation := msg.ValidateBasic()
 			// if !tc.showError {
 			// 	require.True(t, validation == nil)

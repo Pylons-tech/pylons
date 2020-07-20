@@ -43,6 +43,7 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			1526476218113,
 			0,
 			"your.purchase.token",
+			"your.puchase.signature",
 			addr)
 
 		// sigs := []auth.StdSignature{{}}

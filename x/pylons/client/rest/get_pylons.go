@@ -45,6 +45,7 @@ func getPylonsHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerF
 			1526476218113,
 			0,
 			"your.purchase.token",
+			"your.puchase.signature",
 			addr)
 		err = msg.ValidateBasic()
 		if err != nil {

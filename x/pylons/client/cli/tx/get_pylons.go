@@ -27,6 +27,7 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 	var purchaseTime int64
 	var purchaseState int64
 	var PurchaseToken string
+	var Signature string
 	ccb := &cobra.Command{
 		Use:   "get-pylons",
 		Short: "ask for pylons. get pylons per iap order",
@@ -43,6 +44,7 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 				purchaseTime,
 				purchaseState,
 				PurchaseToken,
+				Signature,
 				cliCtx.GetFromAddress())
 			err := msg.ValidateBasic()
 			if err != nil {
@@ -58,5 +60,6 @@ func GetPylons(cdc *codec.Codec) *cobra.Command {
 	ccb.PersistentFlags().Int64Var(&purchaseTime, "purchase-time", 0, "Get pylons order purchase time")
 	ccb.PersistentFlags().Int64Var(&purchaseState, "purchase-state", 0, "Get pylons order purchase state")
 	ccb.PersistentFlags().StringVar(&PurchaseToken, "purchase-token", "", "Get pylons order purchase token")
+	ccb.PersistentFlags().StringVar(&Signature, "signature", "", "Get pylons order signature")
 	return ccb
 }
