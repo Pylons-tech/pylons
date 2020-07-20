@@ -8,7 +8,6 @@ import (
 	"encoding/hex"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -37,7 +36,14 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 			return
 		}
 
-		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr)
+		msg := msgs.NewMsgGetPylons(
+			"your.order.id",
+			"your.package.name",
+			"your.product.id",
+			1526476218113,
+			0,
+			"your.purchase.token",
+			addr)
 
 		// sigs := []auth.StdSignature{{}}
 

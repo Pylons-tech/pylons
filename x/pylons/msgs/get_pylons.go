@@ -24,16 +24,23 @@ type MsgGetPylons struct {
 	// 	"purchaseState": 0,
 	// 	"purchaseToken": "your.purchase.token"
 	// }
+	OrderID       string
+	PackageName   string
+	ProductID     string
+	PurchaseTime  int64
+	PurchaseState int64
 	PurchaseToken string // TODO: for now, token with prefix "TrueToken" is correct
-	Amount        sdk.Coins
 	Requester     sdk.AccAddress
 }
 
 // NewMsgGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGetPylons(amount sdk.Coins, requester sdk.AccAddress) MsgGetPylons {
+func NewMsgGetPylons(OrderID, PackageName, ProductID string, PurchaseTime, PurchaseState int64, PurchaseToken string, requester sdk.AccAddress) MsgGetPylons {
 	return MsgGetPylons{
-		PurchaseToken: "TrueToken8X7325",
-		Amount:        amount,
+		OrderID:       OrderID,
+		PackageName:   PackageName,
+		ProductID:     ProductID,
+		PurchaseTime:  PurchaseTime,
+		PurchaseToken: PurchaseToken,
 		Requester:     requester,
 	}
 }
@@ -50,9 +57,8 @@ func (msg MsgGetPylons) ValidateBasic() error {
 	if msg.Requester.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
 	}
-	if !msg.Amount.IsAllPositive() {
-		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "Amount cannot be less than 0/negative")
-	}
+
+	//	TODO, for now, we don't verify the package name and amount match as we need to discuss how to handle this
 
 	// offline testMode checking JS module https://github.com/voltrue2/in-app-purchase/blob/e966ee1348bd4f67581779abeec59c4bbc2b2ebc/lib/google.js#L788
 

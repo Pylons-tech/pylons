@@ -10,3 +10,11 @@ fees:
   item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
+google_iap:
+  - package_name: com.pylons.loud
+    product_id: pylons_1000
+    amount: 1000
+  - package_name: com.pylons.loud
+    product_id: pylons_55000
+    amount: 55000
+google_iap_pubkey: 3344A33234Xwer==

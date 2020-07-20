@@ -10,7 +10,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type getPylonsReq struct {
@@ -39,7 +38,14 @@ func getPylonsHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerF
 		}
 
 		// create the message
-		msg := msgs.NewMsgGetPylons(types.NewPylon(DefaultCoinPerRequest), addr)
+		msg := msgs.NewMsgGetPylons(
+			"your.order.id",
+			"your.package.name",
+			"your.product.id",
+			1526476218113,
+			0,
+			"your.purchase.token",
+			addr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

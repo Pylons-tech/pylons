@@ -7,12 +7,13 @@ import (
 
 // store keys
 const (
-	KeyPylonsEntity    = "pylons_entity"
-	KeyPylonsCookbook  = "pylons_cookbook"
-	KeyPylonsRecipe    = "pylons_recipe"
-	KeyPylonsItem      = "pylons_item"
-	KeyPylonsExecution = "pylons_exection"
-	KeyPylonsTrade     = "pylons_trade"
+	KeyGoogleIAPOrderEntity = "pylons_google_iap_order_key"
+	KeyPylonsEntity         = "pylons_entity"
+	KeyPylonsCookbook       = "pylons_cookbook"
+	KeyPylonsRecipe         = "pylons_recipe"
+	KeyPylonsItem           = "pylons_item"
+	KeyPylonsExecution      = "pylons_exection"
+	KeyPylonsTrade          = "pylons_trade"
 )
 
 const (

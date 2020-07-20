@@ -1,8 +1,11 @@
 package handlers
 
 import (
+	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -23,13 +26,30 @@ func HandlerMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPyl
 		return nil, errInternal(err)
 	}
 
-	// TODO: validate if purchase token does exist within the list already
-	// TODO: register purchase token before giving coins, put the data where the entityCount or cookbooks are stored.
-	// TODO: filter pylons out of all the coins
-	_, err = keeper.CoinKeeper.AddCoins(ctx, msg.Requester, msg.Amount) // If so, deduct the Bid amount from the sender
-	// TODO, for now, we don't verify the package name and amount match as we need to discuss how to handle this
+	// Validate if purchase token does exist within the list already
+	if keeper.HasGoogleIAPOrder(ctx, msg.OrderID) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
+	}
+
+	// Register purchase token before giving coins
+	iap := types.NewGoogleIAPOrder(
+		msg.OrderID,
+		msg.PackageName,
+		msg.ProductID,
+		msg.PurchaseTime,
+		msg.PurchaseState,
+		msg.PurchaseToken,
+		msg.Requester,
+	)
+	err = keeper.RegisterGoogleIAPOrder(ctx, iap)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Buyer does not have enough coins")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering iap order: %s", err.Error()))
+	}
+
+	// Add coins based on the package
+	_, err = keeper.CoinKeeper.AddCoins(ctx, msg.Requester, iap.GetAmount())
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return marshalJSON(GetPylonsResponse{

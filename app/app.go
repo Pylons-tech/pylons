@@ -210,6 +210,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	// It handles interactions with the namestore
 	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
+		app.keys[pylons.KeyGoogleIAPOrderEntity],
 		app.keys[pylons.KeyPylonsEntity],
 		app.keys[pylons.KeyPylonsCookbook],
 		app.keys[pylons.KeyPylonsRecipe],
