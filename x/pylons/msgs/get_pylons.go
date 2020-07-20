@@ -77,10 +77,18 @@ func (msg MsgGetPylons) ValidateBasic() error {
 	// Cordova Plugin code that check offline https://github.com/j3k0/cordova-plugin-purchase/blob/8861bd2392a48d643ffc754b8f59afc1e6afab60/src/android/cc/fovea/Security.java#L94
 	// https://stackoverflow.com/questions/31349710/google-play-billing-response-signature-verification
 
-	// We should research are ask google for offline verification from public key
-	// should contact google team to check if this is correct use
-
-	// TODO: should validate the purchaseToken and productId match with the receiptData
+	// We should contact google team to check if this is correct use
+	var jsonData map[string]interface{}
+	err := json.Unmarshal([]byte(msg.ReceiptData), &jsonData)
+	if err != nil {
+		return err
+	}
+	if msg.PurchaseToken != jsonData["purchaseToken"] {
+		return fmt.Errorf("purchaseToken does not match with receipt data")
+	}
+	if msg.ProductID != jsonData["productId"] {
+		return fmt.Errorf("productId does not match with receipt data")
+	}
 	return msg.ValidateSignatureLocally()
 }
 

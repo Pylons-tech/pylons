@@ -66,11 +66,13 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 			_, err := HandlerMsgGetPylons(tci.Ctx, tci.PlnK, msg)
 
 			if !tc.showError {
+				require.True(t, err == nil, err)
 				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount)))
 				require.False(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount+1)))
 				require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount-1)))
 			} else {
-				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+				require.True(t, err != nil)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
 			}
 
 			if tc.tryReuseOrderID {
