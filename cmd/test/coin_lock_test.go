@@ -84,10 +84,10 @@ func TestCoinLockViaCLI(originT *originT.T) {
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
 			if tc.tradeTest {
 				RunSingleTradeCoinLockTestCase(tcNum, tc, t)
 			}
-
 			if tc.recipeTest {
 				RunSingleCheckExecutionCoinLockTestCase(tcNum, tc, t)
 			}
@@ -97,13 +97,16 @@ func TestCoinLockViaCLI(originT *originT.T) {
 
 func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T) {
 
-	cbOwnerKey := fmt.Sprintf("TestCoinLockViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
+	cbOwnerKey := fmt.Sprintf("TestCoinLockViaCLI%d_CBOwner_%d", tcNum, time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
 
-	mCB := GetMockedCookbook(cbOwnerKey, false, t)
+	tradeFulfillerKey := fmt.Sprintf("TestCoinLockViaCLI%d_Creator_%d", tcNum, time.Now().Unix())
+	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
 
-	tradeCreatorKey := fmt.Sprintf("TestCoinLockViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
+	tradeCreatorKey := fmt.Sprintf("TestCoinLockViaCLI%d_Fulfiller_%d", tcNum, time.Now().Unix())
 	MockAccount(tradeCreatorKey, t) // mock account with initial balance
+
+	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
 	tradeCreatorAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
 	tradeCreatorSdkAddress, err := sdk.AccAddressFromBech32(tradeCreatorAddr)
@@ -118,9 +121,11 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 		tradeCreatorKey,
 		mCB.ID,
 		tc.tradeCoinInputList,
-		false, "",
+		false,
+		"",
 		true, tc.tradeOutputCoinName, tc.tradeOutputCoinAmount,
-		false, "",
+		false,
+		"",
 		fmt.Sprintf("%s%d", tc.tradeExtraInfo, time.Now().Unix()),
 		t)
 
@@ -133,8 +138,6 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	lcDiffer := lockedCoinsAfterCreateTrade.Amount.Sort().Sub(lockedCoinsFirst.Amount.Sort())
 	t.MustTrue(lcDiffer.IsEqual(tc.tradeLockDifferAfterCreate), "locked coin is invalid after creating trade")
 
-	tradeFulfillerKey := fmt.Sprintf("TestCoinLockViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
-	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
 	if tc.tradeCoinInputList != nil {
 		FaucetGameCoins(tradeFulfillerKey, tc.tradeCoinInputList.ToCoins(), t)
 	}
@@ -177,12 +180,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		tc.recipeDesiredItemName,
 		t,
 	)
-
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error mocking recipe")
-	}
+	t.MustNil(err, "error mocking recipe")
 
 	rcp, err := inttestSDK.GetRecipeByGUID(guid)
 	t.WithFields(testing.Fields{
@@ -247,11 +245,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 
 	// Here recipeDesiredItemName should be different across tests cases and across test files
 	items, err := inttestSDK.ListItemsViaCLI("")
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error listing items via cli")
-	}
+	t.MustNil(err, "error listing items via cli")
 
 	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.recipeDesiredItemName, false, false)
 	t.WithFields(testing.Fields{
@@ -261,12 +255,9 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	}).MustTrue(ok == true, "item exist status is different from expected")
 
 	exec, err := inttestSDK.GetExecutionByGUID(schedule.ExecID)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"exec_id": schedule.ExecID,
-			"error":   err,
-		}).Fatal("error finding execution")
-	}
+	t.WithFields(testing.Fields{
+		"exec_id": schedule.ExecID,
+	}).MustNil(err, "error finding execution")
 	t.WithFields(testing.Fields{
 		"completed":       exec.Completed,
 		"shouldCompleted": true,
