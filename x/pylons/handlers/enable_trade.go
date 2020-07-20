@@ -67,7 +67,7 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 	err = keeper.LockCoin(ctx, lockedCoin)
 
 	if err != nil {
-		return nil, err
+		return nil, errInternal(err)
 	}
 
 	return marshalJSON(EnableTradeResponse{

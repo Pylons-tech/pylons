@@ -54,7 +54,7 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 	err = keeper.LockCoin(ctx, lockedCoin)
 
 	if err != nil {
-		return nil, err
+		return nil, errInternal(err)
 	}
 
 	trade := types.NewTrade(msg.ExtraInfo,

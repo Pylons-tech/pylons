@@ -76,12 +76,7 @@ func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) (types.Loc
 	lockedCoin := types.LockedCoin{}
 	err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
 
-	if err.Error() == "The lockedCoin doesn't exist" {
-		lockedCoin.Sender = sender
-		return lockedCoin, nil
-	}
-
-	return lockedCoin, err
+	return lockedCoin, err.Error()
 }
 
 func (k Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
