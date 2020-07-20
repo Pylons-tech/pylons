@@ -3,5 +3,5 @@
   "Longs": [{ "Key": "level", "Value": "1" }],
   "Strings": [{ "Key": "Name","Value": "send_items_test_item1"}],
   "CookbookID": "send_items_test-1589853709",
-  "Sender": "account1"
+  "Sender": "senditem_account2"
 }

@@ -1,10 +1,10 @@
 {
-  "ID": "recipe_item_send_fee_test-1589853709",
-  "Name": "recipe_item_send_fee_test",
+  "ID": "recipe-item-send-fee-1589853709",
+  "Name": "Recipe item send fee test",
   "Description": "this has to meet character limits lol",
   "Developer": "SketchyCo",
   "Level": "0",
-  "Sender": "account2",
+  "Sender": "itemfee_account1",
   "SupportEmail": "example@example.com",
   "Version": "1.0.0",
   "CostPerBlock": "50"

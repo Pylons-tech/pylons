@@ -1,8 +1,8 @@
 {
     "Doubles": [{ "Key": "attack", "Value": "1024" }, { "Key": "Mana", "Value": "100" }, { "Key": "MinMana", "Value": "10" }],
     "Longs": [{ "Key": "HP", "Value": "10" }, { "Key": "MaxHP", "Value": "100" }],
-    "Strings": [{ "Key": "Name","Value": "Custom Function TestCharacter"}],
-    "CookbookID": "custom_func_test-1589853709",
-    "Sender": "account1",
+    "Strings": [{ "Key": "Name","Value": "RecipeItemSendFeeTestCharacter"}],
+    "CookbookID": "recipe-item-send-fee-1589853709",
+    "Sender": "itemfee_account2",
     "TransferFee": "1000"
 }

@@ -1,12 +1,12 @@
 [
     {
-        "ID": "CREATE_GAMERH_ACCOUNT1",
+        "ID": "CREATE_SENDITEM_ACCOUNT1",
         "runAfter": {
           "precondition": [],
           "blockWait": 0
         },
         "action": "create_account",
-        "paramsRef": "gamerh_account1",
+        "paramsRef": "senditem_account1",
         "output": {
           "txResult": {
             "status": "Success"
@@ -14,20 +14,20 @@
         }
     },
     {
-        "ID": "GET_PYLONS_GAMERH_ACCOUNT1",
+        "ID": "GET_PYLONS_SENDITEM_ACCOUNT1",
         "runAfter": {
-          "precondition": ["CREATE_GAMERH_ACCOUNT1"],
+          "precondition": ["CREATE_SENDITEM_ACCOUNT1"],
           "blockWait": 0
         },
         "action": "get_pylons",
-        "paramsRef": "gamerh_account1",
+        "paramsRef": "senditem_account1",
         "output": {
           "txResult": {
             "status": "Success"
           },
           "property": [
             {
-              "owner": "gamerh_account1",
+              "owner": "senditem_account1",
               "coins": [
                 {
                   "denom": "pylon",
@@ -39,13 +39,13 @@
         }
     },
     {
-        "ID": "CREATE_GAMERH_ACCOUNT2",
+        "ID": "CREATE_SENDITEM_ACCOUNT2",
         "runAfter": {
           "precondition": [],
           "blockWait": 0
         },
         "action": "create_account",
-        "paramsRef": "gamerh_account2",
+        "paramsRef": "senditem_account2",
         "output": {
           "txResult": {
             "status": "Success"
@@ -53,20 +53,20 @@
         }
     },
     {
-        "ID": "GET_PYLONS_GAMERH_ACCOUNT2",
+        "ID": "GET_PYLONS_SENDITEM_ACCOUNT2",
         "runAfter": {
-          "precondition": ["CREATE_GAMERH_ACCOUNT2"],
+          "precondition": ["CREATE_SENDITEM_ACCOUNT2"],
           "blockWait": 0
         },
         "action": "get_pylons",
-        "paramsRef": "gamerh_account2",
+        "paramsRef": "senditem_account2",
         "output": {
           "txResult": {
             "status": "Success"
           },
           "property": [
             {
-              "owner": "gamerh_account2",
+              "owner": "senditem_account2",
               "coins": [
                 {
                   "denom": "pylon",
@@ -78,81 +78,96 @@
         }
     },
   {
-      "ID": "CREATE_GAMEREAL_COOKBOOK",
+      "ID": "CREATE_SENDITEM_COOKBOOK",
       "runAfter": {
-          "precondition": ["GET_PYLONS_GAMERH_ACCOUNT1"],
+          "precondition": ["GET_PYLONS_SENDITEM_ACCOUNT1"],
           "blockWait": 0
       },
       "action": "create_cookbook",
-      "paramsRef": "./cookbooks/game_real.json",
+      "paramsRef": "./cookbooks/send_items_test.json",
       "output": {
           "txResult": {
               "status": "Success"
           },
           "property": [
               {
-                  "owner": "gamerh_account1",
-                  "cookbooks": ["Game Real"]
+                  "owner": "senditem_account1",
+                  "cookbooks": ["send_items_test"]
               }
           ]
       }
   },
   {
-      "ID": "CREATE_GAMEHACK_COOKBOOK",
+      "ID": "CREATE_ITEM1",        
       "runAfter": {
-          "precondition": ["GET_PYLONS_GAMERH_ACCOUNT2"],
+          "precondition": ["CREATE_SENDITEM_COOKBOOK", "GET_PYLONS_SENDITEM_ACCOUNT2"],
           "blockWait": 0
       },
-      "action": "create_cookbook",
-      "paramsRef": "./cookbooks/game_hack.json",
+      "action": "fiat_item",
+      "paramsRef": "./items/send_items_test/item1.json",
       "output": {
           "txResult": {
               "status": "Success"
           },
           "property": [
               {
-                  "owner": "gamerh_account2",
-                  "cookbooks": ["Game Hack"]
+                  "owner": "senditem_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "send_items_test_item1" }
+                      }
+                  ]
               }
           ]
       }
   },
   {
-      "ID": "CREATE_ISSUE_GOLD_GAMEREAL_RECIPE",
+      "ID": "CREATE_ITEM2",
       "runAfter": {
-          "precondition": ["CREATE_GAMEREAL_COOKBOOK"],
+          "precondition": ["CREATE_SENDITEM_COOKBOOK", "GET_PYLONS_SENDITEM_ACCOUNT2"],
           "blockWait": 0
       },
-      "action": "create_recipe",
-      "paramsRef": "./recipes/game_real/issue_gold.json",
+      "action": "fiat_item",
+      "paramsRef": "./items/send_items_test/item2.json",
       "output": {
           "txResult": {
               "status": "Success"
           },
           "property": [
               {
-                  "owner": "gamerh_account1",
-                  "recipes": ["GameReal's issue gold recipe"]
+                  "owner": "senditem_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "send_items_test_item2" }
+                      }
+                  ]
               }
           ]
       }
   },
   {
-      "ID": "CREATE_ISSUE_GOLD_GAMEHACK_RECIPE",
+      "ID": "SEND_ITEMS",        
       "runAfter": {
-          "precondition": ["CREATE_GAMEHACK_COOKBOOK", "CREATE_ISSUE_GOLD_GAMEREAL_RECIPE"],
+          "precondition": ["CREATE_ITEM1", "CREATE_ITEM2"],
           "blockWait": 0
       },
-      "action": "create_recipe",
-      "paramsRef": "./recipes/game_hack/issue_gold.json",
+      "action": "send_items",
+      "paramsRef": "./send_items_test/send_items.json",
       "output": {
           "txResult": {
               "status": "Success"
           },
           "property": [
               {
-                  "owner": "gamerh_account2",
-                  "recipes": ["GameHack's issue gold recipe"]
+                  "owner": "senditem_account1",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "send_items_test_item1" }
+                      },
+                      {
+                          "stringValues": { "Name": "send_items_test_item2" }
+                      }
+                  ]
               }
           ]
       }

@@ -1,7 +1,7 @@
 {
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./recipes/custom_func_test/item_input/character.json"
+        "./recipes/recipe_item_send_fee/item_input/character.json"
     ],
     "Entries":{
         "CoinOutputs":[],
@@ -9,7 +9,7 @@
             {
                 "ModifyItem": {
                     "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/custom_func_test/upgrader/custom_func_test.json"
+                    "ModifyParamsRef": "./recipes/recipe_item_send_fee/upgrader/recipe_item_send_fee.json"
                 }
             }
         ]
@@ -21,9 +21,9 @@
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
-    "Name": "Growing HP Character Health Restore Recipe",
-    "CookbookID": "custom_func_test-1589853709",
+    "Sender":"itemfee_account1",
+    "Name": "Recipe Item Send Fee Test Recipe",
+    "CookbookID": "recipe-item-send-fee-1589853709",
     "Description": "this recipe is used to restore character's health using timed field.",
     "BlockInterval":"2"
 }
