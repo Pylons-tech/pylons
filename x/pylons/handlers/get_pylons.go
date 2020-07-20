@@ -27,18 +27,15 @@ func HandlerMsgGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGetPyl
 	}
 
 	// Validate if purchase token does exist within the list already
-	if keeper.HasGoogleIAPOrder(ctx, msg.OrderID) {
+	if keeper.HasGoogleIAPOrder(ctx, msg.PurchaseToken) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
 	}
 
 	// Register purchase token before giving coins
 	iap := types.NewGoogleIAPOrder(
-		msg.OrderID,
-		msg.PackageName,
 		msg.ProductID,
-		msg.PurchaseTime,
-		msg.PurchaseState,
 		msg.PurchaseToken,
+		msg.ReceiptData,
 		msg.Signature,
 		msg.Requester,
 	)

@@ -37,12 +37,9 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 		}
 
 		msg := msgs.NewMsgGetPylons(
-			"your.order.id",
-			"your.package.name",
 			"your.product.id",
-			1526476218113,
-			0,
 			"your.purchase.token",
+			"your.receipt.data",
 			"your.puchase.signature",
 			addr)
 

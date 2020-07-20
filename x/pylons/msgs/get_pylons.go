@@ -1,47 +1,34 @@
 package msgs
 
 import (
-	// "context"
+	"crypto"
+	"crypto/rsa"
+	"crypto/sha1"
+	"crypto/x509"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"strings"
 
-	// "io/ioutil"
-
-	// "github.com/awa/go-iap/playstore"
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // MsgGetPylons defines a GetPylons message
 type MsgGetPylons struct {
-	// TODO: add google playstore purchase data; need to discuss what to put here
-	// {
-	// 	"orderId": "your.order.id",
-	// 	"packageName": "your.package.name",
-	// 	"productId": "your.product.id",
-	// 	"purchaseTime": 1526476218113,
-	// 	"purchaseState": 0,
-	// 	"purchaseToken": "your.purchase.token"
-	// }
-	OrderID       string
-	PackageName   string
 	ProductID     string
-	PurchaseTime  int64
-	PurchaseState int64
-	PurchaseToken string // TODO: for now, token with prefix "TrueToken" is correct
+	PurchaseToken string
+	ReceiptData   string
 	Signature     string
 	Requester     sdk.AccAddress
 }
 
 // NewMsgGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGetPylons(OrderID, PackageName, ProductID string, PurchaseTime, PurchaseState int64, PurchaseToken, Signature string, requester sdk.AccAddress) MsgGetPylons {
+func NewMsgGetPylons(ProductID, PurchaseToken, ReceiptData, Signature string, requester sdk.AccAddress) MsgGetPylons {
 	return MsgGetPylons{
-		OrderID:       OrderID,
-		PackageName:   PackageName,
 		ProductID:     ProductID,
-		PurchaseTime:  PurchaseTime,
 		PurchaseToken: PurchaseToken,
+		ReceiptData:   ReceiptData,
 		Signature:     Signature,
 		Requester:     requester,
 	}
@@ -53,6 +40,31 @@ func (msg MsgGetPylons) Route() string { return RouterKey }
 // Type should return the action
 func (msg MsgGetPylons) Type() string { return "get_pylons" }
 
+// ValidateSignatureLocally is function for testing signature on local
+func (msg MsgGetPylons) ValidateSignatureLocally() error {
+	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.GoogleIAPPubKey)
+	if err != nil {
+		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
+	}
+	re, err := x509.ParsePKIXPublicKey(playStorePubKeyBytes)
+	if err != nil {
+		return err
+	}
+	pub := re.(*rsa.PublicKey)
+	text := []byte(msg.ReceiptData)
+
+	h := sha1.New()
+	_, err = h.Write(text)
+	if err != nil {
+		return err
+	}
+	digest := h.Sum(nil)
+
+	ds, _ := base64.StdEncoding.DecodeString(msg.Signature)
+	err = rsa.VerifyPKCS1v15(pub, crypto.SHA1, digest, ds)
+	return err
+}
+
 // ValidateBasic is a function to validate MsgGetPylons msg
 func (msg MsgGetPylons) ValidateBasic() error {
 
@@ -60,56 +72,16 @@ func (msg MsgGetPylons) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
 	}
 
-	//	TODO, for now, we don't verify the package name and amount match as we need to discuss how to handle this
-
-	// offline testMode checking JS module https://github.com/voltrue2/in-app-purchase/blob/e966ee1348bd4f67581779abeec59c4bbc2b2ebc/lib/google.js#L788
-
-	// // You need to prepare a public key for your Android app's in app billing
-	// // at https://console.developers.google.com.
-	// playStorePubKey, err := ioutil.ReadFile("jsonKey.json")
-	// if err != nil {
-	// 	return err
-	// }
-
-	// playStoreClient, err := playstore.New(playStorePubKey)
-	// if err != nil {
-	// 	return err
-	// }
-	// playStoreCtx := context.Background()
-
-	// playStoreResp, err := playStoreClient.VerifySubscription(playStoreCtx, "package", "subscriptionID", "purchaseToken")
-	// // 	urls := googleapi.ResolveRelative(c.s.BasePath, "{packageName}/purchases/subscriptions/{subscriptionId}/tokens/{token}")
-
-	// // TODO: VerifySubscription method is still using the http endpoint.
-	// // urls := googleapi.ResolveRelative(c.s.BasePath, "{packageName}/purchases/subscriptions/{subscriptionId}/tokens/{token}:refund")
-
+	// References
+	// offline verification JS module https://github.com/voltrue2/in-app-purchase/blob/e966ee1348bd4f67581779abeec59c4bbc2b2ebc/lib/google.js#L788
+	// Cordova Plugin code that check offline https://github.com/j3k0/cordova-plugin-purchase/blob/8861bd2392a48d643ffc754b8f59afc1e6afab60/src/android/cc/fovea/Security.java#L94
 	// https://stackoverflow.com/questions/31349710/google-play-billing-response-signature-verification
 
-	// {
-	// 	"orderId": "your.order.id",
-	// 	"packageName": "your.package.name",
-	// 	"productId": "your.product.id",
-	// 	"purchaseTime": 1526476218113,
-	// 	"purchaseState": 0,
-	// 	"purchaseToken": "your.purchase.token"
-	// }
-	// Another potential problem is that purchase only has productId
-	// and when we add one more package, should register by updating code
-	// want to discuss about this.
-	// suggestion: Pylons LLC validator can register a package by running a createPackage msg
+	// We should research are ask google for offline verification from public key
+	// should contact google team to check if this is correct use
 
-	// Cordova Plugin code that check offline
-	// https://github.com/j3k0/cordova-plugin-purchase/blob/8861bd2392a48d643ffc754b8f59afc1e6afab60/src/android/cc/fovea/Security.java#L94
-
-	// We should research are ask google for offline verification from public key and if it's possible
-	// The best way is to contact google team and test with real tokens
-
-	// fmt.Println("Handling playstore response", playStoreResp)
-	// return err
-	if !strings.HasPrefix(msg.PurchaseToken, "TrueToken") {
-		return fmt.Errorf("wrong purchase token %s", msg.PurchaseToken)
-	}
-	return nil
+	// TODO: should validate the purchaseToken and productId match with the receiptData
+	return msg.ValidateSignatureLocally()
 }
 
 // GetSignBytes encodes the message for signing

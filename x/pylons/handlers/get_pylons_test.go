@@ -7,7 +7,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/google/uuid"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -15,12 +14,12 @@ import (
 
 func TestHandlerMsgGetPylons(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
+	sender1, _, sender3, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
-		packageName     string
 		productID       string
 		purchaseToken   string
+		receiptData     string
 		signature       string
 		fromAddress     sdk.AccAddress
 		showError       bool
@@ -30,23 +29,12 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 		tryReuseErr     string
 	}{
 		"successful check": {
-			packageName:     "com.pylons.loud",
-			productID:       "pylons_55000",
-			purchaseToken:   "TrueToken0833XweaU==",
-			signature:       "TrueToken0833XweaU==", // Correct signature
+			productID:     "pylons_1000",
+			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
+			receiptData:   `{"productId":"pylons_1000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`,
+			// Correct signature
+			signature:       "HEo0RYQeH0+8nmYa6ETKP9f3S/W/cUuQTBme7VSh3Lzm+1+1GwJIl1pdF1dh32YGhd3BtyMoLVGzr9ZajfHhhznIvbowS/XIlyJJCE6dI+zg68mKo5rDt0wB2BY8azk0+WCkc5XT5y8biRNXe5RyvmuqYKPXmEsgHaYKo6x3mHs6oXrECckKv/c9T9MHCvdAqVFrml9W7K41sRHbpOdFmYnO33bkNITCCaf/C1PDGMVOItxvq7uXi+F0DpjXwXko9AU6L3pK6zDICcD38HblbzumOg6LGsuWCjOw8QwNobYOUNtrdj01fEXqkKhfYzFZcwxM6xsphN38gnO0ksDdyw==",
 			fromAddress:     sender1,
-			showError:       false,
-			desiredError:    "",
-			reqAmount:       55000,
-			tryReuseOrderID: true,
-			tryReuseErr:     "the iap order ID is already being used",
-		},
-		"different package successful check": {
-			packageName:     "com.pylons.loud",
-			productID:       "pylons_1000",
-			purchaseToken:   "TrueToken0833XweaU==",
-			signature:       "TrueToken0833XweaU==", // Correct signature
-			fromAddress:     sender2,
 			showError:       false,
 			desiredError:    "",
 			reqAmount:       1000,
@@ -54,14 +42,15 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 			tryReuseErr:     "the iap order ID is already being used",
 		},
 		"wrong signature check": {
-			packageName:     "com.pylons.loud",
-			productID:       "pylons_55000",
-			purchaseToken:   "FakeToken0833XweaU==",
-			signature:       "FakeToken0833XweaU==", // Incorrect signature
+			productID:     "pylons_1000",
+			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
+			receiptData:   `{"productId":"pylons_1000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`,
+			// Correct signature
+			signature:       "Invalid signature",
 			fromAddress:     sender3,
 			showError:       true,
-			desiredError:    "wrong purchase token",
-			reqAmount:       55000,
+			desiredError:    "crypto/rsa: verification error",
+			reqAmount:       1000,
 			tryReuseOrderID: false,
 			tryReuseErr:     "",
 		},
@@ -69,12 +58,9 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgGetPylons(
-				uuid.New().String(),
-				tc.packageName,
 				tc.productID,
-				1526476218113,
-				0,
 				tc.purchaseToken,
+				tc.receiptData,
 				tc.signature,
 				tc.fromAddress)
 			_, err := HandlerMsgGetPylons(tci.Ctx, tci.PlnK, msg)

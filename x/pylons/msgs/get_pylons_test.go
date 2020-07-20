@@ -1,63 +1,56 @@
 package msgs
 
 import (
+	"strings"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGoogleIAPSignatureVerification(t *testing.T) {
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
 	cases := map[string]struct {
-		orderID       string
-		packageName   string
 		productID     string
-		purchaseTime  int64
-		purchaseState int64
 		purchaseToken string
+		receiptData   string
 		signature     string
 		sender        sdk.AccAddress
 		desiredError  string
 		showError     bool
 	}{
-		"invalid token check": {
-			orderID:       "GPA.3387-0058-0649-87584",
-			packageName:   "com.pylons.loud",
+		"successful check": {
 			productID:     "pylons_1000",
-			purchaseTime:  1595031050407,
-			purchaseState: 0,
 			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
+			receiptData:   `{"productId":"pylons_1000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`,
 			// Correct signature
 			signature:    "HEo0RYQeH0+8nmYa6ETKP9f3S/W/cUuQTBme7VSh3Lzm+1+1GwJIl1pdF1dh32YGhd3BtyMoLVGzr9ZajfHhhznIvbowS/XIlyJJCE6dI+zg68mKo5rDt0wB2BY8azk0+WCkc5XT5y8biRNXe5RyvmuqYKPXmEsgHaYKo6x3mHs6oXrECckKv/c9T9MHCvdAqVFrml9W7K41sRHbpOdFmYnO33bkNITCCaf/C1PDGMVOItxvq7uXi+F0DpjXwXko9AU6L3pK6zDICcD38HblbzumOg6LGsuWCjOw8QwNobYOUNtrdj01fEXqkKhfYzFZcwxM6xsphN38gnO0ksDdyw==",
 			sender:       sender,
 			showError:    false,
 			desiredError: "",
 		},
-		"successful check": {
-			orderID:       "GPA.3387-0058-0649-87585",
-			packageName:   "com.pylons.loud",
+		"invalid signature check": {
 			productID:     "pylons_1000",
-			purchaseTime:  1595031050410,
-			purchaseState: 0,
 			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
-			signature:     "FakeToken0833XweaU==", // Incorrect signature
-			sender:        sender,
-			desiredError:  "wrong purchase token",
-			showError:     true,
+			receiptData:   `{"productId":"pylons_1000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`,
+			// Incorrect signature
+			signature:    "FakeToken0833XweaU==",
+			sender:       sender,
+			desiredError: "crypto/rsa: verification error",
+			showError:    true,
 		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			t.Log(tc)
-			// msg := NewMsgGetPylons(tc.orderID, tc.packageName, tc.productID, tc.purchaseTime, tc.purchaseState, tc.purchaseToken, tc.signature, tc.sender)
-			// validation := msg.ValidateBasic()
-			// if !tc.showError {
-			// 	require.True(t, validation == nil)
-			// } else {
-			// 	require.True(t, validation != nil)
-			// 	require.True(t, strings.Contains(validation.Error(), tc.desiredError))
-			// }
+			msg := NewMsgGetPylons(tc.productID, tc.purchaseToken, tc.receiptData, tc.signature, tc.sender)
+			err := msg.ValidateSignatureLocally()
+			if !tc.showError {
+				require.True(t, err == nil, err)
+			} else {
+				require.True(t, err != nil)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
+			}
 		})
 	}
 }
