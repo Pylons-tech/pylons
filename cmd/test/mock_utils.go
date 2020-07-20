@@ -378,6 +378,7 @@ func MockDetailedTradeGUID(
 	}
 
 	GetTxHandleResult(txhash, t)
+	WaitOneBlockWithErrorCheck(t)
 	// check trade created after 1 block
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.WithFields(testing.Fields{
