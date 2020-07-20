@@ -1,0 +1,5 @@
+{
+    "PayToComplete": false,
+    "ExecRef": "EXECUTE_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE",
+    "Sender":"itemfee_account2"
+}

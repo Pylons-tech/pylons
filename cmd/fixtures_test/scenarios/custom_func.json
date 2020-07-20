@@ -1,20 +1,98 @@
 [
     {
+        "ID": "CREATE_CUSFUNC_ACCOUNT1",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "cusfunc_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_CUSFUNC_ACCOUNT1",
+        "runAfter": {
+          "precondition": ["CREATE_CUSFUNC_ACCOUNT1"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "cusfunc_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "cusfunc_account1",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_CUSFUNC_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "cusfunc_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_CUSFUNC_ACCOUNT2",
+        "runAfter": {
+          "precondition": ["CREATE_CUSFUNC_ACCOUNT2"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "cusfunc_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "cusfunc_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
         "ID": "CREATE_CUSTOMFUNCTEST_COOKBOOK",
         "runAfter": {
-            "precondition": [],
+            "precondition": ["GET_PYLONS_CUSFUNC_ACCOUNT1"],
             "blockWait": 0
         },
         "action": "create_cookbook",
-        "paramsRef": "./cookbooks/custom_func_test.json",
+        "paramsRef": "./cookbooks/custom_func.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": [
                 {
-                    "owner": "account2",
-                    "cookbooks": ["custom_func_test"]
+                    "owner": "cusfunc_account1",
+                    "cookbooks": ["Custom function test"]
                 }
             ]
         }
@@ -22,18 +100,18 @@
     {
         "ID": "CREATE_CUSTOMFUNCTEST_CHARACTER",  
         "runAfter": {
-            "precondition": ["CREATE_CUSTOMFUNCTEST_COOKBOOK"],
+            "precondition": ["CREATE_CUSTOMFUNCTEST_COOKBOOK", "GET_PYLONS_CUSFUNC_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
-        "paramsRef": "./items/custom_func_test/character.json",
+        "paramsRef": "./items/custom_func/character.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "cusfunc_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Custom Function TestCharacter" }
@@ -50,14 +128,14 @@
             "blockWait": 0
         },
         "action": "create_recipe",
-        "paramsRef": "./recipes/custom_func_test/custom_func_test.json",
+        "paramsRef": "./recipes/custom_func/custom_func.json",
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "cusfunc_account1",
                     "recipes": ["Growing HP Character Health Restore Recipe"]
                 }
             ]
@@ -70,7 +148,7 @@
             "blockWait": 0
         },
         "action": "execute_recipe",
-        "paramsRef": "./recipes/custom_func_test/executions/custom_func_test.json",
+        "paramsRef": "./recipes/custom_func/executions/custom_func.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -86,7 +164,7 @@
             "blockWait": 2
         },
         "action": "check_execution",
-        "paramsRef": "./recipes/custom_func_test/check_executions/custom_func_test.json",
+        "paramsRef": "./recipes/custom_func/check_executions/custom_func.json",
         "output": {
             "txResult": {
                 "status": "Success",
@@ -94,7 +172,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "cusfunc_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Custom Function TestCharacter" },
