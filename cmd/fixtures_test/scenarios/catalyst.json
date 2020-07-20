@@ -1,8 +1,86 @@
 [
     {
+        "ID": "CREATE_CATALYST_ACCOUNT1",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "catalyst_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_CATALYST_ACCOUNT1",
+        "runAfter": {
+          "precondition": ["CREATE_CATALYST_ACCOUNT1"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "catalyst_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "catalyst_account1",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_CATALYST_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "catalyst_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_CATALYST_ACCOUNT2",
+        "runAfter": {
+          "precondition": ["CREATE_CATALYST_ACCOUNT2"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "catalyst_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "catalyst_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
         "ID": "CREATE_CATALYST_COOKBOOK",
         "runAfter": {
-            "precondition": [],
+            "precondition": ["GET_PYLONS_CATALYST_ACCOUNT1"],
             "blockWait": 0
         },
         "action": "create_cookbook",
@@ -13,7 +91,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "catalyst_account1",
                     "cookbooks": ["catalyst"]
                 }
             ]
@@ -22,7 +100,7 @@
     {
         "ID": "CREATE_MONSTER_LV1",        
         "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "precondition": ["CREATE_CATALYST_COOKBOOK", "GET_PYLONS_CATALYST_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -33,7 +111,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "catalyst_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Monster" }
@@ -46,7 +124,7 @@
     {
         "ID": "CREATE_CATALYST_ITEM",        
         "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "precondition": ["CREATE_CATALYST_COOKBOOK", "GET_PYLONS_CATALYST_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -57,7 +135,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "catalyst_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "catalyst" }
@@ -81,7 +159,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "catalyst_account1",
                     "recipes": ["Monster Upgrade Catalyst Recipe"]
                 }
             ]
@@ -102,7 +180,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "catalyst_account2",
                     "items": [
                         {
                             "stringValues": { "LastName": "Upgraded Monster" }

@@ -1,5 +1,5 @@
 {
     "RecipeName":"Recipe Item Send Fee Test Recipe",
-    "Sender":"account1",
+    "Sender":"itemfee_account2",
     "ItemNames":["RecipeItemSendFeeTestCharacter"]
 }

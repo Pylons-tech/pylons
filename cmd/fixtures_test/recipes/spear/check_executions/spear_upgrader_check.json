@@ -1,5 +1,5 @@
 {
     "PayToComplete": true,
     "ExecRef": "EXECUTE_DELAYED_SPEAR_UPDATE_RECIPE",
-    "Sender":"account1"
+    "Sender":"spear_account2"
 }

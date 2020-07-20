@@ -30,7 +30,7 @@
         }
     ],
     "ExtraInfo": "",
-    "Sender": "account2",
+    "Sender": "javelin_account1",
     "Name": "Javelin Upgrade Program Recipe",
     "CookbookID": "javelincb-1589853709",
     "Description": "this recipe is used to upgrade javelin using program.",
