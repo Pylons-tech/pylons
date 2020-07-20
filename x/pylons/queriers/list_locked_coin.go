@@ -23,11 +23,7 @@ func ListLockedCoins(ctx sdk.Context, path []string, req abci.RequestQuery, keep
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	lockedCoins, err = keeper.GetLockedCoin(ctx, accAddr)
-
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
+	lockedCoins = keeper.GetLockedCoin(ctx, accAddr)
 
 	lcl, err := keeper.Cdc.MarshalJSON(lockedCoins)
 	if err != nil {

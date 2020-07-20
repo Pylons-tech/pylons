@@ -390,7 +390,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test create trade coin lock
 			if tc.testCreateTradeLock {
-				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				ctRespData, err = MockTrade(
 					tci,
@@ -403,10 +403,7 @@ func TestCoinLock(t *testing.T) {
 
 				require.True(t, err == nil)
 
-				lcAfterCreateTrade, err := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
-
-				require.True(t, err == nil)
-
+				lcAfterCreateTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 				lcDiffer := lcAfterCreateTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
 				require.True(t, lcDiffer.IsEqual(tc.testCreateTradeLockDiffer))
@@ -415,14 +412,14 @@ func TestCoinLock(t *testing.T) {
 
 			// test disable recipe coin unlock
 			if tc.testCreateTradeLock && tc.testDisableTrade {
-				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				disableTrdMsg := msgs.NewMsgDisableTrade(ctRespData.TradeID, sender1)
 				_, err := HandlerMsgDisableTrade(tci.Ctx, tci.PlnK, disableTrdMsg)
 
 				require.True(t, err == nil)
 
-				lcAfterDisalbeTrade, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterDisalbeTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterDisalbeTrade.Amount.Sort())
 
@@ -432,14 +429,14 @@ func TestCoinLock(t *testing.T) {
 
 			// test enable recipe coin lock
 			if tc.testCreateTradeLock && tc.testDisableTrade && tc.testEnableTradeLock {
-				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				enableTrdMsg := msgs.NewMsgEnableTrade(ctRespData.TradeID, sender1)
 				_, err := HandlerMsgEnableTrade(tci.Ctx, tci.PlnK, enableTrdMsg)
 
 				require.True(t, err == nil)
 
-				lcAfterEnableTrade, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterEnableTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				lcDiffer := lcAfterEnableTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
@@ -449,7 +446,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test execute recipe coin lock
 			if tc.testExecuteRecipeLock {
-				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				item := keep.GenItem(cbData.CookbookID, sender1, "Knife")
 				err = tci.PlnK.SetItem(tci.Ctx, *item)
@@ -481,7 +478,7 @@ func TestCoinLock(t *testing.T) {
 				err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 				require.True(t, err == nil)
 
-				lcAfterExecRcp, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterExecRcp := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				lcDiffer := lcAfterExecRcp.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
@@ -538,7 +535,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test fulfill trade coin unlock
 			if tc.testCreateTradeLock && tc.testFulfillTrade {
-				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				ffMsg := msgs.NewMsgFulfillTrade(
 					ctRespData.TradeID,
@@ -549,7 +546,7 @@ func TestCoinLock(t *testing.T) {
 
 				require.True(t, err == nil)
 
-				lcAfterFulfillTrade, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterFulfillTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfterFulfillTrade.Amount.Sort())
 
@@ -559,7 +556,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test check execution coin unlock
 			if tc.testExecuteRecipeLock && tc.testCheckExecution {
-				lcFirst, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, sender1)
 				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
@@ -570,7 +567,7 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil)
 				require.True(t, checkExecResp.Status == "Success")
 
-				lcAfter, _ := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfter := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
 
 				lcDiffer := lcFirst.Amount.Sort().Sub(lcAfter.Amount.Sort())
 

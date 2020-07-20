@@ -15,9 +15,9 @@ func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 		return errors.New("LockCoin: the sender cannot be empty")
 	}
 
-	oldLc, err := k.GetLockedCoin(ctx, lockedCoin.Sender)
+	oldLc := k.GetLockedCoin(ctx, lockedCoin.Sender)
 
-	if err != nil {
+	if oldLc.Amount.Empty() {
 		return k.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
 	}
 
@@ -43,14 +43,8 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 		return errors.New("LockCoin: the sender cannot be empty")
 	}
 
-	oldLc, err := k.GetLockedCoin(ctx, lockedCoin.Sender)
-
+	oldLc := k.GetLockedCoin(ctx, lockedCoin.Sender)
 	var newAmount sdk.Coins
-
-	// the locked coin doesn't exist
-	if err != nil {
-		return nil
-	}
 
 	// Compare already locked amount and unlocking amount
 	if oldLc.Amount.IsAllGTE(lockedCoin.Amount) {
@@ -71,12 +65,15 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	return errors.New("Unlocking amount exceeds the locked amount")
 }
 
-// GetLockedCoin returns lockedCoin based on UUID
-func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) (types.LockedCoin, error) {
+// GetLockedCoin returns lockedCoin based on sender
+func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoin {
 	lockedCoin := types.LockedCoin{}
 	err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
-
-	return lockedCoin, err
+	if err != nil {
+		lockedCoin.Sender = sender
+		lockedCoin.Amount = sdk.Coins{}
+	}
+	return lockedCoin
 }
 
 func (k Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
