@@ -49,7 +49,7 @@ func TestCoinLockViaCLI(originT *originT.T) {
 			tradeTest:            true,
 			tradeExtraInfo:       "TESTTRD_FulfillTrade__001_TC1",
 			tradeCoinInputList:   types.GenCoinInputList("node0token", 200),
-			tradeOutputCoins:     sdk.Coins{sdk.NewInt64Coin("pylon", 100)},
+			tradeOutputCoins:     types.NewPylon(100),
 			tradeExpectedStatus:  "Success",
 			tradeExpectedMessage: "successfully fulfilled the trade",
 			lockDiffTradeCreate:  types.NewPylon(100),
