@@ -70,14 +70,14 @@ func TestCoinLock(t *testing.T) {
 		testCheckExecution bool
 		lockDiffCheckExec  sdk.Coins
 		// Send Items Test
-		testSendItems      bool
-		testSendItemsError bool
+		testSendItems       bool
+		shouldFailSendItems bool
 		// Send Coins Test
-		testSendCoins      bool
-		testSendCoinsError bool
+		testSendCoins       bool
+		shouldFailSendCoins bool
 		// Execute Receipe Coin Unlock Test
-		testSecondExecuteRecipe      bool
-		testSecondExecuteRecipeError bool
+		testSecondExecuteRecipe   bool
+		shouldFailSecondExecution bool
 		// Enable trade Coin Lock Test
 		testEnableTradeLock bool
 		lockDiffEnableTrade sdk.Coins
@@ -86,10 +86,9 @@ func TestCoinLock(t *testing.T) {
 		lockDiffDisableTrade sdk.Coins
 	}{
 		"create trade and fulfill trade coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
-
+			testCreateTradeLock:          true,
+			testCreateTradeAmount:        types.NewPylon(100),
+			lockDiffCreateTrade:          types.NewPylon(100),
 			testFulfillTrade:             true,
 			testFulfillTradeInputItemIDs: []string{},
 			lockDiffFulfillTrade:         types.NewPylon(100),
@@ -98,25 +97,22 @@ func TestCoinLock(t *testing.T) {
 			testCreateTradeLock:   true,
 			testCreateTradeAmount: types.NewPylon(100),
 			lockDiffCreateTrade:   types.NewPylon(100),
-
-			testSendItems:      true,
-			testSendItemsError: false,
+			testSendItems:         true,
+			shouldFailSendItems:   false,
 		},
 		"create trade and send coins coin lock test": {
 			testCreateTradeLock:   true,
 			testCreateTradeAmount: types.NewPylon(100),
 			lockDiffCreateTrade:   types.NewPylon(100),
-
-			testSendCoins:      true,
-			testSendCoinsError: false,
+			testSendCoins:         true,
+			shouldFailSendCoins:   false,
 		},
 		"create trade and execute recipe coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
-
-			testSecondExecuteRecipe:      true,
-			testSecondExecuteRecipeError: false,
+			testCreateTradeLock:       true,
+			testCreateTradeAmount:     types.NewPylon(100),
+			lockDiffCreateTrade:       types.NewPylon(100),
+			testSecondExecuteRecipe:   true,
+			shouldFailSecondExecution: false,
 		},
 
 		"execute recipe and check execution coin lock test": {
@@ -132,24 +128,24 @@ func TestCoinLock(t *testing.T) {
 			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
 			lockDiffSchedule:           types.NewPylon(100),
 
-			testSendItems:      true,
-			testSendItemsError: false,
+			testSendItems:       true,
+			shouldFailSendItems: false,
 		},
 		"execute recipe and send coins coin lock test": {
 			testExecuteRecipeLock:      true,
 			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
 			lockDiffSchedule:           types.NewPylon(100),
 
-			testSendCoins:      true,
-			testSendCoinsError: false,
+			testSendCoins:       true,
+			shouldFailSendCoins: false,
 		},
 		"execute recipe and execute recipe coin lock test": {
 			testExecuteRecipeLock:      true,
 			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
 			lockDiffSchedule:           types.NewPylon(100),
 
-			testSecondExecuteRecipe:      true,
-			testSecondExecuteRecipeError: false,
+			testSecondExecuteRecipe:   true,
+			shouldFailSecondExecution: false,
 		},
 
 		"create trade & fulfill trade & execute recipe & check execution coin lock test": {
@@ -184,8 +180,8 @@ func TestCoinLock(t *testing.T) {
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
 
-			testSendItems:      true,
-			testSendItemsError: false,
+			testSendItems:       true,
+			shouldFailSendItems: false,
 		},
 		"create trade & fulfill trade & execute recipe & check execution and send coins coin lock test": {
 			testCreateTradeLock:   true,
@@ -203,8 +199,8 @@ func TestCoinLock(t *testing.T) {
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
 
-			testSendCoins:      true,
-			testSendCoinsError: false,
+			testSendCoins:       true,
+			shouldFailSendCoins: false,
 		},
 		"create trade & fulfill trade & execute recipe & check execution and execute recipe coin lock test": {
 			testCreateTradeLock:   true,
@@ -222,8 +218,8 @@ func TestCoinLock(t *testing.T) {
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
 
-			testSecondExecuteRecipe:      true,
-			testSecondExecuteRecipeError: false,
+			testSecondExecuteRecipe:   true,
+			shouldFailSecondExecution: false,
 		},
 
 		"create trade & execute recipe  coin lock test": {
@@ -244,8 +240,8 @@ func TestCoinLock(t *testing.T) {
 			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
 			lockDiffSchedule:           types.NewPylon(100),
 
-			testSendItems:      true,
-			testSendItemsError: false,
+			testSendItems:       true,
+			shouldFailSendItems: false,
 		},
 		"create trade & execute recipe and send coins coin lock test": {
 			testCreateTradeLock:   true,
@@ -256,8 +252,8 @@ func TestCoinLock(t *testing.T) {
 			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
 			lockDiffSchedule:           types.NewPylon(100),
 
-			testSendCoins:      true,
-			testSendCoinsError: false,
+			testSendCoins:       true,
+			shouldFailSendCoins: false,
 		},
 		"create trade & execute recipe and execute recipe coin lock test": {
 			testCreateTradeLock:   true,
@@ -268,8 +264,8 @@ func TestCoinLock(t *testing.T) {
 			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
 			lockDiffSchedule:           types.NewPylon(100),
 
-			testSecondExecuteRecipe:      true,
-			testSecondExecuteRecipeError: false,
+			testSecondExecuteRecipe:   true,
+			shouldFailSecondExecution: false,
 		},
 		"create trade & disable trade coin lock test": {
 			testCreateTradeLock:   true,
@@ -342,8 +338,8 @@ func TestCoinLock(t *testing.T) {
 			testFulfillTradeInputItemIDs: []string{},
 			lockDiffFulfillTrade:         types.NewPylon(100),
 
-			testSendItems:      true,
-			testSendItemsError: false,
+			testSendItems:       true,
+			shouldFailSendItems: false,
 		},
 		"create trade & disable trade & enable trade & fulfill trade & send coins coin lock test": {
 			testCreateTradeLock:   true,
@@ -360,8 +356,8 @@ func TestCoinLock(t *testing.T) {
 			testFulfillTradeInputItemIDs: []string{},
 			lockDiffFulfillTrade:         types.NewPylon(100),
 
-			testSendCoins:      true,
-			testSendCoinsError: false,
+			testSendCoins:       true,
+			shouldFailSendCoins: false,
 		},
 		"create trade & disable trade & enable trade & fulfill trade & second execute recipe coin lock test": {
 			testCreateTradeLock:   true,
@@ -378,8 +374,8 @@ func TestCoinLock(t *testing.T) {
 			testFulfillTradeInputItemIDs: []string{},
 			lockDiffFulfillTrade:         types.NewPylon(100),
 
-			testSecondExecuteRecipe:      true,
-			testSecondExecuteRecipeError: false,
+			testSecondExecuteRecipe:   true,
+			shouldFailSecondExecution: false,
 		},
 	}
 	for testName, tc := range cases {
@@ -494,8 +490,10 @@ func TestCoinLock(t *testing.T) {
 				msg := msgs.NewMsgSendItems([]string{item.ID}, sender1, sender2)
 				_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
 
-				if !tc.testSendItemsError {
+				if !tc.shouldFailSendItems {
 					require.True(t, err == nil)
+				} else {
+					require.True(t, err != nil)
 				}
 			}
 
@@ -503,8 +501,10 @@ func TestCoinLock(t *testing.T) {
 			if tc.testSendCoins {
 				err = keep.SendCoins(tci.PlnK, tci.Ctx, sender1, sender2, types.NewPylon(100))
 
-				if !tc.testSendCoinsError {
+				if !tc.shouldFailSendCoins {
 					require.True(t, err == nil)
+				} else {
+					require.True(t, err != nil)
 				}
 			}
 
@@ -528,8 +528,10 @@ func TestCoinLock(t *testing.T) {
 				)
 				_, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
-				if !tc.testSecondExecuteRecipeError {
+				if !tc.shouldFailSecondExecution {
 					require.True(t, err == nil)
+				} else {
+					require.True(t, err != nil)
 				}
 			}
 
