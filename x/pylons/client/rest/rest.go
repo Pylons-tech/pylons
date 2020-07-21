@@ -27,6 +27,8 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		txbuilder.CreateAccountTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons/tx_build/{%s}", storeName, txbuilder.TxGPRequesterKey),
 		txbuilder.GetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons/tx_build/{%s}", storeName, txbuilder.TxGoogleIAPGPRequesterKey),
+		txbuilder.GoogleIAPGetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
 		txbuilder.SendPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_items/tx_build/", storeName),
@@ -47,6 +49,8 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		txbuilder.DisableRecipeTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons", storeName),
 		getPylonsHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons", storeName),
+		googleIAPGetPylonsHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/create_account", storeName),
 		createAccountHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons", storeName),
