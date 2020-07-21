@@ -64,6 +64,46 @@ func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.Lock
 	return lockedCoin
 }
 
+// GetLockedCoinDetails return lockedCoinDetails based on sender
+func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoinDetails {
+	lcd := types.LockedCoinDetails{}
+	lc := k.GetLockedCoin(ctx, sender)
+	lcd.Sender, lcd.Amount = lc.Sender, lc.Amount
+
+	if !sender.Empty() {
+		iterator := k.GetTradesIteratorByCreator(ctx, sender)
+		for ; iterator.Valid(); iterator.Next() {
+			var trade types.Trade
+			mRCP := iterator.Value()
+			err := json.Unmarshal(mRCP, &trade)
+			if err != nil {
+				// this happens because we have multiple versions of breaking trades at times
+				continue
+			}
+
+			if !trade.Disabled && !trade.CoinOutputs.Empty() {
+				lcd.LockCoinTrades = append(lcd.LockCoinTrades, types.LockedCoinDescribe{
+					ID:     trade.ID,
+					Amount: trade.CoinOutputs,
+				})
+			}
+		}
+		execs, err := k.GetExecutionsBySender(ctx, sender)
+		if err == nil {
+			for _, exec := range execs {
+				if !exec.CoinInputs.Empty() {
+					lcd.LockCoinExecs = append(lcd.LockCoinExecs, types.LockedCoinDescribe{
+						ID:     exec.ID,
+						Amount: exec.CoinInputs,
+					})
+				}
+			}
+		}
+	}
+
+	return lcd
+}
+
 func (k Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	if lockedCoin.Sender.Empty() {
 		return errors.New("updateLockedCoin: the sender cannot be empty")

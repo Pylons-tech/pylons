@@ -32,3 +32,17 @@ func NewLockedCoin(sender sdk.AccAddress, amount sdk.Coins) LockedCoin {
 
 	return lc
 }
+
+// LockedCoinDescribe describes the locked coin struct
+type LockedCoinDescribe struct {
+	ID     string
+	Amount sdk.Coins
+}
+
+// LockedCoinDetails describes the locked coin struct with where it's locked in details
+type LockedCoinDetails struct {
+	Sender         sdk.AccAddress
+	Amount         sdk.Coins
+	LockCoinTrades []LockedCoinDescribe
+	LockCoinExecs  []LockedCoinDescribe
+}

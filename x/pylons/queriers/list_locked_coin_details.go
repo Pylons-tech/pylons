@@ -9,11 +9,11 @@ import (
 
 // query endpoints supported by the nameservice Querier
 const (
-	KeyListLockedCoin = "list_locked_coins"
+	KeyListLockedCoinDetails = "list_locked_coin_details"
 )
 
-// ListLockedCoins returns locked coins based on user
-func ListLockedCoins(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
+// ListLockedCoinDetails returns locked coins with details based on user
+func ListLockedCoinDetails(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
 	addr := path[0]
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
@@ -21,9 +21,9 @@ func ListLockedCoins(ctx sdk.Context, path []string, req abci.RequestQuery, keep
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	lc := keeper.GetLockedCoin(ctx, accAddr)
+	lcd := keeper.GetLockedCoinDetails(ctx, accAddr)
 
-	lcl, err := keeper.Cdc.MarshalJSON(lc)
+	lcl, err := keeper.Cdc.MarshalJSON(lcd)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}

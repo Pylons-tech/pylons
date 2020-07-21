@@ -29,6 +29,8 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 			return queriers.ListCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyListLockedCoin:
 			return queriers.ListLockedCoins(ctx, path[1:], req, keeper)
+		case queriers.KeyListLockedCoinDetails:
+			return queriers.ListLockedCoinDetails(ctx, path[1:], req, keeper)
 		case queriers.KeyAddrFromPubKey:
 			return queriers.AddrFromPubKey(ctx, path[1:], req, keeper)
 		case queriers.KeyListRecipe:
