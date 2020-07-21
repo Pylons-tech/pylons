@@ -124,10 +124,10 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 
 	lcDiff := lockAfterCreateTrade.Amount.Sort().Sub(initialLock.Amount.Sort())
 	t.WithFields(testing.Fields{
-		"initialLock":            initialLock.Amount,
-		"lockAfterCreateTrade":   lockAfterCreateTrade.Amount,
-		"tc.lockDiffTradeCreate": tc.lockDiffTradeCreate,
-		"tradeCreatorSdkAddress": tradeCreatorSdkAddress.String(),
+		"initial_lock":              initialLock.Amount,
+		"lock_after_create_trade":   lockAfterCreateTrade.Amount,
+		"desired_trade_create_lock": tc.lockDiffTradeCreate,
+		"trade_creator_address":     tradeCreatorSdkAddress.String(),
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffTradeCreate), "locked coin is invalid after creating trade")
 
 	if tc.tradeCoinInputList != nil {
@@ -155,10 +155,10 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 
 	lcDiff = lockAfterCreateTrade.Amount.Sort().Sub(lockAfterFulFillTrade.Amount.Sort())
 	t.WithFields(testing.Fields{
-		"lockAfterCreateTrade":    lockAfterCreateTrade.Amount,
-		"lockAfterFulFillTrade":   lockAfterFulFillTrade.Amount,
-		"tc.lockDiffAfterFulfill": tc.lockDiffAfterFulfill,
-		"tradeCreatorSdkAddress":  tradeCreatorSdkAddress.String(),
+		"lock_after_create_trade":       lockAfterCreateTrade.Amount,
+		"lock_after_fulfill_trade":      lockAfterFulFillTrade.Amount,
+		"desired_lock_diff_for_fulfill": tc.lockDiffAfterFulfill,
+		"trade_creator_address":         tradeCreatorSdkAddress.String(),
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterFulfill), "locked coin is invalid after creating trade")
 }
 
@@ -216,10 +216,10 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 
 	lcDiff := lockAfterSchedule.Amount.Sort().Sub(initialLock.Amount.Sort())
 	t.WithFields(testing.Fields{
-		"initialLock":              initialLock.Amount,
-		"lockAfterSchedule":        lockAfterSchedule.Amount,
-		"tc.lockDiffAfterSchedule": tc.lockDiffAfterSchedule,
-		"cbOwnerSdkAddr":           cbOwnerSdkAddr.String(),
+		"initial_lock":                   initialLock.Amount,
+		"lock_after_schedule":            lockAfterSchedule.Amount,
+		"desired_lock_diff_for_schedule": tc.lockDiffAfterSchedule,
+		"cb_owner_address":               cbOwnerSdkAddr.String(),
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterSchedule), "locked coin is invalid after creating trade")
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
@@ -272,9 +272,9 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 
 	lcDiff = lockAfterSchedule.Amount.Sort().Sub(lockAfterCheckExec.Amount.Sort())
 	t.WithFields(testing.Fields{
-		"lockAfterSchedule":         lockAfterSchedule.Amount,
-		"lockAfterCheckExec":        lockAfterCheckExec.Amount,
-		"tc.lockDiffAfterCheckExec": tc.lockDiffAfterCheckExec,
-		"cbOwnerSdkAddr":            cbOwnerSdkAddr.String(),
+		"lock_after_schedule":     lockAfterSchedule.Amount,
+		"lock_after_check_exec":   lockAfterCheckExec.Amount,
+		"desired_check_exec_lock": tc.lockDiffAfterCheckExec,
+		"cb_owner_address":        cbOwnerSdkAddr.String(),
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterCheckExec), "locked coin is invalid after creating trade")
 }
