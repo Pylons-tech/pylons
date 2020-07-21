@@ -15,26 +15,19 @@ func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 		return errors.New("LockCoin: the sender cannot be empty")
 	}
 
-	oldLc := k.GetLockedCoin(ctx, lockedCoin.Sender)
+	originLock := k.GetLockedCoin(ctx, lockedCoin.Sender)
+	newLock := originLock.Amount.Add(lockedCoin.Amount.Sort()...)
+	senderBalance := k.CoinKeeper.GetCoins(ctx, lockedCoin.Sender)
 
-	if oldLc.Amount.Empty() {
-		return k.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
-	}
-
-	newAmount := oldLc.Amount.Add(lockedCoin.Amount.Sort()...)
-
-	senderAmount := k.CoinKeeper.GetCoins(ctx, lockedCoin.Sender)
-
-	if !senderAmount.IsAllGTE(newAmount) {
+	if !senderBalance.IsAllGTE(newLock) {
 		return errors.New("LockCoin: the sender does not have enough amount to lock")
 	}
 
-	lc := types.LockedCoin{}
+	if originLock.Amount.Empty() {
+		return k.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
+	}
 
-	lc.Sender = lockedCoin.Sender
-	lc.Amount = newAmount
-
-	return k.updateLockedCoin(ctx, lc)
+	return k.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
 }
 
 // UnlockCoin unlock coin from keeper
@@ -43,23 +36,18 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 		return errors.New("LockCoin: the sender cannot be empty")
 	}
 
-	oldLc := k.GetLockedCoin(ctx, lockedCoin.Sender)
-	var newAmount sdk.Coins
+	originLock := k.GetLockedCoin(ctx, lockedCoin.Sender)
+	var newLock sdk.Coins
 
 	// Compare already locked amount and unlocking amount
-	if oldLc.Amount.IsAllGTE(lockedCoin.Amount) {
-		newAmount = oldLc.Amount.Sub(lockedCoin.Amount.Sort())
+	if originLock.Amount.IsAllGTE(lockedCoin.Amount) {
+		newLock = originLock.Amount.Sub(lockedCoin.Amount.Sort())
 
-		if newAmount.IsZero() {
-			return k.DeleteLockedCoin(ctx, oldLc.Sender)
+		if newLock.IsZero() {
+			return k.DeleteLockedCoin(ctx, originLock.Sender)
 		}
 
-		lc := types.LockedCoin{}
-
-		lc.Sender = lockedCoin.Sender
-		lc.Amount = newAmount
-
-		return k.updateLockedCoin(ctx, lc)
+		return k.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
 	}
 
 	return errors.New("Unlocking amount exceeds the locked amount")
@@ -119,7 +107,7 @@ func (k Keeper) GetAllLockedCoinsCount(ctx sdk.Context) int {
 	return len(lockedCoins)
 }
 
-// DeleteLockedCoin is used to delete a lockedCoin based on the id
+// DeleteLockedCoin is used to delete a lockedCoin based on the sender
 func (k Keeper) DeleteLockedCoin(ctx sdk.Context, sender sdk.AccAddress) error {
 	return k.DeleteObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey)
 }

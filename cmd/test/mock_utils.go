@@ -378,8 +378,7 @@ func MockDetailedTradeGUID(
 	}
 
 	GetTxHandleResult(txhash, t)
-	WaitOneBlockWithErrorCheck(t)
-	// check trade created after 1 block
+	// check trade created after transaction is mined
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.WithFields(testing.Fields{
 		"extra_info": extraInfo,

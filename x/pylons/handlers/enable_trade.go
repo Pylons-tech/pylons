@@ -62,9 +62,7 @@ func HandlerMsgEnableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEnab
 		return nil, errInternal(err)
 	}
 
-	lockedCoin := types.NewLockedCoin(trade.Sender, trade.CoinOutputs)
-
-	err = keeper.LockCoin(ctx, lockedCoin)
+	err = keeper.LockCoin(ctx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
 
 	if err != nil {
 		return nil, errInternal(err)

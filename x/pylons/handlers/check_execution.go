@@ -56,9 +56,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err
 	}
 
-	lockedCoin := types.NewLockedCoin(msg.Sender, exec.CoinInputs)
-
-	err = keeper.UnlockCoin(ctx, lockedCoin)
+	err = keeper.UnlockCoin(ctx, types.NewLockedCoin(msg.Sender, exec.CoinInputs))
 	if err != nil {
 		return nil, err
 	}

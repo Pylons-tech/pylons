@@ -152,23 +152,23 @@ func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins, s2coi
 	sender4, _ := sdk.AccAddressFromBech32("cosmos13p8890funv54hflk82ju0zv47tspglpk373453")
 
 	if s1coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins.Sort())
+		require.True(t, err == nil, err)
 	}
 
 	if s2coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins.Sort())
+		require.True(t, err == nil, err)
 	}
 
 	if s3coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins.Sort())
+		require.True(t, err == nil, err)
 	}
 
 	if s4coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins.Sort())
+		require.True(t, err == nil, err)
 	}
 	return sender1, sender2, sender3, sender4
 }

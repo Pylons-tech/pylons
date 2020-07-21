@@ -71,9 +71,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 
-		lockedCoin := types.NewLockedCoin(msg.Sender, recipe.CoinInputs.ToCoins())
-
-		err = keeper.LockCoin(ctx, lockedCoin)
+		err = keeper.LockCoin(ctx, types.NewLockedCoin(msg.Sender, recipe.CoinInputs.ToCoins()))
 		if err != nil {
 			return nil, errInternal(err)
 		}
