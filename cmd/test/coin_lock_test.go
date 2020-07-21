@@ -19,15 +19,14 @@ import (
 type CoinLockTestCase struct {
 	name string
 
-	tradeTest             bool
-	tradeExtraInfo        string
-	tradeCoinInputList    types.CoinInputList
-	tradeOutputCoinName   string
-	tradeOutputCoinAmount int64
-	tradeExpectedStatus   string
-	tradeExpectedMessage  string
-	lockDiffTradeCreate   sdk.Coins
-	lockDiffAfterFulfill  sdk.Coins
+	tradeTest            bool
+	tradeExtraInfo       string
+	tradeCoinInputList   types.CoinInputList
+	tradeOutputCoins     sdk.Coins
+	tradeExpectedStatus  string
+	tradeExpectedMessage string
+	lockDiffTradeCreate  sdk.Coins
+	lockDiffAfterFulfill sdk.Coins
 
 	recipeTest                 bool
 	recipeBlockInterval        int64
@@ -46,16 +45,15 @@ func TestCoinLockViaCLI(originT *originT.T) {
 
 	tests := []CoinLockTestCase{
 		{
-			name:                  "fullfill trade coin lock test",
-			tradeTest:             true,
-			tradeExtraInfo:        "TESTTRD_FulfillTrade__001_TC1",
-			tradeCoinInputList:    types.GenCoinInputList("node0token", 200),
-			tradeOutputCoinName:   "pylon",
-			tradeOutputCoinAmount: 100,
-			tradeExpectedStatus:   "Success",
-			tradeExpectedMessage:  "successfully fulfilled the trade",
-			lockDiffTradeCreate:   types.NewPylon(100),
-			lockDiffAfterFulfill:  types.NewPylon(100),
+			name:                 "fullfill trade coin lock test",
+			tradeTest:            true,
+			tradeExtraInfo:       "TESTTRD_FulfillTrade__001_TC1",
+			tradeCoinInputList:   types.GenCoinInputList("node0token", 200),
+			tradeOutputCoins:     sdk.Coins{sdk.NewInt64Coin("pylon", 100)},
+			tradeExpectedStatus:  "Success",
+			tradeExpectedMessage: "successfully fulfilled the trade",
+			lockDiffTradeCreate:  types.NewPylon(100),
+			lockDiffAfterFulfill: types.NewPylon(100),
 		},
 		{
 			name:                       "check execution coin lock test",
@@ -110,7 +108,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 		tc.tradeCoinInputList,
 		false,
 		"",
-		true, tc.tradeOutputCoinName, tc.tradeOutputCoinAmount,
+		tc.tradeOutputCoins,
 		false,
 		"",
 		fmt.Sprintf("%s%d", tc.tradeExtraInfo, time.Now().Unix()),

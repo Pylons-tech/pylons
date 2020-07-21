@@ -24,11 +24,8 @@ type FulfillTradeTestCase struct {
 	inputItemName  string
 	wrongCBFulfill bool
 
-	coinInputList types.CoinInputList
-
-	hasOutputCoin    bool
-	outputCoinName   string
-	outputCoinAmount int64
+	coinInputList    types.CoinInputList
+	tradeOutputCoins sdk.Coins
 
 	hasOutputItem  bool
 	outputItemName string
@@ -53,9 +50,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			extraInfo:             "TESTTRD_FulfillTrade__001_TC1",
 			hasInputItem:          false,
 			coinInputList:         types.GenCoinInputList("node0token", 200),
-			hasOutputCoin:         true,
-			outputCoinName:        "pylon",
-			outputCoinAmount:      100,
+			tradeOutputCoins:      sdk.Coins{sdk.NewInt64Coin("pylon", 100)},
 			hasOutputItem:         false,
 			expectedStatus:        "Success",
 			expectedMessage:       "successfully fulfilled the trade",
@@ -70,9 +65,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			hasInputItem:          true,
 			inputItemName:         "TESTITEM_FulfillTrade__001_TC2",
 			coinInputList:         nil,
-			hasOutputCoin:         true,
-			outputCoinName:        "pylon",
-			outputCoinAmount:      100,
+			tradeOutputCoins:      sdk.Coins{sdk.NewInt64Coin("pylon", 100)},
 			hasOutputItem:         false,
 			expectedStatus:        "Success",
 			expectedMessage:       "successfully fulfilled the trade",
@@ -87,7 +80,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			extraInfo:             "TESTTRD_FulfillTrade__001_TC3",
 			hasInputItem:          false,
 			coinInputList:         types.GenCoinInputList("pylon", 200),
-			hasOutputCoin:         false,
+			tradeOutputCoins:      nil,
 			hasOutputItem:         true,
 			outputItemName:        "TESTITEM_FulfillTrade__001_TC3",
 			expectedStatus:        "Success",
@@ -104,7 +97,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			hasInputItem:          true,
 			inputItemName:         "TESTITEM_FulfillTrade__001_TC4_INPUT",
 			coinInputList:         types.GenCoinInputList("pylon", 200),
-			hasOutputCoin:         false,
+			tradeOutputCoins:      nil,
 			hasOutputItem:         true,
 			outputItemName:        "TESTITEM_FulfillTrade__001_TC4_OUTPUT",
 			expectedStatus:        "Success",
@@ -124,9 +117,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 				types.CoinInput{Coin: "stake", Count: 100},
 				types.CoinInput{Coin: "node0token", Count: 100},
 			},
-			hasOutputCoin:         true,
-			outputCoinName:        "pylon",
-			outputCoinAmount:      100,
+			tradeOutputCoins:      sdk.Coins{sdk.NewInt64Coin("pylon", 100)},
 			hasOutputItem:         false,
 			expectedStatus:        "Success",
 			expectedMessage:       "successfully fulfilled the trade",
@@ -143,9 +134,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			inputItemName:    "TESTITEM_FulfillTrade__001_TC6_INPUT",
 			wrongCBFulfill:   true,
 			coinInputList:    nil,
-			hasOutputCoin:    true,
-			outputCoinName:   "pylon",
-			outputCoinAmount: 100,
+			tradeOutputCoins: sdk.Coins{sdk.NewInt64Coin("pylon", 100)},
 			hasOutputItem:    false,
 			desiredError:     "the sender doesn't have the trade item attributes",
 		},
@@ -194,7 +183,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		mCB.ID,
 		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
-		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
+		tc.tradeOutputCoins,
 		tc.hasOutputItem, outputItemID,
 		fmt.Sprintf("%s%d", tc.extraInfo, time.Now().Unix()),
 		t)
