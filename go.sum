@@ -22,8 +22,8 @@ github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d h1:nalkkPQ
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d/go.mod h1:URdX5+vg25ts3aCh8H5IFZybJYKWhJHYMTnf+ULtoC4=
 github.com/Knetic/govaluate v3.0.1-0.20171022003610-9aa49832a739+incompatible/go.mod h1:r7JcOSlj0wfOMncg0iLm8Leh48TZaKVeNIfJntJ2wa0=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
-github.com/Pylons-tech/pylons_sdk v0.0.0-20200717100957-b07ca600da00 h1:G9PNpv+5GNkrO/DC8gh1X+N3r4ilVi2dbpXWX3YWE6Q=
-github.com/Pylons-tech/pylons_sdk v0.0.0-20200717100957-b07ca600da00/go.mod h1:/XAK3Z7Cg6DeH5wllfIwey7bDi8FaSkbSECCzAnS54A=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200721180852-e07cdbf01d9b h1:d2DaTYfZp6P9GeVQJvBHYVyzuzqILuApyqMT5mO/tyI=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20200721180852-e07cdbf01d9b/go.mod h1:/XAK3Z7Cg6DeH5wllfIwey7bDi8FaSkbSECCzAnS54A=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=

@@ -1,5 +1,5 @@
 {
-  "ItemNames": ["send_items_test_item1", "send_items_test_item2"],
+  "ItemNames": ["Send item1", "Send item2"],
   "Sender": "senditem_account2",
   "Receiver": "senditem_account1"
 }
