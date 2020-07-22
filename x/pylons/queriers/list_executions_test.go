@@ -31,7 +31,7 @@ func TestListExecution(t *testing.T) {
 		sender1,
 		[]string{},
 	)
-	require.True(t, err == nil)
+	require.True(t, err == nil, err)
 
 	cases := map[string]struct {
 		path          []string

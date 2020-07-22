@@ -70,6 +70,12 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			}
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
+
+		err = keeper.LockCoin(ctx, types.NewLockedCoin(msg.Sender, recipe.CoinInputs.ToCoins()))
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
 		// store the execution as the interval
 		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems,
 			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
@@ -90,7 +96,8 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 			Output:  outputSTR,
 		})
 	}
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, cl) {
+
+	if !keep.HasCoins(keeper, ctx, msg.Sender, cl) {
 		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
 

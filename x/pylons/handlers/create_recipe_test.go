@@ -65,7 +65,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
-			outputDenom:    "pylon",
+			outputDenom:    types.Pylon,
 			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "There should not be a recipe which generate pylon denom as an output",
