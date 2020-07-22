@@ -42,7 +42,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock pylon input recipe
 	pylonInputRecipeData := MockRecipe(
 		tci, "existing recipe",
-		types.GenCoinInputList("pylon", 100),
+		types.GenCoinInputList(types.Pylon, 100),
 		types.ItemInputList{},
 		types.EntriesList{},
 		types.WeightedOutputsList{},
@@ -159,7 +159,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			desiredError:           "",
 			successMsg:             "successfully executed the recipe",
 			showError:              false,
-			checkCoinName:          "pylon",
+			checkCoinName:          types.Pylon,
 			checkCoinAvailable:     true,
 			checkItemName:          "",
 			checkItemAvailable:     false,
