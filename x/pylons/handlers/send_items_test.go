@@ -19,8 +19,8 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
 
-	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender1, types.NewPylon(10000000)))
-	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender2, types.NewPylon(10000000)))
+	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender1, types.NewPylon(10000000)))
+	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
 	cbData := MockCookbook(tci, sender1)
 	cookbook, err := tci.PlnK.GetCookbook(tci.Ctx, cbData.CookbookID)
 	require.True(t, err == nil)
