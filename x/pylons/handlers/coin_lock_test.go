@@ -16,18 +16,15 @@ import (
 func TestCoinLock(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 
-	sender1, sender2, _, _ := keep.SetupTestAccounts(
+	lotsOfCoins := sdk.Coins{
+		sdk.NewInt64Coin("chair", 100000),
+		sdk.NewInt64Coin(types.Pylon, 100000),
+	}
+	sender1, _, _, _ := keep.SetupTestAccounts(
 		t,
 		tci,
-		sdk.Coins{
-			sdk.NewInt64Coin("chair", 100000),
-			sdk.NewInt64Coin(types.Pylon, 100000),
-		},
-		sdk.Coins{
-			sdk.NewInt64Coin("chair", 100000),
-			sdk.NewInt64Coin(types.Pylon, 100000),
-		},
-		nil, nil,
+		lotsOfCoins,
+		nil, nil, nil,
 	)
 
 	cbData := CreateCookbookResponse{}
@@ -49,23 +46,22 @@ func TestCoinLock(t *testing.T) {
 	require.True(t, err == nil)
 	require.True(t, len(cbData.CookbookID) > 0)
 
-	item1 := keep.GenItem(cbData.CookbookID, sender2, "Bhachu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item1)
-	require.True(t, err == nil)
-
 	cases := map[string]struct {
+		// Balance of two accounts for test
+		coinsAccount1 sdk.Coins
+		coinsAccount2 sdk.Coins
 		// Create Trade Coin Lock Test
-		testCreateTradeLock   bool
-		testCreateTradeAmount sdk.Coins
-		lockDiffCreateTrade   sdk.Coins
+		testCreateTradeLock bool
+		createTradeAmount   sdk.Coins
+		lockDiffCreateTrade sdk.Coins
 		// Execute Receipe Coin Lock Test
-		testExecuteRecipeLock      bool
-		testExecuteRecipeCoinInput types.CoinInputList
-		lockDiffSchedule           sdk.Coins
+		testExecuteRecipeLock  bool
+		executeRecipeCoinInput types.CoinInputList
+		lockDiffSchedule       sdk.Coins
 		// Fulfill Trade Coin Unlock Test
-		testFulfillTrade             bool
-		testFulfillTradeInputItemIDs []string
-		lockDiffFulfillTrade         sdk.Coins
+		testFulfillTrade         bool
+		fulfillTradeInputItemIDs []string
+		lockDiffFulfillTrade     sdk.Coins
 		// Check Execution Coin Unlock Test
 		testCheckExecution bool
 		lockDiffCheckExec  sdk.Coins
@@ -86,96 +82,116 @@ func TestCoinLock(t *testing.T) {
 		lockDiffDisableTrade sdk.Coins
 	}{
 		"create trade and fulfill trade coin lock test": {
-			testCreateTradeLock:          true,
-			testCreateTradeAmount:        types.NewPylon(100),
-			lockDiffCreateTrade:          types.NewPylon(100),
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			coinsAccount1:            lotsOfCoins,
+			coinsAccount2:            lotsOfCoins,
+			testCreateTradeLock:      true,
+			createTradeAmount:        types.NewPylon(100),
+			lockDiffCreateTrade:      types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 		},
 		"create trade and send items coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
-			testSendItems:         true,
-			shouldFailSendItems:   false,
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
+			testSendItems:       true,
+			shouldFailSendItems: false,
 		},
 		"create trade and send coins coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
-			testSendCoins:         true,
-			shouldFailSendCoins:   false,
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
+			testSendCoins:       true,
+			shouldFailSendCoins: false,
 		},
 		"create trade and execute recipe coin lock test": {
+			coinsAccount1:             lotsOfCoins,
+			coinsAccount2:             lotsOfCoins,
 			testCreateTradeLock:       true,
-			testCreateTradeAmount:     types.NewPylon(100),
+			createTradeAmount:         types.NewPylon(100),
 			lockDiffCreateTrade:       types.NewPylon(100),
 			testSecondExecuteRecipe:   true,
 			shouldFailSecondExecution: false,
 		},
 
 		"execute recipe and check execution coin lock test": {
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			coinsAccount1:          lotsOfCoins,
+			coinsAccount2:          lotsOfCoins,
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
 		},
 		"execute recipe and send items coin lock test": {
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			coinsAccount1:          lotsOfCoins,
+			coinsAccount2:          lotsOfCoins,
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testSendItems:       true,
 			shouldFailSendItems: false,
 		},
 		"execute recipe and send coins coin lock test": {
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			coinsAccount1:          lotsOfCoins,
+			coinsAccount2:          lotsOfCoins,
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testSendCoins:       true,
 			shouldFailSendCoins: false,
 		},
 		"execute recipe and execute recipe coin lock test": {
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			coinsAccount1:          lotsOfCoins,
+			coinsAccount2:          lotsOfCoins,
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testSecondExecuteRecipe:   true,
 			shouldFailSecondExecution: false,
 		},
 
 		"create trade & fulfill trade & execute recipe & check execution coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
 		},
 		"create trade & fulfill trade & execute recipe & check execution and send items coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
@@ -184,17 +200,19 @@ func TestCoinLock(t *testing.T) {
 			shouldFailSendItems: false,
 		},
 		"create trade & fulfill trade & execute recipe & check execution and send coins coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
@@ -203,17 +221,19 @@ func TestCoinLock(t *testing.T) {
 			shouldFailSendCoins: false,
 		},
 		"create trade & fulfill trade & execute recipe & check execution and execute recipe coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
@@ -223,62 +243,74 @@ func TestCoinLock(t *testing.T) {
 		},
 
 		"create trade & execute recipe  coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 		},
 		"create trade & execute recipe and send items coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testSendItems:       true,
 			shouldFailSendItems: false,
 		},
 		"create trade & execute recipe and send coins coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testSendCoins:       true,
 			shouldFailSendCoins: false,
 		},
 		"create trade & execute recipe and execute recipe coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testSecondExecuteRecipe:   true,
 			shouldFailSecondExecution: false,
 		},
 		"create trade & disable trade coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
 		},
 		"create trade & disable trade & enable trade coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
@@ -287,9 +319,11 @@ func TestCoinLock(t *testing.T) {
 			lockDiffEnableTrade: types.NewPylon(100),
 		},
 		"create trade & disable trade & enable trade & fulfill trade coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
@@ -297,14 +331,16 @@ func TestCoinLock(t *testing.T) {
 			testEnableTradeLock: true,
 			lockDiffEnableTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 		},
 		"create trade & disable trade & enable trade & fulfill trade & execute recipe & check execution coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
@@ -312,21 +348,23 @@ func TestCoinLock(t *testing.T) {
 			testEnableTradeLock: true,
 			lockDiffEnableTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
-			testExecuteRecipeLock:      true,
-			testExecuteRecipeCoinInput: types.GenCoinInputList("pylon", 100),
-			lockDiffSchedule:           types.NewPylon(100),
+			testExecuteRecipeLock:  true,
+			executeRecipeCoinInput: types.GenCoinInputList("pylon", 100),
+			lockDiffSchedule:       types.NewPylon(100),
 
 			testCheckExecution: true,
 			lockDiffCheckExec:  types.NewPylon(100),
 		},
 		"create trade & disable trade & enable trade & fulfill trade & send items coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
@@ -334,17 +372,19 @@ func TestCoinLock(t *testing.T) {
 			testEnableTradeLock: true,
 			lockDiffEnableTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
 			testSendItems:       true,
 			shouldFailSendItems: false,
 		},
 		"create trade & disable trade & enable trade & fulfill trade & send coins coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
@@ -352,17 +392,19 @@ func TestCoinLock(t *testing.T) {
 			testEnableTradeLock: true,
 			lockDiffEnableTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
 			testSendCoins:       true,
 			shouldFailSendCoins: false,
 		},
 		"create trade & disable trade & enable trade & fulfill trade & second execute recipe coin lock test": {
-			testCreateTradeLock:   true,
-			testCreateTradeAmount: types.NewPylon(100),
-			lockDiffCreateTrade:   types.NewPylon(100),
+			coinsAccount1:       lotsOfCoins,
+			coinsAccount2:       lotsOfCoins,
+			testCreateTradeLock: true,
+			createTradeAmount:   types.NewPylon(100),
+			lockDiffCreateTrade: types.NewPylon(100),
 
 			testDisableTrade:     true,
 			lockDiffDisableTrade: types.NewPylon(100),
@@ -370,9 +412,9 @@ func TestCoinLock(t *testing.T) {
 			testEnableTradeLock: true,
 			lockDiffEnableTrade: types.NewPylon(100),
 
-			testFulfillTrade:             true,
-			testFulfillTradeInputItemIDs: []string{},
-			lockDiffFulfillTrade:         types.NewPylon(100),
+			testFulfillTrade:         true,
+			fulfillTradeInputItemIDs: []string{},
+			lockDiffFulfillTrade:     types.NewPylon(100),
 
 			testSecondExecuteRecipe:   true,
 			shouldFailSecondExecution: false,
@@ -381,41 +423,56 @@ func TestCoinLock(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			ctRespData := CreateTradeResponse{}
+			// setup new account1
+			_, account1, err := GenAccount()
+			require.True(t, err == nil, err)
+			if tc.coinsAccount1 != nil {
+				_, err := tci.Bk.AddCoins(tci.Ctx, account1, tc.coinsAccount1.Sort())
+				require.True(t, err == nil, err)
+			}
+
+			// setup new account2
+			_, account2, err := GenAccount()
+			require.True(t, err == nil, err)
+			if tc.coinsAccount2 != nil {
+				_, err := tci.Bk.AddCoins(tci.Ctx, account2, tc.coinsAccount2.Sort())
+				require.True(t, err == nil, err)
+			}
+
+			tradeData := CreateTradeResponse{}
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 
 			// test create trade coin lock
 			if tc.testCreateTradeLock {
-				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				ctRespData, err = MockTrade(
+				tradeData, err = MockTrade(
 					tci,
 					types.GenCoinInputList("chair", 100),
 					types.TradeItemInputList{},
-					tc.testCreateTradeAmount,
+					tc.createTradeAmount,
 					types.ItemList{},
-					sender1,
+					account1,
 				)
 
 				require.True(t, err == nil)
 
-				lcAfterCreateTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterCreateTrade := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				lcDiff := lcAfterCreateTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
 				require.True(t, lcDiff.IsEqual(tc.lockDiffCreateTrade))
-
 			}
 
 			// test disable recipe coin unlock
 			if tc.testCreateTradeLock && tc.testDisableTrade {
-				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				disableTrdMsg := msgs.NewMsgDisableTrade(ctRespData.TradeID, sender1)
+				disableTrdMsg := msgs.NewMsgDisableTrade(tradeData.TradeID, account1)
 				_, err := HandlerMsgDisableTrade(tci.Ctx, tci.PlnK, disableTrdMsg)
 
 				require.True(t, err == nil)
 
-				lcAfterDisalbeTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterDisalbeTrade := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				lcDiff := lcFirst.Amount.Sort().Sub(lcAfterDisalbeTrade.Amount.Sort())
 
@@ -425,14 +482,14 @@ func TestCoinLock(t *testing.T) {
 
 			// test enable recipe coin lock
 			if tc.testCreateTradeLock && tc.testDisableTrade && tc.testEnableTradeLock {
-				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				enableTrdMsg := msgs.NewMsgEnableTrade(ctRespData.TradeID, sender1)
+				enableTrdMsg := msgs.NewMsgEnableTrade(tradeData.TradeID, account1)
 				_, err := HandlerMsgEnableTrade(tci.Ctx, tci.PlnK, enableTrdMsg)
 
 				require.True(t, err == nil)
 
-				lcAfterEnableTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterEnableTrade := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				lcDiff := lcAfterEnableTrade.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
@@ -442,16 +499,16 @@ func TestCoinLock(t *testing.T) {
 
 			// test execute recipe coin lock
 			if tc.testExecuteRecipeLock {
-				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				item := keep.GenItem(cbData.CookbookID, sender1, "Knife")
+				item := keep.GenItem(cbData.CookbookID, account1, "Knife")
 				err = tci.PlnK.SetItem(tci.Ctx, *item)
 				require.True(t, err == nil)
 
 				recipeData := MockRecipe(
 					tci,
 					"coin lock test recipe",
-					tc.testExecuteRecipeCoinInput,
+					tc.executeRecipeCoinInput,
 					types.GenItemInputList("Knife"),
 					types.GenItemOnlyEntry("KnifeMRG"),
 					types.GenOneOutput(1),
@@ -463,7 +520,7 @@ func TestCoinLock(t *testing.T) {
 				execRcpResponse, err := MockExecution(
 					tci,
 					recipeData.RecipeID,
-					sender1,
+					account1,
 					[]string{item.ID},
 				)
 
@@ -474,7 +531,7 @@ func TestCoinLock(t *testing.T) {
 				err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 				require.True(t, err == nil)
 
-				lcAfterExecRcp := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterExecRcp := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				lcDiff := lcAfterExecRcp.Amount.Sort().Sub(lcFirst.Amount.Sort())
 
@@ -483,11 +540,11 @@ func TestCoinLock(t *testing.T) {
 
 			// test send items after coin lock
 			if tc.testSendItems {
-				item := keep.GenItem(cbData.CookbookID, sender1, "sword")
+				item := keep.GenItem(cbData.CookbookID, account1, "sword")
 				err = tci.PlnK.SetItem(tci.Ctx, *item)
 				require.True(t, err == nil)
 
-				msg := msgs.NewMsgSendItems([]string{item.ID}, sender1, sender2)
+				msg := msgs.NewMsgSendItems([]string{item.ID}, account1, account2)
 				_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
 
 				if !tc.shouldFailSendItems {
@@ -499,7 +556,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test send coins after coin lock
 			if tc.testSendCoins {
-				err = keep.SendCoins(tci.PlnK, tci.Ctx, sender1, sender2, types.NewPylon(100))
+				err = keep.SendCoins(tci.PlnK, tci.Ctx, account1, account2, types.NewPylon(100))
 
 				if !tc.shouldFailSendCoins {
 					require.True(t, err == nil)
@@ -523,7 +580,7 @@ func TestCoinLock(t *testing.T) {
 
 				msg := msgs.NewMsgExecuteRecipe(
 					pylonInputRecipeData.RecipeID,
-					sender1,
+					account1,
 					[]string{},
 				)
 				_, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
@@ -537,18 +594,18 @@ func TestCoinLock(t *testing.T) {
 
 			// test fulfill trade coin unlock
 			if tc.testCreateTradeLock && tc.testFulfillTrade {
-				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				ffMsg := msgs.NewMsgFulfillTrade(
-					ctRespData.TradeID,
-					sender2,
-					tc.testFulfillTradeInputItemIDs,
+					tradeData.TradeID,
+					account2,
+					tc.fulfillTradeInputItemIDs,
 				)
 				_, err = HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
 
 				require.True(t, err == nil)
 
-				lcAfterFulfillTrade := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfterFulfillTrade := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				lcDiff := lcFirst.Amount.Sort().Sub(lcAfterFulfillTrade.Amount.Sort())
 
@@ -558,9 +615,9 @@ func TestCoinLock(t *testing.T) {
 
 			// test check execution coin unlock
 			if tc.testExecuteRecipeLock && tc.testCheckExecution {
-				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcFirst := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, sender1)
+				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, account1)
 				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
 				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
 				checkExecResp := CheckExecutionResponse{}
@@ -569,7 +626,7 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil)
 				require.True(t, checkExecResp.Status == "Success")
 
-				lcAfter := tci.PlnK.GetLockedCoin(tci.Ctx, sender1)
+				lcAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				lcDiff := lcFirst.Amount.Sort().Sub(lcAfter.Amount.Sort())
 
