@@ -24,11 +24,8 @@ type FulfillTradeTestCase struct {
 	inputItemName  string
 	wrongCBFulfill bool
 
-	coinInputList types.CoinInputList
-
-	hasOutputCoin    bool
-	outputCoinName   string
-	outputCoinAmount int64
+	coinInputList    types.CoinInputList
+	tradeOutputCoins sdk.Coins
 
 	hasOutputItem  bool
 	outputItemName string
@@ -40,6 +37,8 @@ type FulfillTradeTestCase struct {
 
 	pylonsLLCDistribution int64
 	cbOwnerDistribution   int64
+	tradeCreatorDiff      int64
+	tradeFulfillerDiff    int64
 }
 
 func TestFulfillTradeViaCLI(originT *originT.T) {
@@ -51,14 +50,14 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			extraInfo:             "TESTTRD_FulfillTrade__001_TC1",
 			hasInputItem:          false,
 			coinInputList:         types.GenCoinInputList("node0token", 200),
-			hasOutputCoin:         true,
-			outputCoinName:        "pylon",
-			outputCoinAmount:      100,
+			tradeOutputCoins:      types.NewPylon(100),
 			hasOutputItem:         false,
 			expectedStatus:        "Success",
 			expectedMessage:       "successfully fulfilled the trade",
 			expectedRetryErrMsg:   "this trade is already completed",
 			pylonsLLCDistribution: 10, // there's no item here and all the fee goes to pylons LLC
+			tradeCreatorDiff:      -100,
+			tradeFulfillerDiff:    90,
 		},
 		{
 			name:                  "item->coin fullfill trade test", // item-coin fulfill trade test
@@ -66,22 +65,22 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			hasInputItem:          true,
 			inputItemName:         "TESTITEM_FulfillTrade__001_TC2",
 			coinInputList:         nil,
-			hasOutputCoin:         true,
-			outputCoinName:        "pylon",
-			outputCoinAmount:      100,
+			tradeOutputCoins:      types.NewPylon(100),
 			hasOutputItem:         false,
 			expectedStatus:        "Success",
 			expectedMessage:       "successfully fulfilled the trade",
 			expectedRetryErrMsg:   "this trade is already completed",
 			pylonsLLCDistribution: 1,
 			cbOwnerDistribution:   9,
+			tradeCreatorDiff:      -100,
+			tradeFulfillerDiff:    90,
 		},
 		{
 			name:                  "coin->item fullfill trade test", // coin-item fulfill trade test
 			extraInfo:             "TESTTRD_FulfillTrade__001_TC3",
 			hasInputItem:          false,
 			coinInputList:         types.GenCoinInputList("pylon", 200),
-			hasOutputCoin:         false,
+			tradeOutputCoins:      nil,
 			hasOutputItem:         true,
 			outputItemName:        "TESTITEM_FulfillTrade__001_TC3",
 			expectedStatus:        "Success",
@@ -89,6 +88,8 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedRetryErrMsg:   "this trade is already completed",
 			pylonsLLCDistribution: 2,
 			cbOwnerDistribution:   18,
+			tradeCreatorDiff:      180,
+			tradeFulfillerDiff:    -200,
 		},
 		{
 			name:                  "item->item fullfill trade test", // item-item fulfill trade test
@@ -96,7 +97,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			hasInputItem:          true,
 			inputItemName:         "TESTITEM_FulfillTrade__001_TC4_INPUT",
 			coinInputList:         types.GenCoinInputList("pylon", 200),
-			hasOutputCoin:         false,
+			tradeOutputCoins:      nil,
 			hasOutputItem:         true,
 			outputItemName:        "TESTITEM_FulfillTrade__001_TC4_OUTPUT",
 			expectedStatus:        "Success",
@@ -104,6 +105,8 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			expectedRetryErrMsg:   "this trade is already completed",
 			pylonsLLCDistribution: 2,
 			cbOwnerDistribution:   18,
+			tradeCreatorDiff:      180,
+			tradeFulfillerDiff:    -200,
 		},
 		{
 			name:          "trade unordered coin input test",
@@ -114,15 +117,15 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 				types.CoinInput{Coin: "stake", Count: 100},
 				types.CoinInput{Coin: "node0token", Count: 100},
 			},
-			hasOutputCoin:         true,
-			outputCoinName:        "pylon",
-			outputCoinAmount:      100,
+			tradeOutputCoins:      types.NewPylon(100),
 			hasOutputItem:         false,
 			expectedStatus:        "Success",
 			expectedMessage:       "successfully fulfilled the trade",
 			expectedRetryErrMsg:   "this trade is already completed",
 			pylonsLLCDistribution: 1,
 			cbOwnerDistribution:   9,
+			tradeCreatorDiff:      -100,
+			tradeFulfillerDiff:    90,
 		},
 		{
 			name:             "same item with different cookbook id fulfill trade test",
@@ -131,9 +134,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			inputItemName:    "TESTITEM_FulfillTrade__001_TC6_INPUT",
 			wrongCBFulfill:   true,
 			coinInputList:    nil,
-			hasOutputCoin:    true,
-			outputCoinName:   "pylon",
-			outputCoinAmount: 100,
+			tradeOutputCoins: types.NewPylon(100),
 			hasOutputItem:    false,
 			desiredError:     "the sender doesn't have the trade item attributes",
 		},
@@ -166,6 +167,10 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	tradeCreatorKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
 	MockAccount(tradeCreatorKey, t) // mock account with initial balance
 	// FaucetGameCoins(tradeCreatorKey, tc.CoinOutputs, t)
+	tradeCreatorAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
+	tradeCreatorSdkAddress, err := sdk.AccAddressFromBech32(tradeCreatorAddr)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	tradeCreatorAccInfo := inttestSDK.GetAccountInfoFromAddr(tradeCreatorSdkAddress.String(), t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {
@@ -178,7 +183,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		mCB.ID,
 		tc.coinInputList,
 		tc.hasInputItem, tc.inputItemName,
-		tc.hasOutputCoin, tc.outputCoinName, tc.outputCoinAmount,
+		tc.tradeOutputCoins,
 		tc.hasOutputItem, outputItemID,
 		fmt.Sprintf("%s%d", tc.extraInfo, time.Now().Unix()),
 		t)
@@ -194,6 +199,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	tradeFulfillerAddr := inttestSDK.GetAccountAddr(tradeFulfillerKey, t)
 	tradeFulfillerSdkAddr, err := sdk.AccAddressFromBech32(tradeFulfillerAddr)
 	t.MustNil(err, "error converting string address to AccAddress struct")
+	tradeFulfillerAccInfo := inttestSDK.GetAccountInfoFromAddr(tradeFulfillerSdkAddr.String(), t)
 
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
@@ -271,6 +277,29 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
 	}
 
-	// TODO should check also trade fufiller change
-	// TODO should check also trade creator change
+	if tc.tradeCreatorDiff != 0 {
+		accInfo := inttestSDK.GetAccountInfoFromAddr(tradeCreatorSdkAddress.String(), t)
+		originPylonAmount := tradeCreatorAccInfo.Coins.AmountOf(types.Pylon)
+		balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.tradeCreatorDiff))
+		t.WithFields(testing.Fields{
+			"creator_key":     tradeCreatorKey,
+			"creator_address": tradeCreatorSdkAddress.String(),
+			"origin_amount":   originPylonAmount.Int64(),
+			"target_change":   tc.tradeCreatorDiff,
+			"actual_amount":   accInfo.Coins.AmountOf(types.Pylon).Int64(),
+		}).MustTrue(balanceOk, "trade creator balance change should be correct")
+	}
+
+	if tc.tradeFulfillerDiff != 0 {
+		accInfo := inttestSDK.GetAccountInfoFromAddr(tradeFulfillerSdkAddr.String(), t)
+		originPylonAmount := tradeFulfillerAccInfo.Coins.AmountOf(types.Pylon)
+		balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.tradeFulfillerDiff))
+		t.WithFields(testing.Fields{
+			"fulfiller_key":     tradeFulfillerKey,
+			"fulfiller_address": tradeFulfillerSdkAddr.String(),
+			"origin_amount":     originPylonAmount.Int64(),
+			"target_change":     tc.tradeFulfillerDiff,
+			"actual_amount":     accInfo.Coins.AmountOf(types.Pylon).Int64(),
+		}).MustTrue(balanceOk, "trade fulfiller balance change should be correct")
+	}
 }

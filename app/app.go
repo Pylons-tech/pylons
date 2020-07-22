@@ -127,6 +127,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 		pylons.KeyPylonsItem,
 		pylons.KeyPylonsExecution,
 		pylons.KeyPylonsTrade,
+		pylons.KeyPylonsLockedCoin,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(params.TStoreKey)
@@ -217,6 +218,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 		app.keys[pylons.KeyPylonsItem],
 		app.keys[pylons.KeyPylonsExecution],
 		app.keys[pylons.KeyPylonsTrade],
+		app.keys[pylons.KeyPylonsLockedCoin],
 		app.cdc,
 	)
 	app.mm = module.NewManager(

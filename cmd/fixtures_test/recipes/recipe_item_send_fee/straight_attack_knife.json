@@ -5,7 +5,7 @@
       "CoinOutputs":[],
       "ItemOutputs":[
           {
-              "Ref": "./recipes/recipe_item_send_fee_test/item_output/straight_attack_knife.json"
+              "Ref": "./recipes/recipe_item_send_fee/item_output/straight_attack_knife.json"
           }
       ]
   },
@@ -16,9 +16,9 @@
       }
   ],
   "ExtraInfo":"",
-  "Sender":"account2",
+  "Sender":"itemfee_account1",
   "Name": "Knife Generation Recipe",
-  "CookbookID": "recipe_item_send_fee_test-1589853709",
+  "CookbookID": "recipe-item-send-fee-1589853709",
   "Description": "this has to meet character limits lol",
   "BlockInterval":"0"
 }

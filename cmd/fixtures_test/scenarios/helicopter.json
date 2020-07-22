@@ -1,8 +1,86 @@
 [
     {
+        "ID": "CREATE_HELI_ACCOUNT1",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "heli_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_HELI_ACCOUNT1",
+        "runAfter": {
+          "precondition": ["CREATE_HELI_ACCOUNT1"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "heli_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "heli_account1",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_HELI_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "heli_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_HELI_ACCOUNT2",
+        "runAfter": {
+          "precondition": ["CREATE_HELI_ACCOUNT2"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "heli_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "heli_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
         "ID": "CREATE_HELICOPTER_COOKBOOK",
         "runAfter": {
-            "precondition": [],
+            "precondition": ["GET_PYLONS_HELI_ACCOUNT1"],
             "blockWait": 0
         },
         "action": "create_cookbook",
@@ -13,7 +91,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "cookbooks": ["helicopter"]
                 }
             ]
@@ -22,7 +100,7 @@
     {
         "ID": "CREATE_HELI_KNIFE_LV1",        
         "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -33,7 +111,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Helicopter's Knife lv1" }
@@ -46,7 +124,7 @@
     {
         "ID": "CREATE_HELI_KNIFE_LV2",        
         "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -57,7 +135,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Helicopter's Knife lv2" }
@@ -70,7 +148,7 @@
     {
         "ID": "CREATE_HELI_KNIFE_LV3",        
         "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -81,7 +159,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Helicopter's Knife lv3" }
@@ -94,7 +172,7 @@
     {
         "ID": "CREATE_HELI_SHIELD_LV1",        
         "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -105,7 +183,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Helicopter's Shield lv1" }
@@ -118,7 +196,7 @@
     {
         "ID": "CREATE_HELI_SHIELD_LV2",        
         "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -129,7 +207,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Helicopter's Shield lv2" }
@@ -142,7 +220,7 @@
     {
         "ID": "CREATE_ADVENTURER_LV1",        
         "runAfter": {
-            "precondition": ["CREATE_HELICOPTER_COOKBOOK"],
+            "precondition": ["CREATE_HELICOPTER_COOKBOOK", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -153,7 +231,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Adventurer" }
@@ -177,7 +255,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Helicopter's Straight Attack Knife Generation Recipe"]
                 }
             ]
@@ -197,7 +275,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Helicopter's Coin Generation Recipe"]
                 }
             ]
@@ -217,7 +295,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Adventurer Upgrade Recipe"]
                 }
             ]
@@ -237,7 +315,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Helicopter's sell two knives Recipe"]
                 }
             ]
@@ -257,7 +335,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Helicopter's merge two shields Recipe"]
                 }
             ]
@@ -277,7 +355,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Helicopter's Invalid Program Coin Generation Recipe"]
                 }
             ]
@@ -297,7 +375,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "heli_account1",
                     "recipes": ["Helicopter's Hlg Coin Generation From Input Recipe"]
                 }
             ]
@@ -306,7 +384,7 @@
     {
         "ID": "EXECUTE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",        
         "runAfter": {
-            "precondition": ["CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE"],
+            "precondition": ["CREATE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -318,7 +396,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Helicopter's Straight Attack Knife" }
@@ -331,7 +409,7 @@
     {
         "ID": "EXECUTE_HELI_COIN_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_HELI_COIN_RECIPE"],
+            "precondition": ["CREATE_HELI_COIN_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -343,7 +421,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "coins": [
                         {
                             "denom": "helicoin",
@@ -357,7 +435,7 @@
     {
         "ID": "EXECUTE_ADVENTURER_UPDATE_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_ADVENTURER_LV1", "CREATE_ADVENTURER_UPDATE_RECIPE"],
+            "precondition": ["CREATE_ADVENTURER_LV1", "CREATE_ADVENTURER_UPDATE_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -369,7 +447,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Adventurer",  "LastName": "Upgraded Adventurer" },
@@ -385,9 +463,8 @@
         "ID": "EXECUTE_SELL_TWO_KNIVES_PROGRAM_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_HELI_KNIFE_LV1", 
-                "CREATE_HELI_KNIFE_LV2",
-                "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE"
+                "CREATE_HELI_KNIFE_LV1", "CREATE_HELI_KNIFE_LV2",
+                "CREATE_SELL_TWO_KNIVES_PROGRAM_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"
             ],
             "blockWait": 0
         },
@@ -400,7 +477,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "coins": [
                         {
                             "denom": "hllgcoin",
@@ -415,9 +492,8 @@
         "ID": "EXECUTE_MERGE_TWO_SHIELDS_PROGRAM_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_HELI_SHIELD_LV1", 
-                "CREATE_HELI_SHIELD_LV2",
-                "CREATE_MERGE_TWO_SHIELDS_PROGRAM_RECIPE"
+                "CREATE_HELI_SHIELD_LV1", "CREATE_HELI_SHIELD_LV2",
+                "CREATE_MERGE_TWO_SHIELDS_PROGRAM_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"
             ],
             "blockWait": 0
         },
@@ -430,7 +506,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "HShield",  "LastName": "Program Merged Shield" },
@@ -445,9 +521,7 @@
     {
         "ID": "EXECUTE_HELI_COIN_INVALID_PROGRAM_RECIPE",
         "runAfter": {
-            "precondition": [
-                "CREATE_HELI_COIN_INVALID_PROGRAM_RECIPE"
-            ],
+            "precondition": ["CREATE_HELI_COIN_INVALID_PROGRAM_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -463,8 +537,7 @@
         "ID": "EXECUTE_HLG_COIN_PROGRAM_WITH_INPUT_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_HELI_KNIFE_LV3",
-                "CREATE_HLG_COIN_PROGRAM_WITH_INPUT_RECIPE"
+                "CREATE_HELI_KNIFE_LV3", "CREATE_HLG_COIN_PROGRAM_WITH_INPUT_RECIPE", "GET_PYLONS_HELI_ACCOUNT2"
             ],
             "blockWait": 0
         },
@@ -477,7 +550,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "heli_account2",
                     "coins": [
                         {
                             "denom": "hlgcoin",

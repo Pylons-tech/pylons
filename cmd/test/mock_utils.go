@@ -333,7 +333,7 @@ func MockDetailedTradeGUID(
 	cbID string,
 	inputCoinList types.CoinInputList,
 	hasInputItem bool, inputItemName string,
-	hasOutputCoin bool, outputCoinName string, outputCoinAmount int64,
+	outputCoins sdk.Coins,
 	hasOutputItem bool, outputItemID string,
 	extraInfo string,
 	t *testing.T,
@@ -345,12 +345,6 @@ func MockDetailedTradeGUID(
 	inputItemList := types.GenTradeItemInputList(cbID, []string{inputItemName})
 	if !hasInputItem {
 		inputItemList = nil
-	}
-	var outputCoins sdk.Coins
-	if !hasOutputCoin {
-		outputCoins = nil
-	} else {
-		outputCoins = sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
 	}
 	var outputItems types.ItemList
 	if hasOutputItem {
@@ -378,7 +372,7 @@ func MockDetailedTradeGUID(
 	}
 
 	GetTxHandleResult(txhash, t)
-	// check trade created after 1 block
+	// check trade created after transaction is mined
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.WithFields(testing.Fields{
 		"extra_info": extraInfo,

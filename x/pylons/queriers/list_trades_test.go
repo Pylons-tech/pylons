@@ -30,7 +30,7 @@ func TestListTrades(t *testing.T) {
 		sender1,
 	)
 
-	require.True(t, err == nil)
+	require.True(t, err == nil, err)
 
 	_, err = handlers.MockTrade(
 		tci,

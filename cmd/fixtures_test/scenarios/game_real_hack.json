@@ -1,8 +1,86 @@
 [
+    {
+        "ID": "CREATE_GAMERH_ACCOUNT1",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "gamerh_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_GAMERH_ACCOUNT1",
+        "runAfter": {
+          "precondition": ["CREATE_GAMERH_ACCOUNT1"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "gamerh_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "gamerh_account1",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_GAMERH_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "gamerh_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_GAMERH_ACCOUNT2",
+        "runAfter": {
+          "precondition": ["CREATE_GAMERH_ACCOUNT2"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "gamerh_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "gamerh_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
   {
       "ID": "CREATE_GAMEREAL_COOKBOOK",
       "runAfter": {
-          "precondition": [],
+          "precondition": ["GET_PYLONS_GAMERH_ACCOUNT1"],
           "blockWait": 0
       },
       "action": "create_cookbook",
@@ -13,7 +91,7 @@
           },
           "property": [
               {
-                  "owner": "account2",
+                  "owner": "gamerh_account1",
                   "cookbooks": ["Game Real"]
               }
           ]
@@ -22,7 +100,7 @@
   {
       "ID": "CREATE_GAMEHACK_COOKBOOK",
       "runAfter": {
-          "precondition": [],
+          "precondition": ["GET_PYLONS_GAMERH_ACCOUNT2"],
           "blockWait": 0
       },
       "action": "create_cookbook",
@@ -33,7 +111,7 @@
           },
           "property": [
               {
-                  "owner": "account2",
+                  "owner": "gamerh_account2",
                   "cookbooks": ["Game Hack"]
               }
           ]
@@ -53,7 +131,7 @@
           },
           "property": [
               {
-                  "owner": "account2",
+                  "owner": "gamerh_account1",
                   "recipes": ["GameReal's issue gold recipe"]
               }
           ]
@@ -73,7 +151,7 @@
           },
           "property": [
               {
-                  "owner": "account2",
+                  "owner": "gamerh_account2",
                   "recipes": ["GameHack's issue gold recipe"]
               }
           ]

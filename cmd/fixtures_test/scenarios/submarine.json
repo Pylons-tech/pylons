@@ -1,8 +1,86 @@
 [
     {
+        "ID": "CREATE_SUBMARINE_ACCOUNT1",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "submarine_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_SUBMARINE_ACCOUNT1",
+        "runAfter": {
+          "precondition": ["CREATE_SUBMARINE_ACCOUNT1"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "submarine_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "submarine_account1",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_SUBMARINE_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "submarine_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_SUBMARINE_ACCOUNT2",
+        "runAfter": {
+          "precondition": ["CREATE_SUBMARINE_ACCOUNT2"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "submarine_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "submarine_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
         "ID": "CREATE_SUBMARINE_COOKBOOK",
         "runAfter": {
-            "precondition": [],
+            "precondition": ["GET_PYLONS_SUBMARINE_ACCOUNT1"],
             "blockWait": 0
         },
         "action": "create_cookbook",
@@ -13,7 +91,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "submarine_account1",
                     "cookbooks": ["submarine"]
                 }
             ]
@@ -22,7 +100,7 @@
     {
         "ID": "KNIFE_ITEM_CREATION",
         "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -33,7 +111,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Knife" }
@@ -46,7 +124,7 @@
     {
         "ID": "KNIFE2_ITEM_CREATION",
         "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -57,7 +135,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Knife2" }
@@ -70,7 +148,7 @@
     {
         "ID": "SHIELD_ITEM_CREATION",
         "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -81,7 +159,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Shield" }
@@ -105,7 +183,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "submarine_account1",
                     "recipes": ["Straight Attack Knife Generation Recipe"]
                 }
             ]
@@ -125,7 +203,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "submarine_account1",
                     "recipes": ["Delayed Attack Knife Generation Recipe"]
                 }
             ]
@@ -145,7 +223,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "submarine_account1",
                     "recipes": ["Submarine Coin Generation Recipe"]
                 }
             ]
@@ -165,7 +243,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "submarine_account1",
                     "recipes": ["Knife Shield Generation Recipe"]
                 }
             ]
@@ -185,7 +263,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "submarine_account1",
                     "recipes": ["Knife buyer recipe from submcoin"]
                 }
             ]
@@ -206,7 +284,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Straight Attack Knife" }
@@ -262,7 +340,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Knife Shield" }
@@ -287,7 +365,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Delayed Attack Knife" }
@@ -300,7 +378,7 @@
     {
         "ID": "EXECUTE_SUBMARINE_COIN_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COIN_RECIPE"],
+            "precondition": ["CREATE_SUBMARINE_COIN_RECIPE", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -312,7 +390,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "coins": [
                         {
                             "denom": "submcoin",
@@ -338,7 +416,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "submarine_account2",
                     "coins": [
                         {
                             "denom": "submcoin",

@@ -1,0 +1,175 @@
+[
+    {
+        "ID": "CREATE_SENDITEM_ACCOUNT1",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "senditem_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_SENDITEM_ACCOUNT1",
+        "runAfter": {
+          "precondition": ["CREATE_SENDITEM_ACCOUNT1"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "senditem_account1",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "senditem_account1",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_SENDITEM_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "create_account",
+        "paramsRef": "senditem_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          }
+        }
+    },
+    {
+        "ID": "GET_PYLONS_SENDITEM_ACCOUNT2",
+        "runAfter": {
+          "precondition": ["CREATE_SENDITEM_ACCOUNT2"],
+          "blockWait": 0
+        },
+        "action": "get_pylons",
+        "paramsRef": "senditem_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "senditem_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+  {
+      "ID": "CREATE_SENDITEM_COOKBOOK",
+      "runAfter": {
+          "precondition": ["GET_PYLONS_SENDITEM_ACCOUNT1"],
+          "blockWait": 0
+      },
+      "action": "create_cookbook",
+      "paramsRef": "./cookbooks/send_items_test.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "senditem_account1",
+                  "cookbooks": ["send_items_test"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_ITEM1",        
+      "runAfter": {
+          "precondition": ["CREATE_SENDITEM_COOKBOOK", "GET_PYLONS_SENDITEM_ACCOUNT2"],
+          "blockWait": 0
+      },
+      "action": "fiat_item",
+      "paramsRef": "./items/send_items_test/item1.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "senditem_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "send_items_test_item1" }
+                      }
+                  ]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_ITEM2",
+      "runAfter": {
+          "precondition": ["CREATE_SENDITEM_COOKBOOK", "GET_PYLONS_SENDITEM_ACCOUNT2"],
+          "blockWait": 0
+      },
+      "action": "fiat_item",
+      "paramsRef": "./items/send_items_test/item2.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "senditem_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "send_items_test_item2" }
+                      }
+                  ]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "SEND_ITEMS",        
+      "runAfter": {
+          "precondition": ["CREATE_ITEM1", "CREATE_ITEM2"],
+          "blockWait": 0
+      },
+      "action": "send_items",
+      "paramsRef": "./send_items_test/send_items.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "senditem_account1",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "send_items_test_item1" }
+                      },
+                      {
+                          "stringValues": { "Name": "send_items_test_item2" }
+                      }
+                  ]
+              }
+          ]
+      }
+  }
+]
