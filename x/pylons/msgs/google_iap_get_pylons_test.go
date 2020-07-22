@@ -1,6 +1,7 @@
 package msgs
 
 import (
+	"encoding/base64"
 	"strings"
 	"testing"
 
@@ -43,7 +44,8 @@ func TestGoogleIAPSignatureVerification(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, tc.receiptData, tc.signature, tc.sender)
+			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
+			msg := NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, tc.sender)
 			err := msg.ValidateSignatureLocally()
 			if !tc.showError {
 				require.True(t, err == nil, err)

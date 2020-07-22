@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/base64"
 	"strings"
 	"testing"
 
@@ -57,10 +58,11 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
+			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
 			msg := msgs.NewMsgGoogleIAPGetPylons(
 				tc.productID,
 				tc.purchaseToken,
-				tc.receiptData,
+				receiptDataBase64,
 				tc.signature,
 				tc.fromAddress)
 			_, err := HandlerMsgGoogleIAPGetPylons(tci.Ctx, tci.PlnK, msg)

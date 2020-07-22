@@ -16,21 +16,21 @@ import (
 
 // MsgGoogleIAPGetPylons defines a GetPylons message
 type MsgGoogleIAPGetPylons struct {
-	ProductID     string
-	PurchaseToken string
-	ReceiptData   string
-	Signature     string
-	Requester     sdk.AccAddress
+	ProductID         string
+	PurchaseToken     string
+	ReceiptDataBase64 string
+	Signature         string
+	Requester         sdk.AccAddress
 }
 
 // NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptData, Signature string, requester sdk.AccAddress) MsgGoogleIAPGetPylons {
+func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester sdk.AccAddress) MsgGoogleIAPGetPylons {
 	return MsgGoogleIAPGetPylons{
-		ProductID:     ProductID,
-		PurchaseToken: PurchaseToken,
-		ReceiptData:   ReceiptData,
-		Signature:     Signature,
-		Requester:     requester,
+		ProductID:         ProductID,
+		PurchaseToken:     PurchaseToken,
+		ReceiptDataBase64: ReceiptDataBase64,
+		Signature:         Signature,
+		Requester:         requester,
 	}
 }
 
@@ -42,6 +42,7 @@ func (msg MsgGoogleIAPGetPylons) Type() string { return "get_pylons" }
 
 // ValidateSignatureLocally is function for testing signature on local
 func (msg MsgGoogleIAPGetPylons) ValidateSignatureLocally() error {
+	fmt.Println("ValidateSignatureLocally")
 	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.GoogleIAPPubKey)
 	if err != nil {
 		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
@@ -51,10 +52,13 @@ func (msg MsgGoogleIAPGetPylons) ValidateSignatureLocally() error {
 		return err
 	}
 	pub := re.(*rsa.PublicKey)
-	text := []byte(msg.ReceiptData)
+	receiptData, err := base64.StdEncoding.DecodeString(msg.ReceiptDataBase64)
+	if err != nil {
+		return err
+	}
 
 	h := sha1.New()
-	_, err = h.Write(text)
+	_, err = h.Write(receiptData)
 	if err != nil {
 		return err
 	}
@@ -62,11 +66,13 @@ func (msg MsgGoogleIAPGetPylons) ValidateSignatureLocally() error {
 
 	ds, _ := base64.StdEncoding.DecodeString(msg.Signature)
 	err = rsa.VerifyPKCS1v15(pub, crypto.SHA1, digest, ds)
+	fmt.Println("ValidateSignatureLocally", err)
 	return err
 }
 
 // ValidateBasic is a function to validate MsgGoogleIAPGetPylons msg
 func (msg MsgGoogleIAPGetPylons) ValidateBasic() error {
+	fmt.Println("ValidateBasic")
 
 	if msg.Requester.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
@@ -79,7 +85,13 @@ func (msg MsgGoogleIAPGetPylons) ValidateBasic() error {
 
 	// We should contact google team to check if this is correct use
 	var jsonData map[string]interface{}
-	err := json.Unmarshal([]byte(msg.ReceiptData), &jsonData)
+
+	receiptData, err := base64.StdEncoding.DecodeString(msg.ReceiptDataBase64)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(receiptData, &jsonData)
 	if err != nil {
 		return err
 	}
