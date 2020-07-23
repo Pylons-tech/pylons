@@ -1,64 +1,11 @@
 [
     {
-        "ID": "CREATE_GAMERH_ACCOUNT1",
+        "ID": "MOCK_ACCOUNT_GAMERH_ACCOUNT2",
         "runAfter": {
           "precondition": [],
           "blockWait": 0
         },
-        "action": "create_account",
-        "paramsRef": "gamerh_account1",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          }
-        }
-    },
-    {
-        "ID": "GET_PYLONS_GAMERH_ACCOUNT1",
-        "runAfter": {
-          "precondition": ["CREATE_GAMERH_ACCOUNT1"],
-          "blockWait": 0
-        },
-        "action": "get_pylons",
-        "paramsRef": "gamerh_account1",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          },
-          "property": [
-            {
-              "owner": "gamerh_account1",
-              "coins": [
-                {
-                  "denom": "pylon",
-                  "amount": 55000
-                }
-              ]
-            }
-          ]
-        }
-    },
-    {
-        "ID": "CREATE_GAMERH_ACCOUNT2",
-        "runAfter": {
-          "precondition": [],
-          "blockWait": 0
-        },
-        "action": "create_account",
-        "paramsRef": "gamerh_account2",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          }
-        }
-    },
-    {
-        "ID": "GET_PYLONS_GAMERH_ACCOUNT2",
-        "runAfter": {
-          "precondition": ["CREATE_GAMERH_ACCOUNT2"],
-          "blockWait": 0
-        },
-        "action": "get_pylons",
+        "action": "mock_account",
         "paramsRef": "gamerh_account2",
         "output": {
           "txResult": {
@@ -80,10 +27,10 @@
   {
       "ID": "CREATE_GAMEREAL_COOKBOOK",
       "runAfter": {
-          "precondition": ["GET_PYLONS_GAMERH_ACCOUNT1"],
+          "precondition": [],
           "blockWait": 0
       },
-      "action": "create_cookbook",
+      "action": "mock_cookbook",
       "paramsRef": "./cookbooks/game_real.json",
       "output": {
           "txResult": {
@@ -100,7 +47,7 @@
   {
       "ID": "CREATE_GAMEHACK_COOKBOOK",
       "runAfter": {
-          "precondition": ["GET_PYLONS_GAMERH_ACCOUNT2"],
+          "precondition": ["MOCK_ACCOUNT_GAMERH_ACCOUNT2"],
           "blockWait": 0
       },
       "action": "create_cookbook",

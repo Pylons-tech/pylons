@@ -1,0 +1,13 @@
+{
+    "ItemInput": {
+        "Doubles":null,
+        "Longs":null,
+        "Strings":[
+            {
+                "Key":"Name",
+                "Value":"Trading Knife v7"
+            }
+        ]
+    },
+    "CookbookID": "tradecookbook-1589853709"
+}
