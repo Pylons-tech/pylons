@@ -42,18 +42,25 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 			tryReuseOrderID: true,
 			tryReuseErr:     "the iap order ID is already being used",
 		},
-		"wrong signature check": {
+		"wrong signature base64 encoding": {
 			productID:     "pylons_1000",
 			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
 			receiptData:   `{"productId":"pylons_1000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`,
+			// Invalid base64 formatting
+			signature:    "Invalid signature",
+			fromAddress:  sender3,
+			showError:    true,
+			desiredError: "msg signature base64 decoding failure",
+		},
+		"wrong signature check": {
+			productID:     "pylons_55000",
+			purchaseToken: "hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o",
+			receiptData:   `{"productId":"pylons_55000","purchaseToken":"hafokgmjfkcpdnbffanijckj.AO-J1OxXkrKdM8q14T49Qo5a723VG_8h_4MCY_M2Tqn91L0e7FjiVXsZ2Qxc1SnvoFzHN9jBCJpjZqD4ErYIquMG6Li_jUfcuKuXti_wsa7r48eWNA1Oh0o","purchaseTime":1595031050407,"developerPayload":null}`,
 			// Correct signature
-			signature:       "Invalid signature",
-			fromAddress:     sender3,
-			showError:       true,
-			desiredError:    "crypto/rsa: verification error",
-			reqAmount:       1000,
-			tryReuseOrderID: false,
-			tryReuseErr:     "",
+			signature:    "HEo0RYQeH0+8nmYa6ETKP9f3S/W/cUuQTBme7VSh3Lzm+1+1GwJIl1pdF1dh32YGhd3BtyMoLVGzr9ZajfHhhznIvbowS/XIlyJJCE6dI+zg68mKo5rDt0wB2BY8azk0+WCkc5XT5y8biRNXe5RyvmuqYKPXmEsgHaYKo6x3mHs6oXrECckKv/c9T9MHCvdAqVFrml9W7K41sRHbpOdFmYnO33bkNITCCaf/C1PDGMVOItxvq7uXi+F0DpjXwXko9AU6L3pK6zDICcD38HblbzumOg6LGsuWCjOw8QwNobYOUNtrdj01fEXqkKhfYzFZcwxM6xsphN38gnO0ksDdyw==",
+			fromAddress:  sender3,
+			showError:    true,
+			desiredError: "crypto/rsa: verification error",
 		},
 	}
 	for testName, tc := range cases {

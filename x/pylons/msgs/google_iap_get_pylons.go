@@ -63,7 +63,10 @@ func (msg MsgGoogleIAPGetPylons) ValidateSignatureLocally() error {
 	}
 	digest := h.Sum(nil)
 
-	ds, _ := base64.StdEncoding.DecodeString(msg.Signature)
+	ds, err := base64.StdEncoding.DecodeString(msg.Signature)
+	if err != nil {
+		return fmt.Errorf("msg signature base64 decoding failure: %s", err.Error())
+	}
 	err = rsa.VerifyPKCS1v15(pub, crypto.SHA1, digest, ds)
 	return err
 }
