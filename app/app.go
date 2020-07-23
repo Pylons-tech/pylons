@@ -122,7 +122,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 		supply.StoreKey, distr.StoreKey, slashing.StoreKey, params.StoreKey,
 		// pylons keys
 		pylons.KeyPylonsEntity,
-		pylons.KeyGoogleIAPOrderEntity,
+		pylons.KeyGoogleIAPOrder,
 		pylons.KeyPylonsCookbook,
 		pylons.KeyPylonsRecipe,
 		pylons.KeyPylonsItem,
@@ -213,7 +213,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
 		app.keys[pylons.KeyPylonsEntity],
-		app.keys[pylons.KeyGoogleIAPOrderEntity],
+		app.keys[pylons.KeyGoogleIAPOrder],
 		app.keys[pylons.KeyPylonsCookbook],
 		app.keys[pylons.KeyPylonsRecipe],
 		app.keys[pylons.KeyPylonsItem],

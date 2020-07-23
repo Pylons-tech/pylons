@@ -23,11 +23,11 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new Keeper
-func NewKeeper(coinKeeper bank.Keeper, entityKey, googleIAPOrderKey, cookbookKey, recipeKey, itemKey, execKey sdk.StoreKey, tradeKey sdk.StoreKey, lockedCoinKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, entityKey, gIAPOrderKey, cookbookKey, recipeKey, itemKey, execKey sdk.StoreKey, tradeKey sdk.StoreKey, lockedCoinKey sdk.StoreKey, cdc *codec.Codec) Keeper {
 	return Keeper{
 		CoinKeeper:        coinKeeper,
 		EntityKey:         entityKey,
-		GoogleIAPOrderKey: googleIAPOrderKey,
+		GoogleIAPOrderKey: gIAPOrderKey,
 		ExecutionKey:      execKey,
 		CookbookKey:       cookbookKey,
 		RecipeKey:         recipeKey,

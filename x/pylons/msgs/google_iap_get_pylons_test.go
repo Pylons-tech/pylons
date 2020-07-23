@@ -46,7 +46,7 @@ func TestGoogleIAPSignatureVerification(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
 			msg := NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, tc.sender)
-			err := msg.ValidateSignatureLocally()
+			err := msg.ValidateGoogleIAPSignature()
 			if !tc.showError {
 				require.True(t, err == nil, err)
 			} else {

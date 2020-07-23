@@ -18,7 +18,7 @@ import (
 
 // query endpoints supported by the nameservice Querier
 const (
-	TxGoogleIAPGPRequesterKey = "gp_requester"
+	TxGoogleIAPGPRequesterKey = "google_iap_gp_requester"
 )
 
 // GoogleIAPGetPylonsTxBuilder returns the fixtures which can be used to create a get pylons transaction
@@ -40,8 +40,6 @@ func GoogleIAPGetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, st
 			"your.receipt.data",
 			"your.puchase.signature",
 			addr)
-
-		// sigs := []auth.StdSignature{{}}
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 
@@ -68,7 +66,6 @@ func GoogleIAPGetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, st
 
 // GoogleIAPGPTxBuilder gives all the necessary fixtures for creating a get pylons transaction
 type GoogleIAPGPTxBuilder struct {
-	// MsgJSON is the transaction with nil signature
 	SignMsg     auth.StdSignMsg
 	SignTx      auth.StdTx
 	SignerBytes string

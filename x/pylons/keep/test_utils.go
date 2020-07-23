@@ -67,7 +67,7 @@ func SetupTestCoinInput() TestCoinInput {
 
 	fcKey := sdk.NewKVStoreKey("fee_collection")
 	entKey := sdk.NewKVStoreKey("pylons_entity")
-	googleIAPOrderKey := sdk.NewKVStoreKey("pylons_google_iap_order_key")
+	gIAPOrderKey := sdk.NewKVStoreKey("pylons_google_iap_order")
 	cbKey := sdk.NewKVStoreKey("pylons_cookbook")
 	rcKey := sdk.NewKVStoreKey("pylons_recipe")
 	tdKey := sdk.NewKVStoreKey("pylons_trade")
@@ -83,7 +83,7 @@ func SetupTestCoinInput() TestCoinInput {
 	ms.MountStoreWithDB(keyParams, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(fcKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(entKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(googleIAPOrderKey, sdk.StoreTypeIAVL, db)
+	ms.MountStoreWithDB(gIAPOrderKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(cbKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tdKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(rcKey, sdk.StoreTypeIAVL, db)
@@ -133,12 +133,12 @@ func SetupTestCoinInput() TestCoinInput {
 
 	plnK := NewKeeper(
 		bk,
-		entKey,            // entity
-		googleIAPOrderKey, // google iap order key
-		cbKey,             // cookbook
-		rcKey,             // recipe
-		itKey,             // item
-		execKey,           // exec
+		entKey,       // entity
+		gIAPOrderKey, // google iap order key
+		cbKey,        // cookbook
+		rcKey,        // recipe
+		itKey,        // item
+		execKey,      // exec
 		tdKey,
 		lockedCoinKey,
 		cdc,

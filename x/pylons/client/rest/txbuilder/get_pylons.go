@@ -39,8 +39,6 @@ func GetPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 
 		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr)
 
-		// sigs := []auth.StdSignature{{}}
-
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 
 		if err != nil {
@@ -83,7 +81,6 @@ func GetPrivateKeyFromHex(hexKey string) (*crypto.PrivKeySecp256k1, error) {
 
 // GPTxBuilder gives all the necessary fixtures for creating a get pylons transaction
 type GPTxBuilder struct {
-	// MsgJSON is the transaction with nil signature
 	SignMsg     auth.StdSignMsg
 	SignTx      auth.StdTx
 	SignerBytes string
