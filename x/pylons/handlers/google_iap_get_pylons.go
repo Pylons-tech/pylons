@@ -18,7 +18,6 @@ type GoogleIAPGetPylonsResponse struct {
 
 // HandlerMsgGoogleIAPGetPylons is used to send pylons to requesters after google iap verification
 func HandlerMsgGoogleIAPGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgGoogleIAPGetPylons) (*sdk.Result, error) {
-	fmt.Println("HandlerMsgGoogleIAPGetPylons")
 	err := msg.ValidateBasic()
 
 	if err != nil {
@@ -49,7 +48,6 @@ func HandlerMsgGoogleIAPGetPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	fmt.Println("HandlerMsgGoogleIAPGetPylons end")
 	return marshalJSON(GoogleIAPGetPylonsResponse{
 		Message: "successfully got the pylons",
 		Status:  "Success",

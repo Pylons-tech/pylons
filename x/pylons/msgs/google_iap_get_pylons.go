@@ -42,7 +42,6 @@ func (msg MsgGoogleIAPGetPylons) Type() string { return "get_pylons" }
 
 // ValidateSignatureLocally is function for testing signature on local
 func (msg MsgGoogleIAPGetPylons) ValidateSignatureLocally() error {
-	fmt.Println("ValidateSignatureLocally")
 	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.GoogleIAPPubKey)
 	if err != nil {
 		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
@@ -66,13 +65,11 @@ func (msg MsgGoogleIAPGetPylons) ValidateSignatureLocally() error {
 
 	ds, _ := base64.StdEncoding.DecodeString(msg.Signature)
 	err = rsa.VerifyPKCS1v15(pub, crypto.SHA1, digest, ds)
-	fmt.Println("ValidateSignatureLocally", err)
 	return err
 }
 
 // ValidateBasic is a function to validate MsgGoogleIAPGetPylons msg
 func (msg MsgGoogleIAPGetPylons) ValidateBasic() error {
-	fmt.Println("ValidateBasic")
 
 	if msg.Requester.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())

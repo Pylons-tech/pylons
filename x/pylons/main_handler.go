@@ -16,7 +16,6 @@ import (
 
 // NewHandler returns a handler for "pylons" type messages.
 func NewHandler(keeper keep.Keeper) sdk.Handler {
-	fmt.Println("NewHandler")
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		// set random seed before running handlers
 		rand.Seed(types.RandomSeed(ctx, keeper.GetEntityCount(ctx)))
@@ -30,7 +29,6 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgGetPylons:
 			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
 		case msgs.MsgGoogleIAPGetPylons:
-			fmt.Println("MsgGoogleIAPGetPylons")
 			return handlers.HandlerMsgGoogleIAPGetPylons(ctx, keeper, msg)
 		case msgs.MsgSendPylons:
 			return handlers.HandlerMsgSendPylons(ctx, keeper, msg)
