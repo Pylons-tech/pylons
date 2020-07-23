@@ -1,64 +1,11 @@
 [
     {
-        "ID": "CREATE_ITEMFEE_ACCOUNT1",
+        "ID": "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2",
         "runAfter": {
           "precondition": [],
           "blockWait": 0
         },
-        "action": "create_account",
-        "paramsRef": "itemfee_account1",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          }
-        }
-    },
-    {
-        "ID": "GET_PYLONS_ITEMFEE_ACCOUNT1",
-        "runAfter": {
-          "precondition": ["CREATE_ITEMFEE_ACCOUNT1"],
-          "blockWait": 0
-        },
-        "action": "get_pylons",
-        "paramsRef": "itemfee_account1",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          },
-          "property": [
-            {
-              "owner": "itemfee_account1",
-              "coins": [
-                {
-                  "denom": "pylon",
-                  "amount": 55000
-                }
-              ]
-            }
-          ]
-        }
-    },
-    {
-        "ID": "CREATE_ITEMFEE_ACCOUNT2",
-        "runAfter": {
-          "precondition": [],
-          "blockWait": 0
-        },
-        "action": "create_account",
-        "paramsRef": "itemfee_account2",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          }
-        }
-    },
-    {
-        "ID": "GET_PYLONS_ITEMFEE_ACCOUNT2",
-        "runAfter": {
-          "precondition": ["CREATE_ITEMFEE_ACCOUNT2"],
-          "blockWait": 0
-        },
-        "action": "get_pylons",
+        "action": "mock_account",
         "paramsRef": "itemfee_account2",
         "output": {
           "txResult": {
@@ -76,14 +23,14 @@
             }
           ]
         }
-    },
+  },
   {
       "ID": "CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK",
       "runAfter": {
-          "precondition": ["GET_PYLONS_ITEMFEE_ACCOUNT1"],
+          "precondition": [],
           "blockWait": 0
       },
-      "action": "create_cookbook",
+      "action": "mock_cookbook",
       "paramsRef": "./cookbooks/recipe_item_send_fee.json",
       "output": {
           "txResult": {
@@ -100,7 +47,7 @@
   {
       "ID": "CREATE_ITEM_TRANSFER_FEE_TEST_CHARACTER",  
       "runAfter": {
-          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK", "GET_PYLONS_ITEMFEE_ACCOUNT2"],
+          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK", "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2"],
           "blockWait": 0
       },
       "action": "fiat_item",
@@ -122,29 +69,42 @@
       }
   },
   {
-      "ID": "CREATE_KNIFE_RECIPE",
-      "runAfter": {
-          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK"],
-          "blockWait": 0
-      },
-      "action": "create_recipe",
-      "paramsRef": "./recipes/recipe_item_send_fee/straight_attack_knife.json",
-      "output": {
-          "txResult": {
-              "status": "Success"
-          },
-          "property": [
-              {
-                  "owner": "itemfee_account1",
-                  "recipes": ["Knife Generation Recipe"]
-              }
-          ]
-      }
+    "ID": "CREATE_ITEM_TRANSFER_FEE_TEST_RECIPES",
+    "runAfter": {
+        "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK"],
+        "blockWait": 0
+    },
+    "action": "multi_msg_tx",
+    "msgRefs": [
+        {
+            "action": "create_recipe",
+            "paramsRef": "./recipes/recipe_item_send_fee/straight_attack_knife.json"
+        },
+        {
+            "action": "create_recipe",
+            "paramsRef": "./recipes/recipe_item_send_fee/recipe_item_send_fee.json"
+        }
+    ],
+
+    "output": {
+        "txResult": {
+            "status": "Success"
+        },
+        "property": [
+            {
+                "owner": "itemfee_account1",
+                "recipes": [
+                    "Knife Generation Recipe",
+                    "Recipe Item Send Fee Test Recipe"
+                ]
+            }
+        ]
+    }
   },
   {
       "ID": "EXECUTE_KNIFE_RECIPE",
       "runAfter": {
-          "precondition": ["CREATE_KNIFE_RECIPE", "GET_PYLONS_ITEMFEE_ACCOUNT2"],
+          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_RECIPES", "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2"],
           "blockWait": 0
       },
       "action": "execute_recipe",
@@ -168,29 +128,9 @@
       }
   },
   {
-      "ID": "CREATE_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE",
-      "runAfter": {
-          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK"],
-          "blockWait": 0
-      },
-      "action": "create_recipe",
-      "paramsRef": "./recipes/recipe_item_send_fee/recipe_item_send_fee.json",
-      "output": {
-          "txResult": {
-              "status": "Success"
-          },
-          "property": [
-              {
-                  "owner": "itemfee_account1",
-                  "recipes": ["Recipe Item Send Fee Test Recipe"]
-              }
-          ]
-      }
-  },
-  {
       "ID": "EXECUTE_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE",        
       "runAfter": {
-          "precondition": ["CREATE_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE", "CREATE_ITEM_TRANSFER_FEE_TEST_CHARACTER", "GET_PYLONS_ITEMFEE_ACCOUNT2"],
+          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_RECIPES", "CREATE_ITEM_TRANSFER_FEE_TEST_CHARACTER", "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2"],
           "blockWait": 0
       },
       "action": "execute_recipe",

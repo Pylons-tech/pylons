@@ -1,64 +1,11 @@
 [
     {
-        "ID": "CREATE_SUBMARINE_ACCOUNT1",
+        "ID": "MOCK_ACCOUNT_SUBMARINE_ACCOUNT2",
         "runAfter": {
           "precondition": [],
           "blockWait": 0
         },
-        "action": "create_account",
-        "paramsRef": "submarine_account1",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          }
-        }
-    },
-    {
-        "ID": "GET_PYLONS_SUBMARINE_ACCOUNT1",
-        "runAfter": {
-          "precondition": ["CREATE_SUBMARINE_ACCOUNT1"],
-          "blockWait": 0
-        },
-        "action": "get_pylons",
-        "paramsRef": "submarine_account1",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          },
-          "property": [
-            {
-              "owner": "submarine_account1",
-              "coins": [
-                {
-                  "denom": "pylon",
-                  "amount": 55000
-                }
-              ]
-            }
-          ]
-        }
-    },
-    {
-        "ID": "CREATE_SUBMARINE_ACCOUNT2",
-        "runAfter": {
-          "precondition": [],
-          "blockWait": 0
-        },
-        "action": "create_account",
-        "paramsRef": "submarine_account2",
-        "output": {
-          "txResult": {
-            "status": "Success"
-          }
-        }
-    },
-    {
-        "ID": "GET_PYLONS_SUBMARINE_ACCOUNT2",
-        "runAfter": {
-          "precondition": ["CREATE_SUBMARINE_ACCOUNT2"],
-          "blockWait": 0
-        },
-        "action": "get_pylons",
+        "action": "mock_account",
         "paramsRef": "submarine_account2",
         "output": {
           "txResult": {
@@ -80,10 +27,10 @@
     {
         "ID": "CREATE_SUBMARINE_COOKBOOK",
         "runAfter": {
-            "precondition": ["GET_PYLONS_SUBMARINE_ACCOUNT1"],
+            "precondition": [],
             "blockWait": 0
         },
-        "action": "create_cookbook",
+        "action": "mock_cookbook",
         "paramsRef": "./cookbooks/submarine.json",
         "output": {
             "txResult": {
@@ -98,13 +45,26 @@
         }
     },
     {
-        "ID": "KNIFE_ITEM_CREATION",
+        "ID": "CREATE_SUBMARINE_ITEMS",
         "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
+            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "MOCK_ACCOUNT_SUBMARINE_ACCOUNT2"],
             "blockWait": 0
         },
-        "action": "fiat_item",
-        "paramsRef": "./items/submarine/knife.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/submarine/knife.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/submarine/knife2.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/submarine/shield.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
@@ -115,52 +75,10 @@
                     "items": [
                         {
                             "stringValues": { "Name": "Knife" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "KNIFE2_ITEM_CREATION",
-        "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/submarine/knife2.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "submarine_account2",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "Knife2" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "SHIELD_ITEM_CREATION",
-        "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/submarine/shield.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "submarine_account2",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "Shield" }
                         }
@@ -170,13 +88,34 @@
         }
     },
     {
-        "ID": "CREATE_STRAIGHT_ATTACK_KNIFE_RECIPE",
+        "ID": "CREATE_SUBMARINE_RECIPES",
         "runAfter": {
             "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
             "blockWait": 0
         },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/submarine/straight_attack_knife.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/submarine/straight_attack_knife.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/submarine/delayed_attack_knife.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/submarine/subm_coin.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/submarine/knife_shield.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/submarine/knife_buyer_from_subm_coin.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
@@ -184,87 +123,13 @@
             "property": [
                 {
                     "owner": "submarine_account1",
-                    "recipes": ["Straight Attack Knife Generation Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_DELAYED_ATTACK_KNIFE_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/submarine/delayed_attack_knife.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "submarine_account1",
-                    "recipes": ["Delayed Attack Knife Generation Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_SUBMARINE_COIN_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/submarine/subm_coin.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "submarine_account1",
-                    "recipes": ["Submarine Coin Generation Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_KNIFE_SHIELD_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/submarine/knife_shield.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "submarine_account1",
-                    "recipes": ["Knife Shield Generation Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_KNIFE_BUYER_FROM_SUBMCOIN_RECIPE",
-        "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/submarine/knife_buyer_from_subm_coin.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "submarine_account1",
-                    "recipes": ["Knife buyer recipe from submcoin"]
+                    "recipes": [
+                        "Straight Attack Knife Generation Recipe",
+                        "Delayed Attack Knife Generation Recipe",
+                        "Submarine Coin Generation Recipe",
+                        "Knife Shield Generation Recipe",
+                        "Knife buyer recipe from submcoin"
+                    ]
                 }
             ]
         }
@@ -272,7 +137,7 @@
     {
         "ID": "EXECUTE_STRAIGHT_ATTACK_KNIFE_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_STRAIGHT_ATTACK_KNIFE_RECIPE"],
+            "precondition": ["CREATE_SUBMARINE_RECIPES"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -297,7 +162,7 @@
     {
         "ID": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE"],
+            "precondition": ["CREATE_SUBMARINE_RECIPES"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -313,7 +178,7 @@
     {
         "ID": "EXECUTE_DELAYED_ATTACK_KNIFE_RECIPE_WRONG_INPUTS_COUNT",
         "runAfter": {
-            "precondition": ["CREATE_DELAYED_ATTACK_KNIFE_RECIPE", "KNIFE2_ITEM_CREATION"],
+            "precondition": ["CREATE_SUBMARINE_RECIPES", "CREATE_SUBMARINE_ITEMS"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -328,7 +193,7 @@
     {
         "ID": "EXECUTE_KNIFE_SHIELD_RECIPE",
         "runAfter": {
-            "precondition": ["KNIFE_ITEM_CREATION", "SHIELD_ITEM_CREATION", "CREATE_KNIFE_SHIELD_RECIPE"],
+            "precondition": ["CREATE_SUBMARINE_ITEMS", "CREATE_SUBMARINE_RECIPES"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -378,7 +243,7 @@
     {
         "ID": "EXECUTE_SUBMARINE_COIN_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_SUBMARINE_COIN_RECIPE", "GET_PYLONS_SUBMARINE_ACCOUNT2"],
+            "precondition": ["CREATE_SUBMARINE_RECIPES", "MOCK_ACCOUNT_SUBMARINE_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -404,7 +269,7 @@
     {
         "ID": "EXECUTE_KNIFE_BUYER_FROM_SUBMCOIN_RECIPE",
         "runAfter": {
-            "precondition": ["CREATE_KNIFE_BUYER_FROM_SUBMCOIN_RECIPE", "EXECUTE_SUBMARINE_COIN_RECIPE"],
+            "precondition": ["EXECUTE_SUBMARINE_COIN_RECIPE"],
             "blockWait": 0
         },
         "action": "execute_recipe",
