@@ -8,6 +8,7 @@ import (
 // store keys
 const (
 	KeyPylonsEntity     = "pylons_entity"
+	KeyGoogleIAPOrder   = "pylons_google_iap_order"
 	KeyPylonsCookbook   = "pylons_cookbook"
 	KeyPylonsRecipe     = "pylons_recipe"
 	KeyPylonsItem       = "pylons_item"

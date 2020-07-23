@@ -96,6 +96,7 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 	pylonsTxCmd.AddCommand(
 		tx.CreateAccount(cdc),
 		tx.GetPylons(cdc),
+		tx.GoogleIAPGetPylons(cdc),
 		tx.SendPylons(cdc),
 		tx.SendItems(StoreKey, cdc),
 		tx.CreateCookbook(cdc),
