@@ -11,30 +11,30 @@ import (
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
 	CoinKeeper        bank.Keeper
+	Cdc               *codec.Codec // The wire codec for binary encoding/decoding
 	EntityKey         sdk.StoreKey
 	GoogleIAPOrderKey sdk.StoreKey
-	ExecutionKey      sdk.StoreKey
 	CookbookKey       sdk.StoreKey
 	RecipeKey         sdk.StoreKey
 	ItemKey           sdk.StoreKey
+	ExecutionKey      sdk.StoreKey
 	TradeKey          sdk.StoreKey
 	LockedCoinKey     sdk.StoreKey
-	Cdc               *codec.Codec // The wire codec for binary encoding/decoding
 }
 
 // NewKeeper creates a new Keeper
-func NewKeeper(coinKeeper bank.Keeper, entityKey, gIAPOrderKey, cookbookKey, recipeKey, itemKey, execKey sdk.StoreKey, tradeKey sdk.StoreKey, lockedCoinKey sdk.StoreKey, cdc *codec.Codec) Keeper {
+func NewKeeper(coinKeeper bank.Keeper, cdc *codec.Codec, storeKeys map[string]*sdk.KVStoreKey) Keeper {
 	return Keeper{
 		CoinKeeper:        coinKeeper,
-		EntityKey:         entityKey,
-		GoogleIAPOrderKey: gIAPOrderKey,
-		ExecutionKey:      execKey,
-		CookbookKey:       cookbookKey,
-		RecipeKey:         recipeKey,
-		ItemKey:           itemKey,
-		TradeKey:          tradeKey,
-		LockedCoinKey:     lockedCoinKey,
 		Cdc:               cdc,
+		EntityKey:         storeKeys[KeyPylonsEntity],
+		GoogleIAPOrderKey: storeKeys[KeyGoogleIAPOrder],
+		CookbookKey:       storeKeys[KeyPylonsCookbook],
+		RecipeKey:         storeKeys[KeyPylonsRecipe],
+		ItemKey:           storeKeys[KeyPylonsItem],
+		ExecutionKey:      storeKeys[KeyPylonsExecution],
+		TradeKey:          storeKeys[KeyPylonsTrade],
+		LockedCoinKey:     storeKeys[KeyPylonsLockedCoin],
 	}
 }
 
