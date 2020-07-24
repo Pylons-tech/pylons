@@ -48,7 +48,7 @@ func (msg MsgGetPylons) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-// GetSigners encodes the message for signing
+// GetSigners is a function to get signers from MsgGetPylons msg
 func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{msg.Requester}
 }
