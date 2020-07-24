@@ -25,6 +25,16 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 	err := tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
 
+	item1 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item1.OwnerRecipeID = "????????"
+	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	require.True(t, err == nil)
+
+	item2 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item2.OwnerTradeID = "????????"
+	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	require.True(t, err == nil)
+
 	cases := map[string]struct {
 		itemID       string
 		field        string
@@ -88,6 +98,24 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			addInputCoin: true,
 			successMsg:   "successfully updated the item field",
 			showError:    false,
+		},
+		"TC7 Item is owned by a recipe": {
+			itemID:       item1.ID,
+			field:        "Name",
+			value:        "Ben1",
+			sender:       sender1,
+			addInputCoin: true,
+			desiredError: "Item is owned by a recipe",
+			showError:    true,
+		},
+		"TC8 Item is owned by a trade": {
+			itemID:       item2.ID,
+			field:        "Name",
+			value:        "Ben1",
+			sender:       sender1,
+			addInputCoin: true,
+			desiredError: "Item is owned by a trade",
+			showError:    true,
 		},
 	}
 	for testName, tc := range cases {
