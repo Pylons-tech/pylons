@@ -42,6 +42,10 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 		return nil, errInternal(err)
 	}
 
+	if err = item.NewTradeError(); err != nil {
+		return nil, errInternal(err)
+	}
+
 	keyID, ok := item.FindStringKey(msg.Field)
 	if !ok {
 		return nil, errInternal(errors.New("Provided field does not exist within the item"))
