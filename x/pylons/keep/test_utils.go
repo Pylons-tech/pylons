@@ -59,42 +59,28 @@ func SetupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
 	keyAcc := sdk.NewKVStoreKey(auth.StoreKey)
-	authCapKey := sdk.NewKVStoreKey("authCapKey")
-	fckCapKey := sdk.NewKVStoreKey("fckCapKey")
 	keyParams := sdk.NewKVStoreKey("params")
-	keySupply := sdk.NewKVStoreKey(supply.StoreKey)
 	tkeyParams := sdk.NewTransientStoreKey("transient_params")
 
-	fcKey := sdk.NewKVStoreKey("fee_collection")
-	entKey := sdk.NewKVStoreKey("pylons_entity")
-	gIAPOrderKey := sdk.NewKVStoreKey("pylons_google_iap_order")
-	cbKey := sdk.NewKVStoreKey("pylons_cookbook")
-	rcKey := sdk.NewKVStoreKey("pylons_recipe")
-	tdKey := sdk.NewKVStoreKey("pylons_trade")
-	itKey := sdk.NewKVStoreKey("pylons_item")
-	execKey := sdk.NewKVStoreKey("pylons_execution")
-	lockedCoinKey := sdk.NewKVStoreKey("pylons_locked_coin")
+	stringKeys := []string{
+		supply.StoreKey,
+		"authCapKey",
+		"fckCapKey",
+		"fee_collection",
+	}
+	stringKeys = append(stringKeys, StoreKeyList...)
+
+	keys := sdk.NewKVStoreKeys(stringKeys...)
 
 	ms := store.NewCommitMultiStore(db)
-	ms.MountStoreWithDB(keySupply, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyAcc, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(authCapKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(fckCapKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyParams, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(fcKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(entKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(gIAPOrderKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(cbKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(tdKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(rcKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(itKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(execKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(lockedCoinKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tkeyParams, sdk.StoreTypeTransient, db)
+	for _, kvsk := range keys {
+		ms.MountStoreWithDB(kvsk, sdk.StoreTypeIAVL, db)
+	}
 	//nolint:errcheck
 	ms.LoadLatestVersion()
-
-	ms.GetKVStore(cbKey)
 
 	ctx := sdk.NewContext(ms, abci.Header{ChainID: "pylonschain"}, false, log.NewNopLogger())
 
@@ -133,15 +119,8 @@ func SetupTestCoinInput() TestCoinInput {
 
 	plnK := NewKeeper(
 		bk,
-		entKey,       // entity
-		gIAPOrderKey, // google iap order key
-		cbKey,        // cookbook
-		rcKey,        // recipe
-		itKey,        // item
-		execKey,      // exec
-		tdKey,
-		lockedCoinKey,
 		cdc,
+		keys,
 	)
 
 	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}

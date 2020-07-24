@@ -118,19 +118,14 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 
 	bApp.SetAppVersion("v0.0.1")
 
-	keys := sdk.NewKVStoreKeys(bam.MainStoreKey, auth.StoreKey, staking.StoreKey,
+	stringKeys := []string{
+		bam.MainStoreKey, auth.StoreKey, staking.StoreKey,
 		supply.StoreKey, distr.StoreKey, slashing.StoreKey, params.StoreKey,
-		// pylons keys
-		pylons.KeyPylonsEntity,
-		pylons.KeyGoogleIAPOrder,
-		pylons.KeyPylonsCookbook,
-		pylons.KeyPylonsRecipe,
-		pylons.KeyPylonsItem,
-		pylons.KeyPylonsExecution,
-		pylons.KeyPylonsTrade,
-		pylons.KeyPylonsLockedCoin,
-	)
+	}
+	// pylons keys
+	stringKeys = append(stringKeys, keep.StoreKeyList...)
 
+	keys := sdk.NewKVStoreKeys(stringKeys...)
 	tkeys := sdk.NewTransientStoreKeys(params.TStoreKey)
 
 	// Here you initialize your application with the store keys it requires
@@ -212,15 +207,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	// It handles interactions with the namestore
 	app.plnKeeper = keep.NewKeeper(
 		app.bankKeeper,
-		app.keys[pylons.KeyPylonsEntity],
-		app.keys[pylons.KeyGoogleIAPOrder],
-		app.keys[pylons.KeyPylonsCookbook],
-		app.keys[pylons.KeyPylonsRecipe],
-		app.keys[pylons.KeyPylonsItem],
-		app.keys[pylons.KeyPylonsExecution],
-		app.keys[pylons.KeyPylonsTrade],
-		app.keys[pylons.KeyPylonsLockedCoin],
 		app.cdc,
+		keys,
 	)
 	app.mm = module.NewManager(
 		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx),
