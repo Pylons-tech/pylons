@@ -5,7 +5,6 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
@@ -38,13 +37,11 @@ func TestSendItemsViaCLI(originT *originT.T) {
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			cbOwnerKey := fmt.Sprintf("TestSendItemsViaCLI_CBOwner%d_%d", tcNum, time.Now().Unix())
-			MockAccount(cbOwnerKey, t) // mock account with initial balance
 			itemSenderKey := fmt.Sprintf("TestSendItemsViaCLI_itemSender%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t)    // mock account with initial balance
 			MockAccount(itemSenderKey, t) // mock account with initial balance
 
-			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-			pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+			pylonsLLCAddress, pylonsLLCAccInfo := GetPylonsLLCAddressAndInfo(t)
 
 			mCB := GetMockedCookbook(cbOwnerKey, true, t)
 
@@ -55,16 +52,8 @@ func TestSendItemsViaCLI(originT *originT.T) {
 				itemIDs[idx] = itemID
 			}
 
-			cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-			cbOwnerSdkAddr, err := sdk.AccAddressFromBech32(cbOwnerAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-
-			itemSenderAddr := inttestSDK.GetAccountAddr(itemSenderKey, t)
-			itemSenderSdkAddr, err := sdk.AccAddressFromBech32(itemSenderAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-
-			cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerSdkAddr.String(), t)
-
+			cbOwnerSdkAddr, cbOwnerAccInfo := GetAccountAddressAndInfo(cbOwnerKey, t)
+			itemSenderSdkAddr := GetSDKAddressFromKey(itemSenderKey, t)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgSendItems(itemIDs, itemSenderSdkAddr, cbOwnerSdkAddr),
