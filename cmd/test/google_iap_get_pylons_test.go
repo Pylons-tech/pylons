@@ -61,8 +61,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 			// Incorrect signature
 			signature:    "Invalid signature", // does not fit the signature base64 format
 			showError:    true,
-			desiredError: "internal error", // "msg signature base64 decoding failure",
-			// TODO: should fix it from "internal error"
+			desiredError: "msg signature base64 decoding failure",
 		},
 		{
 			name:          "wrong signature check",
@@ -72,8 +71,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 			// Incorrect signature
 			signature:    "HEo0RYQeH0+8nmYa6ETKP9f3S/W/cUuQTBme7VSh3Lzm+1+1GwJIl1pdF1dh32YGhd3BtyMoLVGzr9ZajfHhhznIvbowS/XIlyJJCE6dI+zg68mKo5rDt0wB2BY8azk0+WCkc5XT5y8biRNXe5RyvmuqYKPXmEsgHaYKo6x3mHs6oXrECckKv/c9T9MHCvdAqVFrml9W7K41sRHbpOdFmYnO33bkNITCCaf/C1PDGMVOItxvq7uXi+F0DpjXwXko9AU6L3pK6zDICcD38HblbzumOg6LGsuWCjOw8QwNobYOUNtrdj01fEXqkKhfYzFZcwxM6xsphN38gnO0ksDdyw==",
 			showError:    true,
-			desiredError: "internal error", // "crypto/rsa: verification error",
-			// TODO: should fix it from "internal error"
+			desiredError: "crypto/rsa: verification error",
 		},
 	}
 
