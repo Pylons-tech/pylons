@@ -83,19 +83,15 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	t.Parallel()
 
 	cbOwnerKey := fmt.Sprintf("TestCoinLockViaCLI%d_CBOwner_%d", tcNum, time.Now().Unix())
-	MockAccount(cbOwnerKey, t) // mock account with initial balance
+	tradeFulfillerKey := fmt.Sprintf("TestCoinLockViaCLI%d_Creator_%d", tcNum, time.Now().Unix())
+	tradeCreatorKey := fmt.Sprintf("TestCoinLockViaCLI%d_Fulfiller_%d", tcNum, time.Now().Unix())
+	MockAccount(cbOwnerKey, t)        // mock account with initial balance
+	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
+	MockAccount(tradeCreatorKey, t)   // mock account with initial balance
 
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
-	tradeFulfillerKey := fmt.Sprintf("TestCoinLockViaCLI%d_Creator_%d", tcNum, time.Now().Unix())
-	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
-
-	tradeCreatorKey := fmt.Sprintf("TestCoinLockViaCLI%d_Fulfiller_%d", tcNum, time.Now().Unix())
-	MockAccount(tradeCreatorKey, t) // mock account with initial balance
-
-	tradeCreatorAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
-	tradeCreatorSdkAddress, err := sdk.AccAddressFromBech32(tradeCreatorAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	tradeCreatorSdkAddress := GetSDKAddressFromKey(tradeCreatorKey, t)
 
 	// check locked coin after fulfilling trade
 	initialLock, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
@@ -132,11 +128,8 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 		FaucetGameCoins(tradeFulfillerKey, tc.tradeCoinInputList.ToCoins(), t)
 	}
 
-	tradeFulfillerAddr := inttestSDK.GetAccountAddr(tradeFulfillerKey, t)
-	tradeFulfillerSdkAddr, err := sdk.AccAddressFromBech32(tradeFulfillerAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddr, []string{})
+	tradeFulfillerSdkAddress := GetSDKAddressFromKey(tradeFulfillerKey, t)
+	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress, []string{})
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
 
 	t.MustNil(err, "error text tx with msg with nonce")
@@ -166,13 +159,11 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	cbOwnerKey := fmt.Sprintf("TestCheckExecutionCoinLockViaCLI_%d", time.Now().Unix())
 	MockAccount(cbOwnerKey, t) // mock account with initial balance
 
-	cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-	cbOwnerSdkAddr, err := sdk.AccAddressFromBech32(cbOwnerAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	cbOwnerSdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 
 	rcpName := "TESTRCP_CheckExecutionCoinLock__007_TC" + strconv.Itoa(tcNum)
 
-	guid, err := MockRecipeGUID(
+	guid := MockRecipeGUID(
 		cbOwnerKey,
 		tc.recipeBlockInterval,
 		false,
@@ -181,7 +172,6 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		tc.recipeDesiredItemName,
 		t,
 	)
-	t.MustNil(err, "error mocking recipe")
 
 	rcp, err := inttestSDK.GetRecipeByGUID(guid)
 	t.WithFields(testing.Fields{

@@ -12,7 +12,6 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateRecipeViaCLI(originT *originT.T) {
@@ -43,9 +42,8 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 
 	cbOwnerKey := fmt.Sprintf("TestCreateRecipeViaCLI%d", time.Now().Unix())
 	MockAccount(cbOwnerKey, &t) // mock account with initial balance
-	ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, &t)
-	sdkAddr, err := sdk.AccAddressFromBech32(ownerAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+
+	cbOwnerSdkAddr := GetSDKAddressFromKey(cbOwnerKey, &t)
 	mCB := GetMockedCookbook(cbOwnerKey, false, &t)
 
 	for _, tc := range tests {
@@ -61,7 +59,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					types.GenEntries(tc.outputDenom, "Raichu"),
 					types.GenOneOutput(2),
 					0,
-					sdkAddr),
+					cbOwnerSdkAddr),
 				cbOwnerKey,
 				false,
 			)

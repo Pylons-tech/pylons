@@ -82,10 +82,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 			getPylonsKey := fmt.Sprintf("TestGoogleIAPGetPylonsViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(getPylonsKey, t) // mock account with initial balance
 
-			getPylonsAddr := inttestSDK.GetAccountAddr(getPylonsKey, t)
-			getPylonsSdkAddr, err := sdk.AccAddressFromBech32(getPylonsAddr)
-			getPylonsAccInfo := inttestSDK.GetAccountInfoFromAddr(getPylonsSdkAddr.String(), t)
-			t.MustNil(err, "error converting string address to AccAddress struct")
+			getPylonsSdkAddr, getPylonsAccInfo := GetAccountAddressAndInfo(getPylonsKey, t)
 
 			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
 

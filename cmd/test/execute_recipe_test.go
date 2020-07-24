@@ -5,7 +5,6 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
@@ -18,9 +17,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
-	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), &t)
+	pylonsLLCAddress, pylonsLLCAccInfo := GetPylonsLLCAddressAndInfo(&t)
 
 	tests := []struct {
 		name                  string
@@ -45,26 +42,18 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			cbOwnerKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
-			MockAccount(cbOwnerKey, t) // mock account with initial balance
-			guid, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
-			t.MustNil(err, "error mocking recipe")
+			rcpExecutorKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_RCP_EXECUTOR_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t)     // mock account with initial balance
+			MockAccount(rcpExecutorKey, t) // mock account with initial balance
+			guid := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
 
-			ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-			cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-			cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+			cbOwnerAddress, cbOwnerAccInfo := GetAccountAddressAndInfo(cbOwnerKey, t)
+			rcpExecutorSdkAddress, rcpExecutorAccInfo := GetAccountAddressAndInfo(rcpExecutorKey, t)
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.WithFields(testing.Fields{
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
-
-			rcpExecutorKey := fmt.Sprintf("TestExecuteRecipeViaCLI%d_RCP_EXECUTOR_%d", tcNum, time.Now().Unix())
-			MockAccount(rcpExecutorKey, t) // mock account with initial balance
-			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
-			rcpExecutorSdkAddress, err := sdk.AccAddressFromBech32(rcpExecutorAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-			rcpExecutorAccInfo := inttestSDK.GetAccountInfoFromAddr(rcpExecutorSdkAddress.String(), t)
 
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
@@ -80,11 +69,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			GetTxHandleResult(txhash, t)
 
 			items, err := inttestSDK.ListItemsViaCLI("")
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error listing items via cli")
-			}
+			t.MustNil(err, "error listing items via cli")
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false, false)
 			t.WithFields(testing.Fields{

@@ -6,7 +6,6 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
@@ -149,28 +148,22 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
-	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-	pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 
-	cbOwnerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CBOWNER_%d", tcNum, time.Now().Unix())
-	MockAccount(cbOwnerKey, t) // mock account with initial balance
+	pylonsLLCAddress, pylonsLLCAccInfo := GetPylonsLLCAddressAndInfo(t)
+
+	cbOwnerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CBOwner_%d", tcNum, time.Now().Unix())
+	tradeCreatorKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_Creator_%d", tcNum, time.Now().Unix())
+	tradeFulfillerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_Fulfiller_%d", tcNum, time.Now().Unix())
+	MockAccount(cbOwnerKey, t)        // mock account with initial balance
+	MockAccount(tradeCreatorKey, t)   // mock account with initial balance
+	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
 
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 	mCB2 := GetMockedCookbook(cbOwnerKey, true, t)
 
-	ownerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-	cbOwnerAddress, err := sdk.AccAddressFromBech32(ownerAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-	cbOwnerAccInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
-
-	tradeCreatorKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
-	MockAccount(tradeCreatorKey, t) // mock account with initial balance
+	cbOwnerAddress, cbOwnerAccInfo := GetAccountAddressAndInfo(cbOwnerKey, t)
+	tradeCreatorSdkAddress, tradeCreatorAccInfo := GetAccountAddressAndInfo(tradeCreatorKey, t)
 	// FaucetGameCoins(tradeCreatorKey, tc.CoinOutputs, t)
-	tradeCreatorAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
-	tradeCreatorSdkAddress, err := sdk.AccAddressFromBech32(tradeCreatorAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-	tradeCreatorAccInfo := inttestSDK.GetAccountInfoFromAddr(tradeCreatorSdkAddress.String(), t)
 
 	outputItemID := ""
 	if tc.hasOutputItem {
@@ -190,16 +183,11 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 
 	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
 
-	tradeFulfillerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CREATOR_%d", tcNum, time.Now().Unix())
-	MockAccount(tradeFulfillerKey, t) // mock account with initial balance
 	if tc.coinInputList != nil {
 		FaucetGameCoins(tradeFulfillerKey, tc.coinInputList.ToCoins(), t)
 	}
 
-	tradeFulfillerAddr := inttestSDK.GetAccountAddr(tradeFulfillerKey, t)
-	tradeFulfillerSdkAddr, err := sdk.AccAddressFromBech32(tradeFulfillerAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-	tradeFulfillerAccInfo := inttestSDK.GetAccountInfoFromAddr(tradeFulfillerSdkAddr.String(), t)
+	tradeFulfillerSdkAddr, tradeFulfillerAccInfo := GetAccountAddressAndInfo(tradeFulfillerKey, t)
 
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {

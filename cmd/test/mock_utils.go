@@ -1,8 +1,6 @@
 package inttest
 
 import (
-	"fmt"
-
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
@@ -65,13 +63,8 @@ func MockAccount(key string, t *testing.T) {
 
 // FaucetGameCoins get faucet game coins from faucet server
 func FaucetGameCoins(key string, amount sdk.Coins, t *testing.T) {
-	fromAddress := inttestSDK.GetAccountAddr("node0", t)
-	fromSdkAddr, err := sdk.AccAddressFromBech32(fromAddress)
-	t.MustNil(err, "error converting string cosmos address to sdk struct")
-
-	toAddress := inttestSDK.GetAccountAddr(key, t)
-	toSdkAddr, err := sdk.AccAddressFromBech32(toAddress)
-	t.MustNil(err, "error converting string cosmos address to sdk struct")
+	fromSdkAddr := GetSDKAddressFromKey("node0", t)
+	toSdkAddr := GetSDKAddressFromKey(key, t)
 
 	sendCoinsMsg := bank.NewMsgSend(fromSdkAddr, toSdkAddr, amount)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, sendCoinsMsg, "node0", false)
@@ -89,21 +82,17 @@ func FaucetGameCoins(key string, amount sdk.Coins, t *testing.T) {
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(senderName string, createNew bool, t *testing.T) (string, error) {
-	guid, exist, err := CheckCookbookExist(senderName, t)
-	if err != nil {
-		return "", err
-	}
+func MockCookbook(ownerKey string, createNew bool, t *testing.T) string {
+	guid, exist, err := CheckCookbookExist(ownerKey, t)
+	t.MustNil(err, "error checking cookbook exist")
 
 	if exist && !createNew { // finish mock if already available
-		return guid, nil
+		return guid
 	}
-	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
-	t.MustNil(err, fmt.Sprintf("error converting %s to AccAddress struct", senderName))
+	cbOwnerSdkAddr := GetSDKAddressFromKey(ownerKey, t)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
-		"COOKBOOK_MOCK_001_"+senderName,
+		"COOKBOOK_MOCK_001_"+ownerKey,
 		"",
 		"this has to meet character limits lol",
 		"SketchyCo",
@@ -111,13 +100,13 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 		"example@example.com",
 		0,
 		msgs.DefaultCostPerBlock,
-		sdkAddr),
-		senderName,
+		cbOwnerSdkAddr),
+		ownerKey,
 		false,
 	)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
-		return "", err
+		return ""
 	}
 
 	WaitOneBlockWithErrorCheck(t)
@@ -126,19 +115,13 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 	resp := handlers.CreateCookbookResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
-	return resp.CookbookID, nil
+	return resp.CookbookID
 }
 
 // CheckCookbookExist is a cookbook existence checker
-func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
-	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
-	senderSdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
-
-	if err != nil {
-		return "", false, err
-	}
-
-	cbList, err := inttestSDK.ListCookbookViaCLI(senderSdkAddr.String())
+func CheckCookbookExist(ownerKey string, t *testing.T) (string, bool, error) {
+	cbOwnerSdkAddr := GetSDKAddressFromKey(ownerKey, t)
+	cbList, err := inttestSDK.ListCookbookViaCLI(cbOwnerSdkAddr.String())
 	if err != nil {
 		return "", false, err
 	}
@@ -150,16 +133,15 @@ func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
 
 // GetMockedCookbook get mocked cookbook
 func GetMockedCookbook(senderName string, createNew bool, t *testing.T) types.Cookbook {
-	guid, err := MockCookbook(senderName, createNew, t)
-	t.MustNil(err, "error mocking cookbook")
+	guid := MockCookbook(senderName, createNew, t)
 
 	cb, err := inttestSDK.GetCookbookByGUID(guid)
-	t.MustNil(err, "error mocking cookbook")
+	t.MustNil(err, "error getting cookbook by guid")
 	return cb
 }
 
 // MockNoDelayItemGenRecipeGUID mock no delay item generation recipe
-func MockNoDelayItemGenRecipeGUID(cbOwnerKey, name string, outputItemName string, t *testing.T) (string, error) {
+func MockNoDelayItemGenRecipeGUID(cbOwnerKey, name string, outputItemName string, t *testing.T) string {
 	return MockRecipeGUID(cbOwnerKey, 0, false, name, "", outputItemName, t)
 }
 
@@ -169,7 +151,7 @@ func MockRecipeGUID(
 	interval int64,
 	isUpgrdRecipe bool,
 	name, curItemName, desItemName string,
-	t *testing.T) (string, error) {
+	t *testing.T) string {
 	if !isUpgrdRecipe {
 		return MockDetailedRecipeGUID(
 			cbOwnerKey,
@@ -200,7 +182,7 @@ func MockPopularRecipeGUID(
 	hfrt handlers.PopularRecipeType,
 	rcpName string,
 	t *testing.T,
-) (string, error) {
+) string {
 	ciL, iiL, entries, outputs, bI := handlers.GetParamsForPopularRecipe(hfrt)
 	return MockDetailedRecipeGUID(cbOwnerKey, rcpName, ciL, iiL, entries, outputs, bI, t)
 }
@@ -215,12 +197,10 @@ func MockDetailedRecipeGUID(
 	outputs types.WeightedOutputsList,
 	interval int64,
 	t *testing.T,
-) (string, error) {
+) string {
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
-	eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			rcpName,
@@ -238,7 +218,7 @@ func MockDetailedRecipeGUID(
 	)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
-		return "", err
+		return ""
 	}
 
 	WaitOneBlockWithErrorCheck(t)
@@ -248,15 +228,13 @@ func MockDetailedRecipeGUID(
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
-	return resp.RecipeID, nil
+	return resp.RecipeID
 }
 
 // MockItemGUID mock item and return item's GUID
 func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
-	eugenAddr := inttestSDK.GetAccountAddr(sender, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	sdkAddr := GetSDKAddressFromKey(sender, t)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
 		cbID,
@@ -291,10 +269,7 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
 // MockItemGUIDWithFee mock item with additional transfer fee and return item's GUID
 func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testing.T) string {
-
-	senderAddr := inttestSDK.GetAccountAddr(sender, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	itemOwnerSdkAddr := GetSDKAddressFromKey(sender, t)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
 		cbID,
@@ -306,7 +281,7 @@ func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testin
 				Value: name,
 			},
 		},
-		sdkAddr,
+		itemOwnerSdkAddr,
 		transferFee,
 	),
 		sender,
@@ -338,9 +313,8 @@ func MockDetailedTradeGUID(
 	extraInfo string,
 	t *testing.T,
 ) string {
-	eugenAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+
+	sdkAddr := GetSDKAddressFromKey(tradeCreatorKey, t)
 
 	inputItemList := types.GenTradeItemInputList(cbID, []string{inputItemName})
 	if !hasInputItem {
