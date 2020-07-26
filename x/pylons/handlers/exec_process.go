@@ -38,15 +38,16 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	// we validate and match items
 	var matchedItems []types.Item
 	for i, itemInput := range p.recipe.ItemInputs {
-		if itemInput.Matches(items[i]) {
-			execErr := items[i].NewRecipeExecutionError()
-			if execErr != nil {
-				return fmt.Errorf("the [%d] item is locked: %s", i, execErr.Error())
-			}
-			matchedItems = append(matchedItems, items[i])
-		} else {
-			return fmt.Errorf("the [%d] item input does not match: input=%+v item=%+v", i, itemInput, items[i])
+		matchedItem := items[i]
+		matchErr := itemInput.MatchError(matchedItem)
+		if matchErr != nil {
+			return fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID)
 		}
+		execErr := matchedItem.NewRecipeExecutionError()
+		if execErr != nil {
+			return fmt.Errorf("[%d]th item is locked: %s item_id=%s", i, execErr.Error(), matchedItem.ID)
+		}
+		matchedItems = append(matchedItems, matchedItem)
 	}
 	p.matchedItems = matchedItems
 	return nil

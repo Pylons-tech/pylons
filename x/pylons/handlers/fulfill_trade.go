@@ -56,16 +56,16 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	matchedItems := types.ItemList{}
 	for i, itemInput := range trade.ItemInputs {
-		if itemInput.Matches(items[i]) {
-			matchedItem := items[i]
-			if err = matchedItem.NewTradeError(); err != nil {
-				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
-			}
-			totalItemTransferFee += matchedItem.GetTransferFee()
-			matchedItems = append(matchedItems, matchedItem)
-		} else {
-			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", itemInput))
+		matchedItem := items[i]
+		matchErr := itemInput.MatchError(matchedItem)
+		if matchErr != nil {
+			return nil, errInternal(fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID))
 		}
+		if err = matchedItem.NewTradeError(); err != nil {
+			return nil, errInternal(fmt.Errorf("[%d]th item is not tradable: %s item_id=%s", i, err.Error(), matchedItem.ID))
+		}
+		totalItemTransferFee += matchedItem.GetTransferFee()
+		matchedItems = append(matchedItems, matchedItem)
 	}
 
 	// Unlock trade creator's coins
