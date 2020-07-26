@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -29,7 +28,7 @@ func SendCoinsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgSendPylons(types.NewPylon(5), sender, recv)
+		msg := msgs.NewMsgSendCoins(sdk.Coins{sdk.NewInt64Coin("loudcoin", 10), sdk.NewInt64Coin("pylon", 10)}, sender, recv)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

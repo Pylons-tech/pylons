@@ -46,7 +46,7 @@ func coinsSendHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerF
 			return
 		}
 
-		msg := msgs.NewMsgSendPylons(types.NewPylon(int64(req.Amount)), senderAddr, receiverAddr)
+		msg := msgs.NewMsgSendCoins(types.NewPylon(int64(req.Amount)), senderAddr, receiverAddr)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

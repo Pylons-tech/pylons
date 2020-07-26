@@ -49,7 +49,7 @@ func SendCoins(cdc *codec.Codec) *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg := msgs.NewMsgSendPylons(coins, cliCtx.GetFromAddress(), addr)
+			msg := msgs.NewMsgSendCoins(coins, cliCtx.GetFromAddress(), addr)
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

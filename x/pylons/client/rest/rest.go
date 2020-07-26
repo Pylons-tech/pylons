@@ -31,7 +31,7 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		txbuilder.GoogleIAPGetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
 		txbuilder.SendPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
+	r.HandleFunc(fmt.Sprintf("/%s/send_coins/tx_build/", storeName),
 		txbuilder.SendCoinsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_items/tx_build/", storeName),
 		txbuilder.SendItemsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")

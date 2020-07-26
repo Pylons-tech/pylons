@@ -7,8 +7,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgSendPylons is used to transact pylons between people
-func HandlerMsgSendPylons(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendPylons) (*sdk.Result, error) {
+// HandlerMsgSendCoins is used to transact pylons between people
+func HandlerMsgSendCoins(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendCoins) (*sdk.Result, error) {
 
 	err := msg.ValidateBasic()
 
