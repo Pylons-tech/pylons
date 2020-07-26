@@ -13,6 +13,7 @@ import (
 )
 
 func TestHandlerMsgSendPylons(t *testing.T) {
+	// TODO should update to MsgSendCoins and add game coin test case too and pylons sdk update
 	tci := keep.SetupTestCoinInput()
 
 	initialAmount := int64(50000)

@@ -39,7 +39,6 @@ func (msg MsgSendPylons) ValidateBasic() error {
 
 	if msg.Receiver.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Receiver.String())
-
 	}
 
 	if !msg.Amount.IsAllPositive() {
