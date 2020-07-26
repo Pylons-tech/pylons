@@ -44,7 +44,6 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 				return fmt.Errorf("the [%d] item is locked: %s", i, execErr.Error())
 			}
 			matchedItems = append(matchedItems, items[i])
-			items[i].OwnerRecipeID = p.recipe.ID
 		} else {
 			return fmt.Errorf("the [%d] item input does not match: input=%+v item=%+v", i, itemInput, items[i])
 		}
