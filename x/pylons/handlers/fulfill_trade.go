@@ -55,26 +55,16 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	totalItemTransferFee := int64(0)
 
 	matchedItems := types.ItemList{}
-	for _, inpItem := range trade.ItemInputs {
-		matched := false
-		index := 0
-		for i, item := range items {
-
-			if inpItem.Matches(item) {
-				matched = true
-				index = i
-				break
-			}
-		}
-		if matched {
-			matchedItem := items[index]
+	for i, itemInput := range trade.ItemInputs {
+		if itemInput.Matches(items[i]) {
+			matchedItem := items[i]
 			if err = matchedItem.NewTradeError(); err != nil {
 				return nil, errInternal(fmt.Errorf("%s item id is not tradable", matchedItem.ID))
 			}
 			totalItemTransferFee += matchedItem.GetTransferFee()
 			matchedItems = append(matchedItems, matchedItem)
 		} else {
-			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", inpItem))
+			return nil, errInternal(fmt.Errorf("the sender doesn't have the trade item attributes %+v", itemInput))
 		}
 	}
 

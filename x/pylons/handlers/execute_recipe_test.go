@@ -196,7 +196,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			addInputCoin:       true,
 			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
-			desiredError:       "the [0] item input don't match any items provided",
+			desiredError:       "the [0] item input does not match",
 			successMsg:         "successfully executed the recipe",
 			showError:          true,
 			checkItemName:      "",
