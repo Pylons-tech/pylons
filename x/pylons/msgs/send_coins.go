@@ -27,7 +27,7 @@ func NewMsgSendCoins(amount sdk.Coins, sender sdk.AccAddress, receiver sdk.AccAd
 func (msg MsgSendCoins) Route() string { return RouterKey }
 
 // Type should return the action
-func (msg MsgSendCoins) Type() string { return "send_pylons" }
+func (msg MsgSendCoins) Type() string { return "send_coins" }
 
 // ValidateBasic is a function to validate MsgSendCoins msg
 func (msg MsgSendCoins) ValidateBasic() error {
