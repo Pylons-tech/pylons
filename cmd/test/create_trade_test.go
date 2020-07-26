@@ -11,7 +11,6 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateTradeViaCLI(originT *originT.T) {
@@ -58,9 +57,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 			mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
-			eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
+			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 			var inputCoins types.CoinInputList
 			if tc.inputPylon > 0 {
 				inputCoins = types.GenCoinInputList("pylon", tc.inputPylon)

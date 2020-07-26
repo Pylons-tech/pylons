@@ -9,7 +9,6 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateCookbookViaCLI(originT *originT.T) {
@@ -30,9 +29,8 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			cbOwnerKey := fmt.Sprintf("TestCreateCookbookViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
-			eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
+
+			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"",

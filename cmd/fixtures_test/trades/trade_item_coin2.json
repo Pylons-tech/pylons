@@ -1,7 +1,7 @@
 {
     "CoinInputs":[],
     "ItemInputRefs": [
-        "./trades/item_input/trading_knife_v3.json"
+        "./trades/item_input/trading_knife_v7.json"
     ],
     "CoinOutputs": [{
         "denom":"pylon",

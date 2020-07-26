@@ -6,6 +6,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -59,6 +60,11 @@ func HandlerMsgDisableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDis
 	}
 
 	err = keeper.UpdateTrade(ctx, msg.TradeID, trade)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	err = keeper.UnlockCoin(ctx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
 	}

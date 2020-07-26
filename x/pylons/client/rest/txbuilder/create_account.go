@@ -36,8 +36,6 @@ func CreateAccountTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 		msg := msgs.NewMsgCreateAccount(addr)
 
-		// sigs := []auth.StdSignature{{}}
-
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 
 		if err != nil {
@@ -63,7 +61,6 @@ func CreateAccountTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNa
 
 // CATxBuilder gives all the necessary fixtures for creating a get pylons transaction
 type CATxBuilder struct {
-	// MsgJSON is the transaction with nil signature
 	SignMsg     auth.StdSignMsg
 	SignTx      auth.StdTx
 	SignerBytes string

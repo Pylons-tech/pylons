@@ -10,13 +10,16 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestGetExecution(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
-
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, sdk.Coins{
+		sdk.NewInt64Coin(types.Pylon, 1000000),
+		sdk.NewInt64Coin("wood", 1000000),
+	}, nil, nil, nil)
 	// mock cookbook
 	cbData := handlers.MockCookbook(tci, sender1)
 	// mock recipe
@@ -27,7 +30,7 @@ func TestGetExecution(t *testing.T) {
 		sender1,
 		[]string{}, // empty itemIDs
 	)
-	require.True(t, err == nil)
+	require.True(t, err == nil, err)
 	require.True(t, execRcpResponse.Status == "Success")
 	require.True(t, execRcpResponse.Message == "scheduled the recipe")
 

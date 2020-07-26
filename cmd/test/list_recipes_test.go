@@ -29,12 +29,7 @@ func TestListRecipeViaCLI(originT *originT.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			cbOwnerKey := fmt.Sprintf("TestListRecipeViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
-			_, err := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.outputItemName, t)
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error mocking recipe")
-			}
+			MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.outputItemName, t)
 
 			recipes, err := inttestSDK.ListRecipesViaCLI("")
 			t.MustNil(err, "error listing recipes")

@@ -10,7 +10,6 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestUpdateItemStringViaCLI(originT *originT.T) {
@@ -39,9 +38,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 
 			itemID := MockItemGUID(mCB.ID, cbOwnerKey, tc.itemName, t)
 
-			eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
+			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
 				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
@@ -62,11 +59,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully updated the item field", t)
 
 			items, err := inttestSDK.ListItemsViaCLI("")
-			if err != nil {
-				t.WithFields(testing.Fields{
-					"error": err,
-				}).Fatal("error listing items via cli")
-			}
+			t.MustNil(err, "error listing items via cli")
 
 			_, ok := inttestSDK.FindItemFromArrayByName(items, tc.value, false, false)
 			t.WithFields(testing.Fields{

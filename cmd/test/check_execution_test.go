@@ -13,7 +13,6 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type CheckExecutionTestCase struct {
@@ -111,22 +110,14 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}
 	rcpName := "TESTRCP_CheckExecution__007_TC" + strconv.Itoa(tcNum)
 
-	guid, err := MockRecipeGUID(cbOwnerKey, tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error mocking recipe")
-	}
+	guid := MockRecipeGUID(cbOwnerKey, tc.blockInterval, tc.isUpgrdRecipe, rcpName, tc.currentItemName, tc.desiredItemName, t)
 
 	rcp, err := inttestSDK.GetRecipeByGUID(guid)
 	t.WithFields(testing.Fields{
 		"recipe_guid": guid,
 	}).MustNil(err, "recipe with target guid does not exist")
 
-	eugenAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
-
+	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
@@ -158,11 +149,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	if len(tc.currentItemName) > 0 { // when item input is set
 		items, err := inttestSDK.ListItemsViaCLI("")
-		if err != nil {
-			t.WithFields(testing.Fields{
-				"error": err,
-			}).Fatal("error listing items via cli")
-		}
+		t.MustNil(err, "error listing items via cli")
 
 		item, ok := inttestSDK.FindItemFromArrayByName(items, tc.currentItemName, true, false)
 		t.WithFields(testing.Fields{
@@ -189,11 +176,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 
 	// Here desiredItemName should be different across tests cases and across test files
 	items, err := inttestSDK.ListItemsViaCLI("")
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error listing items via cli")
-	}
+	t.MustNil(err, "error listing items via cli")
 
 	_, ok := inttestSDK.FindItemFromArrayByName(items, tc.desiredItemName, false, false)
 	t.WithFields(testing.Fields{
@@ -203,12 +186,9 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}).MustTrue(ok == tc.shouldSuccess, "item exist status is different from expected")
 
 	exec, err := inttestSDK.GetExecutionByGUID(schedule.ExecID)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"exec_id": schedule.ExecID,
-			"error":   err,
-		}).Fatal("error finding execution")
-	}
+	t.WithFields(testing.Fields{
+		"exec_id": schedule.ExecID,
+	}).MustNil(err, "error finding execution")
 	t.WithFields(testing.Fields{
 		"completed":       exec.Completed,
 		"shouldCompleted": tc.shouldSuccess,

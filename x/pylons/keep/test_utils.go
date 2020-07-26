@@ -59,38 +59,28 @@ func SetupTestCoinInput() TestCoinInput {
 	db := dbm.NewMemDB()
 
 	keyAcc := sdk.NewKVStoreKey(auth.StoreKey)
-	authCapKey := sdk.NewKVStoreKey("authCapKey")
-	fckCapKey := sdk.NewKVStoreKey("fckCapKey")
 	keyParams := sdk.NewKVStoreKey("params")
-	keySupply := sdk.NewKVStoreKey(supply.StoreKey)
 	tkeyParams := sdk.NewTransientStoreKey("transient_params")
 
-	fcKey := sdk.NewKVStoreKey("fee_collection")
-	entKey := sdk.NewKVStoreKey("pylons_entity")
-	cbKey := sdk.NewKVStoreKey("pylons_cookbook")
-	rcKey := sdk.NewKVStoreKey("pylons_recipe")
-	tdKey := sdk.NewKVStoreKey("pylons_trade")
-	itKey := sdk.NewKVStoreKey("pylons_item")
-	execKey := sdk.NewKVStoreKey("pylons_execution")
+	stringKeys := []string{
+		supply.StoreKey,
+		"authCapKey",
+		"fckCapKey",
+		"fee_collection",
+	}
+	stringKeys = append(stringKeys, StoreKeyList...)
+
+	keys := sdk.NewKVStoreKeys(stringKeys...)
 
 	ms := store.NewCommitMultiStore(db)
-	ms.MountStoreWithDB(keySupply, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyAcc, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(authCapKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(fckCapKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(keyParams, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(fcKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(entKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(cbKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(tdKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(rcKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(itKey, sdk.StoreTypeIAVL, db)
-	ms.MountStoreWithDB(execKey, sdk.StoreTypeIAVL, db)
 	ms.MountStoreWithDB(tkeyParams, sdk.StoreTypeTransient, db)
+	for _, kvsk := range keys {
+		ms.MountStoreWithDB(kvsk, sdk.StoreTypeIAVL, db)
+	}
 	//nolint:errcheck
 	ms.LoadLatestVersion()
-
-	ms.GetKVStore(cbKey)
 
 	ctx := sdk.NewContext(ms, abci.Header{ChainID: "pylonschain"}, false, log.NewNopLogger())
 
@@ -129,13 +119,8 @@ func SetupTestCoinInput() TestCoinInput {
 
 	plnK := NewKeeper(
 		bk,
-		entKey,  // entity
-		cbKey,   // cookbook
-		rcKey,   // recipe
-		itKey,   // item
-		execKey, // exec
-		tdKey,
 		cdc,
+		keys,
 	)
 
 	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}
@@ -149,23 +134,23 @@ func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins, s2coi
 	sender4, _ := sdk.AccAddressFromBech32("cosmos13p8890funv54hflk82ju0zv47tspglpk373453")
 
 	if s1coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins.Sort())
+		require.True(t, err == nil, err)
 	}
 
 	if s2coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins.Sort())
+		require.True(t, err == nil, err)
 	}
 
 	if s3coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins.Sort())
+		require.True(t, err == nil, err)
 	}
 
 	if s4coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins)
-		require.True(t, err == nil)
+		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins.Sort())
+		require.True(t, err == nil, err)
 	}
 	return sender1, sender2, sender3, sender4
 }
