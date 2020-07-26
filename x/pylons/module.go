@@ -98,6 +98,7 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 		tx.GetPylons(cdc),
 		tx.GoogleIAPGetPylons(cdc),
 		tx.SendPylons(cdc),
+		tx.SendCoins(cdc),
 		tx.SendItems(StoreKey, cdc),
 		tx.CreateCookbook(cdc),
 		tx.PrivateKeySign(cdc),

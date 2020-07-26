@@ -18,7 +18,7 @@ func RegisterCodec(cdc *codec.Codec) {
 	cdc.RegisterConcrete(msgs.MsgCreateAccount{}, "pylons/CreateAccount", nil)
 	cdc.RegisterConcrete(msgs.MsgGetPylons{}, "pylons/GetPylons", nil)
 	cdc.RegisterConcrete(msgs.MsgGoogleIAPGetPylons{}, "pylons/GoogleIAPGetPylons", nil)
-	cdc.RegisterConcrete(msgs.MsgSendPylons{}, "pylons/SendPylons", nil)
+	cdc.RegisterConcrete(msgs.MsgSendCoins{}, "pylons/SendCoins", nil)
 	cdc.RegisterConcrete(msgs.MsgSendItems{}, "pylons/SendItems", nil)
 	cdc.RegisterConcrete(msgs.MsgCreateCookbook{}, "pylons/CreateCookbook", nil)
 	cdc.RegisterConcrete(msgs.MsgUpdateCookbook{}, "pylons/UpdateCookbook", nil)

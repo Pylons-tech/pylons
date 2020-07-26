@@ -4,28 +4,24 @@ import (
 	"bufio"
 	"errors"
 
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-
-	"strconv"
-
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/keys"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// SendPylons implements SendPylons msg transaction
-func SendPylons(cdc *codec.Codec) *cobra.Command {
+// SendCoins implements sending pylons and game coisn
+func SendCoins(cdc *codec.Codec) *cobra.Command {
 	ccb := &cobra.Command{
-		Use:   "send-pylons [name] [amount]",
-		Short: "send pylons of specific amount to the name provided",
+		Use:   "send [to_address] [amount]",
+		Short: "send pylons and game coins to the address provided",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
@@ -49,11 +45,11 @@ func SendPylons(cdc *codec.Codec) *cobra.Command {
 				addr = info.GetAddress()
 			}
 
-			amount, err := strconv.Atoi(args[1])
+			coins, err := sdk.ParseCoins(args[1])
 			if err != nil {
 				return err
 			}
-			msg := msgs.NewMsgSendCoins(types.NewPylon(int64(amount)), cliCtx.GetFromAddress(), addr)
+			msg := msgs.NewMsgSendCoins(coins, cliCtx.GetFromAddress(), addr)
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

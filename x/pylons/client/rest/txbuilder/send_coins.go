@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -14,8 +13,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 )
 
-// SendPylonsTxBuilder returns the fixtures which can be used to create a send pylons transaction
-func SendPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+// SendCoinsTxBuilder returns the fixtures which can be used to create a send coins transaction
+func SendCoinsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {
@@ -29,7 +28,7 @@ func SendPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName 
 
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgSendCoins(types.NewPylon(5), sender, recv)
+		msg := msgs.NewMsgSendCoins(sdk.Coins{sdk.NewInt64Coin("loudcoin", 10), sdk.NewInt64Coin("pylon", 10)}, sender, recv)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 

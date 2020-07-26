@@ -13,16 +13,16 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-type sendPylonsReq struct {
+type sendCoinsReq struct {
 	BaseReq  rest.BaseReq `json:"base_req"`
 	Sender   string       `json:"sender"`
 	Receiver string       `json:"receiver"`
 	Amount   int64        `json:"amount"`
 }
 
-func pylonsSendHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
+func coinsSendHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req sendPylonsReq
+		var req sendCoinsReq
 
 		if !rest.ReadRESTReq(w, r, cdc, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
