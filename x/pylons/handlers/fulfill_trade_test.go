@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
@@ -74,6 +75,10 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	err = tci.PlnK.SetItem(tci.Ctx, *item6)
 	require.True(t, err == nil)
 
+	item7 := keep.GenItem("wrongCBID", sender2, "Pikachu")
+	err = tci.PlnK.SetItem(tci.Ctx, *item7)
+	require.True(t, err == nil)
+
 	cases := map[string]struct {
 		sender                sdk.AccAddress
 		fulfiller             sdk.AccAddress
@@ -142,13 +147,14 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			showError:           true,
 		},
 		"input item with wrong cookbook id fulfill trade test": {
-			sender:         sender,
-			fulfiller:      sender2,
-			inputCoinList:  types.GenCoinInputList(types.Pylon, 100),
-			inputItemList:  types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
-			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
-			desiredError:   "the sender doesn't have the trade item attributes",
-			showError:      true,
+			sender:              sender,
+			fulfiller:           sender2,
+			inputCoinList:       types.GenCoinInputList(types.Pylon, 100),
+			inputItemList:       types.GenTradeItemInputList(cbData.CookbookID, []string{"Pikachu"}),
+			outputCoinList:      sdk.Coins{sdk.NewInt64Coin("chair", 10)},
+			fulfillInputItemIDs: []string{item7.ID},
+			desiredError:        "[0]th item does not match: cookbook id does not match",
+			showError:           true,
 		},
 		"item trade with small pylons amout": {
 			sender:              sender2,
@@ -255,6 +261,9 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 					d := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress).AmountOf(diff.Coin).Int64() - pylonsLLCAmountFirst.AmountOf(diff.Coin).Int64()
 					require.True(t, d == diff.Count)
 				}
+			} else {
+				require.True(t, err != nil)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error(), tc.desiredError)
 			}
 		})
 	}
