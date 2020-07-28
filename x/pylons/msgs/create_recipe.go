@@ -65,17 +65,15 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			if coinOutput.Coin == types.Pylon {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
 			}
-		case types.ItemOutput:
-			itemOutput := entry
-			if itemOutput.ModifyItem.ItemInputRef != -1 {
-				if itemOutput.ModifyItem.ItemInputRef >= len(msg.ItemInputs) {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef overflow length of ItemInputs")
-				}
-				if itemOutput.ModifyItem.ItemInputRef < -1 {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef is less than 0 which is invalid")
-				}
+		case types.ItemModifyOutput:
+			if entry.ItemInputRef >= len(msg.ItemInputs) {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef overflow length of ItemInputs")
 			}
-
+			if entry.ItemInputRef < -1 {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef is less than 0 which is invalid")
+			}
+		case types.ItemOutput:
+			// do nothing for now
 		default:
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid entry type available")
 		}
@@ -95,14 +93,11 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			usedEntries[result] = true
 			entry := msg.Entries[result]
 			switch entry := entry.(type) {
-			case types.ItemOutput:
-				itemOutput := entry
-				if itemOutput.ModifyItem.ItemInputRef != -1 {
-					if usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] {
-						return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")
-					}
-					usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] = true
+			case types.ItemModifyOutput:
+				if usedItemInputRefs[entry.ItemInputRef] {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")
 				}
+				usedItemInputRefs[entry.ItemInputRef] = true
 			}
 		}
 		// validation for weight program
@@ -113,7 +108,6 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	if len(msg.Description) < 20 {

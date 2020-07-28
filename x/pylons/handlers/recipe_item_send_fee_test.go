@@ -28,7 +28,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 		types.GenItemInputList("catalyst"),
 
 		types.EntriesList{
-			types.NewInputRefOutput(
+			types.NewItemModifyOutput(
 				0, types.ItemModifyParams{TransferFee: 300},
 			),
 			types.GenItemOnlyEntry("Catalyst2")[0],
@@ -45,7 +45,7 @@ func TestRecipeItemSendFee(t *testing.T) {
 		types.GenItemInputList("sword", "knife"),
 
 		types.EntriesList{
-			types.NewInputRefOutput(
+			types.NewItemModifyOutput(
 				0, types.ItemModifyParams{TransferFee: 300},
 			),
 		},
