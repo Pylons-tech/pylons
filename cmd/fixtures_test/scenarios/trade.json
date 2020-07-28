@@ -402,7 +402,7 @@
         "paramsRef": "./fulfill_trades/trade_item_coin2.json",
         "output": {
             "txResult": {
-                "errLog": "the sender doesn't have the trade item attributes"
+                "errLog": "[0]th item does not match: cookbook id does not match"
             }
         }
     }

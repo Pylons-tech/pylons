@@ -189,14 +189,14 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "",
 			checkItemAvailable: false,
 		},
-		"Wrong item in input": {
+		"wrong item in input": {
 			itemIDs:            []string{"invaliditemID"},
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"NoRaichu"},
 			addInputCoin:       true,
 			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
-			desiredError:       "the [0] item input don't match any items provided",
+			desiredError:       "[0]th item does not match",
 			successMsg:         "successfully executed the recipe",
 			showError:          true,
 			checkItemName:      "",

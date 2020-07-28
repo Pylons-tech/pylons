@@ -30,29 +30,24 @@ type ExecProcess struct {
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
 
-	inputItems, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
+	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
 	if err != nil {
 		return err
 	}
 
 	// we validate and match items
 	var matchedItems []types.Item
-	var matches bool
 	for i, itemInput := range p.recipe.ItemInputs {
-		matches = false
-
-		for iii, item := range inputItems {
-			if itemInput.Matches(item) && item.NewRecipeExecutionError() == nil {
-				matchedItems = append(matchedItems, item)
-				inputItems[iii].OwnerRecipeID = p.recipe.ID
-				matches = true
-				break
-			}
+		matchedItem := items[i]
+		matchErr := itemInput.MatchError(matchedItem)
+		if matchErr != nil {
+			return fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID)
 		}
-
-		if !matches {
-			return fmt.Errorf("the [%d] item input don't match any items provided", i)
+		execErr := matchedItem.NewRecipeExecutionError()
+		if execErr != nil {
+			return fmt.Errorf("[%d]th item is locked: %s item_id=%s", i, execErr.Error(), matchedItem.ID)
 		}
+		matchedItems = append(matchedItems, matchedItem)
 	}
 	p.matchedItems = matchedItems
 	return nil
