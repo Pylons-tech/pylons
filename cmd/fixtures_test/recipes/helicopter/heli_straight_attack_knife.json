@@ -2,7 +2,6 @@
     "CoinInputs":[],
     "ItemInputRefs": [],
     "Entries":{
-        "CoinOutputs":[],
         "ItemOutputs":[
             {
                 "Ref": "./recipes/helicopter/item_output/heli_straight_attack_knife.json"

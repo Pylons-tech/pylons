@@ -10,12 +10,10 @@
                 "Count":"100"
             }
         ],
-        "ItemOutputs":[
+        "ItemModifyOutputs":[
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
-                }
+                "ItemInputRef": 0,
+                "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
             }
         ]
     },

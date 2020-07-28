@@ -6,17 +6,13 @@
     ],
     "Entries":{
         "CoinOutputs":[],
-        "ItemOutputs":[
+        "ItemModifyOutputs": [
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/catalyst/upgrader/monster.json"
-                }
+                "ItemInputRef": 0,
+                "ModifyParamsRef": "./recipes/catalyst/upgrader/monster.json"
             },
             {
-                "ModifyItem": {
-                    "ItemInputRef": 1
-                }
+                "ItemInputRef": 1
             }
         ]
     },

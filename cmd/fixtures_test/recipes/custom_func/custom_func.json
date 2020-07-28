@@ -5,12 +5,10 @@
     ],
     "Entries":{
         "CoinOutputs":[],
-        "ItemOutputs":[
+        "ItemModifyOutputs":[
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
-                }
+                "ItemInputRef": 0,
+                "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
             }
         ]
     },
