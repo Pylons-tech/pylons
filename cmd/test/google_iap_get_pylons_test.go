@@ -101,9 +101,11 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 				accInfo := inttestSDK.GetAccountInfoFromAddr(getPylonsSdkAddr.String(), t)
 				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(getPylonsAccInfo.Coins.AmountOf(types.Pylon).Int64() + tc.reqAmount))
 				t.WithFields(testing.Fields{
-					"get_pylons_address": getPylonsSdkAddr.String(),
-					"target_amount":      tc.reqAmount,
-					"actual_amount":      accInfo.Coins.AmountOf(types.Pylon).Int64(),
+					"iap_get_pylons_key":     getPylonsKey,
+					"iap_get_pylons_address": getPylonsSdkAddr.String(),
+					"request_amount":         tc.reqAmount,
+					"base_amount":            getPylonsAccInfo.Coins.AmountOf(types.Pylon).Int64(),
+					"actual_amount":          accInfo.Coins.AmountOf(types.Pylon).Int64(),
 				}).MustTrue(balanceOk, "pylons requestor should get correct revenue")
 			}
 

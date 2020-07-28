@@ -135,7 +135,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			coinInputList:    nil,
 			tradeOutputCoins: types.NewPylon(100),
 			hasOutputItem:    false,
-			desiredError:     "the sender doesn't have the trade item attributes",
+			desiredError:     "[0]th item does not match: cookbook id does not match",
 		},
 	}
 

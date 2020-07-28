@@ -132,7 +132,7 @@ Try to debug the transaction by doing `pylonscli query tx 632A1A35933E4DDD89A71B
 
 - How to handle this issue?
 ```log
-invalid request: the sender doesn't have the trade item attributes {ItemInput:{Doubles:DoubleInputParamList{} Longs:LongInputParamList{} Strings:StringInputParamList{Name: \n\tStringInputParam{ \n\t\tValue: TESTITEM_FulfillTrade__001_TC4_INPUT,\n\t},\n}} CookbookID:LOUD-CB-001}: failed to execute message; message index: 0
+invalid request: [0]th item does not match: cookbook id does not match {ItemInput:{Doubles:DoubleInputParamList{} Longs:LongInputParamList{} Strings:StringInputParamList{Name: \n\tStringInputParam{ \n\t\tValue: TESTITEM_FulfillTrade__001_TC4_INPUT,\n\t},\n}} CookbookID:LOUD-CB-001}: failed to execute message; message index: 0
 ```
 It means sender does not have an item with name `"TESTITEM_FulfillTrade__001_TC4_INPUT"` with cookbook ID `"LOUD-CB-001"`.
 First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `"TESTITEM_FulfillTrade__001_TC4_INPUT"` on that cookbook.
