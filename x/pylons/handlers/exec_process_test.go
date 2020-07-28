@@ -19,10 +19,87 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// Generate initial items
-	initItemNames := []string{"Knife", "Knife", "Shield"}
+	initItemNames := []string{
+		"Knife", "Knife", "Shield", "Eye", "Nose",
+		"Attack1Item", "Attack10Item", "Attack10Level1Item",
+		"Attack10Level20Item",
+		"Attack10Level20Carrier",
+		"Attack10Level20PersonFee1",
+		"Attack10Level20PersonFee1000Locked",
+	}
 	initItemIDs := []string{}
 	for _, iN := range initItemNames {
 		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
+		if iN == "Attack1Item" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "1.0",
+			})
+		} else if iN == "Attack10Item" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "10.0",
+			})
+		} else if iN == "Attack10Level1Item" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "10.0",
+			})
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
+				Key:   "level",
+				Value: 1,
+			})
+		} else if iN == "Attack10Level20Item" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "10.0",
+			})
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
+				Key:   "level",
+				Value: 20,
+			})
+		} else if iN == "Attack10Level20Carrier" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "10.0",
+			})
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
+				Key:   "level",
+				Value: 20,
+			})
+			newItem.Strings = append(newItem.Strings, types.StringKeyValue{
+				Key:   "Type",
+				Value: "Carrier",
+			})
+		} else if iN == "Attack10Level20PersonFee1" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "10.0",
+			})
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
+				Key:   "level",
+				Value: 20,
+			})
+			newItem.Strings = append(newItem.Strings, types.StringKeyValue{
+				Key:   "Type",
+				Value: "person",
+			})
+		} else if iN == "Attack10Level20PersonFee1000Locked" {
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
+				Key:   "attack",
+				Value: "10.0",
+			})
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
+				Key:   "level",
+				Value: 20,
+			})
+			newItem.Strings = append(newItem.Strings, types.StringKeyValue{
+				Key:   "Type",
+				Value: "person",
+			})
+			newItem.TransferFee = 1000
+			newItem.OwnerTradeID = "TRADE_ID"
+		}
 		err := tci.PlnK.SetItem(tci.Ctx, *newItem)
 		require.True(t, err == nil)
 		initItemIDs = append(initItemIDs, newItem.ID)
@@ -37,6 +114,38 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		types.GenItemInputList("Shield", "Shield"),
 		types.GenItemOnlyEntry("MRGShield"),
 		types.GenOneOutput(1),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	diffItemMergeRecipe := MockRecipe(
+		tci, "head build recipe",
+		types.CoinInputList{},
+		types.GenItemInputList("Eye", "Nose"),
+		types.GenItemOnlyEntry("Head"),
+		types.GenOneOutput(1),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	personSleepRecipe := MockRecipe(
+		tci, "sleep recipe",
+		types.CoinInputList{},
+		types.ItemInputList{
+			{
+				Doubles: types.DoubleInputParamList{{Key: "attack", MinValue: "10.0", MaxValue: "1000.0"}},
+				Longs:   types.LongInputParamList{{Key: "level", MinValue: 20, MaxValue: 100}},
+				Strings: types.StringInputParamList{{Key: "Type", Value: "person"}},
+				TransferFee: types.FeeInputParam{
+					MinValue: 10,
+					MaxValue: 10000,
+				},
+			},
+		},
+		nil,
+		nil,
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -63,6 +172,69 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 			desiredError: "multiple use of same item as item inputs",
 			showError:    true,
 		},
+		"input item order change test": {
+			itemIDs:      []string{initItemIDs[4], initItemIDs[3]},
+			rcpID:        diffItemMergeRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: Name key value does not match",
+			showError:    true,
+		},
+		"double key is not available on the item": {
+			itemIDs:      []string{initItemIDs[4]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: attack key is not available on the item",
+			showError:    true,
+		},
+		"double key range does not match": {
+			itemIDs:      []string{initItemIDs[5]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: attack key range does not match",
+			showError:    true,
+		},
+		"long key is not available on the item": {
+			itemIDs:      []string{initItemIDs[6]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: level key is not available on the item",
+			showError:    true,
+		},
+		"long key range does not match": {
+			itemIDs:      []string{initItemIDs[7]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: level key range does not match",
+			showError:    true,
+		},
+		"string key is not available on the item": {
+			itemIDs:      []string{initItemIDs[8]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: Type key is not available on the item",
+			showError:    true,
+		},
+		"string key value does not match": {
+			itemIDs:      []string{initItemIDs[9]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: Type key value does not match",
+			showError:    true,
+		},
+		"item transfer fee does not match": {
+			itemIDs:      []string{initItemIDs[10]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item does not match: item transfer fee does not match",
+			showError:    true,
+		},
+		"item is locked": {
+			itemIDs:      []string{initItemIDs[11]},
+			rcpID:        personSleepRecipe.RecipeID,
+			sender:       sender1,
+			desiredError: "[0]th item is locked: Item is owned by a trade",
+			showError:    true,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -73,7 +245,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 			err = p.SetMatchedItemsFromExecMsg(msg)
 			if tc.showError {
 				require.True(t, err != nil)
-				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error(), tc.desiredError)
 			} else {
 				require.True(t, err == nil)
 			}
