@@ -10,8 +10,7 @@
                 "Coin":"hllgcoin",
                 "Count": "(input0.level + input1.level) * 10"
             }
-        ],
-        "ItemOutputs":[]
+        ]
     },
     "Outputs": [
         {

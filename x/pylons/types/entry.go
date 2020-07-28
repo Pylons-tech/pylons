@@ -13,8 +13,9 @@ type Entry interface {
 type EntriesList []Entry
 
 type serializeEntriesList struct {
-	CoinOutputs []CoinOutput
-	ItemOutputs []ItemOutput
+	CoinOutputs       []CoinOutput
+	ItemModifyOutputs []ItemModifyOutput
+	ItemOutputs       []ItemOutput
 }
 
 func (wpl EntriesList) String() string {
@@ -34,11 +35,11 @@ func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	for _, wp := range wpl {
 		switch wp := wp.(type) {
 		case CoinOutput:
-			coinOutput := wp
-			sel.CoinOutputs = append(sel.CoinOutputs, coinOutput)
+			sel.CoinOutputs = append(sel.CoinOutputs, wp)
+		case ItemModifyOutput:
+			sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wp)
 		case ItemOutput:
-			itemOutput := wp
-			sel.ItemOutputs = append(sel.ItemOutputs, itemOutput)
+			sel.ItemOutputs = append(sel.ItemOutputs, wp)
 		default:
 		}
 	}
@@ -55,6 +56,9 @@ func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 
 	for _, co := range sel.CoinOutputs {
 		*wpl = append(*wpl, co)
+	}
+	for _, io := range sel.ItemModifyOutputs {
+		*wpl = append(*wpl, io)
 	}
 	for _, io := range sel.ItemOutputs {
 		*wpl = append(*wpl, io)

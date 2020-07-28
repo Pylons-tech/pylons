@@ -5,12 +5,10 @@
     ],
     "Entries":{
         "CoinOutputs":[],
-        "ItemOutputs":[
+        "ItemModifyOutputs":[
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
-                }
+                "ItemInputRef": 0,
+                "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
             }
         ]
     },

@@ -5,12 +5,10 @@
     ],
     "Entries":{
         "CoinOutputs":[],
-        "ItemOutputs":[
+        "ItemModifyOutputs":[
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/recipe_item_send_fee/upgrader/recipe_item_send_fee.json"
-                }
+                "ItemInputRef": 0,
+                "ModifyParamsRef": "./recipes/recipe_item_send_fee/upgrader/recipe_item_send_fee.json"
             }
         ]
     },

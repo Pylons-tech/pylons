@@ -4,13 +4,10 @@
         "./recipes/helicopter/item_input/adventurer.json"
     ],
     "Entries":{
-        "CoinOutputs":[],
-        "ItemOutputs":[
+        "ItemModifyOutputs":[
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
-                }
+                "ItemInputRef": 0,
+                "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
             }
         ]
     },

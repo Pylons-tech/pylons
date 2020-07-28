@@ -113,29 +113,36 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 				Coin:   coinOutput.Coin,
 				Amount: coinAmount,
 			})
-		case types.ItemOutput:
+		case types.ItemModifyOutput:
 			itemOutput := output
 			var outputItem *types.Item
 
-			if itemOutput.ModifyItem.ItemInputRef == -1 {
-				outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
-				if err != nil {
-					return ersl, errInternal(err)
-				}
-			} else {
-				// Collect itemInputRefs that are used on output
-				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ModifyItem.ItemInputRef)
+			// Collect itemInputRefs that are used on output
+			usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ItemInputRef)
 
-				fmt.Println("itemOutput.ModifyItem.ItemInputRef", itemOutput.ModifyItem.ItemInputRef)
-				// Modify item according to ModifyParams section
-				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ModifyItem.ItemInputRef], itemOutput.ModifyItem)
-				if err != nil {
-					return ersl, errInternal(err)
-				}
+			fmt.Println("itemOutput.ModifyItem.ItemInputRef", itemOutput.ItemInputRef)
+			// Modify item according to ModifyParams section
+			outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ItemInputRef], itemOutput)
+			if err != nil {
+				return ersl, errInternal(err)
 			}
 			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
 				return ersl, errInternal(err)
 
+			}
+			ersl = append(ersl, ExecuteRecipeSerialize{
+				Type:   "ITEM",
+				ItemID: outputItem.ID,
+			})
+		case types.ItemOutput:
+			itemOutput := output
+			var outputItem *types.Item
+			outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
+			if err != nil {
+				return ersl, errInternal(err)
+			}
+			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
+				return ersl, errInternal(err)
 			}
 			ersl = append(ersl, ExecuteRecipeSerialize{
 				Type:   "ITEM",
@@ -156,7 +163,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 }
 
 // UpdateItemFromModifyParams is used to update item passed via item input from modify params
-func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ModifyItemType) (*types.Item, error) {
+func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyOutput) (*types.Item, error) {
 	dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
 	if err != nil {
 		return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))

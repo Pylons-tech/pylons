@@ -9,8 +9,7 @@
                 "Coin": "hlgcoin",
                 "Count": "int(attack * double(5))"
             }
-        ],
-        "ItemOutputs":[]
+        ]
     },
     "Outputs": [
         {

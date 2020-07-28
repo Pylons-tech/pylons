@@ -175,7 +175,7 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 // GenEntriesFirstItemNameUpgrade is a function to generate entries that update first item's name
 func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 	return EntriesList{
-		NewInputRefOutput(
+		NewItemModifyOutput(
 			0, GenModifyParamsForString("Name", targetValue),
 		),
 	}
@@ -184,10 +184,10 @@ func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
 // GenEntriesTwoItemNameUpgrade is a function to generate entries that update two items' names
 func GenEntriesTwoItemNameUpgrade(targetValue1, targetValue2 string) EntriesList {
 	return EntriesList{
-		NewInputRefOutput(
+		NewItemModifyOutput(
 			0, GenModifyParamsForString("Name", targetValue1),
 		),
-		NewInputRefOutput(
+		NewItemModifyOutput(
 			1, GenModifyParamsForString("Name", targetValue2),
 		),
 	}
