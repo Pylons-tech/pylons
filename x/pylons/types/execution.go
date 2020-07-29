@@ -52,6 +52,7 @@ func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 func (e Execution) String() string {
 	return fmt.Sprintf(`
 		Execution{ 
+			NodeVersion: %s,
 			ID: %s,
 			RecipeID: %s,
 			CookbookID: %s,
@@ -60,7 +61,6 @@ func (e Execution) String() string {
 			BlockHeight: %d,
 			Sender: %s,
 			Completed: %t,
-			NodeVersion: %s,
-		}`, e.ID, e.RecipeID, e.CookbookID, e.CoinInputs, e.ItemInputs,
-		e.BlockHeight, e.Sender, e.Completed, e.NodeVersion)
+		}`, e.NodeVersion, e.ID, e.RecipeID, e.CookbookID, e.CoinInputs, e.ItemInputs,
+		e.BlockHeight, e.Sender, e.Completed)
 }

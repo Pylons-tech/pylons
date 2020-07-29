@@ -11,23 +11,23 @@ const TypeGoogleIAPOrder = "google_iap_order"
 
 // GoogleIAPOrder is a struct that contains all the metadata of a google iap order
 type GoogleIAPOrder struct {
+	NodeVersion       SemVer
 	ProductID         string
 	PurchaseToken     string
 	ReceiptDataBase64 string
 	Signature         string
 	Sender            sdk.AccAddress
-	NodeVersion       SemVer
 }
 
 // NewGoogleIAPOrder return a new Google IAP Order
 func NewGoogleIAPOrder(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, Sender sdk.AccAddress) GoogleIAPOrder {
 	cb := GoogleIAPOrder{
+		NodeVersion:       SemVer("0.0.1"),
 		ProductID:         ProductID,
 		PurchaseToken:     PurchaseToken,
 		ReceiptDataBase64: ReceiptDataBase64,
 		Signature:         Signature,
 		Sender:            Sender,
-		NodeVersion:       SemVer("0.0.1"),
 	}
 
 	return cb

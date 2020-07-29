@@ -12,6 +12,7 @@ const TypeTrade = "trade"
 // Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
 // the FulFiller.
 type Trade struct {
+	NodeVersion SemVer
 	ID          string             // the trade guid
 	CoinInputs  CoinInputList      // coins that the fulfiller should send to creator
 	ItemInputs  TradeItemInputList // items that the fulfiller should send to creator
@@ -22,7 +23,6 @@ type Trade struct {
 	FulFiller   sdk.AccAddress     // trade fulfiller address (acceptor)
 	Disabled    bool               // disabled flag
 	Completed   bool               // completed flag
-	NodeVersion SemVer
 }
 
 // TradeList is a list of trades
@@ -48,13 +48,13 @@ func NewTrade(extraInfo string,
 	itemOutputs ItemList,
 	sender sdk.AccAddress) Trade {
 	trd := Trade{
+		NodeVersion: SemVer("0.0.1"),
 		CoinInputs:  coinInputs,
 		ItemInputs:  itemInputs,
 		CoinOutputs: coinOutputs,
 		ItemOutputs: itemOutputs,
 		ExtraInfo:   extraInfo,
 		Sender:      sender,
-		NodeVersion: SemVer("0.0.1"),
 	}
 
 	trd.ID = KeyGen(sender)
@@ -63,6 +63,7 @@ func NewTrade(extraInfo string,
 
 func (trd *Trade) String() string {
 	return fmt.Sprintf(`Trade{
+		NodeVersion: %s,
 		ID: %s,
 		CoinInputs: %s,
 		ItemInputs: %s,
@@ -70,14 +71,14 @@ func (trd *Trade) String() string {
 		ItemOutputs: %+v,
 		ExtraInfo: %s,
 		Sender: %+v,
-		NodeVersion: %s,
-	}`, trd.ID,
+	}`,
+		trd.NodeVersion,
+		trd.ID,
 		trd.CoinInputs.String(),
 		trd.ItemInputs.String(),
 		trd.CoinOutputs.String(),
 		trd.ItemOutputs,
 		trd.ExtraInfo,
 		trd.Sender,
-		trd.NodeVersion,
 	)
 }

@@ -1,4 +1,5 @@
 {
+  "NodeVersion": "0.0.1",
   "Doubles": [
     { "Key": "attack", "Value": "1024" },
     { "Key": "Mana", "Value": "100" },
@@ -11,6 +12,5 @@
   "Strings": [{ "Key": "Name", "Value": "Custom Function TestCharacter" }],
   "CookbookID": "custom-func-1589853709",
   "Sender": "cusfunc_account2",
-  "TransferFee": "1000",
-  "NodeVersion": "0.0.1"
+  "TransferFee": "1000"
 }
