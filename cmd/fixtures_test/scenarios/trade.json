@@ -395,7 +395,7 @@
     {
         "ID": "FULFILL_ITEM_COIN_TRADE2",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE2"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE2", "CREATE_ACCOUNT1_TRADING_ITEMS"],
             "blockWait": 0
         },
         "action": "fulfill_trade",
