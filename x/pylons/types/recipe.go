@@ -22,6 +22,7 @@ type Recipe struct {
 	BlockInterval int64
 	Sender        sdk.AccAddress
 	Disabled      bool
+	NodeVersion   SemVer
 }
 
 // RecipeList is a list of recipes
@@ -57,6 +58,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 		BlockInterval: blockInterval,
 		Description:   description,
 		Sender:        sender,
+		NodeVersion:   SemVer("0.0.1"),
 	}
 
 	rcp.ID = KeyGen(sender)
@@ -72,9 +74,11 @@ func (rcp Recipe) String() string {
 		ItemInputs: %s,
 		Entries: %s,
 		ExecutionTime: %d,
+		NodeVersion: %s,
 	}`, rcp.Name, rcp.CookbookID, rcp.ID,
 		rcp.CoinInputs.String(),
 		rcp.ItemInputs.String(),
 		rcp.Entries.String(),
-		rcp.BlockInterval)
+		rcp.BlockInterval,
+		rcp.NodeVersion)
 }

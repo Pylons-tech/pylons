@@ -11,8 +11,9 @@ const TypeLockedCoin = "lockedCoin"
 
 // LockedCoin describes the locked coin struct
 type LockedCoin struct {
-	Sender sdk.AccAddress
-	Amount sdk.Coins
+	Sender      sdk.AccAddress
+	Amount      sdk.Coins
+	NodeVersion SemVer
 }
 
 func (lc LockedCoin) String() string {
@@ -20,14 +21,16 @@ func (lc LockedCoin) String() string {
 	LockedCoin{ 
 		Address: %s,
 		Amount: %s,
-	}`, lc.Sender.String(), lc.Amount.String())
+		NodeVersion: %s,
+	}`, lc.Sender.String(), lc.Amount.String(), lc.NodeVersion)
 }
 
 // NewLockedCoin return a new locked coin
 func NewLockedCoin(sender sdk.AccAddress, amount sdk.Coins) LockedCoin {
 	lc := LockedCoin{
-		Sender: sender,
-		Amount: amount,
+		Sender:      sender,
+		Amount:      amount,
+		NodeVersion: SemVer("0.0.1"),
 	}
 
 	return lc

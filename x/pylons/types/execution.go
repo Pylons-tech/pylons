@@ -20,6 +20,7 @@ type Execution struct {
 	BlockHeight int64
 	Sender      sdk.AccAddress
 	Completed   bool
+	NodeVersion SemVer
 }
 
 // ExecutionList describes executions list
@@ -41,6 +42,7 @@ func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 		BlockHeight: blockHeight,
 		Sender:      sender,
 		Completed:   completed,
+		NodeVersion: SemVer("0.0.1"),
 	}
 
 	exec.ID = KeyGen(sender)
@@ -58,6 +60,7 @@ func (e Execution) String() string {
 			BlockHeight: %d,
 			Sender: %s,
 			Completed: %t,
+			NodeVersion: %s,
 		}`, e.ID, e.RecipeID, e.CookbookID, e.CoinInputs, e.ItemInputs,
-		e.BlockHeight, e.Sender, e.Completed)
+		e.BlockHeight, e.Sender, e.Completed, e.NodeVersion)
 }

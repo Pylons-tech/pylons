@@ -159,7 +159,16 @@ func (it Item) String() string {
 		Strings: %+v,
 		CookbookID: %+v,
 		TransferFee: %d,
-	}`, it.ID, it.Sender, it.Doubles, it.Longs, it.Strings, it.CookbookID, it.TransferFee)
+		NodeVersion: %s,
+	}`,
+		it.ID,
+		it.Sender,
+		it.Doubles,
+		it.Longs,
+		it.Strings,
+		it.CookbookID,
+		it.TransferFee,
+		it.NodeVersion)
 }
 
 // Equals compares two items

@@ -16,6 +16,7 @@ type GoogleIAPOrder struct {
 	ReceiptDataBase64 string
 	Signature         string
 	Sender            sdk.AccAddress
+	NodeVersion       SemVer
 }
 
 // NewGoogleIAPOrder return a new Google IAP Order
@@ -26,6 +27,7 @@ func NewGoogleIAPOrder(ProductID, PurchaseToken, ReceiptDataBase64, Signature st
 		ReceiptDataBase64: ReceiptDataBase64,
 		Signature:         Signature,
 		Sender:            Sender,
+		NodeVersion:       SemVer("0.0.1"),
 	}
 
 	return cb

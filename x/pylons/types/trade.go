@@ -22,6 +22,7 @@ type Trade struct {
 	FulFiller   sdk.AccAddress     // trade fulfiller address (acceptor)
 	Disabled    bool               // disabled flag
 	Completed   bool               // completed flag
+	NodeVersion SemVer
 }
 
 // TradeList is a list of trades
@@ -53,6 +54,7 @@ func NewTrade(extraInfo string,
 		ItemOutputs: itemOutputs,
 		ExtraInfo:   extraInfo,
 		Sender:      sender,
+		NodeVersion: SemVer("0.0.1"),
 	}
 
 	trd.ID = KeyGen(sender)
@@ -68,6 +70,7 @@ func (trd *Trade) String() string {
 		ItemOutputs: %+v,
 		ExtraInfo: %s,
 		Sender: %+v,
+		NodeVersion: %s,
 	}`, trd.ID,
 		trd.CoinInputs.String(),
 		trd.ItemInputs.String(),
@@ -75,5 +78,6 @@ func (trd *Trade) String() string {
 		trd.ItemOutputs,
 		trd.ExtraInfo,
 		trd.Sender,
+		trd.NodeVersion,
 	)
 }
