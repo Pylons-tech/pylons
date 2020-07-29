@@ -44,6 +44,7 @@ type Item struct {
 	Tradable      bool
 	LastUpdate    int64
 	TransferFee   int64
+	NodeVersion   SemVer
 }
 
 // SetTransferFee set item's TransferFee
@@ -229,6 +230,7 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 		Tradable:    true,
 		LastUpdate:  blockHeight,
 		TransferFee: transferFee,
+		NodeVersion: SemVer("0.0.1"),
 	}
 	item.ID = KeyGen(sender)
 

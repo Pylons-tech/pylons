@@ -14,6 +14,7 @@ type Cookbook struct {
 	ID           string // the cookbook guid
 	Name         string
 	Description  string
+	NodeVersion  SemVer
 	Version      SemVer
 	Developer    string
 	Level        Level
@@ -47,6 +48,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 		SupportEmail: sEmail,
 		Sender:       sender,
 		CostPerBlock: cpb,
+		NodeVersion:  SemVer("0.0.1"),
 	}
 
 	cb.ID = KeyGen(sender)
@@ -64,5 +66,6 @@ func (cb Cookbook) String() string {
 		SupportEmail: %s,
 		CostPerBlock: %d,
 		Sender: %s,
-	}`, cb.Name, cb.Description, cb.Version, cb.Developer, cb.Level, cb.SupportEmail, cb.CostPerBlock, cb.Sender)
+		NodeVersion: %s,
+	}`, cb.Name, cb.Description, cb.Version, cb.Developer, cb.Level, cb.SupportEmail, cb.CostPerBlock, cb.Sender, cb.NodeVersion)
 }
