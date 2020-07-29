@@ -11,6 +11,7 @@ const TypeCookbook = "cookbook"
 
 // Cookbook is a struct that contains all the metadata of a cookbook
 type Cookbook struct {
+	NodeVersion  SemVer
 	ID           string // the cookbook guid
 	Name         string
 	Description  string
@@ -40,6 +41,7 @@ func (cbl CookbookList) String() string {
 // NewCookbook return a new Cookbook
 func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
 	cb := Cookbook{
+		NodeVersion:  SemVer("0.0.1"),
 		Name:         name,
 		Description:  description,
 		Version:      version,
@@ -56,6 +58,7 @@ func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, desc
 func (cb Cookbook) String() string {
 	return fmt.Sprintf(`
 	Cookbook{ 
+		NodeVersion: %s,
 		Name: %s,
 		Description: %s,
 		Version: %s,
@@ -64,5 +67,5 @@ func (cb Cookbook) String() string {
 		SupportEmail: %s,
 		CostPerBlock: %d,
 		Sender: %s,
-	}`, cb.Name, cb.Description, cb.Version, cb.Developer, cb.Level, cb.SupportEmail, cb.CostPerBlock, cb.Sender)
+	}`, cb.NodeVersion, cb.Name, cb.Description, cb.Version, cb.Developer, cb.Level, cb.SupportEmail, cb.CostPerBlock, cb.Sender)
 }

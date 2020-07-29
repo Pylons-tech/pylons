@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs": [],
     "ItemInputRefs": [
         "./recipes/catalyst/item_input/monster.json",

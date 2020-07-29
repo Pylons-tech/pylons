@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "Doubles": [{ "Key": "defense", "Value": "2" }],
     "Longs": [{ "Key": "level", "Value": "2" }],
     "Strings": [{ "Key": "Name", "Value": "Helicopter's Shield lv2" }],
