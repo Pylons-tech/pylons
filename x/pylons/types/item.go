@@ -32,10 +32,11 @@ type StringKeyValue struct {
 
 // Item is a tradable asset
 type Item struct {
-	ID      string
-	Doubles []DoubleKeyValue
-	Longs   []LongKeyValue
-	Strings []StringKeyValue
+	NodeVersion SemVer
+	ID          string
+	Doubles     []DoubleKeyValue
+	Longs       []LongKeyValue
+	Strings     []StringKeyValue
 	// as items are unique per cookbook
 	CookbookID    string
 	Sender        sdk.AccAddress
@@ -44,7 +45,6 @@ type Item struct {
 	Tradable      bool
 	LastUpdate    int64
 	TransferFee   int64
-	NodeVersion   SemVer
 }
 
 // SetTransferFee set item's TransferFee
@@ -152,6 +152,7 @@ func (it Item) SetString(key string, value string) bool {
 func (it Item) String() string {
 	return fmt.Sprintf(`
 	Item{ 
+		NodeVersion: %s,
 		ID: %s,
 		Sender: %s,
 		Doubles: %+v,
@@ -159,16 +160,15 @@ func (it Item) String() string {
 		Strings: %+v,
 		CookbookID: %+v,
 		TransferFee: %d,
-		NodeVersion: %s,
 	}`,
+		it.NodeVersion,
 		it.ID,
 		it.Sender,
 		it.Doubles,
 		it.Longs,
 		it.Strings,
 		it.CookbookID,
-		it.TransferFee,
-		it.NodeVersion)
+		it.TransferFee)
 }
 
 // Equals compares two items
@@ -230,16 +230,16 @@ func (it Item) NewRecipeExecutionError() error {
 func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
 
 	item := &Item{
-		CookbookID: cookbookID,
-		Doubles:    doubles,
-		Longs:      longs,
-		Strings:    strings,
-		Sender:     sender,
+		NodeVersion: SemVer("0.0.1"),
+		CookbookID:  cookbookID,
+		Doubles:     doubles,
+		Longs:       longs,
+		Strings:     strings,
+		Sender:      sender,
 		// By default all items are tradable
 		Tradable:    true,
 		LastUpdate:  blockHeight,
 		TransferFee: transferFee,
-		NodeVersion: SemVer("0.0.1"),
 	}
 	item.ID = KeyGen(sender)
 

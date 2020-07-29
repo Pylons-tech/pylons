@@ -12,6 +12,7 @@ const TypeExecution = "execution"
 // Execution is a recipe execution used for tracking the execution - specifically a
 // scheduled execution
 type Execution struct {
+	NodeVersion SemVer
 	ID          string
 	RecipeID    string // the recipe guid
 	CookbookID  string
@@ -20,7 +21,6 @@ type Execution struct {
 	BlockHeight int64
 	Sender      sdk.AccAddress
 	Completed   bool
-	NodeVersion SemVer
 }
 
 // ExecutionList describes executions list
@@ -35,6 +35,7 @@ func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 	completed bool) Execution {
 
 	exec := Execution{
+		NodeVersion: SemVer("0.0.1"),
 		RecipeID:    recipeID,
 		CookbookID:  cookbookID,
 		CoinInputs:  ci,
@@ -42,7 +43,6 @@ func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 		BlockHeight: blockHeight,
 		Sender:      sender,
 		Completed:   completed,
-		NodeVersion: SemVer("0.0.1"),
 	}
 
 	exec.ID = KeyGen(sender)
