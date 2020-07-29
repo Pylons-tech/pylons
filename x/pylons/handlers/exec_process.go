@@ -79,15 +79,14 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 }
 
 // AddExecutedResult add executed result from ExecProcess
-func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([]ExecuteRecipeSerialize, error) {
+func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string) ([]ExecuteRecipeSerialize, error) {
 	var ersl []ExecuteRecipeSerialize
-	var err error
 	usedItemInputIndexes := []int{}
-	for _, outputIndex := range outputs {
-		if len(p.recipe.Entries) <= outputIndex || outputIndex < 0 {
-			return ersl, fmt.Errorf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries))
+	for _, entryID := range entryIDs {
+		output, err := p.recipe.Entries.FindByID(entryID)
+		if err != nil {
+			return ersl, err
 		}
-		output := p.recipe.Entries[outputIndex]
 
 		switch output := output.(type) {
 		case types.CoinOutput:

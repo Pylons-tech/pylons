@@ -544,7 +544,7 @@ func TestCoinLock(t *testing.T) {
 					tc.recipeCoinInput,
 					types.GenItemInputList("Knife"),
 					types.GenItemOnlyEntry("KnifeMRG"),
-					types.GenOneOutput(1),
+					types.GenOneOutput("KnifeMRG"),
 					cbData.CookbookID,
 					2,
 					sender1,

@@ -2,10 +2,12 @@ package types
 
 import (
 	"encoding/json"
+	"fmt"
 )
 
 // Entry describes an output which can be produced from a recipe
 type Entry interface {
+	GetID() string
 	String() string
 }
 
@@ -27,6 +29,16 @@ func (wpl EntriesList) String() string {
 
 	itm += "}"
 	return itm
+}
+
+// FindByID is a function to find an entry by ID
+func (wpl EntriesList) FindByID(ID string) (Entry, error) {
+	for _, wp := range wpl {
+		if wp.GetID() == ID {
+			return wp, nil
+		}
+	}
+	return nil, fmt.Errorf("no entry with the ID %s available", ID)
 }
 
 // MarshalJSON is a custom marshal function

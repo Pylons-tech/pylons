@@ -15,7 +15,7 @@ func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) typ
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenEntries("chair", "Raichu"),
-		types.GenOneOutput(2),
+		types.GenOneOutput("chair", "Raichu"),
 		0,
 		sender,
 	)

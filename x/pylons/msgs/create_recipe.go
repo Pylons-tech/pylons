@@ -82,16 +82,16 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	for _, output := range msg.Outputs {
 		// validation for same ItemInputRef on output
 		usedItemInputRefs := make(map[int]bool)
-		usedEntries := make(map[int]bool)
-		for _, result := range output.ResultEntries {
-			if result >= len(msg.Entries) || result < 0 {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "output is refering to index which is out of entries range")
+		usedEntries := make(map[string]bool)
+		for _, entryID := range output.EntryIDs {
+			entry, err := msg.Entries.FindByID(entryID)
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			if usedEntries[result] {
+			if usedEntries[entryID] {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of entries within single output result")
 			}
-			usedEntries[result] = true
-			entry := msg.Entries[result]
+			usedEntries[entryID] = true
 			switch entry := entry.(type) {
 			case types.ItemModifyOutput:
 				if usedItemInputRefs[entry.ItemInputRef] {
