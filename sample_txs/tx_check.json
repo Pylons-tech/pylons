@@ -3,11 +3,11 @@
   "value": {
     "msg": [
       {
-        "type": "pylons/ExecuteRecipe",
+        "type": "pylons/CheckExecution",
         "value": {
-          "RecipeID": "RTEST_1596078885",
+          "ExecID": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm42ea6262-b1a3-41a0-9409-227e5c9f6b40",
           "Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm",
-          "Items": []
+          "PayToComplete": true
         }
       }
     ],
