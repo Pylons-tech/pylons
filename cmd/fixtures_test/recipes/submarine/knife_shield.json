@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./recipes/submarine/item_input/knife_lv1.json",

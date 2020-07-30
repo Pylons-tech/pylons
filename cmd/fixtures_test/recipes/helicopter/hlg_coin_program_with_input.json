@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./recipes/helicopter/item_input/heli_knife_lv3.json"

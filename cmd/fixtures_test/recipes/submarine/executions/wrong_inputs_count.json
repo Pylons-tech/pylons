@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "RecipeName":"Delayed Attack Knife Generation Recipe",
     "Sender":"submarine_account2",
     "ItemNames":["Knife2"]
