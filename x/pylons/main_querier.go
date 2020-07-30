@@ -12,6 +12,7 @@ import (
 // NewQuerier is the module level router for state queries
 func NewQuerier(keeper keep.Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err error) {
+		// TODO should check len(path) >= 1 ; possible internal error
 		switch path[0] {
 		case queriers.KeyPylonsBalance:
 			return queriers.PylonsBalance(ctx, path[1:], req, keeper)

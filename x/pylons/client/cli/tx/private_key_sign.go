@@ -82,6 +82,7 @@ be generated via the 'multisign' command.
 		"Private key flag for transaction sign",
 	)
 
+	// TODO this can be possible out of array range
 	cmd = flags.PostCommands(cmd)[0]
 
 	return cmd

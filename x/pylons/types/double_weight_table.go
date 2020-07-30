@@ -47,6 +47,8 @@ func (wt *DoubleWeightTable) Generate() (float64, error) {
 		}
 		first = weight
 	}
+
+	// TODO this can be possible out of array range
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
 	return (rand.Float64() * (selectedWeightRange.Upper.Float() - selectedWeightRange.Lower.Float())) + selectedWeightRange.Lower.Float(), nil

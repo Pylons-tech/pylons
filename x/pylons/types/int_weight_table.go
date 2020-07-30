@@ -47,6 +47,7 @@ func (wt *IntWeightTable) Generate() (int, error) {
 		}
 		first = weight
 	}
+	// TODO this can be possible out of array range
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
 	if selectedWeightRange.Upper > selectedWeightRange.Lower {

@@ -70,6 +70,8 @@ func TestListRecipe(t *testing.T) {
 
 				require.True(t, rcpListErr == nil)
 				require.True(t, len(rcpList.Recipes) == tc.desiredRcpCnt)
+
+				// TODO this can be possible out of array range
 				require.True(t, rcpList.Recipes[0].Name == tc.firstItemName)
 			}
 		})

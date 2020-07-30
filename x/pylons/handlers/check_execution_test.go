@@ -138,6 +138,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, err == nil)
 
 			if tc.dynamicItemSet {
+				// TODO this can be possible out of array range
 				usedItem, err := tci.PlnK.GetItem(tci.Ctx, tc.itemIDs[0])
 				require.True(t, err == nil)
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
@@ -161,6 +162,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if len(tc.desiredUpgradedName) > 0 {
+				// TODO this can be possible out of array range
 				updatedItem, err := tci.PlnK.GetItem(futureContext, tc.itemIDs[0])
 				require.True(t, err == nil)
 				updatedName, ok := updatedItem.FindString("Name")

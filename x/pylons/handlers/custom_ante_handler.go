@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth"
@@ -10,7 +11,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 )
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
@@ -54,7 +54,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	}
 	messages := sigTx.GetMsgs()
 
-	if len(messages) == 1 && messages[0].Type() == "create_account" && sigTx.Signatures != nil && len(sigTx.Signatures) > 0{
+	if len(messages) == 1 && messages[0].Type() == "create_account" && sigTx.Signatures != nil && len(sigTx.Signatures) > 0 {
 		fmt.Println("Running NewAccountCreationDecorator...")
 		// we don't support multi-message transaction for create_account
 		pubkey := sigTx.Signatures[0].PubKey
@@ -63,7 +63,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		if !ok {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "error msg conversion to MsgCreateAccount")
 		}
-		
+
 		if address.String() != msgCreateAccount.Requester.String() {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
 		}
@@ -125,12 +125,16 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 	}
 
 	for i, sig := range sigs {
+
+		// TODO this can be possible out of array range for signerAddrs
 		signerAccs[i], err = ante.GetSignerAcc(ctx, svd.ak, signerAddrs[i])
 		if err != nil {
 			return ctx, err
 		}
 
 		// retrieve signBytes of tx
+
+		// TODO this can be possible out of array range  for signerAccs
 		signBytes := sigTx.GetSignBytes(ctx, signerAccs[i])
 
 		// retrieve pubkey

@@ -14,6 +14,8 @@ const (
 
 // GetLockedCoinDetails returns locked coins with details based on user
 func GetLockedCoinDetails(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
+
+	// TODO this can be possible out of array range
 	addr := path[0]
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 
