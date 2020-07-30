@@ -10,17 +10,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ListRecipes queries the recipes
-func ListRecipes(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	var accAddr string
+// ListRecipesByCookbook queries the recipes
+func ListRecipesByCookbook(queryRoute string, cdc *codec.Codec) *cobra.Command {
+	var cookbookID string
 	ccb := &cobra.Command{
-		Use:   "list_recipe",
-		Short: "get all recipes for a user",
+		Use:   "list_recipe_by_cookbook",
+		Short: "get all recipes on cookbook",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_recipe/%s", queryRoute, accAddr), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_recipe_by_cookbook/%s", queryRoute, cookbookID), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}
@@ -30,21 +30,21 @@ func ListRecipes(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			return cliCtx.PrintOutput(out)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
+	ccb.PersistentFlags().StringVar(&cookbookID, "cookbook-id", "", "id of cookbook")
 	return ccb
 }
 
-// ListShortenRecipes queries the recipes
-func ListShortenRecipes(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	var accAddr string
+// ListShortenRecipesByCookbook queries the recipes
+func ListShortenRecipesByCookbook(queryRoute string, cdc *codec.Codec) *cobra.Command {
+	var cookbookID string
 	ccb := &cobra.Command{
-		Use:   "list_shorten_recipe",
-		Short: "get all recipes for a user",
+		Use:   "list_shorten_recipe_by_cookbook",
+		Short: "get shorten format of recipes on cookbook",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_shorten_recipe/%s", queryRoute, accAddr), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_shorten_recipe_by_cookbook/%s", queryRoute, cookbookID), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}
@@ -54,6 +54,6 @@ func ListShortenRecipes(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			return cliCtx.PrintOutput(out)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
+	ccb.PersistentFlags().StringVar(&cookbookID, "cookbook-id", "", "id of cookbook")
 	return ccb
 }
