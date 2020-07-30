@@ -47,8 +47,14 @@ pylonscli query pylons items_by_sender --account cosmos1tqvdp4rc28zklnk8mwxh94gd
 pylonscli query pylons list_recipe
 pylonscli query pylons list_recipe --account cosmos1tqvdp4rc28zklnk8mwxh94gdlel0s58tcwdrj9
 
+pylonscli query pylons list_recipe_by_cookbook
+pylonscli query pylons list_recipe_by_cookbook --cookbook-id helicopter-1589853709
+
 pylonscli query pylons list_shorten_recipe
 pylonscli query pylons list_shorten_recipe --account cosmos1tqvdp4rc28zklnk8mwxh94gdlel0s58tcwdrj9
+
+pylonscli query pylons list_shorten_recipe_by_cookbook
+pylonscli query pylons list_shorten_recipe_by_cookbook --cookbook-id helicopter-1589853709
 ```
 
 ### trades

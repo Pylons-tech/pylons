@@ -11,7 +11,6 @@ import (
 )
 
 func errInternal(err error) error {
-
 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 }
 

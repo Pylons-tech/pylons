@@ -76,7 +76,9 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		query.ListLockedCoins(StoreKey, cdc),
 		query.ListLockedCoinDetails(StoreKey, cdc),
 		query.ListRecipes(StoreKey, cdc),
+		query.ListRecipesByCookbook(StoreKey, cdc),
 		query.ListShortenRecipes(StoreKey, cdc),
+		query.ListShortenRecipesByCookbook(StoreKey, cdc),
 		query.ItemsBySender(StoreKey, cdc),
 		query.ListExecutions(StoreKey, cdc),
 		query.ListTrade(StoreKey, cdc))
