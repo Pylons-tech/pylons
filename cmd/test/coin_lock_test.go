@@ -94,7 +94,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	tradeCreatorSdkAddress := GetSDKAddressFromKey(tradeCreatorKey, t)
 
 	// check locked coin after fulfilling trade
-	initialLock, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	initialLock, err := inttestSDK.GetLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
 	t.MustNil(err, "error listing locked coins")
 
 	// there should be no issues in mock process, for error checkers in create trade, it needs to be done at create_trade_test.go
@@ -113,7 +113,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	t.MustTrue(trdGUID != "", "trade id shouldn't be empty after mock")
 
 	// check locked coin after fulfilling trade
-	lockAfterCreateTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	lockAfterCreateTrade, err := inttestSDK.GetLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
 	t.MustNil(err, "error listing locked coins")
 
 	lcDiff := lockAfterCreateTrade.Amount.Sort().Sub(initialLock.Amount.Sort())
@@ -141,7 +141,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.tradeExpectedStatus, tc.tradeExpectedMessage, t)
 
 	// check locked coin after fulfilling trade
-	lockAfterFulFillTrade, err := inttestSDK.ListLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
+	lockAfterFulFillTrade, err := inttestSDK.GetLockedCoinsViaCLI(tradeCreatorSdkAddress.String())
 	t.MustNil(err, "error listing locked coins")
 
 	lcDiff = lockAfterCreateTrade.Amount.Sort().Sub(lockAfterFulFillTrade.Amount.Sort())
@@ -186,7 +186,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		return
 	}
 
-	initialLock, err := inttestSDK.ListLockedCoinsViaCLI(cbOwnerSdkAddr.String())
+	initialLock, err := inttestSDK.GetLockedCoinsViaCLI(cbOwnerSdkAddr.String())
 	t.MustNil(err, "error listing locked coins")
 
 	if tc.recipeWaitForBlockInterval {
@@ -199,7 +199,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		WaitOneBlockWithErrorCheck(t)
 	}
 
-	lockAfterSchedule, err := inttestSDK.ListLockedCoinsViaCLI(cbOwnerSdkAddr.String())
+	lockAfterSchedule, err := inttestSDK.GetLockedCoinsViaCLI(cbOwnerSdkAddr.String())
 	t.MustNil(err, "error listing locked coins")
 
 	lcDiff := lockAfterSchedule.Amount.Sort().Sub(initialLock.Amount.Sort())
@@ -255,7 +255,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"shouldCompleted": true,
 	}).MustTrue(exec.Completed == true)
 
-	lockAfterCheckExec, err := inttestSDK.ListLockedCoinsViaCLI(cbOwnerSdkAddr.String())
+	lockAfterCheckExec, err := inttestSDK.GetLockedCoinsViaCLI(cbOwnerSdkAddr.String())
 	t.MustNil(err, "error listing locked coins")
 
 	lcDiff = lockAfterSchedule.Amount.Sort().Sub(lockAfterCheckExec.Amount.Sort())

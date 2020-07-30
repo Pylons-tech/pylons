@@ -9,17 +9,17 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// ListLockedCoins queries the locked coins
-func ListLockedCoins(queryRoute string, cdc *codec.Codec) *cobra.Command {
+// GetLockedCoins queries the locked coins
+func GetLockedCoins(queryRoute string, cdc *codec.Codec) *cobra.Command {
 	var accAddr string
 	ccb := &cobra.Command{
-		Use:   "list_locked_coins",
+		Use:   "get_locked_coins",
 		Short: "get locked coins for a user",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cliCtx := context.NewCLIContext().WithCodec(cdc)
 
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_locked_coins/%s", queryRoute, accAddr), nil)
+			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_locked_coins/%s", queryRoute, accAddr), nil)
 			if err != nil {
 				return fmt.Errorf(err.Error())
 			}

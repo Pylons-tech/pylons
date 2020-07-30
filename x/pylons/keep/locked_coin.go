@@ -55,11 +55,23 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 
 // GetLockedCoin returns lockedCoin based on sender
 func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoin {
-	lockedCoin := types.LockedCoin{}
-	err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
-	if err != nil {
-		lockedCoin.Sender = sender
-		lockedCoin.Amount = sdk.Coins{}
+	lockedCoin := types.LockedCoin{
+		Sender: sender,
+		Amount: sdk.Coins{},
+	}
+	if sender.Empty() {
+		allLocks, err := k.GetAllLockedCoins(ctx)
+		if err == nil {
+			for _, lock := range allLocks {
+				lockedCoin.Amount = lockedCoin.Amount.Add(lock.Amount...)
+			}
+		}
+	} else {
+		err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
+		if err != nil {
+			lockedCoin.Sender = sender
+			lockedCoin.Amount = sdk.Coins{}
+		}
 	}
 	return lockedCoin
 }
@@ -70,33 +82,31 @@ func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) typ
 	lc := k.GetLockedCoin(ctx, sender)
 	lcd.Sender, lcd.Amount = lc.Sender, lc.Amount
 
-	if !sender.Empty() {
-		iterator := k.GetTradesIteratorByCreator(ctx, sender)
-		for ; iterator.Valid(); iterator.Next() {
-			var trade types.Trade
-			mRCP := iterator.Value()
-			err := json.Unmarshal(mRCP, &trade)
-			if err != nil {
-				// this happens because we have multiple versions of breaking trades at times
-				continue
-			}
-
-			if !trade.Disabled && !trade.CoinOutputs.Empty() {
-				lcd.LockCoinTrades = append(lcd.LockCoinTrades, types.LockedCoinDescribe{
-					ID:     trade.ID,
-					Amount: trade.CoinOutputs,
-				})
-			}
+	iterator := k.GetTradesIteratorByCreator(ctx, sender)
+	for ; iterator.Valid(); iterator.Next() {
+		var trade types.Trade
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &trade)
+		if err != nil {
+			// this happens because we have multiple versions of breaking trades at times
+			continue
 		}
-		execs, err := k.GetExecutionsBySender(ctx, sender)
-		if err == nil {
-			for _, exec := range execs {
-				if !exec.CoinInputs.Empty() {
-					lcd.LockCoinExecs = append(lcd.LockCoinExecs, types.LockedCoinDescribe{
-						ID:     exec.ID,
-						Amount: exec.CoinInputs,
-					})
-				}
+
+		if !trade.Disabled && !trade.Completed && !trade.CoinOutputs.Empty() {
+			lcd.LockCoinTrades = append(lcd.LockCoinTrades, types.LockedCoinDescribe{
+				ID:     trade.ID,
+				Amount: trade.CoinOutputs,
+			})
+		}
+	}
+	execs, err := k.GetPendingExecutionsBySender(ctx, sender)
+	if err == nil {
+		for _, exec := range execs {
+			if !exec.CoinInputs.Empty() {
+				lcd.LockCoinExecs = append(lcd.LockCoinExecs, types.LockedCoinDescribe{
+					ID:     exec.ID,
+					Amount: exec.CoinInputs,
+				})
 			}
 		}
 	}
