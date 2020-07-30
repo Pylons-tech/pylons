@@ -8,6 +8,7 @@
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
+                "ID": "spear",
                 "ItemInputRef": 0,
                 "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
             }
@@ -15,7 +16,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["spear"],
             "Weight": "1"
         }
     ],

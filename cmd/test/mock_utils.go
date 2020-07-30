@@ -159,7 +159,7 @@ func MockRecipeGUID(
 			types.GenCoinInputList("pylon", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry(desItemName),
-			types.GenOneOutput(1),
+			types.GenOneOutput(desItemName),
 			interval,
 			t,
 		)
@@ -170,7 +170,7 @@ func MockRecipeGUID(
 		types.GenCoinInputList("pylon", 5),
 		types.GenItemInputList(curItemName),
 		types.GenEntriesFirstItemNameUpgrade(desItemName),
-		types.GenOneOutput(1),
+		types.GenOneOutput(desItemName),
 		interval,
 		t,
 	)

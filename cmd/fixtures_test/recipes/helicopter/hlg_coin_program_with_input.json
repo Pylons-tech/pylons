@@ -7,6 +7,7 @@
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "hlgcoin_reward",
                 "Coin": "hlgcoin",
                 "Count": "int(attack * double(5))"
             }
@@ -14,7 +15,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["hlgcoin_reward"],
             "Weight": "1"
         }
     ],

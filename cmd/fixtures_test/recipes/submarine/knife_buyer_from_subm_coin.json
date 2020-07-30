@@ -11,13 +11,14 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "knife_lv2",
                 "Ref": "./recipes/submarine/item_output/knife_lv2.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["knife_lv2"],
             "Weight": "1"
         }
     ],

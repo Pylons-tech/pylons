@@ -5,6 +5,7 @@
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "helicoin_faucet",
                 "Coin":"helicoin",
                 "Count":"1"
             }
@@ -12,7 +13,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["helicoin_faucet"],
             "Weight": "1"
         }
     ],

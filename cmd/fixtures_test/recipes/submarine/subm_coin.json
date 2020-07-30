@@ -5,6 +5,7 @@
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "submcoin_reward",
                 "Coin":"submcoin",
                 "Count":"100"
             }
@@ -13,7 +14,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["submcoin_reward"],
             "Weight": "1"
         }
     ],

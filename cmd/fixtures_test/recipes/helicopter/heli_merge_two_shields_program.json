@@ -9,13 +9,14 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "merged_shield",
                 "Ref": "./recipes/helicopter/item_output/heli_merge_two_shields_program.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["merged_shield"],
             "Weight": "1"
         }
     ],

@@ -5,13 +5,14 @@
     "Entries":{
         "ItemOutputs":[
             {
+                "ID": "heli_straight_attack_knife",
                 "Ref": "./recipes/helicopter/item_output/heli_straight_attack_knife.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["heli_straight_attack_knife"],
             "Weight": "1"
         }
     ],

@@ -9,17 +9,19 @@
         "CoinOutputs":[],
         "ItemModifyOutputs": [
             {
+                "ID": "modified_monster",
                 "ItemInputRef": 0,
                 "ModifyParamsRef": "./recipes/catalyst/upgrader/monster.json"
             },
             {
+                "ID": "return_catalyst",
                 "ItemInputRef": 1
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0", "1"],
+            "EntryIDs": ["modified_monster", "return_catalyst"],
             "Weight": "1"
         }
     ],

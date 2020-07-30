@@ -5,6 +5,7 @@
   "Entries":{
       "CoinOutputs":[
           {
+              "ID": "gold_faucet",
               "Coin": "gold",
               "Count": "100"
           }
@@ -12,7 +13,7 @@
   },
   "Outputs": [
       {
-          "ResultEntries": ["0"],
+          "EntryIDs": ["gold_faucet"],
           "Weight": "1"
       }
   ],

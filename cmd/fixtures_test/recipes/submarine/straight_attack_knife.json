@@ -6,13 +6,14 @@
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "straight_attack_knife",
                 "Ref": "./recipes/submarine/item_output/straight_attack_knife.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["straight_attack_knife"],
             "Weight": "1"
         }
     ],

@@ -7,12 +7,14 @@
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "javecoin_reward",
                 "Coin":"javecoin",
                 "Count":"100"
             }
         ],
         "ItemModifyOutputs":[
             {
+                "ID": "javelin_program",
                 "ItemInputRef": 0,
                 "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
             }
@@ -20,11 +22,11 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["1"],
+            "EntryIDs": ["javelin_program"],
             "Weight": "1"
         },
         {
-            "ResultEntries": ["0", "1"],
+            "EntryIDs": ["javecoin_reward", "javelin_program"],
             "Weight": "int(attack) * 2 + 1"
         }
     ],

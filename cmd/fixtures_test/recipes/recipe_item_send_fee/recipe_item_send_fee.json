@@ -8,6 +8,7 @@
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
+                "ID": "modified_fee_item",
                 "ItemInputRef": 0,
                 "ModifyParamsRef": "./recipes/recipe_item_send_fee/upgrader/recipe_item_send_fee.json"
             }
@@ -15,7 +16,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["modified_fee_item"],
             "Weight": "1"
         }
     ],

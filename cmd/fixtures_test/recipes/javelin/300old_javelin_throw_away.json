@@ -8,11 +8,11 @@
     },
     "Outputs": [
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "-11"
         },
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "1"
         }
     ],

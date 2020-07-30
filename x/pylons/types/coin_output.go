@@ -16,7 +16,8 @@ func (op CoinOutput) GetID() string {
 
 func (op CoinOutput) String() string {
 	return fmt.Sprintf(`CoinOutput{
+		ID: %s,
 		Coin: %s,
 		Count: %s,
-	}`, op.Coin, op.Count)
+	}`, op.ID, op.Coin, op.Count)
 }

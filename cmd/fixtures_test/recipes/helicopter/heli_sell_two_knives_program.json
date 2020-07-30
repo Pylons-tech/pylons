@@ -8,6 +8,7 @@
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "hllg_reward",
                 "Coin":"hllgcoin",
                 "Count": "(input0.level + input1.level) * 10"
             }
@@ -15,7 +16,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["hllg_reward"],
             "Weight": "1"
         }
     ],

@@ -8,6 +8,7 @@
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
+                "ID": "custom_func",
                 "ItemInputRef": 0,
                 "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
             }
@@ -15,7 +16,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["custom_func"],
             "Weight": "1"
         }
     ],
