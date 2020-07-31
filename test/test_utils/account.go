@@ -1,11 +1,11 @@
-package inttest
+package testutils
 
 import (
 	"errors"
 	"sync"
 
-	testing "github.com/Pylons-tech/pylons/test/evtesting"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/tendermint/tendermint/crypto/secp256k1"

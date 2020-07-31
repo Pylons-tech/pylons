@@ -1,8 +1,9 @@
 package fixturetest
 
 import (
-	testing "github.com/Pylons-tech/pylons/test/evtesting"
-	inttest "github.com/Pylons-tech/pylons/test/test_utils"
+	testutils "github.com/Pylons-tech/pylons/test/test_utils"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils"
 )
 
 // Status is a type to manage work queue status
@@ -36,14 +37,14 @@ func GetQueueID(file string, idx int, stepID string) int {
 }
 
 // GoodToGoForStep check if a step is ready to go
-func GoodToGoForStep(file string, idx int, step FixtureStep, t *testing.T) bool {
+func GoodToGoForStep(file string, idx int, step fixturetestSDK.FixtureStep, t *testing.T) bool {
 	for _, condition := range step.RunAfter.PreCondition {
 		queID := GetQueueID(file, idx, condition)
 		t.WithFields(testing.Fields{
 			"stepID":      step.ID,
 			"idx":         idx,
 			"file":        file,
-			"work_queues": inttest.JSONFormatter(workQueues),
+			"work_queues": testutils.JSONFormatter(workQueues),
 		}).MustTrue(queID != -1, "No WorkQueue found from specified param")
 		work := workQueues[queID]
 		if work.status != Done {
@@ -54,14 +55,14 @@ func GoodToGoForStep(file string, idx int, step FixtureStep, t *testing.T) bool 
 }
 
 // UpdateWorkQueueStatus check if a step is ready to go
-func UpdateWorkQueueStatus(file string, idx int, fixtureSteps []FixtureStep, targetStatus Status, t *testing.T) {
+func UpdateWorkQueueStatus(file string, idx int, fixtureSteps []fixturetestSDK.FixtureStep, targetStatus Status, t *testing.T) {
 	step := fixtureSteps[idx]
 	queID := GetQueueID(file, idx, step.ID)
 	t.WithFields(testing.Fields{
 		"stepID":      step.ID,
 		"idx":         idx,
 		"file":        file,
-		"work_queues": inttest.JSONFormatter(workQueues),
+		"work_queues": testutils.JSONFormatter(workQueues),
 	}).MustTrue(queID != -1, "No WorkQueue found from specified param")
 	switch targetStatus {
 	case InProgress:

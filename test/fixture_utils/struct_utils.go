@@ -9,9 +9,9 @@ import (
 	"sync"
 	"time"
 
-	testing "github.com/Pylons-tech/pylons/test/evtesting"
-	inttest "github.com/Pylons-tech/pylons/test/test_utils"
+	testutils "github.com/Pylons-tech/pylons/test/test_utils"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -64,7 +64,7 @@ func GetAccountKeyFromTempName(tempName string, t *testing.T) string {
 // GetAccountAddressFromTempName is a function to get account address from temp name
 func GetAccountAddressFromTempName(tempName string, t *testing.T) sdk.AccAddress {
 	accountKey := GetAccountKeyFromTempName(tempName, t)
-	return inttest.GetAccountAddr(accountKey, t)
+	return testutils.GetAccountAddr(accountKey, t)
 }
 
 // GetSenderKeyFromRef is a function to get create cookbook message from reference
@@ -113,7 +113,7 @@ func UpdateCBNameToID(bytes []byte, t *testing.T) []byte {
 	if !ok {
 		return bytes
 	}
-	cbID, exist, err := inttest.GetCookbookIDFromName(cbName, sdk.AccAddress{})
+	cbID, exist, err := testutils.GetCookbookIDFromName(cbName, sdk.AccAddress{})
 	if exist && err != nil {
 		raw["CookbookID"] = cbID
 		newBytes, err := json.Marshal(raw)
@@ -131,7 +131,7 @@ func UpdateRecipeName(bytes []byte, t *testing.T) []byte {
 
 	rcpName, ok := raw["RecipeName"].(string)
 	t.MustTrue(ok, "recipe name field is empty")
-	rcpID, exist := inttest.GetRecipeIDFromName(rcpName)
+	rcpID, exist := testutils.GetRecipeIDFromName(rcpName)
 	t.WithFields(testing.Fields{
 		"recipe_name": rcpName,
 	}).MustTrue(exist, "there's no recipe id with specific recipe name")
@@ -149,7 +149,7 @@ func UpdateTradeExtraInfoToID(bytes []byte, t *testing.T) []byte {
 
 	trdInfo, ok := raw["TradeInfo"].(string)
 	t.MustTrue(ok, "trade info does not exist in json")
-	trdID, exist, err := inttest.GetTradeIDFromExtraInfo(trdInfo)
+	trdID, exist, err := testutils.GetTradeIDFromExtraInfo(trdInfo)
 	t.WithFields(testing.Fields{
 		"trade_info": trdInfo,
 	}).MustTrue(exist, "there's not trade id with specific info")
@@ -199,7 +199,7 @@ func UpdateItemIDFromName(bytes []byte, includeLockedByRecipe, includeLockedByTr
 	senderSdkAddr, err := sdk.AccAddressFromBech32(sender)
 	t.MustNil(err, "sender address is not convertable to bech32")
 
-	itemID, exist, err := inttest.GetItemIDFromName(senderSdkAddr, itemName, includeLockedByRecipe, includeLockedByTrade)
+	itemID, exist, err := testutils.GetItemIDFromName(senderSdkAddr, itemName, includeLockedByRecipe, includeLockedByTrade)
 	if !exist {
 		t.WithFields(testing.Fields{
 			"item_name":                itemName,
@@ -232,7 +232,7 @@ func GetItemIDsFromNames(bytes []byte, sender sdk.AccAddress, includeLockedByRec
 	ItemIDs := []string{}
 
 	for _, itemName := range itemNamesResp.ItemNames {
-		itemID, exist, err := inttest.GetItemIDFromName(sender, itemName, includeLockedByRecipe, includeLockedByTrade)
+		itemID, exist, err := testutils.GetItemIDFromName(sender, itemName, includeLockedByRecipe, includeLockedByTrade)
 		if !exist {
 			t.WithFields(testing.Fields{
 				"item_name":                itemName,
@@ -268,7 +268,7 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 	for _, iia := range itemInputRefsReader.ItemInputs {
 		var ii types.ItemInput
 		iiBytes := ReadFile(iia.Ref, t)
-		err := inttest.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
+		err := testutils.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
 		if err != nil {
 			t.WithFields(testing.Fields{
 				"item_input_bytes": string(iiBytes),
@@ -295,7 +295,7 @@ func GetTradeItemInputsFromBytes(bytes []byte, t *testing.T) types.TradeItemInpu
 	for _, tiiRef := range tradeItemInputRefsReader.ItemInputRefs {
 		var tii types.TradeItemInput
 		tiiBytes := ReadFile(tiiRef, t)
-		err := inttest.GetAminoCdc().UnmarshalJSON(tiiBytes, &tii)
+		err := testutils.GetAminoCdc().UnmarshalJSON(tiiBytes, &tii)
 		t.WithFields(testing.Fields{
 			"trade_item_input_bytes": string(tiiBytes),
 		}).MustNil(err, "error unmarshaling trading item inputs")
@@ -318,12 +318,12 @@ func GetItemOutputsFromBytes(bytes []byte, sender sdk.AccAddress, t *testing.T) 
 
 	for _, iN := range itemOutputNamesReader.ItemOutputNames {
 		var io types.Item
-		iID, ok, err := inttest.GetItemIDFromName(sender, iN, false, false)
+		iID, ok, err := testutils.GetItemIDFromName(sender, iN, false, false)
 		t.MustTrue(ok, "item id with specific name does not exist")
 		t.WithFields(testing.Fields{
 			"item_name": iN,
 		}).MustNil(err, "error getting item id from name")
-		io, err = inttest.GetItemByGUID(iID)
+		io, err = testutils.GetItemByGUID(iID)
 		t.WithFields(testing.Fields{
 			"item_id": iID,
 		}).MustNil(err, "error getting item from id")

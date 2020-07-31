@@ -1,4 +1,4 @@
-package inttest
+package testutils
 
 import (
 	"encoding/json"
@@ -9,9 +9,9 @@ import (
 	"sync"
 
 	"github.com/Pylons-tech/pylons/app"
-	testing "github.com/Pylons-tech/pylons/test/evtesting"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	log "github.com/sirupsen/logrus"
@@ -53,28 +53,6 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 // GetAminoCdc is a utility function to get amino codec
 func GetAminoCdc() *amino.Codec {
 	return app.MakeCodec()
-}
-
-// KeyringBackendSetup is a utility function to setup keyring backend for pylonscli command
-func KeyringBackendSetup(args []string) []string {
-	if len(args) == 0 {
-		return args
-	}
-	newArgs := append(args, "--keyring-backend", "test")
-	switch args[0] {
-	case "keys":
-		return newArgs
-	case "tx":
-		if args[1] == "sign" {
-			return newArgs
-		}
-		if args[1] == "pylons" && args[2] == "create-account" {
-			return newArgs
-		}
-		return args
-	default:
-		return args
-	}
 }
 
 // GetAccountInfoFromAddr is a function to get account information from address

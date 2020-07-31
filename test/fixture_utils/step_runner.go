@@ -3,9 +3,10 @@ package fixturetest
 import (
 	"encoding/json"
 
-	testing "github.com/Pylons-tech/pylons/test/evtesting"
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils"
 
-	inttest "github.com/Pylons-tech/pylons/test/test_utils"
+	testutils "github.com/Pylons-tech/pylons/test/test_utils"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
@@ -15,7 +16,7 @@ import (
 )
 
 // TxBroadcastErrorCheck check error is same as expected when it exist
-func TxBroadcastErrorCheck(err error, step FixtureStep, t *testing.T) {
+func TxBroadcastErrorCheck(err error, step fixturetestSDK.FixtureStep, t *testing.T) {
 	if step.Output.TxResult.BroadcastError != "" {
 		t.MustContain(err.Error(), step.Output.TxResult.BroadcastError, "broadcast error is different from expected one")
 	} else {
@@ -32,7 +33,7 @@ func TxErrorLogCheck(result *sdk.Result, ErrorLog string, t *testing.T) {
 }
 
 // TxResultStatusMessageCheck check result status and message
-func TxResultStatusMessageCheck(status, message string, step FixtureStep, t *testing.T) {
+func TxResultStatusMessageCheck(status, message string, step fixturetestSDK.FixtureStep, t *testing.T) {
 	if len(step.Output.TxResult.Status) > 0 {
 		t.WithFields(testing.Fields{
 			"original_status": status,
@@ -54,20 +55,20 @@ func TxResultDecodingErrorCheck(err error, t *testing.T) {
 
 // WaitForNextBlockWithErrorCheck wait 1 block and check the error result
 func WaitForNextBlockWithErrorCheck(t *testing.T) {
-	inttest.WaitForNextBlock()
+	testutils.WaitForNextBlock()
 }
 
 // RunCreateAccount is a function to create account
-func RunCreateAccount(step FixtureStep, t *testing.T) {
+func RunCreateAccount(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		caKey := GetAccountKeyFromTempName(step.ParamsRef, t)
-		address, err := inttest.AddNewLocalKey(caKey)
+		address, err := testutils.AddNewLocalKey(caKey)
 		t.WithFields(testing.Fields{
 			"key":              caKey,
 			"local_key_result": address,
 		}).MustNil(err, "error creating local Key")
-		err = inttest.CreateChainAccount(caKey)
+		err = testutils.CreateChainAccount(caKey)
 		t.MustNil(err, "error creating account on chain")
 	}
 }
@@ -94,9 +95,9 @@ func SendCoinsMsgFromRef(ref string, t *testing.T) msgs.MsgSendCoins {
 		Amount   sdk.Coins
 	}
 
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &siType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &siType)
 	t.WithFields(testing.Fields{
-		"siType":    inttest.AminoCodecFormatter(siType),
+		"siType":    testutils.AminoCodecFormatter(siType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
@@ -104,7 +105,7 @@ func SendCoinsMsgFromRef(ref string, t *testing.T) msgs.MsgSendCoins {
 }
 
 // RunGetPylons is a function to run GetPylos message
-func RunGetPylons(step FixtureStep, t *testing.T) {
+func RunGetPylons(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		gpMsg := GetPylonsMsgFromRef(step.ParamsRef, t)
@@ -114,18 +115,18 @@ func RunGetPylons(step FixtureStep, t *testing.T) {
 			return
 		}
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgGetPylons(tci.Ctx, tci.PlnK, gpMsg)
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.GetPylonsResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
 }
 
 // RunSendCoins is a function to send coins from one address to another
-func RunSendCoins(step FixtureStep, t *testing.T) {
+func RunSendCoins(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		scMsg := SendCoinsMsgFromRef(step.ParamsRef, t)
@@ -136,7 +137,7 @@ func RunSendCoins(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgSendCoins(tci.Ctx, tci.PlnK, scMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -146,14 +147,14 @@ func RunSendCoins(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.GetPylonsResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
 }
 
 // RunMockAccount = RunCreateAccount + RunGetPylons
-func RunMockAccount(step FixtureStep, t *testing.T) {
+func RunMockAccount(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		RunCreateAccount(step, t)
@@ -164,9 +165,9 @@ func RunMockAccount(step FixtureStep, t *testing.T) {
 // RunMultiMsgTx is a function to send multiple messages in a transaction
 // This support only 1 sender multi transaction for now
 // TODO we need to support multi-message multi sender transaction
-func RunMultiMsgTx(step FixtureStep, t *testing.T) {
+func RunMultiMsgTx(step fixturetestSDK.FixtureStep, t *testing.T) {
 
-	tci := inttest.GetTestCoinInput()
+	tci := testutils.GetTestCoinInput()
 
 	if len(step.MsgRefs) != 0 {
 		for _, ref := range step.MsgRefs {
@@ -225,9 +226,9 @@ func CheckExecutionMsgFromRef(ref string, t *testing.T) msgs.MsgCheckExecution {
 		PayToComplete bool
 		Sender        sdk.AccAddress
 	}
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 	t.WithFields(testing.Fields{
-		"execType": inttest.AminoCodecFormatter(execType),
+		"execType": testutils.AminoCodecFormatter(execType),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
 	return msgs.NewMsgCheckExecution(
@@ -238,7 +239,7 @@ func CheckExecutionMsgFromRef(ref string, t *testing.T) msgs.MsgCheckExecution {
 }
 
 // RunCheckExecution is a function to execute check execution
-func RunCheckExecution(step FixtureStep, t *testing.T) {
+func RunCheckExecution(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		chkExecMsg := CheckExecutionMsgFromRef(step.ParamsRef, t)
@@ -249,7 +250,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCheckExecution(tci.Ctx, tci.PlnK, chkExecMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -259,7 +260,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CheckExecutionResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -274,9 +275,9 @@ func FiatItemMsgFromRef(ref string, t *testing.T) msgs.MsgFiatItem {
 	newByteValue = UpdateCBNameToID(newByteValue, t)
 
 	var itemType types.Item
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
 	t.WithFields(testing.Fields{
-		"itemType": inttest.AminoCodecFormatter(itemType),
+		"itemType": testutils.AminoCodecFormatter(itemType),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
 	return msgs.NewMsgFiatItem(
@@ -290,7 +291,7 @@ func FiatItemMsgFromRef(ref string, t *testing.T) msgs.MsgFiatItem {
 }
 
 // RunFiatItem is a function to execute fiat item
-func RunFiatItem(step FixtureStep, t *testing.T) {
+func RunFiatItem(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		itmMsg := FiatItemMsgFromRef(step.ParamsRef, t)
@@ -301,7 +302,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgFiatItem(tci.Ctx, tci.PlnK, itmMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -311,7 +312,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.FiatItemResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.ItemID != "", "item id shouldn't be empty")
 	}
@@ -330,9 +331,9 @@ func SendItemsMsgFromRef(ref string, t *testing.T) msgs.MsgSendItems {
 		ItemIDs  []string `json:"ItemIDs"`
 	}
 
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &siType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &siType)
 	t.WithFields(testing.Fields{
-		"siType":    inttest.AminoCodecFormatter(siType),
+		"siType":    testutils.AminoCodecFormatter(siType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
@@ -343,7 +344,7 @@ func SendItemsMsgFromRef(ref string, t *testing.T) msgs.MsgSendItems {
 }
 
 // RunSendItems is a function to send items to another user
-func RunSendItems(step FixtureStep, t *testing.T) {
+func RunSendItems(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		siMsg := SendItemsMsgFromRef(step.ParamsRef, t)
@@ -354,7 +355,7 @@ func RunSendItems(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgSendItems(tci.Ctx, tci.PlnK, siMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -364,7 +365,7 @@ func RunSendItems(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.SendItemsResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -381,14 +382,14 @@ func UpdateItemStringMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateItemStri
 	var sTypeMsg msgs.MsgUpdateItemString
 	err := json.Unmarshal(newByteValue, &sTypeMsg)
 	t.WithFields(testing.Fields{
-		"sTypeMsg":  inttest.AminoCodecFormatter(sTypeMsg),
+		"sTypeMsg":  testutils.AminoCodecFormatter(sTypeMsg),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 	return sTypeMsg
 }
 
 // RunUpdateItemString is a function to update item's string value
-func RunUpdateItemString(step FixtureStep, t *testing.T) {
+func RunUpdateItemString(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		sTypeMsg := UpdateItemStringMsgFromRef(step.ParamsRef, t)
@@ -398,7 +399,7 @@ func RunUpdateItemString(step FixtureStep, t *testing.T) {
 			return
 		}
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, sTypeMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -408,7 +409,7 @@ func RunUpdateItemString(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.UpdateItemStringResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 	}
 }
@@ -420,9 +421,9 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgCreateCookbook {
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 
 	var cbType types.Cookbook
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
 	t.WithFields(testing.Fields{
-		"cbType":    inttest.AminoCodecFormatter(cbType),
+		"cbType":    testutils.AminoCodecFormatter(cbType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
@@ -440,7 +441,7 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgCreateCookbook {
 }
 
 // RunCreateCookbook is a function to create cookbook
-func RunCreateCookbook(step FixtureStep, t *testing.T) {
+func RunCreateCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		cbMsg := CreateCookbookMsgFromRef(step.ParamsRef, t)
@@ -451,7 +452,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cbMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -461,17 +462,17 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CreateCookbookResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.CookbookID != "", "coookbook id shouldn't be empty")
 	}
 }
 
 // RunMockCookbook = RunMockAccount + RunCreateCookbook
-func RunMockCookbook(step FixtureStep, t *testing.T) {
+func RunMockCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		sender := GetSenderKeyFromRef(step.ParamsRef, t)
-		RunMockAccount(FixtureStep{ParamsRef: sender}, t)
+		RunMockAccount(fixturetestSDK.FixtureStep{ParamsRef: sender}, t)
 		RunCreateCookbook(step, t)
 	}
 }
@@ -489,9 +490,9 @@ func CreateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateRecipe {
 	entries := GetEntriesFromBytes(newByteValue, t)
 
 	var rcpTempl types.Recipe
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpTempl)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpTempl)
 	t.WithFields(testing.Fields{
-		"rcpTempl":  inttest.AminoCodecFormatter(rcpTempl),
+		"rcpTempl":  testutils.AminoCodecFormatter(rcpTempl),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
@@ -510,7 +511,7 @@ func CreateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateRecipe {
 }
 
 // RunCreateRecipe is a function to create recipe
-func RunCreateRecipe(step FixtureStep, t *testing.T) {
+func RunCreateRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		rcpMsg := CreateRecipeMsgFromRef(step.ParamsRef, t)
@@ -521,7 +522,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, rcpMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -531,7 +532,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CreateRecipeResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.RecipeID != "", "recipe id shouldn't be empty")
 	}
@@ -551,9 +552,9 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgExecuteRecipe {
 		ItemIDs  []string `json:"ItemIDs"`
 	}
 
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
 	t.WithFields(testing.Fields{
-		"execType":  inttest.AminoCodecFormatter(execType),
+		"execType":  testutils.AminoCodecFormatter(execType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 	// translate itemNames to itemIDs
@@ -563,7 +564,7 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgExecuteRecipe {
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called
-func RunExecuteRecipe(step FixtureStep, t *testing.T) {
+func RunExecuteRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 	// TODO should check item ID is returned
 	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
 
@@ -576,7 +577,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, execMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -586,7 +587,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.ExecuteRecipeResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 
@@ -601,7 +602,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			execIDs[step.ID] = scheduleRes.ExecID
 			execIDRWMutex.Unlock()
 			for _, itemID := range execMsg.ItemIDs {
-				item, err := inttest.GetItemByGUID(itemID)
+				item, err := testutils.GetItemByGUID(itemID)
 				t.WithFields(testing.Fields{
 					"item_id": itemID,
 				}).MustNil(err, "error getting item from id")
@@ -627,9 +628,9 @@ func CreateTradeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateTrade {
 	// get item inputs from fileNames
 	tradeItemInputs := GetTradeItemInputsFromBytes(newByteValue, t)
 	var trdType types.Trade
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
-		"trdType":   inttest.AminoCodecFormatter(trdType),
+		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
@@ -647,13 +648,13 @@ func CreateTradeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateTrade {
 }
 
 // RunCreateTrade is a function to create trade
-func RunCreateTrade(step FixtureStep, t *testing.T) {
+func RunCreateTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		createTrd := CreateTradeMsgFromRef(step.ParamsRef, t)
 		t.WithFields(testing.Fields{
-			"tx_msgs": inttest.AminoCodecFormatter(createTrd),
-		}).AddFields(inttest.GetLogFieldsFromMsgs([]sdk.Msg{createTrd})).Debug("createTrd")
+			"tx_msgs": testutils.AminoCodecFormatter(createTrd),
+		}).AddFields(testutils.GetLogFieldsFromMsgs([]sdk.Msg{createTrd})).Debug("createTrd")
 		err := createTrd.ValidateBasic()
 		if err != nil {
 			TxBroadcastErrorCheck(err, step, t)
@@ -661,7 +662,7 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, createTrd)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -671,7 +672,7 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CreateTradeResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.TradeID != "", "trade id shouldn't be empty")
 	}
@@ -691,9 +692,9 @@ func FulfillTradeMsgFromRef(ref string, t *testing.T) msgs.MsgFulfillTrade {
 		ItemIDs []string `json:"ItemIDs"`
 	}
 
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
-		"trdType":   inttest.AminoCodecFormatter(trdType),
+		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 	// translate itemNames to itemIDs
@@ -703,7 +704,7 @@ func FulfillTradeMsgFromRef(ref string, t *testing.T) msgs.MsgFulfillTrade {
 }
 
 // RunFulfillTrade is a function to fulfill trade
-func RunFulfillTrade(step FixtureStep, t *testing.T) {
+func RunFulfillTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		ffTrdMsg := FulfillTradeMsgFromRef(step.ParamsRef, t)
@@ -714,7 +715,7 @@ func RunFulfillTrade(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffTrdMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -724,7 +725,7 @@ func RunFulfillTrade(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.FulfillTradeResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -743,9 +744,9 @@ func DisableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableTrade {
 		Sender  sdk.AccAddress
 	}
 
-	err := inttest.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
-		"trdType":   inttest.AminoCodecFormatter(trdType),
+		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using GetAminoCdc")
 
@@ -753,7 +754,7 @@ func DisableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableTrade {
 }
 
 // RunDisableTrade is a function to disable trade
-func RunDisableTrade(step FixtureStep, t *testing.T) {
+func RunDisableTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		dsTrdMsg := DisableTradeMsgFromRef(step.ParamsRef, t)
@@ -764,7 +765,7 @@ func RunDisableTrade(step FixtureStep, t *testing.T) {
 		}
 
 		WaitForNextBlockWithErrorCheck(t)
-		tci := inttest.GetTestCoinInput()
+		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgDisableTrade(tci.Ctx, tci.PlnK, dsTrdMsg)
 
 		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
@@ -774,7 +775,7 @@ func RunDisableTrade(step FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.DisableTradeResponse{}
-		err = inttest.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
