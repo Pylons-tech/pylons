@@ -49,9 +49,7 @@
           },
           "Outputs": [
             {
-              "ResultEntries": [
-                "0"
-              ],
+              "EntryIDs": ["loudcoin_reward"],
               "Weight": "1"
             }
           ],

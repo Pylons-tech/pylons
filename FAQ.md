@@ -38,11 +38,11 @@ e.g.
 ```
     "Outputs": [
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "-11"
         },
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "Mana - rand() * 20.0"
         }
     ]

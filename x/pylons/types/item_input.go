@@ -7,6 +7,7 @@ import (
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
+	ID          string
 	Doubles     DoubleInputParamList
 	Longs       LongInputParamList
 	Strings     StringInputParamList

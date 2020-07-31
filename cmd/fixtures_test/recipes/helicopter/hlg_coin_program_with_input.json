@@ -1,12 +1,16 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/helicopter/item_input/heli_knife_lv3.json"
+    "ItemInputs": [
+        {
+            "ID": "heli_knife_lv3",
+            "Ref": "./recipes/helicopter/item_input/heli_knife_lv3.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "hlgcoin_reward",
                 "Coin": "hlgcoin",
                 "Count": "int(attack * double(5))"
             }
@@ -14,7 +18,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["hlgcoin_reward"],
             "Weight": "1"
         }
     ],

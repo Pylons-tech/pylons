@@ -1,14 +1,17 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs": [],
-    "ItemInputRefs": [
-        "./recipes/javelin/item_input/400old_javelin.json"
+    "ItemInputs": [
+        {
+            "ID": "400old_javelin",
+            "Ref": "./recipes/javelin/item_input/400old_javelin.json"
+        }
     ],
     "Entries":{
     },
     "Outputs": [
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "5.0"
         }
     ],

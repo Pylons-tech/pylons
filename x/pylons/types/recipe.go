@@ -84,3 +84,13 @@ func (rcp Recipe) String() string {
 		rcp.Entries.String(),
 		rcp.BlockInterval)
 }
+
+// GetItemInputRefIndex get item input index from ref string
+func (rcp Recipe) GetItemInputRefIndex(inputRef string) int {
+	for idx, input := range rcp.ItemInputs {
+		if input.ID == inputRef {
+			return idx
+		}
+	}
+	return -1
+}

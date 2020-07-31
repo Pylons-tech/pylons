@@ -1,10 +1,11 @@
 {
   "NodeVersion": "0.0.1",
   "CoinInputs": [],
-  "ItemInputRefs": [],
+  "ItemInputs": [],
   "Entries":{
       "CoinOutputs":[
           {
+              "ID": "pylon_reward",
               "Coin":"pylon",
               "Count":"100"
           }
@@ -12,7 +13,7 @@
   },
   "Outputs": [
       {
-          "ResultEntries": ["0"],
+          "EntryIDs": ["pylon_reward"],
           "Weight": "1"
       }
   ],

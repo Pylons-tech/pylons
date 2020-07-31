@@ -1,25 +1,33 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs": [],
-    "ItemInputRefs": [
-        "./recipes/catalyst/item_input/monster.json",
-        "./recipes/catalyst/item_input/catalyst.json"
+    "ItemInputs": [
+        {
+            "ID": "monster",
+            "Ref": "./recipes/catalyst/item_input/monster.json"
+        },
+        {
+            "ID": "catalyst",
+            "Ref": "./recipes/catalyst/item_input/catalyst.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemModifyOutputs": [
             {
-                "ItemInputRef": 0,
+                "ID": "modified_monster",
+                "ItemInputRef": "monster",
                 "ModifyParamsRef": "./recipes/catalyst/upgrader/monster.json"
             },
             {
-                "ItemInputRef": 1
+                "ID": "return_catalyst",
+                "ItemInputRef": "catalyst"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0", "1"],
+            "EntryIDs": ["modified_monster", "return_catalyst"],
             "Weight": "1"
         }
     ],

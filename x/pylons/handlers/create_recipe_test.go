@@ -79,7 +79,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			isUpgrdRecipe:  true,
 			numItemInput:   0,
 			sender:         sender,
-			desiredError:   "ItemInputRef overflow length of ItemInputs",
+			desiredError:   "Invalid item input ref found that does not exist in item inputs",
 			showError:      true,
 		},
 		"multiple item upgrade recipe success creation test": {
@@ -111,22 +111,26 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 
-			var mEntries types.EntriesList
-			if !tc.isUpgrdRecipe {
-				mEntries = types.GenEntries(tc.outputDenom, "Raichu")
-			} else {
-				if tc.numItemOutput == 2 {
-					mEntries = types.GenEntriesTwoItemNameUpgrade("RaichuV2", "PikachuV2")
-				} else {
-					mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
-				}
-			}
-			mOutputs := types.GenOneOutput(len(mEntries))
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
 				mInputList = types.GenItemInputList("Raichu")
 			} else if tc.numItemInput == 2 {
 				mInputList = types.GenItemInputList("Raichu", "Pikachu")
+			}
+
+			var mEntries types.EntriesList
+			var mOutputs types.WeightedOutputsList
+			if !tc.isUpgrdRecipe {
+				mEntries = types.GenEntries(tc.outputDenom, "Raichu")
+				mOutputs = types.GenOneOutput(tc.outputDenom, "Raichu")
+			} else {
+				if tc.numItemOutput == 2 {
+					mEntries = types.GenEntriesTwoItemNameUpgrade("Raichu", "RaichuV2", "Pikachu", "PikachuV2")
+					mOutputs = types.GenOneOutput("RaichuV2", "PikachuV2")
+				} else {
+					mEntries = types.GenEntriesItemNameUpgrade("Raichu", "RaichuV2")
+					mOutputs = types.GenOneOutput("RaichuV2")
+				}
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
@@ -166,7 +170,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
-	mOutputs := types.GenOneOutput(len(mEntries))
+	mOutputs := types.GenOneOutput("chair", "Raichu")
 	mInputList := types.GenItemInputList("Raichu")
 
 	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",

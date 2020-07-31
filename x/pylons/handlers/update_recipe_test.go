@@ -25,7 +25,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenEntries("chair", "Raichu"),
-		types.GenOneOutput(2),
+		types.GenOneOutput("chair", "Raichu"),
 		0,
 		sender1,
 	)
@@ -69,7 +69,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenCoinInputList("wood", 5),
 				types.GenItemInputList("Raichu"),
 				types.GenEntries("chair", "Raichu"),
-				types.GenOneOutput(2),
+				types.GenOneOutput("chair", "Raichu"),
 				sender1)
 
 			result, err := HandlerMsgUpdateRecipe(tci.Ctx, tci.PlnK, msg)

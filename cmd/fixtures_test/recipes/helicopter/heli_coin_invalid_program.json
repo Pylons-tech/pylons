@@ -1,10 +1,11 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "helicoin_faucet",
                 "Coin":"helicoin",
                 "Count": "Invalid Program"
             }
@@ -12,7 +13,7 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["helicoin_faucet"],
             "Weight": "1"
         }
     ],

@@ -1,20 +1,24 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/helicopter/item_input/adventurer.json"
+    "ItemInputs": [
+        {
+            "ID": "adventurer",
+            "Ref": "./recipes/helicopter/item_input/adventurer.json"
+        }
     ],
     "Entries":{
         "ItemModifyOutputs":[
             {
-                "ItemInputRef": 0,
+                "ID": "modified_adventurer",
+                "ItemInputRef": "adventurer",
                 "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["modified_adventurer"],
             "Weight": "1"
         }
     ],

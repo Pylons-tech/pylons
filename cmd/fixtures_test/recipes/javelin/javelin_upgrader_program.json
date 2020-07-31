@@ -1,30 +1,35 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs": [],
-    "ItemInputRefs": [
-        "./recipes/javelin/item_input/javelin.json"
+    "ItemInputs": [
+        {
+            "ID": "javelin",
+            "Ref": "./recipes/javelin/item_input/javelin.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "javecoin_reward",
                 "Coin":"javecoin",
                 "Count":"100"
             }
         ],
         "ItemModifyOutputs":[
             {
-                "ItemInputRef": 0,
+                "ID": "javelin_program",
+                "ItemInputRef": "javelin",
                 "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["1"],
+            "EntryIDs": ["javelin_program"],
             "Weight": "1"
         },
         {
-            "ResultEntries": ["0", "1"],
+            "EntryIDs": ["javecoin_reward", "javelin_program"],
             "Weight": "int(attack) * 2 + 1"
         }
     ],

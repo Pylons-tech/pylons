@@ -1,18 +1,19 @@
 {
   "NodeVersion": "0.0.1",
   "CoinInputs":[],
-  "ItemInputRefs": [],
+  "ItemInputs": [],
   "Entries":{
       "CoinOutputs":[],
       "ItemOutputs":[
           {
+              "ID": "straight_attack_knife",
               "Ref": "./recipes/recipe_item_send_fee/item_output/straight_attack_knife.json"
           }
       ]
   },
   "Outputs": [
       {
-          "ResultEntries": ["0"],
+          "EntryIDs": ["straight_attack_knife"],
           "Weight": "1"
       }
   ],

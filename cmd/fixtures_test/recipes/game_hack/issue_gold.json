@@ -1,10 +1,11 @@
 {
   "NodeVersion": "0.0.1",
   "CoinInputs": [],
-  "ItemInputRefs": [],
+  "ItemInputs": [],
   "Entries":{
       "CoinOutputs":[
           {
+              "ID": "gold_faucet",
               "Coin": "gold",
               "Count": "100"
           }
@@ -12,7 +13,7 @@
   },
   "Outputs": [
       {
-          "ResultEntries": ["0"],
+          "EntryIDs": ["gold_faucet"],
           "Weight": "1"
       }
   ],

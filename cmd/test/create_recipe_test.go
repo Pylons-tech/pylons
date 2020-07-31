@@ -57,7 +57,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					types.GenCoinInputList("wood", 5),
 					types.GenItemInputList("Raichu"),
 					types.GenEntries(tc.outputDenom, "Raichu"),
-					types.GenOneOutput(2),
+					types.GenOneOutput(tc.outputDenom, "Raichu"),
 					0,
 					cbOwnerSdkAddr),
 				cbOwnerKey,

@@ -1,8 +1,11 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs": [],
-    "ItemInputRefs": [
-        "./recipes/javelin/item_input/200old_javelin.json"
+    "ItemInputs": [
+        {
+            "ID": "200old_javelin",
+            "Ref": "./recipes/javelin/item_input/200old_javelin.json"
+        }
     ],
     "Entries":{
     },

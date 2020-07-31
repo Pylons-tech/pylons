@@ -1,18 +1,19 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "delayed_attack_knife",
                 "Ref": "./recipes/submarine/item_output/delayed_attack_knife.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["delayed_attack_knife"],
             "Weight": "1"
         }
     ],

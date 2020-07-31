@@ -1,21 +1,28 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/submarine/item_input/knife_lv1.json",
-        "./recipes/submarine/item_input/shield_lv1.json"
+    "ItemInputs": [
+        {
+            "ID": "knife_lv1",
+            "Ref": "./recipes/submarine/item_input/knife_lv1.json"
+        },
+        {
+            "ID": "shield_lv1",
+            "Ref": "./recipes/submarine/item_input/shield_lv1.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "knife_shield_lv1",
                 "Ref": "./recipes/submarine/item_output/knife_shield_lv1.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["knife_shield_lv1"],
             "Weight": "1"
         }
     ],
