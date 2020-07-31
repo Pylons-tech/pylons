@@ -29,3 +29,6 @@ fixture_tests:
 
 unit_tests:
 	go test -v ./x/... ${ARGS}
+
+fixture_unit_tests:
+	go test -v ./test/fixtures_test/ ${ARGS}

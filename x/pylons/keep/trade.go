@@ -1,6 +1,7 @@
 package keep
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -32,6 +33,22 @@ func (k Keeper) GetTradesIteratorByCreator(ctx sdk.Context, sender sdk.AccAddres
 func (k Keeper) GetTradesIterator(ctx sdk.Context) sdk.Iterator {
 	store := ctx.KVStore(k.TradeKey)
 	return sdk.KVStorePrefixIterator(store, []byte(""))
+}
+
+// GetTradesByCreator returns trades array by sender
+func (k Keeper) GetTradesByCreator(ctx sdk.Context, sender sdk.AccAddress) ([]types.Trade, error) {
+	var trades []types.Trade
+	iterator := k.GetTradesIteratorByCreator(ctx, sender)
+	for ; iterator.Valid(); iterator.Next() {
+		var trade types.Trade
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &trade)
+		if err != nil {
+			return trades, err
+		}
+		trades = append(trades, trade)
+	}
+	return trades, nil
 }
 
 // UpdateTrade is used to update the trade using the id
