@@ -14,6 +14,10 @@ const (
 
 // GetLockedCoins returns locked coins based on user
 func GetLockedCoins(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
+	if len(path) == 0 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
+	}
+
 	addr := path[0]
 	accAddr, err := sdk.AccAddressFromBech32(addr)
 

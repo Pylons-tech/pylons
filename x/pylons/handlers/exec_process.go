@@ -29,6 +29,9 @@ type ExecProcess struct {
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
+	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
+		return errors.New("the item IDs count doesn't match the recipe input")
+	}
 
 	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
 	if err != nil {
@@ -38,8 +41,6 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	// we validate and match items
 	var matchedItems []types.Item
 	for i, itemInput := range p.recipe.ItemInputs {
-
-		// TODO this can be possible out of array range
 		matchedItem := items[i]
 		matchErr := itemInput.MatchError(matchedItem)
 		if matchErr != nil {
@@ -126,13 +127,16 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			var outputItem *types.Item
 
 			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
+			if itemInputIndex < 0 {
+				return ersl, errInternal(fmt.Errorf("no item input with ID=%s exist", output.ItemInputRef))
+			}
+			inputItem := p.GetMatchedItemFromIndex(itemInputIndex)
 
 			// Collect itemInputRefs that are used on output
 			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
 
 			// Modify item according to ModifyParams section
-			// TODO this can be possible out of array range
-			outputItem, err = p.UpdateItemFromModifyParams(p.GetMatchedItemFromIndex(itemInputIndex), output)
+			outputItem, err = p.UpdateItemFromModifyParams(inputItem, output)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
@@ -182,19 +186,11 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if !ok {
 			return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
 		}
-
-		// TODO this can be possible out of array range
 		if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
-
-			// TODO this can be possible out of array range
 			originValue := targetItem.Doubles[dblKey].Value.Float()
 			upgradeAmount := dbl.Value.Float()
-
-			// TODO this can be possible out of array range
 			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
 		} else {
-
-			// TODO this can be possible out of array range
 			targetItem.Doubles[dblKey].Value = dbl.Value
 		}
 	}
@@ -208,14 +204,9 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if !ok {
 			return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
 		}
-
-		// TODO this can be possible out of array range
 		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
-			// TODO this can be possible out of array range
 			targetItem.Longs[lngKey].Value += lng.Value
 		} else {
-			fmt.Printf("updating long key [%s] from %d to %d\n", lng.Key, targetItem.Longs[lngKey].Value, lng.Value)
-			// TODO this can be possible out of array range
 			targetItem.Longs[lngKey].Value = lng.Value
 		}
 	}
@@ -229,7 +220,6 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if !ok {
 			return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
 		}
-		// TODO this can be possible out of array range
 		targetItem.Strings[strKey].Value = str.Value
 	}
 

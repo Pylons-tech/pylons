@@ -41,14 +41,17 @@ func (wt *DoubleWeightTable) Generate() (float64, error) {
 	first := 0
 	chosenIndex := -1
 	for i, weight := range weights {
-		if randWeight >= first && randWeight <= weight {
+		if randWeight >= first && randWeight < weight {
 			chosenIndex = i
 			break
 		}
 		first = weight
 	}
 
-	// TODO this can be possible out of array range
+	if chosenIndex < 0 || chosenIndex >= len(wt.WeightRanges) {
+		return 0, errors.New("something went wrong generating random double value")
+	}
+
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
 	return (rand.Float64() * (selectedWeightRange.Upper.Float() - selectedWeightRange.Lower.Float())) + selectedWeightRange.Lower.Float(), nil

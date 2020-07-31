@@ -126,7 +126,6 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 	for i, sig := range sigs {
 
-		// TODO this can be possible out of array range for signerAddrs
 		signerAccs[i], err = ante.GetSignerAcc(ctx, svd.ak, signerAddrs[i])
 		if err != nil {
 			return ctx, err
@@ -134,7 +133,6 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 		// retrieve signBytes of tx
 
-		// TODO this can be possible out of array range  for signerAccs
 		signBytes := sigTx.GetSignBytes(ctx, signerAccs[i])
 
 		// retrieve pubkey
