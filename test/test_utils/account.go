@@ -14,7 +14,7 @@ import (
 var keyMapMux sync.Mutex
 var keyAddressMap = make(map[string]sdk.AccAddress)
 var keyPrivateMap = make(map[string]secp256k1.PrivKeySecp256k1)
-var chainAccountCount uint64 = 0
+var chainAccountCount uint64
 
 // AddNewLocalKey is a function to add key cli
 func AddNewLocalKey(key string) (sdk.AccAddress, error) {
@@ -60,6 +60,7 @@ func CreateChainAccount(key string) error {
 		Address:       address,
 	}
 	tci.Ak.SetAccount(tci.Ctx, acc)
+	chainAccountCount++
 
 	return nil
 }

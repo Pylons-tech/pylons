@@ -3,7 +3,6 @@ package testutils
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"sync"
@@ -34,20 +33,6 @@ func init() {
 // GetTestCoinInput returns test coin input for testing
 func GetTestCoinInput() keep.TestCoinInput {
 	return tci
-}
-
-// ReadFile is a utility function to read file
-func ReadFile(fileURL string, t *testing.T) []byte {
-	jsonFile, err := os.Open(fileURL)
-	if err != nil {
-		t.MustNil(err, "error reading file")
-		return []byte{}
-	}
-
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-	return byteValue
 }
 
 // GetAminoCdc is a utility function to get amino codec
