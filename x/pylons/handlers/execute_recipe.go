@@ -50,10 +50,6 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	if len(msg.ItemIDs) != len(recipe.ItemInputs) {
-		return nil, errInternal(errors.New("the item IDs count doesn't match the recipe input"))
-	}
-
 	err = p.SetMatchedItemsFromExecMsg(msg)
 	if err != nil {
 		return nil, errInternal(err)

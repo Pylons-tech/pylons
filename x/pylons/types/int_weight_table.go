@@ -41,12 +41,17 @@ func (wt *IntWeightTable) Generate() (int, error) {
 	first := 0
 	chosenIndex := -1
 	for i, weight := range weights {
-		if randWeight >= first && randWeight <= weight {
+		if randWeight >= first && randWeight < weight {
 			chosenIndex = i
 			break
 		}
 		first = weight
 	}
+
+	if chosenIndex < 0 || chosenIndex >= len(wt.WeightRanges) {
+		return 0, errors.New("something went wrong generating random integer value")
+	}
+
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
 	if selectedWeightRange.Upper > selectedWeightRange.Lower {

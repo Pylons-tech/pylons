@@ -29,6 +29,9 @@ type ExecProcess struct {
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
+	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
+		return errors.New("the item IDs count doesn't match the recipe input")
+	}
 
 	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
 	if err != nil {
@@ -124,12 +127,16 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			var outputItem *types.Item
 
 			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
+			if itemInputIndex < 0 {
+				return ersl, errInternal(fmt.Errorf("no item input with ID=%s exist", output.ItemInputRef))
+			}
+			inputItem := p.GetMatchedItemFromIndex(itemInputIndex)
 
 			// Collect itemInputRefs that are used on output
 			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
 
 			// Modify item according to ModifyParams section
-			outputItem, err = p.UpdateItemFromModifyParams(p.GetMatchedItemFromIndex(itemInputIndex), output)
+			outputItem, err = p.UpdateItemFromModifyParams(inputItem, output)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
@@ -200,7 +207,6 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
 			targetItem.Longs[lngKey].Value += lng.Value
 		} else {
-			fmt.Printf("updating long key [%s] from %d to %d\n", lng.Key, targetItem.Longs[lngKey].Value, lng.Value)
 			targetItem.Longs[lngKey].Value = lng.Value
 		}
 	}
