@@ -51,14 +51,28 @@ Minus weights are processed as 0.
 This is useful when the Weight is a kind of expression expression that has possibility of less than 0.
 It removes the expression max of 0 that's common.
 
-## FAQ in fixture test writing
-
-- You should create account using get-pylons message.
+## How to create account and get initial balance
+- Create local key
 ```
 pylonscli keys add jack --keyring-backend=test
+```
+- create account on chain
+```
+pylonscli tx pylons create-account --from jack --keyring-backend=test
+```
+- get pylons on chain
+```
 pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
 ```
 
+## FAQ in fixture test writing
+
+- You should create account using create-account message and should get some balance using get-pylons message.
+```
+pylonscli keys add jack --keyring-backend=test
+pylonscli tx pylons create-account --from jack --keyring-backend=test
+pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
+```
 - All the keys are managed via `--keyring-backend=test` (which is an argument of pylonscli) for tests and you should use this for most of test related cli use and other actions that does not require user's system password.
 - You should reinstall pylonsd and pylonscli correctly before running fixture test.
 - You should reinit the chain before running fixture test. If you are using local daemon, try to run `sh init_accounts.local.sh`.
