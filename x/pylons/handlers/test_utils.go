@@ -115,19 +115,19 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 	case RcpRaichuNameUpgrade:
 		return types.CoinInputList{},
 			types.GenItemInputList("Raichu"),
-			types.GenEntriesFirstItemNameUpgrade("RaichuV2"),
+			types.GenEntriesItemNameUpgrade("Raichu", "RaichuV2"),
 			types.GenOneOutput("RaichuV2"),
 			0
 	case RcpRaichuNameUpgradeWithCatalyst:
 		return types.CoinInputList{},
 			types.GenItemInputList("RaichuTC", "catalyst"),
-			types.GenEntriesFirstItemNameUpgrade("RaichuTCV2"),
+			types.GenEntriesItemNameUpgrade("RaichuTC", "RaichuTCV2"),
 			types.GenOneOutput("RaichuTCV2"),
 			0
 	case Rcp2BlockDelayedKnifeUpgrade:
 		return types.CoinInputList{},
 			types.GenItemInputList("Knife"),
-			types.GenEntriesFirstItemNameUpgrade("KnifeV2"),
+			types.GenEntriesItemNameUpgrade("Knife", "KnifeV2"),
 			types.GenOneOutput("KnifeV2"),
 			2
 	case Rcp2BlockDelayedKnifeMerge:

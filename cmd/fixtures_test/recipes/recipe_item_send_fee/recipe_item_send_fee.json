@@ -1,15 +1,18 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/recipe_item_send_fee/item_input/character.json"
+    "ItemInputs": [
+        {
+            "ID": "character",
+            "Ref": "./recipes/recipe_item_send_fee/item_input/character.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
                 "ID": "modified_fee_item",
-                "ItemInputRef": 0,
+                "ItemInputRef": "character",
                 "ModifyParamsRef": "./recipes/recipe_item_send_fee/upgrader/recipe_item_send_fee.json"
             }
         ]

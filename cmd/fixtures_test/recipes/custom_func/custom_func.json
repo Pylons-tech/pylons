@@ -1,15 +1,18 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/custom_func/item_input/character.json"
+    "ItemInputs": [
+        {
+            "ID": "character",
+            "Ref": "./recipes/custom_func/item_input/character.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
                 "ID": "custom_func",
-                "ItemInputRef": 0,
+                "ItemInputRef": "character",
                 "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
             }
         ]

@@ -53,6 +53,14 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	return nil
 }
 
+// GetMatchedItemFromIndex is matched item by index helper
+func (p ExecProcess) GetMatchedItemFromIndex(index int) types.Item {
+	if index < 0 || index >= len(p.matchedItems) {
+		return types.Item{}
+	}
+	return p.matchedItems[index]
+}
+
 // Run execute the process and return result
 func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 	err := p.GenerateCelEnvVarFromInputItems()
@@ -113,15 +121,15 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 				Amount: coinAmount,
 			})
 		case types.ItemModifyOutput:
-			itemOutput := output
 			var outputItem *types.Item
 
-			// Collect itemInputRefs that are used on output
-			usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ItemInputRef)
+			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
 
-			fmt.Println("itemOutput.ModifyItem.ItemInputRef", itemOutput.ItemInputRef)
+			// Collect itemInputRefs that are used on output
+			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
+
 			// Modify item according to ModifyParams section
-			outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ItemInputRef], itemOutput)
+			outputItem, err = p.UpdateItemFromModifyParams(p.GetMatchedItemFromIndex(itemInputIndex), output)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
@@ -135,8 +143,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			})
 		case types.ItemOutput:
 			itemOutput := output
-			var outputItem *types.Item
-			outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
+			outputItem, err := itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
@@ -257,7 +264,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	if len(p.matchedItems) > 0 {
 		// first matched item
-		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.matchedItems[0]) // HP, level, attack
+		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
 	}
 
 	varDefs = append(varDefs,

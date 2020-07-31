@@ -1,9 +1,15 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/helicopter/item_input/heli_knife_lv1.json",
-        "./recipes/helicopter/item_input/heli_knife_lv2.json"
+    "ItemInputs": [
+        {
+            "ID": "heli_knife_lv1",
+            "Ref": "./recipes/helicopter/item_input/heli_knife_lv1.json"
+        },
+        {
+            "ID": "heli_knife_lv2",
+            "Ref": "./recipes/helicopter/item_input/heli_knife_lv2.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[

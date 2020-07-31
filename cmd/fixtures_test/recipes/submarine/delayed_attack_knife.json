@@ -1,7 +1,7 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[

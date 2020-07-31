@@ -1,8 +1,11 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs": [],
-    "ItemInputRefs": [
-        "./recipes/javelin/item_input/javelin.json"
+    "ItemInputs": [
+        {
+            "ID": "javelin",
+            "Ref": "./recipes/javelin/item_input/javelin.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[
@@ -15,7 +18,7 @@
         "ItemModifyOutputs":[
             {
                 "ID": "javelin_program",
-                "ItemInputRef": 0,
+                "ItemInputRef": "javelin",
                 "ModifyParamsRef": "./recipes/javelin/upgrader/javelin_program.json"
             }
         ]

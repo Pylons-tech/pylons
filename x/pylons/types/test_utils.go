@@ -15,6 +15,7 @@ func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
 		iiL = append(iiL, ItemInput{
+			name,
 			nil,
 			nil,
 			StringInputParamList{StringInputParam{"Name", name}},
@@ -171,23 +172,23 @@ func GenEntriesRand(coinName, itemName string) EntriesList {
 	}
 }
 
-// GenEntriesFirstItemNameUpgrade is a function to generate entries that update first item's name
-func GenEntriesFirstItemNameUpgrade(targetValue string) EntriesList {
+// GenEntriesItemNameUpgrade is a function to generate entries that update first item's name
+func GenEntriesItemNameUpgrade(inputRef, targetValue string) EntriesList {
 	return EntriesList{
 		NewItemModifyOutput(
-			targetValue, 0, GenModifyParamsForString("Name", targetValue),
+			targetValue, inputRef, GenModifyParamsForString("Name", targetValue),
 		),
 	}
 }
 
 // GenEntriesTwoItemNameUpgrade is a function to generate entries that update two items' names
-func GenEntriesTwoItemNameUpgrade(targetValue1, targetValue2 string) EntriesList {
+func GenEntriesTwoItemNameUpgrade(inputRef1, targetValue1, inputRef2, targetValue2 string) EntriesList {
 	return EntriesList{
 		NewItemModifyOutput(
-			targetValue1, 0, GenModifyParamsForString("Name", targetValue1),
+			targetValue1, inputRef1, GenModifyParamsForString("Name", targetValue1),
 		),
 		NewItemModifyOutput(
-			targetValue2, 1, GenModifyParamsForString("Name", targetValue2),
+			targetValue2, inputRef2, GenModifyParamsForString("Name", targetValue2),
 		),
 	}
 }

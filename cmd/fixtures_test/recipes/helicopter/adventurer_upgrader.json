@@ -1,14 +1,17 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/helicopter/item_input/adventurer.json"
+    "ItemInputs": [
+        {
+            "ID": "adventurer",
+            "Ref": "./recipes/helicopter/item_input/adventurer.json"
+        }
     ],
     "Entries":{
         "ItemModifyOutputs":[
             {
                 "ID": "modified_adventurer",
-                "ItemInputRef": 0,
+                "ItemInputRef": "adventurer",
                 "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
             }
         ]

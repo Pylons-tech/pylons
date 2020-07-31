@@ -29,7 +29,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 
 		types.EntriesList{
 			types.NewItemModifyOutput(
-				"FeeModifyEntry", 0, types.ItemModifyParams{TransferFee: 300},
+				"FeeModifyEntry", "catalyst", types.ItemModifyParams{TransferFee: 300},
 			),
 			types.GenItemOnlyEntry("Catalyst2")[0],
 		},
@@ -46,7 +46,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 
 		types.EntriesList{
 			types.NewItemModifyOutput(
-				"FeeModifyEntry", 0, types.ItemModifyParams{TransferFee: 300},
+				"FeeModifyEntry", "sword", types.ItemModifyParams{TransferFee: 300},
 			),
 		},
 		types.GenAllOutput("FeeModifyEntry"),

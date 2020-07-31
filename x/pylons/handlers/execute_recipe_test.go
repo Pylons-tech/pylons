@@ -59,7 +59,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 		types.EntriesList{
 			types.NewItemModifyOutput(
-				"catalystOutputEntry", 0, types.ItemModifyParams{},
+				"catalystOutputEntry", "catalyst", types.ItemModifyParams{},
 			),
 			types.GenItemOnlyEntry("Catalyst2")[0],
 		},

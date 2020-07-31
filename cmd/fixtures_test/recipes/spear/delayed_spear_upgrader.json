@@ -1,15 +1,18 @@
 {
     "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/spear/item_input/spear.json"
+    "ItemInputs": [
+        {
+            "ID": "character",
+            "Ref": "./recipes/spear/item_input/spear.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
                 "ID": "spear",
-                "ItemInputRef": 0,
+                "ItemInputRef": "character",
                 "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
             }
         ]

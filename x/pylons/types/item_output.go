@@ -17,7 +17,7 @@ type ItemModifyParams struct {
 // ItemModifyOutput describes what is modified from item input
 type ItemModifyOutput struct {
 	ID           string
-	ItemInputRef int
+	ItemInputRef string
 	Doubles      DoubleParamList
 	Longs        LongParamList
 	Strings      StringParamList
@@ -25,7 +25,7 @@ type ItemModifyOutput struct {
 }
 
 // NewItemModifyOutput returns ItemOutput that is modified from item input
-func NewItemModifyOutput(ID string, ItemInputRef int, ModifyParams ItemModifyParams) ItemModifyOutput {
+func NewItemModifyOutput(ID string, ItemInputRef string, ModifyParams ItemModifyParams) ItemModifyOutput {
 	return ItemModifyOutput{
 		ID:           ID,
 		ItemInputRef: ItemInputRef,
@@ -44,7 +44,7 @@ func (mit ItemModifyOutput) GetID() string {
 func (mit ItemModifyOutput) String() string {
 	return fmt.Sprintf(`ItemModifyOutput{
 		ID: %s,
-		ItemInputRef: %d,
+		ItemInputRef: %s,
 		Doubles: %+v,
 		Longs:   %+v,
 		Strings: %+v,
