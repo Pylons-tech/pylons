@@ -261,11 +261,16 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	varDefs = append(varDefs, decls.NewVar("lastBlockHeight", decls.Int))
 	variables["lastBlockHeight"] = p.ctx.BlockHeight()
+	itemInputs := p.recipe.ItemInputs
 
 	for idx, item := range p.matchedItems {
-		iPrefix := fmt.Sprintf("input%d.", idx)
+		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
 
-		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix, item) // input0.level, input1.attack, input2.HP
+		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
+		if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" && itemInputs[idx].IDValidationError() == nil {
+			iPrefix2 := itemInputs[idx].ID + "."
+			varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
+		}
 	}
 
 	if len(p.matchedItems) > 0 {
@@ -314,4 +319,9 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	p.ec = types.NewCelEnvCollection(env, variables, funcs)
 	return err
+}
+
+// GetEnvCollection get env collection
+func (p *ExecProcess) GetEnvCollection() types.CelEnvCollection {
+	return p.ec
 }

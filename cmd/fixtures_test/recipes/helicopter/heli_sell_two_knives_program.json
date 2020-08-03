@@ -16,7 +16,7 @@
             {
                 "ID": "hllg_reward",
                 "Coin":"hllgcoin",
-                "Count": "(input0.level + input1.level) * 10"
+                "Count": "(heli_knife_lv1.level + heli_knife_lv2.level) * 10"
             }
         ]
     },

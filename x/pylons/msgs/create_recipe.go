@@ -2,6 +2,7 @@ package msgs
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -55,11 +56,29 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	itemInputRefsMap := map[string]bool{}
+	entryIDsMap := map[string]bool{}
 	for _, ii := range msg.ItemInputs {
+		if ii.ID == "" {
+			continue
+		}
+		if err := ii.IDValidationError(); err != nil {
+			return err
+		}
+		if itemInputRefsMap[ii.ID] {
+			return fmt.Errorf("item input with same ID available: ID=%s", ii.ID)
+		}
 		itemInputRefsMap[ii.ID] = true
 	}
-	// validation for the item input index overflow on entries
+	// validation for the invalid item input reference on entries
 	for _, entry := range msg.Entries {
+
+		if err := types.EntryIDValidationError(entry.GetID()); err != nil {
+			return err
+		}
+		if entryIDsMap[entry.GetID()] {
+			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+		}
+		entryIDsMap[entry.GetID()] = true
 		switch entry := entry.(type) {
 		case types.CoinOutput:
 			coinOutput := entry
@@ -68,6 +87,9 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			}
 			if coinOutput.Coin == types.Pylon {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
+			}
+			if err := sdk.ValidateDenom(coinOutput.Coin); err != nil {
+				return err
 			}
 		case types.ItemModifyOutput:
 			if !itemInputRefsMap[entry.ItemInputRef] {
