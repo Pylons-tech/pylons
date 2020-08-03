@@ -3,7 +3,7 @@
     "CoinInputs": [],
     "ItemInputs": [
         {
-            "ID": "200old_javelin",
+            "ID": "javelin_200old",
             "Ref": "./recipes/javelin/item_input/200old_javelin.json"
         }
     ],

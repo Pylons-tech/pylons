@@ -32,11 +32,6 @@ func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper kee
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	for _, trade := range trades {
-		if !trade.Disabled {
-			trades = append(trades, trade)
-		}
-	}
 
 	tradeList := types.TradeList{
 		Trades: trades,
