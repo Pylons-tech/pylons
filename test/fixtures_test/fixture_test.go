@@ -8,19 +8,17 @@ import (
 	fixturetestSDK "github.com/Pylons-tech/pylons/test/fixture_utils"
 )
 
-var runSerialMode = false
 var scenarios = ""
 var accounts = ""
 
 func init() {
-	flag.BoolVar(&runSerialMode, "runserial", false, "true/false value to check if test will be running in parallel")
 	flag.StringVar(&scenarios, "scenarios", "", "custom scenario file names")
 	flag.StringVar(&accounts, "accounts", "", "custom account names")
 }
 
 func TestFixtures(t *testing.T) {
 	flag.Parse()
-	fixturetestSDK.FixtureTestOpts.IsParallel = !runSerialMode
+	fixturetestSDK.FixtureTestOpts.IsParallel = false
 	fixturetestSDK.FixtureTestOpts.BaseDirectory = "../../cmd/fixtures_test"
 
 	fixturetestSDK.RegisterDefaultActionRunners()

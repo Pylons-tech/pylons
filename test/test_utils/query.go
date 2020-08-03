@@ -22,32 +22,37 @@ func GetTradeIDFromExtraInfo(tradeExtraInfo string) (string, bool, error) {
 	return trade.ID, exist, nil
 }
 
-// ListCookbook is a function to list cookbooks via cli
+// ListCookbook is a function to list cookbooks
 func ListCookbook(address sdk.AccAddress) ([]types.Cookbook, error) {
 	return tci.PlnK.GetCookbookBySender(tci.Ctx, address)
 }
 
-// GetLockedCoins is a function to list locked coins via cli
+// GetLockedCoins is a function to list locked coins
 func GetLockedCoins(address sdk.AccAddress) types.LockedCoin {
 	return tci.PlnK.GetLockedCoin(tci.Ctx, address)
 }
 
-// GetLockedCoinDetails is a function to list locked coins via cli
+// GetLockedCoinDetails is a function to list locked coins
 func GetLockedCoinDetails(address sdk.AccAddress) types.LockedCoinDetails {
 	return tci.PlnK.GetLockedCoinDetails(tci.Ctx, address)
 }
 
-// ListRecipes is a function to list recipes via cli
-func ListRecipes(address sdk.AccAddress) []types.Recipe {
+// ListRecipesBySender is a function to list recipes by sender
+func ListRecipesBySender(address sdk.AccAddress) []types.Recipe {
 	return tci.PlnK.GetRecipesBySender(tci.Ctx, address)
 }
 
-// ListExecutions is a function to list executions via cli
+// ListRecipes is a function to list recipes
+func ListRecipes() []types.Recipe {
+	return tci.PlnK.GetRecipes(tci.Ctx)
+}
+
+// ListExecutions is a function to list executions
 func ListExecutions(address sdk.AccAddress) ([]types.Execution, error) {
 	return tci.PlnK.GetExecutionsBySender(tci.Ctx, address)
 }
 
-// ListItems is a function to list items via cli
+// ListItems is a function to list items
 func ListItems(address sdk.AccAddress) ([]types.Item, error) {
 	return tci.PlnK.GetItemsBySender(tci.Ctx, address)
 }
@@ -137,7 +142,7 @@ func GetCookbookIDFromName(cbName string, account sdk.AccAddress) (string, bool,
 
 // GetRecipeIDFromName is a function to get recipe id from name
 func GetRecipeIDFromName(rcpName string) (string, bool) {
-	rcpList := ListRecipes(sdk.AccAddress{})
+	rcpList := ListRecipes()
 	rcp, exist := FindRecipeFromArrayByName(rcpList, rcpName)
 	return rcp.ID, exist
 }
@@ -169,7 +174,7 @@ func GetItemByGUID(guid string) (types.Item, error) {
 
 // GetRecipeGUIDFromName is a function to get recipe id from name
 func GetRecipeGUIDFromName(name string, address sdk.AccAddress) string {
-	rcpList := ListRecipes(address)
+	rcpList := ListRecipesBySender(address)
 	rcp, _ := FindRecipeFromArrayByName(rcpList, name)
 	return rcp.ID
 }

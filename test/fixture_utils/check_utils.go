@@ -328,7 +328,7 @@ func RunTestScenarios(scenarioDir string, scenarioFileNames []string, t *originT
 	newT := testing.NewT(t)
 
 	// Register default accounts configured into runtime key mapping
-	RegisterDefaultAccountKeys()
+	RegisterDefaultAccountKeys(&newT)
 
 	var files []string
 

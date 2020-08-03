@@ -40,10 +40,26 @@ func UnmarshalIntoEmptyInterface(bytes []byte, t *testing.T) map[string]interfac
 }
 
 // RegisterDefaultAccountKeys register the accounts configured on FixtureTestOpts.AccountNames
-func RegisterDefaultAccountKeys() {
+func RegisterDefaultAccountKeys(t *testing.T) {
 	runtimeKeyGenMux.Lock()
 	defer runtimeKeyGenMux.Unlock()
+	tci := testutils.GetTestCoinInput()
+	coins := sdk.Coins{
+		sdk.NewInt64Coin("loudcoin", 10000000000),
+		sdk.NewInt64Coin("node0token", 10000000000),
+		sdk.NewInt64Coin("pylon", 10000000000),
+		sdk.NewInt64Coin("stake", 10000000000),
+	}
 	for idx, key := range FixtureTestOpts.AccountNames {
+		address, err := testutils.AddNewLocalKey(key)
+		t.WithFields(testing.Fields{
+			"key":              key,
+			"local_key_result": address,
+		}).MustNil(err, "error creating local Key")
+		err = testutils.CreateChainAccount(key)
+		t.MustNil(err, "error creating account on chain")
+		tci.Bk.AddCoins(tci.Ctx, address, coins.Sort())
+
 		runtimeAccountKeys[fmt.Sprintf("account%d", idx+1)] = key
 	}
 }

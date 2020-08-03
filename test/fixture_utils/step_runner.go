@@ -25,10 +25,10 @@ func TxBroadcastErrorCheck(err error, step fixturetestSDK.FixtureStep, t *testin
 }
 
 // TxErrorLogCheck check expected error log is produced correctly
-func TxErrorLogCheck(result *sdk.Result, ErrorLog string, t *testing.T) {
+func TxErrorLogCheck(err error, ErrorLog string, t *testing.T) {
 	if len(ErrorLog) > 0 {
-		t.MustTrue(result != nil, "result is nil unexpectedly")
-		t.MustContain(result.Log, ErrorLog, "transaction error log is different from expected one.")
+		t.MustTrue(err != nil, "result is nil unexpectedly")
+		t.MustContain(err.Error(), ErrorLog, "transaction error log is different from expected one.")
 	}
 }
 
@@ -140,7 +140,7 @@ func RunSendCoins(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgSendCoins(tci.Ctx, tci.PlnK, scMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -253,7 +253,7 @@ func RunCheckExecution(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCheckExecution(tci.Ctx, tci.PlnK, chkExecMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -305,7 +305,7 @@ func RunFiatItem(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgFiatItem(tci.Ctx, tci.PlnK, itmMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -358,7 +358,7 @@ func RunSendItems(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgSendItems(tci.Ctx, tci.PlnK, siMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -402,7 +402,7 @@ func RunUpdateItemString(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, sTypeMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -455,7 +455,7 @@ func RunCreateCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cbMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -525,7 +525,7 @@ func RunCreateRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, rcpMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -580,7 +580,7 @@ func RunExecuteRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, execMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -665,7 +665,7 @@ func RunCreateTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, createTrd)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -718,7 +718,7 @@ func RunFulfillTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffTrdMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
@@ -768,7 +768,7 @@ func RunDisableTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgDisableTrade(tci.Ctx, tci.PlnK, dsTrdMsg)
 
-		TxErrorLogCheck(result, step.Output.TxResult.ErrorLog, t)
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
 		if len(step.Output.TxResult.ErrorLog) > 0 {
 			return
 		}
