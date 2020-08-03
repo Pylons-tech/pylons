@@ -29,6 +29,9 @@ func ListTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper kee
 	}
 
 	trades, err := keeper.GetTradesByCreator(ctx, senderAccAddress)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
 	for _, trade := range trades {
 		if !trade.Disabled {
 			trades = append(trades, trade)

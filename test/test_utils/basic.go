@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"regexp"
-	"sync"
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -24,7 +23,6 @@ type CLIOptions struct{}
 
 // CLIOpts is a variable to manage pylonscli options
 var CLIOpts CLIOptions
-var cliMux sync.Mutex
 
 func init() {
 	tci = keep.SetupTestCoinInput()

@@ -9,11 +9,9 @@ import (
 )
 
 var scenarios = ""
-var accounts = ""
 
 func init() {
 	flag.StringVar(&scenarios, "scenarios", "", "custom scenario file names")
-	flag.StringVar(&accounts, "accounts", "", "custom account names")
 }
 
 func TestFixtures(t *testing.T) {
@@ -28,9 +26,6 @@ func TestFixtures(t *testing.T) {
 	if len(scenarios) > 0 {
 		scenarioFileNames = strings.Split(scenarios, ",")
 	}
-	fixturetestSDK.FixtureTestOpts.AccountNames = []string{}
-	if len(accounts) > 0 {
-		fixturetestSDK.FixtureTestOpts.AccountNames = strings.Split(accounts, ",")
-	}
+	fixturetestSDK.FixtureTestOpts.AccountNames = []string{"genesis1", "genesis2", "genesis3", "genesis4"}
 	fixturetestSDK.RunTestScenarios("scenarios", scenarioFileNames, t)
 }

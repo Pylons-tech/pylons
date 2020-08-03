@@ -117,9 +117,10 @@ func RunGetPylons(step fixturetestSDK.FixtureStep, t *testing.T) {
 		WaitForNextBlockWithErrorCheck(t)
 		tci := testutils.GetTestCoinInput()
 		result, err := handlers.HandlerMsgGetPylons(tci.Ctx, tci.PlnK, gpMsg)
+		t.MustTrue(err == nil, "error should be empty")
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.GetPylonsResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -147,7 +148,7 @@ func RunSendCoins(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.GetPylonsResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -260,7 +261,7 @@ func RunCheckExecution(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CheckExecutionResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -312,7 +313,7 @@ func RunFiatItem(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.FiatItemResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.ItemID != "", "item id shouldn't be empty")
 	}
@@ -365,7 +366,7 @@ func RunSendItems(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.SendItemsResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -409,7 +410,7 @@ func RunUpdateItemString(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.UpdateItemStringResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 	}
 }
@@ -462,7 +463,7 @@ func RunCreateCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CreateCookbookResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.CookbookID != "", "coookbook id shouldn't be empty")
 	}
@@ -532,7 +533,7 @@ func RunCreateRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CreateRecipeResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.RecipeID != "", "recipe id shouldn't be empty")
 	}
@@ -587,7 +588,7 @@ func RunExecuteRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.ExecuteRecipeResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 
@@ -672,7 +673,7 @@ func RunCreateTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.CreateTradeResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		t.MustTrue(resp.TradeID != "", "trade id shouldn't be empty")
 	}
@@ -725,7 +726,7 @@ func RunFulfillTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.FulfillTradeResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}
@@ -775,7 +776,7 @@ func RunDisableTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 		t.MustTrue(result != nil, "result should not be empty")
 		resp := handlers.DisableTradeResponse{}
-		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp)
+		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)
 		TxResultStatusMessageCheck(resp.Status, resp.Message, step, t)
 	}

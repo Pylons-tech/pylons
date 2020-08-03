@@ -58,7 +58,8 @@ func RegisterDefaultAccountKeys(t *testing.T) {
 		}).MustNil(err, "error creating local Key")
 		err = testutils.CreateChainAccount(key)
 		t.MustNil(err, "error creating account on chain")
-		tci.Bk.AddCoins(tci.Ctx, address, coins.Sort())
+		_, err = tci.Bk.AddCoins(tci.Ctx, address, coins.Sort())
+		t.MustNil(err, "error adding coins")
 
 		runtimeAccountKeys[fmt.Sprintf("account%d", idx+1)] = key
 	}
