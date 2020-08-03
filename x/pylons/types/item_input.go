@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	"regexp"
 )
 
 // ItemInput is a wrapper struct for Item for recipes
@@ -53,6 +54,20 @@ func (ii ItemInput) MatchError(item Item) error {
 		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
 	}
 	return nil
+}
+
+// IDValidationError check if ID can be used as a variable name if available
+func (ii ItemInput) IDValidationError() error {
+	if len(ii.ID) == 0 {
+		return nil
+	}
+
+	regex := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z_0-9]*$`)
+	if regex.MatchString(ii.ID) {
+		return nil
+	}
+
+	return fmt.Errorf("ID is not empty nor fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ii.ID)
 }
 
 // ItemInputList is a list of ItemInputs for convinience

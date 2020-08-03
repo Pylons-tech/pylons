@@ -132,7 +132,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 			2
 	case Rcp2BlockDelayedKnifeMerge:
 		return types.CoinInputList{},
-			types.GenItemInputList("Knife", "Knife"),
+			types.GenItemInputList("Knife1", "Knife2"),
 			types.GenItemOnlyEntry("KnifeMRG"),
 			types.GenOneOutput("KnifeMRG"),
 			2
