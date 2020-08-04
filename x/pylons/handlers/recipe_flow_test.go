@@ -37,9 +37,8 @@ func TestRecipeFlowUpdate(t *testing.T) {
 		dynamicItemNames []string
 	}{
 		"successful test for update recipe": {
-			cbID:       cbData.CookbookID,
-			recipeName: "recipe0001",
-			// rcpID:        recipeData.RecipeID, // available ID
+			cbID:         cbData.CookbookID,
+			recipeName:   "recipe0001",
 			recipeDesc:   "this has to meet character limits lol",
 			sender:       sender1,
 			desiredError: "",
@@ -52,8 +51,6 @@ func TestRecipeFlowUpdate(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			// Create recipe
-
-			// mock new recipe
 			newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
 				types.GenCoinInputList("wood", 5),
 				types.GenItemInputList("Raichu"),
