@@ -13,6 +13,70 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestCustomCreateRecipeValidateBasic(t *testing.T) {
+	recipeJSON := `
+		{
+			"BlockInterval": "0",
+			"CoinInputs": [
+			  {
+				"Coin": "pylon",
+				"Count": "1"
+			  }
+			],
+			"CookbookID": "LOUD-v0.1.0-1579053457",
+			"Description": "test recipe from test suite",
+			"Entries": {
+			  "CoinOutputs": null,
+			  "ItemModifyOutputs": null,
+			  "ItemOutputs": [
+				{
+				  "Doubles": [
+					{
+					  "Key": "Mass",
+					  "Program": "",
+					  "Rate": "1",
+					  "WeightRanges": [
+						{
+						  "Lower": "50",
+						  "Upper": "100",
+						  "Weight": 1
+						}
+					  ]
+					}
+				  ],
+				  "ID": "a0",
+				  "Longs": null,
+				  "Strings": [
+					{
+					  "Key": "Name",
+					  "Program": "",
+					  "Rate": "1",
+					  "Value": "Mars"
+					}
+				  ],
+				  "TransferFee": 0
+				}
+			  ]
+			},
+			"ItemInputs": null,
+			"Name": "RTEST_1596513734",
+			"Outputs": [
+			  {
+				"EntryIDs": ["a0"],
+				"Weight": "1"
+			  }
+			],
+			"Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
+		}`
+
+	tci := keep.SetupTestCoinInput()
+	msg := msgs.MsgCreateRecipe{}
+	err := tci.Cdc.UnmarshalJSON([]byte(recipeJSON), &msg)
+	require.True(t, err == nil, err)
+	err = msg.ValidateBasic()
+	require.True(t, err == nil, err)
+}
+
 func TestHandlerMsgCreateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)

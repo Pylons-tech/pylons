@@ -9,6 +9,11 @@ pylonscli tx broadcast tx_recipe_signed.json
 sleep 6
 
 # block 3
+pylonscli tx sign tx_recipe2.json --from eugen --keyring-backend=test > tx_recipe2_signed.json
+pylonscli tx broadcast tx_recipe2_signed.json 
+sleep 6
+
+# block 3
 pylonscli tx sign tx_execute.json --from eugen --keyring-backend=test > tx_execute_signed.json
 pylonscli tx broadcast tx_execute_signed.json
 sleep 6

@@ -1,0 +1,69 @@
+{
+    "type": "cosmos-sdk/StdTx",
+    "value": {
+      "msg":[
+        {
+          "type": "pylons/CreateRecipe",
+          "value": {
+            "BlockInterval": "0",
+            "CoinInputs": [
+              {
+                "Coin": "pylon",
+                "Count": "1"
+              }
+            ],
+            "CookbookID": "LOUD-v0.1.0-1579053457",
+            "Description": "test recipe from test suite",
+            "Entries": {
+              "CoinOutputs": null,
+              "ItemModifyOutputs": null,
+              "ItemOutputs": [
+                {
+                  "Doubles": [
+                    {
+                      "Key": "Mass",
+                      "Program": "",
+                      "Rate": "1",
+                      "WeightRanges": [
+                        {
+                          "Lower": "50",
+                          "Upper": "100",
+                          "Weight": 1
+                        }
+                      ]
+                    }
+                  ],
+                  "ID": "0",
+                  "Longs": null,
+                  "Strings": [
+                    {
+                      "Key": "Name",
+                      "Program": "",
+                      "Rate": "1",
+                      "Value": "Mars"
+                    }
+                  ],
+                  "TransferFee": 0
+                }
+              ]
+            },
+            "ItemInputs": null,
+            "Name": "RTEST_1596513734",
+            "Outputs": [
+              {
+                "EntryIDs": ["0"],
+                "Weight": "1"
+              }
+            ],
+            "Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
+          }
+        }
+      ],
+      "fee": {
+        "amount": [],
+        "gas": "200000"
+      },
+      "signatures": null,
+      "memo": ""
+    }
+  }
