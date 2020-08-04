@@ -1,0 +1,17 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "DE-double-empty-input-type2",
+    "CoinInputs":[],
+    "ItemInputs":[
+        {
+            "ID": "double_empty_type2",
+            "Ref": "./recipes/double_empty/item_input/double_empty_type2.json"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"de_account1",
+    "Name": "DE's double empty input type2 test recipe",
+    "CookbookID": "DE-v0.0.0-1579053457",
+    "Description": "this recipe is used to test double empty input type2.",
+    "BlockInterval":"0"
+}

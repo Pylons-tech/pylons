@@ -1,0 +1,18 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "DE-no-output-empty-type3",
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[{
+            "ID": "regular",
+            "Ref": "./recipes/double_empty/item_output/regular.json"
+        }]
+    },
+    "Outputs": [],
+    "ExtraInfo":"",
+    "Sender":"de_account1",
+    "Name": "DE's no output type3 test recipe",
+    "CookbookID": "DE-v0.0.0-1579053457",
+    "Description": "this recipe is used to test no output type3.",
+    "BlockInterval":"0"
+}

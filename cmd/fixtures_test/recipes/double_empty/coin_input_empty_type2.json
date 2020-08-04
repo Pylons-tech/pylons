@@ -1,0 +1,24 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "DE-coin-input-empty-type2",
+    "ItemInputs": [],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[{
+            "ID": "regular",
+            "Ref": "./recipes/double_empty/item_output/regular.json"
+        }]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["regular"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"de_account1",
+    "Name": "DE's coin input empty type2 test recipe",
+    "CookbookID": "DE-v0.0.0-1579053457",
+    "Description": "this recipe is used to test coin input empty type2.",
+    "BlockInterval":"0"
+}
