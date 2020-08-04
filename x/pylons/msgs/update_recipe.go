@@ -28,6 +28,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 	itemInputs types.ItemInputList,
 	entries types.EntriesList,
 	outputs types.WeightedOutputsList,
+	blockInterval int64,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		Name:          recipeName,
@@ -38,7 +39,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
 		Outputs:       outputs,
-		BlockInterval: 0,
+		BlockInterval: blockInterval,
 		Sender:        sender,
 	}
 }
@@ -65,7 +66,20 @@ func (msg MsgUpdateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
-	return nil
+	msgCreateRecipe := NewMsgCreateRecipe(
+		msg.Name,
+		msg.CookbookID,
+		msg.ID,
+		msg.Description,
+		msg.CoinInputs,
+		msg.ItemInputs,
+		msg.Entries,
+		msg.Outputs,
+		msg.BlockInterval,
+		msg.Sender,
+	)
+
+	return msgCreateRecipe.ValidateBasic()
 }
 
 // GetSignBytes encodes the message for signing

@@ -70,6 +70,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				types.GenItemInputList("Raichu"),
 				types.GenEntries("chair", "Raichu"),
 				types.GenOneOutput("chair", "Raichu"),
+				0,
 				sender1)
 
 			result, err := HandlerMsgUpdateRecipe(tci.Ctx, tci.PlnK, msg)

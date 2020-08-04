@@ -30,6 +30,7 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			types.GenItemInputList("Raichu"),
 			types.GenEntries("chair", "Raichu"),
 			types.GenOneOutput("chair", "Raichu"),
+			0,
 			sender,
 		)
 
