@@ -23,21 +23,6 @@ type Cookbook struct {
 	Sender       sdk.AccAddress
 }
 
-// CookbookList is a list of cookbook
-type CookbookList struct {
-	Cookbooks []Cookbook
-}
-
-func (cbl CookbookList) String() string {
-	output := "CookbookList{"
-	for _, cb := range cbl.Cookbooks {
-		output += cb.String()
-		output += ",\n"
-	}
-	output += "}"
-	return output
-}
-
 // NewCookbook return a new Cookbook
 func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
 	cb := Cookbook{
@@ -68,4 +53,19 @@ func (cb Cookbook) String() string {
 		CostPerBlock: %d,
 		Sender: %s,
 	}`, cb.NodeVersion, cb.Name, cb.Description, cb.Version, cb.Developer, cb.Level, cb.SupportEmail, cb.CostPerBlock, cb.Sender)
+}
+
+// CookbookList is a list of cookbook
+type CookbookList struct {
+	Cookbooks []Cookbook
+}
+
+func (cbl CookbookList) String() string {
+	output := "CookbookList{"
+	for _, cb := range cbl.Cookbooks {
+		output += cb.String()
+		output += ",\n"
+	}
+	output += "}"
+	return output
 }

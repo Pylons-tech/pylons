@@ -149,6 +149,26 @@ func (it Item) SetString(key string, value string) bool {
 	return false
 }
 
+// NewItem create a new item with an auto generated ID
+func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
+
+	item := &Item{
+		NodeVersion: SemVer("0.0.1"),
+		CookbookID:  cookbookID,
+		Doubles:     doubles,
+		Longs:       longs,
+		Strings:     strings,
+		Sender:      sender,
+		// By default all items are tradable
+		Tradable:    true,
+		LastUpdate:  blockHeight,
+		TransferFee: transferFee,
+	}
+	item.ID = KeyGen(sender)
+
+	return item
+}
+
 func (it Item) String() string {
 	return fmt.Sprintf(`
 	Item{ 
@@ -224,24 +244,4 @@ func (it Item) NewRecipeExecutionError() error {
 		return errors.New("Item is owned by a trade")
 	}
 	return nil
-}
-
-// NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
-
-	item := &Item{
-		NodeVersion: SemVer("0.0.1"),
-		CookbookID:  cookbookID,
-		Doubles:     doubles,
-		Longs:       longs,
-		Strings:     strings,
-		Sender:      sender,
-		// By default all items are tradable
-		Tradable:    true,
-		LastUpdate:  blockHeight,
-		TransferFee: transferFee,
-	}
-	item.ID = KeyGen(sender)
-
-	return item
 }

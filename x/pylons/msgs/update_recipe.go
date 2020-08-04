@@ -52,18 +52,8 @@ func (msg MsgUpdateRecipe) Type() string { return "update_recipe" }
 
 // ValidateBasic validates the Msg
 func (msg MsgUpdateRecipe) ValidateBasic() error {
-
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
-	}
-
 	if len(msg.ID) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the id for the recipe require to update it")
-	}
-
-	if len(msg.Description) < 20 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe id is required for this message type")
 	}
 
 	msgCreateRecipe := NewMsgCreateRecipe(

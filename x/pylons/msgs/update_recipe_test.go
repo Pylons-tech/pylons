@@ -37,7 +37,7 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 			outputs:      nil,
 			sender:       sender,
 			showError:    true,
-			desiredError: "the id for the recipe require to update it",
+			desiredError: "recipe id is required for this message type",
 		},
 		"item input ID validation error": { // item input ID validation error
 			recipeID:     "recipeID",

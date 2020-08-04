@@ -41,7 +41,6 @@ func (msg MsgUpdateCookbook) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	if msg.ID == "" {
