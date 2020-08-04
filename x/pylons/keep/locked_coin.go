@@ -82,21 +82,15 @@ func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) typ
 	lc := k.GetLockedCoin(ctx, sender)
 	lcd.Sender, lcd.Amount = lc.Sender, lc.Amount
 
-	iterator := k.GetTradesIteratorByCreator(ctx, sender)
-	for ; iterator.Valid(); iterator.Next() {
-		var trade types.Trade
-		mRCP := iterator.Value()
-		err := json.Unmarshal(mRCP, &trade)
-		if err != nil {
-			// this happens because we have multiple versions of breaking trades at times
-			continue
-		}
-
-		if !trade.Disabled && !trade.Completed && !trade.CoinOutputs.Empty() {
-			lcd.LockCoinTrades = append(lcd.LockCoinTrades, types.LockedCoinDescribe{
-				ID:     trade.ID,
-				Amount: trade.CoinOutputs,
-			})
+	trades, err := k.GetTradesByCreator(ctx, sender)
+	if err == nil {
+		for _, trade := range trades {
+			if !trade.Disabled && !trade.Completed && !trade.CoinOutputs.Empty() {
+				lcd.LockCoinTrades = append(lcd.LockCoinTrades, types.LockedCoinDescribe{
+					ID:     trade.ID,
+					Amount: trade.CoinOutputs,
+				})
+			}
 		}
 	}
 	execs, err := k.GetPendingExecutionsBySender(ctx, sender)

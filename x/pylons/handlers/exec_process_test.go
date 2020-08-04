@@ -20,7 +20,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 
 	// Generate initial items
 	initItemNames := []string{
-		"Knife", "Knife", "Shield", "Eye", "Nose",
+		"Knife1", "Knife2", "Shield1", "Eye", "Nose",
 		"Attack1Item", "Attack10Item", "Attack10Level1Item",
 		"Attack10Level20Item",
 		"Attack10Level20Carrier",
@@ -111,7 +111,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	shieldMergeRecipe := MockRecipe(
 		tci, "shield merge recipe",
 		types.CoinInputList{},
-		types.GenItemInputList("Shield", "Shield"),
+		types.GenItemInputList("Shield1", "Shield2"),
 		types.GenItemOnlyEntry("MRGShield"),
 		types.GenOneOutput("MRGShield"),
 		cbData.CookbookID,
@@ -247,7 +247,119 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error(), tc.desiredError)
 			} else {
-				require.True(t, err == nil)
+				require.True(t, err == nil, err)
+			}
+		})
+	}
+}
+
+func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
+	tci := keep.SetupTestCoinInput()
+	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+
+	cbData := MockCookbook(tci, sender1)
+
+	initItemIDs := []string{}
+
+	newItem := types.NewItem(
+		cbData.CookbookID,
+		[]types.DoubleKeyValue{
+			{
+				Key:   "attack",
+				Value: "1.0",
+			},
+		},
+		[]types.LongKeyValue{
+			{
+				Key:   "level",
+				Value: 1,
+			},
+		},
+		[]types.StringKeyValue{
+			{
+				Key:   "Name",
+				Value: "Raichu",
+			},
+		},
+		sender1,
+		0,
+		0,
+	)
+	err := tci.PlnK.SetItem(tci.Ctx, *newItem)
+	require.True(t, err == nil)
+	initItemIDs = append(initItemIDs, newItem.ID)
+
+	exmpRcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
+		types.GenCoinInputList("wood", 5),
+		types.GenItemInputList("Raichu"),
+		types.GenEntries("wood", "Raichu"),
+		types.GenOneOutput("wood", "Raichu"),
+		0,
+		sender1,
+	)
+
+	_, err = HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, exmpRcpMsg)
+	require.True(t, err == nil, err)
+
+	cases := map[string]struct {
+		itemIDs      []string
+		rcpID        string
+		sender       sdk.AccAddress
+		desiredError string
+		showError    bool
+	}{
+		"correct same item merge recipe": {
+			itemIDs:      []string{initItemIDs[0]},
+			rcpID:        exmpRcpMsg.RecipeID,
+			sender:       sender1,
+			desiredError: "",
+			showError:    false,
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
+			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
+			require.True(t, err == nil)
+			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
+			err = p.SetMatchedItemsFromExecMsg(msg)
+			require.True(t, err == nil, err)
+			err = p.GenerateCelEnvVarFromInputItems()
+			if tc.showError {
+				require.True(t, err != nil)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error(), tc.desiredError)
+			} else {
+				require.True(t, err == nil, err)
+				ec := p.GetEnvCollection()
+				level, err := ec.EvalInt64("Raichu.level")
+				require.True(t, err == nil, err)
+				require.True(t, level == 1)
+				attack, err := ec.EvalFloat64("Raichu.attack")
+				require.True(t, err == nil, err)
+				require.True(t, attack == 1)
+				name, err := ec.EvalString("Raichu.Name")
+				require.True(t, err == nil, err)
+				require.True(t, name == "Raichu")
+
+				level, err = ec.EvalInt64("input0.level")
+				require.True(t, err == nil, err)
+				require.True(t, level == 1)
+				attack, err = ec.EvalFloat64("input0.attack")
+				require.True(t, err == nil, err)
+				require.True(t, attack == 1)
+				name, err = ec.EvalString("input0.Name")
+				require.True(t, err == nil, err)
+				require.True(t, name == "Raichu")
+
+				level, err = ec.EvalInt64("level")
+				require.True(t, err == nil, err)
+				require.True(t, level == 1)
+				attack, err = ec.EvalFloat64("attack")
+				require.True(t, err == nil, err)
+				require.True(t, attack == 1)
+				name, err = ec.EvalString("Name")
+				require.True(t, err == nil, err)
+				require.True(t, name == "Raichu")
 			}
 		})
 	}

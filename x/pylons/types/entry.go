@@ -3,12 +3,23 @@ package types
 import (
 	"encoding/json"
 	"fmt"
+	"regexp"
 )
 
 // Entry describes an output which can be produced from a recipe
 type Entry interface {
 	GetID() string
 	String() string
+}
+
+// EntryIDValidationError returns entry ID validation error
+func EntryIDValidationError(ID string) error {
+	regex := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z_0-9]*$`)
+	if regex.MatchString(ID) {
+		return nil
+	}
+
+	return fmt.Errorf("entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ID)
 }
 
 // EntriesList is a struct to keep list of items and coins

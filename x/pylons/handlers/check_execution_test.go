@@ -89,7 +89,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 		"more than 1 item input recipe success execution test": {
 			rcpID:            knifeMergeRecipeData.RecipeID,
 			dynamicItemSet:   true,
-			dynamicItemNames: []string{"Knife", "Knife"},
+			dynamicItemNames: []string{"Knife1", "Knife2"},
 			sender:           sender1,
 			payToComplete:    false,
 			addHeight:        3,

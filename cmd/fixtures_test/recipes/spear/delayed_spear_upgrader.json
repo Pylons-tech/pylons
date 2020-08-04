@@ -3,7 +3,7 @@
     "CoinInputs":[],
     "ItemInputs": [
         {
-            "ID": "character",
+            "ID": "spear",
             "Ref": "./recipes/spear/item_input/spear.json"
         }
     ],
@@ -11,15 +11,15 @@
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
-                "ID": "spear",
-                "ItemInputRef": "character",
+                "ID": "modified_spear",
+                "ItemInputRef": "spear",
                 "ModifyParamsRef": "./recipes/spear/upgrader/spear.json"
             }
         ]
     },
     "Outputs": [
         {
-            "EntryIDs": ["spear"],
+            "EntryIDs": ["modified_spear"],
             "Weight": "1"
         }
     ],
