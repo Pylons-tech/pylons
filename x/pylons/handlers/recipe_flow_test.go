@@ -87,9 +87,6 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				itemIDs,
 			)
 			require.True(t, err == nil)
-			if err != nil {
-				t.Log("\n\n\n --- Error Here ---", err.Error())
-			}
 			require.True(t, execRcpResponse.Status == "Success")
 			t.Log(execRcpResponse.Message)
 
@@ -129,10 +126,6 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				tc.sender,
 				itemIDs,
 			)
-			if err != nil {
-				t.Log("\n\n\n --- Error Here ---", err.Error())
-				t.Log("\n\n", execRcpResponse)
-			}
 			require.True(t, err == nil)
 			require.True(t, execRcpResponse.Status == "Success")
 			t.Log(execRcpResponse.Message)
@@ -140,11 +133,6 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			// Schedule Recipe
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-			if err != nil {
-				t.Log("\n\n\n\n----     error      ----\n\n\n")
-				t.Log(err)
-				t.Log(execRcpResponse.Output)
-			}
 			require.True(t, err == nil)
 
 			if tc.dynamicItemSet && len(itemIDs) > 0 {
