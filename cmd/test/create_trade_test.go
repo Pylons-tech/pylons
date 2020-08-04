@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
@@ -9,7 +11,6 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateTradeViaCLI(originT *originT.T) {
@@ -50,13 +51,13 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 		// for coin-coin, item-item, coin-item trading, msg.
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			mCB := GetMockedCookbook("eugen", false, t)
+			cbOwnerKey := fmt.Sprintf("TestCreateTradeViaCLI%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t) // mock account with initial balance
+			mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
+			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 			var inputCoins types.CoinInputList
 			if tc.inputPylon > 0 {
 				inputCoins = types.GenCoinInputList("pylon", tc.inputPylon)
@@ -72,7 +73,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 					nil,
 					tc.extraInfo,
 					sdkAddr),
-				"eugen",
+				cbOwnerKey,
 				false,
 			)
 			if err != nil {

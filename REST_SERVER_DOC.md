@@ -108,6 +108,11 @@ Sample
 http://localhost:1317/pylons/list_recipe/cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2
 ```
 
+By cookbook
+```
+http://${HOST}/pylons/list_recipe_by_cookbook/${cookbookID}
+```
+
 Sample Result
 ```
 {
@@ -119,6 +124,11 @@ Shorten recipes
 ```
 http://localhost:1317/pylons/list_shorten_recipe
 ```
+By cookbook
+```
+http://${HOST}/pylons/list_shorten_recipe_by_cookbook/${cookbookID}
+```
+
 Sample Result
 ```
 {

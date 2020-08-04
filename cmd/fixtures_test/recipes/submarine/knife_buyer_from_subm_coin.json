@@ -1,27 +1,29 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[
         {
             "Coin": "submcoin",
             "Count": "1"
         }
     ],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "knife_lv2",
                 "Ref": "./recipes/submarine/item_output/knife_lv2.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["knife_lv2"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"submarine_account1",
     "Name": "Knife buyer recipe from submcoin",
     "CookbookID": "submarine-1589853709",
     "Description": "this has to meet character limits lol",

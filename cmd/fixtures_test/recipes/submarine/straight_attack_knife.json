@@ -1,22 +1,24 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "straight_attack_knife",
                 "Ref": "./recipes/submarine/item_output/straight_attack_knife.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["straight_attack_knife"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"submarine_account1",
     "Name": "Straight Attack Knife Generation Recipe",
     "CookbookID": "submarine-1589853709",
     "Description": "this has to meet character limits lol",

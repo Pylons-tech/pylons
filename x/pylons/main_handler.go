@@ -28,8 +28,10 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 			return handlers.HandlerMsgCreateAccount(ctx, keeper, msg)
 		case msgs.MsgGetPylons:
 			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
-		case msgs.MsgSendPylons:
-			return handlers.HandlerMsgSendPylons(ctx, keeper, msg)
+		case msgs.MsgGoogleIAPGetPylons:
+			return handlers.HandlerMsgGoogleIAPGetPylons(ctx, keeper, msg)
+		case msgs.MsgSendCoins:
+			return handlers.HandlerMsgSendCoins(ctx, keeper, msg)
 		case msgs.MsgSendItems:
 			return handlers.HandlerMsgSendItems(ctx, keeper, msg)
 		case msgs.MsgCreateCookbook:

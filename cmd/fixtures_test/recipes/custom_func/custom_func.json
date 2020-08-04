@@ -1,0 +1,32 @@
+{
+    "NodeVersion": "0.0.1",
+    "CoinInputs":[],
+    "ItemInputs": [
+        {
+            "ID": "character",
+            "Ref": "./recipes/custom_func/item_input/character.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemModifyOutputs":[
+            {
+                "ID": "custom_func",
+                "ItemInputRef": "character",
+                "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["custom_func"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"cusfunc_account1",
+    "Name": "Growing HP Character Health Restore Recipe",
+    "CookbookID": "custom-func-1589853709",
+    "Description": "this recipe is used to restore character's health using timed field.",
+    "BlockInterval":"2"
+}

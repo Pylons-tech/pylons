@@ -1,26 +1,33 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/helicopter/item_input/heli_knife_lv1.json",
-        "./recipes/helicopter/item_input/heli_knife_lv2.json"
+    "ItemInputs": [
+        {
+            "ID": "heli_knife_lv1",
+            "Ref": "./recipes/helicopter/item_input/heli_knife_lv1.json"
+        },
+        {
+            "ID": "heli_knife_lv2",
+            "Ref": "./recipes/helicopter/item_input/heli_knife_lv2.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "hllg_reward",
                 "Coin":"hllgcoin",
-                "Count": "(input0.level + input1.level) * 10"
+                "Count": "(heli_knife_lv1.level + heli_knife_lv2.level) * 10"
             }
-        ],
-        "ItemOutputs":[]
+        ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["hllg_reward"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"heli_account1",
     "Name": "Helicopter's sell two knives Recipe",
     "CookbookID": "helicopter-1589853709",
     "Description": "this has to meet character limits lol",

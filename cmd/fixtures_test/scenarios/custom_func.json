@@ -1,0 +1,134 @@
+[
+    {
+        "ID": "MOCK_ACCOUNT_CUSFUNC_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "mock_account",
+        "paramsRef": "cusfunc_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "cusfunc_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_CUSTOMFUNCTEST_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "mock_cookbook",
+        "paramsRef": "./cookbooks/custom_func.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "cusfunc_account1",
+                    "cookbooks": ["Custom function test"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_CUSTOMFUNCTEST_CHARACTER",  
+        "runAfter": {
+            "precondition": ["CREATE_CUSTOMFUNCTEST_COOKBOOK", "MOCK_ACCOUNT_CUSFUNC_ACCOUNT2"],
+            "blockWait": 0
+        },
+        "action": "fiat_item",
+        "paramsRef": "./items/custom_func/character.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "cusfunc_account2",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Custom Function TestCharacter" }
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_CHARACTER_CUSTOM_FUNC_TEST_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_CUSTOMFUNCTEST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/custom_func/custom_func.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "cusfunc_account1",
+                    "recipes": ["Growing HP Character Health Restore Recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "EXECUTE_CHARACTER_CUSTOM_FUNC_TEST_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_CHARACTER_CUSTOM_FUNC_TEST_RECIPE", "CREATE_CUSTOMFUNCTEST_CHARACTER"],
+            "blockWait": 0
+        },
+        "action": "execute_recipe",
+        "paramsRef": "./recipes/custom_func/executions/custom_func.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "scheduled the recipe"
+            },
+            "property": []
+        }
+    },
+    {
+        "ID": "CHECK_EXECUTION_CHARACTER_CUSTOM_FUNC_TEST_RECIPE",
+        "runAfter": {
+            "precondition": ["EXECUTE_CHARACTER_CUSTOM_FUNC_TEST_RECIPE"],
+            "blockWait": 2
+        },
+        "action": "check_execution",
+        "paramsRef": "./recipes/custom_func/check_executions/custom_func.json",
+        "output": {
+            "txResult": {
+                "status": "Success",
+                "message": "successfully completed the execution"
+            },
+            "property": [
+                {
+                    "owner": "cusfunc_account2",
+                    "items": [
+                        {
+                            "stringValues": { "Name": "Custom Function TestCharacter" },
+                            "dblValues": { "attack": "1034" },
+                            "transferFee": "1200"
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+]

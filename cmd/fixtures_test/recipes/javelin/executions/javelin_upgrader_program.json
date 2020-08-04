@@ -1,5 +1,6 @@
 {
+    "NodeVersion": "0.0.1",
     "RecipeName":"Javelin Upgrade Program Recipe",
-    "Sender":"account1",
+    "Sender":"javelin_account2",
     "ItemNames":["Javelin"]
 }

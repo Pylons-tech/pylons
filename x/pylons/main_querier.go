@@ -12,6 +12,9 @@ import (
 // NewQuerier is the module level router for state queries
 func NewQuerier(keeper keep.Keeper) sdk.Querier {
 	return func(ctx sdk.Context, path []string, req abci.RequestQuery) (res []byte, err error) {
+		if len(path) < 1 {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "no endpoint path provided for pylons query")
+		}
 		switch path[0] {
 		case queriers.KeyPylonsBalance:
 			return queriers.PylonsBalance(ctx, path[1:], req, keeper)
@@ -27,12 +30,20 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 			return queriers.GetTrade(ctx, path[1:], req, keeper)
 		case queriers.KeyListCookbook:
 			return queriers.ListCookbook(ctx, path[1:], req, keeper)
+		case queriers.KeyGetLockedCoin:
+			return queriers.GetLockedCoins(ctx, path[1:], req, keeper)
+		case queriers.KeyGetLockedCoinDetails:
+			return queriers.GetLockedCoinDetails(ctx, path[1:], req, keeper)
 		case queriers.KeyAddrFromPubKey:
 			return queriers.AddrFromPubKey(ctx, path[1:], req, keeper)
 		case queriers.KeyListRecipe:
 			return queriers.ListRecipe(ctx, path[1:], req, keeper)
+		case queriers.KeyListRecipeByCookbook:
+			return queriers.ListRecipeByCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyListShortenRecipe:
 			return queriers.ListShortenRecipe(ctx, path[1:], req, keeper)
+		case queriers.KeyListShortenRecipeByCookbook:
+			return queriers.ListShortenRecipeByCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyItemsByCookbook:
 			return queriers.ItemsByCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyItemsBySender:

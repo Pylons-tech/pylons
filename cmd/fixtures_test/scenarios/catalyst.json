@@ -1,11 +1,36 @@
 [
     {
+        "ID": "MOCK_ACCOUNT_CATALYST_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "mock_account",
+        "paramsRef": "catalyst_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "catalyst_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
         "ID": "CREATE_CATALYST_COOKBOOK",
         "runAfter": {
             "precondition": [],
             "blockWait": 0
         },
-        "action": "create_cookbook",
+        "action": "mock_cookbook",
         "paramsRef": "./cookbooks/catalyst.json",
         "output": {
             "txResult": {
@@ -13,52 +38,40 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "catalyst_account1",
                     "cookbooks": ["catalyst"]
                 }
             ]
         }
     },
     {
-        "ID": "CREATE_MONSTER_LV1",        
+        "ID": "CREATE_CATALYST_ITEMS",
         "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
+            "precondition": ["CREATE_CATALYST_COOKBOOK", "MOCK_ACCOUNT_CATALYST_ACCOUNT2"],
             "blockWait": 0
         },
-        "action": "fiat_item",
-        "paramsRef": "./items/catalyst/monster_lv1.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/catalyst/monster_lv1.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/catalyst/catalyst.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "catalyst_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Monster" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_CATALYST_ITEM",        
-        "runAfter": {
-            "precondition": ["CREATE_CATALYST_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/catalyst/catalyst.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account1",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "catalyst" }
                         }
@@ -81,7 +94,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "catalyst_account1",
                     "recipes": ["Monster Upgrade Catalyst Recipe"]
                 }
             ]
@@ -90,7 +103,7 @@
     {
         "ID": "EXECUTE_MONSTER_CATALYST_UPGRADE_RECIPE",        
         "runAfter": {
-            "precondition": ["CREATE_MONSTER_CATALYST_UPGRADE_RECIPE", "CREATE_MONSTER_LV1", "CREATE_CATALYST_ITEM"],
+            "precondition": ["CREATE_MONSTER_CATALYST_UPGRADE_RECIPE", "CREATE_CATALYST_ITEMS"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -102,7 +115,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "catalyst_account2",
                     "items": [
                         {
                             "stringValues": { "LastName": "Upgraded Monster" }

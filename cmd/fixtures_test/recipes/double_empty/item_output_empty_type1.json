@@ -1,0 +1,14 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "DE-item-output-empty-type1",
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[]
+    },
+    "ExtraInfo":"",
+    "Sender":"de_account1",
+    "Name": "DE's item output empty type1 test recipe",
+    "CookbookID": "DE-v0.0.0-1579053457",
+    "Description": "this recipe is used to test item output empty type1.",
+    "BlockInterval":"0"
+}

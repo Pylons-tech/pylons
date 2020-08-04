@@ -19,8 +19,8 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
 
-	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender1, types.NewPylon(10000000)))
-	require.True(t, tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, sender2, types.NewPylon(10000000)))
+	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender1, types.NewPylon(10000000)))
+	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
 	cbData := MockCookbook(tci, sender1)
 	cookbook, err := tci.PlnK.GetCookbook(tci.Ctx, cbData.CookbookID)
 	require.True(t, err == nil)
@@ -32,8 +32,10 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	item5 := keep.GenItem(cbData.CookbookID, sender3, "bow1")
 	item6 := keep.GenItem(cbData.CookbookID, sender2, "bow2")
 	item7 := keep.GenItem(cbData.CookbookID, sender2, "bow3")
+	item8 := keep.GenItem(cbData.CookbookID, sender1, "bow4")
 
 	item2.OwnerRecipeID = "????????"
+	item8.OwnerTradeID = "????????"
 
 	item3.SetTransferFee(1000)
 	item4.SetTransferFee(1000)
@@ -61,6 +63,9 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	require.True(t, err == nil)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item7)
+	require.True(t, err == nil)
+
+	err = tci.PlnK.SetItem(tci.Ctx, *item8)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -138,6 +143,16 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			fromAddress:     sender1,
 			toAddress:       sender2,
 			desiredError:    "Item is owned by a recipe",
+			showError:       true,
+			differSender:    0,
+			differPylonsLLC: 0,
+			differCBOwner:   0,
+		},
+		"owner trade id check": {
+			itemIDs:         []string{item8.ID},
+			fromAddress:     sender1,
+			toAddress:       sender2,
+			desiredError:    "Item is owned by a trade",
 			showError:       true,
 			differSender:    0,
 			differPylonsLLC: 0,

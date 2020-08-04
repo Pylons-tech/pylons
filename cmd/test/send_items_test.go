@@ -1,9 +1,10 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
@@ -33,36 +34,30 @@ func TestSendItemsViaCLI(originT *originT.T) {
 		},
 	}
 
-	for _, tc := range tests {
+	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			cbOwnerKey := fmt.Sprintf("TestSendItemsViaCLI_CBOwner%d_%d", tcNum, time.Now().Unix())
+			itemSenderKey := fmt.Sprintf("TestSendItemsViaCLI_itemSender%d_%d", tcNum, time.Now().Unix())
+			MockAccount(cbOwnerKey, t)    // mock account with initial balance
+			MockAccount(itemSenderKey, t) // mock account with initial balance
 
-			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-			pylonsLLCAccInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+			pylonsLLCAddress, pylonsLLCAccInfo := GetPylonsLLCAddressAndInfo(t)
 
-			mCB := GetMockedCookbook("jose", true, t)
+			mCB := GetMockedCookbook(cbOwnerKey, true, t)
 
 			itemIDs := make([]string, len(tc.itemNames))
 
 			for idx, itemName := range tc.itemNames {
-				itemID := MockItemGUIDWithFee(mCB.ID, "eugen", itemName, tc.transferFees[idx], t)
+				itemID := MockItemGUIDWithFee(mCB.ID, itemSenderKey, itemName, tc.transferFees[idx], t)
 				itemIDs[idx] = itemID
 			}
 
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			eugenSdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-
-			joseAddr := inttestSDK.GetAccountAddr("jose", t)
-			joseSdkAddr, err := sdk.AccAddressFromBech32(joseAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
-
-			joseAccInfo := inttestSDK.GetAccountInfoFromAddr(joseSdkAddr.String(), t)
-
+			cbOwnerSdkAddr, cbOwnerAccInfo := GetAccountAddressAndInfo(cbOwnerKey, t)
+			itemSenderSdkAddr := GetSDKAddressFromKey(itemSenderKey, t)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
 				t,
-				msgs.NewMsgSendItems(itemIDs, eugenSdkAddr, joseSdkAddr),
-				"eugen",
+				msgs.NewMsgSendItems(itemIDs, itemSenderSdkAddr, cbOwnerSdkAddr),
+				itemSenderKey,
 				false,
 			)
 			if err != nil {
@@ -82,20 +77,31 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			for _, itemID := range itemIDs {
 				item, err := inttestSDK.GetItemByGUID(itemID)
 				t.MustNil(err)
-				t.MustTrue(item.Sender.String() == joseSdkAddr.String())
+				t.MustTrue(item.Sender.String() == cbOwnerSdkAddr.String())
 			}
 
 			pylonsLLCAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
 			originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
 
-			pylonAvailOnLLC := pylonsLLCAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.differPylonsLLC))
-			t.MustTrue(pylonAvailOnLLC, "Pylons LLC should get correct revenue")
+			balanceOk := pylonsLLCAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.differPylonsLLC))
+			t.WithFields(testing.Fields{
+				"pylons_llc_address":  pylonsLLCAddress.String(),
+				"origin_amount":       originPylonAmount.Int64(),
+				"target_distribution": tc.differPylonsLLC,
+				"actual_amount":       pylonsLLCAccInfoAfter.Coins.AmountOf(types.Pylon).Int64(),
+			}).MustTrue(balanceOk, "Pylons LLC should get correct revenue")
 
-			joseAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(joseSdkAddr.String(), t)
-			originJoseAmount := joseAccInfo.Coins.AmountOf(types.Pylon)
+			cbOwnerAccInfoAfter := inttestSDK.GetAccountInfoFromAddr(cbOwnerSdkAddr.String(), t)
+			originCBOwnerAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
 
-			availOnJose := joseAccInfoAfter.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originJoseAmount.Int64() + tc.differCBOwner))
-			t.MustTrue(availOnJose, "Cookbook sender should get correct revenue")
+			balanceOk = cbOwnerAccInfoAfter.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originCBOwnerAmount.Int64() + tc.differCBOwner))
+			t.WithFields(testing.Fields{
+				"cbowner_key":         cbOwnerKey,
+				"cbowner_address":     cbOwnerSdkAddr.String(),
+				"origin_amount":       originCBOwnerAmount.Int64(),
+				"target_distribution": tc.differCBOwner,
+				"actual_amount":       cbOwnerAccInfoAfter.Coins.AmountOf(types.Pylon).Int64(),
+			}).MustTrue(balanceOk, "Cookbook sender should get correct revenue")
 		})
 	}
 }

@@ -1,0 +1,172 @@
+[
+    {
+        "ID": "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "mock_account",
+        "paramsRef": "itemfee_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "itemfee_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+  },
+  {
+      "ID": "CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK",
+      "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+      },
+      "action": "mock_cookbook",
+      "paramsRef": "./cookbooks/recipe_item_send_fee.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "itemfee_account1",
+                  "cookbooks": ["Recipe item send fee test"]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "CREATE_ITEM_TRANSFER_FEE_TEST_CHARACTER",  
+      "runAfter": {
+          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK", "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2"],
+          "blockWait": 0
+      },
+      "action": "fiat_item",
+      "paramsRef": "./items/recipe_item_send_fee/character.json",
+      "output": {
+          "txResult": {
+              "status": "Success"
+          },
+          "property": [
+              {
+                  "owner": "itemfee_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "RecipeItemSendFeeTestCharacter" }
+                      }
+                  ]
+              }
+          ]
+      }
+  },
+  {
+    "ID": "CREATE_ITEM_TRANSFER_FEE_TEST_RECIPES",
+    "runAfter": {
+        "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_COOKBOOK"],
+        "blockWait": 0
+    },
+    "action": "multi_msg_tx",
+    "msgRefs": [
+        {
+            "action": "create_recipe",
+            "paramsRef": "./recipes/recipe_item_send_fee/straight_attack_knife.json"
+        },
+        {
+            "action": "create_recipe",
+            "paramsRef": "./recipes/recipe_item_send_fee/recipe_item_send_fee.json"
+        }
+    ],
+
+    "output": {
+        "txResult": {
+            "status": "Success"
+        },
+        "property": [
+            {
+                "owner": "itemfee_account1",
+                "recipes": [
+                    "Knife Generation Recipe",
+                    "Recipe Item Send Fee Test Recipe"
+                ]
+            }
+        ]
+    }
+  },
+  {
+      "ID": "EXECUTE_KNIFE_RECIPE",
+      "runAfter": {
+          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_RECIPES", "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2"],
+          "blockWait": 0
+      },
+      "action": "execute_recipe",
+      "paramsRef": "./recipes/recipe_item_send_fee/executions/straight_attack_knife.json",
+      "output": {
+          "txResult": {
+              "status": "Success",
+              "message": "successfully executed the recipe"
+          },
+          "property": [
+              {
+                  "owner": "itemfee_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "Knife" },
+                          "transferFee": "1000"
+                      }
+                  ]
+              }
+          ]
+      }
+  },
+  {
+      "ID": "EXECUTE_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE",        
+      "runAfter": {
+          "precondition": ["CREATE_ITEM_TRANSFER_FEE_TEST_RECIPES", "CREATE_ITEM_TRANSFER_FEE_TEST_CHARACTER", "MOCK_ACCOUNT_ITEMFEE_ACCOUNT2"],
+          "blockWait": 0
+      },
+      "action": "execute_recipe",
+      "paramsRef": "./recipes/recipe_item_send_fee/executions/recipe_item_send_fee.json",
+      "output": {
+          "txResult": {
+              "status": "Success",
+              "message": "scheduled the recipe"
+          },
+          "property": []
+      }
+  },
+  {
+      "ID": "CHECK_EXECUTION_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE",
+      "runAfter": {
+          "precondition": ["EXECUTE_CHARACTER_ITEM_TRANSFER_FEE_TEST_RECIPE"],
+          "blockWait": 2
+      },
+      "action": "check_execution",
+      "paramsRef": "./recipes/recipe_item_send_fee/check_executions/recipe_item_send_fee.json",
+      "output": {
+          "txResult": {
+              "status": "Success",
+              "message": "successfully completed the execution"
+          },
+          "property": [
+              {
+                  "owner": "itemfee_account2",
+                  "items": [
+                      {
+                          "stringValues": { "Name": "RecipeItemSendFeeTestCharacter" },
+                          "transferFee": "1200"
+                      }
+                  ]
+              }
+          ]
+      }
+  }
+]

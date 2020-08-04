@@ -1,27 +1,29 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/helicopter/item_input/adventurer.json"
+    "ItemInputs": [
+        {
+            "ID": "adventurer",
+            "Ref": "./recipes/helicopter/item_input/adventurer.json"
+        }
     ],
     "Entries":{
-        "CoinOutputs":[],
-        "ItemOutputs":[
+        "ItemModifyOutputs":[
             {
-                "ModifyItem": {
-                    "ItemInputRef": 0,
-                    "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
-                }
+                "ID": "modified_adventurer",
+                "ItemInputRef": "adventurer",
+                "ModifyParamsRef": "./recipes/helicopter/upgrader/adventurer.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["modified_adventurer"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"heli_account1",
     "Name": "Adventurer Upgrade Recipe",
     "CookbookID": "helicopter-1589853709",
     "Description": "this recipe is used to upgrade adventurer which can update all versions of adventurer.",

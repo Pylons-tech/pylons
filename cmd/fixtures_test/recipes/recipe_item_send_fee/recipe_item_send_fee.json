@@ -1,0 +1,32 @@
+{
+    "NodeVersion": "0.0.1",
+    "CoinInputs":[],
+    "ItemInputs": [
+        {
+            "ID": "character",
+            "Ref": "./recipes/recipe_item_send_fee/item_input/character.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemModifyOutputs":[
+            {
+                "ID": "modified_fee_item",
+                "ItemInputRef": "character",
+                "ModifyParamsRef": "./recipes/recipe_item_send_fee/upgrader/recipe_item_send_fee.json"
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["modified_fee_item"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"itemfee_account1",
+    "Name": "Recipe Item Send Fee Test Recipe",
+    "CookbookID": "recipe-item-send-fee-1589853709",
+    "Description": "this recipe is used to restore character's health using timed field.",
+    "BlockInterval":"2"
+}

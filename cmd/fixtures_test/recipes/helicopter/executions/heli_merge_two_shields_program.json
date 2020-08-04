@@ -1,5 +1,6 @@
 {
+    "NodeVersion": "0.0.1",
     "RecipeName":"Helicopter's merge two shields Recipe",
-    "Sender":"account1",
+    "Sender":"heli_account2",
     "ItemNames":["Helicopter's Shield lv1", "Helicopter's Shield lv2"]
 }

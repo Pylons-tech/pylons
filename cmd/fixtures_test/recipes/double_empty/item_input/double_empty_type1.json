@@ -1,0 +1,5 @@
+{
+    "Doubles": [],
+    "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "10000000"}],
+    "Strings": [{"Key": "Name", "Value": "Angel sword"}]
+}

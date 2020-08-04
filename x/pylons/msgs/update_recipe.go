@@ -28,6 +28,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 	itemInputs types.ItemInputList,
 	entries types.EntriesList,
 	outputs types.WeightedOutputsList,
+	blockInterval int64,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		Name:          recipeName,
@@ -38,7 +39,7 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 		ItemInputs:    itemInputs,
 		Entries:       entries,
 		Outputs:       outputs,
-		BlockInterval: 0,
+		BlockInterval: blockInterval,
 		Sender:        sender,
 	}
 }
@@ -51,21 +52,24 @@ func (msg MsgUpdateRecipe) Type() string { return "update_recipe" }
 
 // ValidateBasic validates the Msg
 func (msg MsgUpdateRecipe) ValidateBasic() error {
-
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
-	}
-
 	if len(msg.ID) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the id for the recipe require to update it")
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe id is required for this message type")
 	}
 
-	if len(msg.Description) < 20 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
-	}
+	msgCreateRecipe := NewMsgCreateRecipe(
+		msg.Name,
+		msg.CookbookID,
+		msg.ID,
+		msg.Description,
+		msg.CoinInputs,
+		msg.ItemInputs,
+		msg.Entries,
+		msg.Outputs,
+		msg.BlockInterval,
+		msg.Sender,
+	)
 
-	return nil
+	return msgCreateRecipe.ValidateBasic()
 }
 
 // GetSignBytes encodes the message for signing

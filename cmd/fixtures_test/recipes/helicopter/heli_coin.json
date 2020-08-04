@@ -1,23 +1,24 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "helicoin_faucet",
                 "Coin":"helicoin",
                 "Count":"1"
             }
-        ],
-        "ItemOutputs":[]
+        ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["helicoin_faucet"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"heli_account1",
     "Name": "Helicopter's Coin Generation Recipe",
     "CookbookID": "helicopter-1589853709",
     "Description": "this has to meet character limits lol",

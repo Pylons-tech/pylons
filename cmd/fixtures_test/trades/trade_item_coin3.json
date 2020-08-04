@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
     "ItemInputRefs": [
         "./trades/item_input/trading_knife_v3.json"

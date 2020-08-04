@@ -44,6 +44,27 @@ func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
 	return recipes
 }
 
+// GetRecipesByCookbook returns recipes filtered by cookbook
+func (k Keeper) GetRecipesByCookbook(ctx sdk.Context, cookbookID string) []types.Recipe {
+	store := ctx.KVStore(k.RecipeKey)
+	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
+	var recipes []types.Recipe
+	for ; iterator.Valid(); iterator.Next() {
+		var recipe types.Recipe
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &recipe)
+		if err != nil {
+			// this happens because we have multiple versions of breaking recipes at times
+			continue
+		}
+
+		if recipe.CookbookID == cookbookID {
+			recipes = append(recipes, recipe)
+		}
+	}
+	return recipes
+}
+
 // GetAllRecipesCount returns all recipes count
 func (k Keeper) GetAllRecipesCount(ctx sdk.Context) int {
 	recipes := k.GetRecipes(ctx)

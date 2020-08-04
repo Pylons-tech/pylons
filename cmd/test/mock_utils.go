@@ -1,8 +1,6 @@
 package inttest
 
 import (
-	"fmt"
-
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
@@ -11,27 +9,90 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/bank"
 )
+
+///////////ACCOUNT///////////////////////////////////////////////
+
+// MockAccount generate local key and do initial get-pylons to create cookbook
+func MockAccount(key string, t *testing.T) {
+	// add local key
+	localKeyResult, err := inttestSDK.AddNewLocalKey(key)
+	t.WithFields(testing.Fields{
+		"key":              key,
+		"local_key_result": localKeyResult,
+	}).MustNil(err, "error creating local Key")
+
+	addr := localKeyResult["address"]
+
+	// send message for creating account
+	result, logstr, err := inttestSDK.CreateChainAccount(key)
+	t.WithFields(testing.Fields{
+		"result": result,
+		"logstr": logstr,
+	}).MustNil(err, "error creating account on chain")
+
+	// fetch txhash from result log
+	caTxHash := inttestSDK.GetTxHashFromLog(result)
+	t.MustTrue(caTxHash != "", "error fetching txhash from result")
+	t.WithFields(testing.Fields{
+		"txhash": caTxHash,
+	}).Info("started waiting for create account transaction")
+
+	// wait for txhash to be confirmed
+	txResponseBytes, err := inttestSDK.WaitAndGetTxData(caTxHash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for create account transaction")
+	inttestSDK.GetAccountInfoFromAddr(addr, t)
+
+	// get initial balance
+	sdkAddr, err := sdk.AccAddressFromBech32(addr)
+	t.MustNil(err, "error converting string cosmos address to sdk struct")
+	getPylonsMsg := msgs.NewMsgGetPylons(types.PremiumTier.Fee, sdkAddr)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, getPylonsMsg, key, false)
+	t.WithFields(testing.Fields{
+		"txhash": txhash,
+	}).MustNil(err, "error sending transaction")
+
+	txResponseBytes, err = inttestSDK.WaitAndGetTxData(txhash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for get pylons transaction")
+}
+
+// FaucetGameCoins get faucet game coins from faucet server
+func FaucetGameCoins(key string, amount sdk.Coins, t *testing.T) {
+	fromSdkAddr := GetSDKAddressFromKey("node0", t)
+	toSdkAddr := GetSDKAddressFromKey(key, t)
+
+	sendCoinsMsg := bank.NewMsgSend(fromSdkAddr, toSdkAddr, amount)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, sendCoinsMsg, "node0", false)
+	t.WithFields(testing.Fields{
+		"txhash": txhash,
+	}).MustNil(err, "error sending transaction")
+
+	txResponseBytes, err := inttestSDK.WaitAndGetTxData(txhash, inttestSDK.GetMaxWaitBlock(), t)
+	t.WithFields(testing.Fields{
+		"result": string(txResponseBytes),
+	}).MustNil(err, "error waiting for getting faucet transaction")
+}
 
 ///////////COOKBOOK//////////////////////////////////////////////
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks
-func MockCookbook(senderName string, createNew bool, t *testing.T) (string, error) {
-	guid, exist, err := CheckCookbookExist(senderName, t)
-	if err != nil {
-		return "", err
-	}
+func MockCookbook(ownerKey string, createNew bool, t *testing.T) string {
+	guid, exist, err := CheckCookbookExist(ownerKey, t)
+	t.MustNil(err, "error checking cookbook exist")
 
 	if exist && !createNew { // finish mock if already available
-		return guid, nil
+		return guid
 	}
-	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
-	t.MustNil(err, fmt.Sprintf("error converting %s to AccAddress struct", senderName))
+	cbOwnerSdkAddr := GetSDKAddressFromKey(ownerKey, t)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
-		"COOKBOOK_MOCK_001_"+senderName,
+		"COOKBOOK_MOCK_001_"+ownerKey,
 		"",
 		"this has to meet character limits lol",
 		"SketchyCo",
@@ -39,13 +100,13 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 		"example@example.com",
 		0,
 		msgs.DefaultCostPerBlock,
-		sdkAddr),
-		senderName,
+		cbOwnerSdkAddr),
+		ownerKey,
 		false,
 	)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
-		return "", err
+		return ""
 	}
 
 	WaitOneBlockWithErrorCheck(t)
@@ -54,19 +115,13 @@ func MockCookbook(senderName string, createNew bool, t *testing.T) (string, erro
 	resp := handlers.CreateCookbookResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
-	return resp.CookbookID, nil
+	return resp.CookbookID
 }
 
 // CheckCookbookExist is a cookbook existence checker
-func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
-	senderAddr := inttestSDK.GetAccountAddr(senderName, t)
-	senderSdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
-
-	if err != nil {
-		return "", false, err
-	}
-
-	cbList, err := inttestSDK.ListCookbookViaCLI(senderSdkAddr.String())
+func CheckCookbookExist(ownerKey string, t *testing.T) (string, bool, error) {
+	cbOwnerSdkAddr := GetSDKAddressFromKey(ownerKey, t)
+	cbList, err := inttestSDK.ListCookbookViaCLI(cbOwnerSdkAddr.String())
 	if err != nil {
 		return "", false, err
 	}
@@ -78,64 +133,63 @@ func CheckCookbookExist(senderName string, t *testing.T) (string, bool, error) {
 
 // GetMockedCookbook get mocked cookbook
 func GetMockedCookbook(senderName string, createNew bool, t *testing.T) types.Cookbook {
-	guid, err := MockCookbook(senderName, createNew, t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error mocking cookbook")
-	}
+	guid := MockCookbook(senderName, createNew, t)
 
 	cb, err := inttestSDK.GetCookbookByGUID(guid)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error mocking cookbook")
-	}
+	t.MustNil(err, "error getting cookbook by guid")
 	return cb
 }
 
 // MockNoDelayItemGenRecipeGUID mock no delay item generation recipe
-func MockNoDelayItemGenRecipeGUID(name string, outputItemName string, t *testing.T) (string, error) {
-	return MockRecipeGUID(0, false, name, "", outputItemName, t)
+func MockNoDelayItemGenRecipeGUID(cbOwnerKey, name string, outputItemName string, t *testing.T) string {
+	return MockRecipeGUID(cbOwnerKey, 0, false, name, "", outputItemName, t)
 }
 
 // MockRecipeGUID mock recipe and returns GUID
 func MockRecipeGUID(
+	cbOwnerKey string,
 	interval int64,
 	isUpgrdRecipe bool,
 	name, curItemName, desItemName string,
-	t *testing.T) (string, error) {
+	t *testing.T) string {
 	if !isUpgrdRecipe {
-		return MockDetailedRecipeGUID(name,
+		return MockDetailedRecipeGUID(
+			cbOwnerKey,
+			name,
 			types.GenCoinInputList("pylon", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry(desItemName),
-			types.GenOneOutput(1),
+			types.GenOneOutput(desItemName),
 			interval,
 			t,
 		)
 	}
-	return MockDetailedRecipeGUID(name,
+	return MockDetailedRecipeGUID(
+		cbOwnerKey,
+		name,
 		types.GenCoinInputList("pylon", 5),
 		types.GenItemInputList(curItemName),
-		types.GenEntriesFirstItemNameUpgrade(desItemName),
-		types.GenOneOutput(1),
+		types.GenEntriesItemNameUpgrade(curItemName, desItemName),
+		types.GenOneOutput(desItemName),
 		interval,
 		t,
 	)
 }
 
 // MockPopularRecipeGUID mock popular recipe and returns GUID
-func MockPopularRecipeGUID(hfrt handlers.PopularRecipeType,
+func MockPopularRecipeGUID(
+	cbOwnerKey string,
+	hfrt handlers.PopularRecipeType,
 	rcpName string,
 	t *testing.T,
-) (string, error) {
+) string {
 	ciL, iiL, entries, outputs, bI := handlers.GetParamsForPopularRecipe(hfrt)
-	return MockDetailedRecipeGUID(rcpName, ciL, iiL, entries, outputs, bI, t)
+	return MockDetailedRecipeGUID(cbOwnerKey, rcpName, ciL, iiL, entries, outputs, bI, t)
 }
 
 // MockDetailedRecipeGUID mock detailed recipe and returns GUID
 func MockDetailedRecipeGUID(
+	cbOwnerKey string,
 	rcpName string,
 	ciL types.CoinInputList,
 	iiL types.ItemInputList,
@@ -143,28 +197,10 @@ func MockDetailedRecipeGUID(
 	outputs types.WeightedOutputsList,
 	interval int64,
 	t *testing.T,
-) (string, error) {
-	guid, err := inttestSDK.GetRecipeGUIDFromName(rcpName, "")
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error checking if recipe already exist")
-	}
+) string {
+	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
-	if len(guid) > 0 { // finish mock if already available
-		return guid, nil
-	}
-
-	mCB := GetMockedCookbook("eugen", false, t)
-	if err != nil {
-		t.WithFields(testing.Fields{
-			"error": err,
-		}).Fatal("error getting mocked cookbook")
-	}
-
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 		msgs.NewMsgCreateRecipe(
 			rcpName,
@@ -177,12 +213,12 @@ func MockDetailedRecipeGUID(
 			outputs,
 			interval,
 			sdkAddr),
-		"eugen",
+		cbOwnerKey,
 		false,
 	)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
-		return "", err
+		return ""
 	}
 
 	WaitOneBlockWithErrorCheck(t)
@@ -192,15 +228,13 @@ func MockDetailedRecipeGUID(
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
-	return resp.RecipeID, nil
+	return resp.RecipeID
 }
 
 // MockItemGUID mock item and return item's GUID
 func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
-	eugenAddr := inttestSDK.GetAccountAddr(sender, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	sdkAddr := GetSDKAddressFromKey(sender, t)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
 		cbID,
@@ -235,10 +269,7 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
 // MockItemGUIDWithFee mock item with additional transfer fee and return item's GUID
 func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testing.T) string {
-
-	senderAddr := inttestSDK.GetAccountAddr(sender, t)
-	sdkAddr, err := sdk.AccAddressFromBech32(senderAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+	itemOwnerSdkAddr := GetSDKAddressFromKey(sender, t)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgFiatItem(
 		cbID,
@@ -250,7 +281,7 @@ func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testin
 				Value: name,
 			},
 		},
-		sdkAddr,
+		itemOwnerSdkAddr,
 		transferFee,
 	),
 		sender,
@@ -273,27 +304,21 @@ func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testin
 
 // MockDetailedTradeGUID mock trade and return GUID
 func MockDetailedTradeGUID(
+	tradeCreatorKey string,
 	cbID string,
 	inputCoinList types.CoinInputList,
 	hasInputItem bool, inputItemName string,
-	hasOutputCoin bool, outputCoinName string, outputCoinAmount int64,
+	outputCoins sdk.Coins,
 	hasOutputItem bool, outputItemID string,
 	extraInfo string,
 	t *testing.T,
 ) string {
-	eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-	sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-	t.MustNil(err, "error converting string address to AccAddress struct")
+
+	sdkAddr := GetSDKAddressFromKey(tradeCreatorKey, t)
 
 	inputItemList := types.GenTradeItemInputList(cbID, []string{inputItemName})
 	if !hasInputItem {
 		inputItemList = nil
-	}
-	var outputCoins sdk.Coins
-	if !hasOutputCoin {
-		outputCoins = nil
-	} else {
-		outputCoins = sdk.Coins{sdk.NewInt64Coin(outputCoinName, outputCoinAmount)}
 	}
 	var outputItems types.ItemList
 	if hasOutputItem {
@@ -312,7 +337,7 @@ func MockDetailedTradeGUID(
 			outputItems,
 			extraInfo,
 			sdkAddr),
-		"eugen",
+		tradeCreatorKey,
 		false,
 	)
 	if err != nil {
@@ -321,7 +346,7 @@ func MockDetailedTradeGUID(
 	}
 
 	GetTxHandleResult(txhash, t)
-	// check trade created after 1 block
+	// check trade created after transaction is mined
 	tradeID, exist, err := inttestSDK.GetTradeIDFromExtraInfo(extraInfo)
 	t.WithFields(testing.Fields{
 		"extra_info": extraInfo,

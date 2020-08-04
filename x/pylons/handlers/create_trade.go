@@ -45,8 +45,14 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		}
 	}
 
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, msg.CoinOutputs) {
+	if !keep.HasCoins(keeper, ctx, msg.Sender, msg.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "sender doesn't have enough coins for the trade")
+	}
+
+	err = keeper.LockCoin(ctx, types.NewLockedCoin(msg.Sender, msg.CoinOutputs))
+
+	if err != nil {
+		return nil, errInternal(err)
 	}
 
 	trade := types.NewTrade(msg.ExtraInfo,

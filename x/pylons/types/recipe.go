@@ -11,6 +11,7 @@ const TypeRecipe = "recipe"
 
 // Recipe is a game state machine step abstracted out as a cooking terminology
 type Recipe struct {
+	NodeVersion   SemVer
 	ID            string // the recipe guid
 	CookbookID    string // the cookbook guid
 	Name          string
@@ -48,6 +49,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 	blockInterval int64, // The amount of time to wait to finish running the recipe
 	sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
+		NodeVersion:   SemVer("0.0.1"),
 		Name:          recipeName,
 		CookbookID:    cookbookID,
 		CoinInputs:    coinInputs,
@@ -65,6 +67,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 
 func (rcp Recipe) String() string {
 	return fmt.Sprintf(`Recipe{
+		NodeVersion: %s,
 		Name: %s,
 		CookbookID: %s,
 		ID: %s,
@@ -72,9 +75,22 @@ func (rcp Recipe) String() string {
 		ItemInputs: %s,
 		Entries: %s,
 		ExecutionTime: %d,
-	}`, rcp.Name, rcp.CookbookID, rcp.ID,
+	}`, rcp.NodeVersion,
+		rcp.Name,
+		rcp.CookbookID,
+		rcp.ID,
 		rcp.CoinInputs.String(),
 		rcp.ItemInputs.String(),
 		rcp.Entries.String(),
 		rcp.BlockInterval)
+}
+
+// GetItemInputRefIndex get item input index from ref string
+func (rcp Recipe) GetItemInputRefIndex(inputRef string) int {
+	for idx, input := range rcp.ItemInputs {
+		if input.ID == inputRef {
+			return idx
+		}
+	}
+	return -1
 }

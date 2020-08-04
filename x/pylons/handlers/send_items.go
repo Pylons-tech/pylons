@@ -47,7 +47,7 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 
 		coins := types.NewPylon(item.GetTransferFee())
 
-		if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, coins) {
+		if !keep.HasCoins(keeper, ctx, msg.Sender, coins) {
 			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
 		}
 
@@ -79,7 +79,7 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 			return err
 		}
 
-		err = keeper.CoinKeeper.SendCoins(ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
+		err = keep.SendCoins(keeper, ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
 		if err != nil {
 			return err
 		}
@@ -88,7 +88,7 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 		cbOwnerProfit := pylonAmount * cbOwnerProfitPercent / 100
 		if cbOwnerProfit > 0 {
 			cbSenderCoins := types.NewPylon(cbOwnerProfit)
-			err = keeper.CoinKeeper.SendCoins(ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
+			err = keep.SendCoins(keeper, ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
 			if err != nil {
 				return err
 			}

@@ -29,7 +29,8 @@ func UpdateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			types.GenCoinInputList("wood", 5),
 			types.GenItemInputList("Raichu"),
 			types.GenEntries("chair", "Raichu"),
-			types.GenOneOutput(2),
+			types.GenOneOutput("chair", "Raichu"),
+			0,
 			sender,
 		)
 

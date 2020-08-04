@@ -5,7 +5,7 @@
             "precondition": [],
             "blockWait": 0
         },
-        "action": "create_cookbook",
+        "action": "mock_cookbook",
         "paramsRef": "./cookbooks/javelin.json",
         "output": {
             "txResult": {
@@ -13,102 +13,81 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "javelin_account1",
                     "cookbooks": ["javelincb"]
                 }
             ]
         }
     },
     {
-        "ID": "CREATE_JAVELIN_LV1",        
+        "ID": "MOCK_ACCOUNT_JAVELIN_ACCOUNT2",
         "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "mock_account",
+        "paramsRef": "javelin_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "javelin_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
+        "ID": "CREATE_JAVELIN_ITEMS",
+        "runAfter": {
+            "precondition": ["CREATE_JAVELIN_COOKBOOK", "MOCK_ACCOUNT_JAVELIN_ACCOUNT2"],
             "blockWait": 0
         },
-        "action": "fiat_item",
-        "paramsRef": "./items/javelin/javelin_lv1.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/javelin/javelin_lv1.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/javelin/200old_javelin.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/javelin/300old_javelin.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/javelin/400old_javelin.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "javelin_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Javelin" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_200OLD_JAVELIN",        
-        "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/javelin/200old_javelin.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account1",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "200 Old Javelin" },
                             "longValues": { "level": 1 }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_300OLD_JAVELIN",        
-        "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/javelin/300old_javelin.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account1",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "300 Old Javelin" },
                             "longValues": { "level": 1 }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_400OLD_JAVELIN",        
-        "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/javelin/400old_javelin.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account1",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "400 Old Javelin" },
                             "longValues": { "level": 1 }
@@ -133,81 +112,43 @@
         }
     },
     {
-        "ID": "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE",        
+        "ID": "CREATE_JAVELIN_RECIPES",
         "runAfter": {
             "precondition": ["CREATE_JAVELIN_COOKBOOK"],
             "blockWait": 0
         },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/javelin/javelin_upgrader_program.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/javelin/javelin_upgrader_program.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/javelin/200old_javelin_throw_away.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/javelin/300old_javelin_throw_away.json"
+            },
+            {
+                "action": "create_recipe",
+                "paramsRef": "./recipes/javelin/400old_javelin_throw_away_invalid.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
             },
             "property": [
                 {
-                    "owner": "account2",
-                    "recipes": ["Javelin Upgrade Program Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_200OLD_JAVELIN_THROW_AWAY_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/javelin/200old_javelin_throw_away.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "recipes": ["200 Old Javelin Throw Away Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_300OLD_JAVELIN_THROW_AWAY_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/javelin/300old_javelin_throw_away.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "recipes": ["300 Old Javelin Throw Away Recipe"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_400OLD_JAVELIN_THROW_AWAY_INVALID_RECIPE",        
-        "runAfter": {
-            "precondition": ["CREATE_JAVELIN_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_recipe",
-        "paramsRef": "./recipes/javelin/400old_javelin_throw_away_invalid.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "recipes": ["400 Old Javelin Throw Away Invalid Recipe"]
+                    "owner": "javelin_account1",
+                    "recipes": [
+                        "Javelin Upgrade Program Recipe",
+                        "200 Old Javelin Throw Away Recipe",
+                        "300 Old Javelin Throw Away Recipe",
+                        "400 Old Javelin Throw Away Invalid Recipe"
+                    ]
                 }
             ]
         }
@@ -216,8 +157,7 @@
         "ID": "EXECUTE_JAVELIN_UPGRADER_PROGRAM_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_JAVELIN_LV1", 
-                "CREATE_JAVELIN_UPGRADER_PROGRAM_RECIPE"
+                "CREATE_JAVELIN_ITEMS", "CREATE_JAVELIN_RECIPES", "MOCK_ACCOUNT_JAVELIN_ACCOUNT2"
             ],
             "blockWait": 0
         },
@@ -230,7 +170,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "javelin_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Javelin",  "LastName": "Program Upgraded Javelin" },
@@ -246,8 +186,7 @@
         "ID": "EXECUTE_200OLD_JAVELIN_THROW_AWAY_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_200OLD_JAVELIN", 
-                "CREATE_200OLD_JAVELIN_THROW_AWAY_RECIPE"
+                "CREATE_JAVELIN_ITEMS", "CREATE_JAVELIN_RECIPES", "MOCK_ACCOUNT_JAVELIN_ACCOUNT2"
             ],
             "blockWait": 0
         },
@@ -260,7 +199,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "javelin_account2",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -275,8 +214,7 @@
         "ID": "EXECUTE_300OLD_JAVELIN_THROW_AWAY_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_300OLD_JAVELIN", 
-                "CREATE_300OLD_JAVELIN_THROW_AWAY_RECIPE"
+                "CREATE_JAVELIN_ITEMS", "CREATE_JAVELIN_RECIPES", "MOCK_ACCOUNT_JAVELIN_ACCOUNT2"
             ],
             "blockWait": 0
         },
@@ -289,7 +227,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "javelin_account2",
                     "shouldNotExist": true,
                     "items": [
                         {
@@ -304,8 +242,7 @@
         "ID": "EXECUTE_400OLD_JAVELIN_THROW_AWAY_INVALID_RECIPE",
         "runAfter": {
             "precondition": [
-                "CREATE_400OLD_JAVELIN", 
-                "CREATE_400OLD_JAVELIN_THROW_AWAY_INVALID_RECIPE"
+                "CREATE_JAVELIN_ITEMS", "CREATE_JAVELIN_RECIPES", "MOCK_ACCOUNT_JAVELIN_ACCOUNT2"
             ],
             "blockWait": 0
         },

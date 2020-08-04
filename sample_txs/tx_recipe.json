@@ -5,32 +5,57 @@
       {
         "type": "pylons/CreateRecipe",
         "value": {
-          "RecipeID": "LOUD-hunt-rabbits-with-no-weapon-recipe-v0.1.0-1579053457",
-          "CoinInputs": [],
-          "ItemInputs": [],
+          "RecipeID": "RTEST_1596078885",
+          "Name": "RTEST_1596078885",
+          "CookbookID": "LOUD-v0.1.0-1579053457",
+          "CoinInputs": [
+            {
+              "Coin": "pylon",
+              "Count": "1"
+            }
+          ],
+          "ItemInputs": null,
           "Entries": {
-            "CoinOutputs": [
+            "CoinOutputs": null,
+            "ItemModifyOutputs": null,
+            "ItemOutputs": [
               {
-                "Coin": "loudcoin",
-                "Count": "rand(5)+1"
+                "Doubles": [
+                  {
+                    "Rate": "1",
+                    "Key": "Mass",
+                    "WeightRanges": [
+                      {
+                        "Lower": "50",
+                        "Upper": "100",
+                        "Weight": 1
+                      }
+                    ],
+                    "Program": ""
+                  }
+                ],
+                "Longs": null,
+                "Strings": [
+                  {
+                    "Rate": "1",
+                    "Key": "Name",
+                    "Value": "Mars",
+                    "Program": ""
+                  }
+                ],
+                "TransferFee": 0
               }
-            ],
-            "ItemOutputs": []
+            ]
           },
           "Outputs": [
             {
-              "ResultEntries": [
-                "0"
-              ],
+              "EntryIDs": ["loudcoin_reward"],
               "Weight": "1"
             }
           ],
-          "ExtraInfo": "",
-          "Sender": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
-          "Name": "LOUD's hunt rabbits without sword recipe",
-          "CookbookID": "LOUD-v0.1.0-1579053457",
-          "Description": "this recipe is used to hunt rabbits without sword.",
-          "BlockInterval": "0"
+          "BlockInterval": "2",
+          "Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm",
+          "Description": "test recipe from test suite"
         }
       }
     ],

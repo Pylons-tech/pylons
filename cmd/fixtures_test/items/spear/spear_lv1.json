@@ -1,7 +1,8 @@
 {
+    "NodeVersion": "0.0.1",
     "Doubles": [{ "Key": "attack", "Value": "1" }],
     "Longs": [{ "Key": "level", "Value": "1" }],
     "Strings": [{ "Key": "Name","Value": "Spear"}, { "Key": "LastName", "Value": "????????"}],
     "CookbookID": "spearcookbook-1589853709",
-    "Sender": "account1"
+    "Sender": "spear_account2"
 }

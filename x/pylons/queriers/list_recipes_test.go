@@ -70,6 +70,7 @@ func TestListRecipe(t *testing.T) {
 
 				require.True(t, rcpListErr == nil)
 				require.True(t, len(rcpList.Recipes) == tc.desiredRcpCnt)
+				require.True(t, len(rcpList.Recipes) > 0)
 				require.True(t, rcpList.Recipes[0].Name == tc.firstItemName)
 			}
 		})

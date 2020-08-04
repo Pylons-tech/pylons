@@ -1,10 +1,11 @@
 {
+  "NodeVersion": "0.0.1",
   "ID": "game-hack-1589853709",
   "Name": "Game Hack",
   "Description": "this has to meet character limits lol",
   "Developer": "SketchyCo",
   "Level": "0",
-  "Sender": "account2",
+  "Sender": "gamerh_account2",
   "SupportEmail": "example@example.com",
   "Version": "1.0.0",
   "CostPerBlock": "50"

@@ -1,11 +1,36 @@
 [
     {
+        "ID": "MOCK_ACCOUNT_SPEAR_ACCOUNT2",
+        "runAfter": {
+          "precondition": [],
+          "blockWait": 0
+        },
+        "action": "mock_account",
+        "paramsRef": "spear_account2",
+        "output": {
+          "txResult": {
+            "status": "Success"
+          },
+          "property": [
+            {
+              "owner": "spear_account2",
+              "coins": [
+                {
+                  "denom": "pylon",
+                  "amount": 55000
+                }
+              ]
+            }
+          ]
+        }
+    },
+    {
         "ID": "CREATE_SPEAR_COOKBOOK",
         "runAfter": {
             "precondition": [],
             "blockWait": 0
         },
-        "action": "create_cookbook",
+        "action": "mock_cookbook",
         "paramsRef": "./cookbooks/spear.json",
         "output": {
             "txResult": {
@@ -13,7 +38,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "spear_account1",
                     "cookbooks": ["spearcookbook"]
                 }
             ]
@@ -22,7 +47,7 @@
     {
         "ID": "CREATE_SPEAR_LV1",        
         "runAfter": {
-            "precondition": ["CREATE_SPEAR_COOKBOOK"],
+            "precondition": ["CREATE_SPEAR_COOKBOOK", "MOCK_ACCOUNT_SPEAR_ACCOUNT2"],
             "blockWait": 0
         },
         "action": "fiat_item",
@@ -33,7 +58,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "spear_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Spear" }
@@ -57,7 +82,7 @@
             },
             "property": [
                 {
-                    "owner": "account2",
+                    "owner": "spear_account1",
                     "recipes": ["Delayed Spear Upgrade Recipe"]
                 }
             ]
@@ -93,7 +118,7 @@
             },
             "property": [
                 {
-                    "owner": "account1",
+                    "owner": "spear_account2",
                     "items": [
                         {
                             "stringValues": { "Name": "Spear",  "LastName": "Upgraded Spear" },

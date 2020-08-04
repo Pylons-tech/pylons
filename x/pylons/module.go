@@ -73,8 +73,12 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 		query.GetTrade(StoreKey, cdc),
 		query.GetRecipe(StoreKey, cdc),
 		query.ListCookbook(StoreKey, cdc),
+		query.GetLockedCoins(StoreKey, cdc),
+		query.GetLockedCoinDetails(StoreKey, cdc),
 		query.ListRecipes(StoreKey, cdc),
+		query.ListRecipesByCookbook(StoreKey, cdc),
 		query.ListShortenRecipes(StoreKey, cdc),
+		query.ListShortenRecipesByCookbook(StoreKey, cdc),
 		query.ItemsBySender(StoreKey, cdc),
 		query.ListExecutions(StoreKey, cdc),
 		query.ListTrade(StoreKey, cdc))
@@ -94,7 +98,9 @@ func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
 	pylonsTxCmd.AddCommand(
 		tx.CreateAccount(cdc),
 		tx.GetPylons(cdc),
+		tx.GoogleIAPGetPylons(cdc),
 		tx.SendPylons(cdc),
+		tx.SendCoins(cdc),
 		tx.SendItems(StoreKey, cdc),
 		tx.CreateCookbook(cdc),
 		tx.PrivateKeySign(cdc),

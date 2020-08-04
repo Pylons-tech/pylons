@@ -29,33 +29,39 @@ type ExecProcess struct {
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
+	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
+		return errors.New("the item IDs count doesn't match the recipe input")
+	}
 
-	inputItems, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
+	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
 	if err != nil {
 		return err
 	}
 
 	// we validate and match items
 	var matchedItems []types.Item
-	var matches bool
 	for i, itemInput := range p.recipe.ItemInputs {
-		matches = false
-
-		for iii, item := range inputItems {
-			if itemInput.Matches(item) && item.NewRecipeExecutionError() == nil {
-				matchedItems = append(matchedItems, item)
-				inputItems[iii].OwnerRecipeID = p.recipe.ID
-				matches = true
-				break
-			}
+		matchedItem := items[i]
+		matchErr := itemInput.MatchError(matchedItem)
+		if matchErr != nil {
+			return fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID)
 		}
-
-		if !matches {
-			return fmt.Errorf("the [%d] item input don't match any items provided", i)
+		execErr := matchedItem.NewRecipeExecutionError()
+		if execErr != nil {
+			return fmt.Errorf("[%d]th item is locked: %s item_id=%s", i, execErr.Error(), matchedItem.ID)
 		}
+		matchedItems = append(matchedItems, matchedItem)
 	}
 	p.matchedItems = matchedItems
 	return nil
+}
+
+// GetMatchedItemFromIndex is matched item by index helper
+func (p ExecProcess) GetMatchedItemFromIndex(index int) types.Item {
+	if index < 0 || index >= len(p.matchedItems) {
+		return types.Item{}
+	}
+	return p.matchedItems[index]
 }
 
 // Run execute the process and return result
@@ -84,15 +90,14 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 }
 
 // AddExecutedResult add executed result from ExecProcess
-func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([]ExecuteRecipeSerialize, error) {
+func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string) ([]ExecuteRecipeSerialize, error) {
 	var ersl []ExecuteRecipeSerialize
-	var err error
 	usedItemInputIndexes := []int{}
-	for _, outputIndex := range outputs {
-		if len(p.recipe.Entries) <= outputIndex || outputIndex < 0 {
-			return ersl, fmt.Errorf("index out of range entries[%d] with length %d on output", outputIndex, len(p.recipe.Entries))
+	for _, entryID := range entryIDs {
+		output, err := p.recipe.Entries.FindByID(entryID)
+		if err != nil {
+			return ersl, err
 		}
-		output := p.recipe.Entries[outputIndex]
 
 		switch output := output.(type) {
 		case types.CoinOutput:
@@ -118,29 +123,39 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 				Coin:   coinOutput.Coin,
 				Amount: coinAmount,
 			})
-		case types.ItemOutput:
-			itemOutput := output
+		case types.ItemModifyOutput:
 			var outputItem *types.Item
 
-			if itemOutput.ModifyItem.ItemInputRef == -1 {
-				outputItem, err = itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
-				if err != nil {
-					return ersl, errInternal(err)
-				}
-			} else {
-				// Collect itemInputRefs that are used on output
-				usedItemInputIndexes = append(usedItemInputIndexes, itemOutput.ModifyItem.ItemInputRef)
+			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
+			if itemInputIndex < 0 {
+				return ersl, errInternal(fmt.Errorf("no item input with ID=%s exist", output.ItemInputRef))
+			}
+			inputItem := p.GetMatchedItemFromIndex(itemInputIndex)
 
-				fmt.Println("itemOutput.ModifyItem.ItemInputRef", itemOutput.ModifyItem.ItemInputRef)
-				// Modify item according to ModifyParams section
-				outputItem, err = p.UpdateItemFromModifyParams(p.matchedItems[itemOutput.ModifyItem.ItemInputRef], itemOutput.ModifyItem)
-				if err != nil {
-					return ersl, errInternal(err)
-				}
+			// Collect itemInputRefs that are used on output
+			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
+
+			// Modify item according to ModifyParams section
+			outputItem, err = p.UpdateItemFromModifyParams(inputItem, output)
+			if err != nil {
+				return ersl, errInternal(err)
 			}
 			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
 				return ersl, errInternal(err)
 
+			}
+			ersl = append(ersl, ExecuteRecipeSerialize{
+				Type:   "ITEM",
+				ItemID: outputItem.ID,
+			})
+		case types.ItemOutput:
+			itemOutput := output
+			outputItem, err := itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
+			if err != nil {
+				return ersl, errInternal(err)
+			}
+			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
+				return ersl, errInternal(err)
 			}
 			ersl = append(ersl, ExecuteRecipeSerialize{
 				Type:   "ITEM",
@@ -161,7 +176,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, outputs []int) ([
 }
 
 // UpdateItemFromModifyParams is used to update item passed via item input from modify params
-func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ModifyItemType) (*types.Item, error) {
+func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyOutput) (*types.Item, error) {
 	dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
 	if err != nil {
 		return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
@@ -192,7 +207,6 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
 			targetItem.Longs[lngKey].Value += lng.Value
 		} else {
-			fmt.Printf("updating long key [%s] from %d to %d\n", lng.Key, targetItem.Longs[lngKey].Value, lng.Value)
 			targetItem.Longs[lngKey].Value = lng.Value
 		}
 	}
@@ -247,16 +261,21 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	varDefs = append(varDefs, decls.NewVar("lastBlockHeight", decls.Int))
 	variables["lastBlockHeight"] = p.ctx.BlockHeight()
+	itemInputs := p.recipe.ItemInputs
 
 	for idx, item := range p.matchedItems {
-		iPrefix := fmt.Sprintf("input%d.", idx)
+		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
 
-		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix, item) // input0.level, input1.attack, input2.HP
+		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
+		if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" && itemInputs[idx].IDValidationError() == nil {
+			iPrefix2 := itemInputs[idx].ID + "."
+			varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
+		}
 	}
 
 	if len(p.matchedItems) > 0 {
 		// first matched item
-		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.matchedItems[0]) // HP, level, attack
+		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
 	}
 
 	varDefs = append(varDefs,
@@ -300,4 +319,9 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	p.ec = types.NewCelEnvCollection(env, variables, funcs)
 	return err
+}
+
+// GetEnvCollection get env collection
+func (p *ExecProcess) GetEnvCollection() types.CelEnvCollection {
+	return p.ec
 }
