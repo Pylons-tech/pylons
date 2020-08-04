@@ -44,6 +44,9 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 		newLock = originLock.Amount.Sub(lockedCoin.Amount.Sort())
 
 		if newLock.IsZero() {
+			if originLock.Amount.IsZero() {
+				return nil
+			}
 			return k.DeleteLockedCoin(ctx, originLock.Sender)
 		}
 

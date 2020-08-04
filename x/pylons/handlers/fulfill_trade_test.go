@@ -22,6 +22,8 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		sdk.NewInt64Coin(types.Pylon, 100000),
 	}, types.NewPylon(100000), types.NewPylon(100000), types.NewPylon(100000))
 
+	_, sender5, _ := GenAccount()
+
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, sdk.Coins{
 		sdk.NewInt64Coin("aaaa", 100000),
 		sdk.NewInt64Coin("cccc", 100000),
@@ -73,6 +75,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	item6 := keep.GenItem(cbData1.CookbookID, sender4, "Bhachu")
 	item6.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, *item6)
+	require.True(t, err == nil)
+
+	item8 := keep.GenItem(cbData1.CookbookID, sender5, "Bhachu8")
+	item8.SetTransferFee(70)
+	err = tci.PlnK.SetItem(tci.Ctx, *item8)
 	require.True(t, err == nil)
 
 	item7 := keep.GenItem("wrongCBID", sender2, "Pikachu")
@@ -202,6 +209,17 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			sender4AmountDiffer:   []types.CoinInput{{Coin: types.Pylon, Count: 54}},
 			pylonsLLCAmountDiffer: []types.CoinInput{{Coin: types.Pylon, Count: 12}},
 		},
+		"empty coin output trade success test with no locked coin sender": {
+			sender:              sender5,
+			fulfiller:           sender4,
+			inputCoinList:       types.GenCoinInputList(types.Pylon, 500),
+			inputItemList:       nil,
+			outputCoinList:      nil,
+			outputItemList:      types.ItemList{*item8},
+			fulfillInputItemIDs: []string{},
+			desiredError:        "",
+			showError:           false,
+		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
@@ -220,10 +238,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 
 			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
 			ctResult, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, ctMsg)
-			if err != nil {
-				t.Log(err)
-			}
-			require.True(t, err == nil)
+			require.True(t, err == nil, err)
 			ctRespData := CreateTradeResponse{}
 			err = json.Unmarshal(ctResult.Data, &ctRespData)
 			require.True(t, err == nil)
@@ -231,10 +246,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			ffMsg := msgs.NewMsgFulfillTrade(ctRespData.TradeID, tc.fulfiller, tc.fulfillInputItemIDs)
 			ffResult, err := HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
 			if !tc.showError {
-				if err != nil {
-					t.Log(err)
-				}
-				require.True(t, err == nil)
+				require.True(t, err == nil, err)
 				ffRespData := FulfillTradeResponse{}
 				err = json.Unmarshal(ffResult.Data, &ffRespData)
 				require.True(t, err == nil)

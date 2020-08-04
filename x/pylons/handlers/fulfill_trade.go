@@ -20,7 +20,6 @@ type FulfillTradeResponse struct {
 
 // HandlerMsgFulfillTrade is used to fulfill a trade
 func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFulfillTrade) (*sdk.Result, error) {
-
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -51,9 +50,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	}
 
 	// check if the sender has all condition met
-
 	totalItemTransferFee := int64(0)
-
 	matchedItems := types.ItemList{}
 	for i, itemInput := range trade.ItemInputs {
 		matchedItem := items[i]
@@ -69,7 +66,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	}
 
 	// Unlock trade creator's coins
-
 	err = keeper.UnlockCoin(ctx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
@@ -85,7 +81,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	}
 
 	// -------------------- handle Item interactions ----------------
-
 	refreshedOutputItems := types.ItemList{}
 
 	// get the items from the trade initiator
@@ -110,7 +105,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	}
 
 	// ----------------- handle coin interaction ----------------------
-
 	inputPylonsAmount := inputCoins.AmountOf(types.Pylon)
 	outputPylonsAmount := trade.CoinOutputs.AmountOf(types.Pylon)
 	totalPylonsAmount := inputPylonsAmount.Int64() + outputPylonsAmount.Int64()
@@ -126,7 +120,6 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	}
 
 	// divide total fee between the sender and fullfiller
-
 	if totalPylonsAmount == 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalPylonsAmount is 0 unexpectedly")
 	}
