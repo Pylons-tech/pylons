@@ -162,3 +162,33 @@ The solution is on server side, connect two of them or only run 1 node.
 As they are defined as a map, there's no sequence so the test cases would be run in random order. 
 So if you have some interactive test cases in sequence, those cases won't run exactly in some cases. (in the case the order is opposite) So you should avoid interactive test cases or at least use separate items or dynamic items.
 - When you create a test item, you should name it as a meaningful name rather than ? or randomly generated name.
+
+## How to debug create recipe internal errors on mobile side
+
+search for keyword "TestCustomCreateRecipeValidateBasic" on pylons repo.  
+After that you update the json content there to something you use on mobile side.  
+Then you can run `make unit_tests ARGS="-run TestCustomCreateRecipeValidateBasic"`
+
+```
+make unit_tests ARGS="-run TestCustomCreateRecipeValidateBasic"
+
+go test -v ./x/... -run TestCustomCreateRecipeValidateBasic
+testing: warning: no tests to run
+PASS
+ok  	github.com/Pylons-tech/pylons/x/pylons	(cached) [no tests to run]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/cli/query	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/cli/tx	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/rest	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/rest/txbuilder	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/config	[no test files]
+=== RUN   TestCustomCreateRecipeValidateBasic
+--- FAIL: TestCustomCreateRecipeValidateBasic (0.00s)
+    create_recipe_test.go:77: 
+        	Error Trace:	create_recipe_test.go:77
+        	Error:      	Should be true
+        	Test:       	TestCustomCreateRecipeValidateBasic
+        	Messages:   	entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=0
+```
+
+It will report errors something like above.
+Here messages section is something you need to care about. You can catch the error `entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=0`.
