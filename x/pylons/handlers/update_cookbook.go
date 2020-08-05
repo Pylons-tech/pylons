@@ -7,6 +7,13 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// UpdateCookbookResponse is a struct to control update cookbook response
+type UpdateCookbookResponse struct {
+	CookbookID string `json:"CookbookID"`
+	Message    string
+	Status     string
+}
+
 // HandlerMsgUpdateCookbook is used to update cookbook by a developer
 func HandlerMsgUpdateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateCookbook) (*sdk.Result, error) {
 
@@ -35,5 +42,9 @@ func HandlerMsgUpdateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgU
 		return nil, errInternal(err)
 	}
 
-	return &sdk.Result{}, nil
+	return marshalJSON(UpdateCookbookResponse{
+		CookbookID: cb.ID,
+		Message:    "successfully updated the cookbook",
+		Status:     "Success",
+	})
 }
