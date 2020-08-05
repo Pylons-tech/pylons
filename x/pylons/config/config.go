@@ -38,6 +38,7 @@ type Configuration struct {
 	Validators      ValidatorsConfiguration  `yaml:"validators"`
 	GoogleIAP       []GoogleIAPConfiguration `yaml:"google_iap"`
 	GoogleIAPPubKey string                   `yaml:"google_iap_pubkey"`
+	IsProduction    bool                     `yaml:"is_production"`
 }
 
 // Config is for managing configuration
