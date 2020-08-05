@@ -15,6 +15,7 @@ const (
 	// DefaultCoinPerRequest is the number of coins the faucet sends per req
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
+	purchaseTokenKey      = "purchaseTokenKey"
 	ownerKeyName          = "ownerKey"
 	tradeKeyName          = "tradeKey"
 	cookbookKeyName       = "cookbookKey"
@@ -64,6 +65,8 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 
 	r.HandleFunc(fmt.Sprintf("/%s/get_trade/{%s}", storeName, tradeKeyName),
 		getTradeHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/check_google_iap_order/{%s}", storeName, purchaseTokenKey),
+		checkGoogleIAPOrderHandler(cdc, cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),
 		listRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
