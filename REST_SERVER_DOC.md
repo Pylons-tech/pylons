@@ -3,7 +3,7 @@
 Using REST interface server is the easiest way to fetch results in REST interface.
 
 ## Running rest server
-```
+```sh
 pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 ```
 ## Fetching
@@ -21,7 +21,7 @@ http://localhost:1317/pylons/list_cookbooks/cosmos19vlpdf25cxh0w2s80z44r9ktrgznc
 ```
 
 Sample Result
-```
+```json
 {
     "Cookbooks": []
 }
@@ -39,7 +39,7 @@ http://localhost:1317/pylons/list_trade/cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zs
 ```
 
 Sample Result
-```
+```json
 {
     "Trades": []
 }
@@ -114,7 +114,7 @@ http://${HOST}/pylons/list_recipe_by_cookbook/${cookbookID}
 ```
 
 Sample Result
-```
+```json
 {
     "Recipes": []
 }
@@ -130,7 +130,7 @@ http://${HOST}/pylons/list_shorten_recipe_by_cookbook/${cookbookID}
 ```
 
 Sample Result
-```
+```json
 {
     "Recipes": [
       {
@@ -156,7 +156,7 @@ http://localhost:1317/pylons/items_by_sender/cosmos19vlpdf25cxh0w2s80z44r9ktrgzn
 ```
 
 Sample Result
-```
+```json
 {
     "Items": []
 }
@@ -174,7 +174,7 @@ http://localhost:1317/pylons/list_executions/cosmos19vlpdf25cxh0w2s80z44r9ktrgzn
 ```
 
 Sample Result
-```
+```json
 {
     "Executions": []
 }
