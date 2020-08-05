@@ -18,6 +18,8 @@ func NewQuerier(keeper keep.Keeper) sdk.Querier {
 		switch path[0] {
 		case queriers.KeyPylonsBalance:
 			return queriers.PylonsBalance(ctx, path[1:], req, keeper)
+		case queriers.KeyCheckGoogleIAPOrder:
+			return queriers.CheckGoogleIAPOrder(ctx, path[1:], req, keeper)
 		case queriers.KeyGetCookbook:
 			return queriers.GetCookbook(ctx, path[1:], req, keeper)
 		case queriers.KeyGetItem:

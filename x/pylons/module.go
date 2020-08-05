@@ -67,6 +67,7 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 	}
 	pylonsQueryCmd.AddCommand(
 		query.GetPylonsBalance(StoreKey, cdc),
+		query.CheckGoogleIAPOrder(StoreKey, cdc),
 		query.GetCookbook(StoreKey, cdc),
 		query.GetExecution(StoreKey, cdc),
 		query.GetItem(StoreKey, cdc),
