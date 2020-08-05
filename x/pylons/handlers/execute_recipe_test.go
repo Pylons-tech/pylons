@@ -33,7 +33,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
 		types.GenItemOnlyEntry("Zombie"),
-		types.GenOneOutput(1),
+		types.GenOneOutput("Zombie"),
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -42,7 +42,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// mock pylon input recipe
 	pylonInputRecipeData := MockRecipe(
 		tci, "existing recipe",
-		types.GenCoinInputList("pylon", 100),
+		types.GenCoinInputList(types.Pylon, 100),
 		types.ItemInputList{},
 		types.EntriesList{},
 		types.WeightedOutputsList{},
@@ -58,12 +58,12 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.GenItemInputList("catalyst"),
 
 		types.EntriesList{
-			types.NewInputRefOutput(
-				0, types.ItemModifyParams{},
+			types.NewItemModifyOutput(
+				"catalystOutputEntry", "catalyst", types.ItemModifyParams{},
 			),
 			types.GenItemOnlyEntry("Catalyst2")[0],
 		},
-		types.GenAllOutput(2),
+		types.GenAllOutput("catalystOutputEntry", "Catalyst2"),
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -75,7 +75,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntries("chaira", "ZombieA"),
-		types.GenOneOutput(2),
+		types.GenOneOutput("chaira", "ZombieA"),
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -87,7 +87,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		types.CoinInputList{},
 		types.ItemInputList{},
 		types.GenEntriesRand("zmbr", "ZombieRand"),
-		types.GenOneOutput(2),
+		types.GenOneOutput("zmbr", "ZombieRand"),
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -159,7 +159,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			desiredError:           "",
 			successMsg:             "successfully executed the recipe",
 			showError:              false,
-			checkCoinName:          "pylon",
+			checkCoinName:          types.Pylon,
 			checkCoinAvailable:     true,
 			checkItemName:          "",
 			checkItemAvailable:     false,
@@ -189,14 +189,14 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemName:      "",
 			checkItemAvailable: false,
 		},
-		"Wrong item in input": {
+		"wrong item in input": {
 			itemIDs:            []string{"invaliditemID"},
 			dynamicItemSet:     true,
 			dynamicItemNames:   []string{"NoRaichu"},
 			addInputCoin:       true,
 			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
-			desiredError:       "the [0] item input don't match any items provided",
+			desiredError:       "[0]th item does not match",
 			successMsg:         "successfully executed the recipe",
 			showError:          true,
 			checkItemName:      "",
@@ -315,7 +315,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				// calc generated coin availability
 				coinAvailability := false
 				if tc.checkCoinAvailable || tc.checkItemOrCoinAvailable {
-					coinAvailability = tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
+					coinAvailability = keep.HasCoins(tci.PlnK, tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin(tc.checkCoinName, 1)})
 				}
 
 				// calc generated item availability
@@ -348,7 +348,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				if tc.checkPylonDistribution {
 					pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 					require.True(t, err == nil)
-					pylonAvailOnLLC := tci.PlnK.CoinKeeper.HasCoins(tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
+					pylonAvailOnLLC := keep.HasCoins(tci.PlnK, tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
 					require.True(t, pylonAvailOnLLC)
 				}
 			} else {

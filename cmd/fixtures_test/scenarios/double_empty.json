@@ -1,0 +1,442 @@
+[
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_COOKBOOK",
+        "runAfter": {
+            "precondition": [],
+            "blockWait": 0
+        },
+        "action": "mock_cookbook",
+        "paramsRef": "./cookbooks/double_empty.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "cookbooks": ["Double Empty Checker Cookbook"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_COIN_INPUT_EMPTY_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/coin_input_empty_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's coin input empty type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_COIN_INPUT_EMPTY_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/coin_input_empty_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's coin input empty type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_INPUT_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_input_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no input type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_INPUT_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_input_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no input type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_OUTPUT_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_output_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no output type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_OUTPUT_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_output_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no output type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_OUTPUT_TYPE3_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_output_type3.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no output type3 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_OUTPUT_TYPE4_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_output_type4.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no output type4 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_ENTRIES_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_entries_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no entries type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_ENTRIES_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_entries_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no entries type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_NO_ENTRIES_TYPE3_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/no_entries_type3.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's no entries type3 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_COIN_OUTPUT_EMPTY_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/coin_output_empty_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's coin output empty type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_COIN_OUTPUT_EMPTY_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/coin_output_empty_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's coin output empty type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_INPUT_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/double_empty_input_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's double empty input type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_INPUT_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/double_empty_input_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's double empty input type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_OUTPUT_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/double_empty_output_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's double empty output type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_OUTPUT_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/double_empty_output_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's double empty output type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_UPGRADER_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/double_empty_upgrader_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's double empty upgrader type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_DOUBLE_EMPTY_UPGRADER_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/double_empty_upgrader_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's double empty upgrader type2 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_OUTPUT_EMPTY_TYPE1_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/item_output_empty_type1.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's item output empty type1 test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_OUTPUT_EMPTY_TYPE2_RECIPE",
+        "runAfter": {
+            "precondition": ["CREATE_DOUBLE_EMPTY_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/double_empty/item_output_empty_type2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "de_account1",
+                    "recipes": ["DE's item output empty type2 test recipe"]
+                }
+            ]
+        }
+    }
+]

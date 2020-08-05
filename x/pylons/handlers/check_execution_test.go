@@ -89,7 +89,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 		"more than 1 item input recipe success execution test": {
 			rcpID:            knifeMergeRecipeData.RecipeID,
 			dynamicItemSet:   true,
-			dynamicItemNames: []string{"Knife", "Knife"},
+			dynamicItemNames: []string{"Knife1", "Knife2"},
 			sender:           sender1,
 			payToComplete:    false,
 			addHeight:        3,
@@ -137,7 +137,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.True(t, err == nil)
 
-			if tc.dynamicItemSet {
+			if tc.dynamicItemSet && len(tc.itemIDs) > 0 {
 				usedItem, err := tci.PlnK.GetItem(tci.Ctx, tc.itemIDs[0])
 				require.True(t, err == nil)
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
@@ -160,7 +160,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				require.True(t, checkExecResp.Message == tc.expectedMessage)
 			}
 
-			if len(tc.desiredUpgradedName) > 0 {
+			if len(tc.desiredUpgradedName) > 0 && len(tc.itemIDs) > 0 {
 				updatedItem, err := tci.PlnK.GetItem(futureContext, tc.itemIDs[0])
 				require.True(t, err == nil)
 				updatedName, ok := updatedItem.FindString("Name")

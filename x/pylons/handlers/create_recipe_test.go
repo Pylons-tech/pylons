@@ -13,6 +13,70 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+func TestCustomCreateRecipeValidateBasic(t *testing.T) {
+	recipeJSON := `
+		{
+			"BlockInterval": "0",
+			"CoinInputs": [
+			  {
+				"Coin": "pylon",
+				"Count": "1"
+			  }
+			],
+			"CookbookID": "LOUD-v0.1.0-1579053457",
+			"Description": "test recipe from test suite",
+			"Entries": {
+			  "CoinOutputs": null,
+			  "ItemModifyOutputs": null,
+			  "ItemOutputs": [
+				{
+				  "Doubles": [
+					{
+					  "Key": "Mass",
+					  "Program": "",
+					  "Rate": "1",
+					  "WeightRanges": [
+						{
+						  "Lower": "50",
+						  "Upper": "100",
+						  "Weight": 1
+						}
+					  ]
+					}
+				  ],
+				  "ID": "a0",
+				  "Longs": null,
+				  "Strings": [
+					{
+					  "Key": "Name",
+					  "Program": "",
+					  "Rate": "1",
+					  "Value": "Mars"
+					}
+				  ],
+				  "TransferFee": 0
+				}
+			  ]
+			},
+			"ItemInputs": null,
+			"Name": "RTEST_1596513734",
+			"Outputs": [
+			  {
+				"EntryIDs": ["a0"],
+				"Weight": "1"
+			  }
+			],
+			"Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
+		}`
+
+	tci := keep.SetupTestCoinInput()
+	msg := msgs.MsgCreateRecipe{}
+	err := tci.Cdc.UnmarshalJSON([]byte(recipeJSON), &msg)
+	require.True(t, err == nil, err)
+	err = msg.ValidateBasic()
+	require.True(t, err == nil, err)
+}
+
 func TestHandlerMsgCreateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
@@ -65,7 +129,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cookbookName:   "book000001",
 			createCookbook: true,
 			recipeDesc:     "this has to meet character limits",
-			outputDenom:    "pylon",
+			outputDenom:    types.Pylon,
 			numItemInput:   1,
 			sender:         sender,
 			desiredError:   "There should not be a recipe which generate pylon denom as an output",
@@ -79,7 +143,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			isUpgrdRecipe:  true,
 			numItemInput:   0,
 			sender:         sender,
-			desiredError:   "ItemInputRef overflow length of ItemInputs",
+			desiredError:   "Invalid item input ref found that does not exist in item inputs",
 			showError:      true,
 		},
 		"multiple item upgrade recipe success creation test": {
@@ -111,22 +175,26 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 
-			var mEntries types.EntriesList
-			if !tc.isUpgrdRecipe {
-				mEntries = types.GenEntries(tc.outputDenom, "Raichu")
-			} else {
-				if tc.numItemOutput == 2 {
-					mEntries = types.GenEntriesTwoItemNameUpgrade("RaichuV2", "PikachuV2")
-				} else {
-					mEntries = types.GenEntriesFirstItemNameUpgrade("RaichuV2")
-				}
-			}
-			mOutputs := types.GenOneOutput(len(mEntries))
 			mInputList := types.ItemInputList{}
 			if tc.numItemInput == 1 {
 				mInputList = types.GenItemInputList("Raichu")
 			} else if tc.numItemInput == 2 {
 				mInputList = types.GenItemInputList("Raichu", "Pikachu")
+			}
+
+			var mEntries types.EntriesList
+			var mOutputs types.WeightedOutputsList
+			if !tc.isUpgrdRecipe {
+				mEntries = types.GenEntries(tc.outputDenom, "Raichu")
+				mOutputs = types.GenOneOutput(tc.outputDenom, "Raichu")
+			} else {
+				if tc.numItemOutput == 2 {
+					mEntries = types.GenEntriesTwoItemNameUpgrade("Raichu", "RaichuV2", "Pikachu", "PikachuV2")
+					mOutputs = types.GenOneOutput("RaichuV2", "PikachuV2")
+				} else {
+					mEntries = types.GenEntriesItemNameUpgrade("Raichu", "RaichuV2")
+					mOutputs = types.GenOneOutput("RaichuV2")
+				}
 			}
 
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
@@ -166,7 +234,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
-	mOutputs := types.GenOneOutput(len(mEntries))
+	mOutputs := types.GenOneOutput("chair", "Raichu")
 	mInputList := types.GenItemInputList("Raichu")
 
 	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",

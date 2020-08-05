@@ -28,7 +28,7 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 
 	updateFee := types.NewPylon(config.Config.Fee.UpdateItemFieldString)
 
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, updateFee) {
+	if !keep.HasCoins(keeper, ctx, msg.Sender, updateFee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
 
@@ -39,6 +39,10 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 
 	item, err := keeper.GetItem(ctx, msg.ItemID)
 	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	if err = item.NewTradeError(); err != nil {
 		return nil, errInternal(err)
 	}
 

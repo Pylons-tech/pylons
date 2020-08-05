@@ -27,8 +27,12 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		txbuilder.CreateAccountTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons/tx_build/{%s}", storeName, txbuilder.TxGPRequesterKey),
 		txbuilder.GetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons/tx_build/{%s}", storeName, txbuilder.TxGoogleIAPGPRequesterKey),
+		txbuilder.GoogleIAPGetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
 		txbuilder.SendPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/send_coins/tx_build/", storeName),
+		txbuilder.SendCoinsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_items/tx_build/", storeName),
 		txbuilder.SendItemsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/create_cookbook/tx_build/", storeName),
@@ -47,10 +51,14 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		txbuilder.DisableRecipeTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons", storeName),
 		getPylonsHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons", storeName),
+		googleIAPGetPylonsHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/create_account", storeName),
 		createAccountHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons", storeName),
 		pylonsSendHandler(cdc, cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/send_coins", storeName),
+		coinsSendHandler(cdc, cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cdc, cliCtx, storeName)).Methods("GET")
 
@@ -61,10 +69,18 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 		listRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe/{%s}", storeName, ownerKeyName),
 		listRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_recipe_by_cookbook", storeName),
+		listRecipesByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_recipe_by_cookbook/{%s}", storeName, cookbookKeyName),
+		listRecipesByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_shorten_recipe", storeName),
 		listShortenRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_shorten_recipe/{%s}", storeName, ownerKeyName),
 		listShortenRecipesHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_shorten_recipe_by_cookbook", storeName),
+		listShortenRecipesByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_shorten_recipe_by_cookbook/{%s}", storeName, ownerKeyName),
+		listShortenRecipesByCookbookHandler(cdc, cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks", storeName),
 		listCookbooksHandler(cdc, cliCtx, storeName)).Methods("GET")

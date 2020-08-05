@@ -36,7 +36,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, errInternal(errors.New("invalid level"))
 	}
 
-	if !keeper.CoinKeeper.HasCoins(ctx, msg.Sender, fee) {
+	if !keep.HasCoins(keeper, ctx, msg.Sender, fee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
@@ -44,7 +44,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = keeper.CoinKeeper.SendCoins(ctx, msg.Sender, pylonsLLCAddress, fee)
+	err = keep.SendCoins(keeper, ctx, msg.Sender, pylonsLLCAddress, fee)
 	if err != nil {
 		return nil, errInternal(err)
 	}

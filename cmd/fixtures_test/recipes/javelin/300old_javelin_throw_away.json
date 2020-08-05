@@ -1,22 +1,26 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs": [],
-    "ItemInputRefs": [
-        "./recipes/javelin/item_input/300old_javelin.json"
+    "ItemInputs": [
+        {
+            "ID": "javelin_300old",
+            "Ref": "./recipes/javelin/item_input/300old_javelin.json"
+        }
     ],
     "Entries":{
     },
     "Outputs": [
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "-11"
         },
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "1"
         }
     ],
     "ExtraInfo": "",
-    "Sender": "account2",
+    "Sender": "javelin_account1",
     "Name": "300 Old Javelin Throw Away Recipe",
     "CookbookID": "javelincb-1589853709",
     "Description": "this recipe is used to throw away old javelin.",

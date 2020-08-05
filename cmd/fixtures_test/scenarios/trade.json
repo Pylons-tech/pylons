@@ -20,13 +20,22 @@
         }
     },
     {
-        "ID": "CREATE_TRADING_KNIFE_V1",        
+        "ID": "CREATE_ACCOUNT2_TRADING_ITEMS",
         "runAfter": {
             "precondition": ["CREATE_TRADE_COOKBOOK"],
             "blockWait": 0
         },
-        "action": "fiat_item",
-        "paramsRef": "./items/trading/trading_knife_v1.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/trading/trading_knife_v1.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/trading/trading_knife_v2.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
@@ -37,28 +46,7 @@
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v1" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_TRADING_KNIFE_V2",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/trading/trading_knife_v2.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "Trading Knife v2" }
                         }
@@ -68,13 +56,26 @@
         }
     },
     {
-        "ID": "CREATE_TRADING_KNIFE_V3",        
+        "ID": "CREATE_ACCOUNT1_TRADING_ITEMS",
         "runAfter": {
             "precondition": ["CREATE_TRADE_COOKBOOK"],
             "blockWait": 0
         },
-        "action": "fiat_item",
-        "paramsRef": "./items/trading/trading_knife_v3.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/trading/trading_knife_v3.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/trading/trading_knife_v4.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/trading/trading_knife_v5.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
@@ -85,52 +86,10 @@
                     "items": [
                         {
                             "stringValues": { "Name": "Trading Knife v3" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_TRADING_KNIFE_V4",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/trading/trading_knife_v4.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account1",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "Trading Knife v4" }
-                        }
-                    ]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "CREATE_TRADING_KNIFE_V5",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "fiat_item",
-        "paramsRef": "./items/trading/trading_knife_v5.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account1",
-                    "items": [
+                        },
                         {
                             "stringValues": { "Name": "Trading Knife v5" }
                         }
@@ -139,6 +98,7 @@
             ]
         }
     },
+
     {
         "ID": "CREATE_COIN_COIN_TRADE",        
         "runAfter": {
@@ -208,13 +168,34 @@
         }
     },
     {
-        "ID": "CREATE_COIN_ITEM_TRADE",        
+        "ID": "CREATE_TRADES",
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V1"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ACCOUNT1_TRADING_ITEMS", "CREATE_ACCOUNT2_TRADING_ITEMS"],
             "blockWait": 0
         },
-        "action": "create_trade",
-        "paramsRef": "./trades/trade_coin_item.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "create_trade",
+                "paramsRef": "./trades/trade_coin_item.json"
+            },
+            {
+                "action": "create_trade",
+                "paramsRef": "./trades/trade_item_coin.json"
+            },
+            {
+                "action": "create_trade",
+                "paramsRef": "./trades/trade_item_item.json"
+            },
+            {
+                "action": "create_trade",
+                "paramsRef": "./trades/trade_item_coin3.json"
+            },
+            {
+                "action": "create_trade",
+                "paramsRef": "./trades/trade_unordered_coin_input_list.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
@@ -222,7 +203,13 @@
             "property": [
                 {
                     "owner": "account2",
-                    "trades": ["coin to item trading"]
+                    "trades": [
+                        "coin to item trading",
+                        "item to coin trading",
+                        "item to item trading",
+                        "item to coin trading3",
+                        "unordered coin input list trading"
+                    ]
                 }
             ]
         }
@@ -230,7 +217,7 @@
     {
         "ID": "FULFILL_COIN_ITEM_TRADE",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_COIN_ITEM_TRADE"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADES"],
             "blockWait": 0
         },
         "action": "fulfill_trade",
@@ -261,63 +248,9 @@
         }
     },
     {
-        "ID": "CREATE_ITEM_COIN_TRADE2",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V5"],
-            "blockWait": 0
-        },
-        "action": "create_trade",
-        "paramsRef": "./trades/trade_item_coin2.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "trades": ["item to coin trading2"]
-                }
-            ]
-        }
-    },
-    {
-        "ID": "FULFILL_ITEM_COIN_TRADE2",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE2"],
-            "blockWait": 0
-        },
-        "action": "fulfill_trade",
-        "paramsRef": "./fulfill_trades/trade_item_coin2.json",
-        "output": {
-            "txResult": {
-                "errLog": "the sender doesn't have the trade item attributes"
-            }
-        }
-    },
-    {
-        "ID": "CREATE_ITEM_COIN_TRADE",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V3"],
-            "blockWait": 0
-        },
-        "action": "create_trade",
-        "paramsRef": "./trades/trade_item_coin.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "trades": ["item to coin trading"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "FULFILL_ITEM_COIN_TRADE",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADES"],
             "blockWait": 0
         },
         "action": "fulfill_trade",
@@ -348,29 +281,9 @@
         }
     },
     {
-        "ID": "CREATE_ITEM_ITEM_TRADE",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V2", "CREATE_TRADING_KNIFE_V4"],
-            "blockWait": 0
-        },
-        "action": "create_trade",
-        "paramsRef": "./trades/trade_item_item.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "trades": ["item to item trading"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "FULFILL_ITEM_ITEM_TRADE",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_ITEM_TRADE"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADES"],
             "blockWait": 0
         },
         "action": "fulfill_trade",
@@ -432,29 +345,9 @@
         }
     },
     {
-        "ID": "CREATE_ITEM_COIN_TRADE3",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADING_KNIFE_V3"],
-            "blockWait": 0
-        },
-        "action": "create_trade",
-        "paramsRef": "./trades/trade_item_coin3.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "trades": ["item to coin trading"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "FULFILL_ITEM_COIN_TRADE3",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE3"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADES"],
             "blockWait": 0
         },
         "action": "fulfill_trade",
@@ -466,29 +359,9 @@
         }
     },
     {
-        "ID": "CREATE_UNORDERED_COIN_INPUT_LIST_TRADE",        
-        "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK"],
-            "blockWait": 0
-        },
-        "action": "create_trade",
-        "paramsRef": "./trades/trade_unordered_coin_input_list.json",
-        "output": {
-            "txResult": {
-                "status": "Success"
-            },
-            "property": [
-                {
-                    "owner": "account2",
-                    "trades": ["unordered coin input list trading"]
-                }
-            ]
-        }
-    },
-    {
         "ID": "FULFILL_UNORDERED_COIN_INPUT_LIST_TRADE",        
         "runAfter": {
-            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_UNORDERED_COIN_INPUT_LIST_TRADE"],
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_TRADES"],
             "blockWait": 0
         },
         "action": "fulfill_trade",
@@ -496,6 +369,40 @@
         "output": {
             "txResult": {
                 "status": "Success"
+            }
+        }
+    },
+    {
+        "ID": "CREATE_ITEM_COIN_TRADE2",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_trade",
+        "paramsRef": "./trades/trade_item_coin2.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "account2",
+                    "trades": ["item to coin trading2"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "FULFILL_ITEM_COIN_TRADE2",        
+        "runAfter": {
+            "precondition": ["CREATE_TRADE_COOKBOOK", "CREATE_ITEM_COIN_TRADE2", "CREATE_ACCOUNT1_TRADING_ITEMS"],
+            "blockWait": 0
+        },
+        "action": "fulfill_trade",
+        "paramsRef": "./fulfill_trades/trade_item_coin2.json",
+        "output": {
+            "txResult": {
+                "errLog": "[0]th item does not match: Name key value does not match"
             }
         }
     }

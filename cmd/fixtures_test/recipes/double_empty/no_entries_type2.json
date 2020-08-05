@@ -1,0 +1,12 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "DE-no-entries-type2",
+    "Entries":{
+    },
+    "ExtraInfo":"",
+    "Sender":"de_account1",
+    "Name": "DE's no entries type2 test recipe",
+    "CookbookID": "DE-v0.0.0-1579053457",
+    "Description": "this recipe is used to test no entries type2.",
+    "BlockInterval":"0"
+}

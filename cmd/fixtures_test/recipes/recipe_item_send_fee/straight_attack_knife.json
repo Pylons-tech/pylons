@@ -1,0 +1,26 @@
+{
+  "NodeVersion": "0.0.1",
+  "CoinInputs":[],
+  "ItemInputs": [],
+  "Entries":{
+      "CoinOutputs":[],
+      "ItemOutputs":[
+          {
+              "ID": "straight_attack_knife",
+              "Ref": "./recipes/recipe_item_send_fee/item_output/straight_attack_knife.json"
+          }
+      ]
+  },
+  "Outputs": [
+      {
+          "EntryIDs": ["straight_attack_knife"],
+          "Weight": "1"
+      }
+  ],
+  "ExtraInfo":"",
+  "Sender":"itemfee_account1",
+  "Name": "Knife Generation Recipe",
+  "CookbookID": "recipe-item-send-fee-1589853709",
+  "Description": "this has to meet character limits lol",
+  "BlockInterval":"0"
+}

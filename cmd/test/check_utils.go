@@ -3,8 +3,11 @@ package inttest
 import (
 	"strings"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 // TxResultStatusMessageCheck check result status and message
@@ -73,4 +76,27 @@ func TxBroadcastErrorExpected(txhash string, err error, desiredError string, t *
 func WaitOneBlockWithErrorCheck(t *testing.T) {
 	err := inttestSDK.WaitForNextBlock()
 	t.MustNil(err, "error waiting for next block")
+}
+
+// GetAccountAddressAndInfo returns SDK address and account info from key
+func GetAccountAddressAndInfo(key string, t *testing.T) (sdk.AccAddress, types.BaseAccount) {
+	address := inttestSDK.GetAccountAddr(key, t)
+	sdkAddress, err := sdk.AccAddressFromBech32(address)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	return sdkAddress, inttestSDK.GetAccountInfoFromAddr(sdkAddress.String(), t)
+}
+
+// GetPylonsLLCAddressAndInfo returns Pylons LLC SDK address and account info from key
+func GetPylonsLLCAddressAndInfo(t *testing.T) (sdk.Address, types.BaseAccount) {
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	return pylonsLLCAddress, inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+}
+
+// GetSDKAddressFromKey returns SDK address from key
+func GetSDKAddressFromKey(key string, t *testing.T) sdk.AccAddress {
+	address := inttestSDK.GetAccountAddr(key, t)
+	sdkAddr, err := sdk.AccAddressFromBech32(address)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	return sdkAddr
 }

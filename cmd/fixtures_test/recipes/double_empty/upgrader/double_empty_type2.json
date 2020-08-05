@@ -1,0 +1,6 @@
+{
+    "Longs": [{
+        "Key": "level", 
+        "Program": "level + 1"
+    }]
+}

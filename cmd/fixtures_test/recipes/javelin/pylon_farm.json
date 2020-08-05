@@ -1,9 +1,11 @@
 {
+  "NodeVersion": "0.0.1",
   "CoinInputs": [],
-  "ItemInputRefs": [],
+  "ItemInputs": [],
   "Entries":{
       "CoinOutputs":[
           {
+              "ID": "pylon_reward",
               "Coin":"pylon",
               "Count":"100"
           }
@@ -11,12 +13,12 @@
   },
   "Outputs": [
       {
-          "ResultEntries": ["0"],
+          "EntryIDs": ["pylon_reward"],
           "Weight": "1"
       }
   ],
   "ExtraInfo": "",
-  "Sender": "account2",
+  "Sender": "javelin_account1",
   "Name": "Pylon Farming Recipe",
   "CookbookID": "javelincb-1589853709",
   "Description": "this recipe is used to generate pylon from recipe.",

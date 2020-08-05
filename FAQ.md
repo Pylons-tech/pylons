@@ -38,11 +38,11 @@ e.g.
 ```
     "Outputs": [
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "-11"
         },
         {
-            "ResultEntries": [],
+            "EntryIDs": [],
             "Weight": "Mana - rand() * 20.0"
         }
     ]
@@ -132,7 +132,7 @@ Try to debug the transaction by doing `pylonscli query tx 632A1A35933E4DDD89A71B
 
 - How to handle this issue?
 ```log
-invalid request: the sender doesn't have the trade item attributes {ItemInput:{Doubles:DoubleInputParamList{} Longs:LongInputParamList{} Strings:StringInputParamList{Name: \n\tStringInputParam{ \n\t\tValue: TESTITEM_FulfillTrade__001_TC4_INPUT,\n\t},\n}} CookbookID:LOUD-CB-001}: failed to execute message; message index: 0
+invalid request: [0]th item does not match: cookbook id does not match {ItemInput:{Doubles:DoubleInputParamList{} Longs:LongInputParamList{} Strings:StringInputParamList{Name: \n\tStringInputParam{ \n\t\tValue: TESTITEM_FulfillTrade__001_TC4_INPUT,\n\t},\n}} CookbookID:LOUD-CB-001}: failed to execute message; message index: 0
 ```
 It means sender does not have an item with name `"TESTITEM_FulfillTrade__001_TC4_INPUT"` with cookbook ID `"LOUD-CB-001"`.
 First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `"TESTITEM_FulfillTrade__001_TC4_INPUT"` on that cookbook.
@@ -145,6 +145,12 @@ First check if cookbook with ID `"LOUD-CB-001"` and after that, check the item `
 ```
 It means the sender does not have enough pylons to create recipes.
 
+## Sometimes list_recipes, list_cookbook are shown as empty with remote server and sometimes not
+
+We have experienced this issue when remote server has 2 separate nodes which run separately without connection.
+It sometimes connect to one node and sometimes connect to another node which cause unexpected result in cli run.
+The solution is on server side, connect two of them or only run 1 node.
+
 ## What is OwnerRecipeID of an item? 
 
 - When the item is scheduled to be handled in the future block by a recipe, the item's OwnerRecipeID is set as the recipe's ID. This means that this item is locked until the appropriate future block is created.
@@ -156,3 +162,33 @@ It means the sender does not have enough pylons to create recipes.
 As they are defined as a map, there's no sequence so the test cases would be run in random order. 
 So if you have some interactive test cases in sequence, those cases won't run exactly in some cases. (in the case the order is opposite) So you should avoid interactive test cases or at least use separate items or dynamic items.
 - When you create a test item, you should name it as a meaningful name rather than ? or randomly generated name.
+
+## How to debug create recipe internal errors on mobile side
+
+search for keyword "TestCustomCreateRecipeValidateBasic" on pylons repo.  
+After that you update the json content there to something you use on mobile side.  
+Then you can run `make unit_tests ARGS="-run TestCustomCreateRecipeValidateBasic"`
+
+```
+make unit_tests ARGS="-run TestCustomCreateRecipeValidateBasic"
+
+go test -v ./x/... -run TestCustomCreateRecipeValidateBasic
+testing: warning: no tests to run
+PASS
+ok  	github.com/Pylons-tech/pylons/x/pylons	(cached) [no tests to run]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/cli/query	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/cli/tx	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/rest	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/client/rest/txbuilder	[no test files]
+?   	github.com/Pylons-tech/pylons/x/pylons/config	[no test files]
+=== RUN   TestCustomCreateRecipeValidateBasic
+--- FAIL: TestCustomCreateRecipeValidateBasic (0.00s)
+    create_recipe_test.go:77: 
+        	Error Trace:	create_recipe_test.go:77
+        	Error:      	Should be true
+        	Test:       	TestCustomCreateRecipeValidateBasic
+        	Messages:   	entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=0
+```
+
+It will report errors something like above.
+Here messages section is something you need to care about. You can catch the error `entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=0`.

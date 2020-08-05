@@ -14,7 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestRecipeItemSendFee(t *testing.T) {
+func TestRecipeItemTransferFee(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
@@ -28,12 +28,12 @@ func TestRecipeItemSendFee(t *testing.T) {
 		types.GenItemInputList("catalyst"),
 
 		types.EntriesList{
-			types.NewInputRefOutput(
-				0, types.ItemModifyParams{TransferFee: 300},
+			types.NewItemModifyOutput(
+				"FeeModifyEntry", "catalyst", types.ItemModifyParams{TransferFee: 300},
 			),
 			types.GenItemOnlyEntry("Catalyst2")[0],
 		},
-		types.GenAllOutput(2),
+		types.GenAllOutput("FeeModifyEntry", "Catalyst2"),
 		cbData.CookbookID,
 		0,
 		sender1,
@@ -45,11 +45,11 @@ func TestRecipeItemSendFee(t *testing.T) {
 		types.GenItemInputList("sword", "knife"),
 
 		types.EntriesList{
-			types.NewInputRefOutput(
-				0, types.ItemModifyParams{TransferFee: 300},
+			types.NewItemModifyOutput(
+				"FeeModifyEntry", "sword", types.ItemModifyParams{TransferFee: 300},
 			),
 		},
-		types.GenAllOutput(1),
+		types.GenAllOutput("FeeModifyEntry"),
 		cbData.CookbookID,
 		0,
 		sender1,

@@ -1,7 +1,9 @@
 package inttest
 
 import (
+	"fmt"
 	originT "testing"
+	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
@@ -10,7 +12,6 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateRecipeViaCLI(originT *originT.T) {
@@ -39,13 +40,14 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 		},
 	}
 
-	mCB := GetMockedCookbook("eugen", false, &t)
+	cbOwnerKey := fmt.Sprintf("TestCreateRecipeViaCLI%d", time.Now().Unix())
+	MockAccount(cbOwnerKey, &t) // mock account with initial balance
+
+	cbOwnerSdkAddr := GetSDKAddressFromKey(cbOwnerKey, &t)
+	mCB := GetMockedCookbook(cbOwnerKey, false, &t)
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			eugenAddr := inttestSDK.GetAccountAddr("eugen", t)
-			sdkAddr, err := sdk.AccAddressFromBech32(eugenAddr)
-			t.MustNil(err, "error converting string address to AccAddress struct")
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				msgs.NewMsgCreateRecipe(
 					tc.rcpName,
@@ -55,10 +57,10 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 					types.GenCoinInputList("wood", 5),
 					types.GenItemInputList("Raichu"),
 					types.GenEntries(tc.outputDenom, "Raichu"),
-					types.GenOneOutput(2),
+					types.GenOneOutput(tc.outputDenom, "Raichu"),
 					0,
-					sdkAddr),
-				"eugen",
+					cbOwnerSdkAddr),
+				cbOwnerKey,
 				false,
 			)
 			if err != nil {

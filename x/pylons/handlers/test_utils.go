@@ -98,55 +98,55 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
-			types.GenOneOutput(1),
+			types.GenOneOutput("chair"),
 			0
 	case Rcp5BlockDelayed5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenCoinOnlyEntry("chair"),
-			types.GenOneOutput(1),
+			types.GenOneOutput("chair"),
 			5
 	case Rcp5xWoodcoinTo1xRaichuItemBuy:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Raichu"),
-			types.GenOneOutput(1),
+			types.GenOneOutput("Raichu"),
 			0
 	case RcpRaichuNameUpgrade:
 		return types.CoinInputList{},
 			types.GenItemInputList("Raichu"),
-			types.GenEntriesFirstItemNameUpgrade("RaichuV2"),
-			types.GenOneOutput(1),
+			types.GenEntriesItemNameUpgrade("Raichu", "RaichuV2"),
+			types.GenOneOutput("RaichuV2"),
 			0
 	case RcpRaichuNameUpgradeWithCatalyst:
 		return types.CoinInputList{},
 			types.GenItemInputList("RaichuTC", "catalyst"),
-			types.GenEntriesFirstItemNameUpgrade("RaichuTCV2"),
-			types.GenOneOutput(1),
+			types.GenEntriesItemNameUpgrade("RaichuTC", "RaichuTCV2"),
+			types.GenOneOutput("RaichuTCV2"),
 			0
 	case Rcp2BlockDelayedKnifeUpgrade:
 		return types.CoinInputList{},
 			types.GenItemInputList("Knife"),
-			types.GenEntriesFirstItemNameUpgrade("KnifeV2"),
-			types.GenOneOutput(1),
+			types.GenEntriesItemNameUpgrade("Knife", "KnifeV2"),
+			types.GenOneOutput("KnifeV2"),
 			2
 	case Rcp2BlockDelayedKnifeMerge:
 		return types.CoinInputList{},
-			types.GenItemInputList("Knife", "Knife"),
+			types.GenItemInputList("Knife1", "Knife2"),
 			types.GenItemOnlyEntry("KnifeMRG"),
-			types.GenOneOutput(1),
+			types.GenOneOutput("KnifeMRG"),
 			2
 	case Rcp2BlockDelayedKnifeBuyer:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenItemOnlyEntry("Knife"),
-			types.GenOneOutput(1),
+			types.GenOneOutput("Knife"),
 			2
 	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
 			types.GenEntries("chair", "Raichu"),
-			types.GenOneOutput(1),
+			types.GenOneOutput("chair", "Raichu"),
 			0
 	}
 }
@@ -176,11 +176,14 @@ func MockExecution(
 	sender sdk.AccAddress,
 	itemIDs []string,
 ) (ExecuteRecipeResponse, error) {
-	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
-	result, _ := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
-
 	execRcpResponse := ExecuteRecipeResponse{}
-	err := json.Unmarshal(result.Data, &execRcpResponse)
+	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
+	result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+
+	if err != nil {
+		return execRcpResponse, err
+	}
+	err = json.Unmarshal(result.Data, &execRcpResponse)
 	return execRcpResponse, err
 }
 
@@ -193,10 +196,13 @@ func MockTrade(
 	itemOutputs types.ItemList,
 	sender sdk.AccAddress,
 ) (CreateTradeResponse, error) {
-	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
-	result, _ := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
 	createTrdResponse := CreateTradeResponse{}
-	err := json.Unmarshal(result.Data, &createTrdResponse)
+	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
+	result, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
+	if err != nil {
+		return createTrdResponse, err
+	}
+	err = json.Unmarshal(result.Data, &createTrdResponse)
 	return createTrdResponse, err
 }
 

@@ -1,4 +1,5 @@
 {
+    "NodeVersion": "0.0.1",
     "Doubles": [{ "Key": "attack", "Value": "3" }],
     "Longs": [{ "Key": "level", "Value": "3" }],
     "Strings": [{ "Key": "Name","Value": "Trading Knife v3"}],

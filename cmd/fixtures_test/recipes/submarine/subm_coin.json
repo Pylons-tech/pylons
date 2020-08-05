@@ -1,9 +1,11 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [],
+    "ItemInputs": [],
     "Entries":{
         "CoinOutputs":[
             {
+                "ID": "submcoin_reward",
                 "Coin":"submcoin",
                 "Count":"100"
             }
@@ -12,12 +14,12 @@
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["submcoin_reward"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"submarine_account1",
     "Name": "Submarine Coin Generation Recipe",
     "CookbookID": "submarine-1589853709",
     "Description": "this has to meet character limits lol",

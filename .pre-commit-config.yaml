@@ -22,3 +22,8 @@
       entry: make
       language: system
       args: [unit_tests]
+    - id: fixture-unit-tests
+      name: fixture unit tests
+      entry: make
+      language: system
+      args: [fixture_unit_tests]

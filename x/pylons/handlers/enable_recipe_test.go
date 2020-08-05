@@ -64,7 +64,6 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 				require.True(t, err == nil)
 				require.True(t, uRcp.Disabled == false)
 			} else {
-				// t.Errorf("EnableRecipeTEST LOG:: %+v", result)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})

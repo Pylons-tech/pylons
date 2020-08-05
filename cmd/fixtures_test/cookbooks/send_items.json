@@ -1,0 +1,12 @@
+{
+  "NodeVersion": "0.0.1",
+  "ID": "send_items_test-1589853709",
+  "Name": "Send items test cookbook",
+  "Description": "this has to meet character limits lol",
+  "Developer": "SketchyCo",
+  "Level": "0",
+  "Sender": "senditem_account1",
+  "SupportEmail": "example@example.com",
+  "Version": "1.0.0",
+  "CostPerBlock": "50"
+}

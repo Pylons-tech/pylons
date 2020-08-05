@@ -1,25 +1,33 @@
 {
+    "NodeVersion": "0.0.1",
     "CoinInputs":[],
-    "ItemInputRefs": [
-        "./recipes/submarine/item_input/knife_lv1.json",
-        "./recipes/submarine/item_input/shield_lv1.json"
+    "ItemInputs": [
+        {
+            "ID": "knife_lv1",
+            "Ref": "./recipes/submarine/item_input/knife_lv1.json"
+        },
+        {
+            "ID": "shield_lv1",
+            "Ref": "./recipes/submarine/item_input/shield_lv1.json"
+        }
     ],
     "Entries":{
         "CoinOutputs":[],
         "ItemOutputs":[
             {
+                "ID": "knife_shield_lv1",
                 "Ref": "./recipes/submarine/item_output/knife_shield_lv1.json"
             }
         ]
     },
     "Outputs": [
         {
-            "ResultEntries": ["0"],
+            "EntryIDs": ["knife_shield_lv1"],
             "Weight": "1"
         }
     ],
     "ExtraInfo":"",
-    "Sender":"account2",
+    "Sender":"submarine_account1",
     "Name": "Knife Shield Generation Recipe",
     "CookbookID": "submarine-1589853709",
     "Description": "this recipe is merging level 1 knife and level 1 shield into level 1 knife-shield.",

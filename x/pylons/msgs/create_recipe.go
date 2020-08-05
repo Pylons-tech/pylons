@@ -2,6 +2,7 @@ package msgs
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -54,8 +55,30 @@ func (msg MsgCreateRecipe) Type() string { return "create_recipe" }
 // ValidateBasic validates the Msg
 func (msg MsgCreateRecipe) ValidateBasic() error {
 
-	// validation for the item input index overflow on entries
+	itemInputRefsMap := map[string]bool{}
+	entryIDsMap := map[string]bool{}
+	for _, ii := range msg.ItemInputs {
+		if ii.ID == "" {
+			continue
+		}
+		if err := ii.IDValidationError(); err != nil {
+			return err
+		}
+		if itemInputRefsMap[ii.ID] {
+			return fmt.Errorf("item input with same ID available: ID=%s", ii.ID)
+		}
+		itemInputRefsMap[ii.ID] = true
+	}
+	// validation for the invalid item input reference on entries
 	for _, entry := range msg.Entries {
+
+		if err := types.EntryIDValidationError(entry.GetID()); err != nil {
+			return err
+		}
+		if entryIDsMap[entry.GetID()] {
+			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+		}
+		entryIDsMap[entry.GetID()] = true
 		switch entry := entry.(type) {
 		case types.CoinOutput:
 			coinOutput := entry
@@ -65,17 +88,15 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			if coinOutput.Coin == types.Pylon {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
 			}
-		case types.ItemOutput:
-			itemOutput := entry
-			if itemOutput.ModifyItem.ItemInputRef != -1 {
-				if itemOutput.ModifyItem.ItemInputRef >= len(msg.ItemInputs) {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef overflow length of ItemInputs")
-				}
-				if itemOutput.ModifyItem.ItemInputRef < -1 {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "ItemInputRef is less than 0 which is invalid")
-				}
+			if err := sdk.ValidateDenom(coinOutput.Coin); err != nil {
+				return err
 			}
-
+		case types.ItemModifyOutput:
+			if !itemInputRefsMap[entry.ItemInputRef] {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Invalid item input ref found that does not exist in item inputs")
+			}
+		case types.ItemOutput:
+			// do nothing for now
 		default:
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid entry type available")
 		}
@@ -83,26 +104,23 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	for _, output := range msg.Outputs {
 		// validation for same ItemInputRef on output
-		usedItemInputRefs := make(map[int]bool)
-		usedEntries := make(map[int]bool)
-		for _, result := range output.ResultEntries {
-			if result >= len(msg.Entries) || result < 0 {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "output is refering to index which is out of entries range")
+		usedItemInputRefs := make(map[string]bool)
+		usedEntries := make(map[string]bool)
+		for _, entryID := range output.EntryIDs {
+			entry, err := msg.Entries.FindByID(entryID)
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			if usedEntries[result] {
+			if usedEntries[entryID] {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of entries within single output result")
 			}
-			usedEntries[result] = true
-			entry := msg.Entries[result]
+			usedEntries[entryID] = true
 			switch entry := entry.(type) {
-			case types.ItemOutput:
-				itemOutput := entry
-				if itemOutput.ModifyItem.ItemInputRef != -1 {
-					if usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] {
-						return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")
-					}
-					usedItemInputRefs[itemOutput.ModifyItem.ItemInputRef] = true
+			case types.ItemModifyOutput:
+				if usedItemInputRefs[entry.ItemInputRef] {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")
 				}
+				usedItemInputRefs[entry.ItemInputRef] = true
 			}
 		}
 		// validation for weight program
@@ -113,7 +131,6 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	if len(msg.Description) < 20 {

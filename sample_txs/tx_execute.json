@@ -5,8 +5,8 @@
       {
         "type": "pylons/ExecuteRecipe",
         "value": {
-          "RecipeID": "LOUD-hunt-rabbits-with-no-weapon-recipe-v0.1.0-1579053457",
-          "Sender": "cosmos13p8890funv54hflk82ju0zv47tspglpk373453",
+          "RecipeID": "RTEST_1596078885",
+          "Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm",
           "Items": []
         }
       }

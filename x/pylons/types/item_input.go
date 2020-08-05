@@ -3,53 +3,71 @@ package types
 import (
 	"errors"
 	"fmt"
+	"regexp"
 )
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
+	ID          string
 	Doubles     DoubleInputParamList
 	Longs       LongInputParamList
 	Strings     StringInputParamList
 	TransferFee FeeInputParam
 }
 
-// Matches checks if all the constraint match the given item
-func (ii ItemInput) Matches(item Item) bool {
+// MatchError checks if all the constraint match the given item
+func (ii ItemInput) MatchError(item Item) error {
 
 	for _, param := range ii.Doubles {
 		double, ok := item.FindDouble(param.Key)
 		if !ok {
-			return false
+			return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
 		}
 
 		if !param.Has(double) {
-			return false
+			return fmt.Errorf("%s key range does not match: item_id=%s", param.Key, item.ID)
 		}
-
 	}
 
 	for _, param := range ii.Longs {
 		long, ok := item.FindLong(param.Key)
 		if !ok {
-			return false
+			return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
 		}
 
 		if !param.Has(long) {
-			return false
+			return fmt.Errorf("%s key range does not match: item_id=%s", param.Key, item.ID)
 		}
 	}
 
 	for _, param := range ii.Strings {
 		str, ok := item.FindString(param.Key)
 		if !ok {
-			return false
+			return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
 		}
 		if str != param.Value {
-			return false
+			return fmt.Errorf("%s key value does not match: item_id=%s", param.Key, item.ID)
 		}
 	}
 
-	return ii.TransferFee.Has(item.TransferFee)
+	if !ii.TransferFee.Has(item.TransferFee) {
+		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
+	}
+	return nil
+}
+
+// IDValidationError check if ID can be used as a variable name if available
+func (ii ItemInput) IDValidationError() error {
+	if len(ii.ID) == 0 {
+		return nil
+	}
+
+	regex := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z_0-9]*$`)
+	if regex.MatchString(ii.ID) {
+		return nil
+	}
+
+	return fmt.Errorf("ID is not empty nor fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ii.ID)
 }
 
 // ItemInputList is a list of ItemInputs for convinience
@@ -77,12 +95,12 @@ type TradeItemInput struct {
 	CookbookID string
 }
 
-// Matches checks if all the constraint match the given item
-func (tii TradeItemInput) Matches(item Item) bool {
+// MatchError checks if all the constraint match the given item
+func (tii TradeItemInput) MatchError(item Item) error {
 	if item.CookbookID != tii.CookbookID {
-		return false
+		return fmt.Errorf("cookbook id does not match")
 	}
-	return tii.ItemInput.Matches(item)
+	return tii.ItemInput.MatchError(item)
 }
 
 // TradeItemInputList is a list of ItemInputs for convinience

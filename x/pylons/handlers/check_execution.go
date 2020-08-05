@@ -25,7 +25,7 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 	}
 
 	// send coins to cookbook owner
-	err = keeper.CoinKeeper.SendCoins(ctx, msgSender, cookbook.Sender, coinInputs)
+	err = keep.SendCoins(keeper, ctx, msgSender, cookbook.Sender, coinInputs)
 	if err != nil {
 		return err
 	}
@@ -38,8 +38,11 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 		if err != nil {
 			return err
 		}
-		pylonsLLCAmount := Max(1, pylonAmount*rcpPercent/100)
-		return keeper.CoinKeeper.SendCoins(ctx, cookbook.Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
+		// when pylon amount is 5 and rcpPercent is 10, cbOwnerAmount = 5 * 90 / 100 = 4
+		cbOwnerAmount := pylonAmount * (100 - rcpPercent) / 100
+		// when pylon amount is 5 and rcpPercent is 10, pylonsLLCAmount = 5 - 4 = 1
+		pylonsLLCAmount := pylonAmount - cbOwnerAmount
+		return keep.SendCoins(keeper, ctx, cookbook.Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
 	}
 	return nil
 }
@@ -49,6 +52,11 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 	var outputSTR []byte
 
 	recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
+	if err != nil {
+		return nil, err
+	}
+
+	err = keeper.UnlockCoin(ctx, types.NewLockedCoin(msg.Sender, exec.CoinInputs))
 	if err != nil {
 		return nil, err
 	}
@@ -124,7 +132,7 @@ func HandlerMsgCheckExecution(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		}
 		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
 
-		if keeper.CoinKeeper.HasCoins(ctx, msg.Sender, pylonsToCharge) {
+		if keep.HasCoins(keeper, ctx, msg.Sender, pylonsToCharge) {
 			_, err := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, pylonsToCharge)
 			if err != nil {
 				return nil, errInternal(err)

@@ -26,10 +26,10 @@ func SendPylonsTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName 
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
-	
+
 		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
 
-		msg := msgs.NewMsgSendPylons(types.NewPylon(5), sender, recv)
+		msg := msgs.NewMsgSendCoins(types.NewPylon(5), sender, recv)
 
 		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
 
