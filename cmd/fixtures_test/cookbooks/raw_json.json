@@ -1,0 +1,12 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "raw-json-cb-1589853709",
+    "Name": "Raw json test cookbook",
+    "Description": "this has to meet character limits lol",
+    "Developer": "SketchyCo",
+    "Level": "0",
+    "Sender": "rj_account1",
+    "SupportEmail": "example@example.com",
+    "Version": "1.0.0",
+    "CostPerBlock": "50"
+}

@@ -1,0 +1,70 @@
+[
+    {
+      "ID": "CREATE_RAW_JSON_TEST_COOKBOOK",
+      "runAfter": {
+        "precondition": [],
+        "blockWait": 0
+      },
+      "action": "mock_cookbook",
+      "paramsRef": "./cookbooks/raw_json.json",
+      "output": {
+        "txResult": {
+          "status": "Success"
+        },
+        "property": [
+          {
+            "owner": "rj_account1",
+            "cookbooks": [
+              "Raw json test cookbook"
+            ],
+            "coins": [
+              {
+                "denom": "pylon",
+                "amount": 45000
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+        "ID": "CREATE_RAW_JSON_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_RAW_JSON_TEST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/raw_json/raw.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "rj_account1",
+                    "recipes": ["Raw json test recipe"]
+                }
+            ]
+        }
+    },
+    {
+        "ID": "CREATE_RAW_ITEM_INPUT_NIL_JSON_RECIPE",        
+        "runAfter": {
+            "precondition": ["CREATE_RAW_JSON_TEST_COOKBOOK"],
+            "blockWait": 0
+        },
+        "action": "create_recipe",
+        "paramsRef": "./recipes/raw_json/raw_item_input_nil.json",
+        "output": {
+            "txResult": {
+                "status": "Success"
+            },
+            "property": [
+                {
+                    "owner": "rj_account1",
+                    "recipes": ["Raw item input nil json test recipe"]
+                }
+            ]
+        }
+    }
+]

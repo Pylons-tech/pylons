@@ -516,6 +516,10 @@ func RunCreateRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		rcpMsg := CreateRecipeMsgFromRef(step.ParamsRef, t)
+		t.WithFields(testing.Fields{
+			"parsed_recipe": string(testutils.GetAminoCdc().MustMarshalJSON(rcpMsg)),
+		}).Info("recipe info")
+
 		err := rcpMsg.ValidateBasic()
 		if err != nil {
 			TxBroadcastErrorCheck(err, step, t)
