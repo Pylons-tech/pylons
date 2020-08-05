@@ -22,7 +22,6 @@ func CheckGoogleIAPOrder(ctx sdk.Context, path []string, req abci.RequestQuery, 
 	purchaseToken := path[0]
 	exist := keeper.HasGoogleIAPOrder(ctx, purchaseToken)
 
-	// if we cannot find the value then it should return an error
 	bz, err := json.Marshal(map[string]interface{}{
 		"purchaseToken": purchaseToken,
 		"exist":         exist,
