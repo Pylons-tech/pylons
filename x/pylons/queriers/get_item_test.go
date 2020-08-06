@@ -64,7 +64,6 @@ func TestGetItem(t *testing.T) {
 				},
 				tci.PlnK,
 			)
-			// t.Errorf("GetItemTEST LOG:: %+v", err)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {

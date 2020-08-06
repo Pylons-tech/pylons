@@ -28,10 +28,8 @@ func (l Level) Validate() error {
 
 // tier fee types
 var (
-
 	// BasicFee is the fee charged to create a basic cookbook
 	BasicFee = NewPylon(10000)
-
 	// PremiumFee is the fee charged to create a premium cookbook
 	PremiumFee = NewPylon(50000)
 )

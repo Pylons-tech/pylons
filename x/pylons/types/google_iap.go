@@ -41,5 +41,5 @@ func (iap GoogleIAPOrder) GetAmount() sdk.Coins {
 			return types.NewPylon(giapProduct.Amount)
 		}
 	}
-	return types.NewPylon(50000)
+	return types.NewPylon(0)
 }

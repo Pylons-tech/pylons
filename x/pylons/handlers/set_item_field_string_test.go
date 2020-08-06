@@ -154,7 +154,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				if itemName != tc.value {
 					t.Error("item name does not match after successfully updating the field")
 				}
-				// should check pylon is reduced correctly
+				// TODO should check pylon is reduced correctly
 			} else {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

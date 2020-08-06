@@ -32,12 +32,11 @@ type StringKeyValue struct {
 
 // Item is a tradable asset
 type Item struct {
-	NodeVersion SemVer
-	ID          string
-	Doubles     []DoubleKeyValue
-	Longs       []LongKeyValue
-	Strings     []StringKeyValue
-	// as items are unique per cookbook
+	NodeVersion   SemVer
+	ID            string
+	Doubles       []DoubleKeyValue
+	Longs         []LongKeyValue
+	Strings       []StringKeyValue
 	CookbookID    string
 	Sender        sdk.AccAddress
 	OwnerRecipeID string

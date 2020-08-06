@@ -207,10 +207,6 @@ func PropertyExistCheck(step fixturetestSDK.FixtureStep, t *testing.T) {
 		if len(pCheck.Items) > 0 {
 			for _, itemCheck := range pCheck.Items {
 				fitItemExist := false
-				// t.WithFields(testing.Fields{
-				// 	// "id": idx,
-				// 	"item_spec": itemCheck,
-				// }).Info("checking item")
 				items, err := testutils.ListItems(pOwnerAddr)
 				t.MustNil(err, "error listing items")
 

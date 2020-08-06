@@ -51,7 +51,6 @@ func TestKeeperGetCookbook(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 
 			readCookbook, err := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
-			// t.Errorf("CookbookTEST LOG:: %+v", err)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {

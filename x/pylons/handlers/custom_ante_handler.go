@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"fmt"
-
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -55,7 +53,6 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 	messages := sigTx.GetMsgs()
 
 	if len(messages) == 1 && messages[0].Type() == "create_account" && sigTx.Signatures != nil && len(sigTx.Signatures) > 0 {
-		fmt.Println("Running NewAccountCreationDecorator...")
 		// we don't support multi-message transaction for create_account
 		pubkey := sigTx.Signatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
@@ -68,10 +65,8 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
 		}
 
-		fmt.Println(address.String() + " received")
 		// if the account doesnt exist we set it
 		if svd.ak.GetAccount(ctx, address) == nil {
-			fmt.Println("Creating new account")
 			acc := &auth.BaseAccount{
 				Sequence:      0,
 				Coins:         sdk.Coins{},
