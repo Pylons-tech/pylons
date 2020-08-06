@@ -1,14 +1,14 @@
 # Introduction
 
-Fixture test is a test to check all the cases are working.
-After writing initial test, game developers can easily create new scenarios according to their game specification.
+Fixture test is a test to check the actions step by step written in json.
+After building recipes, game developers can easily create new scenarios according to their game specification.
 
 ## Basic fields description
 
-Scenario is set of steps and each step is carried out by one transaction.  
+Scenario is set of steps and each step is carried out by one or more transactions.  
 Here's sample scenario's step in JSON
 
-```
+```json
     {
         "ID": "EXECUTE_HELI_STRAIGHT_ATTACK_KNIFE_RECIPE",        
         "runAfter": {
@@ -41,22 +41,42 @@ Here's sample scenario's step in JSON
     }
 ```
 
-First it can check if transaction run successfully and returned value is correct.
-And also it can check if transaction fails when params are incorrect.
+First it can check if transaction ran successfully and returned value is correct.
+And also it can check transaction failure when params are incorrect.
 It is described in `txResult`.
 
-It can also check if user's status is correct after doing a transaction.
-Checkable things are items, recipes, cookbooks and coins.
+It can also check if users' statuses are correct after doing a transaction.
+Checkable things are coins items, cookbooks, recipes and trades.
 
-It can make the system to run `create_cookbook`, `create_recipe`, `execute_recipe`, `check_execution`, `fiat_item`.
+Action types are determined by the message types and combined messages that are commonly used together.
+As long as more actions are added, this should be modified
 
-Detailed params can be found at `./scenarios/submarine.json`.
-And to make things easier and to make scenario file smaller, there are references to other files.
-For example when creating recipe, recipe spec is in `./recipes` folder.
-
-hint.  
-To ignore txResult Message, which is because it's ambitious to get which message to get, can just ignore TxResult.Message field like below.
+```go
+	"create_account" // create account on chain
+	"get_pylons" // get pylons faucet
+	"mock_account" // create_account + get_pylons
+	"send_coins" // send coins
+	"fiat_item" // generate item
+	"update_item_string" // update item's string field
+	"send_items" // send item
+	"create_cookbook" // create cookbook
+	"mock_cookbook" // mock_account + create_cookbook
+	"create_recipe" // create recipe
+	"execute_recipe" // execute recipe
+	"check_execution" // finish the scheduled execution
+	"create_trade" // create trade
+	"fulfill_trade" // fulfill trade
+	"disable_trade" // disable trade
+	"multi_msg_tx" // merge all the above actions into one transaction
 ```
+
+Details can be found at `./scenarios/submarine.json`.
+And to make things easier and to make scenario file shorter, there are references to other files.
+For example for recipe, recipe spec is in `./recipes` folder.
+
+Hint.  
+To ignore txResult Message, which is because it's ambitious to get which message to get, can just ignore TxResult.Message field like below.
+```json
     "txResult": {
         "status": "Success"
     },
@@ -71,7 +91,9 @@ You can check `scenarios`, `cookbooks`, `items`, `recipes`, `executions`, `check
 
 ## How fixture test executor work
 
-All the test scenarios are running in parallel. Some scenarios have dependencies and there are waiters.
+There are two ways to run fixture test. 
+One in parallel and the other in sequential.
+Some scenarios have dependencies and there are waiters.
 
 Each steps have it's own ID like "CREATE_KNIFE_ITEM"
 And to execute a recipe which requires this item, it should be done after waiting for this and it has `precondition` field `["CREATE_KNIFE_ITEM"]`.
@@ -90,34 +112,36 @@ make fixture_tests ARGS="--accounts=michael,eugen"
 ```
 
 - runserial
-Run fixture test in serial mode.
-```
+Run fixture test in serial mode. (sequential order)
+```sh
 make fixture_tests ARGS="-runserial --accounts=michael,eugen"
 ```
 
 - userest
 Send transactions by using rest endpoint.
-```
+```sh
 make fixture_tests ARGS="-userest --accounts=michael,eugen"
 ```
 
 - use-known-cookbook
 Ignore create_cookbook message but just do update rest of them
-```
+```sh
 make fixture_tests ARGS="-use-known-cookbook --accounts=michael,eugen"
 ```
 - verify-only
 Verification stuff for fixture test
-```
+```sh
 make fixture_tests ARGS="-verify-only --accounts=michael,eugen"
 ```
 - specific scenarios test
 If not specify this param, it tests all scenario files. If specify only do specific tests.
-```
+```sh
 make fixture_tests ARGS="--scenarios=multi_msg_tx,double_empty --accounts=michael,eugen"
 ```
 
 ## To make fixture test scenarios clean
 
-- Always try to make a new scenario when it is going to increase fixture test running time much.
+- Always try to make a new scenario when it is going to increase fixture test running time much for dependencies.
 - Always try to split scenarios to manage tests easily. 
+- Always use different account per scenario
+- Always make a test does not interact with another test when running in parallel

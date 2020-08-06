@@ -1,0 +1,49 @@
+{
+    "NodeVersion": "0.0.1",
+    "CoinInputs": [
+      {
+        "Coin": "pylon",
+        "Count": "1"
+      }
+    ],
+    "ItemInputs": [
+        {
+            "ID": "ii0",
+            "Doubles": [{"Key": "attack", "MinValue": "1.0", "MaxValue": "10000000.0"}],
+            "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "10000000"}],
+            "Strings": [{"Key": "Name", "Value": "Angel sword"}]
+        }
+    ],
+    "Entries": {
+      "CoinOutputs": null,
+      "ItemModifyOutputs": null,
+      "ItemOutputs": [
+        {
+          "ID": "a0",
+          "Doubles": [
+            {
+              "Key": "Mass", "Program": "", "Rate": "1", "WeightRanges": [{ "Lower": "50", "Upper": "100", "Weight": 1 }]
+            }
+          ],
+          "Longs": null,
+          "Strings": [
+            {
+                "Key": "Name", "Program": "", "Rate": "1", "Value": "Mars"
+            }
+          ],
+          "TransferFee": 0
+        }
+      ]
+    },
+    "Outputs": [
+      {
+        "EntryIDs": ["a0"],
+        "Weight": "1"
+      }
+    ],
+    "CookbookID": "raw-json-cb-1589853709",
+    "Description": "test recipe from test suite",
+    "Name": "Raw json test recipe",
+    "BlockInterval": "0",
+    "Sender": "rj_account1"
+  }

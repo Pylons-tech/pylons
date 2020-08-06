@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -27,6 +28,9 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgCreateAccount:
 			return handlers.HandlerMsgCreateAccount(ctx, keeper, msg)
 		case msgs.MsgGetPylons:
+			if config.Config.IsProduction {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "MsgGetPylons is only supported on development mode")
+			}
 			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
 		case msgs.MsgGoogleIAPGetPylons:
 			return handlers.HandlerMsgGoogleIAPGetPylons(ctx, keeper, msg)
@@ -51,6 +55,9 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 		case msgs.MsgCheckExecution:
 			return handlers.HandlerMsgCheckExecution(ctx, keeper, msg)
 		case msgs.MsgFiatItem:
+			if config.Config.IsProduction {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "MsgFiatItem is only supported on development mode")
+			}
 			return handlers.HandlerMsgFiatItem(ctx, keeper, msg)
 		case msgs.MsgUpdateItemString:
 			return handlers.HandlerMsgUpdateItemString(ctx, keeper, msg)

@@ -275,24 +275,38 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 			Ref string
 		}
 	}
+	var itemInputDirectReader struct {
+		ItemInputs []types.ItemInput
+	}
+
 	err := json.Unmarshal(bytes, &itemInputRefsReader)
 	t.WithFields(testing.Fields{
 		"bytes": string(bytes),
 	}).MustNil(err, "error unmarshaling into item input refs")
 
+	err = testutils.GetAminoCdc().UnmarshalJSON(bytes, &itemInputDirectReader)
+	t.WithFields(testing.Fields{
+		"bytes": string(bytes),
+	}).MustNil(err, "error unmarshaling into item input direct")
+	t.MustTrue(len(itemInputDirectReader.ItemInputs) == len(itemInputRefsReader.ItemInputs), "item input refs count and item input count does not match")
+
 	var itemInputs types.ItemInputList
 
-	for _, iia := range itemInputRefsReader.ItemInputs {
-		var ii types.ItemInput
-		iiBytes := ReadFile(iia.Ref, t)
-		err := testutils.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
-		if err != nil {
-			t.WithFields(testing.Fields{
-				"item_input_bytes": string(iiBytes),
-			}).MustNil(err, "error unmarshaling item inputs")
+	for iii, iia := range itemInputRefsReader.ItemInputs {
+		if len(iia.Ref) > 0 {
+			var ii types.ItemInput
+			iiBytes := ReadFile(iia.Ref, t)
+			err := testutils.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
+			if err != nil {
+				t.WithFields(testing.Fields{
+					"item_input_bytes": string(iiBytes),
+				}).MustNil(err, "error unmarshaling item inputs")
+			}
+			ii.ID = iia.ID
+			itemInputs = append(itemInputs, ii)
+		} else {
+			itemInputs = append(itemInputs, itemInputDirectReader.ItemInputs[iii])
 		}
-		ii.ID = iia.ID
-		itemInputs = append(itemInputs, ii)
 	}
 	return itemInputs
 }
@@ -366,34 +380,53 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		}
 	}
 
+	var entriesDirectReader struct {
+		Entries struct {
+			CoinOutputs       []types.CoinOutput
+			ItemModifyOutputs []types.ItemModifyOutput
+			ItemOutputs       []types.ItemOutput
+		}
+	}
+
 	err := json.Unmarshal(bytes, &entriesReader)
 	t.WithFields(testing.Fields{
 		"bytes": string(bytes),
 	}).MustNil(err, "error unmarshaling into entries reader")
+
+	err = json.Unmarshal(bytes, &entriesDirectReader)
+	t.WithFields(testing.Fields{
+		"bytes": string(bytes),
+	}).MustNil(err, "error unmarshaling into entries direct")
+	t.MustTrue(len(entriesReader.Entries.ItemModifyOutputs) == len(entriesDirectReader.Entries.ItemModifyOutputs), "entry parsing modify outputs array length different for direct reader and ref reader")
+	t.MustTrue(len(entriesReader.Entries.ItemOutputs) == len(entriesDirectReader.Entries.ItemOutputs), "entry parsing outputs array length different for direct reader and ref reader")
 
 	var wpl types.EntriesList
 	for _, co := range entriesReader.Entries.CoinOutputs {
 		wpl = append(wpl, co)
 	}
 
-	for _, io := range entriesReader.Entries.ItemModifyOutputs {
-		ModifyParams := GetModifyParamsFromRef(io.ModifyParamsRef, t)
-		pio := types.NewItemModifyOutput(io.ID, io.ItemInputRef, ModifyParams)
+	for ioidx, io := range entriesReader.Entries.ItemModifyOutputs {
+		if len(io.ModifyParamsRef) > 0 {
+			ModifyParams := GetModifyParamsFromRef(io.ModifyParamsRef, t)
+			pio := types.NewItemModifyOutput(io.ID, io.ItemInputRef, ModifyParams)
 
-		// This is hot fix for signature verification failed issue of item output Doubles: [] instead of Doubles: nil
-		if pio.Doubles != nil && len(pio.Doubles) == 0 {
-			pio.Doubles = nil
+			// This is hot fix for signature verification failed issue of item output Doubles: [] instead of Doubles: nil
+			if pio.Doubles != nil && len(pio.Doubles) == 0 {
+				pio.Doubles = nil
+			}
+			if pio.Longs != nil && len(pio.Longs) == 0 {
+				pio.Longs = nil
+			}
+			if pio.Strings != nil && len(pio.Strings) == 0 {
+				pio.Strings = nil
+			}
+			wpl = append(wpl, pio)
+		} else {
+			wpl = append(wpl, entriesDirectReader.Entries.ItemModifyOutputs[ioidx])
 		}
-		if pio.Longs != nil && len(pio.Longs) == 0 {
-			pio.Longs = nil
-		}
-		if pio.Strings != nil && len(pio.Strings) == 0 {
-			pio.Strings = nil
-		}
-		wpl = append(wpl, pio)
 	}
 
-	for _, io := range entriesReader.Entries.ItemOutputs {
+	for ioidx, io := range entriesReader.Entries.ItemOutputs {
 		var pio types.ItemOutput
 		if len(io.Ref) > 0 {
 			ioBytes := ReadFile(io.Ref, t)
@@ -401,6 +434,8 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 			t.WithFields(testing.Fields{
 				"item_output_bytes": string(ioBytes),
 			}).MustNil(err, "error unmarshaling into item outputs")
+		} else {
+			pio = entriesDirectReader.Entries.ItemOutputs[ioidx]
 		}
 		pio.ID = io.ID
 		// This is hot fix for signature verification failed issue of item output Doubles: [] instead of Doubles: nil

@@ -1,10 +1,11 @@
 # pylons
 
-Pylons daemon is the project responsible for providing rest api and amino endpoints necessary for interacting with pylons eco system
+Pylons daemon connect with all the other daemons around the world and process the transactions.   
+pylonscli is responsible for providing rest api and cli endpoints for interacting with pylons eco system
 
 ## Setup development environment
 
-```
+```sh
 git clone https://github.com/Pylons-tech/pylons
 brew install pre-commit
 brew install golangci/tap/golangci-lint
@@ -16,17 +17,15 @@ pre-commit install
 
 - Install
 
-```
+```sh
 go clean -i all
 go install ./cmd/pylonsd
 go install ./cmd/pylonscli
-
 ```
 
 - create a genesis block and some users
 
-```
-
+```sh
 # Initialize configuration files and genesis file, the name here is "masternode", you can call it anything
 pylonsd init masternode --chain-id pylonschain
 
@@ -51,7 +50,7 @@ pylonscli config trust-node true
 - Multinode integration test is using init-account.sh. It does not use get-pylons but use the public genesis account for the tests accounts setup.
 - For local genesis accounts setup for integration test, you can use `init_accounts.local.sh` file.
 
-```
+```sh
 sh init_accounts.local.sh
 ```
 
@@ -59,30 +58,29 @@ sh init_accounts.local.sh
 
 - start the `pylonsd` node
 
-```
-
+```sh
 pylonsd start
-
 ```
 
 - play with the api
 
-```
+```sh
 pylonscli tx pylons get-pylons --from alice
 ```
 
 - start the `rest-server` in dev mode
-```
+```sh
+# keyring-backed should be set and if not it will report issues on rest api call
 pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 ```
 
 ## Running tests
 - Unit test command
-```
+```sh
 make unit_tests
 ```
 - Specific unit test (regular expression filter)
-```
+```sh
 make unit_tests ARGS="-run TestKeeperSetExecutio.*/empty_sender_tes"
 --- PASS: TestKeeperSetExecution (0.00s)
     --- PASS: TestKeeperSetExecution/empty_sender_test (0.00s)
@@ -91,11 +89,11 @@ ok  	github.com/Pylons-tech/pylons/x/pylons/keep	0.050s
 ```
 
 - Integration test with local daemon command
-```
+```sh
 make int_tests
 ```
 - Specific integration test (regular expression filter)
-```
+```sh
 make int_tests ARGS="-run TestFulfillTradeViaCLI"
 --- PASS: TestFulfillTradeViaCLI (0.00s)
     --- PASS: TestFulfillTradeViaCLI/same_item_with_different_cookbook_id_fulfill_trade_test (31.76s)
@@ -109,32 +107,32 @@ ok  	github.com/Pylons-tech/pylons/cmd/test	71.481s
 ```
 
 - Fixture test with local daemon command
-```
+```sh
 make fixture_tests ARGS="--accounts=michael,eugen"
 ```
 - Specific fixture test (scenario name filter)
 If not specify this param, it tests all scenario files. If specify only do specific tests.
-```
+```sh
 make fixture_tests ARGS="--scenarios=multi_msg_tx,double_empty --accounts=michael,eugen"
 ```
 
 ### Before running integration and fixture test initialize blockchain status and start daemon
 Resets the blockchain database  
-```
+```sh
 make reset_chain
 ```
 Start daemon  
-```
+```sh
 pylonsd start
 ```
 
 ### If you wanna get the latest updates of pylons_sdk, use the following commands
 Clean the cache
-```
+```sh
 go clean -modcache
 ```
 Get the latest pylons_sdk from github
-```
+```sh
 go get github.com/Pylons-tech/pylons_sdk
 ```
 
@@ -142,7 +140,7 @@ go get github.com/Pylons-tech/pylons_sdk
 
 - File name: `pylons.yml`
 
-```
+```yaml
 fees:
   recipe_fee_percentage: 10 # Pylons fee percentage
   cookbook_basic_fee: 10000 # Cookbook creation fee
@@ -150,8 +148,20 @@ fees:
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
   update_item_string_field_fee: 10 # Item string field update fee
+  min_item_transfer_fee: 1 # Basic item transfer fee
+  max_item_transfer_fee: 100000
+  item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
+google_iap:
+  - package_name: com.pylons.loud
+    product_id: pylons_1000
+    amount: 1000
+  - package_name: com.pylons.loud
+    product_id: pylons_55000
+    amount: 55000
+google_iap_pubkey: XXXX
+is_production: false
 ```
 
 - `recipe_fee_percentage` refers to the percentage of pylons that needs to be  transfered to Pylons LLC validator address for every pylons denom paid recipe.  
@@ -161,6 +171,12 @@ validators:
 - `minimum_trade_price` refers to the minimum amount of pylons that needs to participate per trading.
 - `update_item_string_field_fee` refers to item string field update fee per field
 - `pylons_llc` refers to cosmos address for Pylons LLC validator.
+- `min_item_transfer_fee` refers to the minimum pylons per item transfer
+- `max_item_transfer_fee` refers to the maximum pylons per item transfer
+- `item_transfer_cookbook_owner_profit_percent` refers to cookbook owner's profit percent in fee
+- `google_iap` define google iap packages/products along with the amount associated with the package/product.
+- `google_iap_pubkey` defines the google iap public key to verify google iap purchase signature
+- `is_production` defines the flag to show if this configuration is for production
 
 ## Deploying for production
 
@@ -172,11 +188,11 @@ pylonscli rest-server --chain-id pylonschain --trust-node --keyring-backend=test
 ## CLI based tx creation, sign and broadcast
 
 ### To get help from pylons tx, use below command
-```
+```sh
 pylonscli tx pylons --help
 ```
 Result is as follows
-```
+```sh
 Pylons transactions subcommands
 
 Usage:
@@ -190,12 +206,12 @@ Available Commands:
 ```
 
 ### To generate a transaction json, use below command
-```
+```sh
 ./pylonscli tx pylons get-pylons --from cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 --generate-only > t.json
 ```
 Here, `cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337` is account address, can be fetched by using `pylonscli keys show jack -a` command.
 It is generating t.json like below.
-```
+```json
 {
   "type": "auth/StdTx",
   "value": {
@@ -227,7 +243,7 @@ On above, main part is `value.msg`. It contains msg type and msg value.
 Totally, it means Requester `cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337`, have requested `500 pylons`.
 
 Here's sample tx for `create cookbook`.
-```
+```json
 {
   "type": "auth/StdTx",
   "value": {
@@ -260,15 +276,15 @@ This will enough for understanding structure of Transaction.
 ### Transaction sign process
 
 Sample command.  
-```
+```sh
  pylonscli tx sign create_cookbook.json --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2 --chain-id pylonschain > signedCreateCookbookTx.json
 ```
 Offline sign process to sign more than 1 transactions with 1 account within 1 block on test with daemon.
-```
+```sh
 pylonscli tx sign sample_transaction.json --account-number 2 --sequence 10 --offline --from cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7zsaqey2
 ```
 Compute private key from mnemonic.
-```
+```sh
 pylonscli keys add aaa --keyring-backend=test
 {
   "name": "aaa",
@@ -292,7 +308,7 @@ It means signing create_cookbook tx with cosmos19vlpdf25cxh0w2s80z44r9ktrgzncf7z
 
 This is result of successfully signed transaction.
 
-```
+```json
 {
   "type": "auth/StdTx",
   "value": {
@@ -331,12 +347,12 @@ This is result of successfully signed transaction.
 signatures field was modified.
 
 ### Broadcast signed transaction
-```
+```sh
 pylonscli tx broadcast signedCreateCookbookTx.json 
 ```
 
 Successful result
-```
+```json
 {
   "height": "0",
   "txhash": "8A847C81B396B07578FAEB25AA3E01FA11F03F300ECDDC8E4918A1D6F883640A"
@@ -346,29 +362,29 @@ Successful result
 ### single node docker test local
 
 Test daemon build
-```
+```sh
 docker build . --target pylonsd
 docker run <id>
 ```
 Test daemon build with integration test
-```
+```sh
 docker build . --target integration_test
 docker run <id>
 ```
 Test daemon build with fixture test
-```
+```sh
 docker build . --target fixture_test
 docker run <id>
 ```
 Test daemon build with both integration test and fixture test
-```
+```sh
 docker build . --target all_test
 docker run <id>
 ```
 
 ### 3 node local cloudbuild setup guide on OSX
 
-```
+```sh
 brew cask install google-cloud-sdk
 gcloud components install docker-credential-gcr
 gcloud auth configure-docker
@@ -388,7 +404,7 @@ TODO: pylonscli query txs command is removed or updated for cosmos sdk upgrade. 
 
 These are useful commands to query transactions by tags.
 
-```
+```sh
 pylonscli query txs --tags tx.hash:A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
 pylonscli query txs --tags tx.height:3344 --page 1 --limit 100
 pylonscli query txs --tags sender:cosmos1vy25zn267xwuecnrtqqqq8prr2qw6f477xz6s4 --page 1 --limit 100
@@ -406,12 +422,12 @@ pylonscli query txs --tags action:disable_trade
 ## How to get tag of specific transaction
 
 If you run 
-```
+```sh
 pylonscli query tx A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
 ```
 
 It returns something like this
-```
+```json
 {
   ...
   "tags": [
@@ -424,7 +440,7 @@ It returns something like this
 }
 ```
 This means we can query this transaction by using
-```
+```sh
 pylonscli query txs --tags action:create_cookbook
 ```
 which is `pylonscli query txs --tags <key>:<value>` according to documentation.
