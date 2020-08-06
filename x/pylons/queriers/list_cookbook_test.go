@@ -53,7 +53,6 @@ func TestListCookbook(t *testing.T) {
 				tci.PlnK,
 			)
 			if tc.showError {
-				// t.Errorf("ListCookbook err LOG:: %+v", err)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)

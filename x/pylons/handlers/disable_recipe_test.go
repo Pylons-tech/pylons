@@ -62,7 +62,6 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 				require.True(t, disableRcpResponse.Message == "successfully disabled the recipe")
 
 				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
-				// t.Errorf("DisableRecipeTEST LOG:: %+v", uRcp)
 				require.True(t, err == nil)
 				require.True(t, uRcp.Disabled == true)
 			} else {
