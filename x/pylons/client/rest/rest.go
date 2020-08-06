@@ -110,4 +110,13 @@ func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, 
 	r.HandleFunc(fmt.Sprintf("/%s/list_executions/{%s}", storeName, senderKey),
 		listExecutionsHandler(cdc, cliCtx, storeName)).Methods("GET")
 
+	r.HandleFunc(fmt.Sprintf("/%s/get_locked_coin_details", storeName),
+		getLockedCoinDetailsHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/get_locked_coin_details/{%s}", storeName, senderKey),
+		getLockedCoinDetailsHandler(cdc, cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/get_locked_coins", storeName),
+		getLockedCoinsHandler(cdc, cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/get_locked_coins/{%s}", storeName, senderKey),
+		getLockedCoinsHandler(cdc, cliCtx, storeName)).Methods("GET")
 }
