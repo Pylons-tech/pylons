@@ -38,7 +38,7 @@ func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signa
 func (msg MsgGoogleIAPGetPylons) Route() string { return RouterKey }
 
 // Type should return the action
-func (msg MsgGoogleIAPGetPylons) Type() string { return "get_pylons" }
+func (msg MsgGoogleIAPGetPylons) Type() string { return "google_iap_get_pylons" }
 
 // ValidateGoogleIAPSignature is function for testing signature on local
 func (msg MsgGoogleIAPGetPylons) ValidateGoogleIAPSignature() error {
