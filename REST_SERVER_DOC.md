@@ -180,6 +180,73 @@ Sample Result
 }
 ```
 
+### locked coins
+Format  
+```
+http://localhost:1317/pylons/get_locked_coin_details
+http://localhost:1317/pylons/get_locked_coin_details/cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm
+```
+
+Sample result
+```json
+{
+  "height": "0",
+  "result": {
+    "Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm",
+    "Amount": [
+      {
+        "denom": "pylon",
+        "amount": "40200"
+      }
+    ],
+    "LockCoinTrades": [
+      {
+        "ID": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm62f01650-af8c-41a5-ae50-9ddfb67ec251",
+        "Amount": [
+          {
+            "denom": "pylon",
+            "amount": "200"
+          }
+        ]
+      }
+    ],
+    "LockCoinExecs": [
+      {
+        "ID": "cosmos16dkp62c4cu9g6ljxxx8nujple90764xv0l96v4d3379fd6-56a7-4c7c-a072-8c9e71bedd1b",
+        "Amount": [
+          {
+            "denom": "pylon",
+            "amount": "40000"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Format  
+```
+http://localhost:1317/pylons/get_locked_coins
+http://localhost:1317/pylons/get_locked_coins/cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm
+```
+
+Sample result
+```json
+{
+  "height": "0",
+  "result": {
+    "NodeVersion": "0.0.1",
+    "Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm",
+    "Amount": [
+      {
+        "denom": "pylon",
+        "amount": "200"
+      }
+    ]
+  }
+}
+```
 ### google iap query
 Format
 ```
