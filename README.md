@@ -148,8 +148,20 @@ fees:
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
   update_item_string_field_fee: 10 # Item string field update fee
+  min_item_transfer_fee: 1 # Basic item transfer fee
+  max_item_transfer_fee: 100000
+  item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
   pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
+google_iap:
+  - package_name: com.pylons.loud
+    product_id: pylons_1000
+    amount: 1000
+  - package_name: com.pylons.loud
+    product_id: pylons_55000
+    amount: 55000
+google_iap_pubkey: XXXX
+is_production: false
 ```
 
 - `recipe_fee_percentage` refers to the percentage of pylons that needs to be  transfered to Pylons LLC validator address for every pylons denom paid recipe.  
@@ -159,6 +171,12 @@ validators:
 - `minimum_trade_price` refers to the minimum amount of pylons that needs to participate per trading.
 - `update_item_string_field_fee` refers to item string field update fee per field
 - `pylons_llc` refers to cosmos address for Pylons LLC validator.
+- `min_item_transfer_fee` refers to the minimum pylons per item transfer
+- `max_item_transfer_fee` refers to the maximum pylons per item transfer
+- `item_transfer_cookbook_owner_profit_percent` refers to cookbook owner's profit percent in fee
+- `google_iap` define google iap packages/products along with the amount associated with the package/product.
+- `google_iap_pubkey` defines the google iap public key to verify google iap purchase signature
+- `is_production` defines the flag to show if this configuration is for production
 
 ## Deploying for production
 

@@ -80,3 +80,28 @@ pylonscli query pylons get_locked_coins --account cosmos1g5w79thfvt86m6cpa0a7jez
 pylonscli query pylons get_locked_coin_details --account cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm # get all locked coin details
 pylonscli query pylons get_locked_coin_details --account cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm # get specific account's locked coin details
 ```
+
+### item transfer
+
+```sh
+# format
+pylonscli tx pylons send-items <to_address> <item_id1>,<item_id2>... --from <from_address> keyring-backend=<keyring-backend>
+
+# example
+pylonscli tx pylons send-items cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm cosmos1yjrrrgt0xfqau9fz3vu6tlm380m7kjvqmzyd0scd8be417-3d63-4fcc-9fae-d9e98c498c55 --from cosmos1k6qm04kxkz7q69lhy80jf562y8d5rj66y8g8t2 --keyring-backend=test
+```
+
+### google iap query
+
+```sh
+pylonscli query pylons check_google_iap_order "agpgcdbplfjjpkbgadnfkmec.AO-J1OxqC40C2YfQkf5jjDqN8gparJ6W-EbGtygUKQlbc_bPn1ZvZz2-a9UnfY3i6HUYk8M5p92uf29pE7ffNwTUg4XmGrR8y3dhz7EKssD6qp-dejCg2Rs"
+```
+
+Example Response  
+
+```json
+{
+    "exist":true,
+    "purchaseToken":"agpgcdbplfjjpkbgadnfkmec.AO-J1OxqC40C2YfQkf5jjDqN8gparJ6W-EbGtygUKQlbc_bPn1ZvZz2-a9UnfY3i6HUYk8M5p92uf29pE7ffNwTUg4XmGrR8y3dhz7EKssD6qp-dejCg2Rs"
+}
+```

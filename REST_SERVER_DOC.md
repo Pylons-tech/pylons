@@ -179,3 +179,25 @@ Sample Result
     "Executions": []
 }
 ```
+
+### google iap query
+Format
+```
+http://127.0.0.1:1317/pylons/check_google_iap_order/<purchaseToken>
+```
+
+Sample
+```
+http://127.0.0.1:1317/pylons/check_google_iap_order/agpgcdbplfjjpkbgadnfkmec.AO-J1OxqC40C2YfQkf5jjDqN8gparJ6W-EbGtygUKQlbc_bPn1ZvZz2-a9UnfY3i6HUYk8M5p92uf29pE7ffNwTUg4XmGrR8y3dhz7EKssD6qp-dejCg2Rs
+```
+
+Example Response  
+```json
+{
+  "height": "0",
+  "result": {
+    "exist": true,
+    "purchaseToken": "agpgcdbplfjjpkbgadnfkmec.AO-J1OxqC40C2YfQkf5jjDqN8gparJ6W-EbGtygUKQlbc_bPn1ZvZz2-a9UnfY3i6HUYk8M5p92uf29pE7ffNwTUg4XmGrR8y3dhz7EKssD6qp-dejCg2Rs"
+  }
+}
+```
