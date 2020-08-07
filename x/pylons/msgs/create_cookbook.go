@@ -52,7 +52,6 @@ func (msg MsgCreateCookbook) ValidateBasic() error {
 
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	if len(msg.Name) < 8 {

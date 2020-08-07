@@ -88,7 +88,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			t.Log(execRcpResponse.Message)
 
 			// Update recipe
-			msg := msgs.NewMsgUpdateRecipe(tc.recipeName, tc.cbID, tc.rcpID, tc.recipeDesc,
+			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
 				types.GenCoinInputList("wood", 5),
 				types.GenItemInputList("Raichu"),
 				types.GenEntries("chair", "Raichu"),

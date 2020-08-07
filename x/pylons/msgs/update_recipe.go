@@ -23,7 +23,7 @@ type MsgUpdateRecipe struct {
 }
 
 // NewMsgUpdateRecipe a constructor for UpdateRecipe msg
-func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
+func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
 	coinInputs types.CoinInputList,
 	itemInputs types.ItemInputList,
 	entries types.EntriesList,
@@ -31,8 +31,8 @@ func NewMsgUpdateRecipe(recipeName, cookbookID, id, description string,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
-		Name:          recipeName,
 		ID:            id,
+		Name:          recipeName,
 		CookbookID:    cookbookID,
 		Description:   description,
 		CoinInputs:    coinInputs,

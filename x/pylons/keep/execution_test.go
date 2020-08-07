@@ -106,7 +106,6 @@ func TestKeeperGetExecution(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				// t.Errorf("execution_test err LOG:: %+v", err)
 				require.True(t, err == nil)
 				require.True(t, execution.RecipeID == exec.RecipeID)
 				require.True(t, execution.Sender.String() == exec.Sender.String())
@@ -151,7 +150,6 @@ func TestKeeperUpdateExecution(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				// t.Errorf("execution_test err LOG:: %+v", err)
 				require.True(t, err == nil)
 				uExec, err := tci.PlnK.GetExecution(tci.Ctx, tc.execID)
 				require.True(t, err == nil)

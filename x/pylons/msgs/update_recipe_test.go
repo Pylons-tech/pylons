@@ -192,9 +192,9 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 				desc = ""
 			}
 			msg := NewMsgUpdateRecipe(
+				tc.recipeID,
 				"existing recipe",
 				"CookbookID",
-				tc.recipeID,
 				desc,
 				types.GenCoinInputList("wood", 5),
 				tc.itemInputs,

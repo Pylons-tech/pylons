@@ -40,7 +40,6 @@ func (msg MsgFiatItem) Type() string { return "fiat_item" }
 func (msg MsgFiatItem) ValidateBasic() error {
 	if msg.Sender.Empty() {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
-
 	}
 
 	return nil

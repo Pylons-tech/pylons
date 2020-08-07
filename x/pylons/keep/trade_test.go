@@ -69,7 +69,6 @@ func TestGetTrade(t *testing.T) {
 				require.True(t, reflect.DeepEqual(trade.ItemInputs, storedTrade.ItemInputs))
 				require.True(t, reflect.DeepEqual(trade.ItemOutputs, storedTrade.ItemOutputs))
 				require.True(t, reflect.DeepEqual(trade.Sender, storedTrade.Sender))
-
 			}
 		})
 

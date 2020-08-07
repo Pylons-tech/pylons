@@ -90,5 +90,4 @@ func TestSameCookbookIDCreation(t *testing.T) {
 
 	_, err = HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	require.True(t, strings.Contains(err.Error(), "A cookbook with CookbookID samecookbookID-0001 already exists"))
-
 }
