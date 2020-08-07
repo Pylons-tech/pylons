@@ -19,6 +19,7 @@ RUN go mod download
 COPY app ./app
 COPY cmd ./cmd
 COPY x ./x
+COPY test ./test
 COPY go.mod .
 COPY go.sum .
 
