@@ -36,6 +36,7 @@ RUN pylonscli config trust-node true
 
 COPY Makefile .
 RUN make unit_tests
+RUN make fixture_unit_tests
 
 # Final image
 FROM golang:latest as pylonsd
