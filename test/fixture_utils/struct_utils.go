@@ -122,6 +122,20 @@ func UpdateReceiverKeyToAddress(bytes []byte, t *testing.T) []byte {
 	return newBytes
 }
 
+// UpdateRequesterKeyToAddress is a function to update requester key to requester's address
+func UpdateRequesterKeyToAddress(bytes []byte, t *testing.T) []byte {
+	raw := UnmarshalIntoEmptyInterface(bytes, t)
+
+	requesterTempName, ok := raw["Requester"].(string)
+	t.MustTrue(ok, "requester field is empty")
+	raw["Requester"] = GetAccountAddressFromTempName(requesterTempName, t)
+	newBytes, err := json.Marshal(raw)
+	t.WithFields(testing.Fields{
+		"updated_requester_interface": raw,
+	}).MustNil(err, "error encoding raw json")
+	return newBytes
+}
+
 // UpdateCBNameToID is a function to update cookbook name to cookbook id if it has cookbook name field
 func UpdateCBNameToID(bytes []byte, t *testing.T) []byte {
 	raw := UnmarshalIntoEmptyInterface(bytes, t)
