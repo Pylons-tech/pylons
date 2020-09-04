@@ -24,11 +24,11 @@ const (
 
 // RegisterRoutes adds routes
 func RegisterRoutes(cliCtx context.CLIContext, r *mux.Router, cdc *codec.Codec, storeName string) {
-	r.HandleFunc(fmt.Sprintf("/%s/create_accounht/tx_build/{%s}", storeName, txbuilder.TxCARequesterKey),
+	r.HandleFunc(fmt.Sprintf("/%s/create_account/tx_build/", storeName),
 		txbuilder.CreateAccountTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/get_pylons/tx_build/{%s}", storeName, txbuilder.TxGPRequesterKey),
+	r.HandleFunc(fmt.Sprintf("/%s/get_pylons/tx_build/", storeName),
 		txbuilder.GetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons/tx_build/{%s}", storeName, txbuilder.TxGoogleIAPGPRequesterKey),
+	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons/tx_build/", storeName),
 		txbuilder.GoogleIAPGetPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
 		txbuilder.SendPylonsTxBuilder(cdc, cliCtx, storeName)).Methods("GET")
