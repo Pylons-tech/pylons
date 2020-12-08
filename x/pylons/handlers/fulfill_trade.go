@@ -178,6 +178,13 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 
 		item.Sender = msg.Sender
+
+		keeper.SetItemHistory(ctx, types.ItemHistory{
+			ID:      types.KeyGen(item.Sender),
+			ItemID:  item.ID,
+			TradeID: item.OwnerTradeID,
+		})
+
 		item.OwnerTradeID = ""
 		err = keeper.SetItem(ctx, item)
 		if err != nil {

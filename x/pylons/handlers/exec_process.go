@@ -223,6 +223,12 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		targetItem.Strings[strKey].Value = str.Value
 	}
 
+	p.keeper.SetItemHistory(p.ctx, types.ItemHistory{
+		ID:       types.KeyGen(targetItem.Sender),
+		ItemID:   targetItem.ID,
+		RecipeID: targetItem.OwnerRecipeID,
+	})
+
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
 	targetItem.LastUpdate = p.ctx.BlockHeight()
