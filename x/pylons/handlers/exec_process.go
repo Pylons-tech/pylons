@@ -225,6 +225,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 
 	p.keeper.SetItemHistory(p.ctx, types.ItemHistory{
 		ID:       types.KeyGen(targetItem.Sender),
+		Owner:    targetItem.Sender,
 		ItemID:   targetItem.ID,
 		RecipeID: targetItem.OwnerRecipeID,
 	})
@@ -241,6 +242,8 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
 
 	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
+	variables[prefix+"owner"] = item.Sender.String()
+	variables[prefix+"itemID"] = item.ID
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 	variables[prefix+"transferFee"] = item.TransferFee
 
@@ -267,6 +270,7 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	varDefs = append(varDefs, decls.NewVar("lastBlockHeight", decls.Int))
 	variables["lastBlockHeight"] = p.ctx.BlockHeight()
+	variables["recipeID"] = p.recipe.ID
 	itemInputs := p.recipe.ItemInputs
 
 	for idx, item := range p.matchedItems {
@@ -289,11 +293,8 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 		types.Log2FuncDecls,
 		types.MinFuncDecls,
 		types.MaxFuncDecls,
-		decls.NewFunction("block_since",
-			decls.NewOverload("block_since",
-				[]*exprpb.Type{decls.Int},
-				decls.Int),
-		),
+		types.BlockSinceDecls,
+		types.ExecutedByCountDecls,
 	)
 
 	funcs := cel.Functions(
@@ -315,7 +316,30 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 			Unary: func(arg ref.Val) ref.Val {
 				return celTypes.Int(p.ctx.BlockHeight() - arg.Value().(int64))
 			},
-		})
+		},
+		&functions.Overload{
+			// operator for 3 params
+			Operator: "executed_by_count",
+			Function: func(args ...ref.Val) ref.Val {
+				// $owner, $recipe_id, $item_id
+				owner := args[0].Value().(string)
+				recipeID := args[1].Value().(string)
+				itemID := args[2].Value().(string)
+				matchingCount := 0
+				iterator := p.keeper.GetItemHistoryIterator(p.ctx)
+				for ; iterator.Valid(); iterator.Next() {
+					historyID := string(iterator.Key())
+					itemHistory, _ := p.keeper.GetItemHistory(p.ctx, historyID)
+					if itemHistory.Owner.String() == owner &&
+						itemHistory.RecipeID == recipeID &&
+						itemHistory.ItemID == itemID {
+						matchingCount++
+					}
+				}
+				return celTypes.Int(matchingCount)
+			},
+		},
+	)
 
 	env, err := cel.NewEnv(
 		cel.Declarations(

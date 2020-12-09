@@ -242,3 +242,17 @@ var MultiplyFunc = &functions.Overload{
 		return types.Int(lhs.Value().(int64) * rhs.Value().(int64))
 	},
 }
+
+// BlockSinceDecls is a global function
+var BlockSinceDecls = decls.NewFunction("block_since",
+	decls.NewOverload("block_since",
+		[]*exprpb.Type{decls.Int},
+		decls.Int),
+)
+
+// ExecutedByCountDecls is a global function
+var ExecutedByCountDecls = decls.NewFunction("executed_by_count",
+	decls.NewOverload("executed_by_count",
+		[]*exprpb.Type{decls.String, decls.String, decls.String},
+		decls.Int),
+)
