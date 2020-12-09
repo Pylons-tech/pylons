@@ -26,7 +26,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		msgs.DefaultCostPerBlock,
 	)
 	err := tci.PlnK.SetCookbook(tci.Ctx, cb)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		cbID         string
@@ -69,7 +69,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 
 			if !tc.showError {
 				readCookbook, err := tci.PlnK.GetCookbook(tci.Ctx, tc.cbID)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, readCookbook.Description == tc.desc)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

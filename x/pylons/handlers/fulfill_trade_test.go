@@ -30,7 +30,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		sdk.NewInt64Coin(types.Pylon, 100000),
 		sdk.NewInt64Coin("zzzz", 100000),
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cbData := CreateCookbookResponse{}
 	cbData1 := CreateCookbookResponse{}
@@ -38,53 +38,53 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 	err = json.Unmarshal(cookbookResult.Data, &cbData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	item := keep.GenItem(cbData.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item2 := keep.GenItem(cbData.CookbookID, sender2, "Pikachu")
 	item2.SetTransferFee(200)
 	err = tci.PlnK.SetItem(tci.Ctx, *item2)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item3 := keep.GenItem(cbData.CookbookID, sender2, "Rikchu")
 	item3.SetTransferFee(50)
 	err = tci.PlnK.SetItem(tci.Ctx, *item3)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item5 := keep.GenItem(cbData.CookbookID, sender2, "Pychu")
 	item5.SetTransferFee(50)
 	err = tci.PlnK.SetItem(tci.Ctx, *item5)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	// Create cookbook for sender3
 	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender3)
 	cookbookResult1, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg1)
 	err = json.Unmarshal(cookbookResult1.Data, &cbData1)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(cbData1.CookbookID) > 0)
 
 	item4 := keep.GenItem(cbData1.CookbookID, sender4, "Tachu")
 	item4.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, *item4)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item6 := keep.GenItem(cbData1.CookbookID, sender4, "Bhachu")
 	item6.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, *item6)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item8 := keep.GenItem(cbData1.CookbookID, sender5, "Bhachu8")
 	item8.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, *item8)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item7 := keep.GenItem("wrongCBID", sender2, "Pikachu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item7)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		sender                sdk.AccAddress
@@ -231,7 +231,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 
 			// get pylons LLC address
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			// get pylons amount of pylons LLC amount
 			pylonsLLCAmountFirst := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
@@ -241,7 +241,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			require.True(t, err == nil, err)
 			ctRespData := CreateTradeResponse{}
 			err = json.Unmarshal(ctResult.Data, &ctRespData)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, len(ctRespData.TradeID) > 0)
 			ffMsg := msgs.NewMsgFulfillTrade(ctRespData.TradeID, tc.fulfiller, tc.fulfillInputItemIDs)
 			ffResult, err := HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
@@ -249,7 +249,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 				require.True(t, err == nil, err)
 				ffRespData := FulfillTradeResponse{}
 				err = json.Unmarshal(ffResult.Data, &ffRespData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, ffRespData.Status == "Success")
 				require.True(t, ffRespData.Message == "successfully fulfilled the trade")
 

@@ -285,14 +285,14 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
 				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
-				require.True(t, err == nil)
+				require.NoError(t, err)
 			}
 			if tc.dynamicItemSet {
 				tc.itemIDs = []string{}
 				for _, diN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
 					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
@@ -301,14 +301,14 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
 
 			if tc.showError == false {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				execRcpResponse := ExecuteRecipeResponse{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
 				if err != nil {
 					t.Log(err, result)
 				}
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == tc.successMsg)
 
@@ -320,7 +320,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 
 				// calc generated item availability
 				items, err := tci.PlnK.GetItemsBySender(tci.Ctx, tc.sender)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				itemAvailability := false
 				for _, item := range items {
@@ -347,7 +347,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				}
 				if tc.checkPylonDistribution {
 					pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					pylonAvailOnLLC := keep.HasCoins(tci.PlnK, tci.Ctx, pylonsLLCAddress, sdk.Coins{sdk.NewInt64Coin(types.Pylon, tc.pylonsLLCDistribution)})
 					require.True(t, pylonAvailOnLLC)
 				}

@@ -163,15 +163,15 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cbData := CreateCookbookResponse{}
 			if tc.createCookbook {
 				_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.cbID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
 				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				err = json.Unmarshal(cookbookResult.Data, &cbData)
 				if err != nil {
 					t.Log("cookbook result log", cookbookResult.Log)
 				}
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 
@@ -208,10 +208,10 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			result, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				recipeData := CreateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
 				require.True(t, err != nil)
@@ -230,7 +230,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	cbData := CreateCookbookResponse{}
 	err := json.Unmarshal(result.Data, &cbData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
@@ -250,7 +250,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 
 	recipeData := CreateRecipeResponse{}
 	err = json.Unmarshal(rcpResult.Data, &recipeData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(recipeData.RecipeID) > 0)
 
 	// try creating it 2nd time

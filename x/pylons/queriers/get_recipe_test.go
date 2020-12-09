@@ -66,7 +66,7 @@ func TestGetRecipe(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				readRecipe := types.Recipe{}
 				readRecipeErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readRecipe)
 

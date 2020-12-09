@@ -18,10 +18,10 @@ func TestEntriesListSerialize(t *testing.T) {
 	for testName := range cases {
 		t.Run(testName, func(t *testing.T) {
 			data, err := json.Marshal(entries)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			var serializedEntries EntriesList
 			err = json.Unmarshal(data, &serializedEntries)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, reflect.DeepEqual(entries, serializedEntries))
 		})
 	}

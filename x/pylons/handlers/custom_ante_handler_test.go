@@ -48,7 +48,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.genNewAccount == false {
 				cosmosAddr = sender1
@@ -60,7 +60,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 
 			if tc.putSignature {
 				sig, err := priv.Sign(auth.StdSignBytes("pylonschain", 0, 0, fee, tx.Msgs, memo))
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				sigs := []auth.StdSignature{
 					{
 						PubKey:    priv.PubKey(),
@@ -75,7 +75,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				account := acd.ak.GetAccount(newCtx, cosmosAddr)
 				if tc.shouldAccountExist {
 					require.True(t, account != nil)
@@ -143,7 +143,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			fee := authTypes.NewStdFee(0, sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
 			memo := ""
@@ -151,7 +151,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 
 			if tc.putSignature {
 				sig, err := priv.Sign(auth.StdSignBytes("pylonschain", tc.accountNumber, tc.accountSequence, fee, tx.Msgs, memo))
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				sigs := []auth.StdSignature{
 					{
 						PubKey:    priv.PubKey(),
@@ -177,12 +177,12 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				if tc.additionMsgType == "create_cookbook" {
 					caMsg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, cosmosAddr)
 					tx := auth.NewStdTx([]sdk.Msg{caMsg}, fee, nil, memo)
 					sig, err := priv.Sign(auth.StdSignBytes("pylonschain", tc.accountNumber, tc.accountSequence, fee, tx.Msgs, memo))
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					sigs := []auth.StdSignature{
 						{
 							PubKey:    priv.PubKey(),
@@ -191,7 +191,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 					}
 					tx.Signatures = sigs
 					_, err = csvd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 				}
 			}
 		})

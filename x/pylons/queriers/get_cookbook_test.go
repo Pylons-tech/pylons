@@ -61,7 +61,7 @@ func TestGetCookbook(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				readCookbook := types.Cookbook{}
 				readCookbookErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readCookbook)
 

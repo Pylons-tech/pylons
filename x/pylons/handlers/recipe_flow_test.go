@@ -63,7 +63,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
 			recipeData := CreateRecipeResponse{}
 			err := json.Unmarshal(newRcpResult.Data, &recipeData)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			tc.rcpID = recipeData.RecipeID
 
@@ -73,7 +73,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
 			}
@@ -83,7 +83,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				tc.sender,
 				itemIDs,
 			)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, execRcpResponse.Status == "Success")
 			t.Log(execRcpResponse.Message)
 
@@ -101,7 +101,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -113,7 +113,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
 			}
@@ -123,18 +123,18 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				tc.sender,
 				itemIDs,
 			)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, execRcpResponse.Status == "Success")
 			t.Log(execRcpResponse.Message)
 
 			// Schedule Recipe
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.dynamicItemSet && len(itemIDs) > 0 {
 				usedItem, err := tci.PlnK.GetItem(tci.Ctx, itemIDs[0])
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
 			}
 
@@ -145,7 +145,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			checkMsgResult, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
 			checkExecResp := CheckExecutionResponse{}
 			err = json.Unmarshal(checkMsgResult.Data, &checkExecResp)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.showError {
 				require.True(t, checkExecResp.Status == "Failure")

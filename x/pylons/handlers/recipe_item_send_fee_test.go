@@ -106,7 +106,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
 				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
-				require.True(t, err == nil)
+				require.NoError(t, err)
 			}
 			if tc.dynamicItemSet {
 				tc.itemIDs = []string{}
@@ -117,7 +117,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 						dynamicItem.SetTransferFee(tc.dynamicItemFees[idx])
 					}
 					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
@@ -127,20 +127,20 @@ func TestRecipeItemTransferFee(t *testing.T) {
 
 			if tc.showError == false {
 				fmt.Print(err)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				execRcpResponse := ExecuteRecipeResponse{}
 				err := json.Unmarshal(result.Data, &execRcpResponse)
 
 				if err != nil {
 					fmt.Print(err, result)
 				}
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == tc.successMsg)
 
 				// calc generated item availability
 				items, err := tci.PlnK.GetItemsBySender(tci.Ctx, tc.sender)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				itemAvailability := false
 				itemTransferFeeCorrect := true

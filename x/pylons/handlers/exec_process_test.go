@@ -101,7 +101,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 			newItem.OwnerTradeID = "TRADE_ID"
 		}
 		err := tci.PlnK.SetItem(tci.Ctx, *newItem)
-		require.True(t, err == nil)
+		require.NoError(t, err)
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 
@@ -240,7 +240,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
 			err = p.SetMatchedItemsFromExecMsg(msg)
 			if tc.showError {
@@ -286,7 +286,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		0,
 	)
 	err := tci.PlnK.SetItem(tci.Ctx, *newItem)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	initItemIDs = append(initItemIDs, newItem.ID)
 
 	exmpRcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
@@ -320,7 +320,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
 			err = p.SetMatchedItemsFromExecMsg(msg)
 			require.True(t, err == nil, err)

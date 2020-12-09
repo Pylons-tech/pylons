@@ -17,6 +17,6 @@ func TestIntWeightTable_NoRandomization(t *testing.T) {
 		},
 	}
 	iwtGen, err := iwt.Generate()
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, iwtGen == 100)
 }

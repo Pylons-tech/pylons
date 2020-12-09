@@ -2,6 +2,7 @@ package queriers
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -53,5 +54,5 @@ type QueryResBalance struct {
 
 // implement fmt.Stringer
 func (r QueryResBalance) String() string {
-	return string(r.Balance)
+	return fmt.Sprint(r.Balance)
 }

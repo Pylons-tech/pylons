@@ -64,7 +64,7 @@ func TestListRecipe(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				rcpList := types.RecipeList{}
 				rcpListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &rcpList)
 
