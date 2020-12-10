@@ -31,7 +31,7 @@ func (keeper Keeper) ExecutedByCount(ctx sdk.Context, args ...ref.Val) ref.Val {
 
 // Overloads returns overloads
 func (keeper Keeper) Overloads(ctx sdk.Context) []*functions.Overload {
-	return append(types.BasicFunctions(),
+	return append(types.BasicOverloads(),
 		&functions.Overload{
 			// operator for 1 param
 			Operator: "block_since",
