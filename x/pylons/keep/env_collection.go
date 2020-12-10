@@ -19,7 +19,10 @@ func (keeper Keeper) ExecutedByCount(ctx sdk.Context, args ...ref.Val) ref.Val {
 	iterator := keeper.GetItemHistoryIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
 		historyID := string(iterator.Key())
-		itemHistory, _ := keeper.GetItemHistory(ctx, historyID)
+		itemHistory, err := keeper.GetItemHistory(ctx, historyID)
+		if err != nil {
+			panic(err)
+		}
 		if itemHistory.Owner.String() == owner &&
 			itemHistory.RecipeID == recipeID &&
 			itemHistory.ItemID == itemID {

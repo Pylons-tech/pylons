@@ -225,7 +225,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		ID:       types.KeyGen(targetItem.Sender),
 		Owner:    targetItem.Sender,
 		ItemID:   targetItem.ID,
-		RecipeID: targetItem.OwnerRecipeID,
+		RecipeID: p.recipe.ID,
 	})
 
 	// after upgrading is done, OwnerRecipe is not set

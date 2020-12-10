@@ -1,0 +1,33 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "execution_count_restriction",
+    "CoinInputs":[],
+    "ItemInputs": [
+        {
+            "ID": "character",
+            "Ref": "./recipes/custom_func/item_input/execution_count_restriction_input.json"
+        }
+    ],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemModifyOutputs":[
+            {
+                "ID": "custom_func",
+                "ItemInputRef": "character",
+                "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
+            }
+        ]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["custom_func"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"cusfunc_account1",
+    "Name": "Execution Count Restriction Recipe",
+    "CookbookID": "custom-func-1589853709",
+    "Description": "this recipe can be used only once to restore health.",
+    "BlockInterval":"0"
+}

@@ -307,7 +307,13 @@ func BasicOverloads() [](*functions.Overload) {
 
 // AddVariableFromItem collect variables from item inputs
 func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item Item) ([](*exprpb.Decl), map[string]interface{}) {
-	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
+	varDefs = append(varDefs,
+		decls.NewVar(prefix+"lastUpdate", decls.Int),
+		decls.NewVar(prefix+"itemID", decls.String),
+		decls.NewVar(prefix+"owner", decls.String),
+		decls.NewVar(prefix+"transferFee", decls.Int),
+	)
+
 	variables[prefix+"owner"] = item.Sender.String()
 	variables[prefix+"itemID"] = item.ID
 	variables[prefix+"lastUpdate"] = item.LastUpdate

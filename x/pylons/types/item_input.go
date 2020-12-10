@@ -65,7 +65,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 	for _, param := range ii.Conditions.Doubles {
 		double, err := ec.EvalFloat64(param.Key)
 		if err != nil {
-			return fmt.Errorf("%s expression is not available on the item: item_id=%s", param.Key, item.ID)
+			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
 		}
 
 		if !param.Has(double) {
@@ -76,7 +76,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 	for _, param := range ii.Conditions.Longs {
 		long, err := ec.EvalInt64(param.Key)
 		if err != nil {
-			return fmt.Errorf("%s expression is not available on the item: item_id=%s", param.Key, item.ID)
+			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
 		}
 
 		if !param.Has(int(long)) {
@@ -87,7 +87,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 	for _, param := range ii.Conditions.Strings {
 		str, err := ec.EvalString(param.Key)
 		if err != nil {
-			return fmt.Errorf("%s expression is not available on the item: item_id=%s", param.Key, item.ID)
+			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
 		}
 		if str != param.Value {
 			return fmt.Errorf("%s expression value does not match: item_id=%s", param.Key, item.ID)
