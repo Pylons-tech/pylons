@@ -45,13 +45,22 @@
         }
     },
     {
-        "ID": "CREATE_CUSTOMFUNCTEST_CHARACTER",  
+        "ID": "CREATE_CUSTOMFUNCTEST_ITEMS",  
         "runAfter": {
             "precondition": ["CREATE_CUSTOMFUNCTEST_COOKBOOK", "MOCK_ACCOUNT_CUSFUNC_ACCOUNT2"],
             "blockWait": 0
         },
-        "action": "fiat_item",
-        "paramsRef": "./items/custom_func/character.json",
+        "action": "multi_msg_tx",
+        "msgRefs": [
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/custom_func/character.json"
+            },
+            {
+                "action": "fiat_item",
+                "paramsRef": "./items/custom_func/one_time_item.json"
+            }
+        ],
         "output": {
             "txResult": {
                 "status": "Success"
@@ -62,6 +71,9 @@
                     "items": [
                         {
                             "stringValues": { "Name": "Custom Function TestCharacter" }
+                        },
+                        {
+                            "stringValues": { "Name": "One-time Item" }
                         }
                     ]
                 }
@@ -103,7 +115,7 @@
     {
         "ID": "EXECUTE_CHARACTER_CUSTOM_FUNC_TEST_RECIPE",        
         "runAfter": {
-            "precondition": ["CREATE_CUSTOM_FUNC_RECIPES", "CREATE_CUSTOMFUNCTEST_CHARACTER"],
+            "precondition": ["CREATE_CUSTOM_FUNC_RECIPES", "CREATE_CUSTOMFUNCTEST_ITEMS"],
             "blockWait": 0
         },
         "action": "execute_recipe",
@@ -146,7 +158,7 @@
     {
         "ID": "EXECUTE_EXECUTION_COUNT_RESTRICTION_RECIPE1",        
         "runAfter": {
-            "precondition": ["CREATE_CUSTOM_FUNC_RECIPES", "CHECK_EXECUTION_CHARACTER_CUSTOM_FUNC_TEST_RECIPE"],
+            "precondition": ["CREATE_CUSTOM_FUNC_RECIPES", "CREATE_CUSTOMFUNCTEST_ITEMS"],
             "blockWait": 0
         },
         "action": "execute_recipe",
