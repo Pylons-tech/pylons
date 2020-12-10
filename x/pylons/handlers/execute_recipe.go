@@ -50,7 +50,7 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	err = p.SetMatchedItemsFromExecMsg(msg)
+	err = p.SetMatchedItemsFromExecMsg(ctx, msg)
 	if err != nil {
 		return nil, errInternal(err)
 	}

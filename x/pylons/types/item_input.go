@@ -6,6 +6,13 @@ import (
 	"regexp"
 )
 
+// ConditionList is a struct for describing  ItemInput expression conditions
+type ConditionList struct {
+	Doubles DoubleInputParamList
+	Longs   LongInputParamList
+	Strings StringInputParamList
+}
+
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
 	ID          string
@@ -13,10 +20,11 @@ type ItemInput struct {
 	Longs       LongInputParamList
 	Strings     StringInputParamList
 	TransferFee FeeInputParam
+	Conditions  ConditionList
 }
 
 // MatchError checks if all the constraint match the given item
-func (ii ItemInput) MatchError(item Item) error {
+func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 
 	for _, param := range ii.Doubles {
 		double, ok := item.FindDouble(param.Key)
@@ -52,6 +60,38 @@ func (ii ItemInput) MatchError(item Item) error {
 
 	if !ii.TransferFee.Has(item.TransferFee) {
 		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
+	}
+
+	for _, param := range ii.Conditions.Doubles {
+		double, err := ec.EvalFloat64(param.Key)
+		if err != nil {
+			return fmt.Errorf("%s expression is not available on the item: item_id=%s", param.Key, item.ID)
+		}
+
+		if !param.Has(double) {
+			return fmt.Errorf("%s expression range does not match: item_id=%s", param.Key, item.ID)
+		}
+	}
+
+	for _, param := range ii.Conditions.Longs {
+		long, err := ec.EvalInt64(param.Key)
+		if err != nil {
+			return fmt.Errorf("%s expression is not available on the item: item_id=%s", param.Key, item.ID)
+		}
+
+		if !param.Has(int(long)) {
+			return fmt.Errorf("%s expression range does not match: item_id=%s", param.Key, item.ID)
+		}
+	}
+
+	for _, param := range ii.Conditions.Strings {
+		str, err := ec.EvalString(param.Key)
+		if err != nil {
+			return fmt.Errorf("%s expression is not available on the item: item_id=%s", param.Key, item.ID)
+		}
+		if str != param.Value {
+			return fmt.Errorf("%s expression value does not match: item_id=%s", param.Key, item.ID)
+		}
 	}
 	return nil
 }
@@ -96,11 +136,11 @@ type TradeItemInput struct {
 }
 
 // MatchError checks if all the constraint match the given item
-func (tii TradeItemInput) MatchError(item Item) error {
+func (tii TradeItemInput) MatchError(item Item, ec CelEnvCollection) error {
 	if item.CookbookID != tii.CookbookID {
 		return fmt.Errorf("cookbook id does not match")
 	}
-	return tii.ItemInput.MatchError(item)
+	return tii.ItemInput.MatchError(item, ec)
 }
 
 // TradeItemInputList is a list of ItemInputs for convinience

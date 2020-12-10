@@ -31,6 +31,11 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 				{
 					"CookbookID":"UTestCreateTrade-CB-001",
 					"ItemInput":{
+						"Conditions":{
+							"Doubles":null,
+							"Longs":null,
+							"Strings":null
+						},
 						"Doubles":null,
 						"ID":"Raichu",
 						"Longs":null,
@@ -48,7 +53,7 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 	buffer := new(bytes.Buffer)
 	err = json.Compact(buffer, []byte(expectedSignBytes))
 	require.NoError(t, err)
-	require.True(t, string(msg.GetSignBytes()) == buffer.String(), string(msg.GetSignBytes()))
+	require.Equal(t, string(msg.GetSignBytes()), buffer.String())
 }
 
 func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {

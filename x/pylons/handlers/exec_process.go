@@ -10,12 +10,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/cel-go/cel"
-	"github.com/google/cel-go/checker/decls"
-	"github.com/google/cel-go/common/types/ref"
-	"github.com/google/cel-go/interpreter/functions"
-
-	celTypes "github.com/google/cel-go/common/types"
-	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 // ExecProcess store and handle all the activities of execution
@@ -28,7 +22,7 @@ type ExecProcess struct {
 }
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
-func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg msgs.MsgExecuteRecipe) error {
 	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}
@@ -42,7 +36,11 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) erro
 	var matchedItems []types.Item
 	for i, itemInput := range p.recipe.ItemInputs {
 		matchedItem := items[i]
-		matchErr := itemInput.MatchError(matchedItem)
+		ec, err := p.keeper.EnvCollection(ctx, msg.RecipeID, "", matchedItem)
+		if err != nil {
+			return fmt.Errorf("error creating env collection for %s item", matchedItem.String())
+		}
+		matchErr := itemInput.MatchError(matchedItem, ec)
 		if matchErr != nil {
 			return fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID)
 		}
@@ -238,108 +236,29 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	return &targetItem, nil
 }
 
-// AddVariableFromItem collect variables from item inputs
-func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
-
-	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
-	variables[prefix+"owner"] = item.Sender.String()
-	variables[prefix+"itemID"] = item.ID
-	variables[prefix+"lastUpdate"] = item.LastUpdate
-	variables[prefix+"transferFee"] = item.TransferFee
-
-	for _, dbli := range item.Doubles {
-		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
-		variables[prefix+dbli.Key] = dbli.Value.Float()
-	}
-	for _, inti := range item.Longs {
-		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
-		variables[prefix+inti.Key] = inti.Value
-	}
-	for _, stri := range item.Strings {
-		varDefs = append(varDefs, decls.NewVar(prefix+stri.Key, decls.String))
-		variables[prefix+stri.Key] = stri.Value
-	}
-	return varDefs, variables
-}
-
 // GenerateCelEnvVarFromInputItems generate cel env varaible from item inputs
 func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
-	varDefs := [](*exprpb.Decl){}
-	variables := map[string]interface{}{}
-
-	varDefs = append(varDefs, decls.NewVar("lastBlockHeight", decls.Int))
-	variables["lastBlockHeight"] = p.ctx.BlockHeight()
-	variables["recipeID"] = p.recipe.ID
+	varDefs := types.BasicVarDefs()
+	variables := types.BasicVariables(p.ctx.BlockHeight(), p.recipe.ID, "")
 	itemInputs := p.recipe.ItemInputs
 
 	for idx, item := range p.matchedItems {
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
 
-		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
+		varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
 		if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" && itemInputs[idx].IDValidationError() == nil {
 			iPrefix2 := itemInputs[idx].ID + "."
-			varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
+			varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
 		}
 	}
 
 	if len(p.matchedItems) > 0 {
 		// first matched item
-		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
+		varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
 	}
 
-	varDefs = append(varDefs,
-		types.RandFuncDecls,
-		types.Log2FuncDecls,
-		types.MinFuncDecls,
-		types.MaxFuncDecls,
-		types.BlockSinceDecls,
-		types.ExecutedByCountDecls,
-	)
-
-	funcs := cel.Functions(
-		types.RandIntFunc,
-		types.RandFunc,
-		types.Log2DoubleFunc,
-		types.Log2IntFunc,
-		types.MinIntIntFunc,
-		types.MinIntDoubleFunc,
-		types.MinDoubleIntFunc,
-		types.MinDoubleDoubleFunc,
-		types.MaxIntIntFunc,
-		types.MaxIntDoubleFunc,
-		types.MaxDoubleIntFunc,
-		types.MaxDoubleDoubleFunc,
-		&functions.Overload{
-			// operator for 1 param
-			Operator: "block_since",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Int(p.ctx.BlockHeight() - arg.Value().(int64))
-			},
-		},
-		&functions.Overload{
-			// operator for 3 params
-			Operator: "executed_by_count",
-			Function: func(args ...ref.Val) ref.Val {
-				// $owner, $recipe_id, $item_id
-				owner := args[0].Value().(string)
-				recipeID := args[1].Value().(string)
-				itemID := args[2].Value().(string)
-				matchingCount := 0
-				iterator := p.keeper.GetItemHistoryIterator(p.ctx)
-				for ; iterator.Valid(); iterator.Next() {
-					historyID := string(iterator.Key())
-					itemHistory, _ := p.keeper.GetItemHistory(p.ctx, historyID)
-					if itemHistory.Owner.String() == owner &&
-						itemHistory.RecipeID == recipeID &&
-						itemHistory.ItemID == itemID {
-						matchingCount++
-					}
-				}
-				return celTypes.Int(matchingCount)
-			},
-		},
-	)
+	funcs := cel.Functions(p.keeper.Overloads(p.ctx)...)
 
 	env, err := cel.NewEnv(
 		cel.Declarations(

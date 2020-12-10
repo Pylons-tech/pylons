@@ -21,14 +21,14 @@ reset_chain:
 
 int_tests:
 	rm ./cmd/test/nonce.json || true
-	go test -v ./cmd/test/ ${ARGS}
+	go test ./cmd/test/ ${ARGS}
 
 fixture_tests:
 	rm ./cmd/fixtures_test/nonce.json || true
-	go test -v ./cmd/fixtures_test/ ${ARGS}
+	go test ./cmd/fixtures_test/ ${ARGS}
 
 unit_tests:
-	go test -v ./x/... ${ARGS}
+	go test ./x/... ${ARGS}
 
 fixture_unit_tests:
-	go test -v ./test/fixtures_test/ ${ARGS}
+	go test ./test/fixtures_test/ ${ARGS}

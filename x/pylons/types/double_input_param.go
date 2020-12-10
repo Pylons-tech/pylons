@@ -18,7 +18,7 @@ type DoubleInputParamList []DoubleInputParam
 
 func (dp DoubleInputParam) String() string {
 	return fmt.Sprintf(`
-	DoubleInputParam{ 
+	DoubleInputParam{
 		MinValue: %+v,
 		MaxValue: %+v,
 	}`, dp.MinValue, dp.MaxValue)
