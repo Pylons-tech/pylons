@@ -4,7 +4,7 @@
     "CoinInputs":[],
     "ItemInputs": [
         {
-            "ID": "character",
+            "ID": "one_time_input",
             "Ref": "./recipes/custom_func/item_input/execution_count_restriction_input.json"
         }
     ],
@@ -12,15 +12,15 @@
         "CoinOutputs":[],
         "ItemModifyOutputs":[
             {
-                "ID": "custom_func",
-                "ItemInputRef": "character",
+                "ID": "one_time_output",
+                "ItemInputRef": "one_time_input",
                 "ModifyParamsRef": "./recipes/custom_func/upgrader/custom_func.json"
             }
         ]
     },
     "Outputs": [
         {
-            "EntryIDs": ["custom_func"],
+            "EntryIDs": ["one_time_output"],
             "Weight": "1"
         }
     ],
