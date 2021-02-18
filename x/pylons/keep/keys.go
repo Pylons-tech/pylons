@@ -12,6 +12,17 @@ const (
 	KeyPylonsLockedCoin = "pylons_locked_coin"
 )
 
+func GetStoreKysList() (string, string, string, string, string, string, string, string) {
+	return KeyPylonsEntity,
+		KeyGoogleIAPOrder,
+		KeyPylonsCookbook,
+		KeyPylonsRecipe,
+		KeyPylonsItem,
+		KeyPylonsExecution,
+		KeyPylonsTrade,
+		KeyPylonsLockedCoin
+}
+
 // StoreKeyList has keys in ordered array
 var StoreKeyList = []string{
 	KeyPylonsEntity,

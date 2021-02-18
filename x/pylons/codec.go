@@ -7,14 +7,14 @@ import (
 )
 
 // ModuleCdc is the codec for the module
-var ModuleCdc = codec.New()
+var ModuleCdc = codec.NewLegacyAmino()
 
 func init() {
 	RegisterCodec(ModuleCdc)
 }
 
 // RegisterCodec registers concrete types on wire codec
-func RegisterCodec(cdc *codec.Codec) {
+func RegisterCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(msgs.MsgCreateAccount{}, "pylons/CreateAccount", nil)
 	cdc.RegisterConcrete(msgs.MsgGetPylons{}, "pylons/GetPylons", nil)
 	cdc.RegisterConcrete(msgs.MsgGoogleIAPGetPylons{}, "pylons/GoogleIAPGetPylons", nil)

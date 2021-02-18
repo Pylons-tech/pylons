@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Pylons-tech/pylons/app/params"
 	"os"
 	"path"
 
@@ -27,7 +28,7 @@ var defaultCLIHome = os.ExpandEnv("$HOME/.pylonscli")
 func main() {
 	cobra.EnableCommandSorting = false
 
-	cdc := app.MakeCodec()
+	cdc := params.MakeCodec()
 
 	// Read in the configuration file for the sdk
 	config := sdk.GetConfig()

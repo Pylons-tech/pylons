@@ -27,7 +27,7 @@ func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 		return []byte{}, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err1.Error())
 	}
 	coins := keeper.CoinKeeper.GetCoins(ctx, accAddr)
-
+	coins := keeper.CoinKeeper
 	var value int64
 	for _, coin := range coins {
 		if coin.Denom == types.Pylon {

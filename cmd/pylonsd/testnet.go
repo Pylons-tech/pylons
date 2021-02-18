@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"net"
 	"os"
 	"path/filepath"
@@ -18,7 +19,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	authexported "github.com/cosmos/cosmos-sdk/x/auth/exported"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
@@ -48,8 +49,8 @@ var (
 )
 
 // get cmd to initialize all files for tendermint testnet and application
-func testnetCmd(ctx *server.Context, cdc *codec.Codec,
-	mbm module.BasicManager, genAccIterator genutiltypes.GenesisAccountsIterator,
+func testnetCmd(ctx *server.Context, cdc *codec.LegacyAmino,
+	mbm module.BasicManager, genAccIterator genutiltypes.GenesisBalancesIterator,
 ) *cobra.Command {
 
 	cmd := &cobra.Command{
@@ -106,8 +107,8 @@ const nodeDirPerm = 0755
 
 // InitTestnet initialize the testnet
 func InitTestnet(
-	cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
-	mbm module.BasicManager, genAccIterator genutiltypes.GenesisAccountsIterator,
+	cmd *cobra.Command, config *tmconfig.Config, cdc *codec.LegacyAmino,
+	mbm module.BasicManager, genAccIterator genutiltypes.GenesisBalancesIterator,
 	outputDir, chainID, minGasPrices, nodeDirPrefix, nodeDaemonHome,
 	nodeCLIHome, startingIPAddress string, numValidators int,
 ) error {
@@ -125,7 +126,7 @@ func InitTestnet(
 
 	//nolint:prealloc
 	var (
-		genAccounts []authexported.GenesisAccount
+		genAccounts []authtypes.GenesisAccount
 		genFiles    []string
 	)
 
@@ -213,15 +214,15 @@ func InitTestnet(
 		genAccounts = append(genAccounts, auth.NewBaseAccount(addr, coins.Sort(), pub, 0, 0))
 
 		valTokens := sdk.TokensFromConsensusPower(100)
-		msg := staking.NewMsgCreateValidator(
+		msg, err := stakingtypes.NewMsgCreateValidator(
 			sdk.ValAddress(addr),
 			valPubKeys[i],
 			sdk.NewCoin(sdk.DefaultBondDenom, valTokens),
-			staking.NewDescription(nodeDirName, "", "", "", ""),
-			staking.NewCommissionRates(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),
+			stakingtypes.NewDescription(nodeDirName, "", "", "", ""),
+			stakingtypes.NewCommissionRates(sdk.OneDec(), sdk.OneDec(), sdk.OneDec()),
 			sdk.OneInt(),
 		)
-		tx := auth.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)
+		tx := authtypes.NewStdTx([]sdk.Msg{msg}, auth.StdFee{}, []auth.StdSignature{}, memo)
 		txBldr := auth.NewTxBuilderFromCLI(inBuf).WithChainID(chainID).WithMemo(memo).WithKeybase(kb)
 		signedTx, err := txBldr.SignStdTx(nodeDirName, clientkeys.DefaultKeyPass, tx, false)
 		if err != nil {
@@ -264,7 +265,7 @@ func InitTestnet(
 
 func initGenFiles(
 	cdc *codec.Codec, mbm module.BasicManager, chainID string,
-	genAccounts []authexported.GenesisAccount,
+	genAccounts []authtypes.GenesisAccount,
 	genFiles []string, numValidators int,
 ) error {
 
@@ -304,10 +305,10 @@ func initGenFiles(
 }
 
 func collectGenFiles(
-	cdc *codec.Codec, config *tmconfig.Config, chainID string,
+	cdc *codec.LegacyAmino, config *tmconfig.Config, chainID string,
 	monikers, nodeIDs []string, valPubKeys []crypto.PubKey,
 	numValidators int, outputDir, nodeDirPrefix, nodeDaemonHome string,
-	genAccIterator genutiltypes.GenesisAccountsIterator,
+	genAccIterator genutiltypes.GenesisBalancesIterator,
 ) error {
 
 	var appState json.RawMessage
@@ -317,13 +318,12 @@ func collectGenFiles(
 		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
 		nodeDir := filepath.Join(outputDir, nodeDirName, nodeDaemonHome)
 		gentxsDir := filepath.Join(outputDir, "gentxs")
-		moniker := monikers[i]
 		config.Moniker = nodeDirName
 
 		config.SetRoot(nodeDir)
 
 		nodeID, valPubKey := nodeIDs[i], valPubKeys[i]
-		initCfg := genutil.NewInitConfig(chainID, gentxsDir, moniker, nodeID, valPubKey)
+		initCfg := genutiltypes.NewInitConfig(chainID, gentxsDir, nodeID, valPubKey)
 
 		genDoc, err := tmTypes.GenesisDocFromFile(config.GenesisFile())
 		if err != nil {

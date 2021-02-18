@@ -19,7 +19,7 @@ import (
 
 // AddGenesisAccountCmd returns add-genesis-account cobra Command.
 func AddGenesisAccountCmd(
-	ctx *server.Context, cdc *codec.Codec, defaultNodeHome, defaultClientHome string,
+	ctx *server.Context, cdc *codec.LegacyAmino, defaultNodeHome, defaultClientHome string,
 ) *cobra.Command {
 
 	cmd := &cobra.Command{

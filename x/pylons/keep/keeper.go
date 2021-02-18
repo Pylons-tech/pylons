@@ -2,7 +2,7 @@ package keep
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/bank"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -10,8 +10,8 @@ import (
 
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
-	CoinKeeper        bank.Keeper
-	Cdc               *codec.Codec // The wire codec for binary encoding/decoding
+	CoinKeeper        bankkeeper.Keeper
+	Cdc               *codec.LegacyAmino // The wire codec for binary encoding/decoding
 	EntityKey         sdk.StoreKey
 	GoogleIAPOrderKey sdk.StoreKey
 	CookbookKey       sdk.StoreKey
@@ -23,7 +23,7 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new Keeper
-func NewKeeper(coinKeeper bank.Keeper, cdc *codec.Codec, storeKeys map[string]*sdk.KVStoreKey) Keeper {
+func NewKeeper(coinKeeper bankkeeper.Keeper, cdc *codec.LegacyAmino, storeKeys map[string]*sdk.KVStoreKey) Keeper {
 	return Keeper{
 		CoinKeeper:        coinKeeper,
 		Cdc:               cdc,
@@ -42,7 +42,7 @@ func NewKeeper(coinKeeper bank.Keeper, cdc *codec.Codec, storeKeys map[string]*s
 func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coins) bool {
 	lockedCoin := keeper.GetLockedCoin(ctx, sender)
 	newAmount := lockedCoin.Amount.Sort().Add(amount.Sort()...)
-	return keeper.CoinKeeper.HasCoins(ctx, sender, newAmount)
+	return keeper.CoinKeeper.HasBalance(ctx, sender, newAmount)
 }
 
 // SendCoins send coins

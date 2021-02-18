@@ -3,10 +3,10 @@ package testutils
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Pylons-tech/pylons/app/params"
 	"os"
 	"regexp"
 
-	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
@@ -35,7 +35,7 @@ func GetTestCoinInput() keep.TestCoinInput {
 
 // GetAminoCdc is a utility function to get amino codec
 func GetAminoCdc() *amino.Codec {
-	return app.MakeCodec()
+	return params.MakeCodec()
 }
 
 // GetAccountInfoFromAddr is a function to get account information from address

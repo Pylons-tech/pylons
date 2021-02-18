@@ -2,29 +2,50 @@ package app
 
 import (
 	"encoding/json"
+	appParams "github.com/Pylons-tech/pylons/app/params"
+	"github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+	"github.com/cosmos/cosmos-sdk/x/params"
 	"os"
 
 	"github.com/tendermint/tendermint/libs/log"
+	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/Keeper"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
+	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+
 	"github.com/cosmos/cosmos-sdk/x/genutil"
-	"github.com/cosmos/cosmos-sdk/x/params"
+
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+
 	"github.com/cosmos/cosmos-sdk/x/slashing"
+	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/Keeper"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+
 	"github.com/cosmos/cosmos-sdk/x/staking"
-	"github.com/cosmos/cosmos-sdk/x/supply"
-	tmtypes "github.com/tendermint/tendermint/types"
+	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keep"
 
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -52,51 +73,39 @@ var (
 		distr.AppModuleBasic{},
 		params.AppModuleBasic{},
 		slashing.AppModuleBasic{},
-		supply.AppModuleBasic{},
 		pylons.AppModuleBasic{},
 	)
 	// account permissions
 	maccPerms = map[string][]string{
-		auth.FeeCollectorName:     nil,
-		distr.ModuleName:          nil,
-		staking.BondedPoolName:    {supply.Burner, supply.Staking},
-		staking.NotBondedPoolName: {supply.Burner, supply.Staking},
+		authtypes.FeeCollectorName:     nil,
+		distrtypes.ModuleName:          nil,
+		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
 	}
 )
-
-// MakeCodec make codec for message marshal/unmarshal
-func MakeCodec() *codec.Codec {
-	var cdc = codec.New()
-
-	ModuleBasics.RegisterCodec(cdc)
-	vesting.RegisterCodec(cdc)
-	sdk.RegisterCodec(cdc)
-	codec.RegisterCrypto(cdc)
-
-	return cdc
-}
 
 // PylonsApp is the top level pylons app
 type PylonsApp struct {
 	*bam.BaseApp
-	cdc *codec.Codec
+	cdc               *codec.LegacyAmino
+	appCodec          codec.Marshaler
+	interfaceRegistry types.InterfaceRegistry
 
 	// keys to access the substores
 	keys  map[string]*sdk.KVStoreKey
 	tkeys map[string]*sdk.TransientStoreKey
 
 	// subspaces
-	subspaces map[string]params.Subspace
+	subspaces map[string]paramstypes.Subspace
 
 	// Keepers
-	accountKeeper  auth.AccountKeeper
-	bankKeeper     bank.Keeper
-	stakingKeeper  staking.Keeper
-	slashingKeeper slashing.Keeper
-	distrKeeper    distr.Keeper
-	supplyKeeper   supply.Keeper
-	paramsKeeper   params.Keeper
-	plnKeeper      keep.Keeper
+	accountKeeper  authkeeper.AccountKeeper
+	bankKeeper     bankkeeper.Keeper
+	stakingKeeper  stakingkeeper.Keeper
+	slashingKeeper slashingkeeper.Keeper
+	distrKeeper    distrkeeper.Keeper
+	paramsKeeper   paramskeeper.Keeper
+	plnKeeper      pylonskeeper.Keeper
 
 	// Module Manager
 	mm *module.Manager
@@ -109,137 +118,137 @@ type PylonsApp struct {
 var _ simapp.App = (*PylonsApp)(nil)
 
 // NewPylonsApp is a constructor function for PylonsApp
-func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.BaseApp)) *PylonsApp {
+func NewPylonsApp(logger log.Logger, db dbm.DB, encodingConfig appParams.EncodingConfig, baseAppOptions ...func(*bam.BaseApp)) *PylonsApp {
 	// First define the top level codec that will be shared by the different modules
-	cdc := MakeCodec()
+	cdc := encodingConfig.Amino
+	appCodec := encodingConfig.Marshaler
+	interfaceRegistry := encodingConfig.InterfaceRegistry
 
 	// BaseApp handles interactions with Tendermint through the ABCI protocol
-	bApp := bam.NewBaseApp(appName, logger, db, auth.DefaultTxDecoder(cdc))
+	bApp := bam.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder())
 
 	bApp.SetAppVersion("v0.0.1")
 
 	stringKeys := []string{
-		bam.MainStoreKey, auth.StoreKey, staking.StoreKey,
-		supply.StoreKey, distr.StoreKey, slashing.StoreKey, params.StoreKey,
+		authtypes.StoreKey, stakingtypes.StoreKey,
+		banktypes.StoreKey, distrtypes.StoreKey,
+		slashingtypes.StoreKey, paramstypes.StoreKey,
+		pylons.StoreKey,
 	}
 	// pylons keys
-	stringKeys = append(stringKeys, keep.StoreKeyList...)
+	stringKeys = append(stringKeys, pylonskeeper.StoreKeyList...)
 
 	keys := sdk.NewKVStoreKeys(stringKeys...)
-	tkeys := sdk.NewTransientStoreKeys(params.TStoreKey)
+	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 
 	// Here you initialize your application with the store keys it requires
 	var app = &PylonsApp{
-		BaseApp:   bApp,
-		cdc:       cdc,
-		keys:      keys,
-		tkeys:     tkeys,
-		subspaces: make(map[string]params.Subspace),
+		BaseApp:           bApp,
+		cdc:               cdc,
+		appCodec:          appCodec,
+		interfaceRegistry: interfaceRegistry,
+		keys:              keys,
+		tkeys:             tkeys,
+		subspaces:         make(map[string]paramstypes.Subspace),
 	}
 
 	// The ParamsKeeper handles parameter storage for the application
-	app.paramsKeeper = params.NewKeeper(app.cdc, keys[params.StoreKey], tkeys[params.TStoreKey])
+	app.paramsKeeper = paramskeeper.NewKeeper(nil, app.cdc, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
 	// Set specific supspaces
-	app.subspaces[auth.ModuleName] = app.paramsKeeper.Subspace(auth.DefaultParamspace)
-	app.subspaces[bank.ModuleName] = app.paramsKeeper.Subspace(bank.DefaultParamspace)
-	app.subspaces[staking.ModuleName] = app.paramsKeeper.Subspace(staking.DefaultParamspace)
-	app.subspaces[distr.ModuleName] = app.paramsKeeper.Subspace(distr.DefaultParamspace)
-	app.subspaces[slashing.ModuleName] = app.paramsKeeper.Subspace(slashing.DefaultParamspace)
+	app.subspaces[authtypes.ModuleName] = app.paramsKeeper.Subspace(authtypes.ModuleName)
+	app.subspaces[banktypes.ModuleName] = app.paramsKeeper.Subspace(banktypes.ModuleName)
+	app.subspaces[stakingtypes.ModuleName] = app.paramsKeeper.Subspace(stakingtypes.ModuleName)
+	app.subspaces[distrtypes.ModuleName] = app.paramsKeeper.Subspace(distrtypes.ModuleName)
+	app.subspaces[slashingtypes.ModuleName] = app.paramsKeeper.Subspace(slashingtypes.ModuleName)
 
 	// The AccountKeeper handles address -> account lookups
-	app.accountKeeper = auth.NewAccountKeeper(
-		app.cdc,
-		keys[auth.StoreKey],
-		app.subspaces[auth.ModuleName],
-		auth.ProtoBaseAccount,
-	)
-
-	// The BankKeeper allows you perform sdk.Coins interactions
-	app.bankKeeper = bank.NewBaseKeeper(
-		app.accountKeeper,
-		app.subspaces[bank.ModuleName],
-		app.ModuleAccountAddrs(),
-	)
-
-	// The SupplyKeeper collects transaction fees and renders them to the fee distribution module
-	app.supplyKeeper = supply.NewKeeper(
-		app.cdc,
-		keys[supply.StoreKey],
-		app.accountKeeper,
-		app.bankKeeper,
+	app.accountKeeper = authkeeper.NewAccountKeeper(
+		app.appCodec,
+		keys[authtypes.StoreKey],
+		app.subspaces[authtypes.ModuleName],
+		authtypes.ProtoBaseAccount,
 		maccPerms,
 	)
 
-	// The staking keeper
-	stakingKeeper := staking.NewKeeper(
-		app.cdc,
-		keys[staking.StoreKey],
-		app.supplyKeeper,
-		app.subspaces[staking.ModuleName],
-	)
-
-	app.distrKeeper = distr.NewKeeper(
-		app.cdc,
-		keys[distr.StoreKey],
-		app.subspaces[distr.ModuleName],
-		&stakingKeeper,
-		app.supplyKeeper,
-		auth.FeeCollectorName,
+	// The BankKeeper allows you perform sdk.Coins interactions
+	app.bankKeeper = bankkeeper.NewBaseKeeper(
+		app.appCodec,
+		keys[banktypes.StoreKey],
+		app.accountKeeper,
+		app.subspaces[banktypes.ModuleName],
 		app.ModuleAccountAddrs(),
 	)
 
-	app.slashingKeeper = slashing.NewKeeper(
-		app.cdc,
-		keys[slashing.StoreKey],
+	// The staking keeper
+	stakingKeeper := stakingkeeper.NewKeeper(
+		app.appCodec,
+		keys[stakingtypes.StoreKey],
+		app.accountKeeper,
+		app.bankKeeper,
+		app.subspaces[stakingtypes.ModuleName],
+	)
+
+	app.distrKeeper = distrkeeper.NewKeeper(
+		app.appCodec,
+		keys[distrtypes.StoreKey],
+		app.subspaces[distrtypes.ModuleName],
+		app.accountKeeper,
+		app.bankKeeper,
+		app.stakingKeeper,
+		authtypes.FeeCollectorName,
+		app.ModuleAccountAddrs(),
+	)
+
+	app.slashingKeeper = slashingkeeper.NewKeeper(
+		app.appCodec,
+		keys[slashingtypes.StoreKey],
 		&stakingKeeper,
-		app.subspaces[slashing.ModuleName],
+		app.subspaces[slashingtypes.ModuleName],
 	)
 
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.stakingKeeper = *stakingKeeper.SetHooks(
-		staking.NewMultiStakingHooks(
+		stakingtypes.NewMultiStakingHooks(
 			app.distrKeeper.Hooks(),
 			app.slashingKeeper.Hooks()),
 	)
 
 	// The pylonsKeeper is the Keeper from the module for this tutorial
 	// It handles interactions with the namestore
-	app.plnKeeper = keep.NewKeeper(
+	app.plnKeeper = pylonskeeper.NewKeeper(
 		app.bankKeeper,
 		app.cdc,
 		keys,
 	)
 	app.mm = module.NewManager(
-		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx),
-		auth.NewAppModule(app.accountKeeper),
-		bank.NewAppModule(app.bankKeeper, app.accountKeeper),
-		supply.NewAppModule(app.supplyKeeper, app.accountKeeper),
+		genutil.NewAppModule(app.accountKeeper, app.stakingKeeper, app.BaseApp.DeliverTx, encodingConfig.TxConfig),
+		auth.NewAppModule(app.appCodec, app.accountKeeper, nil),
+		bank.NewAppModule(app.appCodec, app.bankKeeper, app.accountKeeper),
 		pylons.NewAppModule(app.plnKeeper, app.bankKeeper),
-		distr.NewAppModule(app.distrKeeper, app.accountKeeper, app.supplyKeeper, app.stakingKeeper),
-		slashing.NewAppModule(app.slashingKeeper, app.accountKeeper, app.stakingKeeper),
-		staking.NewAppModule(app.stakingKeeper, app.accountKeeper, app.supplyKeeper),
+		distr.NewAppModule(app.appCodec, app.distrKeeper, app.accountKeeper, app.bankKeeper, app.stakingKeeper),
+		slashing.NewAppModule(app.appCodec, app.slashingKeeper, app.accountKeeper, app.bankKeeper, app.stakingKeeper),
+		staking.NewAppModule(app.appCodec, app.stakingKeeper, app.accountKeeper, app.bankKeeper),
 	)
 
-	app.mm.SetOrderBeginBlockers(distr.ModuleName, slashing.ModuleName)
-	app.mm.SetOrderEndBlockers(staking.ModuleName)
+	app.mm.SetOrderBeginBlockers(distrtypes.ModuleName, slashingtypes.ModuleName)
+	app.mm.SetOrderEndBlockers(stakingtypes.ModuleName)
 
 	// Sets the order of Genesis - Order matters, genutil is to always come last
 	// NOTE: The genutils moodule must occur after staking so that pools are
 	// properly initialized with tokens from genesis accounts.
 	app.mm.SetOrderInitGenesis(
-		distr.ModuleName,
-		staking.ModuleName,
-		auth.ModuleName,
-		bank.ModuleName,
-		slashing.ModuleName,
+		distrtypes.ModuleName,
+		stakingtypes.ModuleName,
+		authtypes.ModuleName,
+		banktypes.ModuleName,
+		slashingtypes.ModuleName,
+		genutiltypes.ModuleName,
 		pylons.ModuleName,
-		supply.ModuleName,
-		genutil.ModuleName,
 	)
 
 	// register all module routes and module queriers
-	app.mm.RegisterRoutes(app.Router(), app.QueryRouter())
+	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), app.cdc)
 
 	// The initChainer handles translating the genesis.json file into initial state for the network
 	app.SetInitChainer(app.InitChainer)
@@ -250,8 +259,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	app.SetAnteHandler(
 		handlers.NewAnteHandler(
 			app.accountKeeper,
-			app.supplyKeeper,
-			auth.DefaultSigVerificationGasConsumer,
+			app.bankKeeper,
+			ante.DefaultSigVerificationGasConsumer,
 		),
 	)
 
@@ -259,7 +268,7 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 	app.MountKVStores(keys)
 	app.MountTransientStores(tkeys)
 
-	err := app.LoadLatestVersion(app.keys[bam.MainStoreKey])
+	err := app.LoadLatestVersion()
 	if err != nil {
 		tmos.Exit(err.Error())
 	}
@@ -272,8 +281,8 @@ func NewPylonsApp(logger log.Logger, db dbm.DB, baseAppOptions ...func(*bam.Base
 type GenesisState map[string]json.RawMessage
 
 // NewDefaultGenesisState returns new default genesis state
-func NewDefaultGenesisState() GenesisState {
-	return ModuleBasics.DefaultGenesis()
+func NewDefaultGenesisState(cdc codec.JSONMarshaler) GenesisState {
+	return ModuleBasics.DefaultGenesis(cdc)
 }
 
 // InitChainer init chain with genesis state
@@ -285,7 +294,7 @@ func (app *PylonsApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) ab
 		panic(err)
 	}
 
-	return app.mm.InitGenesis(ctx, genesisState)
+	return app.mm.InitGenesis(ctx, app.appCodec, genesisState)
 }
 
 // BeginBlocker is a function to begin block
@@ -310,12 +319,12 @@ func (app *PylonsApp) GetTKey(storeKey string) *sdk.TransientStoreKey {
 
 // LoadHeight loads data at a height
 func (app *PylonsApp) LoadHeight(height int64) error {
-	return app.LoadVersion(height, app.keys[bam.MainStoreKey])
+	return app.LoadVersion(height)
 }
 
 // Codec returns simapp's codec
-func (app *PylonsApp) Codec() *codec.Codec {
-	return app.cdc
+func (app *PylonsApp) Codec() codec.JSONMarshaler {
+	return app.appCodec
 }
 
 // SimulationManager implements the SimulationApp interface
@@ -327,26 +336,179 @@ func (app *PylonsApp) SimulationManager() *module.SimulationManager {
 func (app *PylonsApp) ModuleAccountAddrs() map[string]bool {
 	modAccAddrs := make(map[string]bool)
 	for acc := range maccPerms {
-		modAccAddrs[supply.NewModuleAddress(acc).String()] = true
+		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
 	}
 
 	return modAccAddrs
 }
 
+func (app *PylonsApp) LegacyAmino() *codec.LegacyAmino {
+	return app.cdc
+}
+
 // ExportAppStateAndValidators export app state and validators
-func (app *PylonsApp) ExportAppStateAndValidators(forZeroHeight bool, jailWhiteList []string,
-) (appState json.RawMessage, validators []tmtypes.GenesisValidator, err error) {
+func (app *PylonsApp) ExportAppStateAndValidators(
+	forZeroHeight bool, jailAllowedAddrs []string,
+) (servertypes.ExportedApp, error) {
 
 	// as if they could withdraw from the start of the next block
-	ctx := app.NewContext(true, abci.Header{Height: app.LastBlockHeight()})
+	ctx := app.NewContext(true, tmproto.Header{Height: app.LastBlockHeight()})
 
-	genState := app.mm.ExportGenesis(ctx)
-	appState, err = codec.MarshalJSONIndent(app.cdc, genState)
-	if err != nil {
-		return nil, nil, err
+	// We export at last height + 1, because that's the height at which
+	// Tendermint will start InitChain.
+	height := app.LastBlockHeight() + 1
+	if forZeroHeight {
+		height = 0
+		app.prepForZeroHeightGenesis(ctx, jailAllowedAddrs)
 	}
 
-	validators = staking.WriteValidators(ctx, app.stakingKeeper)
+	genState := app.mm.ExportGenesis(ctx, app.appCodec)
+	appState, err := json.MarshalIndent(genState, "", "  ")
+	if err != nil {
+		return servertypes.ExportedApp{}, err
+	}
 
-	return appState, validators, nil
+	validators, err := staking.WriteValidators(ctx, app.stakingKeeper)
+	if err != nil {
+		return servertypes.ExportedApp{}, err
+	}
+	return servertypes.ExportedApp{
+		AppState:        appState,
+		Validators:      validators,
+		Height:          height,
+		ConsensusParams: app.BaseApp.GetConsensusParams(ctx),
+	}, nil
+}
+
+// prepare for fresh start at zero height
+// NOTE zero height genesis is a temporary feature which will be deprecated
+//      in favour of export at a block height
+func (app *PylonsApp) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []string) {
+	applyAllowedAddrs := false
+
+	// check if there is a allowed address list
+	if len(jailAllowedAddrs) > 0 {
+		applyAllowedAddrs = true
+	}
+
+	allowedAddrsMap := make(map[string]bool)
+
+	for _, addr := range jailAllowedAddrs {
+		_, err := sdk.ValAddressFromBech32(addr)
+		if err != nil {
+			tmos.Exit(err.Error())
+		}
+		allowedAddrsMap[addr] = true
+	}
+
+	/* Handle fee distribution state. */
+
+	// withdraw all validator commission
+	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val stakingtypes.ValidatorI) (stop bool) {
+		_, err := app.distrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+		if err != nil {
+			panic(err)
+		}
+		return false
+	})
+
+	// withdraw all delegator rewards
+	dels := app.stakingKeeper.GetAllDelegations(ctx)
+	for _, delegation := range dels {
+		_, err := app.distrKeeper.WithdrawDelegationRewards(ctx, delegation.GetDelegatorAddr(), delegation.GetValidatorAddr())
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	// clear validator slash events
+	app.distrKeeper.DeleteAllValidatorSlashEvents(ctx)
+
+	// clear validator historical rewards
+	app.distrKeeper.DeleteAllValidatorHistoricalRewards(ctx)
+
+	// set context height to zero
+	height := ctx.BlockHeight()
+	ctx = ctx.WithBlockHeight(0)
+
+	// reinitialize all validators
+	app.stakingKeeper.IterateValidators(ctx, func(_ int64, val stakingtypes.ValidatorI) (stop bool) {
+		// donate any unwithdrawn outstanding reward fraction tokens to the community pool
+		scraps := app.distrKeeper.GetValidatorOutstandingRewardsCoins(ctx, val.GetOperator())
+		feePool := app.distrKeeper.GetFeePool(ctx)
+		feePool.CommunityPool = feePool.CommunityPool.Add(scraps...)
+		app.distrKeeper.SetFeePool(ctx, feePool)
+
+		app.distrKeeper.Hooks().AfterValidatorCreated(ctx, val.GetOperator())
+		return false
+	})
+
+	// reinitialize all delegations
+	for _, del := range dels {
+		app.distrKeeper.Hooks().BeforeDelegationCreated(ctx, del.GetDelegatorAddr(), del.GetValidatorAddr())
+		app.distrKeeper.Hooks().AfterDelegationModified(ctx, del.GetDelegatorAddr(), del.GetValidatorAddr())
+	}
+
+	// reset context height
+	ctx = ctx.WithBlockHeight(height)
+
+	/* Handle staking state. */
+
+	// iterate through redelegations, reset creation height
+	app.stakingKeeper.IterateRedelegations(ctx, func(_ int64, red stakingtypes.Redelegation) (stop bool) {
+		for i := range red.Entries {
+			red.Entries[i].CreationHeight = 0
+		}
+		app.stakingKeeper.SetRedelegation(ctx, red)
+		return false
+	})
+
+	// iterate through unbonding delegations, reset creation height
+	app.stakingKeeper.IterateUnbondingDelegations(ctx, func(_ int64, ubd stakingtypes.UnbondingDelegation) (stop bool) {
+		for i := range ubd.Entries {
+			ubd.Entries[i].CreationHeight = 0
+		}
+		app.stakingKeeper.SetUnbondingDelegation(ctx, ubd)
+		return false
+	})
+
+	// Iterate through validators by power descending, reset bond heights, and
+	// update bond intra-tx counters.
+	store := ctx.KVStore(app.keys[stakingtypes.StoreKey])
+	iter := sdk.KVStoreReversePrefixIterator(store, stakingtypes.ValidatorsKey)
+	counter := int16(0)
+
+	for ; iter.Valid(); iter.Next() {
+		addr := sdk.ValAddress(iter.Key()[1:])
+		validator, found := app.stakingKeeper.GetValidator(ctx, addr)
+		if !found {
+			panic("expected validator, not found")
+		}
+
+		validator.UnbondingHeight = 0
+		if applyAllowedAddrs && !allowedAddrsMap[addr.String()] {
+			validator.Jailed = true
+		}
+
+		app.stakingKeeper.SetValidator(ctx, validator)
+		counter++
+	}
+
+	iter.Close()
+
+	if _, err := app.stakingKeeper.ApplyAndReturnValidatorSetUpdates(ctx); err != nil {
+		panic(err)
+	}
+
+	/* Handle slashing state. */
+
+	// reset start height on signing infos
+	app.slashingKeeper.IterateValidatorSigningInfos(
+		ctx,
+		func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
+			info.StartHeight = 0
+			app.slashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
+			return false
+		},
+	)
 }
