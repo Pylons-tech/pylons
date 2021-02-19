@@ -3,11 +3,14 @@ package app
 import (
 	"encoding/json"
 	appParams "github.com/Pylons-tech/pylons/app/params"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
+	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/server/api"
+	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	"os"
 
@@ -18,10 +21,14 @@ import (
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
+	authrest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/Keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
+
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	distr "github.com/cosmos/cosmos-sdk/x/distribution"
 	distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
@@ -35,6 +42,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/Keeper"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
@@ -87,6 +96,7 @@ var (
 // PylonsApp is the top level pylons app
 type PylonsApp struct {
 	*bam.BaseApp
+
 	cdc               *codec.LegacyAmino
 	appCodec          codec.Marshaler
 	interfaceRegistry types.InterfaceRegistry
@@ -378,6 +388,29 @@ func (app *PylonsApp) ExportAppStateAndValidators(
 		Height:          height,
 		ConsensusParams: app.BaseApp.GetConsensusParams(ctx),
 	}, nil
+}
+
+func (app *PylonsApp) RegisterAPIRoutes(svr *api.Server, config srvconfig.APIConfig) {
+	clientCtx := svr.ClientCtx
+	rpc.RegisterRoutes(clientCtx, svr.Router)
+	// Register legacy tx routes.
+	authrest.RegisterTxRoutes(clientCtx, svr.Router)
+	// Register new tx routes from grpc-gateway.
+	authtx.RegisterGRPCGatewayRoutes(clientCtx, svr.GRPCGatewayRouter)
+	// Register new tendermint queries routes from grpc-gateway.
+	tmservice.RegisterGRPCGatewayRoutes(clientCtx, svr.GRPCGatewayRouter)
+
+	// Register legacy and grpc-gateway routes for all modules.
+	ModuleBasics.RegisterRESTRoutes(clientCtx, svr.Router)
+	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, svr.GRPCGatewayRouter)
+}
+
+func (app *PylonsApp) RegisterTxService(clientCtx client.Context) {
+	authtx.RegisterTxService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.BaseApp.Simulate, app.interfaceRegistry)
+}
+
+func (app *PylonsApp) RegisterTendermintService(clientCtx client.Context) {
+	tmservice.RegisterTendermintService(app.BaseApp.GRPCQueryRouter(), clientCtx, app.interfaceRegistry)
 }
 
 // prepare for fresh start at zero height
