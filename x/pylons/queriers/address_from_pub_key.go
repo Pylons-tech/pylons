@@ -30,7 +30,7 @@ func AddrFromPubKey(ctx sdk.Context, path []string, req abci.RequestQuery, keepe
 
 	var pubKeyBytes33 [33]byte
 	copy(pubKeyBytes33[:], pubKeyBytes)
-	pubKey := crypto.PubKeySecp256k1(pubKeyBytes33)
+	var pubKey = crypto.PubKey(pubKeyBytes33[:])
 
 	addrResp := AddrResp{
 		Bech32Addr: sdk.AccAddress(pubKey.Address().Bytes()).String(),

@@ -1,0 +1,64 @@
+syntax = "proto3";
+package pylons;
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
+import "google/api/annotations.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "pylons/query.proto";
+
+// MsgCheckExecution defines a CheckExecution message
+message MsgCheckExecution {
+  string  ExecID = 1;
+  string Sender = 2;
+  // if this is set to true then we complete the execution by paying for it
+  bool PayToComplete = 3;
+}
+
+// MsgCreateAccount defines a CreateAccount message
+message MsgCreateAccount {
+  string Requester = 1;
+}
+
+//Cookbook is a struct that contains all the metadata of a cookbook
+message NewMsgCreateCookbook {
+  // optinal id which can be provided by the developer
+  string CookbookID = 1;
+  string Name = 2;
+  string Description = 3;
+  SemVer Version = 4;
+  string Developer = 5;
+  Email SupportEmail = 6;
+  Level Level = 7;
+  bytes Sender = 8;
+  // Pylons per block to be charged across this cookbook for delayed execution early completion
+  int64 CostPerBlock = 9;
+}
+
+// MsgCreateRecipe defines a CreateRecipe message
+message MsgCreateRecipe {
+  // optional RecipeID if someone
+  string  RecipeID = 1;
+  string Name = 2;
+  string  CookbookID = 3;    // the cookbook guid
+  CoinInputList CoinInputs = 4;
+  ItemInputList ItemInputs = 5;
+  WeightedOutputsList Outputs = 6;
+  int64 BlockInterval = 7;
+  string Sender = 8;
+  string      Description = 9;
+  CoinOutput CoinOutputEntity = 10;
+  ItemOutput ItemOutputEntity = 11;
+  ItemModifyOutput ItemModifyOutputEntity = 12;
+}
+
+
+// MsgCreateTrade defines a CreateTrade message
+message  MsgCreateTrade {
+  CoinInputList CoinInputs = 1;
+  TradeItemInputList ItemInputs = 2;
+  repeated cosmos.base.v1beta1.Coin CoinOutputs = 3;
+  ItemList ItemOutputs = 4;
+  string ExtraInfo = 5;
+  string Sender = 6;
+}
