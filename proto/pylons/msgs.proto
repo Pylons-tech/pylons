@@ -23,7 +23,7 @@ message MsgCreateAccount {
 }
 
 //Cookbook is a struct that contains all the metadata of a cookbook
-message NewMsgCreateCookbook {
+message MsgCreateCookbook {
   // optinal id which can be provided by the developer
   string CookbookID = 1;
   string Name = 2;
@@ -49,9 +49,7 @@ message MsgCreateRecipe {
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
-  CoinOutput CoinOutputEntity = 10;
-  ItemOutput ItemOutputEntity = 11;
-  ItemModifyOutput ItemModifyOutputEntity = 12;
+  repeated bytes Entries = 10  [(gogoproto.castrepeated) = "github.com/Pylons-tech/pylons/x/pylons/types.EntriesList"];
 }
 
 
@@ -59,7 +57,7 @@ message MsgCreateRecipe {
 message MsgCreateTrade {
   CoinInputList CoinInputs = 1;
   TradeItemInputList ItemInputs = 2;
-  repeated cosmos.base.v1beta1.Coin CoinOutputs = 3;
+  repeated cosmos.base.v1beta1.Coin CoinOutputs = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   ItemList ItemOutputs = 4;
   string ExtraInfo = 5;
   string Sender = 6;
@@ -115,7 +113,7 @@ message MsgFulfillTrade {
 
 // MsgGetPylons defines a GetPylons message
 message MsgGetPylons {
-  repeated cosmos.base.v1beta1.Coin Amount = 1;
+  repeated cosmos.base.v1beta1.Coin Amount = 1  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   string Requester = 2;
 }
 
@@ -131,7 +129,7 @@ message MsgGoogleIAPGetPylons {
 
 // MsgSendCoins defines a SendCoins message
 message MsgSendCoins {
-  repeated cosmos.base.v1beta1.Coin Amount = 1;
+  repeated cosmos.base.v1beta1.Coin Amount = 1  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   string Sender = 2;
   string Receiver = 3;
 }
@@ -173,7 +171,5 @@ message MsgUpdateRecipe {
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
-  CoinOutput CoinOutputEntity = 10;
-  ItemOutput ItemOutputEntity = 11;
-  ItemModifyOutput ItemModifyOutputEntity = 12;
+  repeated bytes Entries = 10  [(gogoproto.castrepeated) = "github.com/Pylons-tech/pylons/x/pylons/types.EntriesList"];
 }

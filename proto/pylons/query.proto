@@ -19,9 +19,9 @@ message CoinInput {
 }
 
 message CoinOutput{
-  string IDs = 1;
-  string Coins = 2;
-  string Counts = 3;
+  string ID = 1;
+  string Coin = 2;
+  string Count = 3;
 }
 
 message SemVer {
@@ -33,11 +33,11 @@ message Level {
 }
 
 message Email {
-  string number = 1;
+  string str = 1;
 }
 
 message FloatString {
-  string number = 1;
+  string str = 1;
 }
 
 // DoubleInputParam describes the bounds on an item input/output parameter of type float64
@@ -55,9 +55,9 @@ message DoubleInputParamList {
 
 // DoubleWeightRange describes weight range that produce double value
 message DoubleWeightRange {
-  FloatString  Lower = 1;// This is added due to amino.Marshal does not support float variable
-  FloatString     Upper = 2;
-  int64     Weight = 3;
+  FloatString Lower = 1;// This is added due to amino.Marshal does not support float variable
+  FloatString Upper = 2;
+  int64 Weight = 3;
 }
 
 message DoubleWeightTable  {
@@ -69,7 +69,7 @@ message LongParam {
   string Key = 1;
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
   FloatString    Rate = 2;
-  IntWeightTable Table = 3;
+  IntWeightTable WeightTable = 3;
   // When program is not empty, IntWeightTable is ignored
   string  Program = 4;
 }
@@ -162,7 +162,7 @@ message  DoubleParam  {
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
   FloatString Rate = 1;
   string Key = 2;
-  DoubleWeightTable Table = 3;
+  DoubleWeightTable WeightTable = 3;
   // When program is not empty, DoubleWeightTable is ignored
   string Program = 4;
 }
