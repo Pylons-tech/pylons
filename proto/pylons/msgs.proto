@@ -7,9 +7,11 @@ import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "pylons/query.proto";
 
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/msgs";
+
 // MsgCheckExecution defines a CheckExecution message
 message MsgCheckExecution {
-  string  ExecID = 1;
+  string ExecID = 1;
   string Sender = 2;
   // if this is set to true then we complete the execution by paying for it
   bool PayToComplete = 3;
@@ -30,7 +32,7 @@ message NewMsgCreateCookbook {
   string Developer = 5;
   Email SupportEmail = 6;
   Level Level = 7;
-  bytes Sender = 8;
+  string Sender = 8;
   // Pylons per block to be charged across this cookbook for delayed execution early completion
   int64 CostPerBlock = 9;
 }
@@ -38,15 +40,15 @@ message NewMsgCreateCookbook {
 // MsgCreateRecipe defines a CreateRecipe message
 message MsgCreateRecipe {
   // optional RecipeID if someone
-  string  RecipeID = 1;
+  string RecipeID = 1;
   string Name = 2;
-  string  CookbookID = 3;    // the cookbook guid
+  string CookbookID = 3;    // the cookbook guid
   CoinInputList CoinInputs = 4;
   ItemInputList ItemInputs = 5;
   WeightedOutputsList Outputs = 6;
   int64 BlockInterval = 7;
   string Sender = 8;
-  string      Description = 9;
+  string Description = 9;
   CoinOutput CoinOutputEntity = 10;
   ItemOutput ItemOutputEntity = 11;
   ItemModifyOutput ItemModifyOutputEntity = 12;
@@ -54,11 +56,124 @@ message MsgCreateRecipe {
 
 
 // MsgCreateTrade defines a CreateTrade message
-message  MsgCreateTrade {
+message MsgCreateTrade {
   CoinInputList CoinInputs = 1;
   TradeItemInputList ItemInputs = 2;
   repeated cosmos.base.v1beta1.Coin CoinOutputs = 3;
   ItemList ItemOutputs = 4;
   string ExtraInfo = 5;
   string Sender = 6;
+}
+
+// MsgDisableRecipe defines a DisableRecipe message
+message MsgDisableRecipe  {
+  string RecipeID = 1;
+  string Sender = 2;
+}
+
+// MsgDisableTrade defines a DisableTrade message
+message MsgDisableTrade  {
+  string TradeID = 1;
+  string Sender = 2;
+}
+
+// MsgEnableRecipe defines a EnableRecipe message
+message MsgEnableRecipe  {
+  string RecipeID = 1;
+  string Sender = 2;
+}
+
+// MsgEnableTrade defines a EnableTrade message
+message MsgEnableTrade  {
+  string TradeID = 1;
+  string Sender = 2;
+}
+
+// MsgExecuteRecipe defines a SetName message
+message  MsgExecuteRecipe {
+  string RecipeID = 1;
+  string Sender = 2;
+  repeated string ItemIDs = 3;
+}
+
+// MsgFiatItem is a msg struct to be used to fiat item
+message MsgFiatItem {
+  string CookbookID = 1;
+  repeated DoubleKeyValue Doubles = 2;
+  repeated LongKeyValue Longs = 3;
+  repeated StringKeyValue Strings = 4;
+  string Sender = 5;
+  int64 TransferFee = 6;
+}
+
+// MsgFulfillTrade defines a FulfillTrade message
+message MsgFulfillTrade {
+  string TradeID = 1;
+  string Sender = 2;
+  repeated string ItemIDs = 3;
+}
+
+// MsgGetPylons defines a GetPylons message
+message MsgGetPylons {
+  repeated cosmos.base.v1beta1.Coin Amount = 1;
+  string Requester = 2;
+}
+
+// MsgGoogleIAPGetPylons defines a GetPylons message
+message MsgGoogleIAPGetPylons {
+  string ProductID = 1;
+  string PurchaseToken = 2;
+  string ReceiptDataBase64 = 3;
+  string Signature = 4;
+  string Requester = 5;
+}
+
+
+// MsgSendCoins defines a SendCoins message
+message MsgSendCoins {
+  repeated cosmos.base.v1beta1.Coin Amount = 1;
+  string Sender = 2;
+  string Receiver = 3;
+}
+
+// MsgSendItems defines a SendItems message
+message MsgSendItems {
+  repeated string ItemIDs = 1;
+  string Sender = 2;
+  string Receiver = 3;
+}
+
+
+// MsgUpdateItemString defines a UpdateItemString message
+message MsgUpdateItemString {
+  string Field = 1;
+  string Value = 2;
+  string Sender = 3;
+  string ItemID = 4;
+}
+
+// MsgUpdateCookbook defines a UpdateCookbook message
+message MsgUpdateCookbook {
+  string ID = 1;
+  string Description = 2;
+  SemVer Version = 3;
+  string Developer = 4;
+  Email SupportEmail = 5;
+  string Sender = 6;
+}
+
+// MsgUpdateRecipe defines a UpdateRecipe message
+message MsgUpdateRecipe {
+  string Name = 1;
+  string CookbookID = 2;     // the cookbook guid
+  string ID = 3;             // the recipe guid
+  CoinInputList CoinInputs = 4;
+  ItemInputList ItemInputs = 5;
+  WeightedOutputsList Outputs = 6;
+  int64 BlockInterval = 7;
+  string Sender = 8;
+  string Description = 9;
+  CoinOutput CoinOutputEntity = 10;
+  ItemOutput ItemOutputEntity = 11;
+  ItemModifyOutput ItemModifyOutputEntity = 12;
 }
