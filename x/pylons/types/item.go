@@ -2,7 +2,6 @@ package types
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
@@ -11,40 +10,6 @@ import (
 
 // TypeItem is a store key for item
 const TypeItem = "item"
-
-// DoubleKeyValue describes double key/value set
-type DoubleKeyValue struct {
-	Key   string
-	Value FloatString
-}
-
-// LongKeyValue describes long key/value set
-type LongKeyValue struct {
-	Key   string
-	Value int
-}
-
-// StringKeyValue describes string key/value set
-type StringKeyValue struct {
-	Key   string
-	Value string
-}
-
-// Item is a tradable asset
-type Item struct {
-	NodeVersion   SemVer
-	ID            string
-	Doubles       []DoubleKeyValue
-	Longs         []LongKeyValue
-	Strings       []StringKeyValue
-	CookbookID    string
-	Sender        sdk.AccAddress
-	OwnerRecipeID string
-	OwnerTradeID  string
-	Tradable      bool
-	LastUpdate    int64
-	TransferFee   int64
-}
 
 // SetTransferFee set item's TransferFee
 func (it *Item) SetTransferFee(transferFee int64) {
@@ -68,14 +33,11 @@ func Min(x, y int64) int64 {
 }
 
 // GetTransferFee set item's TransferFee
-func (it Item) GetTransferFee() int64 {
+func (it Item) GetTransferFeeOld() int64 {
 	minItemTransferFee := config.Config.Fee.MinItemTransferFee
 	maxItemTransferFee := config.Config.Fee.MaxItemTransferFee
 	return Min(Max(it.TransferFee, minItemTransferFee), maxItemTransferFee)
 }
-
-// ItemList is a list of items
-type ItemList []Item
 
 // FindDouble is a function to get a double attribute from an item
 func (it Item) FindDouble(key string) (float64, bool) {
@@ -101,7 +63,7 @@ func (it Item) FindDoubleKey(key string) (int, bool) {
 func (it Item) FindLong(key string) (int, bool) {
 	for _, v := range it.Longs {
 		if v.Key == key {
-			return v.Value, true
+			return int(v.Value), true
 		}
 	}
 	return 0, false
@@ -149,15 +111,15 @@ func (it Item) SetString(key string, value string) bool {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, strings []StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
+func NewItem(cookbookID string, doubles []*DoubleKeyValue, longs []*LongKeyValue, strings []*StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
 
 	item := &Item{
-		NodeVersion: SemVer("0.0.1"),
+		NodeVersion: &SemVer{"0.0.1"},
 		CookbookID:  cookbookID,
 		Doubles:     doubles,
 		Longs:       longs,
 		Strings:     strings,
-		Sender:      sender,
+		Sender:      sender.String(),
 		// By default all items are tradable
 		Tradable:    true,
 		LastUpdate:  blockHeight,
@@ -166,28 +128,6 @@ func NewItem(cookbookID string, doubles []DoubleKeyValue, longs []LongKeyValue, 
 	item.ID = KeyGen(sender)
 
 	return item
-}
-
-func (it Item) String() string {
-	return fmt.Sprintf(`
-	Item{ 
-		NodeVersion: %s,
-		ID: %s,
-		Sender: %s,
-		Doubles: %+v,
-		Longs: %+v,
-		Strings: %+v,
-		CookbookID: %+v,
-		TransferFee: %d,
-	}`,
-		it.NodeVersion,
-		it.ID,
-		it.Sender,
-		it.Doubles,
-		it.Longs,
-		it.Strings,
-		it.CookbookID,
-		it.TransferFee)
 }
 
 // Equals compares two items

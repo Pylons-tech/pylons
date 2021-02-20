@@ -8,26 +8,12 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgUpdateRecipe defines a UpdateRecipe message
-type MsgUpdateRecipe struct {
-	Name          string
-	CookbookID    string // the cookbook guid
-	ID            string // the recipe guid
-	CoinInputs    types.CoinInputList
-	ItemInputs    types.ItemInputList
-	Entries       types.EntriesList
-	Outputs       types.WeightedOutputsList
-	BlockInterval int64
-	Sender        sdk.AccAddress
-	Description   string
-}
-
 // NewMsgUpdateRecipe a constructor for UpdateRecipe msg
 func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
-	coinInputs types.CoinInputList,
-	itemInputs types.ItemInputList,
+	coinInputs *types.CoinInputList,
+	itemInputs *types.ItemInputList,
 	entries types.EntriesList,
-	outputs types.WeightedOutputsList,
+	outputs *types.WeightedOutputsList,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
@@ -40,7 +26,7 @@ func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
 		Entries:       entries,
 		Outputs:       outputs,
 		BlockInterval: blockInterval,
-		Sender:        sender,
+		Sender:        sender.String(),
 	}
 }
 
@@ -83,5 +69,5 @@ func (msg MsgUpdateRecipe) GetSignBytes() []byte {
 
 // GetSigners gets the signer who should have signed the message
 func (msg MsgUpdateRecipe) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

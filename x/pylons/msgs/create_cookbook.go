@@ -11,23 +11,8 @@ import (
 // DefaultCostPerBlock the amount of pylons to be charged by default
 const DefaultCostPerBlock = 50 // Pylons
 
-// MsgCreateCookbook defines a CreateCookbook message
-type MsgCreateCookbook struct {
-	// optinal id which can be provided by the developer
-	CookbookID   string
-	Name         string
-	Description  string
-	Version      types.SemVer
-	Developer    string
-	SupportEmail types.Email
-	Level        types.Level
-	Sender       sdk.AccAddress
-	// Pylons per block to be charged across this cookbook for delayed execution early completion
-	CostPerBlock *int `json:",omitempty"`
-}
-
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
-func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version types.SemVer, sEmail types.Email, level types.Level, cpb int, sender sdk.AccAddress) MsgCreateCookbook {
+func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version *types.SemVer, sEmail *types.Email, level *types.Level, cpb int64, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
 		CookbookID:   cookbookID,
 		Name:         name,
@@ -36,8 +21,8 @@ func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version type
 		Version:      version,
 		SupportEmail: sEmail,
 		Level:        level,
-		Sender:       sender,
-		CostPerBlock: &cpb,
+		Sender:       sender.String(),
+		CostPerBlock: cpb,
 	}
 }
 
@@ -50,8 +35,8 @@ func (msg MsgCreateCookbook) Type() string { return "create_cookbook" }
 // ValidateBasic validates the Msg
 func (msg MsgCreateCookbook) ValidateBasic() error {
 
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 	}
 
 	if len(msg.Name) < 8 {
@@ -88,5 +73,5 @@ func (msg MsgCreateCookbook) GetSignBytes() []byte {
 
 // GetSigners gets the signer who should have signed the message
 func (msg MsgCreateCookbook) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

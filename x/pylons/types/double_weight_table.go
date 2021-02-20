@@ -5,18 +5,6 @@ import (
 	"math/rand"
 )
 
-// DoubleWeightTable describes weight loot table that produce double value
-type DoubleWeightTable struct {
-	WeightRanges []DoubleWeightRange
-}
-
-// DoubleWeightRange describes weight range that produce double value
-type DoubleWeightRange struct {
-	Lower  FloatString // This is added due to amino.Marshal does not support float variable
-	Upper  FloatString
-	Weight int
-}
-
 // Has check if an input is between double weight range
 func (wr DoubleWeightRange) Has(number float64) bool {
 	return number >= wr.Lower.Float() && number < wr.Upper.Float()
@@ -27,8 +15,8 @@ func (wr DoubleWeightRange) Has(number float64) bool {
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100.00, 500.00] else [600.00, 800.00].
 // next we get a random number from the selected range and return that
 func (wt *DoubleWeightTable) Generate() (float64, error) {
-	lastWeight := 0
-	var weights []int
+	var lastWeight int64 = 0
+	var weights []int64
 	for _, weightRange := range wt.WeightRanges {
 		lastWeight += weightRange.Weight
 		weights = append(weights, lastWeight)
@@ -36,9 +24,9 @@ func (wt *DoubleWeightTable) Generate() (float64, error) {
 	if lastWeight == 0 {
 		return 0, errors.New("total weight of DoubleWeightTable shouldn't be zero")
 	}
-	randWeight := rand.Intn(lastWeight)
+	randWeight := rand.Int63n(lastWeight)
 
-	first := 0
+	var first int64 = 0
 	chosenIndex := -1
 	for i, weight := range weights {
 		if randWeight >= first && randWeight < weight {

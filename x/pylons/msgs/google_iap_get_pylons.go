@@ -14,15 +14,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgGoogleIAPGetPylons defines a GetPylons message
-type MsgGoogleIAPGetPylons struct {
-	ProductID         string
-	PurchaseToken     string
-	ReceiptDataBase64 string
-	Signature         string
-	Requester         sdk.AccAddress
-}
-
 // NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
 func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester sdk.AccAddress) MsgGoogleIAPGetPylons {
 	return MsgGoogleIAPGetPylons{
@@ -30,7 +21,7 @@ func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signa
 		PurchaseToken:     PurchaseToken,
 		ReceiptDataBase64: ReceiptDataBase64,
 		Signature:         Signature,
-		Requester:         requester,
+		Requester:         requester.String(),
 	}
 }
 
@@ -81,8 +72,8 @@ func (msg MsgGoogleIAPGetPylons) ValidateGoogleIAPSignature() error {
 // ValidateBasic is a function to validate MsgGoogleIAPGetPylons msg
 func (msg MsgGoogleIAPGetPylons) ValidateBasic() error {
 
-	if msg.Requester.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
+	if msg.Requester == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester)
 	}
 
 	var jsonData map[string]interface{}
@@ -116,5 +107,5 @@ func (msg MsgGoogleIAPGetPylons) GetSignBytes() []byte {
 
 // GetSigners encodes the message for signing
 func (msg MsgGoogleIAPGetPylons) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Requester}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Requester)}
 }

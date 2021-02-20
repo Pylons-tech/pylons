@@ -7,17 +7,11 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgGetPylons defines a GetPylons message
-type MsgGetPylons struct {
-	Amount    sdk.Coins
-	Requester sdk.AccAddress
-}
-
 // NewMsgGetPylons is a function to get MsgGetPylons msg from required params
 func NewMsgGetPylons(amount sdk.Coins, requester sdk.AccAddress) MsgGetPylons {
 	return MsgGetPylons{
 		Amount:    amount,
-		Requester: requester,
+		Requester: requester.String(),
 	}
 }
 
@@ -30,8 +24,8 @@ func (msg MsgGetPylons) Type() string { return "get_pylons" }
 // ValidateBasic is a function to validate MsgGetPylons msg
 func (msg MsgGetPylons) ValidateBasic() error {
 
-	if msg.Requester.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
+	if msg.Requester == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester)
 	}
 	if !msg.Amount.IsAllPositive() {
 		return sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "Amount cannot be less than 0/negative")
@@ -50,5 +44,5 @@ func (msg MsgGetPylons) GetSignBytes() []byte {
 
 // GetSigners is a function to get signers from MsgGetPylons msg
 func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Requester}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Requester)}
 }

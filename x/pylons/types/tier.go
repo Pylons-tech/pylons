@@ -6,20 +6,17 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// Level is the kind of cookbook a developer can create
-type Level int
-
 // Tier defines the kind of cookbook this is
 const (
 	// Basic is the free level which does allow developers to use pylons ( paid currency ) in their
 	// games
-	Basic Level = iota
+	Basic int64 = iota
 	Premium
 )
 
 // Validate validates the Level
 func (l Level) Validate() error {
-	if l == Basic || l == Premium {
+	if l.Number == Basic || l.Number == Premium {
 		return nil
 	}
 
@@ -43,12 +40,16 @@ type Tier struct {
 // BasicTier is the cookbook tier which doesn't allow paid recipes which means
 // the developers cannot have recipes where they can actually carge a fee in pylons
 var BasicTier = Tier{
-	Level: Basic,
-	Fee:   BasicFee,
+	Level: Level{
+		Number: Basic,
+	},
+	Fee: BasicFee,
 }
 
 // PremiumTier the cookbook tier which does allow paid recipes
 var PremiumTier = Tier{
-	Level: Premium,
-	Fee:   PremiumFee,
+	Level: Level{
+		Number: Premium,
+	},
+	Fee: PremiumFee,
 }

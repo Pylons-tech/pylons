@@ -7,17 +7,11 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgDisableRecipe defines a DisableRecipe message
-type MsgDisableRecipe struct {
-	RecipeID string
-	Sender   sdk.AccAddress
-}
-
 // NewMsgDisableRecipe a constructor for DisableRecipe msg
 func NewMsgDisableRecipe(recipeID string, sender sdk.AccAddress) MsgDisableRecipe {
 	return MsgDisableRecipe{
 		RecipeID: recipeID,
-		Sender:   sender,
+		Sender:   sender.String(),
 	}
 }
 
@@ -30,8 +24,8 @@ func (msg MsgDisableRecipe) Type() string { return "disable_recipe" }
 // ValidateBasic validates the Msg
 func (msg MsgDisableRecipe) ValidateBasic() error {
 
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 
 	}
 
@@ -49,5 +43,5 @@ func (msg MsgDisableRecipe) GetSignBytes() []byte {
 
 // GetSigners gets the signer who should have signed the message
 func (msg MsgDisableRecipe) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

@@ -7,19 +7,12 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgSendItems defines a SendItems message
-type MsgSendItems struct {
-	ItemIDs  []string
-	Sender   sdk.AccAddress
-	Receiver sdk.AccAddress
-}
-
 // NewMsgSendItems is a function to get MsgSendItems msg from required params
 func NewMsgSendItems(itemIDs []string, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendItems {
 	return MsgSendItems{
 		ItemIDs:  itemIDs,
-		Sender:   sender,
-		Receiver: receiver,
+		Sender:   sender.String(),
+		Receiver: receiver.String(),
 	}
 }
 
@@ -45,16 +38,16 @@ func (msg MsgSendItems) ValidateBasic() error {
 		checked[val] = true
 	}
 
-	if msg.Sender.String() == msg.Receiver.String() {
+	if msg.Sender == msg.Receiver {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Sender and receiver should be different")
 	}
 
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 	}
 
-	if msg.Receiver.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Receiver.String())
+	if msg.Receiver == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Receiver)
 	}
 
 	return nil
@@ -71,5 +64,5 @@ func (msg MsgSendItems) GetSignBytes() []byte {
 
 // GetSigners is a function to get signers from MsgSendItems msg
 func (msg MsgSendItems) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

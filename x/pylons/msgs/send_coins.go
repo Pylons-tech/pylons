@@ -7,19 +7,12 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgSendCoins defines a SendCoins message
-type MsgSendCoins struct {
-	Amount   sdk.Coins
-	Sender   sdk.AccAddress
-	Receiver sdk.AccAddress
-}
-
 // NewMsgSendCoins is a function to get MsgSendCoins msg from required params
 func NewMsgSendCoins(amount sdk.Coins, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendCoins {
 	return MsgSendCoins{
 		Amount:   amount,
-		Sender:   sender,
-		Receiver: receiver,
+		Sender:   sender.String(),
+		Receiver: receiver.String(),
 	}
 }
 
@@ -32,12 +25,12 @@ func (msg MsgSendCoins) Type() string { return "send_coins" }
 // ValidateBasic is a function to validate MsgSendCoins msg
 func (msg MsgSendCoins) ValidateBasic() error {
 
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 	}
 
-	if msg.Receiver.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Receiver.String())
+	if msg.Receiver == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Receiver)
 	}
 
 	if !msg.Amount.IsAllPositive() {
@@ -58,5 +51,5 @@ func (msg MsgSendCoins) GetSignBytes() []byte {
 
 // GetSigners is a function to get signers from MsgSendCoins msg
 func (msg MsgSendCoins) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

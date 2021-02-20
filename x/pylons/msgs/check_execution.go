@@ -7,19 +7,11 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgCheckExecution defines a CheckExecution message
-type MsgCheckExecution struct {
-	ExecID string
-	Sender sdk.AccAddress
-	// if this is set to true then we complete the execution by paying for it
-	PayToComplete bool
-}
-
 // NewMsgCheckExecution a constructor for CheckExecution msg
 func NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress) MsgCheckExecution {
 	return MsgCheckExecution{
 		ExecID:        execID,
-		Sender:        sender,
+		Sender:        sender.String(),
 		PayToComplete: ptc,
 	}
 }
@@ -33,8 +25,8 @@ func (msg MsgCheckExecution) Type() string { return "check_execution" }
 // ValidateBasic validates the Msg
 func (msg MsgCheckExecution) ValidateBasic() error {
 
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 	}
 
 	return nil
@@ -51,5 +43,5 @@ func (msg MsgCheckExecution) GetSignBytes() []byte {
 
 // GetSigners gets the signer who should have signed the message
 func (msg MsgCheckExecution) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

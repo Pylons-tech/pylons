@@ -7,38 +7,6 @@ import (
 	"strconv"
 )
 
-// DoubleParam describes the bounds on an item input/output parameter of type float64
-type DoubleParam struct {
-	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate FloatString
-	Key  string
-	DoubleWeightTable
-	// When program is not empty, DoubleWeightTable is ignored
-	Program string
-}
-
-// DoubleParamList is a list of DoubleParam
-type DoubleParamList []DoubleParam
-
-func (dp DoubleParam) String() string {
-	return fmt.Sprintf(`
-	DoubleParam{ 
-		DoubleWeightTable: %+v
-		Rate: %+v,
-	}`, dp.DoubleWeightTable, dp.Rate)
-}
-
-func (dpm DoubleParamList) String() string {
-	dp := "DoubleParamList{"
-
-	for _, param := range dpm {
-		dp += param.Key + ": " + param.String() + ",\n"
-	}
-
-	dp += "}"
-	return dp
-}
-
 var floatType = reflect.TypeOf(float64(0))
 var stringType = reflect.TypeOf("")
 
@@ -79,22 +47,22 @@ func getFloat(unk interface{}) (float64, error) {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize(ec CelEnvCollection) ([]DoubleKeyValue, error) {
+func (dpm DoubleParamList) Actualize(ec CelEnvCollection) ([]*DoubleKeyValue, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []DoubleKeyValue
-	for _, param := range dpm {
+	var m []*DoubleKeyValue
+	for _, param := range dpm.List {
 		var val float64
 		var err error
 
 		if len(param.Program) > 0 {
 			val, err = ec.EvalFloat64(param.Program)
 		} else {
-			val, err = param.Generate()
+			val, err = param.WeightTable.Generate()
 		}
 		if err != nil {
 			return m, err
 		}
-		m = append(m, DoubleKeyValue{
+		m = append(m, &DoubleKeyValue{
 			Key:   param.Key,
 			Value: ToFloatString(val),
 		})

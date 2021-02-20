@@ -5,20 +5,8 @@ import (
 	"math/rand"
 )
 
-// IntWeightTable describes weight loot table that produce int value
-type IntWeightTable struct {
-	WeightRanges []IntWeightRange
-}
-
-// IntWeightRange describes weight range that produce int value
-type IntWeightRange struct {
-	Lower  int
-	Upper  int
-	Weight int
-}
-
 // Has check if a number is under IntWeightRange
-func (wr IntWeightRange) Has(number int) bool {
+func (wr IntWeightRange) Has(number int64) bool {
 	return number >= wr.Lower && number < wr.Upper
 }
 
@@ -26,9 +14,9 @@ func (wr IntWeightRange) Has(number int) bool {
 // E.g. 2 weight ranges are provided with values [100, 500  weight: 8] and [600, 800 weight: 2] so now we
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100, 500] else [600, 800].
 // next we get a random number from the selected range and return that
-func (wt *IntWeightTable) Generate() (int, error) {
-	lastWeight := 0
-	var weights []int
+func (wt *IntWeightTable) Generate() (int64, error) {
+	var lastWeight int64 = 0
+	var weights []int64
 	for _, weightRange := range wt.WeightRanges {
 		lastWeight += weightRange.Weight
 		weights = append(weights, lastWeight)
@@ -36,9 +24,9 @@ func (wt *IntWeightTable) Generate() (int, error) {
 	if lastWeight == 0 {
 		return 0, errors.New("total weight of IntWeightTable shouldn't be zero")
 	}
-	randWeight := rand.Intn(lastWeight)
+	randWeight := rand.Int63n(lastWeight)
 
-	first := 0
+	var first int64 = 0
 	chosenIndex := -1
 	for i, weight := range weights {
 		if randWeight >= first && randWeight < weight {
@@ -55,7 +43,7 @@ func (wt *IntWeightTable) Generate() (int, error) {
 	selectedWeightRange := wt.WeightRanges[chosenIndex]
 
 	if selectedWeightRange.Upper > selectedWeightRange.Lower {
-		return rand.Intn(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower, nil
+		return rand.Int63n(selectedWeightRange.Upper-selectedWeightRange.Lower) + selectedWeightRange.Lower, nil
 	}
 	return selectedWeightRange.Lower, nil
 }
@@ -63,7 +51,7 @@ func (wt *IntWeightTable) Generate() (int, error) {
 // Has checks if any of the weight ranges has the number
 func (wt *IntWeightTable) Has(number int) bool {
 	for _, weightRange := range wt.WeightRanges {
-		if weightRange.Has(number) {
+		if weightRange.Has(int64(number)) {
 			return true
 		}
 	}

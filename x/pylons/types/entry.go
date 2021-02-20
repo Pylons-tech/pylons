@@ -57,12 +57,12 @@ func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	var sel serializeEntriesList
 	for _, wp := range wpl {
 		switch wp := wp.(type) {
-		case CoinOutput:
-			sel.CoinOutputs = append(sel.CoinOutputs, wp)
-		case ItemModifyOutput:
-			sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wp)
-		case ItemOutput:
-			sel.ItemOutputs = append(sel.ItemOutputs, wp)
+		case *CoinOutput:
+			sel.CoinOutputs = append(sel.CoinOutputs, *wp)
+		case *ItemModifyOutput:
+			sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, *wp)
+		case *ItemOutput:
+			sel.ItemOutputs = append(sel.ItemOutputs, *wp)
 		default:
 		}
 	}
@@ -78,13 +78,13 @@ func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 	}
 
 	for _, co := range sel.CoinOutputs {
-		*wpl = append(*wpl, co)
+		*wpl = append(*wpl, &co)
 	}
 	for _, io := range sel.ItemModifyOutputs {
-		*wpl = append(*wpl, io)
+		*wpl = append(*wpl, &io)
 	}
 	for _, io := range sel.ItemOutputs {
-		*wpl = append(*wpl, io)
+		*wpl = append(*wpl, &io)
 	}
 	return nil
 }

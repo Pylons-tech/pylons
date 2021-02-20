@@ -10,22 +10,12 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgCreateTrade defines a CreateTrade message
-type MsgCreateTrade struct {
-	CoinInputs  types.CoinInputList
-	ItemInputs  types.TradeItemInputList
-	CoinOutputs sdk.Coins
-	ItemOutputs types.ItemList
-	ExtraInfo   string
-	Sender      sdk.AccAddress
-}
-
 // NewMsgCreateTrade a constructor for CreateTrade msg
 func NewMsgCreateTrade(
-	coinInputs types.CoinInputList,
-	tradeItemInputs types.TradeItemInputList,
+	coinInputs *types.CoinInputList,
+	tradeItemInputs *types.TradeItemInputList,
 	coinOutputs sdk.Coins,
-	itemOutputs types.ItemList,
+	itemOutputs *types.ItemList,
 	extraInfo string,
 	sender sdk.AccAddress) MsgCreateTrade {
 	return MsgCreateTrade{
@@ -34,7 +24,7 @@ func NewMsgCreateTrade(
 		CoinOutputs: coinOutputs,
 		ItemOutputs: itemOutputs,
 		ExtraInfo:   extraInfo,
-		Sender:      sender,
+		Sender:      sender.String(),
 	}
 }
 
@@ -48,8 +38,8 @@ func (msg MsgCreateTrade) Type() string { return "create_trade" }
 func (msg MsgCreateTrade) ValidateBasic() error {
 	tradePylonAmount := int64(0)
 
-	if msg.Sender.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender.String())
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 
 	}
 	if msg.CoinOutputs == nil && msg.ItemOutputs == nil {
@@ -70,7 +60,7 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 	}
 
 	if msg.CoinInputs != nil {
-		for _, coinInput := range msg.CoinInputs {
+		for _, coinInput := range msg.CoinInputs.Coins {
 			if coinInput.Count == 0 {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
 			}
@@ -103,5 +93,5 @@ func (msg MsgCreateTrade) GetSignBytes() []byte {
 
 // GetSigners gets the signer who should have signed the message
 func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Sender}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
 }

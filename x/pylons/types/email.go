@@ -5,13 +5,10 @@ import (
 	"regexp"
 )
 
-// Email is a string type with regex validation
-type Email string
-
 // Validate validates the email provided
 func (e Email) Validate() error {
 	exp := regexp.MustCompile(`^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z0-9]{2,})$`)
-	if exp.MatchString(string(e)) {
+	if exp.MatchString(e.Str) {
 		return nil
 	}
 

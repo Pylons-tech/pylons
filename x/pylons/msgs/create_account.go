@@ -7,15 +7,10 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// MsgCreateAccount defines a CreateAccount message
-type MsgCreateAccount struct {
-	Requester sdk.AccAddress
-}
-
 // NewMsgCreateAccount is a function to get MsgCreateAccount msg from required params
 func NewMsgCreateAccount(requester sdk.AccAddress) MsgCreateAccount {
 	return MsgCreateAccount{
-		Requester: requester,
+		Requester: requester.String(),
 	}
 }
 
@@ -28,8 +23,8 @@ func (msg MsgCreateAccount) Type() string { return "create_account" }
 // ValidateBasic is a function to validate MsgCreateAccount msg
 func (msg MsgCreateAccount) ValidateBasic() error {
 
-	if msg.Requester.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester.String())
+	if msg.Requester == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester)
 	}
 	return nil
 }
@@ -45,5 +40,5 @@ func (msg MsgCreateAccount) GetSignBytes() []byte {
 
 // GetSigners encodes the message for signing
 func (msg MsgCreateAccount) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Requester}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Requester)}
 }
