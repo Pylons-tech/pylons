@@ -32,3 +32,6 @@ unit_tests:
 
 fixture_unit_tests:
 	go test -v ./test/fixtures_test/ ${ARGS}
+
+proto-gen:
+	go run ./cmd/protogen/ $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
