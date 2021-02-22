@@ -1,0 +1,24 @@
+{
+    "NodeVersion": "0.0.1",
+    "CoinInputs": [],
+    "ItemInputs": [],
+    "Entries":{
+        "CoinOutputs":[],
+        "ItemOutputs":[{
+            "ID": "nft",
+            "Ref": "./recipes/image_nft_minter/item_output/nft.json"
+        }]
+    },
+    "Outputs": [
+        {
+            "EntryIDs": ["nft"],
+            "Weight": "1"
+        }
+    ],
+    "ExtraInfo": "",
+    "Sender": "image_nft_minter_account1",
+    "Name": "NFT minter recipe",
+    "CookbookID": "image_nft_minter",
+    "Description": "this recipe is used to issue NFT on NFT cookbook.",
+    "BlockInterval": "0"
+}

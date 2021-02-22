@@ -1,0 +1,16 @@
+{
+    "NodeVersion": "0.0.1",
+    "CoinInputs":[],
+    "ItemInputs":[
+        {
+            "ID": "toburn",
+            "Ref": "./recipes/image_nft_minter/item_input/nft.json"
+        }
+    ],
+    "ExtraInfo":"",
+    "Sender":"image_nft_minter_account1",
+    "Name": "NFT burner recipe",
+    "CookbookID": "image_nft_minter",
+    "Description": "this recipe is used to burn NFT on NFT cookbook.",
+    "BlockInterval":"0"
+}

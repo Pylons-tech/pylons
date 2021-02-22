@@ -1,0 +1,13 @@
+{
+    "NodeVersion": "0.0.1",
+    "ID": "image_nft_minter",
+    "Name": "Image NFT Minter",
+    "Description": "this has to meet character limits lol",
+    "Developer": "SketchyCo",
+    "Level": "0",
+    "Sender": "image_nft_minter_account1",
+    "SupportEmail": "image_nft_minter@example.com",
+    "Version": "1.0.0",
+    "CostPerBlock": "50"
+}
+  
