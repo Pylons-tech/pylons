@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -8,22 +9,25 @@ import (
 )
 
 // HandlerMsgSendCoins is used to transact pylons between people
-func HandlerMsgSendCoins(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendCoins) (*sdk.Result, error) {
-
+func (k msgServer) HandlerMsgSendCoins(ctx context.Context, msg *msgs.MsgSendCoins) (*msgs.MsgSendCoinsResponse, error) {
 	err := msg.ValidateBasic()
 
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	if !keep.HasCoins(keeper, ctx, msg.Sender, msg.Amount) {
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+	receiver := sdk.AccAddress(msg.Receiver)
+
+	if !keep.HasCoins(k.Keeper, sdkCtx, sender, msg.Amount) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins")
 	}
 
-	err = keep.SendCoins(keeper, ctx, msg.Sender, msg.Receiver, msg.Amount) // If so, deduct the Bid amount from the sender
+	err = keep.SendCoins(k.Keeper, sdkCtx, sender, receiver, msg.Amount) // If so, deduct the Bid amount from the sender
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	return &sdk.Result{}, nil
+	return &msgs.MsgSendCoinsResponse{}, nil
 }

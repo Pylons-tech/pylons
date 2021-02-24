@@ -1,50 +1,46 @@
 package handlers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// UpdateCookbookResponse is a struct to control update cookbook response
-type UpdateCookbookResponse struct {
-	CookbookID string `json:"CookbookID"`
-	Message    string
-	Status     string
-}
-
 // HandlerMsgUpdateCookbook is used to update cookbook by a developer
-func HandlerMsgUpdateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateCookbook) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *msgs.MsgUpdateCookbook) (*msgs.MsgUpdateCookbookResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	cb, err := keeper.GetCookbook(ctx, msg.ID)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
+	cb, err := k.GetCookbook(sdkCtx, msg.ID)
 
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	// only the original sender (owner) of the cookbook can update the cookbook
-	if !cb.Sender.Equals(msg.Sender) {
+	if !cb.Sender.Equals(sender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the cookbook is different then the current sender")
 	}
 
 	cb.Description = msg.Description
-	cb.Version = msg.Version
-	cb.SupportEmail = msg.SupportEmail
+	cb.Version = *msg.Version
+	cb.SupportEmail = *msg.SupportEmail
 	cb.Developer = msg.Developer
 
-	if err := keeper.UpdateCookbook(ctx, msg.ID, cb); err != nil {
+	if err := k.UpdateCookbook(sdkCtx, msg.ID, cb); err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(UpdateCookbookResponse{
+	return &msgs.MsgUpdateCookbookResponse{
 		CookbookID: cb.ID,
 		Message:    "successfully updated the cookbook",
 		Status:     "Success",
-	})
+	}, nil
 }

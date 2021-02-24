@@ -29,18 +29,18 @@ type ExecProcess struct {
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
 func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
-	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
+	if len(msg.ItemIDs) != len(p.recipe.ItemInputs.List) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}
 
-	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
+	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, sdk.AccAddress(msg.Sender))
 	if err != nil {
 		return err
 	}
 
 	// we validate and match items
 	var matchedItems []types.Item
-	for i, itemInput := range p.recipe.ItemInputs {
+	for i, itemInput := range p.recipe.ItemInputs.List {
 		matchedItem := items[i]
 		matchErr := itemInput.MatchError(matchedItem)
 		if matchErr != nil {
@@ -100,7 +100,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 		}
 
 		switch output := output.(type) {
-		case types.CoinOutput:
+		case *types.CoinOutput:
 			coinOutput := output
 			var coinAmount int64
 			if len(coinOutput.Count) > 0 {
@@ -114,7 +114,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			}
 			ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 
-			_, err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
+			err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
 			if err != nil {
 				return ersl, err
 			}
@@ -123,7 +123,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 				Coin:   coinOutput.Coin,
 				Amount: coinAmount,
 			})
-		case types.ItemModifyOutput:
+		case *types.ItemModifyOutput:
 			var outputItem *types.Item
 
 			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
@@ -136,7 +136,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
 
 			// Modify item according to ModifyParams section
-			outputItem, err = p.UpdateItemFromModifyParams(inputItem, output)
+			outputItem, err = p.UpdateItemFromModifyParams(inputItem, *output)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
@@ -148,7 +148,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})
-		case types.ItemOutput:
+		case *types.ItemOutput:
 			itemOutput := output
 			outputItem, err := itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
 			if err != nil {
@@ -186,7 +186,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if !ok {
 			return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
 		}
-		if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
+		if len(toMod.Doubles.List[idx].Program) == 0 { // NO PROGRAM
 			originValue := targetItem.Doubles[dblKey].Value.Float()
 			upgradeAmount := dbl.Value.Float()
 			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
@@ -204,7 +204,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if !ok {
 			return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
 		}
-		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
+		if len(toMod.Longs.Params[idx].Program) == 0 { // NO PROGRAM
 			targetItem.Longs[lngKey].Value += lng.Value
 		} else {
 			targetItem.Longs[lngKey].Value = lng.Value
@@ -267,8 +267,8 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
 
 		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
-		if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" && itemInputs[idx].IDValidationError() == nil {
-			iPrefix2 := itemInputs[idx].ID + "."
+		if itemInputs.List != nil && len(itemInputs.List) > idx && itemInputs.List[idx].ID != "" && itemInputs.List[idx].IDValidationError() == nil {
+			iPrefix2 := itemInputs.List[idx].ID + "."
 			varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
 		}
 	}

@@ -1,20 +1,13 @@
 package handlers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
-
-// CreateAccountResponse is the response for create-account
-type CreateAccountResponse struct {
-	Message string
-	Status  string
-}
 
 // HandlerMsgCreateAccount is used to send pylons to requesters. This handler is part of the
 // faucet
-func HandlerMsgCreateAccount(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateAccount) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgCreateAccount(ctx context.Context, msg *msgs.MsgCreateAccount) (*msgs.MsgCreateExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -22,8 +15,8 @@ func HandlerMsgCreateAccount(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCr
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(CreateAccountResponse{
+	return &msgs.MsgCreateExecutionResponse{
 		Message: "successfully created the account",
 		Status:  "Success",
-	})
+	}, nil
 }

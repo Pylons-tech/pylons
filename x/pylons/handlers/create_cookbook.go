@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -12,31 +13,27 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CreateCookbookResponse is a struct of create cookbook response
-type CreateCookbookResponse struct {
-	CookbookID string `json:"CookbookID"`
-	Message    string
-	Status     string
-}
-
 // HandlerMsgCreateCookbook is used to create cookbook by a developer
-func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgCreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbook) (*msgs.MsgCreateCookbookResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
 	var fee sdk.Coins
-	if msg.Level == types.BasicTier.Level {
+	if *msg.Level == types.BasicTier.Level {
 		fee = types.BasicTier.Fee
-	} else if msg.Level == types.PremiumTier.Level {
+	} else if *msg.Level == types.PremiumTier.Level {
 		fee = types.PremiumTier.Fee
 	} else {
 		return nil, errInternal(errors.New("invalid level"))
 	}
 
-	if !keep.HasCoins(keeper, ctx, msg.Sender, fee) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, sender, fee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
@@ -44,32 +41,32 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = keep.SendCoins(keeper, ctx, msg.Sender, pylonsLLCAddress, fee)
+	err = keep.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, fee)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	cpb := msgs.DefaultCostPerBlock
-	if msg.CostPerBlock != nil {
-		cpb = *msg.CostPerBlock
+	if msg.CostPerBlock != 0 {
+		cpb = int(msg.CostPerBlock)
 	}
 
-	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
+	cb := types.NewCookbook(*msg.SupportEmail, sender, *msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 
 	if msg.CookbookID != "" {
-		if keeper.HasCookbook(ctx, msg.CookbookID) {
+		if k.HasCookbook(sdkCtx, msg.CookbookID) {
 			return nil, errInternal(fmt.Errorf("A cookbook with CookbookID %s already exists", msg.CookbookID))
 		}
 		cb.ID = msg.CookbookID
 	}
 
-	if err := keeper.SetCookbook(ctx, cb); err != nil {
+	if err := k.SetCookbook(sdkCtx, cb); err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(CreateCookbookResponse{
+	return &msgs.MsgCreateCookbookResponse{
 		CookbookID: cb.ID,
 		Message:    "successfully created a cookbook",
 		Status:     "Success",
-	})
+	}, nil
 }

@@ -17,58 +17,100 @@ import (
 
 // NewHandler returns a handler for "pylons" type messages.
 func NewHandler(keeper keep.Keeper) sdk.Handler {
+	msgServer := handlers.NewMsgServerImpl(keeper)
+
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		// set random seed before running handlers
 		rand.Seed(types.RandomSeed(ctx, keeper.GetEntityCount(ctx)))
 		// set entropy reader for uuid before running handlers
 		uuid.SetRand(types.NewEntropyReader())
 
+		ctx = ctx.WithEventManager(sdk.NewEventManager())
+
 		// handle custom messages
 		switch msg := msg.(type) {
-		case msgs.MsgCreateAccount:
-			return handlers.HandlerMsgCreateAccount(ctx, keeper, msg)
-		case msgs.MsgGetPylons:
+		case *msgs.MsgCreateAccount:
+			res, err := msgServer.HandlerMsgCreateAccount(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgGetPylons:
 			if config.Config.IsProduction {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "MsgGetPylons is only supported on development mode")
 			}
-			return handlers.HandlerMsgGetPylons(ctx, keeper, msg)
-		case msgs.MsgGoogleIAPGetPylons:
-			return handlers.HandlerMsgGoogleIAPGetPylons(ctx, keeper, msg)
-		case msgs.MsgSendCoins:
-			return handlers.HandlerMsgSendCoins(ctx, keeper, msg)
-		case msgs.MsgSendItems:
-			return handlers.HandlerMsgSendItems(ctx, keeper, msg)
-		case msgs.MsgCreateCookbook:
-			return handlers.HandlerMsgCreateCookbook(ctx, keeper, msg)
-		case msgs.MsgUpdateCookbook:
-			return handlers.HandlerMsgUpdateCookbook(ctx, keeper, msg)
-		case msgs.MsgCreateRecipe:
-			return handlers.HandlerMsgCreateRecipe(ctx, keeper, msg)
-		case msgs.MsgUpdateRecipe:
-			return handlers.HandlerMsgUpdateRecipe(ctx, keeper, msg)
-		case msgs.MsgExecuteRecipe:
-			return handlers.HandlerMsgExecuteRecipe(ctx, keeper, msg)
-		case msgs.MsgDisableRecipe:
-			return handlers.HandlerMsgDisableRecipe(ctx, keeper, msg)
-		case msgs.MsgEnableRecipe:
-			return handlers.HandlerMsgEnableRecipe(ctx, keeper, msg)
-		case msgs.MsgCheckExecution:
-			return handlers.HandlerMsgCheckExecution(ctx, keeper, msg)
-		case msgs.MsgFiatItem:
+			res, err := msgServer.HandlerMsgGetPylons(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgGoogleIAPGetPylons:
+			res, err := msgServer.HandlerMsgGoogleIAPGetPylons(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgSendCoins:
+			res, err := msgServer.HandlerMsgSendCoins(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgSendItems:
+			res, err := msgServer.HandlerMsgSendItems(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgCreateCookbook:
+			res, err := msgServer.HandlerMsgCreateCookbook(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgUpdateCookbook:
+			res, err := msgServer.HandlerMsgUpdateCookbook(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgCreateRecipe:
+			res, err := msgServer.HandlerMsgCreateRecipe(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgUpdateRecipe:
+			res, err := msgServer.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgExecuteRecipe:
+			res, err := msgServer.HandlerMsgExecuteRecipe(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgDisableRecipe:
+			res, err := msgServer.HandlerMsgDisableRecipe(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgEnableRecipe:
+			res, err := msgServer.HandlerMsgEnableRecipe(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgCheckExecution:
+			res, err := msgServer.HandlerMsgCheckExecution(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgFiatItem:
 			if config.Config.IsProduction {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "MsgFiatItem is only supported on development mode")
 			}
-			return handlers.HandlerMsgFiatItem(ctx, keeper, msg)
-		case msgs.MsgUpdateItemString:
-			return handlers.HandlerMsgUpdateItemString(ctx, keeper, msg)
-		case msgs.MsgCreateTrade:
-			return handlers.HandlerMsgCreateTrade(ctx, keeper, msg)
-		case msgs.MsgFulfillTrade:
-			return handlers.HandlerMsgFulfillTrade(ctx, keeper, msg)
-		case msgs.MsgDisableTrade:
-			return handlers.HandlerMsgDisableTrade(ctx, keeper, msg)
-		case msgs.MsgEnableTrade:
-			return handlers.HandlerMsgEnableTrade(ctx, keeper, msg)
+			res, err := msgServer.HandlerMsgFiatItem(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgUpdateItemString:
+			res, err := msgServer.HandlerMsgUpdateItemString(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgCreateTrade:
+			res, err := msgServer.HandlerMsgCreateTrade(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgFulfillTrade:
+			res, err := msgServer.HandlerMsgFulfillTrade(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgDisableTrade:
+			res, err := msgServer.HandlerMsgDisableTrade(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *msgs.MsgEnableTrade:
+			res, err := msgServer.HandlerMsgEnableTrade(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		default:
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, fmt.Sprintf("Unrecognized pylons Msg type: %v", msg.Type()))
 		}

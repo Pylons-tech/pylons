@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -12,20 +13,17 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// FulfillTradeResponse is the response for fulfillRecipe
-type FulfillTradeResponse struct {
-	Message string
-	Status  string
-}
-
 // HandlerMsgFulfillTrade is used to fulfill a trade
-func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFulfillTrade) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) (*msgs.MsgFulfillTradeResponse, error) {
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	trade, err := keeper.GetTrade(ctx, msg.TradeID)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
+	trade, err := k.GetTrade(sdkCtx, msg.TradeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -34,11 +32,11 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		return nil, errInternal(errors.New("this trade is already completed"))
 	}
 
-	if len(msg.ItemIDs) != len(trade.ItemInputs) {
+	if len(msg.ItemIDs) != len(trade.ItemInputs.List) {
 		return nil, errInternal(errors.New("the item IDs count doesn't match the trade input"))
 	}
 
-	items, err := GetItemsFromIDs(ctx, keeper, msg.ItemIDs, msg.Sender)
+	items, err := GetItemsFromIDs(sdkCtx, k.Keeper, msg.ItemIDs, sender)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -52,7 +50,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	// check if the sender has all condition met
 	totalItemTransferFee := int64(0)
 	matchedItems := types.ItemList{}
-	for i, itemInput := range trade.ItemInputs {
+	for i, itemInput := range trade.ItemInputs.List {
 		matchedItem := items[i]
 		matchErr := itemInput.MatchError(matchedItem)
 		if matchErr != nil {
@@ -62,21 +60,21 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 			return nil, errInternal(fmt.Errorf("[%d]th item is not tradable: %s item_id=%s", i, err.Error(), matchedItem.ID))
 		}
 		totalItemTransferFee += matchedItem.GetTransferFee()
-		matchedItems = append(matchedItems, matchedItem)
+		matchedItems.List = append(matchedItems.List, &matchedItem)
 	}
 
 	// Unlock trade creator's coins
-	err = keeper.UnlockCoin(ctx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
+	err = k.UnlockCoin(sdkCtx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	inputCoins := trade.CoinInputs.ToCoins()
-	if !keep.HasCoins(keeper, ctx, msg.Sender, inputCoins) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, sender, inputCoins) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 	}
 
-	if !keep.HasCoins(keeper, ctx, trade.Sender, trade.CoinOutputs) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, trade.Sender, trade.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the trade creator doesn't have sufficient coins")
 	}
 
@@ -84,14 +82,14 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	refreshedOutputItems := types.ItemList{}
 
 	// get the items from the trade initiator
-	for _, item := range trade.ItemOutputs {
+	for _, item := range trade.ItemOutputs.List {
 		// verify if its still owned by the initiator
-		storedItem, err := keeper.GetItem(ctx, item.ID)
+		storedItem, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 		// if it isn't then we error out as there hasn't been any state changes so far
-		if !storedItem.Sender.Equals(trade.Sender) {
+		if storedItem.Sender != trade.Sender.String() {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID))
 		}
 
@@ -101,7 +99,7 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 		totalItemTransferFee += storedItem.GetTransferFee()
 
-		refreshedOutputItems = append(refreshedOutputItems, storedItem)
+		refreshedOutputItems.List = append(refreshedOutputItems.List, &storedItem)
 	}
 
 	// ----------------- handle coin interaction ----------------------
@@ -127,15 +125,15 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	// trade creator to trade acceptor the coin output
 	// Send output coin from sender to fullfiller
 
-	err = keep.SendCoins(keeper, ctx, trade.Sender, msg.Sender, trade.CoinOutputs)
+	err = keep.SendCoins(k.Keeper, sdkCtx, trade.Sender, sender, trade.CoinOutputs)
 
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	senderFee := totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
 	if senderFee != 0 {
-		// msg.Sender process fee after receiving coins from trade.Sender
-		err = keep.SendCoins(keeper, ctx, msg.Sender, pylonsLLCAddress, types.NewPylon(senderFee))
+		// sender process fee after receiving coins from trade.Sender
+		err = keep.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -143,14 +141,14 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	// trade acceptor to trade creator the coin input
 	// Send input coin from fullfiller to sender (trade creator)
-	err = keep.SendCoins(keeper, ctx, msg.Sender, trade.Sender, inputCoins)
+	err = keep.SendCoins(k.Keeper, sdkCtx, sender, trade.Sender, inputCoins)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	fulfillerFee := totalFee - senderFee
 	if fulfillerFee != 0 {
-		// trade.Sender process fee after receiving coins from msg.Sender
-		err = keep.SendCoins(keeper, ctx, trade.Sender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
+		// trade.Sender process fee after receiving coins from sender
+		err = keep.SendCoins(k.Keeper, sdkCtx, trade.Sender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -158,67 +156,67 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 
 	totalFeeForCBOwners := totalFee * config.Config.Fee.ItemTransferCookbookOwnerProfitPercent / 100
 
-	for _, item := range refreshedOutputItems {
+	for _, item := range refreshedOutputItems.List {
 
 		if totalItemTransferFee == 0 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}
 		feeForCB := totalFeeForCBOwners * item.GetTransferFee() / totalItemTransferFee
 
-		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
+		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
 		if feeForCB > 0 {
-			err = keep.SendCoins(keeper, ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}
 		}
 
-		item.Sender = msg.Sender
+		item.Sender = sender.String()
 		item.OwnerTradeID = ""
-		err = keeper.SetItem(ctx, item)
+		err = k.SetItem(sdkCtx, *item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 	}
 
-	for _, item := range matchedItems {
+	for _, item := range matchedItems.List {
 		if totalItemTransferFee == 0 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}
 		feeForCB := totalFeeForCBOwners * item.GetTransferFee() / totalItemTransferFee
 
-		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
+		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
 		if feeForCB > 0 {
-			err = keep.SendCoins(keeper, ctx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}
 		}
 
-		item.Sender = trade.Sender
-		err = keeper.SetItem(ctx, item)
+		item.Sender = trade.Sender.String()
+		err = k.SetItem(sdkCtx, *item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 	}
 
-	trade.FulFiller = msg.Sender
+	trade.FulFiller = sender
 	trade.Completed = true
-	err = keeper.SetTrade(ctx, trade)
+	err = k.SetTrade(sdkCtx, trade)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(FulfillTradeResponse{
+	return &msgs.MsgFulfillTradeResponse{
 		Message: "successfully fulfilled the trade",
 		Status:  "Success",
-	})
+	}, nil
 }

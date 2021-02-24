@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -10,34 +11,30 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CreateTradeResponse is struct of create trade response
-type CreateTradeResponse struct {
-	TradeID string `json:"TradeID"`
-	Message string
-	Status  string
-}
-
 // HandlerMsgCreateTrade is used to create a trade by a user
-func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateTrade) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgCreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*msgs.MsgCreateTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	for _, tii := range msg.ItemInputs {
-		_, err := keeper.GetCookbook(ctx, tii.CookbookID)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
+	for _, tii := range msg.ItemInputs.List {
+		_, err := k.GetCookbook(sdkCtx, tii.CookbookID)
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("You specified a cookbook that does not exist where raw error is %+v", err))
 		}
 	}
 
-	for _, item := range msg.ItemOutputs {
-		itemFromStore, err := keeper.GetItem(ctx, item.ID)
+	for _, item := range msg.ItemOutputs.List {
+		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		if !itemFromStore.Sender.Equals(msg.Sender) {
+		if itemFromStore.Sender != msg.Sender {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("item with %s id is not owned by sender", item.ID))
 		}
 		if err = itemFromStore.NewTradeError(); err != nil {
@@ -45,42 +42,42 @@ func HandlerMsgCreateTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCrea
 		}
 	}
 
-	if !keep.HasCoins(keeper, ctx, msg.Sender, msg.CoinOutputs) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, sender, msg.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "sender doesn't have enough coins for the trade")
 	}
 
-	err = keeper.LockCoin(ctx, types.NewLockedCoin(msg.Sender, msg.CoinOutputs))
+	err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, msg.CoinOutputs))
 
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	trade := types.NewTrade(msg.ExtraInfo,
-		msg.CoinInputs,
-		msg.ItemInputs,
+		*msg.CoinInputs,
+		*msg.ItemInputs,
 		msg.CoinOutputs,
-		msg.ItemOutputs,
-		msg.Sender)
-	if err := keeper.SetTrade(ctx, trade); err != nil {
+		*msg.ItemOutputs,
+		sender)
+	if err := k.SetTrade(sdkCtx, trade); err != nil {
 		return nil, errInternal(err)
 	}
 
 	// set items' owner trade id
-	for _, item := range msg.ItemOutputs {
-		itemFromStore, err := keeper.GetItem(ctx, item.ID)
+	for _, item := range msg.ItemOutputs.List {
+		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 		itemFromStore.OwnerTradeID = trade.ID
-		err = keeper.SetItem(ctx, itemFromStore)
+		err = k.SetItem(sdkCtx, itemFromStore)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 	}
 
-	return marshalJSON(CreateTradeResponse{
+	return &msgs.MsgCreateTradeResponse{
 		TradeID: trade.ID,
 		Message: "successfully created a trade",
 		Status:  "Success",
-	})
+	}, nil
 }

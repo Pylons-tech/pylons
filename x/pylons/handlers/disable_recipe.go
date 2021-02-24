@@ -1,43 +1,42 @@
 package handlers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// DisableRecipeResponse is the response for disableRecipe
-type DisableRecipeResponse struct {
-	Message string
-	Status  string
-}
+
 
 // HandlerMsgDisableRecipe is used to disable recipe by a developer
-func HandlerMsgDisableRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDisableRecipe) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgDisableRecipe(ctx context.Context, msg *msgs.MsgDisableRecipe) (*msgs.MsgDisableRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	recipe, err := keeper.GetRecipe(ctx, msg.RecipeID)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
+	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	if !msg.Sender.Equals(recipe.Sender) {
+	if !sender.Equals(recipe.Sender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "msg sender is not the owner of the recipe")
 	}
 	recipe.Disabled = true
 
-	err = keeper.UpdateRecipe(ctx, msg.RecipeID, recipe)
+	err = k.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(DisableRecipeResponse{
+	return &msgs.MsgDisableRecipeResponse{
 		Message: "successfully disabled the recipe",
 		Status:  "Success",
-	})
+	}, nil
 }

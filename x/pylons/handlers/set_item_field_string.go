@@ -1,24 +1,19 @@
 package handlers
 
 import (
+	"context"
 	"errors"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// UpdateItemStringResponse is a struct to control update item string response
-type UpdateItemStringResponse struct {
-	Status  string
-	Message string
-}
-
 // HandlerMsgUpdateItemString is used to transact pylons between people
-func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgUpdateItemString) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgUpdateItemString(ctx context.Context, msg *msgs.MsgUpdateItemString) (*msgs.MsgUpdateItemStringResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -26,18 +21,20 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 		return nil, errInternal(err)
 	}
 
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
 	updateFee := types.NewPylon(config.Config.Fee.UpdateItemFieldString)
 
-	if !keep.HasCoins(keeper, ctx, msg.Sender, updateFee) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, sender, updateFee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
 
-	_, subErr := keeper.CoinKeeper.SubtractCoins(ctx, msg.Sender, updateFee)
+	subErr := k.CoinKeeper.SubtractCoins(sdkCtx, sender, updateFee)
 	if subErr != nil {
 		return nil, errInternal(subErr)
 	}
 
-	item, err := keeper.GetItem(ctx, msg.ItemID)
+	item, err := k.GetItem(sdkCtx, msg.ItemID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -53,12 +50,12 @@ func HandlerMsgUpdateItemString(ctx sdk.Context, keeper keep.Keeper, msg msgs.Ms
 
 	item.Strings[keyID].Value = msg.Value
 
-	if err := keeper.SetItem(ctx, item); err != nil {
+	if err := k.SetItem(sdkCtx, item); err != nil {
 		return nil, errInternal(errors.New("Error updating item inside keeper"))
 	}
 
-	return marshalJSON(CheckExecutionResponse{
+	return &msgs.MsgUpdateItemStringResponse{
 		Message: "successfully updated the item field",
 		Status:  "Success",
-	})
+	}, nil
 }

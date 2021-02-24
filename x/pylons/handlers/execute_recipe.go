@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 
@@ -9,13 +10,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
-
-// ExecuteRecipeResponse is the response for executeRecipe
-type ExecuteRecipeResponse struct {
-	Message string
-	Status  string
-	Output  []byte
-}
 
 // ExecuteRecipeSerialize is a struct for execute recipe result serialization
 type ExecuteRecipeSerialize struct {
@@ -31,26 +25,29 @@ type ExecuteRecipeScheduleOutput struct {
 }
 
 // HandlerMsgExecuteRecipe is used to execute a recipe
-func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgExecuteRecipe) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe) (*msgs.MsgExecuteRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	recipe, err := keeper.GetRecipe(ctx, msg.RecipeID)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
+	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe}
+	p := ExecProcess{ctx: sdkCtx, keeper: k.Keeper, recipe: recipe}
 
 	var cl sdk.Coins
-	for _, inp := range recipe.CoinInputs {
+	for _, inp := range recipe.CoinInputs.Coins {
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	err = p.SetMatchedItemsFromExecMsg(msg)
+	err = p.SetMatchedItemsFromExecMsg(*msg)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -61,21 +58,21 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		var rcpOwnMatchedItems []types.Item
 		for _, item := range p.matchedItems {
 			item.OwnerRecipeID = recipe.ID
-			if err := keeper.SetItem(ctx, item); err != nil {
+			if err := k.SetItem(sdkCtx, item); err != nil {
 				return nil, errInternal(errors.New("error updating item's owner recipe"))
 			}
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 
-		err = keeper.LockCoin(ctx, types.NewLockedCoin(msg.Sender, recipe.CoinInputs.ToCoins()))
+		err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, recipe.CoinInputs.ToCoins()))
 		if err != nil {
 			return nil, errInternal(err)
 		}
 
 		// store the execution as the interval
 		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems,
-			ctx.BlockHeight()+recipe.BlockInterval, msg.Sender, false)
-		err := keeper.SetExecution(ctx, exec)
+			sdkCtx.BlockHeight()+recipe.BlockInterval, sender, false)
+		err := k.SetExecution(sdkCtx, exec)
 
 		if err != nil {
 			return nil, errInternal(err)
@@ -86,30 +83,30 @@ func HandlerMsgExecuteRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgEx
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		return marshalJSON(ExecuteRecipeResponse{
+		return &msgs.MsgExecuteRecipeResponse{
 			Message: "scheduled the recipe",
 			Status:  "Success",
 			Output:  outputSTR,
-		})
+		}, nil
 	}
 
-	if !keep.HasCoins(keeper, ctx, msg.Sender, cl) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, sender, cl) {
 		return nil, errInternal(errors.New("insufficient coin balance"))
 	}
 
-	err = ProcessCoinInputs(ctx, keeper, msg.Sender, recipe.CookbookID, cl)
+	err = ProcessCoinInputs(sdkCtx, k.Keeper, sender, recipe.CookbookID, cl)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	outputSTR, err := p.Run(msg.Sender)
+	outputSTR, err := p.Run(sender)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(ExecuteRecipeResponse{
+	return &msgs.MsgExecuteRecipeResponse{
 		Message: "successfully executed the recipe",
 		Status:  "Success",
 		Output:  outputSTR,
-	})
+	}, nil
 }

@@ -1,36 +1,32 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// DisableTradeResponse is the response for enableTrade
-type DisableTradeResponse struct {
-	Message string
-	Status  string
-}
-
 // HandlerMsgDisableTrade is used to enable trade by a developer
-func HandlerMsgDisableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDisableTrade) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgDisableTrade(ctx context.Context, msg *msgs.MsgDisableTrade) (*msgs.MsgDisableTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	trade, err := keeper.GetTrade(ctx, msg.TradeID)
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	trade, err := k.GetTrade(sdkCtx, msg.TradeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	if !msg.Sender.Equals(trade.Sender) {
+	if msg.Sender != trade.Sender.String() {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Trade initiator is not the same as sender")
 	}
 
@@ -41,36 +37,36 @@ func HandlerMsgDisableTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgDis
 	trade.Disabled = true
 
 	// unset items' owner trade id
-	for idx, item := range trade.ItemOutputs {
-		itemFromStore, err := keeper.GetItem(ctx, item.ID)
+	for idx, item := range trade.ItemOutputs.List {
+		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 
-		if !itemFromStore.Sender.Equals(trade.Sender) {
+		if itemFromStore.Sender != trade.Sender.String() {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", itemFromStore.ID))
 		}
 
 		itemFromStore.OwnerTradeID = ""
-		err = keeper.SetItem(ctx, itemFromStore)
+		err = k.SetItem(sdkCtx, itemFromStore)
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		trade.ItemOutputs[idx] = itemFromStore
+		trade.ItemOutputs.List[idx] = &itemFromStore
 	}
 
-	err = keeper.UpdateTrade(ctx, msg.TradeID, trade)
+	err = k.UpdateTrade(sdkCtx, msg.TradeID, trade)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	err = keeper.UnlockCoin(ctx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
+	err = k.UnlockCoin(sdkCtx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(DisableTradeResponse{
+	return &msgs.MsgDisableTradeResponse{
 		Message: "successfully disabled the trade",
 		Status:  "Success",
-	})
+	}, nil
 }

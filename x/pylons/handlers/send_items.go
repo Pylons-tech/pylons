@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -11,14 +12,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// SendItemsResponse is the response for fulfillRecipe
-type SendItemsResponse struct {
-	Message string
-	Status  string
-}
-
 // HandlerMsgSendItems is used to send items between people
-func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendItems) (*sdk.Result, error) {
+func (k msgServer) HandlerMsgSendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs.MsgSendItemsResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -26,18 +21,21 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		return nil, errInternal(err)
 	}
 
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender := sdk.AccAddress(msg.Sender)
+
 	for _, val := range msg.ItemIDs {
-		item, err := keeper.GetItem(ctx, val)
+		item, err := k.GetItem(sdkCtx, val)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 
-		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
+		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
-		if item.Sender.String() != msg.Sender.String() {
+		if item.String() != msg.String() {
 			return nil, errInternal(errors.New("Item is not the sender's one"))
 		}
 
@@ -47,25 +45,25 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 
 		coins := types.NewPylon(item.GetTransferFee())
 
-		if !keep.HasCoins(keeper, ctx, msg.Sender, coins) {
+		if !keep.HasCoins(k.Keeper, sdkCtx, sender, coins) {
 			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
 		}
 
 		item.Sender = msg.Receiver
-		if err := keeper.SetItem(ctx, item); err != nil {
+		if err := k.SetItem(sdkCtx, item); err != nil {
 			return nil, errInternal(fmt.Errorf("Error updating item inside keeper; %s", err.Error()))
 		}
 
-		err = ProcessSendItemsFee(ctx, keeper, msg.Sender, cookbook.Sender, coins)
+		err = ProcessSendItemsFee(sdkCtx, k.Keeper, sender, cookbook.Sender, coins)
 		if err != nil {
 			return nil, errInternal(fmt.Errorf("Error sending fees to send items; %s", err.Error()))
 		}
 	}
 
-	return marshalJSON(SendItemsResponse{
+	return &msgs.MsgSendItemsResponse{
 		Message: "successfully sent the items",
 		Status:  "Success",
-	})
+	}, nil
 }
 
 // ProcessSendItemsFee process send items fee
