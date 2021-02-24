@@ -7,6 +7,7 @@ require (
 	github.com/Workiva/go-datastructures v1.0.52
 	github.com/cosmos/cosmos-sdk v0.41.3
 	github.com/cosmos/go-bip39 v1.0.0
+	github.com/gogo/protobuf v1.3.3
 	github.com/google/cel-go v0.5.1
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/mux v1.8.0
@@ -21,6 +22,7 @@ require (
 	github.com/tendermint/tm-db v0.6.4
 	github.com/tyler-smith/go-bip39 v1.0.2
 	google.golang.org/genproto v0.0.0-20210114201628-6edceaf6022f
+	google.golang.org/grpc v1.35.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 

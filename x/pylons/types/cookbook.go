@@ -26,7 +26,7 @@ type Cookbook struct {
 // NewCookbook return a new Cookbook
 func NewCookbook(sEmail Email, sender sdk.AccAddress, version SemVer, name, description, developer string, cpb int) Cookbook {
 	cb := Cookbook{
-		NodeVersion:  SemVer("0.0.1"),
+		NodeVersion:  SemVer{"0.0.1"},
 		Name:         name,
 		Description:  description,
 		Version:      version,
