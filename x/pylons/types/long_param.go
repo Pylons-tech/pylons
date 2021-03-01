@@ -1,7 +1,9 @@
 package types
 
+import "encoding/json"
+
 // Actualize builds the params
-func (lpm LongParamList) Actualize(ec CelEnvCollection) ([]*LongKeyValue, error) {
+func (lpm LongParamList) Actualize(ec CelEnvCollection) (*LongKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []*LongKeyValue
 	for _, param := range lpm.Params {
@@ -14,12 +16,37 @@ func (lpm LongParamList) Actualize(ec CelEnvCollection) ([]*LongKeyValue, error)
 			val, err = param.WeightTable.Generate()
 		}
 		if err != nil {
-			return m, err
+			return &LongKeyValueList{m}, err
 		}
 		m = append(m, &LongKeyValue{
 			Key:   param.Key,
 			Value: val,
 		})
 	}
-	return m, nil
+	return &LongKeyValueList{m}, nil
+}
+
+type serializeLongKeyValueList struct {
+	List []LongKeyValue
+}
+
+func (l LongKeyValueList) MarshalJSON() ([]byte, error) {
+	var res serializeLongKeyValueList
+	for _, val := range l.List {
+		res.List = append(res.List, *val)
+	}
+	return json.Marshal(res)
+}
+
+func (l *LongKeyValueList) UnmarshalJSON(data []byte) error {
+	var res serializeLongKeyValueList
+	err := json.Unmarshal(data, &res)
+	if err != nil {
+		return err
+	}
+
+	for _, val := range res.List {
+		l.List = append(l.List, &val)
+	}
+	return nil
 }

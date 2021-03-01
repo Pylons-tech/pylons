@@ -21,7 +21,7 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	trade, err := k.GetTrade(sdkCtx, msg.TradeID)
 	if err != nil {

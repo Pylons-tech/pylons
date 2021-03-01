@@ -7,8 +7,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-
-
 // HandlerMsgDisableRecipe is used to disable recipe by a developer
 func (k msgServer) HandlerMsgDisableRecipe(ctx context.Context, msg *msgs.MsgDisableRecipe) (*msgs.MsgDisableRecipeResponse, error) {
 
@@ -18,7 +16,7 @@ func (k msgServer) HandlerMsgDisableRecipe(ctx context.Context, msg *msgs.MsgDis
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {

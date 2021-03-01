@@ -17,8 +17,8 @@ func (k msgServer) HandlerMsgSendCoins(ctx context.Context, msg *msgs.MsgSendCoi
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
-	receiver := sdk.AccAddress(msg.Receiver)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+	receiver, _ := sdk.AccAddressFromBech32(msg.Receiver)
 
 	if !keep.HasCoins(k.Keeper, sdkCtx, sender, msg.Amount) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins")

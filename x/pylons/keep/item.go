@@ -12,7 +12,7 @@ import (
 
 // SetItem sets a item in the key store
 func (k Keeper) SetItem(ctx sdk.Context, item types.Item) error {
-	if item.Sender.Empty() {
+	if item.Sender == "" {
 		return errors.New("SetItem: the sender cannot be empty")
 	}
 	return k.SetObject(ctx, types.TypeItem, item.ID, k.ItemKey, item)
@@ -38,7 +38,7 @@ func (k Keeper) GetItemsBySender(ctx sdk.Context, sender sdk.AccAddress) ([]type
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		if strings.Contains(item.Sender.String(), sender.String()) { // considered empty sender
+		if strings.Contains(item.Sender, sender.String()) { // considered empty sender
 			items = append(items, item)
 		}
 	}
@@ -71,7 +71,7 @@ func (k Keeper) GetAllItemsCount(ctx sdk.Context) int {
 
 // UpdateItem is used to update the item using the id
 func (k Keeper) UpdateItem(ctx sdk.Context, id string, item types.Item) error {
-	if item.Sender.Empty() {
+	if item.Sender == "" {
 		return errors.New("UpdateItem: the sender cannot be empty")
 
 	}

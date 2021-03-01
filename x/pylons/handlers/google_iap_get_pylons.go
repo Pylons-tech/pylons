@@ -19,7 +19,7 @@ func (k msgServer) HandlerMsgGoogleIAPGetPylons(ctx context.Context, msg *msgs.M
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	requester := sdk.AccAddress(msg.Requester)
+	requester, _ := sdk.AccAddressFromBech32(msg.Requester)
 	// Validate if purchase token does exist within the list already
 	if k.HasGoogleIAPOrder(sdkCtx, msg.PurchaseToken) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")

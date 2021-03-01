@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -15,6 +14,7 @@ import (
 
 func TestHandlerMsgDisableRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -51,15 +51,12 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgDisableRecipe(tc.rcpID, tc.sender)
-			result, err := HandlerMsgDisableRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgDisableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				disableRcpResponse := DisableRecipeResponse{}
-				err := json.Unmarshal(result.Data, &disableRcpResponse)
-
 				require.True(t, err == nil)
-				require.True(t, disableRcpResponse.Status == "Success")
-				require.True(t, disableRcpResponse.Message == "successfully disabled the recipe")
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == "successfully disabled the recipe")
 
 				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
 				require.True(t, err == nil)

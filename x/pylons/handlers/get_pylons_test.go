@@ -14,6 +14,7 @@ import (
 
 func TestHandlerMsgGetPylons(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
@@ -32,7 +33,7 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgGetPylons(types.NewPylon(tc.reqAmount), tc.fromAddress)
-			_, err := HandlerMsgGetPylons(tci.Ctx, tci.PlnK, msg)
+			_, err := tci.PlnH.HandlerMsgGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount)))

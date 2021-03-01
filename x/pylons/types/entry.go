@@ -7,7 +7,7 @@ import (
 )
 
 // Entry describes an output which can be produced from a recipe
-type Entry interface {
+type EntryI interface {
 	GetID() string
 	String() string
 }
@@ -22,29 +22,27 @@ func EntryIDValidationError(ID string) error {
 	return fmt.Errorf("entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ID)
 }
 
-// EntriesList is a struct to keep list of items and coins
-type EntriesList []Entry
-
 type serializeEntriesList struct {
 	CoinOutputs       []CoinOutput
 	ItemModifyOutputs []ItemModifyOutput
 	ItemOutputs       []ItemOutput
 }
 
-func (wpl EntriesList) String() string {
-	itm := "EntriesList{"
-
-	for _, output := range wpl {
-		itm += output.String() + ",\n"
+// FindByID is a function to find an entry by ID
+func (wpl EntriesList) FindByID(ID string) (EntryI, error) {
+	for _, wp := range wpl.CoinOutputs {
+		if wp.GetID() == ID {
+			return wp, nil
+		}
 	}
 
-	itm += "}"
-	return itm
-}
+	for _, wp := range wpl.ItemOutputs {
+		if wp.GetID() == ID {
+			return wp, nil
+		}
+	}
 
-// FindByID is a function to find an entry by ID
-func (wpl EntriesList) FindByID(ID string) (Entry, error) {
-	for _, wp := range wpl {
+	for _, wp := range wpl.ItemModifyOutputs {
 		if wp.GetID() == ID {
 			return wp, nil
 		}
@@ -55,17 +53,16 @@ func (wpl EntriesList) FindByID(ID string) (Entry, error) {
 // MarshalJSON is a custom marshal function
 func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	var sel serializeEntriesList
-	for _, wp := range wpl {
-		switch wp := wp.(type) {
-		case *CoinOutput:
-			sel.CoinOutputs = append(sel.CoinOutputs, *wp)
-		case *ItemModifyOutput:
-			sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, *wp)
-		case *ItemOutput:
-			sel.ItemOutputs = append(sel.ItemOutputs, *wp)
-		default:
-		}
+	for _, wp := range wpl.CoinOutputs {
+		sel.CoinOutputs = append(sel.CoinOutputs, *wp)
 	}
+	for _, wp := range wpl.ItemModifyOutputs {
+		sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, *wp)
+	}
+	for _, wp := range wpl.ItemOutputs {
+		sel.ItemOutputs = append(sel.ItemOutputs, *wp)
+	}
+
 	return json.Marshal(sel)
 }
 
@@ -78,13 +75,13 @@ func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 	}
 
 	for _, co := range sel.CoinOutputs {
-		*wpl = append(*wpl, &co)
+		wpl.CoinOutputs = append(wpl.CoinOutputs, &co)
 	}
 	for _, io := range sel.ItemModifyOutputs {
-		*wpl = append(*wpl, &io)
+		wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, &io)
 	}
 	for _, io := range sel.ItemOutputs {
-		*wpl = append(*wpl, &io)
+		wpl.ItemOutputs = append(wpl.ItemOutputs, &io)
 	}
 	return nil
 }

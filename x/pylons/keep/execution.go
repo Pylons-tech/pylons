@@ -11,7 +11,7 @@ import (
 
 // SetExecution sets a exec in the key store
 func (k Keeper) SetExecution(ctx sdk.Context, exec types.Execution) error {
-	if exec.Sender.Empty() {
+	if exec.Sender == "" {
 		return errors.New("SetExecution: the sender cannot be empty")
 	}
 	return k.SetObject(ctx, types.TypeExecution, exec.ID, k.ExecutionKey, exec)
@@ -26,7 +26,7 @@ func (k Keeper) GetExecution(ctx sdk.Context, id string) (types.Execution, error
 
 // UpdateExecution is used to update the exec using the id
 func (k Keeper) UpdateExecution(ctx sdk.Context, id string, exec types.Execution) error {
-	if exec.Sender.Empty() {
+	if exec.Sender == "" {
 		return errors.New("UpdateExecution: the sender cannot be empty")
 	}
 

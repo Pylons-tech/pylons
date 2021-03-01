@@ -1,72 +1,113 @@
 package keep
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/cosmos/cosmos-sdk/client"
 	"testing"
+
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codec "github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/store"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/bank"
-	distr "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	"github.com/cosmos/cosmos-sdk/x/params"
 	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	"github.com/cosmos/cosmos-sdk/x/supply"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
+	abcitypes "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
+	abci "github.com/tendermint/tendermint/proto/tendermint/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 )
 
 // TestCoinInput is a struct that hodl mocked chain env
 type TestCoinInput struct {
-	Cdc  *codec.Codec
-	Ctx  sdk.Context
-	Ak   auth.AccountKeeper
-	Pk   params.Keeper
-	Bk   bank.Keeper
-	PlnK Keeper
+	Cdc      *codec.LegacyAmino
+	Ctx      sdk.Context
+	TxConfig client.TxConfig
+	Ak       authkeeper.AccountKeeper
+	Pk       paramskeeper.Keeper
+	Bk       bankkeeper.Keeper
+	PlnK     Keeper
+	PlnH     msgs.MsgServer
 }
 
 // GenItem generate an item with name
 func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 	return types.NewItem(
 		cbID,
-		(types.DoubleInputParamList{types.DoubleInputParam{Key: "endurance", MinValue: "100.00", MaxValue: "500.00"}}).Actualize(),
-		(types.LongInputParamList{types.LongInputParam{Key: "HP", MinValue: 100, MaxValue: 500}}).Actualize(),
-		(types.StringInputParamList{types.StringInputParam{Key: "Name", Value: name}}).Actualize(),
+		&types.DoubleKeyValueList{List: types.DoubleInputParamList{
+			Params: []*types.DoubleInputParam{
+				{
+					Key:      "endurance",
+					MinValue: types.ToFloatString(100.00),
+					MaxValue: types.ToFloatString(500.00),
+				},
+			},
+		}.Actualize()},
+		&types.LongKeyValueList{List: types.LongInputParamList{
+			List: []*types.LongInputParam{
+				{
+					Key:      "HP",
+					MinValue: 100,
+					MaxValue: 500,
+				},
+			}}.Actualize()},
+		&types.StringKeyValueList{List: types.StringInputParamList{
+			List: []*types.StringInputParam{
+				{
+					Key:   "Name",
+					Value: name,
+				},
+			}}.Actualize()},
 		sender,
 		0,
 		0,
 	)
 }
-func createTestCodec() *codec.Codec {
-	cdc := codec.New()
-	auth.RegisterCodec(cdc)
-	distr.RegisterCodec(cdc)
-	supply.RegisterCodec(cdc)
-	sdk.RegisterCodec(cdc)
-	codec.RegisterCrypto(cdc)
+
+var (
+	t = types.DoubleInputParamList{
+		Params: []*types.DoubleInputParam{
+			{
+				Key:      "endurance",
+				MinValue: types.ToFloatString(100.00),
+				MaxValue: types.ToFloatString(500.00),
+			},
+		},
+	}
+)
+
+func createTestCodec() *codec.LegacyAmino {
+	cdc := codec.NewLegacyAmino()
+	authtypes.RegisterLegacyAminoCodec(cdc)
+	distrtypes.RegisterLegacyAminoCodec(cdc)
+	sdk.RegisterLegacyAminoCodec(cdc)
+	codec.RegisterEvidences(cdc)
 	return cdc
 }
 
 // SetupTestCoinInput mock chain env
 func SetupTestCoinInput() TestCoinInput {
 	// parts from https://github.com/cosmos/cosmos-sdk/blob/release/v0.38.3/x/staking/keeper/test_common.go
-	cdc := createTestCodec()
+	cdc := MakeEncodingConfig()
 	db := dbm.NewMemDB()
 
-	keyAcc := sdk.NewKVStoreKey(auth.StoreKey)
+	keyAcc := sdk.NewKVStoreKey(authtypes.StoreKey)
 	keyParams := sdk.NewKVStoreKey("params")
 	tkeyParams := sdk.NewTransientStoreKey("transient_params")
 
 	stringKeys := []string{
-		supply.StoreKey,
 		"authCapKey",
 		"fckCapKey",
 		"fee_collection",
+		banktypes.StoreKey,
 	}
 	stringKeys = append(stringKeys, StoreKeyList...)
 
@@ -85,45 +126,53 @@ func SetupTestCoinInput() TestCoinInput {
 	ctx := sdk.NewContext(ms, abci.Header{ChainID: "pylonschain"}, false, log.NewNopLogger())
 
 	ctx = ctx.WithConsensusParams(
-		&abci.ConsensusParams{
+		&abcitypes.ConsensusParams{
 			Validator: &abci.ValidatorParams{
 				PubKeyTypes: []string{tmtypes.ABCIPubKeyTypeEd25519},
 			},
 		},
 	)
 
-	feeCollectorAcc := supply.NewEmptyModuleAccount(auth.FeeCollectorName)
-	notBondedPool := supply.NewEmptyModuleAccount(sttypes.NotBondedPoolName, supply.Burner, supply.Staking)
-	bondPool := supply.NewEmptyModuleAccount(sttypes.BondedPoolName, supply.Burner, supply.Staking)
+	feeCollectorAcc := authtypes.NewEmptyModuleAccount(authtypes.FeeCollectorName)
+	notBondedPool := authtypes.NewEmptyModuleAccount(sttypes.NotBondedPoolName, authtypes.Burner, authtypes.Staking)
+	bondPool := authtypes.NewEmptyModuleAccount(sttypes.BondedPoolName, authtypes.Burner, authtypes.Staking)
 
 	blacklistedAddrs := make(map[string]bool)
 	blacklistedAddrs[feeCollectorAcc.GetAddress().String()] = true
 	blacklistedAddrs[notBondedPool.GetAddress().String()] = true
 	blacklistedAddrs[bondPool.GetAddress().String()] = true
 
-	pk := params.NewKeeper(cdc, keyParams, tkeyParams)
-	accountKeeper := auth.NewAccountKeeper(
-		cdc,    // amino codec
-		keyAcc, // target store
-		pk.Subspace(auth.DefaultParamspace),
-		auth.ProtoBaseAccount, // prototype
+	pk := paramskeeper.NewKeeper(cdc.Marshaler, cdc.Amino, keyParams, tkeyParams)
+	accountKeeper := authkeeper.NewAccountKeeper(
+		cdc.Marshaler, // amino codec
+		keyAcc,        // target store
+		pk.Subspace(authtypes.ModuleName),
+		authtypes.ProtoBaseAccount, // prototype
+		map[string][]string{
+			authtypes.FeeCollectorName:     nil,
+			distrtypes.ModuleName:          nil,
+			stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
+			stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
+		},
 	)
 
-	bk := bank.NewBaseKeeper(
+	bk := bankkeeper.NewBaseKeeper(
+		cdc.Marshaler,
+		keys[banktypes.StoreKey],
 		accountKeeper,
-		pk.Subspace(bank.DefaultParamspace),
+		pk.Subspace(banktypes.ModuleName),
 		blacklistedAddrs,
 	)
 
-	accountKeeper.SetParams(ctx, auth.DefaultParams())
+	accountKeeper.SetParams(ctx, authtypes.DefaultParams())
 
 	plnK := NewKeeper(
 		bk,
-		cdc,
+		cdc.Amino,
 		keys,
 	)
 
-	return TestCoinInput{Cdc: cdc, Ctx: ctx, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK}
+	return TestCoinInput{Cdc: cdc.Amino, Ctx: ctx, TxConfig: cdc.TxConfig, Ak: accountKeeper, Pk: pk, Bk: bk, PlnK: plnK, PlnH: nil}
 }
 
 // SetupTestAccounts do setup for test accounts with coins
@@ -134,22 +183,22 @@ func SetupTestAccounts(t *testing.T, tci TestCoinInput, s1coins sdk.Coins, s2coi
 	sender4, _ := sdk.AccAddressFromBech32("cosmos13p8890funv54hflk82ju0zv47tspglpk373453")
 
 	if s1coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins.Sort())
+		err := tci.Bk.AddCoins(tci.Ctx, sender1, s1coins.Sort())
 		require.True(t, err == nil, err)
 	}
 
 	if s2coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins.Sort())
+		err := tci.Bk.AddCoins(tci.Ctx, sender2, s2coins.Sort())
 		require.True(t, err == nil, err)
 	}
 
 	if s3coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins.Sort())
+		err := tci.Bk.AddCoins(tci.Ctx, sender3, s3coins.Sort())
 		require.True(t, err == nil, err)
 	}
 
 	if s4coins != nil {
-		_, err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins.Sort())
+		err := tci.Bk.AddCoins(tci.Ctx, sender4, s4coins.Sort())
 		require.True(t, err == nil, err)
 	}
 	return sender1, sender2, sender3, sender4

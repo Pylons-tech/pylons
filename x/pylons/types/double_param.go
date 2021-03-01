@@ -47,7 +47,7 @@ func getFloat(unk interface{}) (float64, error) {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize(ec CelEnvCollection) ([]*DoubleKeyValue, error) {
+func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (*DoubleKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []*DoubleKeyValue
 	for _, param := range dpm.List {
@@ -60,12 +60,64 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) ([]*DoubleKeyValue, er
 			val, err = param.WeightTable.Generate()
 		}
 		if err != nil {
-			return m, err
+			return &DoubleKeyValueList{m}, err
 		}
 		m = append(m, &DoubleKeyValue{
 			Key:   param.Key,
 			Value: ToFloatString(val),
 		})
 	}
-	return m, nil
+	return &DoubleKeyValueList{m}, nil
 }
+
+//
+//type serializeDoubleParamList struct {
+//	List []DoubleKeyValue
+//}
+//
+//func (d DoubleKeyValueList) MarshalJSON() ([]byte, error) {
+//	var res serializeDoubleKeyValueList
+//	for _, val := range d.List {
+//		res.List = append(res.List, *val)
+//	}
+//	return json.Marshal(res)
+//}
+//
+//func (d *DoubleKeyValueList) UnmarshalJSON(data []byte) error {
+//	var res serializeDoubleKeyValueList
+//	err := json.Unmarshal(data, &res)
+//	if err != nil {
+//		return err
+//	}
+//
+//	for _, val := range res.List {
+//		d.List = append(d.List, &val)
+//	}
+//	return nil
+//}
+
+//
+//type serializeDoubleKeyValueList struct {
+//	List []DoubleKeyValue
+//}
+//
+//func (d DoubleKeyValueList) MarshalJSON() ([]byte, error) {
+//	var res serializeDoubleKeyValueList
+//	for _, val := range d.List {
+//		res.List = append(res.List, *val)
+//	}
+//	return json.Marshal(res)
+//}
+//
+//func (d *DoubleKeyValueList) UnmarshalJSON(data []byte) error {
+//	var res serializeDoubleKeyValueList
+//	err := json.Unmarshal(data, &res)
+//	if err != nil {
+//		return err
+//	}
+//
+//	for _, val := range res.List {
+//		d.List = append(d.List, &val)
+//	}
+//	return nil
+//}

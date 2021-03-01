@@ -7,7 +7,12 @@ import "google/api/annotations.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
-service EntriesList {}
+// EntriesList is a struct to keep list of items and coins
+message EntriesList {
+  repeated CoinOutput CoinOutputs = 1;
+  repeated ItemOutput ItemOutputs = 2;
+  repeated ItemModifyOutput ItemModifyOutputs = 3;
+}
 
 message CoinInputList {
   repeated CoinInput coins = 1;
@@ -204,9 +209,9 @@ message  ItemModifyParams {
 message  Item {
   SemVer NodeVersion = 1;
   string ID = 2;
-  repeated DoubleKeyValue Doubles = 3;
-  repeated LongKeyValue     Longs = 4;
-  repeated StringKeyValue     Strings = 5;
+  DoubleKeyValueList Doubles = 3;
+  LongKeyValueList Longs = 4;
+  StringKeyValueList Strings = 5;
   string CookbookID = 6;
   string Sender = 7;
   string OwnerRecipeID = 8;
@@ -221,16 +226,28 @@ message  ItemList {
   repeated Item List = 1;
 }
 
+message DoubleKeyValueList {
+  repeated DoubleKeyValue List = 1;
+}
+
 // DoubleKeyValue describes double key/value set
 message  DoubleKeyValue {
   string Key = 1;
   FloatString Value = 2;
 }
 
+message LongKeyValueList {
+  repeated LongKeyValue List = 1;
+}
+
 // LongKeyValue describes long key/value set
 message  LongKeyValue {
   string Key = 1;
   int64 Value = 2;
+}
+
+message StringKeyValueList {
+  repeated StringKeyValue List = 1;
 }
 
 // StringKeyValue describes string key/value set

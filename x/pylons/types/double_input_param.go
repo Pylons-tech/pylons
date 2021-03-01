@@ -6,11 +6,11 @@ func (dp DoubleInputParam) Has(input float64) bool {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
+func (dpm DoubleInputParamList) Actualize() []*DoubleKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []DoubleKeyValue
+	var m []*DoubleKeyValue
 	for _, param := range dpm.Params {
-		m = append(m, DoubleKeyValue{
+		m = append(m, &DoubleKeyValue{
 			Key:   param.Key,
 			Value: ToFloatString((param.MinValue.Float() + param.MaxValue.Float()) / 2),
 		})

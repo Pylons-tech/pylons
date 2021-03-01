@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -63,7 +62,7 @@ func GetItemsFromIDs(ctx sdk.Context, keeper keep.Keeper, itemIDs []string, send
 			if err != nil {
 				return inputItems, err
 			}
-			if !item.Sender.Equals(sender) {
+			if item.Sender != sender.String() {
 				return inputItems, errors.New("item owner is not same as sender")
 			}
 

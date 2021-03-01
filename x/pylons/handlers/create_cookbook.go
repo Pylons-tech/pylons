@@ -22,7 +22,7 @@ func (k msgServer) HandlerMsgCreateCookbook(ctx context.Context, msg *msgs.MsgCr
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	var fee sdk.Coins
 	if *msg.Level == types.BasicTier.Level {

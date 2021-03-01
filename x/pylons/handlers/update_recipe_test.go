@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -15,26 +14,27 @@ import (
 
 func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
 
 	// mock new recipe
+	genCoinList := types.GenCoinInputList("wood", 5)
+	genItemInputList := types.GenItemInputList("Raichu")
+	genEntries := types.GenEntries("chair", "Raichu")
+	genOneOutput := types.GenOneOutput("chair", "Raichu")
 	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
-		types.GenCoinInputList("wood", 5),
-		types.GenItemInputList("Raichu"),
-		types.GenEntries("chair", "Raichu"),
-		types.GenOneOutput("chair", "Raichu"),
+		&genCoinList,
+		&genItemInputList,
+		&genEntries,
+		&genOneOutput,
 		0,
-		sender1,
+		sender1.String(),
 	)
 
-	newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
-	recipeData := CreateRecipeResponse{}
-	err := json.Unmarshal(newRcpResult.Data, &recipeData)
-	require.True(t, err == nil)
-
+	newRcpResult, _ := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 	cases := map[string]struct {
 		cbID         string
 		recipeName   string
@@ -56,7 +56,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		"successful test for update recipe": {
 			cbID:         cbData.CookbookID,
 			recipeName:   "recipe0001",
-			rcpID:        recipeData.RecipeID, // available ID
+			rcpID:        newRcpResult.RecipeID, // available ID
 			recipeDesc:   "this has to meet character limits lol",
 			sender:       sender1,
 			desiredError: "",
@@ -65,21 +65,22 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
+			genCoinList := types.GenCoinInputList("wood", 5)
+			genItemInputList := types.GenItemInputList("Raichu")
+			genEntries := types.GenEntries("chair", "Raichu")
+			genOneOutput := types.GenOneOutput("chair", "Raichu")
 			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
-				types.GenCoinInputList("wood", 5),
-				types.GenItemInputList("Raichu"),
-				types.GenEntries("chair", "Raichu"),
-				types.GenOneOutput("chair", "Raichu"),
+				&genCoinList,
+				&genItemInputList,
+				&genEntries,
+				&genOneOutput,
 				0,
 				sender1)
 
-			result, err := HandlerMsgUpdateRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				recipeData := UpdateRecipeResponse{}
-				err := json.Unmarshal(result.Data, &recipeData)
-				require.True(t, err == nil)
-				require.True(t, len(recipeData.RecipeID) > 0)
+				require.True(t, len(result.RecipeID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}

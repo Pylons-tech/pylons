@@ -18,7 +18,6 @@ func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
 
 // GetRecipe returns recipe based on UUID
 func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
-
 	recipe := types.Recipe{}
 	err := k.GetObject(ctx, types.TypeRecipe, id, k.RecipeKey, &recipe)
 	return recipe, err

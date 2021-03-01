@@ -42,7 +42,12 @@ func NewKeeper(coinKeeper bankkeeper.Keeper, cdc *codec.LegacyAmino, storeKeys m
 func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amount sdk.Coins) bool {
 	lockedCoin := keeper.GetLockedCoin(ctx, sender)
 	newAmount := lockedCoin.Amount.Sort().Add(amount.Sort()...)
-	return keeper.CoinKeeper.HasBalance(ctx, sender, newAmount)
+	for _, coin := range newAmount {
+		if !keeper.CoinKeeper.HasBalance(ctx, sender, coin) {
+			return false
+		}
+	}
+	return true
 }
 
 // SendCoins send coins

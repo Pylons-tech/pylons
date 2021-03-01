@@ -22,7 +22,7 @@ func (k msgServer) HandlerMsgUpdateItemString(ctx context.Context, msg *msgs.Msg
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 	updateFee := types.NewPylon(config.Config.Fee.UpdateItemFieldString)
 
 	if !keep.HasCoins(k.Keeper, sdkCtx, sender, updateFee) {
@@ -48,7 +48,7 @@ func (k msgServer) HandlerMsgUpdateItemString(ctx context.Context, msg *msgs.Msg
 		return nil, errInternal(errors.New("Provided field does not exist within the item"))
 	}
 
-	item.Strings[keyID].Value = msg.Value
+	item.Strings.List[keyID].Value = msg.Value
 
 	if err := k.SetItem(sdkCtx, item); err != nil {
 		return nil, errInternal(errors.New("Error updating item inside keeper"))

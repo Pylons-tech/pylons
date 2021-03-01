@@ -15,6 +15,7 @@ import (
 
 func TestRecipeFlowUpdate(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
 		sdk.NewInt64Coin("wood", 100000),
@@ -51,21 +52,22 @@ func TestRecipeFlowUpdate(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			// Create recipe
+			genCoinsList := types.GenCoinInputList("wood", 5)
+			mInputList := types.GenItemInputList("Raichu")
+			mEntries := types.GenEntries("chair", "Raichu")
+			mOutputs := types.GenOneOutput("chair", "Raichu")
 			newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
-				types.GenCoinInputList("wood", 5),
-				types.GenItemInputList("Raichu"),
-				types.GenEntries("chair", "Raichu"),
-				types.GenOneOutput("chair", "Raichu"),
+				&genCoinsList,
+				&mInputList,
+				&mEntries,
+				&mOutputs,
 				0,
-				tc.sender,
+				tc.sender.String(),
 			)
 
-			newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
-			recipeData := CreateRecipeResponse{}
-			err := json.Unmarshal(newRcpResult.Data, &recipeData)
-			require.True(t, err == nil)
+			newRcpResult, _ := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 
-			tc.rcpID = recipeData.RecipeID
+			tc.rcpID = newRcpResult.RecipeID
 
 			// Create dynamic items
 			itemIDs := []string{}
@@ -89,20 +91,17 @@ func TestRecipeFlowUpdate(t *testing.T) {
 
 			// Update recipe
 			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
-				types.GenCoinInputList("wood", 5),
-				types.GenItemInputList("Raichu"),
-				types.GenEntries("chair", "Raichu"),
-				types.GenOneOutput("chair", "Raichu"),
+				&genCoinsList,
+				&mInputList,
+				&mEntries,
+				&mOutputs,
 				3,
 				sender1)
 
-			result, err := HandlerMsgUpdateRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				recipeData := UpdateRecipeResponse{}
-				err := json.Unmarshal(result.Data, &recipeData)
-				require.True(t, err == nil)
-				require.True(t, len(recipeData.RecipeID) > 0)
+				require.True(t, len(result.RecipeID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
@@ -142,17 +141,14 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender)
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
-			checkMsgResult, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-			checkExecResp := CheckExecutionResponse{}
-			err = json.Unmarshal(checkMsgResult.Data, &checkExecResp)
-			require.True(t, err == nil)
+			checkMsgResult, _ := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 
 			if tc.showError {
-				require.True(t, checkExecResp.Status == "Failure")
-				require.True(t, checkExecResp.Message == tc.desiredError)
+				require.True(t, checkMsgResult.Status == "Failure")
+				require.True(t, checkMsgResult.Message == tc.desiredError)
 
 			} else {
-				require.True(t, checkExecResp.Status == "Success")
+				require.True(t, checkMsgResult.Status == "Success")
 			}
 		})
 	}

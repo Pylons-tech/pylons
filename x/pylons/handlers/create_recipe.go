@@ -19,7 +19,7 @@ func (k msgServer) HandlerMsgCreateRecipe(ctx context.Context, msg *msgs.MsgCrea
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	// validate cookbook id
 	cook, err := k.GetCookbook(sdkCtx, msg.CookbookID)
@@ -35,7 +35,7 @@ func (k msgServer) HandlerMsgCreateRecipe(ctx context.Context, msg *msgs.MsgCrea
 		msg.Name, msg.CookbookID, msg.Description,
 		*msg.CoinInputs,
 		*msg.ItemInputs,
-		msg.Entries,
+		*msg.Entries,
 		*msg.Outputs,
 		msg.BlockInterval, sender)
 

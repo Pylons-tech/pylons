@@ -16,6 +16,7 @@ import (
 
 func TestHandlerMsgSendItems(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 
 	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
 
@@ -177,21 +178,21 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 			require.True(t, err == nil)
 
-			coinsSenderBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
-			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
-			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
+			coinsSenderBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
+			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
+			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbook.Sender)
 
-			_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
+			_, err = tci.PlnH.HandlerMsgSendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
-			coinsSenderAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
-			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
-			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
+			coinsSenderAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
+			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
+			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbook.Sender)
 
 			if !tc.showError {
 				for _, itemID := range tc.itemIDs {
 					item, err := tci.PlnK.GetItem(tci.Ctx, itemID)
 					require.True(t, err == nil)
-					require.True(t, item.Sender.String() == tc.toAddress.String())
+					require.True(t, item.Sender == tc.toAddress.String())
 				}
 
 				differSender := coinsSenderBefore.AmountOf(types.Pylon).Int64() - coinsSenderAfter.AmountOf(types.Pylon).Int64()

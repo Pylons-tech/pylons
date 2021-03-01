@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -28,12 +27,13 @@ type ExecProcess struct {
 }
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
-func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg msgs.MsgExecuteRecipe) error {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg *msgs.MsgExecuteRecipe) error {
 	if len(msg.ItemIDs) != len(p.recipe.ItemInputs.List) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}
 
-	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, sdk.AccAddress(msg.Sender))
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, sender)
 	if err != nil {
 		return err
 	}
@@ -177,52 +177,57 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 
 // UpdateItemFromModifyParams is used to update item passed via item input from modify params
 func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyOutput) (*types.Item, error) {
-	dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
-	if err != nil {
-		return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
-	}
-	for idx, dbl := range dblKeyValues {
-		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
-		if !ok {
-			return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
+	if toMod.Doubles != nil {
+		dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
+		if err != nil {
+			return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
 		}
-		if len(toMod.Doubles.List[idx].Program) == 0 { // NO PROGRAM
-			originValue := targetItem.Doubles[dblKey].Value.Float()
-			upgradeAmount := dbl.Value.Float()
-			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
-		} else {
-			targetItem.Doubles[dblKey].Value = dbl.Value
-		}
-	}
-
-	lngKeyValues, err := toMod.Longs.Actualize(p.ec)
-	if err != nil {
-		return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
-	}
-	for idx, lng := range lngKeyValues {
-		lngKey, ok := targetItem.FindLongKey(lng.Key)
-		if !ok {
-			return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
-		}
-		if len(toMod.Longs.Params[idx].Program) == 0 { // NO PROGRAM
-			targetItem.Longs[lngKey].Value += lng.Value
-		} else {
-			targetItem.Longs[lngKey].Value = lng.Value
+		for idx, dbl := range dblKeyValues.List {
+			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+			if !ok {
+				return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
+			}
+			if len(toMod.Doubles.List[idx].Program) == 0 { // NO PROGRAM
+				originValue := targetItem.Doubles.List[dblKey].Value.Float()
+				upgradeAmount := dbl.Value.Float()
+				targetItem.Doubles.List[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+			} else {
+				targetItem.Doubles.List[dblKey].Value = dbl.Value
+			}
 		}
 	}
 
-	strKeyValues, err := toMod.Strings.Actualize(p.ec)
-	if err != nil {
-		return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
-	}
-	for _, str := range strKeyValues {
-		strKey, ok := targetItem.FindStringKey(str.Key)
-		if !ok {
-			return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
+	if toMod.Longs != nil {
+		lngKeyValues, err := toMod.Longs.Actualize(p.ec)
+		if err != nil {
+			return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
 		}
-		targetItem.Strings[strKey].Value = str.Value
+		for idx, lng := range lngKeyValues.List {
+			lngKey, ok := targetItem.FindLongKey(lng.Key)
+			if !ok {
+				return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
+			}
+			if len(toMod.Longs.Params[idx].Program) == 0 { // NO PROGRAM
+				targetItem.Longs.List[lngKey].Value += lng.Value
+			} else {
+				targetItem.Longs.List[lngKey].Value = lng.Value
+			}
+		}
 	}
 
+	if toMod.Strings != nil {
+		strKeyValues, err := toMod.Strings.Actualize(p.ec)
+		if err != nil {
+			return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
+		}
+		for _, str := range strKeyValues.List {
+			strKey, ok := targetItem.FindStringKey(str.Key)
+			if !ok {
+				return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
+			}
+			targetItem.Strings.List[strKey].Value = str.Value
+		}
+	}
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
 	targetItem.LastUpdate = p.ctx.BlockHeight()
@@ -238,15 +243,15 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 	variables[prefix+"transferFee"] = item.TransferFee
 
-	for _, dbli := range item.Doubles {
+	for _, dbli := range item.Doubles.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
 		variables[prefix+dbli.Key] = dbli.Value.Float()
 	}
-	for _, inti := range item.Longs {
+	for _, inti := range item.Longs.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
 		variables[prefix+inti.Key] = inti.Value
 	}
-	for _, stri := range item.Strings {
+	for _, stri := range item.Strings.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+stri.Key, decls.String))
 		variables[prefix+stri.Key] = stri.Value
 	}

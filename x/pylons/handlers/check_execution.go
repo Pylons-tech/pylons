@@ -45,7 +45,7 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
 	var outputSTR []byte
 
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	recipe, err := keeper.GetRecipe(ctx, exec.RecipeID)
 	if err != nil {
@@ -61,6 +61,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 	if err != nil {
 		return nil, err
 	}
+
 
 	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe, matchedItems: exec.ItemInputs}
 	outputSTR, err = p.Run(sender)
@@ -79,7 +80,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 }
 
 // HandlerMsgCheckExecution is used to check the status of an execution
-func (k msgServer) HandlerMsgCheckExecution(ctx context.Context, msg *msgs.MsgCheckExecution) (*msgs.MsgCheckExecutionResponse, error) {
+func (k msgServer) 	HandlerMsgCheckExecution(ctx context.Context, msg *msgs.MsgCheckExecution) (*msgs.MsgCheckExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -87,14 +88,15 @@ func (k msgServer) HandlerMsgCheckExecution(ctx context.Context, msg *msgs.MsgCh
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	exec, err := k.GetExecution(sdkCtx, msg.ExecID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	if !sender.Equals(exec.Sender) {
+	execSender, err := sdk.AccAddressFromBech32(exec.Sender)
+	if !sender.Equals(execSender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "The current sender is different from the executor")
 	}
 

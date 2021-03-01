@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -16,6 +15,7 @@ import (
 
 func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -32,7 +32,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		tci, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("Raichu"),
-		types.GenItemOnlyEntry("Zombie"),
+		types.EntriesList{ItemOutputs: []*types.ItemOutput{types.GenItemOnlyEntry("Zombie")}},
 		types.GenOneOutput("Zombie"),
 		cbData.CookbookID,
 		0,
@@ -51,17 +51,17 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender1,
 	)
 
+	genItemModifyOutput := types.NewItemModifyOutput(
+		"catalystOutputEntry", "catalyst", types.ItemModifyParams{},
+	)
 	// mock 1 catalyst input 1 output recipe
 	oneCatalystOneOutputRecipeData := MockRecipe(
 		tci, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("catalyst"),
-
 		types.EntriesList{
-			types.NewItemModifyOutput(
-				"catalystOutputEntry", "catalyst", types.ItemModifyParams{},
-			),
-			types.GenItemOnlyEntry("Catalyst2")[0],
+			ItemOutputs:       []*types.ItemOutput{types.GenItemOnlyEntry("Catalyst2")},
+			ItemModifyOutputs: []*types.ItemModifyOutput{&genItemModifyOutput},
 		},
 		types.GenAllOutput("catalystOutputEntry", "Catalyst2"),
 		cbData.CookbookID,
@@ -284,7 +284,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+				err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 				require.True(t, err == nil)
 			}
 			if tc.dynamicItemSet {
@@ -298,19 +298,12 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
-			result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
 				require.True(t, err == nil)
-				execRcpResponse := ExecuteRecipeResponse{}
-				err := json.Unmarshal(result.Data, &execRcpResponse)
-
-				if err != nil {
-					t.Log(err, result)
-				}
-				require.True(t, err == nil)
-				require.True(t, execRcpResponse.Status == "Success")
-				require.True(t, execRcpResponse.Message == tc.successMsg)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == tc.successMsg)
 
 				// calc generated coin availability
 				coinAvailability := false

@@ -20,7 +20,7 @@ func (k msgServer) HandlerMsgCreateTrade(ctx context.Context, msg *msgs.MsgCreat
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	for _, tii := range msg.ItemInputs.List {
 		_, err := k.GetCookbook(sdkCtx, tii.CookbookID)

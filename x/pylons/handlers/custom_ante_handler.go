@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	"github.com/cosmos/cosmos-sdk/x/auth/exported"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
+	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
@@ -46,7 +47,7 @@ func NewAccountCreationDecorator(ak keeper.AccountKeeper) AccountCreationDecorat
 
 // AnteHandle is a handler for NewAccountCreationDecorator
 func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	sigTx, ok := tx.(types.StdTx)
+	sigTx, ok := tx.(legacytx.StdTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
@@ -56,23 +57,27 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		// we don't support multi-message transaction for create_account
 		pubkey := sigTx.Signatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
-		msgCreateAccount, ok := messages[0].(msgs.MsgCreateAccount)
+		msgCreateAccount, ok := messages[0].(*msgs.MsgCreateAccount)
 		if !ok {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "error msg conversion to MsgCreateAccount")
 		}
 
-		if address.String() != msgCreateAccount.Requester.String() {
+		if address.String() != msgCreateAccount.Requester {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "mismatch between signature pubkey and requester address")
 		}
 
 		// if the account doesnt exist we set it
 		if svd.ak.GetAccount(ctx, address) == nil {
-			acc := &auth.BaseAccount{
+			any, err := codectypes.NewAnyWithValue(pubkey)
+			if err != nil {
+				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
+
+			acc := &types.BaseAccount{
 				Sequence:      0,
-				Coins:         sdk.Coins{},
 				AccountNumber: svd.ak.GetNextAccountNumber(ctx),
-				PubKey:        pubkey,
-				Address:       address,
+				PubKey:        any,
+				Address:       address.String(),
 			}
 			svd.ak.SetAccount(ctx, acc)
 		} else {
@@ -100,19 +105,19 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 	if ctx.IsReCheckTx() {
 		return next(ctx, tx, simulate)
 	}
-	sigTx, ok := tx.(ante.SigVerifiableTx)
+	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 
 	// stdSigs contains the sequence number, account number, and signatures.
 	// When simulating, this would just be a 0-length slice.
-	sigs := sigTx.GetSignatures()
+	sigs, _ := sigTx.GetSignaturesV2()
 
 	// stdSigs contains the sequence number, account number, and signatures.
 	// When simulating, this would just be a 0-length slice.
 	signerAddrs := sigTx.GetSigners()
-	signerAccs := make([]exported.Account, len(signerAddrs))
+	signerAccs := make([]types.AccountI, len(signerAddrs))
 
 	// check that signer length and signature length are the same
 	if len(sigs) != len(signerAddrs) {
@@ -126,9 +131,20 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			return ctx, err
 		}
 
-		// retrieve signBytes of tx
-
-		signBytes := sigTx.GetSignBytes(ctx, signerAccs[i])
+		// Check account sequence number.
+		// When using Amino StdSignatures, we actually don't have the Sequence in
+		// the SignatureV2 struct (it's only in the SignDoc). In this case, we
+		// cannot check sequence directly, and must do it via signature
+		// verification (in the VerifySignature call below).
+		onlyAminoSigners := ante.OnlyLegacyAminoSigners(sig.Data)
+		if !onlyAminoSigners {
+			if sig.Sequence != signerAccs[i].GetSequence() {
+				return ctx, sdkerrors.Wrapf(
+					sdkerrors.ErrWrongSequence,
+					"account sequence mismatch, expected %d, got %d", signerAccs[i].GetSequence(), sig.Sequence,
+				)
+			}
+		}
 
 		// retrieve pubkey
 		pubKey := signerAccs[i].GetPubKey()
@@ -138,24 +154,34 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 		messages := sigTx.GetMsgs()
 		if len(messages) == 1 && messages[0].Type() == "create_account" {
-			acc := &auth.BaseAccount{
+			any, err := codectypes.NewAnyWithValue(pubKey)
+			if err != nil {
+				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
+
+			_ = &types.BaseAccount{
 				Sequence:      0,
-				Coins:         sdk.Coins{},
 				AccountNumber: 0, // we do check account number 0 for create_account message
-				PubKey:        pubKey,
-				Address:       pubKey.Address().Bytes(),
+				PubKey:        any,
+				Address:       pubKey.Address().String(),
 			}
-			signBytes := sigTx.GetSignBytes(ctx, acc)
-			if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
+			onlyAminoSigners := ante.OnlyLegacyAminoSigners(sig.Data)
+			if !onlyAminoSigners {
+				if sig.Sequence != signerAccs[i].GetSequence() {
+					return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
+				}
 			}
+			//signBytes := sigTx.GetSignBytes(ctx, acc)
+			//if !simulate && !pubKey.VerifySignature(signBytes, sig) {
+			//	return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
+			//}
 			continue
 		}
 
 		// verify signature
-		if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
-		}
+		//if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
+		//	return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
+		//}
 	}
 
 	return next(ctx, tx, simulate)

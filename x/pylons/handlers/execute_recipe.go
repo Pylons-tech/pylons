@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -33,7 +32,7 @@ func (k msgServer) HandlerMsgExecuteRecipe(ctx context.Context, msg *msgs.MsgExe
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {
@@ -47,7 +46,7 @@ func (k msgServer) HandlerMsgExecuteRecipe(ctx context.Context, msg *msgs.MsgExe
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	err = p.SetMatchedItemsFromExecMsg(*msg)
+	err = p.SetMatchedItemsFromExecMsg(msg)
 	if err != nil {
 		return nil, errInternal(err)
 	}

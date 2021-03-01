@@ -131,8 +131,9 @@ message MsgCreateRecipe {
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
-  repeated bytes Entries = 10  [(gogoproto.castrepeated) = "github.com/Pylons-tech/pylons/x/pylons/types.EntriesList"];
+  EntriesList Entries = 10;
 }
+
 
 // MsgCreateRecipeResponse is struct of create recipe response
 message MsgCreateRecipeResponse  {
@@ -224,9 +225,9 @@ message MsgExecuteRecipeResponse {
 // MsgFiatItem is a msg struct to be used to fiat item
 message MsgFiatItem {
   string CookbookID = 1;
-  repeated DoubleKeyValue Doubles = 2;
-  repeated LongKeyValue Longs = 3;
-  repeated StringKeyValue Strings = 4;
+  DoubleKeyValueList Doubles = 2;
+  LongKeyValueList Longs = 3;
+  StringKeyValueList Strings = 4;
   string Sender = 5;
   int64 TransferFee = 6;
 }
@@ -345,7 +346,7 @@ message MsgUpdateRecipe {
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
-  repeated bytes Entries = 10  [(gogoproto.castrepeated) = "github.com/Pylons-tech/pylons/x/pylons/types.EntriesList"];
+  EntriesList Entries = 10;
 }
 
 // UpdateRecipeResponse is a struct to control update recipe response

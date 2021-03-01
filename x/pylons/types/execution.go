@@ -19,7 +19,7 @@ type Execution struct {
 	CoinInputs  sdk.Coins
 	ItemInputs  []Item
 	BlockHeight int64
-	Sender      sdk.AccAddress
+	Sender      string
 	Completed   bool
 }
 
@@ -35,13 +35,13 @@ func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 	completed bool) Execution {
 
 	exec := Execution{
-		NodeVersion: SemVer("0.0.1"),
+		NodeVersion: SemVer{"0.0.1"},
 		RecipeID:    recipeID,
 		CookbookID:  cookbookID,
 		CoinInputs:  ci,
 		ItemInputs:  itemInputs,
 		BlockHeight: blockHeight,
-		Sender:      sender,
+		Sender:      sender.String(),
 		Completed:   completed,
 	}
 

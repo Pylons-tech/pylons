@@ -23,7 +23,7 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *msgs.MsgUpda
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	rc, err := k.GetRecipe(sdkCtx, msg.ID)
 
@@ -40,7 +40,7 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *msgs.MsgUpda
 	rc.CookbookID = msg.CookbookID
 	rc.CoinInputs = *msg.CoinInputs
 	rc.ItemInputs = *msg.ItemInputs
-	rc.Entries = msg.Entries
+	rc.Entries = *msg.Entries
 	rc.BlockInterval = msg.BlockInterval
 	rc.Name = msg.Name
 	rc.Outputs = *msg.Outputs

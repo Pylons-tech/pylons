@@ -14,6 +14,8 @@ import (
 
 func TestHandlerMsgCheckExecution(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -117,7 +119,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
-			_, err := tci.Bk.AddCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
+			err := tci.Bk.AddCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
 			require.True(t, err == nil)
 
 			execRcpResponse, err := MockExecution(tci, tc.rcpID,
@@ -129,7 +131,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
 			if tc.coinAddition != 0 {
-				_, err = tci.Bk.AddCoins(tci.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
+				err = tci.Bk.AddCoins(tci.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
 				require.True(t, err == nil)
 			}
 
@@ -146,18 +148,16 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
-			result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-			checkExecResp := CheckExecutionResponse{}
-			err = json.Unmarshal(result.Data, &checkExecResp)
+			result, err := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 			require.True(t, err == nil)
 
 			if tc.expectError {
-				require.True(t, checkExecResp.Status == "Failure")
-				require.True(t, checkExecResp.Message == tc.expectedMessage)
+				require.True(t, result.Status == "Failure")
+				require.True(t, result.Message == tc.expectedMessage)
 
 			} else {
-				require.True(t, checkExecResp.Status == "Success")
-				require.True(t, checkExecResp.Message == tc.expectedMessage)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == tc.expectedMessage)
 			}
 
 			if len(tc.desiredUpgradedName) > 0 && len(tc.itemIDs) > 0 {
@@ -169,12 +169,10 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if tc.retryExecution {
-				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-				checkExecResp := CheckExecutionResponse{}
-				err = json.Unmarshal(result.Data, &checkExecResp)
+				result, _ := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 				require.True(t, err == nil)
-				require.True(t, checkExecResp.Status == "Completed")
-				require.True(t, checkExecResp.Message == tc.retryResMessage)
+				require.True(t, result.Status == "Completed")
+				require.True(t, result.Message == tc.retryResMessage)
 			}
 		})
 	}

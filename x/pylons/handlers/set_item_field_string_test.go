@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -16,6 +15,7 @@ import (
 
 func TestHandlerMsgUpdateItemString(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.PremiumTier.Fee, nil, nil, nil)
 
 	// mock cookbook
@@ -121,27 +121,20 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(config.Config.Fee.UpdateItemFieldString))
+				err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(config.Config.Fee.UpdateItemFieldString))
 				require.True(t, err == nil)
 			}
 
 			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
-			result, err := HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgUpdateItemString(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
 				if err != nil {
 					t.Log("HandlerMsgUpdateItemString.err", err)
 				}
 				require.True(t, err == nil)
-				resp := UpdateItemStringResponse{}
-				err := json.Unmarshal(result.Data, &resp)
-
-				if err != nil {
-					t.Log(err, result)
-				}
-				require.True(t, err == nil)
-				require.True(t, resp.Status == "Success")
-				require.True(t, resp.Message == tc.successMsg)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == tc.successMsg)
 
 				item, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
 				require.True(t, err == nil)

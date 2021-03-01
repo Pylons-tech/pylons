@@ -13,7 +13,7 @@ import (
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	coinInputs *types.CoinInputList,
 	itemInputs *types.ItemInputList,
-	entries types.EntriesList,
+	entries *types.EntriesList,
 	outputs *types.WeightedOutputsList,
 	blockInterval int64,
 	sender string) MsgCreateRecipe {
@@ -54,9 +54,9 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 		}
 		itemInputRefsMap[ii.ID] = true
 	}
-	// validation for the invalid item input reference on entries
-	for _, entry := range msg.Entries {
 
+	// validation for the invalid item input reference on a coins outputs
+	for _, entry := range msg.Entries.CoinOutputs {
 		if err := types.EntryIDValidationError(entry.GetID()); err != nil {
 			return err
 		}
@@ -64,28 +64,32 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
 		}
 		entryIDsMap[entry.GetID()] = true
-		switch entry := entry.(type) {
-		case *types.CoinOutput:
-			coinOutput := entry
-			if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "CoinOuput: "+err.Error())
-			}
-			if coinOutput.Coin == types.Pylon {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
-			}
-			if err := sdk.ValidateDenom(coinOutput.Coin); err != nil {
-				return err
-			}
-		case *types.ItemModifyOutput:
-			if !itemInputRefsMap[entry.ItemInputRef] {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Invalid item input ref found that does not exist in item inputs")
-			}
-		case *types.ItemOutput:
-			// do nothing for now
-		default:
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid entry type available")
+		coinOutput := entry
+		if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "CoinOuput: "+err.Error())
+		}
+		if coinOutput.Coin == types.Pylon {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
+		}
+		if err := sdk.ValidateDenom(coinOutput.Coin); err != nil {
+			return err
 		}
 	}
+
+	// validation for the invalid item input reference on a items with modified outputs
+	for _, entry := range msg.Entries.ItemModifyOutputs {
+		if err := types.EntryIDValidationError(entry.GetID()); err != nil {
+			return err
+		}
+		if entryIDsMap[entry.GetID()] {
+			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+		}
+		entryIDsMap[entry.GetID()] = true
+		if !itemInputRefsMap[entry.ItemInputRef] {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Invalid item input ref found that does not exist in item inputs")
+		}
+	}
+	// do nothing for now for items outputs
 
 	for _, output := range msg.Outputs.List {
 		// validation for same ItemInputRef on output

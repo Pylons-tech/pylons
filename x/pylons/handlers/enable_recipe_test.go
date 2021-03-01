@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -14,6 +13,7 @@ import (
 
 func TestHandlerMsgEnableRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -50,15 +50,12 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgEnableRecipe(tc.rcpID, tc.sender)
-			result, err := HandlerMsgEnableRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgEnableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				enableRcpResponse := EnableRecipeResponse{}
-				err := json.Unmarshal(result.Data, &enableRcpResponse)
-
 				require.True(t, err == nil)
-				require.True(t, enableRcpResponse.Status == "Success")
-				require.True(t, enableRcpResponse.Message == "successfully enabled the recipe")
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == "successfully enabled the recipe")
 
 				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
 				require.True(t, err == nil)

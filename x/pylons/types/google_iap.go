@@ -22,7 +22,7 @@ type GoogleIAPOrder struct {
 // NewGoogleIAPOrder return a new Google IAP Order
 func NewGoogleIAPOrder(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, Sender sdk.AccAddress) GoogleIAPOrder {
 	cb := GoogleIAPOrder{
-		NodeVersion:       SemVer("0.0.1"),
+		NodeVersion:       SemVer{"0.0.1"},
 		ProductID:         ProductID,
 		PurchaseToken:     PurchaseToken,
 		ReceiptDataBase64: ReceiptDataBase64,

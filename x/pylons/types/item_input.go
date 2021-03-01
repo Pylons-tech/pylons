@@ -9,40 +9,48 @@ import (
 // MatchError checks if all the constraint match the given item
 func (ii ItemInput) MatchError(item Item) error {
 
-	for _, param := range ii.Doubles.Params {
-		double, ok := item.FindDouble(param.Key)
-		if !ok {
-			return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
-		}
+	if ii.Doubles != nil {
+		for _, param := range ii.Doubles.Params {
+			double, ok := item.FindDouble(param.Key)
+			if !ok {
+				return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
+			}
 
-		if !param.Has(double) {
-			return fmt.Errorf("%s key range does not match: item_id=%s", param.Key, item.ID)
+			if !param.Has(double) {
+				return fmt.Errorf("%s key range does not match: item_id=%s", param.Key, item.ID)
+			}
 		}
 	}
 
-	for _, param := range ii.Longs.List {
-		long, ok := item.FindLong(param.Key)
-		if !ok {
-			return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
-		}
+	if ii.Longs != nil {
+		for _, param := range ii.Longs.List {
+			long, ok := item.FindLong(param.Key)
+			if !ok {
+				return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
+			}
 
-		if !param.Has(long) {
-			return fmt.Errorf("%s key range does not match: item_id=%s", param.Key, item.ID)
+			if !param.Has(long) {
+				return fmt.Errorf("%s key range does not match: item_id=%s", param.Key, item.ID)
+			}
 		}
 	}
 
-	for _, param := range ii.Strings.List {
-		str, ok := item.FindString(param.Key)
-		if !ok {
-			return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
-		}
-		if str != param.Value {
-			return fmt.Errorf("%s key value does not match: item_id=%s", param.Key, item.ID)
+	if ii.Strings != nil {
+		for _, param := range ii.Strings.List {
+			str, ok := item.FindString(param.Key)
+			if !ok {
+				return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
+			}
+			if str != param.Value {
+				return fmt.Errorf("%s key value does not match: item_id=%s", param.Key, item.ID)
+			}
 		}
 	}
 
-	if !ii.TransferFee.Has(item.TransferFee) {
-		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
+	if ii.TransferFee != nil {
+		if !ii.TransferFee.Has(item.TransferFee) {
+			return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
+		}
 	}
 	return nil
 }

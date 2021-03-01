@@ -33,7 +33,7 @@ func Min(x, y int64) int64 {
 }
 
 // GetTransferFee set item's TransferFee
-func (it Item) GetTransferFeeOld() int64 {
+func (it Item) CalculateTransferFee() int64 {
 	minItemTransferFee := config.Config.Fee.MinItemTransferFee
 	maxItemTransferFee := config.Config.Fee.MaxItemTransferFee
 	return Min(Max(it.TransferFee, minItemTransferFee), maxItemTransferFee)
@@ -41,7 +41,7 @@ func (it Item) GetTransferFeeOld() int64 {
 
 // FindDouble is a function to get a double attribute from an item
 func (it Item) FindDouble(key string) (float64, bool) {
-	for _, v := range it.Doubles {
+	for _, v := range it.Doubles.List {
 		if v.Key == key {
 			return v.Value.Float(), true
 		}
@@ -51,7 +51,7 @@ func (it Item) FindDouble(key string) (float64, bool) {
 
 // FindDoubleKey is a function get double key index
 func (it Item) FindDoubleKey(key string) (int, bool) {
-	for i, v := range it.Doubles {
+	for i, v := range it.Doubles.List {
 		if v.Key == key {
 			return i, true
 		}
@@ -61,7 +61,7 @@ func (it Item) FindDoubleKey(key string) (int, bool) {
 
 // FindLong is a function to get a long attribute from an item
 func (it Item) FindLong(key string) (int, bool) {
-	for _, v := range it.Longs {
+	for _, v := range it.Longs.List {
 		if v.Key == key {
 			return int(v.Value), true
 		}
@@ -71,7 +71,7 @@ func (it Item) FindLong(key string) (int, bool) {
 
 // FindLongKey is a function to get long key index
 func (it Item) FindLongKey(key string) (int, bool) {
-	for i, v := range it.Longs {
+	for i, v := range it.Longs.List {
 		if v.Key == key {
 			return i, true
 		}
@@ -81,7 +81,7 @@ func (it Item) FindLongKey(key string) (int, bool) {
 
 // FindString is a function to get a string attribute from an item
 func (it Item) FindString(key string) (string, bool) {
-	for _, v := range it.Strings {
+	for _, v := range it.Strings.List {
 		if v.Key == key {
 			return v.Value, true
 		}
@@ -91,7 +91,7 @@ func (it Item) FindString(key string) (string, bool) {
 
 // FindStringKey is a function to get string key index
 func (it Item) FindStringKey(key string) (int, bool) {
-	for i, v := range it.Strings {
+	for i, v := range it.Strings.List {
 		if v.Key == key {
 			return i, true
 		}
@@ -101,9 +101,9 @@ func (it Item) FindStringKey(key string) (int, bool) {
 
 // SetString set item's string attribute
 func (it Item) SetString(key string, value string) bool {
-	for i, v := range it.Strings {
+	for i, v := range it.Strings.List {
 		if v.Key == key {
-			it.Strings[i].Value = value
+			it.Strings.List[i].Value = value
 			return true
 		}
 	}
@@ -111,7 +111,7 @@ func (it Item) SetString(key string, value string) bool {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles []*DoubleKeyValue, longs []*LongKeyValue, strings []*StringKeyValue, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
+func NewItem(cookbookID string, doubles *DoubleKeyValueList, longs *LongKeyValueList, strings *StringKeyValueList, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
 
 	item := &Item{
 		NodeVersion: &SemVer{"0.0.1"},

@@ -13,6 +13,7 @@ import (
 
 func TestHandlerMsgCreateAccount(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
@@ -34,7 +35,7 @@ func TestHandlerMsgCreateAccount(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateAccount(tc.fromAddress)
-			_, err := HandlerMsgCreateAccount(tci.Ctx, tci.PlnK, msg)
+			_, err := tci.PlnH.HandlerMsgCreateAccount(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

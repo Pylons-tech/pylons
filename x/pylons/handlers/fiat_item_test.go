@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -15,6 +14,7 @@ import (
 
 func TestHandlerMsgFiatItem(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cases := map[string]struct {
@@ -37,24 +37,31 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cbData := CreateCookbookResponse{}
+			cbData := &msgs.MsgCreateCookbookResponse{}
 			if tc.createCookbook {
-				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
+				cookbookMsg := msgs.NewMsgCreateCookbook(
+					tc.cookbookName,
+					"",
+					"this has to meet character limits",
+					"SketchyCo",
+					&types.SemVer{"1.0.0"},
+					&types.Email{"example@example.com"},
+					&types.Level{1},
+					msgs.DefaultCostPerBlock,
+					tc.sender,
+				)
+
+				cookbookResult, err := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 				require.True(t, err == nil)
-				err = json.Unmarshal(cookbookResult.Data, &cbData)
-				require.True(t, err == nil)
+				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
 			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender, 0)
-			result, err := HandlerMsgFiatItem(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgFiatItem(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
-				diRespData := FiatItemResponse{}
-				err := json.Unmarshal(result.Data, &diRespData)
-				require.True(t, err == nil)
-				require.True(t, len(diRespData.ItemID) > 0)
+				require.True(t, len(result.ItemID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}

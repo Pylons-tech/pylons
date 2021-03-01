@@ -8,7 +8,7 @@ import (
 )
 
 // HandlerMsgFiatItem is used to create item within 1 block execution
-func (k msgServer) HandlerMsgFiatItem(ctx context.Context,msg *msgs.MsgFiatItem) (*msgs.MsgFiatItemResponse, error) {
+func (k msgServer) HandlerMsgFiatItem(ctx context.Context, msg *msgs.MsgFiatItem) (*msgs.MsgFiatItemResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -16,7 +16,7 @@ func (k msgServer) HandlerMsgFiatItem(ctx context.Context,msg *msgs.MsgFiatItem)
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	// TODO: should enable it if fiat_item should only be signed by game dev
 	// cook, err := keeper.GetCookbook(ctx, msg.CookbookID)

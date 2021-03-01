@@ -9,7 +9,7 @@ import (
 )
 
 // NewMsgFiatItem a constructor for MsgFiatItem msg
-func NewMsgFiatItem(cookbookID string, doubles []*types.DoubleKeyValue, longs []*types.LongKeyValue, strings []*types.StringKeyValue, sender sdk.AccAddress, transferFee int64) MsgFiatItem {
+func NewMsgFiatItem(cookbookID string, doubles *types.DoubleKeyValueList, longs *types.LongKeyValueList, strings *types.StringKeyValueList, sender sdk.AccAddress, transferFee int64) MsgFiatItem {
 	return MsgFiatItem{
 		CookbookID:  cookbookID,
 		Doubles:     doubles,

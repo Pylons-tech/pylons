@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
@@ -15,24 +14,32 @@ import (
 
 func TestHandlerMsgEnableTrade(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
 
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
+	err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.True(t, err == nil)
 
 	id := uuid.New()
 	id2 := uuid.New()
 	id3 := uuid.New()
 
-	cbData := CreateCookbookResponse{}
+	cookbookMsg := msgs.NewMsgCreateCookbook(
+		"cookbook-0001",
+		"cookbook-id-0001",
+		"this has to meet character limits",
+		"SketchyCo",
+		&types.SemVer{"1.0.0"},
+		&types.Email{"example@example.com"},
+		&types.Level{1},
+		msgs.DefaultCostPerBlock,
+		sender,
+	)
 
-	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "cookbook-id-0001", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
-	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
-	err = json.Unmarshal(cookbookResult.Data, &cbData)
-	require.True(t, err == nil)
-	require.True(t, len(cbData.CookbookID) > 0)
+	cookbookResult, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+	require.True(t, len(cookbookResult.CookbookID) > 0)
 
-	item := keep.GenItem(cbData.CookbookID, sender, "Raichu")
+	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	// item.OwnerTradeID = id.String()
 	err = tci.PlnK.SetItem(tci.Ctx, *item)
 	require.True(t, err == nil)
@@ -41,7 +48,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{*item},
+		ItemOutputs: types.ItemList{List: []*types.Item{item}},
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender,
 		Disabled:    true, // we disable this trade initially
@@ -59,7 +66,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id3.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{*item},
+		ItemOutputs: types.ItemList{List: []*types.Item{item}},
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2,
 		Disabled:    true, // we disable this trade initially
@@ -94,12 +101,12 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 
 			delTrdMsg := msgs.NewMsgEnableTrade(tc.tradeID, tc.sender)
-			_, err := HandlerMsgEnableTrade(tci.Ctx, tci.PlnK, delTrdMsg)
+			_, err := tci.PlnH.HandlerMsgEnableTrade(sdk.WrapSDKContext(tci.Ctx), &delTrdMsg)
 			if tc.showError == false {
 				trd, _ := tci.PlnK.GetTrade(tci.Ctx, tc.tradeID)
 				require.True(t, !trd.Disabled)
-				if trd.ItemOutputs != nil && len(trd.ItemOutputs) > 0 {
-					require.True(t, trd.ItemOutputs[0].OwnerTradeID != "")
+				if trd.ItemOutputs.List != nil && len(trd.ItemOutputs.List) > 0 {
+					require.True(t, trd.ItemOutputs.List[0].OwnerTradeID != "")
 				}
 			} else {
 				require.True(t, err != nil)

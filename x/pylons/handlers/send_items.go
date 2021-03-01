@@ -22,7 +22,7 @@ func (k msgServer) HandlerMsgSendItems(ctx context.Context, msg *msgs.MsgSendIte
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	for _, val := range msg.ItemIDs {
 		item, err := k.GetItem(sdkCtx, val)
@@ -35,7 +35,7 @@ func (k msgServer) HandlerMsgSendItems(ctx context.Context, msg *msgs.MsgSendIte
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
-		if item.String() != msg.String() {
+		if item.Sender != msg.Sender {
 			return nil, errInternal(errors.New("Item is not the sender's one"))
 		}
 
@@ -43,7 +43,7 @@ func (k msgServer) HandlerMsgSendItems(ctx context.Context, msg *msgs.MsgSendIte
 			return nil, errInternal(err)
 		}
 
-		coins := types.NewPylon(item.GetTransferFee())
+		coins := types.NewPylon(item.CalculateTransferFee())
 
 		if !keep.HasCoins(k.Keeper, sdkCtx, sender, coins) {
 			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))

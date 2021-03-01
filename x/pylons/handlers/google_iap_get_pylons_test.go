@@ -15,6 +15,7 @@ import (
 
 func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
@@ -85,11 +86,11 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 				receiptDataBase64,
 				tc.signature,
 				tc.fromAddress)
-			_, err := HandlerMsgGoogleIAPGetPylons(tci.Ctx, tci.PlnK, msg)
+			_, err := tci.PlnH.HandlerMsgGoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, err == nil, err)
-				amount := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress).AmountOf(types.Pylon).Int64()
+				amount := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress).AmountOf(types.Pylon).Int64()
 				require.True(t, amount == tc.reqAmount)
 			} else {
 				require.True(t, err != nil)
@@ -97,7 +98,7 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 			}
 
 			if tc.tryReuseOrderID {
-				_, err := HandlerMsgGoogleIAPGetPylons(tci.Ctx, tci.PlnK, msg)
+				_, err := tci.PlnH.HandlerMsgGoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.tryReuseErr))
 			}

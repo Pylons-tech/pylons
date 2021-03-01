@@ -16,7 +16,7 @@ func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *msgs.MsgUp
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender := sdk.AccAddress(msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	cb, err := k.GetCookbook(sdkCtx, msg.ID)
 
