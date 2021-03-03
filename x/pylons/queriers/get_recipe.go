@@ -1,10 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -13,22 +13,30 @@ const (
 )
 
 // GetRecipe returns a recipe based on the recipe id
-func GetRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetRecipe(ctx context.Context, req *types.GetRecipeRequest) (*types.GetRecipeResponse, error) {
+	if req.RecipeID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no recipe id is provided in path")
 	}
-	rcpID := path[0]
-	recipe, err := keeper.GetRecipe(ctx, rcpID)
+
+	recipe, err := querier.Keeper.GetRecipe(sdk.UnwrapSDKContext(ctx), req.RecipeID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	// if we cannot find the value then it should return an error
-	bz, err := keeper.Cdc.MarshalJSON(recipe)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
 
-	return bz, nil
+	return &types.GetRecipeResponse{
+		NodeVersion:   &recipe.NodeVersion,
+		ID:            recipe.ID,
+		CookbookID:    recipe.CookbookID,
+		Name:          recipe.Name,
+		CoinInputs:    &recipe.CoinInputs,
+		ItemInputs:    &recipe.ItemInputs,
+		Entries:       &recipe.Entries,
+		Outputs:       &recipe.Outputs,
+		Description:   recipe.Description,
+		BlockInterval: recipe.BlockInterval,
+		Sender:        recipe.Sender.String(),
+		Disabled:      recipe.Disabled,
+	}, nil
 
 }

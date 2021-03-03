@@ -1,13 +1,12 @@
 package queriers
 
 import (
-	"encoding/json"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -15,34 +14,37 @@ import (
 
 func TestQuerierPylonsBalance(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000), nil, nil, nil)
 
 	cases := map[string]struct {
-		path          []string
+		address       string
 		desiredError  string
 		desiredAmount int64
 		showError     bool
 	}{
 		"not existing sender": {
-			path:          []string{"invalidSender"},
+			address:       "invalidSender",
 			desiredError:  "decoding bech32 failed: string not all lowercase or all uppercase",
 			desiredAmount: 0,
 			showError:     true,
 		},
 		"error check when not providing sender": {
-			path:          []string{},
+			address:       "",
 			desiredError:  "no sender is provided in path",
 			desiredAmount: 0,
 			showError:     true,
 		},
 		"sender with no balance": {
-			path:          []string{sender2.String()},
+			address:       sender2.String(),
 			desiredError:  "",
 			desiredAmount: 0,
 			showError:     false,
 		},
 		"sender with balance": {
-			path:          []string{sender1.String()},
+			address:       sender1.String(),
 			desiredError:  "",
 			desiredAmount: 1000,
 			showError:     false,
@@ -50,14 +52,11 @@ func TestQuerierPylonsBalance(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			result, err := PylonsBalance(
-				tci.Ctx,
-				tc.path,
-				abci.RequestQuery{
-					Path: "",
-					Data: []byte{},
+			result, err := tci.PlnQ.PylonsBalance(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.PylonsBalanceRequest{
+					Address: tc.address,
 				},
-				tci.PlnK,
 			)
 
 			if tc.showError {
@@ -65,12 +64,7 @@ func TestQuerierPylonsBalance(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 
-				balanceResp := QueryResBalance{}
-				balanceRespErr := json.Unmarshal(result, &balanceResp)
-				require.True(t, balanceRespErr == nil)
-
-				balance := balanceResp.Balance
-				require.True(t, balance == tc.desiredAmount)
+				require.True(t, result.Balance == tc.desiredAmount)
 			}
 		})
 	}

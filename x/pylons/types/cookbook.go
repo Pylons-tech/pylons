@@ -69,3 +69,22 @@ func (cbl CookbookList) String() string {
 	output += "}"
 	return output
 }
+
+func CookbookListToGetCookbookResponseList(list []Cookbook) []*GetCookbookResponse {
+	var res []*GetCookbookResponse
+	for _, cookbook := range list {
+		res = append(res, &GetCookbookResponse{
+			NodeVersion:  &cookbook.NodeVersion,
+			ID:           cookbook.ID,
+			Name:         cookbook.Name,
+			Description:  cookbook.Description,
+			Version:      &cookbook.Version,
+			Developer:    cookbook.Developer,
+			Level:        &cookbook.Level,
+			SupportEmail: &cookbook.SupportEmail,
+			CostPerBlock: int64(cookbook.CostPerBlock),
+			Sender:       cookbook.Sender.String(),
+		})
+	}
+	return res
+}

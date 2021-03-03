@@ -1,12 +1,11 @@
 package queriers
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -15,6 +14,9 @@ import (
 
 func TestGetRecipe(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -26,26 +28,26 @@ func TestGetRecipe(t *testing.T) {
 		mockRecipeName, cbData.CookbookID, sender1)
 
 	cases := map[string]struct {
-		path          []string
+		recipeID      string
 		desiredError  string
 		showError     bool
 		desiredRcpCnt int
 		rcpName       string
 	}{
 		"error check when providing invalid recipe ID": {
-			path:          []string{"invalid recipeID"},
+			recipeID:      "invalid recipeID",
 			showError:     true,
 			desiredError:  "The recipe doesn't exist",
 			desiredRcpCnt: 0,
 		},
 		"error check when not providing recipeID": {
-			path:          []string{},
+			recipeID:      "",
 			showError:     true,
 			desiredError:  "no recipe id is provided in path",
 			desiredRcpCnt: 0,
 		},
 		"get recipe successful check": {
-			path:          []string{rcpData.RecipeID},
+			recipeID:      rcpData.RecipeID,
 			showError:     false,
 			desiredError:  "",
 			desiredRcpCnt: 1,
@@ -54,24 +56,17 @@ func TestGetRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			result, err := GetRecipe(
-				tci.Ctx,
-				tc.path,
-				abci.RequestQuery{
-					Path: "",
-					Data: []byte{},
+			result, err := tci.PlnQ.GetRecipe(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.GetRecipeRequest{
+					RecipeID: tc.recipeID,
 				},
-				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
-				readRecipe := types.Recipe{}
-				readRecipeErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readRecipe)
-
-				require.True(t, readRecipeErr == nil)
-				require.True(t, readRecipe.Name == tc.rcpName)
+				require.True(t, result.Name == tc.rcpName)
 			}
 		})
 	}

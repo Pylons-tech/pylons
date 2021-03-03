@@ -1,12 +1,11 @@
 package queriers
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
@@ -15,9 +14,12 @@ import (
 
 func TestListExecution(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
-	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
+	err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
 	require.True(t, err == nil)
 
 	// mock cookbook
@@ -34,25 +36,25 @@ func TestListExecution(t *testing.T) {
 	require.True(t, err == nil, err)
 
 	cases := map[string]struct {
-		path          []string
+		sender        string
 		desiredError  string
 		showError     bool
 		desiredExcCnt int
 	}{
 		"error check when providing invalid address": {
-			path:          []string{"invalid_address"},
+			sender:        "invalid_address",
 			showError:     true,
 			desiredError:  "decoding bech32 failed: invalid index of 1",
 			desiredExcCnt: 0,
 		},
 		"error check when not providing address": {
-			path:          []string{},
+			sender:        "",
 			showError:     true,
 			desiredError:  "no address is provided in path",
 			desiredExcCnt: 0,
 		},
 		"list recipe successful check": {
-			path:          []string{sender1.String()},
+			sender:        sender1.String(),
 			showError:     false,
 			desiredError:  "",
 			desiredExcCnt: 1,
@@ -60,24 +62,18 @@ func TestListExecution(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			result, err := ListExecutions(
-				tci.Ctx,
-				tc.path,
-				abci.RequestQuery{
-					Path: sender1.String(),
-					Data: []byte{},
+			result, err := tci.PlnQ.ListExecutions(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.ListExecutionsRequest{
+					Sender: tc.sender,
 				},
-				tci.PlnK,
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.True(t, err == nil)
-				excList := types.ExecutionList{}
-				excListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &excList)
 
-				require.True(t, excListErr == nil)
-				require.True(t, len(excList.Executions) == tc.desiredExcCnt)
+				require.True(t, len(result.Executions) == tc.desiredExcCnt)
 			}
 		})
 	}

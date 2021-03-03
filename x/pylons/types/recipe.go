@@ -94,3 +94,24 @@ func (rcp Recipe) GetItemInputRefIndex(inputRef string) int {
 	}
 	return -1
 }
+
+func RecipeListToRecipeProtoList(recipes []Recipe) []*GetRecipeResponse {
+	var res []*GetRecipeResponse
+	for _, recipe := range recipes {
+		res = append(res, &GetRecipeResponse{
+			NodeVersion:   &recipe.NodeVersion,
+			ID:            recipe.ID,
+			CookbookID:    recipe.CookbookID,
+			Name:          recipe.Name,
+			CoinInputs:    &recipe.CoinInputs,
+			ItemInputs:    &recipe.ItemInputs,
+			Entries:       &recipe.Entries,
+			Outputs:       &recipe.Outputs,
+			Description:   recipe.Description,
+			BlockInterval: recipe.BlockInterval,
+			Sender:        recipe.Sender.String(),
+			Disabled:      recipe.Disabled,
+		})
+	}
+	return res
+}

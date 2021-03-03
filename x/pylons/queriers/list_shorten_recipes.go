@@ -1,11 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -13,50 +12,35 @@ const (
 	KeyListShortenRecipe = "list_shorten_recipe"
 )
 
-// ShortenRecipe is a struct to manage shorten recipes
-type ShortenRecipe struct {
-	ID          string // the recipe guid
-	CookbookID  string // the cookbook guid
-	Name        string
-	Description string
-	Sender      sdk.AccAddress
-}
-
-// ShortenRecipeList is list of shorten recipes
-type ShortenRecipeList struct {
-	Recipes []ShortenRecipe
-}
-
 // NewShortenRecipe is a constructor for ShortenRecipe
-func NewShortenRecipe(ID, cbID, Name, Description string, Sender sdk.AccAddress) ShortenRecipe {
-	return ShortenRecipe{
+func NewShortenRecipe(ID, cbID, Name, Description string, Sender sdk.AccAddress) *types.ShortenRecipe {
+	return &types.ShortenRecipe{
 		ID:          ID,
 		CookbookID:  cbID,
 		Name:        Name,
 		Description: Description,
-		Sender:      Sender,
+		Sender:      Sender.String(),
 	}
 }
 
 // ListShortenRecipe returns a recipe based on the recipe id
-func ListShortenRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ListShortenRecipe(ctx context.Context, req *types.ListShortenRecipeRequest) (*types.ListShortenRecipeResponse, error) {
+	if req.Size() == 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
-	addr := path[0]
-	var shortenRecipeList ShortenRecipeList
+
 	var recipes []types.Recipe
-	var shortenRecipes []ShortenRecipe
-	accAddr, err := sdk.AccAddressFromBech32(addr)
+	var shortenRecipes []*types.ShortenRecipe
+	accAddr, err := sdk.AccAddressFromBech32(req.Address)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if accAddr.Empty() {
-		recipes = keeper.GetRecipes(ctx)
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
 	} else {
-		recipes = keeper.GetRecipesBySender(ctx, accAddr)
+		recipes = querier.Keeper.GetRecipesBySender(sdk.UnwrapSDKContext(ctx), accAddr)
 	}
 
 	for _, rcp := range recipes {
@@ -64,14 +48,7 @@ func ListShortenRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, ke
 			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender))
 	}
 
-	shortenRecipeList = ShortenRecipeList{
+	return &types.ListShortenRecipeResponse{
 		Recipes: shortenRecipes,
-	}
-
-	rcpl, err := keeper.Cdc.MarshalJSON(shortenRecipeList)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return rcpl, nil
+	}, nil
 }

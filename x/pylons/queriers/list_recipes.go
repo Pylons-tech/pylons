@@ -1,11 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -14,33 +13,25 @@ const (
 )
 
 // ListRecipe returns a recipe based on the recipe id
-func ListRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ListRecipe(ctx context.Context, req *types.ListRecipeRequest) (*types.ListRecipeResponse, error) {
+	if req.Size() == 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
-	addr := path[0]
-	var recipeList types.RecipeList
+
 	var recipes []types.Recipe
-	accAddr, err := sdk.AccAddressFromBech32(addr)
+	accAddr, err := sdk.AccAddressFromBech32(req.Address)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if accAddr.Empty() {
-		recipes = keeper.GetRecipes(ctx)
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
 	} else {
-		recipes = keeper.GetRecipesBySender(ctx, accAddr)
+		recipes = querier.Keeper.GetRecipesBySender(sdk.UnwrapSDKContext(ctx), accAddr)
 	}
 
-	recipeList = types.RecipeList{
-		Recipes: recipes,
-	}
-
-	rcpl, err := keeper.Cdc.MarshalJSON(recipeList)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return rcpl, nil
+	return &types.ListRecipeResponse{
+		Recipes: types.RecipeListToRecipeProtoList(recipes),
+	}, nil
 }

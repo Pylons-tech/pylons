@@ -83,13 +83,13 @@ func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.Lock
 func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoinDetails {
 	lcd := types.LockedCoinDetails{}
 	lc := k.GetLockedCoin(ctx, sender)
-	lcd.Sender, lcd.Amount = lc.Sender, lc.Amount
+	lcd.Sender, lcd.Amount = lc.Sender.String(), lc.Amount
 
 	trades, err := k.GetTradesByCreator(ctx, sender)
 	if err == nil {
 		for _, trade := range trades {
 			if !trade.Disabled && !trade.Completed && !trade.CoinOutputs.Empty() {
-				lcd.LockCoinTrades = append(lcd.LockCoinTrades, types.LockedCoinDescribe{
+				lcd.LockCoinTrades = append(lcd.LockCoinTrades, &types.LockedCoinDescribe{
 					ID:     trade.ID,
 					Amount: trade.CoinOutputs,
 				})
@@ -100,7 +100,7 @@ func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) typ
 	if err == nil {
 		for _, exec := range execs {
 			if !exec.CoinInputs.Empty() {
-				lcd.LockCoinExecs = append(lcd.LockCoinExecs, types.LockedCoinDescribe{
+				lcd.LockCoinExecs = append(lcd.LockCoinExecs, &types.LockedCoinDescribe{
 					ID:     exec.ID,
 					Amount: exec.CoinInputs,
 				})

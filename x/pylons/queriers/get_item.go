@@ -1,10 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -13,22 +13,18 @@ const (
 )
 
 // GetItem returns a item based on the item id
-func GetItem(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetItem(ctx context.Context, req *types.GetItemRequest) (*types.GetItemResponse, error) {
+	if req.ItemID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no item id is provided in path")
 	}
-	itemID := path[0]
-	item, err := keeper.GetItem(ctx, itemID)
+
+	item, err := querier.Keeper.GetItem(sdk.UnwrapSDKContext(ctx), req.ItemID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	// if we cannot find the value then it should return an error
-	bz, err := keeper.Cdc.MarshalJSON(item)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
 
-	return bz, nil
-
+	return &types.GetItemResponse{
+		Item: &item,
+	}, nil
 }

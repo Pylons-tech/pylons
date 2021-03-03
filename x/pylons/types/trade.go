@@ -82,3 +82,23 @@ func (trd *Trade) String() string {
 		trd.Sender,
 	)
 }
+
+func TradeListToProto(trades []Trade) []*GetTradeResponse {
+	var res []*GetTradeResponse
+	for _, trade := range trades {
+		res = append(res, &GetTradeResponse{
+			NodeVersion: &trade.NodeVersion,
+			ID:          trade.ID,
+			CoinInputs:  &trade.CoinInputs,
+			ItemInputs:  &trade.ItemInputs,
+			CoinOutputs: trade.CoinOutputs,
+			ItemOutputs: &trade.ItemOutputs,
+			ExtraInfo:   trade.ExtraInfo,
+			Sender:      trade.Sender.String(),
+			FulFiller:   trade.FulFiller.String(),
+			Disabled:    trade.Disabled,
+			Completed:   trade.Completed,
+		})
+	}
+	return res
+}

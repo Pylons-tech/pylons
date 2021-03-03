@@ -1,12 +1,11 @@
 package queriers
 
 import (
-	"encoding/json"
+	"context"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -15,31 +14,23 @@ const (
 )
 
 // ItemsBySender returns all items based on the sender address
-func ItemsBySender(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ItemsBySender(ctx context.Context, req *types.ItemsBySenderRequest) (*types.ItemsBySenderResponse, error) {
+	if req.Sender == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no sender is provided in path")
 	}
-	sender := path[0]
-	senderAddr, err := sdk.AccAddressFromBech32(sender)
+
+	senderAddr, err := sdk.AccAddressFromBech32(req.Sender)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	items, err := keeper.GetItemsBySender(ctx, senderAddr)
+	items, err := querier.Keeper.GetItemsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	itemResp := ItemResp{
-		Items: items,
-	}
-	// if we cannot find the value then it should return an error
-	mItems, err := json.Marshal(itemResp)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return mItems, nil
-
+	return &types.ItemsBySenderResponse{
+		Items: types.ItemInputsToProto(items),
+	}, nil
 }

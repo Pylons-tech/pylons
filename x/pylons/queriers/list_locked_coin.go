@@ -1,10 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -13,24 +13,22 @@ const (
 )
 
 // GetLockedCoins returns locked coins based on user
-func GetLockedCoins(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetLockedCoins(ctx context.Context, req *types.GetLockedCoinsRequest) (*types.GetLockedCoinsResponse, error) {
+	if req.Address == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
 
-	addr := path[0]
-	accAddr, err := sdk.AccAddressFromBech32(addr)
+	accAddr, err := sdk.AccAddressFromBech32(req.Address)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	lc := keeper.GetLockedCoin(ctx, accAddr)
+	lc := querier.Keeper.GetLockedCoin(sdk.UnwrapSDKContext(ctx), accAddr)
 
-	lcl, err := keeper.Cdc.MarshalJSON(lc)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return lcl, nil
+	return &types.GetLockedCoinsResponse{
+		NodeVersion: &lc.NodeVersion,
+		Sender:      lc.Sender.String(),
+		Amount:      lc.Amount,
+	}, nil
 }

@@ -64,3 +64,21 @@ func (e Execution) String() string {
 		}`, e.NodeVersion, e.ID, e.RecipeID, e.CookbookID, e.CoinInputs, e.ItemInputs,
 		e.BlockHeight, e.Sender, e.Completed)
 }
+
+func ExecutionsToListProto(execs []Execution) []*GetExecutionResponse {
+	var res []*GetExecutionResponse
+	for _, exec := range execs {
+		res = append(res, &GetExecutionResponse{
+			NodeVersion: &exec.NodeVersion,
+			ID:          exec.ID,
+			RecipeID:    exec.RecipeID,
+			CookbookID:  exec.CookbookID,
+			CoinsInput:  exec.CoinInputs,
+			ItemInputs:  ItemInputsToProto(exec.ItemInputs),
+			BlockHeight: exec.BlockHeight,
+			Sender:      exec.Sender,
+			Completed:   exec.Completed,
+		})
+	}
+	return res
+}

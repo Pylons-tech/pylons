@@ -1,12 +1,11 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -30,33 +29,23 @@ func (er ExecResp) String() string {
 }
 
 // ListExecutions lists all the executions based on the sender address
-func ListExecutions(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ListExecutions(ctx context.Context, req *types.ListExecutionsRequest) (*types.ListExecutionsResponse, error) {
+	if req.Sender == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
 
-	sender := path[0]
-	senderAddr, err := sdk.AccAddressFromBech32(sender)
+	senderAddr, err := sdk.AccAddressFromBech32(req.Sender)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	execs, err := keeper.GetExecutionsBySender(ctx, senderAddr)
+	execs, err := querier.Keeper.GetExecutionsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	execResp := ExecResp{
-		Executions: execs,
-	}
-
-	// if we cannot find the value then it should return an error
-	mItems, err := keeper.Cdc.MarshalJSON(execResp)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return mItems, nil
-
+	return &types.ListExecutionsResponse{
+		Executions: types.ExecutionsToListProto(execs),
+	}, nil
 }

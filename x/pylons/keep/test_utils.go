@@ -36,6 +36,7 @@ type TestCoinInput struct {
 	Bk       bankkeeper.Keeper
 	PlnK     Keeper
 	PlnH     msgs.MsgServer
+	PlnQ     types.QueryServer
 }
 
 // GenItem generate an item with name

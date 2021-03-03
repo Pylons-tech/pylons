@@ -1,11 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -14,31 +13,23 @@ const (
 )
 
 // ListCookbook returns a cookbook based on the cookbook id
-func ListCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ListCookbook(ctx context.Context, req *types.ListCookbookRequest) (*types.ListCookbookResponse, error) {
+	if req.Address == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
 	}
-	addr := path[0]
-	var cookbookList types.CookbookList
-	accAddr, err := sdk.AccAddressFromBech32(addr)
+
+	accAddr, err := sdk.AccAddressFromBech32(req.Address)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	cookbooks, err := keeper.GetCookbookBySender(ctx, accAddr)
+	cookbook, err := querier.Keeper.GetCookbookBySender(sdk.UnwrapSDKContext(ctx), accAddr)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	cookbookList = types.CookbookList{
-		Cookbooks: cookbooks,
-	}
-
-	cbl, err := keeper.Cdc.MarshalJSON(cookbookList)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return cbl, nil
+	return &types.ListCookbookResponse{
+		Cookbooks: types.CookbookListToGetCookbookResponseList(cookbook),
+	}, nil
 }

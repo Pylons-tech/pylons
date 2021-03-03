@@ -1,7 +1,7 @@
 package queriers
 
 import (
-	"encoding/json"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
@@ -9,11 +9,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 func TestQueriersItemsByCookbook(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -25,31 +27,31 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
-		path          []string
+		cookbookID    string
 		desiredError  string
 		desiredLength int
 		showError     bool
 	}{
 		"not existing cookbook id": {
-			path:          []string{"invalidCookbookID"},
+			cookbookID:    "invalidCookbookID",
 			desiredError:  "",
 			desiredLength: 0,
 			showError:     false,
 		},
 		"error check when not providing cookbookID": {
-			path:          []string{},
+			cookbookID:    "",
 			desiredError:  "no cookbook id is provided in path",
 			desiredLength: 0,
 			showError:     true,
 		},
 		"cookbook with no item": {
-			path:          []string{cbData1.CookbookID},
+			cookbookID:    cbData1.CookbookID,
 			desiredError:  "",
 			desiredLength: 0,
 			showError:     false,
 		},
 		"cookbook with 1 item": {
-			path:          []string{cbData.CookbookID},
+			cookbookID:    cbData.CookbookID,
 			desiredError:  "",
 			desiredLength: 1,
 			showError:     false,
@@ -57,14 +59,11 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			result, err := ItemsByCookbook(
-				tci.Ctx,
-				tc.path,
-				abci.RequestQuery{
-					Path: "",
-					Data: []byte{},
+			result, err := tci.PlnQ.ItemsByCookbook(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.ItemsByCookbookRequest{
+					CookbookID: tc.cookbookID,
 				},
-				tci.PlnK,
 			)
 
 			if tc.showError {
@@ -72,11 +71,7 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 
-				itemResp := ItemResp{}
-				itemRespErr := json.Unmarshal(result, &itemResp)
-				require.True(t, itemRespErr == nil)
-
-				cItems := itemResp.Items
+				cItems := result.Items
 				require.True(t, len(cItems) == tc.desiredLength)
 			}
 		})

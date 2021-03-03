@@ -6,6 +6,14 @@ import (
 	"regexp"
 )
 
+func ItemInputsToProto(items []Item) []*Item {
+	var res []*Item
+	for _, item := range items {
+		res = append(res, &item)
+	}
+	return res
+}
+
 // MatchError checks if all the constraint match the given item
 func (ii ItemInput) MatchError(item Item) error {
 

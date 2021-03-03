@@ -1,11 +1,10 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -14,28 +13,20 @@ const (
 )
 
 // ListRecipeByCookbook returns a recipe based on the recipe id
-func ListRecipeByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ListRecipeByCookbook(ctx context.Context, req *types.ListRecipeByCookbookRequest) (*types.ListRecipeByCookbookResponse, error) {
+	if req.Size() == 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no cookbook id is provided in path")
 	}
-	cookbookID := path[0]
-	var recipeList types.RecipeList
+
 	var recipes []types.Recipe
 
-	if cookbookID == "" {
-		recipes = keeper.GetRecipes(ctx)
+	if req.CookbookID == "" {
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
 	} else {
-		recipes = keeper.GetRecipesByCookbook(ctx, cookbookID)
+		recipes = querier.Keeper.GetRecipesByCookbook(sdk.UnwrapSDKContext(ctx), req.CookbookID)
 	}
 
-	recipeList = types.RecipeList{
-		Recipes: recipes,
-	}
-
-	rcpl, err := keeper.Cdc.MarshalJSON(recipeList)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return rcpl, nil
+	return &types.ListRecipeByCookbookResponse{
+		Recipes: types.RecipeListToRecipeProtoList(recipes),
+	}, nil
 }

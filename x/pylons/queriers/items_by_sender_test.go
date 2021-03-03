@@ -1,7 +1,7 @@
 package queriers
 
 import (
-	"encoding/json"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
@@ -9,11 +9,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 func TestQueriersItemsBySender(t *testing.T) {
 	tci := keep.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
@@ -24,31 +26,31 @@ func TestQueriersItemsBySender(t *testing.T) {
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
-		path          []string
+		sender        string
 		desiredError  string
 		desiredLength int
 		showError     bool
 	}{
 		"not existing sender": {
-			path:          []string{"invalidSender"},
+			sender:        "invalidSender",
 			desiredError:  "decoding bech32 failed: string not all lowercase or all uppercase",
 			desiredLength: 0,
 			showError:     true,
 		},
 		"error check when not providing sender": {
-			path:          []string{},
+			sender:        "",
 			desiredError:  "no sender is provided in path",
 			desiredLength: 0,
 			showError:     true,
 		},
 		"sender with no item": {
-			path:          []string{sender2.String()},
+			sender:        sender2.String(),
 			desiredError:  "",
 			desiredLength: 0,
 			showError:     false,
 		},
 		"sender with 1 item": {
-			path:          []string{sender1.String()},
+			sender:        sender1.String(),
 			desiredError:  "",
 			desiredLength: 1,
 			showError:     false,
@@ -56,14 +58,11 @@ func TestQueriersItemsBySender(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			result, err := ItemsBySender(
-				tci.Ctx,
-				tc.path,
-				abci.RequestQuery{
-					Path: "",
-					Data: []byte{},
+			result, err := tci.PlnQ.ItemsBySender(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.ItemsBySenderRequest{
+					Sender: tc.sender,
 				},
-				tci.PlnK,
 			)
 
 			if tc.showError {
@@ -71,11 +70,7 @@ func TestQueriersItemsBySender(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 
-				itemResp := ItemResp{}
-				itemRespErr := json.Unmarshal(result, &itemResp)
-				require.True(t, itemRespErr == nil)
-
-				cItems := itemResp.Items
+				cItems := result.Items
 				require.True(t, len(cItems) == tc.desiredLength)
 			}
 		})

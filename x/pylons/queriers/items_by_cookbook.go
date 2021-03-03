@@ -1,13 +1,11 @@
 package queriers
 
 import (
-	"encoding/json"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"context"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -31,26 +29,18 @@ func (ir ItemResp) String() string {
 }
 
 // ItemsByCookbook returns a cookbook based on the cookbook id
-func ItemsByCookbook(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) ItemsByCookbook(ctx context.Context, req *types.ItemsByCookbookRequest) (*types.ItemsByCookbookResponse, error) {
+	if req.CookbookID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no cookbook id is provided in path")
 	}
-	cookbookID := path[0]
-	items, err := keeper.ItemsByCookbook(ctx, cookbookID)
+
+	items, err := querier.Keeper.ItemsByCookbook(sdk.UnwrapSDKContext(ctx), req.CookbookID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	itemResp := ItemResp{
-		Items: items,
-	}
-
-	// if we cannot find the value then it should return an error
-	mItems, err := json.Marshal(itemResp)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return mItems, nil
+	return &types.ItemsByCookbookResponse{
+		Items: types.ItemInputsToProto(items),
+	}, nil
 }
