@@ -1,13 +1,13 @@
 package handlers
 
 import (
+	"fmt"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 )
@@ -15,7 +15,7 @@ import (
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
 // numbers, checks signatures & account numbers, and deducts fees from the first
 // signer.
-func NewAnteHandler(ak keeper.AccountKeeper, supplyKeeper types.BankKeeper, sigGasConsumer ante.SignatureVerificationGasConsumer) sdk.AnteHandler {
+func NewAnteHandler(ak keeper.AccountKeeper) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		// ante.NewMempoolFeeDecorator(),
@@ -47,16 +47,22 @@ func NewAccountCreationDecorator(ak keeper.AccountKeeper) AccountCreationDecorat
 
 // AnteHandle is a handler for NewAccountCreationDecorator
 func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	sigTx, ok := tx.(legacytx.StdTx)
+	sigTx, ok := tx.(authsigning.SigVerifiableTx)
 	if !ok {
 		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid transaction type")
 	}
 	messages := sigTx.GetMsgs()
 
-	if len(messages) == 1 && messages[0].Type() == "create_account" && sigTx.Signatures != nil && len(sigTx.Signatures) > 0 {
+	sigTxSignatures, err := sigTx.GetSignaturesV2()
+	if err != nil {
+		return ctx, sdkerrors.Wrap(err, "getting signatures of tx is failed")
+	}
+
+	if len(messages) == 1 && messages[0].Type() == "create_account" && sigTxSignatures != nil && len(sigTxSignatures) > 0 {
 		// we don't support multi-message transaction for create_account
-		pubkey := sigTx.Signatures[0].PubKey
+		pubkey := sigTxSignatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
+		fmt.Println(sigTx.GetPubKeys()[0].Address().String())
 		msgCreateAccount, ok := messages[0].(*msgs.MsgCreateAccount)
 		if !ok {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "error msg conversion to MsgCreateAccount")
