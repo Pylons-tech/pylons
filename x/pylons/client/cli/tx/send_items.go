@@ -4,36 +4,32 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"strings"
-
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/keys"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
+	"github.com/spf13/cobra"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // SendItems implements SendItems msg transaction
-func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func SendItems(queryRoute string) *cobra.Command {
 	ccb := &cobra.Command{
 		Use:   "send-items [address] [item_ids]",
 		Short: "send items to the address provided",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			inBuf := bufio.NewReader(cmd.InOrStdin())
-			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
-
-			kb, err := keys.NewKeyBaseFromDir(viper.GetString(flags.FlagHome))
+			keys, err := keyring.New(sdk.KeyringServiceName(), keyring.BackendTest, clientCtx.KeyringDir, inBuf)
 			if err != nil {
 				return errors.New("cannot get the keys from home")
 			}
@@ -42,32 +38,33 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 			addr, err = sdk.AccAddressFromBech32(args[0])
 			// if its not an address
 			if err != nil {
-				info, err := kb.Get(args[0])
+				info, err := keys.Key(args[0])
 				if err != nil {
-					return err
+					return errors.New(err.Error())
 				}
 				addr = info.GetAddress()
 			}
 
 			itemIDsArray := strings.Split(args[1], ",")
 
-			msg := msgs.NewMsgSendItems(itemIDsArray, cliCtx.GetFromAddress(), addr)
+			msg := msgs.NewMsgSendItems(itemIDsArray, clientCtx.GetFromAddress(), addr)
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
 			for _, val := range itemIDsArray {
-
-				res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, val), nil)
+				res, _, err := clientCtx.QueryWithData(fmt.Sprintf("custom/%s/get_item/%s", queryRoute, val), nil)
 				if err != nil {
 					return err
 				}
 
-				var targetItem types.Item
-				cdc.MustUnmarshalJSON(res, &targetItem)
+				var targetItem *types.Item
+				if err := targetItem.Unmarshal(res); err != nil {
+					return err
+				}
 
-				if targetItem.Sender.String() != msg.Sender.String() {
+				if targetItem.GetSender() != msg.GetSender() {
 					return errors.New("Item is not the sender's one")
 				}
 
@@ -76,7 +73,7 @@ func SendItems(queryRoute string, cdc *codec.Codec) *cobra.Command {
 				}
 			}
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{&msg}...)
 		},
 	}
 	return ccb

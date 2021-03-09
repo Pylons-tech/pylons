@@ -1,24 +1,20 @@
 package tx
 
 import (
-	"bufio"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 
 	"github.com/spf13/cobra"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // UpdateCookbook is the client cli command for creating cookbook
-func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
+func UpdateCookbook() *cobra.Command {
 
-	var msgCCB msgs.MsgUpdateCookbook
+	var msgCCB = &msgs.MsgUpdateCookbook{}
 	var tmpVersion string
 	var tmpEmail string
 
@@ -27,20 +23,21 @@ func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
 		Short: "update cookbook by providing the args",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-			inBuf := bufio.NewReader(cmd.InOrStdin())
-			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
-
-			msgCCB.Sender = cliCtx.GetFromAddress()
-			msgCCB.Version = types.SemVer(tmpVersion)
-			msgCCB.SupportEmail = types.Email(tmpEmail)
-
-			err := msgCCB.ValidateBasic()
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgCCB})
+			msgCCB.Sender = clientCtx.GetFromAddress().String()
+			msgCCB.Version = &types.SemVer{tmpVersion}
+			msgCCB.SupportEmail = &types.Email{tmpEmail}
+
+			err = msgCCB.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{msgCCB}...)
 		},
 	}
 

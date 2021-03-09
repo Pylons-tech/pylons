@@ -43,5 +43,9 @@ func (msg MsgFulfillTrade) GetSignBytes() []byte {
 
 // GetSigners gets the signer who should have signed the message
 func (msg MsgFulfillTrade) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
 }

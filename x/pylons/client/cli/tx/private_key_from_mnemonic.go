@@ -8,29 +8,28 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
+	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/go-bip39"
 )
 
 // ComputePrivateKey returns the transaction sign result from private key.
-func ComputePrivateKey(codec *codec.Codec) *cobra.Command {
+func ComputePrivateKey() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "compute-private [mnemonic]",
 		Short: "Compute private key from mnemonic",
-		Long: `Export private key from mnemonic. 
-				Mnemonic is not being used on mobile side and it'a a pain to have difference. 
+		Long: `Export private key from mnemonic.
+				Mnemonic is not being used on mobile side and it'a a pain to have difference.
 				This is a helper for mobile side.
 		`,
 		PreRun: preSignCmd,
-		RunE:   makeComputePrivateKeyCmd(codec),
+		RunE:   makeComputePrivateKeyCmd(),
 		Args:   cobra.ExactArgs(1),
 	}
 
 	return cmd
 }
 
-func makeComputePrivateKeyCmd(cdc *codec.Codec) func(cmd *cobra.Command, args []string) error {
+func makeComputePrivateKeyCmd() func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		mnemonic := args[0]
 		// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
@@ -46,7 +45,7 @@ func makeComputePrivateKeyCmd(cdc *codec.Codec) func(cmd *cobra.Command, args []
 		if err != nil {
 			os.Exit(1)
 		}
-		priv := secp256k1.PrivKeySecp256k1(derivedPriv)
+		priv := secp256k1.GenPrivKeySecp256k1(derivedPriv)
 
 		privKeyHex := hex.EncodeToString(priv[:])
 		// cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes()).String()

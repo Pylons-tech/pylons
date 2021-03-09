@@ -51,5 +51,9 @@ func (msg MsgSendCoins) GetSignBytes() []byte {
 
 // GetSigners is a function to get signers from MsgSendCoins msg
 func (msg MsgSendCoins) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
 }

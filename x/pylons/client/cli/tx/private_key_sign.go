@@ -1,24 +1,18 @@
 package tx
 
 import (
-	"bufio"
 	"bytes"
-	"encoding/hex"
 	"fmt"
-	"os"
-	"strings"
-
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
+	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tendermint/tendermint/crypto/multisig"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
+	"os"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	tmcrypto "github.com/tendermint/tendermint/crypto"
 )
 
@@ -32,7 +26,7 @@ const (
 )
 
 // PrivateKeySign returns the transaction sign result from private key.
-func PrivateKeySign(codec *codec.Codec) *cobra.Command {
+func PrivateKeySign() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "sign [file]",
 		Short: "Sign transactions generated offline",
@@ -58,7 +52,7 @@ key. It implies --signature-only. Full multisig signed transactions may eventual
 be generated via the 'multisign' command.
 `,
 		PreRun: preSignCmd,
-		RunE:   makeSignCmd(codec),
+		RunE:   makeSignCmd(),
 		Args:   cobra.ExactArgs(1),
 	}
 
@@ -71,10 +65,6 @@ be generated via the 'multisign' command.
 		"Print the addresses that must sign the transaction, those who have already signed it, and make sure that signatures are in the correct order",
 	)
 	cmd.Flags().Bool(flagSigOnly, false, "Print only the generated signature, then exit")
-	cmd.Flags().Bool(
-		flagOffline, false,
-		"Offline mode; Do not query a full node. --account and --sequence options would be required if offline is set",
-	)
 	cmd.Flags().String(flagOutfile, "", "The document will be written to the given file instead of STDOUT")
 
 	cmd.Flags().String(
@@ -82,7 +72,7 @@ be generated via the 'multisign' command.
 		"Private key flag for transaction sign",
 	)
 
-	cmd = flags.PostCommands(cmd)[0]
+	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
@@ -90,25 +80,17 @@ be generated via the 'multisign' command.
 func preSignCmd(cmd *cobra.Command, _ []string) {
 	// Conditionally mark the account and sequence numbers required as no RPC
 	// query will be done.
-	if viper.GetBool(flagOffline) {
-		err := cmd.MarkFlagRequired(flags.FlagAccountNumber)
-		if err != nil {
-			fmt.Printf("%s as required flag set failure", flags.FlagAccountNumber)
-			os.Exit(1)
-		}
-		err = cmd.MarkFlagRequired(flags.FlagSequence)
-		if err != nil {
-			fmt.Printf("%s as required flag set failure", flags.FlagSequence)
-			os.Exit(1)
-		}
+	if offline, _ := cmd.Flags().GetBool(flags.FlagOffline); offline {
+		cmd.MarkFlagRequired(flags.FlagAccountNumber)
+		cmd.MarkFlagRequired(flags.FlagSequence)
 	}
 }
 
 func populateAccountFromState(
-	txBldr types.TxBuilder, cliCtx context.CLIContext, addr sdk.AccAddress,
-) (types.TxBuilder, error) {
+	txBldr tx.Factory, clientCtx client.Context, addr sdk.AccAddress,
+) (tx.Factory, error) {
 
-	num, seq, err := types.NewAccountRetriever(cliCtx).GetAccountNumberSequence(addr)
+	num, seq, err := clientCtx.AccountRetriever.GetAccountNumberSequence(clientCtx, addr)
 	if err != nil {
 		return txBldr, err
 	}
@@ -126,66 +108,6 @@ func isTxSigner(user sdk.AccAddress, signers []sdk.AccAddress) bool {
 	return false
 }
 
-// SignStdTx appends a signature to a StdTx and returns a copy of it. If appendSig
-// is false, it replaces the signatures already attached with the new signature.
-// Don't perform online validation or lookups if offline is true.
-func SignStdTx(
-	txBldr types.TxBuilder, cliCtx context.CLIContext,
-	stdTx types.StdTx, appendSig bool, offline bool,
-) (types.StdTx, error) {
-
-	privHex := viper.GetString(flagPrivateKey)
-	privBytes, err := hex.DecodeString(privHex)
-	if err != nil {
-		return types.StdTx{}, fmt.Errorf("error decoding private key hex value")
-	}
-
-	var privBytes32 [32]byte
-	copy(privBytes32[0:32], privBytes)
-
-	priv := secp256k1.PrivKeySecp256k1(privBytes32)
-
-	var signedStdTx types.StdTx
-
-	addr := priv.PubKey().Address()
-
-	// check whether the address is a signer
-	if !isTxSigner(sdk.AccAddress(addr), stdTx.GetSigners()) {
-		return signedStdTx, fmt.Errorf("%s: %s", errInvalidSigner, sdk.AccAddress(addr.Bytes()).String())
-	}
-
-	if !offline {
-		txBldr, err = populateAccountFromState(txBldr, cliCtx, sdk.AccAddress(addr))
-		if err != nil {
-			return signedStdTx, err
-		}
-	}
-
-	if txBldr.ChainID() == "" {
-		return types.StdTx{}, fmt.Errorf("chain ID required but not specified")
-	}
-
-	stdSignature, err := MakeSignature(priv, types.StdSignMsg{
-		ChainID:       txBldr.ChainID(),
-		AccountNumber: txBldr.AccountNumber(),
-		Sequence:      txBldr.Sequence(),
-		Fee:           stdTx.Fee,
-		Msgs:          stdTx.GetMsgs(),
-		Memo:          stdTx.GetMemo(),
-	})
-	if err != nil {
-		return types.StdTx{}, fmt.Errorf("error making signature")
-	}
-
-	sigs := stdTx.Signatures
-	if len(sigs) == 0 || !appendSig {
-		sigs = []types.StdSignature{stdSignature}
-	} else {
-		sigs = append(sigs, stdSignature)
-	}
-	return types.NewStdTx(stdTx.GetMsgs(), stdTx.Fee, sigs, stdTx.GetMemo()), nil
-}
-
 // Sign signs the msg with the named key. It returns an error if the key doesn't
 // exist or the decryption fails.
 func Sign(priv tmcrypto.PrivKey, msg []byte) (sig []byte, pub tmcrypto.PubKey, err error) {
@@ -197,33 +119,23 @@ func Sign(priv tmcrypto.PrivKey, msg []byte) (sig []byte, pub tmcrypto.PubKey, e
 	return sig, priv.PubKey(), nil
 }
 
-// MakeSignature builds a StdSignature given keybase, key name, passphrase, and a StdSignMsg.
-func MakeSignature(priv tmcrypto.PrivKey, msg types.StdSignMsg) (sig types.StdSignature, err error) {
-
-	sigBytes, pubkey, err := Sign(priv, msg.Bytes())
-	if err != nil {
-		return
-	}
-	return types.StdSignature{
-		PubKey:    pubkey,
-		Signature: sigBytes,
-	}, nil
-}
-
-func makeSignCmd(cdc *codec.Codec) func(cmd *cobra.Command, args []string) error {
+func makeSignCmd() func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		stdTx, err := utils.ReadStdTxFromFile(cdc, args[0])
+		clientCtx, err := client.GetClientTxContext(cmd)
 		if err != nil {
 			return err
 		}
+		clientCtx, txFactory, stdTx, err := readTxAndInitContexts(clientCtx, cmd, args[0])
+		if err != nil {
+			return err
+		}
+		txConfig := clientCtx.TxConfig
 
-		inBuf := bufio.NewReader(cmd.InOrStdin())
-		offline := viper.GetBool(flagOffline)
-		cliCtx := context.NewCLIContextWithInput(inBuf).WithCodec(cdc)
-		txBldr := types.NewTxBuilderFromCLI(inBuf)
+		offline, _ := cmd.Flags().GetBool(flagOffline)
+		from, _ := cmd.Flags().GetString(flags.FlagFrom)
 
-		if viper.GetBool(flagValidateSigs) {
-			if !printAndValidateSigs(cliCtx, txBldr.ChainID(), stdTx, offline) {
+		if ok, _ := cmd.Flags().GetBool(flagValidateSigs); ok {
+			if !printAndValidateSigs(cmd, clientCtx, txFactory.ChainID(), stdTx, offline) {
 				return fmt.Errorf("signatures validation failed")
 			}
 
@@ -231,21 +143,24 @@ func makeSignCmd(cdc *codec.Codec) func(cmd *cobra.Command, args []string) error
 		}
 
 		// if --signature-only is on, then override --append
-		var newTx types.StdTx
 		generateSignatureOnly := viper.GetBool(flagSigOnly)
-
-		newTx, err = SignStdTx(txBldr, cliCtx, stdTx, true, offline)
-
+		txBuilder, err := txConfig.WrapTxBuilder(stdTx)
 		if err != nil {
 			return err
 		}
 
-		json, err := getSignatureJSON(cdc, newTx, cliCtx.Indent, generateSignatureOnly)
+		err = authclient.SignTx(txFactory, clientCtx, from, txBuilder, offline, true)
 		if err != nil {
 			return err
 		}
 
-		if viper.GetString(flagOutfile) == "" {
+		json, err := getSignatureJSON(txConfig, txBuilder, generateSignatureOnly)
+		if err != nil {
+			return err
+		}
+
+		if str, _ := cmd.Flags().GetString(flagOutfile);
+			str == "" {
 			fmt.Printf("%s\n", json)
 			return nil
 		}
@@ -264,58 +179,52 @@ func makeSignCmd(cdc *codec.Codec) func(cmd *cobra.Command, args []string) error
 	}
 }
 
-func getSignatureJSON(cdc *codec.Codec, newTx types.StdTx, indent, generateSignatureOnly bool) ([]byte, error) {
-	switch generateSignatureOnly {
-	case true:
-		switch indent {
-		case true:
-			return cdc.MarshalJSONIndent(newTx.Signatures[0], "", "  ")
-
-		default:
-			return cdc.MarshalJSON(newTx.Signatures[0])
+func getSignatureJSON(txConfig client.TxConfig, txBldr client.TxBuilder, generateSignatureOnly bool) ([]byte, error) {
+	parsedTx := txBldr.GetTx()
+	if generateSignatureOnly {
+		sigs, err := parsedTx.GetSignaturesV2()
+		if err != nil {
+			return nil, err
 		}
-	default:
-		switch indent {
-		case true:
-			return cdc.MarshalJSONIndent(newTx, "", "  ")
-
-		default:
-			return cdc.MarshalJSON(newTx)
-		}
+		return txConfig.MarshalSignatureJSON(sigs)
 	}
+	return txConfig.TxJSONEncoder()(parsedTx)
 }
 
 // printAndValidateSigs will validate the signatures of a given transaction over
 // its expected signers. In addition, if offline has not been supplied, the
 // signature is verified over the transaction sign bytes.
 func printAndValidateSigs(
-	cliCtx context.CLIContext, chainID string, stdTx types.StdTx, offline bool,
+	cmd *cobra.Command, clientCtx client.Context, chainID string, tx sdk.Tx, offline bool,
 ) bool {
+	sigTx := tx.(authsigning.SigVerifiableTx)
+	signModeHandler := clientCtx.TxConfig.SignModeHandler()
 
-	fmt.Println("Signers:")
-
-	signers := stdTx.GetSigners()
+	cmd.Println("Signers:")
+	signers := sigTx.GetSigners()
 	for i, signer := range signers {
-		fmt.Printf("  %v: %v\n", i, signer.String())
+		cmd.Printf("  %v: %v\n", i, signer.String())
 	}
 
 	success := true
-	sigs := stdTx.Signatures
-
-	fmt.Println("")
-	fmt.Println("Signatures:")
+	sigs, err := sigTx.GetSignaturesV2()
+	if err != nil {
+		panic(err)
+	}
+	cmd.Println("")
+	cmd.Println("Signatures:")
 
 	if len(sigs) != len(signers) {
 		success = false
 	}
 
 	for i, sig := range sigs {
-		sigAddr := sdk.AccAddress(sig.Address())
-		sigSanity := "OK"
-
 		var (
+			pubKey         = sig.PubKey
 			multiSigHeader string
 			multiSigMsg    string
+			sigAddr        = sdk.AccAddress(pubKey.Address())
+			sigSanity      = "OK"
 		)
 
 		if i >= len(signers) || !sigAddr.Equals(signers[i]) {
@@ -323,48 +232,41 @@ func printAndValidateSigs(
 			success = false
 		}
 
-		// Validate the actual signature over the transaction bytes since we can
+		// validate the actual signature over the transaction bytes since we can
 		// reach out to a full node to query accounts.
 		if !offline && success {
-			acc, err := types.NewAccountRetriever(cliCtx).GetAccount(sigAddr)
+			accNum, accSeq, err := clientCtx.AccountRetriever.GetAccountNumberSequence(clientCtx, sigAddr)
 			if err != nil {
-				fmt.Printf("failed to get account: %s\n", sigAddr)
+				cmd.Printf("failed to get account: %s\n", sigAddr)
 				return false
 			}
 
-			sigBytes := types.StdSignBytes(
-				chainID, acc.GetAccountNumber(), acc.GetSequence(),
-				stdTx.Fee, stdTx.GetMsgs(), stdTx.GetMemo(),
-			)
-
-			if ok := sig.VerifyBytes(sigBytes, sig.Signature); !ok {
-				sigSanity = "ERROR: signature invalid"
-				success = false
+			signingData := authsigning.SignerData{
+				ChainID:       chainID,
+				AccountNumber: accNum,
+				Sequence:      accSeq,
+			}
+			err = authsigning.VerifySignature(pubKey, signingData, sig.Data, signModeHandler, sigTx)
+			if err != nil {
+				return false
 			}
 		}
 
-		multiPK, ok := sig.PubKey.(multisig.PubKeyMultisigThreshold)
-		if ok {
-			var multiSig multisig.Multisignature
-			cliCtx.Codec.MustUnmarshalBinaryBare(sig.Signature, &multiSig)
-
-			var b strings.Builder
-			b.WriteString("\n  MultiSig Signatures:\n")
-
-			for i := 0; i < multiSig.BitArray.Size(); i++ {
-				if multiSig.BitArray.GetIndex(i) {
-					addr := sdk.AccAddress(multiPK.PubKeys[i].Address().Bytes())
-					b.WriteString(fmt.Sprintf("    %d: %s (weight: %d)\n", i, addr, 1))
-				}
-			}
-
-			multiSigHeader = fmt.Sprintf(" [multisig threshold: %d/%d]", multiPK.K, len(multiPK.PubKeys))
-			multiSigMsg = b.String()
-		}
-
-		fmt.Printf("  %d: %s\t\t\t[%s]%s%s\n", i, sigAddr.String(), sigSanity, multiSigHeader, multiSigMsg)
+		cmd.Printf("  %d: %s\t\t\t[%s]%s%s\n", i, sigAddr.String(), sigSanity, multiSigHeader, multiSigMsg)
 	}
 
-	fmt.Println("")
+	cmd.Println("")
+
 	return success
+}
+
+func readTxAndInitContexts(clientCtx client.Context, cmd *cobra.Command, filename string) (client.Context, tx.Factory, sdk.Tx, error) {
+	stdTx, err := authclient.ReadTxFromFile(clientCtx, filename)
+	if err != nil {
+		return clientCtx, tx.Factory{}, nil, err
+	}
+
+	txFactory := tx.NewFactoryCLI(clientCtx, cmd.Flags())
+
+	return clientCtx, txFactory, stdTx, nil
 }

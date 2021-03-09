@@ -4,8 +4,8 @@ go 1.13
 
 require (
 	github.com/Pylons-tech/pylons_sdk v0.0.0-20200807024733-d6f61840a7b2
-	github.com/Workiva/go-datastructures v1.0.52
-	github.com/cosmos/cosmos-sdk v0.41.3
+	github.com/Workiva/go-datastructures v1.0.52 // indirect
+	github.com/cosmos/cosmos-sdk v0.42.0
 	github.com/cosmos/go-bip39 v1.0.0
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.4.3
@@ -21,7 +21,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tendermint/go-amino v0.16.0
 	github.com/tendermint/starport v0.14.0
-	github.com/tendermint/tendermint v0.34.7
+	github.com/tendermint/tendermint v0.34.8
 	github.com/tendermint/tm-db v0.6.4
 	github.com/tyler-smith/go-bip39 v1.0.2
 	google.golang.org/genproto v0.0.0-20210114201628-6edceaf6022f

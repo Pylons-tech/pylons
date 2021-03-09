@@ -1,21 +1,17 @@
 package tx
 
 import (
-	"bufio"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 
 	"github.com/spf13/cobra"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GoogleIAPGetPylons implements GoogleIAPGetPylons msg transaction
-func GoogleIAPGetPylons(cdc *codec.Codec) *cobra.Command {
+func GoogleIAPGetPylons() *cobra.Command {
 	var productID string
 	var purchaseToken string
 	var receiptData string
@@ -25,22 +21,23 @@ func GoogleIAPGetPylons(cdc *codec.Codec) *cobra.Command {
 		Short: "ask for pylons. get pylons per iap order",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-			inBuf := bufio.NewReader(cmd.InOrStdin())
-			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			msg := msgs.NewMsgGoogleIAPGetPylons(
 				productID,
 				purchaseToken,
 				receiptData,
 				signature,
-				cliCtx.GetFromAddress())
-			err := msg.ValidateBasic()
+				clientCtx.GetFromAddress())
+			err = msg.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{&msg}...)
 		},
 	}
 	ccb.PersistentFlags().StringVar(&productID, "product-id", "", "Get pylons order product id")

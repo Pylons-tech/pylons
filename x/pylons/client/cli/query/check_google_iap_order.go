@@ -2,28 +2,39 @@ package query
 
 import (
 	"fmt"
-
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
 )
 
 // CheckGoogleIAPOrder check if google iap order is already used
-func CheckGoogleIAPOrder(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func CheckGoogleIAPOrder() *cobra.Command {
 	ccb := &cobra.Command{
 		Use:   "check_google_iap_order <purchase_token>",
 		Short: "check if google iap order is given to user with purchase token",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/check_google_iap_order/%s", queryRoute, args[0]), nil)
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
-				return fmt.Errorf(err.Error())
+				return err
 			}
 
-			fmt.Println(string(res))
-			return nil
+			queryClient := types.NewQueryClient(clientCtx)
+
+			tokenReq := &types.CheckGoogleIAPOrderRequest{
+				PurchaseToken: args[0],
+			}
+
+			res, err := queryClient.CheckGoogleIAPOrder(cmd.Context(), tokenReq)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintString(
+				fmt.Sprintf(
+					"purchaseToken: %s \nexist: %t",
+					res.GetPurchaseToken(), res.Exist),
+			)
 		},
 	}
 	return ccb

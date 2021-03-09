@@ -55,5 +55,9 @@ func (msg MsgUpdateItemString) GetSignBytes() []byte {
 
 // GetSigners is a function to get signers from MsgUpdateItemString msg
 func (msg MsgUpdateItemString) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Sender)}
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
 }

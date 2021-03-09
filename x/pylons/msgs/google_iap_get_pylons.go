@@ -107,5 +107,9 @@ func (msg MsgGoogleIAPGetPylons) GetSignBytes() []byte {
 
 // GetSigners encodes the message for signing
 func (msg MsgGoogleIAPGetPylons) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Requester)}
+	from, err := sdk.AccAddressFromBech32(msg.Requester)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
 }

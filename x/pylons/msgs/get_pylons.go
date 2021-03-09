@@ -44,5 +44,9 @@ func (msg MsgGetPylons) GetSignBytes() []byte {
 
 // GetSigners is a function to get signers from MsgGetPylons msg
 func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{sdk.AccAddress(msg.Requester)}
+	from, err := sdk.AccAddressFromBech32(msg.Requester)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
 }
