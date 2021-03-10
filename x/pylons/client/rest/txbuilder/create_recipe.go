@@ -3,23 +3,19 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
-	"bytes"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	// "github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 )
 
 // CreateRecipeTxBuilder returns the fixtures which can be used to create a create cookbook transaction
-func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func CreateRecipeTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// vars := mux.Vars(r)
 		// requester := vars[TxGPRequesterKey]
@@ -28,23 +24,32 @@ func CreateRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
+		genCoinInputList := types.GenCoinInputList("wood", 5)
+		genItemInputList := types.GenItemInputList("Raichu")
+		genEntries := types.GenEntries("chair", "Raichu")
+		genOneOutput := types.GenOneOutput("chair", "Raichu")
 
-		msg := msgs.NewMsgCreateRecipe("name", "id001", "", "this has to meet character limits lol",
-			types.GenCoinInputList("wood", 5),
-			types.GenItemInputList("Raichu"),
-			types.GenEntries("chair", "Raichu"),
-			types.GenOneOutput("chair", "Raichu"),
+		msg := msgs.NewMsgCreateRecipe(
+			"name",
+			"id001",
+			"",
+			"this has to meet character limits lol",
+			&genCoinInputList,
+			&genItemInputList,
+			&genEntries,
+			&genOneOutput,
 			0,
-			sender,
+			sender.String(),
 		)
 
-		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
+		txf := tx.Factory{}.
+			WithChainID("testing").
+			WithTxConfig(cliCtx.TxConfig)
 
+		cliCtx.Output = w
+		err = tx.GenerateTx(cliCtx, txf, []sdk.Msg{&msg}...)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
-
-		rest.PostProcessResponse(w, cliCtx, signMsg.Bytes())
 	}
 }

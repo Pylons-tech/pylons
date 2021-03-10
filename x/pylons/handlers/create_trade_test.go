@@ -131,6 +131,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 
 			result, err := tci.PlnH.HandlerMsgCreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {
+				require.True(t, err == nil)
 				require.True(t, len(result.TradeID) > 0)
 			} else {
 				require.True(t, err != nil)

@@ -3,13 +3,11 @@ package rest
 import (
 	"net/http"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 )
 
 type createAccountReq struct {
@@ -17,11 +15,16 @@ type createAccountReq struct {
 	Requester string       `json:"requester"`
 }
 
-func createAccountHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
+func createAccountHandler(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req createAccountReq
 
-		if !rest.ReadRESTReq(w, r, cdc, &req) {
+		clientCtx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, clientCtx, r)
+		if !ok {
+			return
+		}
+
+		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
 			return
 		}
@@ -44,6 +47,7 @@ func createAccountHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.Hand
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
+
+		tx.WriteGeneratedTxResponse(clientCtx, w, baseReq, []sdk.Msg{&msg}...)
 	}
 }

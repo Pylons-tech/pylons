@@ -3,20 +3,17 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
-	"bytes"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 )
 
 // EnableRecipeTxBuilder returns the fixtures which can be used to create an enable recipe transaction
-func EnableRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func EnableRecipeTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// vars := mux.Vars(r)
 		// requester := vars[TxGPRequesterKey]
@@ -25,16 +22,16 @@ func EnableRecipeTxBuilder(cdc *codec.Codec, cliCtx context.CLIContext, storeNam
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		txBldr := auth.NewTxBuilderFromCLI(&bytes.Buffer{}).WithTxEncoder(utils.GetTxEncoder(cdc))
-
 		msg := msgs.NewMsgEnableRecipe("id0001", sender)
 
-		signMsg, err := txBldr.BuildSignMsg([]sdk.Msg{msg})
+		txf := tx.Factory{}.
+			WithChainID("testing").
+			WithTxConfig(cliCtx.TxConfig)
 
+		cliCtx.Output = w
+		err = tx.GenerateTx(cliCtx, txf, []sdk.Msg{&msg}...)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
-
-		rest.PostProcessResponse(w, cliCtx, signMsg.Bytes())
 	}
 }

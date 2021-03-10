@@ -3,25 +3,26 @@ package pylons
 import (
 	"context"
 	"encoding/json"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/queriers"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdktypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli/query"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
+	"github.com/Pylons-tech/pylons/x/pylons/client/rest"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/queriers"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	sdktypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -102,7 +103,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONMarshaler, cl client.TxEncod
 
 // RegisterRESTRoutes rest routes
 func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
-	//rest.RegisterRoutes(ctx, rtr, ModuleCdc, StoreKey)
+	rest.RegisterRoutes(ctx, rtr, StoreKey)
 }
 
 // GetQueryCmd get the root query command of this module
@@ -146,14 +147,14 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 		tx.CreateAccount(),
 		tx.GetPylons(),
 		tx.GoogleIAPGetPylons(),
-		//tx.SendPylons(),
+		tx.SendPylons(),
 		tx.SendCoins(),
-		//tx.SendItems(StoreKey),
-		//tx.CreateCookbook(),
-		//tx.PrivateKeySign(),
-		//tx.ComputePrivateKey(),
-		//tx.UpdateCookbook(),
-		//tx.FiatItem()
+		tx.SendItems(StoreKey),
+		tx.CreateCookbook(),
+		tx.PrivateKeySign(),
+		tx.ComputePrivateKey(),
+		tx.UpdateCookbook(),
+		tx.FiatItem(),
 	)
 	pylonsTxCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
 	pylonsTxCmd.PersistentFlags().String("keyring-backend", "os", "Select keyring's backend (os|file|test)")

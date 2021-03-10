@@ -2,15 +2,14 @@ package rest
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/client"
 	"net/http"
 
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
 )
 
-func listRecipesHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func listRecipesHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		ownerKey := vars[ownerKeyName]
@@ -25,7 +24,7 @@ func listRecipesHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName s
 	}
 }
 
-func listShortenRecipesHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func listShortenRecipesHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		ownerKey := vars[ownerKeyName]
@@ -40,7 +39,7 @@ func listShortenRecipesHandler(cdc *codec.Codec, cliCtx context.CLIContext, stor
 	}
 }
 
-func listRecipesByCookbookHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func listRecipesByCookbookHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		cookbookKey := vars[cookbookKeyName]
@@ -55,7 +54,7 @@ func listRecipesByCookbookHandler(cdc *codec.Codec, cliCtx context.CLIContext, s
 	}
 }
 
-func listShortenRecipesByCookbookHandler(cdc *codec.Codec, cliCtx context.CLIContext, storeName string) http.HandlerFunc {
+func listShortenRecipesByCookbookHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		cookbookKey := vars[cookbookKeyName]

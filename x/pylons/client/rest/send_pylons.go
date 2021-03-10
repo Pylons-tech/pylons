@@ -1,16 +1,14 @@
 package rest
 
 import (
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
-
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/rest"
 )
 
 type sendPylonsReq struct {
@@ -20,11 +18,11 @@ type sendPylonsReq struct {
 	Amount   int64        `json:"amount"`
 }
 
-func pylonsSendHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.HandlerFunc {
+func pylonsSendHandler(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req sendPylonsReq
 
-		if !rest.ReadRESTReq(w, r, cdc, &req) {
+		if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
 			return
 		}
@@ -52,7 +50,7 @@ func pylonsSendHandler(cdc *codec.Codec, cliCtx context.CLIContext) http.Handler
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		utils.WriteGenerateStdTxResponse(w, cliCtx, baseReq, []sdk.Msg{msg})
+		tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
 
 	}
 }
