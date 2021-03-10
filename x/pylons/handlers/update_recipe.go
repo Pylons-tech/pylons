@@ -28,7 +28,7 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *msgs.MsgUpda
 	rc, err := k.GetRecipe(sdkCtx, msg.ID)
 
 	// only the original sender (owner) of the cookbook can update the cookbook
-	if !rc.Sender.Equals(sender) {
+	if rc.Sender != sender.String() {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the recipe is different then the current sender")
 	}
 
@@ -38,12 +38,12 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *msgs.MsgUpda
 
 	rc.Description = msg.Description
 	rc.CookbookID = msg.CookbookID
-	rc.CoinInputs = *msg.CoinInputs
-	rc.ItemInputs = *msg.ItemInputs
-	rc.Entries = *msg.Entries
+	rc.CoinInputs = msg.CoinInputs
+	rc.ItemInputs = msg.ItemInputs
+	rc.Entries = msg.Entries
 	rc.BlockInterval = msg.BlockInterval
 	rc.Name = msg.Name
-	rc.Outputs = *msg.Outputs
+	rc.Outputs = msg.Outputs
 
 	if err := k.UpdateRecipe(sdkCtx, msg.ID, rc); err != nil {
 		return nil, errInternal(err)

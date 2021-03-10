@@ -1,29 +1,11 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // TypeTrade is a store key for trade
 const TypeTrade = "trade"
-
-// Trade is a construct to perform exchange of items and coins between users. Initiated by the sender and completed by
-// the FulFiller.
-type Trade struct {
-	NodeVersion SemVer
-	ID          string             // the trade guid
-	CoinInputs  CoinInputList      // coins that the fulfiller should send to creator
-	ItemInputs  TradeItemInputList // items that the fulfiller should send to creator
-	CoinOutputs sdk.Coins          // coins that the creator should send to fulfiller
-	ItemOutputs ItemList           // items that the creator should send to fulfiller
-	ExtraInfo   string             // custom trade info text
-	Sender      sdk.AccAddress     // trade creator address
-	FulFiller   sdk.AccAddress     // trade fulfiller address (acceptor)
-	Disabled    bool               // disabled flag
-	Completed   bool               // completed flag
-}
 
 // TradeList is a list of trades
 type TradeList struct {
@@ -54,51 +36,9 @@ func NewTrade(extraInfo string,
 		CoinOutputs: coinOutputs,
 		ItemOutputs: itemOutputs,
 		ExtraInfo:   extraInfo,
-		Sender:      sender,
+		Sender:      sender.String(),
 	}
 
 	trd.ID = KeyGen(sender)
 	return trd
-}
-
-func (trd *Trade) String() string {
-	return fmt.Sprintf(`Trade{
-		NodeVersion: %s,
-		ID: %s,
-		CoinInputs: %s,
-		ItemInputs: %s,
-		CoinOutputs: %s,
-		ItemOutputs: %+v,
-		ExtraInfo: %s,
-		Sender: %+v,
-	}`,
-		trd.NodeVersion,
-		trd.ID,
-		trd.CoinInputs.String(),
-		trd.ItemInputs.String(),
-		trd.CoinOutputs.String(),
-		trd.ItemOutputs,
-		trd.ExtraInfo,
-		trd.Sender,
-	)
-}
-
-func TradeListToProto(trades []Trade) []*GetTradeResponse {
-	var res []*GetTradeResponse
-	for _, trade := range trades {
-		res = append(res, &GetTradeResponse{
-			NodeVersion: &trade.NodeVersion,
-			ID:          trade.ID,
-			CoinInputs:  &trade.CoinInputs,
-			ItemInputs:  &trade.ItemInputs,
-			CoinOutputs: trade.CoinOutputs,
-			ItemOutputs: &trade.ItemOutputs,
-			ExtraInfo:   trade.ExtraInfo,
-			Sender:      trade.Sender.String(),
-			FulFiller:   trade.FulFiller.String(),
-			Disabled:    trade.Disabled,
-			Completed:   trade.Completed,
-		})
-	}
-	return res
 }

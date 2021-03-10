@@ -40,11 +40,11 @@ type TestCoinInput struct {
 }
 
 // GenItem generate an item with name
-func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
+func GenItem(cbID string, sender sdk.AccAddress, name string) types.Item {
 	return types.NewItem(
 		cbID,
-		&types.DoubleKeyValueList{List: types.DoubleInputParamList{
-			Params: []*types.DoubleInputParam{
+		types.DoubleKeyValueList{List: types.DoubleInputParamList{
+			Params: []types.DoubleInputParam{
 				{
 					Key:      "endurance",
 					MinValue: types.ToFloatString(100.00),
@@ -52,16 +52,16 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 				},
 			},
 		}.Actualize()},
-		&types.LongKeyValueList{List: types.LongInputParamList{
-			List: []*types.LongInputParam{
+		types.LongKeyValueList{List: types.LongInputParamList{
+			List: []types.LongInputParam{
 				{
 					Key:      "HP",
 					MinValue: 100,
 					MaxValue: 500,
 				},
 			}}.Actualize()},
-		&types.StringKeyValueList{List: types.StringInputParamList{
-			List: []*types.StringInputParam{
+		types.StringKeyValueList{List: types.StringInputParamList{
+			List: []types.StringInputParam{
 				{
 					Key:   "Name",
 					Value: name,
@@ -75,7 +75,7 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) *types.Item {
 
 var (
 	t = types.DoubleInputParamList{
-		Params: []*types.DoubleInputParam{
+		Params: []types.DoubleInputParam{
 			{
 				Key:      "endurance",
 				MinValue: types.ToFloatString(100.00),

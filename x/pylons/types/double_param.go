@@ -47,9 +47,9 @@ func getFloat(unk interface{}) (float64, error) {
 }
 
 // Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (*DoubleKeyValueList, error) {
+func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []*DoubleKeyValue
+	var m []DoubleKeyValue
 	for _, param := range dpm.List {
 		var val float64
 		var err error
@@ -60,14 +60,14 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (*DoubleKeyValueList, 
 			val, err = param.WeightTable.Generate()
 		}
 		if err != nil {
-			return &DoubleKeyValueList{m}, err
+			return DoubleKeyValueList{m}, err
 		}
-		m = append(m, &DoubleKeyValue{
+		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
 			Value: ToFloatString(val),
 		})
 	}
-	return &DoubleKeyValueList{m}, nil
+	return DoubleKeyValueList{m}, nil
 }
 
 //

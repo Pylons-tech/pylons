@@ -1,6 +1,7 @@
 package pylons
 
 import (
+	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	"strings"
 	"testing"
 
@@ -12,6 +13,6 @@ import (
 func TestInvalidMsg(t *testing.T) {
 	h := NewHandler(keep.Keeper{})
 
-	_, err := h(sdk.Context{}, sdk.NewTestMsg())
+	_, err := h(sdk.Context{}, testdata.NewTestMsg())
 	require.True(t, strings.Contains(err.Error(), "Unrecognized pylons Msg type"))
 }

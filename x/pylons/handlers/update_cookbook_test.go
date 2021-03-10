@@ -64,7 +64,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", &types.SemVer{"1.0.0"}, &types.Email{"example@example.com"}, tc.sender)
+			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, tc.sender)
 
 			_, err := tci.PlnH.HandlerMsgUpdateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 

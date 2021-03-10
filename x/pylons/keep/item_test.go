@@ -26,13 +26,13 @@ func TestKeeperSetItem(t *testing.T) {
 	}{
 		"empty sender test": {
 			sender:       nil,
-			level:        1,
+			level:        types.Level{1},
 			desiredError: "SetItem: the sender cannot be empty",
 			showError:    true,
 		},
 		"successful item test": {
 			sender:       sender,
-			level:        1,
+			level:        types.Level{1},
 			desiredError: "",
 			showError:    false,
 		},
@@ -41,7 +41,7 @@ func TestKeeperSetItem(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			item := GenItem(cbData.ID, tc.sender, "Raichu")
-			err := tci.PlnK.SetItem(tci.Ctx, *item)
+			err := tci.PlnK.SetItem(tci.Ctx, item)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -58,7 +58,7 @@ func TestKeeperGetItem(t *testing.T) {
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -86,7 +86,7 @@ func TestKeeperGetItem(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				require.True(t, item.CookbookID == gItem.CookbookID)
-				require.True(t, item.Sender.String() == gItem.Sender.String())
+				require.True(t, item.Sender == gItem.Sender)
 				require.True(t, item.ID == gItem.ID)
 			}
 		})
@@ -100,7 +100,7 @@ func TestKeeperGetItemsBySender(t *testing.T) {
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -145,7 +145,7 @@ func TestKeeperUpdateItem(t *testing.T) {
 	noSenderItem := GenItem(cbData.ID, nil, "Raichu")
 	newItem := GenItem(cbData.ID, sender, "Raichu")
 
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	item.SetString("Name", "RC")
@@ -153,7 +153,7 @@ func TestKeeperUpdateItem(t *testing.T) {
 	cases := map[string]struct {
 		desiredError string
 		showError    bool
-		item         *types.Item
+		item         types.Item
 		itemID       string
 	}{
 		"empty sender of updatedItem": {
@@ -185,7 +185,7 @@ func TestKeeperUpdateItem(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			err := tci.PlnK.UpdateItem(tci.Ctx, tc.itemID, *tc.item)
+			err := tci.PlnK.UpdateItem(tci.Ctx, tc.itemID, tc.item)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
@@ -208,7 +208,7 @@ func TestKeeperDeleteItem(t *testing.T) {
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -248,7 +248,7 @@ func TestKeeperItemsByCookbook(t *testing.T) {
 	cbData1 := GenCookbook(sender, "cookbook-0002", "this has to meet character limits")
 
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

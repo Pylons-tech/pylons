@@ -40,6 +40,6 @@ func NewLockedCoin(sender sdk.AccAddress, amount sdk.Coins) LockedCoin {
 type LockedCoinDetails struct {
 	Sender         string
 	Amount         sdk.Coins
-	LockCoinTrades []*LockedCoinDescribe
-	LockCoinExecs  []*LockedCoinDescribe
+	LockCoinTrades []LockedCoinDescribe
+	LockCoinExecs  []LockedCoinDescribe
 }

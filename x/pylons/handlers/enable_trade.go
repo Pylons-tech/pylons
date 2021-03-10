@@ -25,7 +25,7 @@ func (k msgServer) HandlerMsgEnableTrade(ctx context.Context, msg *msgs.MsgEnabl
 		return nil, errInternal(err)
 	}
 
-	if msg.Sender != trade.Sender.String() {
+	if msg.Sender != trade.Sender {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "Trade initiator is not the same as sender")
 	}
 
@@ -38,7 +38,7 @@ func (k msgServer) HandlerMsgEnableTrade(ctx context.Context, msg *msgs.MsgEnabl
 			return nil, errInternal(err)
 		}
 
-		if itemFromStore.Sender != trade.Sender.String() {
+		if itemFromStore.Sender != trade.Sender {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", itemFromStore.ID))
 		}
 
@@ -50,7 +50,7 @@ func (k msgServer) HandlerMsgEnableTrade(ctx context.Context, msg *msgs.MsgEnabl
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		trade.ItemOutputs.List[idx] = &itemFromStore
+		trade.ItemOutputs.List[idx] = itemFromStore
 	}
 
 	err = k.UpdateTrade(sdkCtx, msg.TradeID, trade)
@@ -58,7 +58,12 @@ func (k msgServer) HandlerMsgEnableTrade(ctx context.Context, msg *msgs.MsgEnabl
 		return nil, errInternal(err)
 	}
 
-	err = k.LockCoin(sdkCtx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
+	sender, err := sdk.AccAddressFromBech32(trade.Sender)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, trade.CoinOutputs))
 
 	if err != nil {
 		return nil, errInternal(err)

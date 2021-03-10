@@ -27,6 +27,6 @@ func (querier *querierServer) ListRecipeByCookbook(ctx context.Context, req *typ
 	}
 
 	return &types.ListRecipeByCookbookResponse{
-		Recipes: types.RecipeListToRecipeProtoList(recipes),
+		Recipes: recipes,
 	}, nil
 }

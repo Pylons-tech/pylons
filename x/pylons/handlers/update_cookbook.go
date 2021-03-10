@@ -30,8 +30,8 @@ func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *msgs.MsgUp
 	}
 
 	cb.Description = msg.Description
-	cb.Version = *msg.Version
-	cb.SupportEmail = *msg.SupportEmail
+	cb.Version = msg.Version
+	cb.SupportEmail = msg.SupportEmail
 	cb.Developer = msg.Developer
 
 	if err := k.UpdateCookbook(sdkCtx, msg.ID, cb); err != nil {

@@ -46,6 +46,6 @@ func (querier *querierServer) ListExecutions(ctx context.Context, req *types.Lis
 	}
 
 	return &types.ListExecutionsResponse{
-		Executions: types.ExecutionsToListProto(execs),
+		Executions: execs,
 	}, nil
 }

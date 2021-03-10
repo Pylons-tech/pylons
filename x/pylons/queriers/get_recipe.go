@@ -25,17 +25,17 @@ func (querier *querierServer) GetRecipe(ctx context.Context, req *types.GetRecip
 	}
 
 	return &types.GetRecipeResponse{
-		NodeVersion:   &recipe.NodeVersion,
+		NodeVersion:   recipe.NodeVersion,
 		ID:            recipe.ID,
 		CookbookID:    recipe.CookbookID,
 		Name:          recipe.Name,
-		CoinInputs:    &recipe.CoinInputs,
-		ItemInputs:    &recipe.ItemInputs,
-		Entries:       &recipe.Entries,
-		Outputs:       &recipe.Outputs,
+		CoinInputs:    recipe.CoinInputs,
+		ItemInputs:    recipe.ItemInputs,
+		Entries:       recipe.Entries,
+		Outputs:       recipe.Outputs,
 		Description:   recipe.Description,
 		BlockInterval: recipe.BlockInterval,
-		Sender:        recipe.Sender.String(),
+		Sender:        recipe.Sender,
 		Disabled:      recipe.Disabled,
 	}, nil
 

@@ -32,51 +32,51 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	})
 	require.True(t, err == nil)
 
-	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", &types.SemVer{"1.0.0"}, &types.Email{"example@example.com"}, &types.Level{1}, msgs.DefaultCostPerBlock, sender)
+	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err = tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	item2 := keep.GenItem(cookbookResult.CookbookID, sender2, "Pikachu")
 	item2.SetTransferFee(200)
-	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.True(t, err == nil)
 
 	item3 := keep.GenItem(cookbookResult.CookbookID, sender2, "Rikchu")
 	item3.SetTransferFee(50)
-	err = tci.PlnK.SetItem(tci.Ctx, *item3)
+	err = tci.PlnK.SetItem(tci.Ctx, item3)
 	require.True(t, err == nil)
 
 	item5 := keep.GenItem(cookbookResult.CookbookID, sender2, "Pychu")
 	item5.SetTransferFee(50)
-	err = tci.PlnK.SetItem(tci.Ctx, *item5)
+	err = tci.PlnK.SetItem(tci.Ctx, item5)
 	require.True(t, err == nil)
 
 	// Create cookbook for sender3
-	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", &types.SemVer{"1.0.0"}, &types.Email{"example@example.com"}, &types.Level{1}, msgs.DefaultCostPerBlock, sender3)
+	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender3)
 	cookbookResult1, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg1)
 	require.True(t, len(cookbookResult1.CookbookID) > 0)
 
 	item4 := keep.GenItem(cookbookResult1.CookbookID, sender4, "Tachu")
 	item4.SetTransferFee(70)
-	err = tci.PlnK.SetItem(tci.Ctx, *item4)
+	err = tci.PlnK.SetItem(tci.Ctx, item4)
 	require.True(t, err == nil)
 
 	item6 := keep.GenItem(cookbookResult1.CookbookID, sender4, "Bhachu")
 	item6.SetTransferFee(70)
-	err = tci.PlnK.SetItem(tci.Ctx, *item6)
+	err = tci.PlnK.SetItem(tci.Ctx, item6)
 	require.True(t, err == nil)
 
 	item8 := keep.GenItem(cookbookResult1.CookbookID, sender5, "Bhachu8")
 	item8.SetTransferFee(70)
-	err = tci.PlnK.SetItem(tci.Ctx, *item8)
+	err = tci.PlnK.SetItem(tci.Ctx, item8)
 	require.True(t, err == nil)
 
 	item7 := keep.GenItem("wrongCBID", sender2, "Pikachu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item7)
+	err = tci.PlnK.SetItem(tci.Ctx, item7)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -162,7 +162,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			inputCoinList:       types.GenCoinInputList(types.Pylon, 20),
 			inputItemList:       types.GenTradeItemInputList(cookbookResult1.CookbookID, []string{"Tachu"}),
 			outputCoinList:      types.NewPylon(10),
-			outputItemList:      types.ItemList{[]*types.Item{item3}},
+			outputItemList:      types.ItemList{[]types.Item{item3}},
 			fulfillInputItemIDs: []string{item4.ID},
 			desiredError:        "total pylons amount is not enough to pay fees",
 			showError:           true,
@@ -192,7 +192,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			inputCoinList:         types.GenCoinInputList(types.Pylon, 50),
 			inputItemList:         types.GenTradeItemInputList(cookbookResult1.CookbookID, []string{"Bhachu"}),
 			outputCoinList:        types.NewPylon(200),
-			outputItemList:        types.ItemList{[]*types.Item{item5}},
+			outputItemList:        types.ItemList{[]types.Item{item5}},
 			fulfillInputItemIDs:   []string{item6.ID},
 			desiredError:          "",
 			showError:             false,
@@ -208,7 +208,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			inputCoinList:       types.GenCoinInputList(types.Pylon, 500),
 			inputItemList:       types.TradeItemInputList{},
 			outputCoinList:      nil,
-			outputItemList:      types.ItemList{[]*types.Item{item8}},
+			outputItemList:      types.ItemList{[]types.Item{item8}},
 			fulfillInputItemIDs: []string{},
 			desiredError:        "",
 			showError:           false,
@@ -229,7 +229,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			// get pylons amount of pylons LLC amount
 			pylonsLLCAmountFirst := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
 
-			ctMsg := msgs.NewMsgCreateTrade(&tc.inputCoinList, &tc.inputItemList, tc.outputCoinList, &tc.outputItemList, "", tc.sender)
+			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
 			ctResult, err := tci.PlnH.HandlerMsgCreateTrade(sdk.WrapSDKContext(tci.Ctx), &ctMsg)
 			require.True(t, err == nil, err)
 			require.True(t, len(ctResult.TradeID) > 0)

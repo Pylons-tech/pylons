@@ -1,5 +1,7 @@
 package types
 
+import sdk "github.com/cosmos/cosmos-sdk/types"
+
 // GenCoinInputList is a utility function to genearte coin input list
 func GenCoinInputList(name string, count int64) CoinInputList {
 	return CoinInputList{
@@ -16,12 +18,12 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}
 	for _, name := range names {
-		iiL.List = append(iiL.List, &ItemInput{
+		iiL.List = append(iiL.List, ItemInput{
 			name,
-			nil,
-			nil,
-			&StringInputParamList{[]*StringInputParam{{"Name", name}}},
-			&FeeInputParam{
+			DoubleInputParamList{},
+			LongInputParamList{},
+			StringInputParamList{[]StringInputParam{{"Name", name}}},
+			FeeInputParam{
 				MinValue: 0,
 				MaxValue: 10000,
 			},
@@ -35,7 +37,7 @@ func GenTradeItemInputList(cookbookID string, itemNames []string) TradeItemInput
 	tiiL := TradeItemInputList{}
 	iiL := GenItemInputList(itemNames...)
 	for _, ii := range iiL.List {
-		tiiL.List = append(tiiL.List, &TradeItemInput{
+		tiiL.List = append(tiiL.List, TradeItemInput{
 			ii,
 			cookbookID,
 		})
@@ -64,10 +66,10 @@ func GenCoinOnlyEntryRand(ID string, coinName string) *CoinOutput {
 // GenItemNameUpgradeParams is a utility function to generate item name upgrade
 func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 	return ItemModifyParams{
-		Doubles: &DoubleParamList{},
-		Longs:   &LongParamList{},
-		Strings: &StringParamList{
-			[]*StringParam{
+		Doubles: DoubleParamList{},
+		Longs:   LongParamList{},
+		Strings: StringParamList{
+			[]StringParam{
 				{
 					Key:   "Name",
 					Value: desItemName,
@@ -81,7 +83,7 @@ func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 func GenItemOnlyEntry(itemName string) *ItemOutput {
 	item := NewItemOutput(
 		itemName,
-		&DoubleParamList{[]*DoubleParam{{Key: "endurance", WeightTable: &DoubleWeightTable{WeightRanges: []*DoubleWeightRange{
+		DoubleParamList{[]DoubleParam{{Key: "endurance", WeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 			{
 				Lower:  ToFloatString(100.00),
 				Upper:  ToFloatString(500.00),
@@ -93,7 +95,7 @@ func GenItemOnlyEntry(itemName string) *ItemOutput {
 				Weight: 2,
 			},
 		}}, Rate: ToFloatString(1.0)}}},
-		&LongParamList{[]*LongParam{{Key: "HP", WeightTable: &IntWeightTable{WeightRanges: []*IntWeightRange{
+		LongParamList{[]LongParam{{Key: "HP", WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 			{
 				Lower:  100,
 				Upper:  500,
@@ -105,7 +107,7 @@ func GenItemOnlyEntry(itemName string) *ItemOutput {
 				Weight: 2,
 			},
 		}}}}},
-		&StringParamList{[]*StringParam{{Key: "Name", Value: itemName, Rate: ToFloatString(1.0), Program: ""}}},
+		StringParamList{[]StringParam{{Key: "Name", Value: itemName, Rate: sdk.NewDec(1.0), Program: ""}}},
 		1232,
 	)
 	return &item
@@ -115,17 +117,17 @@ func GenItemOnlyEntry(itemName string) *ItemOutput {
 func GenItemOnlyEntryRand(ID string, itemName string) *ItemOutput {
 	item := NewItemOutput(
 		ID,
-		&DoubleParamList{[]*DoubleParam{{
+		DoubleParamList{[]DoubleParam{{
 			Key:     "endurance",
 			Program: `500.00`,
 			Rate:    ToFloatString(1.0),
 		}}},
-		&LongParamList{[]*LongParam{{
+		LongParamList{[]LongParam{{
 			Key:     "HP",
 			Program: `500 + rand(300)`,
 			Rate:    ToFloatString(1.0),
 		}}},
-		&StringParamList{[]*StringParam{{Key: "Name", Value: itemName, Rate: ToFloatString(1.0), Program: ""}}},
+		StringParamList{[]StringParam{{Key: "Name", Value: itemName, Rate: sdk.NewDec(1.0), Program: ""}}},
 		0,
 	)
 	return &item
@@ -135,7 +137,7 @@ func GenItemOnlyEntryRand(ID string, itemName string) *ItemOutput {
 func GenOneOutput(entryIDs ...string) WeightedOutputsList {
 	wol := WeightedOutputsList{}
 	for i := 0; i < len(entryIDs); i++ {
-		wol.List = append(wol.List, &WeightedOutputs{
+		wol.List = append(wol.List, WeightedOutputs{
 			EntryIDs: []string{entryIDs[i]},
 			Weight:   "1",
 		})
@@ -146,7 +148,7 @@ func GenOneOutput(entryIDs ...string) WeightedOutputsList {
 // GenAllOutput is a function to generate output with all of entry list
 func GenAllOutput(entryIDs ...string) WeightedOutputsList {
 	wol := WeightedOutputsList{
-		[]*WeightedOutputs{{
+		[]WeightedOutputs{{
 			EntryIDs: entryIDs,
 			Weight:   "1",
 		}},
@@ -197,8 +199,8 @@ func GenEntriesTwoItemNameUpgrade(inputRef1, targetValue1, inputRef2, targetValu
 // GenModifyParamsForString is a function to generate modify params from string key and value
 func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
 	return ItemModifyParams{
-		Strings: &StringParamList{
-			[]*StringParam{{Key: targetKey, Value: targetValue}},
+		Strings: StringParamList{
+			[]StringParam{{Key: targetKey, Value: targetValue}},
 		},
 	}
 }
@@ -206,11 +208,11 @@ func GenModifyParamsForString(targetKey, targetValue string) ItemModifyParams {
 // GenModifyParamsForLong is a function to generate modify params from long key and value
 func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParams {
 	return ItemModifyParams{
-		Longs: &LongParamList{
-			Params: []*LongParam{
+		Longs: LongParamList{
+			Params: []LongParam{
 				{
 					Key: targetKey,
-					WeightTable: &IntWeightTable{WeightRanges: []*IntWeightRange{
+					WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 						{
 							Lower:  int64(upgradeAmount),
 							Upper:  int64(upgradeAmount),
@@ -226,13 +228,13 @@ func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParam
 // GenModifyParamsForDouble is a function to generate modify params from double key and value
 func GenModifyParamsForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
 	return ItemModifyParams{
-		Doubles: &DoubleParamList{
-			List: []*DoubleParam{{
+		Doubles: DoubleParamList{
+			List: []DoubleParam{{
 				Key: targetKey,
-				WeightTable: &DoubleWeightTable{WeightRanges: []*DoubleWeightRange{
+				WeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 					{
-						Lower:  &upgradeAmount,
-						Upper:  &upgradeAmount,
+						Lower:  upgradeAmount,
+						Upper:  upgradeAmount,
 						Weight: 1,
 					},
 				}},

@@ -14,59 +14,69 @@ import (
 
 func TestCustomCreateRecipeValidateBasic(t *testing.T) {
 	recipeJSON := `
-		{
-			"BlockInterval": "0",
-			"CoinInputs": [
-			  {
-				"Coin": "pylon",
-				"Count": "1"
-			  }
-			],
-			"CookbookID": "LOUD-v0.1.0-1579053457",
-			"Description": "test recipe from test suite",
-			"Entries": {
-			  "CoinOutputs": null,
-			  "ItemModifyOutputs": null,
-			  "ItemOutputs": [
-				{
-				  "Doubles": [
-					{
-					  "Key": "Mass",
-					  "Program": "",
-					  "Rate": "1",
-					  "WeightRanges": [
-						{
-						  "Lower": "50",
-						  "Upper": "100",
-						  "Weight": 1
-						}
-					  ]
-					}
-				  ],
-				  "ID": "a0",
-				  "Longs": null,
-				  "Strings": [
-					{
-					  "Key": "Name",
-					  "Program": "",
-					  "Rate": "1",
-					  "Value": "Mars"
-					}
-				  ],
-				  "TransferFee": 0
-				}
-			  ]
-			},
-			"ItemInputs": null,
-			"Name": "RTEST_1596513734",
-			"Outputs": [
-			  {
-				"EntryIDs": ["a0"],
-				"Weight": "1"
-			  }
-			],
-			"Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
-		}`
+	{
+   "BlockInterval":"0",
+   "CoinInputs":{
+      "Coins":[
+         {
+            "Coin":"pylon",
+            "Count":"1"
+         }
+      ]
+   },
+   "CookbookID":"LOUD-v0.1.0-1579053457",
+   "Description":"test recipe from test suite",
+   "Entries":{
+      "CoinOutputs":null,
+      "ItemModifyOutputs":null,
+      "ItemOutputs":[
+            {
+               "Doubles":{
+                  "Params":[
+                     {
+                        "Key":"Mass",
+                        "Program":"",
+                        "Rate":"1",
+                        "WeightRanges":[
+                           {
+                              "Lower":"50",
+                              "Upper":"100",
+                              "Weight":1
+                           }
+                        ]
+                     }
+                  ]
+               },
+               "ID":"a0",
+               "Longs":null,
+               "Strings":{
+                  "List":[
+                     {
+                        "Key":"Name",
+                        "Program":"",
+                        "Rate":"1",
+                        "Value":"Mars"
+                     }
+                  ]
+               },
+               "TransferFee":0
+            }
+         ],
+      "ItemInputs":null,
+      "Name":"RTEST_1596513734",
+      "Outputs":{
+         "List":[
+            {
+               "EntryIDs":[
+                  "a0"
+               ],
+               "Weight":"1"
+            }
+         ]
+      }
+   },
+   "Sender":"cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
+}`
 
 	tci := keep.SetupTestCoinInput()
 	msg := msgs.MsgCreateRecipe{}
@@ -169,9 +179,9 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					tc.cbID,
 					"this has to meet character limits",
 					"SketchyCo",
-					&types.SemVer{"1.0.0"},
-					&types.Email{"example@example.com"},
-					&types.Level{1},
+					types.SemVer{"1.0.0"},
+					types.Email{"example@example.com"},
+					types.Level{1},
 					msgs.DefaultCostPerBlock,
 					tc.sender,
 				)
@@ -205,10 +215,10 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			genCoinList := types.GenCoinInputList("wood", 5)
 			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
-				&genCoinList,
-				&mInputList,
-				&mEntries,
-				&mOutputs,
+				genCoinList,
+				mInputList,
+				mEntries,
+				mOutputs,
 				0,
 				tc.sender.String(),
 			)
@@ -235,9 +245,9 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		"samecookbookID-0001",
 		"some description with 20 characters",
 		"SketchyCo",
-		&types.SemVer{"1.0.0"},
-		&types.Email{"example@example.com"},
-		&types.Level{0},
+		types.SemVer{"1.0.0"},
+		types.Email{"example@example.com"},
+		types.Level{0},
 		msgs.DefaultCostPerBlock,
 		sender1,
 	)
@@ -251,10 +261,10 @@ func TestSameRecipeIDCreation(t *testing.T) {
 
 	genCoinsList := types.GenCoinInputList("wood", 5)
 	rcpMsg := msgs.NewMsgCreateRecipe("name", result.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
-		&genCoinsList,
-		&mInputList,
-		&mEntries,
-		&mOutputs,
+		genCoinsList,
+		mInputList,
+		mEntries,
+		mOutputs,
 		0,
 		sender1.String(),
 	)

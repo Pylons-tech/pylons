@@ -30,9 +30,9 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		"cookbook-id-0001",
 		"this has to meet character limits",
 		"SketchyCo",
-		&types.SemVer{"1.0.0"},
-		&types.Email{"example@example.com"},
-		&types.Level{1},
+		types.SemVer{"1.0.0"},
+		types.Email{"example@example.com"},
+		types.Level{1},
 		msgs.DefaultCostPerBlock,
 		sender,
 	)
@@ -41,16 +41,16 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	item.OwnerTradeID = id.String()
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err = tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	// add trades for tests, one open trade by each sender and one closed trade
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{List: []*types.Item{item}},
+		ItemOutputs: types.ItemList{List: []types.Item{item}},
 		CoinOutputs: types.NewPylon(10000),
-		Sender:      sender,
+		Sender:      sender.String(),
 	})
 	require.True(t, err == nil)
 
@@ -58,7 +58,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		ID:          id2.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Richu"}),
 		CoinOutputs: types.NewPylon(10000),
-		Sender:      sender2,
+		Sender:      sender2.String(),
 	})
 	require.True(t, err == nil)
 
@@ -66,8 +66,8 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		ID:          id3.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pichu"}),
 		CoinOutputs: types.NewPylon(1000),
-		Sender:      sender2,
-		FulFiller:   sender,
+		Sender:      sender2.String(),
+		FulFiller:   sender.String(),
 		Completed:   true,
 	})
 	require.True(t, err == nil)
@@ -75,9 +75,9 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id4.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{List: []*types.Item{item}},
+		ItemOutputs: types.ItemList{List: []types.Item{item}},
 		CoinOutputs: types.NewPylon(10000),
-		Sender:      sender2,
+		Sender:      sender2.String(),
 	})
 	require.True(t, err == nil)
 

@@ -19,7 +19,7 @@ func (querier *querierServer) ListShortenRecipeByCookbook(ctx context.Context, r
 	}
 
 	var recipes []types.Recipe
-	var shortenRecipes []*types.ShortenRecipe
+	var shortenRecipes []types.ShortenRecipe
 
 	if req.CookbookID == "" {
 		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))

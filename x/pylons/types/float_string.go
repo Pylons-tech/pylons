@@ -14,8 +14,8 @@ func (fs FloatString) Float() float64 {
 }
 
 // ToFloatString convert float64 to FloatString
-func ToFloatString(f float64) *FloatString {
-	return &FloatString{
+func ToFloatString(f float64) FloatString {
+	return FloatString{
 		Str: strconv.FormatFloat(f, 'f', -1, 64),
 	}
 }

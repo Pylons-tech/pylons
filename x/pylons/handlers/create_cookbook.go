@@ -25,9 +25,9 @@ func (k msgServer) HandlerMsgCreateCookbook(ctx context.Context, msg *msgs.MsgCr
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	var fee sdk.Coins
-	if *msg.Level == types.BasicTier.Level {
+	if msg.Level == types.BasicTier.Level {
 		fee = types.BasicTier.Fee
-	} else if *msg.Level == types.PremiumTier.Level {
+	} else if msg.Level == types.PremiumTier.Level {
 		fee = types.PremiumTier.Fee
 	} else {
 		return nil, errInternal(errors.New("invalid level"))
@@ -51,7 +51,7 @@ func (k msgServer) HandlerMsgCreateCookbook(ctx context.Context, msg *msgs.MsgCr
 		cpb = int(msg.CostPerBlock)
 	}
 
-	cb := types.NewCookbook(*msg.SupportEmail, sender, *msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
+	cb := types.NewCookbook(msg.SupportEmail, sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 
 	if msg.CookbookID != "" {
 		if k.HasCookbook(sdkCtx, msg.CookbookID) {

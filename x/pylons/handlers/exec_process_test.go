@@ -32,76 +32,76 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	for _, iN := range initItemNames {
 		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
 		if iN == "Attack1Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(1.0),
 			})
 		} else if iN == "Attack10Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(10.0),
 			})
 		} else if iN == "Attack10Level1Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, &types.LongKeyValue{
+			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
 				Value: 1,
 			})
 		} else if iN == "Attack10Level20Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, &types.LongKeyValue{
+			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
 		} else if iN == "Attack10Level20Carrier" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, &types.LongKeyValue{
+			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
-			newItem.Strings.List = append(newItem.Strings.List, &types.StringKeyValue{
+			newItem.Strings.List = append(newItem.Strings.List, types.StringKeyValue{
 				Key:   "Type",
 				Value: "Carrier",
 			})
 		} else if iN == "Attack10Level20PersonFee1" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, &types.LongKeyValue{
+			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
-			newItem.Strings.List = append(newItem.Strings.List, &types.StringKeyValue{
+			newItem.Strings.List = append(newItem.Strings.List, types.StringKeyValue{
 				Key:   "Type",
 				Value: "person",
 			})
 		} else if iN == "Attack10Level20PersonFee1000Locked" {
-			newItem.Doubles.List = append(newItem.Doubles.List, &types.DoubleKeyValue{
+			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: types.ToFloatString(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, &types.LongKeyValue{
+			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
-			newItem.Strings.List = append(newItem.Strings.List, &types.StringKeyValue{
+			newItem.Strings.List = append(newItem.Strings.List, types.StringKeyValue{
 				Key:   "Type",
 				Value: "person",
 			})
 			newItem.TransferFee = 1000
 			newItem.OwnerTradeID = "TRADE_ID"
 		}
-		err := tci.PlnK.SetItem(tci.Ctx, *newItem)
+		err := tci.PlnK.SetItem(tci.Ctx, newItem)
 		require.True(t, err == nil)
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
@@ -134,11 +134,15 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	personSleepRecipe := MockRecipe(
 		tci, "sleep recipe",
 		types.CoinInputList{},
-		types.ItemInputList{List: []*types.ItemInput{
+		types.ItemInputList{List: []types.ItemInput{
 			{
-				Doubles: &types.DoubleInputParamList{Params: []*types.DoubleInputParam{{Key: "attack", MinValue: types.ToFloatString(10.0), MaxValue: types.ToFloatString(1000.0)}}},
-				Longs:   &types.LongInputParamList{List: []*types.LongInputParam{{Key: "level", MinValue: 20, MaxValue: 100}}},
-				Strings: &types.StringInputParamList{List: []*types.StringInputParam{{Key: "Type", Value: "person"}}},
+				Doubles: types.DoubleInputParamList{Params: []types.DoubleInputParam{{Key: "attack", MinValue: types.ToFloatString(10.0), MaxValue: types.ToFloatString(1000.0)}}},
+				Longs:   types.LongInputParamList{List: []types.LongInputParam{{Key: "level", MinValue: 20, MaxValue: 100}}},
+				Strings: types.StringInputParamList{List: []types.StringInputParam{{Key: "Type", Value: "person"}}},
+				TransferFee: types.FeeInputParam{
+					MinValue: 10,
+					MaxValue: 10000,
+				},
 			},
 		}},
 		types.EntriesList{},
@@ -261,19 +265,19 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 
 	newItem := types.NewItem(
 		cbData.CookbookID,
-		&types.DoubleKeyValueList{List: []*types.DoubleKeyValue{
+		types.DoubleKeyValueList{List: []types.DoubleKeyValue{
 			{
 				Key:   "attack",
 				Value: types.ToFloatString(1.0),
 			},
 		}},
-		&types.LongKeyValueList{List: []*types.LongKeyValue{
+		types.LongKeyValueList{List: []types.LongKeyValue{
 			{
 				Key:   "level",
 				Value: 1,
 			},
 		}},
-		&types.StringKeyValueList{List: []*types.StringKeyValue{
+		types.StringKeyValueList{List: []types.StringKeyValue{
 			{
 				Key:   "Name",
 				Value: "Raichu",
@@ -283,7 +287,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		0,
 		0,
 	)
-	err := tci.PlnK.SetItem(tci.Ctx, *newItem)
+	err := tci.PlnK.SetItem(tci.Ctx, newItem)
 	require.True(t, err == nil)
 	initItemIDs = append(initItemIDs, newItem.ID)
 
@@ -293,10 +297,10 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	genOneOutput := types.GenOneOutput("wood", "Raichu")
 
 	exmpRcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
-		&genCoinInputList,
-		&genItemInputList,
-		&genEntries,
-		&genOneOutput,
+		genCoinInputList,
+		genItemInputList,
+		genEntries,
+		genOneOutput,
 		0,
 		sender1.String(),
 	)

@@ -430,7 +430,7 @@ func New(
 	//)
 	// The AnteHandler handles signature verification and transaction pre-processing
 	app.SetAnteHandler(
-		handlers.NewAnteHandler(app.AccountKeeper),
+		handlers.NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler()),
 	)
 	app.SetEndBlocker(app.EndBlocker)
 

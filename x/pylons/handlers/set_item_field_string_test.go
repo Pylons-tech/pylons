@@ -22,17 +22,17 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	item := keep.GenItem(cbData.CookbookID, sender1, "????????")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	item1 := keep.GenItem(cbData.CookbookID, sender1, "????????")
 	item1.OwnerRecipeID = "????????"
-	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.True(t, err == nil)
 
 	item2 := keep.GenItem(cbData.CookbookID, sender1, "????????")
 	item2.OwnerTradeID = "????????"
-	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

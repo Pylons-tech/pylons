@@ -60,11 +60,14 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 			return nil, errInternal(fmt.Errorf("[%d]th item is not tradable: %s item_id=%s", i, err.Error(), matchedItem.ID))
 		}
 		totalItemTransferFee += matchedItem.GetTransferFee()
-		matchedItems.List = append(matchedItems.List, &matchedItem)
+		matchedItems.List = append(matchedItems.List, matchedItem)
 	}
-
+	tradeSender, err := sdk.AccAddressFromBech32(trade.Sender)
+	if err != nil {
+		return nil, errInternal(err)
+	}
 	// Unlock trade creator's coins
-	err = k.UnlockCoin(sdkCtx, types.NewLockedCoin(trade.Sender, trade.CoinOutputs))
+	err = k.UnlockCoin(sdkCtx, types.NewLockedCoin(tradeSender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -74,7 +77,7 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 	}
 
-	if !keep.HasCoins(k.Keeper, sdkCtx, trade.Sender, trade.CoinOutputs) {
+	if !keep.HasCoins(k.Keeper, sdkCtx, tradeSender, trade.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the trade creator doesn't have sufficient coins")
 	}
 
@@ -89,7 +92,7 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 			return nil, errInternal(err)
 		}
 		// if it isn't then we error out as there hasn't been any state changes so far
-		if storedItem.Sender != trade.Sender.String() {
+		if storedItem.Sender != trade.Sender {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, fmt.Sprintf("Item with id %s is not owned by the trade creator", storedItem.ID))
 		}
 
@@ -99,7 +102,7 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 
 		totalItemTransferFee += storedItem.GetTransferFee()
 
-		refreshedOutputItems.List = append(refreshedOutputItems.List, &storedItem)
+		refreshedOutputItems.List = append(refreshedOutputItems.List, storedItem)
 	}
 
 	// ----------------- handle coin interaction ----------------------
@@ -125,7 +128,7 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 	// trade creator to trade acceptor the coin output
 	// Send output coin from sender to fullfiller
 
-	err = keep.SendCoins(k.Keeper, sdkCtx, trade.Sender, sender, trade.CoinOutputs)
+	err = keep.SendCoins(k.Keeper, sdkCtx, tradeSender, sender, trade.CoinOutputs)
 
 	if err != nil {
 		return nil, errInternal(err)
@@ -141,14 +144,14 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 
 	// trade acceptor to trade creator the coin input
 	// Send input coin from fullfiller to sender (trade creator)
-	err = keep.SendCoins(k.Keeper, sdkCtx, sender, trade.Sender, inputCoins)
+	err = keep.SendCoins(k.Keeper, sdkCtx, sender, tradeSender, inputCoins)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	fulfillerFee := totalFee - senderFee
 	if fulfillerFee != 0 {
 		// trade.Sender process fee after receiving coins from sender
-		err = keep.SendCoins(k.Keeper, sdkCtx, trade.Sender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
+		err = keep.SendCoins(k.Keeper, sdkCtx, tradeSender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -177,7 +180,7 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 
 		item.Sender = sender.String()
 		item.OwnerTradeID = ""
-		err = k.SetItem(sdkCtx, *item)
+		err = k.SetItem(sdkCtx, item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -201,14 +204,14 @@ func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulf
 			}
 		}
 
-		item.Sender = trade.Sender.String()
-		err = k.SetItem(sdkCtx, *item)
+		item.Sender = trade.Sender
+		err = k.SetItem(sdkCtx, item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 	}
 
-	trade.FulFiller = sender
+	trade.FulFiller = sender.String()
 	trade.Completed = true
 	err = k.SetTrade(sdkCtx, trade)
 	if err != nil {

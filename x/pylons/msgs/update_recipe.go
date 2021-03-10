@@ -10,10 +10,10 @@ import (
 
 // NewMsgUpdateRecipe a constructor for UpdateRecipe msg
 func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
-	coinInputs *types.CoinInputList,
-	itemInputs *types.ItemInputList,
-	entries *types.EntriesList,
-	outputs *types.WeightedOutputsList,
+	coinInputs types.CoinInputList,
+	itemInputs types.ItemInputList,
+	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	blockInterval int64,
 	sender sdk.AccAddress) MsgUpdateRecipe {
 	return MsgUpdateRecipe{

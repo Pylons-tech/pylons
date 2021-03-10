@@ -32,6 +32,6 @@ func (querier *querierServer) ListTrade(ctx context.Context, req *types.ListTrad
 	}
 
 	return &types.ListTradeResponse{
-		Trades: types.TradeListToProto(trades),
+		Trades: trades,
 	}, nil
 }

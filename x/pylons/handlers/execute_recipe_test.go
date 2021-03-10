@@ -291,7 +291,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				tc.itemIDs = []string{}
 				for _, diN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.True(t, err == nil)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}

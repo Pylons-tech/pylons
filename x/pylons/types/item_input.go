@@ -17,7 +17,7 @@ func ItemInputsToProto(items []Item) []*Item {
 // MatchError checks if all the constraint match the given item
 func (ii ItemInput) MatchError(item Item) error {
 
-	if ii.Doubles != nil {
+	if ii.Doubles.Params != nil {
 		for _, param := range ii.Doubles.Params {
 			double, ok := item.FindDouble(param.Key)
 			if !ok {
@@ -30,7 +30,7 @@ func (ii ItemInput) MatchError(item Item) error {
 		}
 	}
 
-	if ii.Longs != nil {
+	if ii.Longs.List != nil {
 		for _, param := range ii.Longs.List {
 			long, ok := item.FindLong(param.Key)
 			if !ok {
@@ -43,7 +43,7 @@ func (ii ItemInput) MatchError(item Item) error {
 		}
 	}
 
-	if ii.Strings != nil {
+	if ii.Strings.List != nil {
 		for _, param := range ii.Strings.List {
 			str, ok := item.FindString(param.Key)
 			if !ok {
@@ -55,11 +55,10 @@ func (ii ItemInput) MatchError(item Item) error {
 		}
 	}
 
-	if ii.TransferFee != nil {
-		if !ii.TransferFee.Has(item.TransferFee) {
-			return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
-		}
+	if !ii.TransferFee.Has(item.TransferFee) {
+		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
 	}
+
 	return nil
 }
 

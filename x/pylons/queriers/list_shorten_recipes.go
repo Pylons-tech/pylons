@@ -13,13 +13,13 @@ const (
 )
 
 // NewShortenRecipe is a constructor for ShortenRecipe
-func NewShortenRecipe(ID, cbID, Name, Description string, Sender sdk.AccAddress) *types.ShortenRecipe {
-	return &types.ShortenRecipe{
+func NewShortenRecipe(ID, cbID, Name, Description string, Sender string) types.ShortenRecipe {
+	return types.ShortenRecipe{
 		ID:          ID,
 		CookbookID:  cbID,
 		Name:        Name,
 		Description: Description,
-		Sender:      Sender.String(),
+		Sender:      Sender,
 	}
 }
 
@@ -30,7 +30,7 @@ func (querier *querierServer) ListShortenRecipe(ctx context.Context, req *types.
 	}
 
 	var recipes []types.Recipe
-	var shortenRecipes []*types.ShortenRecipe
+	var shortenRecipes []types.ShortenRecipe
 	accAddr, err := sdk.AccAddressFromBech32(req.Address)
 
 	if err != nil {

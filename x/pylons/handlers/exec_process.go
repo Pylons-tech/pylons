@@ -154,7 +154,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			if err != nil {
 				return ersl, errInternal(err)
 			}
-			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
+			if err = p.keeper.SetItem(p.ctx, outputItem); err != nil {
 				return ersl, errInternal(err)
 			}
 			ersl = append(ersl, ExecuteRecipeSerialize{
@@ -177,7 +177,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 
 // UpdateItemFromModifyParams is used to update item passed via item input from modify params
 func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyOutput) (*types.Item, error) {
-	if toMod.Doubles != nil {
+	if toMod.Doubles.List != nil {
 		dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
 		if err != nil {
 			return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
@@ -197,7 +197,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		}
 	}
 
-	if toMod.Longs != nil {
+	if toMod.Longs.Params != nil {
 		lngKeyValues, err := toMod.Longs.Actualize(p.ec)
 		if err != nil {
 			return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
@@ -215,7 +215,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		}
 	}
 
-	if toMod.Strings != nil {
+	if toMod.Strings.List != nil {
 		strKeyValues, err := toMod.Strings.Actualize(p.ec)
 		if err != nil {
 			return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))

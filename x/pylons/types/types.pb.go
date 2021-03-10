@@ -424,9 +424,9 @@ func (m *FloatString) GetStr() string {
 type DoubleInputParam struct {
 	Key string `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
 	// The minimum legal value of this parameter.
-	MinValue *FloatString `protobuf:"bytes,2,opt,name=MinValue,proto3" json:"MinValue,omitempty"`
+	MinValue FloatString `protobuf:"bytes,2,opt,name=MinValue,proto3" json:"MinValue"`
 	// The maximum legal value of this parameter.
-	MaxValue *FloatString `protobuf:"bytes,3,opt,name=MaxValue,proto3" json:"MaxValue,omitempty"`
+	MaxValue FloatString `protobuf:"bytes,3,opt,name=MaxValue,proto3" json:"MaxValue"`
 }
 
 func (m *DoubleInputParam) Reset()         { *m = DoubleInputParam{} }
@@ -469,22 +469,22 @@ func (m *DoubleInputParam) GetKey() string {
 	return ""
 }
 
-func (m *DoubleInputParam) GetMinValue() *FloatString {
+func (m *DoubleInputParam) GetMinValue() FloatString {
 	if m != nil {
 		return m.MinValue
 	}
-	return nil
+	return FloatString{}
 }
 
-func (m *DoubleInputParam) GetMaxValue() *FloatString {
+func (m *DoubleInputParam) GetMaxValue() FloatString {
 	if m != nil {
 		return m.MaxValue
 	}
-	return nil
+	return FloatString{}
 }
 
 type DoubleInputParamList struct {
-	Params []*DoubleInputParam `protobuf:"bytes,1,rep,name=params,proto3" json:"params,omitempty"`
+	Params []DoubleInputParam `protobuf:"bytes,1,rep,name=params,proto3" json:"params"`
 }
 
 func (m *DoubleInputParamList) Reset()         { *m = DoubleInputParamList{} }
@@ -520,7 +520,7 @@ func (m *DoubleInputParamList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleInputParamList proto.InternalMessageInfo
 
-func (m *DoubleInputParamList) GetParams() []*DoubleInputParam {
+func (m *DoubleInputParamList) GetParams() []DoubleInputParam {
 	if m != nil {
 		return m.Params
 	}
@@ -529,9 +529,9 @@ func (m *DoubleInputParamList) GetParams() []*DoubleInputParam {
 
 // DoubleWeightRange describes weight range that produce double value
 type DoubleWeightRange struct {
-	Lower  *FloatString `protobuf:"bytes,1,opt,name=Lower,proto3" json:"Lower,omitempty"`
-	Upper  *FloatString `protobuf:"bytes,2,opt,name=Upper,proto3" json:"Upper,omitempty"`
-	Weight int64        `protobuf:"varint,3,opt,name=Weight,proto3" json:"Weight,omitempty"`
+	Lower  FloatString `protobuf:"bytes,1,opt,name=Lower,proto3" json:"Lower"`
+	Upper  FloatString `protobuf:"bytes,2,opt,name=Upper,proto3" json:"Upper"`
+	Weight int64       `protobuf:"varint,3,opt,name=Weight,proto3" json:"Weight,omitempty"`
 }
 
 func (m *DoubleWeightRange) Reset()         { *m = DoubleWeightRange{} }
@@ -567,18 +567,18 @@ func (m *DoubleWeightRange) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleWeightRange proto.InternalMessageInfo
 
-func (m *DoubleWeightRange) GetLower() *FloatString {
+func (m *DoubleWeightRange) GetLower() FloatString {
 	if m != nil {
 		return m.Lower
 	}
-	return nil
+	return FloatString{}
 }
 
-func (m *DoubleWeightRange) GetUpper() *FloatString {
+func (m *DoubleWeightRange) GetUpper() FloatString {
 	if m != nil {
 		return m.Upper
 	}
-	return nil
+	return FloatString{}
 }
 
 func (m *DoubleWeightRange) GetWeight() int64 {
@@ -589,7 +589,7 @@ func (m *DoubleWeightRange) GetWeight() int64 {
 }
 
 type DoubleWeightTable struct {
-	WeightRanges []*DoubleWeightRange `protobuf:"bytes,1,rep,name=WeightRanges,proto3" json:"WeightRanges,omitempty"`
+	WeightRanges []DoubleWeightRange `protobuf:"bytes,1,rep,name=WeightRanges,proto3" json:"WeightRanges"`
 }
 
 func (m *DoubleWeightTable) Reset()         { *m = DoubleWeightTable{} }
@@ -625,7 +625,7 @@ func (m *DoubleWeightTable) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleWeightTable proto.InternalMessageInfo
 
-func (m *DoubleWeightTable) GetWeightRanges() []*DoubleWeightRange {
+func (m *DoubleWeightTable) GetWeightRanges() []DoubleWeightRange {
 	if m != nil {
 		return m.WeightRanges
 	}
@@ -636,8 +636,8 @@ func (m *DoubleWeightTable) GetWeightRanges() []*DoubleWeightRange {
 type LongParam struct {
 	Key string `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate        *FloatString    `protobuf:"bytes,2,opt,name=Rate,proto3" json:"Rate,omitempty"`
-	WeightTable *IntWeightTable `protobuf:"bytes,3,opt,name=WeightTable,proto3" json:"WeightTable,omitempty"`
+	Rate        FloatString    `protobuf:"bytes,2,opt,name=Rate,proto3" json:"Rate"`
+	WeightTable IntWeightTable `protobuf:"bytes,3,opt,name=WeightTable,proto3" json:"WeightTable"`
 	// When program is not empty, IntWeightTable is ignored
 	Program string `protobuf:"bytes,4,opt,name=Program,proto3" json:"Program,omitempty"`
 }
@@ -682,18 +682,18 @@ func (m *LongParam) GetKey() string {
 	return ""
 }
 
-func (m *LongParam) GetRate() *FloatString {
+func (m *LongParam) GetRate() FloatString {
 	if m != nil {
 		return m.Rate
 	}
-	return nil
+	return FloatString{}
 }
 
-func (m *LongParam) GetWeightTable() *IntWeightTable {
+func (m *LongParam) GetWeightTable() IntWeightTable {
 	if m != nil {
 		return m.WeightTable
 	}
-	return nil
+	return IntWeightTable{}
 }
 
 func (m *LongParam) GetProgram() string {
@@ -705,7 +705,7 @@ func (m *LongParam) GetProgram() string {
 
 // LongParamList is a list of LongParam
 type LongParamList struct {
-	Params []*LongParam `protobuf:"bytes,1,rep,name=params,proto3" json:"params,omitempty"`
+	Params []LongParam `protobuf:"bytes,1,rep,name=params,proto3" json:"params"`
 }
 
 func (m *LongParamList) Reset()         { *m = LongParamList{} }
@@ -741,7 +741,7 @@ func (m *LongParamList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LongParamList proto.InternalMessageInfo
 
-func (m *LongParamList) GetParams() []*LongParam {
+func (m *LongParamList) GetParams() []LongParam {
 	if m != nil {
 		return m.Params
 	}
@@ -811,7 +811,7 @@ func (m *IntWeightRange) GetWeight() int64 {
 
 // IntWeightTable describes weight loot table that produce int value
 type IntWeightTable struct {
-	WeightRanges []*IntWeightRange `protobuf:"bytes,1,rep,name=WeightRanges,proto3" json:"WeightRanges,omitempty"`
+	WeightRanges []IntWeightRange `protobuf:"bytes,1,rep,name=WeightRanges,proto3" json:"WeightRanges"`
 }
 
 func (m *IntWeightTable) Reset()         { *m = IntWeightTable{} }
@@ -847,7 +847,7 @@ func (m *IntWeightTable) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_IntWeightTable proto.InternalMessageInfo
 
-func (m *IntWeightTable) GetWeightRanges() []*IntWeightRange {
+func (m *IntWeightTable) GetWeightRanges() []IntWeightRange {
 	if m != nil {
 		return m.WeightRanges
 	}
@@ -910,7 +910,7 @@ func (m *StringInputParam) GetValue() string {
 
 // StringInputParamList is a list of StringInputParam
 type StringInputParamList struct {
-	List []*StringInputParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []StringInputParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *StringInputParamList) Reset()         { *m = StringInputParamList{} }
@@ -946,7 +946,7 @@ func (m *StringInputParamList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StringInputParamList proto.InternalMessageInfo
 
-func (m *StringInputParamList) GetList() []*StringInputParam {
+func (m *StringInputParamList) GetList() []StringInputParam {
 	if m != nil {
 		return m.List
 	}
@@ -1068,7 +1068,7 @@ func (m *LongInputParam) GetMaxValue() int64 {
 
 // LongInputParamList is a list of LongInputParam
 type LongInputParamList struct {
-	List []*LongInputParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []LongInputParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *LongInputParamList) Reset()         { *m = LongInputParamList{} }
@@ -1104,7 +1104,7 @@ func (m *LongInputParamList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LongInputParamList proto.InternalMessageInfo
 
-func (m *LongInputParamList) GetList() []*LongInputParam {
+func (m *LongInputParamList) GetList() []LongInputParam {
 	if m != nil {
 		return m.List
 	}
@@ -1113,11 +1113,11 @@ func (m *LongInputParamList) GetList() []*LongInputParam {
 
 // ItemInput is a wrapper struct for Item for recipes
 type ItemInput struct {
-	ID          string                `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
-	Doubles     *DoubleInputParamList `protobuf:"bytes,2,opt,name=Doubles,proto3" json:"Doubles,omitempty"`
-	Longs       *LongInputParamList   `protobuf:"bytes,3,opt,name=Longs,proto3" json:"Longs,omitempty"`
-	Strings     *StringInputParamList `protobuf:"bytes,4,opt,name=Strings,proto3" json:"Strings,omitempty"`
-	TransferFee *FeeInputParam        `protobuf:"bytes,5,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
+	ID          string               `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	Doubles     DoubleInputParamList `protobuf:"bytes,2,opt,name=Doubles,proto3" json:"Doubles"`
+	Longs       LongInputParamList   `protobuf:"bytes,3,opt,name=Longs,proto3" json:"Longs"`
+	Strings     StringInputParamList `protobuf:"bytes,4,opt,name=Strings,proto3" json:"Strings"`
+	TransferFee FeeInputParam        `protobuf:"bytes,5,opt,name=TransferFee,proto3" json:"TransferFee"`
 }
 
 func (m *ItemInput) Reset()         { *m = ItemInput{} }
@@ -1160,36 +1160,36 @@ func (m *ItemInput) GetID() string {
 	return ""
 }
 
-func (m *ItemInput) GetDoubles() *DoubleInputParamList {
+func (m *ItemInput) GetDoubles() DoubleInputParamList {
 	if m != nil {
 		return m.Doubles
 	}
-	return nil
+	return DoubleInputParamList{}
 }
 
-func (m *ItemInput) GetLongs() *LongInputParamList {
+func (m *ItemInput) GetLongs() LongInputParamList {
 	if m != nil {
 		return m.Longs
 	}
-	return nil
+	return LongInputParamList{}
 }
 
-func (m *ItemInput) GetStrings() *StringInputParamList {
+func (m *ItemInput) GetStrings() StringInputParamList {
 	if m != nil {
 		return m.Strings
 	}
-	return nil
+	return StringInputParamList{}
 }
 
-func (m *ItemInput) GetTransferFee() *FeeInputParam {
+func (m *ItemInput) GetTransferFee() FeeInputParam {
 	if m != nil {
 		return m.TransferFee
 	}
-	return nil
+	return FeeInputParam{}
 }
 
 type ItemInputList struct {
-	List []*ItemInput `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []ItemInput `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *ItemInputList) Reset()         { *m = ItemInputList{} }
@@ -1225,7 +1225,7 @@ func (m *ItemInputList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ItemInputList proto.InternalMessageInfo
 
-func (m *ItemInputList) GetList() []*ItemInput {
+func (m *ItemInputList) GetList() []ItemInput {
 	if m != nil {
 		return m.List
 	}
@@ -1288,7 +1288,7 @@ func (m *WeightedOutputs) GetWeight() string {
 // WeightedOutputsList is a struct to keep items which can be generated by weight;
 // ItemOutput and CoinOutput is possible in current stage
 type WeightedOutputsList struct {
-	List []*WeightedOutputs `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []WeightedOutputs `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *WeightedOutputsList) Reset()         { *m = WeightedOutputsList{} }
@@ -1324,7 +1324,7 @@ func (m *WeightedOutputsList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WeightedOutputsList proto.InternalMessageInfo
 
-func (m *WeightedOutputsList) GetList() []*WeightedOutputs {
+func (m *WeightedOutputsList) GetList() []WeightedOutputs {
 	if m != nil {
 		return m.List
 	}
@@ -1334,9 +1334,9 @@ func (m *WeightedOutputsList) GetList() []*WeightedOutputs {
 // StringParam describes an item input/output parameter of type string
 type StringParam struct {
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate  *FloatString `protobuf:"bytes,1,opt,name=Rate,proto3" json:"Rate,omitempty"`
-	Key   string       `protobuf:"bytes,2,opt,name=Key,proto3" json:"Key,omitempty"`
-	Value string       `protobuf:"bytes,3,opt,name=Value,proto3" json:"Value,omitempty"`
+	Rate  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,1,opt,name=Rate,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"Rate"`
+	Key   string                                 `protobuf:"bytes,2,opt,name=Key,proto3" json:"Key,omitempty"`
+	Value string                                 `protobuf:"bytes,3,opt,name=Value,proto3" json:"Value,omitempty"`
 	// When program is not empty, Value is ignored
 	Program string `protobuf:"bytes,4,opt,name=Program,proto3" json:"Program,omitempty"`
 }
@@ -1374,13 +1374,6 @@ func (m *StringParam) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StringParam proto.InternalMessageInfo
 
-func (m *StringParam) GetRate() *FloatString {
-	if m != nil {
-		return m.Rate
-	}
-	return nil
-}
-
 func (m *StringParam) GetKey() string {
 	if m != nil {
 		return m.Key
@@ -1404,7 +1397,7 @@ func (m *StringParam) GetProgram() string {
 
 // StringParamList is a list of StringParam
 type StringParamList struct {
-	List []*StringParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []StringParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *StringParamList) Reset()         { *m = StringParamList{} }
@@ -1440,7 +1433,7 @@ func (m *StringParamList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StringParamList proto.InternalMessageInfo
 
-func (m *StringParamList) GetList() []*StringParam {
+func (m *StringParamList) GetList() []StringParam {
 	if m != nil {
 		return m.List
 	}
@@ -1450,9 +1443,9 @@ func (m *StringParamList) GetList() []*StringParam {
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 type DoubleParam struct {
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate        *FloatString       `protobuf:"bytes,1,opt,name=Rate,proto3" json:"Rate,omitempty"`
-	Key         string             `protobuf:"bytes,2,opt,name=Key,proto3" json:"Key,omitempty"`
-	WeightTable *DoubleWeightTable `protobuf:"bytes,3,opt,name=WeightTable,proto3" json:"WeightTable,omitempty"`
+	Rate        FloatString       `protobuf:"bytes,1,opt,name=Rate,proto3" json:"Rate"`
+	Key         string            `protobuf:"bytes,2,opt,name=Key,proto3" json:"Key,omitempty"`
+	WeightTable DoubleWeightTable `protobuf:"bytes,3,opt,name=WeightTable,proto3" json:"WeightTable"`
 	// When program is not empty, DoubleWeightTable is ignored
 	Program string `protobuf:"bytes,4,opt,name=Program,proto3" json:"Program,omitempty"`
 }
@@ -1490,11 +1483,11 @@ func (m *DoubleParam) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleParam proto.InternalMessageInfo
 
-func (m *DoubleParam) GetRate() *FloatString {
+func (m *DoubleParam) GetRate() FloatString {
 	if m != nil {
 		return m.Rate
 	}
-	return nil
+	return FloatString{}
 }
 
 func (m *DoubleParam) GetKey() string {
@@ -1504,11 +1497,11 @@ func (m *DoubleParam) GetKey() string {
 	return ""
 }
 
-func (m *DoubleParam) GetWeightTable() *DoubleWeightTable {
+func (m *DoubleParam) GetWeightTable() DoubleWeightTable {
 	if m != nil {
 		return m.WeightTable
 	}
-	return nil
+	return DoubleWeightTable{}
 }
 
 func (m *DoubleParam) GetProgram() string {
@@ -1520,7 +1513,7 @@ func (m *DoubleParam) GetProgram() string {
 
 // DoubleParamList is a list of DoubleParam
 type DoubleParamList struct {
-	List []*DoubleParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []DoubleParam `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *DoubleParamList) Reset()         { *m = DoubleParamList{} }
@@ -1556,7 +1549,7 @@ func (m *DoubleParamList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleParamList proto.InternalMessageInfo
 
-func (m *DoubleParamList) GetList() []*DoubleParam {
+func (m *DoubleParamList) GetList() []DoubleParam {
 	if m != nil {
 		return m.List
 	}
@@ -1565,11 +1558,11 @@ func (m *DoubleParamList) GetList() []*DoubleParam {
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
 type ItemOutput struct {
-	ID          string           `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
-	Doubles     *DoubleParamList `protobuf:"bytes,2,opt,name=Doubles,proto3" json:"Doubles,omitempty"`
-	Longs       *LongParamList   `protobuf:"bytes,3,opt,name=Longs,proto3" json:"Longs,omitempty"`
-	Strings     *StringParamList `protobuf:"bytes,4,opt,name=Strings,proto3" json:"Strings,omitempty"`
-	TransferFee int64            `protobuf:"varint,5,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
+	ID          string          `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	Doubles     DoubleParamList `protobuf:"bytes,2,opt,name=Doubles,proto3" json:"Doubles"`
+	Longs       LongParamList   `protobuf:"bytes,3,opt,name=Longs,proto3" json:"Longs"`
+	Strings     StringParamList `protobuf:"bytes,4,opt,name=Strings,proto3" json:"Strings"`
+	TransferFee int64           `protobuf:"varint,5,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
 }
 
 func (m *ItemOutput) Reset()         { *m = ItemOutput{} }
@@ -1612,25 +1605,25 @@ func (m *ItemOutput) GetID() string {
 	return ""
 }
 
-func (m *ItemOutput) GetDoubles() *DoubleParamList {
+func (m *ItemOutput) GetDoubles() DoubleParamList {
 	if m != nil {
 		return m.Doubles
 	}
-	return nil
+	return DoubleParamList{}
 }
 
-func (m *ItemOutput) GetLongs() *LongParamList {
+func (m *ItemOutput) GetLongs() LongParamList {
 	if m != nil {
 		return m.Longs
 	}
-	return nil
+	return LongParamList{}
 }
 
-func (m *ItemOutput) GetStrings() *StringParamList {
+func (m *ItemOutput) GetStrings() StringParamList {
 	if m != nil {
 		return m.Strings
 	}
-	return nil
+	return StringParamList{}
 }
 
 func (m *ItemOutput) GetTransferFee() int64 {
@@ -1642,12 +1635,12 @@ func (m *ItemOutput) GetTransferFee() int64 {
 
 // ItemModifyOutput describes what is modified from item input
 type ItemModifyOutput struct {
-	ID           string           `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
-	ItemInputRef string           `protobuf:"bytes,2,opt,name=ItemInputRef,proto3" json:"ItemInputRef,omitempty"`
-	Doubles      *DoubleParamList `protobuf:"bytes,3,opt,name=Doubles,proto3" json:"Doubles,omitempty"`
-	Longs        *LongParamList   `protobuf:"bytes,4,opt,name=Longs,proto3" json:"Longs,omitempty"`
-	Strings      *StringParamList `protobuf:"bytes,5,opt,name=Strings,proto3" json:"Strings,omitempty"`
-	TransferFee  int64            `protobuf:"varint,6,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
+	ID           string          `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	ItemInputRef string          `protobuf:"bytes,2,opt,name=ItemInputRef,proto3" json:"ItemInputRef,omitempty"`
+	Doubles      DoubleParamList `protobuf:"bytes,3,opt,name=Doubles,proto3" json:"Doubles"`
+	Longs        LongParamList   `protobuf:"bytes,4,opt,name=Longs,proto3" json:"Longs"`
+	Strings      StringParamList `protobuf:"bytes,5,opt,name=Strings,proto3" json:"Strings"`
+	TransferFee  int64           `protobuf:"varint,6,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
 }
 
 func (m *ItemModifyOutput) Reset()         { *m = ItemModifyOutput{} }
@@ -1697,25 +1690,25 @@ func (m *ItemModifyOutput) GetItemInputRef() string {
 	return ""
 }
 
-func (m *ItemModifyOutput) GetDoubles() *DoubleParamList {
+func (m *ItemModifyOutput) GetDoubles() DoubleParamList {
 	if m != nil {
 		return m.Doubles
 	}
-	return nil
+	return DoubleParamList{}
 }
 
-func (m *ItemModifyOutput) GetLongs() *LongParamList {
+func (m *ItemModifyOutput) GetLongs() LongParamList {
 	if m != nil {
 		return m.Longs
 	}
-	return nil
+	return LongParamList{}
 }
 
-func (m *ItemModifyOutput) GetStrings() *StringParamList {
+func (m *ItemModifyOutput) GetStrings() StringParamList {
 	if m != nil {
 		return m.Strings
 	}
-	return nil
+	return StringParamList{}
 }
 
 func (m *ItemModifyOutput) GetTransferFee() int64 {
@@ -1727,10 +1720,10 @@ func (m *ItemModifyOutput) GetTransferFee() int64 {
 
 // ItemModifyParams describes the fields that needs to be modified
 type ItemModifyParams struct {
-	Doubles     *DoubleParamList `protobuf:"bytes,1,opt,name=Doubles,proto3" json:"Doubles,omitempty"`
-	Longs       *LongParamList   `protobuf:"bytes,2,opt,name=Longs,proto3" json:"Longs,omitempty"`
-	Strings     *StringParamList `protobuf:"bytes,3,opt,name=Strings,proto3" json:"Strings,omitempty"`
-	TransferFee int64            `protobuf:"varint,4,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
+	Doubles     DoubleParamList `protobuf:"bytes,1,opt,name=Doubles,proto3" json:"Doubles"`
+	Longs       LongParamList   `protobuf:"bytes,2,opt,name=Longs,proto3" json:"Longs"`
+	Strings     StringParamList `protobuf:"bytes,3,opt,name=Strings,proto3" json:"Strings"`
+	TransferFee int64           `protobuf:"varint,4,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
 }
 
 func (m *ItemModifyParams) Reset()         { *m = ItemModifyParams{} }
@@ -1766,25 +1759,25 @@ func (m *ItemModifyParams) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ItemModifyParams proto.InternalMessageInfo
 
-func (m *ItemModifyParams) GetDoubles() *DoubleParamList {
+func (m *ItemModifyParams) GetDoubles() DoubleParamList {
 	if m != nil {
 		return m.Doubles
 	}
-	return nil
+	return DoubleParamList{}
 }
 
-func (m *ItemModifyParams) GetLongs() *LongParamList {
+func (m *ItemModifyParams) GetLongs() LongParamList {
 	if m != nil {
 		return m.Longs
 	}
-	return nil
+	return LongParamList{}
 }
 
-func (m *ItemModifyParams) GetStrings() *StringParamList {
+func (m *ItemModifyParams) GetStrings() StringParamList {
 	if m != nil {
 		return m.Strings
 	}
-	return nil
+	return StringParamList{}
 }
 
 func (m *ItemModifyParams) GetTransferFee() int64 {
@@ -1796,18 +1789,18 @@ func (m *ItemModifyParams) GetTransferFee() int64 {
 
 // Item is a tradable asset
 type Item struct {
-	NodeVersion   *SemVer             `protobuf:"bytes,1,opt,name=NodeVersion,proto3" json:"NodeVersion,omitempty"`
-	ID            string              `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	Doubles       *DoubleKeyValueList `protobuf:"bytes,3,opt,name=Doubles,proto3" json:"Doubles,omitempty"`
-	Longs         *LongKeyValueList   `protobuf:"bytes,4,opt,name=Longs,proto3" json:"Longs,omitempty"`
-	Strings       *StringKeyValueList `protobuf:"bytes,5,opt,name=Strings,proto3" json:"Strings,omitempty"`
-	CookbookID    string              `protobuf:"bytes,6,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
-	Sender        string              `protobuf:"bytes,7,opt,name=Sender,proto3" json:"Sender,omitempty"`
-	OwnerRecipeID string              `protobuf:"bytes,8,opt,name=OwnerRecipeID,proto3" json:"OwnerRecipeID,omitempty"`
-	OwnerTradeID  string              `protobuf:"bytes,9,opt,name=OwnerTradeID,proto3" json:"OwnerTradeID,omitempty"`
-	Tradable      bool                `protobuf:"varint,10,opt,name=Tradable,proto3" json:"Tradable,omitempty"`
-	LastUpdate    int64               `protobuf:"varint,11,opt,name=LastUpdate,proto3" json:"LastUpdate,omitempty"`
-	TransferFee   int64               `protobuf:"varint,12,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
+	NodeVersion   SemVer             `protobuf:"bytes,1,opt,name=NodeVersion,proto3" json:"NodeVersion"`
+	ID            string             `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	Doubles       DoubleKeyValueList `protobuf:"bytes,3,opt,name=Doubles,proto3" json:"Doubles"`
+	Longs         LongKeyValueList   `protobuf:"bytes,4,opt,name=Longs,proto3" json:"Longs"`
+	Strings       StringKeyValueList `protobuf:"bytes,5,opt,name=Strings,proto3" json:"Strings"`
+	CookbookID    string             `protobuf:"bytes,6,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
+	Sender        string             `protobuf:"bytes,7,opt,name=Sender,proto3" json:"Sender,omitempty"`
+	OwnerRecipeID string             `protobuf:"bytes,8,opt,name=OwnerRecipeID,proto3" json:"OwnerRecipeID,omitempty"`
+	OwnerTradeID  string             `protobuf:"bytes,9,opt,name=OwnerTradeID,proto3" json:"OwnerTradeID,omitempty"`
+	Tradable      bool               `protobuf:"varint,10,opt,name=Tradable,proto3" json:"Tradable,omitempty"`
+	LastUpdate    int64              `protobuf:"varint,11,opt,name=LastUpdate,proto3" json:"LastUpdate,omitempty"`
+	TransferFee   int64              `protobuf:"varint,12,opt,name=TransferFee,proto3" json:"TransferFee,omitempty"`
 }
 
 func (m *Item) Reset()         { *m = Item{} }
@@ -1843,11 +1836,11 @@ func (m *Item) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Item proto.InternalMessageInfo
 
-func (m *Item) GetNodeVersion() *SemVer {
+func (m *Item) GetNodeVersion() SemVer {
 	if m != nil {
 		return m.NodeVersion
 	}
-	return nil
+	return SemVer{}
 }
 
 func (m *Item) GetID() string {
@@ -1857,25 +1850,25 @@ func (m *Item) GetID() string {
 	return ""
 }
 
-func (m *Item) GetDoubles() *DoubleKeyValueList {
+func (m *Item) GetDoubles() DoubleKeyValueList {
 	if m != nil {
 		return m.Doubles
 	}
-	return nil
+	return DoubleKeyValueList{}
 }
 
-func (m *Item) GetLongs() *LongKeyValueList {
+func (m *Item) GetLongs() LongKeyValueList {
 	if m != nil {
 		return m.Longs
 	}
-	return nil
+	return LongKeyValueList{}
 }
 
-func (m *Item) GetStrings() *StringKeyValueList {
+func (m *Item) GetStrings() StringKeyValueList {
 	if m != nil {
 		return m.Strings
 	}
-	return nil
+	return StringKeyValueList{}
 }
 
 func (m *Item) GetCookbookID() string {
@@ -1929,7 +1922,7 @@ func (m *Item) GetTransferFee() int64 {
 
 // ItemList is a list of items
 type ItemList struct {
-	List []*Item `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []Item `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *ItemList) Reset()         { *m = ItemList{} }
@@ -1965,7 +1958,7 @@ func (m *ItemList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ItemList proto.InternalMessageInfo
 
-func (m *ItemList) GetList() []*Item {
+func (m *ItemList) GetList() []Item {
 	if m != nil {
 		return m.List
 	}
@@ -1973,7 +1966,7 @@ func (m *ItemList) GetList() []*Item {
 }
 
 type DoubleKeyValueList struct {
-	List []*DoubleKeyValue `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []DoubleKeyValue `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *DoubleKeyValueList) Reset()         { *m = DoubleKeyValueList{} }
@@ -2009,7 +2002,7 @@ func (m *DoubleKeyValueList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleKeyValueList proto.InternalMessageInfo
 
-func (m *DoubleKeyValueList) GetList() []*DoubleKeyValue {
+func (m *DoubleKeyValueList) GetList() []DoubleKeyValue {
 	if m != nil {
 		return m.List
 	}
@@ -2018,8 +2011,8 @@ func (m *DoubleKeyValueList) GetList() []*DoubleKeyValue {
 
 // DoubleKeyValue describes double key/value set
 type DoubleKeyValue struct {
-	Key   string       `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
-	Value *FloatString `protobuf:"bytes,2,opt,name=Value,proto3" json:"Value,omitempty"`
+	Key   string      `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
+	Value FloatString `protobuf:"bytes,2,opt,name=Value,proto3" json:"Value"`
 }
 
 func (m *DoubleKeyValue) Reset()         { *m = DoubleKeyValue{} }
@@ -2062,15 +2055,15 @@ func (m *DoubleKeyValue) GetKey() string {
 	return ""
 }
 
-func (m *DoubleKeyValue) GetValue() *FloatString {
+func (m *DoubleKeyValue) GetValue() FloatString {
 	if m != nil {
 		return m.Value
 	}
-	return nil
+	return FloatString{}
 }
 
 type LongKeyValueList struct {
-	List []*LongKeyValue `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []LongKeyValue `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *LongKeyValueList) Reset()         { *m = LongKeyValueList{} }
@@ -2106,7 +2099,7 @@ func (m *LongKeyValueList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LongKeyValueList proto.InternalMessageInfo
 
-func (m *LongKeyValueList) GetList() []*LongKeyValue {
+func (m *LongKeyValueList) GetList() []LongKeyValue {
 	if m != nil {
 		return m.List
 	}
@@ -2167,7 +2160,7 @@ func (m *LongKeyValue) GetValue() int64 {
 }
 
 type StringKeyValueList struct {
-	List []*StringKeyValue `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []StringKeyValue `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *StringKeyValueList) Reset()         { *m = StringKeyValueList{} }
@@ -2203,7 +2196,7 @@ func (m *StringKeyValueList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StringKeyValueList proto.InternalMessageInfo
 
-func (m *StringKeyValueList) GetList() []*StringKeyValue {
+func (m *StringKeyValueList) GetList() []StringKeyValue {
 	if m != nil {
 		return m.List
 	}
@@ -2265,8 +2258,8 @@ func (m *StringKeyValue) GetValue() string {
 
 // TradeItemInput is a wrapper struct for Item for trades
 type TradeItemInput struct {
-	ItemInput  *ItemInput `protobuf:"bytes,1,opt,name=ItemInput,proto3" json:"ItemInput,omitempty"`
-	CookbookID string     `protobuf:"bytes,2,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
+	ItemInput  ItemInput `protobuf:"bytes,1,opt,name=ItemInput,proto3" json:"ItemInput"`
+	CookbookID string    `protobuf:"bytes,2,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
 }
 
 func (m *TradeItemInput) Reset()         { *m = TradeItemInput{} }
@@ -2302,11 +2295,11 @@ func (m *TradeItemInput) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TradeItemInput proto.InternalMessageInfo
 
-func (m *TradeItemInput) GetItemInput() *ItemInput {
+func (m *TradeItemInput) GetItemInput() ItemInput {
 	if m != nil {
 		return m.ItemInput
 	}
-	return nil
+	return ItemInput{}
 }
 
 func (m *TradeItemInput) GetCookbookID() string {
@@ -2318,7 +2311,7 @@ func (m *TradeItemInput) GetCookbookID() string {
 
 // TradeItemInputList is a list of ItemInputs for convinience
 type TradeItemInputList struct {
-	List []*TradeItemInput `protobuf:"bytes,1,rep,name=List,proto3" json:"List,omitempty"`
+	List []TradeItemInput `protobuf:"bytes,1,rep,name=List,proto3" json:"List"`
 }
 
 func (m *TradeItemInputList) Reset()         { *m = TradeItemInputList{} }
@@ -2354,7 +2347,7 @@ func (m *TradeItemInputList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_TradeItemInputList proto.InternalMessageInfo
 
-func (m *TradeItemInputList) GetList() []*TradeItemInput {
+func (m *TradeItemInputList) GetList() []TradeItemInput {
 	if m != nil {
 		return m.List
 	}
@@ -2491,6 +2484,370 @@ func (m *ShortenRecipe) GetSender() string {
 	return ""
 }
 
+type Execution struct {
+	NodeVersion SemVer                                   `protobuf:"bytes,1,opt,name=NodeVersion,proto3" json:"NodeVersion"`
+	ID          string                                   `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	RecipeID    string                                   `protobuf:"bytes,3,opt,name=RecipeID,proto3" json:"RecipeID,omitempty"`
+	CookbookID  string                                   `protobuf:"bytes,4,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
+	CoinInputs  github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,5,rep,name=CoinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"CoinInputs"`
+	ItemInputs  []Item                                   `protobuf:"bytes,6,rep,name=ItemInputs,proto3" json:"ItemInputs"`
+	BlockHeight int64                                    `protobuf:"varint,7,opt,name=BlockHeight,proto3" json:"BlockHeight,omitempty"`
+	Sender      string                                   `protobuf:"bytes,8,opt,name=Sender,proto3" json:"Sender,omitempty"`
+	Completed   bool                                     `protobuf:"varint,9,opt,name=Completed,proto3" json:"Completed,omitempty"`
+}
+
+func (m *Execution) Reset()         { *m = Execution{} }
+func (m *Execution) String() string { return proto.CompactTextString(m) }
+func (*Execution) ProtoMessage()    {}
+func (*Execution) Descriptor() ([]byte, []int) {
+	return fileDescriptor_102cda291ba6db83, []int{44}
+}
+func (m *Execution) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Execution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Execution.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Execution) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Execution.Merge(m, src)
+}
+func (m *Execution) XXX_Size() int {
+	return m.Size()
+}
+func (m *Execution) XXX_DiscardUnknown() {
+	xxx_messageInfo_Execution.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Execution proto.InternalMessageInfo
+
+func (m *Execution) GetNodeVersion() SemVer {
+	if m != nil {
+		return m.NodeVersion
+	}
+	return SemVer{}
+}
+
+func (m *Execution) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
+
+func (m *Execution) GetRecipeID() string {
+	if m != nil {
+		return m.RecipeID
+	}
+	return ""
+}
+
+func (m *Execution) GetCookbookID() string {
+	if m != nil {
+		return m.CookbookID
+	}
+	return ""
+}
+
+func (m *Execution) GetCoinInputs() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.CoinInputs
+	}
+	return nil
+}
+
+func (m *Execution) GetItemInputs() []Item {
+	if m != nil {
+		return m.ItemInputs
+	}
+	return nil
+}
+
+func (m *Execution) GetBlockHeight() int64 {
+	if m != nil {
+		return m.BlockHeight
+	}
+	return 0
+}
+
+func (m *Execution) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *Execution) GetCompleted() bool {
+	if m != nil {
+		return m.Completed
+	}
+	return false
+}
+
+type Recipe struct {
+	NodeVersion   SemVer              `protobuf:"bytes,1,opt,name=NodeVersion,proto3" json:"NodeVersion"`
+	ID            string              `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	CookbookID    string              `protobuf:"bytes,3,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
+	Name          string              `protobuf:"bytes,4,opt,name=Name,proto3" json:"Name,omitempty"`
+	CoinInputs    CoinInputList       `protobuf:"bytes,5,opt,name=CoinInputs,proto3" json:"CoinInputs"`
+	ItemInputs    ItemInputList       `protobuf:"bytes,6,opt,name=ItemInputs,proto3" json:"ItemInputs"`
+	Entries       EntriesList         `protobuf:"bytes,7,opt,name=Entries,proto3" json:"Entries"`
+	Outputs       WeightedOutputsList `protobuf:"bytes,8,opt,name=Outputs,proto3" json:"Outputs"`
+	Description   string              `protobuf:"bytes,9,opt,name=Description,proto3" json:"Description,omitempty"`
+	BlockInterval int64               `protobuf:"varint,10,opt,name=BlockInterval,proto3" json:"BlockInterval,omitempty"`
+	Sender        string              `protobuf:"bytes,11,opt,name=Sender,proto3" json:"Sender,omitempty"`
+	Disabled      bool                `protobuf:"varint,12,opt,name=Disabled,proto3" json:"Disabled,omitempty"`
+}
+
+func (m *Recipe) Reset()         { *m = Recipe{} }
+func (m *Recipe) String() string { return proto.CompactTextString(m) }
+func (*Recipe) ProtoMessage()    {}
+func (*Recipe) Descriptor() ([]byte, []int) {
+	return fileDescriptor_102cda291ba6db83, []int{45}
+}
+func (m *Recipe) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Recipe) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Recipe.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Recipe) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Recipe.Merge(m, src)
+}
+func (m *Recipe) XXX_Size() int {
+	return m.Size()
+}
+func (m *Recipe) XXX_DiscardUnknown() {
+	xxx_messageInfo_Recipe.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Recipe proto.InternalMessageInfo
+
+func (m *Recipe) GetNodeVersion() SemVer {
+	if m != nil {
+		return m.NodeVersion
+	}
+	return SemVer{}
+}
+
+func (m *Recipe) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
+
+func (m *Recipe) GetCookbookID() string {
+	if m != nil {
+		return m.CookbookID
+	}
+	return ""
+}
+
+func (m *Recipe) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Recipe) GetCoinInputs() CoinInputList {
+	if m != nil {
+		return m.CoinInputs
+	}
+	return CoinInputList{}
+}
+
+func (m *Recipe) GetItemInputs() ItemInputList {
+	if m != nil {
+		return m.ItemInputs
+	}
+	return ItemInputList{}
+}
+
+func (m *Recipe) GetEntries() EntriesList {
+	if m != nil {
+		return m.Entries
+	}
+	return EntriesList{}
+}
+
+func (m *Recipe) GetOutputs() WeightedOutputsList {
+	if m != nil {
+		return m.Outputs
+	}
+	return WeightedOutputsList{}
+}
+
+func (m *Recipe) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *Recipe) GetBlockInterval() int64 {
+	if m != nil {
+		return m.BlockInterval
+	}
+	return 0
+}
+
+func (m *Recipe) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *Recipe) GetDisabled() bool {
+	if m != nil {
+		return m.Disabled
+	}
+	return false
+}
+
+type Trade struct {
+	NodeVersion SemVer                                   `protobuf:"bytes,1,opt,name=NodeVersion,proto3" json:"NodeVersion"`
+	ID          string                                   `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	CoinInputs  CoinInputList                            `protobuf:"bytes,3,opt,name=CoinInputs,proto3" json:"CoinInputs"`
+	ItemInputs  TradeItemInputList                       `protobuf:"bytes,4,opt,name=ItemInputs,proto3" json:"ItemInputs"`
+	CoinOutputs github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,5,rep,name=CoinOutputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"CoinOutputs"`
+	ItemOutputs ItemList                                 `protobuf:"bytes,6,opt,name=ItemOutputs,proto3" json:"ItemOutputs"`
+	ExtraInfo   string                                   `protobuf:"bytes,7,opt,name=ExtraInfo,proto3" json:"ExtraInfo,omitempty"`
+	Sender      string                                   `protobuf:"bytes,8,opt,name=Sender,proto3" json:"Sender,omitempty"`
+	FulFiller   string                                   `protobuf:"bytes,9,opt,name=FulFiller,proto3" json:"FulFiller,omitempty"`
+	Disabled    bool                                     `protobuf:"varint,10,opt,name=Disabled,proto3" json:"Disabled,omitempty"`
+	Completed   bool                                     `protobuf:"varint,11,opt,name=Completed,proto3" json:"Completed,omitempty"`
+}
+
+func (m *Trade) Reset()         { *m = Trade{} }
+func (m *Trade) String() string { return proto.CompactTextString(m) }
+func (*Trade) ProtoMessage()    {}
+func (*Trade) Descriptor() ([]byte, []int) {
+	return fileDescriptor_102cda291ba6db83, []int{46}
+}
+func (m *Trade) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Trade) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_Trade.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *Trade) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Trade.Merge(m, src)
+}
+func (m *Trade) XXX_Size() int {
+	return m.Size()
+}
+func (m *Trade) XXX_DiscardUnknown() {
+	xxx_messageInfo_Trade.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Trade proto.InternalMessageInfo
+
+func (m *Trade) GetNodeVersion() SemVer {
+	if m != nil {
+		return m.NodeVersion
+	}
+	return SemVer{}
+}
+
+func (m *Trade) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
+
+func (m *Trade) GetCoinInputs() CoinInputList {
+	if m != nil {
+		return m.CoinInputs
+	}
+	return CoinInputList{}
+}
+
+func (m *Trade) GetItemInputs() TradeItemInputList {
+	if m != nil {
+		return m.ItemInputs
+	}
+	return TradeItemInputList{}
+}
+
+func (m *Trade) GetCoinOutputs() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.CoinOutputs
+	}
+	return nil
+}
+
+func (m *Trade) GetItemOutputs() ItemList {
+	if m != nil {
+		return m.ItemOutputs
+	}
+	return ItemList{}
+}
+
+func (m *Trade) GetExtraInfo() string {
+	if m != nil {
+		return m.ExtraInfo
+	}
+	return ""
+}
+
+func (m *Trade) GetSender() string {
+	if m != nil {
+		return m.Sender
+	}
+	return ""
+}
+
+func (m *Trade) GetFulFiller() string {
+	if m != nil {
+		return m.FulFiller
+	}
+	return ""
+}
+
+func (m *Trade) GetDisabled() bool {
+	if m != nil {
+		return m.Disabled
+	}
+	return false
+}
+
+func (m *Trade) GetCompleted() bool {
+	if m != nil {
+		return m.Completed
+	}
+	return false
+}
+
 func init() {
 	proto.RegisterType((*EntriesList)(nil), "pylons.EntriesList")
 	proto.RegisterType((*CoinInputList)(nil), "pylons.CoinInputList")
@@ -2536,105 +2893,129 @@ func init() {
 	proto.RegisterType((*TradeItemInputList)(nil), "pylons.TradeItemInputList")
 	proto.RegisterType((*LockedCoinDescribe)(nil), "pylons.LockedCoinDescribe")
 	proto.RegisterType((*ShortenRecipe)(nil), "pylons.ShortenRecipe")
+	proto.RegisterType((*Execution)(nil), "pylons.Execution")
+	proto.RegisterType((*Recipe)(nil), "pylons.Recipe")
+	proto.RegisterType((*Trade)(nil), "pylons.Trade")
 }
 
 func init() { proto.RegisterFile("pylons/types.proto", fileDescriptor_102cda291ba6db83) }
 
 var fileDescriptor_102cda291ba6db83 = []byte{
-	// 1482 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x58, 0xcf, 0x6f, 0xdb, 0xc6,
-	0x12, 0x36, 0x45, 0x49, 0xb1, 0x46, 0xb6, 0x62, 0x6f, 0x94, 0x44, 0x11, 0x02, 0x59, 0x20, 0xde,
-	0x43, 0x9c, 0x97, 0x44, 0xb4, 0xf3, 0xd2, 0x34, 0x48, 0x5b, 0x20, 0x4d, 0x14, 0xb7, 0x42, 0x9c,
-	0x1f, 0x58, 0x3b, 0x29, 0x90, 0x1b, 0x25, 0xad, 0x65, 0xc2, 0x12, 0x57, 0x20, 0xa9, 0x24, 0x3a,
-	0xf6, 0x52, 0xa0, 0x87, 0x02, 0x3d, 0xf7, 0xd2, 0x7b, 0xff, 0x8b, 0x02, 0x05, 0x9a, 0x63, 0x7a,
-	0xeb, 0xa9, 0x2d, 0x92, 0xff, 0xa1, 0x97, 0x5e, 0x8a, 0xfd, 0x41, 0x6a, 0x97, 0xa4, 0xe4, 0x3a,
-	0x3d, 0x49, 0xbb, 0xfb, 0xed, 0xee, 0x7c, 0xf3, 0xcd, 0x0c, 0x87, 0x04, 0x34, 0x9e, 0x0e, 0xa9,
-	0x17, 0xd8, 0xe1, 0x74, 0x4c, 0x82, 0xd6, 0xd8, 0xa7, 0x21, 0x45, 0x45, 0x31, 0x57, 0xaf, 0x0e,
-	0xe8, 0x80, 0xf2, 0x29, 0x9b, 0xfd, 0x13, 0xab, 0xf5, 0x0b, 0x03, 0x4a, 0x07, 0x43, 0x62, 0xf3,
-	0x51, 0x77, 0x72, 0x60, 0x3b, 0xde, 0x54, 0x2e, 0x5d, 0x94, 0x4b, 0xce, 0xd8, 0xb5, 0x1d, 0xcf,
-	0xa3, 0xa1, 0x13, 0xba, 0xd4, 0x93, 0xc7, 0xd6, 0x1b, 0x3d, 0x1a, 0x8c, 0x68, 0x60, 0x77, 0x9d,
-	0x80, 0xd8, 0x2f, 0xb6, 0xbb, 0x24, 0x74, 0xb6, 0xed, 0x1e, 0x75, 0x3d, 0xb1, 0x6e, 0xfd, 0x68,
-	0x40, 0xf9, 0xbe, 0x17, 0xfa, 0x2e, 0x09, 0x76, 0xdd, 0x20, 0x44, 0x37, 0xa0, 0x7c, 0x8f, 0xba,
-	0xde, 0xe3, 0x49, 0x38, 0x9e, 0x84, 0x41, 0xcd, 0x68, 0x9a, 0x9b, 0xe5, 0xeb, 0xa8, 0x25, 0x8c,
-	0x6b, 0xcd, 0x96, 0xb0, 0x0a, 0x63, 0xbb, 0x3a, 0x21, 0x19, 0x45, 0xbb, 0x72, 0xfa, 0xae, 0xd9,
-	0x12, 0x56, 0x61, 0x68, 0x07, 0xd6, 0xd9, 0xf0, 0x21, 0xed, 0xbb, 0x07, 0xd3, 0x68, 0xaf, 0xc9,
-	0xf7, 0xd6, 0xd4, 0xbd, 0x2a, 0x00, 0xa7, 0xb7, 0x58, 0xb7, 0x60, 0x95, 0x19, 0xd3, 0xf1, 0xc6,
-	0x93, 0x90, 0x93, 0xb8, 0x04, 0x05, 0x46, 0x31, 0x32, 0x7f, 0x5d, 0x35, 0x9f, 0xa3, 0xb0, 0x58,
-	0xb7, 0x3e, 0x80, 0x52, 0x3c, 0x87, 0x10, 0xe4, 0xd9, 0xa0, 0x66, 0x34, 0x8d, 0xcd, 0x12, 0xe6,
-	0xff, 0x51, 0x15, 0x0a, 0xf7, 0xe8, 0xc4, 0x0b, 0x6b, 0xb9, 0xa6, 0xb1, 0x69, 0x62, 0x31, 0xb0,
-	0x76, 0x00, 0x66, 0xec, 0x51, 0x05, 0x72, 0x9d, 0xb6, 0xdc, 0x95, 0xeb, 0xb4, 0xe3, 0x73, 0x72,
-	0x59, 0xe7, 0x98, 0x7c, 0x52, 0x9e, 0xd3, 0x84, 0xe2, 0x1e, 0x19, 0x3d, 0x23, 0x3e, 0x3a, 0x07,
-	0x45, 0x6f, 0x32, 0xea, 0x12, 0x5f, 0x9e, 0x23, 0x47, 0xd6, 0x06, 0x14, 0x76, 0xc9, 0x0b, 0x32,
-	0x4c, 0x00, 0xcc, 0x18, 0x70, 0x01, 0x0a, 0xf7, 0x47, 0x8e, 0x3b, 0x44, 0x6b, 0x60, 0x06, 0x61,
-	0xb4, 0x9d, 0xfd, 0xb5, 0x36, 0xa0, 0xbc, 0x33, 0xa4, 0x4e, 0xb8, 0x17, 0xfa, 0xae, 0x37, 0xc8,
-	0x00, 0x7c, 0x65, 0xc0, 0x5a, 0x9b, 0x4e, 0xba, 0x43, 0xc2, 0x1d, 0xf0, 0xc4, 0xf1, 0x9d, 0x11,
-	0x83, 0x3d, 0x20, 0xd3, 0x08, 0xf6, 0x80, 0x4c, 0x91, 0x0d, 0xcb, 0x0f, 0x5d, 0xef, 0x99, 0x33,
-	0x9c, 0x10, 0xce, 0xa9, 0x7c, 0xfd, 0x4c, 0xe4, 0x50, 0xe5, 0x7c, 0x1c, 0x83, 0xf8, 0x06, 0xe7,
-	0x95, 0xd8, 0x60, 0x2e, 0xda, 0x20, 0x41, 0xd6, 0xe7, 0x50, 0x4d, 0xda, 0xc1, 0x75, 0xdc, 0x82,
-	0xe2, 0x98, 0x0d, 0x22, 0x21, 0xe3, 0xa8, 0x48, 0xa2, 0xb1, 0xc4, 0x59, 0x5f, 0x1a, 0xb0, 0x2e,
-	0x16, 0xbf, 0x20, 0xee, 0xe0, 0x30, 0xc4, 0x8e, 0x37, 0x20, 0xe8, 0x32, 0x14, 0x76, 0xe9, 0x4b,
-	0xe9, 0xbb, 0x39, 0xd6, 0x08, 0x04, 0x83, 0x3e, 0x1d, 0x8f, 0x89, 0xbf, 0x88, 0xa9, 0x40, 0x30,
-	0x49, 0xc4, 0x25, 0x9c, 0xa4, 0x89, 0xe5, 0xc8, 0xc2, 0xba, 0x09, 0xfb, 0x4e, 0x77, 0x48, 0xd0,
-	0x27, 0xb0, 0xa2, 0x58, 0x14, 0x11, 0xba, 0xa0, 0x13, 0x52, 0x10, 0x58, 0x83, 0x5b, 0xdf, 0x19,
-	0x50, 0xda, 0xa5, 0xde, 0x60, 0x9e, 0x46, 0x97, 0x20, 0x8f, 0x9d, 0x70, 0xa1, 0x3e, 0x1c, 0x80,
-	0x6e, 0x41, 0x59, 0x31, 0x4b, 0xca, 0x73, 0x2e, 0xce, 0x36, 0x2f, 0x54, 0x56, 0xb1, 0x0a, 0x45,
-	0x35, 0x38, 0xf5, 0xc4, 0xa7, 0x03, 0xdf, 0x19, 0xd5, 0xf2, 0xfc, 0xe2, 0x68, 0x68, 0xdd, 0x86,
-	0xd5, 0xd8, 0x36, 0xae, 0xdb, 0xe5, 0x84, 0x6e, 0x71, 0x02, 0xc6, 0xb0, 0x58, 0xb0, 0x7d, 0xa8,
-	0xc4, 0x97, 0x0a, 0xb1, 0xaa, 0xaa, 0x58, 0x66, 0xa4, 0x4b, 0x55, 0xd5, 0xc5, 0x3c, 0x4e, 0x82,
-	0x5d, 0xe5, 0x54, 0x61, 0xfd, 0xed, 0x4c, 0xff, 0xa7, 0x89, 0x67, 0x39, 0xff, 0x36, 0xac, 0x09,
-	0x1f, 0x2e, 0x4c, 0x93, 0x2a, 0x14, 0x66, 0x39, 0x52, 0xc2, 0x62, 0x60, 0xb5, 0xa1, 0x9a, 0xdc,
-	0xcb, 0x5d, 0x74, 0x15, 0xf2, 0xec, 0x37, 0x19, 0xd8, 0x49, 0x2c, 0xe6, 0x28, 0xeb, 0x33, 0x58,
-	0xdd, 0x21, 0x6a, 0x96, 0xd6, 0x95, 0x9c, 0x14, 0x7e, 0x9a, 0xa5, 0x5f, 0x5d, 0x49, 0xbf, 0x9c,
-	0x5c, 0x8b, 0x32, 0xed, 0x39, 0x54, 0x98, 0x06, 0x0b, 0x89, 0xd4, 0x13, 0xf9, 0x3e, 0xef, 0x6c,
-	0x33, 0x71, 0xf6, 0x1d, 0x40, 0xfa, 0xd9, 0x9c, 0xe8, 0xff, 0x34, 0xa2, 0xe7, 0xd4, 0x48, 0x48,
-	0xd1, 0xfc, 0xd3, 0x80, 0x12, 0x2b, 0xef, 0xa2, 0x1e, 0x27, 0xeb, 0xea, 0x4d, 0x38, 0x25, 0xd2,
-	0x24, 0x90, 0x61, 0x7e, 0x71, 0x5e, 0x39, 0x60, 0x87, 0xe1, 0x08, 0x8c, 0xb6, 0x58, 0x40, 0x79,
-	0x83, 0x40, 0x06, 0x7b, 0x3d, 0xdb, 0x04, 0xbe, 0x47, 0x00, 0xd9, 0x4d, 0x42, 0x88, 0x80, 0x87,
-	0xba, 0x72, 0x53, 0x96, 0x96, 0x38, 0x02, 0xa3, 0x0f, 0xa1, 0xbc, 0xef, 0x3b, 0x5e, 0x70, 0x40,
-	0xfc, 0x1d, 0x42, 0x6a, 0x05, 0xbe, 0xf7, 0x6c, 0x9c, 0x8c, 0xaa, 0x82, 0x58, 0x45, 0x5a, 0x37,
-	0x61, 0x35, 0xe6, 0xcd, 0xbd, 0xf6, 0x5f, 0xcd, 0x6b, 0xeb, 0xea, 0xd3, 0x50, 0x3c, 0xc0, 0x84,
-	0xc3, 0xee, 0xc3, 0x69, 0x11, 0xa9, 0xa4, 0x1f, 0x3d, 0x54, 0xeb, 0xb0, 0xcc, 0x9e, 0xe7, 0xd3,
-	0x4e, 0x5b, 0x04, 0x79, 0x09, 0xc7, 0x63, 0x25, 0x5d, 0x44, 0x8c, 0x46, 0xe9, 0x72, 0x17, 0xce,
-	0x24, 0x8e, 0xe1, 0x46, 0x5c, 0xd1, 0x8c, 0x38, 0x1f, 0x19, 0x91, 0x80, 0x4a, 0x53, 0x5e, 0x41,
-	0x59, 0xb8, 0x41, 0x84, 0x55, 0x54, 0x90, 0x8c, 0xe3, 0x0a, 0x92, 0x8c, 0xbf, 0x5c, 0x46, 0x22,
-	0x99, 0x4a, 0x22, 0x2d, 0x2c, 0x3f, 0xa7, 0x95, 0x9b, 0x65, 0x03, 0xa0, 0x5a, 0x7e, 0x46, 0x57,
-	0x4f, 0x8d, 0xb8, 0xef, 0x0d, 0x28, 0x8b, 0x38, 0xf9, 0xd7, 0x66, 0x7f, 0x94, 0x55, 0x59, 0x33,
-	0x0b, 0xfc, 0x09, 0x8b, 0xeb, 0x69, 0xc5, 0xc0, 0x45, 0xec, 0x14, 0x98, 0x64, 0xf7, 0x8b, 0x01,
-	0x30, 0x6b, 0xb8, 0x52, 0x09, 0xb5, 0x9d, 0x4c, 0xa8, 0xf3, 0x19, 0x47, 0xe9, 0xb9, 0x74, 0x45,
-	0xcf, 0xa5, 0xb3, 0xa9, 0xc2, 0xae, 0xa6, 0xd1, 0x76, 0x32, 0x8d, 0xce, 0x67, 0x08, 0xa1, 0x67,
-	0x50, 0x33, 0x9d, 0x41, 0xa6, 0x9e, 0x2a, 0x7f, 0x19, 0xb0, 0x96, 0x6c, 0x01, 0x53, 0xcc, 0x2c,
-	0x58, 0x99, 0xa5, 0x0a, 0x39, 0x90, 0x32, 0x69, 0x73, 0x2a, 0x7b, 0xf3, 0xa4, 0xec, 0xf3, 0x27,
-	0x63, 0x5f, 0x78, 0x3f, 0xf6, 0xc5, 0x34, 0xfb, 0x9f, 0x35, 0xf6, 0xfc, 0x88, 0x40, 0x65, 0x62,
-	0x9c, 0x94, 0x49, 0xee, 0x64, 0x4c, 0xcc, 0xf7, 0x63, 0x92, 0x4f, 0x33, 0xf9, 0xc9, 0x84, 0x3c,
-	0x63, 0x82, 0xb6, 0xa0, 0xfc, 0x88, 0xf6, 0xc9, 0x33, 0xe2, 0x07, 0x2e, 0xf5, 0x24, 0x83, 0x4a,
-	0x7c, 0x03, 0xef, 0x8f, 0xb1, 0x0a, 0x91, 0x6a, 0xe7, 0x62, 0xb5, 0x6f, 0x24, 0x95, 0xac, 0xeb,
-	0xfc, 0x1f, 0x90, 0x29, 0xaf, 0x21, 0xba, 0x0b, 0x5a, 0xba, 0x98, 0x35, 0xd5, 0x05, 0xda, 0x0e,
-	0xe9, 0x85, 0x1b, 0x49, 0x3d, 0xeb, 0xba, 0x17, 0xf4, 0x5b, 0x22, 0x47, 0x34, 0xd8, 0xab, 0x02,
-	0x3d, 0xea, 0x52, 0x7a, 0xd4, 0x69, 0x73, 0x45, 0x4b, 0x58, 0x99, 0x61, 0x25, 0x79, 0x8f, 0x78,
-	0x7d, 0xe2, 0xd7, 0x4e, 0x89, 0x92, 0x2c, 0x46, 0xe8, 0x3f, 0xb0, 0xfa, 0xf8, 0xa5, 0x47, 0x7c,
-	0x4c, 0x7a, 0xee, 0x98, 0x74, 0xda, 0xb5, 0x65, 0xbe, 0xac, 0x4f, 0xb2, 0x38, 0xe7, 0x13, 0xfb,
-	0xbe, 0xd3, 0x67, 0xa0, 0x92, 0x88, 0x73, 0x75, 0x8e, 0x3d, 0x10, 0xd8, 0x5f, 0x5e, 0x94, 0xa0,
-	0x69, 0x6c, 0x2e, 0xe3, 0x78, 0xcc, 0xac, 0xdb, 0x75, 0x82, 0xf0, 0xe9, 0xb8, 0xcf, 0x8a, 0x5e,
-	0x99, 0xab, 0xa4, 0xcc, 0x24, 0x65, 0x5c, 0x49, 0xcb, 0x78, 0x15, 0x96, 0x99, 0x8a, 0xbc, 0x2e,
-	0x35, 0xb5, 0xba, 0xb4, 0xa2, 0x3e, 0xb4, 0x64, 0x41, 0xba, 0x03, 0x28, 0x2d, 0xc9, 0xbc, 0x16,
-	0x41, 0x47, 0xca, 0x13, 0x1e, 0x42, 0x45, 0x9f, 0xcf, 0x68, 0x60, 0x2e, 0xab, 0x9d, 0xd8, 0xbc,
-	0x1e, 0x5e, 0xf4, 0x2c, 0x1f, 0xc3, 0x5a, 0x52, 0x6f, 0xb4, 0xa9, 0x99, 0x53, 0xcd, 0x8a, 0x0b,
-	0x69, 0xcc, 0x4d, 0x58, 0x51, 0x67, 0x8f, 0x6b, 0x0a, 0xcd, 0xe8, 0xd6, 0x3b, 0x80, 0xd2, 0x31,
-	0x33, 0xcf, 0x0d, 0x3a, 0x52, 0xde, 0x7c, 0x0b, 0x2a, 0xfa, 0xfc, 0x3f, 0x6e, 0x48, 0x1d, 0xa8,
-	0x88, 0xc8, 0x88, 0xfb, 0x2c, 0x5b, 0x69, 0xba, 0x64, 0xfa, 0x65, 0x34, 0x1c, 0x4a, 0x63, 0xa6,
-	0xc7, 0x74, 0x2e, 0x19, 0xd3, 0x8c, 0x9e, 0x7e, 0xc5, 0x22, 0x7a, 0x3a, 0x52, 0xd2, 0xfb, 0xda,
-	0x60, 0xbd, 0x64, 0xef, 0x88, 0xf4, 0xd9, 0xdb, 0x73, 0x9b, 0x04, 0x3d, 0xdf, 0xed, 0x92, 0x54,
-	0x99, 0xef, 0x41, 0xf1, 0xd3, 0x91, 0x7c, 0x3d, 0x17, 0xaf, 0x53, 0xe2, 0x6b, 0x47, 0xab, 0xeb,
-	0x04, 0xa4, 0x25, 0xbf, 0x76, 0xf0, 0xb7, 0xfe, 0xbb, 0x5b, 0xaf, 0x7f, 0xdb, 0x58, 0xfa, 0xe1,
-	0xf7, 0x8d, 0xcd, 0x81, 0x1b, 0x1e, 0x4e, 0xba, 0xad, 0x1e, 0x1d, 0xd9, 0xf2, 0xd3, 0x88, 0xf8,
-	0xb9, 0x16, 0xf4, 0x8f, 0xe4, 0x07, 0x19, 0xb6, 0x21, 0xc0, 0xf2, 0x68, 0xeb, 0x1b, 0x03, 0x56,
-	0xf7, 0x0e, 0xa9, 0x1f, 0x12, 0x4f, 0xe4, 0x5d, 0xca, 0x8c, 0x63, 0xfc, 0x81, 0x10, 0xe4, 0x1f,
-	0x39, 0xa3, 0xa8, 0x9f, 0xe1, 0xff, 0x59, 0x66, 0x09, 0x5a, 0xe3, 0x90, 0x55, 0x3d, 0xf1, 0xd0,
-	0x57, 0xa7, 0x94, 0xca, 0x50, 0x50, 0x2b, 0xc3, 0xdd, 0x9d, 0xd7, 0x6f, 0x1b, 0xc6, 0x9b, 0xb7,
-	0x0d, 0xe3, 0x8f, 0xb7, 0x0d, 0xe3, 0xdb, 0x77, 0x8d, 0xa5, 0x37, 0xef, 0x1a, 0x4b, 0xbf, 0xbe,
-	0x6b, 0x2c, 0x3d, 0xbf, 0xaa, 0x70, 0x7b, 0xc2, 0xbd, 0x7b, 0x2d, 0x24, 0xbd, 0x43, 0x5b, 0x7e,
-	0x6d, 0x7a, 0x65, 0xab, 0x9f, 0x9d, 0xba, 0x45, 0xfe, 0x01, 0xe8, 0xff, 0x7f, 0x07, 0x00, 0x00,
-	0xff, 0xff, 0xf0, 0x9f, 0x3b, 0xd4, 0x8d, 0x12, 0x00, 0x00,
+	// 1815 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x59, 0xdd, 0x6e, 0x13, 0xc7,
+	0x17, 0xcf, 0x7a, 0x6d, 0xc7, 0x3e, 0x4e, 0x42, 0xb2, 0x18, 0x30, 0xfe, 0x47, 0x4e, 0xb4, 0x42,
+	0xfc, 0x23, 0xb5, 0xb1, 0x49, 0x80, 0x80, 0x80, 0x56, 0xe0, 0x38, 0x2e, 0x2e, 0xe1, 0x43, 0x9b,
+	0x40, 0x2b, 0xee, 0xd6, 0xf6, 0xc4, 0x59, 0xc5, 0xde, 0xb1, 0x76, 0xd7, 0x80, 0x1f, 0xa0, 0x52,
+	0x7b, 0x41, 0x55, 0xb5, 0xef, 0xd0, 0x8b, 0xf6, 0x29, 0x7a, 0xc7, 0x25, 0x97, 0x6d, 0x55, 0xd1,
+	0x8a, 0xdc, 0xf6, 0x21, 0xaa, 0xf9, 0xd8, 0xf5, 0xcc, 0xee, 0xda, 0x49, 0x43, 0x7a, 0x15, 0xcf,
+	0xcc, 0x39, 0x33, 0xe7, 0x9c, 0xdf, 0xf9, 0x9d, 0x39, 0x3b, 0x01, 0xad, 0x3f, 0xec, 0x62, 0xdb,
+	0xad, 0x78, 0xc3, 0x3e, 0x72, 0xcb, 0x7d, 0x07, 0x7b, 0x58, 0x4b, 0xb3, 0xb9, 0x62, 0xbe, 0x83,
+	0x3b, 0x98, 0x4e, 0x55, 0xc8, 0x2f, 0xb6, 0x5a, 0xbc, 0xd8, 0xc1, 0xb8, 0xd3, 0x45, 0x15, 0x3a,
+	0x6a, 0x0e, 0xf6, 0x2a, 0xa6, 0x3d, 0xe4, 0x4b, 0x8b, 0x7c, 0xc9, 0xec, 0x5b, 0x15, 0xd3, 0xb6,
+	0xb1, 0x67, 0x7a, 0x16, 0xb6, 0xf9, 0xb6, 0xc5, 0x52, 0x0b, 0xbb, 0x3d, 0xec, 0x56, 0x9a, 0xa6,
+	0x8b, 0x2a, 0x2f, 0xd6, 0x9a, 0xc8, 0x33, 0xd7, 0x2a, 0x2d, 0x6c, 0xd9, 0x6c, 0x5d, 0xff, 0x45,
+	0x81, 0xdc, 0x96, 0xed, 0x39, 0x16, 0x72, 0xb7, 0x2d, 0xd7, 0xd3, 0xae, 0x41, 0x6e, 0x13, 0x5b,
+	0xf6, 0xe3, 0x81, 0xd7, 0x1f, 0x78, 0x6e, 0x41, 0x59, 0x56, 0x57, 0x72, 0xeb, 0x5a, 0x99, 0x19,
+	0x57, 0x1e, 0x2d, 0x19, 0xa2, 0x18, 0xd1, 0x6a, 0x78, 0xa8, 0xe7, 0x6b, 0x25, 0x64, 0xad, 0xd1,
+	0x92, 0x21, 0x8a, 0x69, 0x75, 0x58, 0x20, 0xc3, 0x87, 0xb8, 0x6d, 0xed, 0x0d, 0x7d, 0x5d, 0x95,
+	0xea, 0x16, 0x44, 0x5d, 0x51, 0xc0, 0x88, 0xaa, 0xe8, 0x37, 0x61, 0x96, 0x18, 0xd3, 0xb0, 0xfb,
+	0x03, 0x8f, 0x3a, 0xf1, 0x7f, 0x48, 0x11, 0x17, 0x7d, 0xf3, 0x17, 0x44, 0xf3, 0xa9, 0x94, 0xc1,
+	0xd6, 0xf5, 0xeb, 0x90, 0x0d, 0xe6, 0x34, 0x0d, 0x92, 0x64, 0x50, 0x50, 0x96, 0x95, 0x95, 0xac,
+	0x41, 0x7f, 0x6b, 0x79, 0x48, 0x6d, 0xe2, 0x81, 0xed, 0x15, 0x12, 0xcb, 0xca, 0x8a, 0x6a, 0xb0,
+	0x81, 0x5e, 0x07, 0x18, 0x79, 0xaf, 0xcd, 0x41, 0xa2, 0x51, 0xe3, 0x5a, 0x89, 0x46, 0x2d, 0xd8,
+	0x27, 0x11, 0xb7, 0x8f, 0x4a, 0x27, 0xf9, 0x3e, 0xcb, 0x90, 0xde, 0x41, 0xbd, 0x67, 0xc8, 0xd1,
+	0xce, 0x43, 0xda, 0x1e, 0xf4, 0x9a, 0xc8, 0xe1, 0xfb, 0xf0, 0x91, 0xbe, 0x04, 0xa9, 0x6d, 0xf4,
+	0x02, 0x75, 0x43, 0x02, 0x6a, 0x20, 0x70, 0x11, 0x52, 0x5b, 0x3d, 0xd3, 0xea, 0x6a, 0xf3, 0xa0,
+	0xba, 0x9e, 0xaf, 0x4e, 0x7e, 0xea, 0x4b, 0x90, 0xab, 0x77, 0xb1, 0xe9, 0xed, 0x78, 0x8e, 0x65,
+	0x77, 0x62, 0x04, 0xbe, 0x57, 0x60, 0xbe, 0x86, 0x07, 0xcd, 0x2e, 0xa2, 0x01, 0x78, 0x62, 0x3a,
+	0x66, 0x8f, 0x88, 0x3d, 0x40, 0x43, 0x5f, 0xec, 0x01, 0x1a, 0x6a, 0xd7, 0x21, 0xf3, 0xd0, 0xb2,
+	0x9f, 0x99, 0xdd, 0x01, 0xa2, 0x3e, 0xe5, 0xd6, 0xcf, 0xfa, 0x01, 0x15, 0xf6, 0xaf, 0x26, 0xdf,
+	0xbc, 0x5b, 0x9a, 0x32, 0x02, 0x51, 0xaa, 0x66, 0xbe, 0x62, 0x6a, 0xea, 0xd1, 0x6a, 0x5c, 0x54,
+	0x7f, 0x04, 0xf9, 0xb0, 0x4d, 0x14, 0xd3, 0x0d, 0x48, 0xf7, 0xc9, 0xc0, 0x07, 0x35, 0xc8, 0x90,
+	0xb0, 0x34, 0xdf, 0x91, 0x4b, 0xeb, 0xaf, 0x15, 0x58, 0x60, 0x22, 0x5f, 0x20, 0xab, 0xb3, 0xef,
+	0x19, 0xa6, 0xdd, 0x41, 0x5a, 0x05, 0x52, 0xdb, 0xf8, 0x25, 0x8f, 0xe6, 0x44, 0xcb, 0x98, 0x1c,
+	0x51, 0x78, 0xda, 0xef, 0x23, 0xe7, 0xe8, 0x08, 0x30, 0x39, 0x02, 0x18, 0x3b, 0x90, 0x3a, 0xaf,
+	0x1a, 0x7c, 0xa4, 0x7f, 0x29, 0x9b, 0xb3, 0x6b, 0x36, 0xbb, 0x48, 0xdb, 0x84, 0x19, 0xc1, 0x3a,
+	0xdf, 0xc5, 0x8b, 0xb2, 0x8b, 0x82, 0x04, 0x3f, 0x4a, 0x52, 0xd2, 0x7f, 0x54, 0x20, 0xbb, 0x8d,
+	0xed, 0xce, 0x38, 0x1c, 0x57, 0x21, 0x69, 0x98, 0xde, 0x31, 0x30, 0xa4, 0x62, 0xda, 0xa7, 0x90,
+	0x13, 0x4c, 0xe4, 0x10, 0x9e, 0x0f, 0x78, 0x69, 0x7b, 0xc2, 0x2a, 0x57, 0x14, 0x15, 0xb4, 0x02,
+	0x4c, 0x3f, 0x71, 0x70, 0xc7, 0x31, 0x7b, 0x85, 0x24, 0x35, 0xc2, 0x1f, 0xea, 0x77, 0x61, 0x36,
+	0xb0, 0x93, 0x62, 0x5b, 0x09, 0x61, 0x1b, 0x10, 0x36, 0x10, 0x0b, 0x81, 0xba, 0x0b, 0x73, 0x81,
+	0x01, 0x0c, 0xd0, 0xbc, 0x08, 0xa8, 0xea, 0xa3, 0x96, 0x17, 0x51, 0x53, 0x8f, 0x82, 0xc6, 0x10,
+	0x76, 0x65, 0x3e, 0xdc, 0x8d, 0xc5, 0x25, 0x1a, 0x84, 0xf1, 0xa0, 0xdc, 0x82, 0x79, 0x16, 0xdb,
+	0x89, 0x14, 0xcb, 0x43, 0x6a, 0xc4, 0xaf, 0xac, 0xc1, 0x06, 0xfa, 0xe7, 0x90, 0x0f, 0xeb, 0xd2,
+	0x70, 0xad, 0x43, 0x92, 0xfc, 0x0d, 0x13, 0x21, 0x2c, 0xeb, 0xa3, 0x49, 0x64, 0xf5, 0xcf, 0x60,
+	0xb6, 0x8e, 0x44, 0x9e, 0x17, 0x05, 0x56, 0xb3, 0x98, 0x8d, 0xa8, 0x5b, 0x14, 0xa8, 0x9b, 0xe0,
+	0x6b, 0x3e, 0x3f, 0x9f, 0xc3, 0x1c, 0x41, 0x65, 0xa2, 0x3b, 0xc5, 0x50, 0xc5, 0x18, 0xb7, 0xb7,
+	0x1a, 0xda, 0xbb, 0x0e, 0x9a, 0xbc, 0x37, 0x75, 0xf7, 0x8a, 0xe4, 0xee, 0x79, 0x31, 0x37, 0xc6,
+	0x38, 0xfb, 0x6d, 0x02, 0xb2, 0xe4, 0x9a, 0x60, 0x75, 0x3d, 0x5c, 0x9f, 0xef, 0xc0, 0x34, 0x23,
+	0x94, 0xcb, 0xa9, 0xb0, 0x38, 0xae, 0x94, 0x90, 0xcd, 0xf8, 0xc6, 0xbe, 0x8a, 0xb6, 0x41, 0x12,
+	0xcd, 0xee, 0xb8, 0x9c, 0x10, 0xc5, 0x78, 0x73, 0x04, 0x4d, 0x26, 0x4e, 0x4e, 0x65, 0x00, 0xb9,
+	0x94, 0x0e, 0xc2, 0xa9, 0x71, 0x18, 0xfb, 0xa7, 0x72, 0x15, 0xed, 0x13, 0xc8, 0xed, 0x3a, 0xa6,
+	0xed, 0xee, 0x21, 0xa7, 0x8e, 0x50, 0x21, 0x45, 0x77, 0x38, 0x17, 0x50, 0x18, 0x45, 0xeb, 0x9f,
+	0x28, 0xaf, 0xdf, 0x81, 0xd9, 0x20, 0x1e, 0x34, 0xa6, 0x1f, 0x49, 0x31, 0x5d, 0x10, 0x6f, 0x5b,
+	0x2a, 0x24, 0x85, 0x73, 0x0b, 0xce, 0xb0, 0x9c, 0x46, 0x6d, 0xff, 0xea, 0x2e, 0x42, 0x86, 0x74,
+	0x0d, 0xc3, 0x46, 0x8d, 0x91, 0x22, 0x6b, 0x04, 0x63, 0x81, 0x5e, 0x2c, 0x9b, 0x7d, 0x7a, 0xdd,
+	0x87, 0xb3, 0xa1, 0x6d, 0xa8, 0x29, 0x6b, 0x92, 0x29, 0x17, 0x7c, 0x53, 0x42, 0xa2, 0x92, 0x41,
+	0x3f, 0x28, 0x90, 0x63, 0x91, 0x61, 0x19, 0x58, 0xe5, 0x95, 0x8d, 0x62, 0x5c, 0x2d, 0x13, 0xc9,
+	0xdf, 0xdf, 0x2d, 0x5d, 0xee, 0x58, 0xde, 0xfe, 0xa0, 0x59, 0x6e, 0xe1, 0x5e, 0x85, 0x77, 0x41,
+	0xec, 0xcf, 0xaa, 0xdb, 0x3e, 0xe0, 0xbd, 0x57, 0x0d, 0xb5, 0x78, 0xb9, 0xe3, 0x59, 0x9c, 0x88,
+	0x21, 0xa5, 0x2a, 0x90, 0x72, 0x62, 0x59, 0x3b, 0x23, 0x18, 0x45, 0x7d, 0x5b, 0x95, 0x7c, 0x3b,
+	0x2b, 0x23, 0x1e, 0xcd, 0xdb, 0x9f, 0x15, 0xc8, 0xb1, 0x3c, 0x63, 0x7e, 0xad, 0x0a, 0x7e, 0x1d,
+	0xa3, 0x62, 0x47, 0x5d, 0xb8, 0x17, 0x57, 0xc3, 0x63, 0xaf, 0x95, 0x13, 0x95, 0xf1, 0x33, 0x82,
+	0xb1, 0x93, 0xfc, 0x15, 0xc4, 0x24, 0x7f, 0x0f, 0x15, 0x80, 0x51, 0x43, 0x18, 0x21, 0xea, 0x8d,
+	0x30, 0x51, 0x2f, 0xc4, 0x6c, 0x18, 0xc7, 0xd1, 0x35, 0x99, 0xa3, 0xe7, 0x22, 0xd7, 0x49, 0x94,
+	0x9e, 0x37, 0xc2, 0xf4, 0xbc, 0x10, 0x03, 0x56, 0x1c, 0x33, 0x97, 0xa3, 0xcc, 0x54, 0x65, 0xf2,
+	0xbd, 0x4e, 0xc0, 0x7c, 0xb8, 0x69, 0x8d, 0xf8, 0xaa, 0xc3, 0x4c, 0x40, 0x3e, 0x03, 0xed, 0x71,
+	0x10, 0xa5, 0x39, 0x31, 0x1e, 0xea, 0xc9, 0xe2, 0x91, 0x3c, 0x49, 0x3c, 0x52, 0x1f, 0x12, 0x8f,
+	0x74, 0x34, 0x1e, 0xbf, 0x29, 0x62, 0x3c, 0xe8, 0x46, 0xae, 0xe8, 0x9b, 0x72, 0x32, 0xdf, 0x12,
+	0x27, 0xf1, 0x4d, 0xfd, 0x10, 0xdf, 0x92, 0x51, 0xdf, 0xfe, 0x50, 0x21, 0x49, 0x7c, 0xd3, 0x36,
+	0x20, 0xf7, 0x08, 0xb7, 0xd1, 0x33, 0xe4, 0xb8, 0x16, 0xb6, 0xb9, 0x4f, 0x73, 0xc1, 0x39, 0xb4,
+	0xeb, 0xf7, 0xe9, 0x26, 0x08, 0xf2, 0xbc, 0x48, 0x04, 0x79, 0x71, 0x2b, 0x8c, 0x79, 0x51, 0x8e,
+	0xcb, 0x03, 0x34, 0xa4, 0x75, 0x29, 0x2e, 0x34, 0xd7, 0x64, 0xd8, 0x0b, 0x62, 0x68, 0x62, 0xf4,
+	0x78, 0x74, 0x6e, 0x85, 0x91, 0x2f, 0xca, 0xd1, 0x89, 0x3b, 0xd1, 0x0f, 0x50, 0x89, 0x7c, 0x18,
+	0xe1, 0x83, 0x26, 0xc6, 0x07, 0x8d, 0x1a, 0xc5, 0x3e, 0x6b, 0x08, 0x33, 0xe4, 0x6a, 0xd8, 0x41,
+	0x76, 0x1b, 0x39, 0x85, 0x69, 0x76, 0x35, 0xb0, 0x91, 0x76, 0x09, 0x66, 0x1f, 0xbf, 0xb4, 0x91,
+	0x63, 0xa0, 0x96, 0xd5, 0x47, 0x8d, 0x5a, 0x21, 0x43, 0x97, 0xe5, 0x49, 0xc2, 0x11, 0x3a, 0xb1,
+	0xeb, 0x98, 0x6d, 0x22, 0x94, 0x65, 0x1c, 0x11, 0xe7, 0xc8, 0xc5, 0x44, 0x7e, 0xd2, 0x72, 0x07,
+	0xcb, 0xca, 0x4a, 0xc6, 0x08, 0xc6, 0xc4, 0xba, 0x6d, 0xd3, 0xf5, 0x9e, 0xf6, 0xdb, 0xa4, 0xa8,
+	0xe6, 0x28, 0x7a, 0xc2, 0x4c, 0x18, 0xde, 0x99, 0x28, 0xbc, 0xeb, 0x90, 0x21, 0xe8, 0xd2, 0x5a,
+	0x77, 0x59, 0xaa, 0x75, 0x33, 0xe2, 0x15, 0x2a, 0x15, 0xb9, 0x3a, 0x68, 0x51, 0xa8, 0xc6, 0x35,
+	0x35, 0xb2, 0xa4, 0xb4, 0xcf, 0x0e, 0xcc, 0xc9, 0xab, 0x31, 0x8d, 0x57, 0x45, 0xec, 0x23, 0x27,
+	0x7f, 0xa5, 0xb0, 0x8e, 0xab, 0x0a, 0xf3, 0xe1, 0x6c, 0xd0, 0xca, 0x92, 0x69, 0xf9, 0xb8, 0xac,
+	0x91, 0x0c, 0xdb, 0x80, 0x19, 0x71, 0xed, 0xa8, 0xf6, 0x56, 0xf5, 0xcf, 0xae, 0x83, 0x16, 0xcd,
+	0xa8, 0x71, 0x81, 0x91, 0x25, 0xa5, 0xf3, 0x6f, 0xc2, 0x9c, 0xbc, 0x7a, 0xec, 0x06, 0xbb, 0x03,
+	0x73, 0x2c, 0x6f, 0x82, 0x5e, 0xf1, 0xba, 0xd0, 0x38, 0x72, 0xd2, 0x8e, 0x6d, 0x8e, 0x84, 0x16,
+	0x53, 0xce, 0xfb, 0x44, 0x38, 0xef, 0x89, 0xab, 0xf2, 0x41, 0x93, 0x5c, 0x95, 0x25, 0x25, 0x57,
+	0xbf, 0x51, 0x48, 0x87, 0xdc, 0x3a, 0x40, 0xed, 0x4d, 0x6c, 0xd9, 0x35, 0xe4, 0xb6, 0x1c, 0xab,
+	0x89, 0x22, 0x97, 0x49, 0x0b, 0xd2, 0xf7, 0x7a, 0xfc, 0xd9, 0x82, 0x7d, 0x48, 0xb2, 0xc6, 0xa7,
+	0xdc, 0x34, 0x5d, 0x54, 0xe6, 0xaf, 0x40, 0xf4, 0x35, 0xa4, 0x7a, 0x85, 0xec, 0xfe, 0xd3, 0x9f,
+	0x4b, 0x2b, 0xc7, 0x68, 0x96, 0x88, 0x82, 0x6b, 0xf0, 0xad, 0xc9, 0x87, 0xf5, 0xec, 0xce, 0x3e,
+	0x76, 0x3c, 0x64, 0x33, 0x86, 0x46, 0xcc, 0x38, 0x22, 0x2a, 0x9a, 0x06, 0xc9, 0x47, 0x66, 0xcf,
+	0xef, 0xaf, 0xe8, 0x6f, 0xc2, 0x41, 0xe6, 0x56, 0xdf, 0x23, 0x75, 0x93, 0xb5, 0x1c, 0xe2, 0x94,
+	0x50, 0x43, 0x52, 0x62, 0x0d, 0xd1, 0xbf, 0x56, 0x21, 0xbb, 0xf5, 0x0a, 0xb5, 0x06, 0x54, 0xea,
+	0xb4, 0xea, 0x6f, 0x11, 0x32, 0x41, 0x51, 0x62, 0x76, 0x06, 0xe3, 0x90, 0x7f, 0xc9, 0x88, 0x7f,
+	0x07, 0xec, 0x99, 0x88, 0xc2, 0x48, 0x8a, 0xe9, 0xa9, 0x43, 0x21, 0x6c, 0xaf, 0xad, 0xb3, 0x56,
+	0x8a, 0x1f, 0x96, 0x1e, 0x5b, 0x94, 0x04, 0x29, 0x12, 0xec, 0x6a, 0x17, 0xb7, 0x0e, 0xee, 0xb3,
+	0x76, 0x7d, 0x9a, 0x15, 0x3c, 0x61, 0x4a, 0x08, 0x76, 0x46, 0x2a, 0xd8, 0x8b, 0x90, 0xdd, 0xc4,
+	0xbd, 0x7e, 0x17, 0x79, 0xa8, 0x4d, 0xeb, 0x70, 0xc6, 0x18, 0x4d, 0xe8, 0x7f, 0xab, 0x90, 0xe6,
+	0x39, 0x71, 0x5a, 0x38, 0xc8, 0xb1, 0x56, 0xc7, 0xe6, 0x52, 0x52, 0xc8, 0xa5, 0xdb, 0xa1, 0xf8,
+	0x4b, 0xfd, 0x81, 0xf4, 0x62, 0xe8, 0xc7, 0x46, 0x88, 0xe7, 0xed, 0x50, 0x3c, 0x25, 0x65, 0x89,
+	0xc7, 0x31, 0x81, 0xbd, 0x0a, 0xd3, 0xfc, 0x51, 0x95, 0x06, 0x55, 0xa8, 0xc4, 0xc2, 0x5b, 0xab,
+	0x7f, 0x79, 0xf2, 0x29, 0xed, 0x36, 0x4c, 0xfb, 0x8f, 0xa0, 0x19, 0xaa, 0xf4, 0xbf, 0x31, 0xdf,
+	0x42, 0xa2, 0xb2, 0xff, 0x41, 0x16, 0xe2, 0x4d, 0x36, 0xca, 0x9b, 0x4b, 0x30, 0x4b, 0x91, 0x6d,
+	0xd8, 0x1e, 0x72, 0x5e, 0x98, 0x5d, 0x7a, 0x3d, 0xaa, 0x86, 0x3c, 0x29, 0x00, 0x9e, 0x93, 0x00,
+	0x2f, 0x42, 0xa6, 0x66, 0xb9, 0xe4, 0x1a, 0x6d, 0xd3, 0x8b, 0x31, 0x63, 0x04, 0x63, 0xfd, 0xab,
+	0x24, 0xa4, 0x68, 0xd1, 0x3a, 0x35, 0xb4, 0x65, 0xe4, 0xd4, 0x7f, 0x87, 0xdc, 0x5d, 0x09, 0xb9,
+	0xa4, 0xdc, 0xc3, 0x44, 0xcb, 0x70, 0x0c, 0x7c, 0x3d, 0xf9, 0x11, 0xfc, 0x3f, 0x60, 0xae, 0xf4,
+	0x7a, 0x7e, 0x53, 0x7e, 0x3d, 0x67, 0xb9, 0x36, 0x2f, 0xe6, 0x9a, 0x60, 0xa7, 0xf4, 0x82, 0xbe,
+	0x48, 0x4a, 0x9e, 0xe7, 0x98, 0x0d, 0x7b, 0x0f, 0xf3, 0x96, 0x6a, 0x34, 0x31, 0x89, 0xbc, 0xf5,
+	0x41, 0xb7, 0x6e, 0x75, 0xbb, 0xc8, 0xe1, 0x99, 0x32, 0x9a, 0x90, 0x90, 0x06, 0x19, 0x69, 0x99,
+	0xf6, 0xb9, 0x10, 0xed, 0xab, 0xf5, 0x37, 0xef, 0x4b, 0xca, 0xdb, 0xf7, 0x25, 0xe5, 0xaf, 0xf7,
+	0x25, 0xe5, 0xbb, 0xc3, 0xd2, 0xd4, 0xdb, 0xc3, 0xd2, 0xd4, 0xaf, 0x87, 0xa5, 0xa9, 0xe7, 0x1f,
+	0x0b, 0x81, 0x79, 0x42, 0xdd, 0x5a, 0xf5, 0x50, 0x6b, 0xbf, 0xc2, 0xff, 0x0f, 0xf2, 0xaa, 0x22,
+	0xfe, 0x43, 0xa4, 0x99, 0xa6, 0xff, 0x9a, 0xb8, 0xfa, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x9a,
+	0x4d, 0xd1, 0x05, 0x27, 0x19, 0x00, 0x00,
 }
 
 func (m *EntriesList) Marshal() (dAtA []byte, err error) {
@@ -2956,30 +3337,26 @@ func (m *DoubleInputParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.MaxValue != nil {
-		{
-			size, err := m.MaxValue.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.MaxValue.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.MinValue != nil {
-		{
-			size, err := m.MinValue.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.MinValue.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x12
 	if len(m.Key) > 0 {
 		i -= len(m.Key)
 		copy(dAtA[i:], m.Key)
@@ -3052,30 +3429,26 @@ func (m *DoubleWeightRange) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x18
 	}
-	if m.Upper != nil {
-		{
-			size, err := m.Upper.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Upper.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Lower != nil {
-		{
-			size, err := m.Lower.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.Lower.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -3143,30 +3516,26 @@ func (m *LongParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.WeightTable != nil {
-		{
-			size, err := m.WeightTable.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.WeightTable.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Rate != nil {
-		{
-			size, err := m.Rate.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.Rate.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x12
 	if len(m.Key) > 0 {
 		i -= len(m.Key)
 		copy(dAtA[i:], m.Key)
@@ -3493,54 +3862,46 @@ func (m *ItemInput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.TransferFee != nil {
-		{
-			size, err := m.TransferFee.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.TransferFee.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x2a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Strings != nil {
-		{
-			size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x2a
+	{
+		size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x22
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Longs != nil {
-		{
-			size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x22
+	{
+		size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Doubles != nil {
-		{
-			size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x12
 	if len(m.ID) > 0 {
 		i -= len(m.ID)
 		copy(dAtA[i:], m.ID)
@@ -3705,18 +4066,16 @@ func (m *StringParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if m.Rate != nil {
-		{
-			size, err := m.Rate.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size := m.Rate.Size()
+		i -= size
+		if _, err := m.Rate.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -3784,18 +4143,16 @@ func (m *DoubleParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x22
 	}
-	if m.WeightTable != nil {
-		{
-			size, err := m.WeightTable.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.WeightTable.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x1a
 	if len(m.Key) > 0 {
 		i -= len(m.Key)
 		copy(dAtA[i:], m.Key)
@@ -3803,18 +4160,16 @@ func (m *DoubleParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if m.Rate != nil {
-		{
-			size, err := m.Rate.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Rate.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -3880,42 +4235,36 @@ func (m *ItemOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x28
 	}
-	if m.Strings != nil {
-		{
-			size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x22
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Longs != nil {
-		{
-			size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x22
+	{
+		size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Doubles != nil {
-		{
-			size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x12
 	if len(m.ID) > 0 {
 		i -= len(m.ID)
 		copy(dAtA[i:], m.ID)
@@ -3951,42 +4300,36 @@ func (m *ItemModifyOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x30
 	}
-	if m.Strings != nil {
-		{
-			size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x2a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Longs != nil {
-		{
-			size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x2a
+	{
+		size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x22
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Doubles != nil {
-		{
-			size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x22
+	{
+		size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x1a
 	if len(m.ItemInputRef) > 0 {
 		i -= len(m.ItemInputRef)
 		copy(dAtA[i:], m.ItemInputRef)
@@ -4029,42 +4372,36 @@ func (m *ItemModifyParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x20
 	}
-	if m.Strings != nil {
-		{
-			size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Longs != nil {
-		{
-			size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x1a
+	{
+		size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Doubles != nil {
-		{
-			size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x12
+	{
+		size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -4136,42 +4473,36 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x32
 	}
-	if m.Strings != nil {
-		{
-			size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Strings.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x2a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Longs != nil {
-		{
-			size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x2a
+	{
+		size, err := m.Longs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x22
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
-	if m.Doubles != nil {
-		{
-			size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	i--
+	dAtA[i] = 0x22
+	{
+		size, err := m.Doubles.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x1a
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x1a
 	if len(m.ID) > 0 {
 		i -= len(m.ID)
 		copy(dAtA[i:], m.ID)
@@ -4179,18 +4510,16 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if m.NodeVersion != nil {
-		{
-			size, err := m.NodeVersion.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.NodeVersion.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -4288,18 +4617,16 @@ func (m *DoubleKeyValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Value != nil {
-		{
-			size, err := m.Value.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.Value.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0x12
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0x12
 	if len(m.Key) > 0 {
 		i -= len(m.Key)
 		copy(dAtA[i:], m.Key)
@@ -4483,18 +4810,16 @@ func (m *TradeItemInput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
-	if m.ItemInput != nil {
-		{
-			size, err := m.ItemInput.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
+	{
+		size, err := m.ItemInput.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
 		}
-		i--
-		dAtA[i] = 0xa
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
 	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -4634,6 +4959,358 @@ func (m *ShortenRecipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xa
 	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Execution) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Execution) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Execution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Completed {
+		i--
+		if m.Completed {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x48
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.BlockHeight != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BlockHeight))
+		i--
+		dAtA[i] = 0x38
+	}
+	if len(m.ItemInputs) > 0 {
+		for iNdEx := len(m.ItemInputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ItemInputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.CoinInputs) > 0 {
+		for iNdEx := len(m.CoinInputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CoinInputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.CookbookID)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.RecipeID) > 0 {
+		i -= len(m.RecipeID)
+		copy(dAtA[i:], m.RecipeID)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.RecipeID)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	{
+		size, err := m.NodeVersion.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *Recipe) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Recipe) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Disabled {
+		i--
+		if m.Disabled {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x60
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0x5a
+	}
+	if m.BlockInterval != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.BlockInterval))
+		i--
+		dAtA[i] = 0x50
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	{
+		size, err := m.Outputs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x42
+	{
+		size, err := m.Entries.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x3a
+	{
+		size, err := m.ItemInputs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x32
+	{
+		size, err := m.CoinInputs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x2a
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.CookbookID)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	{
+		size, err := m.NodeVersion.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+
+func (m *Trade) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Trade) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Trade) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Completed {
+		i--
+		if m.Completed {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x58
+	}
+	if m.Disabled {
+		i--
+		if m.Disabled {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x50
+	}
+	if len(m.FulFiller) > 0 {
+		i -= len(m.FulFiller)
+		copy(dAtA[i:], m.FulFiller)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.FulFiller)))
+		i--
+		dAtA[i] = 0x4a
+	}
+	if len(m.Sender) > 0 {
+		i -= len(m.Sender)
+		copy(dAtA[i:], m.Sender)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Sender)))
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.ExtraInfo) > 0 {
+		i -= len(m.ExtraInfo)
+		copy(dAtA[i:], m.ExtraInfo)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ExtraInfo)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	{
+		size, err := m.ItemOutputs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x32
+	if len(m.CoinOutputs) > 0 {
+		for iNdEx := len(m.CoinOutputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CoinOutputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	{
+		size, err := m.ItemInputs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x22
+	{
+		size, err := m.CoinInputs.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	{
+		size, err := m.NodeVersion.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTypes(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0xa
 	return len(dAtA) - i, nil
 }
 
@@ -4788,14 +5465,10 @@ func (m *DoubleInputParam) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.MinValue != nil {
-		l = m.MinValue.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.MaxValue != nil {
-		l = m.MaxValue.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.MinValue.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.MaxValue.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
 
@@ -4820,14 +5493,10 @@ func (m *DoubleWeightRange) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Lower != nil {
-		l = m.Lower.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Upper != nil {
-		l = m.Upper.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Lower.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Upper.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	if m.Weight != 0 {
 		n += 1 + sovTypes(uint64(m.Weight))
 	}
@@ -4859,14 +5528,10 @@ func (m *LongParam) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Rate != nil {
-		l = m.Rate.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.WeightTable != nil {
-		l = m.WeightTable.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Rate.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.WeightTable.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.Program)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -5013,22 +5678,14 @@ func (m *ItemInput) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Doubles != nil {
-		l = m.Doubles.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Longs != nil {
-		l = m.Longs.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Strings != nil {
-		l = m.Strings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.TransferFee != nil {
-		l = m.TransferFee.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Doubles.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Longs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Strings.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.TransferFee.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
 
@@ -5087,10 +5744,8 @@ func (m *StringParam) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Rate != nil {
-		l = m.Rate.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Rate.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.Key)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -5127,18 +5782,14 @@ func (m *DoubleParam) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Rate != nil {
-		l = m.Rate.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Rate.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.Key)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.WeightTable != nil {
-		l = m.WeightTable.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.WeightTable.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.Program)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -5171,18 +5822,12 @@ func (m *ItemOutput) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Doubles != nil {
-		l = m.Doubles.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Longs != nil {
-		l = m.Longs.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Strings != nil {
-		l = m.Strings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Doubles.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Longs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Strings.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	if m.TransferFee != 0 {
 		n += 1 + sovTypes(uint64(m.TransferFee))
 	}
@@ -5203,18 +5848,12 @@ func (m *ItemModifyOutput) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Doubles != nil {
-		l = m.Doubles.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Longs != nil {
-		l = m.Longs.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Strings != nil {
-		l = m.Strings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Doubles.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Longs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Strings.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	if m.TransferFee != 0 {
 		n += 1 + sovTypes(uint64(m.TransferFee))
 	}
@@ -5227,18 +5866,12 @@ func (m *ItemModifyParams) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Doubles != nil {
-		l = m.Doubles.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Longs != nil {
-		l = m.Longs.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Strings != nil {
-		l = m.Strings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Doubles.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Longs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Strings.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	if m.TransferFee != 0 {
 		n += 1 + sovTypes(uint64(m.TransferFee))
 	}
@@ -5251,26 +5884,18 @@ func (m *Item) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.NodeVersion != nil {
-		l = m.NodeVersion.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.NodeVersion.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.ID)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Doubles != nil {
-		l = m.Doubles.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Longs != nil {
-		l = m.Longs.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.Strings != nil {
-		l = m.Strings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Doubles.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Longs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Strings.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.CookbookID)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -5339,10 +5964,8 @@ func (m *DoubleKeyValue) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.Value != nil {
-		l = m.Value.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.Value.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
 
@@ -5415,10 +6038,8 @@ func (m *TradeItemInput) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ItemInput != nil {
-		l = m.ItemInput.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
+	l = m.ItemInput.Size()
+	n += 1 + l + sovTypes(uint64(l))
 	l = len(m.CookbookID)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
@@ -5485,6 +6106,141 @@ func (m *ShortenRecipe) Size() (n int) {
 	l = len(m.Sender)
 	if l > 0 {
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *Execution) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.NodeVersion.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.RecipeID)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.CookbookID)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.CoinInputs) > 0 {
+		for _, e := range m.CoinInputs {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ItemInputs) > 0 {
+		for _, e := range m.ItemInputs {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.BlockHeight != 0 {
+		n += 1 + sovTypes(uint64(m.BlockHeight))
+	}
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Completed {
+		n += 2
+	}
+	return n
+}
+
+func (m *Recipe) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.NodeVersion.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.CookbookID)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = m.CoinInputs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.ItemInputs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Entries.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.Outputs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.BlockInterval != 0 {
+		n += 1 + sovTypes(uint64(m.BlockInterval))
+	}
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Disabled {
+		n += 2
+	}
+	return n
+}
+
+func (m *Trade) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = m.NodeVersion.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = m.CoinInputs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = m.ItemInputs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	if len(m.CoinOutputs) > 0 {
+		for _, e := range m.CoinOutputs {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	l = m.ItemOutputs.Size()
+	n += 1 + l + sovTypes(uint64(l))
+	l = len(m.ExtraInfo)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.FulFiller)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Disabled {
+		n += 2
+	}
+	if m.Completed {
+		n += 2
 	}
 	return n
 }
@@ -6383,9 +7139,6 @@ func (m *DoubleInputParam) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.MinValue == nil {
-				m.MinValue = &FloatString{}
-			}
 			if err := m.MinValue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6418,9 +7171,6 @@ func (m *DoubleInputParam) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.MaxValue == nil {
-				m.MaxValue = &FloatString{}
 			}
 			if err := m.MaxValue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6505,7 +7255,7 @@ func (m *DoubleInputParamList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Params = append(m.Params, &DoubleInputParam{})
+			m.Params = append(m.Params, DoubleInputParam{})
 			if err := m.Params[len(m.Params)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6589,9 +7339,6 @@ func (m *DoubleWeightRange) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Lower == nil {
-				m.Lower = &FloatString{}
-			}
 			if err := m.Lower.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6624,9 +7371,6 @@ func (m *DoubleWeightRange) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Upper == nil {
-				m.Upper = &FloatString{}
 			}
 			if err := m.Upper.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -6730,7 +7474,7 @@ func (m *DoubleWeightTable) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.WeightRanges = append(m.WeightRanges, &DoubleWeightRange{})
+			m.WeightRanges = append(m.WeightRanges, DoubleWeightRange{})
 			if err := m.WeightRanges[len(m.WeightRanges)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6846,9 +7590,6 @@ func (m *LongParam) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Rate == nil {
-				m.Rate = &FloatString{}
-			}
 			if err := m.Rate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6881,9 +7622,6 @@ func (m *LongParam) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.WeightTable == nil {
-				m.WeightTable = &IntWeightTable{}
 			}
 			if err := m.WeightTable.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7000,7 +7738,7 @@ func (m *LongParamList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Params = append(m.Params, &LongParam{})
+			m.Params = append(m.Params, LongParam{})
 			if err := m.Params[len(m.Params)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7191,7 +7929,7 @@ func (m *IntWeightTable) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.WeightRanges = append(m.WeightRanges, &IntWeightRange{})
+			m.WeightRanges = append(m.WeightRanges, IntWeightRange{})
 			if err := m.WeightRanges[len(m.WeightRanges)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7389,7 +8127,7 @@ func (m *StringInputParamList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &StringInputParam{})
+			m.List = append(m.List, StringInputParam{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7681,7 +8419,7 @@ func (m *LongInputParamList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &LongInputParam{})
+			m.List = append(m.List, LongInputParam{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7797,9 +8535,6 @@ func (m *ItemInput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Doubles == nil {
-				m.Doubles = &DoubleInputParamList{}
-			}
 			if err := m.Doubles.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7832,9 +8567,6 @@ func (m *ItemInput) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Longs == nil {
-				m.Longs = &LongInputParamList{}
 			}
 			if err := m.Longs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7869,9 +8601,6 @@ func (m *ItemInput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Strings == nil {
-				m.Strings = &StringInputParamList{}
-			}
 			if err := m.Strings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7904,9 +8633,6 @@ func (m *ItemInput) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.TransferFee == nil {
-				m.TransferFee = &FeeInputParam{}
 			}
 			if err := m.TransferFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -7991,7 +8717,7 @@ func (m *ItemInputList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &ItemInput{})
+			m.List = append(m.List, ItemInput{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8189,7 +8915,7 @@ func (m *WeightedOutputsList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &WeightedOutputs{})
+			m.List = append(m.List, WeightedOutputs{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8248,7 +8974,7 @@ func (m *StringParam) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Rate", wireType)
 			}
-			var msglen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTypes
@@ -8258,23 +8984,21 @@ func (m *StringParam) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				msglen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if msglen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthTypes
 			}
-			postIndex := iNdEx + msglen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthTypes
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Rate == nil {
-				m.Rate = &FloatString{}
 			}
 			if err := m.Rate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8455,7 +9179,7 @@ func (m *StringParamList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &StringParam{})
+			m.List = append(m.List, StringParam{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8539,9 +9263,6 @@ func (m *DoubleParam) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Rate == nil {
-				m.Rate = &FloatString{}
-			}
 			if err := m.Rate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8606,9 +9327,6 @@ func (m *DoubleParam) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.WeightTable == nil {
-				m.WeightTable = &DoubleWeightTable{}
 			}
 			if err := m.WeightTable.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -8725,7 +9443,7 @@ func (m *DoubleParamList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &DoubleParam{})
+			m.List = append(m.List, DoubleParam{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8841,9 +9559,6 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Doubles == nil {
-				m.Doubles = &DoubleParamList{}
-			}
 			if err := m.Doubles.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8877,9 +9592,6 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Longs == nil {
-				m.Longs = &LongParamList{}
-			}
 			if err := m.Longs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -8912,9 +9624,6 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Strings == nil {
-				m.Strings = &StringParamList{}
 			}
 			if err := m.Strings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9082,9 +9791,6 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Doubles == nil {
-				m.Doubles = &DoubleParamList{}
-			}
 			if err := m.Doubles.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9118,9 +9824,6 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Longs == nil {
-				m.Longs = &LongParamList{}
-			}
 			if err := m.Longs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9153,9 +9856,6 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Strings == nil {
-				m.Strings = &StringParamList{}
 			}
 			if err := m.Strings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9259,9 +9959,6 @@ func (m *ItemModifyParams) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Doubles == nil {
-				m.Doubles = &DoubleParamList{}
-			}
 			if err := m.Doubles.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9295,9 +9992,6 @@ func (m *ItemModifyParams) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Longs == nil {
-				m.Longs = &LongParamList{}
-			}
 			if err := m.Longs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9330,9 +10024,6 @@ func (m *ItemModifyParams) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Strings == nil {
-				m.Strings = &StringParamList{}
 			}
 			if err := m.Strings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9436,9 +10127,6 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.NodeVersion == nil {
-				m.NodeVersion = &SemVer{}
-			}
 			if err := m.NodeVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9504,9 +10192,6 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Doubles == nil {
-				m.Doubles = &DoubleKeyValueList{}
-			}
 			if err := m.Doubles.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9540,9 +10225,6 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Longs == nil {
-				m.Longs = &LongKeyValueList{}
-			}
 			if err := m.Longs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9575,9 +10257,6 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
-			}
-			if m.Strings == nil {
-				m.Strings = &StringKeyValueList{}
 			}
 			if err := m.Strings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -9848,7 +10527,7 @@ func (m *ItemList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &Item{})
+			m.List = append(m.List, Item{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -9932,7 +10611,7 @@ func (m *DoubleKeyValueList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &DoubleKeyValue{})
+			m.List = append(m.List, DoubleKeyValue{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10048,9 +10727,6 @@ func (m *DoubleKeyValue) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Value == nil {
-				m.Value = &FloatString{}
-			}
 			if err := m.Value.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10134,7 +10810,7 @@ func (m *LongKeyValueList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &LongKeyValue{})
+			m.List = append(m.List, LongKeyValue{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10319,7 +10995,7 @@ func (m *StringKeyValueList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &StringKeyValue{})
+			m.List = append(m.List, StringKeyValue{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10517,9 +11193,6 @@ func (m *TradeItemInput) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ItemInput == nil {
-				m.ItemInput = &ItemInput{}
-			}
 			if err := m.ItemInput.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10635,7 +11308,7 @@ func (m *TradeItemInputList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.List = append(m.List, &TradeItemInput{})
+			m.List = append(m.List, TradeItemInput{})
 			if err := m.List[len(m.List)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -10966,6 +11639,1122 @@ func (m *ShortenRecipe) Unmarshal(dAtA []byte) error {
 			}
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Execution) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Execution: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Execution: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.NodeVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RecipeID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RecipeID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CookbookID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CoinInputs = append(m.CoinInputs, types.Coin{})
+			if err := m.CoinInputs[len(m.CoinInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemInputs = append(m.ItemInputs, Item{})
+			if err := m.ItemInputs[len(m.ItemInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeight", wireType)
+			}
+			m.BlockHeight = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BlockHeight |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Completed", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Completed = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Recipe) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Recipe: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Recipe: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.NodeVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CookbookID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.CoinInputs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ItemInputs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Entries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Outputs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockInterval", wireType)
+			}
+			m.BlockInterval = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BlockInterval |= int64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Disabled = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Trade) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Trade: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Trade: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.NodeVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.CoinInputs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ItemInputs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinOutputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CoinOutputs = append(m.CoinOutputs, types.Coin{})
+			if err := m.CoinOutputs[len(m.CoinOutputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemOutputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ItemOutputs.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtraInfo", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExtraInfo = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sender", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Sender = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FulFiller", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FulFiller = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Disabled = bool(v != 0)
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Completed", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Completed = bool(v != 0)
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

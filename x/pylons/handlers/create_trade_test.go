@@ -25,9 +25,9 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		"cookbook-id-0001",
 		"this has to meet character limits",
 		"SketchyCo",
-		&types.SemVer{"1.0.0"},
-		&types.Email{`example@example.com`},
-		&types.Level{1},
+		types.SemVer{"1.0.0"},
+		types.Email{`example@example.com`},
+		types.Level{1},
 		msgs.DefaultCostPerBlock,
 		sender,
 	)
@@ -35,19 +35,19 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err = tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	item1 := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.True(t, err == nil)
 
 	item2 := keep.GenItem(cookbookResult.CookbookID, sender2, "Pichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.True(t, err == nil)
 
 	item3 := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
-	err = tci.PlnK.SetItem(tci.Ctx, *item3)
+	err = tci.PlnK.SetItem(tci.Ctx, item3)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {
@@ -63,7 +63,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList("", []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				List: []*types.Item{item1},
+				List: []types.Item{item1},
 			},
 			outputCoinList: types.NewPylon(1000000),
 			desiredError:   "There should be no empty cookbook ID inputs for trades",
@@ -80,7 +80,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cookbookResult.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				List: []*types.Item{item1},
+				List: []types.Item{item1},
 			},
 			showError:    true,
 			desiredError: "there should be more than 10 amount of pylon per trade",
@@ -89,7 +89,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cookbookResult.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				List: []*types.Item{item1},
+				List: []types.Item{item1},
 			},
 			outputCoinList: types.NewPylon(1),
 			desiredError:   "there should be more than 10 amount of pylon per trade",
@@ -99,7 +99,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cookbookResult.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				List: []*types.Item{item},
+				List: []types.Item{item},
 			},
 			outputCoinList: types.NewPylon(10000),
 			showError:      false,
@@ -108,7 +108,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputCoinList: types.GenCoinInputList(types.Pylon, 10),
 			outputItemList: types.ItemList{
-				List: []*types.Item{item2},
+				List: []types.Item{item2},
 			},
 			desiredError: "is not owned by sender",
 			showError:    true,
@@ -117,7 +117,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			sender:        sender,
 			inputItemList: types.GenTradeItemInputList(cookbookResult.CookbookID, []string{"Pikachu"}),
 			outputItemList: types.ItemList{
-				List: []*types.Item{item3},
+				List: []types.Item{item3},
 			},
 			outputCoinList: types.NewPylon(1000000),
 			desiredError:   "sender doesn't have enough coins for the trade",
@@ -127,7 +127,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			msg := msgs.NewMsgCreateTrade(&tc.inputCoinList, &tc.inputItemList, tc.outputCoinList, &tc.outputItemList, "", tc.sender)
+			msg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
 
 			result, err := tci.PlnH.HandlerMsgCreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {

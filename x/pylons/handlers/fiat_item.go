@@ -29,7 +29,7 @@ func (k msgServer) HandlerMsgFiatItem(ctx context.Context, msg *msgs.MsgFiatItem
 
 	item := types.NewItem(msg.CookbookID, msg.Doubles, msg.Longs, msg.Strings, sender, sdkCtx.BlockHeight(), msg.TransferFee)
 
-	if err := k.SetItem(sdkCtx, *item); err != nil {
+	if err := k.SetItem(sdkCtx, item); err != nil {
 		return nil, errInternal(err)
 	}
 

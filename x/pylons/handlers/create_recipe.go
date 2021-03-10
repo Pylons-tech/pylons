@@ -33,10 +33,10 @@ func (k msgServer) HandlerMsgCreateRecipe(ctx context.Context, msg *msgs.MsgCrea
 
 	recipe := types.NewRecipe(
 		msg.Name, msg.CookbookID, msg.Description,
-		*msg.CoinInputs,
-		*msg.ItemInputs,
-		*msg.Entries,
-		*msg.Outputs,
+		msg.CoinInputs,
+		msg.ItemInputs,
+		msg.Entries,
+		msg.Outputs,
 		msg.BlockInterval, sender)
 
 	if msg.RecipeID != "" {

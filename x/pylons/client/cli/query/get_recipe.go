@@ -30,7 +30,6 @@ func GetRecipe() *cobra.Command {
 			}
 
 			return clientCtx.PrintProto(res)
-			return nil
 		},
 	}
 	return ccb

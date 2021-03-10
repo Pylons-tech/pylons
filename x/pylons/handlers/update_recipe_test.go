@@ -26,10 +26,10 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	genEntries := types.GenEntries("chair", "Raichu")
 	genOneOutput := types.GenOneOutput("chair", "Raichu")
 	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
-		&genCoinList,
-		&genItemInputList,
-		&genEntries,
-		&genOneOutput,
+		genCoinList,
+		genItemInputList,
+		genEntries,
+		genOneOutput,
 		0,
 		sender1.String(),
 	)
@@ -70,10 +70,10 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 			genEntries := types.GenEntries("chair", "Raichu")
 			genOneOutput := types.GenOneOutput("chair", "Raichu")
 			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
-				&genCoinList,
-				&genItemInputList,
-				&genEntries,
-				&genOneOutput,
+				genCoinList,
+				genItemInputList,
+				genEntries,
+				genOneOutput,
 				0,
 				sender1)
 

@@ -25,15 +25,15 @@ func (querier *querierServer) GetTrade(ctx context.Context, req *types.GetTradeR
 	}
 
 	return &types.GetTradeResponse{
-		NodeVersion: &trade.NodeVersion,
+		NodeVersion: trade.NodeVersion,
 		ID:          trade.ID,
-		CoinInputs:  &trade.CoinInputs,
-		ItemInputs:  &trade.ItemInputs,
+		CoinInputs:  trade.CoinInputs,
+		ItemInputs:  trade.ItemInputs,
 		CoinOutputs: trade.CoinOutputs,
-		ItemOutputs: &trade.ItemOutputs,
+		ItemOutputs: trade.ItemOutputs,
 		ExtraInfo:   trade.ExtraInfo,
-		Sender:      trade.Sender.String(),
-		FulFiller:   trade.FulFiller.String(),
+		Sender:      trade.Sender,
+		FulFiller:   trade.FulFiller,
 		Disabled:    trade.Disabled,
 		Completed:   trade.Completed,
 	}, nil

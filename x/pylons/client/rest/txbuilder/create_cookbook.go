@@ -29,9 +29,9 @@ func CreateCookbookTxBuilder(cliCtx client.Context, storeName string) http.Handl
 			"",
 			"this has to meet character limits lol",
 			"SketchyCo",
-			&types.SemVer{"1.0.0"},
-			&types.Email{"example@example.com"},
-			&types.Level{0},
+			types.SemVer{"1.0.0"},
+			types.Email{"example@example.com"},
+			types.Level{0},
 			msgs.DefaultCostPerBlock,
 			sender,
 		)

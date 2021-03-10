@@ -45,28 +45,28 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	item6.SetTransferFee(642)
 	item7.SetTransferFee(1187)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item3)
+	err = tci.PlnK.SetItem(tci.Ctx, item3)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item4)
+	err = tci.PlnK.SetItem(tci.Ctx, item4)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item5)
+	err = tci.PlnK.SetItem(tci.Ctx, item5)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item6)
+	err = tci.PlnK.SetItem(tci.Ctx, item6)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item7)
+	err = tci.PlnK.SetItem(tci.Ctx, item7)
 	require.True(t, err == nil)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item8)
+	err = tci.PlnK.SetItem(tci.Ctx, item8)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

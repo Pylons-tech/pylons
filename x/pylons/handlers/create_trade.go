@@ -53,10 +53,10 @@ func (k msgServer) HandlerMsgCreateTrade(ctx context.Context, msg *msgs.MsgCreat
 	}
 
 	trade := types.NewTrade(msg.ExtraInfo,
-		*msg.CoinInputs,
-		*msg.ItemInputs,
+		msg.CoinInputs,
+		msg.ItemInputs,
 		msg.CoinOutputs,
-		*msg.ItemOutputs,
+		msg.ItemOutputs,
 		sender)
 	if err := k.SetTrade(sdkCtx, trade); err != nil {
 		return nil, errInternal(err)

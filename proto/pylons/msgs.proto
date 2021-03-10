@@ -102,10 +102,10 @@ message MsgCreateCookbook {
   string CookbookID = 1;
   string Name = 2;
   string Description = 3;
-  SemVer Version = 4;
+  SemVer Version = 4 [(gogoproto.nullable) = false];
   string Developer = 5;
-  Email SupportEmail = 6;
-  Level Level = 7;
+  Email SupportEmail = 6 [(gogoproto.nullable) = false];
+  Level Level = 7 [(gogoproto.nullable) = false];
   string Sender = 8;
   // Pylons per block to be charged across this cookbook for delayed execution early completion
   int64 CostPerBlock = 9;
@@ -125,13 +125,13 @@ message MsgCreateRecipe {
   string RecipeID = 1;
   string Name = 2;
   string CookbookID = 3;    // the cookbook guid
-  CoinInputList CoinInputs = 4;
-  ItemInputList ItemInputs = 5;
-  WeightedOutputsList Outputs = 6;
+  CoinInputList CoinInputs = 4 [(gogoproto.nullable) = false];
+  ItemInputList ItemInputs = 5 [(gogoproto.nullable) = false];
+  WeightedOutputsList Outputs = 6 [(gogoproto.nullable) = false];
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
-  EntriesList Entries = 10;
+  EntriesList Entries = 10 [(gogoproto.nullable) = false];
 }
 
 
@@ -144,10 +144,10 @@ message MsgCreateRecipeResponse  {
 
 // MsgCreateTrade defines a CreateTrade message
 message MsgCreateTrade {
-  CoinInputList CoinInputs = 1;
-  TradeItemInputList ItemInputs = 2;
+  CoinInputList CoinInputs = 1  [(gogoproto.nullable) = false];
+  TradeItemInputList ItemInputs = 2 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin CoinOutputs = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  ItemList ItemOutputs = 4;
+  ItemList ItemOutputs = 4 [(gogoproto.nullable) = false];
   string ExtraInfo = 5;
   string Sender = 6;
 }
@@ -225,9 +225,9 @@ message MsgExecuteRecipeResponse {
 // MsgFiatItem is a msg struct to be used to fiat item
 message MsgFiatItem {
   string CookbookID = 1;
-  DoubleKeyValueList Doubles = 2;
-  LongKeyValueList Longs = 3;
-  StringKeyValueList Strings = 4;
+  DoubleKeyValueList Doubles = 2 [(gogoproto.nullable) = false];
+  LongKeyValueList Longs = 3 [(gogoproto.nullable) = false];
+  StringKeyValueList Strings = 4 [(gogoproto.nullable) = false];
   string Sender = 5;
   int64 TransferFee = 6;
 }
@@ -322,9 +322,9 @@ message MsgUpdateItemStringResponse  {
 message MsgUpdateCookbook {
   string ID = 1;
   string Description = 2;
-  SemVer Version = 3;
+  SemVer Version = 3 [(gogoproto.nullable) = false];
   string Developer = 4;
-  Email SupportEmail = 5;
+  Email SupportEmail = 5 [(gogoproto.nullable) = false];
   string Sender = 6;
 }
 
@@ -340,13 +340,13 @@ message MsgUpdateRecipe {
   string Name = 1;
   string CookbookID = 2;     // the cookbook guid
   string ID = 3;             // the recipe guid
-  CoinInputList CoinInputs = 4;
-  ItemInputList ItemInputs = 5;
-  WeightedOutputsList Outputs = 6;
+  CoinInputList CoinInputs = 4 [(gogoproto.nullable) = false];
+  ItemInputList ItemInputs = 5 [(gogoproto.nullable) = false];
+  WeightedOutputsList Outputs = 6 [(gogoproto.nullable) = false];
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
-  EntriesList Entries = 10;
+  EntriesList Entries = 10 [(gogoproto.nullable) = false];
 }
 
 // UpdateRecipeResponse is a struct to control update recipe response

@@ -27,8 +27,8 @@ func UpdateCookbookTxBuilder(cliCtx client.Context, storeName string) http.Handl
 			"cookbook id",
 			"this has to meet character limits lol",
 			"SketchyCo",
-			&types.SemVer{"1.0.0"},
-			&types.Email{"example@example.com"},
+			types.SemVer{"1.0.0"},
+			types.Email{"example@example.com"},
 			sender,
 		)
 

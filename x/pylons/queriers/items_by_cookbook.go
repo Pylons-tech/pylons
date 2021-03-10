@@ -41,6 +41,6 @@ func (querier *querierServer) ItemsByCookbook(ctx context.Context, req *types.It
 	}
 
 	return &types.ItemsByCookbookResponse{
-		Items: types.ItemInputsToProto(items),
+		Items: items,
 	}, nil
 }

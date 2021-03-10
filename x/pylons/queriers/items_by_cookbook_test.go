@@ -23,7 +23,7 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 	cbData1 := handlers.MockCookbookByName(tci, sender1, "cookbook-00002")
 
 	item := keep.GenItem(cbData.CookbookID, sender1, "Raichu")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

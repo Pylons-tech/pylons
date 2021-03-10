@@ -12,7 +12,7 @@ import (
 const DefaultCostPerBlock = 50 // Pylons
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
-func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version *types.SemVer, sEmail *types.Email, level *types.Level, cpb int64, sender sdk.AccAddress) MsgCreateCookbook {
+func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version types.SemVer, sEmail types.Email, level types.Level, cpb int64, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
 		CookbookID:   cookbookID,
 		Name:         name,

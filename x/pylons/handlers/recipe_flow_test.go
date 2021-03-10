@@ -57,10 +57,10 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			mEntries := types.GenEntries("chair", "Raichu")
 			mOutputs := types.GenOneOutput("chair", "Raichu")
 			newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
-				&genCoinsList,
-				&mInputList,
-				&mEntries,
-				&mOutputs,
+				genCoinsList,
+				mInputList,
+				mEntries,
+				mOutputs,
 				0,
 				tc.sender.String(),
 			)
@@ -74,7 +74,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			if tc.dynamicItemSet {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.True(t, err == nil)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
@@ -91,10 +91,10 @@ func TestRecipeFlowUpdate(t *testing.T) {
 
 			// Update recipe
 			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
-				&genCoinsList,
-				&mInputList,
-				&mEntries,
-				&mOutputs,
+				genCoinsList,
+				mInputList,
+				mEntries,
+				mOutputs,
 				3,
 				sender1)
 
@@ -111,7 +111,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			if tc.dynamicItemSet {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.True(t, err == nil)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}

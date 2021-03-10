@@ -19,7 +19,7 @@ func TestEmailValidate(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			validation := Email(tc.email).Validate()
+			validation := Email{tc.email}.Validate()
 			require.True(t, (validation == nil) == tc.ok)
 		})
 	}

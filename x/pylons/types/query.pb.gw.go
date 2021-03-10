@@ -1927,43 +1927,43 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_AddrFromPubKey_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "addr_from_pub_key", "hex_pub_key"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_AddrFromPubKey_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "addr_from_pub_key", "hex_pub_key"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_CheckGoogleIAPOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "check_google_iap_order", "purchaseToken"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_CheckGoogleIAPOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "check_google_iap_order", "purchaseToken"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetExecution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_execution", "executionID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetExecution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_execution", "executionID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_item", "itemID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_item", "itemID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_recipe", "recipeID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_recipe", "recipeID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetTrade_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_trade", "tradeID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetTrade_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_trade", "tradeID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ItemsByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "items_by_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ItemsByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "items_by_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ItemsBySender_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "items_by_sender", "sender"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ItemsBySender_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "items_by_sender", "sender"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_cookbook", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_cookbook", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListExecutions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_executions", "sender"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListExecutions_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_executions", "sender"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetLockedCoins_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_locked_coins", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetLockedCoins_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_locked_coins", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_GetLockedCoinDetails_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "get_locked_coin_details", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GetLockedCoinDetails_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_locked_coin_details", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_recipe", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_recipe", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListRecipeByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_recipe_by_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListRecipeByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_recipe_by_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListShortenRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_shorten_recipe", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListShortenRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_shorten_recipe", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListShortenRecipeByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_shorten_recipe_by_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListShortenRecipeByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_shorten_recipe_by_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ListTrade_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "list_trade", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ListTrade_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "list_trade", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_PylonsBalance_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylon", "balance", "address"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_PylonsBalance_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "balance", "address"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

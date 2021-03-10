@@ -116,7 +116,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 					if len(tc.dynamicItemFees) > idx {
 						dynamicItem.SetTransferFee(tc.dynamicItemFees[idx])
 					}
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.True(t, err == nil)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
@@ -126,7 +126,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 			result, err := tci.PlnH.HandlerMsgExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				fmt.Print(err)
+				fmt.Println(err)
 				require.True(t, err == nil)
 				require.True(t, result.Status == "Success")
 				require.True(t, result.Message == tc.successMsg)
@@ -141,7 +141,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 				for _, item := range items {
 					itemName, ok := item.FindString("Name")
 					if !ok {
-						fmt.Print("name not available for item=", item)
+						fmt.Println("name not available for item=", item)
 					}
 					require.True(t, ok)
 					if itemName == tc.checkItemName {
@@ -159,7 +159,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 
 				if tc.checkItemAvailable {
 					require.True(t, itemAvailability)
-					fmt.Print(itemAvailability)
+					fmt.Println(itemAvailability)
 				}
 
 				if tc.checkItemTrasferFee {

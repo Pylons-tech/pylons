@@ -10,7 +10,7 @@ import (
 
 // SetRecipe sets a recipe in the key store
 func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
-	if recipe.Sender.Empty() {
+	if recipe.Sender == "" {
 		return errors.New("SetRecipe: the sender cannot be empty")
 	}
 	return k.SetObject(ctx, types.TypeRecipe, recipe.ID, k.RecipeKey, recipe)
@@ -102,7 +102,7 @@ func (k Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []typ
 			continue
 		}
 
-		if recipe.Sender.Equals(sender) {
+		if recipe.Sender == sender.String() {
 			recipes = append(recipes, recipe)
 		}
 	}
@@ -111,7 +111,7 @@ func (k Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []typ
 
 // UpdateRecipe is used to update the recipe using the id
 func (k Keeper) UpdateRecipe(ctx sdk.Context, id string, recipe types.Recipe) error {
-	if recipe.Sender.Empty() {
+	if recipe.Sender == "" {
 		return errors.New("UpdateRecipe: the sender cannot be empty")
 
 	}

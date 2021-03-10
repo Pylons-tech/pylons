@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/cosmos/cosmos-sdk/simapp"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"os"
 
 	"github.com/Pylons-tech/pylons/app"
@@ -10,6 +12,8 @@ import (
 
 func main() {
 	rootCmd, _ := cmd.NewRootCmd()
+	rootCmd.AddCommand(testnetCmd(simapp.ModuleBasics, banktypes.GenesisBalancesIterator{}))
+
 	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
 		os.Exit(1)
 	}

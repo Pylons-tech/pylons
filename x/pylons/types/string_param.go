@@ -3,9 +3,9 @@ package types
 import "encoding/json"
 
 // Actualize actualize string param using cel program
-func (spm StringParamList) Actualize(ec CelEnvCollection) (*StringKeyValueList, error) {
+func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []*StringKeyValue
+	var m []StringKeyValue
 	for _, param := range spm.List {
 		var val string
 		var err error
@@ -16,14 +16,14 @@ func (spm StringParamList) Actualize(ec CelEnvCollection) (*StringKeyValueList, 
 			val = param.Value
 		}
 		if err != nil {
-			return &StringKeyValueList{m}, err
+			return StringKeyValueList{m}, err
 		}
-		m = append(m, &StringKeyValue{
+		m = append(m, StringKeyValue{
 			Key:   param.Key,
 			Value: val,
 		})
 	}
-	return &StringKeyValueList{m}, nil
+	return StringKeyValueList{m}, nil
 }
 
 type serializeStringKeyValueList struct {
@@ -33,7 +33,7 @@ type serializeStringKeyValueList struct {
 func (str StringKeyValueList) MarshalJSON() ([]byte, error) {
 	var res serializeStringKeyValueList
 	for _, val := range str.List {
-		res.List = append(res.List, *val)
+		res.List = append(res.List, val)
 	}
 	return json.Marshal(res)
 }
@@ -46,7 +46,7 @@ func (str *StringKeyValueList) UnmarshalJSON(data []byte) error {
 	}
 
 	for _, val := range res.List {
-		str.List = append(str.List, &val)
+		str.List = append(str.List, val)
 	}
 	return nil
 }

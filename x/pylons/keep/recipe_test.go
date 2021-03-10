@@ -39,7 +39,7 @@ func TestKeeperGetRecipe(t *testing.T) {
 			recipeName:   "recipe-00001",
 			desc:         "this has to meet character limits",
 			sender:       sender,
-			level:        1,
+			level:        types.Level{1},
 			desiredError: "",
 			showError:    false,
 		},
@@ -47,13 +47,13 @@ func TestKeeperGetRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			cb := types.NewCookbook(
-				"example@example.com", // msg.SupportEmail,
-				tc.sender,             // msg.Sender,
-				"1.0.0",               // msg.Version,
-				tc.cookbookName,       // msg.Name,
-				tc.desc,               // msg.Description,
-				"SketchyCo",           // msg.Developer,
-				50,                    // msg.CostPerBlock,
+				types.Email{"example@example.com"}, // msg.SupportEmail,
+				tc.sender,                          // msg.Sender,
+				types.SemVer{"1.0.0"},              // msg.Version,
+				tc.cookbookName,                    // msg.Name,
+				tc.desc,                            // msg.Description,
+				"SketchyCo",                        // msg.Developer,
+				50,                                 // msg.CostPerBlock,
 			)
 			err := tci.PlnK.SetCookbook(tci.Ctx, cb)
 			require.True(t, err == nil)

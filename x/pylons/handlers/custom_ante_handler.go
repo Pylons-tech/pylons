@@ -15,7 +15,7 @@ import (
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
 // numbers, checks signatures & account numbers, and deducts fees from the first
 // signer.
-func NewAnteHandler(ak keeper.AccountKeeper) sdk.AnteHandler {
+func NewAnteHandler(ak keeper.AccountKeeper, signModeHandler authsigning.SignModeHandler) sdk.AnteHandler {
 	return sdk.ChainAnteDecorators(
 		ante.NewSetUpContextDecorator(), // outermost AnteDecorator. SetUpContext must be called first
 		// ante.NewMempoolFeeDecorator(),
@@ -28,7 +28,7 @@ func NewAnteHandler(ak keeper.AccountKeeper) sdk.AnteHandler {
 		ante.NewValidateSigCountDecorator(ak),
 		// ante.NewDeductFeeDecorator(ak, supplyKeeper),
 		// ante.NewSigGasConsumeDecorator(ak, sigGasConsumer),
-		NewCustomSigVerificationDecorator(ak),
+		NewCustomSigVerificationDecorator(ak, signModeHandler),
 		ante.NewIncrementSequenceDecorator(ak), // innermost AnteDecorator
 	)
 }
@@ -95,13 +95,15 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 
 // CustomSigVerificationDecorator is a custom verification decorator designed for create_account
 type CustomSigVerificationDecorator struct {
-	ak keeper.AccountKeeper
+	ak              keeper.AccountKeeper
+	signModeHandler authsigning.SignModeHandler
 }
 
 // NewCustomSigVerificationDecorator automatically sign transaction if it's create-account msg
-func NewCustomSigVerificationDecorator(ak keeper.AccountKeeper) CustomSigVerificationDecorator {
+func NewCustomSigVerificationDecorator(ak keeper.AccountKeeper, signModeHandler authsigning.SignModeHandler) CustomSigVerificationDecorator {
 	return CustomSigVerificationDecorator{
-		ak: ak,
+		ak:              ak,
+		signModeHandler: signModeHandler,
 	}
 }
 
@@ -152,42 +154,43 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			}
 		}
 
-		// retrieve pubkey
+		// retrieve pubkey and signer data
 		pubKey := signerAccs[i].GetPubKey()
 		if !simulate && pubKey == nil {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidPubKey, "pubkey on account is not set")
 		}
 
+		genesis := ctx.BlockHeight() == 0
+		chainID := ctx.ChainID()
+		var accNum uint64
+		if !genesis {
+			accNum = signerAccs[i].GetAccountNumber()
+		}
+		signerData := authsigning.SignerData{
+			ChainID:       chainID,
+			AccountNumber: accNum,
+			Sequence:      signerAccs[i].GetSequence(),
+		}
+
 		messages := sigTx.GetMsgs()
 		if len(messages) == 1 && messages[0].Type() == "create_account" {
-			any, err := codectypes.NewAnyWithValue(pubKey)
+			_, err := codectypes.NewAnyWithValue(pubKey)
 			if err != nil {
 				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			_ = &types.BaseAccount{
-				Sequence:      0,
-				AccountNumber: 0, // we do check account number 0 for create_account message
-				PubKey:        any,
-				Address:       pubKey.Address().String(),
+			err = authsigning.VerifySignature(pubKey, signerData, sig.Data, svd.signModeHandler, tx)
+			if !simulate && err != nil {
+				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
 			}
-			onlyAminoSigners := ante.OnlyLegacyAminoSigners(sig.Data)
-			if !onlyAminoSigners {
-				if sig.Sequence != signerAccs[i].GetSequence() {
-					return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
-				}
-			}
-			//signBytes := sigTx.GetSignBytes(ctx, acc)
-			//if !simulate && !pubKey.VerifySignature(signBytes, sig) {
-			//	return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
-			//}
 			continue
 		}
 
 		// verify signature
-		//if !simulate && !pubKey.VerifyBytes(signBytes, sig) {
-		//	return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
-		//}
+		err = authsigning.VerifySignature(pubKey, signerData, sig.Data, svd.signModeHandler, tx)
+		if !simulate && err != nil {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "signature verification failed; verify correct account sequence and chain-id")
+		}
 	}
 
 	return next(ctx, tx, simulate)

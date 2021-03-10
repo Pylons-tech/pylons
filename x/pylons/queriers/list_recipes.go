@@ -32,6 +32,6 @@ func (querier *querierServer) ListRecipe(ctx context.Context, req *types.ListRec
 	}
 
 	return &types.ListRecipeResponse{
-		Recipes: types.RecipeListToRecipeProtoList(recipes),
+		Recipes: recipes,
 	}, nil
 }

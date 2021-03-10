@@ -25,14 +25,14 @@ func (querier *querierServer) GetCookbook(ctx context.Context, req *types.GetCoo
 	}
 
 	return &types.GetCookbookResponse{
-		NodeVersion:  &cookbook.NodeVersion,
+		NodeVersion:  cookbook.NodeVersion,
 		ID:           cookbook.ID,
 		Name:         cookbook.Name,
 		Description:  cookbook.Description,
-		Version:      &cookbook.Version,
+		Version:      cookbook.Version,
 		Developer:    cookbook.Developer,
-		Level:        &cookbook.Level,
-		SupportEmail: &cookbook.SupportEmail,
+		Level:        cookbook.Level,
+		SupportEmail: cookbook.SupportEmail,
 		CostPerBlock: int64(cookbook.CostPerBlock),
 		Sender:       cookbook.Sender.String(),
 	}, nil

@@ -1,29 +1,11 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // TypeRecipe is a store key for recipe
 const TypeRecipe = "recipe"
-
-// Recipe is a game state machine step abstracted out as a cooking terminology
-type Recipe struct {
-	NodeVersion   SemVer
-	ID            string // the recipe guid
-	CookbookID    string // the cookbook guid
-	Name          string
-	CoinInputs    CoinInputList
-	ItemInputs    ItemInputList
-	Entries       EntriesList
-	Outputs       WeightedOutputsList
-	Description   string
-	BlockInterval int64
-	Sender        sdk.AccAddress
-	Disabled      bool
-}
 
 // RecipeList is a list of recipes
 type RecipeList struct {
@@ -58,31 +40,11 @@ func NewRecipe(recipeName, cookbookID, description string,
 		Outputs:       outputs,
 		BlockInterval: blockInterval,
 		Description:   description,
-		Sender:        sender,
+		Sender:        sender.String(),
 	}
 
 	rcp.ID = KeyGen(sender)
 	return rcp
-}
-
-func (rcp Recipe) String() string {
-	return fmt.Sprintf(`Recipe{
-		NodeVersion: %s,
-		Name: %s,
-		CookbookID: %s,
-		ID: %s,
-		CoinInputs: %s,
-		ItemInputs: %s,
-		Entries: %s,
-		ExecutionTime: %d,
-	}`, rcp.NodeVersion,
-		rcp.Name,
-		rcp.CookbookID,
-		rcp.ID,
-		rcp.CoinInputs.String(),
-		rcp.ItemInputs.String(),
-		rcp.Entries.String(),
-		rcp.BlockInterval)
 }
 
 // GetItemInputRefIndex get item input index from ref string
@@ -93,25 +55,4 @@ func (rcp Recipe) GetItemInputRefIndex(inputRef string) int {
 		}
 	}
 	return -1
-}
-
-func RecipeListToRecipeProtoList(recipes []Recipe) []*GetRecipeResponse {
-	var res []*GetRecipeResponse
-	for _, recipe := range recipes {
-		res = append(res, &GetRecipeResponse{
-			NodeVersion:   &recipe.NodeVersion,
-			ID:            recipe.ID,
-			CookbookID:    recipe.CookbookID,
-			Name:          recipe.Name,
-			CoinInputs:    &recipe.CoinInputs,
-			ItemInputs:    &recipe.ItemInputs,
-			Entries:       &recipe.Entries,
-			Outputs:       &recipe.Outputs,
-			Description:   recipe.Description,
-			BlockInterval: recipe.BlockInterval,
-			Sender:        recipe.Sender.String(),
-			Disabled:      recipe.Disabled,
-		})
-	}
-	return res
 }

@@ -25,6 +25,6 @@ func (querier *querierServer) GetItem(ctx context.Context, req *types.GetItemReq
 	}
 
 	return &types.GetItemResponse{
-		Item: &item,
+		Item: item,
 	}, nil
 }

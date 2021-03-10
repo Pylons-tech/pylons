@@ -27,7 +27,7 @@ func (querier *querierServer) GetLockedCoins(ctx context.Context, req *types.Get
 	lc := querier.Keeper.GetLockedCoin(sdk.UnwrapSDKContext(ctx), accAddr)
 
 	return &types.GetLockedCoinsResponse{
-		NodeVersion: &lc.NodeVersion,
+		NodeVersion: lc.NodeVersion,
 		Sender:      lc.Sender.String(),
 		Amount:      lc.Amount,
 	}, nil

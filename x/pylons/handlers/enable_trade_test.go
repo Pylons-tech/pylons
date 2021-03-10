@@ -29,9 +29,9 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		"cookbook-id-0001",
 		"this has to meet character limits",
 		"SketchyCo",
-		&types.SemVer{"1.0.0"},
-		&types.Email{"example@example.com"},
-		&types.Level{1},
+		types.SemVer{"1.0.0"},
+		types.Email{"example@example.com"},
+		types.Level{1},
 		msgs.DefaultCostPerBlock,
 		sender,
 	)
@@ -41,16 +41,16 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	// item.OwnerTradeID = id.String()
-	err = tci.PlnK.SetItem(tci.Ctx, *item)
+	err = tci.PlnK.SetItem(tci.Ctx, item)
 	require.True(t, err == nil)
 
 	// add 3 trades. one open trade by each sender and one closed trade
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{List: []*types.Item{item}},
+		ItemOutputs: types.ItemList{List: []types.Item{item}},
 		CoinOutputs: types.NewPylon(10000),
-		Sender:      sender,
+		Sender:      sender.String(),
 		Disabled:    true, // we disable this trade initially
 	})
 	require.True(t, err == nil)
@@ -59,16 +59,16 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		ID:          id2.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Richu"}),
 		CoinOutputs: types.NewPylon(10000),
-		Sender:      sender2,
+		Sender:      sender2.String(),
 	})
 	require.True(t, err == nil)
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id3.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{List: []*types.Item{item}},
+		ItemOutputs: types.ItemList{List: []types.Item{item}},
 		CoinOutputs: types.NewPylon(10000),
-		Sender:      sender2,
+		Sender:      sender2.String(),
 		Disabled:    true, // we disable this trade initially
 	})
 	require.True(t, err == nil)

@@ -32,7 +32,7 @@ func GetItem() *cobra.Command {
 			}
 
 			return clientCtx.PrintString(fmt.Sprintf(
-				"NodeVersion: %s \nID: %s \nDoubles: %s \nLongs: %s \nStrings: %s \nCookbookID: %s \nSender: %s \nOwnerRecipeID: %s \nOwnerTradeID: %s \nTradable: %t \nLastUpdate: %d \nTransferFee: %d",
+				"NodeVersion: %s \nID: %s \nDoubles: %s \nLongs: %v \nStrings: %s \nCookbookID: %s \nSender: %s \nOwnerRecipeID: %s \nOwnerTradeID: %s \nTradable: %t \nLastUpdate: %d \nTransferFee: %d",
 				res.Item.NodeVersion,
 				res.Item.ID,
 				res.Item.Doubles,

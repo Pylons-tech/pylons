@@ -11,10 +11,10 @@ import (
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
-	coinInputs *types.CoinInputList,
-	itemInputs *types.ItemInputList,
-	entries *types.EntriesList,
-	outputs *types.WeightedOutputsList,
+	coinInputs types.CoinInputList,
+	itemInputs types.ItemInputList,
+	entries types.EntriesList,
+	outputs types.WeightedOutputsList,
 	blockInterval int64,
 	sender string) MsgCreateRecipe {
 	return MsgCreateRecipe{

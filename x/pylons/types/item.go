@@ -111,10 +111,10 @@ func (it Item) SetString(key string, value string) bool {
 }
 
 // NewItem create a new item with an auto generated ID
-func NewItem(cookbookID string, doubles *DoubleKeyValueList, longs *LongKeyValueList, strings *StringKeyValueList, sender sdk.AccAddress, blockHeight int64, transferFee int64) *Item {
+func NewItem(cookbookID string, doubles DoubleKeyValueList, longs LongKeyValueList, strings StringKeyValueList, sender sdk.AccAddress, blockHeight int64, transferFee int64) Item {
 
-	item := &Item{
-		NodeVersion: &SemVer{"0.0.1"},
+	item := Item{
+		NodeVersion: SemVer{"0.0.1"},
 		CookbookID:  cookbookID,
 		Doubles:     doubles,
 		Longs:       longs,

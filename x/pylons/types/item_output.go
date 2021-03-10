@@ -22,7 +22,7 @@ func (mit *ItemModifyOutput) SetTransferFee(transferFee int64) {
 }
 
 // NewItemOutput returns new ItemOutput generated from recipe
-func NewItemOutput(ID string, Doubles *DoubleParamList, Longs *LongParamList, Strings *StringParamList, TransferFee int64) ItemOutput {
+func NewItemOutput(ID string, Doubles DoubleParamList, Longs LongParamList, Strings StringParamList, TransferFee int64) ItemOutput {
 	return ItemOutput{
 		ID:          ID,
 		Doubles:     Doubles,
@@ -38,20 +38,20 @@ func (io *ItemOutput) SetTransferFee(transferFee int64) {
 }
 
 // Item function acualize an item from item output data
-func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvCollection) (*Item, error) {
+func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvCollection) (Item, error) {
 	// This function is used on ExecuteRecipe's AddExecutedResult, and it's
 	// not acceptable to provide predefined GUID
 	dblActualize, err := io.Doubles.Actualize(ec)
 	if err != nil {
-		return nil, err
+		return Item{}, err
 	}
 	longActualize, err := io.Longs.Actualize(ec)
 	if err != nil {
-		return nil, err
+		return Item{}, err
 	}
 	stringActualize, err := io.Strings.Actualize(ec)
 	if err != nil {
-		return nil, err
+		return Item{}, err
 	}
 
 	transferFee := io.TransferFee

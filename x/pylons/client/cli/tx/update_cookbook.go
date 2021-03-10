@@ -29,8 +29,8 @@ func UpdateCookbook() *cobra.Command {
 			}
 
 			msgCCB.Sender = clientCtx.GetFromAddress().String()
-			msgCCB.Version = &types.SemVer{tmpVersion}
-			msgCCB.SupportEmail = &types.Email{tmpEmail}
+			msgCCB.Version = types.SemVer{tmpVersion}
+			msgCCB.SupportEmail = types.Email{tmpEmail}
 
 			err = msgCCB.ValidateBasic()
 			if err != nil {

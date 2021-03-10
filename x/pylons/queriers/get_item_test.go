@@ -25,7 +25,7 @@ func TestGetItem(t *testing.T) {
 	// mock item
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
 	mockedItem := keep.GenItem(cbData.CookbookID, sender1, mockItemName)
-	err := tci.PlnK.SetItem(tci.Ctx, *mockedItem)
+	err := tci.PlnK.SetItem(tci.Ctx, mockedItem)
 	require.True(t, err == nil)
 
 	cases := map[string]struct {

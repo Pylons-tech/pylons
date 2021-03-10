@@ -23,7 +23,7 @@ func (k msgServer) HandlerMsgEnableRecipe(ctx context.Context, msg *msgs.MsgEnab
 		return nil, errInternal(err)
 	}
 
-	if !sender.Equals(recipe.Sender) {
+	if sender.String() != recipe.Sender {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "msg sender is not the owner of the recipe")
 	}
 

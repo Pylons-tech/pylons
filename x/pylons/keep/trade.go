@@ -10,7 +10,7 @@ import (
 
 // SetTrade sets a trade in the key store
 func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) error {
-	if trade.Sender.Empty() {
+	if trade.Sender == "" {
 		return errors.New("SetTrade: the sender cannot be empty")
 	}
 	return k.SetObject(ctx, types.TypeTrade, trade.ID, k.TradeKey, trade)
@@ -53,7 +53,7 @@ func (k Keeper) GetTradesByCreator(ctx sdk.Context, sender sdk.AccAddress) ([]ty
 
 // UpdateTrade is used to update the trade using the id
 func (k Keeper) UpdateTrade(ctx sdk.Context, id string, trade types.Trade) error {
-	if trade.Sender.Empty() {
+	if trade.Sender == "" {
 		return errors.New("UpdateTrade: the sender cannot be empty")
 
 	}

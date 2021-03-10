@@ -31,7 +31,6 @@ func GetLockedCoins() *cobra.Command {
 			}
 
 			return clientCtx.PrintProto(res)
-			return nil
 		},
 	}
 	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")

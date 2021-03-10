@@ -26,10 +26,10 @@ func UpdateRecipeTxBuilder(cliCtx client.Context, storeName string) http.Handler
 		genOneOutput := types.GenOneOutput("chair", "Raichu")
 
 		msg := msgs.NewMsgUpdateRecipe("id001", "recipeName", "name", "this has to meet character limits lol",
-			&genCoinInputList,
-			&genItemInputList,
-			&genEntries,
-			&genOneOutput,
+			genCoinInputList,
+			genItemInputList,
+			genEntries,
+			genOneOutput,
 			0,
 			sender,
 		)

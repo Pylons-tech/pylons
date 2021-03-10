@@ -25,7 +25,7 @@ func TestGetTrade(t *testing.T) {
 
 	cbData := GenCookbook(sender, "cookbook-0001", "this has to meet character limits")
 	item := GenItem(cbData.ID, sender, "Raichu")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 
 	require.True(t, err == nil)
 
@@ -38,7 +38,7 @@ func TestGetTrade(t *testing.T) {
 		"basic flow test": {
 			sender,
 			types.ItemList{
-				*item,
+				List: []types.Item{item},
 			},
 			0,
 			false,
@@ -46,7 +46,7 @@ func TestGetTrade(t *testing.T) {
 		"error for empty sender": {
 			nil,
 			types.ItemList{
-				*item,
+				List: []types.Item{item},
 			},
 			0,
 			true,

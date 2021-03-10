@@ -25,7 +25,7 @@ func (querier *querierServer) GetExecution(ctx context.Context, req *types.GetEx
 	}
 
 	return &types.GetExecutionResponse{
-		NodeVersion: &exec.NodeVersion,
+		NodeVersion: exec.NodeVersion,
 		ID:          exec.ID,
 		RecipeID:    exec.RecipeID,
 		CookbookID:  exec.CookbookID,

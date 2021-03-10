@@ -16,14 +16,14 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 	rcpData := GenRecipe(sender, cbData.ID, "new recipe", "this has to meet character limits; lol")
 
 	var cl sdk.Coins
-	for _, inp := range rcpData.CoinInputs {
+	for _, inp := range rcpData.CoinInputs.Coins {
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
 	var inputItems []types.Item
 
-	inputItems = append(inputItems, *GenItem(cbData.ID, sender, "Raichu"))
-	inputItems = append(inputItems, *GenItem(cbData.ID, sender, "Raichu"))
+	inputItems = append(inputItems, GenItem(cbData.ID, sender, "Raichu"))
+	inputItems = append(inputItems, GenItem(cbData.ID, sender, "Raichu"))
 
 	exec := types.NewExecution(
 		rcpData.ID,
@@ -108,7 +108,7 @@ func TestKeeperGetExecution(t *testing.T) {
 			} else {
 				require.True(t, err == nil)
 				require.True(t, execution.RecipeID == exec.RecipeID)
-				require.True(t, execution.Sender.String() == exec.Sender.String())
+				require.True(t, execution.Sender == exec.Sender)
 				require.True(t, execution.Completed == exec.Completed)
 			}
 		})
