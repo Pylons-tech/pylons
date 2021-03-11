@@ -11,62 +11,62 @@ import "pylons/types.proto";
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/msgs";
 
 service Msg {
-  // HandlerMsgCreateAccount is used to send pylons to requesters. This handler is part of the faucet
-  rpc HandlerMsgCreateAccount(MsgCreateAccount) returns (MsgCreateExecutionResponse);
+  // CreateAccount is used to send pylons to requesters. This handler is part of the faucet
+  rpc CreateAccount(MsgCreateAccount) returns (MsgCreateExecutionResponse);
 
-  // HandlerMsgGetPylons is used to send pylons to requesters. This handler is part of the faucet
-  rpc HandlerMsgGetPylons(MsgGetPylons) returns (MsgGetPylonsResponse);
+  // GetPylons is used to send pylons to requesters. This handler is part of the faucet
+  rpc GetPylons(MsgGetPylons) returns (MsgGetPylonsResponse);
 
-  // HandlerMsgGoogleIAPGetPylons is used to send pylons to requesters after google iap verification
-  rpc HandlerMsgGoogleIAPGetPylons(MsgGoogleIAPGetPylons) returns (MsgGoogleIAPGetPylonsResponse);
+  // GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
+  rpc GoogleIAPGetPylons(MsgGoogleIAPGetPylons) returns (MsgGoogleIAPGetPylonsResponse);
 
-  // HandlerMsgSendCoins is used to transact pylons between people
-  rpc HandlerMsgSendCoins(MsgSendCoins) returns (MsgSendCoinsResponse);
+  // SendCoins is used to transact pylons between people
+  rpc SendCoins(MsgSendCoins) returns (MsgSendCoinsResponse);
 
-  // HandlerMsgSendItems is used to send items between people
-  rpc HandlerMsgSendItems(MsgSendItems) returns (MsgSendItemsResponse);
+  // SendItems is used to send items between people
+  rpc SendItems(MsgSendItems) returns (MsgSendItemsResponse);
 
-  // HandlerMsgCreateCookbook is used to create cookbook by a developer
-  rpc HandlerMsgCreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
+  // CreateCookbook is used to create cookbook by a developer
+  rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
 
   // HandlerMsgUpdateCookbook is used to update cookbook by a developer
   rpc HandlerMsgUpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
 
-  // HandlerMsgCreateRecipe is used to create recipe by a developer
-  rpc HandlerMsgCreateRecipe(MsgCreateRecipe) returns (MsgCreateRecipeResponse);
+  // CreateRecipe is used to create recipe by a developer
+  rpc CreateRecipe(MsgCreateRecipe) returns (MsgCreateRecipeResponse);
 
   // HandlerMsgUpdateRecipe is used to update recipe by a developer
   rpc HandlerMsgUpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
 
-  // HandlerMsgExecuteRecipe is used to execute a recipe
-  rpc HandlerMsgExecuteRecipe (MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
+  // ExecuteRecipe is used to execute a recipe
+  rpc ExecuteRecipe (MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
 
-  // HandlerMsgDisableRecipe is used to disable recipe by a developer
-  rpc HandlerMsgDisableRecipe (MsgDisableRecipe) returns (MsgDisableRecipeResponse);
+  // DisableRecipe is used to disable recipe by a developer
+  rpc DisableRecipe (MsgDisableRecipe) returns (MsgDisableRecipeResponse);
 
-  // HandlerMsgEnableRecipe is used to enable recipe by a developer
-  rpc HandlerMsgEnableRecipe (MsgEnableRecipe) returns (MsgEnableRecipeResponse);
+  // EnableRecipe is used to enable recipe by a developer
+  rpc EnableRecipe (MsgEnableRecipe) returns (MsgEnableRecipeResponse);
 
-  // HandlerMsgCheckExecution is used to check the status of an execution
-  rpc HandlerMsgCheckExecution (MsgCheckExecution) returns (MsgCheckExecutionResponse);
+  // CheckExecution is used to check the status of an execution
+  rpc CheckExecution (MsgCheckExecution) returns (MsgCheckExecutionResponse);
 
-  // HandlerMsgFiatItem is used to create item within 1 block execution
-  rpc HandlerMsgFiatItem(MsgFiatItem) returns (MsgFiatItemResponse);
+  // FiatItem is used to create item within 1 block execution
+  rpc FiatItem(MsgFiatItem) returns (MsgFiatItemResponse);
 
-  // HandlerMsgUpdateItemString is used to transact pylons between people
-  rpc HandlerMsgUpdateItemString(MsgUpdateItemString) returns (MsgUpdateItemStringResponse);
+  // UpdateItemString is used to transact pylons between people
+  rpc UpdateItemString(MsgUpdateItemString) returns (MsgUpdateItemStringResponse);
 
-  // HandlerMsgCreateTrade is used to create a trade by a user
-  rpc HandlerMsgCreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
+  // CreateTrade is used to create a trade by a user
+  rpc CreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
 
-  // HandlerMsgFulfillTrade is used to fulfill a trade
-  rpc HandlerMsgFulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
+  // FulfillTrade is used to fulfill a trade
+  rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
 
-  // HandlerMsgDisableTrade is used to enable trade by a developer
-  rpc HandlerMsgDisableTrade(MsgDisableTrade) returns (MsgDisableTradeResponse);
+  // DisableTrade is used to enable trade by a developer
+  rpc DisableTrade(MsgDisableTrade) returns (MsgDisableTradeResponse);
 
-  // HandlerMsgEnableTrade is used to enable trade by a developer
-  rpc HandlerMsgEnableTrade(MsgEnableTrade) returns (MsgEnableTradeResponse);
+  // EnableTrade is used to enable trade by a developer
+  rpc EnableTrade(MsgEnableTrade) returns (MsgEnableTradeResponse);
 }
 
 

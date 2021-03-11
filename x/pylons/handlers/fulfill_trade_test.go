@@ -33,7 +33,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	require.True(t, err == nil)
 
 	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender)
-	cookbookResult, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
@@ -57,7 +57,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 
 	// Create cookbook for sender3
 	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender3)
-	cookbookResult1, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg1)
+	cookbookResult1, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg1)
 	require.True(t, len(cookbookResult1.CookbookID) > 0)
 
 	item4 := keep.GenItem(cookbookResult1.CookbookID, sender4, "Tachu")
@@ -230,11 +230,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			pylonsLLCAmountFirst := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
 
 			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
-			ctResult, err := tci.PlnH.HandlerMsgCreateTrade(sdk.WrapSDKContext(tci.Ctx), &ctMsg)
+			ctResult, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &ctMsg)
 			require.True(t, err == nil, err)
 			require.True(t, len(ctResult.TradeID) > 0)
 			ffMsg := msgs.NewMsgFulfillTrade(ctResult.TradeID, tc.fulfiller, tc.fulfillInputItemIDs)
-			ffResult, err := tci.PlnH.HandlerMsgFulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
+			ffResult, err := tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 			if !tc.showError {
 				require.True(t, err == nil, err)
 				require.True(t, ffResult.Status == "Success")

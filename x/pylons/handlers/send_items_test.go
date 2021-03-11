@@ -182,7 +182,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
 			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbook.Sender)
 
-			_, err = tci.PlnH.HandlerMsgSendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
+			_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			coinsSenderAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
 			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)

@@ -51,14 +51,14 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 					tc.sender,
 				)
 
-				cookbookResult, err := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 				require.True(t, err == nil)
 				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
 			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender, 0)
-			result, err := tci.PlnH.HandlerMsgFiatItem(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.FiatItem(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, len(result.ItemID) > 0)

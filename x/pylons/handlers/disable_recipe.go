@@ -7,8 +7,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgDisableRecipe is used to disable recipe by a developer
-func (k msgServer) HandlerMsgDisableRecipe(ctx context.Context, msg *msgs.MsgDisableRecipe) (*msgs.MsgDisableRecipeResponse, error) {
+// DisableRecipe is used to disable recipe by a developer
+func (k msgServer) DisableRecipe(ctx context.Context, msg *msgs.MsgDisableRecipe) (*msgs.MsgDisableRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

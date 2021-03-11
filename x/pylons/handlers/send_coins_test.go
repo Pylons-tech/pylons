@@ -44,7 +44,7 @@ func TestHandlerMsgSendCoins(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgSendCoins(tc.amount, tc.fromAddress, tc.toAddress)
-			_, err := tci.PlnH.HandlerMsgSendCoins(sdk.WrapSDKContext(tci.Ctx), &msg)
+			_, err := tci.PlnH.SendCoins(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.toAddress).IsEqual(tc.amount))

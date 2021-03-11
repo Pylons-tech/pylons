@@ -34,7 +34,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		sender1.String(),
 	)
 
-	newRcpResult, _ := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
+	newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 	cases := map[string]struct {
 		cbID         string
 		recipeName   string

@@ -123,7 +123,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
-			result, err := tci.PlnH.HandlerMsgExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
 				fmt.Println(err)

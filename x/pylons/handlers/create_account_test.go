@@ -35,7 +35,7 @@ func TestHandlerMsgCreateAccount(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateAccount(tc.fromAddress)
-			_, err := tci.PlnH.HandlerMsgCreateAccount(sdk.WrapSDKContext(tci.Ctx), &msg)
+			_, err := tci.PlnH.CreateAccount(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

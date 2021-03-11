@@ -5,9 +5,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 )
 
-// HandlerMsgCreateAccount is used to send pylons to requesters. This handler is part of the
+// CreateAccount is used to send pylons to requesters. This handler is part of the
 // faucet
-func (k msgServer) HandlerMsgCreateAccount(ctx context.Context, msg *msgs.MsgCreateAccount) (*msgs.MsgCreateExecutionResponse, error) {
+func (k msgServer) CreateAccount(ctx context.Context, msg *msgs.MsgCreateAccount) (*msgs.MsgCreateExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 

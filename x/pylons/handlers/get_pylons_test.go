@@ -33,7 +33,7 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgGetPylons(types.NewPylon(tc.reqAmount), tc.fromAddress)
-			_, err := tci.PlnH.HandlerMsgGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
+			_, err := tci.PlnH.GetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, tc.fromAddress, types.NewPylon(tc.reqAmount)))

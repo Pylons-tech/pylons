@@ -7,8 +7,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// HandlerMsgFiatItem is used to create item within 1 block execution
-func (k msgServer) HandlerMsgFiatItem(ctx context.Context, msg *msgs.MsgFiatItem) (*msgs.MsgFiatItemResponse, error) {
+// FiatItem is used to create item within 1 block execution
+func (k msgServer) FiatItem(ctx context.Context, msg *msgs.MsgFiatItem) (*msgs.MsgFiatItemResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

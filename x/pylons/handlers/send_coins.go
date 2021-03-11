@@ -8,8 +8,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgSendCoins is used to transact pylons between people
-func (k msgServer) HandlerMsgSendCoins(ctx context.Context, msg *msgs.MsgSendCoins) (*msgs.MsgSendCoinsResponse, error) {
+// SendCoins is used to transact pylons between people
+func (k msgServer) SendCoins(ctx context.Context, msg *msgs.MsgSendCoins) (*msgs.MsgSendCoinsResponse, error) {
 	err := msg.ValidateBasic()
 
 	if err != nil {

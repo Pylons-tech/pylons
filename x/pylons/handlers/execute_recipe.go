@@ -23,8 +23,8 @@ type ExecuteRecipeScheduleOutput struct {
 	ExecID string
 }
 
-// HandlerMsgExecuteRecipe is used to execute a recipe
-func (k msgServer) HandlerMsgExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe) (*msgs.MsgExecuteRecipeResponse, error) {
+// ExecuteRecipe is used to execute a recipe
+func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe) (*msgs.MsgExecuteRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

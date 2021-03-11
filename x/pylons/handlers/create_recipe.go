@@ -10,8 +10,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgCreateRecipe is used to create recipe by a developer
-func (k msgServer) HandlerMsgCreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) (*msgs.MsgCreateRecipeResponse, error) {
+// CreateRecipe is used to create recipe by a developer
+func (k msgServer) CreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) (*msgs.MsgCreateRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

@@ -7,8 +7,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgGetPylons is used to send pylons to requesters. This handler is part of the faucet
-func (k msgServer) HandlerMsgGetPylons(ctx context.Context, msg *msgs.MsgGetPylons) (*msgs.MsgGetPylonsResponse, error) {
+// GetPylons is used to send pylons to requesters. This handler is part of the faucet
+func (k msgServer) GetPylons(ctx context.Context, msg *msgs.MsgGetPylons) (*msgs.MsgGetPylonsResponse, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	err := msg.ValidateBasic()
 

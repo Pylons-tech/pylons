@@ -10,8 +10,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgEnableTrade is used to enable trade by a developer
-func (k msgServer) HandlerMsgEnableTrade(ctx context.Context, msg *msgs.MsgEnableTrade) (*msgs.MsgEnableTradeResponse, error) {
+// EnableTrade is used to enable trade by a developer
+func (k msgServer) EnableTrade(ctx context.Context, msg *msgs.MsgEnableTrade) (*msgs.MsgEnableTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

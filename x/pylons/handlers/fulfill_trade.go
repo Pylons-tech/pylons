@@ -13,8 +13,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgFulfillTrade is used to fulfill a trade
-func (k msgServer) HandlerMsgFulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) (*msgs.MsgFulfillTradeResponse, error) {
+// FulfillTrade is used to fulfill a trade
+func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) (*msgs.MsgFulfillTradeResponse, error) {
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

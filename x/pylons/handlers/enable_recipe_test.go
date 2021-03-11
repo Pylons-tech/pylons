@@ -50,7 +50,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgEnableRecipe(tc.rcpID, tc.sender)
-			result, err := tci.PlnH.HandlerMsgEnableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.EnableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
 				require.True(t, err == nil)

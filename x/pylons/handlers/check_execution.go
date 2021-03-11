@@ -62,7 +62,6 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 		return nil, err
 	}
 
-
 	p := ExecProcess{ctx: ctx, keeper: keeper, recipe: recipe, matchedItems: exec.ItemInputs}
 	outputSTR, err = p.Run(sender)
 
@@ -80,7 +79,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 }
 
 // HandlerMsgCheckExecution is used to check the status of an execution
-func (k msgServer) 	HandlerMsgCheckExecution(ctx context.Context, msg *msgs.MsgCheckExecution) (*msgs.MsgCheckExecutionResponse, error) {
+func (k msgServer) CheckExecution(ctx context.Context, msg *msgs.MsgCheckExecution) (*msgs.MsgCheckExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

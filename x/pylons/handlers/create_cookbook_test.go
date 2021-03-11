@@ -63,7 +63,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, "", tc.desc, "SketchyCo",
 				types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, tc.level, msgs.DefaultCostPerBlock, tc.sender)
 
-			result, err := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, len(result.CookbookID) > 0)
@@ -81,9 +81,9 @@ func TestSameCookbookIDCreation(t *testing.T) {
 
 	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{0}, msgs.DefaultCostPerBlock, sender1)
 
-	result, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
+	result, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	require.True(t, len(result.CookbookID) > 0)
 
-	_, err := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
+	_, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	require.True(t, strings.Contains(err.Error(), "A cookbook with CookbookID samecookbookID-0001 already exists"))
 }

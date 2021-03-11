@@ -10,8 +10,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgGoogleIAPGetPylons is used to send pylons to requesters after google iap verification
-func (k msgServer) HandlerMsgGoogleIAPGetPylons(ctx context.Context, msg *msgs.MsgGoogleIAPGetPylons) (*msgs.MsgGoogleIAPGetPylonsResponse, error) {
+// GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
+func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *msgs.MsgGoogleIAPGetPylons) (*msgs.MsgGoogleIAPGetPylonsResponse, error) {
 	err := msg.ValidateBasic()
 
 	if err != nil {

@@ -11,8 +11,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgCreateTrade is used to create a trade by a user
-func (k msgServer) HandlerMsgCreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*msgs.MsgCreateTradeResponse, error) {
+// CreateTrade is used to create a trade by a user
+func (k msgServer) CreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*msgs.MsgCreateTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

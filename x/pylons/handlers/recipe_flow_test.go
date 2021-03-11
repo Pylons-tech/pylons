@@ -65,7 +65,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				tc.sender.String(),
 			)
 
-			newRcpResult, _ := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
+			newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 
 			tc.rcpID = newRcpResult.RecipeID
 
@@ -141,7 +141,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender)
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
-			checkMsgResult, _ := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
+			checkMsgResult, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 
 			if tc.showError {
 				require.True(t, checkMsgResult.Status == "Failure")

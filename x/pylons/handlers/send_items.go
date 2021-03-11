@@ -12,8 +12,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// HandlerMsgSendItems is used to send items between people
-func (k msgServer) HandlerMsgSendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs.MsgSendItemsResponse, error) {
+// SendItems is used to send items between people
+func (k msgServer) SendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs.MsgSendItemsResponse, error) {
 
 	err := msg.ValidateBasic()
 

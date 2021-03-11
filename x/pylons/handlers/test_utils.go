@@ -24,7 +24,7 @@ func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) *msgs.MsgCreate
 func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) *msgs.MsgCreateCookbookResponse {
 	cookbookDesc := "this has to meet character limits"
 	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender)
-	cbResult, err := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
+	cbResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -51,7 +51,7 @@ func MockRecipe(
 		blockInterval,
 		sender.String(),
 	)
-	newRcpResult, err := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
+	newRcpResult, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -169,7 +169,7 @@ func MockExecution(
 	itemIDs []string,
 ) (*msgs.MsgExecuteRecipeResponse, error) {
 	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
-	result, err := tci.PlnH.HandlerMsgExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+	result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err
 	}
@@ -186,7 +186,7 @@ func MockTrade(
 	sender sdk.AccAddress,
 ) (*msgs.MsgCreateTradeResponse, error) {
 	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
-	result, err := tci.PlnH.HandlerMsgCreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
+	result, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err
 	}

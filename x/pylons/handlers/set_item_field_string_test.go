@@ -126,11 +126,11 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			}
 
 			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
-			result, err := tci.PlnH.HandlerMsgUpdateItemString(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.UpdateItemString(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
 				if err != nil {
-					t.Log("HandlerMsgUpdateItemString.err", err)
+					t.Log("UpdateItemString.err", err)
 				}
 				require.True(t, err == nil)
 				require.True(t, result.Status == "Success")

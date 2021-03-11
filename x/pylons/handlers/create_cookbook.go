@@ -13,8 +13,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgCreateCookbook is used to create cookbook by a developer
-func (k msgServer) HandlerMsgCreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbook) (*msgs.MsgCreateCookbookResponse, error) {
+// CreateCookbook is used to create cookbook by a developer
+func (k msgServer) CreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbook) (*msgs.MsgCreateCookbookResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {

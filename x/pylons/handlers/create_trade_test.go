@@ -31,7 +31,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		msgs.DefaultCostPerBlock,
 		sender,
 	)
-	cookbookResult, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
@@ -129,7 +129,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 
 			msg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
 
-			result, err := tci.PlnH.HandlerMsgCreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {
 				require.True(t, err == nil)
 				require.True(t, len(result.TradeID) > 0)

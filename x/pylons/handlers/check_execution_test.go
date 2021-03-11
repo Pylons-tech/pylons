@@ -148,7 +148,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
-			result, err := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
+			result, err := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 			require.True(t, err == nil)
 
 			if tc.expectError {
@@ -169,7 +169,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			}
 
 			if tc.retryExecution {
-				result, _ := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
+				result, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 				require.True(t, err == nil)
 				require.True(t, result.Status == "Completed")
 				require.True(t, result.Message == tc.retryResMessage)

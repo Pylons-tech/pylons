@@ -185,7 +185,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					msgs.DefaultCostPerBlock,
 					tc.sender,
 				)
-				cookbookResult, err := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 				require.True(t, err == nil)
 				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
@@ -223,7 +223,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				tc.sender.String(),
 			)
 
-			result, err := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+			result, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {
 				require.True(t, err == nil)
 				require.True(t, len(result.RecipeID) > 0)
@@ -252,7 +252,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		sender1,
 	)
 
-	result, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
+	result, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	require.True(t, len(result.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
@@ -269,12 +269,12 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		sender1.String(),
 	)
 
-	rcpResult, _ := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
+	rcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
 
 	require.True(t, len(rcpResult.RecipeID) > 0)
 
 	// try creating it 2nd time
-	_, err := tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
+	_, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
 	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
 }

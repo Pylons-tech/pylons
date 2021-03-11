@@ -12,8 +12,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// HandlerMsgUpdateItemString is used to transact pylons between people
-func (k msgServer) HandlerMsgUpdateItemString(ctx context.Context, msg *msgs.MsgUpdateItemString) (*msgs.MsgUpdateItemStringResponse, error) {
+// UpdateItemString is used to transact pylons between people
+func (k msgServer) UpdateItemString(ctx context.Context, msg *msgs.MsgUpdateItemString) (*msgs.MsgUpdateItemStringResponse, error) {
 
 	err := msg.ValidateBasic()
 

@@ -48,7 +48,7 @@ func TestCoinLock(t *testing.T) {
 		sender1,
 	)
 
-	cookbookResult, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	cbData.CookbookID = cookbookResult.CookbookID
 	cbData.Status = cookbookResult.Status
 	cbData.Message = cookbookResult.Message
@@ -503,7 +503,7 @@ func TestCoinLock(t *testing.T) {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				disableTrdMsg := msgs.NewMsgDisableTrade(tradeData.TradeID, account1)
-				_, err := tci.PlnH.HandlerMsgDisableTrade(sdk.WrapSDKContext(tci.Ctx), &disableTrdMsg)
+				_, err := tci.PlnH.DisableTrade(sdk.WrapSDKContext(tci.Ctx), &disableTrdMsg)
 
 				require.True(t, err == nil)
 
@@ -520,7 +520,7 @@ func TestCoinLock(t *testing.T) {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
 				enableTrdMsg := msgs.NewMsgEnableTrade(tradeData.TradeID, account1)
-				_, err := tci.PlnH.HandlerMsgEnableTrade(sdk.WrapSDKContext(tci.Ctx), &enableTrdMsg)
+				_, err := tci.PlnH.EnableTrade(sdk.WrapSDKContext(tci.Ctx), &enableTrdMsg)
 
 				require.True(t, err == nil)
 
@@ -579,7 +579,7 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil)
 
 				msg := msgs.NewMsgSendItems([]string{item.ID}, account1, account2)
-				_, err = tci.PlnH.HandlerMsgSendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
+				_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 				if !tc.shouldFailSendItems {
 					require.True(t, err == nil)
@@ -619,7 +619,7 @@ func TestCoinLock(t *testing.T) {
 					account1,
 					[]string{},
 				)
-				_, err := tci.PlnH.HandlerMsgExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+				_, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 				// lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				// balanceAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, account1)
@@ -639,7 +639,7 @@ func TestCoinLock(t *testing.T) {
 					account2,
 					[]string{},
 				)
-				_, err = tci.PlnH.HandlerMsgFulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
+				_, err = tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 
 				require.True(t, err == nil)
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
@@ -653,7 +653,7 @@ func TestCoinLock(t *testing.T) {
 
 				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, account1)
 				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
-				result, _ := tci.PlnH.HandlerMsgCheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
+				result, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 				require.True(t, result.Status == "Success")
 
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)

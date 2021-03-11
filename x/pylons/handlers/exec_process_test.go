@@ -305,7 +305,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		sender1.String(),
 	)
 
-	_, err = tci.PlnH.HandlerMsgCreateRecipe(sdk.WrapSDKContext(tci.Ctx), &exmpRcpMsg)
+	_, err = tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &exmpRcpMsg)
 	require.True(t, err == nil, err)
 
 	cases := map[string]struct {

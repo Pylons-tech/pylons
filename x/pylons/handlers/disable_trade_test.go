@@ -36,7 +36,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		msgs.DefaultCostPerBlock,
 		sender,
 	)
-	cookbookResult, _ := tci.PlnH.HandlerMsgCreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
@@ -115,7 +115,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 
 			delTrdMsg := msgs.NewMsgDisableTrade(tc.tradeID, tc.sender)
-			_, err := tci.PlnH.HandlerMsgDisableTrade(sdk.WrapSDKContext(tci.Ctx), &delTrdMsg)
+			_, err := tci.PlnH.DisableTrade(sdk.WrapSDKContext(tci.Ctx), &delTrdMsg)
 			if tc.showError == false {
 				trd, _ := tci.PlnK.GetTrade(tci.Ctx, tc.tradeID)
 				require.True(t, trd.Disabled)

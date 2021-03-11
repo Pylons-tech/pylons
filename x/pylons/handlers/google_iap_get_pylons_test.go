@@ -86,7 +86,7 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 				receiptDataBase64,
 				tc.signature,
 				tc.fromAddress)
-			_, err := tci.PlnH.HandlerMsgGoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
+			_, err := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {
 				require.True(t, err == nil, err)
@@ -98,7 +98,7 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 			}
 
 			if tc.tryReuseOrderID {
-				_, err := tci.PlnH.HandlerMsgGoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
+				_, err := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.tryReuseErr))
 			}
