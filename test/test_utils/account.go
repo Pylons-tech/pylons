@@ -2,18 +2,19 @@ package testutils
 
 import (
 	"errors"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"sync"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 var keyMapMux sync.Mutex
 var keyAddressMap = make(map[string]sdk.AccAddress)
-var keyPrivateMap = make(map[string]secp256k1.PrivKeySecp256k1)
+var keyPrivateMap = make(map[string]cryptotypes.PrivKey)
 var chainAccountCount uint64
 
 // AddNewLocalKey is a function to add key cli
@@ -52,12 +53,15 @@ func CreateChainAccount(key string) error {
 	if !exist {
 		return errors.New("account does not exist on local")
 	}
-	acc := &auth.BaseAccount{
+	any, err := codectypes.NewAnyWithValue(keyPrivateMap[key].PubKey())
+	if err != nil {
+		return err
+	}
+	acc := &authtypes.BaseAccount{
 		Sequence:      0,
-		Coins:         sdk.Coins{},
 		AccountNumber: chainAccountCount,
-		PubKey:        keyPrivateMap[key].PubKey(),
-		Address:       address,
+		PubKey:        any,
+		Address:       address.String(),
 	}
 	tci.Ak.SetAccount(tci.Ctx, acc)
 	chainAccountCount++

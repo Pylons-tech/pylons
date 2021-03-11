@@ -3,7 +3,9 @@ package testutils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Pylons-tech/pylons/app/params"
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"os"
 	"regexp"
 
@@ -11,9 +13,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
 	log "github.com/sirupsen/logrus"
-	amino "github.com/tendermint/go-amino"
 )
 
 var tci keep.TestCoinInput
@@ -34,17 +34,20 @@ func GetTestCoinInput() keep.TestCoinInput {
 }
 
 // GetAminoCdc is a utility function to get amino codec
-func GetAminoCdc() *amino.Codec {
-	return params.MakeCodec()
+func GetAminoCdc() *codec.LegacyAmino {
+	return keep.MakeCodec()
 }
 
 // GetAccountInfoFromAddr is a function to get account information from address
-func GetAccountInfoFromAddr(address sdk.AccAddress, t *testing.T) auth.BaseAccount {
+func GetAccountInfoFromAddr(address sdk.AccAddress, t *testing.T) authtypes.BaseAccount {
 	exportedAccInfo := tci.Ak.GetAccount(tci.Ctx, address)
-	accInfo := auth.BaseAccount{
-		Address:       exportedAccInfo.GetAddress(),
-		Coins:         exportedAccInfo.GetCoins(),
-		PubKey:        exportedAccInfo.GetPubKey(),
+	any, err := codectypes.NewAnyWithValue(exportedAccInfo.GetPubKey())
+	if err != nil {
+		return authtypes.BaseAccount{}
+	}
+	accInfo := authtypes.BaseAccount{
+		Address:       exportedAccInfo.GetAddress().String(),
+		PubKey:        any,
 		AccountNumber: exportedAccInfo.GetAccountNumber(),
 		Sequence:      exportedAccInfo.GetSequence(),
 	}
@@ -52,7 +55,7 @@ func GetAccountInfoFromAddr(address sdk.AccAddress, t *testing.T) auth.BaseAccou
 }
 
 // GetAccountInfoFromName is a function to get account information from account key
-func GetAccountInfoFromName(key string, t *testing.T) auth.BaseAccount {
+func GetAccountInfoFromName(key string, t *testing.T) authtypes.BaseAccount {
 	addr := GetAccountAddr(key, t)
 	return GetAccountInfoFromAddr(addr, t)
 }
@@ -97,37 +100,37 @@ func GetLogFieldsFromMsgs(txMsgs []sdk.Msg) log.Fields {
 			ikeypref = "tx_msg_"
 		}
 		switch msg := msg.(type) {
-		case msgs.MsgCreateCookbook:
+		case *msgs.MsgCreateCookbook:
 			fields[ikeypref+"type"] = "MsgCreateCookbook"
 			fields[ikeypref+"cb_name"] = msg.Name
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgCreateRecipe:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *msgs.MsgCreateRecipe:
 			fields[ikeypref+"type"] = "MsgCreateRecipe"
 			fields[ikeypref+"rcp_name"] = msg.Name
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgExecuteRecipe:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *msgs.MsgExecuteRecipe:
 			fields[ikeypref+"type"] = "MsgCreateRecipe"
 			fields[ikeypref+"rcp_id"] = msg.RecipeID
 			fields[ikeypref+"sender"] = msg.Sender
-		case msgs.MsgCheckExecution:
+		case *msgs.MsgCheckExecution:
 			fields[ikeypref+"type"] = "MsgCheckExecution"
 			fields[ikeypref+"exec_id"] = msg.ExecID
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgCreateTrade:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *msgs.MsgCreateTrade:
 			fields[ikeypref+"type"] = "MsgCreateTrade"
 			fields[ikeypref+"trade_info"] = msg.ExtraInfo
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgFulfillTrade:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *msgs.MsgFulfillTrade:
 			fields[ikeypref+"type"] = "MsgFulfillTrade"
 			fields[ikeypref+"trade_id"] = msg.TradeID
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgFiatItem:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *msgs.MsgFiatItem:
 			fields[ikeypref+"type"] = "MsgFiatItem"
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgUpdateItemString:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *msgs.MsgUpdateItemString:
 			fields[ikeypref+"type"] = "MsgUpdateItemString"
 			fields[ikeypref+"item_id"] = msg.ItemID
-			fields[ikeypref+"sender"] = msg.Sender.String()
+			fields[ikeypref+"sender"] = msg.Sender
 		}
 	}
 	return fields

@@ -1,14 +1,12 @@
 package handlers
 
 import (
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
-	"github.com/tyler-smith/go-bip39"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -199,29 +197,8 @@ func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, er
 }
 
 // GenAccount is a function to generate an account
-func GenAccount() (secp256k1.PrivKey, sdk.AccAddress, error) {
-	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
-	if err != nil {
-		return secp256k1.PrivKey{}, nil, err
-	}
-	mnemonic, err := bip39.NewMnemonic(entropySeed)
-	if err != nil {
-		return secp256k1.PrivKey{}, nil, err
-	}
-
-	// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
-	seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")
-	if err != nil {
-		return secp256k1.PrivKey{}, nil, err
-	}
-
-	masterPriv, ch := hd.ComputeMastersFromSeed(seed)
-	derivedPriv, err := hd.DerivePrivateKeyForPath(masterPriv, ch, "44'/118'/0'/0/0")
-	if err != nil {
-		return secp256k1.PrivKey{}, nil, err
-	}
-
-	priv := secp256k1.GenPrivKeySecp256k1(derivedPriv)
+func GenAccount() (cryptotypes.PrivKey, sdk.AccAddress, error) {
+	priv := secp256k1.GenPrivKey()
 	cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes())
 	return priv, cosmosAddr, nil
 }
