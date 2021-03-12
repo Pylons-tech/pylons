@@ -40,7 +40,7 @@ var FixtureTestOpts = TestOptions{
 func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
 	for _, sK := range stringKeys {
 		keyExist := false
-		for _, sKV := range item.Strings {
+		for _, sKV := range item.Strings.List {
 			if sK == sKV.Key {
 				keyExist = true
 			}
@@ -56,7 +56,7 @@ func CheckItemWithStringKeys(item types.Item, stringKeys []string) bool {
 func CheckItemWithStringValues(item types.Item, stringValues map[string]string) bool {
 	for sK, sV := range stringValues {
 		keyExist := false
-		for _, sKV := range item.Strings {
+		for _, sKV := range item.Strings.List {
 			if sK == sKV.Key && sV == sKV.Value {
 				keyExist = true
 			}
@@ -72,7 +72,7 @@ func CheckItemWithStringValues(item types.Item, stringValues map[string]string) 
 func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
 	for _, sK := range dblKeys {
 		keyExist := false
-		for _, sKV := range item.Doubles {
+		for _, sKV := range item.Doubles.List {
 			if sK == sKV.Key {
 				keyExist = true
 			}
@@ -88,7 +88,7 @@ func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
 func CheckItemWithDblValues(item types.Item, dblValues map[string]pSDKTypes.FloatString) bool {
 	for sK, sV := range dblValues {
 		keyExist := false
-		for _, sKV := range item.Doubles {
+		for _, sKV := range item.Doubles.List {
 			if sK == sKV.Key && sV.Float() == sKV.Value.Float() {
 				keyExist = true
 			}
@@ -104,7 +104,7 @@ func CheckItemWithDblValues(item types.Item, dblValues map[string]pSDKTypes.Floa
 func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
 	for _, sK := range longKeys {
 		keyExist := false
-		for _, sKV := range item.Longs {
+		for _, sKV := range item.Longs.List {
 			if sK == sKV.Key {
 				keyExist = true
 			}
@@ -120,8 +120,8 @@ func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
 func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
 	for sK, sV := range longValues {
 		keyExist := false
-		for _, sKV := range item.Longs {
-			if sK == sKV.Key && sV == sKV.Value {
+		for _, sKV := range item.Longs.List {
+			if sK == sKV.Key && int64(sV) == sKV.Value {
 				keyExist = true
 			}
 		}
