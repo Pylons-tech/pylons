@@ -183,6 +183,17 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			signMode := tci.TxConfig.SignModeHandler().DefaultMode()
 
 			if tc.putSignature {
+				sigV2Empty := signing.SignatureV2{
+					PubKey: priv.PubKey(),
+					Data: &signing.SingleSignatureData{
+						SignMode:  tci.TxConfig.SignModeHandler().DefaultMode(),
+						Signature: nil,
+					},
+					Sequence: 0,
+				}
+				err = txBuilder.SetSignatures(sigV2Empty)
+				require.NoError(t, err)
+
 				var sigV2 signing.SignatureV2
 				signerData := authsigning.SignerData{
 					ChainID:       tci.Ctx.ChainID(),
@@ -249,8 +260,21 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 					txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
 					txBuilder.SetMemo("")
 
-					txBuilder.SetMsgs([]sdk.Msg{&caMsg}...)
+					err = txBuilder.SetMsgs([]sdk.Msg{&caMsg}...)
+					require.True(t, err == nil)
+
 					signMode := tci.TxConfig.SignModeHandler().DefaultMode()
+					sigV2Empty := signing.SignatureV2{
+						PubKey: priv.PubKey(),
+						Data: &signing.SingleSignatureData{
+							SignMode:  tci.TxConfig.SignModeHandler().DefaultMode(),
+							Signature: nil,
+						},
+						Sequence: 0,
+					}
+					err = txBuilder.SetSignatures(sigV2Empty)
+					require.NoError(t, err)
+
 					var sigV2 signing.SignatureV2
 					signerData := authsigning.SignerData{
 						ChainID:       tci.Ctx.ChainID(),

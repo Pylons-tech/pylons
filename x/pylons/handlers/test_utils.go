@@ -199,6 +199,6 @@ func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, er
 // GenAccount is a function to generate an account
 func GenAccount() (cryptotypes.PrivKey, sdk.AccAddress, error) {
 	priv := secp256k1.GenPrivKey()
-	cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes())
+	cosmosAddr := sdk.AccAddress(priv.PubKey().Address())
 	return priv, cosmosAddr, nil
 }
