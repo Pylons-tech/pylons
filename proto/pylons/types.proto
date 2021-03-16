@@ -49,9 +49,9 @@ message FloatString {
 message DoubleInputParam {
   string Key = 1;
   // The minimum legal value of this parameter.
-  FloatString MinValue = 2 [(gogoproto.nullable) = false];
+  string MinValue = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // The maximum legal value of this parameter.
-  FloatString MaxValue = 3 [(gogoproto.nullable) = false];
+  string  MaxValue = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
 message DoubleInputParamList {
@@ -60,8 +60,8 @@ message DoubleInputParamList {
 
 // DoubleWeightRange describes weight range that produce double value
 message DoubleWeightRange {
-  FloatString Lower = 1 [(gogoproto.nullable) = false];// This is added due to amino.Marshal does not support float variable
-  FloatString Upper = 2 [(gogoproto.nullable) = false];
+  string Lower = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];// This is added due to amino.Marshal does not support float variable
+  string Upper = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   int64 Weight = 3;
 }
 
@@ -73,10 +73,10 @@ message DoubleWeightTable  {
 message LongParam {
   string Key = 1;
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  FloatString    Rate = 2 [(gogoproto.nullable) = false];
+  string Rate = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   IntWeightTable WeightTable = 3 [(gogoproto.nullable) = false];
   // When program is not empty, IntWeightTable is ignored
-  string  Program = 4;
+  string Program = 4;
 }
 // LongParamList is a list of LongParam
 message LongParamList {
@@ -165,7 +165,7 @@ message StringParamList {
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 message  DoubleParam  {
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  FloatString Rate = 1 [(gogoproto.nullable) = false];
+  string Rate = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   string Key = 2;
   DoubleWeightTable WeightTable = 3 [(gogoproto.nullable) = false];
   // When program is not empty, DoubleWeightTable is ignored
@@ -233,7 +233,7 @@ message DoubleKeyValueList {
 // DoubleKeyValue describes double key/value set
 message  DoubleKeyValue {
   string Key = 1;
-  FloatString Value = 2 [(gogoproto.nullable) = false];
+  string Value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
 message LongKeyValueList {

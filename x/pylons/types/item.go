@@ -40,13 +40,13 @@ func (it Item) CalculateTransferFee() int64 {
 }
 
 // FindDouble is a function to get a double attribute from an item
-func (it Item) FindDouble(key string) (float64, bool) {
+func (it Item) FindDouble(key string) (sdk.Dec, bool) {
 	for _, v := range it.Doubles.List {
 		if v.Key == key {
-			return v.Value.Float(), true
+			return v.Value, true
 		}
 	}
-	return 0, false
+	return sdk.NewDec(0), false
 }
 
 // FindDoubleKey is a function get double key index

@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"math"
 	"reflect"
 	"strconv"
@@ -51,73 +52,23 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue
 	for _, param := range dpm.List {
-		var val float64
+		var valDec sdk.Dec
 		var err error
 
 		if len(param.Program) > 0 {
+			var val float64
 			val, err = ec.EvalFloat64(param.Program)
+			valDec, _ = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
 		} else {
-			val, err = param.WeightTable.Generate()
+			valDec, err = param.WeightTable.Generate()
 		}
 		if err != nil {
 			return DoubleKeyValueList{m}, err
 		}
 		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
-			Value: ToFloatString(val),
+			Value: valDec,
 		})
 	}
 	return DoubleKeyValueList{m}, nil
 }
-
-//
-//type serializeDoubleParamList struct {
-//	List []DoubleKeyValue
-//}
-//
-//func (d DoubleKeyValueList) MarshalJSON() ([]byte, error) {
-//	var res serializeDoubleKeyValueList
-//	for _, val := range d.List {
-//		res.List = append(res.List, *val)
-//	}
-//	return json.Marshal(res)
-//}
-//
-//func (d *DoubleKeyValueList) UnmarshalJSON(data []byte) error {
-//	var res serializeDoubleKeyValueList
-//	err := json.Unmarshal(data, &res)
-//	if err != nil {
-//		return err
-//	}
-//
-//	for _, val := range res.List {
-//		d.List = append(d.List, &val)
-//	}
-//	return nil
-//}
-
-//
-//type serializeDoubleKeyValueList struct {
-//	List []DoubleKeyValue
-//}
-//
-//func (d DoubleKeyValueList) MarshalJSON() ([]byte, error) {
-//	var res serializeDoubleKeyValueList
-//	for _, val := range d.List {
-//		res.List = append(res.List, *val)
-//	}
-//	return json.Marshal(res)
-//}
-//
-//func (d *DoubleKeyValueList) UnmarshalJSON(data []byte) error {
-//	var res serializeDoubleKeyValueList
-//	err := json.Unmarshal(data, &res)
-//	if err != nil {
-//		return err
-//	}
-//
-//	for _, val := range res.List {
-//		d.List = append(d.List, &val)
-//	}
-//	return nil
-//}

@@ -85,16 +85,16 @@ func GenItemOnlyEntry(itemName string) *ItemOutput {
 		itemName,
 		DoubleParamList{[]DoubleParam{{Key: "endurance", WeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
 			{
-				Lower:  ToFloatString(100.00),
-				Upper:  ToFloatString(500.00),
+				Lower:  sdk.NewDec(100.00),
+				Upper:  sdk.NewDec(500.00),
 				Weight: 6,
 			},
 			{
-				Lower:  ToFloatString(501.00),
-				Upper:  ToFloatString(800.00),
+				Lower:  sdk.NewDec(501.00),
+				Upper:  sdk.NewDec(800.00),
 				Weight: 2,
 			},
-		}}, Rate: ToFloatString(1.0)}}},
+		}}, Rate: sdk.NewDec(1.0)}}},
 		LongParamList{[]LongParam{{Key: "HP", WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 			{
 				Lower:  100,
@@ -120,12 +120,12 @@ func GenItemOnlyEntryRand(ID string, itemName string) *ItemOutput {
 		DoubleParamList{[]DoubleParam{{
 			Key:     "endurance",
 			Program: `500.00`,
-			Rate:    ToFloatString(1.0),
+			Rate:    sdk.NewDec(1.0),
 		}}},
 		LongParamList{[]LongParam{{
 			Key:     "HP",
 			Program: `500 + rand(300)`,
-			Rate:    ToFloatString(1.0),
+			Rate:    sdk.NewDec(1.0),
 		}}},
 		StringParamList{[]StringParam{{Key: "Name", Value: itemName, Rate: sdk.NewDec(1.0), Program: ""}}},
 		0,
@@ -226,7 +226,7 @@ func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParam
 }
 
 // GenModifyParamsForDouble is a function to generate modify params from double key and value
-func GenModifyParamsForDouble(targetKey string, upgradeAmount FloatString) ItemModifyParams {
+func GenModifyParamsForDouble(targetKey string, upgradeAmount sdk.Dec) ItemModifyParams {
 	return ItemModifyParams{
 		Doubles: DoubleParamList{
 			List: []DoubleParam{{

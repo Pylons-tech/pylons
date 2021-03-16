@@ -1,8 +1,12 @@
 package types
 
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
+
 // Has check if an input is between double input param range
-func (dp DoubleInputParam) Has(input float64) bool {
-	return input >= dp.MinValue.Float() && input <= dp.MaxValue.Float()
+func (dp DoubleInputParam) Has(input sdk.Dec) bool {
+	return input.GTE(dp.MinValue) && input.LTE(dp.MaxValue)
 }
 
 // Actualize creates a (key, value) list from ParamList
@@ -12,7 +16,7 @@ func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
 	for _, param := range dpm.Params {
 		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
-			Value: ToFloatString((param.MinValue.Float() + param.MaxValue.Float()) / 2),
+			Value: param.MinValue.Add(param.MaxValue).QuoInt64(2),
 		})
 	}
 	return m

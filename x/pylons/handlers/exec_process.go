@@ -188,9 +188,9 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 				return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
 			}
 			if len(toMod.Doubles.List[idx].Program) == 0 { // NO PROGRAM
-				originValue := targetItem.Doubles.List[dblKey].Value.Float()
-				upgradeAmount := dbl.Value.Float()
-				targetItem.Doubles.List[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
+				originValue := targetItem.Doubles.List[dblKey].Value
+				upgradeAmount := dbl.Value
+				targetItem.Doubles.List[dblKey].Value.Add(originValue).Add(upgradeAmount)
 			} else {
 				targetItem.Doubles.List[dblKey].Value = dbl.Value
 			}
@@ -245,7 +245,7 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 
 	for _, dbli := range item.Doubles.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
-		variables[prefix+dbli.Key] = dbli.Value.Float()
+		variables[prefix+dbli.Key] = dbli.Value
 	}
 	for _, inti := range item.Longs.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))

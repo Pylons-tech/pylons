@@ -47,8 +47,8 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) types.Item {
 			Params: []types.DoubleInputParam{
 				{
 					Key:      "endurance",
-					MinValue: types.ToFloatString(100.00),
-					MaxValue: types.ToFloatString(500.00),
+					MinValue: sdk.NewDec(100.00),
+					MaxValue: sdk.NewDec(500.00),
 				},
 			},
 		}.Actualize()},
@@ -78,8 +78,8 @@ var (
 		Params: []types.DoubleInputParam{
 			{
 				Key:      "endurance",
-				MinValue: types.ToFloatString(100.00),
-				MaxValue: types.ToFloatString(500.00),
+				MinValue: sdk.NewDec(100.00),
+				MaxValue: sdk.NewDec(500.00),
 			},
 		},
 	}
