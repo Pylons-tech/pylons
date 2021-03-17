@@ -18,31 +18,31 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	sender, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cbData := CreateCookbookResponse{}
 
 	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "cookbook-id-0001", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 	err = json.Unmarshal(cookbookResult.Data, &cbData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	item := keep.GenItem(cbData.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item1 := keep.GenItem(cbData.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item1)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item2 := keep.GenItem(cbData.CookbookID, sender2, "Pichu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item2)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item3 := keep.GenItem(cbData.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, *item3)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		sender         sdk.AccAddress
@@ -125,9 +125,9 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 			result, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
 			if !tc.showError {
 				ctRespData := CreateTradeResponse{}
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				err = json.Unmarshal(result.Data, &ctRespData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(ctRespData.TradeID) > 0)
 			} else {
 				require.True(t, err != nil)

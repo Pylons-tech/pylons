@@ -21,7 +21,7 @@ func TestQueriersItemsBySender(t *testing.T) {
 
 	item := keep.GenItem(cbData.CookbookID, sender1, "Raichu")
 	err := tci.PlnK.SetItem(tci.Ctx, *item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		path          []string
@@ -69,7 +69,7 @@ func TestQueriersItemsBySender(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				itemResp := ItemResp{}
 				itemRespErr := json.Unmarshal(result, &itemResp)

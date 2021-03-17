@@ -18,7 +18,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	sender, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	id := uuid.New()
 	id2 := uuid.New()
@@ -29,13 +29,13 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "cookbook-id-0001", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
 	err = json.Unmarshal(cookbookResult.Data, &cbData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	item := keep.GenItem(cbData.CookbookID, sender, "Raichu")
 	// item.OwnerTradeID = id.String()
 	err = tci.PlnK.SetItem(tci.Ctx, *item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	// add 3 trades. one open trade by each sender and one closed trade
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
@@ -46,7 +46,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		Sender:      sender,
 		Disabled:    true, // we disable this trade initially
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id2.String(),
@@ -54,7 +54,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2,
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id3.String(),
@@ -64,7 +64,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 		Sender:      sender2,
 		Disabled:    true, // we disable this trade initially
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		tradeID      string

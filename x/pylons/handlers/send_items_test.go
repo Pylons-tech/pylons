@@ -23,7 +23,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
 	cbData := MockCookbook(tci, sender1)
 	cookbook, err := tci.PlnK.GetCookbook(tci.Ctx, cbData.CookbookID)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
 	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
@@ -45,28 +45,28 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	item7.SetTransferFee(1187)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item1)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item2)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item3)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item4)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item5)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item6)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item7)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetItem(tci.Ctx, *item8)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		itemIDs         []string
@@ -175,7 +175,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			coinsSenderBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
 			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
@@ -190,7 +190,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			if !tc.showError {
 				for _, itemID := range tc.itemIDs {
 					item, err := tci.PlnK.GetItem(tci.Ctx, itemID)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					require.True(t, item.Sender.String() == tc.toAddress.String())
 				}
 

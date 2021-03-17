@@ -67,7 +67,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			if !tc.showError {
 				cbData := CreateCookbookResponse{}
 				err := json.Unmarshal(result.Data, &cbData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(cbData.CookbookID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -85,7 +85,7 @@ func TestSameCookbookIDCreation(t *testing.T) {
 	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
 	cbData := CreateCookbookResponse{}
 	err := json.Unmarshal(result.Data, &cbData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, len(cbData.CookbookID) > 0)
 
 	_, err = HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)

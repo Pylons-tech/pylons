@@ -1,0 +1,11 @@
+{
+    "Doubles": [],
+    "Longs": [],
+    "Strings": [],
+    "TransferFee": {"MinValue": "1", "MaxValue": "2000"},
+    "Conditions": {
+        "Doubles": [],
+        "Longs": [{"Key": "executed_by_count(owner, recipeID, itemID)", "MinValue": "0", "MaxValue": "0"}],
+        "Strings": []
+    }
+}

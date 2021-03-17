@@ -41,9 +41,9 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 			if tc.createCookbook {
 				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
 				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				err = json.Unmarshal(cookbookResult.Data, &cbData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
@@ -53,7 +53,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 			if !tc.showError {
 				diRespData := FiatItemResponse{}
 				err := json.Unmarshal(result.Data, &diRespData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(diRespData.ItemID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

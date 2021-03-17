@@ -54,7 +54,11 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 	matchedItems := types.ItemList{}
 	for i, itemInput := range trade.ItemInputs {
 		matchedItem := items[i]
-		matchErr := itemInput.MatchError(matchedItem)
+		ec, err := keeper.EnvCollection(ctx, "", msg.TradeID, matchedItem)
+		if err != nil {
+			return nil, errInternal(fmt.Errorf("error creating env collection for %s item", matchedItem.String()))
+		}
+		matchErr := itemInput.MatchError(matchedItem, ec)
 		if matchErr != nil {
 			return nil, errInternal(fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID))
 		}
@@ -178,6 +182,14 @@ func HandlerMsgFulfillTrade(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgFul
 		}
 
 		item.Sender = msg.Sender
+
+		keeper.SetItemHistory(ctx, types.ItemHistory{
+			ID:      types.KeyGen(item.Sender),
+			Owner:   item.Sender,
+			ItemID:  item.ID,
+			TradeID: item.OwnerTradeID,
+		})
+
 		item.OwnerTradeID = ""
 		err = keeper.SetItem(ctx, item)
 		if err != nil {

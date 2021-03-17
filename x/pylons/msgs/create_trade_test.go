@@ -12,7 +12,7 @@ import (
 
 func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 	sdkAddr, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	msg := NewMsgCreateTrade(
 		nil,
 		types.GenTradeItemInputList("UTestCreateTrade-CB-001", []string{"Raichu"}),
@@ -21,7 +21,7 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 		"Test CreateTrade GetSignBytes",
 		sdkAddr)
 	err = msg.ValidateBasic()
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	expectedSignBytes := `{
 			"CoinInputs":null,
@@ -31,6 +31,11 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 				{
 					"CookbookID":"UTestCreateTrade-CB-001",
 					"ItemInput":{
+						"Conditions":{
+							"Doubles":null,
+							"Longs":null,
+							"Strings":null
+						},
 						"Doubles":null,
 						"ID":"Raichu",
 						"Longs":null,
@@ -47,13 +52,13 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 		}`
 	buffer := new(bytes.Buffer)
 	err = json.Compact(buffer, []byte(expectedSignBytes))
-	require.True(t, err == nil)
-	require.True(t, string(msg.GetSignBytes()) == buffer.String(), string(msg.GetSignBytes()))
+	require.NoError(t, err)
+	require.Equal(t, string(msg.GetSignBytes()), buffer.String())
 }
 
 func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	sdkAddr, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	msg := NewMsgCreateTrade(
 		types.CoinInputList{
 			types.CoinInput{Coin: "aaaa", Count: 100},
@@ -66,7 +71,7 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 		"Test CreateTrade GetSignBytes",
 		sdkAddr)
 	err = msg.ValidateBasic()
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	expectedSignBytes := `{
 		"CoinInputs": [
@@ -96,6 +101,6 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	}`
 	buffer := new(bytes.Buffer)
 	err = json.Compact(buffer, []byte(expectedSignBytes))
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	require.True(t, string(msg.GetSignBytes()) == buffer.String())
 }

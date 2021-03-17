@@ -875,7 +875,7 @@ func RunExecuteRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 			return
 		}
 
-		t.MustTrue(result != nil, "result should not be empty")
+		t.MustTrue(result != nil, "result should not be empty", err)
 		resp := handlers.ExecuteRecipeResponse{}
 		err = testutils.GetAminoCdc().UnmarshalJSON(result.Data, &resp) // nolint:staticcheck
 		TxResultDecodingErrorCheck(err, t)

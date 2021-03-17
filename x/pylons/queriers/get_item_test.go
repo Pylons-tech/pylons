@@ -24,7 +24,7 @@ func TestGetItem(t *testing.T) {
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
 	mockedItem := keep.GenItem(cbData.CookbookID, sender1, mockItemName)
 	err := tci.PlnK.SetItem(tci.Ctx, *mockedItem)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		path          []string
@@ -67,7 +67,7 @@ func TestGetItem(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				readItem := types.Item{}
 				readItemErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readItem)
 

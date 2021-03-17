@@ -68,7 +68,7 @@ func TestKeeperSetExecution(t *testing.T) {
 				// t.Errorf("execution_test err LOG:: %+v", err)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 			}
 		})
 	}
@@ -80,7 +80,7 @@ func TestKeeperGetExecution(t *testing.T) {
 
 	exec := GenExecution(sender, tci)
 	err := tci.PlnK.SetExecution(tci.Ctx, exec)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		execID       string
@@ -106,7 +106,7 @@ func TestKeeperGetExecution(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, execution.RecipeID == exec.RecipeID)
 				require.True(t, execution.Sender.String() == exec.Sender.String())
 				require.True(t, execution.Completed == exec.Completed)
@@ -121,7 +121,7 @@ func TestKeeperUpdateExecution(t *testing.T) {
 
 	exec := GenExecution(sender, tci)
 	err := tci.PlnK.SetExecution(tci.Ctx, exec)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	newExec := GenExecution(sender, tci)
 	newExec.Completed = true
@@ -150,9 +150,9 @@ func TestKeeperUpdateExecution(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				uExec, err := tci.PlnK.GetExecution(tci.Ctx, tc.execID)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, uExec.Completed == true)
 			}
 		})
@@ -166,18 +166,18 @@ func TestKeeperGetExecutionsBySender(t *testing.T) {
 	for i := 0; i < 5; i++ {
 		exec := GenExecution(sender, tci)
 		err := tci.PlnK.SetExecution(tci.Ctx, exec)
-		require.True(t, err == nil)
+		require.NoError(t, err)
 	}
 
 	for i := 0; i < 2; i++ {
 		exec := GenExecution(sender2, tci)
 		err := tci.PlnK.SetExecution(tci.Ctx, exec)
-		require.True(t, err == nil)
+		require.NoError(t, err)
 	}
 
 	exec2 := GenExecution(sender2, tci)
 	err := tci.PlnK.SetExecution(tci.Ctx, exec2)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	executions, err := tci.PlnK.GetExecutionsBySender(tci.Ctx, sender)
 	require.Nil(t, err, "Error while getting executions")
 	require.True(t, len(executions) == 5)

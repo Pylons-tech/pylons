@@ -18,7 +18,7 @@ func TestListExecution(t *testing.T) {
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	// mock cookbook
 	cbData := handlers.MockCookbook(tci, sender1)
@@ -72,7 +72,7 @@ func TestListExecution(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				excList := types.ExecutionList{}
 				excListErr := tci.PlnK.Cdc.UnmarshalJSON(result, &excList)
 

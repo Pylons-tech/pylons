@@ -27,7 +27,7 @@ func TestGetTrade(t *testing.T) {
 	item := GenItem(cbData.ID, sender, "Raichu")
 	err := tci.PlnK.SetItem(tci.Ctx, *item)
 
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		sender       sdk.AccAddress
@@ -61,9 +61,9 @@ func TestGetTrade(t *testing.T) {
 			if test.showError {
 				require.True(t, err != nil)
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				storedTrade, err := tci.PlnK.GetTrade(tci.Ctx, trade.ID)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, reflect.DeepEqual(trade.CoinOutputs, storedTrade.CoinOutputs))
 				require.True(t, reflect.DeepEqual(trade.CoinInputs, storedTrade.CoinInputs))
 				require.True(t, reflect.DeepEqual(trade.ItemInputs, storedTrade.ItemInputs))

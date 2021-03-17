@@ -33,7 +33,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
 	recipeData := CreateRecipeResponse{}
 	err := json.Unmarshal(newRcpResult.Data, &recipeData)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		cbID         string
@@ -78,7 +78,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 			if tc.showError == false {
 				recipeData := UpdateRecipeResponse{}
 				err := json.Unmarshal(result.Data, &recipeData)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(recipeData.RecipeID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
