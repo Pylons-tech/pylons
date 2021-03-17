@@ -41,10 +41,6 @@ message Email {
   string str = 1;
 }
 
-message FloatString {
-  string str = 1;
-}
-
 // DoubleInputParam describes the bounds on an item input/output parameter of type float64
 message DoubleInputParam {
   string Key = 1;
