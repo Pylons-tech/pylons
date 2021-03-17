@@ -1,7 +1,7 @@
 package keep
 
 import (
-	"reflect"
+	"fmt"
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -65,7 +65,7 @@ func TestKeeperGetRecipe(t *testing.T) {
 			readRecipe, err := tci.PlnK.GetRecipe(tci.Ctx, recipe.ID)
 
 			require.True(t, err == nil)
-			require.True(t, reflect.DeepEqual(recipe, readRecipe))
+			require.EqualValues(t, fmt.Sprintf("%v", recipe), fmt.Sprintf("%v", readRecipe))
 		})
 	}
 }

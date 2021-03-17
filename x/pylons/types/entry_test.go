@@ -2,7 +2,7 @@ package types
 
 import (
 	"encoding/json"
-	"reflect"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -22,7 +22,7 @@ func TestEntriesListSerialize(t *testing.T) {
 			var serializedEntries EntriesList
 			err = json.Unmarshal(data, &serializedEntries)
 			require.True(t, err == nil)
-			require.True(t, reflect.DeepEqual(entries, serializedEntries))
+			require.EqualValues(t, fmt.Sprintf("%v", entries), fmt.Sprintf("%v", serializedEntries))
 		})
 	}
 }

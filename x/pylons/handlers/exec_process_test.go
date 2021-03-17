@@ -34,17 +34,17 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		if iN == "Attack1Item" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(1.0),
+				Value: sdk.NewDec(1.0),
 			})
 		} else if iN == "Attack10Item" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(10.0),
+				Value: sdk.NewDec(10.0),
 			})
 		} else if iN == "Attack10Level1Item" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(10.0),
+				Value: sdk.NewDec(10.0),
 			})
 			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
@@ -53,7 +53,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		} else if iN == "Attack10Level20Item" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(10.0),
+				Value: sdk.NewDec(10.0),
 			})
 			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
@@ -62,7 +62,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		} else if iN == "Attack10Level20Carrier" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(10.0),
+				Value: sdk.NewDec(10.0),
 			})
 			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
@@ -75,7 +75,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		} else if iN == "Attack10Level20PersonFee1" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(10.0),
+				Value: sdk.NewDec(10.0),
 			})
 			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
@@ -88,7 +88,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		} else if iN == "Attack10Level20PersonFee1000Locked" {
 			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
 				Key:   "attack",
-				Value: types.ToFloatString(10.0),
+				Value: sdk.NewDec(10.0),
 			})
 			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
 				Key:   "level",
@@ -136,7 +136,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		types.CoinInputList{},
 		types.ItemInputList{List: []types.ItemInput{
 			{
-				Doubles: types.DoubleInputParamList{Params: []types.DoubleInputParam{{Key: "attack", MinValue: types.ToFloatString(10.0), MaxValue: types.ToFloatString(1000.0)}}},
+				Doubles: types.DoubleInputParamList{Params: []types.DoubleInputParam{{Key: "attack", MinValue: sdk.NewDec(10.0), MaxValue: sdk.NewDec(1000.0)}}},
 				Longs:   types.LongInputParamList{List: []types.LongInputParam{{Key: "level", MinValue: 20, MaxValue: 100}}},
 				Strings: types.StringInputParamList{List: []types.StringInputParam{{Key: "Type", Value: "person"}}},
 				TransferFee: types.FeeInputParam{
@@ -268,7 +268,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		types.DoubleKeyValueList{List: []types.DoubleKeyValue{
 			{
 				Key:   "attack",
-				Value: types.ToFloatString(1.0),
+				Value: sdk.NewDec(1.0),
 			},
 		}},
 		types.LongKeyValueList{List: []types.LongKeyValue{

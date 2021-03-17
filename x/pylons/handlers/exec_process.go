@@ -4,10 +4,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker/decls"
 	"github.com/google/cel-go/common/types/ref"
@@ -245,7 +249,8 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 
 	for _, dbli := range item.Doubles.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
-		variables[prefix+dbli.Key] = dbli.Value
+		fl, _ := strconv.ParseFloat(dbli.Value.String(), 64)
+		variables[prefix+dbli.Key] = fl
 	}
 	for _, inti := range item.Longs.List {
 		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
