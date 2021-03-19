@@ -16,10 +16,8 @@ const (
 )
 
 // CreateAccountTxBuilder returns the fixtures which can be used to create a get pylons transaction
-func CreateAccountTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
+func CreateAccountTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		//vars := mux.Vars(r)
-		//requester := vars[TxCARequesterKey]
 		addr, err := sdk.AccAddressFromBech32("cosmos10nlnguhl0xsctwff4ch9gyjdcetxa2eww46e29")
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

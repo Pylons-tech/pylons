@@ -14,7 +14,7 @@ import (
 )
 
 // ExecuteRecipeTxBuilder returns the fixtures which can be used to create a execute recipe transaction
-func ExecuteRecipeTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
+func ExecuteRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {

@@ -37,16 +37,16 @@ service Msg {
   rpc HandlerMsgUpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
 
   // ExecuteRecipe is used to execute a recipe
-  rpc ExecuteRecipe (MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
+  rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
 
   // DisableRecipe is used to disable recipe by a developer
-  rpc DisableRecipe (MsgDisableRecipe) returns (MsgDisableRecipeResponse);
+  rpc DisableRecipe(MsgDisableRecipe) returns (MsgDisableRecipeResponse);
 
   // EnableRecipe is used to enable recipe by a developer
-  rpc EnableRecipe (MsgEnableRecipe) returns (MsgEnableRecipeResponse);
+  rpc EnableRecipe(MsgEnableRecipe) returns (MsgEnableRecipeResponse);
 
   // CheckExecution is used to check the status of an execution
-  rpc CheckExecution (MsgCheckExecution) returns (MsgCheckExecutionResponse);
+  rpc CheckExecution(MsgCheckExecution) returns (MsgCheckExecutionResponse);
 
   // FiatItem is used to create item within 1 block execution
   rpc FiatItem(MsgFiatItem) returns (MsgFiatItemResponse);

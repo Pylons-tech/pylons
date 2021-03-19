@@ -12,7 +12,7 @@ import (
 )
 
 // SendPylonsTxBuilder returns the fixtures which can be used to create a send pylons transaction
-func SendPylonsTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
+func SendPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {

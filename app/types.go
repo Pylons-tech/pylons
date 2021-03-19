@@ -8,7 +8,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// App implements the common methods for a Cosmos SDK-based application
+// PylonsApp implements the common methods for a Cosmos SDK-based application
 // specific blockchain.
 type CosmosApp interface {
 	// The assigned name of the app.

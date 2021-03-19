@@ -23,31 +23,31 @@ const (
 // RegisterRoutes adds routes
 func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/create_accounht/tx_build/{%s}", storeName, txbuilder.TxCARequesterKey),
-		txbuilder.CreateAccountTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.CreateAccountTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons/tx_build/{%s}", storeName, txbuilder.TxGPRequesterKey),
-		txbuilder.GetPylonsTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.GetPylonsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons/tx_build/{%s}", storeName, txbuilder.TxGoogleIAPGPRequesterKey),
-		txbuilder.GoogleIAPGetPylonsTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.GoogleIAPGetPylonsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
-		txbuilder.SendPylonsTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.SendPylonsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_coins/tx_build/", storeName),
-		txbuilder.SendCoinsTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.SendCoinsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_items/tx_build/", storeName),
-		txbuilder.SendItemsTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.SendItemsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/create_cookbook/tx_build/", storeName),
-		txbuilder.CreateCookbookTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.CreateCookbookTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_cookbook/tx_build/", storeName),
-		txbuilder.UpdateCookbookTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.UpdateCookbookTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/create_recipe/tx_build/", storeName),
-		txbuilder.CreateRecipeTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.CreateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/execute_recipe/tx_build/", storeName),
-		txbuilder.ExecuteRecipeTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.ExecuteRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_recipe/tx_build/", storeName),
-		txbuilder.UpdateRecipeTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.UpdateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/enable_recipe/tx_build/", storeName),
-		txbuilder.EnableRecipeTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.EnableRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/disable_recipe/tx_build/", storeName),
-		txbuilder.DisableRecipeTxBuilder(cliCtx, storeName)).Methods("GET")
+		txbuilder.DisableRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/get_pylons", storeName),
 		getPylonsHandler(cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons", storeName),

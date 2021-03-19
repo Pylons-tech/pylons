@@ -47,7 +47,7 @@ func GetPylonsBalance() *cobra.Command {
 					return clientCtx.PrintString(res.String())
 				}
 			}
-			return errors.New("cannot get the ")
+			return errors.New("cannot get the balance using this name")
 		},
 	}
 	return ccb

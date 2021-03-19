@@ -1,7 +1,6 @@
 package query
 
 import (
-	"fmt"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
@@ -30,18 +29,7 @@ func GetExecution() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintString(fmt.Sprintf(
-				"NodeVersion: %s \nID: %s \nRecipeID: %s \nCookbookID: %s \nCoinsInput: %s \nItemInputs: %s \nBlockHeight: %d \nSender: %s \nCompleted: %t",
-				res.NodeVersion,
-				res.ID,
-				res.RecipeID,
-				res.CookbookID,
-				res.CoinsInput,
-				res.ItemInputs,
-				res.BlockHeight,
-				res.Sender,
-				res.Completed,
-			))
+			return clientCtx.PrintProto(res)
 		},
 	}
 	return ccb

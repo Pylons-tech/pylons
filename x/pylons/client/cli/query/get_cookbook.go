@@ -1,7 +1,6 @@
 package query
 
 import (
-	"fmt"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
@@ -30,19 +29,7 @@ func GetCookbook() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintString(fmt.Sprintf(
-				"NodeVersion: %s \nID: %s \nName: %s \nDescription: %s  \nVersion: %s \nDeveloper: %s \nLevel: %d \nSupportEmail: %s \nCostPerBlock: %d \nSender: %s",
-				res.NodeVersion.String(),
-				res.ID,
-				res.Name,
-				res.Description,
-				res.Version.GetNumber(),
-				res.Developer,
-				res.Level.GetNumber(),
-				res.SupportEmail.GetStr(),
-				res.CostPerBlock,
-				res.Sender,
-			))
+			return clientCtx.PrintProto(res)
 		},
 	}
 	return ccb

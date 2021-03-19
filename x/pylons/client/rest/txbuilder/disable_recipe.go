@@ -13,10 +13,8 @@ import (
 )
 
 // DisableRecipeTxBuilder returns the fixtures which can be used to create a disable recipe transaction
-func DisableRecipeTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
+func DisableRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// vars := mux.Vars(r)
-		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

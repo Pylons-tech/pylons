@@ -1,7 +1,6 @@
 package query
 
 import (
-	"fmt"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/spf13/cobra"
@@ -30,11 +29,7 @@ func CheckGoogleIAPOrder() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintString(
-				fmt.Sprintf(
-					"purchaseToken: %s \nexist: %t",
-					res.GetPurchaseToken(), res.Exist),
-			)
+			return clientCtx.PrintProto(res)
 		},
 	}
 	return ccb

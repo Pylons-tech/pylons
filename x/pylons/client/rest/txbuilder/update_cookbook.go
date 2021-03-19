@@ -14,10 +14,8 @@ import (
 )
 
 // UpdateCookbookTxBuilder returns the fixtures which can be used to create an update cookbook transaction
-func UpdateCookbookTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
+func UpdateCookbookTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// vars := mux.Vars(r)
-		// requester := vars[TxGPRequesterKey]
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

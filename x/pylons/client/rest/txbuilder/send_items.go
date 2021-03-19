@@ -11,7 +11,7 @@ import (
 )
 
 // SendItemsTxBuilder returns the fixtures which can be used to create a send items transaction
-func SendItemsTxBuilder(cliCtx client.Context, storeName string) http.HandlerFunc {
+func SendItemsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {
