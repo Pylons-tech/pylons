@@ -23,17 +23,17 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 
 	item := keep.GenItem(cbData.CookbookID, sender1, "????????")
 	err := tci.PlnK.SetItem(tci.Ctx, item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item1 := keep.GenItem(cbData.CookbookID, sender1, "????????")
 	item1.OwnerRecipeID = "????????"
 	err = tci.PlnK.SetItem(tci.Ctx, item1)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	item2 := keep.GenItem(cbData.CookbookID, sender1, "????????")
 	item2.OwnerTradeID = "????????"
 	err = tci.PlnK.SetItem(tci.Ctx, item2)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		itemID       string
@@ -122,7 +122,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
 				err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(config.Config.Fee.UpdateItemFieldString))
-				require.True(t, err == nil)
+				require.NoError(t, err)
 			}
 
 			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
@@ -132,12 +132,13 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				if err != nil {
 					t.Log("UpdateItemString.err", err)
 				}
-				require.True(t, err == nil)
+
+				require.NoError(t, err)
 				require.True(t, result.Status == "Success")
 				require.True(t, result.Message == tc.successMsg)
 
 				item, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				itemName, ok := item.FindString("Name")
 				if !ok {

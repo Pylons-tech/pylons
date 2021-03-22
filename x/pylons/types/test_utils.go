@@ -27,6 +27,7 @@ func GenItemInputList(names ...string) ItemInputList {
 				MinValue: 0,
 				MaxValue: 10000,
 			},
+			ConditionList{},
 		})
 	}
 	return iiL

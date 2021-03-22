@@ -37,7 +37,7 @@ func TestGetExecution(t *testing.T) {
 
 	scheduleOutput := handlers.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		execID        string
@@ -77,8 +77,8 @@ func TestGetExecution(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
-				require.True(t, result.RecipeID == tc.rcpID)
+				require.NoError(t, err)
+				require.Equal(t, result.RecipeID, tc.rcpID)
 			}
 		})
 	}

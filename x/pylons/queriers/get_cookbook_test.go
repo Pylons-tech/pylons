@@ -1,9 +1,10 @@
 package queriers
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/stretchr/testify/require"
 
@@ -58,8 +59,8 @@ func TestGetCookbook(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
-				require.True(t, result.Name == tc.cbName)
+				require.NoError(t, err)
+				require.Equal(t, result.Name, tc.cbName)
 			}
 		})
 	}

@@ -1,10 +1,11 @@
 package handlers
 
 import (
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"strings"
 	"testing"
+
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -50,7 +51,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.genNewAccount == false {
 				cosmosAddr = sender1
@@ -100,7 +101,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				account := acd.ak.GetAccount(newCtx, cosmosAddr)
 				if tc.shouldAccountExist {
 					require.True(t, account != nil)
@@ -168,7 +169,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			msg := msgs.NewMsgCreateAccount(cosmosAddr)
 
@@ -242,7 +243,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				if tc.additionMsgType == "create_cookbook" {
 					caMsg := msgs.NewMsgCreateCookbook(
 						"samecookbookID-0001",

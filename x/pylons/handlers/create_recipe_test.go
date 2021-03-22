@@ -173,7 +173,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			cbData := &msgs.MsgCreateCookbookResponse{}
 			if tc.createCookbook {
 				err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				cookbookMsg := msgs.NewMsgCreateCookbook(
 					tc.cookbookName,
 					tc.cbID,
@@ -186,7 +186,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					tc.sender,
 				)
 				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
@@ -225,7 +225,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 
 			result, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, len(result.RecipeID) > 0)
 			} else {
 				require.True(t, err != nil)
@@ -270,7 +270,6 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	)
 
 	rcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
-
 	require.True(t, len(rcpResult.RecipeID) > 0)
 
 	// try creating it 2nd time

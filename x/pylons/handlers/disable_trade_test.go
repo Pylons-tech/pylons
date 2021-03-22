@@ -18,7 +18,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	sender, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
 
 	err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	id := uuid.New()
 	id2 := uuid.New()
@@ -42,7 +42,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	item.OwnerTradeID = id.String()
 	err = tci.PlnK.SetItem(tci.Ctx, item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	// add trades for tests, one open trade by each sender and one closed trade
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
@@ -52,7 +52,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender.String(),
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id2.String(),
@@ -60,7 +60,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2.String(),
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id3.String(),
@@ -70,7 +70,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		FulFiller:   sender.String(),
 		Completed:   true,
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id4.String(),
@@ -79,7 +79,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2.String(),
 	})
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		tradeID      string

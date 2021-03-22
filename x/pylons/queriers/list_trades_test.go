@@ -1,9 +1,10 @@
 package queriers
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/stretchr/testify/require"
 
@@ -20,7 +21,7 @@ func TestListTrades(t *testing.T) {
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	// mock cookbook
 	_, err = handlers.MockTrade(
@@ -43,7 +44,7 @@ func TestListTrades(t *testing.T) {
 		sender1,
 	)
 
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		address       string
@@ -75,9 +76,8 @@ func TestListTrades(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
-
-				require.True(t, len(result.Trades) == tc.desiredExcCnt)
+				require.NoError(t, err)
+				require.Equal(t, len(result.Trades), tc.desiredExcCnt)
 			}
 		})
 	}

@@ -66,7 +66,6 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			)
 
 			newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
-
 			tc.rcpID = newRcpResult.RecipeID
 
 			// Create dynamic items
@@ -75,7 +74,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
 			}
@@ -85,7 +84,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				tc.sender,
 				itemIDs,
 			)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, execRcpResponse.Status == "Success")
 			t.Log(execRcpResponse.Message)
 
@@ -112,7 +111,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
 			}
@@ -122,18 +121,18 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				tc.sender,
 				itemIDs,
 			)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, execRcpResponse.Status == "Success")
 			t.Log(execRcpResponse.Message)
 
 			// Schedule Recipe
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.dynamicItemSet && len(itemIDs) > 0 {
 				usedItem, err := tci.PlnK.GetItem(tci.Ctx, itemIDs[0])
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
 			}
 

@@ -490,7 +490,7 @@ func TestCoinLock(t *testing.T) {
 					account1,
 				)
 
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				lockDiff := lockAfter.Amount.Sort().Sub(lockOrigin.Amount.Sort())
@@ -505,7 +505,7 @@ func TestCoinLock(t *testing.T) {
 				disableTrdMsg := msgs.NewMsgDisableTrade(tradeData.TradeID, account1)
 				_, err := tci.PlnH.DisableTrade(sdk.WrapSDKContext(tci.Ctx), &disableTrdMsg)
 
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
@@ -522,7 +522,7 @@ func TestCoinLock(t *testing.T) {
 				enableTrdMsg := msgs.NewMsgEnableTrade(tradeData.TradeID, account1)
 				_, err := tci.PlnH.EnableTrade(sdk.WrapSDKContext(tci.Ctx), &enableTrdMsg)
 
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				lockDiff := lockAfter.Amount.Sort().Sub(lockOrigin.Amount.Sort())
@@ -537,7 +537,7 @@ func TestCoinLock(t *testing.T) {
 
 				item := keep.GenItem(cbData.CookbookID, account1, "Knife")
 				err = tci.PlnK.SetItem(tci.Ctx, item)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				recipeData := MockRecipe(
 					tci,
@@ -558,12 +558,12 @@ func TestCoinLock(t *testing.T) {
 					[]string{item.ID},
 				)
 
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, execRcpResponse.Status == "Success")
 				require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
 				err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
@@ -576,13 +576,13 @@ func TestCoinLock(t *testing.T) {
 			if tc.testSendItems {
 				item := keep.GenItem(cbData.CookbookID, account1, "sword")
 				err = tci.PlnK.SetItem(tci.Ctx, item)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				msg := msgs.NewMsgSendItems([]string{item.ID}, account1, account2)
 				_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 				if !tc.shouldFailSendItems {
-					require.True(t, err == nil)
+					require.NoError(t, err)
 				} else {
 					require.True(t, err != nil)
 				}
@@ -593,7 +593,7 @@ func TestCoinLock(t *testing.T) {
 				err = keep.SendCoins(tci.PlnK, tci.Ctx, account1, account2, pylon100)
 
 				if !tc.shouldFailSendCoins {
-					require.True(t, err == nil)
+					require.NoError(t, err)
 				} else {
 					require.True(t, err != nil)
 				}
@@ -641,7 +641,7 @@ func TestCoinLock(t *testing.T) {
 				)
 				_, err = tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				lockDiff := lockOrigin.Amount.Sort().Sub(lockAfter.Amount.Sort())
 				require.True(t, lockDiff.IsEqual(tc.lockDiffFulfillTrade))

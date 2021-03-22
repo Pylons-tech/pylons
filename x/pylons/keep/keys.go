@@ -9,6 +9,7 @@ const (
 	KeyPylonsItem       = "pylons_item"
 	KeyPylonsExecution  = "pylons_exection"
 	KeyPylonsTrade      = "pylons_trade"
+	KeyPylonsHistory    = "pylons_history"
 	KeyPylonsLockedCoin = "pylons_locked_coin"
 )
 
@@ -32,5 +33,6 @@ var StoreKeyList = []string{
 	KeyPylonsItem,
 	KeyPylonsExecution,
 	KeyPylonsTrade,
+	KeyPylonsHistory,
 	KeyPylonsLockedCoin,
 }
