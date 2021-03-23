@@ -18,10 +18,10 @@ import (
 
 var tci keep.TestCoinInput
 
-// CLIOptions is a struct to manage pylonscli options
+// CLIOptions is a struct to manage pylonsd options
 type CLIOptions struct{}
 
-// CLIOpts is a variable to manage pylonscli options
+// CLIOpts is a variable to manage pylonsd options
 var CLIOpts CLIOptions
 
 func init() {

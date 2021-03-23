@@ -26,15 +26,6 @@ COPY go.sum .
 # Install the daemon
 RUN go install ./cmd/pylonsd
 
-# Install the cli
-RUN go install ./cmd/pylonscli
-
-# Basic installation for daemon and cli
-RUN pylonscli config chain-id pylonschain
-RUN pylonscli config output json
-RUN pylonscli config indent true
-RUN pylonscli config trust-node true
-
 COPY Makefile .
 RUN make unit_tests
 RUN make fixture_unit_tests
@@ -44,8 +35,7 @@ FROM golang:latest as pylonsd
 
 WORKDIR /root
 COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
-COPY --from=build /go/bin/pylonscli /usr/bin/pylonscli
-COPY --from=build /root/.pylonscli /root/.pylonscli
+COPY --from=build /root/.pylonsd /root/.pylonsd
 RUN pylonsd init masternode --chain-id pylonschain
 COPY init_accounts.local.sh ./
 RUN bash ./init_accounts.local.sh
@@ -67,7 +57,6 @@ COPY Makefile .
 COPY init_accounts.sh .
 RUN chmod +x init_accounts.sh
 # RUN make init_accounts
-# COPY --from=test_server /root/.pylonscli/keyring-test-cosmos/ /root/.pylonscli/keyring-test-cosmos
 CMD sleep 5 && make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657 --timeout=30m"
 
 FROM build as fixture_test

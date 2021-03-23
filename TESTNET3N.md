@@ -283,10 +283,10 @@ https://stackoverflow.com/questions/33799885/how-to-stop-all-containers-when-one
 - Key add on local
 
 ```sh
-pylonscli keys add node0 --recover
+pylonsd keys add node0 --recover
 ```
 
-For recovery keyword, use `./build/node0/pylonscli/key_seed.json`
+For recovery keyword, use `./build/node0/pylonsd/key_seed.json`
 
 - Fresh blocks
 
@@ -308,57 +308,57 @@ docker-compose up
 
 ```sh
 pylonsd unsafe-reset-all
-pylonsd add-genesis-account $(pylonscli keys show node0 -a) 10000000pylon
+pylonsd add-genesis-account $(pylonsd keys show node0 -a) 10000000pylon
 pylonsd start
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+pylonsd query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
 ```
 
 - Query account
 
 ```sh
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://127.0.0.1:26662
+pylonsd query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+pylonsd query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://127.0.0.1:26662
 ```
 
-- REPLACE tx_cook, tx_execute, tx_recipe, tx_get-pylons’s sender/requester attribute to $(pylonscli keys show -a node0) = cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+- REPLACE tx_cook, tx_execute, tx_recipe, tx_get-pylons’s sender/requester attribute to $(pylonsd keys show -a node0) = cosmos13p8890funv54hflk82ju0zv47tspglpk373453
 
 - Get 500000 pylons for testing
 
 ```sh
-pylonscli tx sign tx_get-pylons.json --from node0 --chain-id pylonschain > signed_tx_get-pylons.json
-pylonscli tx broadcast signed_tx_get-pylons.json
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
+pylonsd tx sign tx_get-pylons.json --from node0 --chain-id pylonschain > signed_tx_get-pylons.json
+pylonsd tx broadcast signed_tx_get-pylons.json
+pylonsd query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453
 ```
 - Cookbook with ID
 
 ```sh
-pylonscli tx sign tx_cook.json --from node0 --chain-id pylonschain > signed_tx_cook.json
-pylonscli tx broadcast signed_tx_cook.json
-pylonscli query tx $(RETURNED TXHASH)
-pylonscli query pylons list_cookbook
+pylonsd tx sign tx_cook.json --from node0 --chain-id pylonschain > signed_tx_cook.json
+pylonsd tx broadcast signed_tx_cook.json
+pylonsd query tx $(RETURNED TXHASH)
+pylonsd query pylons list_cookbook
 ```
 - Recipe with ID
 
 ```sh
-pylonscli tx sign tx_recipe.json --from node0 --chain-id pylonschain > signed_tx_recipe.json
-pylonscli tx broadcast signed_tx_recipe.json
-pylonscli query tx $(RETURNED TXHASH)
-pylonscli query pylons list_recipe
+pylonsd tx sign tx_recipe.json --from node0 --chain-id pylonschain > signed_tx_recipe.json
+pylonsd tx broadcast signed_tx_recipe.json
+pylonsd query tx $(RETURNED TXHASH)
+pylonsd query pylons list_recipe
 ```
 - Recipe Execution which has rand_int
 
 ```sh
-pylonscli tx sign tx_execute.json --from node0 --chain-id pylonschain > signed_tx_execute.json
-pylonscli tx broadcast signed_tx_execute.json
-pylonscli query tx $(RETURNED TXHASH)
+pylonsd tx sign tx_execute.json --from node0 --chain-id pylonschain > signed_tx_execute.json
+pylonsd tx broadcast signed_tx_execute.json
+pylonsd query tx $(RETURNED TXHASH)
 ```
 - Cookbook without ID
 
 ```sh
-pylonscli tx sign tx_cook_noid.json --from node0 --chain-id pylonschain > signed_tx_cook_noid.json
-pylonscli tx broadcast signed_tx_cook_noid.json
-pylonscli query tx $(RETURNED TXHASH)
-pylonscli query pylons list_cookbook
+pylonsd tx sign tx_cook_noid.json --from node0 --chain-id pylonschain > signed_tx_cook_noid.json
+pylonsd tx broadcast signed_tx_cook_noid.json
+pylonsd query tx $(RETURNED TXHASH)
+pylonsd query pylons list_cookbook
 ```
 
 - Try to send multiple transactions in a block with same account
