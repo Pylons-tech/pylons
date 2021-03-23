@@ -1,22 +1,19 @@
 #!/bin/sh
 
-rm -rf ~/.pylonsd
-rm -rf ~/.pylonscli
+rm -rf $HOME/.pylonsd
 
-pylonsd init masternode --chain-id pylonschain
-pylonscli config chain-id pylonschain
-pylonscli config output json
-pylonscli config indent true
-pylonscli config trust-node true
+pylonsd init masternode --chain-id=pylonschain --home=$HOME/.pylonsd
 
-pylonscli keys add node0 --keyring-backend=test --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
-pylonscli keys add michael --keyring-backend=test --recover <<< "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
-pylonscli keys add eugen --keyring-backend=test --recover <<< "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
+pylonsd keys add node0 --keyring-backend=test  --home=$HOME/.pylonsd --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
+pylonsd keys add michael --keyring-backend=test  --home=$HOME/.pylonsd --recover <<< "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
+pylonsd keys add eugen --keyring-backend=test --home=$HOME/.pylonsd --recover <<< "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
 
 pylonsd add-genesis-account cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 10000000000pylon # Pylons LLC validator
-pylonsd add-genesis-account $(pylonscli keys show node0 -a --keyring-backend=test) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
-pylonsd add-genesis-account $(pylonscli keys show michael -a --keyring-backend=test) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
-pylonsd add-genesis-account $(pylonscli keys show eugen -a --keyring-backend=test) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
+pylonsd add-genesis-account $(pylonsd keys show node0 -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
+pylonsd add-genesis-account $(pylonsd keys show michael -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
+pylonsd add-genesis-account $(pylonsd keys show eugen -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
 
-pylonsd gentx --name node0 --keyring-backend=test
-pylonsd collect-gentxs
+pylonsd gentx node0 500000000stake --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd
+pylonsd collect-gentxs  --home=$HOME/.pylonsd
+
+pylonsd start --home=$HOME/.pylonsd
