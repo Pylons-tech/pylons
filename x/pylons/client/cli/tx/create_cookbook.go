@@ -5,6 +5,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
@@ -15,7 +16,7 @@ func CreateCookbook() *cobra.Command {
 
 	var msgCCB = &msgs.MsgCreateCookbook{}
 
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "create-cookbook [args]",
 		Short: "create cookbook by providing the args",
 		Args:  cobra.ExactArgs(1),
@@ -49,5 +50,7 @@ func CreateCookbook() *cobra.Command {
 		},
 	}
 
-	return ccb
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
 }

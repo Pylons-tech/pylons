@@ -138,12 +138,12 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 
 // GetTxCmd get the root tx command of this module
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	pylonsTxCmd := &cobra.Command{
+	txCmd := &cobra.Command{
 		Use:   RouterKey,
 		Short: "Pylons transactions subcommands",
 	}
 
-	pylonsTxCmd.AddCommand(
+	txCmd.AddCommand(
 		tx.CreateAccount(),
 		tx.GetPylons(),
 		tx.GoogleIAPGetPylons(),
@@ -156,12 +156,8 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 		tx.UpdateCookbook(),
 		tx.FiatItem(),
 	)
-	pylonsTxCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
-	pylonsTxCmd.PersistentFlags().String("keyring-backend", "os", "Select keyring's backend (os|file|test)")
-	pylonsTxCmd.PersistentFlags().String("from", "", "Name or address of private key with which to sign")
-	pylonsTxCmd.PersistentFlags().String("broadcast-mode", "sync", "Transaction broadcasting mode (sync|async|block)")
 
-	return pylonsTxCmd
+	return txCmd
 }
 
 // AppModule manages keeper and bankKeeper along with AppModuleBasic

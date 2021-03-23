@@ -2,10 +2,9 @@ package tx
 
 import (
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
 	"github.com/spf13/cobra"
-
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -19,7 +18,7 @@ const (
 // GetPylons implements GetPylons msg transaction
 func GetPylons() *cobra.Command {
 	var customBalance int64
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "get-pylons",
 		Short: "ask for pylons. 500 default pylons per request",
 		Args:  cobra.ExactArgs(0),
@@ -41,6 +40,7 @@ func GetPylons() *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{msg}...)
 		},
 	}
-	ccb.PersistentFlags().Int64Var(&customBalance, "amount", DefaultCoinPerRequest, "The request pylon amount")
-	return ccb
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.PersistentFlags().Int64Var(&customBalance, "amount", DefaultCoinPerRequest, "The request pylon amount")
+	return cmd
 }

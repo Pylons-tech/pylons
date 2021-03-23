@@ -1,7 +1,7 @@
 # pylons
 
 Pylonsd daemon connect with all the other daemons around the world and process the transactions.   
-On the other hand, it is responsible for providing rest api and cli endpoints for interacting with pylons ecosystem.
+On the other hand, it is responsible for providing rest api and cli commands for interacting with pylons ecosystem.
 
 ## Setup development environment
 
@@ -58,7 +58,7 @@ pylonsd start
 - play with the api
 
 ```sh
-pylonsd tx pylons get-pylons --from alice
+pylonsd tx pylons get-pylons --from node0 --chain-id=pylonschain --home=$HOME/.pylonsd --yes
 ```
 
 - start the `rest-server` in dev mode

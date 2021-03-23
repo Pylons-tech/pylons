@@ -3,8 +3,10 @@ package tx
 import (
 	"bufio"
 	"errors"
+
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 
@@ -14,7 +16,7 @@ import (
 
 // SendCoins implements sending pylons and game coisn
 func SendCoins() *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "send [to_address] [amount]",
 		Short: "send pylons and game coins to the address provided",
 		Args:  cobra.ExactArgs(2),
@@ -58,5 +60,7 @@ func SendCoins() *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{msg}...)
 		},
 	}
-	return ccb
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
 }

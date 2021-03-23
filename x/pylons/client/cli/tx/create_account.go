@@ -1,18 +1,17 @@
 package tx
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/spf13/cobra"
-
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 )
 
 // CreateAccount implements CreateAccount msg transaction
 func CreateAccount() *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "create-account",
 		Short: "register an account on chain.",
 		Args:  cobra.ExactArgs(0),
@@ -38,5 +37,8 @@ func CreateAccount() *cobra.Command {
 
 		},
 	}
-	return ccb
+
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
 }

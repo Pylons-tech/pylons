@@ -2,6 +2,7 @@ package tx
 
 import (
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 
 	"github.com/spf13/cobra"
@@ -16,7 +17,7 @@ func GoogleIAPGetPylons() *cobra.Command {
 	var purchaseToken string
 	var receiptData string
 	var signature string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "get-pylons",
 		Short: "ask for pylons. get pylons per iap order",
 		Args:  cobra.ExactArgs(0),
@@ -40,9 +41,10 @@ func GoogleIAPGetPylons() *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{&msg}...)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&productID, "product-id", "", "Get pylons order product id")
-	ccb.PersistentFlags().StringVar(&purchaseToken, "purchase-token", "", "Get pylons order purchase token")
-	ccb.PersistentFlags().StringVar(&receiptData, "receipt-data", "", "Get pylons order purchase token")
-	ccb.PersistentFlags().StringVar(&signature, "signature", "", "Get pylons order signature")
-	return ccb
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.PersistentFlags().StringVar(&productID, "product-id", "", "Get pylons order product id")
+	cmd.PersistentFlags().StringVar(&purchaseToken, "purchase-token", "", "Get pylons order purchase token")
+	cmd.PersistentFlags().StringVar(&receiptData, "receipt-data", "", "Get pylons order purchase token")
+	cmd.PersistentFlags().StringVar(&signature, "signature", "", "Get pylons order signature")
+	return cmd
 }

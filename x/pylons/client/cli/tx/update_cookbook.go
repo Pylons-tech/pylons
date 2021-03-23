@@ -1,14 +1,13 @@
 package tx
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/spf13/cobra"
-
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 )
 
 // UpdateCookbook is the client cli command for creating cookbook
@@ -18,7 +17,7 @@ func UpdateCookbook() *cobra.Command {
 	var tmpVersion string
 	var tmpEmail string
 
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "update-cookbook [args]",
 		Short: "update cookbook by providing the args",
 		Args:  cobra.ExactArgs(0),
@@ -41,10 +40,11 @@ func UpdateCookbook() *cobra.Command {
 		},
 	}
 
-	ccb.PersistentFlags().StringVar(&msgCCB.Description, "desc", "", "The description for the cookbook")
-	ccb.PersistentFlags().StringVar(&msgCCB.Developer, "developer", "", "The developer of the cookbook")
-	ccb.PersistentFlags().StringVar(&tmpEmail, "email", "", "The support email")
-	ccb.PersistentFlags().StringVar(&tmpVersion, "version", "", "The version of the cookbook")
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.PersistentFlags().StringVar(&msgCCB.Description, "desc", "", "The description for the cookbook")
+	cmd.PersistentFlags().StringVar(&msgCCB.Developer, "developer", "", "The developer of the cookbook")
+	cmd.PersistentFlags().StringVar(&tmpEmail, "email", "", "The support email")
+	cmd.PersistentFlags().StringVar(&tmpVersion, "version", "", "The version of the cookbook")
 
-	return ccb
+	return cmd
 }
