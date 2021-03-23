@@ -151,7 +151,7 @@ message GetExecutionResponse {
   string RecipeID = 3;
   string CookbookID = 4;
   repeated cosmos.base.v1beta1.Coin CoinsInput = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated Item ItemInputs = 6;
+  repeated Item ItemInputs = 6 [(gogoproto.nullable) = false];
   int64 BlockHeight = 7;
   string Sender = 8;
   bool Completed = 9;
@@ -220,7 +220,7 @@ message ItemsBySenderRequest {
 }
 
 message ItemsBySenderResponse {
-  repeated Item Items = 1;
+  repeated Item Items = 1 [(gogoproto.nullable) = false];
 }
 
 

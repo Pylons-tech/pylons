@@ -9,10 +9,10 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/checker/decls"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 // ExecProcess store and handle all the activities of execution
@@ -25,7 +25,7 @@ type ExecProcess struct {
 }
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
-func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg *msgs.MsgExecuteRecipe) error {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg *msgs.MsgExecuteRecipe) error {
 	if len(msg.ItemIDs) != len(p.recipe.ItemInputs.List) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}
@@ -231,9 +231,14 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		}
 	}
 
+	sender, err := sdk.AccAddressFromBech32(targetItem.Sender)
+	if err != nil {
+		return nil, err
+	}
+
 	p.keeper.SetItemHistory(p.ctx, types.ItemHistory{
-		ID:       types.KeyGen(targetItem.Sender),
-		Owner:    targetItem.Sender,
+		ID:       types.KeyGen(sender),
+		Owner:    sender,
 		ItemID:   targetItem.ID,
 		RecipeID: p.recipe.ID,
 	})

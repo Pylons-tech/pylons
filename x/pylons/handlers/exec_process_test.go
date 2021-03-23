@@ -244,7 +244,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
-			err = p.SetMatchedItemsFromExecMsg(&msg)
+			err = p.SetMatchedItemsFromExecMsg(tci.Ctx, &msg)
 			if tc.showError {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error(), tc.desiredError)
@@ -330,7 +330,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
-			err = p.SetMatchedItemsFromExecMsg(&msg)
+			err = p.SetMatchedItemsFromExecMsg(tci.Ctx, &msg)
 			require.True(t, err == nil, err)
 			err = p.GenerateCelEnvVarFromInputItems()
 			if tc.showError {

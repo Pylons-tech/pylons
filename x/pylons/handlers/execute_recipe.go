@@ -47,7 +47,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	err = p.SetMatchedItemsFromExecMsg(ctx, msg)
+	err = p.SetMatchedItemsFromExecMsg(sdkCtx, msg)
 	if err != nil {
 		return nil, errInternal(err)
 	}

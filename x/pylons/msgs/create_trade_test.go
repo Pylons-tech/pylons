@@ -37,6 +37,7 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
           {
             "CookbookID": "UTestCreateTrade-CB-001",
             "ItemInput": {
+							"Conditions":{"Doubles":{"params":null},"Longs":{"List":null},"Strings":{"List":null}},
               "Doubles": {
                 "params": null
               },

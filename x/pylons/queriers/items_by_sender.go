@@ -30,7 +30,5 @@ func (querier *querierServer) ItemsBySender(ctx context.Context, req *types.Item
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return &types.ItemsBySenderResponse{
-		Items: types.ItemInputsToProto(items),
-	}, nil
+	return &types.ItemsBySenderResponse{Items: items}, nil
 }

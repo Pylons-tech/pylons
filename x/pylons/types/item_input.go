@@ -4,15 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
-)
 
-func ItemInputsToProto(items []Item) []*Item {
-	var res []*Item
-	for _, item := range items {
-		res = append(res, &item)
-	}
-	return res
-}
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 // MatchError checks if all the constraint match the given item
 func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
@@ -59,18 +53,23 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
 	}
 
-	for _, param := range ii.Conditions.Doubles {
+	for _, param := range ii.Conditions.Doubles.Params {
 		double, err := ec.EvalFloat64(param.Key)
 		if err != nil {
 			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
 		}
 
-		if !param.Has(double) {
+		dec, err := sdk.NewDecFromStr(fmt.Sprintf("%v", double))
+		if err != nil {
+			return err
+		}
+
+		if !param.Has(dec) {
 			return fmt.Errorf("%s expression range does not match: item_id=%s", param.Key, item.ID)
 		}
 	}
 
-	for _, param := range ii.Conditions.Longs {
+	for _, param := range ii.Conditions.Longs.List {
 		long, err := ec.EvalInt64(param.Key)
 		if err != nil {
 			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
@@ -81,7 +80,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		}
 	}
 
-	for _, param := range ii.Conditions.Strings {
+	for _, param := range ii.Conditions.Strings.List {
 		str, err := ec.EvalString(param.Key)
 		if err != nil {
 			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
