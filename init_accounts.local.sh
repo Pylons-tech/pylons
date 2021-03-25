@@ -16,4 +16,11 @@ pylonsd add-genesis-account $(pylonsd keys show eugen -a --keyring-backend=test 
 pylonsd gentx node0 500000000stake --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd
 pylonsd collect-gentxs  --home=$HOME/.pylonsd
 
+# sed command for osx
+sed -i '' 's/enable = false/enable = true/g' $HOME/.pylonsd/config/app.toml
+sed -i '' 's/swagger = false/swagger = true/g' $HOME/.pylonsd/config/app.toml
+# # sed command for ubuntu
+# sed -i 's/enable = false/enable = true/g' $HOME/.pylonsd/config/app.toml
+# sed -i 's/swagger = false/swagger = true/g' $HOME/.pylonsd/config/app.toml
+
 pylonsd start --home=$HOME/.pylonsd

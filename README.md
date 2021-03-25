@@ -58,13 +58,13 @@ pylonsd start
 - play with the api
 
 ```sh
-pylonsd tx pylons get-pylons --from node0 --chain-id=pylonschain --home=$HOME/.pylonsd --yes
+pylonsd tx pylons get-pylons --from node0 --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd --yes
 ```
 
-- start the `rest-server` in dev mode
+- enable rest server when starting node
 ```sh
-# keyring-backed should be set and if not it will report issues on rest api call
-pylonsd rest-server --chain-id pylonschain --trust-node --keyring-backend=test
+sed -i 's/enable = false/enable = true/g' $HOME/.pylonsd/config/app.toml
+pylonsd start --home=$HOME/.pylonsd
 ```
 
 ## Running tests
@@ -126,7 +126,7 @@ go clean -modcache
 ```
 Get the latest pylons_sdk from github
 ```sh
-go get github.com/Pylons-tech/pylons_sdk
+go get github.com/Pylons-tech/pylons_sdk@{version_number}
 ```
 
 ### Configuration
@@ -170,13 +170,6 @@ is_production: false
 - `google_iap` define google iap packages/products along with the amount associated with the package/product.
 - `google_iap_pubkey` defines the google iap public key to verify google iap purchase signature
 - `is_production` defines the flag to show if this configuration is for production
-
-## Deploying for production
-
-- run the rest server using the `--laddr` as `0.0.0.0`
-```
-pylonsd rest-server --chain-id pylonschain --trust-node --keyring-backend=test
-```
 
 ## CLI based tx creation, sign and broadcast
 
