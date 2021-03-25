@@ -29,7 +29,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 
 	cb := GenCookbook(sender, "cookbook-00001", "this has to meet character limits")
 	err := tci.PlnK.SetCookbook(tci.Ctx, cb)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		cbID         string
@@ -54,7 +54,7 @@ func TestKeeperGetCookbook(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, cb.SupportEmail == readCookbook.SupportEmail)
 				require.True(t, reflect.DeepEqual(cb, readCookbook))
 			}

@@ -9,15 +9,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/google/cel-go/cel"
 	"github.com/google/cel-go/checker/decls"
-	"github.com/google/cel-go/common/types/ref"
-	"github.com/google/cel-go/interpreter/functions"
-
-	celTypes "github.com/google/cel-go/common/types"
 	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
@@ -31,7 +25,7 @@ type ExecProcess struct {
 }
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
-func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg *msgs.MsgExecuteRecipe) error {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg *msgs.MsgExecuteRecipe) error {
 	if len(msg.ItemIDs) != len(p.recipe.ItemInputs.List) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}
@@ -46,7 +40,11 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(msg *msgs.MsgExecuteRecipe) err
 	var matchedItems []types.Item
 	for i, itemInput := range p.recipe.ItemInputs.List {
 		matchedItem := items[i]
-		matchErr := itemInput.MatchError(matchedItem)
+		ec, err := p.keeper.EnvCollection(ctx, msg.RecipeID, "", matchedItem)
+		if err != nil {
+			return fmt.Errorf("error creating env collection for %s item", matchedItem.String())
+		}
+		matchErr := itemInput.MatchError(matchedItem, ec)
 		if matchErr != nil {
 			return fmt.Errorf("[%d]th item does not match: %s item_id=%s", i, matchErr.Error(), matchedItem.ID)
 		}
@@ -232,6 +230,19 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 			targetItem.Strings.List[strKey].Value = str.Value
 		}
 	}
+
+	sender, err := sdk.AccAddressFromBech32(targetItem.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	p.keeper.SetItemHistory(p.ctx, types.ItemHistory{
+		ID:       types.KeyGen(sender),
+		Owner:    sender,
+		ItemID:   targetItem.ID,
+		RecipeID: p.recipe.ID,
+	})
+
 	// after upgrading is done, OwnerRecipe is not set
 	targetItem.OwnerRecipeID = ""
 	targetItem.LastUpdate = p.ctx.BlockHeight()
@@ -266,11 +277,8 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 // GenerateCelEnvVarFromInputItems generate cel env varaible from item inputs
 func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
-	varDefs := [](*exprpb.Decl){}
-	variables := map[string]interface{}{}
-
-	varDefs = append(varDefs, decls.NewVar("lastBlockHeight", decls.Int))
-	variables["lastBlockHeight"] = p.ctx.BlockHeight()
+	varDefs := types.BasicVarDefs()
+	variables := types.BasicVariables(p.ctx.BlockHeight(), p.recipe.ID, "")
 	itemInputs := p.recipe.ItemInputs
 
 	for idx, item := range p.matchedItems {
@@ -285,41 +293,10 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 
 	if len(p.matchedItems) > 0 {
 		// first matched item
-		varDefs, variables = AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
+		varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
 	}
 
-	varDefs = append(varDefs,
-		types.RandFuncDecls,
-		types.Log2FuncDecls,
-		types.MinFuncDecls,
-		types.MaxFuncDecls,
-		decls.NewFunction("block_since",
-			decls.NewOverload("block_since",
-				[]*exprpb.Type{decls.Int},
-				decls.Int),
-		),
-	)
-
-	funcs := cel.Functions(
-		types.RandIntFunc,
-		types.RandFunc,
-		types.Log2DoubleFunc,
-		types.Log2IntFunc,
-		types.MinIntIntFunc,
-		types.MinIntDoubleFunc,
-		types.MinDoubleIntFunc,
-		types.MinDoubleDoubleFunc,
-		types.MaxIntIntFunc,
-		types.MaxIntDoubleFunc,
-		types.MaxDoubleIntFunc,
-		types.MaxDoubleDoubleFunc,
-		&functions.Overload{
-			// operator for 1 param
-			Operator: "block_since",
-			Unary: func(arg ref.Val) ref.Val {
-				return celTypes.Int(p.ctx.BlockHeight() - arg.Value().(int64))
-			},
-		})
+	funcs := cel.Functions(p.keeper.Overloads(p.ctx)...)
 
 	env, err := cel.NewEnv(
 		cel.Declarations(

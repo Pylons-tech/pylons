@@ -56,15 +56,15 @@ func TestKeeperGetRecipe(t *testing.T) {
 				50,                                 // msg.CostPerBlock,
 			)
 			err := tci.PlnK.SetCookbook(tci.Ctx, cb)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			recipe := GenRecipe(tc.sender, cb.ID, tc.recipeName, tc.desc)
 			err = tci.PlnK.SetRecipe(tci.Ctx, recipe)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			readRecipe, err := tci.PlnK.GetRecipe(tci.Ctx, recipe.ID)
 
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.EqualValues(t, fmt.Sprintf("%v", recipe), fmt.Sprintf("%v", readRecipe))
 		})
 	}

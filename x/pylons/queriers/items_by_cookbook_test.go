@@ -1,10 +1,10 @@
 package queriers
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -24,7 +24,7 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 
 	item := keep.GenItem(cbData.CookbookID, sender1, "Raichu")
 	err := tci.PlnK.SetItem(tci.Ctx, item)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		cookbookID    string
@@ -69,7 +69,7 @@ func TestQueriersItemsByCookbook(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				cItems := result.Items
 				require.True(t, len(cItems) == tc.desiredLength)

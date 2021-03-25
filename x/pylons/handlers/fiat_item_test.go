@@ -52,7 +52,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 				)
 
 				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
 			}

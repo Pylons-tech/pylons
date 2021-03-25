@@ -54,27 +54,27 @@ It removes the expression max of 0 that's common.
 ## How to create account and get initial balance
 - Create local key
 ```
-pylonscli keys add jack --keyring-backend=test
+pylonsd keys add jack --keyring-backend=test
 ```
 - create account on chain
 ```
-pylonscli tx pylons create-account --from jack --keyring-backend=test
+pylonsd tx pylons create-account --from jack --keyring-backend=test
 ```
 - get pylons on chain
 ```
-pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
+pylonsd tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
 ```
 
 ## FAQ in fixture test writing
 
 - You should create account using create-account message and should get some balance using get-pylons message.
 ```
-pylonscli keys add jack --keyring-backend=test
-pylonscli tx pylons create-account --from jack --keyring-backend=test
-pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
+pylonsd keys add jack --keyring-backend=test
+pylonsd tx pylons create-account --from jack --keyring-backend=test
+pylonsd tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
 ```
-- All the keys are managed via `--keyring-backend=test` (which is an argument of pylonscli) for tests and you should use this for most of test related cli use and other actions that does not require user's system password.
-- You should reinstall pylonsd and pylonscli correctly before running fixture test.
+- All the keys are managed via `--keyring-backend=test` (which is an argument of pylonsd) for tests and you should use this for most of test related cli use and other actions that does not require user's system password.
+- You should reinstall pylonsd and pylonsd correctly before running fixture test.
 - You should reinit the chain before running fixture test. If you are using local daemon, try to run `sh init_accounts.local.sh`.
 - You should be careful of the result success messages when you write the fixture test as recipe return different messages according to result of execution. If copy paste from other recipe, there can be an issue. And it's the best practice to learn what kind of messages can be returned from recipes.
 - If you want to upgrade or generate an item or coin, you should create recipe first and then not forget to execute the recipe. create recipe is not something that run the recipe.
@@ -87,7 +87,7 @@ pylonscli tx pylons get-pylons --from jack --keyring-backend=test --amount 50000
           "code": 4,
           "raw_log": "unauthorized: signature verification failed; verify correct account sequence and chain-id"
         }
-         max_retry=48 log="pylonscli tx broadcast /var/folders/_z/rdr0tp0n00x0pt6qm9n9ktgr0000gn/T/pylons375604730/signed_tx_3.json --node tcp://localhost:26657" ==>
+         max_retry=48 log="pylonsd tx broadcast /var/folders/_z/rdr0tp0n00x0pt6qm9n9ktgr0000gn/T/pylons375604730/signed_tx_3.json --node tcp://localhost:26657" ==>
         {
           "height": "0",
           "txhash": "CDF0F3D94BF1964C1C776A4CC8E90DBC3B8FF3A93E9399846021B463BF2F3F96",
@@ -128,7 +128,7 @@ This log means there's an item with name `"Trading Knife v3"` that's owned by `c
     --- PASS: TestFulfillTradeViaCLI/coin->item_fullfill_trade_test (22.85s)
     --- FAIL: TestFulfillTradeViaCLI/item->item_fullfill_trade_test (28.66s)
 ```
-Try to debug the transaction by doing `pylonscli query tx 632A1A35933E4DDD89A71B2C576C7C9BD1267DA39A229B129981A64ED37CE9A6`
+Try to debug the transaction by doing `pylonsd query tx 632A1A35933E4DDD89A71B2C576C7C9BD1267DA39A229B129981A64ED37CE9A6`
 
 - How to handle this issue?
 ```log

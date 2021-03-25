@@ -4,21 +4,21 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"strings"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/spf13/cobra"
-
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 )
 
 // SendItems implements SendItems msg transaction
 func SendItems(queryRoute string) *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "send-items [address] [item_ids]",
 		Short: "send items to the address provided",
 		Args:  cobra.ExactArgs(2),
@@ -76,5 +76,7 @@ func SendItems(queryRoute string) *cobra.Command {
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{&msg}...)
 		},
 	}
-	return ccb
+
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
 }

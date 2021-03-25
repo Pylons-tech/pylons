@@ -1,12 +1,11 @@
 package queriers
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -26,7 +25,7 @@ func TestGetItem(t *testing.T) {
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
 	mockedItem := keep.GenItem(cbData.CookbookID, sender1, mockItemName)
 	err := tci.PlnK.SetItem(tci.Ctx, mockedItem)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 
 	cases := map[string]struct {
 		itemID        string
@@ -66,7 +65,7 @@ func TestGetItem(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				itmName, ok := result.Item.FindString("Name")
 				require.True(t, ok)

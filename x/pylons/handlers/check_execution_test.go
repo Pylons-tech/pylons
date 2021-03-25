@@ -115,33 +115,33 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				for _, iN := range tc.dynamicItemNames {
 					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
 			err := tci.Bk.AddCoins(tci.Ctx, tc.sender, sdk.Coins{sdk.NewInt64Coin("wood", 5)})
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			execRcpResponse, err := MockExecution(tci, tc.rcpID,
 				tc.sender,
 				tc.itemIDs,
 			)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			require.True(t, execRcpResponse.Status == "Success")
 			require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
 			if tc.coinAddition != 0 {
 				err = tci.Bk.AddCoins(tci.Ctx, tc.sender, types.NewPylon(tc.coinAddition))
-				require.True(t, err == nil)
+				require.NoError(t, err)
 			}
 
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.dynamicItemSet && len(tc.itemIDs) > 0 {
 				usedItem, err := tci.PlnK.GetItem(tci.Ctx, tc.itemIDs[0])
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
 			}
 
@@ -149,7 +149,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
 			result, err := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			if tc.expectError {
 				require.True(t, result.Status == "Failure")
@@ -162,7 +162,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 
 			if len(tc.desiredUpgradedName) > 0 && len(tc.itemIDs) > 0 {
 				updatedItem, err := tci.PlnK.GetItem(futureContext, tc.itemIDs[0])
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				updatedName, ok := updatedItem.FindString("Name")
 				require.True(t, ok)
 				require.True(t, updatedName == tc.desiredUpgradedName)
@@ -170,7 +170,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 
 			if tc.retryExecution {
 				result, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, result.Status == "Completed")
 				require.True(t, result.Message == tc.retryResMessage)
 			}

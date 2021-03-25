@@ -35,6 +35,8 @@ github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAE
 github.com/Pallinder/go-randomdata v1.2.0/go.mod h1:yHmJgulpD2Nfrm0cR9tI/+oAgRqCQQixsA8HyRZfV9Y=
 github.com/Pylons-tech/pylons_sdk v0.0.0-20200807024733-d6f61840a7b2 h1:fx8mVVvum3uqjbZqaqhk8mi/OVRlps56255rDfs1rcc=
 github.com/Pylons-tech/pylons_sdk v0.0.0-20200807024733-d6f61840a7b2/go.mod h1:peUjachOQIOZfKlmPeb4qdE8KyU3apqTntxWTT2zukk=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20201211010647-2faf3ce715c8 h1:z3YxTtIi4XKB0k9j3w2VJfZ4hrJ35WkHIsc0WbDwJ+k=
+github.com/Pylons-tech/pylons_sdk v0.0.0-20201211010647-2faf3ce715c8/go.mod h1:peUjachOQIOZfKlmPeb4qdE8KyU3apqTntxWTT2zukk=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=
@@ -150,6 +152,7 @@ github.com/cosmos/cosmos-sdk v0.41.3/go.mod h1:yKN705My5fGGT93DrdoeZ96GPFLCVZrzD
 github.com/cosmos/cosmos-sdk v0.42.0 h1:oQ+rUTYZ5gUq8/YEW83NosCJ3+41iA/3/wZ3pfEIYH8=
 github.com/cosmos/cosmos-sdk v0.42.0/go.mod h1:xiLp1G8mumj82S5KLJGCAyeAlD+7VNomg/aRSJV12yk=
 github.com/cosmos/cosmos-sdk v0.42.1 h1:/0SqvXdxbHBRUFRTLdiL4VYE18DMNXd2ONhC5d90EBQ=
+github.com/cosmos/cosmos-sdk v0.42.2 h1:t2jIxV5DGN1ynOwuSIvQUUHr7tAePN1AG5ArM7o8qos=
 github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d h1:49RLWk1j44Xu4fjHb6JFYmeUnDORVwHNkDxaQ0ctCVU=
 github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d/go.mod h1:tSxLoYXyBmiFeKpvmq4dzayMdCjCnu8uqmCysIGBT2Y=
 github.com/cosmos/go-bip39 v0.0.0-20200817134856-d632e0d11689/go.mod h1:RNJv0H/pOIVgxw6KS7QeX2a0Uo0aKUlfhZ4xuwvCdJw=

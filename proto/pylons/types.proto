@@ -118,6 +118,13 @@ message  LongInputParamList {
   repeated LongInputParam List = 1 [(gogoproto.nullable) = false];
 }
 
+// ConditionList is a struct for describing  ItemInput expression conditions
+message ConditionList {
+	DoubleInputParamList Doubles = 1[(gogoproto.nullable) = false];
+	LongInputParamList Longs = 2[(gogoproto.nullable) = false];
+	StringInputParamList Strings = 3[(gogoproto.nullable) = false];
+}
+
 // ItemInput is a wrapper struct for Item for recipes
 message ItemInput  {
   string ID = 1;
@@ -125,6 +132,7 @@ message ItemInput  {
   LongInputParamList Longs = 3 [(gogoproto.nullable) = false];
   StringInputParamList Strings = 4 [(gogoproto.nullable) = false];
   FeeInputParam TransferFee = 5 [(gogoproto.nullable) = false];
+  ConditionList Conditions = 6 [(gogoproto.nullable) = false];
 }
 
 message ItemInputList {

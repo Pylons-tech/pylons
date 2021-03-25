@@ -102,7 +102,8 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 			newItem.OwnerTradeID = "TRADE_ID"
 		}
 		err := tci.PlnK.SetItem(tci.Ctx, newItem)
-		require.True(t, err == nil)
+		require.NoError(t, err)
+
 		initItemIDs = append(initItemIDs, newItem.ID)
 	}
 
@@ -241,9 +242,9 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
-			err = p.SetMatchedItemsFromExecMsg(&msg)
+			err = p.SetMatchedItemsFromExecMsg(tci.Ctx, &msg)
 			if tc.showError {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error(), tc.desiredError)
@@ -288,7 +289,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		0,
 	)
 	err := tci.PlnK.SetItem(tci.Ctx, newItem)
-	require.True(t, err == nil)
+	require.NoError(t, err)
 	initItemIDs = append(initItemIDs, newItem.ID)
 
 	genCoinInputList := types.GenCoinInputList("wood", 5)
@@ -327,9 +328,9 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
-			err = p.SetMatchedItemsFromExecMsg(&msg)
+			err = p.SetMatchedItemsFromExecMsg(tci.Ctx, &msg)
 			require.True(t, err == nil, err)
 			err = p.GenerateCelEnvVarFromInputItems()
 			if tc.showError {

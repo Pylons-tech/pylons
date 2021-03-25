@@ -856,7 +856,7 @@ func RunExecuteRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
 			return
 		}
 
-		t.MustTrue(result != nil, "result should not be empty")
+		t.MustTrue(result != nil, "result should not be empty", err)
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 
 		if result.Message == "scheduled the recipe" { // delayed execution

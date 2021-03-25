@@ -2,6 +2,7 @@ package queriers
 
 import (
 	"context"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -30,7 +31,7 @@ func (querier *querierServer) GetExecution(ctx context.Context, req *types.GetEx
 		RecipeID:    exec.RecipeID,
 		CookbookID:  exec.CookbookID,
 		CoinsInput:  exec.CoinInputs,
-		ItemInputs:  types.ItemInputsToProto(exec.ItemInputs),
+		ItemInputs:  exec.ItemInputs,
 		BlockHeight: exec.BlockHeight,
 		Sender:      exec.Sender,
 		Completed:   exec.Completed,

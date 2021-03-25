@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -46,7 +47,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
-	err = p.SetMatchedItemsFromExecMsg(msg)
+	err = p.SetMatchedItemsFromExecMsg(sdkCtx, msg)
 	if err != nil {
 		return nil, errInternal(err)
 	}

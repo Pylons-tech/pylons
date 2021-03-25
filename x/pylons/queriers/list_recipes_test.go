@@ -1,9 +1,10 @@
 package queriers
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/stretchr/testify/require"
 
@@ -63,8 +64,7 @@ func TestListRecipe(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
-
+				require.NoError(t, err)
 				require.True(t, len(result.Recipes) == tc.desiredRcpCnt)
 				require.True(t, len(result.Recipes) > 0)
 				require.True(t, result.Recipes[0].Name == tc.firstItemName)

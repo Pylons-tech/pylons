@@ -19,6 +19,7 @@ type Keeper struct {
 	ItemKey           sdk.StoreKey
 	ExecutionKey      sdk.StoreKey
 	TradeKey          sdk.StoreKey
+	HistoryKey        sdk.StoreKey
 	LockedCoinKey     sdk.StoreKey
 }
 
@@ -34,6 +35,7 @@ func NewKeeper(coinKeeper bankkeeper.Keeper, cdc *codec.LegacyAmino, storeKeys m
 		ItemKey:           storeKeys[KeyPylonsItem],
 		ExecutionKey:      storeKeys[KeyPylonsExecution],
 		TradeKey:          storeKeys[KeyPylonsTrade],
+		HistoryKey:        storeKeys[KeyPylonsHistory],
 		LockedCoinKey:     storeKeys[KeyPylonsLockedCoin],
 	}
 }

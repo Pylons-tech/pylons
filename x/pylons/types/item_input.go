@@ -4,18 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func ItemInputsToProto(items []Item) []*Item {
-	var res []*Item
-	for _, item := range items {
-		res = append(res, &item)
-	}
-	return res
-}
-
 // MatchError checks if all the constraint match the given item
-func (ii ItemInput) MatchError(item Item) error {
+func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 
 	if ii.Doubles.Params != nil {
 		for _, param := range ii.Doubles.Params {
@@ -59,6 +53,42 @@ func (ii ItemInput) MatchError(item Item) error {
 		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
 	}
 
+	for _, param := range ii.Conditions.Doubles.Params {
+		double, err := ec.EvalFloat64(param.Key)
+		if err != nil {
+			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
+		}
+
+		dec, err := sdk.NewDecFromStr(fmt.Sprintf("%v", double))
+		if err != nil {
+			return err
+		}
+
+		if !param.Has(dec) {
+			return fmt.Errorf("%s expression range does not match: item_id=%s", param.Key, item.ID)
+		}
+	}
+
+	for _, param := range ii.Conditions.Longs.List {
+		long, err := ec.EvalInt64(param.Key)
+		if err != nil {
+			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
+		}
+
+		if !param.Has(int(long)) {
+			return fmt.Errorf("%s expression range does not match: item_id=%s", param.Key, item.ID)
+		}
+	}
+
+	for _, param := range ii.Conditions.Strings.List {
+		str, err := ec.EvalString(param.Key)
+		if err != nil {
+			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
+		}
+		if str != param.Value {
+			return fmt.Errorf("%s expression value does not match: item_id=%s", param.Key, item.ID)
+		}
+	}
 	return nil
 }
 
@@ -82,11 +112,11 @@ func (iil ItemInputList) Validate() error {
 }
 
 // MatchError checks if all the constraint match the given item
-func (tii TradeItemInput) MatchError(item Item) error {
+func (tii TradeItemInput) MatchError(item Item, ec CelEnvCollection) error {
 	if item.CookbookID != tii.CookbookID {
 		return fmt.Errorf("cookbook id does not match")
 	}
-	return tii.ItemInput.MatchError(item)
+	return tii.ItemInput.MatchError(item, ec)
 }
 
 // Validate is a function to check ItemInputList is valid

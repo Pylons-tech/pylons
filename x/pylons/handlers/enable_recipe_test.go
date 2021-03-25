@@ -53,12 +53,12 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 			result, err := tci.PlnH.EnableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, result.Status == "Success")
 				require.True(t, result.Message == "successfully enabled the recipe")
 
 				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
-				require.True(t, err == nil)
+				require.NoError(t, err)
 				require.True(t, uRcp.Disabled == false)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

@@ -1,10 +1,11 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strings"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/stretchr/testify/require"
 
@@ -62,7 +63,7 @@ func TestQuerierPylonsBalance(t *testing.T) {
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				require.True(t, result.Balance == tc.desiredAmount)
 			}
