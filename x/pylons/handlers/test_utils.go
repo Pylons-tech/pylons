@@ -21,7 +21,7 @@ func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) *msgs.MsgCreate
 // MockCookbookByName mock cookbook with specific name
 func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) *msgs.MsgCreateCookbookResponse {
 	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender)
+	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cbResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		panic(err.Error())

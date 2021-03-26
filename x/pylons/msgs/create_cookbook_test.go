@@ -4,8 +4,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -18,9 +16,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 		name         string
 		desc         string
 		devel        string
-		version      types.SemVer
-		sEmail       types.Email
-		level        types.Level
+		version      string
+		sEmail       string
+		level        int64
 		sender       sdk.AccAddress
 		desiredError string
 		showError    bool
@@ -29,9 +27,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id001",
 			desc:         "this has to meet character limits",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"1.0.0"},
-			sEmail:       types.Email{"example@example.com"},
-			level:        types.Level{0},
+			version:      "1.0.0",
+			sEmail:       "example@example.com",
+			level:        0,
 			sender:       sender,
 			desiredError: "the name of the cookbook should have more than 8 characters",
 			showError:    true,
@@ -40,9 +38,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id0000001",
 			desc:         "this has to meet character limits",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"1.0.0"},
-			sEmail:       types.Email{"example@example.com"},
-			level:        types.Level{0},
+			version:      "1.0.0",
+			sEmail:       "example@example.com",
+			level:        0,
 			sender:       nil,
 			desiredError: "invalid address",
 			showError:    true,
@@ -51,9 +49,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id0000001",
 			desc:         "",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"1.0.0"},
-			sEmail:       types.Email{"example@example.com"},
-			level:        types.Level{0},
+			version:      "1.0.0",
+			sEmail:       "example@example.com",
+			level:        0,
 			sender:       sender,
 			desiredError: "the description should have more than 20 characters",
 			showError:    true,
@@ -62,9 +60,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id0000001",
 			desc:         "this has to meet character limits",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"1.0.0"},
-			sEmail:       types.Email{"wrong email type"},
-			level:        types.Level{0},
+			version:      "1.0.0",
+			sEmail:       "wrong email type",
+			level:        0,
 			sender:       sender,
 			desiredError: "invalid email address",
 			showError:    true,
@@ -73,9 +71,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id0000001",
 			desc:         "this has to meet character limits",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"1.0.0"},
-			sEmail:       types.Email{"example@example.com"},
-			level:        types.Level{3},
+			version:      "1.0.0",
+			sEmail:       "example@example.com",
+			level:        3,
 			sender:       sender,
 			desiredError: "Invalid cookbook plan",
 			showError:    true,
@@ -84,9 +82,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id0000001",
 			desc:         "this has to meet character limits",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"version1 :)"},
-			sEmail:       types.Email{"example@example.com"},
-			level:        types.Level{0},
+			version:      "version1 :)",
+			sEmail:       "example@example.com",
+			level:        0,
 			sender:       sender,
 			desiredError: "invalid semVer",
 			showError:    true,
@@ -95,9 +93,9 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			name:         "id0000001",
 			desc:         "this has to meet character limits",
 			devel:        "SketchyCo",
-			version:      types.SemVer{"1.0.0"},
-			sEmail:       types.Email{"example@example.com"},
-			level:        types.Level{0},
+			version:      "1.0.0",
+			sEmail:       "example@example.com",
+			level:        0,
 			sender:       sender,
 			desiredError: "",
 			showError:    false,

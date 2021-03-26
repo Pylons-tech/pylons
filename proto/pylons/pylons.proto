@@ -29,18 +29,6 @@ message CoinOutput{
   string Count = 3;
 }
 
-message SemVer {
-  string number = 1;
-}
-
-message Level {
-  int64 number = 1;
-}
-
-message Email {
-  string str = 1;
-}
-
 // DoubleInputParam describes the bounds on an item input/output parameter of type float64
 message DoubleInputParam {
   string Key = 1;
@@ -211,7 +199,7 @@ message  ItemModifyParams {
 
 // Item is a tradable asset
 message  Item {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   DoubleKeyValueList Doubles = 3 [(gogoproto.nullable) = false];
   LongKeyValueList Longs = 4 [(gogoproto.nullable) = false];
@@ -286,7 +274,7 @@ message ShortenRecipe  {
 }
 
 message Execution{
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   string RecipeID = 3;
   string CookbookID = 4;
@@ -298,7 +286,7 @@ message Execution{
 }
 
 message Recipe {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   string CookbookID = 3;
   string Name = 4;
@@ -313,7 +301,7 @@ message Recipe {
 }
 
 message Trade {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   CoinInputList CoinInputs = 3 [(gogoproto.nullable) = false];
   TradeItemInputList ItemInputs = 4 [(gogoproto.nullable) = false];

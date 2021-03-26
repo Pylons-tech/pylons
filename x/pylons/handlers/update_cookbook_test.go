@@ -18,9 +18,9 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cb := types.NewCookbook(
-		types.Email{"example@example.com"},
+		"example@example.com",
 		sender1,
-		types.SemVer{"1.0.0"},
+		"1.0.0",
 		"cookbook0001",
 		"this has to meet character limits",
 		"SketchyCo",
@@ -33,7 +33,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		cbID         string
 		desc         string
 		sender       sdk.AccAddress
-		level        types.Level
+		level        int64
 		desiredError string
 		showError    bool
 	}{
@@ -41,7 +41,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 			cbID:         cb.ID,
 			desc:         "this has to meet character limits - updated description",
 			sender:       sender1,
-			level:        types.Level{1},
+			level:        1,
 			desiredError: "",
 			showError:    false,
 		},
@@ -49,7 +49,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 			cbID:         cb.ID,
 			desc:         "this has to meet character limits - updated description",
 			sender:       sender2,
-			level:        types.Level{1},
+			level:        1,
 			desiredError: "the owner of the cookbook is different then the current sender",
 			showError:    true,
 		},
@@ -57,14 +57,14 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 			cbID:         "invalidCookbookID",
 			desc:         "this has to meet character limits - updated description",
 			sender:       sender2,
-			level:        types.Level{1},
+			level:        1,
 			desiredError: "The cookbook doesn't exist",
 			showError:    true,
 		},
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, tc.sender)
+			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender)
 
 			_, err := tci.PlnH.HandlerMsgUpdateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 

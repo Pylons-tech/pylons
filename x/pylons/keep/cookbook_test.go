@@ -13,13 +13,13 @@ import (
 
 func GenCookbook(sender sdk.AccAddress, name string, desc string) types.Cookbook {
 	return types.NewCookbook(
-		types.Email{"example@example.com"}, // msg.SupportEmail,
-		sender,                             // msg.Sender,
-		types.SemVer{"1.0.0"},              // msg.Version,
-		name,                               // msg.Name,
-		desc,                               // msg.Description,
-		"SketchyCo",                        // msg.Developer,
-		50,                                 // msg.CostPerBlock
+		"example@example.com", // msg.SupportEmail,
+		sender,                // msg.Sender,
+		"1.0.0",               // msg.Version,
+		name,                  // msg.Name,
+		desc,                  // msg.Description,
+		"SketchyCo",           // msg.Developer,
+		50,                    // msg.CostPerBlock
 	)
 }
 

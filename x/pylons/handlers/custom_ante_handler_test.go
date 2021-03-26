@@ -250,9 +250,9 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 						"samecookbookID-0001",
 						"some description with 20 characters",
 						"SketchyCo",
-						types.SemVer{"1.0.0"},
-						types.Email{"example@example.com"},
-						types.Level{0},
+						"1.0.0",
+						"example@example.com",
+						0,
 						msgs.DefaultCostPerBlock,
 						cosmosAddr,
 					)

@@ -1,11 +1,10 @@
 {
-	"type": "pylons/CreateCookbook",
-	"value": {
-		"Name": "SAMPLE_MSG_CREATE_COOKBOOK",
-		"Description": "this has to meet character limits lol",
-		"Version": "1.0.0",
-		"Developer": "SketchyCo",
-		"SupportEmail": "example@example.com",
-		"Level": "0"
-	}
+	"Name": "SAMPLE_MSG_CREATE_COOKBOOK",
+	"Description": "this has to meet character limits lol",
+	"Version": "1.0.0",
+	"Developer": "SketchyCo",
+	"SupportEmail": "example@example.com",
+	"Level": 0,
+	"CostPerBlock":50
 }
+

@@ -1,7 +1,7 @@
 package tx
 
 import (
-	// "strconv"
+	"encoding/json"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -34,7 +34,7 @@ func CreateCookbook() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			err = msgCCB.Unmarshal(byteValue)
+			err = json.Unmarshal(byteValue, &msgCCB)
 			if err != nil {
 				return err
 			}
