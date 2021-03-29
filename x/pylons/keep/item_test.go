@@ -20,19 +20,19 @@ func TestKeeperSetItem(t *testing.T) {
 		name         string
 		desc         string
 		sender       sdk.AccAddress
-		level        types.Level
+		level        int64
 		desiredError string
 		showError    bool
 	}{
 		"empty sender test": {
 			sender:       nil,
-			level:        types.Level{1},
+			level:        1,
 			desiredError: "SetItem: the sender cannot be empty",
 			showError:    true,
 		},
 		"successful item test": {
 			sender:       sender,
-			level:        types.Level{1},
+			level:        1,
 			desiredError: "",
 			showError:    false,
 		},

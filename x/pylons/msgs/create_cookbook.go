@@ -12,7 +12,7 @@ import (
 const DefaultCostPerBlock = 50 // Pylons
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
-func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version types.SemVer, sEmail types.Email, level types.Level, cpb int64, sender sdk.AccAddress) MsgCreateCookbook {
+func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version string, sEmail string, level int64, cpb int64, sender sdk.AccAddress) MsgCreateCookbook {
 	return MsgCreateCookbook{
 		CookbookID:   cookbookID,
 		Name:         name,
@@ -47,15 +47,15 @@ func (msg MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
-	if err := msg.SupportEmail.Validate(); err != nil {
+	if err := types.ValidateEmail(msg.SupportEmail); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err := msg.Level.Validate(); err != nil {
+	if err := types.ValidateLevel(msg.Level); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err := msg.Version.Validate(); err != nil {
+	if err := types.ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 

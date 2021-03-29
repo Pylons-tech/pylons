@@ -1,7 +1,7 @@
 syntax = "proto3";
 package pylons;
 
-import "pylons/types.proto";
+import "pylons/pylons.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
@@ -128,14 +128,14 @@ message GetCookbookRequest {
 }
 
 message GetCookbookResponse {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   string Name = 3;
   string Description = 4;
-  SemVer Version = 5 [(gogoproto.nullable) = false];
+  string Version = 5;
   string Developer = 6;
-  Level Level = 7 [(gogoproto.nullable) = false];
-  Email SupportEmail = 8 [(gogoproto.nullable) = false];
+  int64 Level = 7;
+  string SupportEmail = 8;
   int64 CostPerBlock = 9;
   string Sender = 10;
 }
@@ -146,7 +146,7 @@ message GetExecutionRequest {
 }
 
 message GetExecutionResponse {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   string RecipeID = 3;
   string CookbookID = 4;
@@ -172,7 +172,7 @@ message GetRecipeRequest {
 }
 
 message GetRecipeResponse {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   string CookbookID = 3;
   string Name = 4;
@@ -192,7 +192,7 @@ message GetTradeRequest {
 }
 
 message GetTradeResponse {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string ID = 2;
   CoinInputList CoinInputs = 3 [(gogoproto.nullable) = false];
   TradeItemInputList ItemInputs = 4 [(gogoproto.nullable) = false];
@@ -247,7 +247,7 @@ message GetLockedCoinsRequest {
 }
 
 message GetLockedCoinsResponse {
-  SemVer NodeVersion = 1 [(gogoproto.nullable) = false];
+  string NodeVersion = 1;
   string Sender = 2;
   repeated cosmos.base.v1beta1.Coin Amount = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
 }

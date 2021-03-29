@@ -3,10 +3,10 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"net/http"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 
@@ -27,9 +27,9 @@ func CreateCookbookTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			"",
 			"this has to meet character limits lol",
 			"SketchyCo",
-			types.SemVer{"1.0.0"},
-			types.Email{"example@example.com"},
-			types.Level{0},
+			"1.0.0",
+			"example@example.com",
+			0,
 			msgs.DefaultCostPerBlock,
 			sender,
 		)

@@ -2,7 +2,6 @@ package tx
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -28,8 +27,8 @@ func UpdateCookbook() *cobra.Command {
 			}
 
 			msgCCB.Sender = clientCtx.GetFromAddress().String()
-			msgCCB.Version = types.SemVer{tmpVersion}
-			msgCCB.SupportEmail = types.Email{tmpEmail}
+			msgCCB.Version = tmpVersion
+			msgCCB.SupportEmail = tmpEmail
 
 			err = msgCCB.ValidateBasic()
 			if err != nil {

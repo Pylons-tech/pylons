@@ -41,9 +41,9 @@ func TestCoinLock(t *testing.T) {
 		"",
 		"this has to meet character limits",
 		"SketchyCo",
-		types.SemVer{"1.0.0"},
-		types.Email{"example@example.com"},
-		types.Level{1},
+		"1.0.0",
+		"example@example.com",
+		1,
 		msgs.DefaultCostPerBlock,
 		sender1,
 	)

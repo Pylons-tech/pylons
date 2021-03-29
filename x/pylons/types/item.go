@@ -114,7 +114,7 @@ func (it Item) SetString(key string, value string) bool {
 func NewItem(cookbookID string, doubles DoubleKeyValueList, longs LongKeyValueList, strings StringKeyValueList, sender sdk.AccAddress, blockHeight int64, transferFee int64) Item {
 
 	item := Item{
-		NodeVersion: SemVer{"0.0.1"},
+		NodeVersion: "0.0.1",
 		CookbookID:  cookbookID,
 		Doubles:     doubles,
 		Longs:       longs,

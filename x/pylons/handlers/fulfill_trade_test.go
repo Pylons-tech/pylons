@@ -32,7 +32,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender)
+	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
@@ -56,7 +56,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	require.NoError(t, err)
 
 	// Create cookbook for sender3
-	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{1}, msgs.DefaultCostPerBlock, sender3)
+	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender3)
 	cookbookResult1, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg1)
 	require.True(t, len(cookbookResult1.CookbookID) > 0)
 

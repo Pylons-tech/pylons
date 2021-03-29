@@ -10,7 +10,7 @@ func (wr IntWeightRange) Has(number int64) bool {
 	return number >= wr.Lower && number < wr.Upper
 }
 
-// Generate uses the weight table to generate a random number. Its uses a 2 level random generation mechanism.
+// Generate uses the weight table to generate a random number. Its uses a 2 int64 random generation mechanism.
 // E.g. 2 weight ranges are provided with values [100, 500  weight: 8] and [600, 800 weight: 2] so now we
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100, 500] else [600, 800].
 // next we get a random number from the selected range and return that

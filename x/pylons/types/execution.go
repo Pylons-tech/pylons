@@ -19,7 +19,7 @@ func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 	completed bool) Execution {
 
 	exec := Execution{
-		NodeVersion: SemVer{"0.0.1"},
+		NodeVersion: "0.0.1",
 		RecipeID:    recipeID,
 		CookbookID:  cookbookID,
 		CoinInputs:  ci,

@@ -8,15 +8,15 @@ import (
 
 // Tier defines the kind of cookbook this is
 const (
-	// Basic is the free level which does allow developers to use pylons ( paid currency ) in their
+	// Basic is the free int64 which does allow developers to use pylons ( paid currency ) in their
 	// games
 	Basic int64 = iota
 	Premium
 )
 
-// Validate validates the Level
-func (l Level) Validate() error {
-	if l.Number == Basic || l.Number == Premium {
+// ValidateLevel validates the level
+func ValidateLevel(level int64) error {
+	if level == Basic || level == Premium {
 		return nil
 	}
 
@@ -33,23 +33,19 @@ var (
 
 // Tier defines the kind of cookbook this is
 type Tier struct {
-	Level Level
+	Level int64
 	Fee   sdk.Coins
 }
 
 // BasicTier is the cookbook tier which doesn't allow paid recipes which means
 // the developers cannot have recipes where they can actually carge a fee in pylons
 var BasicTier = Tier{
-	Level: Level{
-		Number: Basic,
-	},
-	Fee: BasicFee,
+	Level: Basic,
+	Fee:   BasicFee,
 }
 
 // PremiumTier the cookbook tier which does allow paid recipes
 var PremiumTier = Tier{
-	Level: Level{
-		Number: Premium,
-	},
-	Fee: PremiumFee,
+	Level: Premium,
+	Fee:   PremiumFee,
 }

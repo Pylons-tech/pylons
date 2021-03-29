@@ -31,6 +31,6 @@ unit_tests:
 fixture_unit_tests:
 	go test -v ./test/fixtures_test/ ${ARGS}
 
-protoc-gen:
+proto-gen:
 	bash ./protoc_gen.sh
 

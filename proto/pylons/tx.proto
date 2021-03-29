@@ -4,7 +4,7 @@ package pylons;
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "pylons/types.proto";
+import "pylons/pylons.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/msgs";
 
@@ -100,10 +100,10 @@ message MsgCreateCookbook {
   string CookbookID = 1;
   string Name = 2;
   string Description = 3;
-  SemVer Version = 4 [(gogoproto.nullable) = false];
+  string Version = 4;
   string Developer = 5;
-  Email SupportEmail = 6 [(gogoproto.nullable) = false];
-  Level Level = 7 [(gogoproto.nullable) = false];
+  string SupportEmail = 6;
+  int64 Level = 7;
   string Sender = 8;
   // Pylons per block to be charged across this cookbook for delayed execution early completion
   int64 CostPerBlock = 9;
@@ -320,9 +320,9 @@ message MsgUpdateItemStringResponse  {
 message MsgUpdateCookbook {
   string ID = 1;
   string Description = 2;
-  SemVer Version = 3 [(gogoproto.nullable) = false];
+  string Version = 3;
   string Developer = 4;
-  Email SupportEmail = 5 [(gogoproto.nullable) = false];
+  string SupportEmail = 5;
   string Sender = 6;
 }
 

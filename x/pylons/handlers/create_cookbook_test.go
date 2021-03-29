@@ -21,7 +21,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 		name         string
 		desc         string
 		sender       sdk.AccAddress
-		level        types.Level
+		level        int64
 		desiredError string
 		showError    bool
 	}{
@@ -29,7 +29,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			name:         "cookbook-00001",
 			desc:         "this has to meet character limits",
 			sender:       sender1,
-			level:        types.Level{1},
+			level:        1,
 			desiredError: "",
 			showError:    false,
 		},
@@ -37,7 +37,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			name:         "id01",
 			desc:         "this has to meet character limits",
 			sender:       sender1,
-			level:        types.Level{0},
+			level:        0,
 			desiredError: "the name of the cookbook should have more than 8 characters",
 			showError:    true,
 		},
@@ -45,7 +45,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			name:         "cookbook-00001",
 			desc:         "this has to meet character limits",
 			sender:       sender2,
-			level:        types.Level{0},
+			level:        0,
 			desiredError: "the user doesn't have enough pylons",
 			showError:    true,
 		},
@@ -53,7 +53,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			name:         "cookbook-00001",
 			desc:         "this has to meet character limits",
 			sender:       sender1,
-			level:        types.Level{2},
+			level:        2,
 			desiredError: "Invalid cookbook plan",
 			showError:    true,
 		},
@@ -61,7 +61,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, "", tc.desc, "SketchyCo",
-				types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, tc.level, msgs.DefaultCostPerBlock, tc.sender)
+				"1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender)
 
 			result, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 
@@ -79,7 +79,7 @@ func TestSameCookbookIDCreation(t *testing.T) {
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil, nil)
 
-	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", types.SemVer{"1.0.0"}, types.Email{"example@example.com"}, types.Level{0}, msgs.DefaultCostPerBlock, sender1)
+	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
 
 	result, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	require.True(t, len(result.CookbookID) > 0)

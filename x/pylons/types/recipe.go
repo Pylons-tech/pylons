@@ -24,14 +24,14 @@ func (rl RecipeList) String() string {
 
 // NewRecipe creates a new recipe
 func NewRecipe(recipeName, cookbookID, description string,
-	coinInputs CoinInputList,    // coins to put on the recipe
-	itemInputs ItemInputList,    // items to put on the recipe
-	entries EntriesList,         // items that can be created from recipe
+	coinInputs CoinInputList, // coins to put on the recipe
+	itemInputs ItemInputList, // items to put on the recipe
+	entries EntriesList, // items that can be created from recipe
 	outputs WeightedOutputsList, // item outputs listing by weight value
-	blockInterval int64,         // The amount of time to wait to finish running the recipe
+	blockInterval int64, // The amount of time to wait to finish running the recipe
 	sender sdk.AccAddress) Recipe {
 	rcp := Recipe{
-		NodeVersion:   SemVer{"0.0.1"},
+		NodeVersion:   "0.0.1",
 		Name:          recipeName,
 		CookbookID:    cookbookID,
 		CoinInputs:    coinInputs,

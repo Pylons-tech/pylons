@@ -9,11 +9,11 @@ import (
 )
 
 // NewMsgUpdateCookbook a constructor for UpdateCookbook msg
-func NewMsgUpdateCookbook(ID, desc, devel string, version types.SemVer, sEmail types.Email, sender sdk.AccAddress) MsgUpdateCookbook {
+func NewMsgUpdateCookbook(ID, desc, developer, version, sEmail string, sender sdk.AccAddress) MsgUpdateCookbook {
 	return MsgUpdateCookbook{
 		ID:           ID,
 		Description:  desc,
-		Developer:    devel,
+		Developer:    developer,
 		Version:      version,
 		SupportEmail: sEmail,
 		Sender:       sender.String(),
@@ -41,11 +41,11 @@ func (msg MsgUpdateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
-	if err := msg.SupportEmail.Validate(); err != nil {
+	if err := types.ValidateEmail(msg.SupportEmail); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err := msg.Version.Validate(); err != nil {
+	if err := types.ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
