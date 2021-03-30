@@ -4,9 +4,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestUpdateRecipeValidateBasic(t *testing.T) {
