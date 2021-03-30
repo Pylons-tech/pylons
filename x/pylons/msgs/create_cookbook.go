@@ -9,7 +9,7 @@ import (
 )
 
 // DefaultCostPerBlock the amount of pylons to be charged by default
-const DefaultCostPerBlock = 50 // Pylons
+const DefaultCostPerBlock int64 = 50 // Pylons
 
 // NewMsgCreateCookbook a constructor for CreateCookbook msg
 func NewMsgCreateCookbook(name, cookbookID, desc, developer string, version string, sEmail string, level int64, cpb int64, sender sdk.AccAddress) MsgCreateCookbook {

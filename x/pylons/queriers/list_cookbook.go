@@ -2,6 +2,7 @@ package queriers
 
 import (
 	"context"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -24,12 +25,10 @@ func (querier *querierServer) ListCookbook(ctx context.Context, req *types.ListC
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	cookbook, err := querier.Keeper.GetCookbookBySender(sdk.UnwrapSDKContext(ctx), accAddr)
+	cookbooks, err := querier.Keeper.GetCookbooksBySender(sdk.UnwrapSDKContext(ctx), accAddr)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return &types.ListCookbookResponse{
-		Cookbooks: types.CookbookListToGetCookbookResponseList(cookbook),
-	}, nil
+	return &types.ListCookbookResponse{Cookbooks: cookbooks}, nil
 }

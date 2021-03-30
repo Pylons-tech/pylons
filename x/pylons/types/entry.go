@@ -32,19 +32,19 @@ type serializeEntriesList struct {
 func (wpl EntriesList) FindByID(ID string) (EntryI, error) {
 	for _, wp := range wpl.CoinOutputs {
 		if wp.GetID() == ID {
-			return wp, nil
+			return &wp, nil
 		}
 	}
 
 	for _, wp := range wpl.ItemOutputs {
 		if wp.GetID() == ID {
-			return wp, nil
+			return &wp, nil
 		}
 	}
 
 	for _, wp := range wpl.ItemModifyOutputs {
 		if wp.GetID() == ID {
-			return wp, nil
+			return &wp, nil
 		}
 	}
 	return nil, fmt.Errorf("no entry with the ID %s available", ID)
@@ -54,13 +54,13 @@ func (wpl EntriesList) FindByID(ID string) (EntryI, error) {
 func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	var sel serializeEntriesList
 	for _, wp := range wpl.CoinOutputs {
-		sel.CoinOutputs = append(sel.CoinOutputs, *wp)
+		sel.CoinOutputs = append(sel.CoinOutputs, wp)
 	}
 	for _, wp := range wpl.ItemModifyOutputs {
-		sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, *wp)
+		sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wp)
 	}
 	for _, wp := range wpl.ItemOutputs {
-		sel.ItemOutputs = append(sel.ItemOutputs, *wp)
+		sel.ItemOutputs = append(sel.ItemOutputs, wp)
 	}
 
 	return json.Marshal(sel)
@@ -75,13 +75,13 @@ func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 	}
 
 	for _, co := range sel.CoinOutputs {
-		wpl.CoinOutputs = append(wpl.CoinOutputs, &co)
+		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
 	}
 	for _, io := range sel.ItemModifyOutputs {
-		wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, &io)
+		wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, io)
 	}
 	for _, io := range sel.ItemOutputs {
-		wpl.ItemOutputs = append(wpl.ItemOutputs, &io)
+		wpl.ItemOutputs = append(wpl.ItemOutputs, io)
 	}
 	return nil
 }

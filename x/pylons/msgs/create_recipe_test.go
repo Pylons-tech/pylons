@@ -47,7 +47,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		},
 		"entry ID validation error": { // entry ID validation error
 			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{CoinOutputs: []*types.CoinOutput{{ID: "123"}}},
+			entries:      types.EntriesList{CoinOutputs: []types.CoinOutput{{ID: "123"}}},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
@@ -55,7 +55,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		},
 		"length of program code shouldn't be 0": { // length of program code shouldn't be 0
 			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{CoinOutputs: []*types.CoinOutput{{ID: "a123"}}},
+			entries:      types.EntriesList{CoinOutputs: []types.CoinOutput{{ID: "a123"}}},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
@@ -64,7 +64,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		"invalid item input ref": { // invalid item input ref
 			itemInputs: types.ItemInputList{},
 			entries: types.EntriesList{
-				ItemModifyOutputs: []*types.ItemModifyOutput{{ID: "a123", ItemInputRef: "aaabbb"}},
+				ItemModifyOutputs: []types.ItemModifyOutput{{ID: "a123", ItemInputRef: "aaabbb"}},
 			},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
@@ -74,7 +74,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		"entry same ID available error": { // entry same ID available error
 			itemInputs: types.ItemInputList{},
 			entries: types.EntriesList{
-				CoinOutputs: []*types.CoinOutput{
+				CoinOutputs: []types.CoinOutput{
 					{ID: "a123", Coin: "abc", Count: "1"},
 					{ID: "a123", Coin: "abc", Count: "2"},
 				},
@@ -87,7 +87,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		"coin output denom validation error": { // coin output denom validation error
 			itemInputs: types.ItemInputList{},
 			entries: types.EntriesList{
-				CoinOutputs: []*types.CoinOutput{{ID: "a123", Coin: "123$", Count: "1"}},
+				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "123$", Count: "1"}},
 			},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
@@ -108,7 +108,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		"double use of entries within single output": { // double use of entries within single output
 			itemInputs: types.ItemInputList{},
 			entries: types.EntriesList{
-				CoinOutputs: []*types.CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
+				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
 			},
 			outputs: types.WeightedOutputsList{List: []types.WeightedOutputs{{
 				EntryIDs: []string{"a123", "a123"},
@@ -121,7 +121,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		"double use of item input within single output result": { // double use of item input within single output result
 			itemInputs: types.ItemInputList{List: []types.ItemInput{{ID: "input1"}}},
 			entries: types.EntriesList{
-				ItemModifyOutputs: []*types.ItemModifyOutput{
+				ItemModifyOutputs: []types.ItemModifyOutput{
 					{ID: "a1", ItemInputRef: "input1"},
 					{ID: "a2", ItemInputRef: "input1"},
 				}},

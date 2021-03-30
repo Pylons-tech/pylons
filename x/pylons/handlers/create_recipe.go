@@ -22,22 +22,21 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) 
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	// validate cookbook id
-	cook, err := k.GetCookbook(sdkCtx, msg.CookbookID)
+	cookbook, err := k.GetCookbook(sdkCtx, msg.CookbookID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	// validate sender
-	if !cook.Sender.Equals(sender) {
+	if cookbook.Sender != msg.Sender {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "cookbook not owned by the sender")
 	}
 
 	recipe := types.NewRecipe(
 		msg.Name, msg.CookbookID, msg.Description,
-		msg.CoinInputs,
-		msg.ItemInputs,
-		msg.Entries,
-		msg.Outputs,
-		msg.BlockInterval, sender)
+		msg.CoinInputs, msg.ItemInputs,
+		msg.Entries, msg.Outputs,
+		msg.BlockInterval, sender,
+	)
 
 	if msg.RecipeID != "" {
 		if k.HasRecipeWithCookbookID(sdkCtx, msg.CookbookID, msg.RecipeID) {

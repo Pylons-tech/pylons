@@ -5,7 +5,7 @@ import sdk "github.com/cosmos/cosmos-sdk/types"
 // GenCoinInputList is a utility function to genearte coin input list
 func GenCoinInputList(name string, count int64) CoinInputList {
 	return CoinInputList{
-		[]*CoinInput{
+		[]CoinInput{
 			{
 				Coin:  name,
 				Count: count,
@@ -47,8 +47,8 @@ func GenTradeItemInputList(cookbookID string, itemNames []string) TradeItemInput
 }
 
 // GenCoinOnlyEntry is a utility function to genearte coin only entry
-func GenCoinOnlyEntry(coinName string) *CoinOutput {
-	return &CoinOutput{
+func GenCoinOnlyEntry(coinName string) CoinOutput {
+	return CoinOutput{
 		ID:    coinName,
 		Coin:  coinName,
 		Count: "1",
@@ -56,8 +56,8 @@ func GenCoinOnlyEntry(coinName string) *CoinOutput {
 }
 
 // GenCoinOnlyEntryRand is a utility function to genearte coin only entry with random count
-func GenCoinOnlyEntryRand(ID string, coinName string) *CoinOutput {
-	return &CoinOutput{
+func GenCoinOnlyEntryRand(ID string, coinName string) CoinOutput {
+	return CoinOutput{
 		ID:    ID,
 		Coin:  coinName,
 		Count: `rand(10)+1`,
@@ -81,7 +81,7 @@ func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 }
 
 // GenItemOnlyEntry is a utility function to generate item only entry
-func GenItemOnlyEntry(itemName string) *ItemOutput {
+func GenItemOnlyEntry(itemName string) ItemOutput {
 	item := NewItemOutput(
 		itemName,
 		DoubleParamList{[]DoubleParam{{Key: "endurance", WeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
@@ -96,27 +96,31 @@ func GenItemOnlyEntry(itemName string) *ItemOutput {
 				Weight: 2,
 			},
 		}}, Rate: sdk.NewDec(1.0)}}},
-		LongParamList{[]LongParam{{Key: "HP", WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
-			{
-				Lower:  100,
-				Upper:  500,
-				Weight: 6,
-			},
-			{
-				Lower:  501,
-				Upper:  800,
-				Weight: 2,
-			},
-		}}}}},
+		LongParamList{[]LongParam{{
+			Key: "HP",
+			Rate: sdk.NewDec(1),
+			WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+				{
+					Lower:  100,
+					Upper:  500,
+					Weight: 6,
+				},
+				{
+					Lower:  501,
+					Upper:  800,
+					Weight: 2,
+				},
+			}},
+		}}},
 		StringParamList{[]StringParam{{Key: "Name", Value: itemName, Rate: sdk.NewDec(1.0), Program: ""}}},
 		1232,
 	)
-	return &item
+	return item
 }
 
 // GenItemOnlyEntryRand is a function to generate item only entry with random value
-func GenItemOnlyEntryRand(ID string, itemName string) *ItemOutput {
-	item := NewItemOutput(
+func GenItemOnlyEntryRand(ID string, itemName string) ItemOutput {
+	return NewItemOutput(
 		ID,
 		DoubleParamList{[]DoubleParam{{
 			Key:     "endurance",
@@ -131,7 +135,6 @@ func GenItemOnlyEntryRand(ID string, itemName string) *ItemOutput {
 		StringParamList{[]StringParam{{Key: "Name", Value: itemName, Rate: sdk.NewDec(1.0), Program: ""}}},
 		0,
 	)
-	return &item
 }
 
 // GenOneOutput is a function to generate output with one from entry list
@@ -160,16 +163,16 @@ func GenAllOutput(entryIDs ...string) WeightedOutputsList {
 // GenEntries is a function to generate entries from coin name and item name
 func GenEntries(coinName string, itemName string) EntriesList {
 	return EntriesList{
-		CoinOutputs: []*CoinOutput{GenCoinOnlyEntry(coinName)},
-		ItemOutputs: []*ItemOutput{GenItemOnlyEntry(itemName)},
+		CoinOutputs: []CoinOutput{GenCoinOnlyEntry(coinName)},
+		ItemOutputs: []ItemOutput{GenItemOnlyEntry(itemName)},
 	}
 }
 
 // GenEntriesRand is a function to generate entreis from coin name and item name and which has random attributes
 func GenEntriesRand(coinName, itemName string) EntriesList {
 	return EntriesList{
-		CoinOutputs: []*CoinOutput{GenCoinOnlyEntryRand(coinName, coinName)},
-		ItemOutputs: []*ItemOutput{GenItemOnlyEntryRand(itemName, itemName)},
+		CoinOutputs: []CoinOutput{GenCoinOnlyEntryRand(coinName, coinName)},
+		ItemOutputs: []ItemOutput{GenItemOnlyEntryRand(itemName, itemName)},
 	}
 }
 
@@ -179,7 +182,7 @@ func GenEntriesItemNameUpgrade(inputRef, targetValue string) EntriesList {
 		targetValue, inputRef, GenModifyParamsForString("Name", targetValue),
 	)
 	var t EntriesList
-	t.ItemModifyOutputs = append(t.ItemModifyOutputs, &item)
+	t.ItemModifyOutputs = append(t.ItemModifyOutputs, item)
 	return t
 }
 
@@ -192,8 +195,8 @@ func GenEntriesTwoItemNameUpgrade(inputRef1, targetValue1, inputRef2, targetValu
 		targetValue2, inputRef2, GenModifyParamsForString("Name", targetValue2),
 	)
 	var t EntriesList
-	t.ItemModifyOutputs = append(t.ItemModifyOutputs, &item1)
-	t.ItemModifyOutputs = append(t.ItemModifyOutputs, &item2)
+	t.ItemModifyOutputs = append(t.ItemModifyOutputs, item1)
+	t.ItemModifyOutputs = append(t.ItemModifyOutputs, item2)
 	return t
 }
 

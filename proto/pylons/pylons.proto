@@ -9,13 +9,13 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // EntriesList is a struct to keep list of items and coins
 message EntriesList {
-  repeated CoinOutput CoinOutputs = 1;
-  repeated ItemOutput ItemOutputs = 2;
-  repeated ItemModifyOutput ItemModifyOutputs = 3;
+  repeated CoinOutput CoinOutputs = 1 [(gogoproto.nullable) = false];
+  repeated ItemOutput ItemOutputs = 2 [(gogoproto.nullable) = false];
+  repeated ItemModifyOutput ItemModifyOutputs = 3 [(gogoproto.nullable) = false];
 }
 
 message CoinInputList {
-  repeated CoinInput coins = 1;
+  repeated CoinInput coins = 1 [(gogoproto.nullable) = false];
 }
 
 message CoinInput {
@@ -142,7 +142,10 @@ message  WeightedOutputsList {
 // StringParam describes an item input/output parameter of type string
 message StringParam {
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  string Rate = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string Rate = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
+  ];
   string Key = 2;
   string Value = 3;
   // When program is not empty, Value is ignored
@@ -157,7 +160,10 @@ message StringParamList {
 // DoubleParam describes the bounds on an item input/output parameter of type float64
 message  DoubleParam  {
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-  string Rate = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string Rate = 1 [
+    (gogoproto.nullable) = false,
+    (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
+  ];
   string Key = 2;
   DoubleWeightTable WeightTable = 3 [(gogoproto.nullable) = false];
   // When program is not empty, DoubleWeightTable is ignored
@@ -262,7 +268,10 @@ message TradeItemInputList {
 // LockedCoinDescribe describes the locked coin struct
 message  LockedCoinDescribe {
   string ID = 1;
-  repeated cosmos.base.v1beta1.Coin Amount = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin Amount = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
 }
 // ShortenRecipe is a struct to manage shorten recipes
 message ShortenRecipe  {
@@ -278,11 +287,27 @@ message Execution{
   string ID = 2;
   string RecipeID = 3;
   string CookbookID = 4;
-  repeated cosmos.base.v1beta1.Coin CoinInputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin CoinInputs = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
   repeated Item ItemInputs = 6 [(gogoproto.nullable) = false];
   int64 BlockHeight = 7;
   string Sender = 8;
   bool Completed = 9;
+}
+
+message Cookbook {
+  string NodeVersion = 1;
+	string ID = 2;
+	string Name = 3;
+	string Description = 4;
+	string Version = 5;
+	string Developer = 6;
+	int64 Level = 7;
+	string SupportEmail = 8;
+	int64 CostPerBlock = 9;
+	string Sender = 10;
 }
 
 message Recipe {
@@ -305,7 +330,10 @@ message Trade {
   string ID = 2;
   CoinInputList CoinInputs = 3 [(gogoproto.nullable) = false];
   TradeItemInputList ItemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin CoinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin CoinOutputs = 5 [
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
   ItemList ItemOutputs = 6 [(gogoproto.nullable) = false];
   string ExtraInfo = 7;
   string Sender = 8;

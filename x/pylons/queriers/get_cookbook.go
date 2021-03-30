@@ -33,7 +33,7 @@ func (querier *querierServer) GetCookbook(ctx context.Context, req *types.GetCoo
 		Developer:    cookbook.Developer,
 		Level:        cookbook.Level,
 		SupportEmail: cookbook.SupportEmail,
-		CostPerBlock: int64(cookbook.CostPerBlock),
-		Sender:       cookbook.Sender.String(),
+		CostPerBlock: cookbook.CostPerBlock,
+		Sender:       cookbook.Sender,
 	}, nil
 }

@@ -102,11 +102,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
 			desiredError:   "",
 			showError:      false,
-			senderAmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{
+			senderAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: 90},
 				{Coin: "chair", Count: -10},
 			}},
-			sender2AmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{
+			sender2AmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: -100},
 				{Coin: "chair", Count: 10},
 			}},
@@ -114,7 +114,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 		"trade unordered coin input test": {
 			sender:    sender,
 			fulfiller: sender2,
-			inputCoinList: types.CoinInputList{Coins: []*types.CoinInput{
+			inputCoinList: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: 100},
 				{Coin: "aaaa", Count: 100},
 				{Coin: "zzzz", Count: 100},
@@ -123,13 +123,13 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
 			desiredError:   "",
 			showError:      false,
-			senderAmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{
+			senderAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: 90},
 				{Coin: "aaaa", Count: 100},
 				{Coin: "zzzz", Count: 100},
 				{Coin: "cccc", Count: 100},
 			}},
-			sender2AmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{
+			sender2AmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: -100},
 				{Coin: "aaaa", Count: -100},
 				{Coin: "zzzz", Count: -100},
@@ -176,15 +176,15 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			fulfillInputItemIDs: []string{item2.ID},
 			desiredError:        "",
 			showError:           false,
-			senderAmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{
+			senderAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: 780},
 				{Coin: "chair", Count: -10},
 			}},
-			sender2AmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{
+			sender2AmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
 				{Coin: types.Pylon, Count: -800},
 				{Coin: "chair", Count: 10},
 			}},
-			pylonsLLCAmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{{Coin: types.Pylon, Count: 20}}},
+			pylonsLLCAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 20}}},
 		},
 		"correct item trading fulfill test with 2 items and 2 amounts": {
 			sender:                sender2,
@@ -196,11 +196,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			fulfillInputItemIDs:   []string{item6.ID},
 			desiredError:          "",
 			showError:             false,
-			senderAmountDiffer:    types.CoinInputList{Coins: []*types.CoinInput{{Coin: types.Pylon, Count: 45}}},
-			sender2AmountDiffer:   types.CoinInputList{Coins: []*types.CoinInput{{Coin: types.Pylon, Count: -174}}},
-			sender3AmountDiffer:   types.CoinInputList{Coins: []*types.CoinInput{{Coin: types.Pylon, Count: 63}}},
-			sender4AmountDiffer:   types.CoinInputList{Coins: []*types.CoinInput{{Coin: types.Pylon, Count: 54}}},
-			pylonsLLCAmountDiffer: types.CoinInputList{Coins: []*types.CoinInput{{Coin: types.Pylon, Count: 12}}},
+			senderAmountDiffer:    types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 45}}},
+			sender2AmountDiffer:   types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: -174}}},
+			sender3AmountDiffer:   types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 63}}},
+			sender4AmountDiffer:   types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 54}}},
+			pylonsLLCAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 12}}},
 		},
 		"empty coin output trade success test with no locked coin sender": {
 			sender:              sender5,

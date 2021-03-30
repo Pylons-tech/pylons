@@ -48,7 +48,7 @@ func (k msgServer) CreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbo
 
 	cpb := msgs.DefaultCostPerBlock
 	if msg.CostPerBlock != 0 {
-		cpb = int(msg.CostPerBlock)
+		cpb = msg.CostPerBlock
 	}
 
 	cb := types.NewCookbook(msg.SupportEmail, sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)

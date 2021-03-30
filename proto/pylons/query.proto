@@ -229,7 +229,7 @@ message ListCookbookRequest {
 }
 
 message ListCookbookResponse {
-  repeated GetCookbookResponse Cookbooks = 1;
+  repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
 }
 
 

@@ -1,7 +1,7 @@
 package keep
 
 import (
-	"fmt"
+	"encoding/json"
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -47,13 +47,13 @@ func TestKeeperGetRecipe(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			cb := types.NewCookbook(
-				"example@example.com", // msg.SupportEmail,
-				tc.sender,             // msg.Sender,
-				"1.0.0",               // msg.Version,
-				tc.cookbookName,       // msg.Name,
-				tc.desc,               // msg.Description,
-				"SketchyCo",           // msg.Developer,
-				50,                    // msg.CostPerBlock,
+				"example@example.com", // SupportEmail,
+				tc.sender,             // Sender,
+				"1.0.0",               // Version,
+				tc.cookbookName,       // Name,
+				tc.desc,               // Description,
+				"SketchyCo",           // Developer,
+				50,                    // CostPerBlock,
 			)
 			err := tci.PlnK.SetCookbook(tci.Ctx, cb)
 			require.NoError(t, err)
@@ -63,9 +63,13 @@ func TestKeeperGetRecipe(t *testing.T) {
 			require.NoError(t, err)
 
 			readRecipe, err := tci.PlnK.GetRecipe(tci.Ctx, recipe.ID)
-
 			require.NoError(t, err)
-			require.EqualValues(t, fmt.Sprintf("%v", recipe), fmt.Sprintf("%v", readRecipe))
+
+			recipeBytes, err := json.Marshal(recipe)
+			require.NoError(t, err)
+			readBytes, err := json.Marshal(readRecipe)
+			require.NoError(t, err)
+			require.EqualValues(t, string(recipeBytes), string(readBytes))
 		})
 	}
 }

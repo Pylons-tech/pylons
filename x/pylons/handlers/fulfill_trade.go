@@ -175,8 +175,13 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
+		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
 		if feeForCB > 0 {
-			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}
@@ -209,8 +214,13 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
+		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
 		if feeForCB > 0 {
-			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbook.Sender, types.NewPylon(feeForCB))
+			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}

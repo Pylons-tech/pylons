@@ -87,19 +87,19 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 	case Rcp5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.EntriesList{CoinOutputs: []*types.CoinOutput{types.GenCoinOnlyEntry("chair")}},
+			types.EntriesList{CoinOutputs: []types.CoinOutput{types.GenCoinOnlyEntry("chair")}},
 			types.GenOneOutput("chair"),
 			0
 	case Rcp5BlockDelayed5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.EntriesList{CoinOutputs: []*types.CoinOutput{types.GenCoinOnlyEntry("chair")}},
+			types.EntriesList{CoinOutputs: []types.CoinOutput{types.GenCoinOnlyEntry("chair")}},
 			types.GenOneOutput("chair"),
 			5
 	case Rcp5xWoodcoinTo1xRaichuItemBuy:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.EntriesList{ItemOutputs: []*types.ItemOutput{types.GenItemOnlyEntry("Raichu")}},
+			types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("Raichu")}},
 			types.GenOneOutput("Raichu"),
 			0
 	case RcpRaichuNameUpgrade:
@@ -123,13 +123,13 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 	case Rcp2BlockDelayedKnifeMerge:
 		return types.CoinInputList{},
 			types.GenItemInputList("Knife1", "Knife2"),
-			types.EntriesList{ItemOutputs: []*types.ItemOutput{types.GenItemOnlyEntry("KnifeMRG")}},
+			types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("KnifeMRG")}},
 			types.GenOneOutput("KnifeMRG"),
 			2
 	case Rcp2BlockDelayedKnifeBuyer:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.EntriesList{ItemOutputs: []*types.ItemOutput{types.GenItemOnlyEntry("Knife")}},
+			types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("Knife")}},
 			types.GenOneOutput("Knife"),
 			2
 	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay

@@ -18,8 +18,13 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 		return err
 	}
 
+	cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+	if err != nil {
+		return err
+	}
+
 	// send coins to cookbook owner
-	err = keep.SendCoins(keeper, ctx, msgSender, cookbook.Sender, coinInputs)
+	err = keep.SendCoins(keeper, ctx, msgSender, cookbookSender, coinInputs)
 	if err != nil {
 		return err
 	}
@@ -36,7 +41,7 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 		cbOwnerAmount := pylonAmount * (100 - rcpPercent) / 100
 		// when pylon amount is 5 and rcpPercent is 10, pylonsLLCAmount = 5 - 4 = 1
 		pylonsLLCAmount := pylonAmount - cbOwnerAmount
-		return keep.SendCoins(keeper, ctx, cookbook.Sender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
+		return keep.SendCoins(keeper, ctx, cookbookSender, pylonsLLCAddress, types.NewPylon(pylonsLLCAmount))
 	}
 	return nil
 }

@@ -7,21 +7,6 @@ import (
 // TypeTrade is a store key for trade
 const TypeTrade = "trade"
 
-// TradeList is a list of trades
-type TradeList struct {
-	Trades []Trade
-}
-
-func (cbl TradeList) String() string {
-	output := "TradeList{"
-	for _, cb := range cbl.Trades {
-		output += cb.String()
-		output += ",\n"
-	}
-	output += "}"
-	return output
-}
-
 // NewTrade creates a new trade
 func NewTrade(extraInfo string,
 	coinInputs CoinInputList, // coinOutputs CoinOutputList,

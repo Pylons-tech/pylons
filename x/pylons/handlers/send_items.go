@@ -35,6 +35,11 @@ func (k msgServer) SendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
+		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
 		if item.Sender != msg.Sender {
 			return nil, errInternal(errors.New("Item is not the sender's one"))
 		}
@@ -54,7 +59,7 @@ func (k msgServer) SendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs
 			return nil, errInternal(fmt.Errorf("Error updating item inside keeper; %s", err.Error()))
 		}
 
-		err = ProcessSendItemsFee(sdkCtx, k.Keeper, sender, cookbook.Sender, coins)
+		err = ProcessSendItemsFee(sdkCtx, k.Keeper, sender, cookbookSender, coins)
 		if err != nil {
 			return nil, errInternal(fmt.Errorf("Error sending fees to send items; %s", err.Error()))
 		}

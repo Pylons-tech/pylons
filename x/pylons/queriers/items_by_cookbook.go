@@ -2,6 +2,7 @@ package queriers
 
 import (
 	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -12,21 +13,6 @@ import (
 const (
 	KeyItemsByCookbook = "items_by_cookbook"
 )
-
-// ItemResp is the response for Items
-type ItemResp struct {
-	Items []types.Item
-}
-
-func (ir ItemResp) String() string {
-	output := "ItemResp{"
-	for _, it := range ir.Items {
-		output += it.String()
-		output += ",\n"
-	}
-	output += "}"
-	return output
-}
 
 // ItemsByCookbook returns a cookbook based on the cookbook id
 func (querier *querierServer) ItemsByCookbook(ctx context.Context, req *types.ItemsByCookbookRequest) (*types.ItemsByCookbookResponse, error) {

@@ -7,21 +7,6 @@ import (
 // TypeRecipe is a store key for recipe
 const TypeRecipe = "recipe"
 
-// RecipeList is a list of recipes
-type RecipeList struct {
-	Recipes []Recipe
-}
-
-func (rl RecipeList) String() string {
-	output := "RecipeList{"
-	for _, r := range rl.Recipes {
-		output += r.String()
-		output += ",\n"
-	}
-	output += "}"
-	return output
-}
-
 // NewRecipe creates a new recipe
 func NewRecipe(recipeName, cookbookID, description string,
 	coinInputs CoinInputList, // coins to put on the recipe

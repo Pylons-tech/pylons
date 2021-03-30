@@ -24,7 +24,9 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedSignBytes := `{
-      "CoinInputs": {},
+      "CoinInputs": {
+				"coins": null
+			},
       "CoinOutputs": [
         {
           "amount": "10",
@@ -76,7 +78,7 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	require.NoError(t, err)
 	msg := NewMsgCreateTrade(
 		types.CoinInputList{
-			Coins: []*types.CoinInput{
+			Coins: []types.CoinInput{
 				{Coin: "aaaa", Count: 100},
 				{Coin: "zzzz", Count: 100},
 				{Coin: "cccc", Count: 100},

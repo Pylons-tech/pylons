@@ -6,9 +6,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// CoinInputList is a list of Coin inputs
-type CoinInputList2 []CoinInput
-
 // ToCoins converts to coins
 func (cil CoinInputList) ToCoins() sdk.Coins {
 	var coins sdk.Coins
@@ -17,18 +14,6 @@ func (cil CoinInputList) ToCoins() sdk.Coins {
 	}
 	sort.Sort(coins)
 	return coins
-}
-
-func (cil CoinInputList) StringS() string {
-	output := "CoinInputList{"
-
-	for _, input := range cil.Coins {
-		output += input.String() + ",\n"
-	}
-
-	output += "}"
-	return output
-
 }
 
 // Equal compares two inputlists

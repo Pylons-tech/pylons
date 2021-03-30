@@ -26,6 +26,9 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	cookbook, err := tci.PlnK.GetCookbook(tci.Ctx, cbData.CookbookID)
 	require.NoError(t, err)
 
+	cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+	require.NoError(t, err)
+
 	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
 	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
 	item3 := keep.GenItem(cbData.CookbookID, sender2, "spear")
@@ -180,13 +183,13 @@ func TestHandlerMsgSendItems(t *testing.T) {
 
 			coinsSenderBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
 			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
-			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbook.Sender)
+			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbookSender)
 
 			_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			coinsSenderAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
 			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
-			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbook.Sender)
+			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbookSender)
 
 			if !tc.showError {
 				for _, itemID := range tc.itemIDs {

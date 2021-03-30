@@ -12,7 +12,7 @@ import (
 
 // SetCookbook sets the cookbook with the name as the key
 func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) error {
-	if cookbook.Sender.Empty() {
+	if cookbook.Sender == "" {
 		return errors.New("SetCookbook: the sender cannot be empty")
 	}
 
@@ -34,7 +34,7 @@ func (k Keeper) HasCookbook(ctx sdk.Context, id string) bool {
 
 // UpdateCookbook is used to update the cookbook using the id
 func (k Keeper) UpdateCookbook(ctx sdk.Context, id string, cookbook types.Cookbook) error {
-	if cookbook.Sender.Empty() {
+	if cookbook.Sender == "" {
 		return errors.New("UpdateCookbook: the sender cannot be empty")
 
 	}
@@ -47,9 +47,8 @@ func (k Keeper) GetCookbooksIterator(ctx sdk.Context) sdk.Iterator {
 	return sdk.KVStorePrefixIterator(store, []byte(""))
 }
 
-// GetCookbookBySender returns cookbooks created by the sender
-func (k Keeper) GetCookbookBySender(ctx sdk.Context, sender sdk.AccAddress) ([]types.Cookbook, error) {
-
+// GetCookbooksBySender returns cookbooks created by the sender
+func (k Keeper) GetCookbooksBySender(ctx sdk.Context, sender sdk.AccAddress) ([]types.Cookbook, error) {
 	var cookbooks []types.Cookbook
 	iterator := k.GetCookbooksIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
@@ -59,7 +58,7 @@ func (k Keeper) GetCookbookBySender(ctx sdk.Context, sender sdk.AccAddress) ([]t
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		if strings.Contains(cookbook.Sender.String(), sender.String()) { // considered empty sender
+		if strings.Contains(cookbook.Sender, sender.String()) { // considered empty sender
 			cookbooks = append(cookbooks, cookbook)
 		}
 	}

@@ -16,16 +16,14 @@ func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *msgs.MsgUp
 	}
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	cb, err := k.GetCookbook(sdkCtx, msg.ID)
-
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	// only the original sender (owner) of the cookbook can update the cookbook
-	if !cb.Sender.Equals(sender) {
+	if cb.Sender != msg.Sender {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the cookbook is different then the current sender")
 	}
 

@@ -30,8 +30,8 @@ func TestRecipeItemTransferFee(t *testing.T) {
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("catalyst"),
 		types.EntriesList{
-			ItemModifyOutputs: []*types.ItemModifyOutput{&genItemModifyOutput},
-			ItemOutputs:       []*types.ItemOutput{types.GenItemOnlyEntry("Catalyst2")},
+			ItemModifyOutputs: []types.ItemModifyOutput{genItemModifyOutput},
+			ItemOutputs:       []types.ItemOutput{types.GenItemOnlyEntry("Catalyst2")},
 		},
 		types.GenAllOutput("FeeModifyEntry", "Catalyst2"),
 		cbData.CookbookID,
@@ -47,7 +47,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 		types.CoinInputList{},
 		types.GenItemInputList("sword", "knife"),
 		types.EntriesList{
-			ItemModifyOutputs: []*types.ItemModifyOutput{&genItemModifyOutput1},
+			ItemModifyOutputs: []types.ItemModifyOutput{genItemModifyOutput1},
 		},
 		types.GenAllOutput("FeeModifyEntry"),
 		cbData.CookbookID,
