@@ -7,11 +7,6 @@ import (
 // TypeExecution is a store key for execution
 const TypeExecution = "execution"
 
-// ExecutionList describes executions list
-type ExecutionList struct {
-	Executions []Execution
-}
-
 // NewExecution return a new Execution
 func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
 	itemInputs []Item,

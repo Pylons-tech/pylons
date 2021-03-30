@@ -23,18 +23,3 @@ func NewCookbook(sEmail string, sender sdk.AccAddress, version, name, descriptio
 	cb.ID = KeyGen(sender)
 	return cb
 }
-
-// CookbookList is a list of cookbook
-type CookbookList struct {
-	Cookbooks []Cookbook
-}
-
-func (cbl CookbookList) String() string {
-	output := "CookbookList{"
-	for _, cb := range cbl.Cookbooks {
-		output += cb.String()
-		output += ",\n"
-	}
-	output += "}"
-	return output
-}
