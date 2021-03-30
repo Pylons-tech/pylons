@@ -38,4 +38,3 @@ func (cbl CookbookList) String() string {
 	output += "}"
 	return output
 }
-

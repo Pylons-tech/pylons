@@ -97,7 +97,7 @@ func GenItemOnlyEntry(itemName string) ItemOutput {
 			},
 		}}, Rate: sdk.NewDec(1.0)}}},
 		LongParamList{[]LongParam{{
-			Key: "HP",
+			Key:  "HP",
 			Rate: sdk.NewDec(1),
 			WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
 				{
