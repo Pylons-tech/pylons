@@ -8,10 +8,10 @@ import (
 )
 
 // NewMsgDisableTrade a constructor for DisableTrade msg
-func NewMsgDisableTrade(tradeID string, sender sdk.AccAddress) MsgDisableTrade {
+func NewMsgDisableTrade(tradeID string, sender string) MsgDisableTrade {
 	return MsgDisableTrade{
 		TradeID: tradeID,
-		Sender:  sender.String(),
+		Sender:  sender,
 	}
 }
 

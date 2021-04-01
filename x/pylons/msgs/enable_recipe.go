@@ -8,10 +8,10 @@ import (
 )
 
 // NewMsgEnableRecipe a constructor for EnableRecipe msg
-func NewMsgEnableRecipe(recipeID string, sender sdk.AccAddress) MsgEnableRecipe {
+func NewMsgEnableRecipe(recipeID string, sender string) MsgEnableRecipe {
 	return MsgEnableRecipe{
 		RecipeID: recipeID,
-		Sender:   sender.String(),
+		Sender:   sender,
 	}
 }
 

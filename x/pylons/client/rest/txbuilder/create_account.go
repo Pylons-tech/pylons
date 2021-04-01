@@ -27,7 +27,7 @@ func CreateAccountTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)
 
-		msg := msgs.NewMsgCreateAccount(addr)
+		msg := msgs.NewMsgCreateAccount(addr.String())
 
 		cliCtx.Output = w
 		err = tx.GenerateTx(cliCtx, txf, []sdk.Msg{&msg}...)

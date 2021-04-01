@@ -15,7 +15,7 @@ func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
 	entries types.EntriesList,
 	outputs types.WeightedOutputsList,
 	blockInterval int64,
-	sender sdk.AccAddress) MsgUpdateRecipe {
+	sender string) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
 		ID:            id,
 		Name:          recipeName,
@@ -26,7 +26,7 @@ func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
 		Entries:       entries,
 		Outputs:       outputs,
 		BlockInterval: blockInterval,
-		Sender:        sender.String(),
+		Sender:        sender,
 	}
 }
 

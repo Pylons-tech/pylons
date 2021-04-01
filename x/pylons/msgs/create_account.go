@@ -8,9 +8,9 @@ import (
 )
 
 // NewMsgCreateAccount is a function to get MsgCreateAccount msg from required params
-func NewMsgCreateAccount(requester sdk.AccAddress) MsgCreateAccount {
+func NewMsgCreateAccount(requester string) MsgCreateAccount {
 	return MsgCreateAccount{
-		Requester: requester.String(),
+		Requester: requester,
 	}
 }
 

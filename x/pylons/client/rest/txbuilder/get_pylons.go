@@ -33,7 +33,7 @@ func GetPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr)
+		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr.String())
 		txf := tx.Factory{}.
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)

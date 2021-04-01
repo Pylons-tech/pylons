@@ -43,7 +43,7 @@ func TestHandlerMsgSendCoins(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgSendCoins(tc.amount, tc.fromAddress, tc.toAddress)
+			msg := msgs.NewMsgSendCoins(tc.amount, tc.fromAddress.String(), tc.toAddress.String())
 			_, err := tci.PlnH.SendCoins(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {

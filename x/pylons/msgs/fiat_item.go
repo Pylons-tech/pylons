@@ -9,13 +9,13 @@ import (
 )
 
 // NewMsgFiatItem a constructor for MsgFiatItem msg
-func NewMsgFiatItem(cookbookID string, doubles types.DoubleKeyValueList, longs types.LongKeyValueList, strings types.StringKeyValueList, sender sdk.AccAddress, transferFee int64) MsgFiatItem {
+func NewMsgFiatItem(cookbookID string, doubles types.DoubleKeyValueList, longs types.LongKeyValueList, strings types.StringKeyValueList, sender string, transferFee int64) MsgFiatItem {
 	return MsgFiatItem{
 		CookbookID:  cookbookID,
 		Doubles:     doubles,
 		Longs:       longs,
 		Strings:     strings,
-		Sender:      sender.String(),
+		Sender:      sender,
 		TransferFee: transferFee,
 	}
 }

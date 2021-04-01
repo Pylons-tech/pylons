@@ -145,7 +145,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
 			}
 
-			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender)
+			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender.String())
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
 			result, err := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)

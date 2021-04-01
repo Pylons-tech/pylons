@@ -85,7 +85,7 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 				tc.purchaseToken,
 				receiptDataBase64,
 				tc.signature,
-				tc.fromAddress)
+				tc.fromAddress.String())
 			_, err := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {

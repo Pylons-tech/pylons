@@ -9,14 +9,14 @@ import (
 )
 
 // NewMsgUpdateCookbook a constructor for UpdateCookbook msg
-func NewMsgUpdateCookbook(ID, desc, developer, version, sEmail string, sender sdk.AccAddress) MsgUpdateCookbook {
+func NewMsgUpdateCookbook(ID, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
 	return MsgUpdateCookbook{
 		ID:           ID,
 		Description:  desc,
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: sEmail,
-		Sender:       sender.String(),
+		Sender:       sender,
 	}
 }
 

@@ -8,10 +8,10 @@ import (
 )
 
 // NewMsgEnableTrade a constructor for EnableTrade msg
-func NewMsgEnableTrade(tradeID string, sender sdk.AccAddress) MsgEnableTrade {
+func NewMsgEnableTrade(tradeID string, sender string) MsgEnableTrade {
 	return MsgEnableTrade{
 		TradeID: tradeID,
-		Sender:  sender.String(),
+		Sender:  sender,
 	}
 }
 

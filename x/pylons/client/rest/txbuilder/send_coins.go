@@ -23,7 +23,7 @@ func SendCoinsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgSendCoins(sdk.Coins{sdk.NewInt64Coin("loudcoin", 10), sdk.NewInt64Coin("pylon", 10)}, sender, recv)
+		msg := msgs.NewMsgSendCoins(sdk.Coins{sdk.NewInt64Coin("loudcoin", 10), sdk.NewInt64Coin("pylon", 10)}, sender.String(), recv.String())
 		txf := tx.Factory{}.
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)

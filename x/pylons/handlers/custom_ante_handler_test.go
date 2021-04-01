@@ -58,7 +58,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 			}
 
 			txBuilder := tci.TxConfig.NewTxBuilder()
-			msg := msgs.NewMsgCreateAccount(cosmosAddr)
+			msg := msgs.NewMsgCreateAccount(cosmosAddr.String())
 
 			txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
 			txBuilder.SetMemo("")
@@ -171,7 +171,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
 			require.NoError(t, err)
 
-			msg := msgs.NewMsgCreateAccount(cosmosAddr)
+			msg := msgs.NewMsgCreateAccount(cosmosAddr.String())
 
 			txBuilder := tci.TxConfig.NewTxBuilder()
 
@@ -254,7 +254,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 						"example@example.com",
 						0,
 						msgs.DefaultCostPerBlock,
-						cosmosAddr,
+						cosmosAddr.String(),
 					)
 					txBuilder := tci.TxConfig.NewTxBuilder()
 

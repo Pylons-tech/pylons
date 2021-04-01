@@ -47,7 +47,7 @@ func SendItems(queryRoute string) *cobra.Command {
 
 			itemIDsArray := strings.Split(args[1], ",")
 
-			msg := msgs.NewMsgSendItems(itemIDsArray, clientCtx.GetFromAddress(), addr)
+			msg := msgs.NewMsgSendItems(itemIDsArray, clientCtx.GetFromAddress().String(), addr.String())
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

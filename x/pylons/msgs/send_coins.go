@@ -8,11 +8,11 @@ import (
 )
 
 // NewMsgSendCoins is a function to get MsgSendCoins msg from required params
-func NewMsgSendCoins(amount sdk.Coins, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendCoins {
+func NewMsgSendCoins(amount sdk.Coins, sender, receiver string) MsgSendCoins {
 	return MsgSendCoins{
 		Amount:   amount,
-		Sender:   sender.String(),
-		Receiver: receiver.String(),
+		Sender:   sender,
+		Receiver: receiver,
 	}
 }
 

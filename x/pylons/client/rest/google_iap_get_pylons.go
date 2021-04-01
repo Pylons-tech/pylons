@@ -41,7 +41,7 @@ func googleIAPGetPylonsHandler(cliCtx client.Context) http.HandlerFunc {
 			"your.purchase.token",
 			"your.receipt.data",
 			"your.puchase.signature",
-			addr)
+			addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

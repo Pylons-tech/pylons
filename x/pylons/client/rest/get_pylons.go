@@ -37,7 +37,7 @@ func getPylonsHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := msgs.NewMsgGetPylons(types.NewPylon(DefaultCoinPerRequest), addr)
+		msg := msgs.NewMsgGetPylons(types.NewPylon(DefaultCoinPerRequest), addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

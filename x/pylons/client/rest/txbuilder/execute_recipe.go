@@ -21,7 +21,7 @@ func ExecuteRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgExecuteRecipe("id0001", sender, []string{"alpha", "beta", "gamma"})
+		msg := msgs.NewMsgExecuteRecipe("id0001", sender.String(), []string{"alpha", "beta", "gamma"})
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

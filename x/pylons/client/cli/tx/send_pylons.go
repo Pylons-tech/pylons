@@ -53,7 +53,7 @@ func SendPylons() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg := msgs.NewMsgSendCoins(types.NewPylon(int64(amount)), clientCtx.GetFromAddress(), addr)
+			msg := msgs.NewMsgSendCoins(types.NewPylon(int64(amount)), clientCtx.GetFromAddress().String(), addr.String())
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

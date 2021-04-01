@@ -183,7 +183,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					"example@example.com",
 					1,
 					msgs.DefaultCostPerBlock,
-					tc.sender,
+					tc.sender.String(),
 				)
 				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 				require.NoError(t, err)
@@ -249,7 +249,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		"example@example.com",
 		0,
 		msgs.DefaultCostPerBlock,
-		sender1,
+		sender1.String(),
 	)
 
 	result, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)

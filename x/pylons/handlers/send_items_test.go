@@ -175,7 +175,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgSendItems(tc.itemIDs, tc.fromAddress, tc.toAddress)
+			msg := msgs.NewMsgSendItems(tc.itemIDs, tc.fromAddress.String(), tc.toAddress.String())
 
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 

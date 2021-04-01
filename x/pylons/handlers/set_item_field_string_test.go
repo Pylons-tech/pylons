@@ -125,7 +125,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				require.NoError(t, err)
 			}
 
-			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
+			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1.String())
 			result, err := tci.PlnH.UpdateItemString(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {

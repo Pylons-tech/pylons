@@ -8,10 +8,10 @@ import (
 )
 
 // NewMsgCheckExecution a constructor for CheckExecution msg
-func NewMsgCheckExecution(execID string, ptc bool, sender sdk.AccAddress) MsgCheckExecution {
+func NewMsgCheckExecution(execID string, ptc bool, sender string) MsgCheckExecution {
 	return MsgCheckExecution{
 		ExecID:        execID,
-		Sender:        sender.String(),
+		Sender:        sender,
 		PayToComplete: ptc,
 	}
 }

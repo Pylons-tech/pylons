@@ -240,7 +240,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
+			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
@@ -326,7 +326,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
+			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}

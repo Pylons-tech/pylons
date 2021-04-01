@@ -33,7 +33,7 @@ func GoogleIAPGetPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			"your.purchase.token",
 			"your.receipt.data",
 			"your.puchase.signature",
-			addr)
+			addr.String())
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

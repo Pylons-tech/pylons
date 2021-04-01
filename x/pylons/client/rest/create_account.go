@@ -41,7 +41,7 @@ func createAccountHandler(clientCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := msgs.NewMsgCreateAccount(addr)
+		msg := msgs.NewMsgCreateAccount(addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

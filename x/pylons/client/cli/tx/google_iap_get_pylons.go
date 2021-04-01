@@ -32,7 +32,7 @@ func GoogleIAPGetPylons() *cobra.Command {
 				purchaseToken,
 				receiptData,
 				signature,
-				clientCtx.GetFromAddress())
+				clientCtx.GetFromAddress().String())
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

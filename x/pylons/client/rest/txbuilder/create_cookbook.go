@@ -31,7 +31,7 @@ func CreateCookbookTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			"example@example.com",
 			0,
 			msgs.DefaultCostPerBlock,
-			sender,
+			sender.String(),
 		)
 
 		txf := tx.Factory{}.

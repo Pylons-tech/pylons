@@ -32,7 +32,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
+	cookbookMsg := msgs.NewMsgCreateCookbook("cookbook-0001", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender.String())
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
@@ -56,7 +56,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	require.NoError(t, err)
 
 	// Create cookbook for sender3
-	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender3)
+	cookbookMsg1 := msgs.NewMsgCreateCookbook("cookbook-0002", "", "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender3.String())
 	cookbookResult1, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg1)
 	require.True(t, len(cookbookResult1.CookbookID) > 0)
 
@@ -229,11 +229,11 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			// get pylons amount of pylons LLC amount
 			pylonsLLCAmountFirst := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
 
-			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
+			ctMsg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender.String())
 			ctResult, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &ctMsg)
 			require.NoError(t, err)
 			require.True(t, len(ctResult.TradeID) > 0)
-			ffMsg := msgs.NewMsgFulfillTrade(ctResult.TradeID, tc.fulfiller, tc.fulfillInputItemIDs)
+			ffMsg := msgs.NewMsgFulfillTrade(ctResult.TradeID, tc.fulfiller.String(), tc.fulfillInputItemIDs)
 			ffResult, err := tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 			if !tc.showError {
 				require.NoError(t, err)

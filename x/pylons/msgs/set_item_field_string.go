@@ -8,12 +8,12 @@ import (
 )
 
 // NewMsgUpdateItemString is a function to get MsgUpdateItemString msg from required params
-func NewMsgUpdateItemString(ItemID, Field, Value string, Sender sdk.AccAddress) MsgUpdateItemString {
+func NewMsgUpdateItemString(ItemID, Field, Value string, Sender string) MsgUpdateItemString {
 	return MsgUpdateItemString{
 		ItemID: ItemID,
 		Field:  Field,
 		Value:  Value,
-		Sender: Sender.String(),
+		Sender: Sender,
 	}
 }
 

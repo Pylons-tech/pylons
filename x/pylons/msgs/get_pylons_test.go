@@ -45,7 +45,7 @@ func TestGetPylonsValidateBasic(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := NewMsgGetPylons(tc.amount, tc.requester)
+			msg := NewMsgGetPylons(tc.amount, tc.requester.String())
 			err := msg.ValidateBasic()
 			if !tc.showError {
 				require.True(t, err == nil, err)

@@ -85,11 +85,11 @@ func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
 }
 
 // CheckItemWithDblValues checks if double key/values are all available
-func CheckItemWithDblValues(item types.Item, dblValues map[string]pSDKTypes.FloatString) bool {
+func CheckItemWithDblValues(item types.Item, dblValues map[string]sdk.Dec) bool {
 	for sK, sV := range dblValues {
 		keyExist := false
 		for _, sKV := range item.Doubles.List {
-			if sK == sKV.Key && sV.Float() == sKV.Value.Float() {
+			if sK == sKV.Key && sV.Equal(sKV.Value) {
 				keyExist = true
 			}
 		}

@@ -31,7 +31,7 @@ func UpdateRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			genEntries,
 			genOneOutput,
 			0,
-			sender,
+			sender.String(),
 		)
 
 		txf := tx.Factory{}.

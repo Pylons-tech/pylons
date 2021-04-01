@@ -8,10 +8,10 @@ import (
 )
 
 // NewMsgGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGetPylons(amount sdk.Coins, requester sdk.AccAddress) MsgGetPylons {
+func NewMsgGetPylons(amount sdk.Coins, requester string) MsgGetPylons {
 	return MsgGetPylons{
 		Amount:    amount,
-		Requester: requester.String(),
+		Requester: requester,
 	}
 }
 

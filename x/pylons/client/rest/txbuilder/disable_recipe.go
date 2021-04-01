@@ -20,7 +20,7 @@ func DisableRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgDisableRecipe("id0001", sender)
+		msg := msgs.NewMsgDisableRecipe("id0001", sender.String())
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

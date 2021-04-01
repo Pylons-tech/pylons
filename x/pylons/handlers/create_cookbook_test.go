@@ -61,7 +61,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			msg := msgs.NewMsgCreateCookbook(tc.name, "", tc.desc, "SketchyCo",
-				"1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender)
+				"1.0.0", "example@example.com", tc.level, msgs.DefaultCostPerBlock, tc.sender.String())
 
 			result, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 
@@ -79,7 +79,7 @@ func TestSameCookbookIDCreation(t *testing.T) {
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil, nil)
 
-	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
+	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1.String())
 
 	result, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	require.True(t, len(result.CookbookID) > 0)

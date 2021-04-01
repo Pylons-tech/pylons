@@ -76,7 +76,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 				genEntries,
 				genOneOutput,
 				0,
-				sender1)
+				sender1.String())
 
 			result, err := tci.PlnH.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 

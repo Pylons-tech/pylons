@@ -15,13 +15,13 @@ import (
 )
 
 // NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester sdk.AccAddress) MsgGoogleIAPGetPylons {
+func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester string) MsgGoogleIAPGetPylons {
 	return MsgGoogleIAPGetPylons{
 		ProductID:         ProductID,
 		PurchaseToken:     PurchaseToken,
 		ReceiptDataBase64: ReceiptDataBase64,
 		Signature:         Signature,
-		Requester:         requester.String(),
+		Requester:         requester,
 	}
 }
 

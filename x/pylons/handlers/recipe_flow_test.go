@@ -95,7 +95,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				mEntries,
 				mOutputs,
 				3,
-				sender1)
+				sender1.String())
 
 			result, err := tci.PlnH.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
@@ -137,7 +137,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			}
 
 			// Check execution
-			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender)
+			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender.String())
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
 			checkMsgResult, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)

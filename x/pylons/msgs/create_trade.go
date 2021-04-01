@@ -17,14 +17,14 @@ func NewMsgCreateTrade(
 	coinOutputs sdk.Coins,
 	itemOutputs types.ItemList,
 	extraInfo string,
-	sender sdk.AccAddress) MsgCreateTrade {
+	sender string) MsgCreateTrade {
 	return MsgCreateTrade{
 		CoinInputs:  coinInputs,
 		ItemInputs:  tradeItemInputs,
 		CoinOutputs: coinOutputs,
 		ItemOutputs: itemOutputs,
 		ExtraInfo:   extraInfo,
-		Sender:      sender.String(),
+		Sender:      sender,
 	}
 }
 

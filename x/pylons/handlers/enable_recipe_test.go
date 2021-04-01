@@ -49,7 +49,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgEnableRecipe(tc.rcpID, tc.sender)
+			msg := msgs.NewMsgEnableRecipe(tc.rcpID, tc.sender.String())
 			result, err := tci.PlnH.EnableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {

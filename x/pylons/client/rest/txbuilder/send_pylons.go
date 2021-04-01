@@ -24,7 +24,7 @@ func SendPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgSendCoins(types.NewPylon(5), sender, recv)
+		msg := msgs.NewMsgSendCoins(types.NewPylon(5), sender.String(), recv.String())
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

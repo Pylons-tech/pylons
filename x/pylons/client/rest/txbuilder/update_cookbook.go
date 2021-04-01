@@ -27,7 +27,7 @@ func UpdateCookbookTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			"SketchyCo",
 			"1.0.0",
 			"example@example.com",
-			sender,
+			sender.String(),
 		)
 
 		txf := tx.Factory{}.

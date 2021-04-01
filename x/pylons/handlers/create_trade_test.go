@@ -29,7 +29,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		"example@example.com",
 		1,
 		msgs.DefaultCostPerBlock,
-		sender,
+		sender.String(),
 	)
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
@@ -127,7 +127,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			msg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender)
+			msg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender.String())
 
 			result, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {

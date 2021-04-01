@@ -32,7 +32,7 @@ func TestHandlerMsgGetPylons(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgGetPylons(types.NewPylon(tc.reqAmount), tc.fromAddress)
+			msg := msgs.NewMsgGetPylons(types.NewPylon(tc.reqAmount), tc.fromAddress.String())
 			_, err := tci.PlnH.GetPylons(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {

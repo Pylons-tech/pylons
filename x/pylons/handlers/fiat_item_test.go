@@ -48,7 +48,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 					"example@example.com",
 					1,
 					msgs.DefaultCostPerBlock,
-					tc.sender,
+					tc.sender.String(),
 				)
 
 				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
@@ -57,7 +57,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
-			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender, 0)
+			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender.String(), 0)
 			result, err := tci.PlnH.FiatItem(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {

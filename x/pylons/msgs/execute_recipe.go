@@ -8,10 +8,10 @@ import (
 )
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, sender sdk.AccAddress, itemIDs []string) MsgExecuteRecipe {
+func NewMsgExecuteRecipe(recipeID string, sender string, itemIDs []string) MsgExecuteRecipe {
 	msg := MsgExecuteRecipe{
 		RecipeID: recipeID,
-		Sender:   sender.String(),
+		Sender:   sender,
 		ItemIDs:  itemIDs,
 	}
 	return msg

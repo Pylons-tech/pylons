@@ -19,7 +19,7 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 		types.NewPylon(10),
 		types.ItemList{},
 		"Test CreateTrade GetSignBytes",
-		sdkAddr)
+		sdkAddr.String())
 	err = msg.ValidateBasic()
 	require.NoError(t, err)
 
@@ -87,7 +87,7 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 		types.NewPylon(10),
 		types.ItemList{},
 		"Test CreateTrade GetSignBytes",
-		sdkAddr)
+		sdkAddr.String())
 	err = msg.ValidateBasic()
 	require.NoError(t, err)
 

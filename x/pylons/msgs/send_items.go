@@ -8,11 +8,11 @@ import (
 )
 
 // NewMsgSendItems is a function to get MsgSendItems msg from required params
-func NewMsgSendItems(itemIDs []string, sender sdk.AccAddress, receiver sdk.AccAddress) MsgSendItems {
+func NewMsgSendItems(itemIDs []string, sender, receiver string) MsgSendItems {
 	return MsgSendItems{
 		ItemIDs:  itemIDs,
-		Sender:   sender.String(),
-		Receiver: receiver.String(),
+		Sender:   sender,
+		Receiver: receiver,
 	}
 }
 
