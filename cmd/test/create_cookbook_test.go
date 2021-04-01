@@ -7,7 +7,6 @@ import (
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
@@ -31,7 +30,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 
 			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, msgs.NewMsgCreateCookbook(
+			cbMsg := msgs.NewMsgCreateCookbook(
 				tc.cbName,
 				"",
 				"this has to meet character limits lol",
@@ -40,10 +39,9 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				"example@example.com",
 				0,
 				msgs.DefaultCostPerBlock,
-				sdkAddr),
-				cbOwnerKey,
-				false,
+				sdkAddr.String(),
 			)
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &cbMsg, cbOwnerKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)
 				return
@@ -52,7 +50,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			WaitOneBlockWithErrorCheck(t)
 
 			txHandleResBytes := GetTxHandleResult(txhash, t)
-			resp := handlers.CreateCookbookResponse{}
+			resp := msgs.MsgCreateCookbookResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.CookbookID != "", "cookbook id should exist")

@@ -10,7 +10,6 @@ import (
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
@@ -48,21 +47,19 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-				msgs.NewMsgCreateRecipe(
-					tc.rcpName,
-					mCB.ID,
-					"",
-					"this has to meet character limits lol",
-					types.GenCoinInputList("wood", 5),
-					types.GenItemInputList("Raichu"),
-					types.GenEntries(tc.outputDenom, "Raichu"),
-					types.GenOneOutput(tc.outputDenom, "Raichu"),
-					0,
-					cbOwnerSdkAddr),
-				cbOwnerKey,
-				false,
+			rcpMsg := msgs.NewMsgCreateRecipe(
+				tc.rcpName,
+				mCB.ID,
+				"",
+				"this has to meet character limits lol",
+				types.GenCoinInputList("wood", 5),
+				types.GenItemInputList("Raichu"),
+				types.GenEntries(tc.outputDenom, "Raichu"),
+				types.GenOneOutput(tc.outputDenom, "Raichu"),
+				0,
+				cbOwnerSdkAddr.String(),
 			)
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &rcpMsg, cbOwnerKey, false)
 			if err != nil {
 				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return
@@ -71,7 +68,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 			WaitOneBlockWithErrorCheck(t)
 
 			txHandleResBytes := GetTxHandleResult(txhash, t)
-			resp := handlers.CreateRecipeResponse{}
+			resp := msgs.MsgCreateRecipeResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.RecipeID != "", "recipe id should exist")

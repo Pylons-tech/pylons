@@ -118,9 +118,9 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}).MustNil(err, "recipe with target guid does not exist")
 
 	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
+	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr.String(), itemIDs)
 
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
@@ -137,7 +137,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	execResp := handlers.ExecuteRecipeResponse{}
+	execResp := msgs.MsgExecuteRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
@@ -161,15 +161,15 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}).MustTrue(item.OwnerRecipeID == guid, "owner recipe id is different from expected")
 	}
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
+	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr.String())
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
 	txHandleResBytes = GetTxHandleResult(txhash, t)
-	resp := handlers.CheckExecutionResponse{}
+	resp := msgs.MsgCheckExecutionResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedStatus, tc.expectedMessage, t)
@@ -194,7 +194,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		"shouldCompleted": tc.shouldSuccess,
 	}).MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
-		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 		if err != nil {
 			TxBroadcastErrorCheck(txhash, err, t)
 			return
@@ -203,7 +203,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		WaitOneBlockWithErrorCheck(t)
 
 		txHandleResBytes = GetTxHandleResult(txhash, t)
-		resp := handlers.CheckExecutionResponse{}
+		resp := msgs.MsgCheckExecutionResponse{}
 		err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 		TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 		TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedRetryResStatus, tc.expectedRetryResMessage, t)

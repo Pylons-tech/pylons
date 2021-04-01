@@ -3,16 +3,17 @@ package testutils
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"os"
 	"regexp"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -36,6 +37,15 @@ func GetTestCoinInput() keep.TestCoinInput {
 // GetAminoCdc is a utility function to get amino codec
 func GetAminoCdc() *codec.LegacyAmino {
 	return keep.MakeCodec()
+}
+
+// GetAccountInfoFromAddr is a function to get account information from address
+func GetAccountBalanceFromAddr(address sdk.AccAddress, t *testing.T) banktypes.Balance {
+	var balance banktypes.Balance
+	coins := tci.Bk.SpendableCoins(tci.Ctx, address)
+	balance.Address = address.String()
+	balance.Coins = coins
+	return balance
 }
 
 // GetAccountInfoFromAddr is a function to get account information from address

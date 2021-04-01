@@ -16,7 +16,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils"
-	pSDKTypes "github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -117,7 +116,7 @@ func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
 }
 
 // CheckItemWithLongValues checks if long key/values are all available
-func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
+func CheckItemWithLongValues(item types.Item, longValues map[string]int64) bool {
 	for sK, sV := range longValues {
 		keyExist := false
 		for _, sKV := range item.Longs.List {
@@ -249,12 +248,12 @@ func PropertyExistCheck(step fixturetestSDK.FixtureStep, t *testing.T) {
 		}
 		if len(pCheck.Coins) > 0 {
 			for _, coinCheck := range pCheck.Coins {
-				accInfo := testutils.GetAccountInfoFromAddr(pOwnerAddr, t)
+				balance := testutils.GetAccountBalanceFromAddr(pOwnerAddr, t)
 				// TODO should we have the case of using GTE, LTE, GT or LT ?
 				t.WithFields(testing.Fields{
 					"target_balance": coinCheck.Amount,
-					"actual_balance": accInfo.Coins.AmountOf(coinCheck.Coin).Int64(),
-				}).MustTrue(accInfo.Coins.AmountOf(coinCheck.Coin).Equal(sdk.NewInt(coinCheck.Amount)), "account balance is incorrect")
+					"actual_balance": balance.Coins.AmountOf(coinCheck.Coin).Int64(),
+				}).MustTrue(balance.Coins.AmountOf(coinCheck.Coin).Equal(sdk.NewInt(coinCheck.Amount)), "account balance is incorrect")
 			}
 		}
 	}

@@ -124,18 +124,18 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 		"trade_creator_address":     tradeCreatorSdkAddress.String(),
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffTradeCreate), "locked coin is invalid after creating trade")
 
-	if tc.tradeCoinInputList != nil {
+	if tc.tradeCoinInputList.Coins != nil {
 		FaucetGameCoins(tradeFulfillerKey, tc.tradeCoinInputList.ToCoins(), t)
 	}
 
 	tradeFulfillerSdkAddress := GetSDKAddressFromKey(tradeFulfillerKey, t)
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress, []string{})
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
+	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress.String(), []string{})
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 
 	t.MustNil(err, "error text tx with msg with nonce")
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	ffTrdResp := handlers.FulfillTradeResponse{}
+	ffTrdResp := msgs.MsgFulfillTradeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.tradeExpectedStatus, tc.tradeExpectedMessage, t)
@@ -178,9 +178,9 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"recipe_guid": guid,
 	}).MustNil(err, "recipe with target guid does not exist")
 
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr, []string{})
+	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr.String(), []string{})
 
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
@@ -211,7 +211,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterSchedule), "locked coin is invalid after creating trade")
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	execResp := handlers.ExecuteRecipeResponse{}
+	execResp := msgs.MsgExecuteRecipeResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
@@ -221,16 +221,16 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"schedule_output": string(execResp.Output),
 	}).MustNil(err, "error unmarshaling schedule output")
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr)
+	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr.String())
 
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
 	txHandleResBytes = GetTxHandleResult(txhash, t)
-	resp := handlers.CheckExecutionResponse{}
+	resp := msgs.MsgCheckExecutionResponse{}
 	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.recipeExpectedStatus, tc.recipeExpectedMessage, t)

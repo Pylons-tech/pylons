@@ -8,7 +8,6 @@ import (
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
@@ -39,12 +38,8 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			itemID := MockItemGUID(mCB.ID, cbOwnerKey, tc.itemName, t)
 
 			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
-				t,
-				msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr),
-				cbOwnerKey,
-				false,
-			)
+			updateItmMsg := msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr.String())
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &updateItmMsg, cbOwnerKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)
 				return
@@ -53,7 +48,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			WaitOneBlockWithErrorCheck(t)
 
 			txHandleResBytes := GetTxHandleResult(txhash, t)
-			resp := handlers.UpdateItemStringResponse{}
+			resp := msgs.MsgUpdateItemStringResponse{}
 			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully updated the item field", t)

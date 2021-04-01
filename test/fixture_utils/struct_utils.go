@@ -416,7 +416,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 
 	var wpl types.EntriesList
 	for _, co := range entriesReader.Entries.CoinOutputs {
-		wpl.CoinOutputs = append(wpl.CoinOutputs, &co)
+		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
 	}
 
 	for ioidx, io := range entriesReader.Entries.ItemModifyOutputs {
@@ -434,9 +434,9 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 			if pio.Strings.List != nil && len(pio.Strings.List) == 0 {
 				pio.Strings.List = nil
 			}
-			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, &pio)
+			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, pio)
 		} else {
-			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, &entriesDirectReader.Entries.ItemModifyOutputs[ioidx])
+			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, entriesDirectReader.Entries.ItemModifyOutputs[ioidx])
 		}
 	}
 
@@ -462,7 +462,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		if pio.Strings.List != nil && len(pio.Strings.List) == 0 {
 			pio.Strings.List = nil
 		}
-		wpl.ItemOutputs = append(wpl.ItemOutputs, &pio)
+		wpl.ItemOutputs = append(wpl.ItemOutputs, pio)
 	}
 
 	return wpl

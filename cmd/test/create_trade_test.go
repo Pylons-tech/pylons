@@ -62,20 +62,18 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			if tc.inputPylon > 0 {
 				inputCoins = types.GenCoinInputList("pylon", tc.inputPylon)
 			} else {
-				inputCoins = nil
+				inputCoins.Coins = nil
 			}
 
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-				msgs.NewMsgCreateTrade(
-					inputCoins,
-					types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
-					types.NewPylon(tc.outputPylon),
-					nil,
-					tc.extraInfo,
-					sdkAddr),
-				cbOwnerKey,
-				false,
+			trdMsg := msgs.NewMsgCreateTrade(
+				inputCoins,
+				types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
+				types.NewPylon(tc.outputPylon),
+				types.ItemList{},
+				tc.extraInfo,
+				sdkAddr.String(),
 			)
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &trdMsg, cbOwnerKey, false)
 			if err != nil {
 				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return

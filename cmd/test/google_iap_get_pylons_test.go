@@ -93,13 +93,13 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 			getPylonsKey := fmt.Sprintf("TestGoogleIAPGetPylonsViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(getPylonsKey, t) // mock account with initial balance
 
-			getPylonsSdkAddr, getPylonsAccInfo := GetAccountAddressAndInfo(getPylonsKey, t)
+			getPylonsAccInfo := inttestSDK.GetAccountBalanceFromAddr(getPylonsKey, t)
 
 			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
 
-			msgGoogleIAPGetPylons := msgs.NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, getPylonsSdkAddr)
+			msgGoogleIAPGetPylons := msgs.NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, getPylonsAccInfo.Address)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-				msgGoogleIAPGetPylons,
+				&msgGoogleIAPGetPylons,
 				getPylonsKey,
 				false,
 			)
@@ -111,11 +111,11 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 			GetTxHandleResult(txhash, t)
 			if tc.showError {
 			} else {
-				accInfo := inttestSDK.GetAccountInfoFromAddr(getPylonsSdkAddr.String(), t)
+				accInfo := inttestSDK.GetAccountBalanceFromAddr(getPylonsAccInfo.Address, t)
 				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(getPylonsAccInfo.Coins.AmountOf(types.Pylon).Int64() + tc.reqAmount))
 				t.WithFields(testing.Fields{
 					"iap_get_pylons_key":     getPylonsKey,
-					"iap_get_pylons_address": getPylonsSdkAddr.String(),
+					"iap_get_pylons_address": getPylonsAccInfo.Address,
 					"request_amount":         tc.reqAmount,
 					"base_amount":            getPylonsAccInfo.Coins.AmountOf(types.Pylon).Int64(),
 					"actual_amount":          accInfo.Coins.AmountOf(types.Pylon).Int64(),
@@ -124,7 +124,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 
 			if tc.tryReuseOrderID {
 				txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-					msgGoogleIAPGetPylons,
+					&msgGoogleIAPGetPylons,
 					getPylonsKey,
 					false,
 				)

@@ -8,6 +8,7 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
 // TxResultStatusMessageCheck check result status and message
@@ -91,6 +92,13 @@ func GetPylonsLLCAddressAndInfo(t *testing.T) (sdk.Address, types.BaseAccount) {
 	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	return pylonsLLCAddress, inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+}
+
+// GetPylonsLLCAddressAndInfo returns Pylons LLC SDK address and account info from key
+func GetPylonsLLCAddressAndBalance(t *testing.T) (sdk.Address, banktypes.Balance) {
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	return pylonsLLCAddress, inttestSDK.GetAccountBalanceFromAddr(pylonsLLCAddress.String(), t)
 }
 
 // GetSDKAddressFromKey returns SDK address from key
