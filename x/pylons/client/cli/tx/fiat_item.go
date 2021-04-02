@@ -1,6 +1,8 @@
 package tx
 
 import (
+	"encoding/json"
+
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -26,7 +28,7 @@ func FiatItem() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			err = msgFI.Unmarshal(byteValue)
+			err = json.Unmarshal(byteValue, &msgFI)
 			if err != nil {
 				return err
 			}

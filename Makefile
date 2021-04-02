@@ -32,5 +32,5 @@ fixture_unit_tests:
 	go test -v ./test/fixtures_test/ ${ARGS}
 
 proto-gen:
-	bash ./protoc_gen.sh
+	bash ./scripts/protoc_gen.sh
 

@@ -28,7 +28,7 @@ pylonsd tx pylons send-pylons
 ### cookbooks
 ```sh
 pylonsd query pylons list_cookbook
-pylonsd query pylons list_cookbook --account cosmos1tqvdp4rc28zklnk8mwxh94gdlel0s58tcwdrj9
+pylonsd query pylons list_cookbook --account=$(pylonsd keys show -a eugen --keyring-backend=test --home=$HOME/.pylonsd)
 ```
 
 ### items

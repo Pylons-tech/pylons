@@ -103,7 +103,6 @@ service Query {
   rpc PylonsBalance(PylonsBalanceRequest) returns (PylonsBalanceResponse){
     option (google.api.http).get = "/custom/pylons/balance/{address}";
   }
-
 }
 
 message AddrFromPubKeyRequest {

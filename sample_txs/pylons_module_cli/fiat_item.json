@@ -1,23 +1,11 @@
 {
-	"type": "pylons/FiatItem",
-	"value": {
-        "Doubles": [
-            {
-            "Key": "endurance",
-            "Value": "286"
-            }
-        ],
-        "Longs": [
-            {
-            "Key": "HP",
-            "Value": "479"
-            }
-        ],
-        "Strings": [
-            {
-            "Key": "Name",
-            "Value": "Knife"
-            }
-        ]
-	}
+    "Doubles": {
+        "List": [{"Key": "endurance", "Value": "286"}]
+    },
+    "Longs": {
+        "List": [{"Key": "HP", "Value": 479}]
+    },
+    "Strings": {
+        "List": [{"Key": "Name", "Value": "Knife"}]
+    }
 }
