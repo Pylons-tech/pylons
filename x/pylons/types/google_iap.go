@@ -2,7 +2,6 @@ package types
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -38,8 +37,8 @@ func (iap GoogleIAPOrder) GetAmount() sdk.Coins {
 
 	for _, giapProduct := range config.Config.GoogleIAP {
 		if giapProduct.ProductID == iap.ProductID {
-			return types.NewPylon(giapProduct.Amount)
+			return NewPylon(giapProduct.Amount)
 		}
 	}
-	return types.NewPylon(0)
+	return NewPylon(0)
 }

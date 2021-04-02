@@ -58,7 +58,7 @@ pylonsd start
 - play with the api
 
 ```sh
-pylonsd tx pylons get-pylons --from node0 --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd --yes
+pylonsd tx pylons get-pylons --from=node0 --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd --yes
 ```
 
 - enable rest server when starting node
@@ -75,10 +75,6 @@ make unit_tests
 - Specific unit test (regular expression filter)
 ```sh
 make unit_tests ARGS="-run TestKeeperSetExecutio.*/empty_sender_tes"
---- PASS: TestKeeperSetExecution (0.00s)
-    --- PASS: TestKeeperSetExecution/empty_sender_test (0.00s)
-PASS
-ok  	github.com/Pylons-tech/pylons/x/pylons/keep	0.050s
 ```
 
 - Integration test with local daemon command
@@ -88,15 +84,6 @@ make int_tests
 - Specific integration test (regular expression filter)
 ```sh
 make int_tests ARGS="-run TestFulfillTradeViaCLI"
---- PASS: TestFulfillTradeViaCLI (0.00s)
-    --- PASS: TestFulfillTradeViaCLI/same_item_with_different_cookbook_id_fulfill_trade_test (31.76s)
-    --- PASS: TestFulfillTradeViaCLI/coin->coin_fullfill_trade_test (37.59s)
-    --- PASS: TestFulfillTradeViaCLI/trade_unordered_coin_input_test (43.35s)
-    --- PASS: TestFulfillTradeViaCLI/item->item_fullfill_trade_test (49.27s)
-    --- PASS: TestFulfillTradeViaCLI/item->coin_fullfill_trade_test (33.78s)
-    --- PASS: TestFulfillTradeViaCLI/coin->item_fullfill_trade_test (39.66s)
-PASS
-ok  	github.com/Pylons-tech/pylons/cmd/test	71.481s
 ```
 
 - Fixture test with local daemon command
