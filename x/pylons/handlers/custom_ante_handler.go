@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -178,6 +179,11 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 			if err != nil {
 				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
+
+			// MsgCreateAccount is creating account dynamically and account number and sequence are not registered.
+			// But we need to verify pubkey and do signature verification for accountNumber=0,sequence=0 message
+			signerData.AccountNumber = 0
+			signerData.Sequence = 0
 
 			err = authsigning.VerifySignature(pubKey, signerData, sig.Data, svd.signModeHandler, tx)
 			if !simulate && err != nil {
