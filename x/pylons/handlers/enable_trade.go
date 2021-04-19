@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -32,7 +33,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *msgs.MsgEnableTrade) (*
 	trade.Disabled = false
 
 	// reset items' owner trade id
-	for idx, item := range trade.ItemOutputs.List {
+	for idx, item := range trade.ItemOutputs {
 		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
@@ -50,7 +51,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *msgs.MsgEnableTrade) (*
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		trade.ItemOutputs.List[idx] = itemFromStore
+		trade.ItemOutputs[idx] = itemFromStore
 	}
 
 	err = k.UpdateTrade(sdkCtx, msg.TradeID, trade)

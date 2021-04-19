@@ -22,14 +22,14 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	for _, tii := range msg.ItemInputs.List {
+	for _, tii := range msg.ItemInputs {
 		_, err := k.GetCookbook(sdkCtx, tii.CookbookID)
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("You specified a cookbook that does not exist where raw error is %+v", err))
 		}
 	}
 
-	for _, item := range msg.ItemOutputs.List {
+	for _, item := range msg.ItemOutputs {
 		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
@@ -63,7 +63,7 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*
 	}
 
 	// set items' owner trade id
-	for _, item := range msg.ItemOutputs.List {
+	for _, item := range msg.ItemOutputs {
 		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)

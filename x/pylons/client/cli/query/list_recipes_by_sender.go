@@ -3,13 +3,14 @@ package query
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 )
 
 // ListRecipes queries the recipes
 func ListRecipes() *cobra.Command {
 	var accAddr string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list_recipe",
 		Short: "get all recipes for a user",
 		Args:  cobra.ExactArgs(0),
@@ -33,14 +34,16 @@ func ListRecipes() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
-	return ccb
+
+	cmd.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }
 
 // ListShortenRecipes queries the recipes
 func ListShortenRecipes() *cobra.Command {
 	var accAddr string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list_shorten_recipe",
 		Short: "get shorten format of recipes for a user",
 		Args:  cobra.ExactArgs(0),
@@ -64,6 +67,8 @@ func ListShortenRecipes() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
-	return ccb
+
+	cmd.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

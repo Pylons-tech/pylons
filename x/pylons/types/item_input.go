@@ -106,6 +106,8 @@ func (ii ItemInput) IDValidationError() error {
 	return fmt.Errorf("ID is not empty nor fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ii.ID)
 }
 
+type ItemInputList []ItemInput
+
 // Validate is a function to check ItemInputList is valid
 func (iil ItemInputList) Validate() error {
 	return nil
@@ -119,9 +121,11 @@ func (tii TradeItemInput) MatchError(item Item, ec CelEnvCollection) error {
 	return tii.ItemInput.MatchError(item, ec)
 }
 
+type TradeItemInputList []TradeItemInput
+
 // Validate is a function to check ItemInputList is valid
 func (tiil TradeItemInputList) Validate() error {
-	for _, ii := range tiil.List {
+	for _, ii := range tiil {
 		if ii.CookbookID == "" {
 			return errors.New("There should be no empty cookbook ID inputs for trades")
 		}

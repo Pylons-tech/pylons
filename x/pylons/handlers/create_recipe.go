@@ -44,7 +44,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) 
 		}
 		recipe.ID = msg.RecipeID
 	}
-	if err := recipe.ItemInputs.Validate(); err != nil {
+	if err := types.ItemInputList(recipe.ItemInputs).Validate(); err != nil {
 		return nil, errInternal(err)
 	}
 

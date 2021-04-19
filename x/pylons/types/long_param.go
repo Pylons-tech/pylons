@@ -2,11 +2,13 @@ package types
 
 import "encoding/json"
 
+type LongParamList []LongParam
+
 // Actualize builds the params
 func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []LongKeyValue
-	for _, param := range lpm.Params {
+	for _, param := range lpm {
 		var val int64
 		var err error
 

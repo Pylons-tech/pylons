@@ -2,6 +2,7 @@ package query
 
 import (
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/spf13/cobra"
@@ -9,7 +10,7 @@ import (
 
 // GetItem get an item by GUID
 func GetItem() *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "get_item <id>",
 		Short: "get an item by id",
 		Args:  cobra.ExactArgs(1),
@@ -33,5 +34,7 @@ func GetItem() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	return ccb
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

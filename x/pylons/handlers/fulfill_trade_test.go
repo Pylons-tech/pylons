@@ -102,39 +102,39 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
 			desiredError:   "",
 			showError:      false,
-			senderAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
+			senderAmountDiffer: types.CoinInputList{
 				{Coin: types.Pylon, Count: 90},
 				{Coin: "chair", Count: -10},
-			}},
-			sender2AmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
+			},
+			sender2AmountDiffer: types.CoinInputList{
 				{Coin: types.Pylon, Count: -100},
 				{Coin: "chair", Count: 10},
-			}},
+			},
 		},
 		"trade unordered coin input test": {
 			sender:    sender,
 			fulfiller: sender2,
-			inputCoinList: types.CoinInputList{Coins: []types.CoinInput{
+			inputCoinList: types.CoinInputList{
 				{Coin: types.Pylon, Count: 100},
 				{Coin: "aaaa", Count: 100},
 				{Coin: "zzzz", Count: 100},
 				{Coin: "cccc", Count: 100},
-			}},
+			},
 			outputCoinList: sdk.Coins{sdk.NewInt64Coin("chair", 10)},
 			desiredError:   "",
 			showError:      false,
-			senderAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
+			senderAmountDiffer: types.CoinInputList{
 				{Coin: types.Pylon, Count: 90},
 				{Coin: "aaaa", Count: 100},
 				{Coin: "zzzz", Count: 100},
 				{Coin: "cccc", Count: 100},
-			}},
-			sender2AmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
+			},
+			sender2AmountDiffer: types.CoinInputList{
 				{Coin: types.Pylon, Count: -100},
 				{Coin: "aaaa", Count: -100},
 				{Coin: "zzzz", Count: -100},
 				{Coin: "cccc", Count: -100},
-			}},
+			},
 		},
 		"empty fulfill item on item trading fulfill test": {
 			sender:              sender,
@@ -162,7 +162,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			inputCoinList:       types.GenCoinInputList(types.Pylon, 20),
 			inputItemList:       types.GenTradeItemInputList(cookbookResult1.CookbookID, []string{"Tachu"}),
 			outputCoinList:      types.NewPylon(10),
-			outputItemList:      types.ItemList{[]types.Item{item3}},
+			outputItemList:      types.ItemList{item3},
 			fulfillInputItemIDs: []string{item4.ID},
 			desiredError:        "total pylons amount is not enough to pay fees",
 			showError:           true,
@@ -176,15 +176,15 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			fulfillInputItemIDs: []string{item2.ID},
 			desiredError:        "",
 			showError:           false,
-			senderAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
+			senderAmountDiffer: types.CoinInputList{
 				{Coin: types.Pylon, Count: 780},
 				{Coin: "chair", Count: -10},
-			}},
-			sender2AmountDiffer: types.CoinInputList{Coins: []types.CoinInput{
+			},
+			sender2AmountDiffer: types.CoinInputList{
 				{Coin: types.Pylon, Count: -800},
 				{Coin: "chair", Count: 10},
-			}},
-			pylonsLLCAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 20}}},
+			},
+			pylonsLLCAmountDiffer: types.CoinInputList{{Coin: types.Pylon, Count: 20}},
 		},
 		"correct item trading fulfill test with 2 items and 2 amounts": {
 			sender:                sender2,
@@ -192,15 +192,15 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			inputCoinList:         types.GenCoinInputList(types.Pylon, 50),
 			inputItemList:         types.GenTradeItemInputList(cookbookResult1.CookbookID, []string{"Bhachu"}),
 			outputCoinList:        types.NewPylon(200),
-			outputItemList:        types.ItemList{[]types.Item{item5}},
+			outputItemList:        types.ItemList{item5},
 			fulfillInputItemIDs:   []string{item6.ID},
 			desiredError:          "",
 			showError:             false,
-			senderAmountDiffer:    types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 45}}},
-			sender2AmountDiffer:   types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: -174}}},
-			sender3AmountDiffer:   types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 63}}},
-			sender4AmountDiffer:   types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 54}}},
-			pylonsLLCAmountDiffer: types.CoinInputList{Coins: []types.CoinInput{{Coin: types.Pylon, Count: 12}}},
+			senderAmountDiffer:    types.CoinInputList{{Coin: types.Pylon, Count: 45}},
+			sender2AmountDiffer:   types.CoinInputList{{Coin: types.Pylon, Count: -174}},
+			sender3AmountDiffer:   types.CoinInputList{{Coin: types.Pylon, Count: 63}},
+			sender4AmountDiffer:   types.CoinInputList{{Coin: types.Pylon, Count: 54}},
+			pylonsLLCAmountDiffer: types.CoinInputList{{Coin: types.Pylon, Count: 12}},
 		},
 		"empty coin output trade success test with no locked coin sender": {
 			sender:              sender5,
@@ -208,7 +208,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			inputCoinList:       types.GenCoinInputList(types.Pylon, 500),
 			inputItemList:       types.TradeItemInputList{},
 			outputCoinList:      nil,
-			outputItemList:      types.ItemList{[]types.Item{item8}},
+			outputItemList:      types.ItemList{item8},
 			fulfillInputItemIDs: []string{},
 			desiredError:        "",
 			showError:           false,
@@ -240,23 +240,23 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 				require.True(t, ffResult.Status == "Success")
 				require.True(t, ffResult.Message == "successfully fulfilled the trade")
 
-				for _, diff := range tc.senderAmountDiffer.Coins {
+				for _, diff := range tc.senderAmountDiffer {
 					d := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, sender).AmountOf(diff.Coin).Int64() - senderAmountFirst.AmountOf(diff.Coin).Int64()
 					require.True(t, d == diff.Count)
 				}
-				for _, diff := range tc.sender2AmountDiffer.Coins {
+				for _, diff := range tc.sender2AmountDiffer {
 					d := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, sender2).AmountOf(diff.Coin).Int64() - sender2AmountFirst.AmountOf(diff.Coin).Int64()
 					require.True(t, d == diff.Count)
 				}
-				for _, diff := range tc.sender3AmountDiffer.Coins {
+				for _, diff := range tc.sender3AmountDiffer {
 					d := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, sender3).AmountOf(diff.Coin).Int64() - sender3AmountFirst.AmountOf(diff.Coin).Int64()
 					require.True(t, d == diff.Count)
 				}
-				for _, diff := range tc.sender4AmountDiffer.Coins {
+				for _, diff := range tc.sender4AmountDiffer {
 					d := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, sender4).AmountOf(diff.Coin).Int64() - sender4AmountFirst.AmountOf(diff.Coin).Int64()
 					require.True(t, d == diff.Count)
 				}
-				for _, diff := range tc.pylonsLLCAmountDiffer.Coins {
+				for _, diff := range tc.pylonsLLCAmountDiffer {
 					d := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress).AmountOf(diff.Coin).Int64() - pylonsLLCAmountFirst.AmountOf(diff.Coin).Int64()
 					require.True(t, d == diff.Count)
 				}

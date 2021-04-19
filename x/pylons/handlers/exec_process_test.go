@@ -135,7 +135,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	personSleepRecipe := MockRecipe(
 		tci, "sleep recipe",
 		types.CoinInputList{},
-		types.ItemInputList{List: []types.ItemInput{
+		types.ItemInputList{
 			{
 				Doubles: types.DoubleInputParamList{Params: []types.DoubleInputParam{{Key: "attack", MinValue: sdk.NewDec(10.0), MaxValue: sdk.NewDec(1000.0)}}},
 				Longs:   types.LongInputParamList{List: []types.LongInputParam{{Key: "level", MinValue: 20, MaxValue: 100}}},
@@ -145,7 +145,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 					MaxValue: 10000,
 				},
 			},
-		}},
+		},
 		types.EntriesList{},
 		types.WeightedOutputsList{},
 		cbData.CookbookID,

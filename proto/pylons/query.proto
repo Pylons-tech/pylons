@@ -175,10 +175,10 @@ message GetRecipeResponse {
   string ID = 2;
   string CookbookID = 3;
   string Name = 4;
-  CoinInputList CoinInputs = 5 [(gogoproto.nullable) = false];
-  ItemInputList ItemInputs = 6 [(gogoproto.nullable) = false];
+  repeated CoinInput CoinInputs = 5 [(gogoproto.nullable) = false];
+  repeated ItemInput ItemInputs = 6 [(gogoproto.nullable) = false];
   EntriesList Entries = 7 [(gogoproto.nullable) = false];
-  WeightedOutputsList Outputs = 8 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs Outputs = 8 [(gogoproto.nullable) = false];
   string Description = 9;
   int64 BlockInterval = 10;
   string Sender = 11;
@@ -193,10 +193,10 @@ message GetTradeRequest {
 message GetTradeResponse {
   string NodeVersion = 1;
   string ID = 2;
-  CoinInputList CoinInputs = 3 [(gogoproto.nullable) = false];
-  TradeItemInputList ItemInputs = 4 [(gogoproto.nullable) = false];
+  repeated CoinInput CoinInputs = 3 [(gogoproto.nullable) = false];
+  repeated TradeItemInput ItemInputs = 4 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin CoinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  ItemList ItemOutputs = 6 [(gogoproto.nullable) = false];
+  repeated Item ItemOutputs = 6 [(gogoproto.nullable) = false];
   string ExtraInfo = 7;
   string Sender = 8;
   string FulFiller = 9;

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -37,7 +38,7 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *msgs.MsgDisableTrade) 
 	trade.Disabled = true
 
 	// unset items' owner trade id
-	for idx, item := range trade.ItemOutputs.List {
+	for idx, item := range trade.ItemOutputs {
 		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
@@ -52,7 +53,7 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *msgs.MsgDisableTrade) 
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		trade.ItemOutputs.List[idx] = itemFromStore
+		trade.ItemOutputs[idx] = itemFromStore
 	}
 
 	err = k.UpdateTrade(sdkCtx, msg.TradeID, trade)

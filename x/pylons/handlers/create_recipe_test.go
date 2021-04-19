@@ -16,14 +16,12 @@ func TestCustomCreateRecipeValidateBasic(t *testing.T) {
 	recipeJSON := `
 	{
    "BlockInterval":"0",
-   "CoinInputs":{
-      "Coins":[
-         {
-            "Coin":"pylon",
-            "Count":"1"
-         }
-      ]
-   },
+   "CoinInputs":[
+		{
+			"Coin":"pylon",
+			"Count":"1"
+		}
+	],
    "CookbookID":"LOUD-v0.1.0-1579053457",
    "Description":"test recipe from test suite",
    "Entries":{
@@ -31,37 +29,33 @@ func TestCustomCreateRecipeValidateBasic(t *testing.T) {
       "ItemModifyOutputs":null,
       "ItemOutputs":[
             {
-               "Doubles":{
-                  "Params":[
-                     {
-                        "Key":"Mass",
-                        "Program":"",
-                        "Rate":"1",
-                        "WeightRanges":[
-                           {
-                              "Lower":"50",
-                              "Upper":"100",
-                              "Weight":1
-                           }
-                        ]
-                     }
-                  ]
-               },
+               "Doubles":[
+					{
+						"Key":"Mass",
+						"Program":"",
+						"Rate":"1",
+						"WeightRanges":[
+							{
+								"Lower":"50",
+								"Upper":"100",
+								"Weight":1
+							}
+						]
+					}
+				],
                "ID":"a0",
-               "Longs":null,
-               "Strings":{
-                  "List":[
-                     {
-                        "Key":"Name",
-                        "Program":"",
-                        "Rate":"1",
-                        "Value":"Mars"
-                     }
-                  ]
-               },
+               "Longs": [],
+               "Strings":[
+					{
+						"Key":"Name",
+						"Program":"",
+						"Rate":"1",
+						"Value":"Mars"
+					}
+				],
                "TransferFee":0
             }
-         ],
+        ],
       "ItemInputs":null,
       "Name":"RTEST_1596513734",
       "Outputs":{

@@ -184,3 +184,5 @@ func (it Item) NewRecipeExecutionError() error {
 	}
 	return nil
 }
+
+type ItemList []Item

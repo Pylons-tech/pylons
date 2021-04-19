@@ -2,10 +2,11 @@ package types
 
 import (
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"math"
 	"reflect"
 	"strconv"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 var floatType = reflect.TypeOf(float64(0))
@@ -47,11 +48,13 @@ func getFloat(unk interface{}) (float64, error) {
 	}
 }
 
+type DoubleParamList []DoubleParam
+
 // Actualize creates a (key, value) list from ParamList
 func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []DoubleKeyValue
-	for _, param := range dpm.List {
+	for _, param := range dpm {
 		var valDec sdk.Dec
 		var err error
 

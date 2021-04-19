@@ -41,15 +41,15 @@ func (io *ItemOutput) SetTransferFee(transferFee int64) {
 func (io ItemOutput) Item(cookbook string, sender sdk.AccAddress, ec CelEnvCollection) (Item, error) {
 	// This function is used on ExecuteRecipe's AddExecutedResult, and it's
 	// not acceptable to provide predefined GUID
-	dblActualize, err := io.Doubles.Actualize(ec)
+	dblActualize, err := DoubleParamList(io.Doubles).Actualize(ec)
 	if err != nil {
 		return Item{}, err
 	}
-	longActualize, err := io.Longs.Actualize(ec)
+	longActualize, err := LongParamList(io.Longs).Actualize(ec)
 	if err != nil {
 		return Item{}, err
 	}
-	stringActualize, err := io.Strings.Actualize(ec)
+	stringActualize, err := StringParamList(io.Strings).Actualize(ec)
 	if err != nil {
 		return Item{}, err
 	}

@@ -22,7 +22,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		desiredError string
 	}{
 		"item input ID validation error": { // item input ID validation error
-			itemInputs:   types.ItemInputList{List: []types.ItemInput{{ID: "123"}}},
+			itemInputs:   types.ItemInputList{{ID: "123"}},
 			entries:      types.EntriesList{},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
@@ -30,7 +30,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 			desiredError: "ID is not empty nor fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=123",
 		},
 		"item input ID validation": { // item input ID validation
-			itemInputs:   types.ItemInputList{List: []types.ItemInput{{ID: "heli_knife_lv1"}}},
+			itemInputs:   types.ItemInputList{{ID: "heli_knife_lv1"}},
 			entries:      types.EntriesList{},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
@@ -38,7 +38,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 			desiredError: "",
 		},
 		"same item input ID check error": { // same item input ID check error
-			itemInputs:   types.ItemInputList{List: []types.ItemInput{{ID: "a123"}, {ID: "a123"}}},
+			itemInputs:   types.ItemInputList{{ID: "a123"}, {ID: "a123"}},
 			entries:      types.EntriesList{},
 			outputs:      types.WeightedOutputsList{},
 			sender:       sender,
@@ -97,10 +97,10 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 		"does not exist entry ID use on outputs": { // does not exist entry ID use on outputs
 			itemInputs: types.ItemInputList{},
 			entries:    types.EntriesList{},
-			outputs: types.WeightedOutputsList{List: []types.WeightedOutputs{{
+			outputs: types.WeightedOutputsList{{
 				EntryIDs: []string{"aaabbb"},
 				Weight:   "1",
-			}}},
+			}},
 			sender:       sender,
 			showError:    true,
 			desiredError: "no entry with the ID aaabbb available",
@@ -110,25 +110,25 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 			entries: types.EntriesList{
 				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
 			},
-			outputs: types.WeightedOutputsList{List: []types.WeightedOutputs{{
+			outputs: types.WeightedOutputsList{{
 				EntryIDs: []string{"a123", "a123"},
 				Weight:   "1",
-			}}},
+			}},
 			sender:       sender,
 			showError:    true,
 			desiredError: "double use of entries within single output",
 		},
 		"double use of item input within single output result": { // double use of item input within single output result
-			itemInputs: types.ItemInputList{List: []types.ItemInput{{ID: "input1"}}},
+			itemInputs: types.ItemInputList{{ID: "input1"}},
 			entries: types.EntriesList{
 				ItemModifyOutputs: []types.ItemModifyOutput{
 					{ID: "a1", ItemInputRef: "input1"},
 					{ID: "a2", ItemInputRef: "input1"},
 				}},
-			outputs: types.WeightedOutputsList{List: []types.WeightedOutputs{{
+			outputs: types.WeightedOutputsList{{
 				EntryIDs: []string{"a1", "a2"},
 				Weight:   "1",
-			}}},
+			}},
 			sender:       sender,
 			showError:    true,
 			desiredError: "double use of item input within single output result: invalid request",

@@ -32,7 +32,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		return nil, errInternal(errors.New("this trade is already completed"))
 	}
 
-	if len(msg.ItemIDs) != len(trade.ItemInputs.List) {
+	if len(msg.ItemIDs) != len(trade.ItemInputs) {
 		return nil, errInternal(errors.New("the item IDs count doesn't match the trade input"))
 	}
 
@@ -50,7 +50,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 	// check if the sender has all condition met
 	totalItemTransferFee := int64(0)
 	matchedItems := types.ItemList{}
-	for i, itemInput := range trade.ItemInputs.List {
+	for i, itemInput := range trade.ItemInputs {
 		matchedItem := items[i]
 		ec, err := k.EnvCollection(sdkCtx, "", msg.TradeID, matchedItem)
 		if err != nil {
@@ -64,7 +64,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 			return nil, errInternal(fmt.Errorf("[%d]th item is not tradable: %s item_id=%s", i, err.Error(), matchedItem.ID))
 		}
 		totalItemTransferFee += matchedItem.GetTransferFee()
-		matchedItems.List = append(matchedItems.List, matchedItem)
+		matchedItems = append(matchedItems, matchedItem)
 	}
 	tradeSender, err := sdk.AccAddressFromBech32(trade.Sender)
 	if err != nil {
@@ -76,7 +76,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		return nil, errInternal(err)
 	}
 
-	inputCoins := trade.CoinInputs.ToCoins()
+	inputCoins := types.CoinInputList(trade.CoinInputs).ToCoins()
 	if !keep.HasCoins(k.Keeper, sdkCtx, sender, inputCoins) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 	}
@@ -89,7 +89,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 	refreshedOutputItems := types.ItemList{}
 
 	// get the items from the trade initiator
-	for _, item := range trade.ItemOutputs.List {
+	for _, item := range trade.ItemOutputs {
 		// verify if its still owned by the initiator
 		storedItem, err := k.GetItem(sdkCtx, item.ID)
 		if err != nil {
@@ -106,7 +106,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 
 		totalItemTransferFee += storedItem.GetTransferFee()
 
-		refreshedOutputItems.List = append(refreshedOutputItems.List, storedItem)
+		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
 
 	// ----------------- handle coin interaction ----------------------
@@ -163,7 +163,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 
 	totalFeeForCBOwners := totalFee * config.Config.Fee.ItemTransferCookbookOwnerProfitPercent / 100
 
-	for _, item := range refreshedOutputItems.List {
+	for _, item := range refreshedOutputItems {
 
 		if totalItemTransferFee == 0 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
@@ -203,7 +203,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		}
 	}
 
-	for _, item := range matchedItems.List {
+	for _, item := range matchedItems {
 		if totalItemTransferFee == 0 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}

@@ -3,12 +3,13 @@ package query
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 )
 
 // GetTrade get an execution by GUID
 func GetTrade() *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "get_trade <id>",
 		Short: "get a trade by id",
 		Args:  cobra.ExactArgs(1),
@@ -32,5 +33,7 @@ func GetTrade() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	return ccb
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

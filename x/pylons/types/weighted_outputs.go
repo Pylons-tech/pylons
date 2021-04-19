@@ -5,6 +5,8 @@ import (
 	"math/rand"
 )
 
+type WeightedOutputsList []WeightedOutputs
+
 // GetWeight calculate weight value using program
 func (ol WeightedOutputs) GetWeightInt(ec CelEnvCollection) (int, error) {
 	refVal, refErr := ec.Eval(ol.Weight)
@@ -25,13 +27,13 @@ func (ol WeightedOutputs) GetWeightInt(ec CelEnvCollection) (int, error) {
 // Actualize generate result entries from WeightedOutputsList
 func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) {
 
-	if len(wol.List) == 0 {
+	if len(wol) == 0 {
 		return nil, nil
 	}
 
 	lastWeight := 0
 	var weights []int
-	for _, wp := range wol.List {
+	for _, wp := range wol {
 		w, err := wp.GetWeightInt(ec)
 		if err != nil {
 			return nil, err
@@ -54,5 +56,5 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) 
 		}
 		first = weight
 	}
-	return wol.List[chosenIndex].EntryIDs, nil
+	return wol[chosenIndex].EntryIDs, nil
 }

@@ -34,7 +34,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 
 // GetItemInputRefIndex get item input index from ref string
 func (rcp Recipe) GetItemInputRefIndex(inputRef string) int {
-	for idx, input := range rcp.ItemInputs.List {
+	for idx, input := range rcp.ItemInputs {
 		if input.ID == inputRef {
 			return idx
 		}

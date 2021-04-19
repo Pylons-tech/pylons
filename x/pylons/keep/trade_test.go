@@ -38,7 +38,7 @@ func TestGetTrade(t *testing.T) {
 		"basic flow test": {
 			sender,
 			types.ItemList{
-				List: []types.Item{item},
+				item,
 			},
 			0,
 			false,
@@ -46,7 +46,7 @@ func TestGetTrade(t *testing.T) {
 		"error for empty sender": {
 			nil,
 			types.ItemList{
-				List: []types.Item{item},
+				item,
 			},
 			0,
 			true,

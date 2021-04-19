@@ -3,12 +3,13 @@ package query
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 )
 
 // CheckGoogleIAPOrder check if google iap order is already used
 func CheckGoogleIAPOrder() *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "check_google_iap_order <purchase_token>",
 		Short: "check if google iap order is given to user with purchase token",
 		Args:  cobra.ExactArgs(1),
@@ -32,5 +33,7 @@ func CheckGoogleIAPOrder() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	return ccb
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

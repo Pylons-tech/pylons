@@ -16,7 +16,7 @@ func GenExecution(sender sdk.AccAddress, tci TestCoinInput) types.Execution {
 	rcpData := GenRecipe(sender, cbData.ID, "new recipe", "this has to meet character limits; lol")
 
 	var cl sdk.Coins
-	for _, inp := range rcpData.CoinInputs.Coins {
+	for _, inp := range rcpData.CoinInputs {
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 

@@ -48,7 +48,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{List: []types.Item{item}},
+		ItemOutputs: types.ItemList{item},
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender.String(),
 		Disabled:    true, // we disable this trade initially
@@ -66,7 +66,7 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 	err = tci.PlnK.SetTrade(tci.Ctx, types.Trade{
 		ID:          id3.String(),
 		ItemInputs:  types.GenTradeItemInputList("LOUD-CB-001", []string{"Pikachu"}),
-		ItemOutputs: types.ItemList{List: []types.Item{item}},
+		ItemOutputs: types.ItemList{item},
 		CoinOutputs: types.NewPylon(10000),
 		Sender:      sender2.String(),
 		Disabled:    true, // we disable this trade initially
@@ -105,8 +105,8 @@ func TestHandlerMsgEnableTrade(t *testing.T) {
 			if tc.showError == false {
 				trd, _ := tci.PlnK.GetTrade(tci.Ctx, tc.tradeID)
 				require.True(t, !trd.Disabled)
-				if trd.ItemOutputs.List != nil && len(trd.ItemOutputs.List) > 0 {
-					require.True(t, trd.ItemOutputs.List[0].OwnerTradeID != "")
+				if trd.ItemOutputs != nil && len(trd.ItemOutputs) > 0 {
+					require.True(t, trd.ItemOutputs[0].OwnerTradeID != "")
 				}
 			} else {
 				require.True(t, err != nil)

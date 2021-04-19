@@ -24,9 +24,7 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedSignBytes := `{
-      "CoinInputs": {
-				"coins": null
-			},
+      "CoinInputs": [],
       "CoinOutputs": [
         {
           "amount": "10",
@@ -34,37 +32,33 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
         }
       ],
       "ExtraInfo": "Test CreateTrade GetSignBytes",
-      "ItemInputs": {
-        "List": [
-          {
-            "CookbookID": "UTestCreateTrade-CB-001",
-            "ItemInput": {
-							"Conditions":{"Doubles":{"params":null},"Longs":{"List":null},"Strings":{"List":null}},
-              "Doubles": {
-                "params": null
-              },
-              "ID": "Raichu",
-              "Longs": {
-                "List": null
-              },
-              "Strings": {
-                "List": [
-                  {
-                    "Key": "Name",
-                    "Value": "Raichu"
-                  }
-                ]
-              },
-              "TransferFee": {
-                "MaxValue": 10000
-              }
+      "ItemInputs": [
+        {
+          "CookbookID": "UTestCreateTrade-CB-001",
+          "ItemInput": {
+            "Conditions":{"Doubles":{"params":null},"Longs":{"List":null},"Strings":{"List":null}},
+            "Doubles": {
+              "params": null
+            },
+            "ID": "Raichu",
+            "Longs": {
+              "List": null
+            },
+            "Strings": {
+              "List": [
+                {
+                  "Key": "Name",
+                  "Value": "Raichu"
+                }
+              ]
+            },
+            "TransferFee": {
+              "MaxValue": 10000
             }
           }
-        ]
-      },
-      "ItemOutputs": {
-        "List": null
-      },
+        }
+      ],
+      "ItemOutputs": [],
       "Sender": "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
     }`
 	buffer := new(bytes.Buffer)
@@ -78,11 +72,10 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	require.NoError(t, err)
 	msg := NewMsgCreateTrade(
 		types.CoinInputList{
-			Coins: []types.CoinInput{
-				{Coin: "aaaa", Count: 100},
-				{Coin: "zzzz", Count: 100},
-				{Coin: "cccc", Count: 100},
-			}},
+			{Coin: "aaaa", Count: 100},
+			{Coin: "zzzz", Count: 100},
+			{Coin: "cccc", Count: 100},
+		},
 		types.TradeItemInputList{},
 		types.NewPylon(10),
 		types.ItemList{},
@@ -92,22 +85,20 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	require.NoError(t, err)
 
 	expectedSignBytes := `{
-      "CoinInputs": {
-        "coins": [
-          {
-            "Coin": "aaaa",
-            "Count": 100
-          },
-          {
-            "Coin": "zzzz",
-            "Count": 100
-          },
-          {
-            "Coin": "cccc",
-            "Count": 100
-          }
-        ]
-      },
+      "CoinInputs": [
+        {
+          "Coin": "aaaa",
+          "Count": 100
+        },
+        {
+          "Coin": "zzzz",
+          "Count": 100
+        },
+        {
+          "Coin": "cccc",
+          "Count": 100
+        }
+      ],
       "CoinOutputs": [
         {
           "amount": "10",
@@ -115,16 +106,12 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
         }
       ],
       "ExtraInfo": "Test CreateTrade GetSignBytes",
-      "ItemInputs": {
-        "List": null
-      },
-      "ItemOutputs": {
-        "List": null
-      },
+      "ItemInputs": [],
+      "ItemOutputs": [],
       "Sender": "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
     }`
 	buffer := new(bytes.Buffer)
 	err = json.Compact(buffer, []byte(expectedSignBytes))
 	require.NoError(t, err)
-	require.True(t, string(msg.GetSignBytes()) == buffer.String(), string(msg.GetSignBytes()))
+	require.Equal(t, string(msg.GetSignBytes()), buffer.String(), string(msg.GetSignBytes()))
 }

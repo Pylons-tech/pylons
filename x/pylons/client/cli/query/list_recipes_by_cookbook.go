@@ -3,13 +3,14 @@ package query
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 )
 
 // ListRecipesByCookbook queries the recipes
 func ListRecipesByCookbook() *cobra.Command {
 	var cookbookID string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list_recipe_by_cookbook",
 		Short: "get all recipes on cookbook",
 		Args:  cobra.ExactArgs(0),
@@ -33,14 +34,16 @@ func ListRecipesByCookbook() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&cookbookID, "cookbook-id", "", "id of cookbook")
-	return ccb
+
+	cmd.PersistentFlags().StringVar(&cookbookID, "cookbook-id", "", "id of cookbook")
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }
 
 // ListShortenRecipesByCookbook queries the recipes
 func ListShortenRecipesByCookbook() *cobra.Command {
 	var cookbookID string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "list_shorten_recipe_by_cookbook",
 		Short: "get shorten format of recipes on cookbook",
 		Args:  cobra.ExactArgs(0),
@@ -64,6 +67,8 @@ func ListShortenRecipesByCookbook() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&cookbookID, "cookbook-id", "", "id of cookbook")
-	return ccb
+
+	cmd.PersistentFlags().StringVar(&cookbookID, "cookbook-id", "", "id of cookbook")
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

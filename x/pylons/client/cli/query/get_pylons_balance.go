@@ -2,8 +2,10 @@ package query
 
 import (
 	"errors"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
@@ -11,7 +13,7 @@ import (
 
 // GetPylonsBalance queries the pylons balance
 func GetPylonsBalance() *cobra.Command {
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "balance [name]",
 		Short: "get pylons balance",
 		Args:  cobra.ExactArgs(1),
@@ -50,5 +52,7 @@ func GetPylonsBalance() *cobra.Command {
 			return errors.New("cannot get the balance using this name")
 		},
 	}
-	return ccb
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

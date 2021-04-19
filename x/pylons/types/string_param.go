@@ -2,11 +2,13 @@ package types
 
 import "encoding/json"
 
+type StringParamList []StringParam
+
 // Actualize actualize string param using cel program
 func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	var m []StringKeyValue
-	for _, param := range spm.List {
+	for _, param := range spm {
 		var val string
 		var err error
 

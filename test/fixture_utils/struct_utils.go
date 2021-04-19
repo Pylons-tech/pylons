@@ -317,9 +317,9 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 				}).MustNil(err, "error unmarshaling item inputs")
 			}
 			ii.ID = iia.ID
-			itemInputs.List = append(itemInputs.List, ii)
+			itemInputs = append(itemInputs, ii)
 		} else {
-			itemInputs.List = append(itemInputs.List, itemInputDirectReader.ItemInputs[iii])
+			itemInputs = append(itemInputs, itemInputDirectReader.ItemInputs[iii])
 		}
 	}
 	return itemInputs
@@ -344,7 +344,7 @@ func GetTradeItemInputsFromBytes(bytes []byte, t *testing.T) types.TradeItemInpu
 		t.WithFields(testing.Fields{
 			"trade_item_input_bytes": string(tiiBytes),
 		}).MustNil(err, "error unmarshaling trading item inputs")
-		itemInputs.List = append(itemInputs.List, tii)
+		itemInputs = append(itemInputs, tii)
 	}
 	return itemInputs
 }
@@ -372,7 +372,7 @@ func GetItemOutputsFromBytes(bytes []byte, sender sdk.AccAddress, t *testing.T) 
 		t.WithFields(testing.Fields{
 			"item_id": iID,
 		}).MustNil(err, "error getting item from id")
-		itemOutputs.List = append(itemOutputs.List, io)
+		itemOutputs = append(itemOutputs, io)
 	}
 	return itemOutputs
 }
@@ -425,14 +425,14 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 			pio := types.NewItemModifyOutput(io.ID, io.ItemInputRef, ModifyParams)
 
 			// This is hot fix for signature verification failed issue of item output Doubles: [] instead of Doubles: nil
-			if pio.Doubles.List != nil && len(pio.Doubles.List) == 0 {
-				pio.Doubles.List = nil
+			if pio.Doubles != nil && len(pio.Doubles) == 0 {
+				pio.Doubles = nil
 			}
-			if pio.Longs.Params != nil && len(pio.Longs.Params) == 0 {
-				pio.Longs.Params = nil
+			if pio.Longs != nil && len(pio.Longs) == 0 {
+				pio.Longs = nil
 			}
-			if pio.Strings.List != nil && len(pio.Strings.List) == 0 {
-				pio.Strings.List = nil
+			if pio.Strings != nil && len(pio.Strings) == 0 {
+				pio.Strings = nil
 			}
 			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, pio)
 		} else {
@@ -453,14 +453,14 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		}
 		pio.ID = io.ID
 		// This is hot fix for signature verification failed issue of item output Doubles: [] instead of Doubles: nil
-		if pio.Doubles.List != nil && len(pio.Doubles.List) == 0 {
-			pio.Doubles.List = nil
+		if pio.Doubles != nil && len(pio.Doubles) == 0 {
+			pio.Doubles = nil
 		}
-		if pio.Longs.Params != nil && len(pio.Longs.Params) == 0 {
-			pio.Longs.Params = nil
+		if pio.Longs != nil && len(pio.Longs) == 0 {
+			pio.Longs = nil
 		}
-		if pio.Strings.List != nil && len(pio.Strings.List) == 0 {
-			pio.Strings.List = nil
+		if pio.Strings != nil && len(pio.Strings) == 0 {
+			pio.Strings = nil
 		}
 		wpl.ItemOutputs = append(wpl.ItemOutputs, pio)
 	}

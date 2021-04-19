@@ -43,7 +43,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe
 	p := ExecProcess{ctx: sdkCtx, keeper: k.Keeper, recipe: recipe}
 
 	var cl sdk.Coins
-	for _, inp := range recipe.CoinInputs.Coins {
+	for _, inp := range recipe.CoinInputs {
 		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 	}
 
@@ -64,7 +64,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 
-		err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, recipe.CoinInputs.ToCoins()))
+		err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, types.CoinInputList(recipe.CoinInputs).ToCoins()))
 		if err != nil {
 			return nil, errInternal(err)
 		}

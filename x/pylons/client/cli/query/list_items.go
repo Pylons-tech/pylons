@@ -3,13 +3,14 @@ package query
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 )
 
 // ItemsBySender queries the items
 func ItemsBySender() *cobra.Command {
 	var accAddr string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "items_by_sender",
 		Short: "get all items for a user",
 		Args:  cobra.ExactArgs(0),
@@ -33,6 +34,8 @@ func ItemsBySender() *cobra.Command {
 			return clientCtx.PrintProto(res)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
-	return ccb
+
+	cmd.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

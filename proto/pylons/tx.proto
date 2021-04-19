@@ -122,9 +122,9 @@ message MsgCreateRecipe {
   string RecipeID = 1;
   string Name = 2;
   string CookbookID = 3;    // the cookbook guid
-  CoinInputList CoinInputs = 4 [(gogoproto.nullable) = false];
-  ItemInputList ItemInputs = 5 [(gogoproto.nullable) = false];
-  WeightedOutputsList Outputs = 6 [(gogoproto.nullable) = false];
+  repeated CoinInput CoinInputs = 4 [(gogoproto.nullable) = false];
+  repeated ItemInput ItemInputs = 5 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs Outputs = 6 [(gogoproto.nullable) = false];
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;
@@ -141,10 +141,10 @@ message MsgCreateRecipeResponse  {
 
 // MsgCreateTrade defines a CreateTrade message
 message MsgCreateTrade {
-  CoinInputList CoinInputs = 1  [(gogoproto.nullable) = false];
-  TradeItemInputList ItemInputs = 2 [(gogoproto.nullable) = false];
+  repeated CoinInput CoinInputs = 1  [(gogoproto.nullable) = false];
+  repeated TradeItemInput ItemInputs = 2 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin CoinOutputs = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  ItemList ItemOutputs = 4 [(gogoproto.nullable) = false];
+  repeated Item ItemOutputs = 4 [(gogoproto.nullable) = false];
   string ExtraInfo = 5;
   string Sender = 6;
 }
@@ -337,9 +337,9 @@ message MsgUpdateRecipe {
   string Name = 1;
   string CookbookID = 2;     // the cookbook guid
   string ID = 3;             // the recipe guid
-  CoinInputList CoinInputs = 4 [(gogoproto.nullable) = false];
-  ItemInputList ItemInputs = 5 [(gogoproto.nullable) = false];
-  WeightedOutputsList Outputs = 6 [(gogoproto.nullable) = false];
+  repeated CoinInput CoinInputs = 4 [(gogoproto.nullable) = false];
+  repeated ItemInput ItemInputs = 5 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs Outputs = 6 [(gogoproto.nullable) = false];
   int64 BlockInterval = 7;
   string Sender = 8;
   string Description = 9;

@@ -42,7 +42,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	itemInputRefsMap := map[string]bool{}
 	entryIDsMap := map[string]bool{}
-	for _, ii := range msg.ItemInputs.List {
+	for _, ii := range msg.ItemInputs {
 		if ii.ID == "" {
 			continue
 		}
@@ -91,7 +91,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	}
 	// do nothing for now for items outputs
 
-	for _, output := range msg.Outputs.List {
+	for _, output := range msg.Outputs {
 		// validation for same ItemInputRef on output
 		usedItemInputRefs := make(map[string]bool)
 		usedEntries := make(map[string]bool)
