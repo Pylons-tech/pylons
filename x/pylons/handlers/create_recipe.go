@@ -35,7 +35,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) 
 		msg.Name, msg.CookbookID, msg.Description,
 		msg.CoinInputs, msg.ItemInputs,
 		msg.Entries, msg.Outputs,
-		msg.BlockInterval, sender,
+		msg.BlockInterval, sender, msg.ExtraInfo,
 	)
 
 	if msg.RecipeID != "" {

@@ -129,6 +129,7 @@ message MsgCreateRecipe {
   string Sender = 8;
   string Description = 9;
   EntriesList Entries = 10 [(gogoproto.nullable) = false];
+  string ExtraInfo = 11;
 }
 
 

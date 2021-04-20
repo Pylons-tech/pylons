@@ -174,7 +174,7 @@ message  ItemModifyParams {
 }
 
 // Item is a tradable asset
-message  Item {
+message Item {
   string NodeVersion = 1;
   string ID = 2;
   DoubleKeyValueList Doubles = 3 [(gogoproto.nullable) = false];
@@ -283,6 +283,7 @@ message Recipe {
   int64 BlockInterval = 10;
   string Sender = 11;
   bool Disabled = 12;
+  string ExtraInfo = 13;
 }
 
 message Trade {

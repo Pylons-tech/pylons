@@ -18,6 +18,7 @@ func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) typ
 		types.GenOneOutput("chair", "Raichu"),
 		0,
 		sender,
+		"",
 	)
 }
 

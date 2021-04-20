@@ -14,7 +14,8 @@ func NewRecipe(recipeName, cookbookID, description string,
 	entries EntriesList, // items that can be created from recipe
 	outputs WeightedOutputsList, // item outputs listing by weight value
 	blockInterval int64, // The amount of time to wait to finish running the recipe
-	sender sdk.AccAddress) Recipe {
+	sender sdk.AccAddress,
+	extraInfo string) Recipe {
 	rcp := Recipe{
 		NodeVersion:   "0.0.1",
 		Name:          recipeName,
@@ -26,6 +27,7 @@ func NewRecipe(recipeName, cookbookID, description string,
 		BlockInterval: blockInterval,
 		Description:   description,
 		Sender:        sender.String(),
+		ExtraInfo:     extraInfo,
 	}
 
 	rcp.ID = KeyGen(sender)
