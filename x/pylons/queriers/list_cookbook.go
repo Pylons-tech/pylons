@@ -15,14 +15,15 @@ const (
 
 // ListCookbook returns a cookbook based on the cookbook id
 func (querier *querierServer) ListCookbook(ctx context.Context, req *types.ListCookbookRequest) (*types.ListCookbookResponse, error) {
-	if req.Address == "" {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
-	}
+	var err error
+	var accAddr sdk.AccAddress
 
-	accAddr, err := sdk.AccAddressFromBech32(req.Address)
+	if req.Address != "" {
+		accAddr, err = sdk.AccAddressFromBech32(req.Address)
 
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
 	}
 
 	cookbooks, err := querier.Keeper.GetCookbooksBySender(sdk.UnwrapSDKContext(ctx), accAddr)

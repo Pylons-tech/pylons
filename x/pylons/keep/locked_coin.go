@@ -3,6 +3,7 @@ package keep
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,7 +21,7 @@ func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	senderBalance := k.CoinKeeper.GetAllBalances(ctx, lockedCoin.Sender)
 
 	if !senderBalance.IsAllGTE(newLock) {
-		return errors.New("LockCoin: the sender does not have enough amount to lock")
+		return fmt.Errorf("LockCoin: the sender does not have enough amount to lock: balance=%s new=%s locked=%s origin=%s", senderBalance.String(), newLock.String(), lockedCoin.Amount.String(), originLock.Amount.String())
 	}
 
 	if originLock.Amount.Empty() {

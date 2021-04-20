@@ -378,6 +378,11 @@ TODO: pylonsd query txs command is removed or updated for cosmos sdk upgrade. We
 These are useful commands to query transactions by tags.
 
 ```sh
+# new SDK
+pylonsd query txs --events="message.sender=cosmos1agrkc5u7pwc2cwclmkguhc68x6d6ptf9w3ntex"
+pylonsd query txs --events="transfer.recipient=cosmos1agrkc5u7pwc2cwclmkguhc68x6d6ptf9w3ntex"
+
+# old SDK
 pylonsd query txs --tags tx.hash:A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
 pylonsd query txs --tags tx.height:3344 --page 1 --limit 100
 pylonsd query txs --tags sender:cosmos1vy25zn267xwuecnrtqqqq8prr2qw6f477xz6s4 --page 1 --limit 100
