@@ -73,3 +73,51 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 	}
 	return m, nil
 }
+
+// Actualize builds the params
+func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error) {
+	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
+	var m []LongKeyValue
+	for _, param := range lpm {
+		var val int64
+		var err error
+
+		if len(param.Program) > 0 {
+			val, err = ec.EvalInt64(param.Program)
+		} else {
+			val, err = param.WeightTable.Generate()
+		}
+		if err != nil {
+			return m, err
+		}
+		m = append(m, LongKeyValue{
+			Key:   param.Key,
+			Value: val,
+		})
+	}
+	return m, nil
+}
+
+// Actualize actualize string param using cel program
+func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
+	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
+	var m []StringKeyValue
+	for _, param := range spm {
+		var val string
+		var err error
+
+		if len(param.Program) > 0 {
+			val, err = ec.EvalString(param.Program)
+		} else {
+			val = param.Value
+		}
+		if err != nil {
+			return m, err
+		}
+		m = append(m, StringKeyValue{
+			Key:   param.Key,
+			Value: val,
+		})
+	}
+	return m, nil
+}
