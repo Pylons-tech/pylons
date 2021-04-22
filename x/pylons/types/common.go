@@ -63,6 +63,7 @@ const (
 	TypeTrade       = "trade"
 	TypeItem        = "item"
 	TypeItemHistory = "item_history"
+	TypeExecution   = "execution"
 )
 
 // tier fee types
@@ -194,6 +195,27 @@ func (it Item) FulfillTradeError(tradeID string) error {
 		return errors.New("Item is not owned by the trade")
 	}
 	return nil
+}
+
+// NewExecution return a new Execution
+func NewExecution(recipeID string, cookbookID string, ci sdk.Coins,
+	itemInputs []Item,
+	blockHeight int64, sender sdk.AccAddress,
+	completed bool) Execution {
+
+	exec := Execution{
+		NodeVersion: "0.0.1",
+		RecipeID:    recipeID,
+		CookbookID:  cookbookID,
+		CoinInputs:  ci,
+		ItemInputs:  itemInputs,
+		BlockHeight: blockHeight,
+		Sender:      sender.String(),
+		Completed:   completed,
+	}
+
+	exec.ID = KeyGen(sender)
+	return exec
 }
 
 // NewRecipeExecutionError is a utility that shows if Recipe is compatible with recipe execution
