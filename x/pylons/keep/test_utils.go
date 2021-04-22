@@ -1,9 +1,10 @@
 package keep
 
 import (
+	"testing"
+
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/cosmos/cosmos-sdk/client"
-	"testing"
 
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
@@ -43,30 +44,26 @@ type TestCoinInput struct {
 func GenItem(cbID string, sender sdk.AccAddress, name string) types.Item {
 	return types.NewItem(
 		cbID,
-		types.DoubleKeyValueList{List: types.DoubleInputParamList{
-			Params: []types.DoubleInputParam{
-				{
-					Key:      "endurance",
-					MinValue: sdk.NewDec(100.00),
-					MaxValue: sdk.NewDec(500.00),
-				},
+		types.DoubleInputParamList{
+			{
+				Key:      "endurance",
+				MinValue: sdk.NewDec(100.00),
+				MaxValue: sdk.NewDec(500.00),
 			},
-		}.Actualize()},
-		types.LongKeyValueList{List: types.LongInputParamList{
-			List: []types.LongInputParam{
-				{
-					Key:      "HP",
-					MinValue: 100,
-					MaxValue: 500,
-				},
-			}}.Actualize()},
-		types.StringKeyValueList{List: types.StringInputParamList{
-			List: []types.StringInputParam{
-				{
-					Key:   "Name",
-					Value: name,
-				},
-			}}.Actualize()},
+		}.Actualize(),
+		types.LongInputParamList{
+			{
+				Key:      "HP",
+				MinValue: 100,
+				MaxValue: 500,
+			},
+		}.Actualize(),
+		types.StringInputParamList{
+			{
+				Key:   "Name",
+				Value: name,
+			},
+		}.Actualize(),
 		sender,
 		0,
 		0,
@@ -75,12 +72,10 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) types.Item {
 
 var (
 	t = types.DoubleInputParamList{
-		Params: []types.DoubleInputParam{
-			{
-				Key:      "endurance",
-				MinValue: sdk.NewDec(100.00),
-				MaxValue: sdk.NewDec(500.00),
-			},
+		{
+			Key:      "endurance",
+			MinValue: sdk.NewDec(100.00),
+			MaxValue: sdk.NewDec(500.00),
 		},
 	}
 )

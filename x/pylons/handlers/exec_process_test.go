@@ -32,69 +32,69 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	for _, iN := range initItemNames {
 		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
 		if iN == "Attack1Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(1.0),
 			})
 		} else if iN == "Attack10Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(10.0),
 			})
 		} else if iN == "Attack10Level1Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
 				Key:   "level",
 				Value: 1,
 			})
 		} else if iN == "Attack10Level20Item" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
 		} else if iN == "Attack10Level20Carrier" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
-			newItem.Strings.List = append(newItem.Strings.List, types.StringKeyValue{
+			newItem.Strings = append(newItem.Strings, types.StringKeyValue{
 				Key:   "Type",
 				Value: "Carrier",
 			})
 		} else if iN == "Attack10Level20PersonFee1" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
-			newItem.Strings.List = append(newItem.Strings.List, types.StringKeyValue{
+			newItem.Strings = append(newItem.Strings, types.StringKeyValue{
 				Key:   "Type",
 				Value: "person",
 			})
 		} else if iN == "Attack10Level20PersonFee1000Locked" {
-			newItem.Doubles.List = append(newItem.Doubles.List, types.DoubleKeyValue{
+			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
 				Value: sdk.NewDec(10.0),
 			})
-			newItem.Longs.List = append(newItem.Longs.List, types.LongKeyValue{
+			newItem.Longs = append(newItem.Longs, types.LongKeyValue{
 				Key:   "level",
 				Value: 20,
 			})
-			newItem.Strings.List = append(newItem.Strings.List, types.StringKeyValue{
+			newItem.Strings = append(newItem.Strings, types.StringKeyValue{
 				Key:   "Type",
 				Value: "person",
 			})
@@ -137,9 +137,9 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		types.CoinInputList{},
 		types.ItemInputList{
 			{
-				Doubles: types.DoubleInputParamList{Params: []types.DoubleInputParam{{Key: "attack", MinValue: sdk.NewDec(10.0), MaxValue: sdk.NewDec(1000.0)}}},
-				Longs:   types.LongInputParamList{List: []types.LongInputParam{{Key: "level", MinValue: 20, MaxValue: 100}}},
-				Strings: types.StringInputParamList{List: []types.StringInputParam{{Key: "Type", Value: "person"}}},
+				Doubles: types.DoubleInputParamList{{Key: "attack", MinValue: sdk.NewDec(10.0), MaxValue: sdk.NewDec(1000.0)}},
+				Longs:   types.LongInputParamList{{Key: "level", MinValue: 20, MaxValue: 100}},
+				Strings: types.StringInputParamList{{Key: "Type", Value: "person"}},
 				TransferFee: types.FeeInputParam{
 					MinValue: 10,
 					MaxValue: 10000,
@@ -266,24 +266,24 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 
 	newItem := types.NewItem(
 		cbData.CookbookID,
-		types.DoubleKeyValueList{List: []types.DoubleKeyValue{
+		types.DoubleKeyValueList{
 			{
 				Key:   "attack",
 				Value: sdk.NewDec(1.0),
 			},
-		}},
-		types.LongKeyValueList{List: []types.LongKeyValue{
+		},
+		types.LongKeyValueList{
 			{
 				Key:   "level",
 				Value: 1,
 			},
-		}},
-		types.StringKeyValueList{List: []types.StringKeyValue{
+		},
+		types.StringKeyValueList{
 			{
 				Key:   "Name",
 				Value: "Raichu",
 			},
-		}},
+		},
 		sender1,
 		0,
 		0,

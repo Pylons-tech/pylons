@@ -36,22 +36,16 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
         {
           "CookbookID": "UTestCreateTrade-CB-001",
           "ItemInput": {
-            "Conditions":{"Doubles":{"params":null},"Longs":{"List":null},"Strings":{"List":null}},
-            "Doubles": {
-              "params": null
-            },
+            "Conditions":{"Doubles":null,"Longs":null,"Strings":null},
+            "Doubles": [],
             "ID": "Raichu",
-            "Longs": {
-              "List": null
-            },
-            "Strings": {
-              "List": [
-                {
-                  "Key": "Name",
-                  "Value": "Raichu"
-                }
-              ]
-            },
+            "Longs": [],
+            "Strings": [
+              {
+                "Key": "Name",
+                "Value": "Raichu"
+              }
+            ],
             "TransferFee": {
               "MaxValue": 10000
             }

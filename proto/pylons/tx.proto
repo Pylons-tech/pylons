@@ -223,9 +223,9 @@ message MsgExecuteRecipeResponse {
 // MsgFiatItem is a msg struct to be used to fiat item
 message MsgFiatItem {
   string CookbookID = 1;
-  DoubleKeyValueList Doubles = 2 [(gogoproto.nullable) = false];
-  LongKeyValueList Longs = 3 [(gogoproto.nullable) = false];
-  StringKeyValueList Strings = 4 [(gogoproto.nullable) = false];
+  repeated DoubleKeyValue Doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongKeyValue Longs = 3 [(gogoproto.nullable) = false];
+  repeated StringKeyValue Strings = 4 [(gogoproto.nullable) = false];
   string Sender = 5;
   int64 TransferFee = 6;
 }

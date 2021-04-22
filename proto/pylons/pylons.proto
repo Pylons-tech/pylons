@@ -33,10 +33,6 @@ message DoubleInputParam {
   string  MaxValue = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
-message DoubleInputParamList {
-  repeated DoubleInputParam params = 1 [(gogoproto.nullable) = false];
-}
-
 // DoubleWeightRange describes weight range that produce double value
 message DoubleWeightRange {
   string Lower = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];// This is added due to amino.Marshal does not support float variable
@@ -76,10 +72,7 @@ message StringInputParam {
   // The value of the parameter
   string Value = 2;
 }
-// StringInputParamList is a list of StringInputParam
-message StringInputParamList {
-  repeated StringInputParam List = 1 [(gogoproto.nullable) = false];
-}
+
 message FeeInputParam {
   int64 MinValue = 1;
   int64 MaxValue = 2;
@@ -92,24 +85,19 @@ message LongInputParam {
   int64 MaxValue = 3;
 }
 
-// LongInputParamList is a list of LongInputParam
-message  LongInputParamList {
-  repeated LongInputParam List = 1 [(gogoproto.nullable) = false];
-}
-
 // ConditionList is a struct for describing  ItemInput expression conditions
 message ConditionList {
-	DoubleInputParamList Doubles = 1[(gogoproto.nullable) = false];
-	LongInputParamList Longs = 2[(gogoproto.nullable) = false];
-	StringInputParamList Strings = 3[(gogoproto.nullable) = false];
+	repeated DoubleInputParam Doubles = 1[(gogoproto.nullable) = false];
+	repeated LongInputParam Longs = 2[(gogoproto.nullable) = false];
+	repeated StringInputParam Strings = 3[(gogoproto.nullable) = false];
 }
 
 // ItemInput is a wrapper struct for Item for recipes
 message ItemInput  {
   string ID = 1;
-  DoubleInputParamList Doubles = 2 [(gogoproto.nullable) = false];
-  LongInputParamList Longs = 3 [(gogoproto.nullable) = false];
-  StringInputParamList Strings = 4 [(gogoproto.nullable) = false];
+  repeated DoubleInputParam Doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongInputParam Longs = 3 [(gogoproto.nullable) = false];
+  repeated StringInputParam Strings = 4 [(gogoproto.nullable) = false];
   FeeInputParam TransferFee = 5 [(gogoproto.nullable) = false];
   ConditionList Conditions = 6 [(gogoproto.nullable) = false];
 }
@@ -177,9 +165,9 @@ message  ItemModifyParams {
 message Item {
   string NodeVersion = 1;
   string ID = 2;
-  DoubleKeyValueList Doubles = 3 [(gogoproto.nullable) = false];
-  LongKeyValueList Longs = 4 [(gogoproto.nullable) = false];
-  StringKeyValueList Strings = 5 [(gogoproto.nullable) = false];
+  repeated DoubleKeyValue Doubles = 3 [(gogoproto.nullable) = false];
+  repeated LongKeyValue Longs = 4 [(gogoproto.nullable) = false];
+  repeated StringKeyValue Strings = 5 [(gogoproto.nullable) = false];
   string CookbookID = 6;
   string Sender = 7;
   string OwnerRecipeID = 8;
@@ -189,28 +177,16 @@ message Item {
   int64 TransferFee = 12;
 }
 
-message DoubleKeyValueList {
-  repeated DoubleKeyValue List = 1 [(gogoproto.nullable) = false];
-}
-
 // DoubleKeyValue describes double key/value set
 message  DoubleKeyValue {
   string Key = 1;
   string Value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
-message LongKeyValueList {
-  repeated LongKeyValue List = 1 [(gogoproto.nullable) = false];
-}
-
 // LongKeyValue describes long key/value set
 message  LongKeyValue {
   string Key = 1;
   int64 Value = 2;
-}
-
-message StringKeyValueList {
-  repeated StringKeyValue List = 1 [(gogoproto.nullable) = false];
 }
 
 // StringKeyValue describes string key/value set

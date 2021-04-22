@@ -66,12 +66,12 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 			valDec, err = param.WeightTable.Generate()
 		}
 		if err != nil {
-			return DoubleKeyValueList{m}, err
+			return m, err
 		}
 		m = append(m, DoubleKeyValue{
 			Key:   param.Key,
 			Value: valDec,
 		})
 	}
-	return DoubleKeyValueList{m}, nil
+	return m, nil
 }

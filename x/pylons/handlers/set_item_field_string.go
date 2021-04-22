@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
@@ -48,7 +49,7 @@ func (k msgServer) UpdateItemString(ctx context.Context, msg *msgs.MsgUpdateItem
 		return nil, errInternal(errors.New("Provided field does not exist within the item"))
 	}
 
-	item.Strings.List[keyID].Value = msg.Value
+	item.Strings[keyID].Value = msg.Value
 
 	if err := k.SetItem(sdkCtx, item); err != nil {
 		return nil, errInternal(errors.New("Error updating item inside keeper"))

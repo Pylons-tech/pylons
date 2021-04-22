@@ -41,9 +41,9 @@ func TestListRecipe(t *testing.T) {
 		},
 		"error check when not providing address": {
 			address:       "",
-			showError:     true,
-			desiredError:  "no address is provided in path",
-			desiredRcpCnt: 0,
+			showError:     false,
+			desiredRcpCnt: 1,
+			firstItemName: "recipe0001",
 		},
 		"list recipe successful check": {
 			address:       sender1.String(),
@@ -62,12 +62,13 @@ func TestListRecipe(t *testing.T) {
 				},
 			)
 			if tc.showError {
+				require.Error(t, err)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.NoError(t, err)
-				require.True(t, len(result.Recipes) == tc.desiredRcpCnt)
+				require.Equal(t, len(result.Recipes), tc.desiredRcpCnt)
 				require.True(t, len(result.Recipes) > 0)
-				require.True(t, result.Recipes[0].Name == tc.firstItemName)
+				require.Equal(t, result.Recipes[0].Name, tc.firstItemName)
 			}
 		})
 	}

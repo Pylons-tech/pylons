@@ -41,7 +41,7 @@ func (it Item) CalculateTransferFee() int64 {
 
 // FindDouble is a function to get a double attribute from an item
 func (it Item) FindDouble(key string) (sdk.Dec, bool) {
-	for _, v := range it.Doubles.List {
+	for _, v := range it.Doubles {
 		if v.Key == key {
 			return v.Value, true
 		}
@@ -51,7 +51,7 @@ func (it Item) FindDouble(key string) (sdk.Dec, bool) {
 
 // FindDoubleKey is a function get double key index
 func (it Item) FindDoubleKey(key string) (int, bool) {
-	for i, v := range it.Doubles.List {
+	for i, v := range it.Doubles {
 		if v.Key == key {
 			return i, true
 		}
@@ -61,7 +61,7 @@ func (it Item) FindDoubleKey(key string) (int, bool) {
 
 // FindLong is a function to get a long attribute from an item
 func (it Item) FindLong(key string) (int, bool) {
-	for _, v := range it.Longs.List {
+	for _, v := range it.Longs {
 		if v.Key == key {
 			return int(v.Value), true
 		}
@@ -71,7 +71,7 @@ func (it Item) FindLong(key string) (int, bool) {
 
 // FindLongKey is a function to get long key index
 func (it Item) FindLongKey(key string) (int, bool) {
-	for i, v := range it.Longs.List {
+	for i, v := range it.Longs {
 		if v.Key == key {
 			return i, true
 		}
@@ -81,7 +81,7 @@ func (it Item) FindLongKey(key string) (int, bool) {
 
 // FindString is a function to get a string attribute from an item
 func (it Item) FindString(key string) (string, bool) {
-	for _, v := range it.Strings.List {
+	for _, v := range it.Strings {
 		if v.Key == key {
 			return v.Value, true
 		}
@@ -91,7 +91,7 @@ func (it Item) FindString(key string) (string, bool) {
 
 // FindStringKey is a function to get string key index
 func (it Item) FindStringKey(key string) (int, bool) {
-	for i, v := range it.Strings.List {
+	for i, v := range it.Strings {
 		if v.Key == key {
 			return i, true
 		}
@@ -101,9 +101,9 @@ func (it Item) FindStringKey(key string) (int, bool) {
 
 // SetString set item's string attribute
 func (it Item) SetString(key string, value string) bool {
-	for i, v := range it.Strings.List {
+	for i, v := range it.Strings {
 		if v.Key == key {
-			it.Strings.List[i].Value = value
+			it.Strings[i].Value = value
 			return true
 		}
 	}

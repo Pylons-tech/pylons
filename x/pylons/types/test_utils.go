@@ -20,7 +20,7 @@ func GenItemInputList(names ...string) ItemInputList {
 			name,
 			DoubleInputParamList{},
 			LongInputParamList{},
-			StringInputParamList{[]StringInputParam{{"Name", name}}},
+			StringInputParamList{{"Name", name}},
 			FeeInputParam{
 				MinValue: 0,
 				MaxValue: 10000,

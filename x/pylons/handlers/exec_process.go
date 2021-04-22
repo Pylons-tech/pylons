@@ -184,17 +184,17 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if err != nil {
 			return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
 		}
-		for idx, dbl := range dblKeyValues.List {
+		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
 				return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
 			}
 			if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
-				originValue := targetItem.Doubles.List[dblKey].Value
+				originValue := targetItem.Doubles[dblKey].Value
 				upgradeAmount := dbl.Value
-				targetItem.Doubles.List[dblKey].Value.Add(originValue).Add(upgradeAmount)
+				targetItem.Doubles[dblKey].Value.Add(originValue).Add(upgradeAmount)
 			} else {
-				targetItem.Doubles.List[dblKey].Value = dbl.Value
+				targetItem.Doubles[dblKey].Value = dbl.Value
 			}
 		}
 	}
@@ -204,15 +204,15 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if err != nil {
 			return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
 		}
-		for idx, lng := range lngKeyValues.List {
+		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
 				return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
 			}
 			if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
-				targetItem.Longs.List[lngKey].Value += lng.Value
+				targetItem.Longs[lngKey].Value += lng.Value
 			} else {
-				targetItem.Longs.List[lngKey].Value = lng.Value
+				targetItem.Longs[lngKey].Value = lng.Value
 			}
 		}
 	}
@@ -222,12 +222,12 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 		if err != nil {
 			return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
 		}
-		for _, str := range strKeyValues.List {
+		for _, str := range strKeyValues {
 			strKey, ok := targetItem.FindStringKey(str.Key)
 			if !ok {
 				return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
 			}
-			targetItem.Strings.List[strKey].Value = str.Value
+			targetItem.Strings[strKey].Value = str.Value
 		}
 	}
 
@@ -258,16 +258,16 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 	variables[prefix+"transferFee"] = item.TransferFee
 
-	for _, dbli := range item.Doubles.List {
+	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
 		fl, _ := strconv.ParseFloat(dbli.Value.String(), 64)
 		variables[prefix+dbli.Key] = fl
 	}
-	for _, inti := range item.Longs.List {
+	for _, inti := range item.Longs {
 		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
 		variables[prefix+inti.Key] = inti.Value
 	}
-	for _, stri := range item.Strings.List {
+	for _, stri := range item.Strings {
 		varDefs = append(varDefs, decls.NewVar(prefix+stri.Key, decls.String))
 		variables[prefix+stri.Key] = stri.Value
 	}

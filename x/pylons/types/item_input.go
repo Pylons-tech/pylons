@@ -11,8 +11,8 @@ import (
 // MatchError checks if all the constraint match the given item
 func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 
-	if ii.Doubles.Params != nil {
-		for _, param := range ii.Doubles.Params {
+	if ii.Doubles != nil {
+		for _, param := range ii.Doubles {
 			double, ok := item.FindDouble(param.Key)
 			if !ok {
 				return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
@@ -24,8 +24,8 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		}
 	}
 
-	if ii.Longs.List != nil {
-		for _, param := range ii.Longs.List {
+	if ii.Longs != nil {
+		for _, param := range ii.Longs {
 			long, ok := item.FindLong(param.Key)
 			if !ok {
 				return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
@@ -37,8 +37,8 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		}
 	}
 
-	if ii.Strings.List != nil {
-		for _, param := range ii.Strings.List {
+	if ii.Strings != nil {
+		for _, param := range ii.Strings {
 			str, ok := item.FindString(param.Key)
 			if !ok {
 				return fmt.Errorf("%s key is not available on the item: item_id=%s", param.Key, item.ID)
@@ -53,7 +53,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		return fmt.Errorf("item transfer fee does not match: fee=%d range=%s", item.TransferFee, ii.TransferFee.String())
 	}
 
-	for _, param := range ii.Conditions.Doubles.Params {
+	for _, param := range ii.Conditions.Doubles {
 		double, err := ec.EvalFloat64(param.Key)
 		if err != nil {
 			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
@@ -69,7 +69,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		}
 	}
 
-	for _, param := range ii.Conditions.Longs.List {
+	for _, param := range ii.Conditions.Longs {
 		long, err := ec.EvalInt64(param.Key)
 		if err != nil {
 			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)
@@ -80,7 +80,7 @@ func (ii ItemInput) MatchError(item Item, ec CelEnvCollection) error {
 		}
 	}
 
-	for _, param := range ii.Conditions.Strings.List {
+	for _, param := range ii.Conditions.Strings {
 		str, err := ec.EvalString(param.Key)
 		if err != nil {
 			return fmt.Errorf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err)

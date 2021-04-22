@@ -320,16 +320,16 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 	variables[prefix+"transferFee"] = item.TransferFee
 
-	for _, dbli := range item.Doubles.List {
+	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
 		fl, _ := strconv.ParseFloat(dbli.Value.String(), 64)
 		variables[prefix+dbli.Key] = fl
 	}
-	for _, inti := range item.Longs.List {
+	for _, inti := range item.Longs {
 		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
 		variables[prefix+inti.Key] = inti.Value
 	}
-	for _, stri := range item.Strings.List {
+	for _, stri := range item.Strings {
 		varDefs = append(varDefs, decls.NewVar(prefix+stri.Key, decls.String))
 		variables[prefix+stri.Key] = stri.Value
 	}

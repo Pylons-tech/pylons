@@ -34,9 +34,8 @@ func TestListCookbook(t *testing.T) {
 			desiredError: "decoding bech32 failed: invalid index of 1",
 		},
 		"error check when not providing address": {
-			address:      "",
-			showError:    true,
-			desiredError: "no address is provided in path",
+			address:   "",
+			showError: false,
 		},
 		"list cookbook successful check": {
 			address:      sender1.String(),
@@ -53,6 +52,7 @@ func TestListCookbook(t *testing.T) {
 				},
 			)
 			if tc.showError {
+				require.Error(t, err)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.NoError(t, err)
