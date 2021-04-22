@@ -48,8 +48,6 @@ func getFloat(unk interface{}) (float64, error) {
 	}
 }
 
-type DoubleParamList []DoubleParam
-
 // Actualize creates a (key, value) list from ParamList
 func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it

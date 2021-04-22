@@ -1,7 +1,5 @@
 package types
 
-type StringParamList []StringParam
-
 // Actualize actualize string param using cel program
 func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
