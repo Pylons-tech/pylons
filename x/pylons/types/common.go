@@ -23,6 +23,7 @@ type StringParamList []StringParam
 type DoubleInputParamList []DoubleInputParam
 type LongInputParamList []LongInputParam
 type StringInputParamList []StringInputParam
+type WeightedOutputsList []WeightedOutputs
 
 type CoinInputList []CoinInput
 type ItemList []Item
