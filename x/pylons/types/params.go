@@ -61,7 +61,7 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 			val, err = ec.EvalFloat64(param.Program)
 			valDec, _ = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
 		} else {
-			valDec, err = DoubleWeightTable(param.WeightTable).Generate()
+			valDec, err = DoubleWeightTable(param.WeightRanges).Generate()
 		}
 		if err != nil {
 			return m, err
@@ -85,7 +85,7 @@ func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error
 		if len(param.Program) > 0 {
 			val, err = ec.EvalInt64(param.Program)
 		} else {
-			val, err = IntWeightTable(param.WeightTable).Generate()
+			val, err = IntWeightTable(param.WeightRanges).Generate()
 		}
 		if err != nil {
 			return m, err
