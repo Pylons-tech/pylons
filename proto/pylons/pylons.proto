@@ -40,16 +40,12 @@ message DoubleWeightRange {
   int64 Weight = 3;
 }
 
-message DoubleWeightTable  {
-  repeated DoubleWeightRange WeightRanges = 1 [(gogoproto.nullable) = false];
-}
-
 // LongParam describes the bounds on an item input/output parameter of type int64
 message LongParam {
   string Key = 1;
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
   string Rate = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
-  IntWeightTable WeightTable = 3 [(gogoproto.nullable) = false];
+  repeated IntWeightRange WeightTable = 3 [(gogoproto.nullable) = false];
   // When program is not empty, IntWeightTable is ignored
   string Program = 4;
 }
@@ -59,11 +55,6 @@ message IntWeightRange {
   int64 Lower = 1;
   int64 Upper = 2;
   int64 Weight = 3;
-}
-
-// IntWeightTable describes weight loot table that produce int value
-message IntWeightTable {
-  repeated IntWeightRange WeightRanges = 1 [(gogoproto.nullable) = false];
 }
 
 // StringInputParam describes the bounds on an item input/output parameter of type string
@@ -122,14 +113,14 @@ message StringParam {
 }
 
 // DoubleParam describes the bounds on an item input/output parameter of type float64
-message  DoubleParam  {
+message DoubleParam  {
   // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
   string Rate = 1 [
     (gogoproto.nullable) = false,
     (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"
   ];
   string Key = 2;
-  DoubleWeightTable WeightTable = 3 [(gogoproto.nullable) = false];
+  repeated DoubleWeightRange WeightTable = 3 [(gogoproto.nullable) = false];
   // When program is not empty, DoubleWeightTable is ignored
   string Program = 4;
 }

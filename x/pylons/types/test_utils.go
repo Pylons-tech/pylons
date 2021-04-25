@@ -80,7 +80,7 @@ func GenItemNameUpgradeParams(desItemName string) ItemModifyParams {
 func GenItemOnlyEntry(itemName string) ItemOutput {
 	item := NewItemOutput(
 		itemName,
-		DoubleParamList{{Key: "endurance", WeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+		DoubleParamList{{Key: "endurance", WeightTable: DoubleWeightTable{
 			{
 				Lower:  sdk.NewDec(100.00),
 				Upper:  sdk.NewDec(500.00),
@@ -91,11 +91,11 @@ func GenItemOnlyEntry(itemName string) ItemOutput {
 				Upper:  sdk.NewDec(800.00),
 				Weight: 2,
 			},
-		}}, Rate: sdk.NewDec(1.0)}},
+		}, Rate: sdk.NewDec(1.0)}},
 		LongParamList{{
 			Key:  "HP",
 			Rate: sdk.NewDec(1),
-			WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+			WeightTable: IntWeightTable{
 				{
 					Lower:  100,
 					Upper:  500,
@@ -107,7 +107,7 @@ func GenItemOnlyEntry(itemName string) ItemOutput {
 					Weight: 2,
 				},
 			}},
-		}},
+		},
 		StringParamList{{Key: "Name", Value: itemName, Rate: sdk.NewDec(1.0), Program: ""}},
 		1232,
 	)
@@ -209,13 +209,13 @@ func GenModifyParamsForLong(targetKey string, upgradeAmount int) ItemModifyParam
 		Longs: LongParamList{
 			{
 				Key: targetKey,
-				WeightTable: IntWeightTable{WeightRanges: []IntWeightRange{
+				WeightTable: IntWeightTable{
 					{
 						Lower:  int64(upgradeAmount),
 						Upper:  int64(upgradeAmount),
 						Weight: 1,
 					},
-				}},
+				},
 			},
 		},
 	}
@@ -227,13 +227,13 @@ func GenModifyParamsForDouble(targetKey string, upgradeAmount sdk.Dec) ItemModif
 		Doubles: DoubleParamList{
 			{
 				Key: targetKey,
-				WeightTable: DoubleWeightTable{WeightRanges: []DoubleWeightRange{
+				WeightTable: DoubleWeightTable{
 					{
 						Lower:  upgradeAmount,
 						Upper:  upgradeAmount,
 						Weight: 1,
 					},
-				}},
+				},
 			},
 		},
 	}

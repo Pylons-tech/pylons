@@ -30,6 +30,9 @@ type ItemList []Item
 type ItemInputList []ItemInput
 type TradeItemInputList []TradeItemInput
 
+type DoubleWeightTable []DoubleWeightRange
+type IntWeightTable []IntWeightRange
+
 // Tier defines the kind of cookbook this is
 type Tier struct {
 	Level int64
