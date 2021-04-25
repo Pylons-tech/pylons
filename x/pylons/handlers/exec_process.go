@@ -192,7 +192,7 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 			if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
 				originValue := targetItem.Doubles[dblKey].Value
 				upgradeAmount := dbl.Value
-				targetItem.Doubles[dblKey].Value.Add(originValue).Add(upgradeAmount)
+				targetItem.Doubles[dblKey].Value = originValue.Add(upgradeAmount)
 			} else {
 				targetItem.Doubles[dblKey].Value = dbl.Value
 			}
