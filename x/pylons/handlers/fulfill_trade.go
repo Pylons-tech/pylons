@@ -63,7 +63,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		if err = matchedItem.NewTradeError(); err != nil {
 			return nil, errInternal(fmt.Errorf("[%d]th item is not tradable: %s item_id=%s", i, err.Error(), matchedItem.ID))
 		}
-		totalItemTransferFee += matchedItem.GetTransferFee()
+		totalItemTransferFee += matchedItem.CalculateTransferFee()
 		matchedItems = append(matchedItems, matchedItem)
 	}
 	tradeSender, err := sdk.AccAddressFromBech32(trade.Sender)
@@ -104,7 +104,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", storedItem.ID))
 		}
 
-		totalItemTransferFee += storedItem.GetTransferFee()
+		totalItemTransferFee += storedItem.CalculateTransferFee()
 
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
@@ -168,7 +168,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		if totalItemTransferFee == 0 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}
-		feeForCB := totalFeeForCBOwners * item.GetTransferFee() / totalItemTransferFee
+		feeForCB := totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
 
 		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
@@ -207,7 +207,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		if totalItemTransferFee == 0 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}
-		feeForCB := totalFeeForCBOwners * item.GetTransferFee() / totalItemTransferFee
+		feeForCB := totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
 
 		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
