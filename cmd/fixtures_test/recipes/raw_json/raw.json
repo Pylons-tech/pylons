@@ -3,14 +3,14 @@
     "CoinInputs": [
       {
         "Coin": "pylon",
-        "Count": "1"
+        "Count": 1
       }
     ],
     "ItemInputs": [
         {
             "ID": "ii0",
             "Doubles": [{"Key": "attack", "MinValue": "1.0", "MaxValue": "10000000.0"}],
-            "Longs": [{"Key": "level", "MinValue": "1", "MaxValue": "10000000"}],
+            "Longs": [{"Key": "level", "MinValue": 1, "MaxValue": 10000000}],
             "Strings": [{"Key": "Name", "Value": "Angel sword"}]
         }
     ],
@@ -44,6 +44,6 @@
     "CookbookID": "raw-json-cb-1589853709",
     "Description": "test recipe from test suite",
     "Name": "Raw json test recipe",
-    "BlockInterval": "0",
+    "BlockInterval": 0,
     "Sender": "rj_account1"
   }

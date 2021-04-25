@@ -3,7 +3,7 @@
     "ID": "DE-double-empty-upgrader-type1",
     "CoinInputs":[{
         "Coin": "loudcoin",
-        "Count": "250"
+        "Count": 250
     }],    
     "ItemInputs":[
         {
@@ -32,5 +32,5 @@
     "Name": "DE's double empty upgrader type1 test recipe",
     "CookbookID": "DE-v0.0.0-1579053457",
     "Description": "this recipe is used to test double empty upgrader type1.",
-    "BlockInterval":"0"
+    "BlockInterval":0
 }

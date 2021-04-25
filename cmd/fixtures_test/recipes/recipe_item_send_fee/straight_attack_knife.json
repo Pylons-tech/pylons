@@ -22,5 +22,5 @@
   "Name": "Knife Generation Recipe",
   "CookbookID": "recipe-item-send-fee-1589853709",
   "Description": "this has to meet character limits lol",
-  "BlockInterval":"0"
+  "BlockInterval":0
 }

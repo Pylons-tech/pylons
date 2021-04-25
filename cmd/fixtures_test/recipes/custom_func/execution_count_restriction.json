@@ -29,5 +29,5 @@
     "Name": "Execution Count Restriction Recipe",
     "CookbookID": "custom-func-1589853709",
     "Description": "this recipe can be used only once to restore health.",
-    "BlockInterval":"0"
+    "BlockInterval":0
 }

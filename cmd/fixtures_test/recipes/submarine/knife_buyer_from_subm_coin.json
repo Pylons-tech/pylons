@@ -3,7 +3,7 @@
     "CoinInputs":[
         {
             "Coin": "submcoin",
-            "Count": "1"
+            "Count": 1
         }
     ],
     "ItemInputs": [],
@@ -27,5 +27,5 @@
     "Name": "Knife buyer recipe from submcoin",
     "CookbookID": "submarine-1589853709",
     "Description": "this has to meet character limits lol",
-    "BlockInterval":"0"
+    "BlockInterval":0
 }

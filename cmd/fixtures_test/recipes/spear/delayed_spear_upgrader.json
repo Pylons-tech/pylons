@@ -28,5 +28,5 @@
     "Name": "Delayed Spear Upgrade Recipe",
     "CookbookID": "spearcookbook-1589853709",
     "Description": "this recipe is delayed upgrader, used to upgrade spear which can update all versions of spear.",
-    "BlockInterval":"2"
+    "BlockInterval":2
 }

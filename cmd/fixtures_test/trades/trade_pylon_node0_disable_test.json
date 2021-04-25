@@ -3,7 +3,7 @@
     "CoinInputs":[
         {
             "Coin": "pylon",
-            "Count": "10"
+            "Count": 10
         }
     ],
     "ItemInputRefs": [],

@@ -10,5 +10,5 @@
     "Name": "DE's no entries type1 test recipe",
     "CookbookID": "DE-v0.0.0-1579053457",
     "Description": "this recipe is used to test no entries type1.",
-    "BlockInterval":"0"
+    "BlockInterval":0
 }

@@ -28,5 +28,5 @@
     "Name": "Growing HP Character Health Restore Recipe",
     "CookbookID": "custom-func-1589853709",
     "Description": "this recipe is used to restore character's health using timed field.",
-    "BlockInterval":"2"
+    "BlockInterval": 2
 }

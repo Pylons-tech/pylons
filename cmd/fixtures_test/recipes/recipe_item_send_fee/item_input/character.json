@@ -1,6 +1,6 @@
 {
     "Doubles": [{"Key": "attack", "MinValue": "1", "MaxValue": "2000"}, {"Key": "Mana", "MinValue": "1", "MaxValue": "2000"}, {"Key": "MinMana", "MinValue": "1", "MaxValue": "2000"}],
-    "Longs": [{"Key": "HP", "MinValue": "1", "MaxValue": "2000"}, {"Key": "MaxHP", "MinValue": "1", "MaxValue": "2000"}],
+    "Longs": [{"Key": "HP", "MinValue": 1, "MaxValue": 2000}, {"Key": "MaxHP", "MinValue": 1, "MaxValue": 2000}],
     "Strings": [{"Key": "Name", "Value": "RecipeItemSendFeeTestCharacter"}],
-    "TransferFee": {"MinValue": "1", "MaxValue": "2000"}
+    "TransferFee": {"MinValue": 1, "MaxValue": 2000}
 }

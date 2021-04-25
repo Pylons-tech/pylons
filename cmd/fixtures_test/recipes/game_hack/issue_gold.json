@@ -22,5 +22,5 @@
   "Name": "GameHack's issue gold recipe",
   "CookbookID": "game-hack-1589853709",
   "Description": "this recipe is used to issue gold on GameHack.",
-  "BlockInterval": "0"
+  "BlockInterval": 0
 }
