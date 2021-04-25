@@ -10,7 +10,7 @@
         {
             "Rate":"1.0",
             "Key":"level",
-            "Program": 1
+            "Program": "1"
         }
     ],
     "Strings":[{ "Key":"Name", "Value":"Angel sword", "Rate":"1.0" }]

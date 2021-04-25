@@ -19,7 +19,7 @@
     "Longs":[
         {
             "Key":"HP",
-            "Rate":"",
+            "Rate":"1.0",
             "WeightRanges":[
                 {
                     "Lower":100,
