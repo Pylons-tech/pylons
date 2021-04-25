@@ -6,6 +6,8 @@ import (
 	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/gogo/protobuf/proto"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
@@ -68,8 +70,15 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 			WaitOneBlockWithErrorCheck(t)
 
 			txHandleResBytes := GetTxHandleResult(txhash, t)
+			txMsgData := &sdk.TxMsgData{
+				Data: make([]*sdk.MsgData, 0, 1),
+			}
+			err = proto.Unmarshal(txHandleResBytes, txMsgData)
+			t.MustNil(err)
+			t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+			t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateRecipe{}).Type(), "MsgType should be accurate")
 			resp := msgs.MsgCreateRecipeResponse{}
-			err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+			err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.RecipeID != "", "recipe id should exist")
 		})

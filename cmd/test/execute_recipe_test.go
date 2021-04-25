@@ -5,8 +5,8 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
@@ -47,8 +47,10 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			MockAccount(rcpExecutorKey, t) // mock account with initial balance
 			guid := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
 
-			cbOwnerAccBalance := inttestSDK.GetAccountBalanceFromAddr(cbOwnerKey, t)
-			rcpExecutorBalance := inttestSDK.GetAccountBalanceFromAddr(rcpExecutorKey, t)
+			cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
+			cbOwnerAccBalance := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAddr, t)
+			rcpExecutorBalance := inttestSDK.GetAccountBalanceFromAddr(rcpExecutorAddr, t)
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.WithFields(testing.Fields{

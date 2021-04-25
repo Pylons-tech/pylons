@@ -40,9 +40,9 @@ func TestQueriersItemsBySender(t *testing.T) {
 		},
 		"error check when not providing sender": {
 			sender:        "",
-			desiredError:  "no sender is provided in path",
-			desiredLength: 0,
-			showError:     true,
+			desiredError:  "",
+			desiredLength: 1,
+			showError:     false,
 		},
 		"sender with no item": {
 			sender:        sender2.String(),

@@ -2,6 +2,7 @@ package inttest
 
 import (
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/gogo/protobuf/proto"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
@@ -33,7 +34,8 @@ func MockAccount(key string, t *testing.T) {
 	}).MustNil(err, "error creating account on chain")
 
 	// fetch txhash from result log
-	caTxHash := inttestSDK.GetTxHashFromLog(result)
+	caTxHash, err := inttestSDK.GetTxHashFromJson(result)
+	t.MustNil(err)
 	t.MustTrue(caTxHash != "", "error fetching txhash from result")
 	t.WithFields(testing.Fields{
 		"txhash": caTxHash,
@@ -110,8 +112,15 @@ func MockCookbook(ownerKey string, createNew bool, t *testing.T) string {
 	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateCookbook{}).Type(), "MsgType should be accurate")
 	resp := msgs.MsgCreateCookbookResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	return resp.CookbookID
 }
@@ -222,8 +231,15 @@ func MockDetailedRecipeGUID(
 	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateRecipe{}).Type(), "MsgType should be accurate")
 	resp := msgs.MsgCreateRecipeResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
 	return resp.RecipeID
@@ -238,11 +254,9 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 		types.DoubleKeyValueList{},
 		types.LongKeyValueList{},
 		types.StringKeyValueList{
-			List: []types.StringKeyValue{
-				{
-					Key:   "Name",
-					Value: name,
-				},
+			{
+				Key:   "Name",
+				Value: name,
 			},
 		},
 		sdkAddr.String(),
@@ -257,8 +271,15 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgFiatItem{}).Type(), "MsgType should be accurate")
 	resp := msgs.MsgFiatItemResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
 	return resp.ItemID
@@ -289,8 +310,15 @@ func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testin
 	WaitOneBlockWithErrorCheck(t)
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgFiatItem{}).Type(), "MsgType should be accurate")
 	resp := msgs.MsgFiatItemResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
 	return resp.ItemID
@@ -320,9 +348,7 @@ func MockDetailedTradeGUID(
 		t.WithFields(testing.Fields{
 			"item_guid": outputItemID,
 		}).MustNil(err, "error getting item with target guid")
-		outputItems = types.ItemList{
-			List: []types.Item{outputItem},
-		}
+		outputItems = types.ItemList{outputItem}
 	}
 
 	trdCMsg := msgs.NewMsgCreateTrade(

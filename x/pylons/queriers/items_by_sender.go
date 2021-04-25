@@ -16,15 +16,17 @@ const (
 
 // ItemsBySender returns all items based on the sender address
 func (querier *querierServer) ItemsBySender(ctx context.Context, req *types.ItemsBySenderRequest) (*types.ItemsBySenderResponse, error) {
-	if req.Sender == "" {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no sender is provided in path")
+	var err error
+	var senderAddr sdk.AccAddress
+
+	if req.Sender != "" {
+		senderAddr, err = sdk.AccAddressFromBech32(req.Sender)
+
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
 	}
 
-	senderAddr, err := sdk.AccAddressFromBech32(req.Sender)
-
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
 	items, err := querier.Keeper.GetItemsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
 
 	if err != nil {

@@ -62,7 +62,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 			if tc.inputPylon > 0 {
 				inputCoins = types.GenCoinInputList("pylon", tc.inputPylon)
 			} else {
-				inputCoins.Coins = nil
+				inputCoins = nil
 			}
 
 			trdMsg := msgs.NewMsgCreateTrade(
