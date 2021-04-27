@@ -5,12 +5,11 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
-
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 )
 
 func TestUpdateItemStringViaCLI(originT *originT.T) {

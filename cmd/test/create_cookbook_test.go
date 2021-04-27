@@ -5,7 +5,7 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
