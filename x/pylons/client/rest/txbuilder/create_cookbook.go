@@ -5,10 +5,9 @@ package txbuilder
 import (
 	"net/http"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
@@ -22,7 +21,7 @@ func CreateCookbookTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgCreateCookbook(
+		msg := types.NewMsgCreateCookbook(
 			"name",
 			"",
 			"this has to meet character limits lol",
@@ -30,7 +29,7 @@ func CreateCookbookTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			"1.0.0",
 			"example@example.com",
 			0,
-			msgs.DefaultCostPerBlock,
+			types.DefaultCostPerBlock,
 			sender.String(),
 		)
 

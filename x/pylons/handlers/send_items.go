@@ -7,13 +7,12 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // SendItems is used to send items between people
-func (k msgServer) SendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs.MsgSendItemsResponse, error) {
+func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*types.MsgSendItemsResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -65,7 +64,7 @@ func (k msgServer) SendItems(ctx context.Context, msg *msgs.MsgSendItems) (*msgs
 		}
 	}
 
-	return &msgs.MsgSendItemsResponse{
+	return &types.MsgSendItemsResponse{
 		Message: "successfully sent the items",
 		Status:  "Success",
 	}, nil

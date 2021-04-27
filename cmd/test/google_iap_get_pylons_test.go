@@ -9,7 +9,6 @@ import (
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -98,7 +97,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 
 			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
 
-			msgGoogleIAPGetPylons := msgs.NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, getPylonsAccInfo.Address)
+			msgGoogleIAPGetPylons := types.NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, getPylonsAccInfo.Address)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
 				&msgGoogleIAPGetPylons,
 				getPylonsKey,

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -14,14 +13,14 @@ const (
 )
 
 // MockCookbook mock cookbook
-func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) *msgs.MsgCreateCookbookResponse {
+func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) *types.MsgCreateCookbookResponse {
 	return MockCookbookByName(tci, sender, "cookbook-00001")
 }
 
 // MockCookbookByName mock cookbook with specific name
-func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) *msgs.MsgCreateCookbookResponse {
+func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) *types.MsgCreateCookbookResponse {
 	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender.String())
+	msg := types.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, types.DefaultCostPerBlock, sender.String())
 	cbResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		panic(err.Error())
@@ -40,8 +39,8 @@ func MockRecipe(
 	cbID string,
 	blockInterval int64,
 	sender sdk.AccAddress,
-) *msgs.MsgCreateRecipeResponse {
-	newRcpMsg := msgs.NewMsgCreateRecipe(rcpName, cbID, "", "this has to meet character limits",
+) *types.MsgCreateRecipeResponse {
+	newRcpMsg := types.NewMsgCreateRecipe(rcpName, cbID, "", "this has to meet character limits",
 		coinInputList,
 		itemInputList,
 		entries,
@@ -148,7 +147,7 @@ func MockPopularRecipe(
 	rcpName string,
 	cbID string,
 	sender sdk.AccAddress,
-) *msgs.MsgCreateRecipeResponse {
+) *types.MsgCreateRecipeResponse {
 	ciL, iiL, entries, outputs, bI := GetParamsForPopularRecipe(hfrt)
 	return MockRecipe(
 		tci, rcpName,
@@ -165,8 +164,8 @@ func MockExecution(
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
 	itemIDs []string,
-) (*msgs.MsgExecuteRecipeResponse, error) {
-	msg := msgs.NewMsgExecuteRecipe(rcpID, sender.String(), itemIDs)
+) (*types.MsgExecuteRecipeResponse, error) {
+	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), itemIDs)
 	result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err
@@ -182,8 +181,8 @@ func MockTrade(
 	coinOutputs sdk.Coins,
 	itemOutputs types.ItemList,
 	sender sdk.AccAddress,
-) (*msgs.MsgCreateTradeResponse, error) {
-	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender.String())
+) (*types.MsgCreateTradeResponse, error) {
+	msg := types.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender.String())
 	result, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err

@@ -1,4 +1,4 @@
-package msgs
+package types
 
 import (
 	"bytes"
@@ -7,7 +7,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -123,91 +122,91 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 
 	cases := map[string]struct {
-		itemInputs   types.ItemInputList
-		entries      types.EntriesList
-		outputs      types.WeightedOutputsList
+		itemInputs   ItemInputList
+		entries      EntriesList
+		outputs      WeightedOutputsList
 		sender       sdk.AccAddress
 		shortDesc    bool
 		showError    bool
 		desiredError string
 	}{
 		"item input ID validation error": { // item input ID validation error
-			itemInputs:   types.ItemInputList{{ID: "123"}},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{{ID: "123"}},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "ID is not empty nor fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=123",
 		},
 		"item input ID validation": { // item input ID validation
-			itemInputs:   types.ItemInputList{{ID: "heli_knife_lv1"}},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{{ID: "heli_knife_lv1"}},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    false,
 			desiredError: "",
 		},
 		"same item input ID check error": { // same item input ID check error
-			itemInputs:   types.ItemInputList{{ID: "a123"}, {ID: "a123"}},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{{ID: "a123"}, {ID: "a123"}},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "item input with same ID available: ID=a123",
 		},
 		"entry ID validation error": { // entry ID validation error
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{CoinOutputs: []types.CoinOutput{{ID: "123"}}},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{CoinOutputs: []CoinOutput{{ID: "123"}}},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=123",
 		},
 		"length of program code shouldn't be 0": { // length of program code shouldn't be 0
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{CoinOutputs: []types.CoinOutput{{ID: "a123"}}},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{CoinOutputs: []CoinOutput{{ID: "a123"}}},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "length of program code shouldn't be 0",
 		},
 		"invalid item input ref": { // invalid item input ref
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				ItemModifyOutputs: []types.ItemModifyOutput{{ID: "a123", ItemInputRef: "aaabbb"}},
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				ItemModifyOutputs: []ItemModifyOutput{{ID: "a123", ItemInputRef: "aaabbb"}},
 			},
-			outputs:      types.WeightedOutputsList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "Invalid item input ref found that does not exist in item inputs",
 		},
 		"entry same ID available error": { // entry same ID available error
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				CoinOutputs: []types.CoinOutput{
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				CoinOutputs: []CoinOutput{
 					{ID: "a123", Coin: "abc", Count: "1"},
 					{ID: "a123", Coin: "abc", Count: "2"},
 				},
 			},
-			outputs:      types.WeightedOutputsList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "entry with same ID available: ID=a123",
 		},
 		"coin output denom validation error": { // coin output denom validation error
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "123$", Count: "1"}},
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				CoinOutputs: []CoinOutput{{ID: "a123", Coin: "123$", Count: "1"}},
 			},
-			outputs:      types.WeightedOutputsList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "invalid denom: 123$",
 		},
 		"does not exist entry ID use on outputs": { // does not exist entry ID use on outputs
-			itemInputs: types.ItemInputList{},
-			entries:    types.EntriesList{},
-			outputs: types.WeightedOutputsList{{
+			itemInputs: ItemInputList{},
+			entries:    EntriesList{},
+			outputs: WeightedOutputsList{{
 				EntryIDs: []string{"aaabbb"},
 				Weight:   "1",
 			}},
@@ -216,11 +215,11 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 			desiredError: "no entry with the ID aaabbb available",
 		},
 		"double use of entries within single output": { // double use of entries within single output
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				CoinOutputs: []CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
 			},
-			outputs: types.WeightedOutputsList{{
+			outputs: WeightedOutputsList{{
 				EntryIDs: []string{"a123", "a123"},
 				Weight:   "1",
 			}},
@@ -229,13 +228,13 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 			desiredError: "double use of entries within single output",
 		},
 		"double use of item input within single output result": { // double use of item input within single output result
-			itemInputs: types.ItemInputList{{ID: "input1"}},
-			entries: types.EntriesList{
-				ItemModifyOutputs: []types.ItemModifyOutput{
+			itemInputs: ItemInputList{{ID: "input1"}},
+			entries: EntriesList{
+				ItemModifyOutputs: []ItemModifyOutput{
 					{ID: "a1", ItemInputRef: "input1"},
 					{ID: "a2", ItemInputRef: "input1"},
 				}},
-			outputs: types.WeightedOutputsList{{
+			outputs: WeightedOutputsList{{
 				EntryIDs: []string{"a1", "a2"},
 				Weight:   "1",
 			}},
@@ -244,17 +243,17 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 			desiredError: "double use of item input within single output result: invalid request",
 		},
 		"empty sender validation1": { // empty sender validation1
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       nil,
 			showError:    true,
 			desiredError: "invalid address",
 		},
 		"empty sender validation2": { // empty sender validation2
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sdk.AccAddress{},
 			showError:    true,
 			desiredError: "invalid address",
@@ -273,7 +272,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 				desc = ""
 			}
 			msg := NewMsgCreateRecipe("existing recipe", "CookbookID", "", desc,
-				types.GenCoinInputList("wood", 5),
+				GenCoinInputList("wood", 5),
 				tc.itemInputs,
 				tc.entries,
 				tc.outputs,
@@ -297,9 +296,9 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 
 	cases := map[string]struct {
 		recipeID     string
-		itemInputs   types.ItemInputList
-		entries      types.EntriesList
-		outputs      types.WeightedOutputsList
+		itemInputs   ItemInputList
+		entries      EntriesList
+		outputs      WeightedOutputsList
 		sender       sdk.AccAddress
 		shortDesc    bool
 		showError    bool
@@ -307,106 +306,106 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 	}{
 		"successful update recipe": {
 			recipeID:   "recipeID",
-			itemInputs: types.GenItemInputList("Raichu"),
-			entries:    types.GenEntries("chair", "Raichu"),
-			outputs:    types.GenOneOutput("chair", "Raichu"),
+			itemInputs: GenItemInputList("Raichu"),
+			entries:    GenEntries("chair", "Raichu"),
+			outputs:    GenOneOutput("chair", "Raichu"),
 			sender:     sender,
 			showError:  false,
 		},
 		"recipe ID validation error": {
 			recipeID:     "",
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "recipe id is required for this message type",
 		},
 		"item input ID validation error": { // item input ID validation error
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{{ID: "123"}},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{{ID: "123"}},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "ID is not empty nor fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=123",
 		},
 		"item input ID validation": { // item input ID validation
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{{ID: "heli_knife_lv1"}},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{{ID: "heli_knife_lv1"}},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    false,
 			desiredError: "",
 		},
 		"same item input ID check error": { // same item input ID check error
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{{ID: "a123"}, {ID: "a123"}},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{{ID: "a123"}, {ID: "a123"}},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "item input with same ID available: ID=a123",
 		},
 		"entry ID validation error": { // entry ID validation error
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{CoinOutputs: []types.CoinOutput{{ID: "123"}}},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{CoinOutputs: []CoinOutput{{ID: "123"}}},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=123",
 		},
 		"length of program code shouldn't be 0": { // length of program code shouldn't be 0
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{CoinOutputs: []types.CoinOutput{{ID: "a123"}}},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{CoinOutputs: []CoinOutput{{ID: "a123"}}},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "length of program code shouldn't be 0",
 		},
 		"invalid item input ref": { // invalid item input ref
 			recipeID:   "recipeID",
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				ItemModifyOutputs: []types.ItemModifyOutput{{ID: "a123", ItemInputRef: "aaabbb"}},
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				ItemModifyOutputs: []ItemModifyOutput{{ID: "a123", ItemInputRef: "aaabbb"}},
 			},
-			outputs:      types.WeightedOutputsList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "Invalid item input ref found that does not exist in item inputs",
 		},
 		"entry same ID available error": { // entry same ID available error
 			recipeID:   "recipeID",
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				CoinOutputs: []types.CoinOutput{
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				CoinOutputs: []CoinOutput{
 					{ID: "a123", Coin: "abc", Count: "1"},
 					{ID: "a123", Coin: "abc", Count: "2"},
 				}},
-			outputs:      types.WeightedOutputsList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "entry with same ID available: ID=a123",
 		},
 		"coin output denom validation error": { // coin output denom validation error
 			recipeID:   "recipeID",
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "123$", Count: "1"}},
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				CoinOutputs: []CoinOutput{{ID: "a123", Coin: "123$", Count: "1"}},
 			},
-			outputs:      types.WeightedOutputsList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sender,
 			showError:    true,
 			desiredError: "invalid denom: 123$",
 		},
 		"does not exist entry ID use on outputs": { // does not exist entry ID use on outputs
 			recipeID:   "recipeID",
-			itemInputs: types.ItemInputList{},
-			entries:    types.EntriesList{},
-			outputs: types.WeightedOutputsList{{
+			itemInputs: ItemInputList{},
+			entries:    EntriesList{},
+			outputs: WeightedOutputsList{{
 				EntryIDs: []string{"aaabbb"},
 				Weight:   "1",
 			}},
@@ -416,11 +415,11 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 		},
 		"double use of entries within single output": { // double use of entries within single output
 			recipeID:   "recipeID",
-			itemInputs: types.ItemInputList{},
-			entries: types.EntriesList{
-				CoinOutputs: []types.CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
+			itemInputs: ItemInputList{},
+			entries: EntriesList{
+				CoinOutputs: []CoinOutput{{ID: "a123", Coin: "aaa", Count: "1"}},
 			},
-			outputs: types.WeightedOutputsList{{
+			outputs: WeightedOutputsList{{
 				EntryIDs: []string{"a123", "a123"},
 				Weight:   "1",
 			}},
@@ -430,13 +429,13 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 		},
 		"double use of item input within single output result": { // double use of item input within single output result
 			recipeID:   "recipeID",
-			itemInputs: types.ItemInputList{{ID: "input1"}},
-			entries: types.EntriesList{
-				ItemModifyOutputs: []types.ItemModifyOutput{
+			itemInputs: ItemInputList{{ID: "input1"}},
+			entries: EntriesList{
+				ItemModifyOutputs: []ItemModifyOutput{
 					{ID: "a1", ItemInputRef: "input1"},
 					{ID: "a2", ItemInputRef: "input1"},
 				}},
-			outputs: types.WeightedOutputsList{{
+			outputs: WeightedOutputsList{{
 				EntryIDs: []string{"a1", "a2"},
 				Weight:   "1",
 			}},
@@ -446,18 +445,18 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 		},
 		"empty sender validation1": { // empty sender validation1
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       nil,
 			showError:    true,
 			desiredError: "invalid address",
 		},
 		"empty sender validation2": { // empty sender validation2
 			recipeID:     "recipeID",
-			itemInputs:   types.ItemInputList{},
-			entries:      types.EntriesList{},
-			outputs:      types.WeightedOutputsList{},
+			itemInputs:   ItemInputList{},
+			entries:      EntriesList{},
+			outputs:      WeightedOutputsList{},
 			sender:       sdk.AccAddress{},
 			showError:    true,
 			desiredError: "invalid address",
@@ -481,7 +480,7 @@ func TestUpdateRecipeValidateBasic(t *testing.T) {
 				"existing recipe",
 				"CookbookID",
 				desc,
-				types.GenCoinInputList("wood", 5),
+				GenCoinInputList("wood", 5),
 				tc.itemInputs,
 				tc.entries,
 				tc.outputs,
@@ -510,7 +509,7 @@ func TestGetPylonsValidateBasic(t *testing.T) {
 		desiredError string
 	}{
 		"successful check": {
-			amount:       types.NewPylon(500),
+			amount:       NewPylon(500),
 			requester:    sender,
 			showError:    false,
 			desiredError: "",
@@ -528,7 +527,7 @@ func TestGetPylonsValidateBasic(t *testing.T) {
 			desiredError: "Amount cannot be less than 0/negative: unknown request",
 		},
 		"empty address check": {
-			amount:       types.NewPylon(500),
+			amount:       NewPylon(500),
 			requester:    sdk.AccAddress{},
 			showError:    true,
 			desiredError: "invalid address",
@@ -600,10 +599,10 @@ func TestCreateTradeGetSignBytesItemInput(t *testing.T) {
 	sdkAddr, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	require.NoError(t, err)
 	msg := NewMsgCreateTrade(
-		types.CoinInputList{},
-		types.GenTradeItemInputList("UTestCreateTrade-CB-001", []string{"Raichu"}),
-		types.NewPylon(10),
-		types.ItemList{},
+		CoinInputList{},
+		GenTradeItemInputList("UTestCreateTrade-CB-001", []string{"Raichu"}),
+		NewPylon(10),
+		ItemList{},
 		"Test CreateTrade GetSignBytes",
 		sdkAddr.String())
 	err = msg.ValidateBasic()
@@ -651,14 +650,14 @@ func TestCreateTradeGetSignBytesUnorderedCoinInputs(t *testing.T) {
 	sdkAddr, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 	require.NoError(t, err)
 	msg := NewMsgCreateTrade(
-		types.CoinInputList{
+		CoinInputList{
 			{Coin: "aaaa", Count: 100},
 			{Coin: "zzzz", Count: 100},
 			{Coin: "cccc", Count: 100},
 		},
-		types.TradeItemInputList{},
-		types.NewPylon(10),
-		types.ItemList{},
+		TradeItemInputList{},
+		NewPylon(10),
+		ItemList{},
 		"Test CreateTrade GetSignBytes",
 		sdkAddr.String())
 	err = msg.ValidateBasic()

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -43,7 +42,7 @@ func TestHandlerMsgSendCoins(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgSendCoins(tc.amount, tc.fromAddress.String(), tc.toAddress.String())
+			msg := types.NewMsgSendCoins(tc.amount, tc.fromAddress.String(), tc.toAddress.String())
 			_, err := tci.PlnH.SendCoins(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {

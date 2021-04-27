@@ -1,7 +1,7 @@
 package tx
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -23,7 +23,7 @@ func CreateAccount() *cobra.Command {
 
 			addr := clientCtx.GetFromAddress()
 
-			createTx := &msgs.MsgCreateAccount{
+			createTx := &types.MsgCreateAccount{
 				Requester: addr.String(),
 			}
 

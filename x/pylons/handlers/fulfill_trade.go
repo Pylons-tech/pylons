@@ -7,14 +7,13 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // FulfillTrade is used to fulfill a trade
-func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) (*msgs.MsgFulfillTradeResponse, error) {
+func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade) (*types.MsgFulfillTradeResponse, error) {
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -240,7 +239,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *msgs.MsgFulfillTrade) 
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgFulfillTradeResponse{
+	return &types.MsgFulfillTradeResponse{
 		Message: "successfully fulfilled the trade",
 		Status:  "Success",
 	}, nil

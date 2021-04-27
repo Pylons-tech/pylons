@@ -6,7 +6,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -125,7 +124,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 				require.NoError(t, err)
 			}
 
-			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1.String())
+			msg := types.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1.String())
 			result, err := tci.PlnH.UpdateItemString(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {

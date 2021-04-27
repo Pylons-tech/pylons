@@ -1,11 +1,12 @@
 package txbuilder
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
@@ -25,7 +26,7 @@ func SendItemsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 
 		itemIDs := []string{"cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2q3d6b4e7b-5589-4a65-88ad-7262a75b9782", "cosmos1fdwv4q20wm0ar7y8q2ak8vxqup89n33sp4hp2qab539c55-d98a-4ede-9803-a36b93505bd6"}
 
-		msg := msgs.NewMsgSendItems(itemIDs, sender.String(), recv.String())
+		msg := types.NewMsgSendItems(itemIDs, sender.String(), recv.String())
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

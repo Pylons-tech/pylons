@@ -3,7 +3,7 @@ package tx
 import (
 	"encoding/json"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -13,7 +13,7 @@ import (
 
 // FiatItem is the client cli command for creating item
 func FiatItem() *cobra.Command {
-	var msgFI = &msgs.MsgFiatItem{}
+	var msgFI = &types.MsgFiatItem{}
 
 	cmd := &cobra.Command{
 		Use:   "fiat-item [args]",

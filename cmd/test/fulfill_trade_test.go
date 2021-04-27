@@ -11,7 +11,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -201,7 +200,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		itemIDs = []string{MockItemGUID(useCBID, tradeFulfillerKey, tc.inputItemName, t)}
 	}
 
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerBalance.Address, itemIDs)
+	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerBalance.Address, itemIDs)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 	if err != nil {
 		TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
@@ -225,8 +224,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgFulfillTrade{}).Type(), "MsgType should be accurate")
-	ffTrdResp := msgs.MsgFulfillTradeResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgFulfillTrade{}).Type(), "MsgType should be accurate")
+	ffTrdResp := types.MsgFulfillTradeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &ffTrdResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.expectedStatus, tc.expectedMessage, t)

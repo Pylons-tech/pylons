@@ -8,13 +8,12 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // UpdateItemString is used to transact pylons between people
-func (k msgServer) UpdateItemString(ctx context.Context, msg *msgs.MsgUpdateItemString) (*msgs.MsgUpdateItemStringResponse, error) {
+func (k msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateItemString) (*types.MsgUpdateItemStringResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -55,7 +54,7 @@ func (k msgServer) UpdateItemString(ctx context.Context, msg *msgs.MsgUpdateItem
 		return nil, errInternal(errors.New("Error updating item inside keeper"))
 	}
 
-	return &msgs.MsgUpdateItemStringResponse{
+	return &types.MsgUpdateItemStringResponse{
 		Message: "successfully updated the item field",
 		Status:  "Success",
 	}, nil

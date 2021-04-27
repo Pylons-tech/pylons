@@ -2,13 +2,13 @@ package handlers
 
 import (
 	"context"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // FiatItem is used to create item within 1 block execution
-func (k msgServer) FiatItem(ctx context.Context, msg *msgs.MsgFiatItem) (*msgs.MsgFiatItemResponse, error) {
+func (k msgServer) FiatItem(ctx context.Context, msg *types.MsgFiatItem) (*types.MsgFiatItemResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -33,7 +33,7 @@ func (k msgServer) FiatItem(ctx context.Context, msg *msgs.MsgFiatItem) (*msgs.M
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgFiatItemResponse{
+	return &types.MsgFiatItemResponse{
 		ItemID:  item.ID,
 		Message: "successfully created an item",
 		Status:  "Success",

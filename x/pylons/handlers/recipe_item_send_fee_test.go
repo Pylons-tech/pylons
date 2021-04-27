@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -122,7 +121,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 				}
 			}
 
-			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
 			result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {

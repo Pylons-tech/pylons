@@ -9,7 +9,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -55,7 +54,7 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
 			cbOwnerAccInfo := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAddr, t)
 			itemSenderSdkAddr := GetSDKAddressFromKey(itemSenderKey, t)
-			sendItmMsg := msgs.NewMsgSendItems(itemIDs, itemSenderSdkAddr.String(), cbOwnerAccInfo.Address)
+			sendItmMsg := types.NewMsgSendItems(itemIDs, itemSenderSdkAddr.String(), cbOwnerAccInfo.Address)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &sendItmMsg, itemSenderKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)
@@ -71,8 +70,8 @@ func TestSendItemsViaCLI(originT *originT.T) {
 			err = proto.Unmarshal(txHandleResBytes, txMsgData)
 			t.MustNil(err)
 			t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-			t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgSendItems{}).Type(), "MsgType should be accurate")
-			resp := msgs.MsgSendItemsResponse{}
+			t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgSendItems{}).Type(), "MsgType should be accurate")
+			resp := types.MsgSendItemsResponse{}
 			err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully sent the items", t)

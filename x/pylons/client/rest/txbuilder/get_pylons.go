@@ -2,13 +2,13 @@ package txbuilder
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"net/http"
 
 	"encoding/hex"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
@@ -33,7 +33,7 @@ func GetPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		msg := msgs.NewMsgGetPylons(types.NewPylon(500), addr.String())
+		msg := types.NewMsgGetPylons(types.NewPylon(500), addr.String())
 		txf := tx.Factory{}.
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)

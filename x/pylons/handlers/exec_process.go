@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/cel-go/cel"
@@ -25,7 +24,7 @@ type ExecProcess struct {
 }
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
-func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg *msgs.MsgExecuteRecipe) error {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg *types.MsgExecuteRecipe) error {
 	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}

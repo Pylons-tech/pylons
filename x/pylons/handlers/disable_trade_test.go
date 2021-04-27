@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/uuid"
@@ -25,7 +24,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	id3 := uuid.New()
 	id4 := uuid.New()
 
-	cookbookMsg := msgs.NewMsgCreateCookbook(
+	cookbookMsg := types.NewMsgCreateCookbook(
 		"cookbook-0001",
 		"cookbook-id-0001",
 		"this has to meet character limits",
@@ -33,7 +32,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 		"1.0.0",
 		"example@example.com",
 		1,
-		msgs.DefaultCostPerBlock,
+		types.DefaultCostPerBlock,
 		sender.String(),
 	)
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
@@ -114,7 +113,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 	for name, tc := range cases {
 		t.Run(name, func(t *testing.T) {
 
-			delTrdMsg := msgs.NewMsgDisableTrade(tc.tradeID, tc.sender.String())
+			delTrdMsg := types.NewMsgDisableTrade(tc.tradeID, tc.sender.String())
 			_, err := tci.PlnH.DisableTrade(sdk.WrapSDKContext(tci.Ctx), &delTrdMsg)
 			if tc.showError == false {
 				trd, _ := tci.PlnK.GetTrade(tci.Ctx, tc.tradeID)

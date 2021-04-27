@@ -6,7 +6,6 @@ import (
 	"errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -25,7 +24,7 @@ type ExecuteRecipeScheduleOutput struct {
 }
 
 // ExecuteRecipe is used to execute a recipe
-func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe) (*msgs.MsgExecuteRecipeResponse, error) {
+func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -83,7 +82,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		return &msgs.MsgExecuteRecipeResponse{
+		return &types.MsgExecuteRecipeResponse{
 			Message: "scheduled the recipe",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -104,7 +103,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *msgs.MsgExecuteRecipe
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgExecuteRecipeResponse{
+	return &types.MsgExecuteRecipeResponse{
 		Message: "successfully executed the recipe",
 		Status:  "Success",
 		Output:  outputSTR,

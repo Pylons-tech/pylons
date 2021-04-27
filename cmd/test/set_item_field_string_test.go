@@ -5,12 +5,12 @@ import (
 	originT "testing"
 	"time"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
 func TestUpdateItemStringViaCLI(originT *originT.T) {
@@ -40,7 +40,7 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			itemID := MockItemGUID(mCB.ID, cbOwnerKey, tc.itemName, t)
 
 			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-			updateItmMsg := msgs.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr.String())
+			updateItmMsg := types.NewMsgUpdateItemString(itemID, tc.field, tc.value, sdkAddr.String())
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &updateItmMsg, cbOwnerKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)
@@ -56,8 +56,8 @@ func TestUpdateItemStringViaCLI(originT *originT.T) {
 			err = proto.Unmarshal(txHandleResBytes, txMsgData)
 			t.MustNil(err)
 			t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-			t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgUpdateItemString{}).Type(), "MsgType should be accurate")
-			resp := msgs.MsgUpdateItemStringResponse{}
+			t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgUpdateItemString{}).Type(), "MsgType should be accurate")
+			resp := types.MsgUpdateItemStringResponse{}
 			err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, "Success", "successfully updated the item field", t)

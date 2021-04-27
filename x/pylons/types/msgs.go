@@ -1,4 +1,4 @@
-package msgs
+package types
 
 import (
 	"crypto"
@@ -10,7 +10,6 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -94,15 +93,15 @@ func (msg MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
-	if err := types.ValidateEmail(msg.SupportEmail); err != nil {
+	if err := ValidateEmail(msg.SupportEmail); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err := types.ValidateLevel(msg.Level); err != nil {
+	if err := ValidateLevel(msg.Level); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err := types.ValidateVersion(msg.Version); err != nil {
+	if err := ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -160,11 +159,11 @@ func (msg MsgUpdateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
 	}
 
-	if err := types.ValidateEmail(msg.SupportEmail); err != nil {
+	if err := ValidateEmail(msg.SupportEmail); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if err := types.ValidateVersion(msg.Version); err != nil {
+	if err := ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -191,10 +190,10 @@ func (msg MsgUpdateCookbook) GetSigners() []sdk.AccAddress {
 
 // NewMsgCreateRecipe a constructor for CreateRecipe msg
 func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
-	coinInputs types.CoinInputList,
-	itemInputs types.ItemInputList,
-	entries types.EntriesList,
-	outputs types.WeightedOutputsList,
+	coinInputs CoinInputList,
+	itemInputs ItemInputList,
+	entries EntriesList,
+	outputs WeightedOutputsList,
 	blockInterval int64,
 	sender string) MsgCreateRecipe {
 	return MsgCreateRecipe{
@@ -237,7 +236,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	// validation for the invalid item input reference on a coins outputs
 	for _, entry := range msg.Entries.CoinOutputs {
-		if err := types.EntryIDValidationError(entry.GetID()); err != nil {
+		if err := EntryIDValidationError(entry.GetID()); err != nil {
 			return err
 		}
 		if entryIDsMap[entry.GetID()] {
@@ -245,10 +244,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 		}
 		entryIDsMap[entry.GetID()] = true
 		coinOutput := entry
-		if err := types.ProgramValidateBasic(coinOutput.Count); err != nil {
+		if err := ProgramValidateBasic(coinOutput.Count); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "CoinOuput: "+err.Error())
 		}
-		if coinOutput.Coin == types.Pylon {
+		if coinOutput.Coin == Pylon {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "There should not be a recipe which generate pylon denom as an output")
 		}
 		if err := sdk.ValidateDenom(coinOutput.Coin); err != nil {
@@ -258,7 +257,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 
 	// validation for the invalid item input reference on a items with modified outputs
 	for _, entry := range msg.Entries.ItemModifyOutputs {
-		if err := types.EntryIDValidationError(entry.GetID()); err != nil {
+		if err := EntryIDValidationError(entry.GetID()); err != nil {
 			return err
 		}
 		if entryIDsMap[entry.GetID()] {
@@ -285,7 +284,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			}
 			usedEntries[entryID] = true
 			switch entry := entry.(type) {
-			case *types.ItemModifyOutput:
+			case *ItemModifyOutput:
 				if usedItemInputRefs[entry.ItemInputRef] {
 					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of item input within single output result")
 				}
@@ -293,7 +292,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			}
 		}
 		// validation for weight program
-		if err := types.ProgramValidateBasic(output.Weight); err != nil {
+		if err := ProgramValidateBasic(output.Weight); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Output Weight: "+err.Error())
 		}
 	}
@@ -329,10 +328,10 @@ func (msg MsgCreateRecipe) GetSigners() []sdk.AccAddress {
 
 // NewMsgUpdateRecipe a constructor for UpdateRecipe msg
 func NewMsgUpdateRecipe(id, recipeName, cookbookID, description string,
-	coinInputs types.CoinInputList,
-	itemInputs types.ItemInputList,
-	entries types.EntriesList,
-	outputs types.WeightedOutputsList,
+	coinInputs CoinInputList,
+	itemInputs ItemInputList,
+	entries EntriesList,
+	outputs WeightedOutputsList,
 	blockInterval int64,
 	sender string) MsgUpdateRecipe {
 	return MsgUpdateRecipe{
@@ -712,7 +711,7 @@ func (msg MsgGoogleIAPGetPylons) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgFiatItem a constructor for MsgFiatItem msg
-func NewMsgFiatItem(cookbookID string, doubles types.DoubleKeyValueList, longs types.LongKeyValueList, strings types.StringKeyValueList, sender string, transferFee int64) MsgFiatItem {
+func NewMsgFiatItem(cookbookID string, doubles DoubleKeyValueList, longs LongKeyValueList, strings StringKeyValueList, sender string, transferFee int64) MsgFiatItem {
 	return MsgFiatItem{
 		CookbookID:  cookbookID,
 		Doubles:     doubles,
@@ -758,10 +757,10 @@ func (msg MsgFiatItem) GetSigners() []sdk.AccAddress {
 
 // NewMsgCreateTrade a constructor for CreateTrade msg
 func NewMsgCreateTrade(
-	coinInputs types.CoinInputList,
-	tradeItemInputs types.TradeItemInputList,
+	coinInputs CoinInputList,
+	tradeItemInputs TradeItemInputList,
 	coinOutputs sdk.Coins,
-	itemOutputs types.ItemList,
+	itemOutputs ItemList,
 	extraInfo string,
 	sender string) MsgCreateTrade {
 	return MsgCreateTrade{
@@ -798,7 +797,7 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
 			}
 		}
-		tradePylonAmount += msg.CoinOutputs.AmountOf(types.Pylon).Int64()
+		tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 	}
 
 	if msg.ItemInputs == nil && msg.CoinInputs == nil {
@@ -811,7 +810,7 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
 			}
 		}
-		tradePylonAmount += types.CoinInputList(msg.CoinInputs).ToCoins().AmountOf(types.Pylon).Int64()
+		tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
 	}
 
 	if tradePylonAmount < config.Config.Fee.MinTradePrice {
@@ -819,7 +818,7 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 	}
 
 	if msg.ItemInputs != nil {
-		err := types.TradeItemInputList(msg.ItemInputs).Validate()
+		err := TradeItemInputList(msg.ItemInputs).Validate()
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}

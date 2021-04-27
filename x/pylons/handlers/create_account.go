@@ -2,12 +2,13 @@ package handlers
 
 import (
 	"context"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // CreateAccount is used to send pylons to requesters. This handler is part of the
 // faucet
-func (k msgServer) CreateAccount(ctx context.Context, msg *msgs.MsgCreateAccount) (*msgs.MsgCreateExecutionResponse, error) {
+func (k msgServer) CreateAccount(ctx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -15,7 +16,7 @@ func (k msgServer) CreateAccount(ctx context.Context, msg *msgs.MsgCreateAccount
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgCreateExecutionResponse{
+	return &types.MsgCreateExecutionResponse{
 		Message: "successfully created the account",
 		Status:  "Success",
 	}, nil

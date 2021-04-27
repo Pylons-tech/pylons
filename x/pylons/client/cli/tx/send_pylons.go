@@ -11,7 +11,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -53,7 +52,7 @@ func SendPylons() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg := msgs.NewMsgSendCoins(types.NewPylon(int64(amount)), clientCtx.GetFromAddress().String(), addr.String())
+			msg := types.NewMsgSendCoins(types.NewPylon(int64(amount)), clientCtx.GetFromAddress().String(), addr.String())
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

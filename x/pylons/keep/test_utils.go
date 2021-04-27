@@ -3,9 +3,11 @@ package keep
 import (
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
-
+	codec "github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/store"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
@@ -13,11 +15,6 @@ import (
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-	codec "github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/store"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/stretchr/testify/require"
 	abcitypes "github.com/tendermint/tendermint/abci/types"
@@ -36,7 +33,7 @@ type TestCoinInput struct {
 	Pk       paramskeeper.Keeper
 	Bk       bankkeeper.Keeper
 	PlnK     Keeper
-	PlnH     msgs.MsgServer
+	PlnH     types.MsgServer
 	PlnQ     types.QueryServer
 }
 

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -240,7 +239,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
@@ -297,7 +296,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	genEntries := types.GenEntries("wood", "Raichu")
 	genOneOutput := types.GenOneOutput("wood", "Raichu")
 
-	exmpRcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
+	exmpRcpMsg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
 		genCoinInputList,
 		genItemInputList,
 		genEntries,
@@ -326,7 +325,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}

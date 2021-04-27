@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -47,7 +46,7 @@ func SendItems(queryRoute string) *cobra.Command {
 
 			itemIDsArray := strings.Split(args[1], ",")
 
-			msg := msgs.NewMsgSendItems(itemIDsArray, clientCtx.GetFromAddress().String(), addr.String())
+			msg := types.NewMsgSendItems(itemIDsArray, clientCtx.GetFromAddress().String(), addr.String())
 			err = msg.ValidateBasic()
 			if err != nil {
 				return err

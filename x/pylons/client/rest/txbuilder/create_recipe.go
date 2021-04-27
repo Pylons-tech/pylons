@@ -3,11 +3,11 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -27,7 +27,7 @@ func CreateRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 		genEntries := types.GenEntries("chair", "Raichu")
 		genOneOutput := types.GenOneOutput("chair", "Raichu")
 
-		msg := msgs.NewMsgCreateRecipe(
+		msg := types.NewMsgCreateRecipe(
 			"name",
 			"id001",
 			"",

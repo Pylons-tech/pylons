@@ -1,11 +1,12 @@
 package txbuilder
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
@@ -28,7 +29,7 @@ func GoogleIAPGetPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		msg := msgs.NewMsgGoogleIAPGetPylons(
+		msg := types.NewMsgGoogleIAPGetPylons(
 			"your.product.id",
 			"your.purchase.token",
 			"your.receipt.data",

@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"errors"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -47,7 +47,7 @@ func SendCoins() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			msg := &msgs.MsgSendCoins{
+			msg := &types.MsgSendCoins{
 				Amount:   coins,
 				Sender:   clientCtx.GetFromAddress().String(),
 				Receiver: addr.String(),

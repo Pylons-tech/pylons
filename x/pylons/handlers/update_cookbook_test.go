@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -24,7 +23,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 		"cookbook0001",
 		"this has to meet character limits",
 		"SketchyCo",
-		msgs.DefaultCostPerBlock,
+		types.DefaultCostPerBlock,
 	)
 	err := tci.PlnK.SetCookbook(tci.Ctx, cb)
 	require.NoError(t, err)
@@ -64,7 +63,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender.String())
+			msg := types.NewMsgUpdateCookbook(tc.cbID, tc.desc, "SketchyCo", "1.0.0", "example@example.com", tc.sender.String())
 
 			_, err := tci.PlnH.HandlerMsgUpdateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 

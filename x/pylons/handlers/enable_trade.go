@@ -6,13 +6,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // EnableTrade is used to enable trade by a developer
-func (k msgServer) EnableTrade(ctx context.Context, msg *msgs.MsgEnableTrade) (*msgs.MsgEnableTradeResponse, error) {
+func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (*types.MsgEnableTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -70,7 +69,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *msgs.MsgEnableTrade) (*
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgEnableTradeResponse{
+	return &types.MsgEnableTradeResponse{
 		Message: "successfully enabled the trade",
 		Status:  "Success",
 	}, nil

@@ -7,13 +7,12 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // DisableTrade is used to enable trade by a developer
-func (k msgServer) DisableTrade(ctx context.Context, msg *msgs.MsgDisableTrade) (*msgs.MsgDisableTradeResponse, error) {
+func (k msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade) (*types.MsgDisableTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -70,7 +69,7 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *msgs.MsgDisableTrade) 
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgDisableTradeResponse{
+	return &types.MsgDisableTradeResponse{
 		Message: "successfully disabled the trade",
 		Status:  "Success",
 	}, nil

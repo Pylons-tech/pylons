@@ -9,7 +9,6 @@ import (
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -57,7 +56,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, tc.itemIDs)
+			execMsg := types.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, tc.itemIDs)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, rcpExecutorKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)

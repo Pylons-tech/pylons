@@ -5,9 +5,9 @@ import (
 	originT "testing"
 	"time"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
 )
@@ -32,7 +32,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			MockAccount(cbOwnerKey, t) // mock account with initial balance
 
 			sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-			cbMsg := msgs.NewMsgCreateCookbook(
+			cbMsg := types.NewMsgCreateCookbook(
 				tc.cbName,
 				"",
 				"this has to meet character limits lol",
@@ -40,7 +40,7 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 				"1.0.0",
 				"example@example.com",
 				0,
-				msgs.DefaultCostPerBlock,
+				types.DefaultCostPerBlock,
 				sdkAddr.String(),
 			)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &cbMsg, cbOwnerKey, false)
@@ -58,8 +58,8 @@ func TestCreateCookbookViaCLI(originT *originT.T) {
 			err = proto.Unmarshal(txHandleResBytes, txMsgData)
 			t.MustNil(err)
 			t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-			t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateCookbook{}).Type(), "MsgType should be accurate")
-			resp := msgs.MsgCreateCookbookResponse{}
+			t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCreateCookbook{}).Type(), "MsgType should be accurate")
+			resp := types.MsgCreateCookbookResponse{}
 			err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.CookbookID != "", "cookbook id should exist")

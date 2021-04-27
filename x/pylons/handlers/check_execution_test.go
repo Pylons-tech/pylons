@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -145,7 +144,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				require.True(t, usedItem.OwnerRecipeID == tc.rcpID)
 			}
 
-			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender.String())
+			checkExec := types.NewMsgCheckExecution(scheduleOutput.ExecID, tc.payToComplete, tc.sender.String())
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + tc.addHeight)
 			result, err := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)

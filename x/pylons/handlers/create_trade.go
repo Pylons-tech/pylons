@@ -5,14 +5,13 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // CreateTrade is used to create a trade by a user
-func (k msgServer) CreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*msgs.MsgCreateTradeResponse, error) {
+func (k msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -75,7 +74,7 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *msgs.MsgCreateTrade) (*
 		}
 	}
 
-	return &msgs.MsgCreateTradeResponse{
+	return &types.MsgCreateTradeResponse{
 		TradeID: trade.ID,
 		Message: "successfully created a trade",
 		Status:  "Success",

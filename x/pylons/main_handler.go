@@ -7,7 +7,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -29,85 +28,85 @@ func NewHandler(keeper keep.Keeper) sdk.Handler {
 
 		// handle custom messages
 		switch msg := msg.(type) {
-		case *msgs.MsgCreateAccount:
+		case *types.MsgCreateAccount:
 			res, err := msgServer.CreateAccount(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgGetPylons:
+		case *types.MsgGetPylons:
 			if config.Config.IsProduction {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "MsgGetPylons is only supported on development mode")
 			}
 			res, err := msgServer.GetPylons(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgGoogleIAPGetPylons:
+		case *types.MsgGoogleIAPGetPylons:
 			res, err := msgServer.GoogleIAPGetPylons(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgSendCoins:
+		case *types.MsgSendCoins:
 			res, err := msgServer.SendCoins(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgSendItems:
+		case *types.MsgSendItems:
 			res, err := msgServer.SendItems(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgCreateCookbook:
+		case *types.MsgCreateCookbook:
 			res, err := msgServer.CreateCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgUpdateCookbook:
+		case *types.MsgUpdateCookbook:
 			res, err := msgServer.HandlerMsgUpdateCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgCreateRecipe:
+		case *types.MsgCreateRecipe:
 			res, err := msgServer.CreateRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgUpdateRecipe:
+		case *types.MsgUpdateRecipe:
 			res, err := msgServer.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgExecuteRecipe:
+		case *types.MsgExecuteRecipe:
 			res, err := msgServer.ExecuteRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgDisableRecipe:
+		case *types.MsgDisableRecipe:
 			res, err := msgServer.DisableRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgEnableRecipe:
+		case *types.MsgEnableRecipe:
 			res, err := msgServer.EnableRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgCheckExecution:
+		case *types.MsgCheckExecution:
 			res, err := msgServer.CheckExecution(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgFiatItem:
+		case *types.MsgFiatItem:
 			if config.Config.IsProduction {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "MsgFiatItem is only supported on development mode")
 			}
 			res, err := msgServer.FiatItem(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgUpdateItemString:
+		case *types.MsgUpdateItemString:
 			res, err := msgServer.UpdateItemString(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgCreateTrade:
+		case *types.MsgCreateTrade:
 			res, err := msgServer.CreateTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgFulfillTrade:
+		case *types.MsgFulfillTrade:
 			res, err := msgServer.FulfillTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgDisableTrade:
+		case *types.MsgDisableTrade:
 			res, err := msgServer.DisableTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *msgs.MsgEnableTrade:
+		case *types.MsgEnableTrade:
 			res, err := msgServer.EnableTrade(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 

@@ -7,14 +7,13 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // CreateCookbook is used to create cookbook by a developer
-func (k msgServer) CreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbook) (*msgs.MsgCreateCookbookResponse, error) {
+func (k msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCookbook) (*types.MsgCreateCookbookResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -46,7 +45,7 @@ func (k msgServer) CreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbo
 		return nil, errInternal(err)
 	}
 
-	cpb := msgs.DefaultCostPerBlock
+	cpb := types.DefaultCostPerBlock
 	if msg.CostPerBlock != 0 {
 		cpb = msg.CostPerBlock
 	}
@@ -64,7 +63,7 @@ func (k msgServer) CreateCookbook(ctx context.Context, msg *msgs.MsgCreateCookbo
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgCreateCookbookResponse{
+	return &types.MsgCreateCookbookResponse{
 		CookbookID: cb.ID,
 		Message:    "successfully created a cookbook",
 		Status:     "Success",

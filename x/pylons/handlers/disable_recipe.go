@@ -2,13 +2,14 @@ package handlers
 
 import (
 	"context"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // DisableRecipe is used to disable recipe by a developer
-func (k msgServer) DisableRecipe(ctx context.Context, msg *msgs.MsgDisableRecipe) (*msgs.MsgDisableRecipeResponse, error) {
+func (k msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecipe) (*types.MsgDisableRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -33,7 +34,7 @@ func (k msgServer) DisableRecipe(ctx context.Context, msg *msgs.MsgDisableRecipe
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgDisableRecipeResponse{
+	return &types.MsgDisableRecipeResponse{
 		Message: "successfully disabled the recipe",
 		Status:  "Success",
 	}, nil

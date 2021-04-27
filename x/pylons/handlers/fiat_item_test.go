@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -37,9 +36,9 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cbData := &msgs.MsgCreateCookbookResponse{}
+			cbData := &types.MsgCreateCookbookResponse{}
 			if tc.createCookbook {
-				cookbookMsg := msgs.NewMsgCreateCookbook(
+				cookbookMsg := types.NewMsgCreateCookbook(
 					tc.cookbookName,
 					"",
 					"this has to meet character limits",
@@ -47,7 +46,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 					"1.0.0",
 					"example@example.com",
 					1,
-					msgs.DefaultCostPerBlock,
+					types.DefaultCostPerBlock,
 					tc.sender.String(),
 				)
 
@@ -57,7 +56,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
-			msg := msgs.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender.String(), 0)
+			msg := types.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender.String(), 0)
 			result, err := tci.PlnH.FiatItem(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if !tc.showError {

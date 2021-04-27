@@ -5,7 +5,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -48,7 +47,7 @@ func ProcessCoinInputs(ctx sdk.Context, keeper keep.Keeper, msgSender sdk.AccAdd
 }
 
 // SafeExecute execute a msg and returns result
-func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg msgs.MsgCheckExecution) ([]byte, error) {
+func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg types.MsgCheckExecution) ([]byte, error) {
 	var outputSTR []byte
 
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
@@ -85,7 +84,7 @@ func SafeExecute(ctx sdk.Context, keeper keep.Keeper, exec types.Execution, msg 
 }
 
 // HandlerMsgCheckExecution is used to check the status of an execution
-func (k msgServer) CheckExecution(ctx context.Context, msg *msgs.MsgCheckExecution) (*msgs.MsgCheckExecutionResponse, error) {
+func (k msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecution) (*types.MsgCheckExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -106,7 +105,7 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *msgs.MsgCheckExecuti
 	}
 
 	if exec.Completed {
-		return &msgs.MsgCheckExecutionResponse{
+		return &types.MsgCheckExecutionResponse{
 			Message: "execution already completed",
 			Status:  "Completed",
 		}, nil
@@ -118,7 +117,7 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *msgs.MsgCheckExecuti
 			return nil, errInternal(err)
 		}
 
-		return &msgs.MsgCheckExecutionResponse{
+		return &types.MsgCheckExecutionResponse{
 			Message: "successfully completed the execution",
 			Status:  "Success",
 			Output:  outputSTR,
@@ -150,19 +149,19 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *msgs.MsgCheckExecuti
 				return nil, errInternal(err)
 			}
 
-			return &msgs.MsgCheckExecutionResponse{
+			return &types.MsgCheckExecutionResponse{
 				Message: "successfully paid to complete the execution",
 				Status:  "Success",
 				Output:  outputSTR,
 			}, nil
 		}
-		return &msgs.MsgCheckExecutionResponse{
+		return &types.MsgCheckExecutionResponse{
 			Message: "insufficient balance to complete the execution",
 			Status:  "Failure",
 		}, nil
 
 	}
-	return &msgs.MsgCheckExecutionResponse{
+	return &types.MsgCheckExecutionResponse{
 		Message: "execution pending",
 		Status:  "Pending",
 	}, nil

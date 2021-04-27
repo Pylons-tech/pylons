@@ -1,7 +1,7 @@
 package tx
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -12,7 +12,7 @@ import (
 // UpdateCookbook is the client cli command for creating cookbook
 func UpdateCookbook() *cobra.Command {
 
-	var msgCCB = &msgs.MsgUpdateCookbook{}
+	var msgCCB = &types.MsgUpdateCookbook{}
 	var tmpVersion string
 	var tmpEmail string
 

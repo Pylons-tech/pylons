@@ -2,13 +2,14 @@ package handlers
 
 import (
 	"context"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // EnableRecipe is used to enable recipe by a developer
-func (k msgServer) EnableRecipe(ctx context.Context, msg *msgs.MsgEnableRecipe) (*msgs.MsgEnableRecipeResponse, error) {
+func (k msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe) (*types.MsgEnableRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -34,7 +35,7 @@ func (k msgServer) EnableRecipe(ctx context.Context, msg *msgs.MsgEnableRecipe) 
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgEnableRecipeResponse{
+	return &types.MsgEnableRecipeResponse{
 		Message: "successfully enabled the recipe",
 		Status:  "Success",
 	}, nil

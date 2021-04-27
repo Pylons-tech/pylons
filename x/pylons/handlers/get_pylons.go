@@ -2,13 +2,14 @@ package handlers
 
 import (
 	"context"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // GetPylons is used to send pylons to requesters. This handler is part of the faucet
-func (k msgServer) GetPylons(ctx context.Context, msg *msgs.MsgGetPylons) (*msgs.MsgGetPylonsResponse, error) {
+func (k msgServer) GetPylons(ctx context.Context, msg *types.MsgGetPylons) (*types.MsgGetPylonsResponse, error) {
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	err := msg.ValidateBasic()
 
@@ -22,7 +23,7 @@ func (k msgServer) GetPylons(ctx context.Context, msg *msgs.MsgGetPylons) (*msgs
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Buyer does not have enough coins")
 	}
 
-	return &msgs.MsgGetPylonsResponse{
+	return &types.MsgGetPylonsResponse{
 		Message: "successfully got the pylons",
 		Status:  "Success",
 	}, nil

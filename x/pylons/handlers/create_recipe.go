@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // CreateRecipe is used to create recipe by a developer
-func (k msgServer) CreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) (*msgs.MsgCreateRecipeResponse, error) {
+func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe) (*types.MsgCreateRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -52,7 +51,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *msgs.MsgCreateRecipe) 
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgCreateRecipeResponse{
+	return &types.MsgCreateRecipeResponse{
 		RecipeID: recipe.ID,
 		Message:  "successfully created a recipe",
 		Status:   "Success",

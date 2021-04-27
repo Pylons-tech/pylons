@@ -1,13 +1,13 @@
 package tx
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 
 	"github.com/spf13/cobra"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -27,7 +27,7 @@ func GoogleIAPGetPylons() *cobra.Command {
 				return err
 			}
 
-			msg := msgs.NewMsgGoogleIAPGetPylons(
+			msg := types.NewMsgGoogleIAPGetPylons(
 				productID,
 				purchaseToken,
 				receiptData,

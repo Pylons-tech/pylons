@@ -3,13 +3,13 @@ package handlers
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // HandlerMsgUpdateCookbook is used to update cookbook by a developer
-func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *msgs.MsgUpdateCookbook) (*msgs.MsgUpdateCookbookResponse, error) {
+func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *types.MsgUpdateCookbook) (*types.MsgUpdateCookbookResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -37,7 +37,7 @@ func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *msgs.MsgUp
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgUpdateCookbookResponse{
+	return &types.MsgUpdateCookbookResponse{
 		CookbookID: cb.ID,
 		Message:    "successfully updated the cookbook",
 		Status:     "Success",

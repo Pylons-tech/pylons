@@ -8,7 +8,7 @@ import (
 
 	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -127,34 +127,34 @@ func GetLogFieldsFromMsgs(txMsgs []sdk.Msg) log.Fields {
 			ikeypref = "tx_msg_"
 		}
 		switch msg := msg.(type) {
-		case *msgs.MsgCreateCookbook:
+		case *types.MsgCreateCookbook:
 			fields[ikeypref+"type"] = "MsgCreateCookbook"
 			fields[ikeypref+"cb_name"] = msg.Name
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgCreateRecipe:
+		case *types.MsgCreateRecipe:
 			fields[ikeypref+"type"] = "MsgCreateRecipe"
 			fields[ikeypref+"rcp_name"] = msg.Name
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgExecuteRecipe:
+		case *types.MsgExecuteRecipe:
 			fields[ikeypref+"type"] = "MsgCreateRecipe"
 			fields[ikeypref+"rcp_id"] = msg.RecipeID
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgCheckExecution:
+		case *types.MsgCheckExecution:
 			fields[ikeypref+"type"] = "MsgCheckExecution"
 			fields[ikeypref+"exec_id"] = msg.ExecID
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgCreateTrade:
+		case *types.MsgCreateTrade:
 			fields[ikeypref+"type"] = "MsgCreateTrade"
 			fields[ikeypref+"trade_info"] = msg.ExtraInfo
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgFulfillTrade:
+		case *types.MsgFulfillTrade:
 			fields[ikeypref+"type"] = "MsgFulfillTrade"
 			fields[ikeypref+"trade_id"] = msg.TradeID
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgFiatItem:
+		case *types.MsgFiatItem:
 			fields[ikeypref+"type"] = "MsgFiatItem"
 			fields[ikeypref+"sender"] = msg.Sender
-		case *msgs.MsgUpdateItemString:
+		case *types.MsgUpdateItemString:
 			fields[ikeypref+"type"] = "MsgUpdateItemString"
 			fields[ikeypref+"item_id"] = msg.ItemID
 			fields[ikeypref+"sender"] = msg.Sender

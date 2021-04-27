@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -56,7 +55,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			mInputList := types.GenItemInputList("Raichu")
 			mEntries := types.GenEntries("chair", "Raichu")
 			mOutputs := types.GenOneOutput("chair", "Raichu")
-			newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
+			newRcpMsg := types.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
 				genCoinsList,
 				mInputList,
 				mEntries,
@@ -89,7 +88,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			t.Log(execRcpResponse.Message)
 
 			// Update recipe
-			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
+			msg := types.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
 				genCoinsList,
 				mInputList,
 				mEntries,
@@ -137,7 +136,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			}
 
 			// Check execution
-			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender.String())
+			checkExec := types.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender.String())
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
 			checkMsgResult, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)

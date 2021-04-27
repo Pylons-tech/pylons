@@ -3,7 +3,7 @@ package tx
 import (
 	"encoding/json"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -14,7 +14,7 @@ import (
 // CreateCookbook is the client cli command for creating cookbook
 func CreateCookbook() *cobra.Command {
 
-	var msgCCB = &msgs.MsgCreateCookbook{}
+	var msgCCB = &types.MsgCreateCookbook{}
 
 	cmd := &cobra.Command{
 		Use:   "create-cookbook [args]",

@@ -3,7 +3,7 @@ package txbuilder
 import (
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -27,7 +27,7 @@ func CreateAccountTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)
 
-		msg := msgs.NewMsgCreateAccount(addr.String())
+		msg := types.NewMsgCreateAccount(addr.String())
 
 		cliCtx.Output = w
 		err = tx.GenerateTx(cliCtx, txf, []sdk.Msg{&msg}...)

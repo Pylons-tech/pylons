@@ -13,7 +13,6 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -130,7 +129,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	}
 
 	tradeFulfillerSdkAddress := GetSDKAddressFromKey(tradeFulfillerKey, t)
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress.String(), []string{})
+	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress.String(), []string{})
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 
 	t.MustNil(err, "error text tx with msg with nonce")
@@ -142,8 +141,8 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgFulfillTrade{}).Type(), "MsgType should be accurate")
-	ffTrdResp := msgs.MsgFulfillTradeResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgFulfillTrade{}).Type(), "MsgType should be accurate")
+	ffTrdResp := types.MsgFulfillTradeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &ffTrdResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.tradeExpectedStatus, tc.tradeExpectedMessage, t)
@@ -186,7 +185,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"recipe_guid": guid,
 	}).MustNil(err, "recipe with target guid does not exist")
 
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr.String(), []string{})
+	execMsg := types.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr.String(), []string{})
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, cbOwnerKey, false)
 	if err != nil {
@@ -225,8 +224,8 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgExecuteRecipe{}).Type(), "MsgType should be accurate")
-	execResp := msgs.MsgExecuteRecipeResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgExecuteRecipe{}).Type(), "MsgType should be accurate")
+	execResp := types.MsgExecuteRecipeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
@@ -236,7 +235,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"schedule_output": string(execResp.Output),
 	}).MustNil(err, "error unmarshaling schedule output")
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr.String())
+	chkExecMsg := types.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr.String())
 
 	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 	if err != nil {
@@ -251,8 +250,8 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCheckExecution{}).Type(), "MsgType should be accurate")
-	resp := msgs.MsgCheckExecutionResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCheckExecution{}).Type(), "MsgType should be accurate")
+	resp := types.MsgCheckExecutionResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.recipeExpectedStatus, tc.recipeExpectedMessage, t)

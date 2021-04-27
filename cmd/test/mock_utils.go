@@ -5,7 +5,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
@@ -51,7 +50,7 @@ func MockAccount(key string, t *testing.T) {
 	// get initial balance
 	sdkAddr, err := sdk.AccAddressFromBech32(addr)
 	t.MustNil(err, "error converting string cosmos address to sdk struct")
-	getPylonsMsg := msgs.NewMsgGetPylons(types.PremiumTier.Fee, sdkAddr.String())
+	getPylonsMsg := types.NewMsgGetPylons(types.PremiumTier.Fee, sdkAddr.String())
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &getPylonsMsg, key, false)
 	t.WithFields(testing.Fields{
 		"txhash": txhash,
@@ -92,7 +91,7 @@ func MockCookbook(ownerKey string, createNew bool, t *testing.T) string {
 		return guid
 	}
 	cbOwnerSdkAddr := GetSDKAddressFromKey(ownerKey, t)
-	cbMsg := msgs.NewMsgCreateCookbook(
+	cbMsg := types.NewMsgCreateCookbook(
 		"COOKBOOK_MOCK_001_"+ownerKey,
 		"",
 		"this has to meet character limits lol",
@@ -100,7 +99,7 @@ func MockCookbook(ownerKey string, createNew bool, t *testing.T) string {
 		"1.0.0",
 		"example@example.com",
 		0,
-		msgs.DefaultCostPerBlock,
+		types.DefaultCostPerBlock,
 		cbOwnerSdkAddr.String(),
 	)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &cbMsg, ownerKey, false)
@@ -118,8 +117,8 @@ func MockCookbook(ownerKey string, createNew bool, t *testing.T) string {
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateCookbook{}).Type(), "MsgType should be accurate")
-	resp := msgs.MsgCreateCookbookResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCreateCookbook{}).Type(), "MsgType should be accurate")
+	resp := types.MsgCreateCookbookResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	return resp.CookbookID
@@ -210,7 +209,7 @@ func MockDetailedRecipeGUID(
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 
 	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-	rcpMsg := msgs.NewMsgCreateRecipe(
+	rcpMsg := types.NewMsgCreateRecipe(
 		rcpName,
 		mCB.ID,
 		"",
@@ -237,8 +236,8 @@ func MockDetailedRecipeGUID(
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateRecipe{}).Type(), "MsgType should be accurate")
-	resp := msgs.MsgCreateRecipeResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCreateRecipe{}).Type(), "MsgType should be accurate")
+	resp := types.MsgCreateRecipeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
@@ -249,7 +248,7 @@ func MockDetailedRecipeGUID(
 func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 
 	sdkAddr := GetSDKAddressFromKey(sender, t)
-	itmMsg := msgs.NewMsgFiatItem(
+	itmMsg := types.NewMsgFiatItem(
 		cbID,
 		types.DoubleKeyValueList{},
 		types.LongKeyValueList{},
@@ -277,8 +276,8 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgFiatItem{}).Type(), "MsgType should be accurate")
-	resp := msgs.MsgFiatItemResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgFiatItem{}).Type(), "MsgType should be accurate")
+	resp := types.MsgFiatItemResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
@@ -288,7 +287,7 @@ func MockItemGUID(cbID, sender, name string, t *testing.T) string {
 // MockItemGUIDWithFee mock item with additional transfer fee and return item's GUID
 func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testing.T) string {
 	itemOwnerSdkAddr := GetSDKAddressFromKey(sender, t)
-	itmMsg := msgs.NewMsgFiatItem(
+	itmMsg := types.NewMsgFiatItem(
 		cbID,
 		types.DoubleKeyValueList{},
 		types.LongKeyValueList{},
@@ -316,8 +315,8 @@ func MockItemGUIDWithFee(cbID, sender, name string, transferFee int64, t *testin
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgFiatItem{}).Type(), "MsgType should be accurate")
-	resp := msgs.MsgFiatItemResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgFiatItem{}).Type(), "MsgType should be accurate")
+	resp := types.MsgFiatItemResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 
@@ -351,7 +350,7 @@ func MockDetailedTradeGUID(
 		outputItems = types.ItemList{outputItem}
 	}
 
-	trdCMsg := msgs.NewMsgCreateTrade(
+	trdCMsg := types.NewMsgCreateTrade(
 		inputCoinList,
 		inputItemList,
 		outputCoins,

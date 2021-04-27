@@ -4,14 +4,13 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
-func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *msgs.MsgGoogleIAPGetPylons) (*msgs.MsgGoogleIAPGetPylonsResponse, error) {
+func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *types.MsgGoogleIAPGetPylons) (*types.MsgGoogleIAPGetPylonsResponse, error) {
 	err := msg.ValidateBasic()
 
 	if err != nil {
@@ -45,7 +44,7 @@ func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *msgs.MsgGoogleIA
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return &msgs.MsgGoogleIAPGetPylonsResponse{
+	return &types.MsgGoogleIAPGetPylonsResponse{
 		Message: "successfully got the pylons",
 		Status:  "Success",
 	}, nil

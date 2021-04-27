@@ -4,14 +4,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-
 	testutils "github.com/Pylons-tech/pylons/test/test_utils"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -74,16 +70,16 @@ func RunCreateAccount(step FixtureStep, t *testing.T) {
 }
 
 // GetPylonsMsgFromRef is a function to get GetPylons message from reference
-func GetPylonsMsgFromRef(ref string, t *testing.T) msgs.MsgGetPylons {
+func GetPylonsMsgFromRef(ref string, t *testing.T) types.MsgGetPylons {
 	gpAddr := GetAccountAddressFromTempName(ref, t)
-	return msgs.NewMsgGetPylons(
+	return types.NewMsgGetPylons(
 		types.NewPylon(55000),
 		gpAddr.String(),
 	)
 }
 
 // SendCoinsMsgFromRef is a function to SendCoins message from reference
-func SendCoinsMsgFromRef(ref string, t *testing.T) msgs.MsgSendCoins {
+func SendCoinsMsgFromRef(ref string, t *testing.T) types.MsgSendCoins {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -106,7 +102,7 @@ func SendCoinsMsgFromRef(ref string, t *testing.T) msgs.MsgSendCoins {
 		"amount": siType.Amount,
 	}).MustNil(err, "error parsing amount")
 
-	return msgs.NewMsgSendCoins(amount, siType.Sender, siType.Receiver)
+	return types.NewMsgSendCoins(amount, siType.Sender, siType.Receiver)
 }
 
 // RunGetPylons is a function to run GetPylos message
@@ -130,7 +126,7 @@ func RunGetPylons(step FixtureStep, t *testing.T) {
 }
 
 // GoogleIAPGetPylonsMsgFromRef is a function to get GoogleIAPGetPylons message from reference
-func GoogleIAPGetPylonsMsgFromRef(ref string, t *testing.T) msgs.MsgGoogleIAPGetPylons {
+func GoogleIAPGetPylonsMsgFromRef(ref string, t *testing.T) types.MsgGoogleIAPGetPylons {
 	byteValue := ReadFile(ref, t)
 	// translate requester from account name to account address
 	newByteValue := UpdateRequesterKeyToAddress(byteValue, t)
@@ -151,7 +147,7 @@ func GoogleIAPGetPylonsMsgFromRef(ref string, t *testing.T) msgs.MsgGoogleIAPGet
 
 	receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(gigpType.ReceiptData))
 
-	return msgs.NewMsgGoogleIAPGetPylons(
+	return types.NewMsgGoogleIAPGetPylons(
 		gigpType.ProductID,
 		gigpType.PurchaseToken,
 		receiptDataBase64,
@@ -286,7 +282,7 @@ func RunMultiMsgTx(step FixtureStep, t *testing.T) {
 }
 
 // CheckExecutionMsgFromRef collect check execution message from reference string
-func CheckExecutionMsgFromRef(ref string, t *testing.T) msgs.MsgCheckExecution {
+func CheckExecutionMsgFromRef(ref string, t *testing.T) types.MsgCheckExecution {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -303,7 +299,7 @@ func CheckExecutionMsgFromRef(ref string, t *testing.T) msgs.MsgCheckExecution {
 		"execType": testutils.AminoCodecFormatter(execType),
 	}).MustNil(err, "error reading using json Unmarshaler")
 
-	return msgs.NewMsgCheckExecution(
+	return types.NewMsgCheckExecution(
 		execType.ExecID,
 		execType.PayToComplete,
 		execType.Sender,
@@ -337,7 +333,7 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 }
 
 // FiatItemMsgFromRef collect check execution message from reference string
-func FiatItemMsgFromRef(ref string, t *testing.T) msgs.MsgFiatItem {
+func FiatItemMsgFromRef(ref string, t *testing.T) types.MsgFiatItem {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -350,7 +346,7 @@ func FiatItemMsgFromRef(ref string, t *testing.T) msgs.MsgFiatItem {
 		"itemType": testutils.AminoCodecFormatter(itemType),
 	}).MustNil(err, "error reading using json Unmarshaler")
 
-	return msgs.NewMsgFiatItem(
+	return types.NewMsgFiatItem(
 		itemType.CookbookID,
 		itemType.Doubles,
 		itemType.Longs,
@@ -387,7 +383,7 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 }
 
 // SendItemsMsgFromRef is a function to collect SendItems from reference string
-func SendItemsMsgFromRef(ref string, t *testing.T) msgs.MsgSendItems {
+func SendItemsMsgFromRef(ref string, t *testing.T) types.MsgSendItems {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -411,7 +407,7 @@ func SendItemsMsgFromRef(ref string, t *testing.T) msgs.MsgSendItems {
 	// translate itemNames to itemIDs
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return msgs.NewMsgSendItems(ItemIDs, siType.Sender, siType.Receiver)
+	return types.NewMsgSendItems(ItemIDs, siType.Sender, siType.Receiver)
 }
 
 // RunSendItems is a function to send items to another user
@@ -441,14 +437,14 @@ func RunSendItems(step FixtureStep, t *testing.T) {
 }
 
 // UpdateItemStringMsgFromRef is a function to collect UpdateItemStringMsg from reference string
-func UpdateItemStringMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateItemString {
+func UpdateItemStringMsgFromRef(ref string, t *testing.T) types.MsgUpdateItemString {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 	// translate item name to item ID
 	newByteValue = UpdateItemIDFromName(newByteValue, false, false, t)
 
-	var sTypeMsg msgs.MsgUpdateItemString
+	var sTypeMsg types.MsgUpdateItemString
 	err := json.Unmarshal(newByteValue, &sTypeMsg)
 	t.WithFields(testing.Fields{
 		"sTypeMsg":  testutils.AminoCodecFormatter(sTypeMsg),
@@ -482,7 +478,7 @@ func RunUpdateItemString(step FixtureStep, t *testing.T) {
 }
 
 // CreateCookbookMsgFromRef is a function to get create cookbook message from reference
-func CreateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgCreateCookbook {
+func CreateCookbookMsgFromRef(ref string, t *testing.T) types.MsgCreateCookbook {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -494,7 +490,7 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgCreateCookbook {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json Unmarshal")
 
-	return msgs.NewMsgCreateCookbook(
+	return types.NewMsgCreateCookbook(
 		cbType.Name,
 		cbType.ID,
 		cbType.Description,
@@ -534,7 +530,7 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 }
 
 // UpdateCookbookMsgFromRef is a function to get update cookbook message from reference
-func UpdateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateCookbook {
+func UpdateCookbookMsgFromRef(ref string, t *testing.T) types.MsgUpdateCookbook {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -546,7 +542,7 @@ func UpdateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateCookbook {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgUpdateCookbook(
+	return types.NewMsgUpdateCookbook(
 		cbType.ID,
 		cbType.Description,
 		cbType.Developer,
@@ -592,7 +588,7 @@ func RunMockCookbook(step FixtureStep, t *testing.T) {
 }
 
 // CreateRecipeMsgFromRef is a function to get create cookbook message from reference
-func CreateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateRecipe {
+func CreateRecipeMsgFromRef(ref string, t *testing.T) types.MsgCreateRecipe {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -610,7 +606,7 @@ func CreateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateRecipe {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgCreateRecipe(
+	return types.NewMsgCreateRecipe(
 		rcpTempl.Name,
 		rcpTempl.CookbookID,
 		rcpTempl.ID,
@@ -655,7 +651,7 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 }
 
 // UpdateRecipeMsgFromRef is a function to get update recipe message from reference
-func UpdateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateRecipe {
+func UpdateRecipeMsgFromRef(ref string, t *testing.T) types.MsgUpdateRecipe {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -676,7 +672,7 @@ func UpdateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateRecipe {
 	addr, err := sdk.AccAddressFromBech32(rcpTempl.Sender)
 	TxResultDecodingErrorCheck(err, t)
 
-	return msgs.NewMsgUpdateRecipe(
+	return types.NewMsgUpdateRecipe(
 		rcpTempl.ID,
 		rcpTempl.Name,
 		rcpTempl.CookbookID,
@@ -717,7 +713,7 @@ func RunUpdateRecipe(step FixtureStep, t *testing.T) {
 }
 
 // EnableRecipeMsgFromRef is a function to get enable recipe message from reference
-func EnableRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgEnableRecipe {
+func EnableRecipeMsgFromRef(ref string, t *testing.T) types.MsgEnableRecipe {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -735,7 +731,7 @@ func EnableRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgEnableRecipe {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgEnableRecipe(recipeType.RecipeID, recipeType.Sender)
+	return types.NewMsgEnableRecipe(recipeType.RecipeID, recipeType.Sender)
 }
 
 // RunEnableRecipe is a function to enable recipe
@@ -765,7 +761,7 @@ func RunEnableRecipe(step FixtureStep, t *testing.T) {
 }
 
 // DisableRecipeMsgFromRef is a function to get disable recipe message from reference
-func DisableRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableRecipe {
+func DisableRecipeMsgFromRef(ref string, t *testing.T) types.MsgDisableRecipe {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -783,7 +779,7 @@ func DisableRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableRecipe {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgDisableRecipe(recipeType.RecipeID, recipeType.Sender)
+	return types.NewMsgDisableRecipe(recipeType.RecipeID, recipeType.Sender)
 }
 
 // RunDisableRecipe is a function to disable recipe
@@ -813,7 +809,7 @@ func RunDisableRecipe(step FixtureStep, t *testing.T) {
 }
 
 // ExecuteRecipeMsgFromRef collect execute recipe msg from reference string
-func ExecuteRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgExecuteRecipe {
+func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -837,7 +833,7 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgExecuteRecipe {
 	t.MustNil(err, "error parsing sender address")
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
+	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called
@@ -896,7 +892,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 }
 
 // CreateTradeMsgFromRef collect create trade msg from reference
-func CreateTradeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateTrade {
+func CreateTradeMsgFromRef(ref string, t *testing.T) types.MsgCreateTrade {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -915,7 +911,7 @@ func CreateTradeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateTrade {
 	// get ItemOutputs from ItemOutputNames
 	itemOutputs := GetItemOutputsFromBytes(newByteValue, addr, t)
 
-	return msgs.NewMsgCreateTrade(
+	return types.NewMsgCreateTrade(
 		trdType.CoinInputs,
 		tradeItemInputs,
 		trdType.CoinOutputs,
@@ -955,7 +951,7 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 }
 
 // FulfillTradeMsgFromRef collect fulfill trade message from reference string
-func FulfillTradeMsgFromRef(ref string, t *testing.T) msgs.MsgFulfillTrade {
+func FulfillTradeMsgFromRef(ref string, t *testing.T) types.MsgFulfillTrade {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -978,7 +974,7 @@ func FulfillTradeMsgFromRef(ref string, t *testing.T) msgs.MsgFulfillTrade {
 	t.MustNil(err, "error parsing sender address")
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return msgs.NewMsgFulfillTrade(trdType.TradeID, trdType.Sender, ItemIDs)
+	return types.NewMsgFulfillTrade(trdType.TradeID, trdType.Sender, ItemIDs)
 }
 
 // RunFulfillTrade is a function to fulfill trade
@@ -1008,7 +1004,7 @@ func RunFulfillTrade(step FixtureStep, t *testing.T) {
 }
 
 // DisableTradeMsgFromRef collect disable trade msg from reference string
-func DisableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableTrade {
+func DisableTradeMsgFromRef(ref string, t *testing.T) types.MsgDisableTrade {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -1026,7 +1022,7 @@ func DisableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableTrade {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgDisableTrade(trdType.TradeID, trdType.Sender)
+	return types.NewMsgDisableTrade(trdType.TradeID, trdType.Sender)
 }
 
 // RunDisableTrade is a function to disable trade
@@ -1056,7 +1052,7 @@ func RunDisableTrade(step FixtureStep, t *testing.T) {
 }
 
 // EnableTradeMsgFromRef collect enable trade msg from reference string
-func EnableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgEnableTrade {
+func EnableTradeMsgFromRef(ref string, t *testing.T) types.MsgEnableTrade {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
@@ -1074,7 +1070,7 @@ func EnableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgEnableTrade {
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgEnableTrade(trdType.TradeID, trdType.Sender)
+	return types.NewMsgEnableTrade(trdType.TradeID, trdType.Sender)
 }
 
 // RunEnableTrade is a function to enable trade

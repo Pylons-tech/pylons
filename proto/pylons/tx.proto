@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 import "pylons/pylons.proto";
 
-option go_package = "github.com/Pylons-tech/pylons/x/pylons/msgs";
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 service Msg {
   // CreateAccount is used to send pylons to requesters. This handler is part of the faucet

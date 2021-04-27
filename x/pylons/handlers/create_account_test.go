@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
@@ -34,7 +34,7 @@ func TestHandlerMsgCreateAccount(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgCreateAccount(tc.fromAddress.String())
+			msg := types.NewMsgCreateAccount(tc.fromAddress.String())
 			_, err := tci.PlnH.CreateAccount(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError {

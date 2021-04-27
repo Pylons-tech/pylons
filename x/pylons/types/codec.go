@@ -1,4 +1,4 @@
-package msgs
+package types
 
 import (
 	sdktypes "github.com/cosmos/cosmos-sdk/codec/types"

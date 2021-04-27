@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -73,7 +72,7 @@ func TestCustomCreateRecipeValidateBasic(t *testing.T) {
 }`
 
 	tci := keep.SetupTestCoinInput()
-	msg := msgs.MsgCreateRecipe{}
+	msg := types.MsgCreateRecipe{}
 	err := tci.Cdc.UnmarshalJSON([]byte(recipeJSON), &msg)
 	require.True(t, err == nil, err)
 	err = msg.ValidateBasic()
@@ -164,11 +163,11 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cbData := &msgs.MsgCreateCookbookResponse{}
+			cbData := &types.MsgCreateCookbookResponse{}
 			if tc.createCookbook {
 				err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 				require.NoError(t, err)
-				cookbookMsg := msgs.NewMsgCreateCookbook(
+				cookbookMsg := types.NewMsgCreateCookbook(
 					tc.cookbookName,
 					tc.cbID,
 					"this has to meet character limits",
@@ -176,7 +175,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					"1.0.0",
 					"example@example.com",
 					1,
-					msgs.DefaultCostPerBlock,
+					types.DefaultCostPerBlock,
 					tc.sender.String(),
 				)
 				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
@@ -208,7 +207,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			}
 
 			genCoinList := types.GenCoinInputList("wood", 5)
-			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
+			msg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
 				genCoinList,
 				mInputList,
 				mEntries,
@@ -234,7 +233,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil, nil)
 
-	msg := msgs.NewMsgCreateCookbook(
+	msg := types.NewMsgCreateCookbook(
 		"samecookbookID-0001",
 		"samecookbookID-0001",
 		"some description with 20 characters",
@@ -242,7 +241,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		"1.0.0",
 		"example@example.com",
 		0,
-		msgs.DefaultCostPerBlock,
+		types.DefaultCostPerBlock,
 		sender1.String(),
 	)
 
@@ -254,7 +253,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	mInputList := types.GenItemInputList("Raichu")
 
 	genCoinsList := types.GenCoinInputList("wood", 5)
-	rcpMsg := msgs.NewMsgCreateRecipe("name", result.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
+	rcpMsg := types.NewMsgCreateRecipe("name", result.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
 		genCoinsList,
 		mInputList,
 		mEntries,

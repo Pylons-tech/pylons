@@ -1,7 +1,6 @@
 package tx
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -28,7 +27,7 @@ func GetPylons() *cobra.Command {
 				return err
 			}
 
-			msg := &msgs.MsgGetPylons{
+			msg := &types.MsgGetPylons{
 				Amount:    types.NewPylon(customBalance),
 				Requester: clientCtx.GetFromAddress().String(),
 			}

@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/stretchr/testify/require"
 
@@ -34,9 +33,9 @@ func TestCoinLock(t *testing.T) {
 		nil, nil, nil,
 	)
 
-	cbData := msgs.MsgCreateCookbookResponse{}
+	cbData := types.MsgCreateCookbookResponse{}
 
-	cookbookMsg := msgs.NewMsgCreateCookbook(
+	cookbookMsg := types.NewMsgCreateCookbook(
 		"cookbook-0001",
 		"",
 		"this has to meet character limits",
@@ -44,7 +43,7 @@ func TestCoinLock(t *testing.T) {
 		"1.0.0",
 		"example@example.com",
 		1,
-		msgs.DefaultCostPerBlock,
+		types.DefaultCostPerBlock,
 		sender1.String(),
 	)
 
@@ -474,7 +473,7 @@ func TestCoinLock(t *testing.T) {
 				require.True(t, err == nil, err)
 			}
 
-			tradeData := &msgs.MsgCreateTradeResponse{}
+			tradeData := &types.MsgCreateTradeResponse{}
 			scheduleOutput := ExecuteRecipeScheduleOutput{}
 
 			// test create trade coin lock
@@ -502,7 +501,7 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testDisableTrade {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				disableTrdMsg := msgs.NewMsgDisableTrade(tradeData.TradeID, account1.String())
+				disableTrdMsg := types.NewMsgDisableTrade(tradeData.TradeID, account1.String())
 				_, err := tci.PlnH.DisableTrade(sdk.WrapSDKContext(tci.Ctx), &disableTrdMsg)
 
 				require.NoError(t, err)
@@ -519,7 +518,7 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testDisableTrade && tc.testEnableTradeLock {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				enableTrdMsg := msgs.NewMsgEnableTrade(tradeData.TradeID, account1.String())
+				enableTrdMsg := types.NewMsgEnableTrade(tradeData.TradeID, account1.String())
 				_, err := tci.PlnH.EnableTrade(sdk.WrapSDKContext(tci.Ctx), &enableTrdMsg)
 
 				require.NoError(t, err)
@@ -578,7 +577,7 @@ func TestCoinLock(t *testing.T) {
 				err = tci.PlnK.SetItem(tci.Ctx, item)
 				require.NoError(t, err)
 
-				msg := msgs.NewMsgSendItems([]string{item.ID}, account1.String(), account2.String())
+				msg := types.NewMsgSendItems([]string{item.ID}, account1.String(), account2.String())
 				_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 				if !tc.shouldFailSendItems {
@@ -614,7 +613,7 @@ func TestCoinLock(t *testing.T) {
 					sender1,
 				)
 
-				msg := msgs.NewMsgExecuteRecipe(
+				msg := types.NewMsgExecuteRecipe(
 					pylonInputRecipeData.RecipeID,
 					account1.String(),
 					[]string{},
@@ -634,7 +633,7 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testFulfillTrade {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				ffMsg := msgs.NewMsgFulfillTrade(
+				ffMsg := types.NewMsgFulfillTrade(
 					tradeData.TradeID,
 					account2.String(),
 					[]string{},
@@ -651,7 +650,7 @@ func TestCoinLock(t *testing.T) {
 			if tc.testScheduleRecipe && tc.testCheckExecution {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, account1.String())
+				checkExec := types.NewMsgCheckExecution(scheduleOutput.ExecID, false, account1.String())
 				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
 				result, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 				require.True(t, result.Status == "Success")

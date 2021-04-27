@@ -4,15 +4,13 @@ import (
 	"strings"
 	"testing"
 
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/tx/signing"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -58,7 +56,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 			}
 
 			txBuilder := tci.TxConfig.NewTxBuilder()
-			msg := msgs.NewMsgCreateAccount(cosmosAddr.String())
+			msg := types.NewMsgCreateAccount(cosmosAddr.String())
 
 			txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
 			txBuilder.SetMemo("")
@@ -171,7 +169,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
 			require.NoError(t, err)
 
-			msg := msgs.NewMsgCreateAccount(cosmosAddr.String())
+			msg := types.NewMsgCreateAccount(cosmosAddr.String())
 
 			txBuilder := tci.TxConfig.NewTxBuilder()
 
@@ -245,7 +243,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				if tc.additionMsgType == "create_cookbook" {
-					caMsg := msgs.NewMsgCreateCookbook(
+					caMsg := types.NewMsgCreateCookbook(
 						"samecookbookID-0001",
 						"samecookbookID-0001",
 						"some description with 20 characters",
@@ -253,7 +251,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 						"1.0.0",
 						"example@example.com",
 						0,
-						msgs.DefaultCostPerBlock,
+						types.DefaultCostPerBlock,
 						cosmosAddr.String(),
 					)
 					txBuilder := tci.TxConfig.NewTxBuilder()

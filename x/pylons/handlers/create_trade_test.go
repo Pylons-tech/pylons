@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,7 +19,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.NoError(t, err)
 
-	cookbookMsg := msgs.NewMsgCreateCookbook(
+	cookbookMsg := types.NewMsgCreateCookbook(
 		"cookbook-0001",
 		"cookbook-id-0001",
 		"this has to meet character limits",
@@ -28,7 +27,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 		"1.0.0",
 		"example@example.com",
 		1,
-		msgs.DefaultCostPerBlock,
+		types.DefaultCostPerBlock,
 		sender.String(),
 	)
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
@@ -127,7 +126,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 
-			msg := msgs.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender.String())
+			msg := types.NewMsgCreateTrade(tc.inputCoinList, tc.inputItemList, tc.outputCoinList, tc.outputItemList, "", tc.sender.String())
 
 			result, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {

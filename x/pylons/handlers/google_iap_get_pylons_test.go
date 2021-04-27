@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -80,7 +79,7 @@ func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
-			msg := msgs.NewMsgGoogleIAPGetPylons(
+			msg := types.NewMsgGoogleIAPGetPylons(
 				tc.productID,
 				tc.purchaseToken,
 				receiptDataBase64,

@@ -1,11 +1,11 @@
 package txbuilder
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
@@ -24,7 +24,7 @@ func SendPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgSendCoins(types.NewPylon(5), sender.String(), recv.String())
+		msg := types.NewMsgSendCoins(types.NewPylon(5), sender.String(), recv.String())
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

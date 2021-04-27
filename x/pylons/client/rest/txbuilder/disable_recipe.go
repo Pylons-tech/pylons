@@ -3,11 +3,12 @@ package txbuilder
 // this module provides the fixtures to build a transaction
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
@@ -20,7 +21,7 @@ func DisableRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
 
-		msg := msgs.NewMsgDisableRecipe("id0001", sender.String())
+		msg := types.NewMsgDisableRecipe("id0001", sender.String())
 
 		txf := tx.Factory{}.
 			WithChainID("testing").

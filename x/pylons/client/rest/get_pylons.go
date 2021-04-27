@@ -1,11 +1,11 @@
 package rest
 
 import (
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/tx"
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
@@ -37,7 +37,7 @@ func getPylonsHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := msgs.NewMsgGetPylons(types.NewPylon(DefaultCoinPerRequest), addr.String())
+		msg := types.NewMsgGetPylons(types.NewPylon(DefaultCoinPerRequest), addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

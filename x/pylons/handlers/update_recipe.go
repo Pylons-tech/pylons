@@ -2,7 +2,8 @@ package handlers
 
 import (
 	"context"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -15,7 +16,7 @@ type UpdateRecipeResponse struct {
 }
 
 // HandlerMsgUpdateRecipe is used to update recipe by a developer
-func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *msgs.MsgUpdateRecipe) (*msgs.MsgUpdateRecipeResponse, error) {
+func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -49,7 +50,7 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *msgs.MsgUpda
 		return nil, errInternal(err)
 	}
 
-	return &msgs.MsgUpdateRecipeResponse{
+	return &types.MsgUpdateRecipeResponse{
 		RecipeID: msg.ID,
 		Message:  "successfully updated the recipe",
 		Status:   "Success",

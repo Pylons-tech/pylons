@@ -12,7 +12,6 @@ import (
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
 func TestCreateRecipeViaCLI(originT *originT.T) {
@@ -49,7 +48,7 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			rcpMsg := msgs.NewMsgCreateRecipe(
+			rcpMsg := types.NewMsgCreateRecipe(
 				tc.rcpName,
 				mCB.ID,
 				"",
@@ -76,8 +75,8 @@ func TestCreateRecipeViaCLI(originT *originT.T) {
 			err = proto.Unmarshal(txHandleResBytes, txMsgData)
 			t.MustNil(err)
 			t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-			t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCreateRecipe{}).Type(), "MsgType should be accurate")
-			resp := msgs.MsgCreateRecipeResponse{}
+			t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCreateRecipe{}).Type(), "MsgType should be accurate")
+			resp := types.MsgCreateRecipeResponse{}
 			err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 			TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 			t.MustTrue(resp.RecipeID != "", "recipe id should exist")

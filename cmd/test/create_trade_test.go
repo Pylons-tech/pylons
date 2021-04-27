@@ -10,7 +10,6 @@ import (
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
 func TestCreateTradeViaCLI(originT *originT.T) {
@@ -65,7 +64,7 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				inputCoins = nil
 			}
 
-			trdMsg := msgs.NewMsgCreateTrade(
+			trdMsg := types.NewMsgCreateTrade(
 				inputCoins,
 				types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
 				types.NewPylon(tc.outputPylon),

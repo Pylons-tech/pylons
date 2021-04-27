@@ -3,14 +3,14 @@ package handlers
 import (
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	"github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 // NewAnteHandler returns an AnteHandler that checks and increments sequence
@@ -64,7 +64,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 		pubkey := sigTxSignatures[0].PubKey
 		address := sdk.AccAddress(pubkey.Address().Bytes())
 		fmt.Println(sigTx.GetPubKeys()[0].Address().String())
-		msgCreateAccount, ok := messages[0].(*msgs.MsgCreateAccount)
+		msgCreateAccount, ok := messages[0].(*types.MsgCreateAccount)
 		if !ok {
 			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "error msg conversion to MsgCreateAccount")
 		}
@@ -80,7 +80,7 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 				return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			acc := &types.BaseAccount{
+			acc := &authtypes.BaseAccount{
 				Sequence:      0,
 				AccountNumber: svd.ak.GetNextAccountNumber(ctx),
 				PubKey:        any,
@@ -126,7 +126,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 	// stdSigs contains the sequence number, account number, and signatures.
 	// When simulating, this would just be a 0-length slice.
 	signerAddrs := sigTx.GetSigners()
-	signerAccs := make([]types.AccountI, len(signerAddrs))
+	signerAccs := make([]authtypes.AccountI, len(signerAddrs))
 
 	// check that signer length and signature length are the same
 	if len(sigs) != len(signerAddrs) {

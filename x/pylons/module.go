@@ -12,7 +12,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/rest"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -47,28 +46,28 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) {
 func (AppModuleBasic) RegisterInterfaces(registry sdktypes.InterfaceRegistry) {
 	registry.RegisterImplementations(
 		(*sdk.Msg)(nil),
-		&msgs.MsgCreateAccount{},
-		&msgs.MsgGetPylons{},
-		&msgs.MsgGoogleIAPGetPylons{},
-		&msgs.MsgSendCoins{},
-		&msgs.MsgSendItems{},
-		&msgs.MsgCreateCookbook{},
-		&msgs.MsgUpdateCookbook{},
-		&msgs.MsgCreateRecipe{},
-		&msgs.MsgUpdateRecipe{},
-		&msgs.MsgExecuteRecipe{},
-		&msgs.MsgDisableRecipe{},
-		&msgs.MsgEnableRecipe{},
-		&msgs.MsgCheckExecution{},
-		&msgs.MsgFiatItem{},
-		&msgs.MsgUpdateItemString{},
-		&msgs.MsgCreateTrade{},
-		&msgs.MsgFulfillTrade{},
-		&msgs.MsgDisableTrade{},
-		&msgs.MsgEnableTrade{},
+		&types.MsgCreateAccount{},
+		&types.MsgGetPylons{},
+		&types.MsgGoogleIAPGetPylons{},
+		&types.MsgSendCoins{},
+		&types.MsgSendItems{},
+		&types.MsgCreateCookbook{},
+		&types.MsgUpdateCookbook{},
+		&types.MsgCreateRecipe{},
+		&types.MsgUpdateRecipe{},
+		&types.MsgExecuteRecipe{},
+		&types.MsgDisableRecipe{},
+		&types.MsgEnableRecipe{},
+		&types.MsgCheckExecution{},
+		&types.MsgFiatItem{},
+		&types.MsgUpdateItemString{},
+		&types.MsgCreateTrade{},
+		&types.MsgFulfillTrade{},
+		&types.MsgDisableTrade{},
+		&types.MsgEnableTrade{},
 	)
 
-	msgs.RegisterMsgServiceDesc(registry)
+	types.RegisterMsgServiceDesc(registry)
 }
 
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
@@ -172,7 +171,7 @@ func (am AppModule) LegacyQuerierHandler(amino *codec.LegacyAmino) sdk.Querier {
 }
 
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-	msgs.RegisterMsgServer(cfg.MsgServer(), handlers.NewMsgServerImpl(am.keeper))
+	types.RegisterMsgServer(cfg.MsgServer(), handlers.NewMsgServerImpl(am.keeper))
 	types.RegisterQueryServer(cfg.QueryServer(), queriers.NewQuerierServerImpl(am.keeper))
 }
 

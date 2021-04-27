@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -25,7 +24,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 	genItemInputList := types.GenItemInputList("Raichu")
 	genEntries := types.GenEntries("chair", "Raichu")
 	genOneOutput := types.GenOneOutput("chair", "Raichu")
-	newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
+	newRcpMsg := types.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
 		genCoinList,
 		genItemInputList,
 		genEntries,
@@ -70,7 +69,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 			genItemInputList := types.GenItemInputList("Raichu")
 			genEntries := types.GenEntries("chair", "Raichu")
 			genOneOutput := types.GenOneOutput("chair", "Raichu")
-			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
+			msg := types.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
 				genCoinList,
 				genItemInputList,
 				genEntries,

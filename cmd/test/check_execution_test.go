@@ -8,13 +8,13 @@ import (
 
 	originT "testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
 type CheckExecutionTestCase struct {
@@ -120,7 +120,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}).MustNil(err, "recipe with target guid does not exist")
 
 	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr.String(), itemIDs)
+	execMsg := types.NewMsgExecuteRecipe(rcp.ID, sdkAddr.String(), itemIDs)
 
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, cbOwnerKey, false)
 	if err != nil {
@@ -145,8 +145,8 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgExecuteRecipe{}).Type(), "MsgType should be accurate")
-	execResp := msgs.MsgExecuteRecipeResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgExecuteRecipe{}).Type(), "MsgType should be accurate")
+	execResp := types.MsgExecuteRecipeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	schedule := handlers.ExecuteRecipeScheduleOutput{}
@@ -170,7 +170,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}).MustTrue(item.OwnerRecipeID == guid, "owner recipe id is different from expected")
 	}
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr.String())
+	chkExecMsg := types.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr.String())
 	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
@@ -184,8 +184,8 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	err = proto.Unmarshal(txHandleResBytes, txMsgData)
 	t.MustNil(err)
 	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-	t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCheckExecution{}).Type(), "MsgType should be accurate")
-	resp := msgs.MsgCheckExecutionResponse{}
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCheckExecution{}).Type(), "MsgType should be accurate")
+	resp := types.MsgCheckExecutionResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedStatus, tc.expectedMessage, t)
@@ -225,8 +225,8 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		err = proto.Unmarshal(txHandleResBytes, txMsgData)
 		t.MustNil(err)
 		t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
-		t.MustTrue(txMsgData.Data[0].MsgType == (msgs.MsgCheckExecution{}).Type(), "MsgType should be accurate")
-		resp := msgs.MsgCheckExecutionResponse{}
+		t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCheckExecution{}).Type(), "MsgType should be accurate")
+		resp := types.MsgCheckExecutionResponse{}
 		err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 		TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 		TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedRetryResStatus, tc.expectedRetryResMessage, t)

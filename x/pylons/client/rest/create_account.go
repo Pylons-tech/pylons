@@ -3,7 +3,7 @@ package rest
 import (
 	"net/http"
 
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -41,7 +41,7 @@ func createAccountHandler(clientCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := msgs.NewMsgCreateAccount(addr.String())
+		msg := types.NewMsgCreateAccount(addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
