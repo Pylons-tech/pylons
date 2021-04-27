@@ -298,7 +298,7 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		"bytes": string(bytes),
 	}).MustNil(err, "error unmarshaling into item input refs")
 
-	err = testutils.GetAminoCdc().UnmarshalJSON(bytes, &itemInputDirectReader)
+	err = json.Unmarshal(bytes, &itemInputDirectReader)
 	t.WithFields(testing.Fields{
 		"bytes": string(bytes),
 	}).MustNil(err, "error unmarshaling into item input direct")
@@ -310,7 +310,7 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		if len(iia.Ref) > 0 {
 			var ii types.ItemInput
 			iiBytes := ReadFile(iia.Ref, t)
-			err := testutils.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
+			err := json.Unmarshal(iiBytes, &ii)
 			if err != nil {
 				t.WithFields(testing.Fields{
 					"item_input_bytes": string(iiBytes),

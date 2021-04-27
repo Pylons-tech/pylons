@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils"
 
 	testutils "github.com/Pylons-tech/pylons/test/test_utils"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
@@ -17,7 +16,7 @@ import (
 )
 
 // TxBroadcastErrorCheck check error is same as expected when it exist
-func TxBroadcastErrorCheck(err error, step fixturetestSDK.FixtureStep, t *testing.T) {
+func TxBroadcastErrorCheck(err error, step FixtureStep, t *testing.T) {
 	if step.Output.TxResult.BroadcastError != "" {
 		t.MustContain(err.Error(), step.Output.TxResult.BroadcastError, "broadcast error is different from expected one")
 	} else {
@@ -34,7 +33,7 @@ func TxErrorLogCheck(err error, ErrorLog string, t *testing.T) {
 }
 
 // TxResultStatusMessageCheck check result status and message
-func TxResultStatusMessageCheck(status, message string, step fixturetestSDK.FixtureStep, t *testing.T) {
+func TxResultStatusMessageCheck(status, message string, step FixtureStep, t *testing.T) {
 	if len(step.Output.TxResult.Status) > 0 {
 		t.WithFields(testing.Fields{
 			"original_status": status,
@@ -60,7 +59,7 @@ func WaitForNextBlockWithErrorCheck(t *testing.T) {
 }
 
 // RunCreateAccount is a function to create account
-func RunCreateAccount(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunCreateAccount(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		caKey := GetAccountKeyFromTempName(step.ParamsRef, t)
@@ -91,22 +90,27 @@ func SendCoinsMsgFromRef(ref string, t *testing.T) msgs.MsgSendCoins {
 	newByteValue = UpdateReceiverKeyToAddress(newByteValue, t)
 
 	var siType struct {
-		Sender   sdk.AccAddress
-		Receiver sdk.AccAddress
-		Amount   sdk.Coins
+		Sender   string
+		Receiver string
+		Amount   string
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &siType)
+	err := json.Unmarshal(newByteValue, &siType)
 	t.WithFields(testing.Fields{
 		"siType":    testutils.AminoCodecFormatter(siType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json Unmarshaler")
 
-	return msgs.NewMsgSendCoins(siType.Amount, siType.Sender.String(), siType.Receiver.String())
+	amount, err := sdk.ParseCoinsNormalized(siType.Amount)
+	t.WithFields(testing.Fields{
+		"amount": siType.Amount,
+	}).MustNil(err, "error parsing amount")
+
+	return msgs.NewMsgSendCoins(amount, siType.Sender, siType.Receiver)
 }
 
 // RunGetPylons is a function to run GetPylos message
-func RunGetPylons(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunGetPylons(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		gpMsg := GetPylonsMsgFromRef(step.ParamsRef, t)
@@ -136,14 +140,14 @@ func GoogleIAPGetPylonsMsgFromRef(ref string, t *testing.T) msgs.MsgGoogleIAPGet
 		PurchaseToken string
 		ReceiptData   string
 		Signature     string
-		Requester     sdk.AccAddress
+		Requester     string
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &gigpType)
+	err := json.Unmarshal(newByteValue, &gigpType)
 	t.WithFields(testing.Fields{
 		"gigpType":  testutils.AminoCodecFormatter(gigpType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using GetJSONMarshaler")
 
 	receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(gigpType.ReceiptData))
 
@@ -152,12 +156,12 @@ func GoogleIAPGetPylonsMsgFromRef(ref string, t *testing.T) msgs.MsgGoogleIAPGet
 		gigpType.PurchaseToken,
 		receiptDataBase64,
 		gigpType.Signature,
-		gigpType.Requester.String(),
+		gigpType.Requester,
 	)
 }
 
 // RunGoogleIAPGetPylons is a function to run GoogleIAPGetPylons message
-func RunGoogleIAPGetPylons(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunGoogleIAPGetPylons(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		gigpMsg := GoogleIAPGetPylonsMsgFromRef(step.ParamsRef, t)
 		err := gigpMsg.ValidateBasic()
@@ -176,7 +180,7 @@ func RunGoogleIAPGetPylons(step fixturetestSDK.FixtureStep, t *testing.T) {
 }
 
 // RunSendCoins is a function to send coins from one address to another
-func RunSendCoins(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunSendCoins(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		scMsg := SendCoinsMsgFromRef(step.ParamsRef, t)
@@ -201,7 +205,7 @@ func RunSendCoins(step fixturetestSDK.FixtureStep, t *testing.T) {
 }
 
 // RunMockAccount = RunCreateAccount + RunGetPylons
-func RunMockAccount(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunMockAccount(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		RunCreateAccount(step, t)
@@ -212,7 +216,7 @@ func RunMockAccount(step fixturetestSDK.FixtureStep, t *testing.T) {
 // RunMultiMsgTx is a function to send multiple messages in a transaction
 // This support only 1 sender multi transaction for now
 // TODO we need to support multi-message multi sender transaction
-func RunMultiMsgTx(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunMultiMsgTx(step FixtureStep, t *testing.T) {
 
 	tci := testutils.GetTestCoinInput()
 	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
@@ -292,22 +296,22 @@ func CheckExecutionMsgFromRef(ref string, t *testing.T) msgs.MsgCheckExecution {
 	var execType struct {
 		ExecID        string
 		PayToComplete bool
-		Sender        sdk.AccAddress
+		Sender        string
 	}
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
+	err := json.Unmarshal(newByteValue, &execType)
 	t.WithFields(testing.Fields{
 		"execType": testutils.AminoCodecFormatter(execType),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json Unmarshaler")
 
 	return msgs.NewMsgCheckExecution(
 		execType.ExecID,
 		execType.PayToComplete,
-		execType.Sender.String(),
+		execType.Sender,
 	)
 }
 
 // RunCheckExecution is a function to execute check execution
-func RunCheckExecution(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunCheckExecution(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		chkExecMsg := CheckExecutionMsgFromRef(step.ParamsRef, t)
@@ -341,26 +345,23 @@ func FiatItemMsgFromRef(ref string, t *testing.T) msgs.MsgFiatItem {
 	newByteValue = UpdateCBNameToID(newByteValue, t)
 
 	var itemType types.Item
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &itemType)
+	err := json.Unmarshal(newByteValue, &itemType)
 	t.WithFields(testing.Fields{
 		"itemType": testutils.AminoCodecFormatter(itemType),
-	}).MustNil(err, "error reading using GetAminoCdc")
-
-	addr, err := sdk.AccAddressFromBech32(itemType.Sender)
-	TxResultDecodingErrorCheck(err, t)
+	}).MustNil(err, "error reading using json Unmarshaler")
 
 	return msgs.NewMsgFiatItem(
 		itemType.CookbookID,
 		itemType.Doubles,
 		itemType.Longs,
 		itemType.Strings,
-		addr.String(),
+		itemType.Sender,
 		itemType.TransferFee,
 	)
 }
 
 // RunFiatItem is a function to execute fiat item
-func RunFiatItem(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunFiatItem(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		itmMsg := FiatItemMsgFromRef(step.ParamsRef, t)
@@ -393,25 +394,28 @@ func SendItemsMsgFromRef(ref string, t *testing.T) msgs.MsgSendItems {
 	newByteValue = UpdateReceiverKeyToAddress(newByteValue, t)
 
 	var siType struct {
-		Sender   sdk.AccAddress
-		Receiver sdk.AccAddress
+		Sender   string
+		Receiver string
 		ItemIDs  []string `json:"ItemIDs"`
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &siType)
+	err := json.Unmarshal(newByteValue, &siType)
 	t.WithFields(testing.Fields{
 		"siType":    testutils.AminoCodecFormatter(siType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json Unmarshal")
+
+	sender, err := sdk.AccAddressFromBech32(siType.Sender)
+	t.MustNil(err, "error parsing sender address")
 
 	// translate itemNames to itemIDs
-	ItemIDs := GetItemIDsFromNames(newByteValue, siType.Sender, false, false, t)
+	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return msgs.NewMsgSendItems(ItemIDs, siType.Sender.String(), siType.Receiver.String())
+	return msgs.NewMsgSendItems(ItemIDs, siType.Sender, siType.Receiver)
 }
 
 // RunSendItems is a function to send items to another user
-func RunSendItems(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunSendItems(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		siMsg := SendItemsMsgFromRef(step.ParamsRef, t)
@@ -449,12 +453,12 @@ func UpdateItemStringMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateItemStri
 	t.WithFields(testing.Fields{
 		"sTypeMsg":  testutils.AminoCodecFormatter(sTypeMsg),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json Unmarshal")
 	return sTypeMsg
 }
 
 // RunUpdateItemString is a function to update item's string value
-func RunUpdateItemString(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunUpdateItemString(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		sTypeMsg := UpdateItemStringMsgFromRef(step.ParamsRef, t)
@@ -484,11 +488,11 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgCreateCookbook {
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 
 	var cbType types.Cookbook
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
+	err := testutils.GetJSONMarshaler().UnmarshalJSON(newByteValue, &cbType)
 	t.WithFields(testing.Fields{
 		"cbType":    testutils.AminoCodecFormatter(cbType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json Unmarshal")
 
 	return msgs.NewMsgCreateCookbook(
 		cbType.Name,
@@ -504,7 +508,7 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgCreateCookbook {
 }
 
 // RunCreateCookbook is a function to create cookbook
-func RunCreateCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunCreateCookbook(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		cbMsg := CreateCookbookMsgFromRef(step.ParamsRef, t)
@@ -536,11 +540,11 @@ func UpdateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateCookbook {
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 
 	var cbType types.Cookbook
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &cbType)
+	err := json.Unmarshal(newByteValue, &cbType)
 	t.WithFields(testing.Fields{
 		"cbType":    testutils.AminoCodecFormatter(cbType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
 	return msgs.NewMsgUpdateCookbook(
 		cbType.ID,
@@ -553,7 +557,7 @@ func UpdateCookbookMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateCookbook {
 }
 
 // RunUpdateCookbook is a function to update cookbook
-func RunUpdateCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunUpdateCookbook(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		cbMsg := UpdateCookbookMsgFromRef(step.ParamsRef, t)
 
@@ -579,10 +583,10 @@ func RunUpdateCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
 }
 
 // RunMockCookbook = RunMockAccount + RunCreateCookbook
-func RunMockCookbook(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunMockCookbook(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		sender := GetSenderKeyFromRef(step.ParamsRef, t)
-		RunMockAccount(fixturetestSDK.FixtureStep{ParamsRef: sender}, t)
+		RunMockAccount(FixtureStep{ParamsRef: sender}, t)
 		RunCreateCookbook(step, t)
 	}
 }
@@ -600,11 +604,11 @@ func CreateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateRecipe {
 	entries := GetEntriesFromBytes(newByteValue, t)
 
 	var rcpTempl types.Recipe
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpTempl)
+	err := json.Unmarshal(newByteValue, &rcpTempl)
 	t.WithFields(testing.Fields{
 		"rcpTempl":  testutils.AminoCodecFormatter(rcpTempl),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
 	return msgs.NewMsgCreateRecipe(
 		rcpTempl.Name,
@@ -621,7 +625,7 @@ func CreateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateRecipe {
 }
 
 // RunCreateRecipe is a function to create recipe
-func RunCreateRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunCreateRecipe(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		rcpMsg := CreateRecipeMsgFromRef(step.ParamsRef, t)
@@ -663,11 +667,11 @@ func UpdateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateRecipe {
 	entries := GetEntriesFromBytes(newByteValue, t)
 
 	var rcpTempl types.Recipe
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &rcpTempl)
+	err := json.Unmarshal(newByteValue, &rcpTempl)
 	t.WithFields(testing.Fields{
 		"rcpTempl":  testutils.AminoCodecFormatter(rcpTempl),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
 	addr, err := sdk.AccAddressFromBech32(rcpTempl.Sender)
 	TxResultDecodingErrorCheck(err, t)
@@ -687,7 +691,7 @@ func UpdateRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgUpdateRecipe {
 }
 
 // RunUpdateRecipe is a function to update recipe
-func RunUpdateRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunUpdateRecipe(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		rcpMsg := UpdateRecipeMsgFromRef(step.ParamsRef, t)
 
@@ -722,20 +726,20 @@ func EnableRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgEnableRecipe {
 
 	var recipeType struct {
 		RecipeID string
-		Sender   sdk.AccAddress
+		Sender   string
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &recipeType)
+	err := json.Unmarshal(newByteValue, &recipeType)
 	t.WithFields(testing.Fields{
 		"rcpTempl":  testutils.AminoCodecFormatter(recipeType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgEnableRecipe(recipeType.RecipeID, recipeType.Sender.String())
+	return msgs.NewMsgEnableRecipe(recipeType.RecipeID, recipeType.Sender)
 }
 
 // RunEnableRecipe is a function to enable recipe
-func RunEnableRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunEnableRecipe(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		rcpMsg := EnableRecipeMsgFromRef(step.ParamsRef, t)
 
@@ -770,20 +774,20 @@ func DisableRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableRecipe {
 
 	var recipeType struct {
 		RecipeID string
-		Sender   sdk.AccAddress
+		Sender   string
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &recipeType)
+	err := json.Unmarshal(newByteValue, &recipeType)
 	t.WithFields(testing.Fields{
 		"rcpTempl":  testutils.AminoCodecFormatter(recipeType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgDisableRecipe(recipeType.RecipeID, recipeType.Sender.String())
+	return msgs.NewMsgDisableRecipe(recipeType.RecipeID, recipeType.Sender)
 }
 
 // RunDisableRecipe is a function to disable recipe
-func RunDisableRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunDisableRecipe(step FixtureStep, t *testing.T) {
 	if step.ParamsRef != "" {
 		rcpMsg := DisableRecipeMsgFromRef(step.ParamsRef, t)
 
@@ -818,23 +822,26 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) msgs.MsgExecuteRecipe {
 
 	var execType struct {
 		RecipeID string
-		Sender   sdk.AccAddress
+		Sender   string
 		ItemIDs  []string `json:"ItemIDs"`
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &execType)
+	err := json.Unmarshal(newByteValue, &execType)
 	t.WithFields(testing.Fields{
 		"execType":  testutils.AminoCodecFormatter(execType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
-	// translate itemNames to itemIDs
-	ItemIDs := GetItemIDsFromNames(newByteValue, execType.Sender, false, false, t)
+	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender.String(), ItemIDs)
+	// translate itemNames to itemIDs
+	sender, err := sdk.AccAddressFromBech32(execType.Sender)
+	t.MustNil(err, "error parsing sender address")
+	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
+
+	return msgs.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called
-func RunExecuteRecipe(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	// TODO should check item ID is returned
 	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
 
@@ -896,11 +903,11 @@ func CreateTradeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateTrade {
 	// get item inputs from fileNames
 	tradeItemInputs := GetTradeItemInputsFromBytes(newByteValue, t)
 	var trdType types.Trade
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := json.Unmarshal(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
 		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
 	addr, err := sdk.AccAddressFromBech32(trdType.Sender)
 	TxResultDecodingErrorCheck(err, t)
@@ -914,12 +921,12 @@ func CreateTradeMsgFromRef(ref string, t *testing.T) msgs.MsgCreateTrade {
 		trdType.CoinOutputs,
 		itemOutputs,
 		trdType.ExtraInfo,
-		addr.String(),
+		trdType.Sender,
 	)
 }
 
 // RunCreateTrade is a function to create trade
-func RunCreateTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunCreateTrade(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		createTrd := CreateTradeMsgFromRef(step.ParamsRef, t)
@@ -957,23 +964,25 @@ func FulfillTradeMsgFromRef(ref string, t *testing.T) msgs.MsgFulfillTrade {
 
 	var trdType struct {
 		TradeID string
-		Sender  sdk.AccAddress
+		Sender  string
 		ItemIDs []string `json:"ItemIDs"`
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := json.Unmarshal(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
 		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 	// translate itemNames to itemIDs
-	ItemIDs := GetItemIDsFromNames(newByteValue, trdType.Sender, false, false, t)
+	sender, err := sdk.AccAddressFromBech32(trdType.Sender)
+	t.MustNil(err, "error parsing sender address")
+	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return msgs.NewMsgFulfillTrade(trdType.TradeID, trdType.Sender.String(), ItemIDs)
+	return msgs.NewMsgFulfillTrade(trdType.TradeID, trdType.Sender, ItemIDs)
 }
 
 // RunFulfillTrade is a function to fulfill trade
-func RunFulfillTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunFulfillTrade(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		ffTrdMsg := FulfillTradeMsgFromRef(step.ParamsRef, t)
@@ -1008,20 +1017,20 @@ func DisableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgDisableTrade {
 
 	var trdType struct {
 		TradeID string
-		Sender  sdk.AccAddress
+		Sender  string
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := json.Unmarshal(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
 		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgDisableTrade(trdType.TradeID, trdType.Sender.String())
+	return msgs.NewMsgDisableTrade(trdType.TradeID, trdType.Sender)
 }
 
 // RunDisableTrade is a function to disable trade
-func RunDisableTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunDisableTrade(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		dsTrdMsg := DisableTradeMsgFromRef(step.ParamsRef, t)
@@ -1056,20 +1065,20 @@ func EnableTradeMsgFromRef(ref string, t *testing.T) msgs.MsgEnableTrade {
 
 	var trdType struct {
 		TradeID string
-		Sender  sdk.AccAddress
+		Sender  string
 	}
 
-	err := testutils.GetAminoCdc().UnmarshalJSON(newByteValue, &trdType)
+	err := json.Unmarshal(newByteValue, &trdType)
 	t.WithFields(testing.Fields{
 		"trdType":   testutils.AminoCodecFormatter(trdType),
 		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetAminoCdc")
+	}).MustNil(err, "error reading using json.Unmarshal")
 
-	return msgs.NewMsgEnableTrade(trdType.TradeID, trdType.Sender.String())
+	return msgs.NewMsgEnableTrade(trdType.TradeID, trdType.Sender)
 }
 
 // RunEnableTrade is a function to enable trade
-func RunEnableTrade(step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunEnableTrade(step FixtureStep, t *testing.T) {
 
 	if step.ParamsRef != "" {
 		dsTrdMsg := EnableTradeMsgFromRef(step.ParamsRef, t)

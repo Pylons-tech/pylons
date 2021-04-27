@@ -6,6 +6,7 @@ import (
 	"os"
 	"regexp"
 
+	"github.com/Pylons-tech/pylons/app"
 	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
@@ -36,7 +37,23 @@ func GetTestCoinInput() keep.TestCoinInput {
 
 // GetAminoCdc is a utility function to get amino codec
 func GetAminoCdc() *codec.LegacyAmino {
-	return keep.MakeCodec()
+	return app.MakeEncodingConfig().Amino
+}
+
+func GetJSONMarshaler() codec.Marshaler {
+	return app.MakeEncodingConfig().Marshaler
+}
+
+func GetInterfaceRegistry() codectypes.InterfaceRegistry {
+	return app.MakeEncodingConfig().InterfaceRegistry
+}
+
+func GetTxJSONEncoder() sdk.TxEncoder {
+	return app.MakeEncodingConfig().TxConfig.TxJSONEncoder()
+}
+
+func GetTxJSONDecoder() sdk.TxDecoder {
+	return app.MakeEncodingConfig().TxConfig.TxJSONDecoder()
 }
 
 // GetAccountInfoFromAddr is a function to get account information from address
