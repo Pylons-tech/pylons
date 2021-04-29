@@ -91,8 +91,8 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 }
 
 // AddExecutedResult add executed result from ExecProcess
-func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string) ([]ExecuteRecipeSerialize, error) {
-	var ersl []ExecuteRecipeSerialize
+func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string) ([]types.ExecuteRecipeSerialize, error) {
+	var ersl []types.ExecuteRecipeSerialize
 	usedItemInputIndexes := []int{}
 	for _, entryID := range entryIDs {
 		output, err := p.recipe.Entries.FindByID(entryID)
@@ -119,7 +119,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			if err != nil {
 				return ersl, err
 			}
-			ersl = append(ersl, ExecuteRecipeSerialize{
+			ersl = append(ersl, types.ExecuteRecipeSerialize{
 				Type:   "COIN",
 				Coin:   coinOutput.Coin,
 				Amount: coinAmount,
@@ -145,7 +145,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 				return ersl, errInternal(err)
 
 			}
-			ersl = append(ersl, ExecuteRecipeSerialize{
+			ersl = append(ersl, types.ExecuteRecipeSerialize{
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})
@@ -158,7 +158,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			if err = p.keeper.SetItem(p.ctx, outputItem); err != nil {
 				return ersl, errInternal(err)
 			}
-			ersl = append(ersl, ExecuteRecipeSerialize{
+			ersl = append(ersl, types.ExecuteRecipeSerialize{
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})

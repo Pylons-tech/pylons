@@ -134,7 +134,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 				require.NoError(t, err)
 			}
 
-			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			scheduleOutput := types.ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.NoError(t, err)
 

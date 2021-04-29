@@ -8,13 +8,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// UpdateRecipeResponse is a struct to control update recipe response
-type UpdateRecipeResponse struct {
-	RecipeID string `json:"RecipeID"`
-	Message  string
-	Status   string
-}
-
 // HandlerMsgUpdateRecipe is used to update recipe by a developer
 func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
 

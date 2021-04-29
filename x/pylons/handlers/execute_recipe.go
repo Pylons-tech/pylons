@@ -10,19 +10,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// ExecuteRecipeSerialize is a struct for execute recipe result serialization
-type ExecuteRecipeSerialize struct {
-	Type   string `json:"type"`   // COIN or ITEM
-	Coin   string `json:"coin"`   // used when type is ITEM
-	Amount int64  `json:"amount"` // used when type is COIN
-	ItemID string `json:"itemID"` // used when type is ITEM
-}
-
-// ExecuteRecipeScheduleOutput is a struct that shows how execute recipe schedule output works
-type ExecuteRecipeScheduleOutput struct {
-	ExecID string
-}
-
 // ExecuteRecipe is used to execute a recipe
 func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 
@@ -76,7 +63,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		outputSTR, err := json.Marshal(ExecuteRecipeScheduleOutput{
+		outputSTR, err := json.Marshal(types.ExecuteRecipeScheduleOutput{
 			ExecID: exec.ID,
 		})
 		if err != nil {

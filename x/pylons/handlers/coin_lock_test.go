@@ -474,7 +474,7 @@ func TestCoinLock(t *testing.T) {
 			}
 
 			tradeData := &types.MsgCreateTradeResponse{}
-			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			scheduleOutput := types.ExecuteRecipeScheduleOutput{}
 
 			// test create trade coin lock
 			if tc.testCreateTradeLock {

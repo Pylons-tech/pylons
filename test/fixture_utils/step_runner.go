@@ -863,7 +863,7 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 
 		if result.Message == "scheduled the recipe" { // delayed execution
-			var scheduleRes handlers.ExecuteRecipeScheduleOutput
+			var scheduleRes types.ExecuteRecipeScheduleOutput
 
 			err := json.Unmarshal(result.Output, &scheduleRes)
 			t.WithFields(testing.Fields{

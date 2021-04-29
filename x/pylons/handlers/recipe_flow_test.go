@@ -125,7 +125,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			t.Log(execRcpResponse.Message)
 
 			// Schedule Recipe
-			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			scheduleOutput := types.ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.NoError(t, err)
 

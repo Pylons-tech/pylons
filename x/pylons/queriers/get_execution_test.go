@@ -35,7 +35,7 @@ func TestGetExecution(t *testing.T) {
 	require.True(t, execRcpResponse.Status == "Success")
 	require.True(t, execRcpResponse.Message == "scheduled the recipe")
 
-	scheduleOutput := handlers.ExecuteRecipeScheduleOutput{}
+	scheduleOutput := types.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 	require.NoError(t, err)
 
