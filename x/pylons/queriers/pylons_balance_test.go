@@ -5,20 +5,18 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/stretchr/testify/require"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestQuerierPylonsBalance(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
 	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
 
-	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000), nil, nil, nil)
+	sender1, sender2, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000), nil, nil, nil)
 
 	cases := map[string]struct {
 		address       string

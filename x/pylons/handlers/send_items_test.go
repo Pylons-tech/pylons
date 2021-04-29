@@ -6,21 +6,20 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgSendItems(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 
-	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
+	sender1, sender2, sender3, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
 
-	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender1, types.NewPylon(10000000)))
-	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
+	require.True(t, keeper.HasCoins(tci.PlnK, tci.Ctx, sender1, types.NewPylon(10000000)))
+	require.True(t, keeper.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
 	cbData := MockCookbook(tci, sender1)
 	cookbook, err := tci.PlnK.GetCookbook(tci.Ctx, cbData.CookbookID)
 	require.NoError(t, err)
@@ -28,14 +27,14 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
 	require.NoError(t, err)
 
-	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
-	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
-	item3 := keep.GenItem(cbData.CookbookID, sender2, "spear")
-	item4 := keep.GenItem(cbData.CookbookID, sender2, "bow")
-	item5 := keep.GenItem(cbData.CookbookID, sender3, "bow1")
-	item6 := keep.GenItem(cbData.CookbookID, sender2, "bow2")
-	item7 := keep.GenItem(cbData.CookbookID, sender2, "bow3")
-	item8 := keep.GenItem(cbData.CookbookID, sender1, "bow4")
+	item1 := keeper.GenItem(cbData.CookbookID, sender1, "sword")
+	item2 := keeper.GenItem(cbData.CookbookID, sender1, "axe")
+	item3 := keeper.GenItem(cbData.CookbookID, sender2, "spear")
+	item4 := keeper.GenItem(cbData.CookbookID, sender2, "bow")
+	item5 := keeper.GenItem(cbData.CookbookID, sender3, "bow1")
+	item6 := keeper.GenItem(cbData.CookbookID, sender2, "bow2")
+	item7 := keeper.GenItem(cbData.CookbookID, sender2, "bow3")
+	item8 := keeper.GenItem(cbData.CookbookID, sender1, "bow4")
 
 	item2.OwnerRecipeID = "????????"
 	item8.OwnerTradeID = "????????"

@@ -4,17 +4,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgFiatItem(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	sender, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cases := map[string]struct {
 		cookbookName    string
@@ -55,7 +54,7 @@ func TestHandlerMsgFiatItem(t *testing.T) {
 				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
-			genItem := keep.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
+			genItem := keeper.GenItem(cbData.CookbookID, tc.sender, tc.desiredItemName)
 			msg := types.NewMsgFiatItem(genItem.CookbookID, genItem.Doubles, genItem.Longs, genItem.Strings, tc.sender.String(), 0)
 			result, err := tci.PlnH.FiatItem(sdk.WrapSDKContext(tci.Ctx), &msg)
 

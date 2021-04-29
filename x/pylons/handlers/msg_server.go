@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type msgServer struct {
-	keep.Keeper
+	keeper.Keeper
 }
 
 // NewMsgServerImpl returns an implementation of the bank MsgServer interface
 // for the provided Keeper.
-func NewMsgServerImpl(keeper keep.Keeper) types.MsgServer {
+func NewMsgServerImpl(keeper keeper.Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 

@@ -7,7 +7,7 @@ import (
 	"regexp"
 
 	"github.com/Pylons-tech/pylons/app"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -18,7 +18,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-var tci keep.TestCoinInput
+var tci keeper.TestCoinInput
 
 // CLIOptions is a struct to manage pylonsd options
 type CLIOptions struct{}
@@ -27,11 +27,11 @@ type CLIOptions struct{}
 var CLIOpts CLIOptions
 
 func init() {
-	tci = keep.SetupTestCoinInput()
+	tci = keeper.SetupTestCoinInput()
 }
 
 // GetTestCoinInput returns test coin input for testing
-func GetTestCoinInput() keep.TestCoinInput {
+func GetTestCoinInput() keeper.TestCoinInput {
 	return tci
 }
 

@@ -5,17 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestRecipeItemTransferFee(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
@@ -110,7 +109,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 			if tc.dynamicItemSet {
 				tc.itemIDs = []string{}
 				for idx, diN := range tc.dynamicItemNames {
-					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
+					dynamicItem := keeper.GenItem(cbData.CookbookID, tc.sender, diN)
 
 					if len(tc.dynamicItemFees) > idx {
 						dynamicItem.SetTransferFee(tc.dynamicItemFees[idx])

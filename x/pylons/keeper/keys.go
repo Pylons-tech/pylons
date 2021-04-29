@@ -1,4 +1,4 @@
-package keep
+package keeper
 
 // store keys
 const (

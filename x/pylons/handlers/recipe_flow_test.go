@@ -5,17 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestRecipeFlowUpdate(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, sdk.Coins{
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
 		sdk.NewInt64Coin("wood", 100000),
 		sdk.NewInt64Coin(types.Pylon, 100000),
@@ -71,7 +70,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			itemIDs := []string{}
 			if tc.dynamicItemSet {
 				for _, iN := range tc.dynamicItemNames {
-					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
+					dynamicItem := keeper.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
@@ -108,7 +107,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			itemIDs = []string{}
 			if tc.dynamicItemSet {
 				for _, iN := range tc.dynamicItemNames {
-					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
+					dynamicItem := keeper.GenItem(cbData.CookbookID, tc.sender, iN)
 					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)

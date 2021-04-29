@@ -1,4 +1,4 @@
-package keep
+package keeper
 
 import (
 	"github.com/cosmos/cosmos-sdk/client"

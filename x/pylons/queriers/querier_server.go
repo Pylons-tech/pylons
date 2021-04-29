@@ -1,15 +1,15 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type querierServer struct {
-	keep.Keeper
+	keeper.Keeper
 }
 
-func NewQuerierServerImpl(k keep.Keeper) *querierServer {
+func NewQuerierServerImpl(k keeper.Keeper) *querierServer {
 	return &querierServer{Keeper: k}
 }
 

@@ -12,7 +12,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -228,7 +227,7 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	execResp := types.MsgExecuteRecipeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
-	schedule := handlers.ExecuteRecipeScheduleOutput{}
+	schedule := types.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.WithFields(testing.Fields{
 		"txhash":          txhash,

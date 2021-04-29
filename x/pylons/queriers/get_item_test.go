@@ -4,26 +4,25 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestGetItem(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
 	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
 
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbook(tci, sender1)
 
 	// mock item
 	mockItemName := "GET_ITEM_MOCK_TEST_NAME"
-	mockedItem := keep.GenItem(cbData.CookbookID, sender1, mockItemName)
+	mockedItem := keeper.GenItem(cbData.CookbookID, sender1, mockItemName)
 	err := tci.PlnK.SetItem(tci.Ctx, mockedItem)
 	require.NoError(t, err)
 

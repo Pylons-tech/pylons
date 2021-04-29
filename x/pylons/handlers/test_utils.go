@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -13,12 +13,12 @@ const (
 )
 
 // MockCookbook mock cookbook
-func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) *types.MsgCreateCookbookResponse {
+func MockCookbook(tci keeper.TestCoinInput, sender sdk.AccAddress) *types.MsgCreateCookbookResponse {
 	return MockCookbookByName(tci, sender, "cookbook-00001")
 }
 
 // MockCookbookByName mock cookbook with specific name
-func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) *types.MsgCreateCookbookResponse {
+func MockCookbookByName(tci keeper.TestCoinInput, sender sdk.AccAddress, cookbookName string) *types.MsgCreateCookbookResponse {
 	cookbookDesc := "this has to meet character limits"
 	msg := types.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, types.DefaultCostPerBlock, sender.String())
 	cbResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
@@ -30,7 +30,7 @@ func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookN
 
 // MockRecipe mock recipe with details
 func MockRecipe(
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	rcpName string,
 	coinInputList types.CoinInputList,
 	itemInputList types.ItemInputList,
@@ -143,7 +143,7 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 // MockPopularRecipe mock popular recipes
 func MockPopularRecipe(
 	hfrt PopularRecipeType,
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	rcpName string,
 	cbID string,
 	sender sdk.AccAddress,
@@ -160,7 +160,7 @@ func MockPopularRecipe(
 
 // MockExecution executes a mockRecipe
 func MockExecution(
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
 	itemIDs []string,
@@ -175,7 +175,7 @@ func MockExecution(
 
 // MockTrade creates a trade
 func MockTrade(
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	coinInputList types.CoinInputList,
 	itemInputList types.TradeItemInputList,
 	coinOutputs sdk.Coins,

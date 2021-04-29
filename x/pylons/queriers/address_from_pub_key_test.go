@@ -1,16 +1,16 @@
 package queriers
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestAddrFromPubKeyFromAfti(t *testing.T) {
-	input := keep.SetupTestCoinInput()
+	input := keeper.SetupTestCoinInput()
 	input.PlnQ = NewQuerierServerImpl(input.PlnK)
 
 	pubKey := "0283e197461d60d77d3b40e854646583ffebdcb12fa7f0327c4cd1c68b316e80f5"
@@ -31,7 +31,7 @@ func TestAddrFromPubKeyFromAfti(t *testing.T) {
 	require.Equal(t, addrResp.Bech32Addr, expectedBech32Addr)
 }
 func TestAddrFromPubKeyFromGirish(t *testing.T) {
-	input := keep.SetupTestCoinInput()
+	input := keeper.SetupTestCoinInput()
 	input.PlnQ = NewQuerierServerImpl(input.PlnK)
 
 	pubKey := "03DD07C1359668F47FF060805A5E2DD3190A2BB5A50577D7E90DB851DA0E6C00A2"

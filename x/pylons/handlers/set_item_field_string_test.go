@@ -5,31 +5,30 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgUpdateItemString(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.PremiumTier.Fee, nil, nil, nil)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.PremiumTier.Fee, nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
 
-	item := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item := keeper.GenItem(cbData.CookbookID, sender1, "????????")
 	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.NoError(t, err)
 
-	item1 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item1 := keeper.GenItem(cbData.CookbookID, sender1, "????????")
 	item1.OwnerRecipeID = "????????"
 	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.NoError(t, err)
 
-	item2 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item2 := keeper.GenItem(cbData.CookbookID, sender1, "????????")
 	item2.OwnerTradeID = "????????"
 	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.NoError(t, err)

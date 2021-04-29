@@ -4,17 +4,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgCreateTrade(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender, sender2, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
+	sender, sender2, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(100000), nil, nil, nil)
 
 	err := tci.Bk.AddCoins(tci.Ctx, sender2, types.NewPylon(100000))
 	require.NoError(t, err)
@@ -33,19 +32,19 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
-	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
+	item := keeper.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, item)
 	require.NoError(t, err)
 
-	item1 := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
+	item1 := keeper.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.NoError(t, err)
 
-	item2 := keep.GenItem(cookbookResult.CookbookID, sender2, "Pichu")
+	item2 := keeper.GenItem(cookbookResult.CookbookID, sender2, "Pichu")
 	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.NoError(t, err)
 
-	item3 := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
+	item3 := keeper.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, item3)
 	require.NoError(t, err)
 

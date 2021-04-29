@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -17,8 +17,8 @@ import (
 // TestNewAccountCreationDecoratorAnteHandle is a test for NewAccountCreationDecorator handler
 func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 	acd := AccountCreationDecorator{tci.Ak}
 
 	cases := map[string]struct {
@@ -119,8 +119,8 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 // TestCustomSigVerificationDecoratorAnteHandle is a test for CustomSigVerificationDecorator handler
 func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 
-	tci := keep.SetupTestCoinInput()
-	keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 	csvd := CustomSigVerificationDecorator{tci.Ak, tci.TxConfig.SignModeHandler()}
 
 	cases := map[string]struct {

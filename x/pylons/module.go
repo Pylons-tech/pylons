@@ -11,16 +11,15 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
 	"github.com/Pylons-tech/pylons/x/pylons/client/rest"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/types/module"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/codec"
 	sdktypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
@@ -162,7 +161,7 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 // AppModule manages keeper and bankKeeper along with AppModuleBasic
 type AppModule struct {
 	AppModuleBasic
-	keeper     keep.Keeper
+	keeper     keeper.Keeper
 	bankKeeper bankkeeper.Keeper
 }
 
@@ -176,7 +175,7 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 }
 
 // NewAppModule creates a new AppModule Object
-func NewAppModule(cdc codec.Marshaler, k keep.Keeper, bankKeeper bankkeeper.Keeper) AppModule {
+func NewAppModule(cdc codec.Marshaler, k keeper.Keeper, bankKeeper bankkeeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         k,

@@ -4,17 +4,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestSetMatchedItemsFromExecMsg(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cbData := MockCookbook(tci, sender1)
 
@@ -29,7 +28,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 	initItemIDs := []string{}
 	for _, iN := range initItemNames {
-		newItem := keep.GenItem(cbData.CookbookID, sender1, iN)
+		newItem := keeper.GenItem(cbData.CookbookID, sender1, iN)
 		if iN == "Attack1Item" {
 			newItem.Doubles = append(newItem.Doubles, types.DoubleKeyValue{
 				Key:   "attack",
@@ -255,9 +254,9 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 }
 
 func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	cbData := MockCookbook(tci, sender1)
 

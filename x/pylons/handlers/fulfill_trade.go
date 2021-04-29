@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -76,11 +76,11 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	}
 
 	inputCoins := types.CoinInputList(trade.CoinInputs).ToCoins()
-	if !keep.HasCoins(k.Keeper, sdkCtx, sender, inputCoins) {
+	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, inputCoins) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 	}
 
-	if !keep.HasCoins(k.Keeper, sdkCtx, tradeSender, trade.CoinOutputs) {
+	if !keeper.HasCoins(k.Keeper, sdkCtx, tradeSender, trade.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the trade creator doesn't have sufficient coins")
 	}
 
@@ -131,7 +131,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	// trade creator to trade acceptor the coin output
 	// Send output coin from sender to fullfiller
 
-	err = keep.SendCoins(k.Keeper, sdkCtx, tradeSender, sender, trade.CoinOutputs)
+	err = keeper.SendCoins(k.Keeper, sdkCtx, tradeSender, sender, trade.CoinOutputs)
 
 	if err != nil {
 		return nil, errInternal(err)
@@ -139,7 +139,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	senderFee := totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
 	if senderFee != 0 {
 		// sender process fee after receiving coins from trade.Sender
-		err = keep.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
+		err = keeper.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -147,14 +147,14 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 
 	// trade acceptor to trade creator the coin input
 	// Send input coin from fullfiller to sender (trade creator)
-	err = keep.SendCoins(k.Keeper, sdkCtx, sender, tradeSender, inputCoins)
+	err = keeper.SendCoins(k.Keeper, sdkCtx, sender, tradeSender, inputCoins)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	fulfillerFee := totalFee - senderFee
 	if fulfillerFee != 0 {
 		// trade.Sender process fee after receiving coins from sender
-		err = keep.SendCoins(k.Keeper, sdkCtx, tradeSender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
+		err = keeper.SendCoins(k.Keeper, sdkCtx, tradeSender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -180,7 +180,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		}
 
 		if feeForCB > 0 {
-			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
+			err = keeper.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}
@@ -219,7 +219,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		}
 
 		if feeForCB > 0 {
-			err = keep.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
+			err = keeper.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}

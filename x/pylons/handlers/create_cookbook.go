@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -32,7 +32,7 @@ func (k msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCookb
 		return nil, errInternal(errors.New("invalid level"))
 	}
 
-	if !keep.HasCoins(k.Keeper, sdkCtx, sender, fee) {
+	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, fee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
@@ -40,7 +40,7 @@ func (k msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCookb
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = keep.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, fee)
+	err = keeper.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, fee)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -66,6 +66,42 @@ func (k msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCookb
 	return &types.MsgCreateCookbookResponse{
 		CookbookID: cb.ID,
 		Message:    "successfully created a cookbook",
+		Status:     "Success",
+	}, nil
+}
+
+// HandlerMsgUpdateCookbook is used to update cookbook by a developer
+func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *types.MsgUpdateCookbook) (*types.MsgUpdateCookbookResponse, error) {
+
+	err := msg.ValidateBasic()
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	cb, err := k.GetCookbook(sdkCtx, msg.ID)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	// only the original sender (owner) of the cookbook can update the cookbook
+	if cb.Sender != msg.Sender {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the cookbook is different then the current sender")
+	}
+
+	cb.Description = msg.Description
+	cb.Version = msg.Version
+	cb.SupportEmail = msg.SupportEmail
+	cb.Developer = msg.Developer
+
+	if err := k.UpdateCookbook(sdkCtx, msg.ID, cb); err != nil {
+		return nil, errInternal(err)
+	}
+
+	return &types.MsgUpdateCookbookResponse{
+		CookbookID: cb.ID,
+		Message:    "successfully updated the cookbook",
 		Status:     "Success",
 	}, nil
 }

@@ -3,7 +3,8 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -50,7 +51,7 @@ func Min(x, y int64) int64 {
 }
 
 // GetItemsFromIDs get items from IDs
-func GetItemsFromIDs(ctx sdk.Context, keeper keep.Keeper, itemIDs []string, sender sdk.AccAddress) ([]types.Item, error) {
+func GetItemsFromIDs(ctx sdk.Context, keeper keeper.Keeper, itemIDs []string, sender sdk.AccAddress) ([]types.Item, error) {
 	var inputItems []types.Item
 	keys := make(map[string]bool)
 

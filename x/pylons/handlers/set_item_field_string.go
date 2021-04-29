@@ -4,11 +4,10 @@ import (
 	"context"
 	"errors"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
@@ -25,7 +24,7 @@ func (k msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateIte
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 	updateFee := types.NewPylon(config.Config.Fee.UpdateItemFieldString)
 
-	if !keep.HasCoins(k.Keeper, sdkCtx, sender, updateFee) {
+	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, updateFee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
 

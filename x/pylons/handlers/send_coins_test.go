@@ -4,19 +4,18 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgSendCoins(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 
 	initialCoins := sdk.Coins{sdk.NewInt64Coin("pylon", 50000), sdk.NewInt64Coin("loudcoin", 10000)}
-	sender1, sender2, _, _ := keep.SetupTestAccounts(t, tci, initialCoins, nil, nil, nil)
+	sender1, sender2, _, _ := keeper.SetupTestAccounts(t, tci, initialCoins, nil, nil, nil)
 
 	cases := map[string]struct {
 		amount       sdk.Coins

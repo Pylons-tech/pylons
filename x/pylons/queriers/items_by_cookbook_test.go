@@ -4,25 +4,24 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestQueriersItemsByCookbook(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
 	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
 
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbookByName(tci, sender1, "cookbook-00001")
 	cbData1 := handlers.MockCookbookByName(tci, sender1, "cookbook-00002")
 
-	item := keep.GenItem(cbData.CookbookID, sender1, "Raichu")
+	item := keeper.GenItem(cbData.CookbookID, sender1, "Raichu")
 	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.NoError(t, err)
 

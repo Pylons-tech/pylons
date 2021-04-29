@@ -5,18 +5,17 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 // TestHandlerMsgFulfillTrade is fulfill trade test
 func TestHandlerMsgFulfillTrade(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender, sender2, sender3, sender4 := keep.SetupTestAccounts(t, tci, sdk.Coins{
+	sender, sender2, sender3, sender4 := keeper.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
 		sdk.NewInt64Coin(types.Pylon, 100000),
 	}, types.NewPylon(100000), types.NewPylon(100000), types.NewPylon(100000))
@@ -35,21 +34,21 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 	require.True(t, len(cookbookResult.CookbookID) > 0)
 
-	item := keep.GenItem(cookbookResult.CookbookID, sender, "Raichu")
+	item := keeper.GenItem(cookbookResult.CookbookID, sender, "Raichu")
 	err = tci.PlnK.SetItem(tci.Ctx, item)
 	require.NoError(t, err)
 
-	item2 := keep.GenItem(cookbookResult.CookbookID, sender2, "Pikachu")
+	item2 := keeper.GenItem(cookbookResult.CookbookID, sender2, "Pikachu")
 	item2.SetTransferFee(200)
 	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.NoError(t, err)
 
-	item3 := keep.GenItem(cookbookResult.CookbookID, sender2, "Rikchu")
+	item3 := keeper.GenItem(cookbookResult.CookbookID, sender2, "Rikchu")
 	item3.SetTransferFee(50)
 	err = tci.PlnK.SetItem(tci.Ctx, item3)
 	require.NoError(t, err)
 
-	item5 := keep.GenItem(cookbookResult.CookbookID, sender2, "Pychu")
+	item5 := keeper.GenItem(cookbookResult.CookbookID, sender2, "Pychu")
 	item5.SetTransferFee(50)
 	err = tci.PlnK.SetItem(tci.Ctx, item5)
 	require.NoError(t, err)
@@ -59,22 +58,22 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 	cookbookResult1, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg1)
 	require.True(t, len(cookbookResult1.CookbookID) > 0)
 
-	item4 := keep.GenItem(cookbookResult1.CookbookID, sender4, "Tachu")
+	item4 := keeper.GenItem(cookbookResult1.CookbookID, sender4, "Tachu")
 	item4.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, item4)
 	require.NoError(t, err)
 
-	item6 := keep.GenItem(cookbookResult1.CookbookID, sender4, "Bhachu")
+	item6 := keeper.GenItem(cookbookResult1.CookbookID, sender4, "Bhachu")
 	item6.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, item6)
 	require.NoError(t, err)
 
-	item8 := keep.GenItem(cookbookResult1.CookbookID, sender5, "Bhachu8")
+	item8 := keeper.GenItem(cookbookResult1.CookbookID, sender5, "Bhachu8")
 	item8.SetTransferFee(70)
 	err = tci.PlnK.SetItem(tci.Ctx, item8)
 	require.NoError(t, err)
 
-	item7 := keep.GenItem("wrongCBID", sender2, "Pikachu")
+	item7 := keeper.GenItem("wrongCBID", sender2, "Pikachu")
 	err = tci.PlnK.SetItem(tci.Ctx, item7)
 	require.NoError(t, err)
 

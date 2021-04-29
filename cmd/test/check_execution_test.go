@@ -10,7 +10,6 @@ import (
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
@@ -148,7 +147,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	execResp := types.MsgExecuteRecipeResponse{}
 	err = proto.Unmarshal(txMsgData.Data[0].Data, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
-	schedule := handlers.ExecuteRecipeScheduleOutput{}
+	schedule := types.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.WithFields(testing.Fields{
 		"txhash":          txhash,

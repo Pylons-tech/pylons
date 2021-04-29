@@ -4,16 +4,15 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/stretchr/testify/require"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 // TestCoinLock is coin lock test
 func TestCoinLock(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	infiniteCoins := sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
@@ -26,7 +25,7 @@ func TestCoinLock(t *testing.T) {
 	pylon100CoinInput := types.GenCoinInputList(types.Pylon, 100)
 	pylon100 := types.NewPylon(100)
 
-	sender1, _, _, _ := keep.SetupTestAccounts(
+	sender1, _, _, _ := keeper.SetupTestAccounts(
 		t,
 		tci,
 		infiniteCoins,
@@ -534,7 +533,7 @@ func TestCoinLock(t *testing.T) {
 			if tc.testScheduleRecipe {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				item := keep.GenItem(cbData.CookbookID, account1, "Knife")
+				item := keeper.GenItem(cbData.CookbookID, account1, "Knife")
 				err = tci.PlnK.SetItem(tci.Ctx, item)
 				require.NoError(t, err)
 
@@ -573,7 +572,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test send items after coin lock
 			if tc.testSendItems {
-				item := keep.GenItem(cbData.CookbookID, account1, "sword")
+				item := keeper.GenItem(cbData.CookbookID, account1, "sword")
 				err = tci.PlnK.SetItem(tci.Ctx, item)
 				require.NoError(t, err)
 
@@ -589,7 +588,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test send coins after coin lock
 			if tc.testSendCoins {
-				err = keep.SendCoins(tci.PlnK, tci.Ctx, account1, account2, pylon100)
+				err = keeper.SendCoins(tci.PlnK, tci.Ctx, account1, account2, pylon100)
 
 				if !tc.shouldFailSendCoins {
 					require.NoError(t, err)

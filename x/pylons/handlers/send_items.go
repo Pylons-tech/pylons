@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -49,7 +49,7 @@ func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*typ
 
 		coins := types.NewPylon(item.CalculateTransferFee())
 
-		if !keep.HasCoins(k.Keeper, sdkCtx, sender, coins) {
+		if !keeper.HasCoins(k.Keeper, sdkCtx, sender, coins) {
 			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
 		}
 
@@ -71,7 +71,7 @@ func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*typ
 }
 
 // ProcessSendItemsFee process send items fee
-func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddress, CookbookOwner sdk.AccAddress, coins sdk.Coins) error {
+func ProcessSendItemsFee(ctx sdk.Context, k keeper.Keeper, Sender sdk.AccAddress, CookbookOwner sdk.AccAddress, coins sdk.Coins) error {
 	// send pylon amount to PylonsLLC, validator
 	pylonAmount := coins.AmountOf(types.Pylon).Int64()
 
@@ -81,7 +81,7 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 			return err
 		}
 
-		err = keep.SendCoins(keeper, ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
+		err = keeper.SendCoins(k, ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
 		if err != nil {
 			return err
 		}
@@ -90,7 +90,7 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 		cbOwnerProfit := pylonAmount * cbOwnerProfitPercent / 100
 		if cbOwnerProfit > 0 {
 			cbSenderCoins := types.NewPylon(cbOwnerProfit)
-			err = keep.SendCoins(keeper, ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
+			err = keeper.SendCoins(k, ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
 			if err != nil {
 				return err
 			}

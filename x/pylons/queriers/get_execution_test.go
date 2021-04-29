@@ -6,18 +6,17 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestGetExecution(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
 	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
 	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
 
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, sdk.Coins{
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin(types.Pylon, 1000000),
 		sdk.NewInt64Coin("wood", 1000000),
 	}, nil, nil, nil)
