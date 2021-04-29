@@ -3,16 +3,11 @@ package queriers
 import (
 	"context"
 	"encoding/hex"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
-)
-
-// query endpoints supported by the nameservice Querier
-const (
-	KeyAddrFromPubKey = "addr_from_pub_key"
 )
 
 // AddrFromPubKey returns a bech32 public address from the public key

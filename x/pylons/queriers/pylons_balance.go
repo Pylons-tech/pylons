@@ -8,11 +8,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// query endpoints supported by the nameservice Querier
-const (
-	KeyPylonsBalance = "balance"
-)
-
 // PylonsBalance provides balances in pylons
 func (querier *querierServer) PylonsBalance(ctx context.Context, req *types.PylonsBalanceRequest) (res *types.PylonsBalanceResponse, err error) {
 	if req.Size() == 0 {

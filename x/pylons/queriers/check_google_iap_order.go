@@ -8,11 +8,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// query endpoints supported by the nameservice Querier
-const (
-	KeyCheckGoogleIAPOrder = "check_google_iap_order"
-)
-
 // CheckGoogleIAPOrder check if google iap order is given to user with purchase token
 func (querier *querierServer) CheckGoogleIAPOrder(ctx context.Context, req *types.CheckGoogleIAPOrderRequest) (*types.CheckGoogleIAPOrderResponse, error) {
 	if req.PurchaseToken == "" {

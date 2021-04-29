@@ -30,6 +30,7 @@ func TestAddrFromPubKeyFromAfti(t *testing.T) {
 
 	require.Equal(t, addrResp.Bech32Addr, expectedBech32Addr)
 }
+
 func TestAddrFromPubKeyFromGirish(t *testing.T) {
 	input := keeper.SetupTestCoinInput()
 	input.PlnQ = NewQuerierServerImpl(input.PlnK)
