@@ -1,53 +1,49 @@
 package tx
 
 import (
-	"bufio"
-
-	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 )
 
 // UpdateCookbook is the client cli command for creating cookbook
-func UpdateCookbook(cdc *codec.Codec) *cobra.Command {
+func UpdateCookbook() *cobra.Command {
 
-	var msgCCB msgs.MsgUpdateCookbook
+	var msgCCB = &types.MsgUpdateCookbook{}
 	var tmpVersion string
 	var tmpEmail string
 
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "update-cookbook [args]",
 		Short: "update cookbook by providing the args",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-			inBuf := bufio.NewReader(cmd.InOrStdin())
-			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
-
-			msgCCB.Sender = cliCtx.GetFromAddress()
-			msgCCB.Version = types.SemVer(tmpVersion)
-			msgCCB.SupportEmail = types.Email(tmpEmail)
-
-			err := msgCCB.ValidateBasic()
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgCCB})
+			msgCCB.Sender = clientCtx.GetFromAddress().String()
+			msgCCB.Version = tmpVersion
+			msgCCB.SupportEmail = tmpEmail
+
+			err = msgCCB.ValidateBasic()
+			if err != nil {
+				return err
+			}
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{msgCCB}...)
 		},
 	}
 
-	ccb.PersistentFlags().StringVar(&msgCCB.Description, "desc", "", "The description for the cookbook")
-	ccb.PersistentFlags().StringVar(&msgCCB.Developer, "developer", "", "The developer of the cookbook")
-	ccb.PersistentFlags().StringVar(&tmpEmail, "email", "", "The support email")
-	ccb.PersistentFlags().StringVar(&tmpVersion, "version", "", "The version of the cookbook")
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.PersistentFlags().StringVar(&msgCCB.Description, "desc", "", "The description for the cookbook")
+	cmd.PersistentFlags().StringVar(&msgCCB.Developer, "developer", "", "The developer of the cookbook")
+	cmd.PersistentFlags().StringVar(&tmpEmail, "email", "", "The support email")
+	cmd.PersistentFlags().StringVar(&tmpVersion, "version", "", "The version of the cookbook")
 
-	return ccb
+	return cmd
 }

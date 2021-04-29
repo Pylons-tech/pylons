@@ -19,5 +19,5 @@
     "Name": "DE's coin output empty type2 test recipe",
     "CookbookID": "DE-v0.0.0-1579053457",
     "Description": "this recipe is used to test coin output empty type2.",
-    "BlockInterval":"0"
+    "BlockInterval":0
 }

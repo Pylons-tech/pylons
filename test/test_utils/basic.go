@@ -7,44 +7,74 @@ import (
 	"regexp"
 
 	"github.com/Pylons-tech/pylons/app"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	log "github.com/sirupsen/logrus"
-	amino "github.com/tendermint/go-amino"
 )
 
-var tci keep.TestCoinInput
+var tci keeper.TestCoinInput
 
-// CLIOptions is a struct to manage pylonscli options
+// CLIOptions is a struct to manage pylonsd options
 type CLIOptions struct{}
 
-// CLIOpts is a variable to manage pylonscli options
+// CLIOpts is a variable to manage pylonsd options
 var CLIOpts CLIOptions
 
 func init() {
-	tci = keep.SetupTestCoinInput()
+	tci = keeper.SetupTestCoinInput()
 }
 
 // GetTestCoinInput returns test coin input for testing
-func GetTestCoinInput() keep.TestCoinInput {
+func GetTestCoinInput() keeper.TestCoinInput {
 	return tci
 }
 
 // GetAminoCdc is a utility function to get amino codec
-func GetAminoCdc() *amino.Codec {
-	return app.MakeCodec()
+func GetAminoCdc() *codec.LegacyAmino {
+	return app.MakeEncodingConfig().Amino
+}
+
+func GetJSONMarshaler() codec.Marshaler {
+	return app.MakeEncodingConfig().Marshaler
+}
+
+func GetInterfaceRegistry() codectypes.InterfaceRegistry {
+	return app.MakeEncodingConfig().InterfaceRegistry
+}
+
+func GetTxJSONEncoder() sdk.TxEncoder {
+	return app.MakeEncodingConfig().TxConfig.TxJSONEncoder()
+}
+
+func GetTxJSONDecoder() sdk.TxDecoder {
+	return app.MakeEncodingConfig().TxConfig.TxJSONDecoder()
 }
 
 // GetAccountInfoFromAddr is a function to get account information from address
-func GetAccountInfoFromAddr(address sdk.AccAddress, t *testing.T) auth.BaseAccount {
+func GetAccountBalanceFromAddr(address sdk.AccAddress, t *testing.T) banktypes.Balance {
+	var balance banktypes.Balance
+	coins := tci.Bk.SpendableCoins(tci.Ctx, address)
+	balance.Address = address.String()
+	balance.Coins = coins
+	return balance
+}
+
+// GetAccountInfoFromAddr is a function to get account information from address
+func GetAccountInfoFromAddr(address sdk.AccAddress, t *testing.T) authtypes.BaseAccount {
 	exportedAccInfo := tci.Ak.GetAccount(tci.Ctx, address)
-	accInfo := auth.BaseAccount{
-		Address:       exportedAccInfo.GetAddress(),
-		Coins:         exportedAccInfo.GetCoins(),
-		PubKey:        exportedAccInfo.GetPubKey(),
+	any, err := codectypes.NewAnyWithValue(exportedAccInfo.GetPubKey())
+	if err != nil {
+		return authtypes.BaseAccount{}
+	}
+	accInfo := authtypes.BaseAccount{
+		Address:       exportedAccInfo.GetAddress().String(),
+		PubKey:        any,
 		AccountNumber: exportedAccInfo.GetAccountNumber(),
 		Sequence:      exportedAccInfo.GetSequence(),
 	}
@@ -52,7 +82,7 @@ func GetAccountInfoFromAddr(address sdk.AccAddress, t *testing.T) auth.BaseAccou
 }
 
 // GetAccountInfoFromName is a function to get account information from account key
-func GetAccountInfoFromName(key string, t *testing.T) auth.BaseAccount {
+func GetAccountInfoFromName(key string, t *testing.T) authtypes.BaseAccount {
 	addr := GetAccountAddr(key, t)
 	return GetAccountInfoFromAddr(addr, t)
 }
@@ -97,37 +127,37 @@ func GetLogFieldsFromMsgs(txMsgs []sdk.Msg) log.Fields {
 			ikeypref = "tx_msg_"
 		}
 		switch msg := msg.(type) {
-		case msgs.MsgCreateCookbook:
+		case *types.MsgCreateCookbook:
 			fields[ikeypref+"type"] = "MsgCreateCookbook"
 			fields[ikeypref+"cb_name"] = msg.Name
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgCreateRecipe:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgCreateRecipe:
 			fields[ikeypref+"type"] = "MsgCreateRecipe"
 			fields[ikeypref+"rcp_name"] = msg.Name
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgExecuteRecipe:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgExecuteRecipe:
 			fields[ikeypref+"type"] = "MsgCreateRecipe"
 			fields[ikeypref+"rcp_id"] = msg.RecipeID
 			fields[ikeypref+"sender"] = msg.Sender
-		case msgs.MsgCheckExecution:
+		case *types.MsgCheckExecution:
 			fields[ikeypref+"type"] = "MsgCheckExecution"
 			fields[ikeypref+"exec_id"] = msg.ExecID
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgCreateTrade:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgCreateTrade:
 			fields[ikeypref+"type"] = "MsgCreateTrade"
 			fields[ikeypref+"trade_info"] = msg.ExtraInfo
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgFulfillTrade:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgFulfillTrade:
 			fields[ikeypref+"type"] = "MsgFulfillTrade"
 			fields[ikeypref+"trade_id"] = msg.TradeID
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgFiatItem:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgFiatItem:
 			fields[ikeypref+"type"] = "MsgFiatItem"
-			fields[ikeypref+"sender"] = msg.Sender.String()
-		case msgs.MsgUpdateItemString:
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgUpdateItemString:
 			fields[ikeypref+"type"] = "MsgUpdateItemString"
 			fields[ikeypref+"item_id"] = msg.ItemID
-			fields[ikeypref+"sender"] = msg.Sender.String()
+			fields[ikeypref+"sender"] = msg.Sender
 		}
 	}
 	return fields

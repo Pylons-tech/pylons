@@ -1,34 +1,140 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
-)
-
-// query endpoints supported by the nameservice Querier
-const (
-	KeyGetRecipe = "get_recipe"
 )
 
 // GetRecipe returns a recipe based on the recipe id
-func GetRecipe(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetRecipe(ctx context.Context, req *types.GetRecipeRequest) (*types.GetRecipeResponse, error) {
+	if req.RecipeID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no recipe id is provided in path")
 	}
-	rcpID := path[0]
-	recipe, err := keeper.GetRecipe(ctx, rcpID)
+
+	recipe, err := querier.Keeper.GetRecipe(sdk.UnwrapSDKContext(ctx), req.RecipeID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	// if we cannot find the value then it should return an error
-	bz, err := keeper.Cdc.MarshalJSON(recipe)
+
+	return &types.GetRecipeResponse{
+		NodeVersion:   recipe.NodeVersion,
+		ID:            recipe.ID,
+		CookbookID:    recipe.CookbookID,
+		Name:          recipe.Name,
+		CoinInputs:    recipe.CoinInputs,
+		ItemInputs:    recipe.ItemInputs,
+		Entries:       recipe.Entries,
+		Outputs:       recipe.Outputs,
+		Description:   recipe.Description,
+		BlockInterval: recipe.BlockInterval,
+		Sender:        recipe.Sender,
+		Disabled:      recipe.Disabled,
+	}, nil
+}
+
+// ListRecipe returns a recipe based on the recipe id
+func (querier *querierServer) ListRecipe(ctx context.Context, req *types.ListRecipeRequest) (*types.ListRecipeResponse, error) {
+	var recipes []types.Recipe
+	if req.Address == "" {
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
+	} else {
+		accAddr, err := sdk.AccAddressFromBech32(req.Address)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+		recipes = querier.Keeper.GetRecipesBySender(sdk.UnwrapSDKContext(ctx), accAddr)
+	}
+
+	return &types.ListRecipeResponse{
+		Recipes: recipes,
+	}, nil
+}
+
+// ListRecipeByCookbook returns a recipe based on the recipe id
+func (querier *querierServer) ListRecipeByCookbook(ctx context.Context, req *types.ListRecipeByCookbookRequest) (*types.ListRecipeByCookbookResponse, error) {
+	if req.Size() == 0 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no cookbook id is provided in path")
+	}
+
+	var recipes []types.Recipe
+
+	if req.CookbookID == "" {
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
+	} else {
+		recipes = querier.Keeper.GetRecipesByCookbook(sdk.UnwrapSDKContext(ctx), req.CookbookID)
+	}
+
+	return &types.ListRecipeByCookbookResponse{
+		Recipes: recipes,
+	}, nil
+}
+
+// NewShortenRecipe is a constructor for ShortenRecipe
+func NewShortenRecipe(ID, cbID, Name, Description string, Sender string) types.ShortenRecipe {
+	return types.ShortenRecipe{
+		ID:          ID,
+		CookbookID:  cbID,
+		Name:        Name,
+		Description: Description,
+		Sender:      Sender,
+	}
+}
+
+// ListShortenRecipe returns a recipe based on the recipe id
+func (querier *querierServer) ListShortenRecipe(ctx context.Context, req *types.ListShortenRecipeRequest) (*types.ListShortenRecipeResponse, error) {
+	if req.Size() == 0 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
+	}
+
+	var recipes []types.Recipe
+	var shortenRecipes []types.ShortenRecipe
+	accAddr, err := sdk.AccAddressFromBech32(req.Address)
+
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return bz, nil
+	if accAddr.Empty() {
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
+	} else {
+		recipes = querier.Keeper.GetRecipesBySender(sdk.UnwrapSDKContext(ctx), accAddr)
+	}
 
+	for _, rcp := range recipes {
+		shortenRecipes = append(shortenRecipes, NewShortenRecipe(
+			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender))
+	}
+
+	return &types.ListShortenRecipeResponse{
+		Recipes: shortenRecipes,
+	}, nil
+}
+
+// ListShortenRecipeByCookbook returns a recipe based on the recipe id
+func (querier *querierServer) ListShortenRecipeByCookbook(ctx context.Context, req *types.ListShortenRecipeByCookbookRequest) (*types.ListShortenRecipeByCookbookResponse, error) {
+	if req.Size() == 0 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no cookbook id is provided in path")
+	}
+
+	var recipes []types.Recipe
+	var shortenRecipes []types.ShortenRecipe
+
+	if req.CookbookID == "" {
+		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
+	} else {
+		recipes = querier.Keeper.GetRecipesByCookbook(sdk.UnwrapSDKContext(ctx), req.CookbookID)
+	}
+
+	for _, rcp := range recipes {
+		shortenRecipes = append(shortenRecipes, NewShortenRecipe(
+			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender))
+	}
+
+	return &types.ListShortenRecipeByCookbookResponse{
+		Recipes: shortenRecipes,
+	}, nil
 }

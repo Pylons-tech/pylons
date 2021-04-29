@@ -8,10 +8,9 @@ import (
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
+	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -113,8 +112,8 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 			hasInputItem:  true,
 			inputItemName: "TESTITEM_FulfillTrade__001_TC5_INPUT",
 			coinInputList: types.CoinInputList{
-				types.CoinInput{Coin: "stake", Count: 100},
-				types.CoinInput{Coin: "node0token", Count: 100},
+				{Coin: "stake", Count: 100},
+				{Coin: "node0token", Count: 100},
 			},
 			tradeOutputCoins:      types.NewPylon(100),
 			hasOutputItem:         false,
@@ -149,7 +148,7 @@ func TestFulfillTradeViaCLI(originT *originT.T) {
 func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testing.T) {
 	t.Parallel()
 
-	pylonsLLCAddress, pylonsLLCAccInfo := GetPylonsLLCAddressAndInfo(t)
+	pylonsLLCAddress, pylonsLLCBalance := GetPylonsLLCAddressAndBalance(t)
 
 	cbOwnerKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_CBOwner_%d", tcNum, time.Now().Unix())
 	tradeCreatorKey := fmt.Sprintf("TestFulfillTradeViaCLI%d_Creator_%d", tcNum, time.Now().Unix())
@@ -161,8 +160,11 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	mCB := GetMockedCookbook(cbOwnerKey, false, t)
 	mCB2 := GetMockedCookbook(cbOwnerKey, true, t)
 
-	cbOwnerAddress, cbOwnerAccInfo := GetAccountAddressAndInfo(cbOwnerKey, t)
-	tradeCreatorSdkAddress, tradeCreatorAccInfo := GetAccountAddressAndInfo(tradeCreatorKey, t)
+	cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+	tradeCreatorAddr := inttestSDK.GetAccountAddr(tradeCreatorKey, t)
+	tradeFulfillerAddr := inttestSDK.GetAccountAddr(tradeFulfillerKey, t)
+	cbOwnerAccInfo := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAddr, t)
+	tradeCreatorAccInfo := inttestSDK.GetAccountBalanceFromAddr(tradeCreatorAddr, t)
 	// FaucetGameCoins(tradeCreatorKey, tc.CoinOutputs, t)
 
 	outputItemID := ""
@@ -187,7 +189,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		FaucetGameCoins(tradeFulfillerKey, tc.coinInputList.ToCoins(), t)
 	}
 
-	tradeFulfillerSdkAddr, tradeFulfillerAccInfo := GetAccountAddressAndInfo(tradeFulfillerKey, t)
+	tradeFulfillerBalance := inttestSDK.GetAccountBalanceFromAddr(tradeFulfillerAddr, t)
 
 	itemIDs := []string{}
 	if len(tc.inputItemName) > 0 {
@@ -198,8 +200,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		itemIDs = []string{MockItemGUID(useCBID, tradeFulfillerKey, tc.inputItemName, t)}
 	}
 
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddr, itemIDs)
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
+	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerBalance.Address, itemIDs)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 	if err != nil {
 		TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 		return
@@ -216,14 +218,21 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	ffTrdResp := handlers.FulfillTradeResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgFulfillTrade{}).Type(), "MsgType should be accurate")
+	ffTrdResp := types.MsgFulfillTradeResponse{}
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &ffTrdResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.expectedStatus, tc.expectedMessage, t)
 
 	// Try again after fulfill trade
 	if tc.expectedRetryErrMsg != "" {
-		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 		if err != nil {
 			TxBroadcastErrorCheck(txhash, err, t)
 			return
@@ -240,8 +249,8 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	if tc.pylonsLLCDistribution > 0 {
-		accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
-		originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
+		accInfo := inttestSDK.GetAccountBalanceFromAddr(pylonsLLCAddress.String(), t)
+		originPylonAmount := pylonsLLCBalance.Coins.AmountOf(types.Pylon)
 		balanceOk := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
 		t.WithFields(testing.Fields{
 			"pylons_llc_address":  pylonsLLCAddress.String(),
@@ -253,12 +262,12 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	if tc.cbOwnerDistribution > 0 {
-		accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
+		accInfo := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAccInfo.Address, t)
 		originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
 		balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
 		t.WithFields(testing.Fields{
 			"cbowner_key":         cbOwnerKey,
-			"cbowner_address":     cbOwnerAddress.String(),
+			"cbowner_address":     cbOwnerAccInfo.Address,
 			"origin_amount":       originPylonAmount.Int64(),
 			"target_distribution": tc.cbOwnerDistribution,
 			"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
@@ -266,12 +275,12 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	if tc.tradeCreatorDiff != 0 {
-		accInfo := inttestSDK.GetAccountInfoFromAddr(tradeCreatorSdkAddress.String(), t)
+		accInfo := inttestSDK.GetAccountBalanceFromAddr(tradeCreatorAccInfo.Address, t)
 		originPylonAmount := tradeCreatorAccInfo.Coins.AmountOf(types.Pylon)
 		balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.tradeCreatorDiff))
 		t.WithFields(testing.Fields{
 			"creator_key":     tradeCreatorKey,
-			"creator_address": tradeCreatorSdkAddress.String(),
+			"creator_address": tradeCreatorAccInfo.Address,
 			"origin_amount":   originPylonAmount.Int64(),
 			"target_change":   tc.tradeCreatorDiff,
 			"actual_amount":   accInfo.Coins.AmountOf(types.Pylon).Int64(),
@@ -279,15 +288,15 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 	}
 
 	if tc.tradeFulfillerDiff != 0 {
-		accInfo := inttestSDK.GetAccountInfoFromAddr(tradeFulfillerSdkAddr.String(), t)
-		originPylonAmount := tradeFulfillerAccInfo.Coins.AmountOf(types.Pylon)
-		balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.tradeFulfillerDiff))
+		accBalance := inttestSDK.GetAccountBalanceFromAddr(tradeFulfillerAddr, t)
+		originPylonAmount := tradeFulfillerBalance.Coins.AmountOf(types.Pylon)
+		balanceOk := accBalance.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.tradeFulfillerDiff))
 		t.WithFields(testing.Fields{
 			"fulfiller_key":     tradeFulfillerKey,
-			"fulfiller_address": tradeFulfillerSdkAddr.String(),
+			"fulfiller_address": tradeFulfillerBalance.Address,
 			"origin_amount":     originPylonAmount.Int64(),
 			"target_change":     tc.tradeFulfillerDiff,
-			"actual_amount":     accInfo.Coins.AmountOf(types.Pylon).Int64(),
+			"actual_amount":     accBalance.Coins.AmountOf(types.Pylon).Int64(),
 		}).MustTrue(balanceOk, "trade fulfiller balance change should be correct")
 	}
 }

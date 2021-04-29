@@ -3,11 +3,12 @@ package inttest
 import (
 	"strings"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 )
 
 // TxResultStatusMessageCheck check result status and message
@@ -79,7 +80,7 @@ func WaitOneBlockWithErrorCheck(t *testing.T) {
 }
 
 // GetAccountAddressAndInfo returns SDK address and account info from key
-func GetAccountAddressAndInfo(key string, t *testing.T) (sdk.AccAddress, types.BaseAccount) {
+func GetAccountAddressAndInfo(key string, t *testing.T) (sdk.AccAddress, types.AccountI) {
 	address := inttestSDK.GetAccountAddr(key, t)
 	sdkAddress, err := sdk.AccAddressFromBech32(address)
 	t.MustNil(err, "error converting string address to AccAddress struct")
@@ -87,10 +88,17 @@ func GetAccountAddressAndInfo(key string, t *testing.T) (sdk.AccAddress, types.B
 }
 
 // GetPylonsLLCAddressAndInfo returns Pylons LLC SDK address and account info from key
-func GetPylonsLLCAddressAndInfo(t *testing.T) (sdk.Address, types.BaseAccount) {
+func GetPylonsLLCAddressAndInfo(t *testing.T) (sdk.Address, types.AccountI) {
 	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 	t.MustNil(err, "error converting string address to AccAddress struct")
 	return pylonsLLCAddress, inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
+}
+
+// GetPylonsLLCAddressAndInfo returns Pylons LLC SDK address and account info from key
+func GetPylonsLLCAddressAndBalance(t *testing.T) (sdk.Address, banktypes.Balance) {
+	pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
+	t.MustNil(err, "error converting string address to AccAddress struct")
+	return pylonsLLCAddress, inttestSDK.GetAccountBalanceFromAddr(pylonsLLCAddress.String(), t)
 }
 
 // GetSDKAddressFromKey returns SDK address from key

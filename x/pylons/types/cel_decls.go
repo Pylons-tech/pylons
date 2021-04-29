@@ -3,6 +3,7 @@ package types
 import (
 	"math"
 	"math/rand"
+	"strconv"
 
 	"github.com/google/cel-go/checker/decls"
 	"github.com/google/cel-go/common/types"
@@ -314,14 +315,15 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 		decls.NewVar(prefix+"transferFee", decls.Int),
 	)
 
-	variables[prefix+"owner"] = item.Sender.String()
+	variables[prefix+"owner"] = item.Sender
 	variables[prefix+"itemID"] = item.ID
 	variables[prefix+"lastUpdate"] = item.LastUpdate
 	variables[prefix+"transferFee"] = item.TransferFee
 
 	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
-		variables[prefix+dbli.Key] = dbli.Value.Float()
+		fl, _ := strconv.ParseFloat(dbli.Value.String(), 64)
+		variables[prefix+dbli.Key] = fl
 	}
 	for _, inti := range item.Longs {
 		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))

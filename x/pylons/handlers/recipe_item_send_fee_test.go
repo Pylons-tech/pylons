@@ -1,37 +1,35 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestRecipeItemTransferFee(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
 
 	// mock 1 catalyst input 1 output recipe
+	genItemModifyOutput := types.NewItemModifyOutput(
+		"FeeModifyEntry", "catalyst", types.ItemModifyParams{TransferFee: 300},
+	)
 	oneCatalystOneOutputRecipeData := MockRecipe(
 		tci, "existing recipe",
 		types.GenCoinInputList("wood", 5),
 		types.GenItemInputList("catalyst"),
-
 		types.EntriesList{
-			types.NewItemModifyOutput(
-				"FeeModifyEntry", "catalyst", types.ItemModifyParams{TransferFee: 300},
-			),
-			types.GenItemOnlyEntry("Catalyst2")[0],
+			ItemModifyOutputs: []types.ItemModifyOutput{genItemModifyOutput},
+			ItemOutputs:       []types.ItemOutput{types.GenItemOnlyEntry("Catalyst2")},
 		},
 		types.GenAllOutput("FeeModifyEntry", "Catalyst2"),
 		cbData.CookbookID,
@@ -39,15 +37,15 @@ func TestRecipeItemTransferFee(t *testing.T) {
 		sender1,
 	)
 
+	genItemModifyOutput1 := types.NewItemModifyOutput(
+		"FeeModifyEntry", "sword", types.ItemModifyParams{TransferFee: 300},
+	)
 	oneCatalystOneOutputRecipeData1 := MockRecipe(
 		tci, "existing recipe",
 		types.CoinInputList{},
 		types.GenItemInputList("sword", "knife"),
-
 		types.EntriesList{
-			types.NewItemModifyOutput(
-				"FeeModifyEntry", "sword", types.ItemModifyParams{TransferFee: 300},
-			),
+			ItemModifyOutputs: []types.ItemModifyOutput{genItemModifyOutput1},
 		},
 		types.GenAllOutput("FeeModifyEntry"),
 		cbData.CookbookID,
@@ -105,38 +103,30 @@ func TestRecipeItemTransferFee(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
+				err := tci.Bk.AddCoins(tci.Ctx, sender1, sdk.Coins{sdk.NewInt64Coin("wood", 50000)})
 				require.NoError(t, err)
 			}
 			if tc.dynamicItemSet {
 				tc.itemIDs = []string{}
 				for idx, diN := range tc.dynamicItemNames {
-					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, diN)
+					dynamicItem := keeper.GenItem(cbData.CookbookID, tc.sender, diN)
 
 					if len(tc.dynamicItemFees) > idx {
 						dynamicItem.SetTransferFee(tc.dynamicItemFees[idx])
 					}
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.NoError(t, err)
 					tc.itemIDs = append(tc.itemIDs, dynamicItem.ID)
 				}
 			}
 
-			msg := msgs.NewMsgExecuteRecipe(tc.rcpID, tc.sender, tc.itemIDs)
-			result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				fmt.Print(err)
 				require.NoError(t, err)
-				execRcpResponse := ExecuteRecipeResponse{}
-				err := json.Unmarshal(result.Data, &execRcpResponse)
-
-				if err != nil {
-					fmt.Print(err, result)
-				}
-				require.NoError(t, err)
-				require.True(t, execRcpResponse.Status == "Success")
-				require.True(t, execRcpResponse.Message == tc.successMsg)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == tc.successMsg)
 
 				// calc generated item availability
 				items, err := tci.PlnK.GetItemsBySender(tci.Ctx, tc.sender)
@@ -148,7 +138,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 				for _, item := range items {
 					itemName, ok := item.FindString("Name")
 					if !ok {
-						fmt.Print("name not available for item=", item)
+						fmt.Println("name not available for item=", item)
 					}
 					require.True(t, ok)
 					if itemName == tc.checkItemName {
@@ -166,7 +156,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 
 				if tc.checkItemAvailable {
 					require.True(t, itemAvailability)
-					fmt.Print(itemAvailability)
+					fmt.Println(itemAvailability)
 				}
 
 				if tc.checkItemTrasferFee {

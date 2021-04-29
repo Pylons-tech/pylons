@@ -5,11 +5,10 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -17,7 +16,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
-	pylonsLLCAddress, pylonsLLCAccInfo := GetPylonsLLCAddressAndInfo(&t)
+	pylonsLLCAddress, pylonsLLCBalance := GetPylonsLLCAddressAndBalance(&t)
 
 	tests := []struct {
 		name                  string
@@ -47,20 +46,18 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			MockAccount(rcpExecutorKey, t) // mock account with initial balance
 			guid := MockNoDelayItemGenRecipeGUID(cbOwnerKey, tc.rcpName, tc.desiredItemName, t)
 
-			cbOwnerAddress, cbOwnerAccInfo := GetAccountAddressAndInfo(cbOwnerKey, t)
-			rcpExecutorSdkAddress, rcpExecutorAccInfo := GetAccountAddressAndInfo(rcpExecutorKey, t)
+			cbOwnerAddr := inttestSDK.GetAccountAddr(cbOwnerKey, t)
+			rcpExecutorAddr := inttestSDK.GetAccountAddr(rcpExecutorKey, t)
+			cbOwnerAccBalance := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAddr, t)
+			rcpExecutorBalance := inttestSDK.GetAccountBalanceFromAddr(rcpExecutorAddr, t)
 
 			rcp, err := inttestSDK.GetRecipeByGUID(guid)
 			t.WithFields(testing.Fields{
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(
-				t,
-				msgs.NewMsgExecuteRecipe(rcp.ID, rcpExecutorSdkAddress, tc.itemIDs),
-				rcpExecutorKey,
-				false,
-			)
+			execMsg := types.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, tc.itemIDs)
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, rcpExecutorKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)
 				return
@@ -77,8 +74,8 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 			}).MustTrue(ok, "item id with specific name does not exist")
 
 			if tc.pylonsLLCDistribution > 0 {
-				accInfo := inttestSDK.GetAccountInfoFromAddr(pylonsLLCAddress.String(), t)
-				originPylonAmount := pylonsLLCAccInfo.Coins.AmountOf(types.Pylon)
+				accInfo := inttestSDK.GetAccountBalanceFromAddr(pylonsLLCAddress.String(), t)
+				originPylonAmount := pylonsLLCBalance.Coins.AmountOf(types.Pylon)
 				balanceOk := accInfo.Coins.AmountOf(types.Pylon).GTE(sdk.NewInt(originPylonAmount.Int64() + tc.pylonsLLCDistribution))
 				t.WithFields(testing.Fields{
 					"pylons_llc_address":  pylonsLLCAddress.String(),
@@ -89,24 +86,24 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				t.MustTrue(balanceOk, "Pylons LLC should get correct revenue")
 			}
 			if tc.cbOwnerDistribution > 0 {
-				accInfo := inttestSDK.GetAccountInfoFromAddr(cbOwnerAddress.String(), t)
-				originPylonAmount := cbOwnerAccInfo.Coins.AmountOf(types.Pylon)
+				accInfo := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAccBalance.Address, t)
+				originPylonAmount := cbOwnerAccBalance.Coins.AmountOf(types.Pylon)
 				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() + tc.cbOwnerDistribution))
 				t.WithFields(testing.Fields{
 					"cbowner_key":         cbOwnerKey,
-					"cbowner_address":     cbOwnerAddress.String(),
+					"cbowner_address":     cbOwnerAccBalance.Address,
 					"origin_amount":       originPylonAmount.Int64(),
 					"target_distribution": tc.cbOwnerDistribution,
 					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
 				}).MustTrue(balanceOk, "cookbook owner should get correct revenue")
 			}
 			if tc.rcpExecutorSpend != 0 {
-				accInfo := inttestSDK.GetAccountInfoFromAddr(rcpExecutorSdkAddress.String(), t)
-				originPylonAmount := rcpExecutorAccInfo.Coins.AmountOf(types.Pylon)
+				accInfo := inttestSDK.GetAccountBalanceFromAddr(rcpExecutorBalance.Address, t)
+				originPylonAmount := rcpExecutorBalance.Coins.AmountOf(types.Pylon)
 				balanceOk := accInfo.Coins.AmountOf(types.Pylon).Equal(sdk.NewInt(originPylonAmount.Int64() - tc.rcpExecutorSpend))
 				t.WithFields(testing.Fields{
 					"executor_key":     rcpExecutorKey,
-					"executor_address": rcpExecutorSdkAddress.String(),
+					"executor_address": rcpExecutorBalance.Address,
 					"origin_amount":    originPylonAmount.Int64(),
 					"target_spend":     tc.rcpExecutorSpend,
 					"actual_amount":    accInfo.Coins.AmountOf(types.Pylon).Int64(),

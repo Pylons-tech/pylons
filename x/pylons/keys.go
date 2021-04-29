@@ -1,7 +1,6 @@
 package pylons
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -13,7 +12,7 @@ const (
 	StoreKey = ModuleName
 
 	// RouterKey is the module name router key
-	RouterKey = msgs.RouterKey
+	RouterKey = types.RouterKey
 
 	// QuerierRoute to be used for querierer msgs
 	QuerierRoute = ModuleName

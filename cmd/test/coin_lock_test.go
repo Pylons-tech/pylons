@@ -9,10 +9,9 @@ import (
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
+	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -129,14 +128,21 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	}
 
 	tradeFulfillerSdkAddress := GetSDKAddressFromKey(tradeFulfillerKey, t)
-	ffTrdMsg := msgs.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress, []string{})
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, ffTrdMsg, tradeFulfillerKey, false)
+	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress.String(), []string{})
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 
 	t.MustNil(err, "error text tx with msg with nonce")
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	ffTrdResp := handlers.FulfillTradeResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &ffTrdResp)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgFulfillTrade{}).Type(), "MsgType should be accurate")
+	ffTrdResp := types.MsgFulfillTradeResponse{}
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &ffTrdResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, ffTrdResp.Status, ffTrdResp.Message, tc.tradeExpectedStatus, tc.tradeExpectedMessage, t)
 
@@ -178,9 +184,9 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 		"recipe_guid": guid,
 	}).MustNil(err, "recipe with target guid does not exist")
 
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr, []string{})
+	execMsg := types.NewMsgExecuteRecipe(rcp.ID, cbOwnerSdkAddr.String(), []string{})
 
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
@@ -211,27 +217,41 @@ func RunSingleCheckExecutionCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *
 	}).MustTrue(lcDiff.IsEqual(tc.lockDiffAfterSchedule), "locked coin is invalid after creating trade")
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	execResp := handlers.ExecuteRecipeResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgExecuteRecipe{}).Type(), "MsgType should be accurate")
+	execResp := types.MsgExecuteRecipeResponse{}
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
-	schedule := handlers.ExecuteRecipeScheduleOutput{}
+	schedule := types.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.WithFields(testing.Fields{
 		"txhash":          txhash,
 		"schedule_output": string(execResp.Output),
 	}).MustNil(err, "error unmarshaling schedule output")
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr)
+	chkExecMsg := types.NewMsgCheckExecution(schedule.ExecID, false, cbOwnerSdkAddr.String())
 
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
 	txHandleResBytes = GetTxHandleResult(txhash, t)
-	resp := handlers.CheckExecutionResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	txMsgData = &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCheckExecution{}).Type(), "MsgType should be accurate")
+	resp := types.MsgCheckExecutionResponse{}
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.recipeExpectedStatus, tc.recipeExpectedMessage, t)
 

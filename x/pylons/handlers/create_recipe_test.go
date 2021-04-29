@@ -1,76 +1,77 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestCustomCreateRecipeValidateBasic(t *testing.T) {
 	recipeJSON := `
+	{
+   "BlockInterval":"0",
+   "CoinInputs":[
 		{
-			"BlockInterval": "0",
-			"CoinInputs": [
-			  {
-				"Coin": "pylon",
-				"Count": "1"
-			  }
-			],
-			"CookbookID": "LOUD-v0.1.0-1579053457",
-			"Description": "test recipe from test suite",
-			"Entries": {
-			  "CoinOutputs": null,
-			  "ItemModifyOutputs": null,
-			  "ItemOutputs": [
-				{
-				  "Doubles": [
+			"Coin":"pylon",
+			"Count":"1"
+		}
+	],
+   "CookbookID":"LOUD-v0.1.0-1579053457",
+   "Description":"test recipe from test suite",
+   "Entries":{
+      "CoinOutputs":null,
+      "ItemModifyOutputs":null,
+      "ItemOutputs":[
+            {
+               "Doubles":[
 					{
-					  "Key": "Mass",
-					  "Program": "",
-					  "Rate": "1",
-					  "WeightRanges": [
-						{
-						  "Lower": "50",
-						  "Upper": "100",
-						  "Weight": 1
-						}
-					  ]
+						"Key":"Mass",
+						"Program":"",
+						"Rate":"1",
+						"WeightRanges":[
+							{
+								"Lower":"50",
+								"Upper":"100",
+								"Weight":1
+							}
+						]
 					}
-				  ],
-				  "ID": "a0",
-				  "Longs": null,
-				  "Strings": [
+				],
+               "ID":"a0",
+               "Longs": [],
+               "Strings":[
 					{
-					  "Key": "Name",
-					  "Program": "",
-					  "Rate": "1",
-					  "Value": "Mars"
+						"Key":"Name",
+						"Program":"",
+						"Rate":"1",
+						"Value":"Mars"
 					}
-				  ],
-				  "TransferFee": 0
-				}
-			  ]
-			},
-			"ItemInputs": null,
-			"Name": "RTEST_1596513734",
-			"Outputs": [
-			  {
-				"EntryIDs": ["a0"],
-				"Weight": "1"
-			  }
-			],
-			"Sender": "cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
-		}`
+				],
+               "TransferFee":0
+            }
+        ],
+      "ItemInputs":null,
+      "Name":"RTEST_1596513734",
+      "Outputs":{
+         "List":[
+            {
+               "EntryIDs":[
+                  "a0"
+               ],
+               "Weight":"1"
+            }
+         ]
+      }
+   },
+   "Sender":"cosmos1g5w79thfvt86m6cpa0a7jezfv0sjt0u7y09ldm"
+}`
 
-	tci := keep.SetupTestCoinInput()
-	msg := msgs.MsgCreateRecipe{}
+	tci := keeper.SetupTestCoinInput()
+	msg := types.MsgCreateRecipe{}
 	err := tci.Cdc.UnmarshalJSON([]byte(recipeJSON), &msg)
 	require.True(t, err == nil, err)
 	err = msg.ValidateBasic()
@@ -78,8 +79,9 @@ func TestCustomCreateRecipeValidateBasic(t *testing.T) {
 }
 
 func TestHandlerMsgCreateRecipe(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender, _, _, _ := keeper.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
 		cookbookName   string
@@ -160,18 +162,24 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			cbData := CreateCookbookResponse{}
+			cbData := &types.MsgCreateCookbookResponse{}
 			if tc.createCookbook {
-				_, err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
+				err := tci.Bk.AddCoins(tci.Ctx, sender, types.NewPylon(1000000))
 				require.NoError(t, err)
-				cookbookMsg := msgs.NewMsgCreateCookbook(tc.cookbookName, tc.cbID, "this has to meet character limits", "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, tc.sender)
-				cookbookResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
+				cookbookMsg := types.NewMsgCreateCookbook(
+					tc.cookbookName,
+					tc.cbID,
+					"this has to meet character limits",
+					"SketchyCo",
+					"1.0.0",
+					"example@example.com",
+					1,
+					types.DefaultCostPerBlock,
+					tc.sender.String(),
+				)
+				cookbookResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
 				require.NoError(t, err)
-				err = json.Unmarshal(cookbookResult.Data, &cbData)
-				if err != nil {
-					t.Log("cookbook result log", cookbookResult.Log)
-				}
-				require.NoError(t, err)
+				cbData = cookbookResult
 				require.True(t, len(cbData.CookbookID) > 0)
 			}
 
@@ -197,22 +205,20 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				}
 			}
 
-			msg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
-				types.GenCoinInputList("wood", 5),
+			genCoinList := types.GenCoinInputList("wood", 5)
+			msg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
+				genCoinList,
 				mInputList,
 				mEntries,
 				mOutputs,
 				0,
-				tc.sender,
+				tc.sender.String(),
 			)
 
-			result, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 			if !tc.showError {
 				require.NoError(t, err)
-				recipeData := CreateRecipeResponse{}
-				err := json.Unmarshal(result.Data, &recipeData)
-				require.NoError(t, err)
-				require.True(t, len(recipeData.RecipeID) > 0)
+				require.True(t, len(result.RecipeID) > 0)
 			} else {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
@@ -222,39 +228,233 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 }
 
 func TestSameRecipeIDCreation(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(10000000), nil, nil, nil)
 
-	msg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, sender1)
+	msg := types.NewMsgCreateCookbook(
+		"samecookbookID-0001",
+		"samecookbookID-0001",
+		"some description with 20 characters",
+		"SketchyCo",
+		"1.0.0",
+		"example@example.com",
+		0,
+		types.DefaultCostPerBlock,
+		sender1.String(),
+	)
 
-	result, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
-	cbData := CreateCookbookResponse{}
-	err := json.Unmarshal(result.Data, &cbData)
-	require.NoError(t, err)
-	require.True(t, len(cbData.CookbookID) > 0)
+	result, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
+	require.True(t, len(result.CookbookID) > 0)
 
 	mEntries := types.GenEntries("chair", "Raichu")
 	mOutputs := types.GenOneOutput("chair", "Raichu")
 	mInputList := types.GenItemInputList("Raichu")
 
-	rcpMsg := msgs.NewMsgCreateRecipe("name", cbData.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
-		types.GenCoinInputList("wood", 5),
+	genCoinsList := types.GenCoinInputList("wood", 5)
+	rcpMsg := types.NewMsgCreateRecipe("name", result.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
+		genCoinsList,
 		mInputList,
 		mEntries,
 		mOutputs,
 		0,
-		sender1,
+		sender1.String(),
 	)
 
-	rcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, rcpMsg)
-
-	recipeData := CreateRecipeResponse{}
-	err = json.Unmarshal(rcpResult.Data, &recipeData)
-	require.NoError(t, err)
-	require.True(t, len(recipeData.RecipeID) > 0)
+	rcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
+	require.True(t, len(rcpResult.RecipeID) > 0)
 
 	// try creating it 2nd time
-	_, err = HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, rcpMsg)
+	_, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
 	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
+}
+
+func TestHandlerMsgEnableRecipe(t *testing.T) {
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, sender2, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+
+	// mock cookbook
+	cbData := MockCookbook(tci, sender1)
+
+	// mock recipe
+	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1)
+
+	cases := map[string]struct {
+		rcpID        string
+		sender       sdk.AccAddress
+		desiredError string
+		showError    bool
+	}{
+		"wrong recipe check": {
+			rcpID:        "invalidRecipeID",
+			sender:       sender1,
+			desiredError: "The recipe doesn't exist",
+			showError:    true,
+		},
+		"owner of recipe check": {
+			rcpID:        rcpData.RecipeID,
+			sender:       sender2,
+			desiredError: "msg sender is not the owner of the recipe",
+			showError:    true,
+		},
+		"successful update check": {
+			rcpID:        rcpData.RecipeID,
+			sender:       sender1,
+			desiredError: "",
+			showError:    false,
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			msg := types.NewMsgEnableRecipe(tc.rcpID, tc.sender.String())
+			result, err := tci.PlnH.EnableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+
+			if tc.showError == false {
+				require.NoError(t, err)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == "successfully enabled the recipe")
+
+				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
+				require.NoError(t, err)
+				require.True(t, uRcp.Disabled == false)
+			} else {
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			}
+		})
+	}
+}
+
+func TestHandlerMsgUpdateRecipe(t *testing.T) {
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+
+	// mock cookbook
+	cbData := MockCookbook(tci, sender1)
+
+	// mock new recipe
+	genCoinList := types.GenCoinInputList("wood", 5)
+	genItemInputList := types.GenItemInputList("Raichu")
+	genEntries := types.GenEntries("chair", "Raichu")
+	genOneOutput := types.GenOneOutput("chair", "Raichu")
+	newRcpMsg := types.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
+		genCoinList,
+		genItemInputList,
+		genEntries,
+		genOneOutput,
+		0,
+		sender1.String(),
+	)
+
+	newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
+
+	cases := map[string]struct {
+		cbID         string
+		recipeName   string
+		rcpID        string
+		recipeDesc   string
+		sender       sdk.AccAddress
+		desiredError string
+		showError    bool
+	}{
+		"update recipe check for not available recipe": {
+			cbID:         cbData.CookbookID,
+			recipeName:   "recipe0001",
+			rcpID:        "id001", // not available ID
+			recipeDesc:   "this has to meet character limits lol",
+			sender:       sender1,
+			desiredError: "the owner of the recipe is different then the current sender",
+			showError:    true,
+		},
+		"successful test for update recipe": {
+			cbID:         cbData.CookbookID,
+			recipeName:   "recipe0001",
+			rcpID:        newRcpResult.RecipeID, // available ID
+			recipeDesc:   "this has to meet character limits lol",
+			sender:       sender1,
+			desiredError: "",
+			showError:    false,
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			genCoinList := types.GenCoinInputList("wood", 5)
+			genItemInputList := types.GenItemInputList("Raichu")
+			genEntries := types.GenEntries("chair", "Raichu")
+			genOneOutput := types.GenOneOutput("chair", "Raichu")
+			msg := types.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
+				genCoinList,
+				genItemInputList,
+				genEntries,
+				genOneOutput,
+				0,
+				sender1.String())
+
+			result, err := tci.PlnH.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+
+			if tc.showError == false {
+				require.True(t, len(result.RecipeID) > 0)
+			} else {
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			}
+		})
+	}
+}
+
+func TestHandlerMsgDisableRecipe(t *testing.T) {
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, sender2, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+
+	// mock cookbook
+	cbData := MockCookbook(tci, sender1)
+
+	// mock recipe
+	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1)
+
+	cases := map[string]struct {
+		rcpID        string
+		sender       sdk.AccAddress
+		desiredError string
+		showError    bool
+	}{
+		"wrong recipe check": {
+			rcpID:        "invalidRecipeID",
+			sender:       sender1,
+			desiredError: "The recipe doesn't exist",
+			showError:    true,
+		},
+		"owner of recipe check": {
+			rcpID:        rcpData.RecipeID,
+			sender:       sender2,
+			desiredError: "msg sender is not the owner of the recipe",
+			showError:    true,
+		},
+		"successful update check": {
+			rcpID:        rcpData.RecipeID,
+			sender:       sender1,
+			desiredError: "",
+			showError:    false,
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			msg := types.NewMsgDisableRecipe(tc.rcpID, tc.sender.String())
+			result, err := tci.PlnH.DisableRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
+
+			if tc.showError == false {
+				require.NoError(t, err)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == "successfully disabled the recipe")
+
+				uRcp, err := tci.PlnK.GetRecipe(tci.Ctx, tc.rcpID)
+				require.NoError(t, err)
+				require.True(t, uRcp.Disabled == true)
+			} else {
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			}
+		})
+	}
 }

@@ -1,34 +1,56 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
-)
-
-// query endpoints supported by the nameservice Querier
-const (
-	KeyGetExecution = "get_execution"
 )
 
 // GetExecution returns an execution based on the execution id
-func GetExecution(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetExecution(ctx context.Context, req *types.GetExecutionRequest) (*types.GetExecutionResponse, error) {
+	if req.ExecutionID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no execution id is provided in path")
 	}
-	execID := path[0]
-	exec, err := keeper.GetExecution(ctx, execID)
+
+	exec, err := querier.Keeper.GetExecution(sdk.UnwrapSDKContext(ctx), req.ExecutionID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	// if we cannot find the value then it should return an error
-	bz, err := keeper.Cdc.MarshalJSON(exec)
+
+	return &types.GetExecutionResponse{
+		NodeVersion: exec.NodeVersion,
+		ID:          exec.ID,
+		RecipeID:    exec.RecipeID,
+		CookbookID:  exec.CookbookID,
+		CoinsInput:  exec.CoinInputs,
+		ItemInputs:  exec.ItemInputs,
+		BlockHeight: exec.BlockHeight,
+		Sender:      exec.Sender,
+		Completed:   exec.Completed,
+	}, nil
+}
+
+// ListExecutions lists all the executions based on the sender address
+func (querier *querierServer) ListExecutions(ctx context.Context, req *types.ListExecutionsRequest) (*types.ListExecutionsResponse, error) {
+	if req.Sender == "" {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no address is provided in path")
+	}
+
+	senderAddr, err := sdk.AccAddressFromBech32(req.Sender)
+
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+	execs, err := querier.Keeper.GetExecutionsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
+
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return bz, nil
-
+	return &types.ListExecutionsResponse{
+		Executions: execs,
+	}, nil
 }

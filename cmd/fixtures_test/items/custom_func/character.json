@@ -6,11 +6,11 @@
     { "Key": "MinMana", "Value": "10" }
   ],
   "Longs": [
-    { "Key": "HP", "Value": "10" },
-    { "Key": "MaxHP", "Value": "100" }
+    { "Key": "HP", "Value": 10 },
+    { "Key": "MaxHP", "Value": 100 }
   ],
   "Strings": [{ "Key": "Name", "Value": "Custom Function TestCharacter" }],
   "CookbookID": "custom-func-1589853709",
   "Sender": "cusfunc_account2",
-  "TransferFee": "1000"
+  "TransferFee": 1000
 }

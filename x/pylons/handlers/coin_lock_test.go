@@ -4,18 +4,16 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/stretchr/testify/require"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 // TestCoinLock is coin lock test
 func TestCoinLock(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 	infiniteCoins := sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
 		sdk.NewInt64Coin(types.Pylon, 100000),
@@ -27,16 +25,16 @@ func TestCoinLock(t *testing.T) {
 	pylon100CoinInput := types.GenCoinInputList(types.Pylon, 100)
 	pylon100 := types.NewPylon(100)
 
-	sender1, _, _, _ := keep.SetupTestAccounts(
+	sender1, _, _, _ := keeper.SetupTestAccounts(
 		t,
 		tci,
 		infiniteCoins,
 		nil, nil, nil,
 	)
 
-	cbData := CreateCookbookResponse{}
+	cbData := types.MsgCreateCookbookResponse{}
 
-	cookbookMsg := msgs.NewMsgCreateCookbook(
+	cookbookMsg := types.NewMsgCreateCookbook(
 		"cookbook-0001",
 		"",
 		"this has to meet character limits",
@@ -44,14 +42,15 @@ func TestCoinLock(t *testing.T) {
 		"1.0.0",
 		"example@example.com",
 		1,
-		msgs.DefaultCostPerBlock,
-		sender1,
+		types.DefaultCostPerBlock,
+		sender1.String(),
 	)
 
-	cookbookResult, _ := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, cookbookMsg)
-	err := json.Unmarshal(cookbookResult.Data, &cbData)
-	require.NoError(t, err)
-	require.True(t, len(cbData.CookbookID) > 0)
+	cookbookResult, _ := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &cookbookMsg)
+	cbData.CookbookID = cookbookResult.CookbookID
+	cbData.Status = cookbookResult.Status
+	cbData.Message = cookbookResult.Message
+	require.True(t, len(cookbookResult.CookbookID) > 0)
 
 	cases := map[string]struct {
 		// Balance of two accounts for test
@@ -461,7 +460,7 @@ func TestCoinLock(t *testing.T) {
 			_, account1, err := GenAccount()
 			require.True(t, err == nil, err)
 			if tc.coinsAccount1 != nil {
-				_, err := tci.Bk.AddCoins(tci.Ctx, account1, tc.coinsAccount1.Sort())
+				err := tci.Bk.AddCoins(tci.Ctx, account1, tc.coinsAccount1.Sort())
 				require.True(t, err == nil, err)
 			}
 
@@ -469,12 +468,12 @@ func TestCoinLock(t *testing.T) {
 			_, account2, err := GenAccount()
 			require.True(t, err == nil, err)
 			if tc.coinsAccount2 != nil {
-				_, err := tci.Bk.AddCoins(tci.Ctx, account2, tc.coinsAccount2.Sort())
+				err := tci.Bk.AddCoins(tci.Ctx, account2, tc.coinsAccount2.Sort())
 				require.True(t, err == nil, err)
 			}
 
-			tradeData := CreateTradeResponse{}
-			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			tradeData := &types.MsgCreateTradeResponse{}
+			scheduleOutput := types.ExecuteRecipeScheduleOutput{}
 
 			// test create trade coin lock
 			if tc.testCreateTradeLock {
@@ -501,8 +500,8 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testDisableTrade {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				disableTrdMsg := msgs.NewMsgDisableTrade(tradeData.TradeID, account1)
-				_, err := HandlerMsgDisableTrade(tci.Ctx, tci.PlnK, disableTrdMsg)
+				disableTrdMsg := types.NewMsgDisableTrade(tradeData.TradeID, account1.String())
+				_, err := tci.PlnH.DisableTrade(sdk.WrapSDKContext(tci.Ctx), &disableTrdMsg)
 
 				require.NoError(t, err)
 
@@ -518,8 +517,8 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testDisableTrade && tc.testEnableTradeLock {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				enableTrdMsg := msgs.NewMsgEnableTrade(tradeData.TradeID, account1)
-				_, err := HandlerMsgEnableTrade(tci.Ctx, tci.PlnK, enableTrdMsg)
+				enableTrdMsg := types.NewMsgEnableTrade(tradeData.TradeID, account1.String())
+				_, err := tci.PlnH.EnableTrade(sdk.WrapSDKContext(tci.Ctx), &enableTrdMsg)
 
 				require.NoError(t, err)
 
@@ -534,8 +533,8 @@ func TestCoinLock(t *testing.T) {
 			if tc.testScheduleRecipe {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				item := keep.GenItem(cbData.CookbookID, account1, "Knife")
-				err = tci.PlnK.SetItem(tci.Ctx, *item)
+				item := keeper.GenItem(cbData.CookbookID, account1, "Knife")
+				err = tci.PlnK.SetItem(tci.Ctx, item)
 				require.NoError(t, err)
 
 				recipeData := MockRecipe(
@@ -543,7 +542,7 @@ func TestCoinLock(t *testing.T) {
 					"coin lock test recipe",
 					tc.recipeCoinInput,
 					types.GenItemInputList("Knife"),
-					types.GenItemOnlyEntry("KnifeNew"),
+					types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("KnifeNew")}},
 					types.GenOneOutput("KnifeNew"),
 					cbData.CookbookID,
 					2,
@@ -573,12 +572,12 @@ func TestCoinLock(t *testing.T) {
 
 			// test send items after coin lock
 			if tc.testSendItems {
-				item := keep.GenItem(cbData.CookbookID, account1, "sword")
-				err = tci.PlnK.SetItem(tci.Ctx, *item)
+				item := keeper.GenItem(cbData.CookbookID, account1, "sword")
+				err = tci.PlnK.SetItem(tci.Ctx, item)
 				require.NoError(t, err)
 
-				msg := msgs.NewMsgSendItems([]string{item.ID}, account1, account2)
-				_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
+				msg := types.NewMsgSendItems([]string{item.ID}, account1.String(), account2.String())
+				_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 				if !tc.shouldFailSendItems {
 					require.NoError(t, err)
@@ -589,7 +588,7 @@ func TestCoinLock(t *testing.T) {
 
 			// test send coins after coin lock
 			if tc.testSendCoins {
-				err = keep.SendCoins(tci.PlnK, tci.Ctx, account1, account2, pylon100)
+				err = keeper.SendCoins(tci.PlnK, tci.Ctx, account1, account2, pylon100)
 
 				if !tc.shouldFailSendCoins {
 					require.NoError(t, err)
@@ -613,12 +612,12 @@ func TestCoinLock(t *testing.T) {
 					sender1,
 				)
 
-				msg := msgs.NewMsgExecuteRecipe(
+				msg := types.NewMsgExecuteRecipe(
 					pylonInputRecipeData.RecipeID,
-					account1,
+					account1.String(),
 					[]string{},
 				)
-				_, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
+				_, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 				// lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				// balanceAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, account1)
@@ -633,12 +632,12 @@ func TestCoinLock(t *testing.T) {
 			if tc.testCreateTradeLock && tc.testFulfillTrade {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				ffMsg := msgs.NewMsgFulfillTrade(
+				ffMsg := types.NewMsgFulfillTrade(
 					tradeData.TradeID,
-					account2,
+					account2.String(),
 					[]string{},
 				)
-				_, err = HandlerMsgFulfillTrade(tci.Ctx, tci.PlnK, ffMsg)
+				_, err = tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 
 				require.NoError(t, err)
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
@@ -650,14 +649,10 @@ func TestCoinLock(t *testing.T) {
 			if tc.testScheduleRecipe && tc.testCheckExecution {
 				lockOrigin := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 
-				checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, account1)
+				checkExec := types.NewMsgCheckExecution(scheduleOutput.ExecID, false, account1.String())
 				futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
-				result, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-				checkExecResp := CheckExecutionResponse{}
-
-				err = json.Unmarshal(result.Data, &checkExecResp)
-				require.NoError(t, err)
-				require.True(t, checkExecResp.Status == "Success")
+				result, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
+				require.True(t, result.Status == "Success")
 
 				lockAfter := tci.PlnK.GetLockedCoin(tci.Ctx, account1)
 				lockDiff := lockOrigin.Amount.Sort().Sub(lockAfter.Amount.Sort())

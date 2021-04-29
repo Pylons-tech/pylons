@@ -1,38 +1,41 @@
 package query
 
 import (
-	"encoding/json"
-	"fmt"
-
-	"github.com/Pylons-tech/pylons/x/pylons/queriers"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
 )
 
 // ItemsBySender queries the items
-func ItemsBySender(queryRoute string, cdc *codec.Codec) *cobra.Command {
+func ItemsBySender() *cobra.Command {
 	var accAddr string
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "items_by_sender",
 		Short: "get all items for a user",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/items_by_sender/%s", queryRoute, accAddr), nil)
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				return fmt.Errorf(err.Error())
+				return err
 			}
 
-			var out queriers.ItemResp
-			err = json.Unmarshal(res, &out)
-			if err != nil {
-				return fmt.Errorf(err.Error())
+			queryClient := types.NewQueryClient(clientCtx)
+
+			itemsReq := &types.ItemsBySenderRequest{
+				Sender: accAddr,
 			}
-			return cliCtx.PrintOutput(out)
+
+			res, err := queryClient.ItemsBySender(cmd.Context(), itemsReq)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
 		},
 	}
-	ccb.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
-	return ccb
+
+	cmd.PersistentFlags().StringVar(&accAddr, "account", "", "address of user")
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

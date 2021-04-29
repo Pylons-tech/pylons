@@ -1,52 +1,51 @@
 package tx
 
 import (
-	"bufio"
+	"encoding/json"
 
-	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 )
 
 // FiatItem is the client cli command for creating item
-func FiatItem(cdc *codec.Codec) *cobra.Command {
-	var msgFI msgs.MsgFiatItem
+func FiatItem() *cobra.Command {
+	var msgFI = &types.MsgFiatItem{}
 
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "fiat-item [args]",
 		Short: "create item and assign it to sender",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-			inBuf := bufio.NewReader(cmd.InOrStdin())
-			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
-
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 			byteValue, err := ReadFile(args[0])
 			if err != nil {
 				return err
 			}
-			err = cdc.UnmarshalJSON(byteValue, &msgFI)
+			err = json.Unmarshal(byteValue, &msgFI)
 			if err != nil {
 				return err
 			}
-			msgFI.Sender = cliCtx.GetFromAddress()
+
+			msgFI.Sender = clientCtx.GetFromAddress().String()
 
 			err = msgFI.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgFI})
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{msgFI}...)
 		},
 	}
 
-	ccb.PersistentFlags().StringVar(&msgFI.CookbookID, "cookbookID", "", "The ID of the cookbook for this item")
+	flags.AddTxFlagsToCmd(cmd)
+	cmd.PersistentFlags().StringVar(&msgFI.CookbookID, "cookbookID", "", "The ID of the cookbook for this item")
 
-	return ccb
+	return cmd
 }

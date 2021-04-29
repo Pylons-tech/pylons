@@ -1,31 +1,27 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CreateCookbookResponse is a struct of create cookbook response
-type CreateCookbookResponse struct {
-	CookbookID string `json:"CookbookID"`
-	Message    string
-	Status     string
-}
-
-// HandlerMsgCreateCookbook is used to create cookbook by a developer
-func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateCookbook) (*sdk.Result, error) {
+// CreateCookbook is used to create cookbook by a developer
+func (k msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCookbook) (*types.MsgCreateCookbookResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	var fee sdk.Coins
 	if msg.Level == types.BasicTier.Level {
@@ -36,7 +32,7 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 		return nil, errInternal(errors.New("invalid level"))
 	}
 
-	if !keep.HasCoins(keeper, ctx, msg.Sender, fee) {
+	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, fee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the user doesn't have enough pylons")
 	}
 
@@ -44,32 +40,68 @@ func HandlerMsgCreateCookbook(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgC
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = keep.SendCoins(keeper, ctx, msg.Sender, pylonsLLCAddress, fee)
+	err = keeper.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, fee)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	cpb := msgs.DefaultCostPerBlock
-	if msg.CostPerBlock != nil {
-		cpb = *msg.CostPerBlock
+	cpb := types.DefaultCostPerBlock
+	if msg.CostPerBlock != 0 {
+		cpb = msg.CostPerBlock
 	}
 
-	cb := types.NewCookbook(msg.SupportEmail, msg.Sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
+	cb := types.NewCookbook(msg.SupportEmail, sender, msg.Version, msg.Name, msg.Description, msg.Developer, cpb)
 
 	if msg.CookbookID != "" {
-		if keeper.HasCookbook(ctx, msg.CookbookID) {
+		if k.HasCookbook(sdkCtx, msg.CookbookID) {
 			return nil, errInternal(fmt.Errorf("A cookbook with CookbookID %s already exists", msg.CookbookID))
 		}
 		cb.ID = msg.CookbookID
 	}
 
-	if err := keeper.SetCookbook(ctx, cb); err != nil {
+	if err := k.SetCookbook(sdkCtx, cb); err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(CreateCookbookResponse{
+	return &types.MsgCreateCookbookResponse{
 		CookbookID: cb.ID,
 		Message:    "successfully created a cookbook",
 		Status:     "Success",
-	})
+	}, nil
+}
+
+// HandlerMsgUpdateCookbook is used to update cookbook by a developer
+func (k msgServer) HandlerMsgUpdateCookbook(ctx context.Context, msg *types.MsgUpdateCookbook) (*types.MsgUpdateCookbookResponse, error) {
+
+	err := msg.ValidateBasic()
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+
+	cb, err := k.GetCookbook(sdkCtx, msg.ID)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	// only the original sender (owner) of the cookbook can update the cookbook
+	if cb.Sender != msg.Sender {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the cookbook is different then the current sender")
+	}
+
+	cb.Description = msg.Description
+	cb.Version = msg.Version
+	cb.SupportEmail = msg.SupportEmail
+	cb.Developer = msg.Developer
+
+	if err := k.UpdateCookbook(sdkCtx, msg.ID, cb); err != nil {
+		return nil, errInternal(err)
+	}
+
+	return &types.MsgUpdateCookbookResponse{
+		CookbookID: cb.ID,
+		Message:    "successfully updated the cookbook",
+		Status:     "Success",
+	}, nil
 }

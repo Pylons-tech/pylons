@@ -22,5 +22,5 @@
   "Name": "Pylon Farming Recipe",
   "CookbookID": "javelincb-1589853709",
   "Description": "this recipe is used to generate pylon from recipe.",
-  "BlockInterval": "0"
+  "BlockInterval": 0
 }

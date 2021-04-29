@@ -58,7 +58,7 @@ func RegisterDefaultAccountKeys(t *testing.T) {
 		}).MustNil(err, "error creating local Key")
 		err = testutils.CreateChainAccount(key)
 		t.MustNil(err, "error creating account on chain")
-		_, err = tci.Bk.AddCoins(tci.Ctx, address, coins.Sort())
+		err = tci.Bk.AddCoins(tci.Ctx, address, coins.Sort())
 		t.MustNil(err, "error adding coins")
 
 		runtimeAccountKeys[fmt.Sprintf("account%d", idx+1)] = key
@@ -298,7 +298,7 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		"bytes": string(bytes),
 	}).MustNil(err, "error unmarshaling into item input refs")
 
-	err = testutils.GetAminoCdc().UnmarshalJSON(bytes, &itemInputDirectReader)
+	err = json.Unmarshal(bytes, &itemInputDirectReader)
 	t.WithFields(testing.Fields{
 		"bytes": string(bytes),
 	}).MustNil(err, "error unmarshaling into item input direct")
@@ -310,7 +310,7 @@ func GetItemInputsFromBytes(bytes []byte, t *testing.T) types.ItemInputList {
 		if len(iia.Ref) > 0 {
 			var ii types.ItemInput
 			iiBytes := ReadFile(iia.Ref, t)
-			err := testutils.GetAminoCdc().UnmarshalJSON(iiBytes, &ii)
+			err := json.Unmarshal(iiBytes, &ii)
 			if err != nil {
 				t.WithFields(testing.Fields{
 					"item_input_bytes": string(iiBytes),
@@ -416,7 +416,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 
 	var wpl types.EntriesList
 	for _, co := range entriesReader.Entries.CoinOutputs {
-		wpl = append(wpl, co)
+		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
 	}
 
 	for ioidx, io := range entriesReader.Entries.ItemModifyOutputs {
@@ -434,9 +434,9 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 			if pio.Strings != nil && len(pio.Strings) == 0 {
 				pio.Strings = nil
 			}
-			wpl = append(wpl, pio)
+			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, pio)
 		} else {
-			wpl = append(wpl, entriesDirectReader.Entries.ItemModifyOutputs[ioidx])
+			wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, entriesDirectReader.Entries.ItemModifyOutputs[ioidx])
 		}
 	}
 
@@ -462,7 +462,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 		if pio.Strings != nil && len(pio.Strings) == 0 {
 			pio.Strings = nil
 		}
-		wpl = append(wpl, pio)
+		wpl.ItemOutputs = append(wpl.ItemOutputs, pio)
 	}
 
 	return wpl

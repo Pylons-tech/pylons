@@ -4,20 +4,21 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	authTypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/cosmos/cosmos-sdk/types/tx/signing"
+	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/stretchr/testify/require"
 )
 
 // TestNewAccountCreationDecoratorAnteHandle is a test for NewAccountCreationDecorator handler
 func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 	acd := AccountCreationDecorator{tci.Ak}
 
 	cases := map[string]struct {
@@ -54,23 +55,46 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 				cosmosAddr = sender1
 			}
 
-			fee := authTypes.NewStdFee(0, sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
-			memo := ""
-			tx := auth.NewStdTx([]sdk.Msg{msgs.NewMsgCreateAccount(cosmosAddr)}, fee, nil, memo)
+			txBuilder := tci.TxConfig.NewTxBuilder()
+			msg := types.NewMsgCreateAccount(cosmosAddr.String())
+
+			txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
+			txBuilder.SetMemo("")
+
+			txBuilder.SetMsgs([]sdk.Msg{&msg}...)
+			signMode := tci.TxConfig.SignModeHandler().DefaultMode()
 
 			if tc.putSignature {
-				sig, err := priv.Sign(auth.StdSignBytes("pylonschain", 0, 0, fee, tx.Msgs, memo))
-				require.NoError(t, err)
-				sigs := []auth.StdSignature{
-					{
-						PubKey:    priv.PubKey(),
-						Signature: sig,
-					},
+				var sigV2 signing.SignatureV2
+				signerData := authsigning.SignerData{
+					ChainID:       tci.Ctx.ChainID(),
+					AccountNumber: 0,
+					Sequence:      0,
 				}
-				tx.Signatures = sigs
+				// Generate the bytes to be signed.
+				signBytes, err := tci.TxConfig.SignModeHandler().GetSignBytes(signMode, signerData, txBuilder.GetTx())
+				require.True(t, err == nil)
+
+				// Sign those bytes
+				signature, err := priv.Sign(signBytes)
+				require.True(t, err == nil)
+
+				// Construct the SignatureV2 struct
+				sigData := signing.SingleSignatureData{
+					SignMode:  signMode,
+					Signature: signature,
+				}
+
+				sigV2 = signing.SignatureV2{
+					PubKey:   priv.PubKey(),
+					Data:     &sigData,
+					Sequence: 0,
+				}
+
+				txBuilder.SetSignatures(sigV2)
 			}
 
-			newCtx, err := acd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
+			newCtx, err := acd.AnteHandle(tci.Ctx, txBuilder.GetTx(), false, emptyAnteHandle)
 			if len(tc.desiredError) > 0 {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
@@ -81,7 +105,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 					require.True(t, account != nil)
 					require.True(t, account.GetSequence() == 0)
 					if tc.retryAccountCreation {
-						_, err = acd.AnteHandle(newCtx, tx, false, emptyAnteHandle)
+						_, err = acd.AnteHandle(newCtx, txBuilder.GetTx(), false, emptyAnteHandle)
 						require.True(t, strings.Contains(err.Error(), "account already exist"))
 					}
 				} else {
@@ -95,9 +119,9 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 // TestCustomSigVerificationDecoratorAnteHandle is a test for CustomSigVerificationDecorator handler
 func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 
-	tci := keep.SetupTestCoinInput()
-	keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
-	csvd := CustomSigVerificationDecorator{tci.Ak}
+	tci := keeper.SetupTestCoinInput()
+	keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	csvd := CustomSigVerificationDecorator{tci.Ak, tci.TxConfig.SignModeHandler()}
 
 	cases := map[string]struct {
 		putSignature    bool
@@ -110,13 +134,13 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 		"create_account signature verification no signature msg test": {
 			putSignature:    false,
 			accountSequence: 0,
-			desiredError:    "unauthorized: invalid number of signer;  expected: 1, got 0", // no signature error msg
+			desiredError:    "invalid number of signer;  expected: 1, got 0", // no signature error msg
 		},
 		"unknown address signature verification test": {
 			putSignature:    true,
 			accountNumber:   0,
 			accountSequence: 0,
-			desiredError:    "unknown address:",
+			desiredError:    "unknown address",
 		},
 		"create_account account_number=0, sequence=0 signature verification test": {
 			putSignature:    true,
@@ -145,53 +169,140 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			priv, cosmosAddr, err := GenAccount()
 			require.NoError(t, err)
 
-			fee := authTypes.NewStdFee(0, sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
-			memo := ""
-			tx := auth.NewStdTx([]sdk.Msg{msgs.NewMsgCreateAccount(cosmosAddr)}, fee, nil, memo)
+			msg := types.NewMsgCreateAccount(cosmosAddr.String())
+
+			txBuilder := tci.TxConfig.NewTxBuilder()
+
+			txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
+			txBuilder.SetMemo("")
+
+			err = txBuilder.SetMsgs([]sdk.Msg{&msg}...)
+			require.True(t, err == nil)
+
+			signMode := tci.TxConfig.SignModeHandler().DefaultMode()
 
 			if tc.putSignature {
-				sig, err := priv.Sign(auth.StdSignBytes("pylonschain", tc.accountNumber, tc.accountSequence, fee, tx.Msgs, memo))
-				require.NoError(t, err)
-				sigs := []auth.StdSignature{
-					{
-						PubKey:    priv.PubKey(),
-						Signature: sig,
+				sigV2Empty := signing.SignatureV2{
+					PubKey: priv.PubKey(),
+					Data: &signing.SingleSignatureData{
+						SignMode:  tci.TxConfig.SignModeHandler().DefaultMode(),
+						Signature: nil,
 					},
+					Sequence: 0,
 				}
-				tx.Signatures = sigs
+				err = txBuilder.SetSignatures(sigV2Empty)
+				require.NoError(t, err)
+
+				var sigV2 signing.SignatureV2
+				signerData := authsigning.SignerData{
+					ChainID:       tci.Ctx.ChainID(),
+					AccountNumber: tc.accountNumber,
+					Sequence:      tc.accountSequence,
+				}
+				// Generate the bytes to be signed.
+				signBytes, err := tci.TxConfig.SignModeHandler().GetSignBytes(signMode, signerData, txBuilder.GetTx())
+				require.True(t, err == nil)
+
+				// Sign those bytes
+				signature, err := priv.Sign(signBytes)
+				require.True(t, err == nil)
+
+				// Construct the SignatureV2 struct
+				sigData := signing.SingleSignatureData{
+					SignMode:  signMode,
+					Signature: signature,
+				}
+
+				sigV2 = signing.SignatureV2{
+					PubKey:   priv.PubKey(),
+					Data:     &sigData,
+					Sequence: tc.accountSequence,
+				}
+
+				err = txBuilder.SetSignatures(sigV2)
+				require.True(t, err == nil)
 			}
 
 			if tc.registerAccount {
-				acc := &auth.BaseAccount{
-					Sequence:      0,
-					Coins:         sdk.Coins{},
+				any, err := codectypes.NewAnyWithValue(priv.PubKey())
+				require.True(t, err == nil)
+
+				acc := &authtypes.BaseAccount{
+					Sequence:      tc.accountSequence,
 					AccountNumber: tci.Ak.GetNextAccountNumber(tci.Ctx),
-					PubKey:        priv.PubKey(),
-					Address:       cosmosAddr,
+					PubKey:        any,
+					Address:       cosmosAddr.String(),
 				}
 				tci.Ak.SetAccount(tci.Ctx, acc)
 			}
 
-			_, err = csvd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
+			_, err = csvd.AnteHandle(tci.Ctx, txBuilder.GetTx(), false, emptyAnteHandle)
 			if len(tc.desiredError) > 0 {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.NoError(t, err)
 				if tc.additionMsgType == "create_cookbook" {
-					caMsg := msgs.NewMsgCreateCookbook("samecookbookID-0001", "samecookbookID-0001", "some description with 20 characters", "SketchyCo", "1.0.0", "example@example.com", 0, msgs.DefaultCostPerBlock, cosmosAddr)
-					tx := auth.NewStdTx([]sdk.Msg{caMsg}, fee, nil, memo)
-					sig, err := priv.Sign(auth.StdSignBytes("pylonschain", tc.accountNumber, tc.accountSequence, fee, tx.Msgs, memo))
-					require.NoError(t, err)
-					sigs := []auth.StdSignature{
-						{
-							PubKey:    priv.PubKey(),
-							Signature: sig,
+					caMsg := types.NewMsgCreateCookbook(
+						"samecookbookID-0001",
+						"samecookbookID-0001",
+						"some description with 20 characters",
+						"SketchyCo",
+						"1.0.0",
+						"example@example.com",
+						0,
+						types.DefaultCostPerBlock,
+						cosmosAddr.String(),
+					)
+					txBuilder := tci.TxConfig.NewTxBuilder()
+
+					txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
+					txBuilder.SetMemo("")
+
+					err = txBuilder.SetMsgs([]sdk.Msg{&caMsg}...)
+					require.True(t, err == nil)
+
+					signMode := tci.TxConfig.SignModeHandler().DefaultMode()
+					sigV2Empty := signing.SignatureV2{
+						PubKey: priv.PubKey(),
+						Data: &signing.SingleSignatureData{
+							SignMode:  tci.TxConfig.SignModeHandler().DefaultMode(),
+							Signature: nil,
 						},
+						Sequence: 0,
 					}
-					tx.Signatures = sigs
-					_, err = csvd.AnteHandle(tci.Ctx, tx, false, emptyAnteHandle)
+					err = txBuilder.SetSignatures(sigV2Empty)
 					require.NoError(t, err)
+
+					var sigV2 signing.SignatureV2
+					signerData := authsigning.SignerData{
+						ChainID:       tci.Ctx.ChainID(),
+						AccountNumber: tc.accountNumber,
+						Sequence:      tc.accountSequence,
+					}
+					// Generate the bytes to be signed.
+					signBytes, err := tci.TxConfig.SignModeHandler().GetSignBytes(signMode, signerData, txBuilder.GetTx())
+					require.True(t, err == nil)
+
+					// Sign those bytes
+					signature, err := priv.Sign(signBytes)
+					require.True(t, err == nil)
+
+					// Construct the SignatureV2 struct
+					sigData := signing.SingleSignatureData{
+						SignMode:  signMode,
+						Signature: signature,
+					}
+
+					sigV2 = signing.SignatureV2{
+						PubKey:   priv.PubKey(),
+						Data:     &sigData,
+						Sequence: tc.accountSequence,
+					}
+
+					txBuilder.SetSignatures(sigV2)
+					_, err = csvd.AnteHandle(tci.Ctx, txBuilder.GetTx(), false, emptyAnteHandle)
+					require.True(t, err == nil)
 				}
 			}
 		})

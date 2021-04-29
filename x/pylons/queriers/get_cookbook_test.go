@@ -4,43 +4,44 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
-	abci "github.com/tendermint/tendermint/abci/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGetCookbook(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
 
 	// mock cookbook
 	cbData := handlers.MockCookbook(tci, sender1)
 
 	cases := map[string]struct {
-		path          []string
+		cookbookID    string
 		desiredError  string
 		showError     bool
 		desiredRcpCnt int
 		cbName        string
 	}{
 		"error check when providing invalid cookbook ID": {
-			path:          []string{"invalid cookbookID"},
+			cookbookID:    "invalid cookbookID",
 			showError:     true,
 			desiredError:  "The cookbook doesn't exist",
 			desiredRcpCnt: 0,
 		},
 		"error check when not providing cookbookID": {
-			path:          []string{},
+			cookbookID:    "",
 			showError:     true,
 			desiredError:  "no cookbook id is provided in path",
 			desiredRcpCnt: 0,
 		},
 		"get cookbook successful check": {
-			path:          []string{cbData.CookbookID},
+			cookbookID:    cbData.CookbookID,
 			showError:     false,
 			desiredError:  "",
 			desiredRcpCnt: 1,
@@ -49,24 +50,65 @@ func TestGetCookbook(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			result, err := GetCookbook(
-				tci.Ctx,
-				tc.path,
-				abci.RequestQuery{
-					Path: "",
-					Data: []byte{},
-				},
-				tci.PlnK,
+			result, err := tci.PlnQ.GetCookbook(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.GetCookbookRequest{CookbookID: tc.cookbookID},
 			)
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			} else {
 				require.NoError(t, err)
-				readCookbook := types.Cookbook{}
-				readCookbookErr := tci.PlnK.Cdc.UnmarshalJSON(result, &readCookbook)
+				require.Equal(t, result.Name, tc.cbName)
+			}
+		})
+	}
+}
 
-				require.True(t, readCookbookErr == nil)
-				require.True(t, readCookbook.Name == tc.cbName)
+func TestListCookbook(t *testing.T) {
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+
+	// mock cookbook
+	handlers.MockCookbook(tci, sender1)
+
+	cases := map[string]struct {
+		address      string
+		desiredError string
+		showError    bool
+	}{
+		"error check when providing invalid address": {
+			address:      "invalid_address",
+			showError:    true,
+			desiredError: "decoding bech32 failed: invalid index of 1",
+		},
+		"error check when not providing address": {
+			address:   "",
+			showError: false,
+		},
+		"list cookbook successful check": {
+			address:      sender1.String(),
+			showError:    false,
+			desiredError: "",
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			result, err := tci.PlnQ.ListCookbook(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.ListCookbookRequest{
+					Address: tc.address,
+				},
+			)
+			if tc.showError {
+				require.Error(t, err)
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			} else {
+				require.NoError(t, err)
+
+				require.True(t, len(result.Cookbooks) == 1)
 			}
 		})
 	}

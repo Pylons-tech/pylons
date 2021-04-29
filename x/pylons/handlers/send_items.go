@@ -1,24 +1,18 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// SendItemsResponse is the response for fulfillRecipe
-type SendItemsResponse struct {
-	Message string
-	Status  string
-}
-
-// HandlerMsgSendItems is used to send items between people
-func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendItems) (*sdk.Result, error) {
+// SendItems is used to send items between people
+func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*types.MsgSendItemsResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -26,18 +20,26 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 		return nil, errInternal(err)
 	}
 
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
 	for _, val := range msg.ItemIDs {
-		item, err := keeper.GetItem(ctx, val)
+		item, err := k.GetItem(sdkCtx, val)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 
-		cookbook, err := keeper.GetCookbook(ctx, item.CookbookID)
+		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
 
-		if item.Sender.String() != msg.Sender.String() {
+		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+		if err != nil {
+			return nil, errInternal(err)
+		}
+
+		if item.Sender != msg.Sender {
 			return nil, errInternal(errors.New("Item is not the sender's one"))
 		}
 
@@ -45,31 +47,31 @@ func HandlerMsgSendItems(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgSendIt
 			return nil, errInternal(err)
 		}
 
-		coins := types.NewPylon(item.GetTransferFee())
+		coins := types.NewPylon(item.CalculateTransferFee())
 
-		if !keep.HasCoins(keeper, ctx, msg.Sender, coins) {
+		if !keeper.HasCoins(k.Keeper, sdkCtx, sender, coins) {
 			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
 		}
 
 		item.Sender = msg.Receiver
-		if err := keeper.SetItem(ctx, item); err != nil {
+		if err := k.SetItem(sdkCtx, item); err != nil {
 			return nil, errInternal(fmt.Errorf("Error updating item inside keeper; %s", err.Error()))
 		}
 
-		err = ProcessSendItemsFee(ctx, keeper, msg.Sender, cookbook.Sender, coins)
+		err = ProcessSendItemsFee(sdkCtx, k.Keeper, sender, cookbookSender, coins)
 		if err != nil {
 			return nil, errInternal(fmt.Errorf("Error sending fees to send items; %s", err.Error()))
 		}
 	}
 
-	return marshalJSON(SendItemsResponse{
+	return &types.MsgSendItemsResponse{
 		Message: "successfully sent the items",
 		Status:  "Success",
-	})
+	}, nil
 }
 
 // ProcessSendItemsFee process send items fee
-func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddress, CookbookOwner sdk.AccAddress, coins sdk.Coins) error {
+func ProcessSendItemsFee(ctx sdk.Context, k keeper.Keeper, Sender sdk.AccAddress, CookbookOwner sdk.AccAddress, coins sdk.Coins) error {
 	// send pylon amount to PylonsLLC, validator
 	pylonAmount := coins.AmountOf(types.Pylon).Int64()
 
@@ -79,7 +81,7 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 			return err
 		}
 
-		err = keep.SendCoins(keeper, ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
+		err = keeper.SendCoins(k, ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
 		if err != nil {
 			return err
 		}
@@ -88,7 +90,7 @@ func ProcessSendItemsFee(ctx sdk.Context, keeper keep.Keeper, Sender sdk.AccAddr
 		cbOwnerProfit := pylonAmount * cbOwnerProfitPercent / 100
 		if cbOwnerProfit > 0 {
 			cbSenderCoins := types.NewPylon(cbOwnerProfit)
-			err = keep.SendCoins(keeper, ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
+			err = keeper.SendCoins(k, ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
 			if err != nil {
 				return err
 			}

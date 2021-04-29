@@ -1,33 +1,25 @@
 package queriers
 
 import (
-	"encoding/json"
-	"fmt"
+	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
-)
-
-// query endpoints supported by the nameservice Querier
-const (
-	KeyPylonsBalance = "balance"
 )
 
 // PylonsBalance provides balances in pylons
-func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) (res []byte, err error) {
-	if len(path) == 0 {
+func (querier *querierServer) PylonsBalance(ctx context.Context, req *types.PylonsBalanceRequest) (res *types.PylonsBalanceResponse, err error) {
+	if req.Size() == 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no sender is provided in path")
 	}
-	addr := path[0]
-	accAddr, err1 := sdk.AccAddressFromBech32(addr)
+
+	accAddr, err1 := sdk.AccAddressFromBech32(req.Address)
 
 	if err1 != nil {
-		return []byte{}, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err1.Error())
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err1.Error())
 	}
-	coins := keeper.CoinKeeper.GetCoins(ctx, accAddr)
+	coins := querier.Keeper.CoinKeeper.GetAllBalances(sdk.UnwrapSDKContext(ctx), accAddr)
 
 	var value int64
 	for _, coin := range coins {
@@ -37,22 +29,7 @@ func PylonsBalance(ctx sdk.Context, path []string, req abci.RequestQuery, keeper
 		}
 	}
 
-	// if we cannot find the value then it should return as 0
-	bz, err := json.Marshal(QueryResBalance{value})
-	if err != nil {
-		panic("could not marshal result to JSON")
-	}
-
-	return bz, nil
-
-}
-
-// QueryResBalance Result Payload for a resolve query
-type QueryResBalance struct {
-	Balance int64 `json:"balance"`
-}
-
-// implement fmt.Stringer
-func (r QueryResBalance) String() string {
-	return fmt.Sprint(r.Balance)
+	return &types.PylonsBalanceResponse{
+		Balance: value,
+	}, nil
 }

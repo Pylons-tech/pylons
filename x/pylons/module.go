@@ -1,6 +1,7 @@
 package pylons
 
 import (
+	"context"
 	"encoding/json"
 
 	"github.com/gorilla/mux"
@@ -9,13 +10,17 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli/query"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
 	"github.com/Pylons-tech/pylons/x/pylons/client/rest"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/queriers"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/x/bank"
-
-	"github.com/cosmos/cosmos-sdk/client/context"
+	sdktypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/module"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	abci "github.com/tendermint/tendermint/abci/types"
 )
 
@@ -25,8 +30,48 @@ var (
 	_ module.AppModuleBasic = AppModuleBasic{}
 )
 
-// AppModuleBasic is app module basics object
-type AppModuleBasic struct{}
+// AppModuleBasic implements the AppModuleBasic interface for the capability module.
+type AppModuleBasic struct {
+	cdc codec.Marshaler
+}
+
+func NewAppModuleBasic(cdc codec.Marshaler) AppModuleBasic {
+	return AppModuleBasic{cdc: cdc}
+}
+func (AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) {
+	RegisterCodec(amino)
+}
+
+func (AppModuleBasic) RegisterInterfaces(registry sdktypes.InterfaceRegistry) {
+	registry.RegisterImplementations(
+		(*sdk.Msg)(nil),
+		&types.MsgCreateAccount{},
+		&types.MsgGetPylons{},
+		&types.MsgGoogleIAPGetPylons{},
+		&types.MsgSendCoins{},
+		&types.MsgSendItems{},
+		&types.MsgCreateCookbook{},
+		&types.MsgUpdateCookbook{},
+		&types.MsgCreateRecipe{},
+		&types.MsgUpdateRecipe{},
+		&types.MsgExecuteRecipe{},
+		&types.MsgDisableRecipe{},
+		&types.MsgEnableRecipe{},
+		&types.MsgCheckExecution{},
+		&types.MsgFiatItem{},
+		&types.MsgUpdateItemString{},
+		&types.MsgCreateTrade{},
+		&types.MsgFulfillTrade{},
+		&types.MsgDisableTrade{},
+		&types.MsgEnableTrade{},
+	)
+
+	types.RegisterMsgServiceDesc(registry)
+}
+
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
+	types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+}
 
 // Name returns AppModuleBasic name
 func (AppModuleBasic) Name() string {
@@ -34,17 +79,17 @@ func (AppModuleBasic) Name() string {
 }
 
 // RegisterCodec implements RegisterCodec
-func (AppModuleBasic) RegisterCodec(cdc *codec.Codec) {
+func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
 	RegisterCodec(cdc)
 }
 
 // DefaultGenesis return GenesisState in JSON
-func (AppModuleBasic) DefaultGenesis() json.RawMessage {
+func (AppModuleBasic) DefaultGenesis(cdc codec.JSONMarshaler) json.RawMessage {
 	return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
 }
 
 // ValidateGenesis do validation check of the Genesis
-func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
+func (AppModuleBasic) ValidateGenesis(cdc codec.JSONMarshaler, cl client.TxEncodingConfig, bz json.RawMessage) error {
 	var data GenesisState
 	err := ModuleCdc.UnmarshalJSON(bz, &data)
 	if err != nil {
@@ -55,34 +100,34 @@ func (AppModuleBasic) ValidateGenesis(bz json.RawMessage) error {
 }
 
 // RegisterRESTRoutes rest routes
-func (AppModuleBasic) RegisterRESTRoutes(ctx context.CLIContext, rtr *mux.Router) {
-	rest.RegisterRoutes(ctx, rtr, ModuleCdc, StoreKey)
+func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
+	rest.RegisterRoutes(ctx, rtr, StoreKey)
 }
 
 // GetQueryCmd get the root query command of this module
-func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	pylonsQueryCmd := &cobra.Command{
 		Use:   RouterKey,
 		Short: "Querying commands for the pylons module",
 	}
 	pylonsQueryCmd.AddCommand(
-		query.GetPylonsBalance(StoreKey, cdc),
-		query.CheckGoogleIAPOrder(StoreKey, cdc),
-		query.GetCookbook(StoreKey, cdc),
-		query.GetExecution(StoreKey, cdc),
-		query.GetItem(StoreKey, cdc),
-		query.GetTrade(StoreKey, cdc),
-		query.GetRecipe(StoreKey, cdc),
-		query.ListCookbook(StoreKey, cdc),
-		query.GetLockedCoins(StoreKey, cdc),
-		query.GetLockedCoinDetails(StoreKey, cdc),
-		query.ListRecipes(StoreKey, cdc),
-		query.ListRecipesByCookbook(StoreKey, cdc),
-		query.ListShortenRecipes(StoreKey, cdc),
-		query.ListShortenRecipesByCookbook(StoreKey, cdc),
-		query.ItemsBySender(StoreKey, cdc),
-		query.ListExecutions(StoreKey, cdc),
-		query.ListTrade(StoreKey, cdc))
+		query.GetPylonsBalance(),
+		query.CheckGoogleIAPOrder(),
+		query.GetCookbook(),
+		query.GetExecution(),
+		query.GetItem(),
+		query.GetTrade(),
+		query.GetRecipe(),
+		query.ListCookbook(),
+		query.GetLockedCoins(),
+		query.GetLockedCoinDetails(),
+		query.ListRecipes(),
+		query.ListRecipesByCookbook(),
+		query.ListShortenRecipes(),
+		query.ListShortenRecipesByCookbook(),
+		query.ItemsBySender(),
+		query.ListExecutions(),
+		query.ListTrade())
 
 	pylonsQueryCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
 
@@ -90,44 +135,49 @@ func (AppModuleBasic) GetQueryCmd(cdc *codec.Codec) *cobra.Command {
 }
 
 // GetTxCmd get the root tx command of this module
-func (AppModuleBasic) GetTxCmd(cdc *codec.Codec) *cobra.Command {
-	pylonsTxCmd := &cobra.Command{
+func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	txCmd := &cobra.Command{
 		Use:   RouterKey,
 		Short: "Pylons transactions subcommands",
 	}
 
-	pylonsTxCmd.AddCommand(
-		tx.CreateAccount(cdc),
-		tx.GetPylons(cdc),
-		tx.GoogleIAPGetPylons(cdc),
-		tx.SendPylons(cdc),
-		tx.SendCoins(cdc),
-		tx.SendItems(StoreKey, cdc),
-		tx.CreateCookbook(cdc),
-		tx.PrivateKeySign(cdc),
-		tx.ComputePrivateKey(cdc),
-		tx.UpdateCookbook(cdc),
-		tx.FiatItem(cdc))
+	txCmd.AddCommand(
+		tx.CreateAccount(),
+		tx.GetPylons(),
+		tx.GoogleIAPGetPylons(),
+		tx.SendPylons(),
+		tx.SendCoins(),
+		tx.SendItems(StoreKey),
+		tx.CreateCookbook(),
+		tx.PrivateKeySign(),
+		tx.ComputePrivateKey(),
+		tx.UpdateCookbook(),
+		tx.FiatItem(),
+	)
 
-	pylonsTxCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")
-	pylonsTxCmd.PersistentFlags().String("keyring-backend", "os", "Select keyring's backend (os|file|test)")
-	pylonsTxCmd.PersistentFlags().String("from", "", "Name or address of private key with which to sign")
-	pylonsTxCmd.PersistentFlags().String("broadcast-mode", "sync", "Transaction broadcasting mode (sync|async|block)")
-
-	return pylonsTxCmd
+	return txCmd
 }
 
 // AppModule manages keeper and bankKeeper along with AppModuleBasic
 type AppModule struct {
 	AppModuleBasic
-	keeper     keep.Keeper
-	bankKeeper bank.Keeper
+	keeper     keeper.Keeper
+	bankKeeper bankkeeper.Keeper
+}
+
+func (am AppModule) LegacyQuerierHandler(amino *codec.LegacyAmino) sdk.Querier {
+	return NewQuerier(am.keeper)
+}
+
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), handlers.NewMsgServerImpl(am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), queriers.NewQuerierServerImpl(am.keeper))
 }
 
 // NewAppModule creates a new AppModule Object
-func NewAppModule(k keep.Keeper, bankKeeper bank.Keeper) AppModule {
+func NewAppModule(cdc codec.Marshaler, k keeper.Keeper, bankKeeper bankkeeper.Keeper) AppModule {
 	return AppModule{
-		AppModuleBasic: AppModuleBasic{},
+		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         k,
 		bankKeeper:     bankKeeper,
 	}
@@ -142,8 +192,8 @@ func (AppModule) Name() string {
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns router key
-func (am AppModule) Route() string {
-	return RouterKey
+func (am AppModule) Route() sdk.Route {
+	return sdk.NewRoute(RouterKey, NewHandler(am.keeper))
 }
 
 // NewHandler returns module handler
@@ -156,11 +206,6 @@ func (am AppModule) QuerierRoute() string {
 	return QuerierRoute
 }
 
-// NewQuerierHandler return NewQuerier
-func (am AppModule) NewQuerierHandler() sdk.Querier {
-	return NewQuerier(am.keeper)
-}
-
 // BeginBlock is a begin block function
 func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
@@ -170,7 +215,7 @@ func (am AppModule) EndBlock(sdk.Context, abci.RequestEndBlock) []abci.Validator
 }
 
 // InitGenesis is a function for init genesis
-func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	ModuleCdc.MustUnmarshalJSON(data, &genesisState)
 	InitGenesis(ctx, am.keeper, genesisState)
@@ -178,7 +223,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, data json.RawMessage) []abci.Va
 }
 
 // ExportGenesis is a function for export genesis
-func (am AppModule) ExportGenesis(ctx sdk.Context) json.RawMessage {
+func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONMarshaler) json.RawMessage {
 	gs := ExportGenesis(ctx, am.keeper)
 	return ModuleCdc.MustMarshalJSON(gs)
 }

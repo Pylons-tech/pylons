@@ -3,11 +3,11 @@
   "CoinInputs":[
       {
           "Coin": "stake",
-          "Count": "100"
+          "Count": 100
       },
       {
           "Coin": "node0token",
-          "Count": "100"
+          "Count": 100
       }
   ],
   "ItemInputRefs": [],

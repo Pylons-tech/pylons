@@ -9,10 +9,10 @@ import (
 	originT "testing"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/gogo/protobuf/proto"
 )
 
 type CheckExecutionTestCase struct {
@@ -118,9 +118,9 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}).MustNil(err, "recipe with target guid does not exist")
 
 	sdkAddr := GetSDKAddressFromKey(cbOwnerKey, t)
-	execMsg := msgs.NewMsgExecuteRecipe(rcp.ID, sdkAddr, itemIDs)
+	execMsg := types.NewMsgExecuteRecipe(rcp.ID, sdkAddr.String(), itemIDs)
 
-	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, execMsg, cbOwnerKey, false)
+	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
@@ -137,10 +137,17 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 	}
 
 	txHandleResBytes := GetTxHandleResult(txhash, t)
-	execResp := handlers.ExecuteRecipeResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &execResp)
+	txMsgData := &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgExecuteRecipe{}).Type(), "MsgType should be accurate")
+	execResp := types.MsgExecuteRecipeResponse{}
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &execResp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
-	schedule := handlers.ExecuteRecipeScheduleOutput{}
+	schedule := types.ExecuteRecipeScheduleOutput{}
 	err = json.Unmarshal(execResp.Output, &schedule)
 	t.WithFields(testing.Fields{
 		"txhash":          txhash,
@@ -161,16 +168,23 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		}).MustTrue(item.OwnerRecipeID == guid, "owner recipe id is different from expected")
 	}
 
-	chkExecMsg := msgs.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr)
-	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
+	chkExecMsg := types.NewMsgCheckExecution(schedule.ExecID, tc.payToComplete, sdkAddr.String())
+	txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 	if err != nil {
 		TxBroadcastErrorCheck(txhash, err, t)
 		return
 	}
 
 	txHandleResBytes = GetTxHandleResult(txhash, t)
-	resp := handlers.CheckExecutionResponse{}
-	err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+	txMsgData = &sdk.TxMsgData{
+		Data: make([]*sdk.MsgData, 0, 1),
+	}
+	err = proto.Unmarshal(txHandleResBytes, txMsgData)
+	t.MustNil(err)
+	t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+	t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCheckExecution{}).Type(), "MsgType should be accurate")
+	resp := types.MsgCheckExecutionResponse{}
+	err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 	TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 	TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedStatus, tc.expectedMessage, t)
 
@@ -194,7 +208,7 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		"shouldCompleted": tc.shouldSuccess,
 	}).MustTrue(exec.Completed == tc.shouldSuccess)
 	if tc.tryFinishedExecution {
-		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, chkExecMsg, cbOwnerKey, false)
+		txhash, err = inttestSDK.TestTxWithMsgWithNonce(t, &chkExecMsg, cbOwnerKey, false)
 		if err != nil {
 			TxBroadcastErrorCheck(txhash, err, t)
 			return
@@ -203,8 +217,15 @@ func RunSingleCheckExecutionTestCase(tcNum int, tc CheckExecutionTestCase, t *te
 		WaitOneBlockWithErrorCheck(t)
 
 		txHandleResBytes = GetTxHandleResult(txhash, t)
-		resp := handlers.CheckExecutionResponse{}
-		err = inttestSDK.GetAminoCdc().UnmarshalJSON(txHandleResBytes, &resp)
+		txMsgData := &sdk.TxMsgData{
+			Data: make([]*sdk.MsgData, 0, 1),
+		}
+		err = proto.Unmarshal(txHandleResBytes, txMsgData)
+		t.MustNil(err)
+		t.MustTrue(len(txMsgData.Data) == 1, "number of msgs should be 1")
+		t.MustTrue(txMsgData.Data[0].MsgType == (types.MsgCheckExecution{}).Type(), "MsgType should be accurate")
+		resp := types.MsgCheckExecutionResponse{}
+		err = proto.Unmarshal(txMsgData.Data[0].Data, &resp)
 		TxResBytesUnmarshalErrorCheck(txhash, err, txHandleResBytes, t)
 		TxResultStatusMessageCheck(txhash, resp.Status, resp.Message, tc.expectedRetryResStatus, tc.expectedRetryResMessage, t)
 		// This is automatically checking OwnerRecipeID lock status ;)

@@ -15,11 +15,51 @@ import (
 	testutils "github.com/Pylons-tech/pylons/test/test_utils"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils"
-	pSDKTypes "github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
+
+// FixtureStep struct describes what should be done in one fixture testcase
+type FixtureStep struct {
+	ID       string `json:"ID"`
+	RunAfter struct {
+		PreCondition []string `json:"precondition"`
+		BlockWait    int64    `json:"blockWait"`
+	} `json:"runAfter"`
+	Action    string `json:"action"`
+	ParamsRef string `json:"paramsRef"`
+	MsgRefs   []struct {
+		Action    string `json:"action"`
+		ParamsRef string `json:"paramsRef"`
+	} `json:"msgRefs"`
+	Output struct {
+		TxResult struct {
+			Status         string `json:"status"`
+			Message        string `json:"message"`
+			ErrorLog       string `json:"errLog"`
+			BroadcastError string `json:"broadcastError"`
+		} `json:"txResult"`
+		Property []struct {
+			Owner          string   `json:"owner"`
+			ShouldNotExist bool     `json:"shouldNotExist"`
+			Cookbooks      []string `json:"cookbooks"`
+			Recipes        []string `json:"recipes"`
+			Items          []struct {
+				StringKeys   []string           `json:"stringKeys"`
+				StringValues map[string]string  `json:"stringValues"`
+				DblKeys      []string           `json:"dblKeys"`
+				DblValues    map[string]sdk.Dec `json:"dblValues"`
+				LongKeys     []string           `json:"longKeys"`
+				LongValues   map[string]int64   `json:"longValues"`
+				TransferFee  string             `json:"transferFee"`
+			} `json:"items"`
+			Coins []struct {
+				Coin   string `json:"denom"`
+				Amount int64  `json:"amount"`
+			} `json:"coins"`
+		} `json:"property"`
+	} `json:"output"`
+}
 
 // TestOptions is options struct to manage test options
 type TestOptions struct {
@@ -85,11 +125,11 @@ func CheckItemWithDblKeys(item types.Item, dblKeys []string) bool {
 }
 
 // CheckItemWithDblValues checks if double key/values are all available
-func CheckItemWithDblValues(item types.Item, dblValues map[string]pSDKTypes.FloatString) bool {
+func CheckItemWithDblValues(item types.Item, dblValues map[string]sdk.Dec) bool {
 	for sK, sV := range dblValues {
 		keyExist := false
 		for _, sKV := range item.Doubles {
-			if sK == sKV.Key && sV.Float() == sKV.Value.Float() {
+			if sK == sKV.Key && sV.Equal(sKV.Value) {
 				keyExist = true
 			}
 		}
@@ -117,11 +157,11 @@ func CheckItemWithLongKeys(item types.Item, longKeys []string) bool {
 }
 
 // CheckItemWithLongValues checks if long key/values are all available
-func CheckItemWithLongValues(item types.Item, longValues map[string]int) bool {
+func CheckItemWithLongValues(item types.Item, longValues map[string]int64) bool {
 	for sK, sV := range longValues {
 		keyExist := false
 		for _, sKV := range item.Longs {
-			if sK == sKV.Key && sV == sKV.Value {
+			if sK == sKV.Key && int64(sV) == sKV.Value {
 				keyExist = true
 			}
 		}
@@ -147,7 +187,7 @@ func CheckItemWithTransferFee(item types.Item, transferFee string, t *testing.T)
 }
 
 // PropertyExistCheck function check if an account has required property that needs to be available
-func PropertyExistCheck(step fixturetestSDK.FixtureStep, t *testing.T) {
+func PropertyExistCheck(step FixtureStep, t *testing.T) {
 	for _, pCheck := range step.Output.Property {
 		shouldNotExist := pCheck.ShouldNotExist
 		var pOwnerAddr sdk.AccAddress
@@ -249,19 +289,19 @@ func PropertyExistCheck(step fixturetestSDK.FixtureStep, t *testing.T) {
 		}
 		if len(pCheck.Coins) > 0 {
 			for _, coinCheck := range pCheck.Coins {
-				accInfo := testutils.GetAccountInfoFromAddr(pOwnerAddr, t)
+				balance := testutils.GetAccountBalanceFromAddr(pOwnerAddr, t)
 				// TODO should we have the case of using GTE, LTE, GT or LT ?
 				t.WithFields(testing.Fields{
 					"target_balance": coinCheck.Amount,
-					"actual_balance": accInfo.Coins.AmountOf(coinCheck.Coin).Int64(),
-				}).MustTrue(accInfo.Coins.AmountOf(coinCheck.Coin).Equal(sdk.NewInt(coinCheck.Amount)), "account balance is incorrect")
+					"actual_balance": balance.Coins.AmountOf(coinCheck.Coin).Int64(),
+				}).MustTrue(balance.Coins.AmountOf(coinCheck.Coin).Equal(sdk.NewInt(coinCheck.Amount)), "account balance is incorrect")
 			}
 		}
 	}
 }
 
 // ProcessSingleFixtureQueueItem executes a fixture queue item
-func ProcessSingleFixtureQueueItem(file string, idx int, fixtureSteps []fixturetestSDK.FixtureStep, lv1t *testing.T) {
+func ProcessSingleFixtureQueueItem(file string, idx int, fixtureSteps []FixtureStep, lv1t *testing.T) {
 	step := fixtureSteps[idx]
 	lv1t.Run(strconv.Itoa(idx)+"_"+step.ID, func(t *testing.T) {
 		if FixtureTestOpts.IsParallel {
@@ -278,7 +318,7 @@ func ProcessSingleFixtureQueueItem(file string, idx int, fixtureSteps []fixturet
 
 // RunRegisterWorkQueuesForSingleFixture is function to add queue items before running whole test
 func RunRegisterWorkQueuesForSingleFixture(file string, t *testing.T) {
-	var fixtureSteps []fixturetestSDK.FixtureStep
+	var fixtureSteps []FixtureStep
 	byteValue := ReadFile(file, t)
 
 	err := json.Unmarshal([]byte(byteValue), &fixtureSteps)
@@ -286,7 +326,7 @@ func RunRegisterWorkQueuesForSingleFixture(file string, t *testing.T) {
 		"raw_json": string(byteValue),
 	}).MustNil(err, "error decoding fixture steps")
 
-	fixturetestSDK.CheckSteps(fixtureSteps, t)
+	CheckSteps(fixtureSteps, t)
 
 	for idx, step := range fixtureSteps {
 		workQueues = append(workQueues, QueueItem{
@@ -300,7 +340,7 @@ func RunRegisterWorkQueuesForSingleFixture(file string, t *testing.T) {
 
 // RunSingleFixtureTest add a work queue into fixture test runner and execute work queues
 func RunSingleFixtureTest(file string, t *testing.T) {
-	var fixtureSteps []fixturetestSDK.FixtureStep
+	var fixtureSteps []FixtureStep
 	byteValue := ReadFile(file, t)
 
 	err := json.Unmarshal([]byte(byteValue), &fixtureSteps)

@@ -1,38 +1,36 @@
 package handlers
 
 import (
-	"encoding/json"
 	"strings"
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgUpdateItemString(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, types.PremiumTier.Fee, nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, types.PremiumTier.Fee, nil, nil, nil)
 
 	// mock cookbook
 	cbData := MockCookbook(tci, sender1)
 
-	item := keep.GenItem(cbData.CookbookID, sender1, "????????")
-	err := tci.PlnK.SetItem(tci.Ctx, *item)
+	item := keeper.GenItem(cbData.CookbookID, sender1, "????????")
+	err := tci.PlnK.SetItem(tci.Ctx, item)
 	require.NoError(t, err)
 
-	item1 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item1 := keeper.GenItem(cbData.CookbookID, sender1, "????????")
 	item1.OwnerRecipeID = "????????"
-	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.NoError(t, err)
 
-	item2 := keep.GenItem(cbData.CookbookID, sender1, "????????")
+	item2 := keeper.GenItem(cbData.CookbookID, sender1, "????????")
 	item2.OwnerTradeID = "????????"
-	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.NoError(t, err)
 
 	cases := map[string]struct {
@@ -121,27 +119,21 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			if tc.addInputCoin {
-				_, err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(config.Config.Fee.UpdateItemFieldString))
+				err := tci.Bk.AddCoins(tci.Ctx, sender1, types.NewPylon(config.Config.Fee.UpdateItemFieldString))
 				require.NoError(t, err)
 			}
 
-			msg := msgs.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1)
-			result, err := HandlerMsgUpdateItemString(tci.Ctx, tci.PlnK, msg)
+			msg := types.NewMsgUpdateItemString(tc.itemID, tc.field, tc.value, sender1.String())
+			result, err := tci.PlnH.UpdateItemString(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
 				if err != nil {
-					t.Log("HandlerMsgUpdateItemString.err", err)
+					t.Log("UpdateItemString.err", err)
 				}
-				require.NoError(t, err)
-				resp := UpdateItemStringResponse{}
-				err := json.Unmarshal(result.Data, &resp)
 
-				if err != nil {
-					t.Log(err, result)
-				}
 				require.NoError(t, err)
-				require.True(t, resp.Status == "Success")
-				require.True(t, resp.Message == tc.successMsg)
+				require.True(t, result.Status == "Success")
+				require.True(t, result.Message == tc.successMsg)
 
 				item, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
 				require.NoError(t, err)

@@ -1,16 +1,11 @@
 package handlers
 
 import (
-	"encoding/json"
-
-	"github.com/cosmos/cosmos-sdk/crypto/keys/hd"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
-	"github.com/tyler-smith/go-bip39"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 const (
@@ -18,27 +13,24 @@ const (
 )
 
 // MockCookbook mock cookbook
-func MockCookbook(tci keep.TestCoinInput, sender sdk.AccAddress) CreateCookbookResponse {
+func MockCookbook(tci keeper.TestCoinInput, sender sdk.AccAddress) *types.MsgCreateCookbookResponse {
 	return MockCookbookByName(tci, sender, "cookbook-00001")
 }
 
 // MockCookbookByName mock cookbook with specific name
-func MockCookbookByName(tci keep.TestCoinInput, sender sdk.AccAddress, cookbookName string) CreateCookbookResponse {
+func MockCookbookByName(tci keeper.TestCoinInput, sender sdk.AccAddress, cookbookName string) *types.MsgCreateCookbookResponse {
 	cookbookDesc := "this has to meet character limits"
-	msg := msgs.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, msgs.DefaultCostPerBlock, sender)
-	cbResult, err := HandlerMsgCreateCookbook(tci.Ctx, tci.PlnK, msg)
+	msg := types.NewMsgCreateCookbook(cookbookName, "", cookbookDesc, "SketchyCo", "1.0.0", "example@example.com", 1, types.DefaultCostPerBlock, sender.String())
+	cbResult, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		panic(err.Error())
 	}
-	cbData := CreateCookbookResponse{}
-	//nolint:errcheck
-	json.Unmarshal((*cbResult).Data, &cbData)
-	return cbData
+	return cbResult
 }
 
 // MockRecipe mock recipe with details
 func MockRecipe(
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	rcpName string,
 	coinInputList types.CoinInputList,
 	itemInputList types.ItemInputList,
@@ -47,23 +39,20 @@ func MockRecipe(
 	cbID string,
 	blockInterval int64,
 	sender sdk.AccAddress,
-) CreateRecipeResponse {
-	newRcpMsg := msgs.NewMsgCreateRecipe(rcpName, cbID, "", "this has to meet character limits",
+) *types.MsgCreateRecipeResponse {
+	newRcpMsg := types.NewMsgCreateRecipe(rcpName, cbID, "", "this has to meet character limits",
 		coinInputList,
 		itemInputList,
 		entries,
 		outputs,
 		blockInterval,
-		sender,
+		sender.String(),
 	)
-	newRcpResult, err := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
+	newRcpResult, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 	if err != nil {
 		panic(err.Error())
 	}
-	recipeData := CreateRecipeResponse{}
-	//nolint:errcheck
-	json.Unmarshal(newRcpResult.Data, &recipeData)
-	return recipeData
+	return newRcpResult
 }
 
 // PopularRecipeType is a type for popular recipes
@@ -97,19 +86,19 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 	case Rcp5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.GenCoinOnlyEntry("chair"),
+			types.EntriesList{CoinOutputs: []types.CoinOutput{types.GenCoinOnlyEntry("chair")}},
 			types.GenOneOutput("chair"),
 			0
 	case Rcp5BlockDelayed5xWoodcoinTo1xChaircoin: // 5 x woodcoin -> 1 x chair coin recipe, 5 block delayed
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.GenCoinOnlyEntry("chair"),
+			types.EntriesList{CoinOutputs: []types.CoinOutput{types.GenCoinOnlyEntry("chair")}},
 			types.GenOneOutput("chair"),
 			5
 	case Rcp5xWoodcoinTo1xRaichuItemBuy:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.GenItemOnlyEntry("Raichu"),
+			types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("Raichu")}},
 			types.GenOneOutput("Raichu"),
 			0
 	case RcpRaichuNameUpgrade:
@@ -133,13 +122,13 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 	case Rcp2BlockDelayedKnifeMerge:
 		return types.CoinInputList{},
 			types.GenItemInputList("Knife1", "Knife2"),
-			types.GenItemOnlyEntry("KnifeMRG"),
+			types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("KnifeMRG")}},
 			types.GenOneOutput("KnifeMRG"),
 			2
 	case Rcp2BlockDelayedKnifeBuyer:
 		return types.GenCoinInputList("wood", 5),
 			types.ItemInputList{},
-			types.GenItemOnlyEntry("Knife"),
+			types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("Knife")}},
 			types.GenOneOutput("Knife"),
 			2
 	default: // 5 x woodcoin -> 1 x chair coin recipe, no delay
@@ -154,11 +143,11 @@ func GetParamsForPopularRecipe(hfrt PopularRecipeType) (types.CoinInputList, typ
 // MockPopularRecipe mock popular recipes
 func MockPopularRecipe(
 	hfrt PopularRecipeType,
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	rcpName string,
 	cbID string,
 	sender sdk.AccAddress,
-) CreateRecipeResponse {
+) *types.MsgCreateRecipeResponse {
 	ciL, iiL, entries, outputs, bI := GetParamsForPopularRecipe(hfrt)
 	return MockRecipe(
 		tci, rcpName,
@@ -171,39 +160,34 @@ func MockPopularRecipe(
 
 // MockExecution executes a mockRecipe
 func MockExecution(
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
 	itemIDs []string,
-) (ExecuteRecipeResponse, error) {
-	execRcpResponse := ExecuteRecipeResponse{}
-	msg := msgs.NewMsgExecuteRecipe(rcpID, sender, itemIDs)
-	result, err := HandlerMsgExecuteRecipe(tci.Ctx, tci.PlnK, msg)
-
+) (*types.MsgExecuteRecipeResponse, error) {
+	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), itemIDs)
+	result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
-		return execRcpResponse, err
+		return nil, err
 	}
-	err = json.Unmarshal(result.Data, &execRcpResponse)
-	return execRcpResponse, err
+	return result, err
 }
 
 // MockTrade creates a trade
 func MockTrade(
-	tci keep.TestCoinInput,
+	tci keeper.TestCoinInput,
 	coinInputList types.CoinInputList,
 	itemInputList types.TradeItemInputList,
 	coinOutputs sdk.Coins,
 	itemOutputs types.ItemList,
 	sender sdk.AccAddress,
-) (CreateTradeResponse, error) {
-	createTrdResponse := CreateTradeResponse{}
-	msg := msgs.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender)
-	result, err := HandlerMsgCreateTrade(tci.Ctx, tci.PlnK, msg)
+) (*types.MsgCreateTradeResponse, error) {
+	msg := types.NewMsgCreateTrade(coinInputList, itemInputList, coinOutputs, itemOutputs, "", sender.String())
+	result, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
-		return createTrdResponse, err
+		return nil, err
 	}
-	err = json.Unmarshal(result.Data, &createTrdResponse)
-	return createTrdResponse, err
+	return result, err
 }
 
 // AnteHandle is a handler for NewAccountCreationDecorator
@@ -212,29 +196,8 @@ func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, er
 }
 
 // GenAccount is a function to generate an account
-func GenAccount() (secp256k1.PrivKeySecp256k1, sdk.AccAddress, error) {
-	entropySeed, err := bip39.NewEntropy(mnemonicEntropySize)
-	if err != nil {
-		return secp256k1.PrivKeySecp256k1{}, nil, err
-	}
-	mnemonic, err := bip39.NewMnemonic(entropySeed)
-	if err != nil {
-		return secp256k1.PrivKeySecp256k1{}, nil, err
-	}
-
-	// Generate a Bip32 HD wallet for the mnemonic and a user supplied password
-	seed, err := bip39.NewSeedWithErrorChecking(mnemonic, "")
-	if err != nil {
-		return secp256k1.PrivKeySecp256k1{}, nil, err
-	}
-
-	masterPriv, ch := hd.ComputeMastersFromSeed(seed)
-	derivedPriv, err := hd.DerivePrivateKeyForPath(masterPriv, ch, "44'/118'/0'/0/0")
-	if err != nil {
-		return secp256k1.PrivKeySecp256k1{}, nil, err
-	}
-
-	priv := secp256k1.PrivKeySecp256k1(derivedPriv)
-	cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes())
+func GenAccount() (cryptotypes.PrivKey, sdk.AccAddress, error) {
+	priv := secp256k1.GenPrivKey()
+	cosmosAddr := sdk.AccAddress(priv.PubKey().Address())
 	return priv, cosmosAddr, nil
 }

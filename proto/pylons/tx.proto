@@ -1,0 +1,355 @@
+syntax = "proto3";
+package pylons;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+import "pylons/pylons.proto";
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+service Msg {
+  // CreateAccount is used to send pylons to requesters. This handler is part of the faucet
+  rpc CreateAccount(MsgCreateAccount) returns (MsgCreateExecutionResponse);
+
+  // GetPylons is used to send pylons to requesters. This handler is part of the faucet
+  rpc GetPylons(MsgGetPylons) returns (MsgGetPylonsResponse);
+
+  // GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
+  rpc GoogleIAPGetPylons(MsgGoogleIAPGetPylons) returns (MsgGoogleIAPGetPylonsResponse);
+
+  // SendCoins is used to transact pylons between people
+  rpc SendCoins(MsgSendCoins) returns (MsgSendCoinsResponse);
+
+  // SendItems is used to send items between people
+  rpc SendItems(MsgSendItems) returns (MsgSendItemsResponse);
+
+  // CreateCookbook is used to create cookbook by a developer
+  rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
+
+  // HandlerMsgUpdateCookbook is used to update cookbook by a developer
+  rpc HandlerMsgUpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
+
+  // CreateRecipe is used to create recipe by a developer
+  rpc CreateRecipe(MsgCreateRecipe) returns (MsgCreateRecipeResponse);
+
+  // HandlerMsgUpdateRecipe is used to update recipe by a developer
+  rpc HandlerMsgUpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
+
+  // ExecuteRecipe is used to execute a recipe
+  rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
+
+  // DisableRecipe is used to disable recipe by a developer
+  rpc DisableRecipe(MsgDisableRecipe) returns (MsgDisableRecipeResponse);
+
+  // EnableRecipe is used to enable recipe by a developer
+  rpc EnableRecipe(MsgEnableRecipe) returns (MsgEnableRecipeResponse);
+
+  // CheckExecution is used to check the status of an execution
+  rpc CheckExecution(MsgCheckExecution) returns (MsgCheckExecutionResponse);
+
+  // FiatItem is used to create item within 1 block execution
+  rpc FiatItem(MsgFiatItem) returns (MsgFiatItemResponse);
+
+  // UpdateItemString is used to transact pylons between people
+  rpc UpdateItemString(MsgUpdateItemString) returns (MsgUpdateItemStringResponse);
+
+  // CreateTrade is used to create a trade by a user
+  rpc CreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
+
+  // FulfillTrade is used to fulfill a trade
+  rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
+
+  // DisableTrade is used to enable trade by a developer
+  rpc DisableTrade(MsgDisableTrade) returns (MsgDisableTradeResponse);
+
+  // EnableTrade is used to enable trade by a developer
+  rpc EnableTrade(MsgEnableTrade) returns (MsgEnableTradeResponse);
+}
+
+
+// MsgCheckExecution defines a CheckExecution message
+message MsgCheckExecution {
+  string ExecID = 1;
+  string Sender = 2;
+  // if this is set to true then we complete the execution by paying for it
+  bool PayToComplete = 3;
+}
+
+// CheckExecutionResponse is the response for checkExecution
+message MsgCheckExecutionResponse  {
+  string Message = 1;
+  string Status = 2;
+  bytes Output = 3;
+}
+
+// MsgCreateAccount defines a CreateAccount message
+message MsgCreateAccount {
+  string Requester = 1;
+}
+
+// MsgCreateExecutionResponse is the response for create-account
+message MsgCreateExecutionResponse {
+  string Message = 1;
+  string Status = 2;
+}
+
+//Cookbook is a struct that contains all the metadata of a cookbook
+message MsgCreateCookbook {
+  // optinal id which can be provided by the developer
+  string CookbookID = 1;
+  string Name = 2;
+  string Description = 3;
+  string Version = 4;
+  string Developer = 5;
+  string SupportEmail = 6;
+  int64 Level = 7;
+  string Sender = 8;
+  // Pylons per block to be charged across this cookbook for delayed execution early completion
+  int64 CostPerBlock = 9;
+}
+
+// MsgCreateCookbookResponse is a struct of create cookbook response
+message MsgCreateCookbookResponse  {
+  string  CookbookID = 1 [(gogoproto.jsontag) = "CookbookID"];
+  string  Message = 2;
+  string  Status = 3;
+}
+
+
+// MsgCreateRecipe defines a CreateRecipe message
+message MsgCreateRecipe {
+  // optional RecipeID if someone
+  string RecipeID = 1;
+  string Name = 2;
+  string CookbookID = 3;    // the cookbook guid
+  repeated CoinInput CoinInputs = 4 [(gogoproto.nullable) = false];
+  repeated ItemInput ItemInputs = 5 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs Outputs = 6 [(gogoproto.nullable) = false];
+  int64 BlockInterval = 7;
+  string Sender = 8;
+  string Description = 9;
+  EntriesList Entries = 10 [(gogoproto.nullable) = false];
+  string ExtraInfo = 11;
+}
+
+
+// MsgCreateRecipeResponse is struct of create recipe response
+message MsgCreateRecipeResponse  {
+  string RecipeID = 1 [(gogoproto.jsontag) = "RecipeID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+// MsgCreateTrade defines a CreateTrade message
+message MsgCreateTrade {
+  repeated CoinInput CoinInputs = 1  [(gogoproto.nullable) = false];
+  repeated TradeItemInput ItemInputs = 2 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin CoinOutputs = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated Item ItemOutputs = 4 [(gogoproto.nullable) = false];
+  string ExtraInfo = 5;
+  string Sender = 6;
+}
+
+// MsgCreateTradeResponse is struct of create trade response
+message MsgCreateTradeResponse  {
+  string TradeID = 1 [(gogoproto.jsontag) = "TradeID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+// MsgDisableRecipe defines a DisableRecipe message
+message MsgDisableRecipe  {
+  string RecipeID = 1;
+  string Sender = 2;
+}
+
+// DisableRecipeResponse is the response for disableRecipe
+message MsgDisableRecipeResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+// MsgDisableTrade defines a DisableTrade message
+message MsgDisableTrade  {
+  string TradeID = 1;
+  string Sender = 2;
+}
+
+// MsgDisableTradeResponse is the response for enableTrade
+message MsgDisableTradeResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+
+// MsgEnableRecipe defines a EnableRecipe message
+message MsgEnableRecipe  {
+  string RecipeID = 1;
+  string Sender = 2;
+}
+
+// MsgEnableRecipeResponse is the response for enableRecipe
+message MsgEnableRecipeResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+// MsgEnableTrade defines a EnableTrade message
+message MsgEnableTrade  {
+  string TradeID = 1;
+  string Sender = 2;
+}
+
+// MsgEnableTradeResponse is the response for enableTrade
+message MsgEnableTradeResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+
+// MsgExecuteRecipe defines a SetName message
+message  MsgExecuteRecipe {
+  string RecipeID = 1;
+  string Sender = 2;
+  repeated string ItemIDs = 3;
+}
+// ExecuteRecipeResponse is the response for executeRecipe
+message MsgExecuteRecipeResponse {
+  string Message = 1;
+  string Status = 2;
+  bytes Output = 3;
+}
+
+// MsgFiatItem is a msg struct to be used to fiat item
+message MsgFiatItem {
+  string CookbookID = 1;
+  repeated DoubleKeyValue Doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongKeyValue Longs = 3 [(gogoproto.nullable) = false];
+  repeated StringKeyValue Strings = 4 [(gogoproto.nullable) = false];
+  string Sender = 5;
+  int64 TransferFee = 6;
+}
+
+// MsgFiatItemResponse is a struct to control fiat item response
+message MsgFiatItemResponse  {
+  string ItemID = 1 [(gogoproto.jsontag) = "ItemID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+// MsgFulfillTrade defines a FulfillTrade message
+message MsgFulfillTrade {
+  string TradeID = 1;
+  string Sender = 2;
+  repeated string ItemIDs = 3;
+}
+
+
+// FulfillTradeResponse is the response for fulfillRecipe
+message  MsgFulfillTradeResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+// MsgGetPylons defines a GetPylons message
+message MsgGetPylons {
+  repeated cosmos.base.v1beta1.Coin Amount = 1  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  string Requester = 2;
+}
+
+// MsgGetPylonsResponse is the response for get-pylons
+message MsgGetPylonsResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+// MsgGoogleIAPGetPylons defines a GetPylons message
+message MsgGoogleIAPGetPylons {
+  string ProductID = 1;
+  string PurchaseToken = 2;
+  string ReceiptDataBase64 = 3;
+  string Signature = 4;
+  string Requester = 5;
+}
+
+// MsgGoogleIAPGetPylonsResponse is the response for get-pylons
+message MsgGoogleIAPGetPylonsResponse  {
+  string Message = 1;
+  string Status = 2;
+}
+
+// MsgSendCoins defines a SendCoins message
+message MsgSendCoins {
+  repeated cosmos.base.v1beta1.Coin Amount = 1  [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  string Sender = 2;
+  string Receiver = 3;
+}
+
+message MsgSendCoinsResponse {
+
+}
+
+// MsgSendItems defines a SendItems message
+message MsgSendItems {
+  repeated string ItemIDs = 1;
+  string Sender = 2;
+  string Receiver = 3;
+}
+
+// MsgSendItemsResponse is the response for fulfillRecipe
+message  MsgSendItemsResponse {
+  string Message = 1;
+  string Status = 2;
+}
+
+// MsgUpdateItemString defines a UpdateItemString message
+message MsgUpdateItemString {
+  string Field = 1;
+  string Value = 2;
+  string Sender = 3;
+  string ItemID = 4;
+}
+
+// MsgUpdateItemStringResponse is a struct to control update item string response
+message MsgUpdateItemStringResponse  {
+  string Status = 1;
+  string Message = 2;
+}
+
+// MsgUpdateCookbook defines a UpdateCookbook message
+message MsgUpdateCookbook {
+  string ID = 1;
+  string Description = 2;
+  string Version = 3;
+  string Developer = 4;
+  string SupportEmail = 5;
+  string Sender = 6;
+}
+
+// MsgUpdateCookbookResponse is a struct to control update cookbook response
+message  MsgUpdateCookbookResponse {
+  string CookbookID = 1 [(gogoproto.jsontag) = "CookbookID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+// MsgUpdateRecipe defines a UpdateRecipe message
+message MsgUpdateRecipe {
+  string Name = 1;
+  string CookbookID = 2;     // the cookbook guid
+  string ID = 3;             // the recipe guid
+  repeated CoinInput CoinInputs = 4 [(gogoproto.nullable) = false];
+  repeated ItemInput ItemInputs = 5 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs Outputs = 6 [(gogoproto.nullable) = false];
+  int64 BlockInterval = 7;
+  string Sender = 8;
+  string Description = 9;
+  EntriesList Entries = 10 [(gogoproto.nullable) = false];
+}
+
+// UpdateRecipeResponse is a struct to control update recipe response
+message MsgUpdateRecipeResponse {
+  string RecipeID = 1 [(gogoproto.jsontag) = "RecipeID"];
+  string Message = 2;
+  string Status = 3;
+}

@@ -5,17 +5,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestRecipeFlowUpdate(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, sdk.Coins{
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, sdk.Coins{
 		sdk.NewInt64Coin("chair", 100000),
 		sdk.NewInt64Coin("wood", 100000),
 		sdk.NewInt64Coin(types.Pylon, 100000),
@@ -51,28 +50,28 @@ func TestRecipeFlowUpdate(t *testing.T) {
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
 			// Create recipe
-			newRcpMsg := msgs.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
-				types.GenCoinInputList("wood", 5),
-				types.GenItemInputList("Raichu"),
-				types.GenEntries("chair", "Raichu"),
-				types.GenOneOutput("chair", "Raichu"),
+			genCoinsList := types.GenCoinInputList("wood", 5)
+			mInputList := types.GenItemInputList("Raichu")
+			mEntries := types.GenEntries("chair", "Raichu")
+			mOutputs := types.GenOneOutput("chair", "Raichu")
+			newRcpMsg := types.NewMsgCreateRecipe("existing recipe", cbData.CookbookID, "", "this has to meet character limits",
+				genCoinsList,
+				mInputList,
+				mEntries,
+				mOutputs,
 				0,
-				tc.sender,
+				tc.sender.String(),
 			)
 
-			newRcpResult, _ := HandlerMsgCreateRecipe(tci.Ctx, tci.PlnK, newRcpMsg)
-			recipeData := CreateRecipeResponse{}
-			err := json.Unmarshal(newRcpResult.Data, &recipeData)
-			require.NoError(t, err)
-
-			tc.rcpID = recipeData.RecipeID
+			newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
+			tc.rcpID = newRcpResult.RecipeID
 
 			// Create dynamic items
 			itemIDs := []string{}
 			if tc.dynamicItemSet {
 				for _, iN := range tc.dynamicItemNames {
-					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					dynamicItem := keeper.GenItem(cbData.CookbookID, tc.sender, iN)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
@@ -88,21 +87,18 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			t.Log(execRcpResponse.Message)
 
 			// Update recipe
-			msg := msgs.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
-				types.GenCoinInputList("wood", 5),
-				types.GenItemInputList("Raichu"),
-				types.GenEntries("chair", "Raichu"),
-				types.GenOneOutput("chair", "Raichu"),
+			msg := types.NewMsgUpdateRecipe(tc.rcpID, tc.recipeName, tc.cbID, tc.recipeDesc,
+				genCoinsList,
+				mInputList,
+				mEntries,
+				mOutputs,
 				3,
-				sender1)
+				sender1.String())
 
-			result, err := HandlerMsgUpdateRecipe(tci.Ctx, tci.PlnK, msg)
+			result, err := tci.PlnH.HandlerMsgUpdateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
-				recipeData := UpdateRecipeResponse{}
-				err := json.Unmarshal(result.Data, &recipeData)
-				require.NoError(t, err)
-				require.True(t, len(recipeData.RecipeID) > 0)
+				require.True(t, len(result.RecipeID) > 0)
 			} else {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
@@ -111,8 +107,8 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			itemIDs = []string{}
 			if tc.dynamicItemSet {
 				for _, iN := range tc.dynamicItemNames {
-					dynamicItem := keep.GenItem(cbData.CookbookID, tc.sender, iN)
-					err := tci.PlnK.SetItem(tci.Ctx, *dynamicItem)
+					dynamicItem := keeper.GenItem(cbData.CookbookID, tc.sender, iN)
+					err := tci.PlnK.SetItem(tci.Ctx, dynamicItem)
 					require.NoError(t, err)
 					itemIDs = append(itemIDs, dynamicItem.ID)
 				}
@@ -128,7 +124,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			t.Log(execRcpResponse.Message)
 
 			// Schedule Recipe
-			scheduleOutput := ExecuteRecipeScheduleOutput{}
+			scheduleOutput := types.ExecuteRecipeScheduleOutput{}
 			err = json.Unmarshal(execRcpResponse.Output, &scheduleOutput)
 			require.NoError(t, err)
 
@@ -139,20 +135,17 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			}
 
 			// Check execution
-			checkExec := msgs.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender)
+			checkExec := types.NewMsgCheckExecution(scheduleOutput.ExecID, false, tc.sender.String())
 
 			futureContext := tci.Ctx.WithBlockHeight(tci.Ctx.BlockHeight() + 3)
-			checkMsgResult, _ := HandlerMsgCheckExecution(futureContext, tci.PlnK, checkExec)
-			checkExecResp := CheckExecutionResponse{}
-			err = json.Unmarshal(checkMsgResult.Data, &checkExecResp)
-			require.NoError(t, err)
+			checkMsgResult, _ := tci.PlnH.CheckExecution(sdk.WrapSDKContext(futureContext), &checkExec)
 
 			if tc.showError {
-				require.True(t, checkExecResp.Status == "Failure")
-				require.True(t, checkExecResp.Message == tc.desiredError)
+				require.True(t, checkMsgResult.Status == "Failure")
+				require.True(t, checkMsgResult.Message == tc.desiredError)
 
 			} else {
-				require.True(t, checkExecResp.Status == "Success")
+				require.True(t, checkMsgResult.Status == "Success")
 			}
 		})
 	}

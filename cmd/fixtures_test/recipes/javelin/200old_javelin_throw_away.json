@@ -16,5 +16,5 @@
     "Name": "200 Old Javelin Throw Away Recipe",
     "CookbookID": "javelincb-1589853709",
     "Description": "this recipe is used to throw away old javelin.",
-    "BlockInterval": "0"
+    "BlockInterval": 0
 }

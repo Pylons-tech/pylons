@@ -2,47 +2,57 @@ package query
 
 import (
 	"errors"
-	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/queriers"
-
-	"github.com/cosmos/cosmos-sdk/client/context"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/keys"
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 // GetPylonsBalance queries the pylons balance
-func GetPylonsBalance(queryRoute string, cdc *codec.Codec) *cobra.Command {
-	ccb := &cobra.Command{
+func GetPylonsBalance() *cobra.Command {
+	cmd := &cobra.Command{
 		Use:   "balance [name]",
 		Short: "get pylons balance",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
 
-			kb, err := keys.NewKeyBaseFromDir(viper.GetString(flags.FlagHome))
-
+			keys, err := keyring.New(sdk.KeyringServiceName(), keyring.BackendTest, clientCtx.KeyringDir, clientCtx.Input)
 			if err != nil {
 				return errors.New("cannot get the keys from home")
 			}
 
-			info, err := kb.Get(args[0])
+			infos, err := keys.List()
 			if err != nil {
 				return errors.New(err.Error())
 			}
 
-			res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/balance/%s", queryRoute, info.GetAddress()), nil)
-			if err != nil {
-				return fmt.Errorf(err.Error())
-			}
+			for _, info := range infos {
+				if info.GetName() == args[0] {
+					queryClient := types.NewQueryClient(clientCtx)
 
-			var out queriers.QueryResBalance
-			cdc.MustUnmarshalJSON(res, &out)
-			return cliCtx.PrintOutput(out)
+					balanceReq := &types.PylonsBalanceRequest{
+						Address: info.GetAddress().String(),
+					}
+
+					res, err := queryClient.PylonsBalance(cmd.Context(), balanceReq)
+					if err != nil {
+						return err
+					}
+
+					return clientCtx.PrintString(res.String())
+				}
+			}
+			return errors.New("cannot get the balance using this name")
 		},
 	}
-	return ccb
+
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

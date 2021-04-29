@@ -1,34 +1,65 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
-)
-
-// query endpoints supported by the nameservice Querier
-const (
-	KeyGetItem = "get_item"
 )
 
 // GetItem returns a item based on the item id
-func GetItem(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetItem(ctx context.Context, req *types.GetItemRequest) (*types.GetItemResponse, error) {
+	if req.ItemID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no item id is provided in path")
 	}
-	itemID := path[0]
-	item, err := keeper.GetItem(ctx, itemID)
+
+	item, err := querier.Keeper.GetItem(sdk.UnwrapSDKContext(ctx), req.ItemID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	// if we cannot find the value then it should return an error
-	bz, err := keeper.Cdc.MarshalJSON(item)
+
+	return &types.GetItemResponse{
+		Item: item,
+	}, nil
+}
+
+// ItemsBySender returns all items based on the sender address
+func (querier *querierServer) ItemsBySender(ctx context.Context, req *types.ItemsBySenderRequest) (*types.ItemsBySenderResponse, error) {
+	var err error
+	var senderAddr sdk.AccAddress
+
+	if req.Sender != "" {
+		senderAddr, err = sdk.AccAddressFromBech32(req.Sender)
+
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	items, err := querier.Keeper.GetItemsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
+
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return bz, nil
+	return &types.ItemsBySenderResponse{Items: items}, nil
+}
 
+// ItemsByCookbook returns a cookbook based on the cookbook id
+func (querier *querierServer) ItemsByCookbook(ctx context.Context, req *types.ItemsByCookbookRequest) (*types.ItemsByCookbookResponse, error) {
+	if req.CookbookID == "" {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no cookbook id is provided in path")
+	}
+
+	items, err := querier.Keeper.ItemsByCookbook(sdk.UnwrapSDKContext(ctx), req.CookbookID)
+
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	return &types.ItemsByCookbookResponse{
+		Items: items,
+	}, nil
 }

@@ -4,30 +4,33 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/google/cel-go/cel"
+	"github.com/google/cel-go/checker/decls"
+	exprpb "google.golang.org/genproto/googleapis/api/expr/v1alpha1"
 )
 
 // ExecProcess store and handle all the activities of execution
 type ExecProcess struct {
 	ctx          sdk.Context
-	keeper       keep.Keeper
+	keeper       keeper.Keeper
 	recipe       types.Recipe
 	matchedItems []types.Item
 	ec           types.CelEnvCollection
 }
 
 // SetMatchedItemsFromExecMsg calculate matched items into process storage from exec msg
-func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg msgs.MsgExecuteRecipe) error {
+func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg *types.MsgExecuteRecipe) error {
 	if len(msg.ItemIDs) != len(p.recipe.ItemInputs) {
 		return errors.New("the item IDs count doesn't match the recipe input")
 	}
 
-	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, msg.Sender)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+	items, err := GetItemsFromIDs(p.ctx, p.keeper, msg.ItemIDs, sender)
 	if err != nil {
 		return err
 	}
@@ -69,7 +72,7 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 		return []byte{}, err
 	}
 
-	outputs, err := p.recipe.Outputs.Actualize(p.ec)
+	outputs, err := types.WeightedOutputsList(p.recipe.Outputs).Actualize(p.ec)
 	if err != nil {
 		return []byte{}, err
 	}
@@ -88,8 +91,8 @@ func (p *ExecProcess) Run(sender sdk.AccAddress) ([]byte, error) {
 }
 
 // AddExecutedResult add executed result from ExecProcess
-func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string) ([]ExecuteRecipeSerialize, error) {
-	var ersl []ExecuteRecipeSerialize
+func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string) ([]types.ExecuteRecipeSerialize, error) {
+	var ersl []types.ExecuteRecipeSerialize
 	usedItemInputIndexes := []int{}
 	for _, entryID := range entryIDs {
 		output, err := p.recipe.Entries.FindByID(entryID)
@@ -98,7 +101,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 		}
 
 		switch output := output.(type) {
-		case types.CoinOutput:
+		case *types.CoinOutput:
 			coinOutput := output
 			var coinAmount int64
 			if len(coinOutput.Count) > 0 {
@@ -112,16 +115,16 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			}
 			ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 
-			_, err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
+			err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
 			if err != nil {
 				return ersl, err
 			}
-			ersl = append(ersl, ExecuteRecipeSerialize{
+			ersl = append(ersl, types.ExecuteRecipeSerialize{
 				Type:   "COIN",
 				Coin:   coinOutput.Coin,
 				Amount: coinAmount,
 			})
-		case types.ItemModifyOutput:
+		case *types.ItemModifyOutput:
 			var outputItem *types.Item
 
 			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
@@ -134,7 +137,7 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
 
 			// Modify item according to ModifyParams section
-			outputItem, err = p.UpdateItemFromModifyParams(inputItem, output)
+			outputItem, err = p.UpdateItemFromModifyParams(inputItem, *output)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
@@ -142,20 +145,20 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 				return ersl, errInternal(err)
 
 			}
-			ersl = append(ersl, ExecuteRecipeSerialize{
+			ersl = append(ersl, types.ExecuteRecipeSerialize{
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})
-		case types.ItemOutput:
+		case *types.ItemOutput:
 			itemOutput := output
 			outputItem, err := itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
 			if err != nil {
 				return ersl, errInternal(err)
 			}
-			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
+			if err = p.keeper.SetItem(p.ctx, outputItem); err != nil {
 				return ersl, errInternal(err)
 			}
-			ersl = append(ersl, ExecuteRecipeSerialize{
+			ersl = append(ersl, types.ExecuteRecipeSerialize{
 				Type:   "ITEM",
 				ItemID: outputItem.ID,
 			})
@@ -175,55 +178,66 @@ func (p *ExecProcess) AddExecutedResult(sender sdk.AccAddress, entryIDs []string
 
 // UpdateItemFromModifyParams is used to update item passed via item input from modify params
 func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod types.ItemModifyOutput) (*types.Item, error) {
-	dblKeyValues, err := toMod.Doubles.Actualize(p.ec)
-	if err != nil {
-		return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
-	}
-	for idx, dbl := range dblKeyValues {
-		dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
-		if !ok {
-			return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
+	if toMod.Doubles != nil {
+		dblKeyValues, err := types.DoubleParamList(toMod.Doubles).Actualize(p.ec)
+		if err != nil {
+			return &targetItem, errInternal(errors.New("error actualizing double upgrade values: " + err.Error()))
 		}
-		if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
-			originValue := targetItem.Doubles[dblKey].Value.Float()
-			upgradeAmount := dbl.Value.Float()
-			targetItem.Doubles[dblKey].Value = types.ToFloatString(originValue + upgradeAmount)
-		} else {
-			targetItem.Doubles[dblKey].Value = dbl.Value
-		}
-	}
-
-	lngKeyValues, err := toMod.Longs.Actualize(p.ec)
-	if err != nil {
-		return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
-	}
-	for idx, lng := range lngKeyValues {
-		lngKey, ok := targetItem.FindLongKey(lng.Key)
-		if !ok {
-			return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
-		}
-		if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
-			targetItem.Longs[lngKey].Value += lng.Value
-		} else {
-			targetItem.Longs[lngKey].Value = lng.Value
+		for idx, dbl := range dblKeyValues {
+			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+			if !ok {
+				return &targetItem, errInternal(errors.New("double key does not exist which needs to be upgraded"))
+			}
+			if len(toMod.Doubles[idx].Program) == 0 { // NO PROGRAM
+				originValue := targetItem.Doubles[dblKey].Value
+				upgradeAmount := dbl.Value
+				targetItem.Doubles[dblKey].Value = originValue.Add(upgradeAmount)
+			} else {
+				targetItem.Doubles[dblKey].Value = dbl.Value
+			}
 		}
 	}
 
-	strKeyValues, err := toMod.Strings.Actualize(p.ec)
-	if err != nil {
-		return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
-	}
-	for _, str := range strKeyValues {
-		strKey, ok := targetItem.FindStringKey(str.Key)
-		if !ok {
-			return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
+	if toMod.Longs != nil {
+		lngKeyValues, err := types.LongParamList(toMod.Longs).Actualize(p.ec)
+		if err != nil {
+			return &targetItem, errInternal(errors.New("error actualizing long upgrade values: " + err.Error()))
 		}
-		targetItem.Strings[strKey].Value = str.Value
+		for idx, lng := range lngKeyValues {
+			lngKey, ok := targetItem.FindLongKey(lng.Key)
+			if !ok {
+				return &targetItem, errInternal(errors.New("long key does not exist which needs to be upgraded"))
+			}
+			if len(toMod.Longs[idx].Program) == 0 { // NO PROGRAM
+				targetItem.Longs[lngKey].Value += lng.Value
+			} else {
+				targetItem.Longs[lngKey].Value = lng.Value
+			}
+		}
+	}
+
+	if toMod.Strings != nil {
+		strKeyValues, err := types.StringParamList(toMod.Strings).Actualize(p.ec)
+		if err != nil {
+			return &targetItem, errInternal(errors.New("error actualizing string upgrade values: " + err.Error()))
+		}
+		for _, str := range strKeyValues {
+			strKey, ok := targetItem.FindStringKey(str.Key)
+			if !ok {
+				return &targetItem, errInternal(errors.New("string key does not exist which needs to be upgraded"))
+			}
+			targetItem.Strings[strKey].Value = str.Value
+		}
+	}
+
+	sender, err := sdk.AccAddressFromBech32(targetItem.Sender)
+	if err != nil {
+		return nil, err
 	}
 
 	p.keeper.SetItemHistory(p.ctx, types.ItemHistory{
-		ID:       types.KeyGen(targetItem.Sender),
-		Owner:    targetItem.Sender,
+		ID:       types.KeyGen(sender),
+		Owner:    sender,
 		ItemID:   targetItem.ID,
 		RecipeID: p.recipe.ID,
 	})
@@ -236,6 +250,29 @@ func (p *ExecProcess) UpdateItemFromModifyParams(targetItem types.Item, toMod ty
 	return &targetItem, nil
 }
 
+// AddVariableFromItem collect variables from item inputs
+func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item types.Item) ([](*exprpb.Decl), map[string]interface{}) {
+
+	varDefs = append(varDefs, decls.NewVar(prefix+"lastUpdate", decls.Int))
+	variables[prefix+"lastUpdate"] = item.LastUpdate
+	variables[prefix+"transferFee"] = item.TransferFee
+
+	for _, dbli := range item.Doubles {
+		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
+		fl, _ := strconv.ParseFloat(dbli.Value.String(), 64)
+		variables[prefix+dbli.Key] = fl
+	}
+	for _, inti := range item.Longs {
+		varDefs = append(varDefs, decls.NewVar(prefix+inti.Key, decls.Int))
+		variables[prefix+inti.Key] = inti.Value
+	}
+	for _, stri := range item.Strings {
+		varDefs = append(varDefs, decls.NewVar(prefix+stri.Key, decls.String))
+		variables[prefix+stri.Key] = stri.Value
+	}
+	return varDefs, variables
+}
+
 // GenerateCelEnvVarFromInputItems generate cel env varaible from item inputs
 func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
@@ -246,10 +283,10 @@ func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	for idx, item := range p.matchedItems {
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
 
-		varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
+		varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
 		if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" && itemInputs[idx].IDValidationError() == nil {
 			iPrefix2 := itemInputs[idx].ID + "."
-			varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
+			varDefs, variables = AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
 		}
 	}
 

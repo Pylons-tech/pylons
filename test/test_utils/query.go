@@ -24,7 +24,7 @@ func GetTradeIDFromExtraInfo(tradeExtraInfo string) (string, bool, error) {
 
 // ListCookbook is a function to list cookbooks
 func ListCookbook(address sdk.AccAddress) ([]types.Cookbook, error) {
-	return tci.PlnK.GetCookbookBySender(tci.Ctx, address)
+	return tci.PlnK.GetCookbooksBySender(tci.Ctx, address)
 }
 
 // GetLockedCoins is a function to list locked coins

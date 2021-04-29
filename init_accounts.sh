@@ -1,31 +1,26 @@
 #!/bin/sh
 
-pylonscli config chain-id pylonschain
-pylonscli config output json
-pylonscli config indent true
-pylonscli config trust-node true
-
 # node0 = cosmos13p8890funv54hflk82ju0zv47tspglpk373453
-pylonscli keys add node0 --keyring-backend=test --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
-pylonscli keys add michael --keyring-backend=test --recover <<< "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
-pylonscli keys add eugen --keyring-backend=test --recover <<< "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
+pylonsd keys add node0 --keyring-backend=test --home=$HOME/.pylonsd --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
+pylonsd keys add michael --keyring-backend=test --home=$HOME/.pylonsd --recover <<< "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
+pylonsd keys add eugen --keyring-backend=test --home=$HOME/.pylonsd --recover <<< "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
 
 echo "waiting for block height 1 ..."
 sleep 6
 
-pylonscli tx pylons send $(pylonscli keys show -a michael --keyring-backend=test) 500000pylon,10000node0token,10000stake --from=node0 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+pylonsd tx pylons send $(pylonsd keys show -a michael --keyring-backend=test --home=$HOME/.pylonsd) 500000pylon,10000node0token,10000stake --from=node0 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished michael account initialization tx sending; waiting 6 seconds..."
 sleep 6
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
-pylonscli query account $(pylonscli keys show -a michael --keyring-backend=test) --node tcp://192.168.10.2:26657
+pylonsd query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
+pylonsd query account $(pylonsd keys show -a michael --keyring-backend=test --home=$HOME/.pylonsd) --node tcp://192.168.10.2:26657
 
-pylonscli tx pylons send $(pylonscli keys show -a eugen --keyring-backend=test) 500000pylon,10000node0token,10000stake --from=node0 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
+pylonsd tx pylons send $(pylonsd keys show -a eugen --keyring-backend=test --home=$HOME/.pylonsd) 500000pylon,10000node0token,10000stake --from=node0 --keyring-backend=test --node tcp://192.168.10.2:26657 <<< y
 echo "finished eugen account initialization tx sending; waiting 6 seconds..."
 sleep 6
 
-pylonscli query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
-pylonscli query account $(pylonscli keys show -a michael --keyring-backend=test) --node tcp://192.168.10.2:26657
-pylonscli query account $(pylonscli keys show -a eugen --keyring-backend=test) --node tcp://192.168.10.2:26657
+pylonsd query account cosmos13p8890funv54hflk82ju0zv47tspglpk373453 --node tcp://192.168.10.2:26657
+pylonsd query account $(pylonsd keys show -a michael --keyring-backend=test --home=$HOME/.pylonsd) --node tcp://192.168.10.2:26657
+pylonsd query account $(pylonsd keys show -a eugen --keyring-backend=test --home=$HOME/.pylonsd) --node tcp://192.168.10.2:26657
 
 
 # sleep 1000;

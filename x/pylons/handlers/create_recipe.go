@@ -1,64 +1,166 @@
 package handlers
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CreateRecipeResponse is struct of create recipe response
-type CreateRecipeResponse struct {
-	RecipeID string `json:"RecipeID"`
-	Message  string
-	Status   string
-}
-
-// HandlerMsgCreateRecipe is used to create recipe by a developer
-func HandlerMsgCreateRecipe(ctx sdk.Context, keeper keep.Keeper, msg msgs.MsgCreateRecipe) (*sdk.Result, error) {
+// CreateRecipe is used to create recipe by a developer
+func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe) (*types.MsgCreateRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
 	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
 	// validate cookbook id
-	cook, err := keeper.GetCookbook(ctx, msg.CookbookID)
+	cookbook, err := k.GetCookbook(sdkCtx, msg.CookbookID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	// validate sender
-	if !cook.Sender.Equals(msg.Sender) {
+	if cookbook.Sender != msg.Sender {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "cookbook not owned by the sender")
 	}
 
 	recipe := types.NewRecipe(
 		msg.Name, msg.CookbookID, msg.Description,
-		msg.CoinInputs,
-		msg.ItemInputs,
-		msg.Entries,
-		msg.Outputs,
-		msg.BlockInterval, msg.Sender)
+		msg.CoinInputs, msg.ItemInputs,
+		msg.Entries, msg.Outputs,
+		msg.BlockInterval, sender, msg.ExtraInfo,
+	)
 
 	if msg.RecipeID != "" {
-		if keeper.HasRecipeWithCookbookID(ctx, msg.CookbookID, msg.RecipeID) {
+		if k.HasRecipeWithCookbookID(sdkCtx, msg.CookbookID, msg.RecipeID) {
 			return nil, errInternal(fmt.Errorf("The recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
 		}
 		recipe.ID = msg.RecipeID
 	}
-	if err := recipe.ItemInputs.Validate(); err != nil {
+	if err := types.ItemInputList(recipe.ItemInputs).Validate(); err != nil {
 		return nil, errInternal(err)
 	}
 
-	if err := keeper.SetRecipe(ctx, recipe); err != nil {
+	if err := k.SetRecipe(sdkCtx, recipe); err != nil {
 		return nil, errInternal(err)
 	}
 
-	return marshalJSON(CreateRecipeResponse{
+	return &types.MsgCreateRecipeResponse{
 		RecipeID: recipe.ID,
 		Message:  "successfully created a recipe",
 		Status:   "Success",
-	})
+	}, nil
+}
+
+// EnableRecipe is used to enable recipe by a developer
+func (k msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe) (*types.MsgEnableRecipeResponse, error) {
+
+	err := msg.ValidateBasic()
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
+	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	if sender.String() != recipe.Sender {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "msg sender is not the owner of the recipe")
+	}
+
+	recipe.Disabled = false
+
+	err = k.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	return &types.MsgEnableRecipeResponse{
+		Message: "successfully enabled the recipe",
+		Status:  "Success",
+	}, nil
+}
+
+// DisableRecipe is used to disable recipe by a developer
+func (k msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecipe) (*types.MsgDisableRecipeResponse, error) {
+
+	err := msg.ValidateBasic()
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
+	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	if sender.String() != recipe.Sender {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "msg sender is not the owner of the recipe")
+	}
+	recipe.Disabled = true
+
+	err = k.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	return &types.MsgDisableRecipeResponse{
+		Message: "successfully disabled the recipe",
+		Status:  "Success",
+	}, nil
+}
+
+// HandlerMsgUpdateRecipe is used to update recipe by a developer
+func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
+
+	err := msg.ValidateBasic()
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
+
+	rc, err := k.GetRecipe(sdkCtx, msg.ID)
+
+	// only the original sender (owner) of the cookbook can update the cookbook
+	if rc.Sender != sender.String() {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "the owner of the recipe is different then the current sender")
+	}
+
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	rc.Description = msg.Description
+	rc.CookbookID = msg.CookbookID
+	rc.CoinInputs = msg.CoinInputs
+	rc.ItemInputs = msg.ItemInputs
+	rc.Entries = msg.Entries
+	rc.BlockInterval = msg.BlockInterval
+	rc.Name = msg.Name
+	rc.Outputs = msg.Outputs
+
+	if err := k.UpdateRecipe(sdkCtx, msg.ID, rc); err != nil {
+		return nil, errInternal(err)
+	}
+
+	return &types.MsgUpdateRecipeResponse{
+		RecipeID: msg.ID,
+		Message:  "successfully updated the recipe",
+		Status:   "Success",
+	}, nil
 }

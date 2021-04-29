@@ -3,7 +3,7 @@ package pylons
 import (
 	"log"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -35,7 +35,7 @@ func DefaultGenesisState() GenesisState {
 }
 
 // InitGenesis init genesis for a context
-func InitGenesis(ctx sdk.Context, keeper keep.Keeper, data GenesisState) {
+func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data GenesisState) {
 	for _, record := range data.Cookbooks {
 		//nolint:errcheck
 		keeper.SetCookbook(ctx, record)
@@ -51,7 +51,7 @@ func InitGenesis(ctx sdk.Context, keeper keep.Keeper, data GenesisState) {
 }
 
 // ExportGenesis export genesis
-func ExportGenesis(ctx sdk.Context, k keep.Keeper) GenesisState {
+func ExportGenesis(ctx sdk.Context, k keeper.Keeper) GenesisState {
 	var cookbooks []types.Cookbook
 	iterator := k.GetCookbooksIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {

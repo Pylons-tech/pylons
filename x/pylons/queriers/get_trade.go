@@ -1,10 +1,11 @@
 package queriers
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
+	"context"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // query endpoints supported by the nameservice Querier
@@ -13,22 +14,52 @@ const (
 )
 
 // GetTrade returns a trade based on the trade id
-func GetTrade(ctx sdk.Context, path []string, req abci.RequestQuery, keeper keep.Keeper) ([]byte, error) {
-	if len(path) == 0 {
+func (querier *querierServer) GetTrade(ctx context.Context, req *types.GetTradeRequest) (*types.GetTradeResponse, error) {
+	if req.TradeID == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no trade id is provided in path")
 	}
-	tradeID := path[0]
-	trade, err := keeper.GetTrade(ctx, tradeID)
+
+	trade, err := querier.Keeper.GetTrade(sdk.UnwrapSDKContext(ctx), req.TradeID)
 
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	// if we cannot find the value then it should return an error
-	bz, err := keeper.Cdc.MarshalJSON(trade)
+
+	return &types.GetTradeResponse{
+		NodeVersion: trade.NodeVersion,
+		ID:          trade.ID,
+		CoinInputs:  trade.CoinInputs,
+		ItemInputs:  trade.ItemInputs,
+		CoinOutputs: trade.CoinOutputs,
+		ItemOutputs: trade.ItemOutputs,
+		ExtraInfo:   trade.ExtraInfo,
+		Sender:      trade.Sender,
+		FulFiller:   trade.FulFiller,
+		Disabled:    trade.Disabled,
+		Completed:   trade.Completed,
+	}, nil
+}
+
+// ListTrade returns a trade based on the trade id
+func (querier *querierServer) ListTrade(ctx context.Context, req *types.ListTradeRequest) (*types.ListTradeResponse, error) {
+
+	var senderAccAddress sdk.AccAddress
+	var err error
+
+	if req.Size() != 0 {
+		// an address has been provided
+		senderAccAddress, err = sdk.AccAddressFromBech32(req.Address)
+		if err != nil {
+			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	trades, err := querier.Keeper.GetTradesByCreator(sdk.UnwrapSDKContext(ctx), senderAccAddress)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return bz, nil
-
+	return &types.ListTradeResponse{
+		Trades: trades,
+	}, nil
 }

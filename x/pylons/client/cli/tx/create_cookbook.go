@@ -1,28 +1,22 @@
 package tx
 
 import (
-	// "strconv"
+	"encoding/json"
 
-	"bufio"
-
-	"github.com/spf13/cobra"
-
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-	// "github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/cosmos/cosmos-sdk/client/context"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/client/utils"
-
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 )
 
 // CreateCookbook is the client cli command for creating cookbook
-func CreateCookbook(cdc *codec.Codec) *cobra.Command {
+func CreateCookbook() *cobra.Command {
 
-	var msgCCB msgs.MsgCreateCookbook
+	var msgCCB = &types.MsgCreateCookbook{}
 
-	ccb := &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "create-cookbook [args]",
 		Short: "create cookbook by providing the args",
 		Args:  cobra.ExactArgs(1),
@@ -31,29 +25,32 @@ func CreateCookbook(cdc *codec.Codec) *cobra.Command {
 			// If we set level, version, support_email, tmp_level name and description separately,
 			// it can be very complex, especially for other commands like create_recipe, fiat_item
 
-			cliCtx := context.NewCLIContext().WithCodec(cdc)
-			inBuf := bufio.NewReader(cmd.InOrStdin())
-			txBldr := auth.NewTxBuilderFromCLI(inBuf).WithTxEncoder(utils.GetTxEncoder(cdc))
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			byteValue, err := ReadFile(args[0])
 			if err != nil {
 				return err
 			}
-			err = cdc.UnmarshalJSON(byteValue, &msgCCB)
+			err = json.Unmarshal(byteValue, &msgCCB)
 			if err != nil {
 				return err
 			}
 
-			msgCCB.Sender = cliCtx.GetFromAddress()
+			msgCCB.Sender = clientCtx.GetFromAddress().String()
 
 			err = msgCCB.ValidateBasic()
 			if err != nil {
 				return err
 			}
 
-			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msgCCB})
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), []sdk.Msg{msgCCB}...)
 		},
 	}
 
-	return ccb
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
 }

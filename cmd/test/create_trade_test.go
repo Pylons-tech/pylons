@@ -10,7 +10,6 @@ import (
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/msgs"
 )
 
 func TestCreateTradeViaCLI(originT *originT.T) {
@@ -65,17 +64,15 @@ func TestCreateTradeViaCLI(originT *originT.T) {
 				inputCoins = nil
 			}
 
-			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-				msgs.NewMsgCreateTrade(
-					inputCoins,
-					types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
-					types.NewPylon(tc.outputPylon),
-					nil,
-					tc.extraInfo,
-					sdkAddr),
-				cbOwnerKey,
-				false,
+			trdMsg := types.NewMsgCreateTrade(
+				inputCoins,
+				types.GenTradeItemInputList(mCB.ID, []string{"Raichu"}),
+				types.NewPylon(tc.outputPylon),
+				types.ItemList{},
+				tc.extraInfo,
+				sdkAddr.String(),
 			)
+			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &trdMsg, cbOwnerKey, false)
 			if err != nil {
 				TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
 				return

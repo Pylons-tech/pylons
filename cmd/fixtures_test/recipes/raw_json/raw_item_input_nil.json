@@ -3,7 +3,7 @@
     "CoinInputs": [
       {
         "Coin": "pylon",
-        "Count": "1"
+        "Count": 1
       }
     ],
     "ItemInputs": null,
@@ -37,6 +37,6 @@
     "CookbookID": "raw-json-cb-1589853709",
     "Description": "test recipe from test suite",
     "Name": "Raw item input nil json test recipe",
-    "BlockInterval": "0",
+    "BlockInterval": 0,
     "Sender": "rj_account1"
   }

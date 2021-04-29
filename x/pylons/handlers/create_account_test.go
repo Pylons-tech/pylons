@@ -4,16 +4,16 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
-
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgCreateAccount(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
-	sender1, _, _, _ := keep.SetupTestAccounts(t, tci, nil, nil, nil, nil)
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
+	sender1, _, _, _ := keeper.SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
 		fromAddress  sdk.AccAddress
@@ -33,8 +33,8 @@ func TestHandlerMsgCreateAccount(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgCreateAccount(tc.fromAddress)
-			_, err := HandlerMsgCreateAccount(tci.Ctx, tci.PlnK, msg)
+			msg := types.NewMsgCreateAccount(tc.fromAddress.String())
+			_, err := tci.PlnH.CreateAccount(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError {
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

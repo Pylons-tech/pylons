@@ -6,33 +6,35 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/keep"
-	"github.com/Pylons-tech/pylons/x/pylons/msgs"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestHandlerMsgSendItems(t *testing.T) {
-	tci := keep.SetupTestCoinInput()
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = NewMsgServerImpl(tci.PlnK)
 
-	sender1, sender2, sender3, _ := keep.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
+	sender1, sender2, sender3, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(10000000), types.NewPylon(10000000), types.NewPylon(10), nil)
 
-	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender1, types.NewPylon(10000000)))
-	require.True(t, keep.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
+	require.True(t, keeper.HasCoins(tci.PlnK, tci.Ctx, sender1, types.NewPylon(10000000)))
+	require.True(t, keeper.HasCoins(tci.PlnK, tci.Ctx, sender2, types.NewPylon(10000000)))
 	cbData := MockCookbook(tci, sender1)
 	cookbook, err := tci.PlnK.GetCookbook(tci.Ctx, cbData.CookbookID)
 	require.NoError(t, err)
 
-	item1 := keep.GenItem(cbData.CookbookID, sender1, "sword")
-	item2 := keep.GenItem(cbData.CookbookID, sender1, "axe")
-	item3 := keep.GenItem(cbData.CookbookID, sender2, "spear")
-	item4 := keep.GenItem(cbData.CookbookID, sender2, "bow")
-	item5 := keep.GenItem(cbData.CookbookID, sender3, "bow1")
-	item6 := keep.GenItem(cbData.CookbookID, sender2, "bow2")
-	item7 := keep.GenItem(cbData.CookbookID, sender2, "bow3")
-	item8 := keep.GenItem(cbData.CookbookID, sender1, "bow4")
+	cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
+	require.NoError(t, err)
+
+	item1 := keeper.GenItem(cbData.CookbookID, sender1, "sword")
+	item2 := keeper.GenItem(cbData.CookbookID, sender1, "axe")
+	item3 := keeper.GenItem(cbData.CookbookID, sender2, "spear")
+	item4 := keeper.GenItem(cbData.CookbookID, sender2, "bow")
+	item5 := keeper.GenItem(cbData.CookbookID, sender3, "bow1")
+	item6 := keeper.GenItem(cbData.CookbookID, sender2, "bow2")
+	item7 := keeper.GenItem(cbData.CookbookID, sender2, "bow3")
+	item8 := keeper.GenItem(cbData.CookbookID, sender1, "bow4")
 
 	item2.OwnerRecipeID = "????????"
 	item8.OwnerTradeID = "????????"
@@ -44,28 +46,28 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	item6.SetTransferFee(642)
 	item7.SetTransferFee(1187)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item1)
+	err = tci.PlnK.SetItem(tci.Ctx, item1)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item2)
+	err = tci.PlnK.SetItem(tci.Ctx, item2)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item3)
+	err = tci.PlnK.SetItem(tci.Ctx, item3)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item4)
+	err = tci.PlnK.SetItem(tci.Ctx, item4)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item5)
+	err = tci.PlnK.SetItem(tci.Ctx, item5)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item6)
+	err = tci.PlnK.SetItem(tci.Ctx, item6)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item7)
+	err = tci.PlnK.SetItem(tci.Ctx, item7)
 	require.NoError(t, err)
 
-	err = tci.PlnK.SetItem(tci.Ctx, *item8)
+	err = tci.PlnK.SetItem(tci.Ctx, item8)
 	require.NoError(t, err)
 
 	cases := map[string]struct {
@@ -171,27 +173,27 @@ func TestHandlerMsgSendItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := msgs.NewMsgSendItems(tc.itemIDs, tc.fromAddress, tc.toAddress)
+			msg := types.NewMsgSendItems(tc.itemIDs, tc.fromAddress.String(), tc.toAddress.String())
 
 			pylonsLLCAddress, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 
 			require.NoError(t, err)
 
-			coinsSenderBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
-			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
-			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
+			coinsSenderBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
+			coinsPylonsLLCBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
+			coinsCBOwnerBefore := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbookSender)
 
-			_, err = HandlerMsgSendItems(tci.Ctx, tci.PlnK, msg)
+			_, err = tci.PlnH.SendItems(sdk.WrapSDKContext(tci.Ctx), &msg)
 
-			coinsSenderAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, tc.fromAddress)
-			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, pylonsLLCAddress)
-			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetCoins(tci.Ctx, cookbook.Sender)
+			coinsSenderAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, tc.fromAddress)
+			coinsPylonsLLCAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, pylonsLLCAddress)
+			coinsCBOwnerAfter := tci.PlnK.CoinKeeper.GetAllBalances(tci.Ctx, cookbookSender)
 
 			if !tc.showError {
 				for _, itemID := range tc.itemIDs {
 					item, err := tci.PlnK.GetItem(tci.Ctx, itemID)
 					require.NoError(t, err)
-					require.True(t, item.Sender.String() == tc.toAddress.String())
+					require.True(t, item.Sender == tc.toAddress.String())
 				}
 
 				differSender := coinsSenderBefore.AmountOf(types.Pylon).Int64() - coinsSenderAfter.AmountOf(types.Pylon).Int64()

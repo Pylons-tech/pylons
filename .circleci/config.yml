@@ -23,13 +23,13 @@ jobs:
 
       # specify any bash command here prefixed with `run: `
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
-      - run: GO111MODULE=on go install -v ./cmd/pylonscli/
+      - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: pylonsd init --chain-id pylonschain
       - run: make init_accounts
-      - run: pylonscli config chain-id pylonschain
-      - run: pylonscli config output json
-      - run: pylonscli config indent true
-      - run: pylonscli config trust-node true
+      - run: pylonsd config chain-id pylonschain
+      - run: pylonsd config output json
+      - run: pylonsd config indent true
+      - run: pylonsd config trust-node true
       - run: 
           command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make int_tests)
           no_output_timeout: 10m
@@ -44,13 +44,13 @@ jobs:
 
       # specify any bash command here prefixed with `run: `
       - run: GO111MODULE=on go install -v ./cmd/pylonsd/
-      - run: GO111MODULE=on go install -v ./cmd/pylonscli/
+      - run: GO111MODULE=on go install -v ./cmd/pylonsd/
       - run: pylonsd init --chain-id pylonschain
       - run: make init_accounts
-      - run: pylonscli config chain-id pylonschain
-      - run: pylonscli config output json
-      - run: pylonscli config indent true
-      - run: pylonscli config trust-node true
+      - run: pylonsd config chain-id pylonschain
+      - run: pylonsd config output json
+      - run: pylonsd config indent true
+      - run: pylonsd config trust-node true
       - run: 
           command: pylonsd start > pylonsd.log & (sleep 5 && GO111MODULE=on make fixture_tests ARGS="--accounts=michael,eugen")
           no_output_timeout: 10m

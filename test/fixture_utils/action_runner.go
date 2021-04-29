@@ -2,11 +2,10 @@ package fixturetest
 
 import (
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	fixturetestSDK "github.com/Pylons-tech/pylons_sdk/cmd/fixture_utils"
 )
 
 // ActFunc describes the type of function used for action running test
-type ActFunc func(fixturetestSDK.FixtureStep, *testing.T)
+type ActFunc func(FixtureStep, *testing.T)
 
 var actFuncs = make(map[string]ActFunc)
 
@@ -21,7 +20,7 @@ func GetActionRunner(action string) ActFunc {
 }
 
 // RunActionRunner execute registered action runner function
-func RunActionRunner(action string, step fixturetestSDK.FixtureStep, t *testing.T) {
+func RunActionRunner(action string, step FixtureStep, t *testing.T) {
 	fn := GetActionRunner(action)
 	t.WithFields(testing.Fields{
 		"action": step.Action,
