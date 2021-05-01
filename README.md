@@ -1,9 +1,11 @@
 # pylons
 
-Pylonsd daemon connect with all the other daemons around the world and process the transactions.   
-On the other hand, it is responsible for providing rest api and cli commands for interacting with pylons ecosystem.
+This repository provides the pylonsd daemon, the program for running a node in the [Pylons](https://pylons.tech) blockchain.
+It connects to the other nodes in the network to form a consensus, and responds to API and CLI commands from clients, including using the Pylons SDK.
 
 ## Setup development environment
+
+### Mac
 
 ```sh
 git clone https://github.com/Pylons-tech/pylons
@@ -28,8 +30,8 @@ go install ./cmd/pylonsd
 # Initialize configuration files and genesis file, the name here is "masternode", you can call it anything
 pylonsd init masternode --chain-id pylonschain
 
-# Copy the `Address` output here and save it for later use 
-# [optional] add "--ledger" at the end to use a Ledger Nano S 
+# Copy the `Address` output here and save it for later use
+# [optional] add "--ledger" at the end to use a Ledger Nano S
 pylonsd keys add jack
 
 # Copy the `Address` output here and save it for later use
@@ -321,7 +323,7 @@ signatures field was modified.
 
 ### Broadcast signed transaction
 ```sh
-pylonsd tx broadcast signedCreateCookbookTx.json 
+pylonsd tx broadcast signedCreateCookbookTx.json
 ```
 
 Successful result
@@ -399,7 +401,7 @@ pylonsd query txs --tags action:disable_trade
 
 ## How to get tag of specific transaction
 
-If you run 
+If you run
 ```sh
 pylonsd query tx A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
 ```
