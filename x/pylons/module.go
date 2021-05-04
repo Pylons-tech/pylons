@@ -43,30 +43,7 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) {
 }
 
 func (AppModuleBasic) RegisterInterfaces(registry sdktypes.InterfaceRegistry) {
-	registry.RegisterImplementations(
-		(*sdk.Msg)(nil),
-		&types.MsgCreateAccount{},
-		&types.MsgGetPylons{},
-		&types.MsgGoogleIAPGetPylons{},
-		&types.MsgSendCoins{},
-		&types.MsgSendItems{},
-		&types.MsgCreateCookbook{},
-		&types.MsgUpdateCookbook{},
-		&types.MsgCreateRecipe{},
-		&types.MsgUpdateRecipe{},
-		&types.MsgExecuteRecipe{},
-		&types.MsgDisableRecipe{},
-		&types.MsgEnableRecipe{},
-		&types.MsgCheckExecution{},
-		&types.MsgFiatItem{},
-		&types.MsgUpdateItemString{},
-		&types.MsgCreateTrade{},
-		&types.MsgFulfillTrade{},
-		&types.MsgDisableTrade{},
-		&types.MsgEnableTrade{},
-	)
-
-	types.RegisterMsgServiceDesc(registry)
+	types.RegisterInterfaces(registry)
 }
 
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
