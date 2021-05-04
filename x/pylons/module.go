@@ -52,7 +52,7 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // Name returns AppModuleBasic name
 func (AppModuleBasic) Name() string {
-	return ModuleName
+	return types.ModuleName
 }
 
 // DefaultGenesis return GenesisState in JSON
@@ -72,13 +72,13 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONMarshaler, cl client.TxEncod
 
 // RegisterRESTRoutes rest routes
 func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(ctx, rtr, StoreKey)
+	rest.RegisterRoutes(ctx, rtr, types.StoreKey)
 }
 
 // GetQueryCmd get the root query command of this module
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	pylonsQueryCmd := &cobra.Command{
-		Use:   RouterKey,
+		Use:   types.RouterKey,
 		Short: "Querying commands for the pylons module",
 	}
 	pylonsQueryCmd.AddCommand(
@@ -108,7 +108,7 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 // GetTxCmd get the root tx command of this module
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
 	txCmd := &cobra.Command{
-		Use:   RouterKey,
+		Use:   types.RouterKey,
 		Short: "Pylons transactions subcommands",
 	}
 
@@ -118,7 +118,7 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 		tx.GoogleIAPGetPylons(),
 		tx.SendPylons(),
 		tx.SendCoins(),
-		tx.SendItems(StoreKey),
+		tx.SendItems(types.StoreKey),
 		tx.CreateCookbook(),
 		tx.PrivateKeySign(),
 		tx.ComputePrivateKey(),
@@ -156,7 +156,7 @@ func NewAppModule(cdc codec.Marshaler, k keeper.Keeper, bankKeeper bankkeeper.Ke
 
 // Name returns AppModule name
 func (AppModule) Name() string {
-	return ModuleName
+	return types.ModuleName
 }
 
 // RegisterInvariants registers invariants
@@ -164,7 +164,7 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns router key
 func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(RouterKey, NewHandler(am.keeper))
+	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
 }
 
 // NewHandler returns module handler
@@ -174,7 +174,7 @@ func (am AppModule) NewHandler() sdk.Handler {
 
 // QuerierRoute returns QuerierRoute
 func (am AppModule) QuerierRoute() string {
-	return QuerierRoute
+	return types.QuerierRoute
 }
 
 // BeginBlock is a begin block function
