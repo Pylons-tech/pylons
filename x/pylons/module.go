@@ -39,7 +39,7 @@ func NewAppModuleBasic(cdc codec.Marshaler) AppModuleBasic {
 	return AppModuleBasic{cdc: cdc}
 }
 func (AppModuleBasic) RegisterLegacyAminoCodec(amino *codec.LegacyAmino) {
-	RegisterCodec(amino)
+	types.RegisterLegacyAminoCodec(amino)
 }
 
 func (AppModuleBasic) RegisterInterfaces(registry sdktypes.InterfaceRegistry) {
@@ -53,11 +53,6 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 // Name returns AppModuleBasic name
 func (AppModuleBasic) Name() string {
 	return ModuleName
-}
-
-// RegisterCodec implements RegisterCodec
-func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
-	RegisterCodec(cdc)
 }
 
 // DefaultGenesis return GenesisState in JSON
@@ -201,5 +196,5 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data j
 // ExportGenesis is a function for export genesis
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONMarshaler) json.RawMessage {
 	gs := ExportGenesis(ctx, am.keeper)
-	return ModuleCdc.MustMarshalJSON(gs)
+	return cdc.MustMarshalJSON(&gs)
 }
