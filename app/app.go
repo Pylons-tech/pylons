@@ -214,7 +214,7 @@ func NewPylonsApp(
 		minttypes.StoreKey, distrtypes.StoreKey, slashingtypes.StoreKey,
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
-		pylons.StoreKey,
+		pylonstypes.StoreKey,
 	}
 	// pylons keys
 	stringKeys = append(stringKeys, pylonskeeper.StoreKeyList...)
