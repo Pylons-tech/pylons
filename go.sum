@@ -47,6 +47,8 @@ github.com/Pylons-tech/pylons_sdk v0.0.4 h1:bLligV2z7HZuJ2umlZ2rT2WN+KQ4D2zZYu9N
 github.com/Pylons-tech/pylons_sdk v0.0.4/go.mod h1:CpX9O+bh2zGkjJWZNJNXlIrUrAXQbiKBp0iC5vB1RiE=
 github.com/Pylons-tech/pylons_sdk v0.0.5 h1:+dfTfWHLmAcn/Un9r78Qp3OO6kn3KoyiI5gGGlaWCJ4=
 github.com/Pylons-tech/pylons_sdk v0.0.5/go.mod h1:CpX9O+bh2zGkjJWZNJNXlIrUrAXQbiKBp0iC5vB1RiE=
+github.com/Pylons-tech/pylons_sdk v0.0.6 h1:/ck8z7gMOSZfK0tXk/shRpiDkofdSieiZ101hLtzG9A=
+github.com/Pylons-tech/pylons_sdk v0.0.6/go.mod h1:CpX9O+bh2zGkjJWZNJNXlIrUrAXQbiKBp0iC5vB1RiE=
 github.com/Shopify/sarama v1.19.0/go.mod h1:FVkBWblsNy7DGZRfXLU0O9RCGt5g3g3yEuWXgklEdEo=
 github.com/Shopify/toxiproxy v2.1.4+incompatible/go.mod h1:OXgGpZ6Cli1/URJOF1DMxUHB2q5Ap20/P/eIdh4G0pI=
 github.com/VividCortex/gohistogram v1.0.0 h1:6+hBz+qvs0JOrrNhhmR7lFxo5sINxBCGXrdtl/UvroE=
