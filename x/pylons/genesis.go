@@ -8,34 +8,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// GenesisState empty genesis for pylons
-type GenesisState struct {
-	Cookbooks []types.Cookbook
-	Recipes   []types.Recipe
-	Items     []types.Item
-}
-
-// NewGenesisState returns new genesis state
-func NewGenesisState() GenesisState {
-	return GenesisState{}
-}
-
-// ValidateGenesis do validate genesis
-func ValidateGenesis(data GenesisState) error {
-	return nil
-}
-
-// DefaultGenesisState returns default genesis state
-func DefaultGenesisState() GenesisState {
-	return GenesisState{
-		Cookbooks: []types.Cookbook{},
-		Recipes:   []types.Recipe{},
-		Items:     []types.Item{},
-	}
-}
-
 // InitGenesis init genesis for a context
-func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data GenesisState) {
+func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data types.GenesisState) {
 	for _, record := range data.Cookbooks {
 		//nolint:errcheck
 		keeper.SetCookbook(ctx, record)
@@ -51,15 +25,13 @@ func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data GenesisState) {
 }
 
 // ExportGenesis export genesis
-func ExportGenesis(ctx sdk.Context, k keeper.Keeper) GenesisState {
+func ExportGenesis(ctx sdk.Context, k keeper.Keeper) types.GenesisState {
 	var cookbooks []types.Cookbook
 	iterator := k.GetCookbooksIterator(ctx)
 	for ; iterator.Valid(); iterator.Next() {
-
 		name := string(iterator.Key())
 		cookbook, _ := k.GetCookbook(ctx, name)
 		cookbooks = append(cookbooks, cookbook)
-
 	}
 
 	recipes := k.GetRecipes(ctx)
@@ -69,5 +41,5 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) GenesisState {
 		log.Panicln("error while getting items in exportGenesis:", err.Error())
 	}
 
-	return GenesisState{Cookbooks: cookbooks, Recipes: recipes, Items: items}
+	return types.GenesisState{Cookbooks: cookbooks, Recipes: recipes, Items: items}
 }

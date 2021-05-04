@@ -1,0 +1,14 @@
+syntax = "proto3";
+package pylons;
+
+import "gogoproto/gogo.proto";
+import "pylons/pylons.proto";
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+// GenesisState defines pylons module's genesis state
+message GenesisState {
+	repeated Cookbook cookbooks = 1 [(gogoproto.nullable) = false];
+	repeated Recipe recipes = 2 [(gogoproto.nullable) = false];
+	repeated Item items = 3 [(gogoproto.nullable) = false];
+}

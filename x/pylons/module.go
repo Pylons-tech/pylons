@@ -62,18 +62,17 @@ func (AppModuleBasic) RegisterCodec(cdc *codec.LegacyAmino) {
 
 // DefaultGenesis return GenesisState in JSON
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONMarshaler) json.RawMessage {
-	return ModuleCdc.MustMarshalJSON(DefaultGenesisState())
+	return cdc.MustMarshalJSON(types.DefaultGenesis())
 }
 
 // ValidateGenesis do validation check of the Genesis
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONMarshaler, cl client.TxEncodingConfig, bz json.RawMessage) error {
-	var data GenesisState
-	err := ModuleCdc.UnmarshalJSON(bz, &data)
+	var genState types.GenesisState
+	err := cdc.UnmarshalJSON(bz, &genState)
 	if err != nil {
 		return err
 	}
-	// Once json successfully marshalled, passes along to genesis.go
-	return ValidateGenesis(data)
+	return genState.Validate()
 }
 
 // RegisterRESTRoutes rest routes
@@ -193,8 +192,8 @@ func (am AppModule) EndBlock(sdk.Context, abci.RequestEndBlock) []abci.Validator
 
 // InitGenesis is a function for init genesis
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState GenesisState
-	ModuleCdc.MustUnmarshalJSON(data, &genesisState)
+	var genesisState types.GenesisState
+	cdc.MustUnmarshalJSON(data, &genesisState)
 	InitGenesis(ctx, am.keeper, genesisState)
 	return []abci.ValidatorUpdate{}
 }
