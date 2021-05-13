@@ -21,7 +21,12 @@ COPY . .
 RUN go build ./cmd/pylonsd/
 
 # Expose port 8080 to the outside world
-EXPOSE 8080
+#EXPOSE 8080
+EXPOSE 1317
 
+COPY init_accounts.local.sh .
+RUN chmod +x init_accounts.local.sh
+RUN bash ./init_accounts.local.sh  
 # Command to run the executable
-CMD ["/app/pylonsd", "rest-server", "--chain-id", "pylonschain", "--trust-node", "--laddr", "tcp://0.0.0.0:8080", "--node", "tcp://node:26657", "--keyring-backend", "test"]
+#CMD ["/app/pylonsd", "rest-server", "--chain-id", "pylonschain", "--trust-node", "--laddr", "tcp://0.0.0.0:8080", "--node", "tcp://node:26657", "--keyring-backend", "test"]
+CMD ["/app/pylonsd", "start", "--home=$HOME/.pylonsd"]
