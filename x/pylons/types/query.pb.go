@@ -119,6 +119,19 @@ func (m *AddrFromPubKeyResponse) GetBech32Addr() string {
 	return ""
 }
 
+//added by @tain20210519
+type CheckStripeOrderRequest struct {
+	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
+}
+
+func (m *CheckStripeOrderRequest) Reset()         { *m = CheckStripeOrderRequest{} }
+func (m *CheckStripeOrderRequest) String() string { return proto.CompactTextString(m) }
+func (*CheckStripeOrderRequest) ProtoMessage()    {}
+func (*CheckStripeOrderRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dbe4a0dc0744f938, []int{2}
+}
+///////////////////////////////////////
+
 type CheckGoogleIAPOrderRequest struct {
 	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
 }
@@ -155,6 +168,27 @@ func (m *CheckGoogleIAPOrderRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_CheckGoogleIAPOrderRequest proto.InternalMessageInfo
+ 
+
+//added by @tian20210519
+func (m *CheckStripeOrderResponse) GetPurchaseToken() string {
+	if m != nil {
+		return m.PurchaseToken
+	}
+	return ""
+}
+type CheckStripeOrderResponse struct {
+	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
+	Exist         bool   `protobuf:"varint,2,opt,name=exist,proto3" json:"exist,omitempty"`
+}
+
+func (m *CheckStripeOrderResponse) Reset()         { *m = CheckStripeOrderResponse{} }
+func (m *CheckStripeOrderResponse) String() string { return proto.CompactTextString(m) }
+func (*CheckStripeOrderResponse) ProtoMessage()    {}
+func (*CheckStripeOrderResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dbe4a0dc0744f938, []int{3}
+}
+//////////////////////////////////
 
 func (m *CheckGoogleIAPOrderRequest) GetPurchaseToken() string {
 	if m != nil {
@@ -2243,7 +2277,9 @@ type QueryClient interface {
 	// AddrFromPubKey returns a bech32 public address from the public key
 	AddrFromPubKey(ctx context.Context, in *AddrFromPubKeyRequest, opts ...grpc.CallOption) (*AddrFromPubKeyResponse, error)
 	// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
-	CheckGoogleIAPOrder(ctx context.Context, in *CheckGoogleIAPOrderRequest, opts ...grpc.CallOption) (*CheckGoogleIAPOrderResponse, error)
+	CheckGoogleIAPOrder(ctx context.Context, in *CheckGoogleIAPOrderRequest, opts ...grpc.CallOption) (*CheckGoogleIAPOrderResponse, error)	//added by @tian20210519
+	// CheckStripeOrder check if stripe order is given to user with purchase token
+	CheckStripeOrder(ctx context.Context, in *CheckStripeOrderRequest, opts ...grpc.CallOption) (*CheckStripeOrderRequest, error)
 	// GetCookbook returns a cookbook based on the cookbook id
 	GetCookbook(ctx context.Context, in *GetCookbookRequest, opts ...grpc.CallOption) (*GetCookbookResponse, error)
 	// GetExecution returns an execution based on the execution id

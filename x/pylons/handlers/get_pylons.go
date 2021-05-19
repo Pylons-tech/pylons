@@ -70,3 +70,45 @@ func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *types.MsgGoogleI
 		Status:  "Success",
 	}, nil
 }
+
+//added by @tian20210519
+// StripeGetPylons is used to send pylons to requesters after stripe iap verification
+func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetPylons) (*types.MsgStripeGetPylonsResponse, error) {
+	err := msg.ValidateBasic()
+
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
+	sdkCtx := sdk.UnwrapSDKContext(ctx)
+	requester, _ := sdk.AccAddressFromBech32(msg.Requester)
+	// Validate if purchase token does exist within the list already
+	if k.HasStripeOrder(sdkCtx, msg.PurchaseToken) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
+	}
+
+	// Register purchase token before giving coins
+	iap := types.NewStripeOrder(
+		msg.ProductID,
+		msg.PurchaseToken,
+		msg.ReceiptDataBase64,
+		msg.Signature,
+		requester,
+	)
+
+	err = k.RegisterStripeOrder(sdkCtx, iap)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering iap order: %s", err.Error()))
+	}
+
+	// Add coins based on the package
+	err = k.CoinKeeper.AddCoins(sdkCtx, requester, iap.GetAmount())
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	return &types.MsgStripeGetPylonsResponse{
+		Message: "successfully got the pylons",
+		Status:  "Success",
+	}, nil
+}

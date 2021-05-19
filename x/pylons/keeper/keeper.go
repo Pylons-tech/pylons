@@ -13,6 +13,7 @@ type Keeper struct {
 	Cdc               *codec.LegacyAmino // The wire codec for binary encoding/decoding
 	EntityKey         sdk.StoreKey
 	GoogleIAPOrderKey sdk.StoreKey
+	StripeOrderKey    sdk.StoreKey
 	CookbookKey       sdk.StoreKey
 	RecipeKey         sdk.StoreKey
 	ItemKey           sdk.StoreKey
@@ -29,6 +30,7 @@ func NewKeeper(coinKeeper bankkeeper.Keeper, cdc *codec.LegacyAmino, storeKeys m
 		Cdc:               cdc,
 		EntityKey:         storeKeys[KeyPylonsEntity],
 		GoogleIAPOrderKey: storeKeys[KeyGoogleIAPOrder],
+		StripeOrderKey:    storeKeys[KeyStripeOrder],
 		CookbookKey:       storeKeys[KeyPylonsCookbook],
 		RecipeKey:         storeKeys[KeyPylonsRecipe],
 		ItemKey:           storeKeys[KeyPylonsItem],
