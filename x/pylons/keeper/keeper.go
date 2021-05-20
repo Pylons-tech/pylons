@@ -48,6 +48,13 @@ func HasCoins(keeper Keeper, ctx sdk.Context, sender sdk.AccAddress, amount sdk.
 			return false
 		}
 	}
+	zeroAmount :=  sdk.Coin{
+		Denom:  lockedCoin.Denom,
+		Amount: 0,
+	}
+	if !keeper.CoinKeeper.HasBalance(ctx, sender, zeroAmount) {
+		return false
+	}
 	return true
 }
 
