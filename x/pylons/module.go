@@ -84,6 +84,7 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	pylonsQueryCmd.AddCommand(
 		query.GetPylonsBalance(),
 		query.CheckGoogleIAPOrder(),
+		query.CheckStripeOrder(),
 		query.GetCookbook(),
 		query.GetExecution(),
 		query.GetItem(),
@@ -116,6 +117,7 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 		tx.CreateAccount(),
 		tx.GetPylons(),
 		tx.GoogleIAPGetPylons(),
+		tx.StripeGetPylons(),
 		tx.SendPylons(),
 		tx.SendCoins(),
 		tx.SendItems(types.StoreKey),

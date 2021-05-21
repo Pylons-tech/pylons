@@ -71,7 +71,7 @@ func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *types.MsgGoogleI
 	}, nil
 }
 
-//added by @tian20210519
+//20210519
 // StripeGetPylons is used to send pylons to requesters after stripe iap verification
 func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetPylons) (*types.MsgStripeGetPylonsResponse, error) {
 	err := msg.ValidateBasic()

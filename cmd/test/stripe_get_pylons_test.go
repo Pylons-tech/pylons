@@ -13,8 +13,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
-
+func TesStripeGetPylonsViaCLI(originT *originT.T) {
 	t := testing.NewT(originT)
 	t.Parallel()
 
@@ -90,7 +89,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 
 	for tcNum, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			getPylonsKey := fmt.Sprintf("TestGoogleIAPGetPylonsViaCLI%d_%d", tcNum, time.Now().Unix())
+			getPylonsKey := fmt.Sprintf("TestStripeGetPylonsViaCLI%d_%d", tcNum, time.Now().Unix())
 			MockAccount(getPylonsKey, t) // mock account with initial balance
 
 			getPylonsAddr := inttestSDK.GetAccountAddr(getPylonsKey, t)
@@ -98,10 +97,9 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 
 			receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(tc.receiptData))
 
-			msgGoogleIAPGetPylons := types.NewMsgGoogleIAPGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, getPylonsAccInfo.Address)
-
+			msgStripeGetPylons := types.NewMsgStripeGetPylons(tc.productID, tc.purchaseToken, receiptDataBase64, tc.signature, getPylonsAccInfo.Address)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-				&msgGoogleIAPGetPylons,
+				&msgStripeGetPylons,
 				getPylonsKey,
 				false,
 			)
@@ -126,7 +124,7 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 
 			if tc.tryReuseOrderID {
 				txhash, err := inttestSDK.TestTxWithMsgWithNonce(t,
-					&msgGoogleIAPGetPylons,
+					&msgStripeGetPylons,
 					getPylonsKey,
 					false,
 				)
@@ -135,6 +133,5 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 				t.MustContain(string(txHandleErr), tc.tryReuseErr)
 			}
 		})
-		break
 	}
 }

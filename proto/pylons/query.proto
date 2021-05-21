@@ -19,6 +19,11 @@ service Query {
     option (google.api.http).get = "/custom/pylons/check_google_iap_order/{purchaseToken}";
   }
 
+  // CheckStripeOrder check if stripe order is given to user with purchase token
+  rpc CheckStripeOrder(CheckGoogleIAPOrderRequest) returns (CheckStripeOrderResponse){
+    option (google.api.http).get = "/custom/pylons/check_stripe_order/{purchaseToken}";
+  }
+
   // GetCookbook returns a cookbook based on the cookbook id
   rpc GetCookbook(GetCookbookRequest) returns (GetCookbookResponse){
     option (google.api.http).get = "/custom/pylons/get_cookbook/{cookbookID}";
@@ -118,6 +123,15 @@ message CheckGoogleIAPOrderRequest {
 }
 
 message CheckGoogleIAPOrderResponse {
+  string purchaseToken = 1;
+  bool exist = 2;
+}
+
+message CheckStripeOrderRequest {
+  string purchaseToken = 1;
+}
+
+message CheckStripeOrderResponse {
   string purchaseToken = 1;
   bool exist = 2;
 }

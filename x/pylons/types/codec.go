@@ -39,6 +39,7 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		&MsgCreateAccount{},
 		&MsgGetPylons{},
 		&MsgGoogleIAPGetPylons{},
+		&MsgStripeGetPylons{},
 		&MsgSendCoins{},
 		&MsgSendItems{},
 		&MsgCreateCookbook{},

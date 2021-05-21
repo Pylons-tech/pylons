@@ -35,7 +35,7 @@ func NewStripeOrder(ProductID, PurchaseToken, ReceiptDataBase64, Signature strin
 // GetAmount returns pylons amount by product and package
 func (iap StripeOrder) GetAmount() sdk.Coins {
 
-	for _, giapProduct := range config.Config.GoogleIAP {	//added by @tian20210519 be able to change googleIAP....
+	for _, giapProduct := range config.Config.GoogleIAP { //20210519 be able to change googleIAP....
 		if giapProduct.ProductID == iap.ProductID {
 			return NewPylon(giapProduct.Amount)
 		}

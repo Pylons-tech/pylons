@@ -1668,6 +1668,23 @@ func (m *MsgGetPylonsResponse) GetStatus() string {
 	return ""
 }
 
+//20210519
+// MsgStripeGetPylons defines a GetPylons message
+type MsgStripeGetPylons struct {
+	ProductID         string `protobuf:"bytes,1,opt,name=ProductID,proto3" json:"ProductID,omitempty"`
+	PurchaseToken     string `protobuf:"bytes,2,opt,name=PurchaseToken,proto3" json:"PurchaseToken,omitempty"`
+	ReceiptDataBase64 string `protobuf:"bytes,3,opt,name=ReceiptDataBase64,proto3" json:"ReceiptDataBase64,omitempty"`
+	Signature         string `protobuf:"bytes,4,opt,name=Signature,proto3" json:"Signature,omitempty"`
+	Requester         string `protobuf:"bytes,5,opt,name=Requester,proto3" json:"Requester,omitempty"`
+}
+
+func (m *MsgStripeGetPylons) Reset()         { *m = MsgStripeGetPylons{} }
+func (m *MsgStripeGetPylons) String() string { return proto.CompactTextString(m) }
+func (*MsgStripeGetPylons) ProtoMessage()    {}
+func (*MsgStripeGetPylons) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{26}
+}
+
 // MsgGoogleIAPGetPylons defines a GetPylons message
 type MsgGoogleIAPGetPylons struct {
 	ProductID         string `protobuf:"bytes,1,opt,name=ProductID,proto3" json:"ProductID,omitempty"`
@@ -1743,6 +1760,20 @@ func (m *MsgGoogleIAPGetPylons) GetRequester() string {
 		return m.Requester
 	}
 	return ""
+}
+
+//20210519
+// MsgStripeGetPylonsResponse is the response for get-pylons
+type MsgStripeGetPylonsResponse struct {
+	Message string `protobuf:"bytes,1,opt,name=Message,proto3" json:"Message,omitempty"`
+	Status  string `protobuf:"bytes,2,opt,name=Status,proto3" json:"Status,omitempty"`
+}
+
+func (m *MsgStripeGetPylonsResponse) Reset()         { *m = MsgStripeGetPylonsResponse{} }
+func (m *MsgStripeGetPylonsResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgStripeGetPylonsResponse) ProtoMessage()    {}
+func (*MsgStripeGetPylonsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{27}
 }
 
 // MsgGoogleIAPGetPylonsResponse is the response for get-pylons
@@ -2484,6 +2515,8 @@ func init() {
 	proto.RegisterType((*MsgGetPylonsResponse)(nil), "pylons.MsgGetPylonsResponse")
 	proto.RegisterType((*MsgGoogleIAPGetPylons)(nil), "pylons.MsgGoogleIAPGetPylons")
 	proto.RegisterType((*MsgGoogleIAPGetPylonsResponse)(nil), "pylons.MsgGoogleIAPGetPylonsResponse")
+	proto.RegisterType((*MsgStripeGetPylons)(nil), "pylons.MsgStripeGetPylons")
+	proto.RegisterType((*MsgStripeGetPylonsResponse)(nil), "pylons.MsgStripeGetPylonsResponse")
 	proto.RegisterType((*MsgSendCoins)(nil), "pylons.MsgSendCoins")
 	proto.RegisterType((*MsgSendCoinsResponse)(nil), "pylons.MsgSendCoinsResponse")
 	proto.RegisterType((*MsgSendItems)(nil), "pylons.MsgSendItems")
@@ -2625,6 +2658,8 @@ type MsgClient interface {
 	GetPylons(ctx context.Context, in *MsgGetPylons, opts ...grpc.CallOption) (*MsgGetPylonsResponse, error)
 	// GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
 	GoogleIAPGetPylons(ctx context.Context, in *MsgGoogleIAPGetPylons, opts ...grpc.CallOption) (*MsgGoogleIAPGetPylonsResponse, error)
+	// StripeGetPylons is used to send pylons to requesters after google iap verification
+	StripeGetPylons(ctx context.Context, in *MsgStripeGetPylons, opts ...grpc.CallOption) (*MsgStripeGetPylonsResponse, error)
 	// SendCoins is used to transact pylons between people
 	SendCoins(ctx context.Context, in *MsgSendCoins, opts ...grpc.CallOption) (*MsgSendCoinsResponse, error)
 	// SendItems is used to send items between people
@@ -2688,6 +2723,15 @@ func (c *msgClient) GetPylons(ctx context.Context, in *MsgGetPylons, opts ...grp
 func (c *msgClient) GoogleIAPGetPylons(ctx context.Context, in *MsgGoogleIAPGetPylons, opts ...grpc.CallOption) (*MsgGoogleIAPGetPylonsResponse, error) {
 	out := new(MsgGoogleIAPGetPylonsResponse)
 	err := c.cc.Invoke(ctx, "/pylons.Msg/GoogleIAPGetPylons", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) StripeGetPylons(ctx context.Context, in *MsgStripeGetPylons, opts ...grpc.CallOption) (*MsgStripeGetPylonsResponse, error) {
+	out := new(MsgStripeGetPylonsResponse)
+	err := c.cc.Invoke(ctx, "/pylons.Msg/StripeGetPylons", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2846,6 +2890,8 @@ type MsgServer interface {
 	GetPylons(context.Context, *MsgGetPylons) (*MsgGetPylonsResponse, error)
 	// GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
 	GoogleIAPGetPylons(context.Context, *MsgGoogleIAPGetPylons) (*MsgGoogleIAPGetPylonsResponse, error)
+	// StripeGetPylons is used to send pylons to requesters after stripe verification
+	StripeGetPylons(context.Context, *MsgStripeGetPylons) (*MsgStripeGetPylonsResponse, error)
 	// SendCoins is used to transact pylons between people
 	SendCoins(context.Context, *MsgSendCoins) (*MsgSendCoinsResponse, error)
 	// SendItems is used to send items between people
@@ -2891,6 +2937,9 @@ func (*UnimplementedMsgServer) GetPylons(ctx context.Context, req *MsgGetPylons)
 	return nil, status.Errorf(codes.Unimplemented, "method GetPylons not implemented")
 }
 func (*UnimplementedMsgServer) GoogleIAPGetPylons(ctx context.Context, req *MsgGoogleIAPGetPylons) (*MsgGoogleIAPGetPylonsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GoogleIAPGetPylons not implemented")
+}
+func (*UnimplementedMsgServer) StripeGetPylons(ctx context.Context, req *MsgStripeGetPylons) (*MsgGoogleIAPGetPylonsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GoogleIAPGetPylons not implemented")
 }
 func (*UnimplementedMsgServer) SendCoins(ctx context.Context, req *MsgSendCoins) (*MsgSendCoinsResponse, error) {

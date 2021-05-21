@@ -119,7 +119,7 @@ func (m *AddrFromPubKeyResponse) GetBech32Addr() string {
 	return ""
 }
 
-//added by @tain20210519
+//20210519
 type CheckStripeOrderRequest struct {
 	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
 }
@@ -130,6 +130,7 @@ func (*CheckStripeOrderRequest) ProtoMessage()    {}
 func (*CheckStripeOrderRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_dbe4a0dc0744f938, []int{2}
 }
+
 ///////////////////////////////////////
 
 type CheckGoogleIAPOrderRequest struct {
@@ -168,15 +169,15 @@ func (m *CheckGoogleIAPOrderRequest) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_CheckGoogleIAPOrderRequest proto.InternalMessageInfo
- 
 
-//added by @tian20210519
+//20210519
 func (m *CheckStripeOrderResponse) GetPurchaseToken() string {
 	if m != nil {
 		return m.PurchaseToken
 	}
 	return ""
 }
+
 type CheckStripeOrderResponse struct {
 	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
 	Exist         bool   `protobuf:"varint,2,opt,name=exist,proto3" json:"exist,omitempty"`
@@ -188,6 +189,7 @@ func (*CheckStripeOrderResponse) ProtoMessage()    {}
 func (*CheckStripeOrderResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_dbe4a0dc0744f938, []int{3}
 }
+
 //////////////////////////////////
 
 func (m *CheckGoogleIAPOrderRequest) GetPurchaseToken() string {
@@ -2094,6 +2096,8 @@ func init() {
 	proto.RegisterType((*AddrFromPubKeyResponse)(nil), "pylons.AddrFromPubKeyResponse")
 	proto.RegisterType((*CheckGoogleIAPOrderRequest)(nil), "pylons.CheckGoogleIAPOrderRequest")
 	proto.RegisterType((*CheckGoogleIAPOrderResponse)(nil), "pylons.CheckGoogleIAPOrderResponse")
+	proto.RegisterType((*CheckStripeOrderRequest)(nil), "pylons.CheckStripeOrderRequest")
+	proto.RegisterType((*CheckStripeOrderResponse)(nil), "pylons.CheckStripeOrderResponse")
 	proto.RegisterType((*GetCookbookRequest)(nil), "pylons.GetCookbookRequest")
 	proto.RegisterType((*GetCookbookResponse)(nil), "pylons.GetCookbookResponse")
 	proto.RegisterType((*GetExecutionRequest)(nil), "pylons.GetExecutionRequest")
@@ -2277,9 +2281,9 @@ type QueryClient interface {
 	// AddrFromPubKey returns a bech32 public address from the public key
 	AddrFromPubKey(ctx context.Context, in *AddrFromPubKeyRequest, opts ...grpc.CallOption) (*AddrFromPubKeyResponse, error)
 	// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
-	CheckGoogleIAPOrder(ctx context.Context, in *CheckGoogleIAPOrderRequest, opts ...grpc.CallOption) (*CheckGoogleIAPOrderResponse, error)	//added by @tian20210519
+	CheckGoogleIAPOrder(ctx context.Context, in *CheckGoogleIAPOrderRequest, opts ...grpc.CallOption) (*CheckGoogleIAPOrderResponse, error) //20210519
 	// CheckStripeOrder check if stripe order is given to user with purchase token
-	CheckStripeOrder(ctx context.Context, in *CheckStripeOrderRequest, opts ...grpc.CallOption) (*CheckStripeOrderRequest, error)
+	CheckStripeOrder(ctx context.Context, in *CheckStripeOrderRequest, opts ...grpc.CallOption) (*CheckStripeOrderResponse, error)
 	// GetCookbook returns a cookbook based on the cookbook id
 	GetCookbook(ctx context.Context, in *GetCookbookRequest, opts ...grpc.CallOption) (*GetCookbookResponse, error)
 	// GetExecution returns an execution based on the execution id
@@ -2336,6 +2340,16 @@ func (c *queryClient) AddrFromPubKey(ctx context.Context, in *AddrFromPubKeyRequ
 func (c *queryClient) CheckGoogleIAPOrder(ctx context.Context, in *CheckGoogleIAPOrderRequest, opts ...grpc.CallOption) (*CheckGoogleIAPOrderResponse, error) {
 	out := new(CheckGoogleIAPOrderResponse)
 	err := c.cc.Invoke(ctx, "/pylons.Query/CheckGoogleIAPOrder", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+//20210519
+func (c *queryClient) CheckStripeOrder(ctx context.Context, in *CheckStripeOrderRequest, opts ...grpc.CallOption) (*CheckStripeOrderResponse, error) {
+	out := new(CheckStripeOrderResponse)
+	err := c.cc.Invoke(ctx, "/pylons.Query/CheckStripeOrder", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -2501,6 +2515,8 @@ type QueryServer interface {
 	AddrFromPubKey(context.Context, *AddrFromPubKeyRequest) (*AddrFromPubKeyResponse, error)
 	// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
 	CheckGoogleIAPOrder(context.Context, *CheckGoogleIAPOrderRequest) (*CheckGoogleIAPOrderResponse, error)
+	// CheckStripeOrder check if google iap order is given to user with purchase token
+	CheckStripeOrder(context.Context, *CheckStripeOrderRequest) (*CheckStripeOrderResponse, error)
 	// GetCookbook returns a cookbook based on the cookbook id
 	GetCookbook(context.Context, *GetCookbookRequest) (*GetCookbookResponse, error)
 	// GetExecution returns an execution based on the execution id
@@ -2546,6 +2562,9 @@ func (*UnimplementedQueryServer) AddrFromPubKey(ctx context.Context, req *AddrFr
 }
 func (*UnimplementedQueryServer) CheckGoogleIAPOrder(ctx context.Context, req *CheckGoogleIAPOrderRequest) (*CheckGoogleIAPOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckGoogleIAPOrder not implemented")
+}
+func (*UnimplementedQueryServer) CheckStripeOrder(ctx context.Context, req *CheckStripeOrderRequest) (*CheckStripeOrderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckStripeOrder not implemented")
 }
 func (*UnimplementedQueryServer) GetCookbook(ctx context.Context, req *GetCookbookRequest) (*GetCookbookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCookbook not implemented")
@@ -2635,6 +2654,24 @@ func _Query_CheckGoogleIAPOrder_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(QueryServer).CheckGoogleIAPOrder(ctx, req.(*CheckGoogleIAPOrderRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Query_ChecStripeOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckStripeOrderRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(QueryServer).CheckStripeOrder(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pylons.Query/CheckStripeOrder",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(QueryServer).CheckStripeOrder(ctx, req.(*CheckStripeOrderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -3160,6 +3197,78 @@ func (m *CheckGoogleIAPOrderResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
+//20210520
+func (m *CheckStripeOrderRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CheckStripeOrderRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CheckStripeOrderRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.PurchaseToken) > 0 {
+		i -= len(m.PurchaseToken)
+		copy(dAtA[i:], m.PurchaseToken)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PurchaseToken)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CheckStripeOrderResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CheckStripeOrderResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CheckStripeOrderResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Exist {
+		i--
+		if m.Exist {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.PurchaseToken) > 0 {
+		i -= len(m.PurchaseToken)
+		copy(dAtA[i:], m.PurchaseToken)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PurchaseToken)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+/////////////////////////
 func (m *GetCookbookRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4709,6 +4818,38 @@ func (m *CheckGoogleIAPOrderResponse) Size() (n int) {
 	return n
 }
 
+//20210520
+
+func (m *CheckStripeOrderRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PurchaseToken)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	return n
+}
+
+func (m *CheckStripeOrderResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PurchaseToken)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	if m.Exist {
+		n += 2
+	}
+	return n
+}
+
+//////////////////////////
 func (m *GetCookbookRequest) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5720,6 +5861,200 @@ func (m *CheckGoogleIAPOrderResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+
+//20210520
+func (m *CheckStripeOrderRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckStripeOrderRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckStripeOrderRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PurchaseToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PurchaseToken = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CheckStripeOrderResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowQuery
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckStripeOrderResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckStripeOrderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PurchaseToken", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PurchaseToken = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Exist", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Exist = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipQuery(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+
+/////////////////////////
 func (m *GetCookbookRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
