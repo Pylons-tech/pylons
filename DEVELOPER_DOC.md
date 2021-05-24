@@ -54,7 +54,7 @@ We accept emails that fit `^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z0-9
 
 ## Item
 
-Item consists of below fields.
+Item consists of the following fields.
 
 | No | Field         | Type   | Sample                                | Description                                                                       |
 |----|---------------|--------|---------------------------------------|-----------------------------------------------------------------------------------|
