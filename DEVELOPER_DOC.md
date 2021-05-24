@@ -216,8 +216,8 @@ Sample Entries JSON
   ]
 }
 ```
-**Warn**  
-- There shouldn't be any recipes that generate pylon denom as an output.
+**Warning**  
+- Recipes cannot generate pylon denom as an output. 
 - ID of any entry should fit `^[a-zA-Z_][a-zA-Z_0-9]*$` (coin output, item modify output and item output).
 
 #### ItemOutputs
