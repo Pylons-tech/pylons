@@ -17,7 +17,7 @@ Since it's a blockchain based system, running recipe is taking more than 1 block
 
 ## Cookbook
 
-Cookbook consists of below fields. Reference of [Table generator](https://www.tablesgenerator.com/markdown_tables).
+The cookbook consists of the following fields. The table was generated with the Markdown [Table generator](https://www.tablesgenerator.com/markdown_tables).
 
 | No | Field        | Type   | Sample                                         | Description                                                                                |
 |----|--------------|--------|------------------------------------------------|--------------------------------------------------------------------------------------------|
