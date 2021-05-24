@@ -4,9 +4,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/paymentintent"
 )
 
 // GetPylons is used to send pylons to requesters. This handler is part of the faucet
@@ -83,14 +86,15 @@ func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetP
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	requester, _ := sdk.AccAddressFromBech32(msg.Requester)
 	// Validate if purchase token does exist within the list already
-	if k.HasStripeOrder(sdkCtx, msg.PurchaseToken) {
+	if k.HasStripeOrder(sdkCtx, msg.PaymentId) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
 	}
 
 	// Register purchase token before giving coins
 	iap := types.NewStripeOrder(
 		msg.ProductID,
-		msg.PurchaseToken,
+		msg.PaymentId,
+		msg.PaymentMethod,
 		msg.ReceiptDataBase64,
 		msg.Signature,
 		requester,
@@ -101,6 +105,19 @@ func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetP
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering iap order: %s", err.Error()))
 	}
 
+	//Confirm a paymentInten of Stripe
+	stripe.Key = config.Config.StripeConfig.StripePublishableKey
+	stripe_params := &stripe.PaymentIntentConfirmParams{
+		PaymentMethod: stripe.String(iap.PaymentMethod),
+	}
+	payIntent, _ := paymentintent.Confirm(
+		iap.PaymentId,
+		stripe_params,
+	)
+
+	if payIntent.Status != "succeeded" {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
+	}
 	// Add coins based on the package
 	err = k.CoinKeeper.AddCoins(sdkCtx, requester, iap.GetAmount())
 	if err != nil {

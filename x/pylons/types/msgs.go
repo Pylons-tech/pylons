@@ -622,10 +622,11 @@ func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signa
 }
 
 // NewMsgStripeGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgStripeGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester string) MsgStripeGetPylons {
+func NewMsgStripeGetPylons(ProductID, PaymentId, PaymentMethod, ReceiptDataBase64, Signature string, requester string) MsgStripeGetPylons {
 	return MsgStripeGetPylons{
 		ProductID:         ProductID,
-		PurchaseToken:     PurchaseToken,
+		PaymentId:         PaymentId,
+		PaymentMethod:     PaymentMethod,
 		ReceiptDataBase64: ReceiptDataBase64,
 		Signature:         Signature,
 		Requester:         requester,
@@ -712,7 +713,7 @@ func (msg MsgStripeGetPylons) Type() string { return "stripe_get_pylons" }
 // ValidateStripeSignature is function for testing signature on local
 func (msg MsgStripeGetPylons) ValidateStripeSignature() error {
 
-	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.GoogleIAPPubKey)
+	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripePublishableKey)
 	if err != nil {
 		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
 	}
@@ -759,11 +760,14 @@ func (msg MsgStripeGetPylons) ValidateBasic() error {
 	if err != nil {
 		return err
 	}
-	if msg.PurchaseToken != jsonData["purchaseToken"] {
-		return fmt.Errorf("purchaseToken does not match with receipt data")
+	if msg.PaymentId != jsonData["paymentId"] {
+		return fmt.Errorf("paymentId does not match with receipt data")
 	}
 	if msg.ProductID != jsonData["productId"] {
 		return fmt.Errorf("productId does not match with receipt data")
+	}
+	if msg.ProductID != jsonData["paymentMethod"] {
+		return fmt.Errorf("paymentMethod does not match with receipt data")
 	}
 	return msg.ValidateStripeSignature()
 }

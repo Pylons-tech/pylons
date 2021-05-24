@@ -11,6 +11,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(MsgCreateAccount{}, "pylons/CreateAccount", nil)
 	cdc.RegisterConcrete(MsgGetPylons{}, "pylons/GetPylons", nil)
 	cdc.RegisterConcrete(MsgGoogleIAPGetPylons{}, "pylons/GoogleIAPGetPylons", nil)
+	cdc.RegisterConcrete(MsgStripeGetPylons{}, "pylons/StripeGetPylons", nil)
 	cdc.RegisterConcrete(MsgSendCoins{}, "pylons/SendCoins", nil)
 	cdc.RegisterConcrete(MsgSendItems{}, "pylons/SendItems", nil)
 	cdc.RegisterConcrete(MsgCreateCookbook{}, "pylons/CreateCookbook", nil)

@@ -121,7 +121,8 @@ func (m *AddrFromPubKeyResponse) GetBech32Addr() string {
 
 //20210519
 type CheckStripeOrderRequest struct {
-	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
+	PaymentId     string `protobuf:"bytes,1,opt,name=paymentId,proto3" json:"paymentId,omitempty"`
+	PaymentMethod string `protobuf:"bytes,2,opt,name=paymentMethod,proto3" json:"paymentMethod,omitempty"`
 }
 
 func (m *CheckStripeOrderRequest) Reset()         { *m = CheckStripeOrderRequest{} }
@@ -171,16 +172,38 @@ func (m *CheckGoogleIAPOrderRequest) XXX_DiscardUnknown() {
 var xxx_messageInfo_CheckGoogleIAPOrderRequest proto.InternalMessageInfo
 
 //20210519
-func (m *CheckStripeOrderResponse) GetPurchaseToken() string {
+func (m *CheckStripeOrderResponse) GetPaymentId() string {
 	if m != nil {
-		return m.PurchaseToken
+		return m.PaymentId
+	}
+	return ""
+}
+
+func (m *CheckStripeOrderResponse) GetPaymentMethod() string {
+	if m != nil {
+		return m.PaymentMethod
+	}
+	return ""
+}
+
+func (m *CheckStripeOrderRequest) GetPaymentId() string {
+	if m != nil {
+		return m.PaymentId
+	}
+	return ""
+}
+
+func (m *CheckStripeOrderRequest) GetPaymentMethod() string {
+	if m != nil {
+		return m.PaymentMethod
 	}
 	return ""
 }
 
 type CheckStripeOrderResponse struct {
-	PurchaseToken string `protobuf:"bytes,1,opt,name=purchaseToken,proto3" json:"purchaseToken,omitempty"`
-	Exist         bool   `protobuf:"varint,2,opt,name=exist,proto3" json:"exist,omitempty"`
+	PaymentId     string `protobuf:"bytes,1,opt,name=paymentId,proto3" json:"paymentId,omitempty"`
+	PaymentMethod string `protobuf:"bytes,2,opt,name=payMethod,proto3" json:"payMethod,omitempty"`
+	Exist         bool   `protobuf:"varint,3,opt,name=exist,proto3" json:"exist,omitempty"`
 }
 
 func (m *CheckStripeOrderResponse) Reset()         { *m = CheckStripeOrderResponse{} }
@@ -2515,7 +2538,7 @@ type QueryServer interface {
 	AddrFromPubKey(context.Context, *AddrFromPubKeyRequest) (*AddrFromPubKeyResponse, error)
 	// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
 	CheckGoogleIAPOrder(context.Context, *CheckGoogleIAPOrderRequest) (*CheckGoogleIAPOrderResponse, error)
-	// CheckStripeOrder check if google iap order is given to user with purchase token
+	// CheckStripeOrder check if google iap order is given to user with payment id
 	CheckStripeOrder(context.Context, *CheckStripeOrderRequest) (*CheckStripeOrderResponse, error)
 	// GetCookbook returns a cookbook based on the cookbook id
 	GetCookbook(context.Context, *GetCookbookRequest) (*GetCookbookResponse, error)
@@ -3218,10 +3241,10 @@ func (m *CheckStripeOrderRequest) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
-	if len(m.PurchaseToken) > 0 {
-		i -= len(m.PurchaseToken)
-		copy(dAtA[i:], m.PurchaseToken)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.PurchaseToken)))
+	if len(m.PaymentId) > 0 {
+		i -= len(m.PaymentId)
+		copy(dAtA[i:], []byte(m.PaymentId))
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PaymentId)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -3258,10 +3281,10 @@ func (m *CheckStripeOrderResponse) MarshalToSizedBuffer(dAtA []byte) (int, error
 		i--
 		dAtA[i] = 0x10
 	}
-	if len(m.PurchaseToken) > 0 {
-		i -= len(m.PurchaseToken)
-		copy(dAtA[i:], m.PurchaseToken)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.PurchaseToken)))
+	if len(m.PaymentId) > 0 {
+		i -= len(m.PaymentId)
+		copy(dAtA[i:], m.PaymentId)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.PaymentId)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -4826,7 +4849,7 @@ func (m *CheckStripeOrderRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.PurchaseToken)
+	l = len(m.PaymentId)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
@@ -4839,7 +4862,7 @@ func (m *CheckStripeOrderResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.PurchaseToken)
+	l = len(m.PaymentId)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
@@ -5894,7 +5917,7 @@ func (m *CheckStripeOrderRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PurchaseToken", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PaymentId", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -5922,7 +5945,7 @@ func (m *CheckStripeOrderRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PurchaseToken = string(dAtA[iNdEx:postIndex])
+			m.PaymentId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -6007,7 +6030,7 @@ func (m *CheckStripeOrderResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.PurchaseToken = string(dAtA[iNdEx:postIndex])
+			m.PaymentId = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 0 {

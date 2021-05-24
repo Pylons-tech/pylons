@@ -10,14 +10,19 @@ import (
 
 // CheckStripePOrder check if stripe order is given to user with purchase token
 func (querier *querierServer) CheckStripeOrder(ctx context.Context, req *types.CheckStripeOrderRequest) (*types.CheckStripeOrderResponse, error) {
-	if req.PurchaseToken == "" {
+	if req.PaymentId == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no item id is provided in path")
 	}
 
-	exist := querier.HasStripeOrder(sdk.UnwrapSDKContext(ctx), req.PurchaseToken)
+	if req.PaymentMethod == "" {
+		req.PaymentMethod = "card"
+	}
+
+	exist := querier.HasStripeOrder(sdk.UnwrapSDKContext(ctx), req.PaymentId)
 
 	return &types.CheckStripeOrderResponse{
-		PurchaseToken: req.PurchaseToken,
+		PaymentId:     req.PaymentId,
+		PaymentMethod: req.PaymentMethod,
 		Exist:         exist,
 	}, nil
 }

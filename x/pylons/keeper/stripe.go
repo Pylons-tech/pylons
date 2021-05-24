@@ -13,5 +13,5 @@ func (k Keeper) HasStripeOrder(ctx sdk.Context, token string) bool {
 
 // RegisterStripeOrder is used to add an iap order
 func (k Keeper) RegisterStripeOrder(ctx sdk.Context, iap types.StripeOrder) error {
-	return k.SetObject(ctx, types.TypeStripeOrder, iap.PurchaseToken, k.StripeOrderKey, iap)
+	return k.SetObject(ctx, types.TypeStripeOrder, iap.PaymentId, k.StripeOrderKey, iap)
 }

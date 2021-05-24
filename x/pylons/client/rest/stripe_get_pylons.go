@@ -39,7 +39,8 @@ func stripeGetPylonsHandler(cliCtx client.Context) http.HandlerFunc {
 		// create the message
 		msg := types.NewMsgStripeGetPylons(
 			"your.product.id",
-			"your.purchase.token",
+			"your.payment.id",
+			"your.payment.method",
 			"your.receipt.data",
 			"your.puchase.signature",
 			addr.String())

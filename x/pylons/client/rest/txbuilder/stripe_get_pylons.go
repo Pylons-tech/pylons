@@ -31,7 +31,8 @@ func StripeGetPylonsTxBuilder(cliCtx client.Context) http.HandlerFunc {
 
 		msg := types.NewMsgStripeGetPylons(
 			"your.product.id",
-			"your.purchase.token",
+			"your.payment.id",
+			"your.payment.method",
 			"your.receipt.data",
 			"your.puchase.signature",
 			addr.String())

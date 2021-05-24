@@ -135,6 +135,5 @@ func TestGoogleIAPGetPylonsViaCLI(originT *originT.T) {
 				t.MustContain(string(txHandleErr), tc.tryReuseErr)
 			}
 		})
-		break
 	}
 }

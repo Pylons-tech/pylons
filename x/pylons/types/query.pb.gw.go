@@ -151,15 +151,15 @@ func request_Query_CheckStripeOrder_0(ctx context.Context, marshaler runtime.Mar
 		_   = err
 	)
 
-	val, ok = pathParams["purchaseToken"]
+	val, ok = pathParams["paymentId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchaseToken")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "paymentId")
 	}
 
-	protoReq.PurchaseToken, err = runtime.String(val)
+	protoReq.PaymentId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchaseToken", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "paymentId", err)
 	}
 
 	msg, err := client.CheckStripeOrder(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -178,12 +178,12 @@ func local_request_Query_CheckStripeOrder_0(ctx context.Context, marshaler runti
 		_   = err
 	)
 
-	val, ok = pathParams["purchaseToken"]
+	val, ok = pathParams["paymentId"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "purchaseToken")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "paymentId")
 	}
 
-	protoReq.PurchaseToken, err = runtime.String(val)
+	protoReq.PaymentId, err = runtime.String(val)
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchaseToken", err)
@@ -1159,7 +1159,7 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 
 	})
 
-	//added by @tain20210520
+	//20210520
 	mux.Handle("GET", pattern_Query_CheckStripeOrder_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()

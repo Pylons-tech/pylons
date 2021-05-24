@@ -14,7 +14,8 @@ import (
 // StripeGetPylons implements StripeGetPylons msg transaction
 func StripeGetPylons() *cobra.Command {
 	var productID string
-	var purchaseToken string
+	var paymentId string
+	var paymentMethod string
 	var receiptData string
 	var signature string
 	cmd := &cobra.Command{
@@ -29,7 +30,8 @@ func StripeGetPylons() *cobra.Command {
 
 			msg := types.NewMsgStripeGetPylons(
 				productID,
-				purchaseToken,
+				paymentId,
+				paymentMethod,
 				receiptData,
 				signature,
 				clientCtx.GetFromAddress().String())
@@ -43,7 +45,8 @@ func StripeGetPylons() *cobra.Command {
 	}
 	flags.AddTxFlagsToCmd(cmd)
 	cmd.PersistentFlags().StringVar(&productID, "product-id", "", "Get pylons order product id")
-	cmd.PersistentFlags().StringVar(&purchaseToken, "purchase-token", "", "Get pylons order purchase token")
+	cmd.PersistentFlags().StringVar(&paymentId, "payment-id", "", "Get pylons order payment id")
+	cmd.PersistentFlags().StringVar(&paymentMethod, "payment-method", "", "Get pylons order payment method")
 	cmd.PersistentFlags().StringVar(&receiptData, "receipt-data", "", "Get pylons order purchase token")
 	cmd.PersistentFlags().StringVar(&signature, "signature", "", "Get pylons order signature")
 	return cmd

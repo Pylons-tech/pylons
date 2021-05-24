@@ -128,12 +128,14 @@ message CheckGoogleIAPOrderResponse {
 }
 
 message CheckStripeOrderRequest {
-  string purchaseToken = 1;
+  string paymentId = 1;
+  string paymentMethod = 2;
 }
 
 message CheckStripeOrderResponse {
-  string purchaseToken = 1;
-  bool exist = 2;
+  string paymentId = 1;
+  string paymentMethod = 2;
+  bool exist = 3;
 }
 
 message GetCookbookRequest {

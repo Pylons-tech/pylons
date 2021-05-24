@@ -10,9 +10,9 @@ import (
 // CheckStripeOrder check if stripe iap order is already used
 func CheckStripeOrder() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "check_stripe_order <purchase_token>",
-		Short: "check if stripe order is given to user with purchase token",
-		Args:  cobra.ExactArgs(1),
+		Use:   "check_stripe_order <payment_id> [payment_method]",
+		Short: "check if stripe order is given to user with payment_id",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -21,11 +21,17 @@ func CheckStripeOrder() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			tokenReq := &types.CheckStripeOrderRequest{
-				PurchaseToken: args[0],
+			if args[2] == "" {
+				args[2] = "card"
 			}
 
-			res, err := queryClient.CheckStripeOrder(cmd.Context(), tokenReq)
+			paymentReq := &types.CheckStripeOrderRequest{
+				PaymentId:     args[1],
+				PaymentMethod: args[2],
+			}
+
+			res, err := queryClient.CheckStripeOrder(cmd.Context(), paymentReq)
+
 			if err != nil {
 				return err
 			}

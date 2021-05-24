@@ -183,7 +183,8 @@ func StripeGetPylonsMsgFromRef(ref string, t *testing.T) types.MsgStripeGetPylon
 
 	var gigpType struct {
 		ProductID     string
-		PurchaseToken string
+		PaymentId     string
+		PaymentMethod string
 		ReceiptData   string
 		Signature     string
 		Requester     string
@@ -199,7 +200,8 @@ func StripeGetPylonsMsgFromRef(ref string, t *testing.T) types.MsgStripeGetPylon
 
 	return types.NewMsgStripeGetPylons(
 		gigpType.ProductID,
-		gigpType.PurchaseToken,
+		gigpType.PaymentId,
+		gigpType.PaymentMethod,
 		receiptDataBase64,
 		gigpType.Signature,
 		gigpType.Requester,

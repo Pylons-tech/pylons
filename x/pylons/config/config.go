@@ -130,7 +130,7 @@ func ReadConfig() error {
 			},
 		},
 		StripeConfig: StripeConfiguration{
-			StripePublishableKey: os.Getenv("STRIPE_PUBLISHABLE_KEY"),
+			StripePublishableKey: "pk_test_51ItNsVKw8S6WAC9T24uDZRqARo6b4F5ykUo8ESpIuCB2ZMeAYUKTXiWSB3HPTq3iibbH6dLJVvYGvGRu4eLofCpp00FeQ48RuJ",
 			StripeCountry:        "us",
 			Country:              "US",
 			Currency:             "USD",
