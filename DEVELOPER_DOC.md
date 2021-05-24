@@ -9,9 +9,9 @@ Here's a description of how to use cookbooks, recipes, items, coins, and trades 
 Usually, a cookbook contains all recipes and items that are used for the game.
 This game corresponds to Cookbook 1:1.
 
-Developers create a cookbook along with recipes and item which is going to be used within the game.
-Recipe can be used for buying items, upgrade items, merge two items into one. Also can be used for the exchange of coins, sell items and trading items between users.
-And players owe items, coins and trade orders. Recipes can be executed if user fit the recipe conditions.
+Developers create a cookbook to go along with recipes and items that are going to be used in the game.
+Recipes can be used to buy items, upgrade items, and merge two items into one. Recipes can be also be used to exchange coins, sell items, and trade items between users.
+Players can owe items, coins, and trade orders. Recipes can be executed only if the user meets the recipe conditions.
 
 Since it's a blockchain based system, running recipe is taking more than 1 block time. So developers consider these things when writing cookbooks, recipes and items for their game.
 
