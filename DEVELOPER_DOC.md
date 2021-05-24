@@ -202,7 +202,7 @@ Sample CoinInput JSON
 }]
 ```
 ### Entries
-Entries consist of coin outputs and item outputs. It means recipe can generate coin or item.
+Entries consist of coin outputs and item outputs. The recipe can generate coins or items.
 
 Sample Entries JSON
 ```json
