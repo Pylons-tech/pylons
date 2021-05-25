@@ -610,23 +610,23 @@ func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from}
 }
 
-// NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester string) MsgGoogleIAPGetPylons {
-	return MsgGoogleIAPGetPylons{
-		ProductID:         ProductID,
-		PurchaseToken:     PurchaseToken,
-		ReceiptDataBase64: ReceiptDataBase64,
-		Signature:         Signature,
-		Requester:         requester,
-	}
-}
-
 // NewMsgStripeGetPylons is a function to get MsgGetPylons msg from required params
 func NewMsgStripeGetPylons(ProductID, PaymentId, PaymentMethod, ReceiptDataBase64, Signature string, requester string) MsgStripeGetPylons {
 	return MsgStripeGetPylons{
 		ProductID:         ProductID,
 		PaymentId:         PaymentId,
 		PaymentMethod:     PaymentMethod,
+		ReceiptDataBase64: ReceiptDataBase64,
+		Signature:         Signature,
+		Requester:         requester,
+	}
+}
+
+// NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
+func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester string) MsgGoogleIAPGetPylons {
+	return MsgGoogleIAPGetPylons{
+		ProductID:         ProductID,
+		PurchaseToken:     PurchaseToken,
 		ReceiptDataBase64: ReceiptDataBase64,
 		Signature:         Signature,
 		Requester:         requester,

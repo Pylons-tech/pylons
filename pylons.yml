@@ -30,5 +30,4 @@ stripe_config:
   stripe_pubkey: pk_test_51ItNsVKw8S6WAC9T24uDZRqARo6b4F5ykUo8ESpIuCB2ZMeAYUKTXiWSB3HPTq3iibbH6dLJVvYGvGRu4eLofCpp00FeQ48RuJ
   stripeCountry: us
   country: US
-  currency: USD
-  paymentMethods: card
+  currency: USD 

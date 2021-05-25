@@ -20,8 +20,8 @@ service Query {
   }
 
   // CheckStripeOrder check if stripe order is given to user with purchase token
-  rpc CheckStripeOrder(CheckGoogleIAPOrderRequest) returns (CheckStripeOrderResponse){
-    option (google.api.http).get = "/custom/pylons/check_stripe_order/{purchaseToken}";
+  rpc CheckStripeOrder(CheckStripeOrderRequest) returns (CheckStripeOrderResponse){
+    option (google.api.http).get = "/custom/pylons/check_stripe_order/{paymentId}";
   }
 
   // GetCookbook returns a cookbook based on the cookbook id

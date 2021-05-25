@@ -77,6 +77,7 @@ func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *types.MsgGoogleI
 //20210519
 // StripeGetPylons is used to send pylons to requesters after stripe iap verification
 func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetPylons) (*types.MsgStripeGetPylonsResponse, error) {
+
 	err := msg.ValidateBasic()
 
 	if err != nil {
@@ -85,12 +86,12 @@ func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetP
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	requester, _ := sdk.AccAddressFromBech32(msg.Requester)
-	// Validate if purchase token does exist within the list already
+	// Validate if paymentId token does exist within the list already
 	if k.HasStripeOrder(sdkCtx, msg.PaymentId) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
 	}
 
-	// Register purchase token before giving coins
+	// Register paymentId before giving coins
 	iap := types.NewStripeOrder(
 		msg.ProductID,
 		msg.PaymentId,
@@ -100,6 +101,7 @@ func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetP
 		requester,
 	)
 
+	fmt.Printf("%+v\n", msg.PaymentId)
 	err = k.RegisterStripeOrder(sdkCtx, iap)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering iap order: %s", err.Error()))
@@ -110,12 +112,17 @@ func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetP
 	stripe_params := &stripe.PaymentIntentConfirmParams{
 		PaymentMethod: stripe.String(iap.PaymentMethod),
 	}
-	payIntent, _ := paymentintent.Confirm(
+	payIntentResult, _ := paymentintent.Confirm(
 		iap.PaymentId,
 		stripe_params,
 	)
 
-	if payIntent.Status != "succeeded" {
+	if payIntentResult.Status != "succeeded" {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
+	}
+
+	print("payment amount = %d", payIntentResult.Amount)
+	if iap.GetAmount().AmountOf(types.Pylon).Int64() != payIntentResult.Amount {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
 	}
 	// Add coins based on the package

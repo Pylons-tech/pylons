@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"gopkg.in/yaml.v2"
 )
@@ -40,11 +39,11 @@ type StripeIAPConfiguration struct {
 }
 
 type StripeConfiguration struct {
-	StripePublishableKey string   `yaml:"stripe_pubkey"`
-	StripeCountry        string   `yaml:"stripeCountry"`
-	Country              string   `yaml:"country"`
-	Currency             string   `yaml:"currency"`
-	PaymentMethods       []string `yaml:"paymentMethods"`
+	StripePublishableKey string `yaml:"stripe_pubkey"`
+	StripeCountry        string `yaml:"stripeCountry"`
+	Country              string `yaml:"country"`
+	Currency             string `yaml:"currency"`
+	PaymentMethods       string `yaml:"paymentMethods"`
 }
 
 // Configuration is a struct to manage game configuration
@@ -69,12 +68,12 @@ func init() {
 	}
 }
 
-func PaymentMethods() []string {
+func PaymentMethods() string {
 	paymentMethodsString := os.Getenv("PAYMENT_METHODS")
 	if paymentMethodsString == "" {
-		return []string{"card"}
+		return "card"
 	} else {
-		return strings.Split(paymentMethodsString, ", ")
+		return paymentMethodsString //strings.Split(paymentMethodsString, ", ")
 	}
 }
 

@@ -19,7 +19,6 @@ func (querier *querierServer) CheckStripeOrder(ctx context.Context, req *types.C
 	}
 
 	exist := querier.HasStripeOrder(sdk.UnwrapSDKContext(ctx), req.PaymentId)
-
 	return &types.CheckStripeOrderResponse{
 		PaymentId:     req.PaymentId,
 		PaymentMethod: req.PaymentMethod,

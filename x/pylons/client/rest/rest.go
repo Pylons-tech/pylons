@@ -16,6 +16,7 @@ const (
 	pubKeyName            = "pubkey"
 	purchaseTokenKey      = "purchaseTokenKey"
 	paymentId             = "paymentId"
+	paymentMethod         = "paymentMethod"
 	ownerKeyName          = "ownerKey"
 	tradeKeyName          = "tradeKey"
 	cookbookKeyName       = "cookbookKey"

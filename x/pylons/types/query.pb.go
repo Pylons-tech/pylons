@@ -172,6 +172,33 @@ func (m *CheckGoogleIAPOrderRequest) XXX_DiscardUnknown() {
 var xxx_messageInfo_CheckGoogleIAPOrderRequest proto.InternalMessageInfo
 
 //20210519
+func (m *CheckStripeOrderRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CheckStripeOrderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CheckStripeOrderRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CheckStripeOrderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckStripeOrderRequest.Merge(m, src)
+}
+func (m *CheckStripeOrderRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CheckStripeOrderRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckStripeOrderRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckStripeOrderRequest proto.InternalMessageInfo
+
 func (m *CheckStripeOrderResponse) GetPaymentId() string {
 	if m != nil {
 		return m.PaymentId
@@ -202,7 +229,7 @@ func (m *CheckStripeOrderRequest) GetPaymentMethod() string {
 
 type CheckStripeOrderResponse struct {
 	PaymentId     string `protobuf:"bytes,1,opt,name=paymentId,proto3" json:"paymentId,omitempty"`
-	PaymentMethod string `protobuf:"bytes,2,opt,name=payMethod,proto3" json:"payMethod,omitempty"`
+	PaymentMethod string `protobuf:"bytes,2,opt,name=paymentMethod,proto3" json:"paymentMethod,omitempty"`
 	Exist         bool   `protobuf:"varint,3,opt,name=exist,proto3" json:"exist,omitempty"`
 }
 
@@ -259,6 +286,33 @@ func (m *CheckGoogleIAPOrderResponse) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_CheckGoogleIAPOrderResponse proto.InternalMessageInfo
+
+func (m *CheckStripeOrderResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CheckStripeOrderResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CheckStripeOrderResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CheckStripeOrderResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckStripeOrderResponse.Merge(m, src)
+}
+func (m *CheckStripeOrderResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *CheckStripeOrderResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckStripeOrderResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckStripeOrderResponse proto.InternalMessageInfo
 
 func (m *CheckGoogleIAPOrderResponse) GetPurchaseToken() string {
 	if m != nil {
@@ -2305,7 +2359,7 @@ type QueryClient interface {
 	AddrFromPubKey(ctx context.Context, in *AddrFromPubKeyRequest, opts ...grpc.CallOption) (*AddrFromPubKeyResponse, error)
 	// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
 	CheckGoogleIAPOrder(ctx context.Context, in *CheckGoogleIAPOrderRequest, opts ...grpc.CallOption) (*CheckGoogleIAPOrderResponse, error) //20210519
-	// CheckStripeOrder check if stripe order is given to user with purchase token
+	// CheckStripeOrder check if stripe order is given to user with paymentId
 	CheckStripeOrder(ctx context.Context, in *CheckStripeOrderRequest, opts ...grpc.CallOption) (*CheckStripeOrderResponse, error)
 	// GetCookbook returns a cookbook based on the cookbook id
 	GetCookbook(ctx context.Context, in *GetCookbookRequest, opts ...grpc.CallOption) (*GetCookbookResponse, error)
@@ -2538,7 +2592,7 @@ type QueryServer interface {
 	AddrFromPubKey(context.Context, *AddrFromPubKeyRequest) (*AddrFromPubKeyResponse, error)
 	// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
 	CheckGoogleIAPOrder(context.Context, *CheckGoogleIAPOrderRequest) (*CheckGoogleIAPOrderResponse, error)
-	// CheckStripeOrder check if google iap order is given to user with payment id
+	// CheckStripeOrder check if stripe order is given to user with payment id
 	CheckStripeOrder(context.Context, *CheckStripeOrderRequest) (*CheckStripeOrderResponse, error)
 	// GetCookbook returns a cookbook based on the cookbook id
 	GetCookbook(context.Context, *GetCookbookRequest) (*GetCookbookResponse, error)
@@ -2681,7 +2735,7 @@ func _Query_CheckGoogleIAPOrder_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ChecStripeOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Query_CheckStripeOrder_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CheckStripeOrderRequest)
 	if err := dec(in); err != nil {
 		return nil, err
@@ -3016,6 +3070,10 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CheckGoogleIAPOrder",
 			Handler:    _Query_CheckGoogleIAPOrder_Handler,
+		},
+		{
+			MethodName: "CheckStripeOrder",
+			Handler:    _Query_CheckStripeOrder_Handler,
 		},
 		{
 			MethodName: "GetCookbook",

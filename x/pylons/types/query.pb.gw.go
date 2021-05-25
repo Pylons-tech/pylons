@@ -186,7 +186,7 @@ func local_request_Query_CheckStripeOrder_0(ctx context.Context, marshaler runti
 	protoReq.PaymentId, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "purchaseToken", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "paymentId", err)
 	}
 
 	msg, err := server.CheckStripeOrder(ctx, &protoReq)
@@ -1972,7 +1972,7 @@ var (
 
 	pattern_Query_CheckGoogleIAPOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "check_google_iap_order", "purchaseToken"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_CheckStripeOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "check_google_iap_order", "purchaseToken"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_CheckStripeOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "check_stripe_order", "paymentId"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_GetCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"custom", "pylons", "get_cookbook", "cookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 
