@@ -717,6 +717,7 @@ func (msg MsgStripeGetPylons) ValidateStripeSignature() error {
 	if err != nil {
 		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
 	}
+
 	re, err := x509.ParsePKIXPublicKey(playStorePubKeyBytes)
 	if err != nil {
 		return err
@@ -766,7 +767,8 @@ func (msg MsgStripeGetPylons) ValidateBasic() error {
 	if msg.ProductID != jsonData["productId"] {
 		return fmt.Errorf("productId does not match with receipt data")
 	}
-	if msg.ProductID != jsonData["paymentMethod"] {
+
+	if msg.PaymentMethod != jsonData["paymentMethod"] {
 		return fmt.Errorf("paymentMethod does not match with receipt data")
 	}
 	return msg.ValidateStripeSignature()

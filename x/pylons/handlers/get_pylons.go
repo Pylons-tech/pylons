@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
@@ -77,7 +78,7 @@ func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *types.MsgGoogleI
 //20210519
 // StripeGetPylons is used to send pylons to requesters after stripe iap verification
 func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetPylons) (*types.MsgStripeGetPylonsResponse, error) {
-
+	fmt.Printf("------------------StripeGetPylons--------------%+v\n", msg.PaymentId)
 	err := msg.ValidateBasic()
 
 	if err != nil {
@@ -101,14 +102,20 @@ func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetP
 		requester,
 	)
 
-	fmt.Printf("%+v\n", msg.PaymentId)
+	fmt.Printf("--------------------------------%+v\n", msg.PaymentId)
 	err = k.RegisterStripeOrder(sdkCtx, iap)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering iap order: %s", err.Error()))
 	}
 
 	//Confirm a paymentInten of Stripe
-	stripe.Key = config.Config.StripeConfig.StripePublishableKey
+	stripePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripePublishableKey)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
+	}
+	fmt.Printf("-------------------------------%+v", stripePubKeyBytes)
+	stripe.Key = string(stripePubKeyBytes)
+
 	stripe_params := &stripe.PaymentIntentConfirmParams{
 		PaymentMethod: stripe.String(iap.PaymentMethod),
 	}
