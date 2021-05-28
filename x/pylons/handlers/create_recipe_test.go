@@ -279,7 +279,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock recipe
-	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1)
+	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	cases := map[string]struct {
 		rcpID        string
@@ -412,7 +412,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock recipe
-	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1)
+	rcpData := MockPopularRecipe(RcpDefault, tci, "existing recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	cases := map[string]struct {
 		rcpID        string

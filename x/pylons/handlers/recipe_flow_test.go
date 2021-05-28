@@ -24,25 +24,28 @@ func TestRecipeFlowUpdate(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	cases := map[string]struct {
-		cbID         string
-		recipeName   string
-		rcpID        string
-		recipeDesc   string
-		sender       sdk.AccAddress
-		desiredError string
-		showError    bool
+		cbID          string
+		recipeName    string
+		rcpID         string
+		recipeDesc    string
+		paymentId     string
+		paymentMethod string
+		sender        sdk.AccAddress
+		desiredError  string
+		showError     bool
 
 		dynamicItemSet   bool
 		dynamicItemNames []string
 	}{
 		"successful test for update recipe": {
-			cbID:         cbData.CookbookID,
-			recipeName:   "recipe0001",
-			recipeDesc:   "this has to meet character limits lol",
-			sender:       sender1,
-			desiredError: "",
-			showError:    false,
-
+			cbID:             cbData.CookbookID,
+			recipeName:       "recipe0001",
+			recipeDesc:       "this has to meet character limits lol",
+			sender:           sender1,
+			desiredError:     "",
+			showError:        false,
+			paymentId:        "pi_1DoShv2eZvKYlo2CqsROyFun",
+			paymentMethod:    "card",
 			dynamicItemSet:   true,
 			dynamicItemNames: []string{"Raichu"},
 		},
@@ -80,6 +83,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 			// Run recipe exeuction for the recipe
 			execRcpResponse, err := MockExecution(tci, tc.rcpID,
 				tc.sender,
+				tc.paymentId, tc.paymentMethod,
 				itemIDs,
 			)
 			require.NoError(t, err)
@@ -116,7 +120,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 
 			// Create exeuction for the recipe
 			execRcpResponse, err = MockExecution(tci, tc.rcpID,
-				tc.sender,
+				tc.sender, tc.paymentId, tc.paymentMethod,
 				itemIDs,
 			)
 			require.NoError(t, err)

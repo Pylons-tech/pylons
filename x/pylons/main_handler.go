@@ -42,10 +42,6 @@ func NewHandler(keeper keeper.Keeper) sdk.Handler {
 			res, err := msgServer.GoogleIAPGetPylons(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgStripeGetPylons:
-			res, err := msgServer.StripeGetPylons(sdk.WrapSDKContext(ctx), msg)
-			return sdk.WrapServiceResult(ctx, res, err)
-
 		case *types.MsgSendCoins:
 			res, err := msgServer.SendCoins(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)

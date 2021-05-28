@@ -39,11 +39,11 @@ type StripeIAPConfiguration struct {
 }
 
 type StripeConfiguration struct {
-	StripePublishableKey string `yaml:"stripe_pubkey"`
-	StripeCountry        string `yaml:"stripeCountry"`
-	Country              string `yaml:"country"`
-	Currency             string `yaml:"currency"`
-	PaymentMethods       string `yaml:"paymentMethods"`
+	StripeSecretKey string `yaml:"stripe_pubkey"`
+	StripeCountry   string `yaml:"stripeCountry"`
+	Country         string `yaml:"country"`
+	Currency        string `yaml:"currency"`
+	PaymentMethods  string `yaml:"paymentMethods"`
 }
 
 // Configuration is a struct to manage game configuration
@@ -129,11 +129,11 @@ func ReadConfig() error {
 			},
 		},
 		StripeConfig: StripeConfiguration{
-			StripePublishableKey: "cGtfdGVzdF81MUl0TnNWS3c4UzZXQUM5VDI0dURaUnFBUm82YjRGNXlrVW84RVNwSXVDQjJaTWVBWVVLVFhpV1NCM0hQVHEzaWliYkg2ZExKVnZZR3ZHUnU0ZUxvZkNwcDAwRmVRNDhSdUo=",
-			StripeCountry:        "us",
-			Country:              "US",
-			Currency:             "USD",
-			PaymentMethods:       PaymentMethods(),
+			StripeSecretKey: "c2tfdGVzdF81MUl0TnNWS3c4UzZXQUM5VEpVOXJxNHpnbTJiRDBzWjRVbU01dkVlS2IwM29RcHA4eGVMQ0k3T205c1RYWmdXOVh2OHJOZm9KVlNSdEFIUjFRNTBrZXNNUDAwVWM0b2RNa3E=",
+			StripeCountry:   "us",
+			Country:         "US",
+			Currency:        "USD",
+			PaymentMethods:  PaymentMethods(),
 		},
 		IsProduction: false,
 	}

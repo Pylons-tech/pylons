@@ -395,11 +395,13 @@ func (msg MsgUpdateRecipe) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, sender string, itemIDs []string) MsgExecuteRecipe {
+func NewMsgExecuteRecipe(recipeID string, sender string, paymentId string, paymentMethod string, itemIDs []string) MsgExecuteRecipe {
 	msg := MsgExecuteRecipe{
-		RecipeID: recipeID,
-		Sender:   sender,
-		ItemIDs:  itemIDs,
+		RecipeID:      recipeID,
+		Sender:        sender,
+		PaymentId:     paymentId,
+		PaymentMethod: paymentMethod,
+		ItemIDs:       itemIDs,
 	}
 	return msg
 }
@@ -610,18 +612,6 @@ func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from}
 }
 
-// NewMsgStripeGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgStripeGetPylons(ProductID, PaymentId, PaymentMethod, ReceiptDataBase64, Signature string, requester string) MsgStripeGetPylons {
-	return MsgStripeGetPylons{
-		ProductID:         ProductID,
-		PaymentId:         PaymentId,
-		PaymentMethod:     PaymentMethod,
-		ReceiptDataBase64: ReceiptDataBase64,
-		Signature:         Signature,
-		Requester:         requester,
-	}
-}
-
 // NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
 func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester string) MsgGoogleIAPGetPylons {
 	return MsgGoogleIAPGetPylons{
@@ -702,94 +692,6 @@ func (msg MsgGoogleIAPGetPylons) ValidateBasic() error {
 		return fmt.Errorf("productId does not match with receipt data")
 	}
 	return msg.ValidateGoogleIAPSignature()
-}
-
-// Route should return the name of the module
-func (msg MsgStripeGetPylons) Route() string { return RouterKey }
-
-// Type should return the action
-func (msg MsgStripeGetPylons) Type() string { return "stripe_get_pylons" }
-
-// ValidateStripeSignature is function for testing signature on local
-func (msg MsgStripeGetPylons) ValidateStripeSignature() error {
-
-	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripePublishableKey)
-	if err != nil {
-		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
-	}
-
-	re, err := x509.ParsePKIXPublicKey(playStorePubKeyBytes)
-	if err != nil {
-		return err
-	}
-	pub := re.(*rsa.PublicKey)
-	receiptData, err := base64.StdEncoding.DecodeString(msg.ReceiptDataBase64)
-	if err != nil {
-		return err
-	}
-
-	h := sha1.New()
-	_, err = h.Write(receiptData)
-	if err != nil {
-		return err
-	}
-	digest := h.Sum(nil)
-
-	ds, err := base64.StdEncoding.DecodeString(msg.Signature)
-	if err != nil {
-		return fmt.Errorf("msg signature base64 decoding failure: %s", err.Error())
-	}
-	err = rsa.VerifyPKCS1v15(pub, crypto.SHA1, digest, ds)
-	return err
-}
-
-// ValidateBasic is a function to validate MsgGoogleIAPGetPylons msg
-func (msg MsgStripeGetPylons) ValidateBasic() error {
-
-	if msg.Requester == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Requester)
-	}
-
-	var jsonData map[string]interface{}
-
-	receiptData, err := base64.StdEncoding.DecodeString(msg.ReceiptDataBase64)
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(receiptData, &jsonData)
-	if err != nil {
-		return err
-	}
-	if msg.PaymentId != jsonData["paymentId"] {
-		return fmt.Errorf("paymentId does not match with receipt data")
-	}
-	if msg.ProductID != jsonData["productId"] {
-		return fmt.Errorf("productId does not match with receipt data")
-	}
-
-	if msg.PaymentMethod != jsonData["paymentMethod"] {
-		return fmt.Errorf("paymentMethod does not match with receipt data")
-	}
-	return msg.ValidateStripeSignature()
-}
-
-// GetSignBytes encodes the message for signing
-func (msg MsgStripeGetPylons) GetSignBytes() []byte {
-	b, err := json.Marshal(msg)
-	if err != nil {
-		panic(err)
-	}
-	return sdk.MustSortJSON(b)
-}
-
-// GetSigners encodes the message for signing
-func (msg MsgStripeGetPylons) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(msg.Requester)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{from}
 }
 
 // GetSignBytes encodes the message for signing

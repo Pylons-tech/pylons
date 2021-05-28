@@ -4,7 +4,7 @@ package keeper
 const (
 	KeyPylonsEntity     = "pylons_entity"
 	KeyGoogleIAPOrder   = "pylons_google_iap_order"
-	KeyStripeOrder      = "pylons_stripe_order"
+	KeyPaymentForStripe = "pylons_payment_for_stripe"
 	KeyPylonsCookbook   = "pylons_cookbook"
 	KeyPylonsRecipe     = "pylons_recipe"
 	KeyPylonsItem       = "pylons_item"
@@ -17,7 +17,7 @@ const (
 func GetStoreKysList() (string, string, string, string, string, string, string, string, string) {
 	return KeyPylonsEntity,
 		KeyGoogleIAPOrder,
-		KeyStripeOrder,
+		KeyPaymentForStripe,
 		KeyPylonsCookbook,
 		KeyPylonsRecipe,
 		KeyPylonsItem,
@@ -30,7 +30,7 @@ func GetStoreKysList() (string, string, string, string, string, string, string, 
 var StoreKeyList = []string{
 	KeyPylonsEntity,
 	KeyGoogleIAPOrder,
-	KeyStripeOrder,
+	KeyPaymentForStripe,
 	KeyPylonsCookbook,
 	KeyPylonsRecipe,
 	KeyPylonsItem,

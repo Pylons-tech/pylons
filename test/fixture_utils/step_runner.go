@@ -175,58 +175,6 @@ func RunGoogleIAPGetPylons(step FixtureStep, t *testing.T) {
 	}
 }
 
-// StripeGetPylonsMsgFromRef is a function to get StripeGetPylons message from reference
-func StripeGetPylonsMsgFromRef(ref string, t *testing.T) types.MsgStripeGetPylons {
-	byteValue := ReadFile(ref, t)
-	// translate requester from account name to account address
-	newByteValue := UpdateRequesterKeyToAddress(byteValue, t)
-
-	var gigpType struct {
-		ProductID     string
-		PaymentId     string
-		PaymentMethod string
-		ReceiptData   string
-		Signature     string
-		Requester     string
-	}
-
-	err := json.Unmarshal(newByteValue, &gigpType)
-	t.WithFields(testing.Fields{
-		"gigpType":  testutils.AminoCodecFormatter(gigpType),
-		"new_bytes": string(newByteValue),
-	}).MustNil(err, "error reading using GetJSONMarshaler")
-
-	receiptDataBase64 := base64.StdEncoding.EncodeToString([]byte(gigpType.ReceiptData))
-
-	return types.NewMsgStripeGetPylons(
-		gigpType.ProductID,
-		gigpType.PaymentId,
-		gigpType.PaymentMethod,
-		receiptDataBase64,
-		gigpType.Signature,
-		gigpType.Requester,
-	)
-}
-
-// RunStripeGetPylons is a function to run StripeGetPylons message
-func RunStripeGetPylons(step FixtureStep, t *testing.T) {
-	if step.ParamsRef != "" {
-		gigpMsg := StripeGetPylonsMsgFromRef(step.ParamsRef, t)
-		err := gigpMsg.ValidateBasic()
-		if err != nil {
-			TxBroadcastErrorCheck(err, step, t)
-			return
-		}
-
-		WaitForNextBlockWithErrorCheck(t)
-		tci := testutils.GetTestCoinInput()
-		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
-		result, err := tci.PlnH.StripeGetPylons(sdk.WrapSDKContext(tci.Ctx), &gigpMsg)
-		t.MustTrue(result != nil, "result should not be empty")
-		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
-	}
-}
-
 // RunSendCoins is a function to send coins from one address to another
 func RunSendCoins(step FixtureStep, t *testing.T) {
 
@@ -869,9 +817,11 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	newByteValue = UpdateRecipeName(newByteValue, t)
 
 	var execType struct {
-		RecipeID string
-		Sender   string
-		ItemIDs  []string `json:"ItemIDs"`
+		RecipeID      string
+		Sender        string
+		PaymentId     string
+		PaymentMethod string
+		ItemIDs       []string `json:"ItemIDs"`
 	}
 
 	err := json.Unmarshal(newByteValue, &execType)
@@ -885,7 +835,7 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	t.MustNil(err, "error parsing sender address")
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, ItemIDs)
+	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.PaymentId, execType.PaymentMethod, ItemIDs)
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called

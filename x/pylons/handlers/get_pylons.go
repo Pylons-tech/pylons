@@ -2,15 +2,11 @@ package handlers
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/stripe/stripe-go"
-	"github.com/stripe/stripe-go/paymentintent"
 )
 
 // GetPylons is used to send pylons to requesters. This handler is part of the faucet
@@ -70,75 +66,6 @@ func (k msgServer) GoogleIAPGetPylons(ctx context.Context, msg *types.MsgGoogleI
 	}
 
 	return &types.MsgGoogleIAPGetPylonsResponse{
-		Message: "successfully got the pylons",
-		Status:  "Success",
-	}, nil
-}
-
-//20210519
-// StripeGetPylons is used to send pylons to requesters after stripe iap verification
-func (k msgServer) StripeGetPylons(ctx context.Context, msg *types.MsgStripeGetPylons) (*types.MsgStripeGetPylonsResponse, error) {
-	fmt.Printf("------------------StripeGetPylons--------------%+v\n", msg.PaymentId)
-	err := msg.ValidateBasic()
-
-	if err != nil {
-		return nil, errInternal(err)
-	}
-
-	sdkCtx := sdk.UnwrapSDKContext(ctx)
-	requester, _ := sdk.AccAddressFromBech32(msg.Requester)
-	// Validate if paymentId token does exist within the list already
-	if k.HasStripeOrder(sdkCtx, msg.PaymentId) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
-	}
-
-	// Register paymentId before giving coins
-	iap := types.NewStripeOrder(
-		msg.ProductID,
-		msg.PaymentId,
-		msg.PaymentMethod,
-		msg.ReceiptDataBase64,
-		msg.Signature,
-		requester,
-	)
-
-	fmt.Printf("--------------------------------%+v\n", msg.PaymentId)
-	err = k.RegisterStripeOrder(sdkCtx, iap)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering iap order: %s", err.Error()))
-	}
-
-	//Confirm a paymentInten of Stripe
-	stripePubKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripePublishableKey)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
-	}
-	fmt.Printf("-------------------------------%+v", stripePubKeyBytes)
-	stripe.Key = string(stripePubKeyBytes)
-
-	stripe_params := &stripe.PaymentIntentConfirmParams{
-		PaymentMethod: stripe.String(iap.PaymentMethod),
-	}
-	payIntentResult, _ := paymentintent.Confirm(
-		iap.PaymentId,
-		stripe_params,
-	)
-
-	if payIntentResult.Status != "succeeded" {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
-	}
-
-	print("payment amount = %d", payIntentResult.Amount)
-	if iap.GetAmount().AmountOf(types.Pylon).Int64() != payIntentResult.Amount {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
-	}
-	// Add coins based on the package
-	err = k.CoinKeeper.AddCoins(sdkCtx, requester, iap.GetAmount())
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	return &types.MsgStripeGetPylonsResponse{
 		Message: "successfully got the pylons",
 		Status:  "Success",
 	}, nil

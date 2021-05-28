@@ -2,7 +2,6 @@ package rest
 
 import (
 	"fmt"
-
 	"github.com/Pylons-tech/pylons/x/pylons/client/rest/txbuilder"
 	"github.com/cosmos/cosmos-sdk/client"
 
@@ -15,8 +14,6 @@ const (
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
 	purchaseTokenKey      = "purchaseTokenKey"
-	paymentId             = "paymentId"
-	paymentMethod         = "paymentMethod"
 	ownerKeyName          = "ownerKey"
 	tradeKeyName          = "tradeKey"
 	cookbookKeyName       = "cookbookKey"
@@ -31,8 +28,6 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		txbuilder.GetPylonsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons/tx_build/{%s}", storeName, txbuilder.TxGoogleIAPGPRequesterKey),
 		txbuilder.GoogleIAPGetPylonsTxBuilder(cliCtx)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/stripe_get_pylons/tx_build/{%s}", storeName, txbuilder.TxStripeGPRequesterKey),
-		txbuilder.StripeGetPylonsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons/tx_build/", storeName),
 		txbuilder.SendPylonsTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/send_coins/tx_build/", storeName),
@@ -57,8 +52,6 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		getPylonsHandler(cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/google_iap_get_pylons", storeName),
 		googleIAPGetPylonsHandler(cliCtx)).Methods("POST")
-	r.HandleFunc(fmt.Sprintf("/%s/stripe_get_pylons", storeName),
-		stripeGetPylonsHandler(cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/create_account", storeName),
 		createAccountHandler(cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/send_pylons", storeName),
@@ -72,8 +65,7 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		getTradeHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/check_google_iap_order/{%s}", storeName, purchaseTokenKey),
 		checkGoogleIAPOrderHandler(cliCtx, storeName)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/check_stripe_order/{%s}", storeName, paymentId),
-		checkStripeOrderHandler(cliCtx, storeName)).Methods("GET")
+
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),
 		listRecipesHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe/{%s}", storeName, ownerKeyName),

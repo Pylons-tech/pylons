@@ -33,7 +33,6 @@ func RegisterDefaultActionRunners() {
 	RegisterActionRunner("create_account", RunCreateAccount)
 	RegisterActionRunner("get_pylons", RunGetPylons)
 	RegisterActionRunner("google_iap_get_pylons", RunGoogleIAPGetPylons)
-	RegisterActionRunner("stripe_get_pylons", RunStripeGetPylons)
 	RegisterActionRunner("mock_account", RunMockAccount) // create account + get pylons
 	RegisterActionRunner("send_coins", RunSendCoins)
 	RegisterActionRunner("fiat_item", RunFiatItem)

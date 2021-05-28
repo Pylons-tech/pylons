@@ -553,6 +553,8 @@ func TestCoinLock(t *testing.T) {
 					tci,
 					recipeData.RecipeID,
 					account1,
+					"pi_1DoShv2eZvKYlo2CqsROyFun",
+					"card",
 					[]string{item.ID},
 				)
 
@@ -615,6 +617,8 @@ func TestCoinLock(t *testing.T) {
 				msg := types.NewMsgExecuteRecipe(
 					pylonInputRecipeData.RecipeID,
 					account1.String(),
+					"pi_1DoShv2eZvKYlo2CqsROyFun",
+					"card",
 					[]string{},
 				)
 				_, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)

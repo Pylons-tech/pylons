@@ -17,9 +17,6 @@ service Msg {
   // GoogleIAPGetPylons is used to send pylons to requesters after google iap verification
   rpc GoogleIAPGetPylons(MsgGoogleIAPGetPylons) returns (MsgGoogleIAPGetPylonsResponse);
 
-  // StripeGetPylons is used to send pylons to requesters after stripe verification
-  rpc StripeGetPylons(MsgStripeGetPylons) returns (MsgStripeGetPylonsResponse);
-
   // SendCoins is used to transact pylons between people
   rpc SendCoins(MsgSendCoins) returns (MsgSendCoinsResponse);
 
@@ -214,7 +211,9 @@ message MsgEnableTradeResponse  {
 message  MsgExecuteRecipe {
   string RecipeID = 1;
   string Sender = 2;
-  repeated string ItemIDs = 3;
+  string PaymentId = 3;
+  string PaymentMethod = 4;
+  repeated string ItemIDs = 5;
 }
 // ExecuteRecipeResponse is the response for executeRecipe
 message MsgExecuteRecipeResponse {
@@ -277,22 +276,6 @@ message MsgGoogleIAPGetPylons {
 
 // MsgGoogleIAPGetPylonsResponse is the response for get-pylons
 message MsgGoogleIAPGetPylonsResponse  {
-  string Message = 1;
-  string Status = 2;
-}
-
-// MsgStripeGetPylons defines a GetPylons message
-message MsgStripeGetPylons {
-  string ProductID = 1;
-  string PaymentId = 2;
-  string PaymentMethod = 3;
-  string ReceiptDataBase64 = 4;
-  string Signature = 5;
-  string Requester = 6;
-}
-
-// MsgStripeGetPylonsResponse is the response for get-pylons
-message MsgStripeGetPylonsResponse  {
   string Message = 1;
   string Status = 2;
 }

@@ -25,10 +25,10 @@ func TestGetExecution(t *testing.T) {
 	cbData := handlers.MockCookbook(tci, sender1)
 	// mock recipe
 	c2cRecipeData := handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
-		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, sender1)
+		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	execRcpResponse, err := handlers.MockExecution(tci, c2cRecipeData.RecipeID,
-		sender1,
+		sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card",
 		[]string{}, // empty itemIDs
 	)
 	require.True(t, err == nil, err)
@@ -98,11 +98,11 @@ func TestListExecution(t *testing.T) {
 	cbData := handlers.MockCookbook(tci, sender1)
 
 	recipeResp := handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
-		"recipe0001", cbData.CookbookID, sender1)
+		"recipe0001", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	_, err = handlers.MockExecution(
 		tci, recipeResp.RecipeID,
-		sender1,
+		sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card",
 		[]string{},
 	)
 	require.True(t, err == nil, err)
