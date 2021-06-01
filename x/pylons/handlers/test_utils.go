@@ -165,11 +165,10 @@ func MockExecution(
 	tci keeper.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
-	paymentId string,
-	paymentMethod string,
+	paymentInfo types.PaymentInfo,
 	itemIDs []string,
 ) (*types.MsgExecuteRecipeResponse, error) {
-	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), paymentId, paymentMethod, itemIDs)
+	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), paymentInfo, itemIDs)
 	result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err

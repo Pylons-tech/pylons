@@ -553,8 +553,10 @@ func TestCoinLock(t *testing.T) {
 					tci,
 					recipeData.RecipeID,
 					account1,
-					"pi_1DoShv2eZvKYlo2CqsROyFun",
-					"card",
+					types.PaymentInfo{
+						PayType:   "stripe",
+						PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+					},
 					[]string{item.ID},
 				)
 
@@ -613,12 +615,14 @@ func TestCoinLock(t *testing.T) {
 					0,
 					sender1,
 				)
-
+				payInfo := types.PaymentInfo{
+					PayType:   "stripe",
+					PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+				}
 				msg := types.NewMsgExecuteRecipe(
 					pylonInputRecipeData.RecipeID,
 					account1.String(),
-					"pi_1DoShv2eZvKYlo2CqsROyFun",
-					"card",
+					payInfo,
 					[]string{},
 				)
 				_, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)

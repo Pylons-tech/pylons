@@ -269,3 +269,9 @@ message Trade {
   bool Disabled = 10;
   bool Completed = 11;
 }
+
+
+message PaymentInfo {
+  string PayType = 1;
+  repeated StringParam Strings = 2 [(gogoproto.nullable) = false];
+}

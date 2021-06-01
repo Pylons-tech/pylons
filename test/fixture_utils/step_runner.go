@@ -817,11 +817,10 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	newByteValue = UpdateRecipeName(newByteValue, t)
 
 	var execType struct {
-		RecipeID      string
-		Sender        string
-		PaymentId     string
-		PaymentMethod string
-		ItemIDs       []string `json:"ItemIDs"`
+		RecipeID    string
+		Sender      string
+		PaymentInfo types.PaymentInfo `json:"PaymentInfo"`
+		ItemIDs     []string          `json:"ItemIDs"`
 	}
 
 	err := json.Unmarshal(newByteValue, &execType)
@@ -834,8 +833,7 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	sender, err := sdk.AccAddressFromBech32(execType.Sender)
 	t.MustNil(err, "error parsing sender address")
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
-
-	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.PaymentId, execType.PaymentMethod, ItemIDs)
+	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.PaymentInfo, ItemIDs)
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called

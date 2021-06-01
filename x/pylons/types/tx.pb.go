@@ -437,8 +437,6 @@ type MsgCreateRecipe struct {
 	Description   string            `protobuf:"bytes,9,opt,name=Description,proto3" json:"Description,omitempty"`
 	Entries       EntriesList       `protobuf:"bytes,10,opt,name=Entries,proto3" json:"Entries"`
 	ExtraInfo     string            `protobuf:"bytes,11,opt,name=ExtraInfo,proto3" json:"ExtraInfo,omitempty"`
-	PaymentId     string            `protobuf:"bytes,12,opt,name=Name,proto3" json:"PaymentId,omitempty"`
-	PaymentMethod string            `protobuf:"bytes,13,opt,name=Name,proto3" json:"PaymentMethod,omitempty"`
 }
 
 func (m *MsgCreateRecipe) Reset()         { *m = MsgCreateRecipe{} }
@@ -1184,11 +1182,10 @@ func (m *MsgEnableTradeResponse) GetStatus() string {
 
 // MsgExecuteRecipe defines a SetName message
 type MsgExecuteRecipe struct {
-	RecipeID      string   `protobuf:"bytes,1,opt,name=RecipeID,proto3" json:"RecipeID,omitempty"`
-	Sender        string   `protobuf:"bytes,2,opt,name=Sender,proto3" json:"Sender,omitempty"`
-	PaymentId     string   `protobuf:"bytes,3,opt,name=Sender,proto3" json:"PaymentId,omitempty"`
-	PaymentMethod string   `protobuf:"bytes,4,opt,name=Sender,proto3" json:"PaymentMethod,omitempty"`
-	ItemIDs       []string `protobuf:"bytes,5,rep,name=ItemIDs,proto3" json:"ItemIDs,omitempty"`
+	RecipeID string      `protobuf:"bytes,1,opt,name=RecipeID,proto3" json:"RecipeID,omitempty"`
+	Sender   string      `protobuf:"bytes,2,opt,name=Sender,proto3" json:"Sender,omitempty"`
+	PayInfo  PaymentInfo `protobuf:"bytes,3,opt,name=PayInfo,proto3" json:"PayInfo,omitempty"`
+	ItemIDs  []string    `protobuf:"bytes,4,rep,name=ItemIDs,proto3" json:"ItemIDs,omitempty"`
 }
 
 func (m *MsgExecuteRecipe) Reset()         { *m = MsgExecuteRecipe{} }
@@ -1236,6 +1233,13 @@ func (m *MsgExecuteRecipe) GetSender() string {
 		return m.Sender
 	}
 	return ""
+}
+
+func (m *MsgExecuteRecipe) GetPaymentInfo() PaymentInfo {
+	if m != nil {
+		return m.PayInfo
+	}
+	return PaymentInfo{}
 }
 
 func (m *MsgExecuteRecipe) GetItemIDs() []string {
@@ -4286,8 +4290,19 @@ func (m *MsgExecuteRecipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			copy(dAtA[i:], m.ItemIDs[iNdEx])
 			i = encodeVarintTx(dAtA, i, uint64(len(m.ItemIDs[iNdEx])))
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
+	}
+
+	if m.PayInfo.Size() > 0 {
+		size, err := m.PayInfo.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+		i--
+		dAtA[i] = 0x1a
 	}
 	if len(m.Sender) > 0 {
 		i -= len(m.Sender)
@@ -5682,6 +5697,10 @@ func (m *MsgExecuteRecipe) Size() (n int) {
 		n += 1 + l + sovTx(uint64(l))
 	}
 	l = len(m.Sender)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = m.PayInfo.Size()
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -9077,6 +9096,67 @@ func (m *MsgExecuteRecipe) Unmarshal(dAtA []byte) error {
 			m.Sender = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PaymentInfo", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PayInfo.PayType = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+			var stringLen1 uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen1 |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen1 := int(stringLen1)
+			if intStringLen1 < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex1 := iNdEx + intStringLen1
+			if postIndex1 < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex1 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PayInfo.PayParams = append(m.PayInfo.PayParams, string(dAtA[iNdEx:postIndex1]))
+
+			iNdEx = postIndex1
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ItemIDs", wireType)
 			}

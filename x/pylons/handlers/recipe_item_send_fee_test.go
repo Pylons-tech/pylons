@@ -69,8 +69,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 		checkItemAvailable  bool
 		checkItemTrasferFee bool
 		transferFee         int64
-		paymentId           string
-		paymentMethod       string
+		paymentInfo         types.PaymentInfo
 	}{
 		"additional item send fee check test": {
 			itemIDs:             []string{},
@@ -87,8 +86,10 @@ func TestRecipeItemTransferFee(t *testing.T) {
 			checkItemAvailable:  true,
 			checkItemTrasferFee: true,
 			transferFee:         1232,
-			paymentId:           "pi_1DoShv2eZvKYlo2CqsROyFun",
-			paymentMethod:       "card",
+			paymentInfo: types.PaymentInfo{
+				PayType:   "stripe",
+				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+			},
 		},
 		"additional item send fee check item upgrade test": {
 			itemIDs:             []string{},
@@ -102,8 +103,10 @@ func TestRecipeItemTransferFee(t *testing.T) {
 			showError:           false,
 			checkItemTrasferFee: true,
 			transferFee:         1232,
-			paymentId:           "pi_1DoShv2eZvKYlo2CqsROyFun",
-			paymentMethod:       "card",
+			paymentInfo: types.PaymentInfo{
+				PayType:   "stripe",
+				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+			},
 		},
 	}
 	for testName, tc := range cases {
@@ -126,7 +129,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 				}
 			}
 
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.paymentId, tc.paymentMethod, tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.paymentInfo, tc.itemIDs)
 			result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {

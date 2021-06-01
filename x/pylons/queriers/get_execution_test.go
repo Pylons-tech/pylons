@@ -28,7 +28,10 @@ func TestGetExecution(t *testing.T) {
 		"GET_EXECUTION_TEST_RECIPE", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	execRcpResponse, err := handlers.MockExecution(tci, c2cRecipeData.RecipeID,
-		sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card",
+		sender1, types.PaymentInfo{
+			PayType:   "stripe",
+			PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+		},
 		[]string{}, // empty itemIDs
 	)
 	require.True(t, err == nil, err)
@@ -102,7 +105,10 @@ func TestListExecution(t *testing.T) {
 
 	_, err = handlers.MockExecution(
 		tci, recipeResp.RecipeID,
-		sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card",
+		sender1, types.PaymentInfo{
+			PayType:   "stripe",
+			PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+		},
 		[]string{},
 	)
 	require.True(t, err == nil, err)

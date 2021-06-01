@@ -211,10 +211,10 @@ message MsgEnableTradeResponse  {
 message  MsgExecuteRecipe {
   string RecipeID = 1;
   string Sender = 2;
-  string PaymentId = 3;
-  string PaymentMethod = 4;
-  repeated string ItemIDs = 5;
-}
+  repeated PaymentInfo PaymentInfo = 3; 
+  repeated string ItemIDs = 4;
+} 
+
 // ExecuteRecipeResponse is the response for executeRecipe
 message MsgExecuteRecipeResponse {
   string Message = 1;

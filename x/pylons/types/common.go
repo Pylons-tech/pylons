@@ -26,6 +26,7 @@ type StringInputParamList []StringInputParam
 type WeightedOutputsList []WeightedOutputs
 
 type CoinInputList []CoinInput
+type paymentParamsList []paymentParams
 type ItemList []Item
 type ItemInputList []ItemInput
 type TradeItemInputList []TradeItemInput

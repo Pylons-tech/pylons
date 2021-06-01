@@ -20,8 +20,15 @@ func ExecuteRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
+		// payParams1 := types.GenPaymentParams("PaymentId", "pi_1DoShv2eZvKYlo2CqsROyFun")
+		// payParams2 := types.GenPaymentParams("PaymentMethod", "pm_card_visa")
+		payInfo := types.PaymentInfo{
+			PayType:   "stripe",
+			PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
+		}
+		msg := types.NewMsgExecuteRecipe("id0001", sender.String(), payInfo, []string{"alpha", "beta", "gamma"})
 
-		msg := types.NewMsgExecuteRecipe("id0001", sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "card", []string{"alpha", "beta", "gamma"})
+		//msg := types.NewMsgExecuteRecipe("id0001", sender.String(), types.PaymentInfo{"stripe", "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"}, []string{"alpha", "beta", "gamma"})
 
 		txf := tx.Factory{}.
 			WithChainID("testing").
