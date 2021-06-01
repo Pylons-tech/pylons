@@ -154,129 +154,84 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	cases := map[string]struct {
 		itemIDs      []string
 		rcpID        string
-		paymentInfo  types.PaymentInfo
 		sender       sdk.AccAddress
 		desiredError string
 		showError    bool
 	}{
 
 		"correct same item merge recipe": {
-			itemIDs: []string{initItemIDs[0], initItemIDs[1]},
-			rcpID:   knifeMergeRecipe.RecipeID,
-			sender:  sender1,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[0], initItemIDs[1]},
+			rcpID:        knifeMergeRecipe.RecipeID,
+			sender:       sender1,
 			desiredError: "",
 			showError:    false,
 		},
 		"wrong same item merge recipe": {
-			itemIDs: []string{initItemIDs[2], initItemIDs[2]},
-			rcpID:   shieldMergeRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[2], initItemIDs[2]},
+			rcpID:        shieldMergeRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "multiple use of same item as item inputs",
 			showError:    true,
 		},
 		"input item order change test": {
-			itemIDs: []string{initItemIDs[4], initItemIDs[3]},
-			rcpID:   diffItemMergeRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[4], initItemIDs[3]},
+			rcpID:        diffItemMergeRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: Name key value does not match",
 			showError:    true,
 		},
 		"double key is not available on the item": {
-			itemIDs: []string{initItemIDs[4]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[4]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: attack key is not available on the item",
 			showError:    true,
 		},
 		"double key range does not match": {
-			itemIDs: []string{initItemIDs[5]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[5]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: attack key range does not match",
 			showError:    true,
 		},
 		"long key is not available on the item": {
-			itemIDs: []string{initItemIDs[6]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[6]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: level key is not available on the item",
 			showError:    true,
 		},
 		"long key range does not match": {
-			itemIDs: []string{initItemIDs[7]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[7]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: level key range does not match",
 			showError:    true,
 		},
 		"string key is not available on the item": {
-			itemIDs: []string{initItemIDs[8]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[8]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: Type key is not available on the item",
 			showError:    true,
 		},
 		"string key value does not match": {
-			itemIDs: []string{initItemIDs[9]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[9]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: Type key value does not match",
 			showError:    true,
 		},
 		"item transfer fee does not match": {
-			itemIDs: []string{initItemIDs[10]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[10]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item does not match: item transfer fee does not match",
 			showError:    true,
 		},
 		"item is locked": {
-			itemIDs: []string{initItemIDs[11]},
-			rcpID:   personSleepRecipe.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[11]},
+			rcpID:        personSleepRecipe.RecipeID,
 			sender:       sender1,
 			desiredError: "[0]th item is locked: Item is owned by a trade",
 			showError:    true,
@@ -284,7 +239,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.paymentInfo, tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
@@ -352,22 +307,16 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 
 	_, err = tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &exmpRcpMsg)
 	require.True(t, err == nil, err)
-
 	cases := map[string]struct {
 		itemIDs      []string
 		rcpID        string
-		paymentInfo  types.PaymentInfo
 		sender       sdk.AccAddress
 		desiredError string
 		showError    bool
 	}{
 		"correct same item merge recipe": {
-			itemIDs: []string{initItemIDs[0]},
-			rcpID:   exmpRcpMsg.RecipeID,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
+			itemIDs:      []string{initItemIDs[0]},
+			rcpID:        exmpRcpMsg.RecipeID,
 			sender:       sender1,
 			desiredError: "",
 			showError:    false,
@@ -375,7 +324,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.paymentInfo, tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}

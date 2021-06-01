@@ -419,90 +419,6 @@ func (m *IntWeightRange) GetWeight() int64 {
 	return 0
 }
 
-// PaymentInfo is a wrapper struct for Item for recipes
-type PaymentInfo struct {
-	PayType   string   `protobuf:"bytes,1,opt,name=PayType,proto3" json:"PayType,omitempty"`
-	PayParams []string `protobuf:"bytes,2,rep,name=PayParams,proto3" json:"PayParams"`
-}
-
-type paymentParams struct {
-	name  string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	value string `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
-}
-
-func (m *paymentParams) Reset()         { *m = paymentParams{} }
-func (m *paymentParams) String() string { return proto.CompactTextString(m) }
-func (*paymentParams) ProtoMessage()    {}
-func (*paymentParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f39a401e48d8a838, []int{7}
-}
-func (m *paymentParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *paymentParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_paymentParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *paymentParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_paymentParams.Merge(m, src)
-}
-func (m *paymentParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *paymentParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_paymentParams.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_paymentParams proto.InternalMessageInfo
-
-func (m *PaymentInfo) Reset()         { *m = PaymentInfo{} }
-func (m *PaymentInfo) String() string { return proto.CompactTextString(m) }
-func (*PaymentInfo) ProtoMessage()    {}
-func (*PaymentInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f39a401e48d8a838, []int{7}
-}
-func (m *PaymentInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *PaymentInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PaymentInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *PaymentInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PaymentInfo.Merge(m, src)
-}
-func (m *PaymentInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *PaymentInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_PaymentInfo.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_PaymentInfo proto.InternalMessageInfo
-
-func (m *PaymentInfo) GetPayType() string {
-	if m != nil {
-		return m.PayType
-	}
-	return ""
-}
-
 // StringInputParam describes the bounds on an item input/output parameter of type string
 type StringInputParam struct {
 	Key string `protobuf:"bytes,1,opt,name=Key,proto3" json:"Key,omitempty"`
@@ -2662,67 +2578,6 @@ func (m *IntWeightRange) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *PaymentInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *PaymentInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *PaymentInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.PayType) > 0 {
-		i -= len(m.PayType)
-		copy(dAtA[i:], m.PayType)
-		i = encodeVarintPylons(dAtA, i, uint64(len(m.PayType)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.PayParams) > 0 {
-		for iNdEx := len(m.PayParams) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.PayParams[iNdEx])
-			copy(dAtA[i:], m.PayParams[iNdEx])
-			i = encodeVarintPylons(dAtA, i, uint64(len(m.PayParams[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *paymentParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.name) > 0 {
-		i -= len(m.name)
-		copy(dAtA[i:], m.name)
-		i = encodeVarintPylons(dAtA, i, uint64(len(m.name)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.value) > 0 {
-		i -= len(m.value)
-		copy(dAtA[i:], m.value)
-		i = encodeVarintPylons(dAtA, i, uint64(len(m.value)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *StringInputParam) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -4387,42 +4242,6 @@ func (m *StringInputParam) Size() (n int) {
 	return n
 }
 
-func (m *PaymentInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PayType)
-	if l > 0 {
-		n += 1 + l + sovPylons(uint64(l))
-	}
-	if len(m.PayParams) > 0 {
-		for _, e := range m.PayParams {
-			l = len(e)
-			n += 1 + l + sovPylons(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *paymentParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.name)
-	if l > 0 {
-		n += 1 + l + sovPylons(uint64(l))
-	}
-	l = len(m.value)
-	if l > 0 {
-		n += 1 + l + sovPylons(uint64(l))
-	}
-	return n
-}
-
 func (m *FeeInputParam) Size() (n int) {
 	if m == nil {
 		return 0
@@ -5218,10 +5037,7 @@ func (m *EntriesList) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -5322,10 +5138,7 @@ func (m *CoinInput) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -5471,10 +5284,7 @@ func (m *CoinOutput) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -5624,10 +5434,7 @@ func (m *DoubleInputParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -5764,10 +5571,7 @@ func (m *DoubleWeightRange) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -5949,10 +5753,7 @@ func (m *LongParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -6059,10 +5860,7 @@ func (m *IntWeightRange) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -6176,10 +5974,7 @@ func (m *StringInputParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -6267,10 +6062,7 @@ func (m *FeeInputParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -6390,126 +6182,7 @@ func (m *LongInputParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *PaymentInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPylons
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PaymentInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PaymentInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Doubles", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPylons
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPylons
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PayType = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Strings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPylons
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPylons
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-
-			m.PayParams = append(m.PayParams, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPylons(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -6661,10 +6334,7 @@ func (m *ConditionList) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -6914,10 +6584,7 @@ func (m *ItemInput) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -7031,127 +6698,7 @@ func (m *WeightedOutputs) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *paymentParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPylons
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: StringInputParam: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: StringInputParam: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPylons
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPylons
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPylons
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPylons
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.value = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPylons(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -7331,10 +6878,7 @@ func (m *StringParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -7516,10 +7060,7 @@ func (m *DoubleParam) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -7722,10 +7263,7 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -7960,10 +7498,7 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -8134,10 +7669,7 @@ func (m *ItemModifyParams) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -8539,10 +8071,7 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -8658,10 +8187,7 @@ func (m *DoubleKeyValue) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -8762,10 +8288,7 @@ func (m *LongKeyValue) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -8879,10 +8402,7 @@ func (m *StringKeyValue) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -8997,10 +8517,7 @@ func (m *TradeItemInput) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -9116,10 +8633,7 @@ func (m *LockedCoinDescribe) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -9329,10 +8843,7 @@ func (m *ShortenRecipe) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -9649,10 +9160,7 @@ func (m *Execution) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -9996,10 +9504,7 @@ func (m *Cookbook) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -10447,10 +9952,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {
@@ -10836,10 +10338,7 @@ func (m *Trade) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthPylons
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthPylons
 			}
 			if (iNdEx + skippy) > l {

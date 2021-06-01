@@ -38,7 +38,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	// 	0,
 	// 	sender1,
 	// )
-
 	// mock 1 input 1 output recipe
 	usdInputRecipeData := MockRecipe(
 		tci, "existing recipe",
@@ -129,7 +128,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		checkItemOrCoinAvailable bool
 		checkPylonDistribution   bool
 		pylonsLLCDistribution    int64
-		paymentInfo              types.PaymentInfo
 	}{
 		// "insufficient coin balance check": {
 		// 	itemIDs:            []string{},
@@ -307,10 +305,6 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			checkItemAvailable:     false,
 			checkPylonDistribution: true,
 			pylonsLLCDistribution:  100 * config.Config.Fee.RecipePercent / 100,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 	}
 	for testName, tc := range cases {
@@ -329,7 +323,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 				}
 
 			}
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.paymentInfo, tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {
@@ -422,7 +416,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 		retryExecution      bool
 		retryResMessage     string
 		desiredUpgradedName string
-		paymentInfo         types.PaymentInfo
 	}{
 		"coin to coin recipe execution test": {
 			rcpID:            c2cRecipeData.RecipeID,
@@ -432,10 +425,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			payToComplete:    false,
 			addHeight:        15,
 			expectedMessage:  "successfully completed the execution",
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 		"coin to coin early pay recipe execution fail due to insufficient balance": {
 			rcpID:            c2cRecipeData.RecipeID,
@@ -445,10 +434,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			payToComplete:    true,
 			expectError:      true,
 			expectedMessage:  "insufficient balance to complete the execution",
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 		"coin to coin early pay recipe execution test": {
 			rcpID:            c2cRecipeData.RecipeID,
@@ -458,10 +443,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			payToComplete:    true,
 			expectedMessage:  "successfully paid to complete the execution",
 			coinAddition:     300,
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 		"item upgrade recipe success execution test": {
 			rcpID:               knifeUpgradeRecipeData.RecipeID,
@@ -472,10 +453,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			addHeight:           3,
 			expectedMessage:     "successfully completed the execution",
 			desiredUpgradedName: "KnifeV2",
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 		"more than 1 item input recipe success execution test": {
 			rcpID:            knifeMergeRecipeData.RecipeID,
@@ -485,10 +462,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			payToComplete:    false,
 			addHeight:        3,
 			expectedMessage:  "successfully completed the execution",
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 		"item generation recipe success execution test": {
 			rcpID:           knifeBuyerRecipeData.RecipeID,
@@ -499,10 +472,6 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 			expectedMessage: "successfully completed the execution",
 			retryExecution:  true,
 			retryResMessage: "execution already completed",
-			paymentInfo: types.PaymentInfo{
-				PayType:   "stripe",
-				PayParams: []string{"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"},
-			},
 		},
 	}
 	for testName, tc := range cases {
@@ -521,7 +490,7 @@ func TestHandlerMsgCheckExecution(t *testing.T) {
 
 			execRcpResponse, err := MockExecution(tci, tc.rcpID,
 				tc.sender,
-				tc.paymentInfo,
+				"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa",
 				tc.itemIDs,
 			)
 			require.NoError(t, err)

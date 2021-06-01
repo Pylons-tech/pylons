@@ -395,12 +395,13 @@ func (msg MsgUpdateRecipe) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgExecuteRecipe a constructor for ExecuteCookbook msg
-func NewMsgExecuteRecipe(recipeID string, sender string, PayInfo PaymentInfo, itemIDs []string) MsgExecuteRecipe {
+func NewMsgExecuteRecipe(recipeID string, sender string, paymentId string, payMethod string, itemIDs []string) MsgExecuteRecipe {
 	msg := MsgExecuteRecipe{
-		RecipeID: recipeID,
-		Sender:   sender,
-		PayInfo:  PayInfo,
-		ItemIDs:  itemIDs,
+		RecipeID:      recipeID,
+		Sender:        sender,
+		PaymentId:     paymentId,
+		PaymentMethod: payMethod,
+		ItemIDs:       itemIDs,
 	}
 	return msg
 }

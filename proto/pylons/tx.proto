@@ -211,8 +211,9 @@ message MsgEnableTradeResponse  {
 message  MsgExecuteRecipe {
   string RecipeID = 1;
   string Sender = 2;
-  repeated PaymentInfo PaymentInfo = 3; 
-  repeated string ItemIDs = 4;
+  string PaymentId = 3; 
+  string PaymentMethod = 4;
+  repeated string ItemIDs = 5;
 } 
 
 // ExecuteRecipeResponse is the response for executeRecipe

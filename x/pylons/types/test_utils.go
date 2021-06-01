@@ -12,15 +12,6 @@ func GenCoinInputList(name string, count int64) CoinInputList {
 	}
 }
 
-func GenPaymentParams(name string, value string) paymentParamsList {
-	return paymentParamsList{
-		{
-			name:  name,
-			value: value,
-		},
-	}
-}
-
 // GenItemInputList is a utility function to genearte item input list
 func GenItemInputList(names ...string) ItemInputList {
 	iiL := ItemInputList{}

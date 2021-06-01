@@ -80,37 +80,41 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
 			}
 
-			if msg.PayInfo.PayType == "stripe" {
-				stripe.Key = string(stripeSecKeyBytes)
-				// stripe_params := &stripe.PaymentIntentConfirmParams{
-				// 	PaymentMethod: stripe.String(msg.PaymentMethod),
-				// }
-				// payIntentResult, _ := paymentintent.Confirm(
-				// 	msg.PaymentId,
-				// 	stripe_params,
-				// )
-				payIntentResult, _ := paymentintent.Get(
-					msg.PayInfo.PayParams[0],
-					nil,
-				)
-				if payIntentResult.Status != "succeeded" {
-					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
-				}
+			//if msg.PaymentInfo[0].PayType == "stripe" {
+			stripe.Key = string(stripeSecKeyBytes)
+			// stripe_params := &stripe.PaymentIntentConfirmParams{
+			// 	PaymentMethod: stripe.String(msg.PaymentMethod),
+			// }
+			// payIntentResult, _ := paymentintent.Confirm(
+			// 	msg.PaymentId,
+			// 	stripe_params,
+			// )
 
-				if inp.Count != payIntentResult.Amount/100 {
-					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
-				}
-				if k.HasPaymentForStripe(sdkCtx, msg.PayInfo.PayParams[0]) {
-					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("payment id for Stripe is already being used"))
-				}
-
-				// Register paymentId for Stripe before giving coins
-				err = k.RegisterPaymentForStripe(sdkCtx, msg.PayInfo.PayParams[0])
-
-				if err != nil {
-					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering payment id for Stripe"))
-				}
+			if msg.PaymentId == "" {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("no paymentId error!"))
 			}
+			payIntentResult, _ := paymentintent.Get(
+				msg.PaymentId,
+				nil,
+			)
+			if payIntentResult.Status != "succeeded" {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
+			}
+
+			if inp.Count != payIntentResult.Amount/100 {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
+			}
+			if k.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("payment id for Stripe is already being used"))
+			}
+
+			// Register paymentId for Stripe before giving coins
+			err = k.RegisterPaymentForStripe(sdkCtx, msg.PaymentId)
+
+			if err != nil {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error registering payment id for Stripe"))
+			}
+			//}
 
 			cl = append(cl, sdk.NewCoin(types.Pylon, sdk.NewInt(inp.Count)))
 		} else {
