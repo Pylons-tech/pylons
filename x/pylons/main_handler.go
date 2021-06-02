@@ -70,6 +70,10 @@ func NewHandler(keeper keeper.Keeper) sdk.Handler {
 			res, err := msgServer.ExecuteRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
+		case *types.MsgStripeCheckout:
+			res, err := msgServer.StripeCheckout(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgDisableRecipe:
 			res, err := msgServer.DisableRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)

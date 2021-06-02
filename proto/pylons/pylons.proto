@@ -270,3 +270,8 @@ message Trade {
   bool Completed = 11;
 } 
  
+message StripePrice {
+  string Product = 1;  
+  string UnitAmount = 2;
+  string Currency = 3;
+}

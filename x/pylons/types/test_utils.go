@@ -133,6 +133,14 @@ func GenItemOnlyEntryRand(ID string, itemName string) ItemOutput {
 	)
 }
 
+func GenMsgStripePrice(Product string, UnitAmount string, Currency string) StripePrice {
+	return NewStripePrice(
+		Product,
+		UnitAmount,
+		Currency,
+	)
+}
+
 // GenOneOutput is a function to generate output with one from entry list
 func GenOneOutput(entryIDs ...string) WeightedOutputsList {
 	wol := WeightedOutputsList{}

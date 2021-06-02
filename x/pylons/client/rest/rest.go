@@ -2,6 +2,7 @@ package rest
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/client/rest/txbuilder"
 	"github.com/cosmos/cosmos-sdk/client"
 
@@ -42,6 +43,8 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		txbuilder.CreateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/execute_recipe/tx_build/", storeName),
 		txbuilder.ExecuteRecipeTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_checkout/tx_build/", storeName),
+		txbuilder.StripeCheckoutTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_recipe/tx_build/", storeName),
 		txbuilder.UpdateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/enable_recipe/tx_build/", storeName),

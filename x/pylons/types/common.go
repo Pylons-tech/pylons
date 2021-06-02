@@ -53,6 +53,10 @@ type ExecuteRecipeScheduleOutput struct {
 	ExecID string
 }
 
+type StripeCheckoutScheduleOutput struct {
+	SessionID string
+}
+
 // ExecuteRecipeSerialize is a struct for execute recipe result serialization
 type ExecuteRecipeSerialize struct {
 	Type   string `json:"type"`   // COIN or ITEM
@@ -452,6 +456,14 @@ func NewItemOutput(ID string, Doubles DoubleParamList, Longs LongParamList, Stri
 		Longs:       Longs,
 		Strings:     Strings,
 		TransferFee: TransferFee,
+	}
+}
+
+func NewStripePrice(Product string, UnitAmount string, Currency string) StripePrice {
+	return StripePrice{
+		Product:    Product,
+		UnitAmount: UnitAmount,
+		Currency:   Currency,
 	}
 }
 

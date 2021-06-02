@@ -837,6 +837,29 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.PaymentId, execType.PaymentMethod, ItemIDs)
 }
 
+// StripeCheckoutMsgFromRef collect execute recipe msg from reference string
+func StripeCheckoutMsgFromRef(ref string, t *testing.T) types.MsgStripeCheckout {
+	byteValue := ReadFile(ref, t)
+	// translate sender from account name to account address
+	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
+	// translate recipe name to recipe id
+	newByteValue = UpdateRecipeName(newByteValue, t)
+
+	var execType struct {
+		StripeKey     string
+		PaymentMethod string
+		Price         *types.StripePrice
+		Sender        string
+	}
+	err := json.Unmarshal(newByteValue, &execType)
+	t.WithFields(testing.Fields{
+		"execType":  testutils.AminoCodecFormatter(execType),
+		"new_bytes": string(newByteValue),
+	}).MustNil(err, "error reading using json.Unmarshal")
+
+	return types.NewMsgStripeCheckout(execType.StripeKey, execType.PaymentMethod, execType.Price, execType.Sender)
+}
+
 // RunExecuteRecipe is executed when an action "execute_recipe" is called
 func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	// TODO should check item ID is returned
@@ -888,6 +911,53 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			t.WithFields(testing.Fields{
 				"output": string(result.Output),
 			}).Debug("straight execution result")
+		}
+	}
+}
+
+func RunStripeCheckout(step FixtureStep, t *testing.T) {
+	// TODO should check item ID is returned
+	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
+
+	if step.ParamsRef != "" {
+		execMsg := StripeCheckoutMsgFromRef(step.ParamsRef, t)
+		err := execMsg.ValidateBasic()
+		if err != nil {
+			TxBroadcastErrorCheck(err, step, t)
+			return
+		}
+
+		WaitForNextBlockWithErrorCheck(t)
+		tci := testutils.GetTestCoinInput()
+		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+		result, err := tci.PlnH.StripeCheckout(sdk.WrapSDKContext(tci.Ctx), &execMsg)
+
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+			return
+		}
+
+		t.MustTrue(result != nil, "result should not be empty", err)
+		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
+
+		if result.Message == "scheduled the stripe_checkout" { // delayed execution
+			var scheduleRes types.StripeCheckoutScheduleOutput
+
+			err := json.Unmarshal([]byte(result.SessionID), &scheduleRes)
+			t.WithFields(testing.Fields{
+				"response_output": string(result.SessionID),
+			}).MustNil(err, "error decoding raw json")
+			execIDRWMutex.Lock()
+			execIDs[step.ID] = scheduleRes.SessionID
+			execIDRWMutex.Unlock()
+
+			t.WithFields(testing.Fields{
+				"session_id": scheduleRes.SessionID,
+			}).Debug("scheduled stripe_checkout")
+		} else { // straight execution
+			t.WithFields(testing.Fields{
+				"Status": string(result.Status),
+			}).Debug("straight stripe_checkout result")
 		}
 	}
 }

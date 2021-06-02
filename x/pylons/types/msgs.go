@@ -406,6 +406,16 @@ func NewMsgExecuteRecipe(recipeID string, sender string, paymentId string, payMe
 	return msg
 }
 
+func NewMsgStripeCheckout(stripeKey string, paymentMethod string, price *StripePrice, sender string) MsgStripeCheckout {
+	msg := MsgStripeCheckout{
+		StripeKey:     stripeKey,
+		PaymentMethod: paymentMethod,
+		Price:         price,
+		Sender:        sender,
+	}
+	return msg
+}
+
 // Route should return the name of the module
 func (msg MsgExecuteRecipe) Route() string { return RouterKey }
 
@@ -429,6 +439,35 @@ func (msg MsgExecuteRecipe) GetSignBytes() []byte {
 		panic(err)
 	}
 	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCheckout) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCheckout) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCheckout) Route() string { return RouterKey }
+
+func (msg MsgStripeCheckout) Type() string { return "stripe_checkout" }
+
+func (msg MsgStripeCheckout) ValidateBasic() error {
+
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	}
+
+	return nil
 }
 
 // GetSigners gets the signer who should have signed the message

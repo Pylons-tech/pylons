@@ -46,6 +46,7 @@ func RegisterDefaultActionRunners() {
 	RegisterActionRunner("enable_recipe", RunEnableRecipe)
 	RegisterActionRunner("disable_recipe", RunDisableRecipe)
 	RegisterActionRunner("execute_recipe", RunExecuteRecipe)
+	RegisterActionRunner("stripe_checkout", RunStripeCheckout)
 	RegisterActionRunner("check_execution", RunCheckExecution)
 	RegisterActionRunner("create_trade", RunCreateTrade)
 	RegisterActionRunner("fulfill_trade", RunFulfillTrade)

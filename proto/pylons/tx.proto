@@ -38,6 +38,8 @@ service Msg {
   // ExecuteRecipe is used to execute a recipe
   rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
 
+  rpc StripeCheckout(MsgStripeCheckout) returns (MsgStripeCheckoutResponse);
+
   // DisableRecipe is used to disable recipe by a developer
   rpc DisableRecipe(MsgDisableRecipe) returns (MsgDisableRecipeResponse);
 
@@ -353,6 +355,34 @@ message MsgUpdateRecipe {
 // UpdateRecipeResponse is a struct to control update recipe response
 message MsgUpdateRecipeResponse {
   string RecipeID = 1 [(gogoproto.jsontag) = "RecipeID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeProduct {
+  string Name = 1;   
+}
+
+message MsgStripePrice {
+  string Product = 1;  
+  string UnitAmount = 2;
+  string Currency = 3;
+}
+
+message MsgStripeCustomer {
+  string Email = 1; 
+  string PaymentMethod = 2; 
+}
+
+message MsgStripeCheckout{
+  string StripeKey = 1;
+  string PaymentMethod = 2;
+  StripePrice Price = 3;
+  string Sender = 4;
+}
+ 
+message MsgStripeCheckoutResponse  {
+  string SessionID = 1 [(gogoproto.jsontag) = "SessionID"];
   string Message = 2;
   string Status = 3;
 }
