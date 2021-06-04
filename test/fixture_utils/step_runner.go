@@ -837,13 +837,13 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.PaymentId, execType.PaymentMethod, ItemIDs)
 }
 
-// StripeCheckoutMsgFromRef collect execute recipe msg from reference string
+// StripeCheckoutMsgFromRef collect checkout stripe msg from reference string
 func StripeCheckoutMsgFromRef(ref string, t *testing.T) types.MsgStripeCheckout {
 	byteValue := ReadFile(ref, t)
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 	// translate recipe name to recipe id
-	newByteValue = UpdateRecipeName(newByteValue, t)
+	newByteValue = UpdateRecipeName(newByteValue, t) //???
 
 	var execType struct {
 		StripeKey     string
@@ -858,6 +858,61 @@ func StripeCheckoutMsgFromRef(ref string, t *testing.T) types.MsgStripeCheckout 
 	}).MustNil(err, "error reading using json.Unmarshal")
 
 	return types.NewMsgStripeCheckout(execType.StripeKey, execType.PaymentMethod, execType.Price, execType.Sender)
+}
+
+// StripeCreateProductMsgFromRef collect create product msg from reference string
+func StripeCreateProductMsgFromRef(ref string, t *testing.T) types.MsgStripeCreateProduct {
+	byteValue := ReadFile(ref, t)
+	// translate sender from account name to account address
+	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
+	// translate recipe name to recipe id
+	newByteValue = UpdateRecipeName(newByteValue, t) //???
+
+	var execType types.MsgStripeCreateProduct
+
+	err := json.Unmarshal(newByteValue, &execType)
+	t.WithFields(testing.Fields{
+		"execType":  testutils.AminoCodecFormatter(execType),
+		"new_bytes": string(newByteValue),
+	}).MustNil(err, "error reading using json.Unmarshal")
+
+	return types.NewMsgStripeCreateProduct(execType.StripeKey, execType.Name, execType.Description, execType.Images, execType.StatementDescriptor, execType.UnitLabel, execType.Sender)
+}
+
+// StripeCreatePriceMsgFromRef collect create price msg from reference string
+func StripeCreatePriceMsgFromRef(ref string, t *testing.T) types.MsgStripeCreatePrice {
+	byteValue := ReadFile(ref, t)
+	// translate sender from account name to account address
+	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
+	// translate recipe name to recipe id
+	newByteValue = UpdateRecipeName(newByteValue, t) //???
+
+	var execType types.MsgStripeCreatePrice
+
+	err := json.Unmarshal(newByteValue, &execType)
+	t.WithFields(testing.Fields{
+		"execType":  testutils.AminoCodecFormatter(execType),
+		"new_bytes": string(newByteValue),
+	}).MustNil(err, "error reading using json.Unmarshal")
+	return types.NewMsgStripeCreatePrice(execType.StripeKey, execType.Product, execType.Amount, execType.Currency, execType.Description, execType.Sender)
+}
+
+// StripeCreateSkuMsgFromRef collect create sku msg from reference string
+func StripeCreateSkuMsgFromRef(ref string, t *testing.T) types.MsgStripeCreateSku {
+	byteValue := ReadFile(ref, t)
+	// translate sender from account name to account address
+	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
+	// translate recipe name to recipe id
+	newByteValue = UpdateRecipeName(newByteValue, t) //???
+
+	var execType types.MsgStripeCreateSku
+
+	err := json.Unmarshal(newByteValue, &execType)
+	t.WithFields(testing.Fields{
+		"execType":  testutils.AminoCodecFormatter(execType),
+		"new_bytes": string(newByteValue),
+	}).MustNil(err, "error reading using json.Unmarshal")
+	return types.NewMsgStripeCreateSku(execType.StripeKey, execType.Product, execType.Attributes, execType.Price, execType.Currency, execType.Inventory, execType.Sender)
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called
@@ -958,6 +1013,147 @@ func RunStripeCheckout(step FixtureStep, t *testing.T) {
 			t.WithFields(testing.Fields{
 				"Status": string(result.Status),
 			}).Debug("straight stripe_checkout result")
+		}
+	}
+}
+
+func RunStripeCreateProduct(step FixtureStep, t *testing.T) {
+	// TODO should check item ID is returned
+	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
+
+	if step.ParamsRef != "" {
+		execMsg := StripeCreateProductMsgFromRef(step.ParamsRef, t)
+		err := execMsg.ValidateBasic()
+		if err != nil {
+			TxBroadcastErrorCheck(err, step, t)
+			return
+		}
+
+		WaitForNextBlockWithErrorCheck(t)
+		tci := testutils.GetTestCoinInput()
+		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+		result, err := tci.PlnH.StripeCreateProduct(sdk.WrapSDKContext(tci.Ctx), &execMsg)
+
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+			return
+		}
+
+		t.MustTrue(result != nil, "result should not be empty", err)
+		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
+
+		if result.Message == "scheduled the stripe_create_product" { // delayed execution
+			var scheduleRes types.StripeCreateProductScheduleOutput
+
+			err := json.Unmarshal([]byte(result.ProductID), &scheduleRes)
+			t.WithFields(testing.Fields{
+				"response_output": string(result.ProductID),
+			}).MustNil(err, "error decoding raw json")
+			execIDRWMutex.Lock()
+			execIDs[step.ID] = scheduleRes.ProductID
+			execIDRWMutex.Unlock()
+
+			t.WithFields(testing.Fields{
+				"session_id": scheduleRes.ProductID,
+			}).Debug("scheduled stripe_create_product")
+		} else { // straight execution
+			t.WithFields(testing.Fields{
+				"Status": string(result.Status),
+			}).Debug("straight stripe_create_product result")
+		}
+	}
+}
+
+func RunStripeCreatePrice(step FixtureStep, t *testing.T) {
+	// TODO should check item ID is returned
+	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
+
+	if step.ParamsRef != "" {
+		execMsg := StripeCreatePriceMsgFromRef(step.ParamsRef, t)
+		err := execMsg.ValidateBasic()
+		if err != nil {
+			TxBroadcastErrorCheck(err, step, t)
+			return
+		}
+
+		WaitForNextBlockWithErrorCheck(t)
+		tci := testutils.GetTestCoinInput()
+		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+		result, err := tci.PlnH.StripeCreatePrice(sdk.WrapSDKContext(tci.Ctx), &execMsg)
+
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+			return
+		}
+
+		t.MustTrue(result != nil, "result should not be empty", err)
+		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
+
+		if result.Message == "scheduled the stripe_create_price" { // delayed execution
+			var scheduleRes types.StripeCreatePriceScheduleOutput
+
+			err := json.Unmarshal([]byte(result.PriceID), &scheduleRes)
+			t.WithFields(testing.Fields{
+				"response_output": string(result.PriceID),
+			}).MustNil(err, "error decoding raw json")
+			execIDRWMutex.Lock()
+			execIDs[step.ID] = scheduleRes.PriceID
+			execIDRWMutex.Unlock()
+
+			t.WithFields(testing.Fields{
+				"session_id": scheduleRes.PriceID,
+			}).Debug("scheduled stripe_create_price")
+		} else { // straight execution
+			t.WithFields(testing.Fields{
+				"Status": string(result.Status),
+			}).Debug("straight stripe_create_price result")
+		}
+	}
+}
+
+func RunStripeCreateSku(step FixtureStep, t *testing.T) {
+	// TODO should check item ID is returned
+	// TODO when items are generated, rather than returning whole should return only ID [if multiple, array of item IDs]
+
+	if step.ParamsRef != "" {
+		execMsg := StripeCreateSkuMsgFromRef(step.ParamsRef, t)
+		err := execMsg.ValidateBasic()
+		if err != nil {
+			TxBroadcastErrorCheck(err, step, t)
+			return
+		}
+
+		WaitForNextBlockWithErrorCheck(t)
+		tci := testutils.GetTestCoinInput()
+		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+		result, err := tci.PlnH.StripeCreateSku(sdk.WrapSDKContext(tci.Ctx), &execMsg)
+
+		TxErrorLogCheck(err, step.Output.TxResult.ErrorLog, t)
+		if len(step.Output.TxResult.ErrorLog) > 0 {
+			return
+		}
+
+		t.MustTrue(result != nil, "result should not be empty", err)
+		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
+
+		if result.Message == "scheduled the stripe_create_sku" { // delayed execution
+			var scheduleRes types.StripeCreateSkuScheduleOutput
+
+			err := json.Unmarshal([]byte(result.SKUID), &scheduleRes)
+			t.WithFields(testing.Fields{
+				"response_output": string(result.SKUID),
+			}).MustNil(err, "error decoding raw json")
+			execIDRWMutex.Lock()
+			execIDs[step.ID] = scheduleRes.SKUID
+			execIDRWMutex.Unlock()
+
+			t.WithFields(testing.Fields{
+				"session_id": scheduleRes.SKUID,
+			}).Debug("scheduled stripe_create_sku")
+		} else { // straight execution
+			t.WithFields(testing.Fields{
+				"Status": string(result.Status),
+			}).Debug("straight stripe_create_sku result")
 		}
 	}
 }

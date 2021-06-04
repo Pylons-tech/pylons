@@ -45,6 +45,12 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		txbuilder.ExecuteRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_checkout/tx_build/", storeName),
 		txbuilder.StripeCheckoutTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product/tx_build/", storeName),
+		txbuilder.StripeCreateProductTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_price/tx_build/", storeName),
+		txbuilder.StripeCreatePriceTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_sku/tx_build/", storeName),
+		txbuilder.StripeCreateSkuTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_recipe/tx_build/", storeName),
 		txbuilder.UpdateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/enable_recipe/tx_build/", storeName),

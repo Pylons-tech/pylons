@@ -133,11 +133,14 @@ func GenItemOnlyEntryRand(ID string, itemName string) ItemOutput {
 	)
 }
 
-func GenMsgStripePrice(Product string, UnitAmount string, Currency string) StripePrice {
+func GenMsgStripePrice(Amount int64, Currency string, Description string, Images []string, Name string, Quantity int64) StripePrice {
 	return NewStripePrice(
-		Product,
-		UnitAmount,
+		Amount,
 		Currency,
+		Description,
+		Images,
+		Name,
+		Quantity,
 	)
 }
 

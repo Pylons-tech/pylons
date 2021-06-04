@@ -416,6 +416,44 @@ func NewMsgStripeCheckout(stripeKey string, paymentMethod string, price *StripeP
 	return msg
 }
 
+func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string, Images []string, StatementDescriptor string, UnitLabel string, Sender string) MsgStripeCreateProduct {
+	msg := MsgStripeCreateProduct{
+		StripeKey:           StripeKey,
+		Name:                Name,
+		Description:         Description,
+		Images:              Images,
+		StatementDescriptor: StatementDescriptor,
+		UnitLabel:           UnitLabel,
+		Sender:              Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCreatePrice(StripeKey string, Product string, Amount string, Currency string, Description string, Sender string) MsgStripeCreatePrice {
+	msg := MsgStripeCreatePrice{
+		StripeKey:   StripeKey,
+		Product:     Product,
+		Amount:      Amount,
+		Currency:    Currency,
+		Description: Description,
+		Sender:      Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCreateSku(StripeKey string, Product string, Attributes StringKeyValueList, Price int64, Currency string, Inventory *StripeInventory, Sender string) MsgStripeCreateSku {
+	msg := MsgStripeCreateSku{
+		StripeKey:  StripeKey,
+		Product:    Product,
+		Attributes: Attributes,
+		Price:      Price,
+		Currency:   Currency,
+		Inventory:  Inventory,
+		Sender:     Sender,
+	}
+	return msg
+}
+
 // Route should return the name of the module
 func (msg MsgExecuteRecipe) Route() string { return RouterKey }
 
@@ -439,6 +477,93 @@ func (msg MsgExecuteRecipe) GetSignBytes() []byte {
 		panic(err)
 	}
 	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateProduct) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateProduct) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreateProduct) Route() string { return RouterKey }
+
+func (msg MsgStripeCreateProduct) Type() string { return "stripe_create_product" }
+
+func (msg MsgStripeCreateProduct) ValidateBasic() error {
+
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	}
+
+	return nil
+}
+
+func (msg MsgStripeCreatePrice) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreatePrice) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreatePrice) Route() string { return RouterKey }
+
+func (msg MsgStripeCreatePrice) Type() string { return "stripe_create_price" }
+
+func (msg MsgStripeCreatePrice) ValidateBasic() error {
+
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	}
+
+	return nil
+}
+
+func (msg MsgStripeCreateSku) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateSku) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreateSku) Route() string { return RouterKey }
+
+func (msg MsgStripeCreateSku) Type() string { return "stripe_create_sku" }
+
+func (msg MsgStripeCreateSku) ValidateBasic() error {
+
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	}
+
+	return nil
 }
 
 func (msg MsgStripeCheckout) GetSignBytes() []byte {

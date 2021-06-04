@@ -13,18 +13,15 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
 
-// StripeCheckoutTxBuilder returns the fixtures which can be used to create a execute recipe transaction
-func StripeCheckoutTxBuilder(cliCtx client.Context) http.HandlerFunc {
+// StripeCreateProductTxBuilder returns the fixtures which can be used to create a execute recipe transaction
+func StripeCreateProductTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 
 		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}
-
-		mStripePrice := types.GenMsgStripePrice(500, "USD", "Description", nil, "Name", 1)
-		msg := types.NewMsgStripeCheckout("Stripe_Key", "pm_card_visa", &mStripePrice, sender.String())
-
+		msg := types.NewMsgStripeCreateProduct("Stripe_key", "Name", "Description", nil, "StatementDescriptor", "UnitLabel", sender.String())
 		txf := tx.Factory{}.
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)

@@ -38,7 +38,17 @@ service Msg {
   // ExecuteRecipe is used to execute a recipe
   rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
 
+  // StripeCheckout is used to checkout stripe
   rpc StripeCheckout(MsgStripeCheckout) returns (MsgStripeCheckoutResponse);
+
+  // StripeCreateProduct is used to create product of stripe
+  rpc StripeCreateProduct(MsgStripeCreateProduct) returns (MsgStripeCreateProductResponse);
+
+  // StripeCreatePrice is used to create price of stripe
+  rpc StripeCreatePrice(MsgStripeCreatePrice) returns (MsgStripeCreatePriceResponse);
+
+  // StripeCreateSKU is used to create sku of stripe
+  rpc StripeCreateSku(MsgStripeCreateSku) returns (MsgStripeCreateSkuResponse); 
 
   // DisableRecipe is used to disable recipe by a developer
   rpc DisableRecipe(MsgDisableRecipe) returns (MsgDisableRecipeResponse);
@@ -359,14 +369,35 @@ message MsgUpdateRecipeResponse {
   string Status = 3;
 }
 
-message MsgStripeProduct {
-  string Name = 1;   
+message MsgStripeCreateProduct {
+  string StripeKey = 1;
+  string Name = 2;   
+  string Description = 3;
+  repeated string Images = 4;
+  string StatementDescriptor = 5;
+  string UnitLabel = 6; 
+  string Sender = 7;
+} 
+
+message MsgStripeCreateProductResponse  {
+  string ProductID = 1 [(gogoproto.jsontag) = "ProductID"];
+  string Message = 2;
+  string Status = 3;
 }
 
-message MsgStripePrice {
-  string Product = 1;  
-  string UnitAmount = 2;
-  string Currency = 3;
+message MsgStripeCreatePrice {
+  string StripeKey = 1;
+  string Product = 2;  
+  string Amount = 3;
+  string Currency = 4;
+  string Description = 5;
+  string Sender = 6;
+}
+
+message MsgStripeCreatePriceResponse  {
+  string PriceID = 1 [(gogoproto.jsontag) = "PriceID"];
+  string Message = 2;
+  string Status = 3;
 }
 
 message MsgStripeCustomer {
@@ -383,6 +414,22 @@ message MsgStripeCheckout{
  
 message MsgStripeCheckoutResponse  {
   string SessionID = 1 [(gogoproto.jsontag) = "SessionID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCreateSku  {
+  string StripeKey = 1;
+  string Product = 2; 
+  repeated StringKeyValue Attributes = 3 [(gogoproto.nullable) = false];
+  int64 Price = 4;
+  string Currency = 5;
+  StripeInventory Inventory = 6; 
+  string Sender = 7;
+} 
+
+message MsgStripeCreateSkuResponse{
+  string SKUID = 1 [(gogoproto.jsontag) = "SKUID"];
   string Message = 2;
   string Status = 3;
 }

@@ -136,8 +136,37 @@ func GetLogFieldsFromMsgs(txMsgs []sdk.Msg) log.Fields {
 			fields[ikeypref+"rcp_name"] = msg.Name
 			fields[ikeypref+"sender"] = msg.Sender
 		case *types.MsgExecuteRecipe:
-			fields[ikeypref+"type"] = "MsgCreateRecipe"
+			fields[ikeypref+"type"] = "MsgExecuteRecipe"
 			fields[ikeypref+"rcp_id"] = msg.RecipeID
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgStripeCheckout:
+			fields[ikeypref+"type"] = "MsgStripeCheckout"
+			fields[ikeypref+"stripe_key"] = msg.StripeKey
+			fields[ikeypref+"payment_method"] = msg.PaymentMethod
+			fields[ikeypref+"price"] = msg.Price
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgStripeCreateProduct:
+			fields[ikeypref+"type"] = "MsgStripeCreateProduct"
+			fields[ikeypref+"stripe_key"] = msg.StripeKey
+			fields[ikeypref+"name"] = msg.Name
+			fields[ikeypref+"description"] = msg.Description
+			fields[ikeypref+"statement_descriptor"] = msg.StatementDescriptor
+			fields[ikeypref+"unit_label"] = msg.UnitLabel
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgStripeCreatePrice:
+			fields[ikeypref+"type"] = "MsgStripeCreatePrice"
+			fields[ikeypref+"stripe_key"] = msg.StripeKey
+			fields[ikeypref+"product"] = msg.Product
+			fields[ikeypref+"currency"] = msg.Currency
+			fields[ikeypref+"description"] = msg.Description
+			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgStripeCreateSku:
+			fields[ikeypref+"type"] = "MsgStripeCreateSku"
+			fields[ikeypref+"stripe_key"] = msg.StripeKey
+			fields[ikeypref+"attributes"] = msg.Attributes
+			fields[ikeypref+"price"] = msg.Price
+			fields[ikeypref+"currency"] = msg.Currency
+			fields[ikeypref+"inventory"] = msg.Inventory
 			fields[ikeypref+"sender"] = msg.Sender
 		case *types.MsgCheckExecution:
 			fields[ikeypref+"type"] = "MsgCheckExecution"

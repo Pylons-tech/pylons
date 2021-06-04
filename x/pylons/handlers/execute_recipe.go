@@ -55,7 +55,6 @@ func SafeExecute(ctx sdk.Context, keeper keeper.Keeper, exec types.Execution, ms
 
 // ExecuteRecipe is used to execute a recipe
 func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
-	fmt.Printf("------------------------stripe1----------------------------------\n")
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)

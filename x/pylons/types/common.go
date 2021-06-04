@@ -57,6 +57,18 @@ type StripeCheckoutScheduleOutput struct {
 	SessionID string
 }
 
+type StripeCreateProductScheduleOutput struct {
+	ProductID string
+}
+
+type StripeCreatePriceScheduleOutput struct {
+	PriceID string
+}
+
+type StripeCreateSkuScheduleOutput struct {
+	SKUID string
+}
+
 // ExecuteRecipeSerialize is a struct for execute recipe result serialization
 type ExecuteRecipeSerialize struct {
 	Type   string `json:"type"`   // COIN or ITEM
@@ -459,11 +471,14 @@ func NewItemOutput(ID string, Doubles DoubleParamList, Longs LongParamList, Stri
 	}
 }
 
-func NewStripePrice(Product string, UnitAmount string, Currency string) StripePrice {
+func NewStripePrice(Amount int64, Currency string, Description string, Images []string, Name string, Quantity int64) StripePrice {
 	return StripePrice{
-		Product:    Product,
-		UnitAmount: UnitAmount,
-		Currency:   Currency,
+		Amount:      Amount,
+		Currency:    Currency,
+		Description: Description,
+		Images:      Images,
+		Name:        Name,
+		Quantity:    Quantity,
 	}
 }
 

@@ -271,7 +271,17 @@ message Trade {
 } 
  
 message StripePrice {
-  string Product = 1;  
-  string UnitAmount = 2;
-  string Currency = 3;
+  int64 Amount = 1;  
+  string Currency = 2;
+  string Description = 3;
+  repeated string Images = 4;
+  string Name = 5;
+  int64 Quantity = 6;
+//  string TaxRates = 7;
 }
+ 
+message StripeInventory{
+  int64 Quantity = 1;  
+  string Type = 2;  
+  string Value = 3;
+} 
