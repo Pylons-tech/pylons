@@ -24,9 +24,10 @@ func StripeCreateSkuTxBuilder(cliCtx client.Context) http.HandlerFunc {
 
 		inventory := types.StripeInventory{
 			Quantity: 1,
-			Type:     "Type",
+			Type:     "finite",
 			Value:    "Value",
 		}
+
 		msg := types.NewMsgStripeCreateSku(
 			"Stripe_key",
 			"Product_Id",

@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -20,15 +19,16 @@ func (k msgServer) StripeCreateSku(ctx context.Context, msg *types.MsgStripeCrea
 
 	//sdkCtx := sdk.UnwrapSDKContext(ctx)
 	//sender, _ := sdk.AccAddressFromBech32(msg.Sender)
-	stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(msg.StripeKey)
+	/*stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(msg.StripeKey)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
 	}
-	stripe.Key = string(stripeSecKeyBytes)
+	stripe.Key = string(stripeSecKeyBytes)*/
+	stripe.Key = string(msg.StripeKey)
 	inventoryParams := stripe.InventoryParams{
 		Quantity: &msg.Inventory.Quantity,
-		Type:     &msg.Inventory.Type,
-		Value:    &msg.Inventory.Value,
+		Type:     &msg.Inventory.Type, //stripe.SKUInventoryTypeFinite
+		// Value:    &msg.Inventory.Value,
 	}
 	mapAttribute := make(map[string]string)
 	for _, attr := range msg.Attributes {
