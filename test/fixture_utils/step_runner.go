@@ -915,6 +915,24 @@ func StripeCreateSkuMsgFromRef(ref string, t *testing.T) types.MsgStripeCreateSk
 	return types.NewMsgStripeCreateSku(execType.StripeKey, execType.Product, execType.Attributes, execType.Price, execType.Currency, execType.Inventory, execType.Sender)
 }
 
+// StripeCreatePaymentIntentMsgFromRef collect create sku msg from reference string
+func StripeCreatePaymentIntentMsgFromRef(ref string, t *testing.T) types.MsgStripeCreatePaymentIntent {
+	byteValue := ReadFile(ref, t)
+	// translate sender from account name to account address
+	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
+	// translate recipe name to recipe id
+	newByteValue = UpdateRecipeName(newByteValue, t) //???
+
+	var execType types.MsgStripeCreatePaymentIntent
+
+	err := json.Unmarshal(newByteValue, &execType)
+	t.WithFields(testing.Fields{
+		"execType":  testutils.AminoCodecFormatter(execType),
+		"new_bytes": string(newByteValue),
+	}).MustNil(err, "error reading using json.Unmarshal")
+	return types.NewMsgStripeCreatePaymentIntent(execType.StripeKey, execType.Amount, execType.Currency, execType.PaymentMethod, execType.Sender)
+}
+
 // RunExecuteRecipe is executed when an action "execute_recipe" is called
 func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 	// TODO should check item ID is returned

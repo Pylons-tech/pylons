@@ -31,6 +31,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(MsgFulfillTrade{}, "pylons/FulfillTrade", nil)
 	cdc.RegisterConcrete(MsgEnableTrade{}, "pylons/EnableTrade", nil)
 	cdc.RegisterConcrete(MsgDisableTrade{}, "pylons/DisableTrade", nil)
+	cdc.RegisterConcrete(MsgStripeCreatePaymentIntent{}, "pylons/StripeCreatePaymentIntent", nil)
 
 	cdc.RegisterConcrete(CoinOutput{}, "pylons/Recipe/CoinOutput", nil)
 	cdc.RegisterConcrete(ItemModifyOutput{}, "pylons/Recipe/ItemModifyOutput", nil)

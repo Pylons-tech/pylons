@@ -27,7 +27,7 @@ stripe_iap:
     product_id: pylons_55000
     amount: 55000
 stripe_config:
-  stripe_pubkey: cGtfdGVzdF81MUl0TnNWS3c4UzZXQUM5VDI0dURaUnFBUm82YjRGNXlrVW84RVNwSXVDQjJaTWVBWVVLVFhpV1NCM0hQVHEzaWliYkg2ZExKVnZZR3ZHUnU0ZUxvZkNwcDAwRmVRNDhSdUo
+  stripe_pubkey: sk_test_51Iy5pOEdpQgutKvr1vkMGl6z4KoqNOkHCtfSskbJBYhpfwuemglQtcNn4XqgiqooiStO9P1k4rxUd83CUqV3kWqM00zG97ZVD8
   stripeCountry: us
   country: US
   currency: USD 

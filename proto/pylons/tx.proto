@@ -45,7 +45,7 @@ service Msg {
   rpc StripeCreateProduct(MsgStripeCreateProduct) returns (MsgStripeCreateProductResponse);
 
   // StripeCreatePrice is used to create price of stripe
-  rpc StripeCreatePrice(MsgStripeCreatePrice) returns (MsgStripeCreatePriceResponse);
+  rpc StripeCreatePrice(MsgStripeCreatePrice) returns (MsgStripeCreatePriceResponse); 
 
   // StripeCreateSKU is used to create sku of stripe
   rpc StripeCreateSku(MsgStripeCreateSku) returns (MsgStripeCreateSkuResponse); 
@@ -433,3 +433,51 @@ message MsgStripeCreateSkuResponse{
   string Message = 2;
   string Status = 3;
 }
+
+message MsgStripeCreatePaymentIntent  { 
+  string StripeKey = 1;
+  int64 Amount = 2;
+  string Currency = 3;
+  string PaymentMethod = 4;
+  string Sender = 5;
+}
+
+message MsgStripeCreatePaymentIntentResponse{
+  string PaymentID = 1 [(gogoproto.jsontag) = "PaymentID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCreateAccount  { 
+  string StripeKey = 1;
+  string Country = 2;
+  string Email = 3;
+  string Types = 4;
+  string Sender = 5;
+}
+
+message MsgStripeCreateAccountResponse{
+  string AccountID = 1 [(gogoproto.jsontag) = "AccountID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+
+message MsgStripeCreateProductSku  { 
+  string StripeKey = 1;
+  string Name = 2;   
+  string Description = 3;
+  repeated string Images = 4;
+  string StatementDescriptor = 5;
+  string UnitLabel = 6; 
+
+  repeated StringKeyValue Attributes = 7 [(gogoproto.nullable) = false];
+  int64 Price = 8;
+  string Currency = 9;
+  StripeInventory Inventory = 10; 
+  string ClientId = 11;
+  string Sender = 12;
+}
+
+ 
+  

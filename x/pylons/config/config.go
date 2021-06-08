@@ -129,7 +129,7 @@ func ReadConfig() error {
 			},
 		},
 		StripeConfig: StripeConfiguration{
-			StripeSecretKey: "c2tfdGVzdF81MUl0TnNWS3c4UzZXQUM5VEpVOXJxNHpnbTJiRDBzWjRVbU01dkVlS2IwM29RcHA4eGVMQ0k3T205c1RYWmdXOVh2OHJOZm9KVlNSdEFIUjFRNTBrZXNNUDAwVWM0b2RNa3E=",
+			StripeSecretKey: "sk_test_51Iy5pOEdpQgutKvr1vkMGl6z4KoqNOkHCtfSskbJBYhpfwuemglQtcNn4XqgiqooiStO9P1k4rxUd83CUqV3kWqM00zG97ZVD8",
 			StripeCountry:   "us",
 			Country:         "US",
 			Currency:        "USD",

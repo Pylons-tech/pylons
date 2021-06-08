@@ -43,14 +43,14 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		txbuilder.CreateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/execute_recipe/tx_build/", storeName),
 		txbuilder.ExecuteRecipeTxBuilder(cliCtx)).Methods("GET")
-	// r.HandleFunc(fmt.Sprintf("/%s/stripe_checkout/tx_build/", storeName),
-	// 	txbuilder.StripeCheckoutTxBuilder(cliCtx)).Methods("GET")
-	// r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product/tx_build/", storeName),
-	// 	txbuilder.StripeCreateProductTxBuilder(cliCtx)).Methods("GET")
-	// r.HandleFunc(fmt.Sprintf("/%s/stripe_create_price/tx_build/", storeName),
-	// 	txbuilder.StripeCreatePriceTxBuilder(cliCtx)).Methods("GET")
-	// r.HandleFunc(fmt.Sprintf("/%s/stripe_create_sku/tx_build/", storeName),
-	// 	txbuilder.StripeCreateSkuTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_checkout/tx_build/", storeName),
+		txbuilder.StripeCheckoutTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product/tx_build/", storeName),
+		txbuilder.StripeCreateProductTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_price/tx_build/", storeName),
+		txbuilder.StripeCreatePriceTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_sku/tx_build/", storeName),
+		txbuilder.StripeCreateSkuTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_recipe/tx_build/", storeName),
 		txbuilder.UpdateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/enable_recipe/tx_build/", storeName),
@@ -73,8 +73,14 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		stripeCreateProductHandler(cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product", storeName),
 		stripeCreateProductHandler(cliCtx)).Methods("GET")
-	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_sku", storeName),
-		stripeCrateSkuHandler(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product_sku", storeName),
+		stripeCreateProductSkuHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_payment_intent", storeName),
+		stripeCratePaymentIntentHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_account", storeName),
+		stripeCrateAccountHandler(cliCtx)).Methods("POST")
 
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cliCtx, storeName)).Methods("GET")

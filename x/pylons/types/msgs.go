@@ -429,6 +429,28 @@ func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string
 	return msg
 }
 
+func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, PaymentMethod string, Sender string) MsgStripeCreatePaymentIntent {
+	msg := MsgStripeCreatePaymentIntent{
+		StripeKey:     StripeKey,
+		Amount:        Amount,
+		Currency:      Currency,
+		PaymentMethod: PaymentMethod,
+		Sender:        Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCreateAccount(StripeKey string, Country string, Email string, Types string, Sender string) MsgStripeCreateAccount {
+	msg := MsgStripeCreateAccount{
+		StripeKey: StripeKey,
+		Country:   Country,
+		Email:     Email,
+		Types:     Types,
+		Sender:    Sender,
+	}
+	return msg
+}
+
 func NewMsgStripeCreatePrice(StripeKey string, Product string, Amount string, Currency string, Description string, Sender string) MsgStripeCreatePrice {
 	msg := MsgStripeCreatePrice{
 		StripeKey:   StripeKey,
@@ -450,6 +472,26 @@ func NewMsgStripeCreateSku(StripeKey string, Product string, Attributes StringKe
 		Currency:   Currency,
 		Inventory:  Inventory,
 		Sender:     Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCreateProductSku(StripeKey string, Name string, Description string, Images []string,
+	StatementDescriptor string, UnitLabel string, Attributes StringKeyValueList, Price int64, Currency string,
+	Inventory *StripeInventory, ClientId string, Sender string) MsgStripeCreateProductSku {
+	msg := MsgStripeCreateProductSku{
+		StripeKey:           StripeKey,
+		Name:                Name,
+		Description:         Description,
+		Images:              Images,
+		StatementDescriptor: StatementDescriptor,
+		UnitLabel:           UnitLabel,
+		Attributes:          Attributes,
+		Price:               Price,
+		Currency:            Currency,
+		Inventory:           Inventory,
+		ClientId:            ClientId,
+		Sender:              Sender,
 	}
 	return msg
 }
@@ -508,6 +550,35 @@ func (msg MsgStripeCreateProduct) ValidateBasic() error {
 	return nil
 }
 
+func (msg MsgStripeCreateProductSku) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateProductSku) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreateProductSku) Route() string { return RouterKey }
+
+func (msg MsgStripeCreateProductSku) Type() string { return "stripe_create_product_sku" }
+
+func (msg MsgStripeCreateProductSku) ValidateBasic() error {
+
+	if msg.Sender == "" {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	}
+
+	return nil
+}
+
 func (msg MsgStripeCreatePrice) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -533,6 +604,64 @@ func (msg MsgStripeCreatePrice) ValidateBasic() error {
 	if msg.Sender == "" {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
 	}
+
+	return nil
+}
+
+func (msg MsgStripeCreateAccount) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateAccount) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreateAccount) Route() string { return RouterKey }
+
+func (msg MsgStripeCreateAccount) Type() string { return "stripe_create_account" }
+
+func (msg MsgStripeCreateAccount) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeCreatePaymentIntent) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreatePaymentIntent) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreatePaymentIntent) Route() string { return RouterKey }
+
+func (msg MsgStripeCreatePaymentIntent) Type() string { return "stripe_create_sku" }
+
+func (msg MsgStripeCreatePaymentIntent) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
 
 	return nil
 }
