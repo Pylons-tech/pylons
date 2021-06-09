@@ -15,19 +15,17 @@ import (
 )
 
 type stripeCreateSkuReq struct {
-	BaseReq             rest.BaseReq `json:"base_req"`
-	StripeKey           string
-	Name                string
-	Description         string
-	Images              []string
-	StatementDescriptor string
-	UnitLabel           string
-	Attributes          types.StringKeyValueList
-	Price               int64
-	Currency            string
-	Inventory           *types.StripeInventory
-	ClientId            string
-	Sender              string
+	BaseReq     rest.BaseReq `json:"base_req"`
+	StripeKey   string
+	Name        string
+	Description string
+	Images      []string
+	Attributes  types.StringKeyValueList
+	Price       int64
+	Currency    string
+	Inventory   *types.StripeInventory
+	ClientId    string
+	Sender      string
 }
 
 func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
@@ -59,8 +57,6 @@ func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
 			req.Name,
 			req.Description,
 			req.Images,
-			req.StatementDescriptor,
-			req.UnitLabel,
 			req.Attributes,
 			req.Price,
 			req.Currency,
@@ -79,8 +75,6 @@ func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
 			Description: stripe.String(msg.Description),
 			// Images:              stripe.StringSlice(msg.Images),
 			Type: stripe.String("good"),
-			//StatementDescriptor: stripe.String(msg.StatementDescriptor),
-			UnitLabel: stripe.String(msg.UnitLabel),
 		}
 		params.AddMetadata("ClientId", msg.ClientId)
 		productId, err := product.New(params)

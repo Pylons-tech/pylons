@@ -1,11 +1,13 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/account"
+	"github.com/stripe/stripe-go/accountlink"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -73,7 +75,21 @@ func stripeCrateAccountHandler(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		rest.PostProcessResponse(w, cliCtx, account.ID)
+
+		linkParams := &stripe.AccountLinkParams{
+			Account:    stripe.String(account.ID),
+			Type:       stripe.String("account_onboarding"),
+			SuccessURL: stripe.String("https://pylons/return"),
+			FailureURL: stripe.String("https://pylons/fail"),
+		}
+
+		aLink, err := accountlink.New(linkParams)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error account link: %s", err.Error()))
+			return
+		}
+		//rest.PostProcessResponse(w, cliCtx, account.ID)
+		rest.PostProcessResponse(w, cliCtx, aLink.URL)
 		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
 	}
 }

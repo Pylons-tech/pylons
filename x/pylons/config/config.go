@@ -44,6 +44,7 @@ type StripeConfiguration struct {
 	Country         string `yaml:"country"`
 	Currency        string `yaml:"currency"`
 	PaymentMethods  string `yaml:"paymentMethods"`
+	StripeSkuID     string `yaml:"stripe_sku_id"`
 }
 
 // Configuration is a struct to manage game configuration
@@ -134,6 +135,7 @@ func ReadConfig() error {
 			Country:         "US",
 			Currency:        "USD",
 			PaymentMethods:  PaymentMethods(),
+			StripeSkuID:     "PaymentMethods",
 		},
 		IsProduction: false,
 	}

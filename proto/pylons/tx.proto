@@ -133,7 +133,7 @@ message MsgCreateRecipe {
   // optional RecipeID if someone
   string RecipeID = 1;
   string Name = 2;
-  string CookbookID = 3;    // the cookbook guid
+  string CookbookID = 3;    // the cookbook guid 
   repeated CoinInput CoinInputs = 4 [(gogoproto.nullable) = false];
   repeated ItemInput ItemInputs = 5 [(gogoproto.nullable) = false];
   repeated WeightedOutputs Outputs = 6 [(gogoproto.nullable) = false];
@@ -360,6 +360,7 @@ message MsgUpdateRecipe {
   string Sender = 8;
   string Description = 9;
   EntriesList Entries = 10 [(gogoproto.nullable) = false];
+  string ExtraInfo = 11;
 }
 
 // UpdateRecipeResponse is a struct to control update recipe response
@@ -438,7 +439,7 @@ message MsgStripeCreatePaymentIntent  {
   string StripeKey = 1;
   int64 Amount = 2;
   string Currency = 3;
-  string PaymentMethod = 4;
+  string SKUID = 4;
   string Sender = 5;
 }
 
@@ -467,16 +468,13 @@ message MsgStripeCreateProductSku  {
   string StripeKey = 1;
   string Name = 2;   
   string Description = 3;
-  repeated string Images = 4;
-  string StatementDescriptor = 5;
-  string UnitLabel = 6; 
-
-  repeated StringKeyValue Attributes = 7 [(gogoproto.nullable) = false];
-  int64 Price = 8;
-  string Currency = 9;
-  StripeInventory Inventory = 10; 
-  string ClientId = 11;
-  string Sender = 12;
+  repeated string Images = 4; 
+  repeated StringKeyValue Attributes = 5 [(gogoproto.nullable) = false];
+  int64 Price = 6;
+  string Currency = 7;
+  StripeInventory Inventory = 8; 
+  string ClientId = 9;
+  string Sender = 10;
 }
 
  

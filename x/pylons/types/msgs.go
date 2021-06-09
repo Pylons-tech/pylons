@@ -195,7 +195,8 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 	entries EntriesList,
 	outputs WeightedOutputsList,
 	blockInterval int64,
-	sender string) MsgCreateRecipe {
+	sender string,
+	ExtraInfo string) MsgCreateRecipe {
 	return MsgCreateRecipe{
 		RecipeID:      recipeID,
 		Name:          recipeName,
@@ -207,6 +208,7 @@ func NewMsgCreateRecipe(recipeName, cookbookID, recipeID, description string,
 		Sender:        sender,
 		Description:   description,
 		Entries:       entries,
+		ExtraInfo:     ExtraInfo,
 	}
 }
 
@@ -371,6 +373,7 @@ func (msg MsgUpdateRecipe) ValidateBasic() error {
 		msg.Outputs,
 		msg.BlockInterval,
 		msg.Sender,
+		msg.ExtraInfo,
 	)
 
 	return msgCreateRecipe.ValidateBasic()
@@ -429,13 +432,13 @@ func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string
 	return msg
 }
 
-func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, PaymentMethod string, Sender string) MsgStripeCreatePaymentIntent {
+func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string) MsgStripeCreatePaymentIntent {
 	msg := MsgStripeCreatePaymentIntent{
-		StripeKey:     StripeKey,
-		Amount:        Amount,
-		Currency:      Currency,
-		PaymentMethod: PaymentMethod,
-		Sender:        Sender,
+		StripeKey: StripeKey,
+		Amount:    Amount,
+		Currency:  Currency,
+		SKUID:     SKUID,
+		Sender:    Sender,
 	}
 	return msg
 }
@@ -477,21 +480,19 @@ func NewMsgStripeCreateSku(StripeKey string, Product string, Attributes StringKe
 }
 
 func NewMsgStripeCreateProductSku(StripeKey string, Name string, Description string, Images []string,
-	StatementDescriptor string, UnitLabel string, Attributes StringKeyValueList, Price int64, Currency string,
+	Attributes StringKeyValueList, Price int64, Currency string,
 	Inventory *StripeInventory, ClientId string, Sender string) MsgStripeCreateProductSku {
 	msg := MsgStripeCreateProductSku{
-		StripeKey:           StripeKey,
-		Name:                Name,
-		Description:         Description,
-		Images:              Images,
-		StatementDescriptor: StatementDescriptor,
-		UnitLabel:           UnitLabel,
-		Attributes:          Attributes,
-		Price:               Price,
-		Currency:            Currency,
-		Inventory:           Inventory,
-		ClientId:            ClientId,
-		Sender:              Sender,
+		StripeKey:   StripeKey,
+		Name:        Name,
+		Description: Description,
+		Images:      Images,
+		Attributes:  Attributes,
+		Price:       Price,
+		Currency:    Currency,
+		Inventory:   Inventory,
+		ClientId:    ClientId,
+		Sender:      Sender,
 	}
 	return msg
 }

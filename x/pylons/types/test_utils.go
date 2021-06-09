@@ -1,6 +1,10 @@
 package types
 
-import sdk "github.com/cosmos/cosmos-sdk/types"
+import (
+	"encoding/json"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 // GenCoinInputList is a utility function to genearte coin input list
 func GenCoinInputList(name string, count int64) CoinInputList {
@@ -154,6 +158,18 @@ func GenOneOutput(entryIDs ...string) WeightedOutputsList {
 		})
 	}
 	return wol
+}
+
+// GenExtraInfo is a function to generate output with one from extra info
+func GenExtraInfo(extraInfo ...string) string {
+	mapAttribute := make(map[string]string)
+	if len(extraInfo) < 2 {
+		return ""
+	}
+	mapAttribute[extraInfo[0]] = extraInfo[1]
+
+	jsonString, _ := json.Marshal(mapAttribute)
+	return string(jsonString)
 }
 
 // GenAllOutput is a function to generate output with all of entry list

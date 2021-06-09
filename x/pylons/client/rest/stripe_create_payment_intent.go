@@ -1,11 +1,13 @@
 package rest
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/paymentintent"
+	"github.com/stripe/stripe-go/sku"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -18,7 +20,7 @@ type stripeCreatePaymentIntentReq struct {
 	StripeKey string
 	Amount    int64
 	Currency  string
-	Paymethod string
+	SKUID     string
 	Sender    string
 }
 
@@ -52,24 +54,27 @@ func stripeCratePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 		// 	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		// }
 		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
+
+		stripe.Key = req.StripeKey
+		skuResult, err := sku.Get(req.SKUID, nil)
+
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error retrieve sku: %s", err.Error()))
+			return
+		}
+
 		// create the message
-		msg := types.NewMsgStripeCreatePaymentIntent(req.StripeKey, req.Amount, req.Currency, req.Paymethod, addr.String())
+		msg := types.NewMsgStripeCreatePaymentIntent(req.StripeKey, req.Amount, req.Currency, req.SKUID, addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
-		stripe.Key = req.StripeKey
-
 		params := &stripe.PaymentIntentParams{
-			Amount:   stripe.Int64(req.Amount),
-			Currency: stripe.String(req.Currency),
-			// OnBehalfOf: ,
-			// Application
-			PaymentMethodTypes: []*string{
-				stripe.String(req.Paymethod),
-			},
+			Amount:     stripe.Int64(skuResult.Price),
+			Currency:   stripe.String(string(skuResult.Currency)),
+			OnBehalfOf: stripe.String(skuResult.Metadata["ClientId"]),
 		}
 
 		paymentId, err := paymentintent.New(params)

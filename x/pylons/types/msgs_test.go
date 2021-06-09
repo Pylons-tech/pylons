@@ -278,6 +278,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 				tc.outputs,
 				0,
 				tc.sender.String(),
+				"",
 			)
 
 			err := msg.ValidateBasic()

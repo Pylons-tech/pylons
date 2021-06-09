@@ -47,6 +47,7 @@ func MockRecipe(
 		outputs,
 		blockInterval,
 		sender.String(),
+		"",
 	)
 	newRcpResult, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 	if err != nil {

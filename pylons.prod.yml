@@ -32,3 +32,4 @@ stripe_config:
   country: US
   currency: USD
   paymentMethods: card
+  stripe_sku_id: sku_Jd7pX8ZInRzUm0

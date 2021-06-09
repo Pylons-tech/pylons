@@ -8,8 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
@@ -26,6 +26,7 @@ func CreateRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 		genItemInputList := types.GenItemInputList("Raichu")
 		genEntries := types.GenEntries("chair", "Raichu")
 		genOneOutput := types.GenOneOutput("chair", "Raichu")
+		genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
 
 		msg := types.NewMsgCreateRecipe(
 			"name",
@@ -38,6 +39,7 @@ func CreateRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 			genOneOutput,
 			0,
 			sender.String(),
+			genSkuString,
 		)
 
 		txf := tx.Factory{}.

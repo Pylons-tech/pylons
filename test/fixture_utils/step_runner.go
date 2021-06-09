@@ -617,6 +617,7 @@ func CreateRecipeMsgFromRef(ref string, t *testing.T) types.MsgCreateRecipe {
 		rcpTempl.Outputs,
 		rcpTempl.BlockInterval,
 		rcpTempl.Sender,
+		rcpTempl.ExtraInfo,
 	)
 }
 

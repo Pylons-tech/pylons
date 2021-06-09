@@ -59,6 +59,7 @@ func TestRecipeFlowUpdate(t *testing.T) {
 				mOutputs,
 				0,
 				tc.sender.String(),
+				"",
 			)
 
 			newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)

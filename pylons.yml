@@ -31,3 +31,4 @@ stripe_config:
   stripeCountry: us
   country: US
   currency: USD 
+  stripe_sku_id: sku_Jd7pX8ZInRzUm0

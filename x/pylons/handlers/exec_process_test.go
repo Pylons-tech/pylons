@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -295,7 +296,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	genItemInputList := types.GenItemInputList("Raichu")
 	genEntries := types.GenEntries("wood", "Raichu")
 	genOneOutput := types.GenOneOutput("wood", "Raichu")
-
+	genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
 	exmpRcpMsg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
 		genCoinInputList,
 		genItemInputList,
@@ -303,6 +304,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		genOneOutput,
 		0,
 		sender1.String(),
+		genSkuString,
 	)
 
 	_, err = tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &exmpRcpMsg)

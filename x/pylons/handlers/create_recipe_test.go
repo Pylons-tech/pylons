@@ -4,6 +4,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -204,6 +205,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					mOutputs = types.GenOneOutput("RaichuV2")
 				}
 			}
+			genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
 
 			genCoinList := types.GenCoinInputList("wood", 5)
 			msg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
@@ -213,6 +215,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				mOutputs,
 				0,
 				tc.sender.String(),
+				genSkuString,
 			)
 
 			result, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
@@ -252,6 +255,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	mInputList := types.GenItemInputList("Raichu")
 
 	genCoinsList := types.GenCoinInputList("wood", 5)
+	genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
 	rcpMsg := types.NewMsgCreateRecipe("name", result.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
 		genCoinsList,
 		mInputList,
@@ -259,6 +263,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 		mOutputs,
 		0,
 		sender1.String(),
+		genSkuString,
 	)
 
 	rcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
@@ -346,6 +351,7 @@ func TestHandlerMsgUpdateRecipe(t *testing.T) {
 		genOneOutput,
 		0,
 		sender1.String(),
+		"",
 	)
 
 	newRcpResult, _ := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
