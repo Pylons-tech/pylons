@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/base64"
-	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -22,7 +21,7 @@ func (k msgServer) StripeCheckout(ctx context.Context, msg *types.MsgStripeCheck
 	//sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 	stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(msg.StripeKey)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error stripe key store base64 public key decoding failure: %s", err.Error())
 	}
 	stripe.Key = string(stripeSecKeyBytes)
 	lineItemParams := stripe.CheckoutSessionLineItemParams{
@@ -43,7 +42,7 @@ func (k msgServer) StripeCheckout(ctx context.Context, msg *types.MsgStripeCheck
 
 	sessionId, err := session.New(params)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error checkout session: %s", err.Error()))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error checkout session: %s", err.Error())
 	}
 	return &types.MsgStripeCheckoutResponse{
 		SessionID: sessionId.ID,

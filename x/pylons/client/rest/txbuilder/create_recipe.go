@@ -17,7 +17,7 @@ import (
 // CreateRecipeTxBuilder returns the fixtures which can be used to create a create cookbook transaction
 func CreateRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		sender, err := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+		sender, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 		}

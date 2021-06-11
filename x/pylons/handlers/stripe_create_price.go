@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/base64"
-	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -21,7 +20,7 @@ func (k msgServer) StripeCreatePrice(ctx context.Context, msg *types.MsgStripeCr
 	//sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 	stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(msg.StripeKey)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error stripe key store base64 public key decoding failure: %s", err.Error())
 	}
 	stripe.Key = string(stripeSecKeyBytes)
 	// params := &stripe.PriceParams{
@@ -33,7 +32,7 @@ func (k msgServer) StripeCreatePrice(ctx context.Context, msg *types.MsgStripeCr
 
 	// priceId, err := price.New(params)
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error create price: %s", err.Error()))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error create price: %s", err.Error())
 	}
 	return &types.MsgStripeCreatePriceResponse{
 		PriceID: "priceId.ID",

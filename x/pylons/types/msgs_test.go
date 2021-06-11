@@ -7,6 +7,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 )
@@ -549,7 +550,7 @@ func TestGetPylonsValidateBasic(t *testing.T) {
 }
 
 func TestGoogleIAPSignatureVerification(t *testing.T) {
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender, _ := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 
 	cases := map[string]struct {
 		productID     string

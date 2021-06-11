@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -17,13 +16,6 @@ func (k msgServer) StripeCreateSku(ctx context.Context, msg *types.MsgStripeCrea
 		return nil, errInternal(err)
 	}
 
-	//sdkCtx := sdk.UnwrapSDKContext(ctx)
-	//sender, _ := sdk.AccAddressFromBech32(msg.Sender)
-	/*stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(msg.StripeKey)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
-	}
-	stripe.Key = string(stripeSecKeyBytes)*/
 	stripe.Key = string(msg.StripeKey)
 	inventoryParams := stripe.InventoryParams{
 		Quantity: &msg.Inventory.Quantity,
@@ -45,7 +37,7 @@ func (k msgServer) StripeCreateSku(ctx context.Context, msg *types.MsgStripeCrea
 	skuID, err := sku.New(params)
 
 	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error create sku: %s", err.Error()))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error create sku: %s", err.Error())
 	}
 	return &types.MsgStripeCreateSkuResponse{
 		SKUID:   skuID.ID,
