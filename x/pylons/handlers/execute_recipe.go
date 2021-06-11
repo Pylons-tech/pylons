@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -74,13 +73,14 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 
 		if inp.Coin == config.Config.StripeConfig.Currency {
 			//Confirm a paymentInten of Stripe
-			stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripeSecretKey)
-			if err != nil {
-				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
-			}
+			// stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripeSecretKey)
+			// if err != nil {
+			// 	return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("error stripe key store base64 public key decoding failure: %s", err.Error()))
+			// }
 
+			stripeSecKeyBytes := string(config.Config.StripeConfig.StripeSecretKey)
 			//if msg.PaymentInfo[0].PayType == "stripe" {
-			stripe.Key = string(stripeSecKeyBytes)
+			stripe.Key = stripeSecKeyBytes
 			// stripe_params := &stripe.PaymentIntentConfirmParams{
 			// 	PaymentMethod: stripe.String(msg.PaymentMethod),
 			// }
@@ -97,7 +97,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 				nil,
 			)
 			if payIntentResult.Status != "succeeded" {
-				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment error!"))
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Stripe for Payment succeeded error!"))
 			}
 
 			if inp.Count != payIntentResult.Amount/100 {
@@ -120,7 +120,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		}
 	}
-	fmt.Printf("---------------payment succeed-----%+v------\n", cl)
+
 	err = p.SetMatchedItemsFromExecMsg(sdkCtx, msg)
 	if err != nil {
 		return nil, errInternal(err)
