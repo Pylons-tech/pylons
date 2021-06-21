@@ -11,6 +11,7 @@ import (
 	"github.com/gogo/protobuf/proto"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

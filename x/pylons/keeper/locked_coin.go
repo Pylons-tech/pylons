@@ -6,38 +6,39 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // LockCoin sets the lockedCoin with the name as the key
-func (k Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
+func (keeper Keeper) LockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	if lockedCoin.Sender.Empty() {
 		return errors.New("LockCoin: the sender cannot be empty")
 	}
 
-	originLock := k.GetLockedCoin(ctx, lockedCoin.Sender)
+	originLock := keeper.GetLockedCoin(ctx, lockedCoin.Sender)
 	newLock := originLock.Amount.Add(lockedCoin.Amount.Sort()...)
-	senderBalance := k.CoinKeeper.GetAllBalances(ctx, lockedCoin.Sender)
+	senderBalance := keeper.CoinKeeper.GetAllBalances(ctx, lockedCoin.Sender)
 
 	if !senderBalance.IsAllGTE(newLock) {
 		return fmt.Errorf("LockCoin: the sender does not have enough amount to lock: balance=%s new=%s locked=%s origin=%s", senderBalance.String(), newLock.String(), lockedCoin.Amount.String(), originLock.Amount.String())
 	}
 
 	if originLock.Amount.Empty() {
-		return k.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
+		return keeper.SetObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), keeper.LockedCoinKey, lockedCoin)
 	}
 
-	return k.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
+	return keeper.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
 }
 
 // UnlockCoin unlock coin from keeper
-func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
+func (keeper Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	if lockedCoin.Sender.Empty() {
 		return errors.New("LockCoin: the sender cannot be empty")
 	}
 
-	originLock := k.GetLockedCoin(ctx, lockedCoin.Sender)
+	originLock := keeper.GetLockedCoin(ctx, lockedCoin.Sender)
 	var newLock sdk.Coins
 
 	// Compare already locked amount and unlocking amount
@@ -48,30 +49,30 @@ func (k Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 			if originLock.Amount.IsZero() {
 				return nil
 			}
-			return k.DeleteLockedCoin(ctx, originLock.Sender)
+			return keeper.DeleteLockedCoin(ctx, originLock.Sender)
 		}
 
-		return k.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
+		return keeper.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
 	}
 
 	return errors.New("Unlocking amount exceeds the locked amount")
 }
 
 // GetLockedCoin returns lockedCoin based on sender
-func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoin {
+func (keeper Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoin {
 	lockedCoin := types.LockedCoin{
 		Sender: sender,
 		Amount: sdk.Coins{},
 	}
 	if sender.Empty() {
-		allLocks, err := k.GetAllLockedCoins(ctx)
+		allLocks, err := keeper.GetAllLockedCoins(ctx)
 		if err == nil {
 			for _, lock := range allLocks {
 				lockedCoin.Amount = lockedCoin.Amount.Add(lock.Amount...)
 			}
 		}
 	} else {
-		err := k.GetObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey, &lockedCoin)
+		err := keeper.GetObject(ctx, types.TypeLockedCoin, sender.String(), keeper.LockedCoinKey, &lockedCoin)
 		if err != nil {
 			lockedCoin.Sender = sender
 			lockedCoin.Amount = sdk.Coins{}
@@ -81,12 +82,12 @@ func (k Keeper) GetLockedCoin(ctx sdk.Context, sender sdk.AccAddress) types.Lock
 }
 
 // GetLockedCoinDetails return lockedCoinDetails based on sender
-func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoinDetails {
+func (keeper Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) types.LockedCoinDetails {
 	lcd := types.LockedCoinDetails{}
-	lc := k.GetLockedCoin(ctx, sender)
+	lc := keeper.GetLockedCoin(ctx, sender)
 	lcd.Sender, lcd.Amount = lc.Sender.String(), lc.Amount
 
-	trades, err := k.GetTradesByCreator(ctx, sender)
+	trades, err := keeper.GetTradesByCreator(ctx, sender)
 	if err == nil {
 		for _, trade := range trades {
 			if !trade.Disabled && !trade.Completed && !trade.CoinOutputs.Empty() {
@@ -97,7 +98,7 @@ func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) typ
 			}
 		}
 	}
-	execs, err := k.GetPendingExecutionsBySender(ctx, sender)
+	execs, err := keeper.GetPendingExecutionsBySender(ctx, sender)
 	if err == nil {
 		for _, exec := range execs {
 			if !exec.CoinInputs.Empty() {
@@ -112,25 +113,25 @@ func (k Keeper) GetLockedCoinDetails(ctx sdk.Context, sender sdk.AccAddress) typ
 	return lcd
 }
 
-func (k Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
+func (keeper Keeper) updateLockedCoin(ctx sdk.Context, lockedCoin types.LockedCoin) error {
 	if lockedCoin.Sender.Empty() {
 		return errors.New("updateLockedCoin: the sender cannot be empty")
 	}
 
-	return k.UpdateObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), k.LockedCoinKey, lockedCoin)
+	return keeper.UpdateObject(ctx, types.TypeLockedCoin, lockedCoin.Sender.String(), keeper.LockedCoinKey, lockedCoin)
 }
 
 // GetLockedCoinsIterator returns an iterator for all the lockedCoins
-func (k Keeper) GetLockedCoinsIterator(ctx sdk.Context) sdk.Iterator {
-	store := ctx.KVStore(k.LockedCoinKey)
+func (keeper Keeper) GetLockedCoinsIterator(ctx sdk.Context) sdk.Iterator {
+	store := ctx.KVStore(keeper.LockedCoinKey)
 	return sdk.KVStorePrefixIterator(store, []byte(""))
 }
 
 // GetAllLockedCoins returns all lockedCoins
-func (k Keeper) GetAllLockedCoins(ctx sdk.Context) ([]types.LockedCoin, error) {
+func (keeper Keeper) GetAllLockedCoins(ctx sdk.Context) ([]types.LockedCoin, error) {
 
 	var lockedCoins []types.LockedCoin
-	iterator := k.GetLockedCoinsIterator(ctx)
+	iterator := keeper.GetLockedCoinsIterator(ctx)
 
 	for ; iterator.Valid(); iterator.Next() {
 
@@ -150,12 +151,12 @@ func (k Keeper) GetAllLockedCoins(ctx sdk.Context) ([]types.LockedCoin, error) {
 }
 
 // GetAllLockedCoinsCount returns the lockedCoin count returns 0 if no lockedCoin is found
-func (k Keeper) GetAllLockedCoinsCount(ctx sdk.Context) int {
-	lockedCoins, _ := k.GetAllLockedCoins(ctx)
+func (keeper Keeper) GetAllLockedCoinsCount(ctx sdk.Context) int {
+	lockedCoins, _ := keeper.GetAllLockedCoins(ctx)
 	return len(lockedCoins)
 }
 
 // DeleteLockedCoin is used to delete a lockedCoin based on the sender
-func (k Keeper) DeleteLockedCoin(ctx sdk.Context, sender sdk.AccAddress) error {
-	return k.DeleteObject(ctx, types.TypeLockedCoin, sender.String(), k.LockedCoinKey)
+func (keeper Keeper) DeleteLockedCoin(ctx sdk.Context, sender sdk.AccAddress) error {
+	return keeper.DeleteObject(ctx, types.TypeLockedCoin, sender.String(), keeper.LockedCoinKey)
 }

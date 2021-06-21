@@ -5,12 +5,13 @@ import (
 	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // CreateRecipe is used to create recipe by a developer
-func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe) (*types.MsgCreateRecipeResponse, error) {
+func (srv msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe) (*types.MsgCreateRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -21,7 +22,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	// validate cookbook id
-	cookbook, err := k.GetCookbook(sdkCtx, msg.CookbookID)
+	cookbook, err := srv.GetCookbook(sdkCtx, msg.CookbookID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -38,7 +39,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe)
 	)
 
 	if msg.RecipeID != "" {
-		if k.HasRecipeWithCookbookID(sdkCtx, msg.CookbookID, msg.RecipeID) {
+		if srv.HasRecipeWithCookbookID(sdkCtx, msg.CookbookID, msg.RecipeID) {
 			return nil, errInternal(fmt.Errorf("The recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
 		}
 		recipe.ID = msg.RecipeID
@@ -47,7 +48,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe)
 		return nil, errInternal(err)
 	}
 
-	if err := k.SetRecipe(sdkCtx, recipe); err != nil {
+	if err := srv.SetRecipe(sdkCtx, recipe); err != nil {
 		return nil, errInternal(err)
 	}
 
@@ -59,7 +60,7 @@ func (k msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecipe)
 }
 
 // EnableRecipe is used to enable recipe by a developer
-func (k msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe) (*types.MsgEnableRecipeResponse, error) {
+func (srv msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe) (*types.MsgEnableRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -69,7 +70,7 @@ func (k msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
+	recipe, err := srv.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -80,7 +81,7 @@ func (k msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe)
 
 	recipe.Disabled = false
 
-	err = k.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
+	err = srv.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -92,7 +93,7 @@ func (k msgServer) EnableRecipe(ctx context.Context, msg *types.MsgEnableRecipe)
 }
 
 // DisableRecipe is used to disable recipe by a developer
-func (k msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecipe) (*types.MsgDisableRecipeResponse, error) {
+func (srv msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecipe) (*types.MsgDisableRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -102,7 +103,7 @@ func (k msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecip
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
+	recipe, err := srv.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -112,7 +113,7 @@ func (k msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecip
 	}
 	recipe.Disabled = true
 
-	err = k.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
+	err = srv.UpdateRecipe(sdkCtx, msg.RecipeID, recipe)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -124,7 +125,7 @@ func (k msgServer) DisableRecipe(ctx context.Context, msg *types.MsgDisableRecip
 }
 
 // HandlerMsgUpdateRecipe is used to update recipe by a developer
-func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
+func (srv msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -134,7 +135,7 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpd
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	rc, err := k.GetRecipe(sdkCtx, msg.ID)
+	rc, err := srv.GetRecipe(sdkCtx, msg.ID)
 
 	// only the original sender (owner) of the cookbook can update the cookbook
 	if rc.Sender != sender.String() {
@@ -154,7 +155,7 @@ func (k msgServer) HandlerMsgUpdateRecipe(ctx context.Context, msg *types.MsgUpd
 	rc.Name = msg.Name
 	rc.Outputs = msg.Outputs
 
-	if err := k.UpdateRecipe(sdkCtx, msg.ID, rc); err != nil {
+	if err := srv.UpdateRecipe(sdkCtx, msg.ID, rc); err != nil {
 		return nil, errInternal(err)
 	}
 

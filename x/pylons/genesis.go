@@ -5,9 +5,11 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
+// TODO handle errors
 // InitGenesis init genesis for a context
 func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data types.GenesisState) {
 	for _, record := range data.Cookbooks {

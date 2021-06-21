@@ -158,42 +158,42 @@ type MsgCreateAccount struct {
 	Requester string `protobuf:"bytes,1,opt,name=Requester,proto3" json:"Requester,omitempty"`
 }
 
-func (m *MsgCreateAccount) Reset()         { *m = MsgCreateAccount{} }
-func (m *MsgCreateAccount) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateAccount) ProtoMessage()    {}
+func (msg *MsgCreateAccount) Reset()         { *msg = MsgCreateAccount{} }
+func (msg *MsgCreateAccount) String() string { return proto.CompactTextString(msg) }
+func (*MsgCreateAccount) ProtoMessage()      {}
 func (*MsgCreateAccount) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d4a7b7e7ad73d5a4, []int{2}
 }
-func (m *MsgCreateAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+func (msg *MsgCreateAccount) XXX_Unmarshal(b []byte) error {
+	return msg.Unmarshal(b)
 }
-func (m *MsgCreateAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (msg *MsgCreateAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgCreateAccount.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCreateAccount.Marshal(b, msg, deterministic)
 	} else {
 		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
+		n, err := msg.MarshalToSizedBuffer(b)
 		if err != nil {
 			return nil, err
 		}
 		return b[:n], nil
 	}
 }
-func (m *MsgCreateAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateAccount.Merge(m, src)
+func (msg *MsgCreateAccount) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateAccount.Merge(msg, src)
 }
-func (m *MsgCreateAccount) XXX_Size() int {
-	return m.Size()
+func (msg *MsgCreateAccount) XXX_Size() int {
+	return msg.Size()
 }
-func (m *MsgCreateAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateAccount.DiscardUnknown(m)
+func (msg *MsgCreateAccount) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateAccount.DiscardUnknown(msg)
 }
 
 var xxx_messageInfo_MsgCreateAccount proto.InternalMessageInfo
 
-func (m *MsgCreateAccount) GetRequester() string {
-	if m != nil {
-		return m.Requester
+func (msg *MsgCreateAccount) GetRequester() string {
+	if msg != nil {
+		return msg.Requester
 	}
 	return ""
 }
@@ -3464,30 +3464,30 @@ func (m *MsgCheckExecutionResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgCreateAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
+func (msg *MsgCreateAccount) Marshal() (dAtA []byte, err error) {
+	size := msg.Size()
 	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	n, err := msg.MarshalToSizedBuffer(dAtA[:size])
 	if err != nil {
 		return nil, err
 	}
 	return dAtA[:n], nil
 }
 
-func (m *MsgCreateAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+func (msg *MsgCreateAccount) MarshalTo(dAtA []byte) (int, error) {
+	size := msg.Size()
+	return msg.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgCreateAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (msg *MsgCreateAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Requester) > 0 {
-		i -= len(m.Requester)
-		copy(dAtA[i:], m.Requester)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Requester)))
+	if len(msg.Requester) > 0 {
+		i -= len(msg.Requester)
+		copy(dAtA[i:], msg.Requester)
+		i = encodeVarintTx(dAtA, i, uint64(len(msg.Requester)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -5298,13 +5298,13 @@ func (m *MsgCheckExecutionResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgCreateAccount) Size() (n int) {
-	if m == nil {
+func (msg *MsgCreateAccount) Size() (n int) {
+	if msg == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.Requester)
+	l = len(msg.Requester)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -6427,7 +6427,7 @@ func (m *MsgCheckExecutionResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgCreateAccount) Unmarshal(dAtA []byte) error {
+func (msg *MsgCreateAccount) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -6486,7 +6486,7 @@ func (m *MsgCreateAccount) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Requester = string(dAtA[iNdEx:postIndex])
+			msg.Requester = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

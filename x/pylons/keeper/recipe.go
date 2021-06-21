@@ -5,27 +5,28 @@ import (
 	"errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // SetRecipe sets a recipe in the key store
-func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
+func (keeper Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) error {
 	if recipe.Sender == "" {
 		return errors.New("SetRecipe: the sender cannot be empty")
 	}
-	return k.SetObject(ctx, types.TypeRecipe, recipe.ID, k.RecipeKey, recipe)
+	return keeper.SetObject(ctx, types.TypeRecipe, recipe.ID, keeper.RecipeKey, recipe)
 }
 
 // GetRecipe returns recipe based on UUID
-func (k Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
+func (keeper Keeper) GetRecipe(ctx sdk.Context, id string) (types.Recipe, error) {
 	recipe := types.Recipe{}
-	err := k.GetObject(ctx, types.TypeRecipe, id, k.RecipeKey, &recipe)
+	err := keeper.GetObject(ctx, types.TypeRecipe, id, keeper.RecipeKey, &recipe)
 	return recipe, err
 }
 
 // GetRecipes returns an iterator for all the recipe
-func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
-	store := ctx.KVStore(k.RecipeKey)
+func (keeper Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
+	store := ctx.KVStore(keeper.RecipeKey)
 	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
 
 	var recipes []types.Recipe
@@ -44,8 +45,8 @@ func (k Keeper) GetRecipes(ctx sdk.Context) []types.Recipe {
 }
 
 // GetRecipesByCookbook returns recipes filtered by cookbook
-func (k Keeper) GetRecipesByCookbook(ctx sdk.Context, cookbookID string) []types.Recipe {
-	store := ctx.KVStore(k.RecipeKey)
+func (keeper Keeper) GetRecipesByCookbook(ctx sdk.Context, cookbookID string) []types.Recipe {
+	store := ctx.KVStore(keeper.RecipeKey)
 	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
 	var recipes []types.Recipe
 	for ; iterator.Valid(); iterator.Next() {
@@ -65,14 +66,14 @@ func (k Keeper) GetRecipesByCookbook(ctx sdk.Context, cookbookID string) []types
 }
 
 // GetAllRecipesCount returns all recipes count
-func (k Keeper) GetAllRecipesCount(ctx sdk.Context) int {
-	recipes := k.GetRecipes(ctx)
+func (keeper Keeper) GetAllRecipesCount(ctx sdk.Context) int {
+	recipes := keeper.GetRecipes(ctx)
 	return len(recipes)
 }
 
 // HasRecipeWithCookbookID checks if a recipe with the provided id and cookbook id is present or not
-func (k Keeper) HasRecipeWithCookbookID(ctx sdk.Context, cbID, recipeID string) bool {
-	store := ctx.KVStore(k.RecipeKey)
+func (keeper Keeper) HasRecipeWithCookbookID(ctx sdk.Context, cbID, recipeID string) bool {
+	store := ctx.KVStore(keeper.RecipeKey)
 	mRecipe := store.Get([]byte(recipeID))
 	if mRecipe == nil {
 		return false
@@ -89,8 +90,8 @@ func (k Keeper) HasRecipeWithCookbookID(ctx sdk.Context, cbID, recipeID string) 
 }
 
 // GetRecipesBySender returns an iterator for recipes created by sender
-func (k Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []types.Recipe {
-	store := ctx.KVStore(k.RecipeKey)
+func (keeper Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []types.Recipe {
+	store := ctx.KVStore(keeper.RecipeKey)
 	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
 	var recipes []types.Recipe
 	for ; iterator.Valid(); iterator.Next() {
@@ -110,10 +111,10 @@ func (k Keeper) GetRecipesBySender(ctx sdk.Context, sender sdk.AccAddress) []typ
 }
 
 // UpdateRecipe is used to update the recipe using the id
-func (k Keeper) UpdateRecipe(ctx sdk.Context, id string, recipe types.Recipe) error {
+func (keeper Keeper) UpdateRecipe(ctx sdk.Context, id string, recipe types.Recipe) error {
 	if recipe.Sender == "" {
 		return errors.New("UpdateRecipe: the sender cannot be empty")
 
 	}
-	return k.UpdateObject(ctx, types.TypeRecipe, id, k.RecipeKey, recipe)
+	return keeper.UpdateObject(ctx, types.TypeRecipe, id, keeper.RecipeKey, recipe)
 }

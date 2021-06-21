@@ -5,8 +5,9 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func GenRecipe(sender sdk.AccAddress, cbID string, name string, desc string) types.Recipe {

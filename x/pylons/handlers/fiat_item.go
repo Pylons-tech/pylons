@@ -4,11 +4,12 @@ import (
 	"context"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // FiatItem is used to create item within 1 block execution
-func (k msgServer) FiatItem(ctx context.Context, msg *types.MsgFiatItem) (*types.MsgFiatItemResponse, error) {
+func (srv msgServer) FiatItem(ctx context.Context, msg *types.MsgFiatItem) (*types.MsgFiatItemResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -29,7 +30,7 @@ func (k msgServer) FiatItem(ctx context.Context, msg *types.MsgFiatItem) (*types
 
 	item := types.NewItem(msg.CookbookID, msg.Doubles, msg.Longs, msg.Strings, sender, sdkCtx.BlockHeight(), msg.TransferFee)
 
-	if err := k.SetItem(sdkCtx, item); err != nil {
+	if err := srv.SetItem(sdkCtx, item); err != nil {
 		return nil, errInternal(err)
 	}
 

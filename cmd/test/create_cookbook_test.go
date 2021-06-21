@@ -5,11 +5,12 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	"github.com/gogo/protobuf/proto"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCreateCookbookViaCLI(originT *originT.T) {

@@ -14,14 +14,15 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/queriers"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	abci "github.com/tendermint/tendermint/abci/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdktypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 // type check to ensure the interface is properly implemented
@@ -46,6 +47,7 @@ func (AppModuleBasic) RegisterInterfaces(registry sdktypes.InterfaceRegistry) {
 	types.RegisterInterfaces(registry)
 }
 
+// TODO handle error
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
 	types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
 }

@@ -5,9 +5,10 @@ import (
 	"encoding/hex"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 )
 
 // AddrFromPubKey returns a bech32 public address from the public key

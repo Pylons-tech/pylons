@@ -6,8 +6,9 @@ import (
 	"time"
 
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 

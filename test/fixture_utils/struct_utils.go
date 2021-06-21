@@ -12,6 +12,7 @@ import (
 	testutils "github.com/Pylons-tech/pylons/test/test_utils"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -23,7 +24,12 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 	jsonFile, err := os.Open(path.Join(FixtureTestOpts.BaseDirectory, fileURL))
 	t.MustNil(err, "fatal log reading file")
 
-	defer jsonFile.Close()
+	defer func(jsonFile *os.File) {
+		err := jsonFile.Close()
+		if err != nil {
+
+		}
+	}(jsonFile)
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	return byteValue

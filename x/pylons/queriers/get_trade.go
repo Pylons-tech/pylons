@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// query endpoints supported by the nameservice Querier
 const (
+	// KeyGetTrade is a query endpoint supported by the nameservice Querier
 	KeyGetTrade = "get_trade"
 )
 

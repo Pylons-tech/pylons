@@ -2,6 +2,7 @@ package types
 
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
