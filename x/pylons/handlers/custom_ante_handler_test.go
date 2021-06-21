@@ -49,7 +49,7 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			priv, cosmosAddr, err := GenAccount()
+			privKey, cosmosAddr, err := GenAccount()
 			require.NoError(t, err)
 
 			if tc.genNewAccount == false {
@@ -62,7 +62,9 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 			txBuilder.SetFeeAmount(sdk.NewCoins(sdk.NewInt64Coin("stake", 0)))
 			txBuilder.SetMemo("")
 
-			txBuilder.SetMsgs([]sdk.Msg{&msg}...)
+			err = txBuilder.SetMsgs([]sdk.Msg{&msg}...)
+			require.NoError(t, err)
+
 			signMode := tci.TxConfig.SignModeHandler().DefaultMode()
 
 			if tc.putSignature {
@@ -74,11 +76,11 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 				}
 				// Generate the bytes to be signed.
 				signBytes, err := tci.TxConfig.SignModeHandler().GetSignBytes(signMode, signerData, txBuilder.GetTx())
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				// Sign those bytes
-				signature, err := priv.Sign(signBytes)
-				require.True(t, err == nil)
+				signature, err := privKey.Sign(signBytes)
+				require.NoError(t, err)
 
 				// Construct the SignatureV2 struct
 				sigData := signing.SingleSignatureData{
@@ -87,12 +89,13 @@ func TestNewAccountCreationDecoratorAnteHandle(t *testing.T) {
 				}
 
 				sigV2 = signing.SignatureV2{
-					PubKey:   priv.PubKey(),
+					PubKey:   privKey.PubKey(),
 					Data:     &sigData,
 					Sequence: 0,
 				}
 
-				txBuilder.SetSignatures(sigV2)
+				err = txBuilder.SetSignatures(sigV2)
+				require.NoError(t, err)
 			}
 
 			newCtx, err := acd.AnteHandle(tci.Ctx, txBuilder.GetTx(), false, emptyAnteHandle)
@@ -167,7 +170,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			priv, cosmosAddr, err := GenAccount()
+			privKey, cosmosAddr, err := GenAccount()
 			require.NoError(t, err)
 
 			msg := types.NewMsgCreateAccount(cosmosAddr.String())
@@ -178,13 +181,13 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			txBuilder.SetMemo("")
 
 			err = txBuilder.SetMsgs([]sdk.Msg{&msg}...)
-			require.True(t, err == nil)
+			require.NoError(t, err)
 
 			signMode := tci.TxConfig.SignModeHandler().DefaultMode()
 
 			if tc.putSignature {
 				sigV2Empty := signing.SignatureV2{
-					PubKey: priv.PubKey(),
+					PubKey: privKey.PubKey(),
 					Data: &signing.SingleSignatureData{
 						SignMode:  tci.TxConfig.SignModeHandler().DefaultMode(),
 						Signature: nil,
@@ -202,11 +205,11 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				}
 				// Generate the bytes to be signed.
 				signBytes, err := tci.TxConfig.SignModeHandler().GetSignBytes(signMode, signerData, txBuilder.GetTx())
-				require.True(t, err == nil)
+				require.NoError(t, err)
 
 				// Sign those bytes
-				signature, err := priv.Sign(signBytes)
-				require.True(t, err == nil)
+				signature, err := privKey.Sign(signBytes)
+				require.NoError(t, err)
 
 				// Construct the SignatureV2 struct
 				sigData := signing.SingleSignatureData{
@@ -215,7 +218,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 				}
 
 				sigV2 = signing.SignatureV2{
-					PubKey:   priv.PubKey(),
+					PubKey:   privKey.PubKey(),
 					Data:     &sigData,
 					Sequence: tc.accountSequence,
 				}
@@ -225,7 +228,7 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 			}
 
 			if tc.registerAccount {
-				any, err := codectypes.NewAnyWithValue(priv.PubKey())
+				any, err := codectypes.NewAnyWithValue(privKey.PubKey())
 				require.True(t, err == nil)
 
 				acc := &authtypes.BaseAccount{
@@ -261,11 +264,11 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 					txBuilder.SetMemo("")
 
 					err = txBuilder.SetMsgs([]sdk.Msg{&caMsg}...)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 
 					signMode := tci.TxConfig.SignModeHandler().DefaultMode()
 					sigV2Empty := signing.SignatureV2{
-						PubKey: priv.PubKey(),
+						PubKey: privKey.PubKey(),
 						Data: &signing.SingleSignatureData{
 							SignMode:  tci.TxConfig.SignModeHandler().DefaultMode(),
 							Signature: nil,
@@ -283,11 +286,11 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 					}
 					// Generate the bytes to be signed.
 					signBytes, err := tci.TxConfig.SignModeHandler().GetSignBytes(signMode, signerData, txBuilder.GetTx())
-					require.True(t, err == nil)
+					require.NoError(t, err)
 
 					// Sign those bytes
-					signature, err := priv.Sign(signBytes)
-					require.True(t, err == nil)
+					signature, err := privKey.Sign(signBytes)
+					require.NoError(t, err)
 
 					// Construct the SignatureV2 struct
 					sigData := signing.SingleSignatureData{
@@ -296,14 +299,15 @@ func TestCustomSigVerificationDecoratorAnteHandle(t *testing.T) {
 					}
 
 					sigV2 = signing.SignatureV2{
-						PubKey:   priv.PubKey(),
+						PubKey:   privKey.PubKey(),
 						Data:     &sigData,
 						Sequence: tc.accountSequence,
 					}
 
-					txBuilder.SetSignatures(sigV2)
+					err = txBuilder.SetSignatures(sigV2)
+					require.NoError(t, err)
 					_, err = csvd.AnteHandle(tci.Ctx, txBuilder.GetTx(), false, emptyAnteHandle)
-					require.True(t, err == nil)
+					require.NoError(t, err)
 				}
 			}
 		})
