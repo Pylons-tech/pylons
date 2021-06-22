@@ -19,7 +19,11 @@ v                     without deliberation
 
 <!-- Why do we need this feature? 
 What problems may be addressed by introducing this feature?
+<<<<<<< HEAD
 What benefits does Pylons stand to gain by including this feature?
+=======
+What benefits does the SDK stand to gain by including this feature?
+>>>>>>> 0fac7486 (create Issue Templates)
 Are there any disadvantages of including this feature? -->
 
 ## Proposal
@@ -33,4 +37,8 @@ ____
 - [ ] Not duplicate issue
 - [ ] Appropriate labels applied
 - [ ] Appropriate contributors tagged
+<<<<<<< HEAD
 - [ ] Contributor assigned/self-assigned
+=======
+- [ ] Contributor assigned/self-assigned
+>>>>>>> 0fac7486 (create Issue Templates)
