@@ -95,7 +95,7 @@ fixture_unit_tests:
 ###############################################################################
 
 lint:
-	golangci-lint run
+	golangci-lint run -c ./golangci.yml
 
 FIND_ARGS := -name '*.go' -type f -not -path "./sample_txs*" -not -path "*.git*" -not -path "./build_report/*" -not -path "./scripts*" -not -name '*.pb.go'
 
