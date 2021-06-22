@@ -8,12 +8,13 @@ import (
 
 	"encoding/hex"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/gorilla/mux"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 const (

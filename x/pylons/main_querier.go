@@ -1,11 +1,12 @@
 package pylons
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 )
 
 // NewQuerier is the module level router for state queries

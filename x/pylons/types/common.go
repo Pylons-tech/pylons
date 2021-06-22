@@ -7,10 +7,11 @@ import (
 	"reflect"
 	"regexp"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/google/uuid"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 )
 
 type StringKeyValueList []StringKeyValue

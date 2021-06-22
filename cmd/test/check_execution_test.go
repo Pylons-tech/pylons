@@ -8,12 +8,13 @@ import (
 
 	originT "testing"
 
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 	"github.com/gogo/protobuf/proto"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 )
 
 type CheckExecutionTestCase struct {

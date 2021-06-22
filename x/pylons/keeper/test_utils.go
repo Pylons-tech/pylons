@@ -3,7 +3,6 @@ package keeper
 import (
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/stretchr/testify/require"
 	abcitypes "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
@@ -23,6 +22,8 @@ import (
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // TestCoinInput is a struct that hodl mocked chain env

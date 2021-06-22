@@ -7,13 +7,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli/query"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
-	"github.com/Pylons-tech/pylons/x/pylons/client/rest"
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/queriers"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	abci "github.com/tendermint/tendermint/abci/types"
 
@@ -23,6 +16,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli/query"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli/tx"
+	"github.com/Pylons-tech/pylons/x/pylons/client/rest"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/queriers"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // type check to ensure the interface is properly implemented
