@@ -5,4 +5,8 @@
 # most precedence.
 
 # Primary repo maintainers
+<<<<<<< HEAD
 *       @aljo242 @andraderaf @giunatale
+=======
+*       @aljo242 @giunat
+>>>>>>> b976af2b (create CODEOWNERS)
