@@ -34,10 +34,14 @@ jobs:
         
     - uses: technote-space/get-diff-action@v4
 <<<<<<< HEAD
+<<<<<<< HEAD
       id: git_diff
 =======
       id: git diff
 >>>>>>> 8b410629 (Create test.yml)
+=======
+      id: git_diff
+>>>>>>> 655fac19 (fix test.yml syntax error)
       with:
         PATTERNS: |
           **/**.go
