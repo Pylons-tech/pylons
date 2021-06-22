@@ -35,25 +35,17 @@ flags:
   app:
     paths:
       - "app/"
-      - "baseapp/"
   modules:
     paths:
       - "x/"
-      - "!x/**/client/" # ignore client package
-  client:
-    paths:
-      - "client/"
-      - "x/**/client/"
-
 ignore:
   - "docs"
   - "*.md"
-  - "*.rst"
   - "**/*.pb.go"
   - "types/*.pb.go"
-  - "tests/*"
-  - "tests/**/*"
+  - "test/*"
+  - "testnet/*"
   - "x/**/*.pb.go"
-  - "x/**/test_common.go"
   - "scripts/"
-  - "contrib"
+  - "sample_txs/"
+  - "*.proto"
