@@ -1,7 +1,11 @@
 name: Tests
 
 # Tests runs unit tests 
+<<<<<<< HEAD
 # This workflow is run on pushed to [develop* master*] and every Pull Requeset where a .go, .mod, .sum have been changed
+=======
+# This workflow is run on pushed to [develop master] and every Pull Requeset where a .go, .mod, .sum have been changed
+>>>>>>> 8b410629 (Create test.yml)
 
 on:
   pull_request:
@@ -11,7 +15,11 @@ on:
       - master
 
 jobs:
+<<<<<<< HEAD
   build:
+=======
+  build-and-test:
+>>>>>>> 8b410629 (Create test.yml)
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,12 +33,17 @@ jobs:
         go-version: 1.16
         
     - uses: technote-space/get-diff-action@v4
+<<<<<<< HEAD
       id: git_diff
+=======
+      id: git diff
+>>>>>>> 8b410629 (Create test.yml)
       with:
         PATTERNS: |
           **/**.go
           go.mod
           go.sum
+<<<<<<< HEAD
     - name: Build
       run: GOARCH=${{matrix.go-arch}} make build-binary
 
@@ -56,3 +69,11 @@ jobs:
         run:  make unit_tests
       - name: fixture-unit-tests
         run: make fixture_unit_tests
+=======
+
+    - name: Build
+      run: GOARCH=${{matrix.go-arch}} make build-binary
+
+    - name: Unit Test
+      run: GOARCH=${{matrix.go-arch}}  make unit_tests
+>>>>>>> 8b410629 (Create test.yml)
