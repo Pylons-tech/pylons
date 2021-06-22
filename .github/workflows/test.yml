@@ -1,0 +1,39 @@
+name: Tests
+
+# Tests runs unit tests 
+# This workflow is run on pushed to [develop master] and every Pull Requeset where a .go, .mod, .sum have been changed
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-arch: ["amd64", "arm",  "arm64"]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2.1.3
+      with:
+        go-version: 1.16
+        
+    - uses: technote-space/get-diff-action@v4
+      id: git diff
+      with:
+        PATTERNS: |
+          **/**.go
+          go.mod
+          go.sum
+
+    - name: Build
+      run: GOARCH=${{matrix.go-arch}} make build-binary
+
+    - name: Unit Test
+      run: GOARCH=${{matrix.go-arch}}  make unit_tests
