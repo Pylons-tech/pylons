@@ -36,20 +36,21 @@ BUILD_FLAGS := -tags "$(build_tags)" -ldflags "$(ldflags)"
 all: install
 
 install: go.sum
+	@echo Installing pylonsd...
 	go install $(BUILD_FLAGS) ./cmd/$(APP_NAME)
 
 build-binary: go.sum $(BUILD_DIR)/
 	go build $(BUILD_FLAGS) -o $(BUILD_DIR)/$(APP_NAME) ./cmd/$(APP_NAME)
 
 $(BUILD_DIR)/:
-	mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)
 
 clean:
 	rm -rf $(BUILD_DIR)/*
 
 go.sum: go.mod
-	go mod verify
-	go mod tidy
+	@go mod verify
+	@go mod tidy
 
 .PHONY: build-binary clean install
 
@@ -58,13 +59,14 @@ go.sum: go.mod
 ###############################################################################
 
 init_accounts:
-	bash ./init_accounts.sh
+	@bash ./init_accounts.sh
 
 proto-gen:
-	bash ./scripts/protoc_gen.sh
+	@bash ./scripts/protoc_gen.sh
 
 reset_chain:
-	$(APP_NAME) unsafe-reset-all
+	@echo Resetting chain...
+	@$(APP_NAME) unsafe-reset-all
 
 .PHONY: init_accounts proto-gen reset_chain
 
@@ -75,11 +77,11 @@ reset_chain:
 test-all: int_tests fixture_tests unit_tests fixture_unit_tests
 
 int_tests:
-	rm ./cmd/test/nonce.json || true
+	@rm ./cmd/test/nonce.json || true
 	go test -v ./cmd/test/ ${ARGS}
 
 fixture_tests:
-	rm ./cmd/fixtures_test/nonce.json || true
+	@rm ./cmd/fixtures_test/nonce.json || true
 	go test -v ./cmd/fixtures_test/ ${ARGS}
 
 unit_tests:
@@ -95,12 +97,12 @@ fixture_unit_tests:
 ###############################################################################
 
 lint:
-	golangci-lint run -c ./golangci.yml
+	@golangci-lint run -c ./.golangci.yml --out-format=tab --issues-exit-code=0
 
 FIND_ARGS := -name '*.go' -type f -not -path "./sample_txs*" -not -path "*.git*" -not -path "./build_report/*" -not -path "./scripts*" -not -name '*.pb.go'
 
 format:
-	find . $(FIND_ARGS) | xargs gofmt -w -s
-	find . $(FIND_ARGS) | xargs goimports -w -local github.com/Pylons-tech/pylons
+	@find . $(FIND_ARGS) | xargs gofmt -w -s
+	@find . $(FIND_ARGS) | xargs goimports -w -local github.com/Pylons-tech/pylons
 
 .PHONY: lint format
