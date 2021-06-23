@@ -59,7 +59,10 @@ go.sum: go.mod
 ###############################################################################
 
 init_accounts:
-	@bash ./init_accounts.sh
+	@bash ./scripts/init_accounts.sh
+
+init_accounts_local:
+	@bash ./scripts/init_accounts.local.sh
 
 proto-gen:
 	@bash ./scripts/protoc_gen.sh

@@ -37,7 +37,7 @@ WORKDIR /root
 COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /root/.pylonsd /root/.pylonsd
 RUN pylonsd init masternode --chain-id pylonschain
-COPY init_accounts.local.sh ./
+COPY scripts/init_accounts.local.sh ./
 RUN bash ./init_accounts.local.sh
 CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657
 
@@ -54,19 +54,19 @@ CMD /usr/bin/pylonsd start --rpc.laddr tcp://0.0.0.0:26657 --log_level main:info
 #Run the tests
 FROM build as integration_test
 COPY Makefile .
-COPY init_accounts.sh .
+COPY scripts/init_accounts.sh .
 RUN chmod +x init_accounts.sh
 # RUN make init_accounts
 CMD sleep 5 && make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657 --timeout=30m"
 
 FROM build as fixture_test
 COPY Makefile .
-COPY init_accounts.sh .
+COPY scripts/init_accounts.sh .
 RUN chmod +x init_accounts.sh
 CMD sleep 5 && make init_accounts && GO111MODULE=on make fixture_tests ARGS="--accounts=michael,eugen --node=tcp://192.168.10.2:26657 --timeout=30m"
 
 FROM build as all_test
 COPY Makefile .
-COPY init_accounts.sh .
+COPY scripts/init_accounts.sh .
 RUN chmod +x init_accounts.sh
 CMD sleep 5 && make init_accounts && GO111MODULE=on make int_tests ARGS="--node=tcp://192.168.10.2:26657,tcp://192.168.10.3:26657,tcp://192.168.10.4:26657 --timeout=30m" && GO111MODULE=on make fixture_tests ARGS="--accounts=michael,eugen --node=tcp://192.168.10.2:26657 --timeout=30m"
