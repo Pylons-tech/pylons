@@ -16,5 +16,6 @@ This installation method removes existing Go installations, installs Go in `/usr
 
 `golangci-lint` is a linter runner used in the `make lint` command provided to developers.  To install it into `$GOPATH/bin` run:
 
-``curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.0
-``
+```shell
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.0
+```

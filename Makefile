@@ -46,7 +46,8 @@ $(BUILD_DIR)/:
 	@mkdir -p $(BUILD_DIR)
 
 clean:
-	rm -rf $(BUILD_DIR)/*
+	@rm -rf $(BUILD_DIR)/*
+	@go clean
 
 go.sum: go.mod
 	@go mod verify
