@@ -464,6 +464,7 @@ message MsgStripeCreateAccountResponse{
 }
 
 
+
 message MsgStripeCreateProductSku  { 
   string StripeKey = 1;
   string Name = 2;   
@@ -477,5 +478,32 @@ message MsgStripeCreateProductSku  {
   string Sender = 10;
 }
 
- 
-  
+message MsgStripeInfo {
+  string Sender = 1;
+}
+
+message MsgStripeInfoResponse {
+  string PubKey = 1;
+  string ClientID = 2;
+  string URI = 3;
+  string Message = 4;
+  string Status = 5;
+}
+
+message MsgStripeOauthToken {
+  string GrantType = 1;
+  string Code = 2;
+  string Sender = 3;
+}
+
+message MsgStripeOauthTokenResponse {
+  string AcessToken = 1;
+  string LiveMode = 2;
+  string RefreshToken = 3;
+  string TokenType = 4;
+  string StripePublishKey = 5;
+  string StripeUserID = 6;
+  string Scope = 7;
+  string Message = 8;
+  string Status = 9;
+}

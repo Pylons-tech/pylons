@@ -112,7 +112,8 @@ func InitTestnet(
 ) error {
 
 	if chainID == "" {
-		chainID = "pylonschain"
+		//chainID = "pylonschain"
+		chainID = "pylons-testnet"
 	}
 
 	nodeIDs := make([]string, numValidators)

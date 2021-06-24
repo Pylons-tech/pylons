@@ -82,6 +82,15 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_account", storeName),
 		stripeCrateAccountHandler(cliCtx)).Methods("POST")
 
+	r.HandleFunc(fmt.Sprintf("/%s/oauth_token", storeName),
+		stripeOAuthTokenHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_info", storeName),
+		stripeInfoHandler(cliCtx)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_account", storeName),
+		stripeCrateAccountHandler(cliCtx)).Methods("POST")
+
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cliCtx, storeName)).Methods("GET")
 

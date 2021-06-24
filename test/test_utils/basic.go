@@ -168,6 +168,9 @@ func GetLogFieldsFromMsgs(txMsgs []sdk.Msg) log.Fields {
 			fields[ikeypref+"currency"] = msg.Currency
 			fields[ikeypref+"inventory"] = msg.Inventory
 			fields[ikeypref+"sender"] = msg.Sender
+		case *types.MsgStripeInfo:
+			fields[ikeypref+"type"] = "MsgStripeInfo"
+			fields[ikeypref+"sender"] = msg.Sender
 		case *types.MsgStripeCreatePaymentIntent:
 			fields[ikeypref+"type"] = "MsgStripeCreatePaymentIntent"
 			fields[ikeypref+"stripe_key"] = msg.StripeKey

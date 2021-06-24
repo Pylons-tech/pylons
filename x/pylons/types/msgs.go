@@ -454,6 +454,15 @@ func NewMsgStripeCreateAccount(StripeKey string, Country string, Email string, T
 	return msg
 }
 
+func NewMsgStripeOauthToken(GrantType string, Code string, Sender string) MsgStripeOauthToken {
+	msg := MsgStripeOauthToken{
+		GrantType: GrantType,
+		Code:      Code,
+		Sender:    Sender,
+	}
+	return msg
+}
+
 func NewMsgStripeCreatePrice(StripeKey string, Product string, Amount string, Currency string, Description string, Sender string) MsgStripeCreatePrice {
 	msg := MsgStripeCreatePrice{
 		StripeKey:   StripeKey,
@@ -580,6 +589,14 @@ func (msg MsgStripeCreateProductSku) ValidateBasic() error {
 	return nil
 }
 
+func (msg MsgStripeInfo) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
 func (msg MsgStripeCreatePrice) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -630,6 +647,56 @@ func (msg MsgStripeCreateAccount) Route() string { return RouterKey }
 func (msg MsgStripeCreateAccount) Type() string { return "stripe_create_account" }
 
 func (msg MsgStripeCreateAccount) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeOauthToken) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeOauthToken) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeOauthToken) Route() string { return RouterKey }
+
+func (msg MsgStripeOauthToken) Type() string { return "stripe_create_account" }
+
+func (msg MsgStripeOauthToken) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeInfo) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeInfo) Route() string { return RouterKey }
+
+func (msg MsgStripeInfo) Type() string { return "stripe_info" }
+
+func (msg MsgStripeInfo) ValidateBasic() error {
 
 	// if msg.Sender == "" {
 	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)

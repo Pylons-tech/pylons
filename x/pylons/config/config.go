@@ -39,12 +39,15 @@ type StripeIAPConfiguration struct {
 }
 
 type StripeConfiguration struct {
-	StripeSecretKey string `yaml:"stripe_pubkey"`
-	StripeCountry   string `yaml:"stripeCountry"`
-	Country         string `yaml:"country"`
-	Currency        string `yaml:"currency"`
-	PaymentMethods  string `yaml:"paymentMethods"`
-	StripeSkuID     string `yaml:"stripe_sku_id"`
+	StripeSecretKey   string `yaml:"stripe_secretKey"`
+	StripePubKey      string `yaml:"stripe_publicKey"`
+	StripeClientID    string `yaml:"stripe_client_id"`
+	StripeRedirectURI string `yaml:"stripe_redirect_uri"`
+	StripeCountry     string `yaml:"stripeCountry"`
+	Country           string `yaml:"country"`
+	Currency          string `yaml:"currency"`
+	PaymentMethods    string `yaml:"paymentMethods"`
+	StripeSkuID       string `yaml:"stripe_sku_id"`
 }
 
 // Configuration is a struct to manage game configuration
@@ -130,12 +133,15 @@ func ReadConfig() error {
 			},
 		},
 		StripeConfig: StripeConfiguration{
-			StripeSecretKey: "sk_test_51Iy5pOEdpQgutKvr1vkMGl6z4KoqNOkHCtfSskbJBYhpfwuemglQtcNn4XqgiqooiStO9P1k4rxUd83CUqV3kWqM00zG97ZVD8",
-			StripeCountry:   "us",
-			Country:         "US",
-			Currency:        "USD",
-			PaymentMethods:  PaymentMethods(),
-			StripeSkuID:     "PaymentMethods",
+			StripeSecretKey:   "StripeSecretKey",
+			StripePubKey:      "StripePubKey",
+			StripeClientID:    "StripeClientID",
+			StripeRedirectURI: "https://wallet.pylons.tech",
+			StripeCountry:     "us",
+			Country:           "US",
+			Currency:          "USD",
+			PaymentMethods:    PaymentMethods(),
+			StripeSkuID:       "PaymentMethods",
 		},
 		IsProduction: false,
 	}

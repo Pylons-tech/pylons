@@ -27,7 +27,10 @@ stripe_iap:
     product_id: pylons_55000
     amount: 55000
 stripe_config:
-  stripe_pubkey: sk_test_51Iy5pOEdpQgutKvr1vkMGl6z4KoqNOkHCtfSskbJBYhpfwuemglQtcNn4XqgiqooiStO9P1k4rxUd83CUqV3kWqM00zG97ZVD8
+  stripe_secKey: sk_test_51Iy5pOEdpQgutKvr1vkMGl6z4KoqNOkHCtfSskbJBYhpfwuemglQtcNn4XqgiqooiStO9P1k4rxUd83CUqV3kWqM00zG97ZVD8
+  stripe_pubkey: pk_test_51Iy5pOEdpQgutKvrWuZVvM0fPB4LRm0tzP1y17hWDCxBcISFb6X07BtIpOQArSfQgApOceoAwUX0qJXPC07OBLCn005w7KGtWE 
+  stripe_client_id: ca_Jd44I5yQ4pKBpePVtiROVcTFRzQVU6cT
+  stripe_redirect_uri: https://wallet.pylons.tech
   stripeCountry: us
   country: US
   currency: USD

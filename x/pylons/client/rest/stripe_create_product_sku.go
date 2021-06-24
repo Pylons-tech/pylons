@@ -9,6 +9,7 @@ import (
 	"github.com/stripe/stripe-go/product"
 	"github.com/stripe/stripe-go/sku"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
@@ -53,7 +54,7 @@ func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := types.NewMsgStripeCreateProductSku(req.StripeKey,
+		msg := types.NewMsgStripeCreateProductSku(config.Config.StripeConfig.StripeSecretKey,
 			req.Name,
 			req.Description,
 			req.Images,
