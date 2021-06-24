@@ -1,73 +1,8 @@
-# pylons
+# Testing
 
-This repository provides the pylonsd daemon, the program for running a node in the [Pylons](https://pylons.tech) blockchain.
-It connects to the other nodes in the network to form a consensus, and responds to API and CLI commands from clients, including using the Pylons SDK.
+## Quick Start
 
-## Setup development environment
-
-### Mac
-
-```sh
-git clone https://github.com/Pylons-tech/pylons
-brew install pre-commit
-brew install golangci/tap/golangci-lint
-go get -u golang.org/x/lint/golint
-pre-commit install
-```
-
-## How to
-
-- Install
-
-```sh
-go clean -i all
-go install ./cmd/pylonsd
-```
-
-- create a genesis block and some users
-
-```sh
-# Initialize configuration files and genesis file, the name here is "masternode", you can call it anything
-pylonsd init masternode --chain-id pylonschain
-
-# Copy the `Address` output here and save it for later use
-# [optional] add "--ledger" at the end to use a Ledger Nano S
-pylonsd keys add jack
-
-# Copy the `Address` output here and save it for later use
-pylonsd keys add alice
-
-# Add both accounts, with coins to the genesis file
-pylonsd add-genesis-account $(pylonsd keys show jack -a) 100pylon,1000jackcoin
-pylonsd add-genesis-account $(pylonsd keys show alice -a) 100pylon,1000alicecoin
-```
-
-- Multinode integration test is using init-account.sh. It does not use get-pylons but use the public genesis account for the tests accounts setup.
-- For local genesis accounts setup for integration test, you can use `init_accounts.local.sh` file.
-
-```sh
-sh init_accounts.local.sh
-```
-
-`michael`, `eugen` account will be created after success run and will have loudcoin and pylons denom for tests.
-
-- start the `pylonsd` node
-
-```sh
-pylonsd start
-```
-
-- play with the api
-
-```sh
-pylonsd tx pylons get-pylons --from=node0 --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd --yes
-```
-
-- enable rest server when starting node
-```sh
-sed -i 's/enable = false/enable = true/g' $HOME/.pylonsd/config/app.toml
-pylonsd start --home=$HOME/.pylonsd
-```
+Follow our [quick start](../README.md) guide to build and initialize the chain.
 
 ## Running tests
 - Unit test command
@@ -76,7 +11,7 @@ make unit_tests
 ```
 - Specific unit test (regular expression filter)
 ```sh
-make unit_tests ARGS="-run TestKeeperSetExecutio.*/empty_sender_tes"
+make unit_tests ARGS="-run TestKeeperSetExecution.*/empty_sender_tes"
 ```
 
 - Integration test with local daemon command
@@ -108,12 +43,12 @@ Start daemon
 pylonsd start
 ```
 
-### If you wanna get the latest updates of pylons_sdk, use the following commands
+### If you want to get the latest updates of pylons_sdk, use the following commands
 Clean the cache
 ```sh
 go clean -modcache
 ```
-Get the latest pylons_sdk from github
+Get the latest pylons_sdk from GitHub
 ```sh
 go get github.com/Pylons-tech/pylons_sdk@{version_number}
 ```
@@ -162,7 +97,7 @@ is_production: false
 
 ## CLI based tx creation, sign and broadcast
 
-### To get help from pylons tx, use below command
+### Get help using `pylons tx`
 ```sh
 pylonsd tx pylons --help
 ```
@@ -180,7 +115,7 @@ Available Commands:
   update-cookbook update cookbook by providing the args
 ```
 
-### To generate a transaction json, use below command
+### Generate a transaction JSON output
 ```sh
 ./pylonsd tx pylons get-pylons --from cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 --generate-only > t.json
 ```
@@ -371,65 +306,3 @@ gcloud auth login
 gcloud projects create pylons-3nbuild
 gcloud config set project pylons-3nbuild
 cloud-build-local --config=cloudbuild.3ntest.yaml --dryrun=false .
-```
-
-# How to query transactions
-
-TODO: pylonsd query txs command is removed or updated for cosmos sdk upgrade. We need to find correct querying functions and update the document
-
-These are useful commands to query transactions by tags.
-
-```sh
-# new SDK
-pylonsd query txs --events="message.sender=cosmos1agrkc5u7pwc2cwclmkguhc68x6d6ptf9w3ntex"
-pylonsd query txs --events="transfer.recipient=cosmos1agrkc5u7pwc2cwclmkguhc68x6d6ptf9w3ntex"
-
-# old SDK
-pylonsd query txs --tags tx.hash:A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
-pylonsd query txs --tags tx.height:3344 --page 1 --limit 100
-pylonsd query txs --tags sender:cosmos1vy25zn267xwuecnrtqqqq8prr2qw6f477xz6s4 --page 1 --limit 100
-pylonsd query txs --tags action:send --page 1 --limit 100
-pylonsd query txs --tags action:fiat_item
-pylonsd query txs --tags action:create_cookbook
-pylonsd query txs --tags action:create_recipe
-pylonsd query txs --tags action:execute_recipe
-pylonsd query txs --tags action:check_execution
-pylonsd query txs --tags action:create_trade
-pylonsd query txs --tags action:fulfill_trade
-pylonsd query txs --tags action:disable_trade
-```
-
-## How to get tag of specific transaction
-
-If you run
-```sh
-pylonsd query tx A82E3CBD9BA956C9B0284955CDCA9A85E13213B0EAA03E58011EFB08B432C28D
-```
-
-It returns something like this
-```json
-{
-  ...
-  "tags": [
-    {
-      "key": "action",
-      "value": "create_cookbook"
-    }
-  ],
-  ...
-}
-```
-This means we can query this transaction by using
-```sh
-pylonsd query txs --tags action:create_cookbook
-```
-which is `pylonsd query txs --tags <key>:<value>` according to documentation.
-
-According to cosmos team discord channel, they said
-```
-<DOMAIN>/txs?sender=cosmos1y6yvdel7zys8x60gz9067fjpcpygsn62ae9x46
-```
-can be working.
-
-For giving custom tag to a transaction, I need to think and research for that. But we have what we want right now.
-The initial thought was to get transactions that are related to cookbook.
