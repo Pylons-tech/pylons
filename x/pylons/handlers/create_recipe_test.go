@@ -205,7 +205,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 					mOutputs = types.GenOneOutput("RaichuV2")
 				}
 			}
-			genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
+			genSkuString := types.GenExtraInfo("stripe_sku_id", config.Config.StripeConfig.StripeSkuID)
 
 			genCoinList := types.GenCoinInputList("wood", 5)
 			msg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "", tc.recipeDesc,
@@ -255,7 +255,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 	mInputList := types.GenItemInputList("Raichu")
 
 	genCoinsList := types.GenCoinInputList("wood", 5)
-	genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
+	genSkuString := types.GenExtraInfo("stripe_sku_id", config.Config.StripeConfig.StripeSkuID)
 	rcpMsg := types.NewMsgCreateRecipe("name", result.CookbookID, "sameRecipeID-0001", "this has to meet character limits",
 		genCoinsList,
 		mInputList,

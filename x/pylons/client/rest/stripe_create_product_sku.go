@@ -29,6 +29,10 @@ type stripeCreateSkuReq struct {
 	Sender      string
 }
 
+type stripeSkuRes struct {
+	SKU_ID string `json:"stripe_sku_id"`
+}
+
 func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req stripeCreateSkuReq
@@ -107,6 +111,8 @@ func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create sku: %s", err.Error()))
 		}
 
-		rest.PostProcessResponse(w, cliCtx, skuID.ID)
+		var result stripeSkuRes
+		result.SKU_ID = skuID.ID
+		rest.PostProcessResponse(w, cliCtx, result)
 	}
 }

@@ -68,6 +68,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 
 	p := ExecProcess{ctx: sdkCtx, keeper: k.Keeper, recipe: recipe}
 	var cl sdk.Coins
+	var isStripePayment = false
 	for _, inp := range recipe.CoinInputs {
 
 		if inp.Coin == config.Config.StripeConfig.Currency {
@@ -99,8 +100,8 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			if err != nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
 			}
-
-			cl = append(cl, sdk.NewCoin(types.Pylon, sdk.NewInt(inp.Count)))
+			isStripePayment = true
+			//cl = append(cl, sdk.NewCoin(types.Pylon, sdk.NewInt(inp.Count)))
 		} else {
 			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		}
@@ -123,9 +124,11 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 
-		err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, types.CoinInputList(recipe.CoinInputs).ToCoins()))
-		if err != nil {
-			return nil, errInternal(err)
+		if isStripePayment == false {
+			err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, types.CoinInputList(recipe.CoinInputs).ToCoins()))
+			if err != nil {
+				return nil, errInternal(err)
+			}
 		}
 
 		// store the execution as the interval

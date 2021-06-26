@@ -89,7 +89,7 @@ func stripeCrateAccountHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		//rest.PostProcessResponse(w, cliCtx, account.ID)
-		rest.PostProcessResponse(w, cliCtx, aLink.URL)
+		rest.PostProcessResponse(w, cliCtx, aLink)
 		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
 	}
 }

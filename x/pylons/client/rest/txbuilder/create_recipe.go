@@ -26,7 +26,7 @@ func CreateRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 		genItemInputList := types.GenItemInputList("Raichu")
 		genEntries := types.GenEntries("chair", "Raichu")
 		genOneOutput := types.GenOneOutput("chair", "Raichu")
-		genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
+		genSkuString := types.GenExtraInfo("stripe_sku_id", config.Config.StripeConfig.StripeSkuID)
 
 		msg := types.NewMsgCreateRecipe(
 			"name",

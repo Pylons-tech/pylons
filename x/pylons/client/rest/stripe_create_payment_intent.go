@@ -24,6 +24,10 @@ type stripeCreatePaymentIntentReq struct {
 	Sender    string
 }
 
+type stripePaymentRes struct {
+	PAYMENT_ID string `json:"stripe_payment_id"`
+}
+
 func stripeCratePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req stripeCreatePaymentIntentReq
@@ -82,7 +86,10 @@ func stripeCratePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		rest.PostProcessResponse(w, cliCtx, paymentId.ClientSecret)
+
+		var result stripePaymentRes
+		result.PAYMENT_ID = paymentId.ID
+		rest.PostProcessResponse(w, cliCtx, result)
 		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
 	}
 }

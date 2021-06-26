@@ -296,7 +296,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	genItemInputList := types.GenItemInputList("Raichu")
 	genEntries := types.GenEntries("wood", "Raichu")
 	genOneOutput := types.GenOneOutput("wood", "Raichu")
-	genSkuString := types.GenExtraInfo("SkuId", config.Config.StripeConfig.StripeSkuID)
+	genSkuString := types.GenExtraInfo("stripe_sku_id", config.Config.StripeConfig.StripeSkuID)
 	exmpRcpMsg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
 		genCoinInputList,
 		genItemInputList,
