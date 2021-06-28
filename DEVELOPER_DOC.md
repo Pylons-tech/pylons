@@ -54,7 +54,7 @@ We accept emails that fit `^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z0-9
 
 ## Item
 
-Item consists of the following fields.
+Item consists of the following fields:
 
 | No | Field         | Type   | Sample                                | Description                                                                       |
 |----|---------------|--------|---------------------------------------|-----------------------------------------------------------------------------------|
@@ -202,6 +202,7 @@ Sample CoinInput JSON
 }]
 ```
 ### Entries
+
 Entries consist of coin outputs and item outputs. The recipe can generate coins or items.
 
 Sample Entries JSON
@@ -217,6 +218,7 @@ Sample Entries JSON
 }
 ```
 **Warning**  
+
 - Recipes cannot generate pylon denom as an output. 
 - ID of any entry should fit `^[a-zA-Z_][a-zA-Z_0-9]*$` (coin output, item modify output and item output).
 
