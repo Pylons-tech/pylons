@@ -72,7 +72,7 @@ func (srv msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*t
 }
 
 // ProcessSendItemsFee process send items fee
-func ProcessSendItemsFee(ctx sdk.Context, k keeper.Keeper, Sender sdk.AccAddress, CookbookOwner sdk.AccAddress, coins sdk.Coins) error {
+func ProcessSendItemsFee(ctx sdk.Context, k keeper.Keeper, sender sdk.AccAddress, cookbookOwner sdk.AccAddress, coins sdk.Coins) error {
 	// send pylon amount to PylonsLLC, validator
 	pylonAmount := coins.AmountOf(types.Pylon).Int64()
 
@@ -82,7 +82,7 @@ func ProcessSendItemsFee(ctx sdk.Context, k keeper.Keeper, Sender sdk.AccAddress
 			return err
 		}
 
-		err = keeper.SendCoins(k, ctx, Sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
+		err = keeper.SendCoins(k, ctx, sender, pylonsLLCAddress, types.NewPylon(pylonAmount))
 		if err != nil {
 			return err
 		}
@@ -91,7 +91,7 @@ func ProcessSendItemsFee(ctx sdk.Context, k keeper.Keeper, Sender sdk.AccAddress
 		cbOwnerProfit := pylonAmount * cbOwnerProfitPercent / 100
 		if cbOwnerProfit > 0 {
 			cbSenderCoins := types.NewPylon(cbOwnerProfit)
-			err = keeper.SendCoins(k, ctx, pylonsLLCAddress, CookbookOwner, cbSenderCoins)
+			err = keeper.SendCoins(k, ctx, pylonsLLCAddress, cookbookOwner, cbSenderCoins)
 			if err != nil {
 				return err
 			}

@@ -25,11 +25,12 @@ func (srv msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCoo
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	var fee sdk.Coins
-	if msg.Level == types.BasicTier.Level {
+	switch msg.Level {
+	case types.BasicTier.Level:
 		fee = types.BasicTier.Fee
-	} else if msg.Level == types.PremiumTier.Level {
+	case types.PremiumTier.Level:
 		fee = types.PremiumTier.Fee
-	} else {
+	default:
 		return nil, errInternal(errors.New("invalid level"))
 	}
 

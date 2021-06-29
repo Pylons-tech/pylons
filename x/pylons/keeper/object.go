@@ -25,7 +25,6 @@ func (keeper Keeper) GetObject(ctx sdk.Context, storageType, id string, keeperKe
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {
-		//return fmt.Errorf("The %s doesn't exist", storageType)
 		return fmt.Errorf("key %s not present in %s store", id, storageType)
 	}
 

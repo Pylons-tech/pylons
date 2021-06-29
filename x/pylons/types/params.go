@@ -35,6 +35,7 @@ func getFloat(unk interface{}) (float64, error) {
 	default:
 		v := reflect.ValueOf(unk)
 		v = reflect.Indirect(v)
+		// nolint: gocritic
 		if v.Type().ConvertibleTo(floatType) {
 			fv := v.Convert(floatType)
 			return fv.Float(), nil

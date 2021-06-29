@@ -130,9 +130,9 @@ func (msg MsgCreateCookbook) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateCookbook a constructor for UpdateCookbook msg
-func NewMsgUpdateCookbook(ID, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
+func NewMsgUpdateCookbook(id, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
 	return MsgUpdateCookbook{
-		ID:           ID,
+		ID:           id,
 		Description:  desc,
 		Developer:    developer,
 		Version:      version,
@@ -286,6 +286,7 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "double use of entries within single output result")
 			}
 			usedEntries[entryID] = true
+			// nolint: gocritic
 			switch entry := entry.(type) {
 			case *ItemModifyOutput:
 				if usedItemInputRefs[entry.ItemInputRef] {
@@ -614,12 +615,12 @@ func (msg MsgGetPylons) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgGoogleIAPGetPylons is a function to get MsgGetPylons msg from required params
-func NewMsgGoogleIAPGetPylons(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, requester string) MsgGoogleIAPGetPylons {
+func NewMsgGoogleIAPGetPylons(productID, purchaseToken, receiptDataBase64, signature string, requester string) MsgGoogleIAPGetPylons {
 	return MsgGoogleIAPGetPylons{
-		ProductID:         ProductID,
-		PurchaseToken:     PurchaseToken,
-		ReceiptDataBase64: ReceiptDataBase64,
-		Signature:         Signature,
+		ProductID:         productID,
+		PurchaseToken:     purchaseToken,
+		ReceiptDataBase64: receiptDataBase64,
+		Signature:         signature,
 		Requester:         requester,
 	}
 }
@@ -850,9 +851,9 @@ func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgFulfillTrade a constructor for FulfillTrade msg
-func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string) MsgFulfillTrade {
+func NewMsgFulfillTrade(tradeID string, sender string, itemIDs []string) MsgFulfillTrade {
 	return MsgFulfillTrade{
-		TradeID: TradeID,
+		TradeID: tradeID,
 		Sender:  sender,
 		ItemIDs: itemIDs,
 	}
@@ -1092,12 +1093,12 @@ func (msg MsgSendItems) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateItemString is a function to get MsgUpdateItemString msg from required params
-func NewMsgUpdateItemString(ItemID, Field, Value string, Sender string) MsgUpdateItemString {
+func NewMsgUpdateItemString(itemID, field, value, sender string) MsgUpdateItemString {
 	return MsgUpdateItemString{
-		ItemID: ItemID,
-		Field:  Field,
-		Value:  Value,
-		Sender: Sender,
+		ItemID: itemID,
+		Field:  field,
+		Value:  value,
+		Sender: sender,
 	}
 }
 

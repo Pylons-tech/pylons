@@ -436,14 +436,14 @@ func (ii ItemInput) IDValidationError() error {
 }
 
 // NewItemModifyOutput returns ItemOutput that is modified from item input
-func NewItemModifyOutput(ID string, ItemInputRef string, ModifyParams ItemModifyParams) ItemModifyOutput {
+func NewItemModifyOutput(id, itemInputRef string, modifyParams ItemModifyParams) ItemModifyOutput {
 	return ItemModifyOutput{
-		ID:           ID,
-		ItemInputRef: ItemInputRef,
-		Doubles:      ModifyParams.Doubles,
-		Longs:        ModifyParams.Longs,
-		Strings:      ModifyParams.Strings,
-		TransferFee:  ModifyParams.TransferFee,
+		ID:           id,
+		ItemInputRef: itemInputRef,
+		Doubles:      modifyParams.Doubles,
+		Longs:        modifyParams.Longs,
+		Strings:      modifyParams.Strings,
+		TransferFee:  modifyParams.TransferFee,
 	}
 }
 
@@ -453,13 +453,13 @@ func (mit *ItemModifyOutput) SetTransferFee(transferFee int64) {
 }
 
 // NewItemOutput returns new ItemOutput generated from recipe
-func NewItemOutput(ID string, Doubles DoubleParamList, Longs LongParamList, Strings StringParamList, TransferFee int64) ItemOutput {
+func NewItemOutput(id string, doubles DoubleParamList, longs LongParamList, strings StringParamList, transferFee int64) ItemOutput {
 	return ItemOutput{
-		ID:          ID,
-		Doubles:     Doubles,
-		Longs:       Longs,
-		Strings:     Strings,
-		TransferFee: TransferFee,
+		ID:          id,
+		Doubles:     doubles,
+		Longs:       longs,
+		Strings:     strings,
+		TransferFee: transferFee,
 	}
 }
 

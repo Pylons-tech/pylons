@@ -13,13 +13,13 @@ type EntryI interface {
 }
 
 // EntryIDValidationError returns entry ID validation error
-func EntryIDValidationError(ID string) error {
+func EntryIDValidationError(id string) error {
 	regex := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z_0-9]*$`)
-	if regex.MatchString(ID) {
+	if regex.MatchString(id) {
 		return nil
 	}
 
-	return fmt.Errorf("entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ID)
+	return fmt.Errorf("entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", id)
 }
 
 type serializeEntriesList struct {
@@ -29,25 +29,25 @@ type serializeEntriesList struct {
 }
 
 // FindByID is a function to find an entry by ID
-func (wpl EntriesList) FindByID(ID string) (EntryI, error) {
+func (wpl EntriesList) FindByID(id string) (EntryI, error) {
 	for _, wp := range wpl.CoinOutputs {
-		if wp.GetID() == ID {
+		if wp.GetID() == id {
 			return &wp, nil
 		}
 	}
 
 	for _, wp := range wpl.ItemOutputs {
-		if wp.GetID() == ID {
+		if wp.GetID() == id {
 			return &wp, nil
 		}
 	}
 
 	for _, wp := range wpl.ItemModifyOutputs {
-		if wp.GetID() == ID {
+		if wp.GetID() == id {
 			return &wp, nil
 		}
 	}
-	return nil, fmt.Errorf("no entry with the ID %s available", ID)
+	return nil, fmt.Errorf("no entry with the ID %s available", id)
 }
 
 // MarshalJSON is a custom marshal function

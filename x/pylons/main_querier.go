@@ -15,9 +15,7 @@ func NewQuerier(keeper keeper.Keeper) sdk.Querier {
 		if len(path) < 1 {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "no endpoint path provided for pylons query")
 		}
-		switch path[0] {
-		default:
-			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown pylons query endpoint")
-		}
+
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "unknown pylons query endpoint")
 	}
 }

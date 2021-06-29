@@ -20,14 +20,14 @@ type GoogleIAPOrder struct {
 }
 
 // NewGoogleIAPOrder return a new Google IAP Order
-func NewGoogleIAPOrder(ProductID, PurchaseToken, ReceiptDataBase64, Signature string, Sender sdk.AccAddress) GoogleIAPOrder {
+func NewGoogleIAPOrder(productID, purchaseToken, receiptDataBase64, signature string, sender sdk.AccAddress) GoogleIAPOrder {
 	cb := GoogleIAPOrder{
 		NodeVersion:       "0.0.1",
-		ProductID:         ProductID,
-		PurchaseToken:     PurchaseToken,
-		ReceiptDataBase64: ReceiptDataBase64,
-		Signature:         Signature,
-		Sender:            Sender,
+		ProductID:         productID,
+		PurchaseToken:     purchaseToken,
+		ReceiptDataBase64: receiptDataBase64,
+		Signature:         signature,
+		Sender:            sender,
 	}
 
 	return cb

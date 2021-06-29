@@ -75,13 +75,13 @@ func (querier *querierServer) ListRecipeByCookbook(ctx context.Context, req *typ
 }
 
 // NewShortenRecipe is a constructor for ShortenRecipe
-func NewShortenRecipe(ID, cbID, Name, Description string, Sender string) types.ShortenRecipe {
+func NewShortenRecipe(id, cbID, name, description, sender string) types.ShortenRecipe {
 	return types.ShortenRecipe{
-		ID:          ID,
+		ID:          id,
 		CookbookID:  cbID,
-		Name:        Name,
-		Description: Description,
-		Sender:      Sender,
+		Name:        name,
+		Description: description,
+		Sender:      sender,
 	}
 }
 

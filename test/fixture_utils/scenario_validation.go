@@ -22,32 +22,32 @@ var g = DependencyGraph{
 	NV:        0, // Number of steps
 }
 
-// AddVertice is to convert string to into for circular check algorithm
-func (g *DependencyGraph) AddVertice(VSID string) bool {
-	if _, ok := g.VMap[VSID]; !ok {
-		g.VMap[VSID] = g.NV
+// AddVertex is to convert string to into for circular check algorithm
+func (g *DependencyGraph) AddVertex(vsID string) bool {
+	if _, ok := g.VMap[vsID]; !ok {
+		g.VMap[vsID] = g.NV
 		if g.NV == 0 {
 			g.adj = make([][]int, 1)
 			g.adj[0] = make([]int, 0)
 		} else {
 			g.adj = append(g.adj, make([]int, 0))
 		}
-		g.NV = g.NV + 1
+		g.NV++
 		return true
 	}
 	return false
 }
 
 // AddEdge function is to add an edge to graph
-func (g *DependencyGraph) AddEdge(VSID, WSID string) bool {
-	if _, ok := g.VMap[VSID]; !ok {
+func (g *DependencyGraph) AddEdge(vsID, wsID string) bool {
+	if _, ok := g.VMap[vsID]; !ok {
 		return false
 	}
-	if _, ok := g.VMap[WSID]; !ok {
+	if _, ok := g.VMap[wsID]; !ok {
 		return false
 	}
-	v := g.VMap[VSID]
-	w := g.VMap[WSID]
+	v := g.VMap[vsID]
+	w := g.VMap[wsID]
 
 	g.adj[v] = append(g.adj[v], w)
 
@@ -108,7 +108,7 @@ func CheckSteps(steps []FixtureStep, t *testing.T) {
 		if len(step.ID) == 0 {
 			t.Fatal("please add ID field for all steps")
 		}
-		if ok := g.AddVertice(step.ID); !ok {
+		if ok := g.AddVertex(step.ID); !ok {
 			t.WithFields(testing.Fields{
 				"stepID": step.ID,
 			}).Fatal("same stepID is available")

@@ -22,10 +22,10 @@ func TxBroadcastErrorCheck(err error, step FixtureStep, t *testing.T) {
 }
 
 // TxErrorLogCheck check expected error log is produced correctly
-func TxErrorLogCheck(err error, ErrorLog string, t *testing.T) {
-	if len(ErrorLog) > 0 {
+func TxErrorLogCheck(err error, errorLog string, t *testing.T) {
+	if len(errorLog) > 0 {
 		t.MustTrue(err != nil, "result is nil unexpectedly")
-		t.MustContain(err.Error(), ErrorLog, "transaction error log is different from expected one.")
+		t.MustContain(err.Error(), errorLog, "transaction error log is different from expected one.")
 	}
 }
 
