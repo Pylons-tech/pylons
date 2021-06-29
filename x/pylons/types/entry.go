@@ -53,15 +53,9 @@ func (wpl EntriesList) FindByID(ID string) (EntryI, error) {
 // MarshalJSON is a custom marshal function
 func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	var sel serializeEntriesList
-	for _, wp := range wpl.CoinOutputs {
-		sel.CoinOutputs = append(sel.CoinOutputs, wp)
-	}
-	for _, wp := range wpl.ItemModifyOutputs {
-		sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wp)
-	}
-	for _, wp := range wpl.ItemOutputs {
-		sel.ItemOutputs = append(sel.ItemOutputs, wp)
-	}
+	sel.CoinOutputs = append(sel.CoinOutputs, wpl.CoinOutputs...)
+	sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wpl.ItemModifyOutputs...)
+	sel.ItemOutputs = append(sel.ItemOutputs, wpl.ItemOutputs...)
 
 	return json.Marshal(sel)
 }
@@ -74,14 +68,9 @@ func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	for _, co := range sel.CoinOutputs {
-		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
-	}
-	for _, io := range sel.ItemModifyOutputs {
-		wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, io)
-	}
-	for _, io := range sel.ItemOutputs {
-		wpl.ItemOutputs = append(wpl.ItemOutputs, io)
-	}
+	wpl.CoinOutputs = append(wpl.CoinOutputs, sel.CoinOutputs...)
+	wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, sel.ItemModifyOutputs...)
+	wpl.ItemOutputs = append(wpl.ItemOutputs, sel.ItemOutputs...)
+
 	return nil
 }
