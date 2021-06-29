@@ -188,7 +188,7 @@ func MockTrade(
 }
 
 // AnteHandle is a handler for NewAccountCreationDecorator
-// nolint: deadcode
+// nolint: deadcode, unused
 // used in x/pylons/handlers/custom_ante_handler_test.go
 func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, error) {
 	return ctx, nil
