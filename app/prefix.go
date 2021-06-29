@@ -5,6 +5,7 @@ import (
 )
 
 const (
+	// AccountAddressPrefix is the common prefix for Cosmos SDK based address
 	AccountAddressPrefix = "cosmos"
 )
 

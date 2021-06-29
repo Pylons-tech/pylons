@@ -75,14 +75,20 @@ const (
 )
 
 const (
+	// Pylon is the common name to identify a coin of type Pylon
 	Pylon = "pylon"
-
-	TypeCookbook    = "cookbook"
-	TypeRecipe      = "recipe"
-	TypeTrade       = "trade"
-	TypeItem        = "item"
+	// TypeCookbook is the label to identify a cookbook to keepers
+	TypeCookbook = "cookbook"
+	// TypeRecipe is the label to identify a recipe to keepers
+	TypeRecipe = "recipe"
+	// TypeTrade is the label to identify a trade to keepers
+	TypeTrade = "trade"
+	// TypeItem is the label to identify an item to keepers
+	TypeItem = "item"
+	// TypeItemHistory is the label to identify an item_history to keepers
 	TypeItemHistory = "item_history"
-	TypeExecution   = "execution"
+	// TypeExecution is the label to identify an execution to keepers
+	TypeExecution = "execution"
 )
 
 // tier fee types

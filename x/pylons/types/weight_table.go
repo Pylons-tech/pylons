@@ -18,7 +18,7 @@ func (wr DoubleWeightRange) Has(number sdk.Dec) bool {
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100.00, 500.00] else [600.00, 800.00].
 // next we get a random number from the selected range and return that
 func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
-	var lastWeight int64 = 0
+	var lastWeight int64
 	var weights []int64
 	for _, weightRange := range wt {
 		lastWeight += weightRange.Weight
@@ -29,7 +29,7 @@ func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 	}
 	randWeight := rand.Int63n(lastWeight)
 
-	var first int64 = 0
+	var first int64
 	chosenIndex := -1
 	for i, weight := range weights {
 		if randWeight >= first && randWeight < weight {
@@ -69,7 +69,7 @@ func (wr IntWeightRange) Has(number int64) bool {
 // generate a random number from 0 to 10 and if its from 0 to 8 then selected range = [100, 500] else [600, 800].
 // next we get a random number from the selected range and return that
 func (wt IntWeightTable) Generate() (int64, error) {
-	var lastWeight int64 = 0
+	var lastWeight int64
 	var weights []int64
 	for _, weightRange := range wt {
 		lastWeight += weightRange.Weight
@@ -80,7 +80,7 @@ func (wt IntWeightTable) Generate() (int64, error) {
 	}
 	randWeight := rand.Int63n(lastWeight)
 
-	var first int64 = 0
+	var first int64
 	chosenIndex := -1
 	for i, weight := range weights {
 		if randWeight >= first && randWeight < weight {
