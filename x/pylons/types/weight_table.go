@@ -19,10 +19,10 @@ func (wr DoubleWeightRange) Has(number sdk.Dec) bool {
 // next we get a random number from the selected range and return that
 func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 	var lastWeight int64
-	var weights []int64
-	for _, weightRange := range wt {
+	weights := make([]int64, len(wt))
+	for i, weightRange := range wt {
 		lastWeight += weightRange.Weight
-		weights = append(weights, lastWeight)
+		weights[i] = lastWeight
 	}
 	if lastWeight == 0 {
 		return sdk.NewDec(0), errors.New("total weight of DoubleWeightTable shouldn't be zero")
@@ -70,10 +70,10 @@ func (wr IntWeightRange) Has(number int64) bool {
 // next we get a random number from the selected range and return that
 func (wt IntWeightTable) Generate() (int64, error) {
 	var lastWeight int64
-	var weights []int64
-	for _, weightRange := range wt {
+	weights := make([]int64, len(wt))
+	for i, weightRange := range wt {
 		lastWeight += weightRange.Weight
-		weights = append(weights, lastWeight)
+		weights[i] = lastWeight
 	}
 	if lastWeight == 0 {
 		return 0, errors.New("total weight of IntWeightTable shouldn't be zero")

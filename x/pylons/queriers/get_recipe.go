@@ -2,7 +2,6 @@ package queriers
 
 import (
 	"context"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -92,7 +91,6 @@ func (querier *querierServer) ListShortenRecipe(ctx context.Context, req *types.
 	}
 
 	var recipes []types.Recipe
-	var shortenRecipes []types.ShortenRecipe
 	accAddr, err := sdk.AccAddressFromBech32(req.Address)
 
 	if err != nil {
@@ -105,9 +103,9 @@ func (querier *querierServer) ListShortenRecipe(ctx context.Context, req *types.
 		recipes = querier.Keeper.GetRecipesBySender(sdk.UnwrapSDKContext(ctx), accAddr)
 	}
 
-	for _, rcp := range recipes {
-		shortenRecipes = append(shortenRecipes, NewShortenRecipe(
-			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender))
+	shortenRecipes := make([]types.ShortenRecipe, len(recipes))
+	for i, rcp := range recipes {
+		shortenRecipes[i] = NewShortenRecipe(rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender)
 	}
 
 	return &types.ListShortenRecipeResponse{
@@ -122,17 +120,16 @@ func (querier *querierServer) ListShortenRecipeByCookbook(ctx context.Context, r
 	}
 
 	var recipes []types.Recipe
-	var shortenRecipes []types.ShortenRecipe
-
 	if req.CookbookID == "" {
 		recipes = querier.Keeper.GetRecipes(sdk.UnwrapSDKContext(ctx))
 	} else {
 		recipes = querier.Keeper.GetRecipesByCookbook(sdk.UnwrapSDKContext(ctx), req.CookbookID)
 	}
 
-	for _, rcp := range recipes {
-		shortenRecipes = append(shortenRecipes, NewShortenRecipe(
-			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender))
+	shortenRecipes := make([]types.ShortenRecipe, len(recipes))
+	for i, rcp := range recipes {
+		shortenRecipes[i] = NewShortenRecipe(
+			rcp.ID, rcp.CookbookID, rcp.Name, rcp.Description, rcp.Sender)
 	}
 
 	return &types.ListShortenRecipeByCookbookResponse{

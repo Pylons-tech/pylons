@@ -38,7 +38,7 @@ func (p *ExecProcess) SetMatchedItemsFromExecMsg(ctx sdk.Context, msg *types.Msg
 	}
 
 	// we validate and match items
-	var matchedItems []types.Item
+	matchedItems := make([]types.Item, 0, len(p.recipe.ItemInputs))
 	for i, itemInput := range p.recipe.ItemInputs {
 		matchedItem := items[i]
 		ec, err := p.keeper.EnvCollection(ctx, msg.RecipeID, "", matchedItem)

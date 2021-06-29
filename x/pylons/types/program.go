@@ -102,7 +102,7 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) 
 	}
 
 	lastWeight := 0
-	var weights []int
+	weights := make([]int, 0, len(wol))
 	for _, wp := range wol {
 		w, err := wp.GetWeightInt(ec)
 		if err != nil {
