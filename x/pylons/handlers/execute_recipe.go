@@ -190,6 +190,10 @@ func (srv msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExec
 	}
 
 	execSender, err := sdk.AccAddressFromBech32(exec.Sender)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
 	if !sender.Equals(execSender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "The current sender is different from the executor")
 	}

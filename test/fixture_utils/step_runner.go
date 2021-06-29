@@ -170,7 +170,7 @@ func RunGoogleIAPGetPylons(step FixtureStep, t *testing.T) {
 		WaitForNextBlockWithErrorCheck(t)
 		tci := testutils.GetTestCoinInput()
 		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
-		result, err := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &gigpMsg)
+		result, _ := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &gigpMsg)
 		t.MustTrue(result != nil, "result should not be empty")
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
