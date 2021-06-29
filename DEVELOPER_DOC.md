@@ -4,20 +4,20 @@
 
 Pylons eco system consists of cookbooks, recipes, items, coins and trades.
 
-Here's a description of how to use cookbooks, recipes, items, coins, and trades compatible with the Pylons' ecosystem.
+Here's description of how to use cookbooks, recipes, items, coins and trades which are compatible with pylons eco system.
 
-Usually, a cookbook contains all recipes and items that are used for the game.
-This game corresponds to Cookbook 1:1.
+Usually, cookbook contains all recipes and items which is used for game.
+The game is corresponding to Cookbook 1: 1.
 
-Developers create a cookbook to go along with recipes and items that are going to be used in the game.
-Recipes can be used to buy items, upgrade items, and merge two items into one. Recipes can be also be used to exchange coins, sell items, and trade items between users.
-Players can owe items, coins, and trade orders. Recipes can be executed only if the user meets the recipe conditions.
+Developers create a cookbook along with recipes and item which is going to be used within the game.
+Recipe can be used for buying items, upgrade items, merge two items into one. Also can be used for the exchange of coins, sell items and trading items between users.
+And players owe items, coins and trade orders. Recipes can be executed if user fit the recipe conditions.
 
-For this blockchain-based system, running a recipe is takes more than one full block time. So, developers must consider latency when writing cookbooks, recipes, and items for their game.
+Since it's a blockchain based system, running recipe is taking more than 1 block time. So developers consider these things when writing cookbooks, recipes and items for their game.
 
 ## Cookbook
 
-The cookbook consists of the following fields. The table was generated with the Markdown [Table generator](https://www.tablesgenerator.com/markdown_tables).
+Cookbook consists of below fields. Reference of [Table generator](https://www.tablesgenerator.com/markdown_tables).
 
 | No | Field        | Type   | Sample                                         | Description                                                                                |
 |----|--------------|--------|------------------------------------------------|--------------------------------------------------------------------------------------------|
@@ -54,7 +54,7 @@ We accept emails that fit `^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z0-9
 
 ## Item
 
-Item consists of the following fields:
+Item consists of below fields.
 
 | No | Field         | Type   | Sample                                | Description                                                                       |
 |----|---------------|--------|---------------------------------------|-----------------------------------------------------------------------------------|
@@ -202,8 +202,7 @@ Sample CoinInput JSON
 }]
 ```
 ### Entries
-
-Entries consist of coin outputs and item outputs. The recipe can generate coins or items.
+Entries consist of coin outputs and item outputs. It means recipe can generate coin or item.
 
 Sample Entries JSON
 ```json
@@ -217,9 +216,8 @@ Sample Entries JSON
   ]
 }
 ```
-**Warning**  
-
-- Recipes cannot generate pylon denom as an output. 
+**Warn**  
+- There shouldn't be any recipes that generate pylon denom as an output.
 - ID of any entry should fit `^[a-zA-Z_][a-zA-Z_0-9]*$` (coin output, item modify output and item output).
 
 #### ItemOutputs
