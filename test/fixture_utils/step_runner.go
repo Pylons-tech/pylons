@@ -499,7 +499,7 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) types.MsgCreateCookbook 
 		cbType.Version,
 		cbType.SupportEmail,
 		cbType.Level,
-		int64(cbType.CostPerBlock),
+		cbType.CostPerBlock,
 		cbType.Sender,
 	)
 }

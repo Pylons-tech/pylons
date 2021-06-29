@@ -226,7 +226,7 @@ func (srv msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExec
 		if blockDiff < 0 { // check if already waited for block interval
 			blockDiff = 0
 		}
-		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
+		pylonsToCharge := types.NewPylon(blockDiff * cookbook.CostPerBlock)
 
 		if keeper.HasCoins(srv.Keeper, sdkCtx, sender, pylonsToCharge) {
 			err := srv.CoinKeeper.SubtractCoins(sdkCtx, sender, pylonsToCharge)
