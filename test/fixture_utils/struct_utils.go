@@ -421,9 +421,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 	t.MustTrue(len(entriesReader.Entries.ItemOutputs) == len(entriesDirectReader.Entries.ItemOutputs), "entry parsing outputs array length different for direct reader and ref reader")
 
 	var wpl types.EntriesList
-	for _, co := range entriesReader.Entries.CoinOutputs {
-		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
-	}
+	wpl.CoinOutputs = append(wpl.CoinOutputs, entriesReader.Entries.CoinOutputs...)
 
 	for ioidx, io := range entriesReader.Entries.ItemModifyOutputs {
 		if len(io.ModifyParamsRef) > 0 {
