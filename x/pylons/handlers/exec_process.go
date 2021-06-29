@@ -275,7 +275,7 @@ func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interfac
 	return varDefs, variables
 }
 
-// GenerateCelEnvVarFromInputItems generate cel env varaible from item inputs
+// GenerateCelEnvVarFromInputItems generate cel env variable from item inputs
 func (p *ExecProcess) GenerateCelEnvVarFromInputItems() error {
 	// create environment variables from matched items
 	varDefs := types.BasicVarDefs()

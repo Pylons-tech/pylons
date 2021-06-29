@@ -119,7 +119,7 @@ func CheckSteps(steps []FixtureStep, t *testing.T) {
 			if ok := g.AddEdge(pd, step.ID); !ok {
 				t.WithFields(testing.Fields{
 					"precondition": pd,
-				}).Fatal("ID is not available which is refering to.")
+				}).Fatal("ID is not available which is referring to.")
 			}
 		}
 	}

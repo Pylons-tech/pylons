@@ -197,7 +197,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		if len(pCheck.Cookbooks) > 0 {
 			for _, cbName := range pCheck.Cookbooks {
 				_, exist, err := testutils.GetCookbookIDFromName(cbName, pOwnerAddr)
-				t.MustNil(err, "error checking cookbook existance")
+				t.MustNil(err, "error checking cookbook existence")
 				if !shouldNotExist {
 					if exist {
 						t.WithFields(testing.Fields{
