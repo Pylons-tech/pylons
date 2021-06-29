@@ -9,10 +9,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const (
-	mnemonicEntropySize = 256
-)
-
 // MockCookbook mock cookbook
 func MockCookbook(tci keeper.TestCoinInput, sender sdk.AccAddress) *types.MsgCreateCookbookResponse {
 	return MockCookbookByName(tci, sender, "cookbook-00001")
@@ -192,6 +188,8 @@ func MockTrade(
 }
 
 // AnteHandle is a handler for NewAccountCreationDecorator
+// nolint: deadcode
+// used in x/pylons/handlers/custom_ante_handler_test.go
 func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, error) {
 	return ctx, nil
 }

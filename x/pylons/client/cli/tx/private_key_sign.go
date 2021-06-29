@@ -1,7 +1,6 @@
 package tx
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 
@@ -87,28 +86,6 @@ func preSignCmd(cmd *cobra.Command, _ []string) {
 		cmd.MarkFlagRequired(flags.FlagAccountNumber)
 		cmd.MarkFlagRequired(flags.FlagSequence)
 	}
-}
-
-func populateAccountFromState(
-	txBldr tx.Factory, clientCtx client.Context, addr sdk.AccAddress,
-) (tx.Factory, error) {
-
-	num, seq, err := clientCtx.AccountRetriever.GetAccountNumberSequence(clientCtx, addr)
-	if err != nil {
-		return txBldr, err
-	}
-
-	return txBldr.WithAccountNumber(num).WithSequence(seq), nil
-}
-
-func isTxSigner(user sdk.AccAddress, signers []sdk.AccAddress) bool {
-	for _, s := range signers {
-		if bytes.Equal(user.Bytes(), s.Bytes()) {
-			return true
-		}
-	}
-
-	return false
 }
 
 // Sign signs the msg with the named key. It returns an error if the key doesn't
