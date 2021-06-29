@@ -1,7 +1,7 @@
 fees:
   recipe_fee_percentage: 10 # Pylons fee percentage
-  cookbook_basic_fee: 0 # Cookbook creation fee
-  cookbook_premium_fee: 0 # Cookbook creation fee
+  cookbook_basic_fee: 10000 # Cookbook creation fee
+  cookbook_premium_fee: 50000 # Cookbook creation fee
   pylons_trade_percentage: 10 # Pylons trade percentage
   minimum_trade_price: 10 # Minimum trade price
   update_item_string_field_fee: 10 # Item string field update fee
@@ -31,6 +31,7 @@ stripe_config:
   stripe_publicKey: pk_test_51Iy5pOEdpQgutKvrWuZVvM0fPB4LRm0tzP1y17hWDCxBcISFb6X07BtIpOQArSfQgApOceoAwUX0qJXPC07OBLCn005w7KGtWE
   stripe_client_id: ca_Jd44I5yQ4pKBpePVtiROVcTFRzQVU6cT
   stripe_redirect_uri: https://wallet.pylons.tech
+  stripe_cancel_url: https://wallet.pylons.tech/cancel
   stripeCountry: us 
   country: US
   currency: USD 

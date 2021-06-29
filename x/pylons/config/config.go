@@ -43,6 +43,7 @@ type StripeConfiguration struct {
 	StripePubKey      string `yaml:"stripe_publicKey"`
 	StripeClientID    string `yaml:"stripe_client_id"`
 	StripeRedirectURI string `yaml:"stripe_redirect_uri"`
+	StripeCancelURI   string `yaml:"stripe_cancel_url"`
 	StripeCountry     string `yaml:"stripeCountry"`
 	Country           string `yaml:"country"`
 	Currency          string `yaml:"currency"`
@@ -137,6 +138,7 @@ func ReadConfig() error {
 			StripePubKey:      "StripePubKey",
 			StripeClientID:    "StripeClientID",
 			StripeRedirectURI: "https://wallet.pylons.tech",
+			StripeCancelURI:   "https://wallet.pylons.tech/cancel",
 			StripeCountry:     "us",
 			Country:           "US",
 			Currency:          "USD",

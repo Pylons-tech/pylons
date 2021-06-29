@@ -113,10 +113,11 @@ func SetupTestCoinInput() TestCoinInput {
 	for _, kvsk := range keys {
 		ms.MountStoreWithDB(kvsk, sdk.StoreTypeIAVL, db)
 	}
+
 	//nolint:errcheck
 	ms.LoadLatestVersion()
 
-	ctx := sdk.NewContext(ms, abci.Header{ChainID: "pylonschain"}, false, log.NewNopLogger())
+	ctx := sdk.NewContext(ms, abci.Header{ChainID: "pylons-testnet"}, false, log.NewNopLogger())
 
 	ctx = ctx.WithConsensusParams(
 		&abcitypes.ConsensusParams{

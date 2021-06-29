@@ -152,13 +152,15 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 		}, nil
 	}
 
-	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, cl) {
-		return nil, errInternal(errors.New("insufficient coin balance"))
-	}
+	if isStripePayment == false {
+		if !keeper.HasCoins(k.Keeper, sdkCtx, sender, cl) {
+			return nil, errInternal(errors.New("insufficient coin balance"))
+		}
 
-	err = ProcessCoinInputs(sdkCtx, k.Keeper, sender, recipe.CookbookID, cl)
-	if err != nil {
-		return nil, errInternal(err)
+		err = ProcessCoinInputs(sdkCtx, k.Keeper, sender, recipe.CookbookID, cl)
+		if err != nil {
+			return nil, errInternal(err)
+		}
 	}
 
 	outputSTR, err := p.Run(sender)

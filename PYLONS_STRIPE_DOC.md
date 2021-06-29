@@ -63,7 +63,9 @@
     Response : 
     {
          "result": {
-	        "stripe_payment_id": "pi_1J6bf0EdpQgutKvrv5oQZSXB"
+	        "stripe_payment_id": "pi_1J6bf0EdpQgutKvrv5oQZSXB",
+            "stripe_ephemeralKey": "ephkey_1J7ncvEdpQgutKvrIRuTTqMB",
+            "stripe_customer_id": "cus_JlKHxhA0nuVBnd"
 	    }
     }
     ex->params : {"Amount":"2300","Country":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"} 

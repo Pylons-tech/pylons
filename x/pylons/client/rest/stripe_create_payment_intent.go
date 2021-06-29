@@ -6,6 +6,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/customer"
+	"github.com/stripe/stripe-go/ephemeralkey"
 	"github.com/stripe/stripe-go/paymentintent"
 	"github.com/stripe/stripe-go/sku"
 
@@ -25,7 +27,9 @@ type stripeCreatePaymentIntentReq struct {
 }
 
 type stripePaymentRes struct {
-	PAYMENT_ID string `json:"stripe_payment_id"`
+	PAYMENT_ID    string `json:"stripe_payment_id"`
+	EPHEMERAL_KEY string `json:"stripe_ephemeralKey"`
+	CURSTOMER_ID  string `json:"stripe_customer_id"`
 }
 
 func stripeCratePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
@@ -75,20 +79,44 @@ func stripeCratePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
+		customerParams := &stripe.CustomerParams{
+			Description: stripe.String(addr.String()),
+		}
+		customer, err := customer.New(customerParams)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create customer: %s", err.Error()))
+			return
+		}
+
+		ephEmeralKeyParams := &stripe.EphemeralKeyParams{
+			Customer:      &customer.ID,
+			StripeVersion: stripe.String("2020-08-27"),
+		}
+
+		ephEmeralKey, err := ephemeralkey.New(ephEmeralKeyParams)
+
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create ephemeralKey: %s", err.Error()))
+			return
+		}
+
 		params := &stripe.PaymentIntentParams{
 			Amount:     stripe.Int64(skuResult.Price),
 			Currency:   stripe.String(string(skuResult.Currency)),
+			Customer:   stripe.String(customer.ID),
 			OnBehalfOf: stripe.String(skuResult.Metadata["ClientId"]),
 		}
 
 		paymentId, err := paymentintent.New(params)
 		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create paymentintent: %s", err.Error()))
 			return
 		}
 
 		var result stripePaymentRes
 		result.PAYMENT_ID = paymentId.ID
+		result.CURSTOMER_ID = customer.ID
+		result.EPHEMERAL_KEY = ephEmeralKey.ID
 		rest.PostProcessResponse(w, cliCtx, result)
 		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
 	}
