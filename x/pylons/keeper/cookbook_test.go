@@ -43,8 +43,8 @@ func TestKeeperGetCookbook(t *testing.T) {
 			showError:    false,
 		},
 		"not existing cookbookID test": {
-			cbID:         "INVALID-CookbookID",
-			desiredError: "The cookbook doesn't exist",
+			cbID:         "invalidCookbookID",
+			desiredError: "key invalidCookbookID not present in cookbook store",
 			showError:    true,
 		},
 	}

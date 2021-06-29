@@ -79,7 +79,7 @@ func TestMsgCreateCookbookValidateBasic(t *testing.T) {
 			sEmail:       "example@example.com",
 			level:        3,
 			sender:       sender,
-			desiredError: "Invalid cookbook plan",
+			desiredError: "invalid cookbook level",
 			showError:    true,
 		},
 		"version validation check": {

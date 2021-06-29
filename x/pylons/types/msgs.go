@@ -1049,7 +1049,7 @@ func (msg MsgSendItems) ValidateBasic() error {
 		}
 
 		if checked[val] {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Duplicated items in items trasfer")
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Duplicated items in items transfer")
 		}
 
 		checked[val] = true

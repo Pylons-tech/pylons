@@ -55,7 +55,7 @@ func (srv msgServer) CreateCookbook(ctx context.Context, msg *types.MsgCreateCoo
 
 	if msg.CookbookID != "" {
 		if srv.HasCookbook(sdkCtx, msg.CookbookID) {
-			return nil, errInternal(fmt.Errorf("A cookbook with CookbookID %s already exists", msg.CookbookID))
+			return nil, errInternal(fmt.Errorf("cookbook with CookbookID %s already exists", msg.CookbookID))
 		}
 		cb.ID = msg.CookbookID
 	}

@@ -66,7 +66,7 @@ func SendItems(queryRoute string) *cobra.Command {
 				}
 
 				if targetItem.GetSender() != msg.GetSender() {
-					return errors.New("Item is not the sender's one")
+					return fmt.Errorf("targetItem sender %s is not the same as msg sender %s", targetItem.GetSender(), msg.GetSender())
 				}
 
 				if err = targetItem.NewTradeError(); err != nil {

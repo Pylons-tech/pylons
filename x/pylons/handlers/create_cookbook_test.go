@@ -54,7 +54,7 @@ func TestHandlerMsgCreateCookbook(t *testing.T) {
 			desc:         "this has to meet character limits",
 			sender:       sender1,
 			level:        2,
-			desiredError: "Invalid cookbook plan",
+			desiredError: "invalid cookbook level",
 			showError:    true,
 		},
 	}
@@ -85,7 +85,7 @@ func TestSameCookbookIDCreation(t *testing.T) {
 	require.True(t, len(result.CookbookID) > 0)
 
 	_, err := tci.PlnH.CreateCookbook(sdk.WrapSDKContext(tci.Ctx), &msg)
-	require.True(t, strings.Contains(err.Error(), "A cookbook with CookbookID samecookbookID-0001 already exists"))
+	require.True(t, strings.Contains(err.Error(), "cookbook with CookbookID samecookbookID-0001 already exists"))
 }
 
 func TestHandlerMsgUpdateCookbook(t *testing.T) {
@@ -134,7 +134,7 @@ func TestHandlerMsgUpdateCookbook(t *testing.T) {
 			desc:         "this has to meet character limits - updated description",
 			sender:       sender2,
 			level:        1,
-			desiredError: "The cookbook doesn't exist",
+			desiredError: "key invalidCookbookID not present in cookbook store",
 			showError:    true,
 		},
 	}

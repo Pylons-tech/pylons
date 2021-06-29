@@ -31,9 +31,9 @@ func TestGetCookbook(t *testing.T) {
 		cbName        string
 	}{
 		"error check when providing invalid cookbook ID": {
-			cookbookID:    "invalid cookbookID",
+			cookbookID:    "invalidCookbookID",
 			showError:     true,
-			desiredError:  "The cookbook doesn't exist",
+			desiredError:  "key invalidCookbookID not present in cookbook store",
 			desiredRcpCnt: 0,
 		},
 		"error check when not providing cookbookID": {

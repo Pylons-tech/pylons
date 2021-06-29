@@ -32,7 +32,7 @@ func (srv msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*t
 
 		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
-			return nil, errInternal(errors.New("Invalid cookbook id"))
+			return nil, errInternal(errors.New("invalid cookbook id"))
 		}
 
 		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
@@ -41,7 +41,7 @@ func (srv msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*t
 		}
 
 		if item.Sender != msg.Sender {
-			return nil, errInternal(errors.New("Item is not the sender's one"))
+			return nil, errInternal(fmt.Errorf("item sender %s is not the same as msg sender %s", item.Sender, msg.Sender))
 		}
 
 		if err = item.NewTradeError(); err != nil {
@@ -51,17 +51,17 @@ func (srv msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*t
 		coins := types.NewPylon(item.CalculateTransferFee())
 
 		if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, coins) {
-			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
+			return nil, errInternal(fmt.Errorf("sender does not have enough coins for fees: %s", coins.String()))
 		}
 
 		item.Sender = msg.Receiver
 		if err := srv.SetItem(sdkCtx, item); err != nil {
-			return nil, errInternal(fmt.Errorf("Error updating item inside keeper; %s", err.Error()))
+			return nil, errInternal(fmt.Errorf("error updating item inside keeper: %w", err))
 		}
 
 		err = ProcessSendItemsFee(sdkCtx, srv.Keeper, sender, cookbookSender, coins)
 		if err != nil {
-			return nil, errInternal(fmt.Errorf("Error sending fees to send items; %s", err.Error()))
+			return nil, errInternal(fmt.Errorf("error sending fees to send items: %w", err))
 		}
 	}
 

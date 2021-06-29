@@ -185,7 +185,7 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 			addInputCoin:       true,
 			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
 			sender:             sender1,
-			desiredError:       "The item doesn't exist",
+			desiredError:       "key invaliditemID not present in item store",
 			showError:          true,
 			checkItemName:      "",
 			checkItemAvailable: false,

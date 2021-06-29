@@ -68,7 +68,7 @@ func TestHandlerMsgCreateTrade(t *testing.T) {
 				item1,
 			},
 			outputCoinList: types.NewPylon(1000000),
-			desiredError:   "There should be no empty cookbook ID inputs for trades",
+			desiredError:   "empty cookbook present in TradeItemInputList",
 			showError:      true,
 		},
 		"wrong cookbook id item input validation": {
@@ -487,7 +487,7 @@ func TestHandlerMsgDisableTrade(t *testing.T) {
 			tradeID:      id3.String(),
 			showError:    true,
 			sender:       sender2,
-			desiredError: "Cannot disable a completed trade",
+			desiredError: "cannot disable a completed trade",
 		},
 		"disable wrong item id owner trade with failure": {
 			tradeID:      id4.String(),

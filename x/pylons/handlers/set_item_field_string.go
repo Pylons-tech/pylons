@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"context"
-	"errors"
+	"fmt"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
@@ -45,13 +45,13 @@ func (srv msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateI
 
 	keyID, ok := item.FindStringKey(msg.Field)
 	if !ok {
-		return nil, errInternal(errors.New("Provided field does not exist within the item"))
+		return nil, errInternal(fmt.Errorf("provided field %s does not exist within the item", msg.Field))
 	}
 
 	item.Strings[keyID].Value = msg.Value
 
 	if err := srv.SetItem(sdkCtx, item); err != nil {
-		return nil, errInternal(errors.New("Error updating item inside keeper"))
+		return nil, errInternal(fmt.Errorf("error updating item inside keeper: %w", err))
 	}
 
 	return &types.MsgUpdateItemStringResponse{

@@ -21,7 +21,6 @@ import (
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	sttypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -129,8 +128,8 @@ func SetupTestCoinInput() TestCoinInput {
 	)
 
 	feeCollectorAcc := authtypes.NewEmptyModuleAccount(authtypes.FeeCollectorName)
-	notBondedPool := authtypes.NewEmptyModuleAccount(sttypes.NotBondedPoolName, authtypes.Burner, authtypes.Staking)
-	bondPool := authtypes.NewEmptyModuleAccount(sttypes.BondedPoolName, authtypes.Burner, authtypes.Staking)
+	notBondedPool := authtypes.NewEmptyModuleAccount(stakingtypes.NotBondedPoolName, authtypes.Burner, authtypes.Staking)
+	bondPool := authtypes.NewEmptyModuleAccount(stakingtypes.BondedPoolName, authtypes.Burner, authtypes.Staking)
 
 	blacklistedAddrs := make(map[string]bool)
 	blacklistedAddrs[feeCollectorAcc.GetAddress().String()] = true

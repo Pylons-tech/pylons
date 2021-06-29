@@ -87,7 +87,7 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			value:        "Ben1",
 			sender:       sender1,
 			addInputCoin: true,
-			desiredError: "Provided field does not exist within the item",
+			desiredError: "provided field NickName does not exist within the item",
 			showError:    true,
 		},
 		"TC6 basic flow test": {

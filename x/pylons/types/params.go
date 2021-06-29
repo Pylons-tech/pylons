@@ -43,7 +43,7 @@ func getFloat(unk interface{}) (float64, error) {
 			s := sv.String()
 			return strconv.ParseFloat(s, 64)
 		} else {
-			return math.NaN(), fmt.Errorf("Can't convert %v to float64", v.Type())
+			return math.NaN(), fmt.Errorf("cannot convert type %v to float64", v.Type())
 		}
 	}
 }

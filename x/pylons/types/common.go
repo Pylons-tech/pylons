@@ -562,7 +562,7 @@ func (tii TradeItemInput) MatchError(item Item, ec CelEnvCollection) error {
 func (tiil TradeItemInputList) Validate() error {
 	for _, ii := range tiil {
 		if ii.CookbookID == "" {
-			return errors.New("There should be no empty cookbook ID inputs for trades")
+			return errors.New("empty cookbook present in TradeItemInputList")
 		}
 	}
 	return nil
@@ -589,7 +589,7 @@ func ValidateLevel(level int64) error {
 		return nil
 	}
 
-	return errors.New("Invalid cookbook plan")
+	return errors.New("invalid cookbook level")
 }
 
 // KeyGen generates key for the store
