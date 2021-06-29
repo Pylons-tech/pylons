@@ -3,6 +3,7 @@ package types
 import (
 	"crypto"
 	"crypto/rsa"
+	// nolint
 	"crypto/sha1"
 	"crypto/x509"
 	"encoding/base64"
@@ -651,6 +652,7 @@ func (msg MsgGoogleIAPGetPylons) ValidateGoogleIAPSignature() error {
 		return err
 	}
 
+	// nolint
 	h := sha1.New()
 	_, err = h.Write(receiptData)
 	if err != nil {
