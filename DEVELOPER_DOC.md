@@ -55,7 +55,7 @@ We accept emails that match this `^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-
 
 ### Item
 
-`Item` consists of the following fields:
+An `item` consists of the following fields:
 
 
 | No | Field         | Type   | Sample                                | Description                                                                       |
@@ -361,7 +361,7 @@ Describes the fields of `ModifyParams` field.
 | No | Field        | Type   | Sample               | Description                                |
 |----|--------------|--------|----------------------|--------------------------------------------|
 | 1  | Key          | string | attack               | attribute that needs to be changed        |
-| 2  | Value        | string | "Upgraded Knife"     | Target value when string attr is changed   |
+| 2  | Value        | string | "Upgraded Knife"     | target value when string attribute is changed   |
 | 3  | WeightRanges | array  | 3-5                  | range that describes delta between initial |
 | 4  | Program      | string | "attack x 2"         | target value when upgraded by program     |
 
@@ -373,11 +373,11 @@ Describes coin that can be generated from recipe.
 
 | No | Field   | type   | sample       | description                                                         |
 |----|---------|--------|--------------|---------------------------------------------------------------------|
-| 1  | Coin    | string | "goldcoin"   | This shows the name of coin to be generated.                        |
-| 3  | Count   | string | "attack x 2" | This is program string and you can use the variables from inputs    |
-| 4  | ID      | string | "coin_reward"| ID to reference at outputs section.                                 |
+| 1  | Coin    | string | "goldcoin"   | name of coin to be generated                        |
+| 3  | Count   | string | "attack x 2" |  program string that can use variables from the inputs    |
+| 4  | ID      | string | "coin_reward"| ID to reference at outputs section                                  |
 
-Sample CoinOutputs in JSON format:
+Sample `CoinOutputs` in JSON format:
 
 ```json
 {
@@ -386,7 +386,7 @@ Sample CoinOutputs in JSON format:
   "Count": "1"
 }
 ```
-Sample CoinOutputs in JSON format with variables
+Sample `CoinOutputs` in JSON format with variables:
 ```json
 {
   "ID": "coin_reward",
@@ -480,7 +480,7 @@ The parameter can be integer or double type.
 
 Example:
 
-```
+```code
 log2(1024) //result: 10
 log2(123.45) //result: 6.947783026255419
 log2(0) //result: -Inf
@@ -595,7 +595,7 @@ For delayed recipes that can take a very long time, the user can use the `PayToC
 
 Trading consists of order creation by using `MsgCreateTrade` and order execution by using `MsgFulfillTrade`.
 
-Order creator can: 
+The order creator can: 
 
 - Set `CoinInputs` for the coin to give on this trading.
 - Set `ItemInputs` for the items to give on this trading.
@@ -604,7 +604,7 @@ Order creator can:
 
 ### Tradings by example
 
-Coin to coin trading:
+Coin-to-coin trading:
 
 ```json
 {
@@ -625,7 +625,7 @@ Coin to coin trading:
 }
 ```
 
-Coin to item trading:
+Coin-to-item trading:
 
 ```json
 {
@@ -643,7 +643,7 @@ Coin to item trading:
 }
 ```
 
-Item to coin trading:
+Item-to-coin trading:
 
 ```json
 {
@@ -664,7 +664,7 @@ Item to coin trading:
 }
 ```
 
-Item to item trading:
+Item-to-item trading:
 
 ```json
 {
@@ -681,9 +681,9 @@ Item to item trading:
 }
 ```
 
-Trading order can be fulfilled by running `MsgFulfillTrade`.
+Trade orders can be fulfilled by running `MsgFulfillTrade`.
 
-Sample trading order in JSON format:
+Sample trade order in JSON format:
 
 ```json
 {
