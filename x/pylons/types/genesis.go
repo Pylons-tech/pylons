@@ -2,6 +2,7 @@ package types
 
 // Validate performs validate genesis
 func (gs GenesisState) Validate() error {
+	// TODO perform validation checks on all state fields
 	return nil
 }
 

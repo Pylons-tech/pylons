@@ -9,9 +9,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// TODO handle errors
-// InitGenesis init genesis for a context
+// InitGenesis initializes a context from a genesis state
 func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data types.GenesisState) {
+	// TODO handle errors
 	for _, record := range data.Cookbooks {
 		//nolint:errcheck
 		keeper.SetCookbook(ctx, record)
@@ -26,7 +26,7 @@ func InitGenesis(ctx sdk.Context, keeper keeper.Keeper, data types.GenesisState)
 	}
 }
 
-// ExportGenesis export genesis
+// ExportGenesis exports current state to new genesis state
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) types.GenesisState {
 	var cookbooks []types.Cookbook
 	iterator := k.GetCookbooksIterator(ctx)
