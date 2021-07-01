@@ -183,6 +183,7 @@ message GetRecipeResponse {
   int64 BlockInterval = 10;
   string Sender = 11;
   bool Disabled = 12;
+  string ExtraInfo = 13;
 }
 
 

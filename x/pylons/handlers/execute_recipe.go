@@ -101,7 +101,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
 			}
 			isStripePayment = true
-			//cl = append(cl, sdk.NewCoin(types.Pylon, sdk.NewInt(inp.Count)))
+			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		} else {
 			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		}

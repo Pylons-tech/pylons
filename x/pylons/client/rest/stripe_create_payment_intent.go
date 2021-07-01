@@ -27,7 +27,8 @@ type stripeCreatePaymentIntentReq struct {
 }
 
 type stripePaymentRes struct {
-	PAYMENT_ID    string `json:"stripe_payment_id"`
+	PAYMENT_ID    string `json:"stripe_payment_intent_id"`
+	CLIENT_SECRET string `json:"client_secret"`
 	EPHEMERAL_KEY string `json:"stripe_ephemeralKey"`
 	CURSTOMER_ID  string `json:"stripe_customer_id"`
 }
@@ -107,14 +108,15 @@ func stripeCratePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 			OnBehalfOf: stripe.String(skuResult.Metadata["ClientId"]),
 		}
 
-		paymentId, err := paymentintent.New(params)
+		paymentIntent, err := paymentintent.New(params)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create paymentintent: %s", err.Error()))
 			return
 		}
 
 		var result stripePaymentRes
-		result.PAYMENT_ID = paymentId.ID
+		result.PAYMENT_ID = paymentIntent.ID
+		result.CLIENT_SECRET = paymentIntent.ClientSecret
 		result.CURSTOMER_ID = customer.ID
 		result.EPHEMERAL_KEY = ephEmeralKey.ID
 		rest.PostProcessResponse(w, cliCtx, result)
