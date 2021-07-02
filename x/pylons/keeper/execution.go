@@ -25,6 +25,26 @@ func (keeper Keeper) GetExecution(ctx sdk.Context, id string) (types.Execution, 
 	return exec, err
 }
 
+// GetExecutions returns an a slice of all Executions in the store
+func (keeper Keeper) GetExecutions(ctx sdk.Context) []types.Execution {
+	store := ctx.KVStore(keeper.ExecutionKey)
+	iterator := sdk.KVStorePrefixIterator(store, []byte(""))
+
+	var executions []types.Execution
+	for ; iterator.Valid(); iterator.Next() {
+		var execution types.Execution
+		mRCP := iterator.Value()
+		err := json.Unmarshal(mRCP, &execution)
+		if err != nil {
+			// this happens because we have multiple versions of breaking executions at times
+			continue
+		}
+
+		executions = append(executions, execution)
+	}
+	return executions
+}
+
 // UpdateExecution is used to update the exec using the id
 func (keeper Keeper) UpdateExecution(ctx sdk.Context, id string, exec types.Execution) error {
 	if exec.Sender == "" {

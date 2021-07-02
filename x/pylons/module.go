@@ -102,6 +102,7 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 		query.ListShortenRecipesByCookbook(),
 		query.ItemsBySender(),
 		query.ListExecutions(),
+		query.ListRecipeExecutions(),
 		query.ListTrade())
 
 	pylonsQueryCmd.PersistentFlags().String("node", "tcp://localhost:26657", "<host>:<port> to Tendermint RPC interface for this chain")

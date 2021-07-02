@@ -3,10 +3,10 @@ package queriers
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetExecution returns an execution based on the execution id
@@ -41,17 +41,42 @@ func (querier *querierServer) ListExecutions(ctx context.Context, req *types.Lis
 	}
 
 	senderAddr, err := sdk.AccAddressFromBech32(req.Sender)
-
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	execs, err := querier.Keeper.GetExecutionsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
 
+	execs, err := querier.Keeper.GetExecutionsBySender(sdk.UnwrapSDKContext(ctx), senderAddr)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return &types.ListExecutionsResponse{
 		Executions: execs,
+	}, nil
+}
+
+// ListRecipeExecutions lists all executions of a recipe for all addresses
+func (querier *querierServer) ListRecipeExecutions(ctx context.Context, req *types.ListRecipeExecutionsRequest) (*types.ListRecipeExecutionsResponse, error) {
+	if req.Recipe == "" {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no recipe provided")
+	}
+
+	// check if recipe exists in store
+	_, err := querier.Keeper.GetRecipe(sdk.UnwrapSDKContext(ctx), req.Recipe)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	var executions []types.Execution
+	// iterate through all Executions to build return slice
+	allExec := querier.Keeper.GetExecutions(sdk.UnwrapSDKContext(ctx))
+	for _, e := range allExec {
+		if e.RecipeID == req.Recipe {
+			executions = append(executions, e)
+		}
+	}
+
+	return &types.ListRecipeExecutionsResponse{
+		Executions: executions,
 	}, nil
 }

@@ -151,3 +151,95 @@ func TestListExecution(t *testing.T) {
 		})
 	}
 }
+
+func TestListRecipeExecution(t *testing.T) {
+	tci := keeper.SetupTestCoinInput()
+	tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
+	tci.PlnQ = NewQuerierServerImpl(tci.PlnK)
+
+	sender1, sender2, _, _ := keeper.SetupTestAccounts(t, tci, types.NewPylon(1000000), nil, nil, nil)
+
+	err := tci.Bk.AddCoins(tci.Ctx, sender1, types.GenCoinInputList("wood", 100).ToCoins())
+	require.NoError(t, err)
+
+	err = tci.Bk.AddCoins(tci.Ctx, sender2, types.GenCoinInputList("wood", 100).ToCoins())
+	require.NoError(t, err)
+
+	// mock cookbook
+	cbData := handlers.MockCookbook(tci, sender1)
+
+	recipeResp := handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
+		"recipe0001", cbData.CookbookID, sender1)
+
+	_, err = handlers.MockExecution(
+		tci, recipeResp.RecipeID,
+		sender1,
+		[]string{},
+	)
+	require.True(t, err == nil, err)
+
+	// create new recipe and execute 2x from different senders
+	recipe2Resp := handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
+		"recipe0002", cbData.CookbookID, sender1)
+
+	_, err = handlers.MockExecution(
+		tci, recipe2Resp.RecipeID,
+		sender1,
+		[]string{},
+	)
+	require.True(t, err == nil, err)
+	_, err = handlers.MockExecution(
+		tci, recipe2Resp.RecipeID,
+		sender2,
+		[]string{},
+	)
+	require.True(t, err == nil, err)
+
+	cases := map[string]struct {
+		recipe        string
+		desiredError  string
+		showError     bool
+		desiredExcCnt int
+	}{
+		"error check when providing invalid recipe": {
+			recipe:        "invalid_recipe",
+			showError:     true,
+			desiredError:  "key invalid_recipe not present in recipe store: invalid request",
+			desiredExcCnt: 0,
+		},
+		"error check when not providing recipe": {
+			recipe:        "",
+			showError:     true,
+			desiredError:  "no recipe provided",
+			desiredExcCnt: 0,
+		},
+		"list recipe successful check": {
+			recipe:        recipeResp.RecipeID,
+			showError:     false,
+			desiredError:  "",
+			desiredExcCnt: 1,
+		},
+		"list recipe successful check 2 recipes": {
+			recipe:        recipe2Resp.RecipeID,
+			showError:     false,
+			desiredError:  "",
+			desiredExcCnt: 2,
+		},
+	}
+	for testName, tc := range cases {
+		t.Run(testName, func(t *testing.T) {
+			result, err := tci.PlnQ.ListRecipeExecutions(
+				sdk.WrapSDKContext(tci.Ctx),
+				&types.ListRecipeExecutionsRequest{
+					Recipe: tc.recipe,
+				},
+			)
+			if tc.showError {
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
+			} else {
+				require.NoError(t, err)
+				require.Equal(t, tc.desiredExcCnt, len(result.Executions))
+			}
+		})
+	}
+}
