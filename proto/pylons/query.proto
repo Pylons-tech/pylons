@@ -64,6 +64,11 @@ service Query {
     option (google.api.http).get = "/custom/pylons/list_executions/{sender}";
   }
 
+  // ListRecipeExecutions lists all executions of a recipe for all users
+  rpc ListRecipeExecutions(ListRecipeExecutionsRequest) returns (ListRecipeExecutionsResponse){
+    option (google.api.http).get = "/custom/pylons/list_recipe_executions/{recipe}";
+  }
+
   // GetLockedCoins returns locked coins based on user
   rpc GetLockedCoins(GetLockedCoinsRequest) returns (GetLockedCoinsResponse){
     option (google.api.http).get = "/custom/pylons/get_locked_coins/{address}";
@@ -240,6 +245,13 @@ message ListExecutionsResponse {
   repeated Execution Executions = 1 [(gogoproto.nullable) = false];
 }
 
+message ListRecipeExecutionsRequest {
+  string recipe = 1;
+}
+
+message ListRecipeExecutionsResponse {
+  repeated Execution Executions = 1 [(gogoproto.nullable) = false];
+}
 
 message GetLockedCoinsRequest {
   string address = 1;
