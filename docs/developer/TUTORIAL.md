@@ -2,7 +2,7 @@
 
 Pylons SDK can be used for blockchain game developers to build their own games that run on blockchain involving game characters and items.
 
-This document is basic tutorial for begineers.
+This document is basic tutorial for beginners.
 For more detailed and deeper tutorial, please check [developer doc](https://github.com/Pylons-tech/pylons_sdk/blob/master/DEVELOPER_DOC.md).
 
 Important points in pylons SDK are:
@@ -17,11 +17,7 @@ It's helpful if you know something about `cosmos-sdk` as our Pylons is based on 
 
 ## Install Golang
   
-Pylons sdk is based on Golang. So you need to install Go to setup local environment.
-The easiest way is to use homebrew. You can follow this link:
-https://ahmadawais.com/install-go-lang-on-macos-with-homebrew/
-
-Configure GOPATH and put GOPATH into PATH.
+Refer to the [technical setup page](../TECHNICAL-SETUP.md) for instructions.
 
 ## Start pylons daemon
 
