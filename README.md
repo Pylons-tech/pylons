@@ -15,6 +15,20 @@ go get -u golang.org/x/lint/golint
 pre-commit install
 ```
 
+### Ubuntu / Debian based linux distributions
+```
+git clone https://github.com/Pylons-tech/pylons
+
+sudo apt install pre-commit
+
+# The binary golangci-lint  will be placed at $(go env GOPATH)/bin/
+
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
+
+golangci-lint --version
+
+```
+
 ## How to
 
 - Install
