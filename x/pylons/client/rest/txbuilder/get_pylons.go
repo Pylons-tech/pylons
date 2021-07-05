@@ -1,7 +1,6 @@
 package txbuilder
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -9,15 +8,17 @@ import (
 
 	"encoding/hex"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/gorilla/mux"
 	crypto "github.com/tendermint/tendermint/crypto/secp256k1"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// query endpoints supported by the nameservice Querier
 const (
+	// TxGPRequesterKey is a query endpoint supported by the nameservice Querier
 	TxGPRequesterKey = "gp_requester"
 )
 
@@ -56,9 +57,6 @@ func GetPrivateKeyFromHex(hexKey string) (*crypto.PrivKey, error) {
 	var privKeyBytes32 []byte
 	copy(privKeyBytes32[:], privKeyBytes)
 	privKey := crypto.GenPrivKeySecp256k1(privKeyBytes32)
-	if err != nil {
-		fmt.Printf("error: \n %+v \n", err)
-	}
 
 	return &privKey, nil
 }

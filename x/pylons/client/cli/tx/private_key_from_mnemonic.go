@@ -8,8 +8,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
 	"github.com/cosmos/go-bip39"
+
+	"github.com/cosmos/cosmos-sdk/crypto/hd"
 )
 
 // ComputePrivateKey returns the transaction sign result from private key.
@@ -45,9 +46,9 @@ func makeComputePrivateKeyCmd() func(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			os.Exit(1)
 		}
-		priv := secp256k1.GenPrivKeySecp256k1(derivedPriv)
+		privKey := secp256k1.GenPrivKeySecp256k1(derivedPriv)
 
-		privKeyHex := hex.EncodeToString(priv[:])
+		privKeyHex := hex.EncodeToString(privKey[:])
 		// cosmosAddr := sdk.AccAddress(priv.PubKey().Address().Bytes()).String()
 		fmt.Println(privKeyHex)
 		return nil

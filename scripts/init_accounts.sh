@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 # node0 = cosmos13p8890funv54hflk82ju0zv47tspglpk373453
 pylonsd keys add node0 --keyring-backend=test --home=$HOME/.pylonsd --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"

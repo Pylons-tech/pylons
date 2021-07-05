@@ -8,12 +8,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // CreateTrade is used to create a trade by a user
-func (k msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
+func (srv msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (*types.MsgCreateTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -24,14 +25,14 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	for _, tii := range msg.ItemInputs {
-		_, err := k.GetCookbook(sdkCtx, tii.CookbookID)
+		_, err := srv.GetCookbook(sdkCtx, tii.CookbookID)
 		if err != nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("You specified a cookbook that does not exist where raw error is %+v", err))
 		}
 	}
 
 	for _, item := range msg.ItemOutputs {
-		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
+		itemFromStore, err := srv.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -43,11 +44,11 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (
 		}
 	}
 
-	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, msg.CoinOutputs) {
+	if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, msg.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "sender doesn't have enough coins for the trade")
 	}
 
-	err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, msg.CoinOutputs))
+	err = srv.LockCoin(sdkCtx, types.NewLockedCoin(sender, msg.CoinOutputs))
 
 	if err != nil {
 		return nil, errInternal(err)
@@ -59,18 +60,18 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (
 		msg.CoinOutputs,
 		msg.ItemOutputs,
 		sender)
-	if err := k.SetTrade(sdkCtx, trade); err != nil {
+	if err := srv.SetTrade(sdkCtx, trade); err != nil {
 		return nil, errInternal(err)
 	}
 
 	// set items' owner trade id
 	for _, item := range msg.ItemOutputs {
-		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
+		itemFromStore, err := srv.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 		itemFromStore.OwnerTradeID = trade.ID
-		err = k.SetItem(sdkCtx, itemFromStore)
+		err = srv.SetItem(sdkCtx, itemFromStore)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -84,7 +85,7 @@ func (k msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade) (
 }
 
 // FulfillTrade is used to fulfill a trade
-func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade) (*types.MsgFulfillTradeResponse, error) {
+func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade) (*types.MsgFulfillTradeResponse, error) {
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -93,7 +94,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	trade, err := k.GetTrade(sdkCtx, msg.TradeID)
+	trade, err := srv.GetTrade(sdkCtx, msg.TradeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -106,7 +107,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		return nil, errInternal(errors.New("the item IDs count doesn't match the trade input"))
 	}
 
-	items, err := GetItemsFromIDs(sdkCtx, k.Keeper, msg.ItemIDs, sender)
+	items, err := GetItemsFromIDs(sdkCtx, srv.Keeper, msg.ItemIDs, sender)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -122,7 +123,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	matchedItems := types.ItemList{}
 	for i, itemInput := range trade.ItemInputs {
 		matchedItem := items[i]
-		ec, err := k.EnvCollection(sdkCtx, "", msg.TradeID, matchedItem)
+		ec, err := srv.EnvCollection(sdkCtx, "", msg.TradeID, matchedItem)
 		if err != nil {
 			return nil, errInternal(fmt.Errorf("error creating env collection for %s item", matchedItem.String()))
 		}
@@ -141,17 +142,17 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		return nil, errInternal(err)
 	}
 	// Unlock trade creator's coins
-	err = k.UnlockCoin(sdkCtx, types.NewLockedCoin(tradeSender, trade.CoinOutputs))
+	err = srv.UnlockCoin(sdkCtx, types.NewLockedCoin(tradeSender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
 	inputCoins := types.CoinInputList(trade.CoinInputs).ToCoins()
-	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, inputCoins) {
+	if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, inputCoins) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 	}
 
-	if !keeper.HasCoins(k.Keeper, sdkCtx, tradeSender, trade.CoinOutputs) {
+	if !keeper.HasCoins(srv.Keeper, sdkCtx, tradeSender, trade.CoinOutputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the trade creator doesn't have sufficient coins")
 	}
 
@@ -161,7 +162,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	// get the items from the trade initiator
 	for _, item := range trade.ItemOutputs {
 		// verify if its still owned by the initiator
-		storedItem, err := k.GetItem(sdkCtx, item.ID)
+		storedItem, err := srv.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -202,7 +203,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	// trade creator to trade acceptor the coin output
 	// Send output coin from sender to fullfiller
 
-	err = keeper.SendCoins(k.Keeper, sdkCtx, tradeSender, sender, trade.CoinOutputs)
+	err = keeper.SendCoins(srv.Keeper, sdkCtx, tradeSender, sender, trade.CoinOutputs)
 
 	if err != nil {
 		return nil, errInternal(err)
@@ -210,7 +211,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 	senderFee := totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
 	if senderFee != 0 {
 		// sender process fee after receiving coins from trade.Sender
-		err = keeper.SendCoins(k.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
+		err = keeper.SendCoins(srv.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -218,14 +219,14 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 
 	// trade acceptor to trade creator the coin input
 	// Send input coin from fullfiller to sender (trade creator)
-	err = keeper.SendCoins(k.Keeper, sdkCtx, sender, tradeSender, inputCoins)
+	err = keeper.SendCoins(srv.Keeper, sdkCtx, sender, tradeSender, inputCoins)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 	fulfillerFee := totalFee - senderFee
 	if fulfillerFee != 0 {
 		// trade.Sender process fee after receiving coins from sender
-		err = keeper.SendCoins(k.Keeper, sdkCtx, tradeSender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
+		err = keeper.SendCoins(srv.Keeper, sdkCtx, tradeSender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -240,7 +241,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		}
 		feeForCB := totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
 
-		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
+		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
@@ -251,7 +252,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		}
 
 		if feeForCB > 0 {
-			err = keeper.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
+			err = keeper.SendCoins(srv.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}
@@ -259,7 +260,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 
 		item.Sender = sender.String()
 
-		k.SetItemHistory(sdkCtx, types.ItemHistory{
+		srv.SetItemHistory(sdkCtx, types.ItemHistory{
 			ID:      types.KeyGen(sender),
 			Owner:   sender,
 			ItemID:  item.ID,
@@ -267,7 +268,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		})
 
 		item.OwnerTradeID = ""
-		err = k.SetItem(sdkCtx, item)
+		err = srv.SetItem(sdkCtx, item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -279,7 +280,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		}
 		feeForCB := totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
 
-		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
+		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
@@ -290,14 +291,14 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 		}
 
 		if feeForCB > 0 {
-			err = keeper.SendCoins(k.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
+			err = keeper.SendCoins(srv.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
 			}
 		}
 
 		item.Sender = trade.Sender
-		err = k.SetItem(sdkCtx, item)
+		err = srv.SetItem(sdkCtx, item)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -305,7 +306,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 
 	trade.FulFiller = sender.String()
 	trade.Completed = true
-	err = k.SetTrade(sdkCtx, trade)
+	err = srv.SetTrade(sdkCtx, trade)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -317,7 +318,7 @@ func (k msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrade)
 }
 
 // EnableTrade is used to enable trade by a developer
-func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (*types.MsgEnableTradeResponse, error) {
+func (srv msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (*types.MsgEnableTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -326,7 +327,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	trade, err := k.GetTrade(sdkCtx, msg.TradeID)
+	trade, err := srv.GetTrade(sdkCtx, msg.TradeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -339,7 +340,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (
 
 	// reset items' owner trade id
 	for idx, item := range trade.ItemOutputs {
-		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
+		itemFromStore, err := srv.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -352,14 +353,14 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (
 			return nil, errInternal(fmt.Errorf("%s item id is not tradable", itemFromStore.ID))
 		}
 		itemFromStore.OwnerTradeID = trade.ID
-		err = k.SetItem(sdkCtx, itemFromStore)
+		err = srv.SetItem(sdkCtx, itemFromStore)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 		trade.ItemOutputs[idx] = itemFromStore
 	}
 
-	err = k.UpdateTrade(sdkCtx, msg.TradeID, trade)
+	err = srv.UpdateTrade(sdkCtx, msg.TradeID, trade)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -369,7 +370,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (
 		return nil, errInternal(err)
 	}
 
-	err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, trade.CoinOutputs))
+	err = srv.LockCoin(sdkCtx, types.NewLockedCoin(sender, trade.CoinOutputs))
 
 	if err != nil {
 		return nil, errInternal(err)
@@ -382,7 +383,7 @@ func (k msgServer) EnableTrade(ctx context.Context, msg *types.MsgEnableTrade) (
 }
 
 // DisableTrade is used to enable trade by a developer
-func (k msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade) (*types.MsgDisableTradeResponse, error) {
+func (srv msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade) (*types.MsgDisableTradeResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -391,7 +392,7 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade)
 
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 
-	trade, err := k.GetTrade(sdkCtx, msg.TradeID)
+	trade, err := srv.GetTrade(sdkCtx, msg.TradeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -408,7 +409,7 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade)
 
 	// unset items' owner trade id
 	for idx, item := range trade.ItemOutputs {
-		itemFromStore, err := k.GetItem(sdkCtx, item.ID)
+		itemFromStore, err := srv.GetItem(sdkCtx, item.ID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -418,14 +419,14 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade)
 		}
 
 		itemFromStore.OwnerTradeID = ""
-		err = k.SetItem(sdkCtx, itemFromStore)
+		err = srv.SetItem(sdkCtx, itemFromStore)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 		trade.ItemOutputs[idx] = itemFromStore
 	}
 
-	err = k.UpdateTrade(sdkCtx, msg.TradeID, trade)
+	err = srv.UpdateTrade(sdkCtx, msg.TradeID, trade)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -434,7 +435,7 @@ func (k msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrade)
 	if err != nil {
 		return nil, errInternal(err)
 	}
-	err = k.UnlockCoin(sdkCtx, types.NewLockedCoin(sender, trade.CoinOutputs))
+	err = srv.UnlockCoin(sdkCtx, types.NewLockedCoin(sender, trade.CoinOutputs))
 	if err != nil {
 		return nil, errInternal(err)
 	}

@@ -2,12 +2,14 @@ package testutils
 
 import (
 	"errors"
+	"sync"
+
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"sync"
 
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )

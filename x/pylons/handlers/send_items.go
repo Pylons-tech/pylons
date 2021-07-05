@@ -8,11 +8,12 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // SendItems is used to send items between people
-func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*types.MsgSendItemsResponse, error) {
+func (srv msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*types.MsgSendItemsResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -24,12 +25,12 @@ func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*typ
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
 	for _, val := range msg.ItemIDs {
-		item, err := k.GetItem(sdkCtx, val)
+		item, err := srv.GetItem(sdkCtx, val)
 		if err != nil {
 			return nil, errInternal(err)
 		}
 
-		cookbook, err := k.GetCookbook(sdkCtx, item.CookbookID)
+		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
 			return nil, errInternal(errors.New("Invalid cookbook id"))
 		}
@@ -49,16 +50,16 @@ func (k msgServer) SendItems(ctx context.Context, msg *types.MsgSendItems) (*typ
 
 		coins := types.NewPylon(item.CalculateTransferFee())
 
-		if !keeper.HasCoins(k.Keeper, sdkCtx, sender, coins) {
+		if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, coins) {
 			return nil, errInternal(fmt.Errorf("Sender does not have enough coins for fees; %s", coins.String()))
 		}
 
 		item.Sender = msg.Receiver
-		if err := k.SetItem(sdkCtx, item); err != nil {
+		if err := srv.SetItem(sdkCtx, item); err != nil {
 			return nil, errInternal(fmt.Errorf("Error updating item inside keeper; %s", err.Error()))
 		}
 
-		err = ProcessSendItemsFee(sdkCtx, k.Keeper, sender, cookbookSender, coins)
+		err = ProcessSendItemsFee(sdkCtx, srv.Keeper, sender, cookbookSender, coins)
 		if err != nil {
 			return nil, errInternal(fmt.Errorf("Error sending fees to send items; %s", err.Error()))
 		}
