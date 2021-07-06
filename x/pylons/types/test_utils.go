@@ -1,6 +1,10 @@
 package types
 
-import sdk "github.com/cosmos/cosmos-sdk/types"
+import (
+	"encoding/json"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 // GenCoinInputList is a utility function to genearte coin input list
 func GenCoinInputList(name string, count int64) CoinInputList {
@@ -133,6 +137,17 @@ func GenItemOnlyEntryRand(ID string, itemName string) ItemOutput {
 	)
 }
 
+func GenMsgStripePrice(Amount int64, Currency string, Description string, Images []string, Name string, Quantity int64) StripePrice {
+	return NewStripePrice(
+		Amount,
+		Currency,
+		Description,
+		Images,
+		Name,
+		Quantity,
+	)
+}
+
 // GenOneOutput is a function to generate output with one from entry list
 func GenOneOutput(entryIDs ...string) WeightedOutputsList {
 	wol := WeightedOutputsList{}
@@ -143,6 +158,18 @@ func GenOneOutput(entryIDs ...string) WeightedOutputsList {
 		})
 	}
 	return wol
+}
+
+// GenExtraInfo is a function to generate output with one from extra info
+func GenExtraInfo(extraInfo ...string) string {
+	mapAttribute := make(map[string]string)
+	if len(extraInfo) < 2 {
+		return ""
+	}
+	mapAttribute[extraInfo[0]] = extraInfo[1]
+
+	jsonString, _ := json.Marshal(mapAttribute)
+	return string(jsonString)
 }
 
 // GenAllOutput is a function to generate output with all of entry list

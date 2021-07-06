@@ -550,11 +550,11 @@ func TestCoinLock(t *testing.T) {
 					2,
 					sender1,
 				)
-
 				execRcpResponse, err := MockExecution(
 					tci,
 					recipeData.RecipeID,
 					account1,
+					"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa",
 					[]string{item.ID},
 				)
 
@@ -613,10 +613,10 @@ func TestCoinLock(t *testing.T) {
 					0,
 					sender1,
 				)
-
 				msg := types.NewMsgExecuteRecipe(
 					pylonInputRecipeData.RecipeID,
 					account1.String(),
+					"pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa",
 					[]string{},
 				)
 				_, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)

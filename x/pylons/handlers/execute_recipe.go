@@ -11,6 +11,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/paymentintent"
 )
 
 // SafeExecute execute a msg and returns result
@@ -51,8 +53,7 @@ func SafeExecute(ctx sdk.Context, keeper keeper.Keeper, exec types.Execution, ms
 }
 
 // ExecuteRecipe is used to execute a recipe
-func (srv msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
-
+func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 	err := msg.ValidateBasic()
 	if err != nil {
 		return nil, errInternal(err)
@@ -61,16 +62,50 @@ func (srv msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRec
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	recipe, err := srv.GetRecipe(sdkCtx, msg.RecipeID)
+	recipe, err := k.GetRecipe(sdkCtx, msg.RecipeID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
 
-	p := ExecProcess{ctx: sdkCtx, keeper: srv.Keeper, recipe: recipe}
-
+	p := ExecProcess{ctx: sdkCtx, keeper: k.Keeper, recipe: recipe}
 	var cl sdk.Coins
+	var isStripePayment = false
 	for _, inp := range recipe.CoinInputs {
-		cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
+
+		if inp.Coin == config.Config.StripeConfig.Currency {
+
+			stripeSecKeyBytes := string(config.Config.StripeConfig.StripeSecretKey)
+			stripe.Key = stripeSecKeyBytes
+
+			if msg.PaymentId == "" {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no paymentId error!")
+			}
+			payIntentResult, _ := paymentintent.Get(
+				msg.PaymentId,
+				nil,
+			)
+			if payIntentResult.Status != "succeeded" {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
+			}
+
+			if inp.Count != payIntentResult.Amount/100 {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment error!")
+			}
+			if k.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "payment id for Stripe is already being used")
+			}
+
+			// Register paymentId for Stripe before giving coins
+			err = k.RegisterPaymentForStripe(sdkCtx, msg.PaymentId)
+
+			if err != nil {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
+			}
+			isStripePayment = true
+			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
+		} else {
+			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
+		}
 	}
 
 	err = p.SetMatchedItemsFromExecMsg(sdkCtx, msg)
@@ -84,21 +119,23 @@ func (srv msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRec
 		var rcpOwnMatchedItems []types.Item
 		for _, item := range p.matchedItems {
 			item.OwnerRecipeID = recipe.ID
-			if err := srv.SetItem(sdkCtx, item); err != nil {
+			if err := k.SetItem(sdkCtx, item); err != nil {
 				return nil, errInternal(errors.New("error updating item's owner recipe"))
 			}
 			rcpOwnMatchedItems = append(rcpOwnMatchedItems, item)
 		}
 
-		err = srv.LockCoin(sdkCtx, types.NewLockedCoin(sender, types.CoinInputList(recipe.CoinInputs).ToCoins()))
-		if err != nil {
-			return nil, errInternal(err)
+		if isStripePayment == false {
+			err = k.LockCoin(sdkCtx, types.NewLockedCoin(sender, types.CoinInputList(recipe.CoinInputs).ToCoins()))
+			if err != nil {
+				return nil, errInternal(err)
+			}
 		}
 
 		// store the execution as the interval
 		exec := types.NewExecution(recipe.ID, recipe.CookbookID, cl, rcpOwnMatchedItems,
 			sdkCtx.BlockHeight()+recipe.BlockInterval, sender, false)
-		err := srv.SetExecution(sdkCtx, exec)
+		err := k.SetExecution(sdkCtx, exec)
 
 		if err != nil {
 			return nil, errInternal(err)
@@ -116,13 +153,15 @@ func (srv msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRec
 		}, nil
 	}
 
-	if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, cl) {
-		return nil, errInternal(errors.New("insufficient coin balance"))
-	}
+	if isStripePayment == false {
+		if !keeper.HasCoins(k.Keeper, sdkCtx, sender, cl) {
+			return nil, errInternal(errors.New("insufficient coin balance"))
+		}
 
-	err = ProcessCoinInputs(sdkCtx, srv.Keeper, sender, recipe.CookbookID, cl)
-	if err != nil {
-		return nil, errInternal(err)
+		err = ProcessCoinInputs(sdkCtx, k.Keeper, sender, recipe.CookbookID, cl)
+		if err != nil {
+			return nil, errInternal(err)
+		}
 	}
 
 	outputSTR, err := p.Run(sender)

@@ -48,6 +48,7 @@ func MockRecipe(
 		outputs,
 		blockInterval,
 		sender.String(),
+		"",
 	)
 	newRcpResult, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &newRcpMsg)
 	if err != nil {
@@ -148,6 +149,8 @@ func MockPopularRecipe(
 	rcpName string,
 	cbID string,
 	sender sdk.AccAddress,
+	paymentId string,
+	paymentMethod string,
 ) *types.MsgCreateRecipeResponse {
 	ciL, iiL, entries, outputs, bI := GetParamsForPopularRecipe(hfrt)
 	return MockRecipe(
@@ -164,9 +167,11 @@ func MockExecution(
 	tci keeper.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
+	paymentId string,
+	paymentMethod string,
 	itemIDs []string,
 ) (*types.MsgExecuteRecipeResponse, error) {
-	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), itemIDs)
+	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), paymentId, paymentMethod, itemIDs)
 	result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err

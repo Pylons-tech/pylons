@@ -9,33 +9,35 @@ import (
 
 // Keeper maintains the link to data storage and exposes getter/setter methods for the various parts of the state machine
 type Keeper struct {
-	CoinKeeper        bankkeeper.Keeper
-	Cdc               *codec.LegacyAmino // The wire codec for binary encoding/decoding
-	EntityKey         sdk.StoreKey
-	GoogleIAPOrderKey sdk.StoreKey
-	CookbookKey       sdk.StoreKey
-	RecipeKey         sdk.StoreKey
-	ItemKey           sdk.StoreKey
-	ExecutionKey      sdk.StoreKey
-	TradeKey          sdk.StoreKey
-	HistoryKey        sdk.StoreKey
-	LockedCoinKey     sdk.StoreKey
+	CoinKeeper          bankkeeper.Keeper
+	Cdc                 *codec.LegacyAmino // The wire codec for binary encoding/decoding
+	EntityKey           sdk.StoreKey
+	GoogleIAPOrderKey   sdk.StoreKey
+	PaymentForStripeKey sdk.StoreKey
+	CookbookKey         sdk.StoreKey
+	RecipeKey           sdk.StoreKey
+	ItemKey             sdk.StoreKey
+	ExecutionKey        sdk.StoreKey
+	TradeKey            sdk.StoreKey
+	HistoryKey          sdk.StoreKey
+	LockedCoinKey       sdk.StoreKey
 }
 
 // NewKeeper creates a new Keeper
 func NewKeeper(coinKeeper bankkeeper.Keeper, cdc *codec.LegacyAmino, storeKeys map[string]*sdk.KVStoreKey) Keeper {
 	return Keeper{
-		CoinKeeper:        coinKeeper,
-		Cdc:               cdc,
-		EntityKey:         storeKeys[KeyPylonsEntity],
-		GoogleIAPOrderKey: storeKeys[KeyGoogleIAPOrder],
-		CookbookKey:       storeKeys[KeyPylonsCookbook],
-		RecipeKey:         storeKeys[KeyPylonsRecipe],
-		ItemKey:           storeKeys[KeyPylonsItem],
-		ExecutionKey:      storeKeys[KeyPylonsExecution],
-		TradeKey:          storeKeys[KeyPylonsTrade],
-		HistoryKey:        storeKeys[KeyPylonsHistory],
-		LockedCoinKey:     storeKeys[KeyPylonsLockedCoin],
+		CoinKeeper:          coinKeeper,
+		Cdc:                 cdc,
+		EntityKey:           storeKeys[KeyPylonsEntity],
+		GoogleIAPOrderKey:   storeKeys[KeyGoogleIAPOrder],
+		PaymentForStripeKey: storeKeys[KeyPaymentForStripe],
+		CookbookKey:         storeKeys[KeyPylonsCookbook],
+		RecipeKey:           storeKeys[KeyPylonsRecipe],
+		ItemKey:             storeKeys[KeyPylonsItem],
+		ExecutionKey:        storeKeys[KeyPylonsExecution],
+		TradeKey:            storeKeys[KeyPylonsTrade],
+		HistoryKey:          storeKeys[KeyPylonsHistory],
+		LockedCoinKey:       storeKeys[KeyPylonsLockedCoin],
 	}
 }
 

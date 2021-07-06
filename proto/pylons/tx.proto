@@ -38,6 +38,18 @@ service Msg {
   // ExecuteRecipe is used to execute a recipe
   rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
 
+  // StripeCheckout is used to checkout stripe
+  rpc StripeCheckout(MsgStripeCheckout) returns (MsgStripeCheckoutResponse);
+
+  // StripeCreateProduct is used to create product of stripe
+  rpc StripeCreateProduct(MsgStripeCreateProduct) returns (MsgStripeCreateProductResponse);
+
+  // StripeCreatePrice is used to create price of stripe
+  rpc StripeCreatePrice(MsgStripeCreatePrice) returns (MsgStripeCreatePriceResponse); 
+
+  // StripeCreateSKU is used to create sku of stripe
+  rpc StripeCreateSku(MsgStripeCreateSku) returns (MsgStripeCreateSkuResponse); 
+
   // DisableRecipe is used to disable recipe by a developer
   rpc DisableRecipe(MsgDisableRecipe) returns (MsgDisableRecipeResponse);
 
@@ -121,7 +133,7 @@ message MsgCreateRecipe {
   // optional RecipeID if someone
   string RecipeID = 1;
   string Name = 2;
-  string CookbookID = 3;    // the cookbook guid
+  string CookbookID = 3;    // the cookbook guid 
   repeated CoinInput CoinInputs = 4 [(gogoproto.nullable) = false];
   repeated ItemInput ItemInputs = 5 [(gogoproto.nullable) = false];
   repeated WeightedOutputs Outputs = 6 [(gogoproto.nullable) = false];
@@ -211,8 +223,11 @@ message MsgEnableTradeResponse  {
 message  MsgExecuteRecipe {
   string RecipeID = 1;
   string Sender = 2;
-  repeated string ItemIDs = 3;
-}
+  string PaymentId = 3; 
+  string PaymentMethod = 4;
+  repeated string ItemIDs = 5;
+} 
+
 // ExecuteRecipeResponse is the response for executeRecipe
 message MsgExecuteRecipeResponse {
   string Message = 1;
@@ -345,6 +360,7 @@ message MsgUpdateRecipe {
   string Sender = 8;
   string Description = 9;
   EntriesList Entries = 10 [(gogoproto.nullable) = false];
+  string ExtraInfo = 11;
 }
 
 // UpdateRecipeResponse is a struct to control update recipe response
@@ -352,4 +368,142 @@ message MsgUpdateRecipeResponse {
   string RecipeID = 1 [(gogoproto.jsontag) = "RecipeID"];
   string Message = 2;
   string Status = 3;
+}
+
+message MsgStripeCreateProduct {
+  string StripeKey = 1;
+  string Name = 2;   
+  string Description = 3;
+  repeated string Images = 4;
+  string StatementDescriptor = 5;
+  string UnitLabel = 6; 
+  string Sender = 7;
+} 
+
+message MsgStripeCreateProductResponse  {
+  string ProductID = 1 [(gogoproto.jsontag) = "ProductID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCreatePrice {
+  string StripeKey = 1;
+  string Product = 2;  
+  string Amount = 3;
+  string Currency = 4;
+  string Description = 5;
+  string Sender = 6;
+}
+
+message MsgStripeCreatePriceResponse  {
+  string PriceID = 1 [(gogoproto.jsontag) = "PriceID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCustomer {
+  string Email = 1; 
+  string PaymentMethod = 2; 
+}
+
+message MsgStripeCheckout{
+  string StripeKey = 1;
+  string PaymentMethod = 2;
+  StripePrice Price = 3;
+  string Sender = 4;
+}
+ 
+message MsgStripeCheckoutResponse  {
+  string SessionID = 1 [(gogoproto.jsontag) = "SessionID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCreateSku  {
+  string StripeKey = 1;
+  string Product = 2; 
+  repeated StringKeyValue Attributes = 3 [(gogoproto.nullable) = false];
+  int64 Price = 4;
+  string Currency = 5;
+  StripeInventory Inventory = 6; 
+  string Sender = 7;
+} 
+
+message MsgStripeCreateSkuResponse{
+  string SKUID = 1 [(gogoproto.jsontag) = "SKUID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCreatePaymentIntent  { 
+  string StripeKey = 1;
+  int64 Amount = 2;
+  string Currency = 3;
+  string SKUID = 4;
+  string Sender = 5;
+}
+
+message MsgStripeCreatePaymentIntentResponse{
+  string PaymentID = 1 [(gogoproto.jsontag) = "PaymentID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCreateAccount  { 
+  string StripeKey = 1;
+  string Country = 2;
+  string Email = 3;
+  string Types = 4;
+  string Sender = 5;
+}
+
+message MsgStripeCreateAccountResponse{
+  string AccountID = 1 [(gogoproto.jsontag) = "AccountID"];
+  string Message = 2;
+  string Status = 3;
+}
+
+
+
+message MsgStripeCreateProductSku  { 
+  string StripeKey = 1;
+  string Name = 2;   
+  string Description = 3;
+  repeated string Images = 4; 
+  repeated StringKeyValue Attributes = 5 [(gogoproto.nullable) = false];
+  int64 Price = 6;
+  string Currency = 7;
+  StripeInventory Inventory = 8; 
+  string ClientId = 9;
+  string Sender = 10;
+}
+
+message MsgStripeInfo {
+  string Sender = 1;
+}
+
+message MsgStripeInfoResponse {
+  string PubKey = 1;
+  string ClientID = 2;
+  string URI = 3;
+  string Message = 4;
+  string Status = 5;
+}
+
+message MsgStripeOauthToken {
+  string GrantType = 1;
+  string Code = 2;
+  string Sender = 3;
+}
+
+message MsgStripeOauthTokenResponse {
+  string AcessToken = 1;
+  string LiveMode = 2;
+  string RefreshToken = 3;
+  string TokenType = 4;
+  string StripePublishKey = 5;
+  string StripeUserID = 6;
+  string Scope = 7;
+  string Message = 8;
+  string Status = 9;
 }

@@ -26,7 +26,7 @@ func TestGetRecipe(t *testing.T) {
 	// mock recipe
 	mockRecipeName := "GET_RECIPE_MOCK_TEST_NAME"
 	rcpData := handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
-		mockRecipeName, cbData.CookbookID, sender1)
+		mockRecipeName, cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	cases := map[string]struct {
 		recipeID      string
@@ -84,7 +84,7 @@ func TestListRecipe(t *testing.T) {
 	cbData := handlers.MockCookbook(tci, sender1)
 
 	handlers.MockPopularRecipe(handlers.Rcp5BlockDelayed5xWoodcoinTo1xChaircoin, tci,
-		"recipe0001", cbData.CookbookID, sender1)
+		"recipe0001", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	cases := map[string]struct {
 		address       string

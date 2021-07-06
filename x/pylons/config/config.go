@@ -32,12 +32,33 @@ type GoogleIAPConfiguration struct {
 	Amount      int64  `yaml:"amount"`
 }
 
+type StripeIAPConfiguration struct {
+	PackageName string `yaml:"package_name"`
+	ProductID   string `yaml:"product_id"`
+	Amount      int64  `yaml:"amount"`
+}
+
+type StripeConfiguration struct {
+	StripeSecretKey   string `yaml:"stripe_secretKey"`
+	StripePubKey      string `yaml:"stripe_publicKey"`
+	StripeClientID    string `yaml:"stripe_client_id"`
+	StripeRedirectURI string `yaml:"stripe_redirect_uri"`
+	StripeCancelURI   string `yaml:"stripe_cancel_url"`
+	StripeCountry     string `yaml:"stripeCountry"`
+	Country           string `yaml:"country"`
+	Currency          string `yaml:"currency"`
+	PaymentMethods    string `yaml:"paymentMethods"`
+	StripeSkuID       string `yaml:"stripe_sku_id"`
+}
+
 // Configuration is a struct to manage game configuration
 type Configuration struct {
 	Fee             FeeConfiguration         `yaml:"fees"`
 	Validators      ValidatorsConfiguration  `yaml:"validators"`
 	GoogleIAP       []GoogleIAPConfiguration `yaml:"google_iap"`
 	GoogleIAPPubKey string                   `yaml:"google_iap_pubkey"`
+	StripeIAP       []StripeIAPConfiguration `yaml:"stripe_iap"`
+	StripeConfig    StripeConfiguration      `yaml:"stripe_config"`
 	IsProduction    bool                     `yaml:"is_production"`
 }
 
@@ -49,6 +70,15 @@ func init() {
 	if err != nil {
 		fmt.Println("config reading error", err)
 		os.Exit(1)
+	}
+}
+
+func PaymentMethods() string {
+	paymentMethodsString := os.Getenv("PAYMENT_METHODS")
+	if paymentMethodsString == "" {
+		return "card"
+	} else {
+		return paymentMethodsString //strings.Split(paymentMethodsString, ", ")
 	}
 }
 
@@ -91,7 +121,31 @@ func ReadConfig() error {
 			},
 		},
 		GoogleIAPPubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
-		IsProduction:    false,
+		StripeIAP: []StripeIAPConfiguration{
+			{
+				PackageName: "com.pylons.loud",
+				ProductID:   "pylons_1000",
+				Amount:      1000,
+			},
+			{
+				PackageName: "com.pylons.loud",
+				ProductID:   "pylons_55000",
+				Amount:      55000,
+			},
+		},
+		StripeConfig: StripeConfiguration{
+			StripeSecretKey:   "StripeSecretKey",
+			StripePubKey:      "StripePubKey",
+			StripeClientID:    "StripeClientID",
+			StripeRedirectURI: "https://wallet.pylons.tech",
+			StripeCancelURI:   "https://wallet.pylons.tech/cancel",
+			StripeCountry:     "us",
+			Country:           "US",
+			Currency:          "USD",
+			PaymentMethods:    PaymentMethods(),
+			StripeSkuID:       "PaymentMethods",
+		},
+		IsProduction: false,
 	}
 	return nil
 }
