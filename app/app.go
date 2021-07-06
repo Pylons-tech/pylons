@@ -5,11 +5,6 @@ import (
 	"os"
 	"path/filepath"
 
-	appparams "github.com/Pylons-tech/pylons/app/params"
-	"github.com/Pylons-tech/pylons/x/pylons"
-	"github.com/Pylons-tech/pylons/x/pylons/handlers"
-	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
-	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
@@ -75,6 +70,7 @@ import (
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+
 	"github.com/spf13/cast"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
@@ -82,6 +78,12 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
+
+	appparams "github.com/Pylons-tech/pylons/app/params"
+	"github.com/Pylons-tech/pylons/x/pylons"
+	"github.com/Pylons-tech/pylons/x/pylons/handlers"
+	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
+	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 const Name = "pylons"

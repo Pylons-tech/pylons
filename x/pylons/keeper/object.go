@@ -8,7 +8,7 @@ import (
 )
 
 // SetObject set custom object in ctx store
-func (k Keeper) SetObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
+func (keeper Keeper) SetObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
 
 	mObject, err := json.Marshal(object)
 	if err != nil {
@@ -16,12 +16,12 @@ func (k Keeper) SetObject(ctx sdk.Context, storageType, id string, keeperKey sdk
 	}
 	store := ctx.KVStore(keeperKey)
 	store.Set([]byte(id), mObject)
-	k.IncreaseEntityCount(ctx)
+	keeper.IncreaseEntityCount(ctx)
 	return nil
 }
 
 // GetObject unmarshals to the object provided
-func (k Keeper) GetObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
+func (keeper Keeper) GetObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {
@@ -33,7 +33,7 @@ func (k Keeper) GetObject(ctx sdk.Context, storageType, id string, keeperKey sdk
 }
 
 // UpdateObject update object in ctx store
-func (k Keeper) UpdateObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
+func (keeper Keeper) UpdateObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey, object interface{}) error {
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {
@@ -48,7 +48,7 @@ func (k Keeper) UpdateObject(ctx sdk.Context, storageType, id string, keeperKey 
 }
 
 // DeleteObject delete object in ctx store
-func (k Keeper) DeleteObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey) error {
+func (keeper Keeper) DeleteObject(ctx sdk.Context, storageType, id string, keeperKey sdk.StoreKey) error {
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {

@@ -38,14 +38,14 @@ COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
 COPY --from=build /root/.pylonsd /root/.pylonsd
 # RUN pylonsd init masternode --chain-id pylonschain
  
-COPY init_accounts.local.sh ./
+COPY scripts/init_accounts.local.sh ./
 
 EXPOSE 1317/tcp
  
 #Run the tests
 FROM build as integration_test
 COPY Makefile .
-COPY init_accounts.local.sh .
+COPY scripts/init_accounts.local.sh .
 RUN chmod +x init_accounts.local.sh 
 RUN rm -rf $HOME/.pylonsd
 #RUN sh ./init_accounts.local.sh

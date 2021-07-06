@@ -2,7 +2,7 @@
 
 `pylonsd` is a main command line interface tool to be mainly used by core developers of pylons ecosystem.
 
-# cli basic
+# Command Line Interface (CLI) basics
 ```sh
 rm -rf ~/.pylonsd
 

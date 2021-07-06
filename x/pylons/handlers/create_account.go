@@ -8,7 +8,7 @@ import (
 
 // CreateAccount is used to send pylons to requesters. This handler is part of the
 // faucet
-func (k msgServer) CreateAccount(ctx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateExecutionResponse, error) {
+func (srv msgServer) CreateAccount(ctx context.Context, msg *types.MsgCreateAccount) (*types.MsgCreateExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 

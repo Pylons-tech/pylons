@@ -2,11 +2,13 @@ package rest
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client"
 	"net/http"
 
-	"github.com/cosmos/cosmos-sdk/types/rest"
+	"github.com/cosmos/cosmos-sdk/client"
+
 	"github.com/gorilla/mux"
+
+	"github.com/cosmos/cosmos-sdk/types/rest"
 )
 
 func getLockedCoinDetailsHandler(cliCtx client.Context, storeName string) http.HandlerFunc {

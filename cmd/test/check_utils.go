@@ -3,9 +3,10 @@ package inttest
 import (
 	"strings"
 
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/config"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/config"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"

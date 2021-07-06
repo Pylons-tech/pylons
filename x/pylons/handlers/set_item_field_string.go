@@ -7,12 +7,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // UpdateItemString is used to transact pylons between people
-func (k msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateItemString) (*types.MsgUpdateItemStringResponse, error) {
+func (srv msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateItemString) (*types.MsgUpdateItemStringResponse, error) {
 
 	err := msg.ValidateBasic()
 
@@ -24,16 +25,16 @@ func (k msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateIte
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 	updateFee := types.NewPylon(config.Config.Fee.UpdateItemFieldString)
 
-	if !keeper.HasCoins(k.Keeper, sdkCtx, sender, updateFee) {
+	if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, updateFee) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "Sender does not have enough coins for this action")
 	}
 
-	subErr := k.CoinKeeper.SubtractCoins(sdkCtx, sender, updateFee)
+	subErr := srv.CoinKeeper.SubtractCoins(sdkCtx, sender, updateFee)
 	if subErr != nil {
 		return nil, errInternal(subErr)
 	}
 
-	item, err := k.GetItem(sdkCtx, msg.ItemID)
+	item, err := srv.GetItem(sdkCtx, msg.ItemID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -49,7 +50,7 @@ func (k msgServer) UpdateItemString(ctx context.Context, msg *types.MsgUpdateIte
 
 	item.Strings[keyID].Value = msg.Value
 
-	if err := k.SetItem(sdkCtx, item); err != nil {
+	if err := srv.SetItem(sdkCtx, item); err != nil {
 		return nil, errInternal(errors.New("Error updating item inside keeper"))
 	}
 

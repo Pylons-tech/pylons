@@ -3,17 +3,20 @@ package tx
 import (
 	"bytes"
 	"fmt"
+	"os"
+
+	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
 	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
-	"os"
+
+	tmcrypto "github.com/tendermint/tendermint/crypto"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	tmcrypto "github.com/tendermint/tendermint/crypto"
 )
 
 const (
@@ -159,8 +162,7 @@ func makeSignCmd() func(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
-		if str, _ := cmd.Flags().GetString(flagOutfile);
-			str == "" {
+		if str, _ := cmd.Flags().GetString(flagOutfile); str == "" {
 			fmt.Printf("%s\n", json)
 			return nil
 		}

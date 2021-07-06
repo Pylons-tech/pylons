@@ -1,10 +1,12 @@
 package query
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/spf13/cobra"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/spf13/cobra"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetExecution get an execution by GUID

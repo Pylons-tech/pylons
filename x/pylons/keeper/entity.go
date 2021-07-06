@@ -11,19 +11,19 @@ import (
 const KeyEntityCount = "key_entity_count"
 
 // IncreaseEntityCount sets a item in the key store
-func (k Keeper) IncreaseEntityCount(ctx sdk.Context) {
-	newCount := k.GetEntityCount(ctx) + 1
+func (keeper Keeper) IncreaseEntityCount(ctx sdk.Context) {
+	newCount := keeper.GetEntityCount(ctx) + 1
 
-	store := ctx.KVStore(k.EntityKey)
+	store := ctx.KVStore(keeper.EntityKey)
 	store.Set([]byte(KeyEntityCount), []byte(fmt.Sprintf("%d", newCount)))
 }
 
 // GetEntityCount returns entity count
-func (k Keeper) GetEntityCount(ctx sdk.Context) int {
-	if k.EntityKey == nil {
+func (keeper Keeper) GetEntityCount(ctx sdk.Context) int {
+	if keeper.EntityKey == nil {
 		return 0
 	}
-	store := ctx.KVStore(k.EntityKey)
+	store := ctx.KVStore(keeper.EntityKey)
 
 	countStr := store.Get([]byte(KeyEntityCount))
 	count, err := strconv.Atoi(string(countStr))

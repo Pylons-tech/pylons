@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #rm -rf $HOME/.pylonsd
 #pylonsd init masternode --chain-id=pylonschain --home=$HOME/.pylonsd
 #pylonsd keys add node0 --keyring-backend=test  --home=$HOME/.pylonsd --recover <<< "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
@@ -10,6 +10,7 @@
 #pylonsd add-genesis-account $(pylonsd keys show eugen -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
 #pylonsd gentx node0 500000000stake --keyring-backend=test --chain-id=pylonschain --home=$HOME/.pylonsd
 #pylonsd collect-gentxs  --home=$HOME/.pylonsd
+
 # sed command for osx
 #sed -i '' 's/enable = false/enable = true/g' $HOME/.pylonsd/config/app.toml
 #sed -i '' 's/swagger = false/swagger = true/g' $HOME/.pylonsd/config/app.toml

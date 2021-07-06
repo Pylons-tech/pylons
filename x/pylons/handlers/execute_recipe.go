@@ -8,6 +8,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stripe/stripe-go"
@@ -212,7 +213,7 @@ func ProcessCoinInputs(ctx sdk.Context, k keeper.Keeper, msgSender sdk.AccAddres
 }
 
 // HandlerMsgCheckExecution is used to check the status of an execution
-func (k msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecution) (*types.MsgCheckExecutionResponse, error) {
+func (srv msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecution) (*types.MsgCheckExecutionResponse, error) {
 
 	err := msg.ValidateBasic()
 	if err != nil {
@@ -222,7 +223,7 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecut
 	sdkCtx := sdk.UnwrapSDKContext(ctx)
 	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 
-	exec, err := k.GetExecution(sdkCtx, msg.ExecID)
+	exec, err := srv.GetExecution(sdkCtx, msg.ExecID)
 	if err != nil {
 		return nil, errInternal(err)
 	}
@@ -240,7 +241,7 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecut
 	}
 
 	if sdkCtx.BlockHeight() >= exec.BlockHeight {
-		outputSTR, err := SafeExecute(sdkCtx, k.Keeper, exec, *msg)
+		outputSTR, err := SafeExecute(sdkCtx, srv.Keeper, exec, *msg)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -252,11 +253,11 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecut
 		}, nil
 
 	} else if msg.PayToComplete {
-		recipe, err := k.GetRecipe(sdkCtx, exec.RecipeID)
+		recipe, err := srv.GetRecipe(sdkCtx, exec.RecipeID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
-		cookbook, err := k.GetCookbook(sdkCtx, recipe.CookbookID)
+		cookbook, err := srv.GetCookbook(sdkCtx, recipe.CookbookID)
 		if err != nil {
 			return nil, errInternal(err)
 		}
@@ -266,13 +267,13 @@ func (k msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExecut
 		}
 		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
 
-		if keeper.HasCoins(k.Keeper, sdkCtx, sender, pylonsToCharge) {
-			err := k.CoinKeeper.SubtractCoins(sdkCtx, sender, pylonsToCharge)
+		if keeper.HasCoins(srv.Keeper, sdkCtx, sender, pylonsToCharge) {
+			err := srv.CoinKeeper.SubtractCoins(sdkCtx, sender, pylonsToCharge)
 			if err != nil {
 				return nil, errInternal(err)
 			}
 
-			outputSTR, err := SafeExecute(sdkCtx, k.Keeper, exec, *msg)
+			outputSTR, err := SafeExecute(sdkCtx, srv.Keeper, exec, *msg)
 			if err != nil {
 				return nil, errInternal(err)
 			}

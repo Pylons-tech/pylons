@@ -24,7 +24,7 @@ RUN go build ./cmd/pylonsd/
 #EXPOSE 8080
 EXPOSE 1317
 
-COPY init_accounts.local.sh .
+COPY scripts/init_accounts.local.sh .
 RUN chmod +x init_accounts.local.sh
 RUN bash ./init_accounts.local.sh  
 # Command to run the executable

@@ -4,16 +4,18 @@ import (
 	"net/http"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 
+	"github.com/gorilla/mux"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/gorilla/mux"
 )
 
-// query endpoints supported by the nameservice Querier
 const (
+	// TxGoogleIAPGPRequesterKey is a query endpoint supported by the nameservice Querier
 	TxGoogleIAPGPRequesterKey = "google_iap_gp_requester"
 )
 

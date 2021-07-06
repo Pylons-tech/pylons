@@ -4,10 +4,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/stretchr/testify/require"
+
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 )
 
 func TestInvalidMsg(t *testing.T) {

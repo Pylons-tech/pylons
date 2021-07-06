@@ -4,8 +4,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/spf13/cobra"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetItem get an item by GUID
