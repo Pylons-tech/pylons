@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"gopkg.in/yaml.v2"
 )
@@ -84,14 +85,23 @@ func PaymentMethods() string {
 
 // ReadConfig is a function to read configuration
 func ReadConfig() error {
-	cfgFileName := "./pylons.yml"
+	userHomeDir, err := os.UserHomeDir()
+	if err != nil {
+		panic(err)
+	}
+	cfgFileNames := [2]string{filepath.Join(userHomeDir, ".pylonsd", "config", "pylons.yml"), "./pylons.yml"}
 
-	configf, err := os.Open(cfgFileName)
-	if err == nil {
-		defer configf.Close()
-
-		decoder := yaml.NewDecoder(configf)
-		return decoder.Decode(&Config)
+	for _, cfgFileName := range cfgFileNames {
+		configf, err := os.Open(cfgFileName)
+		if err == nil {
+			decoder := yaml.NewDecoder(configf)
+			cfg := decoder.Decode(&Config)
+			err := configf.Close()
+			if err != nil {
+				panic(err)
+			}
+			return cfg
+		}
 	}
 	Config = Configuration{
 		Fee: FeeConfiguration{
