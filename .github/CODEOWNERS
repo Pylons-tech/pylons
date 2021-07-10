@@ -5,4 +5,8 @@
 # most precedence.
 
 # Primary repo maintainers
+<<<<<<< HEAD
 *       @aljo242 @giunatale
+=======
+*       @aljo242 @andraderaf @giunatale
+>>>>>>> develop-no-stripe

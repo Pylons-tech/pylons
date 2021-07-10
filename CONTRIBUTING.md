@@ -33,7 +33,7 @@ not required to an open issue to submit a PR, but be aware that for more complex
 problems or features, if a PR is opened before an adequate design discussion has
 taken place in a GitHub issue, that PR runs a high likelihood of being rejected.
 
-Take a peek at our [coding repo](https://github.com/tendermint/coding) for
+Take a peek at the Tendermint [coding repo](https://github.com/tendermint/coding) for
 overall information on repository workflow and standards. Setup for development 
 tools like linters is detailed on the [technical setup](TECHNICAL-SETUP.md) guide.
 

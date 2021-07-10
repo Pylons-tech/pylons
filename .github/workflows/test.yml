@@ -1,7 +1,11 @@
 name: Tests
 
 # Tests runs unit tests 
+<<<<<<< HEAD
 # This workflow is run on pushed to [develop master] and every Pull Requeset where a .go, .mod, .sum have been changed
+=======
+# This workflow is run on pushed to [develop master] and every Pull Request where a .go, .mod, .sum have been changed
+>>>>>>> develop-no-stripe
 
 on:
   pull_request:

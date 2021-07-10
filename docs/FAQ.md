@@ -1,8 +1,4 @@
-# Introduction
-
-FAQ is frequently asked questions for pylons ecosystem.
-
-# FAQs
+# Frequently Asked Questions
 
 ## When fixture test can fail even though recipes and cookbooks are all correct?
 - insufficient account balance to create cookbook

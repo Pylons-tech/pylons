@@ -26,7 +26,9 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 
 	defer func(jsonFile *os.File) {
 		err := jsonFile.Close()
-		t.MustNil(err, "fatal log closing file")
+		if err != nil {
+			panic("error closing file")
+		}
 	}(jsonFile)
 
 	byteValue, err := ioutil.ReadAll(jsonFile)
