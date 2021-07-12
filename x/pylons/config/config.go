@@ -89,7 +89,10 @@ func ReadConfig() error {
 	if err != nil {
 		panic(err)
 	}
-	cfgFileNames := [2]string{filepath.Join(userHomeDir, ".pylonsd", "config", "pylons.yml"), "./pylons.yml"}
+	cfgFileNames := [3]string{
+		filepath.Join(userHomeDir, ".pylonsd", "config", "pylons.yml"),
+		filepath.Join(userHomeDir, "config", "pylons.yml"),
+		"./pylons.yml"}
 
 	for _, cfgFileName := range cfgFileNames {
 		configf, err := os.Open(cfgFileName)
