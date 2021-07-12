@@ -9,5 +9,5 @@
 ### Fixes:
 
 ### Changes: 
-* [#362](https://github.com/Pylons-tech/pylons/pull/362) Refactored codebase to be `make lint` compliant
+* [#366](https://github.com/Pylons-tech/pylons/pull/362) Refactored codebase to be `make lint` compliant
 * [#357](https://github.com/Pylons-tech/pylons/pull/357) Restructured documentation and moved to new `docs/` folder
