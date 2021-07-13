@@ -24,7 +24,7 @@ brew install pre-commit
 #### Ubuntu / Debian based linux distributions
 
 ```shell
-sudo apt install pre-commit
+sudo apt-get install pre-commit
 ```
 
 ### golangci-lint
