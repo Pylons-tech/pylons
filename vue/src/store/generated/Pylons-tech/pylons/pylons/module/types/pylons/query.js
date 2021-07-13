@@ -930,7 +930,17 @@ export const GetRecipeRequest = {
         return message;
     }
 };
-const baseGetRecipeResponse = { NodeVersion: '', ID: '', CookbookID: '', Name: '', Description: '', BlockInterval: 0, Sender: '', Disabled: false };
+const baseGetRecipeResponse = {
+    NodeVersion: '',
+    ID: '',
+    CookbookID: '',
+    Name: '',
+    Description: '',
+    BlockInterval: 0,
+    Sender: '',
+    Disabled: false,
+    ExtraInfo: ''
+};
 export const GetRecipeResponse = {
     encode(message, writer = Writer.create()) {
         if (message.NodeVersion !== '') {
@@ -968,6 +978,9 @@ export const GetRecipeResponse = {
         }
         if (message.Disabled === true) {
             writer.uint32(96).bool(message.Disabled);
+        }
+        if (message.ExtraInfo !== '') {
+            writer.uint32(106).string(message.ExtraInfo);
         }
         return writer;
     },
@@ -1016,6 +1029,9 @@ export const GetRecipeResponse = {
                     break;
                 case 12:
                     message.Disabled = reader.bool();
+                    break;
+                case 13:
+                    message.ExtraInfo = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1098,6 +1114,12 @@ export const GetRecipeResponse = {
         else {
             message.Disabled = false;
         }
+        if (object.ExtraInfo !== undefined && object.ExtraInfo !== null) {
+            message.ExtraInfo = String(object.ExtraInfo);
+        }
+        else {
+            message.ExtraInfo = '';
+        }
         return message;
     },
     toJSON(message) {
@@ -1129,6 +1151,7 @@ export const GetRecipeResponse = {
         message.BlockInterval !== undefined && (obj.BlockInterval = message.BlockInterval);
         message.Sender !== undefined && (obj.Sender = message.Sender);
         message.Disabled !== undefined && (obj.Disabled = message.Disabled);
+        message.ExtraInfo !== undefined && (obj.ExtraInfo = message.ExtraInfo);
         return obj;
     },
     fromPartial(object) {
@@ -1204,6 +1227,12 @@ export const GetRecipeResponse = {
         }
         else {
             message.Disabled = false;
+        }
+        if (object.ExtraInfo !== undefined && object.ExtraInfo !== null) {
+            message.ExtraInfo = object.ExtraInfo;
+        }
+        else {
+            message.ExtraInfo = '';
         }
         return message;
     }

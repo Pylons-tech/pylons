@@ -5,7 +5,7 @@ build:
   binary: "pylonsd"
 
 init:
-  home: "~/.pylons"
+  home: "/home/$USER/pylons"
   config:
     api:
       swagger: true

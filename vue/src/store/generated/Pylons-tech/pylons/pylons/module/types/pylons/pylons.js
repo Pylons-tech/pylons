@@ -3664,6 +3664,247 @@ export const Trade = {
         return message;
     }
 };
+const baseStripePrice = { Amount: 0, Currency: '', Description: '', Images: '', Name: '', Quantity: 0 };
+export const StripePrice = {
+    encode(message, writer = Writer.create()) {
+        if (message.Amount !== 0) {
+            writer.uint32(8).int64(message.Amount);
+        }
+        if (message.Currency !== '') {
+            writer.uint32(18).string(message.Currency);
+        }
+        if (message.Description !== '') {
+            writer.uint32(26).string(message.Description);
+        }
+        for (const v of message.Images) {
+            writer.uint32(34).string(v);
+        }
+        if (message.Name !== '') {
+            writer.uint32(42).string(message.Name);
+        }
+        if (message.Quantity !== 0) {
+            writer.uint32(48).int64(message.Quantity);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseStripePrice };
+        message.Images = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Amount = longToNumber(reader.int64());
+                    break;
+                case 2:
+                    message.Currency = reader.string();
+                    break;
+                case 3:
+                    message.Description = reader.string();
+                    break;
+                case 4:
+                    message.Images.push(reader.string());
+                    break;
+                case 5:
+                    message.Name = reader.string();
+                    break;
+                case 6:
+                    message.Quantity = longToNumber(reader.int64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseStripePrice };
+        message.Images = [];
+        if (object.Amount !== undefined && object.Amount !== null) {
+            message.Amount = Number(object.Amount);
+        }
+        else {
+            message.Amount = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = String(object.Currency);
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = String(object.Description);
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Images !== undefined && object.Images !== null) {
+            for (const e of object.Images) {
+                message.Images.push(String(e));
+            }
+        }
+        if (object.Name !== undefined && object.Name !== null) {
+            message.Name = String(object.Name);
+        }
+        else {
+            message.Name = '';
+        }
+        if (object.Quantity !== undefined && object.Quantity !== null) {
+            message.Quantity = Number(object.Quantity);
+        }
+        else {
+            message.Quantity = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Amount !== undefined && (obj.Amount = message.Amount);
+        message.Currency !== undefined && (obj.Currency = message.Currency);
+        message.Description !== undefined && (obj.Description = message.Description);
+        if (message.Images) {
+            obj.Images = message.Images.map((e) => e);
+        }
+        else {
+            obj.Images = [];
+        }
+        message.Name !== undefined && (obj.Name = message.Name);
+        message.Quantity !== undefined && (obj.Quantity = message.Quantity);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseStripePrice };
+        message.Images = [];
+        if (object.Amount !== undefined && object.Amount !== null) {
+            message.Amount = object.Amount;
+        }
+        else {
+            message.Amount = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = object.Currency;
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = object.Description;
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Images !== undefined && object.Images !== null) {
+            for (const e of object.Images) {
+                message.Images.push(e);
+            }
+        }
+        if (object.Name !== undefined && object.Name !== null) {
+            message.Name = object.Name;
+        }
+        else {
+            message.Name = '';
+        }
+        if (object.Quantity !== undefined && object.Quantity !== null) {
+            message.Quantity = object.Quantity;
+        }
+        else {
+            message.Quantity = 0;
+        }
+        return message;
+    }
+};
+const baseStripeInventory = { Quantity: 0, Type: '', Value: '' };
+export const StripeInventory = {
+    encode(message, writer = Writer.create()) {
+        if (message.Quantity !== 0) {
+            writer.uint32(8).int64(message.Quantity);
+        }
+        if (message.Type !== '') {
+            writer.uint32(18).string(message.Type);
+        }
+        if (message.Value !== '') {
+            writer.uint32(26).string(message.Value);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseStripeInventory };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Quantity = longToNumber(reader.int64());
+                    break;
+                case 2:
+                    message.Type = reader.string();
+                    break;
+                case 3:
+                    message.Value = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseStripeInventory };
+        if (object.Quantity !== undefined && object.Quantity !== null) {
+            message.Quantity = Number(object.Quantity);
+        }
+        else {
+            message.Quantity = 0;
+        }
+        if (object.Type !== undefined && object.Type !== null) {
+            message.Type = String(object.Type);
+        }
+        else {
+            message.Type = '';
+        }
+        if (object.Value !== undefined && object.Value !== null) {
+            message.Value = String(object.Value);
+        }
+        else {
+            message.Value = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Quantity !== undefined && (obj.Quantity = message.Quantity);
+        message.Type !== undefined && (obj.Type = message.Type);
+        message.Value !== undefined && (obj.Value = message.Value);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseStripeInventory };
+        if (object.Quantity !== undefined && object.Quantity !== null) {
+            message.Quantity = object.Quantity;
+        }
+        else {
+            message.Quantity = 0;
+        }
+        if (object.Type !== undefined && object.Type !== null) {
+            message.Type = object.Type;
+        }
+        else {
+            message.Type = '';
+        }
+        if (object.Value !== undefined && object.Value !== null) {
+            message.Value = object.Value;
+        }
+        else {
+            message.Value = '';
+        }
+        return message;
+    }
+};
 var globalThis = (() => {
     if (typeof globalThis !== 'undefined')
         return globalThis;

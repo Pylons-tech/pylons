@@ -1,37 +1,33 @@
 # Requirements
 
-## Install Go
+The following list provides all software dependencies necessary to set up Pylons development environment 
 
-This installation method removes existing Go installations, installs Go in `/usr/local/go/bin/go`, and sets
-the environment variables.
+* [Golang >= 1.16.2](https://golang.org/doc/install)
+* [Precommit](https://pre-commit.com/)
+* [Golangci Lint](https://golangci-lint.run/usage/install/#local-installation)
+* [Starport](https://docs.starport.network/intro/install.html)
+* [Docker](https://docs.docker.com/get-docker/)
+* Make
+    * Debian / Ubuntu based distributions
+      
+        ``
+        $ sudo apt install build-essential
+        ``
+    * Fedora / RHL Based distros    
+      
+        ``
+        $ sudo apt install build-essential
+        ``
+    * Arch Linux
+      
+      ``$ sudo pacman -Sy base-devel``      
+    
+    * Windows 
+        * By using [chocolatey](https://chocolatey.org/)
+          
+          `` choco install make``
+    * MacOS
+        * By using [homebrew](https://formulae.brew.sh/formula/make)
+    
 
-1. Go to <https://golang.org/dl>.
-1. Download the binary release that is suitable for your system.
-1. Follow the installation instructions.
 
-**Note:** We recommend not using brew to install Go.
-
-## Install Dev Tools
-
-### install pre-commit
-
-#### Homebrew
-
-```shell
-brew install pre-commit
-```
-
-#### Ubuntu / Debian based linux distributions
-
-```shell
-sudo apt install pre-commit
-```
-
-### golangci-lint
-
-`golangci-lint` is a linter runner used in the `make lint` command provided to developers. 
-To install it into `$GOPATH/bin` run:
-
-```shell
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
-```

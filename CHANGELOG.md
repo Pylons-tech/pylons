@@ -3,9 +3,9 @@
 ## Unreleased
 
 ### Features:
+* [#361](https://github.com/Pylons-tech/pylons/pull/361) Added starport support
 * [#357](https://github.com/Pylons-tech/pylons/pull/357) GitHub action for unit testing on PR and push to `develop` and `master`
-* [#357](https://github.com/Pylons-tech/pylons/pull/357) Added `make clean`, `make lint`, `make format`
-* [#361](https://github.com/Pylons-tech/pylons/pull/361) Added starport support 
+* [#357](https://github.com/Pylons-tech/pylons/pull/357) Added `make clean`, `make lint`, `make format` 
 
 ### Fixes:
 

@@ -1,0 +1,47 @@
+# Start from the latest golang base image
+FROM starport/cli:0.16.2 as build
+
+# Add Maintainer Info
+LABEL maintainer="Rafael de Andrade <rafael.andrade@pylons.tech>"
+
+USER root
+
+RUN useradd -ms /bin/bash pylons      \
+    && usermod -a -G tendermint pylons
+
+RUN chmod ugo+rw /tmp
+
+USER pylons
+WORKDIR /home/pylons
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY --chown=pylons:pylons docs ./docs
+COPY --chown=pylons:pylons proto ./proto
+COPY --chown=pylons:pylons app ./app
+COPY --chown=pylons:pylons cmd ./cmd
+COPY --chown=pylons:pylons x ./x
+COPY --chown=pylons:pylons test ./test
+COPY --chown=pylons:pylons go.mod .
+COPY --chown=pylons:pylons go.sum .
+COPY --chown=pylons:pylons config.yml .
+
+# Staport builds, installs the pylons binary
+
+ENTRYPOINT ["starport","serve"]
+
+
+# TODO create the final image with only the binaries when the new docker image for staport is available
+# Final image
+#FROM golang:latest as pylonsd
+#
+#WORKDIR /root
+#COPY --from=build /go/bin/pylonsd /usr/bin/pylonsd
+#COPY --from=build /root/.pylonsd /root/.pylonsd
+#RUN pylonsd init masternode --chain-id pylonschain
+#
+#COPY scripts/init_accounts.local.sh ./
+#
+#EXPOSE 1317/tcp
+

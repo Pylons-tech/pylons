@@ -140,6 +140,7 @@ export interface PylonsGetRecipeResponse {
     BlockInterval?: string;
     Sender?: string;
     Disabled?: boolean;
+    ExtraInfo?: string;
 }
 export interface PylonsGetTradeResponse {
     NodeVersion?: string;
@@ -322,6 +323,26 @@ export interface PylonsMsgSendItemsResponse {
     Message?: string;
     Status?: string;
 }
+export interface PylonsMsgStripeCheckoutResponse {
+    SessionID?: string;
+    Message?: string;
+    Status?: string;
+}
+export interface PylonsMsgStripeCreatePriceResponse {
+    PriceID?: string;
+    Message?: string;
+    Status?: string;
+}
+export interface PylonsMsgStripeCreateProductResponse {
+    ProductID?: string;
+    Message?: string;
+    Status?: string;
+}
+export interface PylonsMsgStripeCreateSkuResponse {
+    SKUID?: string;
+    Message?: string;
+    Status?: string;
+}
 export interface PylonsMsgUpdateCookbookResponse {
     CookbookID?: string;
     Message?: string;
@@ -377,6 +398,22 @@ export interface PylonsStringParam {
     Key?: string;
     Value?: string;
     Program?: string;
+}
+export interface PylonsStripeInventory {
+    /** @format int64 */
+    Quantity?: string;
+    Type?: string;
+    Value?: string;
+}
+export interface PylonsStripePrice {
+    /** @format int64 */
+    Amount?: string;
+    Currency?: string;
+    Description?: string;
+    Images?: string[];
+    Name?: string;
+    /** @format int64 */
+    Quantity?: string;
 }
 export interface PylonsTrade {
     NodeVersion?: string;

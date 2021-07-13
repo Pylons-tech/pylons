@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal';
 import * as Long from 'long';
-import { CoinInput, ItemInput, WeightedOutputs, EntriesList, TradeItemInput, Item, DoubleKeyValue, LongKeyValue, StringKeyValue } from '../pylons/pylons';
+import { CoinInput, ItemInput, WeightedOutputs, EntriesList, TradeItemInput, Item, DoubleKeyValue, LongKeyValue, StringKeyValue, StripePrice, StripeInventory } from '../pylons/pylons';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 export const protobufPackage = 'pylons';
 const baseMsgCheckExecution = { ExecID: '', Sender: '', PayToComplete: false };
@@ -1769,7 +1769,7 @@ export const MsgEnableTradeResponse = {
         return message;
     }
 };
-const baseMsgExecuteRecipe = { RecipeID: '', Sender: '', ItemIDs: '' };
+const baseMsgExecuteRecipe = { RecipeID: '', Sender: '', PaymentId: '', PaymentMethod: '', ItemIDs: '' };
 export const MsgExecuteRecipe = {
     encode(message, writer = Writer.create()) {
         if (message.RecipeID !== '') {
@@ -1778,8 +1778,14 @@ export const MsgExecuteRecipe = {
         if (message.Sender !== '') {
             writer.uint32(18).string(message.Sender);
         }
+        if (message.PaymentId !== '') {
+            writer.uint32(26).string(message.PaymentId);
+        }
+        if (message.PaymentMethod !== '') {
+            writer.uint32(34).string(message.PaymentMethod);
+        }
         for (const v of message.ItemIDs) {
-            writer.uint32(26).string(v);
+            writer.uint32(42).string(v);
         }
         return writer;
     },
@@ -1798,6 +1804,12 @@ export const MsgExecuteRecipe = {
                     message.Sender = reader.string();
                     break;
                 case 3:
+                    message.PaymentId = reader.string();
+                    break;
+                case 4:
+                    message.PaymentMethod = reader.string();
+                    break;
+                case 5:
                     message.ItemIDs.push(reader.string());
                     break;
                 default:
@@ -1822,6 +1834,18 @@ export const MsgExecuteRecipe = {
         else {
             message.Sender = '';
         }
+        if (object.PaymentId !== undefined && object.PaymentId !== null) {
+            message.PaymentId = String(object.PaymentId);
+        }
+        else {
+            message.PaymentId = '';
+        }
+        if (object.PaymentMethod !== undefined && object.PaymentMethod !== null) {
+            message.PaymentMethod = String(object.PaymentMethod);
+        }
+        else {
+            message.PaymentMethod = '';
+        }
         if (object.ItemIDs !== undefined && object.ItemIDs !== null) {
             for (const e of object.ItemIDs) {
                 message.ItemIDs.push(String(e));
@@ -1833,6 +1857,8 @@ export const MsgExecuteRecipe = {
         const obj = {};
         message.RecipeID !== undefined && (obj.RecipeID = message.RecipeID);
         message.Sender !== undefined && (obj.Sender = message.Sender);
+        message.PaymentId !== undefined && (obj.PaymentId = message.PaymentId);
+        message.PaymentMethod !== undefined && (obj.PaymentMethod = message.PaymentMethod);
         if (message.ItemIDs) {
             obj.ItemIDs = message.ItemIDs.map((e) => e);
         }
@@ -1855,6 +1881,18 @@ export const MsgExecuteRecipe = {
         }
         else {
             message.Sender = '';
+        }
+        if (object.PaymentId !== undefined && object.PaymentId !== null) {
+            message.PaymentId = object.PaymentId;
+        }
+        else {
+            message.PaymentId = '';
+        }
+        if (object.PaymentMethod !== undefined && object.PaymentMethod !== null) {
+            message.PaymentMethod = object.PaymentMethod;
+        }
+        else {
+            message.PaymentMethod = '';
         }
         if (object.ItemIDs !== undefined && object.ItemIDs !== null) {
             for (const e of object.ItemIDs) {
@@ -3416,7 +3454,7 @@ export const MsgUpdateCookbookResponse = {
         return message;
     }
 };
-const baseMsgUpdateRecipe = { Name: '', CookbookID: '', ID: '', BlockInterval: 0, Sender: '', Description: '' };
+const baseMsgUpdateRecipe = { Name: '', CookbookID: '', ID: '', BlockInterval: 0, Sender: '', Description: '', ExtraInfo: '' };
 export const MsgUpdateRecipe = {
     encode(message, writer = Writer.create()) {
         if (message.Name !== '') {
@@ -3448,6 +3486,9 @@ export const MsgUpdateRecipe = {
         }
         if (message.Entries !== undefined) {
             EntriesList.encode(message.Entries, writer.uint32(82).fork()).ldelim();
+        }
+        if (message.ExtraInfo !== '') {
+            writer.uint32(90).string(message.ExtraInfo);
         }
         return writer;
     },
@@ -3490,6 +3531,9 @@ export const MsgUpdateRecipe = {
                     break;
                 case 10:
                     message.Entries = EntriesList.decode(reader, reader.uint32());
+                    break;
+                case 11:
+                    message.ExtraInfo = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -3560,6 +3604,12 @@ export const MsgUpdateRecipe = {
         else {
             message.Entries = undefined;
         }
+        if (object.ExtraInfo !== undefined && object.ExtraInfo !== null) {
+            message.ExtraInfo = String(object.ExtraInfo);
+        }
+        else {
+            message.ExtraInfo = '';
+        }
         return message;
     },
     toJSON(message) {
@@ -3589,6 +3639,7 @@ export const MsgUpdateRecipe = {
         message.Sender !== undefined && (obj.Sender = message.Sender);
         message.Description !== undefined && (obj.Description = message.Description);
         message.Entries !== undefined && (obj.Entries = message.Entries ? EntriesList.toJSON(message.Entries) : undefined);
+        message.ExtraInfo !== undefined && (obj.ExtraInfo = message.ExtraInfo);
         return obj;
     },
     fromPartial(object) {
@@ -3652,6 +3703,12 @@ export const MsgUpdateRecipe = {
         }
         else {
             message.Entries = undefined;
+        }
+        if (object.ExtraInfo !== undefined && object.ExtraInfo !== null) {
+            message.ExtraInfo = object.ExtraInfo;
+        }
+        else {
+            message.ExtraInfo = '';
         }
         return message;
     }
@@ -3745,6 +3802,2174 @@ export const MsgUpdateRecipeResponse = {
         return message;
     }
 };
+const baseMsgStripeCreateProduct = { StripeKey: '', Name: '', Description: '', Images: '', StatementDescriptor: '', UnitLabel: '', Sender: '' };
+export const MsgStripeCreateProduct = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.Name !== '') {
+            writer.uint32(18).string(message.Name);
+        }
+        if (message.Description !== '') {
+            writer.uint32(26).string(message.Description);
+        }
+        for (const v of message.Images) {
+            writer.uint32(34).string(v);
+        }
+        if (message.StatementDescriptor !== '') {
+            writer.uint32(42).string(message.StatementDescriptor);
+        }
+        if (message.UnitLabel !== '') {
+            writer.uint32(50).string(message.UnitLabel);
+        }
+        if (message.Sender !== '') {
+            writer.uint32(58).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateProduct };
+        message.Images = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.Name = reader.string();
+                    break;
+                case 3:
+                    message.Description = reader.string();
+                    break;
+                case 4:
+                    message.Images.push(reader.string());
+                    break;
+                case 5:
+                    message.StatementDescriptor = reader.string();
+                    break;
+                case 6:
+                    message.UnitLabel = reader.string();
+                    break;
+                case 7:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateProduct };
+        message.Images = [];
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Name !== undefined && object.Name !== null) {
+            message.Name = String(object.Name);
+        }
+        else {
+            message.Name = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = String(object.Description);
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Images !== undefined && object.Images !== null) {
+            for (const e of object.Images) {
+                message.Images.push(String(e));
+            }
+        }
+        if (object.StatementDescriptor !== undefined && object.StatementDescriptor !== null) {
+            message.StatementDescriptor = String(object.StatementDescriptor);
+        }
+        else {
+            message.StatementDescriptor = '';
+        }
+        if (object.UnitLabel !== undefined && object.UnitLabel !== null) {
+            message.UnitLabel = String(object.UnitLabel);
+        }
+        else {
+            message.UnitLabel = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.Name !== undefined && (obj.Name = message.Name);
+        message.Description !== undefined && (obj.Description = message.Description);
+        if (message.Images) {
+            obj.Images = message.Images.map((e) => e);
+        }
+        else {
+            obj.Images = [];
+        }
+        message.StatementDescriptor !== undefined && (obj.StatementDescriptor = message.StatementDescriptor);
+        message.UnitLabel !== undefined && (obj.UnitLabel = message.UnitLabel);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateProduct };
+        message.Images = [];
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Name !== undefined && object.Name !== null) {
+            message.Name = object.Name;
+        }
+        else {
+            message.Name = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = object.Description;
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Images !== undefined && object.Images !== null) {
+            for (const e of object.Images) {
+                message.Images.push(e);
+            }
+        }
+        if (object.StatementDescriptor !== undefined && object.StatementDescriptor !== null) {
+            message.StatementDescriptor = object.StatementDescriptor;
+        }
+        else {
+            message.StatementDescriptor = '';
+        }
+        if (object.UnitLabel !== undefined && object.UnitLabel !== null) {
+            message.UnitLabel = object.UnitLabel;
+        }
+        else {
+            message.UnitLabel = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreateProductResponse = { ProductID: '', Message: '', Status: '' };
+export const MsgStripeCreateProductResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.ProductID !== '') {
+            writer.uint32(10).string(message.ProductID);
+        }
+        if (message.Message !== '') {
+            writer.uint32(18).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(26).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateProductResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ProductID = reader.string();
+                    break;
+                case 2:
+                    message.Message = reader.string();
+                    break;
+                case 3:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateProductResponse };
+        if (object.ProductID !== undefined && object.ProductID !== null) {
+            message.ProductID = String(object.ProductID);
+        }
+        else {
+            message.ProductID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ProductID !== undefined && (obj.ProductID = message.ProductID);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateProductResponse };
+        if (object.ProductID !== undefined && object.ProductID !== null) {
+            message.ProductID = object.ProductID;
+        }
+        else {
+            message.ProductID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreatePrice = { StripeKey: '', Product: '', Amount: '', Currency: '', Description: '', Sender: '' };
+export const MsgStripeCreatePrice = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.Product !== '') {
+            writer.uint32(18).string(message.Product);
+        }
+        if (message.Amount !== '') {
+            writer.uint32(26).string(message.Amount);
+        }
+        if (message.Currency !== '') {
+            writer.uint32(34).string(message.Currency);
+        }
+        if (message.Description !== '') {
+            writer.uint32(42).string(message.Description);
+        }
+        if (message.Sender !== '') {
+            writer.uint32(50).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreatePrice };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.Product = reader.string();
+                    break;
+                case 3:
+                    message.Amount = reader.string();
+                    break;
+                case 4:
+                    message.Currency = reader.string();
+                    break;
+                case 5:
+                    message.Description = reader.string();
+                    break;
+                case 6:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreatePrice };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Product !== undefined && object.Product !== null) {
+            message.Product = String(object.Product);
+        }
+        else {
+            message.Product = '';
+        }
+        if (object.Amount !== undefined && object.Amount !== null) {
+            message.Amount = String(object.Amount);
+        }
+        else {
+            message.Amount = '';
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = String(object.Currency);
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = String(object.Description);
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.Product !== undefined && (obj.Product = message.Product);
+        message.Amount !== undefined && (obj.Amount = message.Amount);
+        message.Currency !== undefined && (obj.Currency = message.Currency);
+        message.Description !== undefined && (obj.Description = message.Description);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreatePrice };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Product !== undefined && object.Product !== null) {
+            message.Product = object.Product;
+        }
+        else {
+            message.Product = '';
+        }
+        if (object.Amount !== undefined && object.Amount !== null) {
+            message.Amount = object.Amount;
+        }
+        else {
+            message.Amount = '';
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = object.Currency;
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = object.Description;
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreatePriceResponse = { PriceID: '', Message: '', Status: '' };
+export const MsgStripeCreatePriceResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.PriceID !== '') {
+            writer.uint32(10).string(message.PriceID);
+        }
+        if (message.Message !== '') {
+            writer.uint32(18).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(26).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreatePriceResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.PriceID = reader.string();
+                    break;
+                case 2:
+                    message.Message = reader.string();
+                    break;
+                case 3:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreatePriceResponse };
+        if (object.PriceID !== undefined && object.PriceID !== null) {
+            message.PriceID = String(object.PriceID);
+        }
+        else {
+            message.PriceID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.PriceID !== undefined && (obj.PriceID = message.PriceID);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreatePriceResponse };
+        if (object.PriceID !== undefined && object.PriceID !== null) {
+            message.PriceID = object.PriceID;
+        }
+        else {
+            message.PriceID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCustomer = { Email: '', PaymentMethod: '' };
+export const MsgStripeCustomer = {
+    encode(message, writer = Writer.create()) {
+        if (message.Email !== '') {
+            writer.uint32(10).string(message.Email);
+        }
+        if (message.PaymentMethod !== '') {
+            writer.uint32(18).string(message.PaymentMethod);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCustomer };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Email = reader.string();
+                    break;
+                case 2:
+                    message.PaymentMethod = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCustomer };
+        if (object.Email !== undefined && object.Email !== null) {
+            message.Email = String(object.Email);
+        }
+        else {
+            message.Email = '';
+        }
+        if (object.PaymentMethod !== undefined && object.PaymentMethod !== null) {
+            message.PaymentMethod = String(object.PaymentMethod);
+        }
+        else {
+            message.PaymentMethod = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Email !== undefined && (obj.Email = message.Email);
+        message.PaymentMethod !== undefined && (obj.PaymentMethod = message.PaymentMethod);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCustomer };
+        if (object.Email !== undefined && object.Email !== null) {
+            message.Email = object.Email;
+        }
+        else {
+            message.Email = '';
+        }
+        if (object.PaymentMethod !== undefined && object.PaymentMethod !== null) {
+            message.PaymentMethod = object.PaymentMethod;
+        }
+        else {
+            message.PaymentMethod = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCheckout = { StripeKey: '', PaymentMethod: '', Sender: '' };
+export const MsgStripeCheckout = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.PaymentMethod !== '') {
+            writer.uint32(18).string(message.PaymentMethod);
+        }
+        if (message.Price !== undefined) {
+            StripePrice.encode(message.Price, writer.uint32(26).fork()).ldelim();
+        }
+        if (message.Sender !== '') {
+            writer.uint32(34).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCheckout };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.PaymentMethod = reader.string();
+                    break;
+                case 3:
+                    message.Price = StripePrice.decode(reader, reader.uint32());
+                    break;
+                case 4:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCheckout };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.PaymentMethod !== undefined && object.PaymentMethod !== null) {
+            message.PaymentMethod = String(object.PaymentMethod);
+        }
+        else {
+            message.PaymentMethod = '';
+        }
+        if (object.Price !== undefined && object.Price !== null) {
+            message.Price = StripePrice.fromJSON(object.Price);
+        }
+        else {
+            message.Price = undefined;
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.PaymentMethod !== undefined && (obj.PaymentMethod = message.PaymentMethod);
+        message.Price !== undefined && (obj.Price = message.Price ? StripePrice.toJSON(message.Price) : undefined);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCheckout };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.PaymentMethod !== undefined && object.PaymentMethod !== null) {
+            message.PaymentMethod = object.PaymentMethod;
+        }
+        else {
+            message.PaymentMethod = '';
+        }
+        if (object.Price !== undefined && object.Price !== null) {
+            message.Price = StripePrice.fromPartial(object.Price);
+        }
+        else {
+            message.Price = undefined;
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCheckoutResponse = { SessionID: '', Message: '', Status: '' };
+export const MsgStripeCheckoutResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.SessionID !== '') {
+            writer.uint32(10).string(message.SessionID);
+        }
+        if (message.Message !== '') {
+            writer.uint32(18).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(26).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCheckoutResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.SessionID = reader.string();
+                    break;
+                case 2:
+                    message.Message = reader.string();
+                    break;
+                case 3:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCheckoutResponse };
+        if (object.SessionID !== undefined && object.SessionID !== null) {
+            message.SessionID = String(object.SessionID);
+        }
+        else {
+            message.SessionID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.SessionID !== undefined && (obj.SessionID = message.SessionID);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCheckoutResponse };
+        if (object.SessionID !== undefined && object.SessionID !== null) {
+            message.SessionID = object.SessionID;
+        }
+        else {
+            message.SessionID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreateSku = { StripeKey: '', Product: '', Price: 0, Currency: '', Sender: '' };
+export const MsgStripeCreateSku = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.Product !== '') {
+            writer.uint32(18).string(message.Product);
+        }
+        for (const v of message.Attributes) {
+            StringKeyValue.encode(v, writer.uint32(26).fork()).ldelim();
+        }
+        if (message.Price !== 0) {
+            writer.uint32(32).int64(message.Price);
+        }
+        if (message.Currency !== '') {
+            writer.uint32(42).string(message.Currency);
+        }
+        if (message.Inventory !== undefined) {
+            StripeInventory.encode(message.Inventory, writer.uint32(50).fork()).ldelim();
+        }
+        if (message.Sender !== '') {
+            writer.uint32(58).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateSku };
+        message.Attributes = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.Product = reader.string();
+                    break;
+                case 3:
+                    message.Attributes.push(StringKeyValue.decode(reader, reader.uint32()));
+                    break;
+                case 4:
+                    message.Price = longToNumber(reader.int64());
+                    break;
+                case 5:
+                    message.Currency = reader.string();
+                    break;
+                case 6:
+                    message.Inventory = StripeInventory.decode(reader, reader.uint32());
+                    break;
+                case 7:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateSku };
+        message.Attributes = [];
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Product !== undefined && object.Product !== null) {
+            message.Product = String(object.Product);
+        }
+        else {
+            message.Product = '';
+        }
+        if (object.Attributes !== undefined && object.Attributes !== null) {
+            for (const e of object.Attributes) {
+                message.Attributes.push(StringKeyValue.fromJSON(e));
+            }
+        }
+        if (object.Price !== undefined && object.Price !== null) {
+            message.Price = Number(object.Price);
+        }
+        else {
+            message.Price = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = String(object.Currency);
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Inventory !== undefined && object.Inventory !== null) {
+            message.Inventory = StripeInventory.fromJSON(object.Inventory);
+        }
+        else {
+            message.Inventory = undefined;
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.Product !== undefined && (obj.Product = message.Product);
+        if (message.Attributes) {
+            obj.Attributes = message.Attributes.map((e) => (e ? StringKeyValue.toJSON(e) : undefined));
+        }
+        else {
+            obj.Attributes = [];
+        }
+        message.Price !== undefined && (obj.Price = message.Price);
+        message.Currency !== undefined && (obj.Currency = message.Currency);
+        message.Inventory !== undefined && (obj.Inventory = message.Inventory ? StripeInventory.toJSON(message.Inventory) : undefined);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateSku };
+        message.Attributes = [];
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Product !== undefined && object.Product !== null) {
+            message.Product = object.Product;
+        }
+        else {
+            message.Product = '';
+        }
+        if (object.Attributes !== undefined && object.Attributes !== null) {
+            for (const e of object.Attributes) {
+                message.Attributes.push(StringKeyValue.fromPartial(e));
+            }
+        }
+        if (object.Price !== undefined && object.Price !== null) {
+            message.Price = object.Price;
+        }
+        else {
+            message.Price = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = object.Currency;
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Inventory !== undefined && object.Inventory !== null) {
+            message.Inventory = StripeInventory.fromPartial(object.Inventory);
+        }
+        else {
+            message.Inventory = undefined;
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreateSkuResponse = { SKUID: '', Message: '', Status: '' };
+export const MsgStripeCreateSkuResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.SKUID !== '') {
+            writer.uint32(10).string(message.SKUID);
+        }
+        if (message.Message !== '') {
+            writer.uint32(18).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(26).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateSkuResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.SKUID = reader.string();
+                    break;
+                case 2:
+                    message.Message = reader.string();
+                    break;
+                case 3:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateSkuResponse };
+        if (object.SKUID !== undefined && object.SKUID !== null) {
+            message.SKUID = String(object.SKUID);
+        }
+        else {
+            message.SKUID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.SKUID !== undefined && (obj.SKUID = message.SKUID);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateSkuResponse };
+        if (object.SKUID !== undefined && object.SKUID !== null) {
+            message.SKUID = object.SKUID;
+        }
+        else {
+            message.SKUID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreatePaymentIntent = { StripeKey: '', Amount: 0, Currency: '', SKUID: '', Sender: '' };
+export const MsgStripeCreatePaymentIntent = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.Amount !== 0) {
+            writer.uint32(16).int64(message.Amount);
+        }
+        if (message.Currency !== '') {
+            writer.uint32(26).string(message.Currency);
+        }
+        if (message.SKUID !== '') {
+            writer.uint32(34).string(message.SKUID);
+        }
+        if (message.Sender !== '') {
+            writer.uint32(42).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreatePaymentIntent };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.Amount = longToNumber(reader.int64());
+                    break;
+                case 3:
+                    message.Currency = reader.string();
+                    break;
+                case 4:
+                    message.SKUID = reader.string();
+                    break;
+                case 5:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreatePaymentIntent };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Amount !== undefined && object.Amount !== null) {
+            message.Amount = Number(object.Amount);
+        }
+        else {
+            message.Amount = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = String(object.Currency);
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.SKUID !== undefined && object.SKUID !== null) {
+            message.SKUID = String(object.SKUID);
+        }
+        else {
+            message.SKUID = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.Amount !== undefined && (obj.Amount = message.Amount);
+        message.Currency !== undefined && (obj.Currency = message.Currency);
+        message.SKUID !== undefined && (obj.SKUID = message.SKUID);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreatePaymentIntent };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Amount !== undefined && object.Amount !== null) {
+            message.Amount = object.Amount;
+        }
+        else {
+            message.Amount = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = object.Currency;
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.SKUID !== undefined && object.SKUID !== null) {
+            message.SKUID = object.SKUID;
+        }
+        else {
+            message.SKUID = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreatePaymentIntentResponse = { PaymentID: '', Message: '', Status: '' };
+export const MsgStripeCreatePaymentIntentResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.PaymentID !== '') {
+            writer.uint32(10).string(message.PaymentID);
+        }
+        if (message.Message !== '') {
+            writer.uint32(18).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(26).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreatePaymentIntentResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.PaymentID = reader.string();
+                    break;
+                case 2:
+                    message.Message = reader.string();
+                    break;
+                case 3:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreatePaymentIntentResponse };
+        if (object.PaymentID !== undefined && object.PaymentID !== null) {
+            message.PaymentID = String(object.PaymentID);
+        }
+        else {
+            message.PaymentID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.PaymentID !== undefined && (obj.PaymentID = message.PaymentID);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreatePaymentIntentResponse };
+        if (object.PaymentID !== undefined && object.PaymentID !== null) {
+            message.PaymentID = object.PaymentID;
+        }
+        else {
+            message.PaymentID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreateAccount = { StripeKey: '', Country: '', Email: '', Types: '', Sender: '' };
+export const MsgStripeCreateAccount = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.Country !== '') {
+            writer.uint32(18).string(message.Country);
+        }
+        if (message.Email !== '') {
+            writer.uint32(26).string(message.Email);
+        }
+        if (message.Types !== '') {
+            writer.uint32(34).string(message.Types);
+        }
+        if (message.Sender !== '') {
+            writer.uint32(42).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateAccount };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.Country = reader.string();
+                    break;
+                case 3:
+                    message.Email = reader.string();
+                    break;
+                case 4:
+                    message.Types = reader.string();
+                    break;
+                case 5:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateAccount };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Country !== undefined && object.Country !== null) {
+            message.Country = String(object.Country);
+        }
+        else {
+            message.Country = '';
+        }
+        if (object.Email !== undefined && object.Email !== null) {
+            message.Email = String(object.Email);
+        }
+        else {
+            message.Email = '';
+        }
+        if (object.Types !== undefined && object.Types !== null) {
+            message.Types = String(object.Types);
+        }
+        else {
+            message.Types = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.Country !== undefined && (obj.Country = message.Country);
+        message.Email !== undefined && (obj.Email = message.Email);
+        message.Types !== undefined && (obj.Types = message.Types);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateAccount };
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Country !== undefined && object.Country !== null) {
+            message.Country = object.Country;
+        }
+        else {
+            message.Country = '';
+        }
+        if (object.Email !== undefined && object.Email !== null) {
+            message.Email = object.Email;
+        }
+        else {
+            message.Email = '';
+        }
+        if (object.Types !== undefined && object.Types !== null) {
+            message.Types = object.Types;
+        }
+        else {
+            message.Types = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreateAccountResponse = { AccountID: '', Message: '', Status: '' };
+export const MsgStripeCreateAccountResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.AccountID !== '') {
+            writer.uint32(10).string(message.AccountID);
+        }
+        if (message.Message !== '') {
+            writer.uint32(18).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(26).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateAccountResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.AccountID = reader.string();
+                    break;
+                case 2:
+                    message.Message = reader.string();
+                    break;
+                case 3:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateAccountResponse };
+        if (object.AccountID !== undefined && object.AccountID !== null) {
+            message.AccountID = String(object.AccountID);
+        }
+        else {
+            message.AccountID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.AccountID !== undefined && (obj.AccountID = message.AccountID);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateAccountResponse };
+        if (object.AccountID !== undefined && object.AccountID !== null) {
+            message.AccountID = object.AccountID;
+        }
+        else {
+            message.AccountID = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeCreateProductSku = { StripeKey: '', Name: '', Description: '', Images: '', Price: 0, Currency: '', ClientId: '', Sender: '' };
+export const MsgStripeCreateProductSku = {
+    encode(message, writer = Writer.create()) {
+        if (message.StripeKey !== '') {
+            writer.uint32(10).string(message.StripeKey);
+        }
+        if (message.Name !== '') {
+            writer.uint32(18).string(message.Name);
+        }
+        if (message.Description !== '') {
+            writer.uint32(26).string(message.Description);
+        }
+        for (const v of message.Images) {
+            writer.uint32(34).string(v);
+        }
+        for (const v of message.Attributes) {
+            StringKeyValue.encode(v, writer.uint32(42).fork()).ldelim();
+        }
+        if (message.Price !== 0) {
+            writer.uint32(48).int64(message.Price);
+        }
+        if (message.Currency !== '') {
+            writer.uint32(58).string(message.Currency);
+        }
+        if (message.Inventory !== undefined) {
+            StripeInventory.encode(message.Inventory, writer.uint32(66).fork()).ldelim();
+        }
+        if (message.ClientId !== '') {
+            writer.uint32(74).string(message.ClientId);
+        }
+        if (message.Sender !== '') {
+            writer.uint32(82).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeCreateProductSku };
+        message.Images = [];
+        message.Attributes = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.StripeKey = reader.string();
+                    break;
+                case 2:
+                    message.Name = reader.string();
+                    break;
+                case 3:
+                    message.Description = reader.string();
+                    break;
+                case 4:
+                    message.Images.push(reader.string());
+                    break;
+                case 5:
+                    message.Attributes.push(StringKeyValue.decode(reader, reader.uint32()));
+                    break;
+                case 6:
+                    message.Price = longToNumber(reader.int64());
+                    break;
+                case 7:
+                    message.Currency = reader.string();
+                    break;
+                case 8:
+                    message.Inventory = StripeInventory.decode(reader, reader.uint32());
+                    break;
+                case 9:
+                    message.ClientId = reader.string();
+                    break;
+                case 10:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeCreateProductSku };
+        message.Images = [];
+        message.Attributes = [];
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = String(object.StripeKey);
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Name !== undefined && object.Name !== null) {
+            message.Name = String(object.Name);
+        }
+        else {
+            message.Name = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = String(object.Description);
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Images !== undefined && object.Images !== null) {
+            for (const e of object.Images) {
+                message.Images.push(String(e));
+            }
+        }
+        if (object.Attributes !== undefined && object.Attributes !== null) {
+            for (const e of object.Attributes) {
+                message.Attributes.push(StringKeyValue.fromJSON(e));
+            }
+        }
+        if (object.Price !== undefined && object.Price !== null) {
+            message.Price = Number(object.Price);
+        }
+        else {
+            message.Price = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = String(object.Currency);
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Inventory !== undefined && object.Inventory !== null) {
+            message.Inventory = StripeInventory.fromJSON(object.Inventory);
+        }
+        else {
+            message.Inventory = undefined;
+        }
+        if (object.ClientId !== undefined && object.ClientId !== null) {
+            message.ClientId = String(object.ClientId);
+        }
+        else {
+            message.ClientId = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.StripeKey !== undefined && (obj.StripeKey = message.StripeKey);
+        message.Name !== undefined && (obj.Name = message.Name);
+        message.Description !== undefined && (obj.Description = message.Description);
+        if (message.Images) {
+            obj.Images = message.Images.map((e) => e);
+        }
+        else {
+            obj.Images = [];
+        }
+        if (message.Attributes) {
+            obj.Attributes = message.Attributes.map((e) => (e ? StringKeyValue.toJSON(e) : undefined));
+        }
+        else {
+            obj.Attributes = [];
+        }
+        message.Price !== undefined && (obj.Price = message.Price);
+        message.Currency !== undefined && (obj.Currency = message.Currency);
+        message.Inventory !== undefined && (obj.Inventory = message.Inventory ? StripeInventory.toJSON(message.Inventory) : undefined);
+        message.ClientId !== undefined && (obj.ClientId = message.ClientId);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeCreateProductSku };
+        message.Images = [];
+        message.Attributes = [];
+        if (object.StripeKey !== undefined && object.StripeKey !== null) {
+            message.StripeKey = object.StripeKey;
+        }
+        else {
+            message.StripeKey = '';
+        }
+        if (object.Name !== undefined && object.Name !== null) {
+            message.Name = object.Name;
+        }
+        else {
+            message.Name = '';
+        }
+        if (object.Description !== undefined && object.Description !== null) {
+            message.Description = object.Description;
+        }
+        else {
+            message.Description = '';
+        }
+        if (object.Images !== undefined && object.Images !== null) {
+            for (const e of object.Images) {
+                message.Images.push(e);
+            }
+        }
+        if (object.Attributes !== undefined && object.Attributes !== null) {
+            for (const e of object.Attributes) {
+                message.Attributes.push(StringKeyValue.fromPartial(e));
+            }
+        }
+        if (object.Price !== undefined && object.Price !== null) {
+            message.Price = object.Price;
+        }
+        else {
+            message.Price = 0;
+        }
+        if (object.Currency !== undefined && object.Currency !== null) {
+            message.Currency = object.Currency;
+        }
+        else {
+            message.Currency = '';
+        }
+        if (object.Inventory !== undefined && object.Inventory !== null) {
+            message.Inventory = StripeInventory.fromPartial(object.Inventory);
+        }
+        else {
+            message.Inventory = undefined;
+        }
+        if (object.ClientId !== undefined && object.ClientId !== null) {
+            message.ClientId = object.ClientId;
+        }
+        else {
+            message.ClientId = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeInfo = { Sender: '' };
+export const MsgStripeInfo = {
+    encode(message, writer = Writer.create()) {
+        if (message.Sender !== '') {
+            writer.uint32(10).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeInfo };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeInfo };
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeInfo };
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeInfoResponse = { PubKey: '', ClientID: '', URI: '', Message: '', Status: '' };
+export const MsgStripeInfoResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.PubKey !== '') {
+            writer.uint32(10).string(message.PubKey);
+        }
+        if (message.ClientID !== '') {
+            writer.uint32(18).string(message.ClientID);
+        }
+        if (message.URI !== '') {
+            writer.uint32(26).string(message.URI);
+        }
+        if (message.Message !== '') {
+            writer.uint32(34).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(42).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeInfoResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.PubKey = reader.string();
+                    break;
+                case 2:
+                    message.ClientID = reader.string();
+                    break;
+                case 3:
+                    message.URI = reader.string();
+                    break;
+                case 4:
+                    message.Message = reader.string();
+                    break;
+                case 5:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeInfoResponse };
+        if (object.PubKey !== undefined && object.PubKey !== null) {
+            message.PubKey = String(object.PubKey);
+        }
+        else {
+            message.PubKey = '';
+        }
+        if (object.ClientID !== undefined && object.ClientID !== null) {
+            message.ClientID = String(object.ClientID);
+        }
+        else {
+            message.ClientID = '';
+        }
+        if (object.URI !== undefined && object.URI !== null) {
+            message.URI = String(object.URI);
+        }
+        else {
+            message.URI = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.PubKey !== undefined && (obj.PubKey = message.PubKey);
+        message.ClientID !== undefined && (obj.ClientID = message.ClientID);
+        message.URI !== undefined && (obj.URI = message.URI);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeInfoResponse };
+        if (object.PubKey !== undefined && object.PubKey !== null) {
+            message.PubKey = object.PubKey;
+        }
+        else {
+            message.PubKey = '';
+        }
+        if (object.ClientID !== undefined && object.ClientID !== null) {
+            message.ClientID = object.ClientID;
+        }
+        else {
+            message.ClientID = '';
+        }
+        if (object.URI !== undefined && object.URI !== null) {
+            message.URI = object.URI;
+        }
+        else {
+            message.URI = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeOauthToken = { GrantType: '', Code: '', Sender: '' };
+export const MsgStripeOauthToken = {
+    encode(message, writer = Writer.create()) {
+        if (message.GrantType !== '') {
+            writer.uint32(10).string(message.GrantType);
+        }
+        if (message.Code !== '') {
+            writer.uint32(18).string(message.Code);
+        }
+        if (message.Sender !== '') {
+            writer.uint32(26).string(message.Sender);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeOauthToken };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.GrantType = reader.string();
+                    break;
+                case 2:
+                    message.Code = reader.string();
+                    break;
+                case 3:
+                    message.Sender = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeOauthToken };
+        if (object.GrantType !== undefined && object.GrantType !== null) {
+            message.GrantType = String(object.GrantType);
+        }
+        else {
+            message.GrantType = '';
+        }
+        if (object.Code !== undefined && object.Code !== null) {
+            message.Code = String(object.Code);
+        }
+        else {
+            message.Code = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = String(object.Sender);
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.GrantType !== undefined && (obj.GrantType = message.GrantType);
+        message.Code !== undefined && (obj.Code = message.Code);
+        message.Sender !== undefined && (obj.Sender = message.Sender);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeOauthToken };
+        if (object.GrantType !== undefined && object.GrantType !== null) {
+            message.GrantType = object.GrantType;
+        }
+        else {
+            message.GrantType = '';
+        }
+        if (object.Code !== undefined && object.Code !== null) {
+            message.Code = object.Code;
+        }
+        else {
+            message.Code = '';
+        }
+        if (object.Sender !== undefined && object.Sender !== null) {
+            message.Sender = object.Sender;
+        }
+        else {
+            message.Sender = '';
+        }
+        return message;
+    }
+};
+const baseMsgStripeOauthTokenResponse = {
+    AcessToken: '',
+    LiveMode: '',
+    RefreshToken: '',
+    TokenType: '',
+    StripePublishKey: '',
+    StripeUserID: '',
+    Scope: '',
+    Message: '',
+    Status: ''
+};
+export const MsgStripeOauthTokenResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.AcessToken !== '') {
+            writer.uint32(10).string(message.AcessToken);
+        }
+        if (message.LiveMode !== '') {
+            writer.uint32(18).string(message.LiveMode);
+        }
+        if (message.RefreshToken !== '') {
+            writer.uint32(26).string(message.RefreshToken);
+        }
+        if (message.TokenType !== '') {
+            writer.uint32(34).string(message.TokenType);
+        }
+        if (message.StripePublishKey !== '') {
+            writer.uint32(42).string(message.StripePublishKey);
+        }
+        if (message.StripeUserID !== '') {
+            writer.uint32(50).string(message.StripeUserID);
+        }
+        if (message.Scope !== '') {
+            writer.uint32(58).string(message.Scope);
+        }
+        if (message.Message !== '') {
+            writer.uint32(66).string(message.Message);
+        }
+        if (message.Status !== '') {
+            writer.uint32(74).string(message.Status);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgStripeOauthTokenResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.AcessToken = reader.string();
+                    break;
+                case 2:
+                    message.LiveMode = reader.string();
+                    break;
+                case 3:
+                    message.RefreshToken = reader.string();
+                    break;
+                case 4:
+                    message.TokenType = reader.string();
+                    break;
+                case 5:
+                    message.StripePublishKey = reader.string();
+                    break;
+                case 6:
+                    message.StripeUserID = reader.string();
+                    break;
+                case 7:
+                    message.Scope = reader.string();
+                    break;
+                case 8:
+                    message.Message = reader.string();
+                    break;
+                case 9:
+                    message.Status = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgStripeOauthTokenResponse };
+        if (object.AcessToken !== undefined && object.AcessToken !== null) {
+            message.AcessToken = String(object.AcessToken);
+        }
+        else {
+            message.AcessToken = '';
+        }
+        if (object.LiveMode !== undefined && object.LiveMode !== null) {
+            message.LiveMode = String(object.LiveMode);
+        }
+        else {
+            message.LiveMode = '';
+        }
+        if (object.RefreshToken !== undefined && object.RefreshToken !== null) {
+            message.RefreshToken = String(object.RefreshToken);
+        }
+        else {
+            message.RefreshToken = '';
+        }
+        if (object.TokenType !== undefined && object.TokenType !== null) {
+            message.TokenType = String(object.TokenType);
+        }
+        else {
+            message.TokenType = '';
+        }
+        if (object.StripePublishKey !== undefined && object.StripePublishKey !== null) {
+            message.StripePublishKey = String(object.StripePublishKey);
+        }
+        else {
+            message.StripePublishKey = '';
+        }
+        if (object.StripeUserID !== undefined && object.StripeUserID !== null) {
+            message.StripeUserID = String(object.StripeUserID);
+        }
+        else {
+            message.StripeUserID = '';
+        }
+        if (object.Scope !== undefined && object.Scope !== null) {
+            message.Scope = String(object.Scope);
+        }
+        else {
+            message.Scope = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = String(object.Message);
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = String(object.Status);
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.AcessToken !== undefined && (obj.AcessToken = message.AcessToken);
+        message.LiveMode !== undefined && (obj.LiveMode = message.LiveMode);
+        message.RefreshToken !== undefined && (obj.RefreshToken = message.RefreshToken);
+        message.TokenType !== undefined && (obj.TokenType = message.TokenType);
+        message.StripePublishKey !== undefined && (obj.StripePublishKey = message.StripePublishKey);
+        message.StripeUserID !== undefined && (obj.StripeUserID = message.StripeUserID);
+        message.Scope !== undefined && (obj.Scope = message.Scope);
+        message.Message !== undefined && (obj.Message = message.Message);
+        message.Status !== undefined && (obj.Status = message.Status);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgStripeOauthTokenResponse };
+        if (object.AcessToken !== undefined && object.AcessToken !== null) {
+            message.AcessToken = object.AcessToken;
+        }
+        else {
+            message.AcessToken = '';
+        }
+        if (object.LiveMode !== undefined && object.LiveMode !== null) {
+            message.LiveMode = object.LiveMode;
+        }
+        else {
+            message.LiveMode = '';
+        }
+        if (object.RefreshToken !== undefined && object.RefreshToken !== null) {
+            message.RefreshToken = object.RefreshToken;
+        }
+        else {
+            message.RefreshToken = '';
+        }
+        if (object.TokenType !== undefined && object.TokenType !== null) {
+            message.TokenType = object.TokenType;
+        }
+        else {
+            message.TokenType = '';
+        }
+        if (object.StripePublishKey !== undefined && object.StripePublishKey !== null) {
+            message.StripePublishKey = object.StripePublishKey;
+        }
+        else {
+            message.StripePublishKey = '';
+        }
+        if (object.StripeUserID !== undefined && object.StripeUserID !== null) {
+            message.StripeUserID = object.StripeUserID;
+        }
+        else {
+            message.StripeUserID = '';
+        }
+        if (object.Scope !== undefined && object.Scope !== null) {
+            message.Scope = object.Scope;
+        }
+        else {
+            message.Scope = '';
+        }
+        if (object.Message !== undefined && object.Message !== null) {
+            message.Message = object.Message;
+        }
+        else {
+            message.Message = '';
+        }
+        if (object.Status !== undefined && object.Status !== null) {
+            message.Status = object.Status;
+        }
+        else {
+            message.Status = '';
+        }
+        return message;
+    }
+};
 export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
@@ -3798,6 +6023,26 @@ export class MsgClientImpl {
         const data = MsgExecuteRecipe.encode(request).finish();
         const promise = this.rpc.request('pylons.Msg', 'ExecuteRecipe', data);
         return promise.then((data) => MsgExecuteRecipeResponse.decode(new Reader(data)));
+    }
+    StripeCheckout(request) {
+        const data = MsgStripeCheckout.encode(request).finish();
+        const promise = this.rpc.request('pylons.Msg', 'StripeCheckout', data);
+        return promise.then((data) => MsgStripeCheckoutResponse.decode(new Reader(data)));
+    }
+    StripeCreateProduct(request) {
+        const data = MsgStripeCreateProduct.encode(request).finish();
+        const promise = this.rpc.request('pylons.Msg', 'StripeCreateProduct', data);
+        return promise.then((data) => MsgStripeCreateProductResponse.decode(new Reader(data)));
+    }
+    StripeCreatePrice(request) {
+        const data = MsgStripeCreatePrice.encode(request).finish();
+        const promise = this.rpc.request('pylons.Msg', 'StripeCreatePrice', data);
+        return promise.then((data) => MsgStripeCreatePriceResponse.decode(new Reader(data)));
+    }
+    StripeCreateSku(request) {
+        const data = MsgStripeCreateSku.encode(request).finish();
+        const promise = this.rpc.request('pylons.Msg', 'StripeCreateSku', data);
+        return promise.then((data) => MsgStripeCreateSkuResponse.decode(new Reader(data)));
     }
     DisableRecipe(request) {
         const data = MsgDisableRecipe.encode(request).finish();

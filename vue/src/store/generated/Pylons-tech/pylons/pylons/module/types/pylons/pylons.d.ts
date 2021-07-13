@@ -223,6 +223,20 @@ export interface Trade {
     Disabled: boolean;
     Completed: boolean;
 }
+export interface StripePrice {
+    Amount: number;
+    Currency: string;
+    Description: string;
+    Images: string[];
+    Name: string;
+    /** string TaxRates = 7; */
+    Quantity: number;
+}
+export interface StripeInventory {
+    Quantity: number;
+    Type: string;
+    Value: string;
+}
 export declare const EntriesList: {
     encode(message: EntriesList, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): EntriesList;
@@ -425,6 +439,20 @@ export declare const Trade: {
     fromJSON(object: any): Trade;
     toJSON(message: Trade): unknown;
     fromPartial(object: DeepPartial<Trade>): Trade;
+};
+export declare const StripePrice: {
+    encode(message: StripePrice, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): StripePrice;
+    fromJSON(object: any): StripePrice;
+    toJSON(message: StripePrice): unknown;
+    fromPartial(object: DeepPartial<StripePrice>): StripePrice;
+};
+export declare const StripeInventory: {
+    encode(message: StripeInventory, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): StripeInventory;
+    fromJSON(object: any): StripeInventory;
+    toJSON(message: StripeInventory): unknown;
+    fromPartial(object: DeepPartial<StripeInventory>): StripeInventory;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

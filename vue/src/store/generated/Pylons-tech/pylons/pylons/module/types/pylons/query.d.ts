@@ -66,6 +66,7 @@ export interface GetRecipeResponse {
     BlockInterval: number;
     Sender: string;
     Disabled: boolean;
+    ExtraInfo: string;
 }
 export interface GetTradeRequest {
     tradeID: string;

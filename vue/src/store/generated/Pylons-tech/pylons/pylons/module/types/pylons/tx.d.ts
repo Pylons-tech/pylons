@@ -1,5 +1,5 @@
 import { Reader, Writer } from 'protobufjs/minimal';
-import { CoinInput, ItemInput, WeightedOutputs, EntriesList, TradeItemInput, Item, DoubleKeyValue, LongKeyValue, StringKeyValue } from '../pylons/pylons';
+import { CoinInput, ItemInput, WeightedOutputs, EntriesList, TradeItemInput, Item, DoubleKeyValue, LongKeyValue, StringKeyValue, StripePrice, StripeInventory } from '../pylons/pylons';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 export declare const protobufPackage = "pylons";
 /** MsgCheckExecution defines a CheckExecution message */
@@ -125,6 +125,8 @@ export interface MsgEnableTradeResponse {
 export interface MsgExecuteRecipe {
     RecipeID: string;
     Sender: string;
+    PaymentId: string;
+    PaymentMethod: string;
     ItemIDs: string[];
 }
 /** ExecuteRecipeResponse is the response for executeRecipe */
@@ -242,10 +244,129 @@ export interface MsgUpdateRecipe {
     Sender: string;
     Description: string;
     Entries: EntriesList | undefined;
+    ExtraInfo: string;
 }
 /** UpdateRecipeResponse is a struct to control update recipe response */
 export interface MsgUpdateRecipeResponse {
     RecipeID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCreateProduct {
+    StripeKey: string;
+    Name: string;
+    Description: string;
+    Images: string[];
+    StatementDescriptor: string;
+    UnitLabel: string;
+    Sender: string;
+}
+export interface MsgStripeCreateProductResponse {
+    ProductID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCreatePrice {
+    StripeKey: string;
+    Product: string;
+    Amount: string;
+    Currency: string;
+    Description: string;
+    Sender: string;
+}
+export interface MsgStripeCreatePriceResponse {
+    PriceID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCustomer {
+    Email: string;
+    PaymentMethod: string;
+}
+export interface MsgStripeCheckout {
+    StripeKey: string;
+    PaymentMethod: string;
+    Price: StripePrice | undefined;
+    Sender: string;
+}
+export interface MsgStripeCheckoutResponse {
+    SessionID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCreateSku {
+    StripeKey: string;
+    Product: string;
+    Attributes: StringKeyValue[];
+    Price: number;
+    Currency: string;
+    Inventory: StripeInventory | undefined;
+    Sender: string;
+}
+export interface MsgStripeCreateSkuResponse {
+    SKUID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCreatePaymentIntent {
+    StripeKey: string;
+    Amount: number;
+    Currency: string;
+    SKUID: string;
+    Sender: string;
+}
+export interface MsgStripeCreatePaymentIntentResponse {
+    PaymentID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCreateAccount {
+    StripeKey: string;
+    Country: string;
+    Email: string;
+    Types: string;
+    Sender: string;
+}
+export interface MsgStripeCreateAccountResponse {
+    AccountID: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeCreateProductSku {
+    StripeKey: string;
+    Name: string;
+    Description: string;
+    Images: string[];
+    Attributes: StringKeyValue[];
+    Price: number;
+    Currency: string;
+    Inventory: StripeInventory | undefined;
+    ClientId: string;
+    Sender: string;
+}
+export interface MsgStripeInfo {
+    Sender: string;
+}
+export interface MsgStripeInfoResponse {
+    PubKey: string;
+    ClientID: string;
+    URI: string;
+    Message: string;
+    Status: string;
+}
+export interface MsgStripeOauthToken {
+    GrantType: string;
+    Code: string;
+    Sender: string;
+}
+export interface MsgStripeOauthTokenResponse {
+    AcessToken: string;
+    LiveMode: string;
+    RefreshToken: string;
+    TokenType: string;
+    StripePublishKey: string;
+    StripeUserID: string;
+    Scope: string;
     Message: string;
     Status: string;
 }
@@ -515,6 +636,132 @@ export declare const MsgUpdateRecipeResponse: {
     toJSON(message: MsgUpdateRecipeResponse): unknown;
     fromPartial(object: DeepPartial<MsgUpdateRecipeResponse>): MsgUpdateRecipeResponse;
 };
+export declare const MsgStripeCreateProduct: {
+    encode(message: MsgStripeCreateProduct, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateProduct;
+    fromJSON(object: any): MsgStripeCreateProduct;
+    toJSON(message: MsgStripeCreateProduct): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateProduct>): MsgStripeCreateProduct;
+};
+export declare const MsgStripeCreateProductResponse: {
+    encode(message: MsgStripeCreateProductResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateProductResponse;
+    fromJSON(object: any): MsgStripeCreateProductResponse;
+    toJSON(message: MsgStripeCreateProductResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateProductResponse>): MsgStripeCreateProductResponse;
+};
+export declare const MsgStripeCreatePrice: {
+    encode(message: MsgStripeCreatePrice, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreatePrice;
+    fromJSON(object: any): MsgStripeCreatePrice;
+    toJSON(message: MsgStripeCreatePrice): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreatePrice>): MsgStripeCreatePrice;
+};
+export declare const MsgStripeCreatePriceResponse: {
+    encode(message: MsgStripeCreatePriceResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreatePriceResponse;
+    fromJSON(object: any): MsgStripeCreatePriceResponse;
+    toJSON(message: MsgStripeCreatePriceResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreatePriceResponse>): MsgStripeCreatePriceResponse;
+};
+export declare const MsgStripeCustomer: {
+    encode(message: MsgStripeCustomer, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCustomer;
+    fromJSON(object: any): MsgStripeCustomer;
+    toJSON(message: MsgStripeCustomer): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCustomer>): MsgStripeCustomer;
+};
+export declare const MsgStripeCheckout: {
+    encode(message: MsgStripeCheckout, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCheckout;
+    fromJSON(object: any): MsgStripeCheckout;
+    toJSON(message: MsgStripeCheckout): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCheckout>): MsgStripeCheckout;
+};
+export declare const MsgStripeCheckoutResponse: {
+    encode(message: MsgStripeCheckoutResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCheckoutResponse;
+    fromJSON(object: any): MsgStripeCheckoutResponse;
+    toJSON(message: MsgStripeCheckoutResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCheckoutResponse>): MsgStripeCheckoutResponse;
+};
+export declare const MsgStripeCreateSku: {
+    encode(message: MsgStripeCreateSku, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateSku;
+    fromJSON(object: any): MsgStripeCreateSku;
+    toJSON(message: MsgStripeCreateSku): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateSku>): MsgStripeCreateSku;
+};
+export declare const MsgStripeCreateSkuResponse: {
+    encode(message: MsgStripeCreateSkuResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateSkuResponse;
+    fromJSON(object: any): MsgStripeCreateSkuResponse;
+    toJSON(message: MsgStripeCreateSkuResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateSkuResponse>): MsgStripeCreateSkuResponse;
+};
+export declare const MsgStripeCreatePaymentIntent: {
+    encode(message: MsgStripeCreatePaymentIntent, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreatePaymentIntent;
+    fromJSON(object: any): MsgStripeCreatePaymentIntent;
+    toJSON(message: MsgStripeCreatePaymentIntent): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreatePaymentIntent>): MsgStripeCreatePaymentIntent;
+};
+export declare const MsgStripeCreatePaymentIntentResponse: {
+    encode(message: MsgStripeCreatePaymentIntentResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreatePaymentIntentResponse;
+    fromJSON(object: any): MsgStripeCreatePaymentIntentResponse;
+    toJSON(message: MsgStripeCreatePaymentIntentResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreatePaymentIntentResponse>): MsgStripeCreatePaymentIntentResponse;
+};
+export declare const MsgStripeCreateAccount: {
+    encode(message: MsgStripeCreateAccount, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateAccount;
+    fromJSON(object: any): MsgStripeCreateAccount;
+    toJSON(message: MsgStripeCreateAccount): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateAccount>): MsgStripeCreateAccount;
+};
+export declare const MsgStripeCreateAccountResponse: {
+    encode(message: MsgStripeCreateAccountResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateAccountResponse;
+    fromJSON(object: any): MsgStripeCreateAccountResponse;
+    toJSON(message: MsgStripeCreateAccountResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateAccountResponse>): MsgStripeCreateAccountResponse;
+};
+export declare const MsgStripeCreateProductSku: {
+    encode(message: MsgStripeCreateProductSku, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeCreateProductSku;
+    fromJSON(object: any): MsgStripeCreateProductSku;
+    toJSON(message: MsgStripeCreateProductSku): unknown;
+    fromPartial(object: DeepPartial<MsgStripeCreateProductSku>): MsgStripeCreateProductSku;
+};
+export declare const MsgStripeInfo: {
+    encode(message: MsgStripeInfo, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeInfo;
+    fromJSON(object: any): MsgStripeInfo;
+    toJSON(message: MsgStripeInfo): unknown;
+    fromPartial(object: DeepPartial<MsgStripeInfo>): MsgStripeInfo;
+};
+export declare const MsgStripeInfoResponse: {
+    encode(message: MsgStripeInfoResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeInfoResponse;
+    fromJSON(object: any): MsgStripeInfoResponse;
+    toJSON(message: MsgStripeInfoResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeInfoResponse>): MsgStripeInfoResponse;
+};
+export declare const MsgStripeOauthToken: {
+    encode(message: MsgStripeOauthToken, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeOauthToken;
+    fromJSON(object: any): MsgStripeOauthToken;
+    toJSON(message: MsgStripeOauthToken): unknown;
+    fromPartial(object: DeepPartial<MsgStripeOauthToken>): MsgStripeOauthToken;
+};
+export declare const MsgStripeOauthTokenResponse: {
+    encode(message: MsgStripeOauthTokenResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgStripeOauthTokenResponse;
+    fromJSON(object: any): MsgStripeOauthTokenResponse;
+    toJSON(message: MsgStripeOauthTokenResponse): unknown;
+    fromPartial(object: DeepPartial<MsgStripeOauthTokenResponse>): MsgStripeOauthTokenResponse;
+};
 export interface Msg {
     /** CreateAccount is used to send pylons to requesters. This handler is part of the faucet */
     CreateAccount(request: MsgCreateAccount): Promise<MsgCreateExecutionResponse>;
@@ -536,6 +783,14 @@ export interface Msg {
     HandlerMsgUpdateRecipe(request: MsgUpdateRecipe): Promise<MsgUpdateRecipeResponse>;
     /** ExecuteRecipe is used to execute a recipe */
     ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>;
+    /** StripeCheckout is used to checkout stripe */
+    StripeCheckout(request: MsgStripeCheckout): Promise<MsgStripeCheckoutResponse>;
+    /** StripeCreateProduct is used to create product of stripe */
+    StripeCreateProduct(request: MsgStripeCreateProduct): Promise<MsgStripeCreateProductResponse>;
+    /** StripeCreatePrice is used to create price of stripe */
+    StripeCreatePrice(request: MsgStripeCreatePrice): Promise<MsgStripeCreatePriceResponse>;
+    /** StripeCreateSKU is used to create sku of stripe */
+    StripeCreateSku(request: MsgStripeCreateSku): Promise<MsgStripeCreateSkuResponse>;
     /** DisableRecipe is used to disable recipe by a developer */
     DisableRecipe(request: MsgDisableRecipe): Promise<MsgDisableRecipeResponse>;
     /** EnableRecipe is used to enable recipe by a developer */
@@ -568,6 +823,10 @@ export declare class MsgClientImpl implements Msg {
     CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;
     HandlerMsgUpdateRecipe(request: MsgUpdateRecipe): Promise<MsgUpdateRecipeResponse>;
     ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>;
+    StripeCheckout(request: MsgStripeCheckout): Promise<MsgStripeCheckoutResponse>;
+    StripeCreateProduct(request: MsgStripeCreateProduct): Promise<MsgStripeCreateProductResponse>;
+    StripeCreatePrice(request: MsgStripeCreatePrice): Promise<MsgStripeCreatePriceResponse>;
+    StripeCreateSku(request: MsgStripeCreateSku): Promise<MsgStripeCreateSkuResponse>;
     DisableRecipe(request: MsgDisableRecipe): Promise<MsgDisableRecipeResponse>;
     EnableRecipe(request: MsgEnableRecipe): Promise<MsgEnableRecipeResponse>;
     CheckExecution(request: MsgCheckExecution): Promise<MsgCheckExecutionResponse>;
