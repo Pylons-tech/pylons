@@ -98,7 +98,7 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/get_trade/{%s}", storeName, tradeKeyName),
 		getTradeHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/check_google_iap_order/{%s}", storeName, purchaseTokenKey),
-		checkGoogleIAPOrderHandler(cliCtx, storeName)).Methods("GET")
+		CheckGoogleIapOrderHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),
 		listRecipesHandler(cliCtx, storeName)).Methods("GET")

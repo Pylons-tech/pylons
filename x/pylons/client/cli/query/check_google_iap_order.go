@@ -9,8 +9,8 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// CheckGoogleIAPOrder check if google iap order is already used
-func CheckGoogleIAPOrder() *cobra.Command {
+// CheckGoogleIapOrder check if google iap order is already used
+func CheckGoogleIapOrder() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "check_google_iap_order <purchase_token>",
 		Short: "check if google iap order is given to user with purchase token",
@@ -23,11 +23,11 @@ func CheckGoogleIAPOrder() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			tokenReq := &types.CheckGoogleIAPOrderRequest{
+			tokenReq := &types.CheckGoogleIapOrderRequest{
 				PurchaseToken: args[0],
 			}
 
-			res, err := queryClient.CheckGoogleIAPOrder(cmd.Context(), tokenReq)
+			res, err := queryClient.CheckGoogleIapOrder(cmd.Context(), tokenReq)
 			if err != nil {
 				return err
 			}
