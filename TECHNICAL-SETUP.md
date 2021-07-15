@@ -1,37 +1,55 @@
 # Requirements
 
-## Install Go
+The following list contains all software dependencies necessary to set up Pylons development environment.
 
-This installation method removes existing Go installations, installs Go in `/usr/local/go/bin/go`, and sets
-the environment variables.
+## Development tools
 
-1. Go to <https://golang.org/dl>.
-1. Download the binary release that is suitable for your system.
-1. Follow the installation instructions.
+### Go programing language    
+Install [Golang >= 1.16.2](https://golang.org/doc/install), the programming language in which Pylons is implemented.
 
-**Note:** We recommend not using brew to install Go.
+### Go Linter
 
-## Install Dev Tools
+Install [Golangci Lint](https://golangci-lint.run/usage/install/#local-installation), used to analyse go code.
 
-### install pre-commit
+### Starport
+Install [Starport](https://docs.starport.network/intro/install.html), the Cosmos SDK tool used to scaffold and maintain modules, types, messages
+etc in the Pylons blockchain.
 
-#### Homebrew
+#### Make
+Install make which will be used to execute building actions at the development stage. The installation procedure will vary depending on your operating system, so
+a list of options is provided as follows:
 
-```shell
-brew install pre-commit
+##### Debian and Ubuntu-based distributions
+
+```bash
+$ sudo apt install build-essential
 ```
 
-#### Ubuntu / Debian based linux distributions
+##### Fedora and RHL-based distributions
 
-```shell
-sudo apt-get install pre-commit
+```bash
+$ sudo apt install build-essential
 ```
 
-### golangci-lint
+##### Arch Linux
+```bash
+$ sudo pacman -Sy base-devel
+```      
 
-`golangci-lint` is a linter runner used in the `make lint` command provided to developers. 
-To install it into `$GOPATH/bin` run:
-
-```shell
-curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.41.1
+##### Windows
+Use [chocolatey](https://chocolatey.org/)
+```bash
+choco install make
 ```
+
+##### MacOS
+
+Use [homebrew](https://formulae.brew.sh/formula/make)
+
+## Infrastructure and maintenance tools 
+
+Install [Precommit](https://pre-commit.com/), a tool used to verify the code before commiting it. It depends on git.
+
+Install [Docker](https://docs.docker.com/get-docker/), the very popular container tool.
+
+
