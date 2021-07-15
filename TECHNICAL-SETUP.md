@@ -37,7 +37,7 @@ $ sudo apt install build-essential
 $ sudo pacman -Sy base-devel
 ```      
 
-##### Windows
+#### Windows
 Use [chocolatey](https://chocolatey.org/)
 ```bash
 choco install make
