@@ -12,8 +12,8 @@ Install [Golang >= 1.16.2](https://golang.org/doc/install), the programming lang
 Install [Golangci Lint](https://golangci-lint.run/usage/install/#local-installation), used for code linting.
 
 ### Starport
-Install [Starport](https://docs.starport.network/intro/install.html), the Cosmos SDK tool used to scaffold and maintain modules, types, messages
-etc in the Pylons blockchain.
+
+Install [Starport](https://docs.starport.network/intro/install.html), the Cosmos SDK command-line tool for scaffolding and maintaining modules, types, messages, and other code in the Pylons blockchain.
 
 #### Make
 Install make which will be used to execute building actions at the development stage. The installation procedure will vary depending on your operating system, so
@@ -51,5 +51,4 @@ Use [homebrew](https://formulae.brew.sh/formula/make)
 Install [Precommit](https://pre-commit.com/), a tool used to verify the code before commiting it. It depends on git.
 
 Install [Docker](https://docs.docker.com/get-docker/), the very popular container tool.
-
 
