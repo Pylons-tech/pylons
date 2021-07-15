@@ -20,7 +20,7 @@ Install [Starport](https://docs.starport.network/intro/install.html), the Cosmos
 Install make that is used to execute building actions at the development stage. The installation procedure varies, depending on your operating system, so
 a list of options is provided as follows:
 
-##### Debian and Ubuntu-based distributions
+#### Debian and Ubuntu-based distributions
 
 ```bash
 $ sudo apt install build-essential
