@@ -32,7 +32,7 @@ $ sudo apt install build-essential
 $ sudo apt install build-essential
 ```
 
-##### Arch Linux
+#### Arch Linux
 ```bash
 $ sudo pacman -Sy base-devel
 ```      
