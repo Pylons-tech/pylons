@@ -9,7 +9,7 @@ Install [Golang >= 1.16.2](https://golang.org/doc/install), the programming lang
 
 ### Go Linter
 
-Install [Golangci Lint](https://golangci-lint.run/usage/install/#local-installation), used to analyse go code.
+Install [Golangci Lint](https://golangci-lint.run/usage/install/#local-installation), used for code linting.
 
 ### Starport
 Install [Starport](https://docs.starport.network/intro/install.html), the Cosmos SDK tool used to scaffold and maintain modules, types, messages
