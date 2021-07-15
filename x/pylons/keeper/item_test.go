@@ -69,7 +69,7 @@ func TestKeeperGetItem(t *testing.T) {
 	}{
 		"item not exist": {
 			itemID:       "invalidItemID",
-			desiredError: "The item doesn't exist",
+			desiredError: "key invalidItemID not present in item store",
 			showError:    true,
 		},
 		"successful item test": {
@@ -166,7 +166,7 @@ func TestKeeperUpdateItem(t *testing.T) {
 		"not existing ID provide check": {
 			itemID:       "invalidItemID",
 			item:         item,
-			desiredError: "The item with gid invalidItemID does not exist",
+			desiredError: "key invalidItemID not present in item store",
 			showError:    true,
 		},
 		"updateItem ID different from param item": {
@@ -218,8 +218,8 @@ func TestKeeperDeleteItem(t *testing.T) {
 		showError    bool
 	}{
 		"not existing id delete": {
-			itemID:       "notExistingID",
-			desiredError: "",
+			itemID:       "invalidItemID",
+			desiredError: "key invalidItemID not present in item store",
 			showError:    false,
 		},
 		"existing id delete": {
@@ -235,7 +235,7 @@ func TestKeeperDeleteItem(t *testing.T) {
 			if tc.showError {
 			} else {
 				_, err := tci.PlnK.GetItem(tci.Ctx, tc.itemID)
-				require.True(t, strings.Contains(err.Error(), "The item doesn't exist"))
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}

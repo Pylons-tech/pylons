@@ -161,7 +161,7 @@ func CheckItemWithLongValues(item types.Item, longValues map[string]int64) bool 
 	for sK, sV := range longValues {
 		keyExist := false
 		for _, sKV := range item.Longs {
-			if sK == sKV.Key && int64(sV) == sKV.Value {
+			if sK == sKV.Key && sV == sKV.Value {
 				keyExist = true
 			}
 		}
@@ -197,7 +197,7 @@ func PropertyExistCheck(step FixtureStep, t *testing.T) {
 		if len(pCheck.Cookbooks) > 0 {
 			for _, cbName := range pCheck.Cookbooks {
 				_, exist, err := testutils.GetCookbookIDFromName(cbName, pOwnerAddr)
-				t.MustNil(err, "error checking cookbook existance")
+				t.MustNil(err, "error checking cookbook existence")
 				if !shouldNotExist {
 					if exist {
 						t.WithFields(testing.Fields{
@@ -321,7 +321,7 @@ func RunRegisterWorkQueuesForSingleFixture(file string, t *testing.T) {
 	var fixtureSteps []FixtureStep
 	byteValue := ReadFile(file, t)
 
-	err := json.Unmarshal([]byte(byteValue), &fixtureSteps)
+	err := json.Unmarshal(byteValue, &fixtureSteps)
 	t.WithFields(testing.Fields{
 		"raw_json": string(byteValue),
 	}).MustNil(err, "error decoding fixture steps")
@@ -343,7 +343,7 @@ func RunSingleFixtureTest(file string, t *testing.T) {
 	var fixtureSteps []FixtureStep
 	byteValue := ReadFile(file, t)
 
-	err := json.Unmarshal([]byte(byteValue), &fixtureSteps)
+	err := json.Unmarshal(byteValue, &fixtureSteps)
 	t.WithFields(testing.Fields{
 		"raw_json": string(byteValue),
 	}).MustNil(err, "error decoding fixture steps")

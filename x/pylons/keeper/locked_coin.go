@@ -55,7 +55,7 @@ func (keeper Keeper) UnlockCoin(ctx sdk.Context, lockedCoin types.LockedCoin) er
 		return keeper.updateLockedCoin(ctx, types.NewLockedCoin(lockedCoin.Sender, newLock))
 	}
 
-	return errors.New("Unlocking amount exceeds the locked amount")
+	return errors.New("unlocking amount exceeds the locked amount")
 }
 
 // GetLockedCoin returns lockedCoin based on sender

@@ -56,50 +56,50 @@ func TestRecipeItemTransferFee(t *testing.T) {
 	)
 
 	cases := map[string]struct {
-		cookbookID          string
-		itemIDs             []string
-		dynamicItemSet      bool
-		dynamicItemNames    []string
-		dynamicItemFees     []int64
-		addInputCoin        bool
-		rcpID               string
-		sender              sdk.AccAddress
-		desiredError        string
-		successMsg          string
-		showError           bool
-		checkItemName       string
-		checkItemAvailable  bool
-		checkItemTrasferFee bool
-		transferFee         int64
+		cookbookID           string
+		itemIDs              []string
+		dynamicItemSet       bool
+		dynamicItemNames     []string
+		dynamicItemFees      []int64
+		addInputCoin         bool
+		rcpID                string
+		sender               sdk.AccAddress
+		desiredError         string
+		successMsg           string
+		showError            bool
+		checkItemName        string
+		checkItemAvailable   bool
+		checkItemTransferFee bool
+		transferFee          int64
 	}{
 		"additional item send fee check test": {
-			itemIDs:             []string{},
-			dynamicItemSet:      true,
-			dynamicItemNames:    []string{"catalyst"},
-			dynamicItemFees:     []int64{932},
-			addInputCoin:        true,
-			rcpID:               oneCatalystOneOutputRecipeData.RecipeID, // available ID
-			sender:              sender1,
-			desiredError:        "",
-			successMsg:          "successfully executed the recipe",
-			showError:           false,
-			checkItemName:       "Catalyst2", // "catalyst" item should be kept
-			checkItemAvailable:  true,
-			checkItemTrasferFee: true,
-			transferFee:         1232,
+			itemIDs:              []string{},
+			dynamicItemSet:       true,
+			dynamicItemNames:     []string{"catalyst"},
+			dynamicItemFees:      []int64{932},
+			addInputCoin:         true,
+			rcpID:                oneCatalystOneOutputRecipeData.RecipeID, // available ID
+			sender:               sender1,
+			desiredError:         "",
+			successMsg:           "successfully executed the recipe",
+			showError:            false,
+			checkItemName:        "Catalyst2", // "catalyst" item should be kept
+			checkItemAvailable:   true,
+			checkItemTransferFee: true,
+			transferFee:          1232,
 		},
 		"additional item send fee check item upgrade test": {
-			itemIDs:             []string{},
-			dynamicItemSet:      true,
-			dynamicItemNames:    []string{"sword", "knife"},
-			dynamicItemFees:     []int64{932, 932},
-			rcpID:               oneCatalystOneOutputRecipeData1.RecipeID, // available ID
-			sender:              sender1,
-			desiredError:        "",
-			successMsg:          "successfully executed the recipe",
-			showError:           false,
-			checkItemTrasferFee: true,
-			transferFee:         1232,
+			itemIDs:              []string{},
+			dynamicItemSet:       true,
+			dynamicItemNames:     []string{"sword", "knife"},
+			dynamicItemFees:      []int64{932, 932},
+			rcpID:                oneCatalystOneOutputRecipeData1.RecipeID, // available ID
+			sender:               sender1,
+			desiredError:         "",
+			successMsg:           "successfully executed the recipe",
+			showError:            false,
+			checkItemTransferFee: true,
+			transferFee:          1232,
 		},
 	}
 	for testName, tc := range cases {
@@ -161,7 +161,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 					fmt.Println(itemAvailability)
 				}
 
-				if tc.checkItemTrasferFee {
+				if tc.checkItemTransferFee {
 					require.True(t, itemTransferFeeCorrect)
 				}
 			} else {

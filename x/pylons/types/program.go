@@ -77,7 +77,7 @@ func (ec *CelEnvCollection) EvalString(program string) (string, error) {
 	return fmt.Sprintf("%v", refVal.Value()), nil
 }
 
-// GetWeight calculate weight value using program
+// GetWeightInt calculate weight value using program
 func (ol WeightedOutputs) GetWeightInt(ec CelEnvCollection) (int, error) {
 	refVal, refErr := ec.Eval(ol.Weight)
 	if refErr != nil {
@@ -102,7 +102,7 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) 
 	}
 
 	lastWeight := 0
-	var weights []int
+	weights := make([]int, 0, len(wol))
 	for _, wp := range wol {
 		w, err := wp.GetWeightInt(ec)
 		if err != nil {

@@ -22,10 +22,10 @@ func TxBroadcastErrorCheck(err error, step FixtureStep, t *testing.T) {
 }
 
 // TxErrorLogCheck check expected error log is produced correctly
-func TxErrorLogCheck(err error, ErrorLog string, t *testing.T) {
-	if len(ErrorLog) > 0 {
+func TxErrorLogCheck(err error, errorLog string, t *testing.T) {
+	if len(errorLog) > 0 {
 		t.MustTrue(err != nil, "result is nil unexpectedly")
-		t.MustContain(err.Error(), ErrorLog, "transaction error log is different from expected one.")
+		t.MustContain(err.Error(), errorLog, "transaction error log is different from expected one.")
 	}
 }
 
@@ -121,7 +121,6 @@ func RunGetPylons(step FixtureStep, t *testing.T) {
 		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
 		result, err := tci.PlnH.GetPylons(sdk.WrapSDKContext(tci.Ctx), &gpMsg)
 		t.MustTrue(err == nil, "error should be empty")
-		t.MustTrue(result != nil, "result should not be empty")
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -170,8 +169,11 @@ func RunGoogleIAPGetPylons(step FixtureStep, t *testing.T) {
 		WaitForNextBlockWithErrorCheck(t)
 		tci := testutils.GetTestCoinInput()
 		tci.PlnH = handlers.NewMsgServerImpl(tci.PlnK)
-		result, err := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &gigpMsg)
+		result, _ := tci.PlnH.GoogleIAPGetPylons(sdk.WrapSDKContext(tci.Ctx), &gigpMsg)
+
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -328,7 +330,10 @@ func RunCheckExecution(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
+		// result only nil if err != nil
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -378,7 +383,9 @@ func RunFiatItem(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		t.MustTrue(result.ItemID != "", "item id shouldn't be empty")
 	}
 }
@@ -432,7 +439,9 @@ func RunSendItems(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -499,7 +508,7 @@ func CreateCookbookMsgFromRef(ref string, t *testing.T) types.MsgCreateCookbook 
 		cbType.Version,
 		cbType.SupportEmail,
 		cbType.Level,
-		int64(cbType.CostPerBlock),
+		cbType.CostPerBlock,
 		cbType.Sender,
 	)
 }
@@ -525,8 +534,10 @@ func RunCreateCookbook(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
-		t.MustTrue(result.CookbookID != "", "coookbook id shouldn't be empty")
+		// nolint: staticcheck
+		t.MustTrue(result.CookbookID != "", "cookbook id should not be empty")
 	}
 }
 
@@ -574,8 +585,10 @@ func RunUpdateCookbook(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
-		t.MustTrue(result.CookbookID != "", "coookbook id shouldn't be empty")
+		// nolint: staticcheck
+		t.MustTrue(result.CookbookID != "", "cookbook id should not be empty")
 	}
 }
 
@@ -646,7 +659,9 @@ func RunCreateRecipe(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		t.MustTrue(result.RecipeID != "", "recipe id shouldn't be empty")
 	}
 }
@@ -708,7 +723,9 @@ func RunUpdateRecipe(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		t.MustTrue(result.RecipeID != "", "recipe id shouldn't be empty")
 	}
 }
@@ -756,7 +773,9 @@ func RunEnableRecipe(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -804,7 +823,9 @@ func RunDisableRecipe(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -860,9 +881,12 @@ func RunExecuteRecipe(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty", err)
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 
+		// nolint: staticcheck
 		if result.Message == "scheduled the recipe" { // delayed execution
 			var scheduleRes types.ExecuteRecipeScheduleOutput
 
@@ -946,7 +970,9 @@ func RunCreateTrade(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		t.MustTrue(result.TradeID != "", "trade id shouldn't be empty")
 	}
 }
@@ -999,7 +1025,9 @@ func RunFulfillTrade(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -1047,7 +1075,9 @@ func RunDisableTrade(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }
@@ -1095,7 +1125,9 @@ func RunEnableTrade(step FixtureStep, t *testing.T) {
 			return
 		}
 
+		// nolint: staticcheck
 		t.MustTrue(result != nil, "result should not be empty")
+		// nolint: staticcheck
 		TxResultStatusMessageCheck(result.Status, result.Message, step, t)
 	}
 }

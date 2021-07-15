@@ -27,11 +27,12 @@ func ReadFile(fileURL string, t *testing.T) []byte {
 	defer func(jsonFile *os.File) {
 		err := jsonFile.Close()
 		if err != nil {
-
+			panic("error closing file")
 		}
 	}(jsonFile)
 
-	byteValue, _ := ioutil.ReadAll(jsonFile)
+	byteValue, err := ioutil.ReadAll(jsonFile)
+	t.MustNil(err, "fatal log reading file")
 	return byteValue
 }
 
@@ -421,9 +422,7 @@ func GetEntriesFromBytes(bytes []byte, t *testing.T) types.EntriesList {
 	t.MustTrue(len(entriesReader.Entries.ItemOutputs) == len(entriesDirectReader.Entries.ItemOutputs), "entry parsing outputs array length different for direct reader and ref reader")
 
 	var wpl types.EntriesList
-	for _, co := range entriesReader.Entries.CoinOutputs {
-		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
-	}
+	wpl.CoinOutputs = append(wpl.CoinOutputs, entriesReader.Entries.CoinOutputs...)
 
 	for ioidx, io := range entriesReader.Entries.ItemModifyOutputs {
 		if len(io.ModifyParamsRef) > 0 {

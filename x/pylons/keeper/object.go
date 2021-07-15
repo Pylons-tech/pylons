@@ -25,7 +25,7 @@ func (keeper Keeper) GetObject(ctx sdk.Context, storageType, id string, keeperKe
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {
-		return fmt.Errorf("The %s doesn't exist", storageType)
+		return fmt.Errorf("key %s not present in %s store", id, storageType)
 	}
 
 	mObject := store.Get([]byte(id))
@@ -37,7 +37,7 @@ func (keeper Keeper) UpdateObject(ctx sdk.Context, storageType, id string, keepe
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {
-		return fmt.Errorf("The %s with gid %s does not exist", storageType, id)
+		return fmt.Errorf("key %s not present in %s store", id, storageType)
 	}
 	mObject, err := json.Marshal(object)
 	if err != nil {
@@ -52,7 +52,7 @@ func (keeper Keeper) DeleteObject(ctx sdk.Context, storageType, id string, keepe
 	store := ctx.KVStore(keeperKey)
 
 	if !store.Has([]byte(id)) {
-		return fmt.Errorf("The %s with the id %s doesn't exist", storageType, id)
+		return fmt.Errorf("key %s not present in %s store", id, storageType)
 	}
 	store.Delete([]byte(id))
 	return nil

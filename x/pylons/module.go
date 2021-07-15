@@ -27,9 +27,10 @@ import (
 )
 
 // type check to ensure the interface is properly implemented
+// checks for AppModule, AppModuleGenesis, AppModuleBasic
+// since AppModule embeds AppModuleGenesis which embeds AppModuleBasic
 var (
-	_ module.AppModule      = AppModule{}
-	_ module.AppModuleBasic = AppModuleBasic{}
+	_ module.AppModule = AppModule{}
 )
 
 // AppModuleBasic implements the AppModuleBasic interface for the capability module.

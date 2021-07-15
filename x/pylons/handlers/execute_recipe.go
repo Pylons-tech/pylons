@@ -190,6 +190,10 @@ func (srv msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExec
 	}
 
 	execSender, err := sdk.AccAddressFromBech32(exec.Sender)
+	if err != nil {
+		return nil, errInternal(err)
+	}
+
 	if !sender.Equals(execSender) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "The current sender is different from the executor")
 	}
@@ -226,7 +230,7 @@ func (srv msgServer) CheckExecution(ctx context.Context, msg *types.MsgCheckExec
 		if blockDiff < 0 { // check if already waited for block interval
 			blockDiff = 0
 		}
-		pylonsToCharge := types.NewPylon(blockDiff * int64(cookbook.CostPerBlock))
+		pylonsToCharge := types.NewPylon(blockDiff * cookbook.CostPerBlock)
 
 		if keeper.HasCoins(srv.Keeper, sdkCtx, sender, pylonsToCharge) {
 			err := srv.CoinKeeper.SubtractCoins(sdkCtx, sender, pylonsToCharge)

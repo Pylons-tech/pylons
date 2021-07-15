@@ -14,7 +14,9 @@ import (
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 )
 
-///////////ACCOUNT///////////////////////////////////////////////
+/*
+	ACCOUNTS
+*/
 
 // MockAccount generate local key and do initial get-pylons to create cookbook
 func MockAccount(key string, t *testing.T) {
@@ -81,7 +83,9 @@ func FaucetGameCoins(key string, amount sdk.Coins, t *testing.T) {
 	}).MustNil(err, "error waiting for getting faucet transaction")
 }
 
-///////////COOKBOOK//////////////////////////////////////////////
+/*
+	COOKBOOK
+*/
 
 // MockCookbook mock a cookbook which can refer to on all tests
 // currently there's no need to create more than 2 cookbooks

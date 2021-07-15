@@ -105,7 +105,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 			outputDenom:    "chair",
 			numItemInput:   1,
 			sender:         sender,
-			desiredError:   "The cookbook doesn't exist",
+			desiredError:   "key  not present in cookbook store",
 			showError:      true,
 		},
 		"successful check": {
@@ -223,7 +223,7 @@ func TestHandlerMsgCreateRecipe(t *testing.T) {
 				require.True(t, len(result.RecipeID) > 0)
 			} else {
 				require.True(t, err != nil)
-				require.True(t, strings.Contains(err.Error(), tc.desiredError), err.Error())
+				require.True(t, strings.Contains(err.Error(), tc.desiredError))
 			}
 		})
 	}
@@ -268,7 +268,8 @@ func TestSameRecipeIDCreation(t *testing.T) {
 
 	// try creating it 2nd time
 	_, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
-	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
+
+	require.True(t, strings.Contains(err.Error(), "recipeID sameRecipeID-0001 is already present in cookbookID samecookbookID-0001"))
 
 }
 
@@ -292,7 +293,7 @@ func TestHandlerMsgEnableRecipe(t *testing.T) {
 		"wrong recipe check": {
 			rcpID:        "invalidRecipeID",
 			sender:       sender1,
-			desiredError: "The recipe doesn't exist",
+			desiredError: "key invalidRecipeID not present in recipe store",
 			showError:    true,
 		},
 		"owner of recipe check": {
@@ -425,7 +426,7 @@ func TestHandlerMsgDisableRecipe(t *testing.T) {
 		"wrong recipe check": {
 			rcpID:        "invalidRecipeID",
 			sender:       sender1,
-			desiredError: "The recipe doesn't exist",
+			desiredError: "key invalidRecipeID not present in recipe store",
 			showError:    true,
 		},
 		"owner of recipe check": {

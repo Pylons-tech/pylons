@@ -55,7 +55,7 @@ func GetPrivateKeyFromHex(hexKey string) (*crypto.PrivKey, error) {
 		return nil, err
 	}
 	var privKeyBytes32 []byte
-	copy(privKeyBytes32[:], privKeyBytes)
+	copy(privKeyBytes32, privKeyBytes)
 	privKey := crypto.GenPrivKeySecp256k1(privKeyBytes32)
 
 	return &privKey, nil

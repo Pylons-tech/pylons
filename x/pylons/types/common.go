@@ -75,14 +75,20 @@ const (
 )
 
 const (
+	// Pylon is the common name to identify a coin of type Pylon
 	Pylon = "pylon"
-
-	TypeCookbook    = "cookbook"
-	TypeRecipe      = "recipe"
-	TypeTrade       = "trade"
-	TypeItem        = "item"
+	// TypeCookbook is the label to identify a cookbook to keepers
+	TypeCookbook = "cookbook"
+	// TypeRecipe is the label to identify a recipe to keepers
+	TypeRecipe = "recipe"
+	// TypeTrade is the label to identify a trade to keepers
+	TypeTrade = "trade"
+	// TypeItem is the label to identify an item to keepers
+	TypeItem = "item"
+	// TypeItemHistory is the label to identify an item_history to keepers
 	TypeItemHistory = "item_history"
-	TypeExecution   = "execution"
+	// TypeExecution is the label to identify an execution to keepers
+	TypeExecution = "execution"
 )
 
 // tier fee types
@@ -430,14 +436,14 @@ func (ii ItemInput) IDValidationError() error {
 }
 
 // NewItemModifyOutput returns ItemOutput that is modified from item input
-func NewItemModifyOutput(ID string, ItemInputRef string, ModifyParams ItemModifyParams) ItemModifyOutput {
+func NewItemModifyOutput(id, itemInputRef string, modifyParams ItemModifyParams) ItemModifyOutput {
 	return ItemModifyOutput{
-		ID:           ID,
-		ItemInputRef: ItemInputRef,
-		Doubles:      ModifyParams.Doubles,
-		Longs:        ModifyParams.Longs,
-		Strings:      ModifyParams.Strings,
-		TransferFee:  ModifyParams.TransferFee,
+		ID:           id,
+		ItemInputRef: itemInputRef,
+		Doubles:      modifyParams.Doubles,
+		Longs:        modifyParams.Longs,
+		Strings:      modifyParams.Strings,
+		TransferFee:  modifyParams.TransferFee,
 	}
 }
 
@@ -447,13 +453,13 @@ func (mit *ItemModifyOutput) SetTransferFee(transferFee int64) {
 }
 
 // NewItemOutput returns new ItemOutput generated from recipe
-func NewItemOutput(ID string, Doubles DoubleParamList, Longs LongParamList, Strings StringParamList, TransferFee int64) ItemOutput {
+func NewItemOutput(id string, doubles DoubleParamList, longs LongParamList, strings StringParamList, transferFee int64) ItemOutput {
 	return ItemOutput{
-		ID:          ID,
-		Doubles:     Doubles,
-		Longs:       Longs,
-		Strings:     Strings,
-		TransferFee: TransferFee,
+		ID:          id,
+		Doubles:     doubles,
+		Longs:       longs,
+		Strings:     strings,
+		TransferFee: transferFee,
 	}
 }
 
@@ -562,7 +568,7 @@ func (tii TradeItemInput) MatchError(item Item, ec CelEnvCollection) error {
 func (tiil TradeItemInputList) Validate() error {
 	for _, ii := range tiil {
 		if ii.CookbookID == "" {
-			return errors.New("There should be no empty cookbook ID inputs for trades")
+			return errors.New("empty cookbook present in TradeItemInputList")
 		}
 	}
 	return nil
@@ -589,7 +595,7 @@ func ValidateLevel(level int64) error {
 		return nil
 	}
 
-	return errors.New("Invalid cookbook plan")
+	return errors.New("invalid cookbook level")
 }
 
 // KeyGen generates key for the store

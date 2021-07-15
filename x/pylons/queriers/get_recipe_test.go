@@ -36,9 +36,9 @@ func TestGetRecipe(t *testing.T) {
 		rcpName       string
 	}{
 		"error check when providing invalid recipe ID": {
-			recipeID:      "invalid recipeID",
+			recipeID:      "invalidRecipeID",
 			showError:     true,
-			desiredError:  "The recipe doesn't exist",
+			desiredError:  "key invalidRecipeID not present in recipe store",
 			desiredRcpCnt: 0,
 		},
 		"error check when not providing recipeID": {

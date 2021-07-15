@@ -243,7 +243,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 
 		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
-			return nil, errInternal(errors.New("Invalid cookbook id"))
+			return nil, errInternal(errors.New("invalid cookbook id"))
 		}
 
 		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
@@ -282,7 +282,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 
 		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil {
-			return nil, errInternal(errors.New("Invalid cookbook id"))
+			return nil, errInternal(errors.New("invalid cookbook id"))
 		}
 
 		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
@@ -402,7 +402,7 @@ func (srv msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrad
 	}
 
 	if trade.Completed && (trade.FulFiller != "") {
-		return nil, errInternal(errors.New("Cannot disable a completed trade"))
+		return nil, errInternal(errors.New("cannot disable a completed trade"))
 	}
 
 	trade.Disabled = true

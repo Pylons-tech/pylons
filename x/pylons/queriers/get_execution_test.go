@@ -49,9 +49,9 @@ func TestGetExecution(t *testing.T) {
 		rcpID         string
 	}{
 		"error check when providing invalid execution ID": {
-			execID:        "invalid executionID",
+			execID:        "invalidExecutionID",
 			showError:     true,
-			desiredError:  "The execution doesn't exist",
+			desiredError:  "key invalidExecutionID not present in execution store",
 			desiredRcpCnt: 0,
 		},
 		"error check when not providing executionID": {

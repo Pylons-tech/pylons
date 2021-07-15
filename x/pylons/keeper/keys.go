@@ -7,7 +7,7 @@ const (
 	KeyPylonsCookbook   = "pylons_cookbook"
 	KeyPylonsRecipe     = "pylons_recipe"
 	KeyPylonsItem       = "pylons_item"
-	KeyPylonsExecution  = "pylons_exection"
+	KeyPylonsExecution  = "pylons_execution"
 	KeyPylonsTrade      = "pylons_trade"
 	KeyPylonsHistory    = "pylons_history"
 	KeyPylonsLockedCoin = "pylons_locked_coin"

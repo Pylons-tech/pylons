@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
@@ -13,16 +12,6 @@ import (
 
 func errInternal(err error) error {
 	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-}
-
-func marshalJSON(intf interface{}) (*sdk.Result, error) {
-	mData, err := json.Marshal(intf)
-
-	if err != nil {
-		return nil, errInternal(err)
-	}
-
-	return &sdk.Result{Data: mData}, nil
 }
 
 // Contains is a utility function to find an int value from int array

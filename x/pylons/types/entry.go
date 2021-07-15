@@ -13,13 +13,13 @@ type EntryI interface {
 }
 
 // EntryIDValidationError returns entry ID validation error
-func EntryIDValidationError(ID string) error {
+func EntryIDValidationError(id string) error {
 	regex := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z_0-9]*$`)
-	if regex.MatchString(ID) {
+	if regex.MatchString(id) {
 		return nil
 	}
 
-	return fmt.Errorf("entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", ID)
+	return fmt.Errorf("entryID does not fit the regular expression ^[a-zA-Z_][a-zA-Z_0-9]*$: id=%s", id)
 }
 
 type serializeEntriesList struct {
@@ -29,39 +29,33 @@ type serializeEntriesList struct {
 }
 
 // FindByID is a function to find an entry by ID
-func (wpl EntriesList) FindByID(ID string) (EntryI, error) {
+func (wpl EntriesList) FindByID(id string) (EntryI, error) {
 	for _, wp := range wpl.CoinOutputs {
-		if wp.GetID() == ID {
+		if wp.GetID() == id {
 			return &wp, nil
 		}
 	}
 
 	for _, wp := range wpl.ItemOutputs {
-		if wp.GetID() == ID {
+		if wp.GetID() == id {
 			return &wp, nil
 		}
 	}
 
 	for _, wp := range wpl.ItemModifyOutputs {
-		if wp.GetID() == ID {
+		if wp.GetID() == id {
 			return &wp, nil
 		}
 	}
-	return nil, fmt.Errorf("no entry with the ID %s available", ID)
+	return nil, fmt.Errorf("no entry with the ID %s available", id)
 }
 
 // MarshalJSON is a custom marshal function
 func (wpl EntriesList) MarshalJSON() ([]byte, error) {
 	var sel serializeEntriesList
-	for _, wp := range wpl.CoinOutputs {
-		sel.CoinOutputs = append(sel.CoinOutputs, wp)
-	}
-	for _, wp := range wpl.ItemModifyOutputs {
-		sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wp)
-	}
-	for _, wp := range wpl.ItemOutputs {
-		sel.ItemOutputs = append(sel.ItemOutputs, wp)
-	}
+	sel.CoinOutputs = append(sel.CoinOutputs, wpl.CoinOutputs...)
+	sel.ItemModifyOutputs = append(sel.ItemModifyOutputs, wpl.ItemModifyOutputs...)
+	sel.ItemOutputs = append(sel.ItemOutputs, wpl.ItemOutputs...)
 
 	return json.Marshal(sel)
 }
@@ -74,14 +68,9 @@ func (wpl *EntriesList) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	for _, co := range sel.CoinOutputs {
-		wpl.CoinOutputs = append(wpl.CoinOutputs, co)
-	}
-	for _, io := range sel.ItemModifyOutputs {
-		wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, io)
-	}
-	for _, io := range sel.ItemOutputs {
-		wpl.ItemOutputs = append(wpl.ItemOutputs, io)
-	}
+	wpl.CoinOutputs = append(wpl.CoinOutputs, sel.CoinOutputs...)
+	wpl.ItemModifyOutputs = append(wpl.ItemModifyOutputs, sel.ItemModifyOutputs...)
+	wpl.ItemOutputs = append(wpl.ItemOutputs, sel.ItemOutputs...)
+
 	return nil
 }

@@ -37,9 +37,9 @@ func TestGetItem(t *testing.T) {
 		itemName      string
 	}{
 		"error check when providing invalid item ID": {
-			itemID:        "invalid itemID",
+			itemID:        "invalidItemID",
 			showError:     true,
-			desiredError:  "The item doesn't exist",
+			desiredError:  "key invalidItemID not present in item store",
 			desiredRcpCnt: 0,
 		},
 		"error check when not providing itemID": {

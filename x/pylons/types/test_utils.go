@@ -54,9 +54,9 @@ func GenCoinOnlyEntry(coinName string) CoinOutput {
 }
 
 // GenCoinOnlyEntryRand is a utility function to genearte coin only entry with random count
-func GenCoinOnlyEntryRand(ID string, coinName string) CoinOutput {
+func GenCoinOnlyEntryRand(id, coinName string) CoinOutput {
 	return CoinOutput{
-		ID:    ID,
+		ID:    id,
 		Coin:  coinName,
 		Count: `rand(10)+1`,
 	}
@@ -115,9 +115,9 @@ func GenItemOnlyEntry(itemName string) ItemOutput {
 }
 
 // GenItemOnlyEntryRand is a function to generate item only entry with random value
-func GenItemOnlyEntryRand(ID string, itemName string) ItemOutput {
+func GenItemOnlyEntryRand(id, itemName string) ItemOutput {
 	return NewItemOutput(
-		ID,
+		id,
 		DoubleParamList{{
 			Key:     "endurance",
 			Program: `500.00`,

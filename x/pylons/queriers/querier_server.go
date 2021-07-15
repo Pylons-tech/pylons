@@ -9,6 +9,7 @@ type querierServer struct {
 	keeper.Keeper
 }
 
+// nolint: revive
 func NewQuerierServerImpl(k keeper.Keeper) *querierServer {
 	return &querierServer{Keeper: k}
 }
