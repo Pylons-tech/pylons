@@ -15,7 +15,7 @@ Install [Golangci Lint](https://golangci-lint.run/usage/install/#local-installat
 
 Install [Starport](https://docs.starport.network/intro/install.html), the Cosmos SDK command-line tool for scaffolding and maintaining modules, types, messages, and other code in the Pylons blockchain.
 
-#### Make
+### Make
 
 Install make that is used to execute building actions at the development stage. The installation procedure varies, depending on your operating system, so
 a list of options is provided as follows:
