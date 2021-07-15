@@ -47,7 +47,7 @@ choco install make
 
 Use [homebrew](https://formulae.brew.sh/formula/make)
 
-## Infrastructure and maintenance tools 
+## Infrastructure and Maintenance Tools 
 
 Install [Precommit](https://pre-commit.com/), a tool used to verify the code before commiting it. It depends on git.
 
