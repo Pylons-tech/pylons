@@ -11,3 +11,4 @@ signed_transaction.json
 /vendor
 /.idea
 /testnet
+/release
