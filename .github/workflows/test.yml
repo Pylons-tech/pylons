@@ -1,7 +1,7 @@
 name: Tests
 
 # Tests runs unit tests 
-# This workflow is run on pushes to [develop master] and every Pull Requeset where a .go, .mod, .sum have been changed
+# This workflow is run on pushed to [develop* master*] and every Pull Requeset where a .go, .mod, .sum have been changed
 
 on:
   pull_request:
@@ -31,12 +31,11 @@ jobs:
           **/**.go
           go.mod
           go.sum
-
     - name: Build
       run: GOARCH=${{matrix.go-arch}} make build-binary
 
 
-  unit-test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -53,6 +52,7 @@ jobs:
             **/**.go
             go.mod
             go.sum
-
-      - name: Test
+      - name: unit-test
         run:  make unit_tests
+      - name: fixture-unit-tests
+        run: make fixture_unit_tests
