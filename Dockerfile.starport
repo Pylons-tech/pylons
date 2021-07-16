@@ -1,0 +1,23 @@
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+# Start from the latest starport image
+FROM starport/cli:0.17.0 as build
+
+# Add Maintainer Info
+LABEL maintainer="Rafael de Andrade Sousa"
+
+USER root
+
+COPY . .
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN starport chain build --release
+RUN starport chain init
+RUN tar -xzvf /apps/release/pylons_linux_amd64.tar.gz
+
+
+## Final
+FROM gcr.io/distroless/base-debian10
+COPY --from=build /apps/pylonsd /
+COPY --from=build /home/pylons/* ~/.pylons/
+
+ENTRYPOINT ["/pylonsd"]
