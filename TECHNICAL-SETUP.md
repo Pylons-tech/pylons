@@ -26,7 +26,7 @@ a list of options is provided as follows:
 $ sudo apt install build-essential
 ```
 
-##### Fedora and RHL-based distributions
+#### Fedora and RHL-based distributions
 
 ```bash
 $ sudo apt install build-essential
@@ -43,7 +43,7 @@ Use [chocolatey](https://chocolatey.org/)
 choco install make
 ```
 
-##### MacOS
+#### MacOS
 
 Use [homebrew](https://formulae.brew.sh/formula/make)
 
