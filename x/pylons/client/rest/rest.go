@@ -122,6 +122,9 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks/{%s}", storeName, ownerKeyName),
 		listCookbooksHandler(cliCtx, storeName)).Methods("GET")
 
+	r.HandleFunc(fmt.Sprintf("/%s/active_list_cookbooks", storeName),
+		activeListCookbooksHandler(cliCtx, storeName)).Methods("GET")
+
 	r.HandleFunc(fmt.Sprintf("/%s/list_trade", storeName),
 		listTradesHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_trade/{%s}", storeName, ownerKeyName),
