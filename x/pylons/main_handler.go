@@ -72,6 +72,26 @@ func NewHandler(keeper keeper.Keeper) sdk.Handler {
 			res, err := msgServer.ExecuteRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
+		case *types.MsgStripeCheckout:
+			res, err := msgServer.StripeCheckout(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgStripeCreateProduct:
+			res, err := msgServer.StripeCreateProduct(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgStripeCreatePrice:
+			res, err := msgServer.StripeCreatePrice(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgStripeCreateSku:
+			res, err := msgServer.StripeCreateSku(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		// case *types.MsgStripeCreatePaymentIntent:
+		// 	res, err := msgServer.StripeCreatePaymentIntent(sdk.WrapSDKContext(ctx), msg)
+		// 	return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgDisableRecipe:
 			res, err := msgServer.DisableRecipe(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)

@@ -9,15 +9,15 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// CheckGoogleIAPOrder check if google iap order is given to user with purchase token
-func (querier *querierServer) CheckGoogleIAPOrder(ctx context.Context, req *types.CheckGoogleIAPOrderRequest) (*types.CheckGoogleIAPOrderResponse, error) {
+// CheckGoogleIapOrder check if google iap order is given to user with purchase token
+func (querier *querierServer) CheckGoogleIapOrder(ctx context.Context, req *types.CheckGoogleIapOrderRequest) (*types.CheckGoogleIapOrderResponse, error) {
 	if req.PurchaseToken == "" {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "no item id is provided in path")
 	}
 
 	exist := querier.HasGoogleIAPOrder(sdk.UnwrapSDKContext(ctx), req.PurchaseToken)
 
-	return &types.CheckGoogleIAPOrderResponse{
+	return &types.CheckGoogleIapOrderResponse{
 		PurchaseToken: req.PurchaseToken,
 		Exist:         exist,
 	}, nil

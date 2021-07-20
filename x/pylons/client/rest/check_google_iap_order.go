@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
 
-func checkGoogleIAPOrderHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
+func CheckGoogleIapOrderHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		purchaseToken := vars[purchaseTokenKey]

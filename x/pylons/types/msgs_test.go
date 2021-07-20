@@ -10,6 +10,8 @@ import (
 	"github.com/stretchr/testify/require"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 )
 
 func TestMsgCreateCookbookValidateBasic(t *testing.T) {
@@ -279,6 +281,7 @@ func TestCreateRecipeValidateBasic(t *testing.T) {
 				tc.outputs,
 				0,
 				tc.sender.String(),
+				"",
 			)
 
 			err := msg.ValidateBasic()
@@ -549,7 +552,7 @@ func TestGetPylonsValidateBasic(t *testing.T) {
 }
 
 func TestGoogleIAPSignatureVerification(t *testing.T) {
-	sender, _ := sdk.AccAddressFromBech32("cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337")
+	sender, _ := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 
 	cases := map[string]struct {
 		productID     string

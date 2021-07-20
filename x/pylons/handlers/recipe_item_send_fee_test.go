@@ -54,7 +54,6 @@ func TestRecipeItemTransferFee(t *testing.T) {
 		0,
 		sender1,
 	)
-
 	cases := map[string]struct {
 		cookbookID           string
 		itemIDs              []string
@@ -122,7 +121,7 @@ func TestRecipeItemTransferFee(t *testing.T) {
 				}
 			}
 
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 
 			if tc.showError == false {

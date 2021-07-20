@@ -3,6 +3,7 @@ package txbuilder
 import (
 	"net/http"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -19,7 +20,7 @@ const (
 // CreateAccountTxBuilder returns the fixtures which can be used to create a get pylons transaction
 func CreateAccountTxBuilder(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		addr, err := sdk.AccAddressFromBech32("cosmos10nlnguhl0xsctwff4ch9gyjdcetxa2eww46e29")
+		addr, err := sdk.AccAddressFromBech32(config.Config.Validators.PylonsLLC)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return

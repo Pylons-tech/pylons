@@ -44,6 +44,14 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		txbuilder.CreateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/execute_recipe/tx_build/", storeName),
 		txbuilder.ExecuteRecipeTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_checkout/tx_build/", storeName),
+		txbuilder.StripeCheckoutTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product/tx_build/", storeName),
+		txbuilder.StripeCreateProductTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_price/tx_build/", storeName),
+		txbuilder.StripeCreatePriceTxBuilder(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_sku/tx_build/", storeName),
+		txbuilder.StripeCreateSkuTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/update_recipe/tx_build/", storeName),
 		txbuilder.UpdateRecipeTxBuilder(cliCtx)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/enable_recipe/tx_build/", storeName),
@@ -60,13 +68,37 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		pylonsSendHandler(cliCtx)).Methods("POST")
 	r.HandleFunc(fmt.Sprintf("/%s/send_coins", storeName),
 		coinsSendHandler(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_checkout", storeName),
+		stripeCheckoutHandler(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product", storeName),
+		stripeCreateProductHandler(cliCtx)).Methods("POST")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product", storeName),
+		stripeCreateProductHandler(cliCtx)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_product_sku", storeName),
+		stripeCreateProductSkuHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_payment_intent", storeName),
+		stripeCratePaymentIntentHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_account", storeName),
+		stripeCrateAccountHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_oauth_token", storeName),
+		stripeOAuthTokenHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_info", storeName),
+		stripeInfoHandler(cliCtx)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_account", storeName),
+		stripeCrateAccountHandler(cliCtx)).Methods("POST")
+
 	r.HandleFunc(fmt.Sprintf("/%s/addr_from_pub_key/{%s}", storeName, pubKeyName),
 		addrFromPubkeyHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/get_trade/{%s}", storeName, tradeKeyName),
 		getTradeHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/check_google_iap_order/{%s}", storeName, purchaseTokenKey),
-		checkGoogleIAPOrderHandler(cliCtx, storeName)).Methods("GET")
+		CheckGoogleIapOrderHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),
 		listRecipesHandler(cliCtx, storeName)).Methods("GET")

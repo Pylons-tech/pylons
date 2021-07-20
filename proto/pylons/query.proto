@@ -14,8 +14,8 @@ service Query {
     option (google.api.http).get = "/custom/pylons/addr_from_pub_key/{hex_pub_key}";
   }
 
-  // CheckGoogleIAPOrder check if google iap order is given to user with purchase token
-  rpc CheckGoogleIAPOrder(CheckGoogleIAPOrderRequest) returns (CheckGoogleIAPOrderResponse){
+  // CheckGoogleIapOrder check if google iap order is given to user with purchase token
+  rpc CheckGoogleIapOrder(CheckGoogleIapOrderRequest) returns (CheckGoogleIapOrderResponse){
     option (google.api.http).get = "/custom/pylons/check_google_iap_order/{purchaseToken}";
   }
 
@@ -113,11 +113,11 @@ message AddrFromPubKeyResponse {
   string Bech32Addr = 1;
 }
 
-message CheckGoogleIAPOrderRequest {
+message CheckGoogleIapOrderRequest {
   string purchaseToken = 1;
 }
 
-message CheckGoogleIAPOrderResponse {
+message CheckGoogleIapOrderResponse {
   string purchaseToken = 1;
   bool exist = 2;
 }
@@ -183,6 +183,7 @@ message GetRecipeResponse {
   int64 BlockInterval = 10;
   string Sender = 11;
   bool Disabled = 12;
+  string ExtraInfo = 13;
 }
 
 

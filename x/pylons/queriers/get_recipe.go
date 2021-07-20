@@ -34,6 +34,7 @@ func (querier *querierServer) GetRecipe(ctx context.Context, req *types.GetRecip
 		BlockInterval: recipe.BlockInterval,
 		Sender:        recipe.Sender,
 		Disabled:      recipe.Disabled,
+		ExtraInfo:     recipe.ExtraInfo,
 	}, nil
 }
 

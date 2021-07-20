@@ -18,6 +18,10 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(MsgCreateRecipe{}, "pylons/CreateRecipe", nil)
 	cdc.RegisterConcrete(MsgUpdateRecipe{}, "pylons/UpdateRecipe", nil)
 	cdc.RegisterConcrete(MsgExecuteRecipe{}, "pylons/ExecuteRecipe", nil)
+	cdc.RegisterConcrete(MsgStripeCheckout{}, "pylons/StripeCheckout", nil)
+	cdc.RegisterConcrete(MsgStripeCreateProduct{}, "pylons/StripeCreateProduct", nil)
+	cdc.RegisterConcrete(MsgStripeCreatePrice{}, "pylons/StripeCreatePrice", nil)
+	cdc.RegisterConcrete(MsgStripeCreateSku{}, "pylons/StripeCreateSku", nil)
 	cdc.RegisterConcrete(MsgCheckExecution{}, "pylons/CheckExecution", nil)
 	cdc.RegisterConcrete(MsgEnableRecipe{}, "pylons/EnableRecipe", nil)
 	cdc.RegisterConcrete(MsgDisableRecipe{}, "pylons/DisableRecipe", nil)
@@ -27,6 +31,7 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(MsgFulfillTrade{}, "pylons/FulfillTrade", nil)
 	cdc.RegisterConcrete(MsgEnableTrade{}, "pylons/EnableTrade", nil)
 	cdc.RegisterConcrete(MsgDisableTrade{}, "pylons/DisableTrade", nil)
+	cdc.RegisterConcrete(MsgStripeCreatePaymentIntent{}, "pylons/StripeCreatePaymentIntent", nil)
 
 	cdc.RegisterConcrete(CoinOutput{}, "pylons/Recipe/CoinOutput", nil)
 	cdc.RegisterConcrete(ItemModifyOutput{}, "pylons/Recipe/ItemModifyOutput", nil)
@@ -46,6 +51,10 @@ func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 		&MsgCreateRecipe{},
 		&MsgUpdateRecipe{},
 		&MsgExecuteRecipe{},
+		&MsgStripeCheckout{},
+		&MsgStripeCreateProduct{},
+		&MsgStripeCreatePrice{},
+		&MsgStripeCreateSku{},
 		&MsgDisableRecipe{},
 		&MsgEnableRecipe{},
 		&MsgCheckExecution{},

@@ -87,7 +87,7 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 	}
 	pylonsQueryCmd.AddCommand(
 		query.GetPylonsBalance(),
-		query.CheckGoogleIAPOrder(),
+		query.CheckGoogleIapOrder(),
 		query.GetCookbook(),
 		query.GetExecution(),
 		query.GetItem(),

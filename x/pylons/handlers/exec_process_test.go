@@ -8,6 +8,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -108,7 +109,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 
 	knifeMergeRecipe := MockPopularRecipe(Rcp2BlockDelayedKnifeMerge, tci,
-		"knife merge recipe", cbData.CookbookID, sender1)
+		"knife merge recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "card")
 
 	shieldMergeRecipe := MockRecipe(
 		tci, "shield merge recipe",
@@ -160,6 +161,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 		desiredError string
 		showError    bool
 	}{
+
 		"correct same item merge recipe": {
 			itemIDs:      []string{initItemIDs[0], initItemIDs[1]},
 			rcpID:        knifeMergeRecipe.RecipeID,
@@ -240,7 +242,7 @@ func TestSetMatchedItemsFromExecMsg(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
@@ -296,7 +298,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	genItemInputList := types.GenItemInputList("Raichu")
 	genEntries := types.GenEntries("wood", "Raichu")
 	genOneOutput := types.GenOneOutput("wood", "Raichu")
-
+	genSkuString := types.GenExtraInfo("stripe_sku_id", config.Config.StripeConfig.StripeSkuID)
 	exmpRcpMsg := types.NewMsgCreateRecipe("name", cbData.CookbookID, "exmplRcp-0001", "this has to meet character limits",
 		genCoinInputList,
 		genItemInputList,
@@ -304,11 +306,11 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 		genOneOutput,
 		0,
 		sender1.String(),
+		genSkuString,
 	)
 
 	_, err = tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &exmpRcpMsg)
 	require.True(t, err == nil, err)
-
 	cases := map[string]struct {
 		itemIDs      []string
 		rcpID        string
@@ -326,7 +328,7 @@ func TestGenerateCelEnvVarFromInputItems(t *testing.T) {
 	}
 	for testName, tc := range cases {
 		t.Run(testName, func(t *testing.T) {
-			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), tc.itemIDs)
+			msg := types.NewMsgExecuteRecipe(tc.rcpID, tc.sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			rcp, err := tci.PlnK.GetRecipe(tci.Ctx, msg.RecipeID)
 			require.NoError(t, err)
 			p := ExecProcess{ctx: tci.Ctx, keeper: tci.PlnK, recipe: rcp}
