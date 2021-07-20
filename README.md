@@ -28,6 +28,12 @@ make init_accounts_local
 pylonsd start
 ```
 
+
+## Leverage docker compose to set up a test environment
+```shell
+METEOR_SETTINGS=$(cat settings.json) docker-compose -f docker-compose-starport.yml up -d
+```
+
 ## Documentation
 To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md).  To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_sdk) project. 
 
