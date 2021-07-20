@@ -153,12 +153,6 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 		return nil, errInternal(err)
 	}
 
-	// Unlock trade creator's coins
-	err = srv.UnlockCoin(sdkCtx, types.NewLockedCoin(tradeSender, trade.CoinOutputs))
-	if err != nil {
-		return nil, errInternal(err)
-	}
-
 	var isStripePayment = false
 	for _, inp := range trade.CoinInputs {
 
@@ -191,6 +185,14 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 			isStripePayment = true
 		}
 
+	}
+
+	if isStripePayment == false {
+		// Unlock trade creator's coins
+		err = srv.UnlockCoin(sdkCtx, types.NewLockedCoin(tradeSender, trade.CoinOutputs))
+		if err != nil {
+			return nil, errInternal(err)
+		}
 	}
 
 	inputCoins := types.CoinInputList(trade.CoinInputs).ToCoins()
@@ -228,11 +230,16 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 		refreshedOutputItems = append(refreshedOutputItems, storedItem)
 	}
 
-	//if(isStripePayment == false){
-	// ----------------- handle coin interaction ----------------------
-	inputPylonsAmount := inputCoins.AmountOf(types.Pylon)
-	outputPylonsAmount := trade.CoinOutputs.AmountOf(types.Pylon)
-	totalPylonsAmount := inputPylonsAmount.Int64() + outputPylonsAmount.Int64()
+	totalPylonsAmount := int64(0)
+	inputPylonsAmount := sdk.ZeroInt()
+	outputPylonsAmount := sdk.ZeroInt()
+
+	if isStripePayment == false {
+		// ----------------- handle coin interaction ----------------------
+		inputPylonsAmount = inputCoins.AmountOf(types.Pylon)
+		outputPylonsAmount = trade.CoinOutputs.AmountOf(types.Pylon)
+		totalPylonsAmount = inputPylonsAmount.Int64() + outputPylonsAmount.Int64()
+	}
 
 	// Select bigger one between total additional fee and total pylons amount
 	tradePercent := config.Config.Fee.PylonsTradePercent
@@ -258,23 +265,23 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	if err != nil && isStripePayment == false {
 		return nil, errInternal(err)
 	}
-	senderFee := totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
-	if senderFee != 0 && isStripePayment == false {
-		// sender process fee after receiving coins from trade.Sender
-		err = keeper.SendCoins(srv.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
-		if err != nil {
-			return nil, errInternal(err)
-		}
-	}
-
-	// trade acceptor to trade creator the coin input
-	// Send input coin from fullfiller to sender (trade creator)
+	senderFee := int64(0)
 	if isStripePayment == false {
+		senderFee = totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
+		if senderFee != 0 {
+			// sender process fee after receiving coins from trade.Sender
+			err = keeper.SendCoins(srv.Keeper, sdkCtx, sender, pylonsLLCAddress, types.NewPylon(senderFee))
+			if err != nil {
+				return nil, errInternal(err)
+			}
+		}
+
+		// trade acceptor to trade creator the coin input
+		// Send input coin from fullfiller to sender (trade creator)
 		err = keeper.SendCoins(srv.Keeper, sdkCtx, sender, tradeSender, inputCoins)
 		if err != nil {
 			return nil, errInternal(err)
 		}
-
 	}
 
 	fulfillerFee := totalFee - senderFee
@@ -287,13 +294,15 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	totalFeeForCBOwners := totalFee * config.Config.Fee.ItemTransferCookbookOwnerProfitPercent / 100
-
+	feeForCB := int64(0)
 	for _, item := range refreshedOutputItems {
 
 		if totalItemTransferFee == 0 && isStripePayment == false {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}
-		feeForCB := totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
+		if isStripePayment == false {
+			feeForCB = totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
+		}
 
 		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 		if err != nil && isStripePayment == false {

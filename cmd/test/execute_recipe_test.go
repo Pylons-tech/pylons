@@ -57,7 +57,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			execMsg := types.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, tc.itemIDs)
+			execMsg := types.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", tc.itemIDs)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, rcpExecutorKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)

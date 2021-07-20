@@ -29,6 +29,7 @@ func ActiveListCookbook() *cobra.Command {
 			}
 
 			res, err := queryClient.ActiveListCookbook(cmd.Context(), cookbookReq)
+			
 			if err != nil {
 				return err
 			}

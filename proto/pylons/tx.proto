@@ -255,10 +255,10 @@ message MsgFiatItemResponse  {
 // MsgFulfillTrade defines a FulfillTrade message
 message MsgFulfillTrade {
   string TradeID = 1;
-  string Sender = 2;
-  string PaymentId = 3; 
-  string PaymentMethod = 4;
-  repeated string ItemIDs = 5;
+  string Sender = 2; 
+  repeated string ItemIDs = 3;
+  string PaymentId = 4; 
+  string PaymentMethod = 5;
 }
 
 

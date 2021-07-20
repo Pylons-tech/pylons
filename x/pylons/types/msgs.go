@@ -1219,11 +1219,13 @@ func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgFulfillTrade a constructor for FulfillTrade msg
-func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string) MsgFulfillTrade {
+func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string, paymentId string, paymentMethod string) MsgFulfillTrade {
 	return MsgFulfillTrade{
-		TradeID: TradeID,
-		Sender:  sender,
-		ItemIDs: itemIDs,
+		TradeID:       TradeID,
+		Sender:        sender,
+		ItemIDs:       itemIDs,
+		PaymentId:     paymentId,
+		PaymentMethod: paymentMethod,
 	}
 }
 
