@@ -24,7 +24,7 @@ services:
       - data:/data/db
 
   big-dipper:
-    image: rafaeldeandrade/big-dipper:0.0.3
+    image: rafaeldeandrade/big-dipper:v0.0.3
     container_name: explorer
     hostname: explorer
     ports:
