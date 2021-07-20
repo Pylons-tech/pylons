@@ -1,0 +1,58 @@
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+# Start from the latest starport image
+FROM starport/cli:0.17.0 as build
+
+# Add Maintainer Info
+LABEL maintainer="Rafael de Andrade <rafael.andrade@tendermint.com>"
+
+USER root
+
+# enable faster module downloading.
+
+ENV GOPROXY https://proxy.golang.org
+
+COPY ./app          ./app
+COPY ./cmd          ./cmd
+COPY ./docs         ./docs
+COPY ./proto        ./proto
+COPY ./x            ./x
+COPY ./config.yml   ./config.yml
+COPY ./go.mod       ./go.mod
+COPY ./vue          ./vue
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN starport chain build --release
+RUN starport chain init
+RUN tar -xzvf /apps/release/pylons_linux_amd64.tar.gz
+
+
+## Node
+FROM ubuntu:21.04 as node
+
+ENV PYLONSHOME="/root/.pylons/"
+
+COPY --from=build /apps/pylonsd /bin/pylonsd
+COPY --from=build /root/.pylons $PYLONSHOME
+
+
+CMD pylonsd --home $PYLONSHOME start
+
+## Ui
+FROM node:latest
+
+RUN apt update && apt install -y python3
+
+RUN alias python="/usr/bin/python3.5"
+
+RUN useradd -ms /bin/bash pylons
+
+USER pylons
+
+WORKDIR /home/pylons
+
+COPY --from=build /apps/vue/* /home/pylons/
+
+RUN npm i
+RUN npm run build
+
+CMD /bin/bash
