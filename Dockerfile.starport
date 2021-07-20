@@ -18,7 +18,6 @@ COPY ./proto        ./proto
 COPY ./x            ./x
 COPY ./config.yml   ./config.yml
 COPY ./go.mod       ./go.mod
-COPY ./vue          ./vue
 
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN starport chain build --release
