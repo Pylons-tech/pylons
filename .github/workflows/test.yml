@@ -1,11 +1,7 @@
 name: Tests
 
 # Tests runs unit tests 
-<<<<<<< HEAD
 # This workflow is run on pushed to [develop* master*] and every Pull Requeset where a .go, .mod, .sum have been changed
-=======
-# This workflow is run on pushed to [develop master] and every Pull Requeset where a .go, .mod, .sum have been changed
->>>>>>> 8b410629 (Create test.yml)
 
 on:
   pull_request:
@@ -15,53 +11,36 @@ on:
       - master
 
 jobs:
-<<<<<<< HEAD
   build:
-=======
-  build-and-test:
->>>>>>> 8b410629 (Create test.yml)
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        go-arch: ["amd64", "arm",  "arm64"]
-    steps:
-    - uses: actions/checkout@v2
+     runs-on: ubuntu-latest
+     strategy:
+       matrix:
+         go-arch: [ "amd64", "arm",  "arm64" ]
+     steps:
+       - uses: actions/checkout@v2
+       - name: Set up Go
+         uses: actions/setup-go@v2.1.3
+         with:
+           go-version: 1.16
 
-    - name: Set up Go
-      uses: actions/setup-go@v2.1.3
-      with:
-        go-version: 1.16
-        
-    - uses: technote-space/get-diff-action@v4
-<<<<<<< HEAD
-<<<<<<< HEAD
-      id: git_diff
-=======
-      id: git diff
->>>>>>> 8b410629 (Create test.yml)
-=======
-      id: git_diff
->>>>>>> 655fac19 (fix test.yml syntax error)
-      with:
-        PATTERNS: |
-          **/**.go
-          go.mod
-          go.sum
-<<<<<<< HEAD
-    - name: Build
-      run: GOARCH=${{matrix.go-arch}} make build-binary
-
+       - uses: technote-space/get-diff-action@v4
+         id: git_diff
+         with:
+           PATTERNS: |
+             **/**.go
+             go.mod
+             go.sum
+       - name: Build
+         run: GOARCH=${{matrix.go-arch}} make build-binary
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Set up Go
         uses: actions/setup-go@v2.1.3
         with:
           go-version: 1.16
-
       - uses: technote-space/get-diff-action@v4
         id: git_diff
         with:
@@ -70,14 +49,6 @@ jobs:
             go.mod
             go.sum
       - name: unit-test
-        run:  make unit_tests
+        run: make unit_tests
       - name: fixture-unit-tests
         run: make fixture_unit_tests
-=======
-
-    - name: Build
-      run: GOARCH=${{matrix.go-arch}} make build-binary
-
-    - name: Unit Test
-      run: GOARCH=${{matrix.go-arch}}  make unit_tests
->>>>>>> 8b410629 (Create test.yml)
