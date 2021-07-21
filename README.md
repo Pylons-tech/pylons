@@ -37,7 +37,7 @@ We could potentially replace this "# Pylons" header with a custom image (see htt
   <a href="https://discord.gg/3sbWqGsp">
     <img alt="Discord" src="https://img.shields.io/discord/425895893380628490.svg" />
   </a>
-    <img alt="Build Status" src="https://github.com/Pylons-tech/pylons/workflows/Test//badge.svg" />
+    <img alt="Build Status" src="https://github.com/Pylons-tech/pylons/workflows/Test/badge.svg" />
     <img alt="Lint Status" src="https://github.com/Pylons-tech/pylons/workflows/Lint/badge.svg" />
 </div>
 
