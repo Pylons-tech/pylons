@@ -79,7 +79,7 @@ Pylons is maintained by [Tendermint](https://tendermint.com/) and [Pylons LLC](h
 
 * [Discord](https://discord.gg/dZgUGy32j7)
 * [Twitter](https://twitter.com/pylonstech)
-* [Jobs](https://tendermint.com/careers/)
+* [Jobs](https://www.linkedin.com/company/pylons/jobs/)
 
 ## Contributing 
 
