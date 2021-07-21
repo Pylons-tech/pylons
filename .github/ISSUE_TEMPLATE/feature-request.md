@@ -23,9 +23,13 @@ What benefits does Pylons stand to gain by including this feature?
 Are there any disadvantages of including this feature? -->
 
 ## Proposal
+
 <!-- Detailed description of requirements of implementation -->
+
 ____
+
 #### For Admin Use
+
 - [ ] Not duplicate issue
 - [ ] Appropriate labels applied
 - [ ] Appropriate contributors tagged
