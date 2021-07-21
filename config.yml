@@ -1,0 +1,36 @@
+genesis:
+  chain_id: "pylons"
+
+build:
+  binary: "pylonsd"
+
+init:
+  home: "$HOME/.pylons"
+  config:
+    api:
+      swagger: true
+
+accounts:
+  - name: michael
+    coins: [ "10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin" ]
+    mnemonic: "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
+  - name: eugen
+    coins: [ "10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin" ]
+    mnemonic: "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
+  - name: node0
+    coins: ["10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin"]
+    mnemonic: "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
+
+validator:
+  name: node0
+  staked: "100000000stake"
+
+client:
+#  vuex:
+#    path: "vue/src/store"
+  openapi:
+    path: "docs/static/openapi.yml"
+
+faucet:
+  name: michael
+  coins: [ "100pylons" ]

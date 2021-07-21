@@ -2,8 +2,11 @@ package app
 
 import (
 	"io"
+	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/Pylons-tech/pylons/docs"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
@@ -84,6 +87,8 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/handlers"
 	pylonskeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	pylonstypes "github.com/Pylons-tech/pylons/x/pylons/types"
+
+	"github.com/tendermint/spm/openapiconsole"
 )
 
 const Name = "pylons"
@@ -540,6 +545,10 @@ func (app *PylonsApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.API
 	// Register legacy and grpc-gateway routes for all modules.
 	ModuleBasics.RegisterRESTRoutes(clientCtx, apiSvr.Router)
 	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
+
+	// register app's OpenAPI routes.
+	apiSvr.Router.Handle("/static/openapi.yml", http.FileServer(http.FS(docs.Docs)))
+	apiSvr.Router.HandleFunc("/", openapiconsole.Handler(Name, "/static/openapi.yml"))
 }
 
 // RegisterTxService implements the Application.RegisterTxService method.
