@@ -1,11 +1,12 @@
 package app
 
 import (
-	"github.com/Pylons-tech/pylons/docs"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/Pylons-tech/pylons/docs"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
