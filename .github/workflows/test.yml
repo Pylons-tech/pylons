@@ -56,4 +56,3 @@ jobs:
         run:  make unit_tests
       - name: fixture-unit-tests
         run: make fixture_unit_tests
-
