@@ -363,7 +363,7 @@ func TestHandlerMsgFulfillTrade(t *testing.T) {
 			ctResult, err := tci.PlnH.CreateTrade(sdk.WrapSDKContext(tci.Ctx), &ctMsg)
 			require.NoError(t, err)
 			require.True(t, len(ctResult.TradeID) > 0)
-			ffMsg := types.NewMsgFulfillTrade(ctResult.TradeID, tc.fulfiller.String(), tc.fulfillInputItemIDs)
+			ffMsg := types.NewMsgFulfillTrade(ctResult.TradeID, tc.fulfiller.String(), tc.fulfillInputItemIDs, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
 			ffResult, err := tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 			if !tc.showError {
 				require.NoError(t, err)
