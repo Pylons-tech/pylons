@@ -25,3 +25,18 @@ func listExecutionsHandler(cliCtx client.Context, storeName string) http.Handler
 		rest.PostProcessResponse(w, cliCtx, res)
 	}
 }
+
+func listRecipeExecutionsHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		ownerKey := vars[ownerKeyName]
+
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/list_recipe_executions/%s", storeName, ownerKey), nil)
+		if err != nil {
+			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
+			return
+		}
+
+		rest.PostProcessResponse(w, cliCtx, res)
+	}
+}

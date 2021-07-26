@@ -109,6 +109,8 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		listExecutionsHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_executions/{%s}", storeName, senderKey),
 		listExecutionsHandler(cliCtx, storeName)).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/%s/list_recipe_executions/{%s}", storeName, ownerKeyName),
+		listRecipeExecutionsHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/get_locked_coin_details", storeName),
 		getLockedCoinDetailsHandler(cliCtx, storeName)).Methods("GET")
