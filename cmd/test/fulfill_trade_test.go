@@ -6,11 +6,14 @@ import (
 	originT "testing"
 	"time"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/gogo/protobuf/proto"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
+
+	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 )
 
 type FulfillTradeTestCase struct {
@@ -199,7 +202,7 @@ func RunSingleFulfillTradeTestCase(tcNum int, tc FulfillTradeTestCase, t *testin
 		itemIDs = []string{MockItemGUID(useCBID, tradeFulfillerKey, tc.inputItemName, t)}
 	}
 
-	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerBalance.Address, itemIDs, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
+	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerBalance.Address, itemIDs)
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 	if err != nil {
 		TxBroadcastErrorExpected(txhash, err, tc.desiredError, t)
