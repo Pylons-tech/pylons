@@ -93,7 +93,6 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 		query.GetTrade(),
 		query.GetRecipe(),
 		query.ListCookbook(),
-		query.ActiveListCookbook(),
 		query.GetLockedCoins(),
 		query.GetLockedCoinDetails(),
 		query.ListRecipes(),

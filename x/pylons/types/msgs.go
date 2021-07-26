@@ -1155,45 +1155,36 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not providing anything in exchange of the trade: empty outputs")
 	}
 
-	var isStripePayment = false
-	for _, inp := range msg.CoinInputs {
-		if inp.Coin == config.Config.StripeConfig.Currency {
-			isStripePayment = true
+	if msg.CoinOutputs != nil {
+		for _, coinOutput := range msg.CoinOutputs {
+			if !coinOutput.IsPositive() {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
+			}
 		}
+		tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 	}
 
-	if isStripePayment == false {
-		if msg.CoinOutputs != nil {
-			for _, coinOutput := range msg.CoinOutputs {
-				if !coinOutput.IsPositive() {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
-				}
+	if msg.ItemInputs == nil && msg.CoinInputs == nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
+	}
+
+	if msg.CoinInputs != nil {
+		for _, coinInput := range msg.CoinInputs {
+			if coinInput.Count == 0 {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
 			}
-			tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 		}
+		tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
+	}
 
-		if msg.ItemInputs == nil && msg.CoinInputs == nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
-		}
+	if tradePylonAmount < config.Config.Fee.MinTradePrice {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
+	}
 
-		if msg.CoinInputs != nil {
-			for _, coinInput := range msg.CoinInputs {
-				if coinInput.Count == 0 {
-					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
-				}
-			}
-			tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
-		}
-
-		if tradePylonAmount < config.Config.Fee.MinTradePrice {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
-		}
-
-		if msg.ItemInputs != nil {
-			err := TradeItemInputList(msg.ItemInputs).Validate()
-			if err != nil {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-			}
+	if msg.ItemInputs != nil {
+		err := TradeItemInputList(msg.ItemInputs).Validate()
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
 
@@ -1219,13 +1210,11 @@ func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgFulfillTrade a constructor for FulfillTrade msg
-func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string, paymentId string, paymentMethod string) MsgFulfillTrade {
+func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string) MsgFulfillTrade {
 	return MsgFulfillTrade{
-		TradeID:       TradeID,
-		Sender:        sender,
-		ItemIDs:       itemIDs,
-		PaymentId:     paymentId,
-		PaymentMethod: paymentMethod,
+		TradeID: TradeID,
+		Sender:  sender,
+		ItemIDs: itemIDs,
 	}
 }
 

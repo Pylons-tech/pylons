@@ -1261,7 +1261,7 @@ func FulfillTradeMsgFromRef(ref string, t *testing.T) types.MsgFulfillTrade {
 	t.MustNil(err, "error parsing sender address")
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
 
-	return types.NewMsgFulfillTrade(trdType.TradeID, trdType.Sender, ItemIDs, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
+	return types.NewMsgFulfillTrade(trdType.TradeID, trdType.Sender, ItemIDs)
 }
 
 // RunFulfillTrade is a function to fulfill trade

@@ -638,8 +638,6 @@ func TestCoinLock(t *testing.T) {
 					tradeData.TradeID,
 					account2.String(),
 					[]string{},
-					"pi_1DoShv2eZvKYlo2CqsROyFun", 
-					"pm_card_visa",
 				)
 				_, err = tci.PlnH.FulfillTrade(sdk.WrapSDKContext(tci.Ctx), &ffMsg)
 

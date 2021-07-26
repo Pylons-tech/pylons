@@ -11,9 +11,10 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
+	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 )
 
 type CoinLockTestCase struct {
@@ -129,7 +130,7 @@ func RunSingleTradeCoinLockTestCase(tcNum int, tc CoinLockTestCase, t *testing.T
 	}
 
 	tradeFulfillerSdkAddress := GetSDKAddressFromKey(tradeFulfillerKey, t)
-	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress.String(), []string{}, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
+	ffTrdMsg := types.NewMsgFulfillTrade(trdGUID, tradeFulfillerSdkAddress.String(), []string{})
 	txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &ffTrdMsg, tradeFulfillerKey, false)
 
 	t.MustNil(err, "error text tx with msg with nonce")
