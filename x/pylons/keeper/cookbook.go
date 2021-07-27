@@ -28,17 +28,42 @@ func (k Keeper) GetCookbook(ctx sdk.Context, index string) (val types.Cookbook, 
 }
 
 
+// GetAllCookbook returns all cookbook
+func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer func(iterator sdk.Iterator) {
+		err := iterator.Close()
+		if err != nil {}
+	}(iterator)
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Cookbook
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		list = append(list, val)
+	}
+
+	return
+}
+
+
 // GetCookbooksByCreator returns cookbooks owned by a specific creator
-func (k Keeper) GetCookbooksByCreator(ctx sdk.Context, creator sdk.AccAddress) []types.Cookbook {
-	var cookbooks []types.Cookbook
+func (k Keeper) GetCookbooksByCreator(ctx sdk.Context, creator sdk.AccAddress) (list []types.Cookbook) {
 	iterator := sdk.KVStorePrefixIterator(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
+
+	defer func(iterator sdk.Iterator) {
+		err := iterator.Close()
+		if err != nil {}
+	}(iterator)
+
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Cookbook
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
 		if strings.Contains(val.Creator, creator.String()) {
-			cookbooks = append(cookbooks, val)
+			list = append(list, val)
 		}
 	}
 
-	return cookbooks
+	return
 }
