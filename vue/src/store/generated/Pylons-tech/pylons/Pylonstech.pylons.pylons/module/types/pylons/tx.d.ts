@@ -1,6 +1,42 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Coin } from '../cosmos/base/v1beta1/coin';
+import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgCreateRecipe {
+    creator: string;
+    index: string;
+    nodeVersion: string;
+    cookbookID: string;
+    name: string;
+    coinInputs: Coin[];
+    itemInputs: ItemInput[];
+    entries: EntriesList | undefined;
+    Outputs: WeightedOutputs[];
+    description: string;
+    blockInterval: number;
+    enabled: boolean;
+    extraInfo: string;
+}
+export interface MsgCreateRecipeResponse {
+}
+export interface MsgUpdateRecipe {
+    creator: string;
+    index: string;
+    nodeVersion: string;
+    cookbookID: string;
+    name: string;
+    coinInputs: Coin[];
+    itemInputs: ItemInput[];
+    entries: EntriesList | undefined;
+    Outputs: WeightedOutputs[];
+    description: string;
+    blockInterval: number;
+    enabled: boolean;
+    extraInfo: string;
+}
+export interface MsgUpdateRecipeResponse {
+}
 export interface MsgCreateCookbook {
     creator: string;
     index: string;
@@ -31,6 +67,34 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
+export declare const MsgCreateRecipe: {
+    encode(message: MsgCreateRecipe, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateRecipe;
+    fromJSON(object: any): MsgCreateRecipe;
+    toJSON(message: MsgCreateRecipe): unknown;
+    fromPartial(object: DeepPartial<MsgCreateRecipe>): MsgCreateRecipe;
+};
+export declare const MsgCreateRecipeResponse: {
+    encode(_: MsgCreateRecipeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateRecipeResponse;
+    fromJSON(_: any): MsgCreateRecipeResponse;
+    toJSON(_: MsgCreateRecipeResponse): unknown;
+    fromPartial(_: DeepPartial<MsgCreateRecipeResponse>): MsgCreateRecipeResponse;
+};
+export declare const MsgUpdateRecipe: {
+    encode(message: MsgUpdateRecipe, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateRecipe;
+    fromJSON(object: any): MsgUpdateRecipe;
+    toJSON(message: MsgUpdateRecipe): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateRecipe>): MsgUpdateRecipe;
+};
+export declare const MsgUpdateRecipeResponse: {
+    encode(_: MsgUpdateRecipeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateRecipeResponse;
+    fromJSON(_: any): MsgUpdateRecipeResponse;
+    toJSON(_: MsgUpdateRecipeResponse): unknown;
+    fromPartial(_: DeepPartial<MsgUpdateRecipeResponse>): MsgUpdateRecipeResponse;
+};
 export declare const MsgCreateCookbook: {
     encode(message: MsgCreateCookbook, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCreateCookbook;
@@ -62,12 +126,16 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
+    CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;
+    UpdateRecipe(request: MsgUpdateRecipe): Promise<MsgUpdateRecipeResponse>;
     CreateCookbook(request: MsgCreateCookbook): Promise<MsgCreateCookbookResponse>;
     UpdateCookbook(request: MsgUpdateCookbook): Promise<MsgUpdateCookbookResponse>;
 }
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
+    CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;
+    UpdateRecipe(request: MsgUpdateRecipe): Promise<MsgUpdateRecipeResponse>;
     CreateCookbook(request: MsgCreateCookbook): Promise<MsgCreateCookbookResponse>;
     UpdateCookbook(request: MsgUpdateCookbook): Promise<MsgUpdateCookbookResponse>;
 }

@@ -1,7 +1,110 @@
 /* eslint-disable */
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
+const baseQueryGetRecipeRequest = { index: '' };
+export const QueryGetRecipeRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.index !== '') {
+            writer.uint32(10).string(message.index);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetRecipeRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.index = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetRecipeRequest };
+        if (object.index !== undefined && object.index !== null) {
+            message.index = String(object.index);
+        }
+        else {
+            message.index = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.index !== undefined && (obj.index = message.index);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetRecipeRequest };
+        if (object.index !== undefined && object.index !== null) {
+            message.index = object.index;
+        }
+        else {
+            message.index = '';
+        }
+        return message;
+    }
+};
+const baseQueryGetRecipeResponse = {};
+export const QueryGetRecipeResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.Recipe !== undefined) {
+            Recipe.encode(message.Recipe, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetRecipeResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Recipe = Recipe.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetRecipeResponse };
+        if (object.Recipe !== undefined && object.Recipe !== null) {
+            message.Recipe = Recipe.fromJSON(object.Recipe);
+        }
+        else {
+            message.Recipe = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Recipe !== undefined && (obj.Recipe = message.Recipe ? Recipe.toJSON(message.Recipe) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetRecipeResponse };
+        if (object.Recipe !== undefined && object.Recipe !== null) {
+            message.Recipe = Recipe.fromPartial(object.Recipe);
+        }
+        else {
+            message.Recipe = undefined;
+        }
+        return message;
+    }
+};
 const baseQueryListCookbookByCreatorRequest = { creator: '' };
 export const QueryListCookbookByCreatorRequest = {
     encode(message, writer = Writer.create()) {
@@ -215,6 +318,11 @@ export const QueryGetCookbookResponse = {
 export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
+    }
+    Recipe(request) {
+        const data = QueryGetRecipeRequest.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Recipe', data);
+        return promise.then((data) => QueryGetRecipeResponse.decode(new Reader(data)));
     }
     ListCookbookByCreator(request) {
         const data = QueryListCookbookByCreatorRequest.encode(request).finish();

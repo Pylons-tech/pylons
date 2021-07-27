@@ -3,7 +3,6 @@ module github.com/Pylons-tech/pylons
 go 1.16
 
 require (
-	github.com/Workiva/go-datastructures v1.0.52
 	github.com/cosmos/cosmos-sdk v0.42.6
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2

@@ -164,5 +164,19 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryRecipe
+         * @summary Queries a recipe by index.
+         * @request GET:/pylons/recipe/{index}
+         */
+        this.queryRecipe = (index, params = {}) => this.request({
+            path: `/pylons/recipe/${index}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

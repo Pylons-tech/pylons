@@ -6,6 +6,9 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
+	types "github.com/cosmos/cosmos-sdk/types"
+	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
@@ -28,6 +31,358 @@ var _ = math.Inf
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // this line is used by starport scaffolding # proto/tx/message
+type MsgCreateRecipe struct {
+	Creator       string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Index         string                                   `protobuf:"bytes,2,opt,name=index,proto3" json:"index,omitempty"`
+	NodeVersion   string                                   `protobuf:"bytes,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
+	CookbookID    string                                   `protobuf:"bytes,4,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	Name          string                                   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	CoinInputs    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,6,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
+	ItemInputs    []ItemInput                              `protobuf:"bytes,7,rep,name=itemInputs,proto3" json:"itemInputs"`
+	Entries       EntriesList                              `protobuf:"bytes,8,opt,name=entries,proto3" json:"entries"`
+	Outputs       []WeightedOutputs                        `protobuf:"bytes,9,rep,name=Outputs,proto3" json:"Outputs"`
+	Description   string                                   `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
+	BlockInterval uint64                                   `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+}
+
+func (m *MsgCreateRecipe) Reset()         { *m = MsgCreateRecipe{} }
+func (m *MsgCreateRecipe) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateRecipe) ProtoMessage()    {}
+func (*MsgCreateRecipe) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{0}
+}
+func (m *MsgCreateRecipe) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateRecipe) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateRecipe.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateRecipe) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateRecipe.Merge(m, src)
+}
+func (m *MsgCreateRecipe) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateRecipe) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateRecipe.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateRecipe proto.InternalMessageInfo
+
+func (m *MsgCreateRecipe) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgCreateRecipe) GetIndex() string {
+	if m != nil {
+		return m.Index
+	}
+	return ""
+}
+
+func (m *MsgCreateRecipe) GetNodeVersion() string {
+	if m != nil {
+		return m.NodeVersion
+	}
+	return ""
+}
+
+func (m *MsgCreateRecipe) GetCookbookID() string {
+	if m != nil {
+		return m.CookbookID
+	}
+	return ""
+}
+
+func (m *MsgCreateRecipe) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *MsgCreateRecipe) GetCoinInputs() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.CoinInputs
+	}
+	return nil
+}
+
+func (m *MsgCreateRecipe) GetItemInputs() []ItemInput {
+	if m != nil {
+		return m.ItemInputs
+	}
+	return nil
+}
+
+func (m *MsgCreateRecipe) GetEntries() EntriesList {
+	if m != nil {
+		return m.Entries
+	}
+	return EntriesList{}
+}
+
+func (m *MsgCreateRecipe) GetOutputs() []WeightedOutputs {
+	if m != nil {
+		return m.Outputs
+	}
+	return nil
+}
+
+func (m *MsgCreateRecipe) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *MsgCreateRecipe) GetBlockInterval() uint64 {
+	if m != nil {
+		return m.BlockInterval
+	}
+	return 0
+}
+
+func (m *MsgCreateRecipe) GetEnabled() bool {
+	if m != nil {
+		return m.Enabled
+	}
+	return false
+}
+
+func (m *MsgCreateRecipe) GetExtraInfo() string {
+	if m != nil {
+		return m.ExtraInfo
+	}
+	return ""
+}
+
+type MsgCreateRecipeResponse struct {
+}
+
+func (m *MsgCreateRecipeResponse) Reset()         { *m = MsgCreateRecipeResponse{} }
+func (m *MsgCreateRecipeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCreateRecipeResponse) ProtoMessage()    {}
+func (*MsgCreateRecipeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{1}
+}
+func (m *MsgCreateRecipeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgCreateRecipeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgCreateRecipeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgCreateRecipeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCreateRecipeResponse.Merge(m, src)
+}
+func (m *MsgCreateRecipeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgCreateRecipeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCreateRecipeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgCreateRecipeResponse proto.InternalMessageInfo
+
+type MsgUpdateRecipe struct {
+	Creator       string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	Index         string                                   `protobuf:"bytes,2,opt,name=index,proto3" json:"index,omitempty"`
+	NodeVersion   string                                   `protobuf:"bytes,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
+	CookbookID    string                                   `protobuf:"bytes,4,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	Name          string                                   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
+	CoinInputs    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,6,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
+	ItemInputs    []ItemInput                              `protobuf:"bytes,7,rep,name=itemInputs,proto3" json:"itemInputs"`
+	Entries       EntriesList                              `protobuf:"bytes,8,opt,name=entries,proto3" json:"entries"`
+	Outputs       []WeightedOutputs                        `protobuf:"bytes,9,rep,name=Outputs,proto3" json:"Outputs"`
+	Description   string                                   `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
+	BlockInterval uint64                                   `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+}
+
+func (m *MsgUpdateRecipe) Reset()         { *m = MsgUpdateRecipe{} }
+func (m *MsgUpdateRecipe) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateRecipe) ProtoMessage()    {}
+func (*MsgUpdateRecipe) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{2}
+}
+func (m *MsgUpdateRecipe) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateRecipe) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateRecipe.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateRecipe) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateRecipe.Merge(m, src)
+}
+func (m *MsgUpdateRecipe) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateRecipe) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateRecipe.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateRecipe proto.InternalMessageInfo
+
+func (m *MsgUpdateRecipe) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *MsgUpdateRecipe) GetIndex() string {
+	if m != nil {
+		return m.Index
+	}
+	return ""
+}
+
+func (m *MsgUpdateRecipe) GetNodeVersion() string {
+	if m != nil {
+		return m.NodeVersion
+	}
+	return ""
+}
+
+func (m *MsgUpdateRecipe) GetCookbookID() string {
+	if m != nil {
+		return m.CookbookID
+	}
+	return ""
+}
+
+func (m *MsgUpdateRecipe) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *MsgUpdateRecipe) GetCoinInputs() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.CoinInputs
+	}
+	return nil
+}
+
+func (m *MsgUpdateRecipe) GetItemInputs() []ItemInput {
+	if m != nil {
+		return m.ItemInputs
+	}
+	return nil
+}
+
+func (m *MsgUpdateRecipe) GetEntries() EntriesList {
+	if m != nil {
+		return m.Entries
+	}
+	return EntriesList{}
+}
+
+func (m *MsgUpdateRecipe) GetOutputs() []WeightedOutputs {
+	if m != nil {
+		return m.Outputs
+	}
+	return nil
+}
+
+func (m *MsgUpdateRecipe) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *MsgUpdateRecipe) GetBlockInterval() uint64 {
+	if m != nil {
+		return m.BlockInterval
+	}
+	return 0
+}
+
+func (m *MsgUpdateRecipe) GetEnabled() bool {
+	if m != nil {
+		return m.Enabled
+	}
+	return false
+}
+
+func (m *MsgUpdateRecipe) GetExtraInfo() string {
+	if m != nil {
+		return m.ExtraInfo
+	}
+	return ""
+}
+
+type MsgUpdateRecipeResponse struct {
+}
+
+func (m *MsgUpdateRecipeResponse) Reset()         { *m = MsgUpdateRecipeResponse{} }
+func (m *MsgUpdateRecipeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUpdateRecipeResponse) ProtoMessage()    {}
+func (*MsgUpdateRecipeResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{3}
+}
+func (m *MsgUpdateRecipeResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *MsgUpdateRecipeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_MsgUpdateRecipeResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *MsgUpdateRecipeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUpdateRecipeResponse.Merge(m, src)
+}
+func (m *MsgUpdateRecipeResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *MsgUpdateRecipeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUpdateRecipeResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MsgUpdateRecipeResponse proto.InternalMessageInfo
+
 type MsgCreateCookbook struct {
 	Creator      string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Index        string `protobuf:"bytes,2,opt,name=index,proto3" json:"index,omitempty"`
@@ -46,7 +401,7 @@ func (m *MsgCreateCookbook) Reset()         { *m = MsgCreateCookbook{} }
 func (m *MsgCreateCookbook) String() string { return proto.CompactTextString(m) }
 func (*MsgCreateCookbook) ProtoMessage()    {}
 func (*MsgCreateCookbook) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d4a7b7e7ad73d5a4, []int{0}
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{4}
 }
 func (m *MsgCreateCookbook) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -159,7 +514,7 @@ func (m *MsgCreateCookbookResponse) Reset()         { *m = MsgCreateCookbookResp
 func (m *MsgCreateCookbookResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgCreateCookbookResponse) ProtoMessage()    {}
 func (*MsgCreateCookbookResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d4a7b7e7ad73d5a4, []int{1}
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{5}
 }
 func (m *MsgCreateCookbookResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -206,7 +561,7 @@ func (m *MsgUpdateCookbook) Reset()         { *m = MsgUpdateCookbook{} }
 func (m *MsgUpdateCookbook) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateCookbook) ProtoMessage()    {}
 func (*MsgUpdateCookbook) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d4a7b7e7ad73d5a4, []int{2}
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{6}
 }
 func (m *MsgUpdateCookbook) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -319,7 +674,7 @@ func (m *MsgUpdateCookbookResponse) Reset()         { *m = MsgUpdateCookbookResp
 func (m *MsgUpdateCookbookResponse) String() string { return proto.CompactTextString(m) }
 func (*MsgUpdateCookbookResponse) ProtoMessage()    {}
 func (*MsgUpdateCookbookResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d4a7b7e7ad73d5a4, []int{3}
+	return fileDescriptor_d4a7b7e7ad73d5a4, []int{7}
 }
 func (m *MsgUpdateCookbookResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -349,6 +704,10 @@ func (m *MsgUpdateCookbookResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUpdateCookbookResponse proto.InternalMessageInfo
 
 func init() {
+	proto.RegisterType((*MsgCreateRecipe)(nil), "Pylonstech.pylons.pylons.MsgCreateRecipe")
+	proto.RegisterType((*MsgCreateRecipeResponse)(nil), "Pylonstech.pylons.pylons.MsgCreateRecipeResponse")
+	proto.RegisterType((*MsgUpdateRecipe)(nil), "Pylonstech.pylons.pylons.MsgUpdateRecipe")
+	proto.RegisterType((*MsgUpdateRecipeResponse)(nil), "Pylonstech.pylons.pylons.MsgUpdateRecipeResponse")
 	proto.RegisterType((*MsgCreateCookbook)(nil), "Pylonstech.pylons.pylons.MsgCreateCookbook")
 	proto.RegisterType((*MsgCreateCookbookResponse)(nil), "Pylonstech.pylons.pylons.MsgCreateCookbookResponse")
 	proto.RegisterType((*MsgUpdateCookbook)(nil), "Pylonstech.pylons.pylons.MsgUpdateCookbook")
@@ -358,32 +717,52 @@ func init() {
 func init() { proto.RegisterFile("pylons/tx.proto", fileDescriptor_d4a7b7e7ad73d5a4) }
 
 var fileDescriptor_d4a7b7e7ad73d5a4 = []byte{
-	// 399 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x54, 0xcd, 0xca, 0x13, 0x31,
-	0x14, 0x6d, 0xbe, 0xfe, 0xa7, 0xa2, 0x18, 0x14, 0x62, 0x95, 0x61, 0xe8, 0x6a, 0x40, 0x9d, 0x82,
-	0x7d, 0x83, 0x16, 0xdd, 0x15, 0xca, 0x80, 0x2e, 0xdc, 0xcd, 0xcf, 0xa5, 0x1d, 0x3a, 0x9d, 0x1b,
-	0x92, 0xb4, 0xb4, 0x6f, 0xe1, 0x63, 0x09, 0x6e, 0xba, 0x74, 0x29, 0xed, 0xda, 0x77, 0x90, 0x64,
-	0x66, 0xb0, 0xd3, 0xfa, 0x83, 0xe0, 0xf2, 0x5b, 0x35, 0xf7, 0x9c, 0x7b, 0xee, 0x49, 0x4e, 0x3a,
-	0xa1, 0x8f, 0xc4, 0x21, 0xc3, 0x5c, 0x8d, 0xf5, 0xde, 0x17, 0x12, 0x35, 0x32, 0xbe, 0xb0, 0x80,
-	0x86, 0x78, 0xe5, 0x17, 0x5c, 0xf9, 0x33, 0x7c, 0x5a, 0xb6, 0xc6, 0x88, 0xeb, 0x08, 0x71, 0x5d,
-	0x08, 0x46, 0x5f, 0xee, 0xe8, 0xe3, 0xb9, 0x5a, 0xce, 0x24, 0x84, 0x1a, 0x66, 0x25, 0xc7, 0x38,
-	0xed, 0xc6, 0x06, 0x41, 0xc9, 0x89, 0x4b, 0xbc, 0x7e, 0x50, 0x95, 0xec, 0x09, 0x6d, 0xa7, 0x79,
-	0x02, 0x7b, 0x7e, 0x67, 0xf1, 0xa2, 0x60, 0x2e, 0x1d, 0xe4, 0x98, 0xc0, 0x07, 0x90, 0x2a, 0xc5,
-	0x9c, 0x37, 0x2d, 0x77, 0x09, 0x31, 0x46, 0x5b, 0x79, 0xb8, 0x01, 0xde, 0xb2, 0x94, 0x5d, 0x1b,
-	0x55, 0x02, 0x2a, 0x96, 0xa9, 0xd0, 0x46, 0xd5, 0x2e, 0x54, 0x17, 0x10, 0x7b, 0x41, 0xfb, 0x09,
-	0xec, 0x20, 0x43, 0x01, 0x92, 0x77, 0x2c, 0xff, 0x13, 0x30, 0xbb, 0xdc, 0x95, 0x8e, 0xdd, 0x62,
-	0x97, 0x65, 0xc9, 0x46, 0xf4, 0x81, 0xda, 0x0a, 0x81, 0x52, 0xbf, 0xdd, 0x84, 0x69, 0xc6, 0x7b,
-	0x96, 0xae, 0x61, 0xe6, 0x24, 0x99, 0x19, 0xc5, 0xfb, 0x2e, 0xf1, 0x9a, 0x41, 0x51, 0x18, 0x65,
-	0x8c, 0x4a, 0x2f, 0x40, 0x4e, 0x33, 0x8c, 0xd7, 0x9c, 0xba, 0xc4, 0x6b, 0x05, 0x35, 0xcc, 0xf8,
-	0x42, 0x1e, 0x46, 0x19, 0x24, 0x7c, 0xe0, 0x12, 0xaf, 0x17, 0x54, 0xe5, 0xe8, 0x39, 0x7d, 0x76,
-	0x13, 0x66, 0x00, 0x4a, 0x60, 0xae, 0xa0, 0x8a, 0xfa, 0xbd, 0x48, 0xee, 0xa3, 0xfe, 0x5f, 0x51,
-	0xd7, 0xc3, 0xac, 0xa2, 0x7e, 0xf3, 0x9d, 0xd0, 0xe6, 0x5c, 0x2d, 0x99, 0xa4, 0x0f, 0xaf, 0xfe,
-	0xd9, 0x2f, 0xfd, 0xdf, 0x7d, 0x21, 0xfe, 0xcd, 0xcd, 0x0d, 0x27, 0xff, 0xd0, 0x5c, 0x79, 0x1b,
-	0xcf, 0xab, 0x2b, 0xfe, 0xb3, 0x67, 0xbd, 0xf9, 0x2f, 0x9e, 0xbf, 0x3e, 0xef, 0xf4, 0xdd, 0xe7,
-	0x93, 0x43, 0x8e, 0x27, 0x87, 0x7c, 0x3b, 0x39, 0xe4, 0xd3, 0xd9, 0x69, 0x1c, 0xcf, 0x4e, 0xe3,
-	0xeb, 0xd9, 0x69, 0x7c, 0x7c, 0xb5, 0x4c, 0xf5, 0x6a, 0x1b, 0xf9, 0x31, 0x6e, 0xc6, 0xc5, 0xe0,
-	0xd7, 0x66, 0xf2, 0xb8, 0x7c, 0x0d, 0xf6, 0xd5, 0x42, 0x1f, 0x04, 0xa8, 0xa8, 0x63, 0x1f, 0x85,
-	0xc9, 0x8f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x55, 0xd5, 0x41, 0xa7, 0x58, 0x04, 0x00, 0x00,
+	// 707 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x56, 0xdb, 0x6e, 0xd3, 0x4c,
+	0x10, 0x8e, 0x9b, 0xb4, 0x69, 0x36, 0xed, 0x5f, 0xfd, 0x4b, 0x11, 0xdb, 0x50, 0xb9, 0x51, 0x00,
+	0x29, 0xa8, 0xd4, 0xa6, 0xed, 0x1b, 0xa4, 0x14, 0xc9, 0x12, 0x15, 0x95, 0x25, 0x40, 0xe2, 0xce,
+	0x87, 0x21, 0xb5, 0xe2, 0xec, 0x5a, 0xde, 0x4d, 0x94, 0xbe, 0x05, 0xcf, 0xc1, 0x93, 0x14, 0x71,
+	0xd3, 0x4b, 0xae, 0x38, 0xb4, 0x2f, 0x82, 0x76, 0xbd, 0x2e, 0x76, 0x7a, 0x20, 0x48, 0xf4, 0xae,
+	0x57, 0xf6, 0x7c, 0x3b, 0x33, 0xdf, 0xec, 0xcc, 0xb7, 0x5e, 0xa3, 0x95, 0xe4, 0x38, 0x66, 0x94,
+	0xdb, 0x62, 0x62, 0x25, 0x29, 0x13, 0x0c, 0x93, 0x43, 0x05, 0x08, 0x08, 0x8e, 0xac, 0x6c, 0x4d,
+	0x3f, 0x5a, 0xab, 0x7d, 0xd6, 0x67, 0xca, 0xc9, 0x96, 0x6f, 0x99, 0x7f, 0xcb, 0x0c, 0x18, 0x1f,
+	0x32, 0x6e, 0xfb, 0x1e, 0x07, 0x7b, 0xbc, 0xed, 0x83, 0xf0, 0xb6, 0xed, 0x80, 0x45, 0x54, 0xaf,
+	0xdf, 0xd3, 0x04, 0x29, 0x04, 0x51, 0x02, 0x1a, 0xbc, 0xaf, 0xc1, 0x80, 0xb1, 0x81, 0xcf, 0xd8,
+	0x20, 0x83, 0x3b, 0x3f, 0x6b, 0x68, 0xe5, 0x80, 0xf7, 0xf7, 0x52, 0xf0, 0x04, 0xb8, 0x2a, 0x00,
+	0x13, 0x54, 0x0f, 0xa4, 0xcd, 0x52, 0x62, 0xb4, 0x8d, 0x6e, 0xc3, 0xcd, 0x4d, 0xbc, 0x8a, 0xe6,
+	0x23, 0x1a, 0xc2, 0x84, 0xcc, 0x29, 0x3c, 0x33, 0x70, 0x1b, 0x35, 0x29, 0x0b, 0xe1, 0x2d, 0xa4,
+	0x3c, 0x62, 0x94, 0x54, 0xd5, 0x5a, 0x11, 0xc2, 0x26, 0x42, 0x39, 0xaf, 0xf3, 0x82, 0xd4, 0x94,
+	0x43, 0x01, 0xc1, 0x18, 0xd5, 0xa8, 0x37, 0x04, 0x32, 0xaf, 0x56, 0xd4, 0x3b, 0x1e, 0xc8, 0x98,
+	0x88, 0x3a, 0x34, 0x19, 0x09, 0x4e, 0x16, 0xda, 0xd5, 0x6e, 0x73, 0x67, 0xcd, 0xca, 0xb6, 0x6e,
+	0xc9, 0xad, 0x5b, 0x7a, 0xeb, 0xd6, 0x1e, 0x8b, 0x68, 0xef, 0xf9, 0xc9, 0xb7, 0x8d, 0xca, 0xa7,
+	0xef, 0x1b, 0xdd, 0x7e, 0x24, 0x8e, 0x46, 0xbe, 0x15, 0xb0, 0xa1, 0xad, 0xfb, 0x94, 0x3d, 0xb6,
+	0x78, 0x38, 0xb0, 0xc5, 0x71, 0x02, 0x5c, 0x05, 0x70, 0xb7, 0x90, 0x1e, 0x3b, 0x08, 0x45, 0x02,
+	0x86, 0x9a, 0xac, 0xae, 0xc8, 0x1e, 0x59, 0xd7, 0xcd, 0xc5, 0x72, 0x72, 0xdf, 0x5e, 0x4d, 0xd2,
+	0xba, 0x85, 0x60, 0xbc, 0x8f, 0xea, 0x40, 0x45, 0x1a, 0x01, 0x27, 0x8b, 0x6d, 0xa3, 0xdb, 0xdc,
+	0x79, 0x72, 0x7d, 0x9e, 0xfd, 0xcc, 0xf1, 0x55, 0xc4, 0xf3, 0x4c, 0x79, 0x2c, 0x76, 0x50, 0xfd,
+	0xf5, 0x48, 0xa8, 0x72, 0x1a, 0xaa, 0x9c, 0xa7, 0xd7, 0xa7, 0x79, 0x07, 0x51, 0xff, 0x48, 0x40,
+	0xa8, 0x03, 0xf2, 0x54, 0xda, 0x94, 0xf3, 0x09, 0x81, 0x07, 0x69, 0x94, 0x08, 0x39, 0x1f, 0x94,
+	0xcd, 0xa7, 0x00, 0xe1, 0xc7, 0x68, 0xd9, 0x8f, 0x59, 0x30, 0x70, 0xa8, 0x80, 0x74, 0xec, 0xc5,
+	0xa4, 0xd9, 0x36, 0xba, 0x35, 0xb7, 0x0c, 0x4a, 0x5d, 0x00, 0xf5, 0xfc, 0x18, 0x42, 0xb2, 0xd4,
+	0x36, 0xba, 0x8b, 0x6e, 0x6e, 0xe2, 0x75, 0xd4, 0x80, 0x89, 0x48, 0x3d, 0x87, 0x7e, 0x60, 0x64,
+	0x59, 0xe5, 0xff, 0x0d, 0x74, 0xd6, 0xd0, 0x83, 0x29, 0x89, 0xb9, 0xc0, 0x13, 0x46, 0x39, 0xe4,
+	0xf2, 0x7b, 0x93, 0x84, 0x77, 0xf2, 0xbb, 0x93, 0xdf, 0x6d, 0xca, 0xaf, 0x28, 0xb1, 0x0b, 0xf9,
+	0x7d, 0x99, 0x43, 0xff, 0x5f, 0x48, 0x73, 0x4f, 0x0b, 0xe2, 0x16, 0x04, 0x98, 0x0b, 0xac, 0x56,
+	0x10, 0xd8, 0x54, 0x5b, 0xe6, 0x2f, 0xb7, 0x65, 0x1d, 0x35, 0x42, 0x18, 0x43, 0xcc, 0x12, 0x48,
+	0xc9, 0x42, 0xb6, 0xad, 0x0b, 0x40, 0x56, 0x39, 0xd6, 0x8c, 0xf5, 0xac, 0x4a, 0x6d, 0xe2, 0x0e,
+	0x5a, 0xe2, 0xa3, 0x24, 0x61, 0xa9, 0xd8, 0x1f, 0x7a, 0x51, 0xac, 0x74, 0xd0, 0x70, 0x4b, 0x98,
+	0xdc, 0x49, 0x2c, 0x53, 0x91, 0x46, 0xdb, 0xe8, 0x56, 0xdd, 0xcc, 0x90, 0x91, 0x01, 0xe3, 0xe2,
+	0x10, 0xd2, 0x9e, 0x6c, 0xbd, 0x9a, 0x55, 0xcd, 0x2d, 0x61, 0xc5, 0x31, 0x34, 0x4b, 0x63, 0xe8,
+	0x3c, 0x44, 0x6b, 0x97, 0x9a, 0x39, 0xdd, 0xea, 0x6c, 0x0c, 0x77, 0xad, 0xfe, 0x27, 0xad, 0x2e,
+	0x37, 0x33, 0x6f, 0xf5, 0xce, 0xe7, 0x2a, 0xaa, 0x1e, 0xf0, 0x3e, 0x8e, 0xd1, 0x52, 0xe9, 0x5e,
+	0xbf, 0xe1, 0x08, 0x4f, 0x7d, 0x9f, 0x5b, 0xdb, 0x33, 0xbb, 0xe6, 0xac, 0x92, 0xad, 0xf4, 0x19,
+	0xbf, 0x99, 0xad, 0xe8, 0xfa, 0x07, 0xb6, 0xab, 0x4e, 0x2e, 0x4e, 0xd1, 0x7f, 0x53, 0xa7, 0x76,
+	0x73, 0x86, 0x92, 0x73, 0xe7, 0xd6, 0xee, 0x5f, 0x38, 0x17, 0x39, 0xa7, 0xe4, 0xbb, 0x39, 0x43,
+	0xe1, 0x33, 0x72, 0x5e, 0x3d, 0xcb, 0xde, 0xcb, 0x93, 0x33, 0xd3, 0x38, 0x3d, 0x33, 0x8d, 0x1f,
+	0x67, 0xa6, 0xf1, 0xf1, 0xdc, 0xac, 0x9c, 0x9e, 0x9b, 0x95, 0xaf, 0xe7, 0x66, 0xe5, 0xfd, 0xb3,
+	0xc2, 0x4d, 0x93, 0x25, 0xde, 0x92, 0x99, 0x6d, 0xfd, 0x9f, 0x37, 0xc9, 0x5f, 0xd4, 0x9d, 0xe3,
+	0x2f, 0xa8, 0xdf, 0xbd, 0xdd, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x53, 0x41, 0xd3, 0xdd, 0x7d,
+	0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -399,6 +778,8 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
 	// this line is used by starport scaffolding # proto/tx/rpc
+	CreateRecipe(ctx context.Context, in *MsgCreateRecipe, opts ...grpc.CallOption) (*MsgCreateRecipeResponse, error)
+	UpdateRecipe(ctx context.Context, in *MsgUpdateRecipe, opts ...grpc.CallOption) (*MsgUpdateRecipeResponse, error)
 	CreateCookbook(ctx context.Context, in *MsgCreateCookbook, opts ...grpc.CallOption) (*MsgCreateCookbookResponse, error)
 	UpdateCookbook(ctx context.Context, in *MsgUpdateCookbook, opts ...grpc.CallOption) (*MsgUpdateCookbookResponse, error)
 }
@@ -409,6 +790,24 @@ type msgClient struct {
 
 func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
+}
+
+func (c *msgClient) CreateRecipe(ctx context.Context, in *MsgCreateRecipe, opts ...grpc.CallOption) (*MsgCreateRecipeResponse, error) {
+	out := new(MsgCreateRecipeResponse)
+	err := c.cc.Invoke(ctx, "/Pylonstech.pylons.pylons.Msg/CreateRecipe", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *msgClient) UpdateRecipe(ctx context.Context, in *MsgUpdateRecipe, opts ...grpc.CallOption) (*MsgUpdateRecipeResponse, error) {
+	out := new(MsgUpdateRecipeResponse)
+	err := c.cc.Invoke(ctx, "/Pylonstech.pylons.pylons.Msg/UpdateRecipe", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *msgClient) CreateCookbook(ctx context.Context, in *MsgCreateCookbook, opts ...grpc.CallOption) (*MsgCreateCookbookResponse, error) {
@@ -432,6 +831,8 @@ func (c *msgClient) UpdateCookbook(ctx context.Context, in *MsgUpdateCookbook, o
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
 	// this line is used by starport scaffolding # proto/tx/rpc
+	CreateRecipe(context.Context, *MsgCreateRecipe) (*MsgCreateRecipeResponse, error)
+	UpdateRecipe(context.Context, *MsgUpdateRecipe) (*MsgUpdateRecipeResponse, error)
 	CreateCookbook(context.Context, *MsgCreateCookbook) (*MsgCreateCookbookResponse, error)
 	UpdateCookbook(context.Context, *MsgUpdateCookbook) (*MsgUpdateCookbookResponse, error)
 }
@@ -440,6 +841,12 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
+func (*UnimplementedMsgServer) CreateRecipe(ctx context.Context, req *MsgCreateRecipe) (*MsgCreateRecipeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateRecipe not implemented")
+}
+func (*UnimplementedMsgServer) UpdateRecipe(ctx context.Context, req *MsgUpdateRecipe) (*MsgUpdateRecipeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRecipe not implemented")
+}
 func (*UnimplementedMsgServer) CreateCookbook(ctx context.Context, req *MsgCreateCookbook) (*MsgCreateCookbookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateCookbook not implemented")
 }
@@ -449,6 +856,42 @@ func (*UnimplementedMsgServer) UpdateCookbook(ctx context.Context, req *MsgUpdat
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
+}
+
+func _Msg_CreateRecipe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgCreateRecipe)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).CreateRecipe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Pylonstech.pylons.pylons.Msg/CreateRecipe",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).CreateRecipe(ctx, req.(*MsgCreateRecipe))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Msg_UpdateRecipe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUpdateRecipe)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MsgServer).UpdateRecipe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Pylonstech.pylons.pylons.Msg/UpdateRecipe",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MsgServer).UpdateRecipe(ctx, req.(*MsgUpdateRecipe))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _Msg_CreateCookbook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -492,6 +935,14 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
+			MethodName: "CreateRecipe",
+			Handler:    _Msg_CreateRecipe_Handler,
+		},
+		{
+			MethodName: "UpdateRecipe",
+			Handler:    _Msg_UpdateRecipe_Handler,
+		},
+		{
 			MethodName: "CreateCookbook",
 			Handler:    _Msg_CreateCookbook_Handler,
 		},
@@ -502,6 +953,330 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "pylons/tx.proto",
+}
+
+func (m *MsgCreateRecipe) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateRecipe) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateRecipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExtraInfo) > 0 {
+		i -= len(m.ExtraInfo)
+		copy(dAtA[i:], m.ExtraInfo)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ExtraInfo)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.Enabled {
+		i--
+		if m.Enabled {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.BlockInterval != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BlockInterval))
+		i--
+		dAtA[i] = 0x58
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Outputs) > 0 {
+		for iNdEx := len(m.Outputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Outputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	{
+		size, err := m.Entries.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x42
+	if len(m.ItemInputs) > 0 {
+		for iNdEx := len(m.ItemInputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ItemInputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.CoinInputs) > 0 {
+		for iNdEx := len(m.CoinInputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CoinInputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.CookbookID)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.NodeVersion) > 0 {
+		i -= len(m.NodeVersion)
+		copy(dAtA[i:], m.NodeVersion)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NodeVersion)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Index) > 0 {
+		i -= len(m.Index)
+		copy(dAtA[i:], m.Index)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Index)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgCreateRecipeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgCreateRecipeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgCreateRecipeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateRecipe) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateRecipe) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateRecipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ExtraInfo) > 0 {
+		i -= len(m.ExtraInfo)
+		copy(dAtA[i:], m.ExtraInfo)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.ExtraInfo)))
+		i--
+		dAtA[i] = 0x6a
+	}
+	if m.Enabled {
+		i--
+		if m.Enabled {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x60
+	}
+	if m.BlockInterval != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.BlockInterval))
+		i--
+		dAtA[i] = 0x58
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x52
+	}
+	if len(m.Outputs) > 0 {
+		for iNdEx := len(m.Outputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Outputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	{
+		size, err := m.Entries.MarshalToSizedBuffer(dAtA[:i])
+		if err != nil {
+			return 0, err
+		}
+		i -= size
+		i = encodeVarintTx(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x42
+	if len(m.ItemInputs) > 0 {
+		for iNdEx := len(m.ItemInputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ItemInputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.CoinInputs) > 0 {
+		for iNdEx := len(m.CoinInputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CoinInputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTx(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.CookbookID)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.NodeVersion) > 0 {
+		i -= len(m.NodeVersion)
+		copy(dAtA[i:], m.NodeVersion)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.NodeVersion)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Index) > 0 {
+		i -= len(m.Index)
+		copy(dAtA[i:], m.Index)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Index)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *MsgUpdateRecipeResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *MsgUpdateRecipeResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *MsgUpdateRecipeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
 }
 
 func (m *MsgCreateCookbook) Marshal() (dAtA []byte, err error) {
@@ -759,6 +1534,150 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *MsgCreateRecipe) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Index)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.NodeVersion)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.CookbookID)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.CoinInputs) > 0 {
+		for _, e := range m.CoinInputs {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if len(m.ItemInputs) > 0 {
+		for _, e := range m.ItemInputs {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = m.Entries.Size()
+	n += 1 + l + sovTx(uint64(l))
+	if len(m.Outputs) > 0 {
+		for _, e := range m.Outputs {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.BlockInterval != 0 {
+		n += 1 + sovTx(uint64(m.BlockInterval))
+	}
+	if m.Enabled {
+		n += 2
+	}
+	l = len(m.ExtraInfo)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgCreateRecipeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *MsgUpdateRecipe) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Index)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.NodeVersion)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.CookbookID)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if len(m.CoinInputs) > 0 {
+		for _, e := range m.CoinInputs {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	if len(m.ItemInputs) > 0 {
+		for _, e := range m.ItemInputs {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = m.Entries.Size()
+	n += 1 + l + sovTx(uint64(l))
+	if len(m.Outputs) > 0 {
+		for _, e := range m.Outputs {
+			l = e.Size()
+			n += 1 + l + sovTx(uint64(l))
+		}
+	}
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.BlockInterval != 0 {
+		n += 1 + sovTx(uint64(m.BlockInterval))
+	}
+	if m.Enabled {
+		n += 2
+	}
+	l = len(m.ExtraInfo)
+	if l > 0 {
+		n += 1 + l + sovTx(uint64(l))
+	}
+	return n
+}
+
+func (m *MsgUpdateRecipeResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
 func (m *MsgCreateCookbook) Size() (n int) {
 	if m == nil {
 		return 0
@@ -882,6 +1801,1002 @@ func sovTx(x uint64) (n int) {
 }
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *MsgCreateRecipe) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateRecipe: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateRecipe: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Index = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NodeVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CookbookID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CoinInputs = append(m.CoinInputs, types.Coin{})
+			if err := m.CoinInputs[len(m.CoinInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemInputs = append(m.ItemInputs, ItemInput{})
+			if err := m.ItemInputs[len(m.ItemInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Entries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Outputs = append(m.Outputs, WeightedOutputs{})
+			if err := m.Outputs[len(m.Outputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockInterval", wireType)
+			}
+			m.BlockInterval = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BlockInterval |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Enabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Enabled = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtraInfo", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExtraInfo = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgCreateRecipeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgCreateRecipeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgCreateRecipeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateRecipe) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateRecipe: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateRecipe: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Index = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NodeVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CookbookID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CoinInputs = append(m.CoinInputs, types.Coin{})
+			if err := m.CoinInputs[len(m.CoinInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemInputs = append(m.ItemInputs, ItemInput{})
+			if err := m.ItemInputs[len(m.ItemInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Entries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Outputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Outputs = append(m.Outputs, WeightedOutputs{})
+			if err := m.Outputs[len(m.Outputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockInterval", wireType)
+			}
+			m.BlockInterval = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.BlockInterval |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 12:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Enabled", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Enabled = bool(v != 0)
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtraInfo", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTx
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTx
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ExtraInfo = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *MsgUpdateRecipeResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTx
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: MsgUpdateRecipeResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: MsgUpdateRecipeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTx(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthTx
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *MsgCreateCookbook) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)

@@ -1,9 +1,12 @@
+import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
     /** this line is used by starport scaffolding # genesis/proto/state */
+    recipeList: Recipe[];
+    /** this line is used by starport scaffolding # genesis/proto/stateField */
     cookbookList: Cookbook[];
 }
 export declare const GenesisState: {

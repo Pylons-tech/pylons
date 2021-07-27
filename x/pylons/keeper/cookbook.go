@@ -27,7 +27,6 @@ func (k Keeper) GetCookbook(ctx sdk.Context, index string) (val types.Cookbook, 
 	return val, true
 }
 
-
 // GetAllCookbook returns all cookbook
 func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
@@ -35,7 +34,8 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 
 	defer func(iterator sdk.Iterator) {
 		err := iterator.Close()
-		if err != nil {}
+		if err != nil {
+		}
 	}(iterator)
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -47,14 +47,14 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 	return
 }
 
-
 // GetCookbooksByCreator returns cookbooks owned by a specific creator
 func (k Keeper) GetCookbooksByCreator(ctx sdk.Context, creator sdk.AccAddress) (list []types.Cookbook) {
 	iterator := sdk.KVStorePrefixIterator(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
 
 	defer func(iterator sdk.Iterator) {
 		err := iterator.Close()
-		if err != nil {}
+		if err != nil {
+		}
 	}(iterator)
 
 	for ; iterator.Valid(); iterator.Next() {

@@ -13,6 +13,7 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
+		RecipeList:   []*Recipe{},
 		CookbookList: []*Cookbook{},
 	}
 }
@@ -23,6 +24,15 @@ func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # ibc/genesistype/validate
 
 	// this line is used by starport scaffolding # genesis/types/validate
+	// Check for duplicated index in recipe
+	recipeIndexMap := make(map[string]bool)
+
+	for _, elem := range gs.RecipeList {
+		if _, ok := recipeIndexMap[elem.Index]; ok {
+			return fmt.Errorf("duplicated index for recipe")
+		}
+		recipeIndexMap[elem.Index] = true
+	}
 	// Check for duplicated index in cookbook
 	cookbookIndexMap := make(map[string]bool)
 

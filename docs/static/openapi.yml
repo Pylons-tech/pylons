@@ -19605,6 +19605,443 @@ paths:
           type: string
       tags:
         - Query
+  '/pylons/recipe/{index}':
+    get:
+      summary: Queries a recipe by index.
+      operationId: PylonstechPylonsPylonsRecipe
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Recipe:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  index:
+                    type: string
+                  nodeVersion:
+                    type: string
+                  cookbookID:
+                    type: string
+                  name:
+                    type: string
+                  coinInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                  itemInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        doubles:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              minValue:
+                                type: string
+                                description: The minimum legal value of this parameter.
+                              maxValue:
+                                type: string
+                                description: The maximum legal value of this parameter.
+                            title: >-
+                              DoubleInputParam describes the bounds on an item
+                              input/output parameter of type float64
+                        longs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              minValue:
+                                type: string
+                                format: int64
+                                description: The minimum legal value of this parameter.
+                              maxValue:
+                                type: string
+                                format: int64
+                                description: The maximum legal value of this parameter.
+                            title: >-
+                              LongInputParam describes the bounds on an item
+                              input/output parameter of type int64
+                        strings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                                title: The value of the parameter
+                            title: >-
+                              StringInputParam describes the bounds on an item
+                              input/output parameter of type string
+                        conditions:
+                          type: object
+                          properties:
+                            doubles:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  minValue:
+                                    type: string
+                                    description: The minimum legal value of this parameter.
+                                  maxValue:
+                                    type: string
+                                    description: The maximum legal value of this parameter.
+                                title: >-
+                                  DoubleInputParam describes the bounds on an
+                                  item input/output parameter of type float64
+                            longs:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  minValue:
+                                    type: string
+                                    format: int64
+                                    description: The minimum legal value of this parameter.
+                                  maxValue:
+                                    type: string
+                                    format: int64
+                                    description: The maximum legal value of this parameter.
+                                title: >-
+                                  LongInputParam describes the bounds on an item
+                                  input/output parameter of type int64
+                            strings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                    title: The value of the parameter
+                                title: >-
+                                  StringInputParam describes the bounds on an
+                                  item input/output parameter of type string
+                          title: >-
+                            ConditionList is a struct for describing ItemInput
+                            expression conditions
+                      title: ItemInput is a struct for describing an input item
+                  entries:
+                    type: object
+                    properties:
+                      coinOutputs:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            denom:
+                              type: string
+                            amount:
+                              type: string
+                          description: >-
+                            Coin defines a token with a denomination and an
+                            amount.
+
+
+                            NOTE: The amount field is an Int which implements
+                            the custom method
+
+                            signatures required by gogoproto.
+                      itemOutputs:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            doubles:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  weightRanges:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        lower:
+                                          type: string
+                                        upper:
+                                          type: string
+                                        weight:
+                                          type: string
+                                          format: int64
+                                      title: >-
+                                        DoubleWeightRange describes weight range
+                                        that produce double value
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, WeightRanges is
+                                      ignored
+                                title: >-
+                                  DoubleParam describes the bounds on an item
+                                  input/output parameter of type float64
+                            longs:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  weightRanges:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        lower:
+                                          type: string
+                                          format: int64
+                                        upper:
+                                          type: string
+                                          format: int64
+                                        weight:
+                                          type: string
+                                          format: int64
+                                      title: >-
+                                        IntWeightRange describes weight range
+                                        that produce int value
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, WeightRanges is
+                                      ignored
+                                title: >-
+                                  LongParam describes the bounds on an item
+                                  input/output parameter of type int64
+                            strings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, Value is
+                                      ignored
+                                title: >-
+                                  StringParam describes an item input/output
+                                  parameter of type string
+                            transferFee:
+                              type: string
+                            quantity:
+                              type: string
+                              format: uint64
+                          title: >-
+                            ItemOutput models the continuum of valid outcomes
+                            for item generation in recipes
+                      itemModifyOutputs:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            itemInputRef:
+                              type: string
+                            doubles:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  weightRanges:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        lower:
+                                          type: string
+                                        upper:
+                                          type: string
+                                        weight:
+                                          type: string
+                                          format: int64
+                                      title: >-
+                                        DoubleWeightRange describes weight range
+                                        that produce double value
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, WeightRanges is
+                                      ignored
+                                title: >-
+                                  DoubleParam describes the bounds on an item
+                                  input/output parameter of type float64
+                            longs:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  weightRanges:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        lower:
+                                          type: string
+                                          format: int64
+                                        upper:
+                                          type: string
+                                          format: int64
+                                        weight:
+                                          type: string
+                                          format: int64
+                                      title: >-
+                                        IntWeightRange describes weight range
+                                        that produce int value
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, WeightRanges is
+                                      ignored
+                                title: >-
+                                  LongParam describes the bounds on an item
+                                  input/output parameter of type int64
+                            strings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, Value is
+                                      ignored
+                                title: >-
+                                  StringParam describes an item input/output
+                                  parameter of type string
+                            transferFee:
+                              type: string
+                          title: >-
+                            ItemModifyOutput describes what is modified from
+                            item input
+                    title: EntriesList is a struct to keep list of items and coins
+                  outputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        entryIDs:
+                          type: array
+                          items:
+                            type: string
+                        Weight:
+                          type: string
+                      title: >-
+                        WeightedOutputs is to make structs which is using weight
+                        to be based on
+                  description:
+                    type: string
+                  blockInterval:
+                    type: string
+                    format: uint64
+                  enabled:
+                    type: boolean
+                  extraInfo:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
 definitions:
   cosmos.bank.v1beta1.DenomUnit:
     type: object
@@ -29891,6 +30328,57 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  Pylonstech.pylons.pylons.ConditionList:
+    type: object
+    properties:
+      doubles:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            minValue:
+              type: string
+              description: The minimum legal value of this parameter.
+            maxValue:
+              type: string
+              description: The maximum legal value of this parameter.
+          title: >-
+            DoubleInputParam describes the bounds on an item input/output
+            parameter of type float64
+      longs:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            minValue:
+              type: string
+              format: int64
+              description: The minimum legal value of this parameter.
+            maxValue:
+              type: string
+              format: int64
+              description: The maximum legal value of this parameter.
+          title: >-
+            LongInputParam describes the bounds on an item input/output
+            parameter of type int64
+      strings:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+              title: The value of the parameter
+          title: >-
+            StringInputParam describes the bounds on an item input/output
+            parameter of type string
+    title: ConditionList is a struct for describing ItemInput expression conditions
   Pylonstech.pylons.pylons.Cookbook:
     type: object
     properties:
@@ -29918,9 +30406,635 @@ definitions:
         format: uint64
       enabled:
         type: boolean
+  Pylonstech.pylons.pylons.DoubleInputParam:
+    type: object
+    properties:
+      key:
+        type: string
+      minValue:
+        type: string
+        description: The minimum legal value of this parameter.
+      maxValue:
+        type: string
+        description: The maximum legal value of this parameter.
+    title: >-
+      DoubleInputParam describes the bounds on an item input/output parameter of
+      type float64
+  Pylonstech.pylons.pylons.DoubleParam:
+    type: object
+    properties:
+      key:
+        type: string
+      rate:
+        type: string
+        description: >-
+          The likelihood that this parameter is applied to the output item.
+          Between 0.0 (exclusive) and 1.0 (inclusive).
+      weightRanges:
+        type: array
+        items:
+          type: object
+          properties:
+            lower:
+              type: string
+            upper:
+              type: string
+            weight:
+              type: string
+              format: int64
+          title: DoubleWeightRange describes weight range that produce double value
+      program:
+        type: string
+        title: 'When program is not empty, WeightRanges is ignored'
+    title: >-
+      DoubleParam describes the bounds on an item input/output parameter of type
+      float64
+  Pylonstech.pylons.pylons.DoubleWeightRange:
+    type: object
+    properties:
+      lower:
+        type: string
+      upper:
+        type: string
+      weight:
+        type: string
+        format: int64
+    title: DoubleWeightRange describes weight range that produce double value
+  Pylonstech.pylons.pylons.EntriesList:
+    type: object
+    properties:
+      coinOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+      itemOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  weightRanges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lower:
+                          type: string
+                        upper:
+                          type: string
+                        weight:
+                          type: string
+                          format: int64
+                      title: >-
+                        DoubleWeightRange describes weight range that produce
+                        double value
+                  program:
+                    type: string
+                    title: 'When program is not empty, WeightRanges is ignored'
+                title: >-
+                  DoubleParam describes the bounds on an item input/output
+                  parameter of type float64
+            longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  weightRanges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lower:
+                          type: string
+                          format: int64
+                        upper:
+                          type: string
+                          format: int64
+                        weight:
+                          type: string
+                          format: int64
+                      title: >-
+                        IntWeightRange describes weight range that produce int
+                        value
+                  program:
+                    type: string
+                    title: 'When program is not empty, WeightRanges is ignored'
+                title: >-
+                  LongParam describes the bounds on an item input/output
+                  parameter of type int64
+            strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  key:
+                    type: string
+                  value:
+                    type: string
+                  program:
+                    type: string
+                    title: 'When program is not empty, Value is ignored'
+                title: >-
+                  StringParam describes an item input/output parameter of type
+                  string
+            transferFee:
+              type: string
+            quantity:
+              type: string
+              format: uint64
+          title: >-
+            ItemOutput models the continuum of valid outcomes for item
+            generation in recipes
+      itemModifyOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            itemInputRef:
+              type: string
+            doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  weightRanges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lower:
+                          type: string
+                        upper:
+                          type: string
+                        weight:
+                          type: string
+                          format: int64
+                      title: >-
+                        DoubleWeightRange describes weight range that produce
+                        double value
+                  program:
+                    type: string
+                    title: 'When program is not empty, WeightRanges is ignored'
+                title: >-
+                  DoubleParam describes the bounds on an item input/output
+                  parameter of type float64
+            longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  weightRanges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        lower:
+                          type: string
+                          format: int64
+                        upper:
+                          type: string
+                          format: int64
+                        weight:
+                          type: string
+                          format: int64
+                      title: >-
+                        IntWeightRange describes weight range that produce int
+                        value
+                  program:
+                    type: string
+                    title: 'When program is not empty, WeightRanges is ignored'
+                title: >-
+                  LongParam describes the bounds on an item input/output
+                  parameter of type int64
+            strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  key:
+                    type: string
+                  value:
+                    type: string
+                  program:
+                    type: string
+                    title: 'When program is not empty, Value is ignored'
+                title: >-
+                  StringParam describes an item input/output parameter of type
+                  string
+            transferFee:
+              type: string
+          title: ItemModifyOutput describes what is modified from item input
+    title: EntriesList is a struct to keep list of items and coins
+  Pylonstech.pylons.pylons.IntWeightRange:
+    type: object
+    properties:
+      lower:
+        type: string
+        format: int64
+      upper:
+        type: string
+        format: int64
+      weight:
+        type: string
+        format: int64
+    title: IntWeightRange describes weight range that produce int value
+  Pylonstech.pylons.pylons.ItemInput:
+    type: object
+    properties:
+      doubles:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            minValue:
+              type: string
+              description: The minimum legal value of this parameter.
+            maxValue:
+              type: string
+              description: The maximum legal value of this parameter.
+          title: >-
+            DoubleInputParam describes the bounds on an item input/output
+            parameter of type float64
+      longs:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            minValue:
+              type: string
+              format: int64
+              description: The minimum legal value of this parameter.
+            maxValue:
+              type: string
+              format: int64
+              description: The maximum legal value of this parameter.
+          title: >-
+            LongInputParam describes the bounds on an item input/output
+            parameter of type int64
+      strings:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+              title: The value of the parameter
+          title: >-
+            StringInputParam describes the bounds on an item input/output
+            parameter of type string
+      conditions:
+        type: object
+        properties:
+          doubles:
+            type: array
+            items:
+              type: object
+              properties:
+                key:
+                  type: string
+                minValue:
+                  type: string
+                  description: The minimum legal value of this parameter.
+                maxValue:
+                  type: string
+                  description: The maximum legal value of this parameter.
+              title: >-
+                DoubleInputParam describes the bounds on an item input/output
+                parameter of type float64
+          longs:
+            type: array
+            items:
+              type: object
+              properties:
+                key:
+                  type: string
+                minValue:
+                  type: string
+                  format: int64
+                  description: The minimum legal value of this parameter.
+                maxValue:
+                  type: string
+                  format: int64
+                  description: The maximum legal value of this parameter.
+              title: >-
+                LongInputParam describes the bounds on an item input/output
+                parameter of type int64
+          strings:
+            type: array
+            items:
+              type: object
+              properties:
+                key:
+                  type: string
+                value:
+                  type: string
+                  title: The value of the parameter
+              title: >-
+                StringInputParam describes the bounds on an item input/output
+                parameter of type string
+        title: >-
+          ConditionList is a struct for describing ItemInput expression
+          conditions
+    title: ItemInput is a struct for describing an input item
+  Pylonstech.pylons.pylons.ItemModifyOutput:
+    type: object
+    properties:
+      itemInputRef:
+        type: string
+      doubles:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            weightRanges:
+              type: array
+              items:
+                type: object
+                properties:
+                  lower:
+                    type: string
+                  upper:
+                    type: string
+                  weight:
+                    type: string
+                    format: int64
+                title: >-
+                  DoubleWeightRange describes weight range that produce double
+                  value
+            program:
+              type: string
+              title: 'When program is not empty, WeightRanges is ignored'
+          title: >-
+            DoubleParam describes the bounds on an item input/output parameter
+            of type float64
+      longs:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            weightRanges:
+              type: array
+              items:
+                type: object
+                properties:
+                  lower:
+                    type: string
+                    format: int64
+                  upper:
+                    type: string
+                    format: int64
+                  weight:
+                    type: string
+                    format: int64
+                title: IntWeightRange describes weight range that produce int value
+            program:
+              type: string
+              title: 'When program is not empty, WeightRanges is ignored'
+          title: >-
+            LongParam describes the bounds on an item input/output parameter of
+            type int64
+      strings:
+        type: array
+        items:
+          type: object
+          properties:
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            key:
+              type: string
+            value:
+              type: string
+            program:
+              type: string
+              title: 'When program is not empty, Value is ignored'
+          title: StringParam describes an item input/output parameter of type string
+      transferFee:
+        type: string
+    title: ItemModifyOutput describes what is modified from item input
+  Pylonstech.pylons.pylons.ItemOutput:
+    type: object
+    properties:
+      doubles:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            weightRanges:
+              type: array
+              items:
+                type: object
+                properties:
+                  lower:
+                    type: string
+                  upper:
+                    type: string
+                  weight:
+                    type: string
+                    format: int64
+                title: >-
+                  DoubleWeightRange describes weight range that produce double
+                  value
+            program:
+              type: string
+              title: 'When program is not empty, WeightRanges is ignored'
+          title: >-
+            DoubleParam describes the bounds on an item input/output parameter
+            of type float64
+      longs:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            weightRanges:
+              type: array
+              items:
+                type: object
+                properties:
+                  lower:
+                    type: string
+                    format: int64
+                  upper:
+                    type: string
+                    format: int64
+                  weight:
+                    type: string
+                    format: int64
+                title: IntWeightRange describes weight range that produce int value
+            program:
+              type: string
+              title: 'When program is not empty, WeightRanges is ignored'
+          title: >-
+            LongParam describes the bounds on an item input/output parameter of
+            type int64
+      strings:
+        type: array
+        items:
+          type: object
+          properties:
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            key:
+              type: string
+            value:
+              type: string
+            program:
+              type: string
+              title: 'When program is not empty, Value is ignored'
+          title: StringParam describes an item input/output parameter of type string
+      transferFee:
+        type: string
+      quantity:
+        type: string
+        format: uint64
+    title: >-
+      ItemOutput models the continuum of valid outcomes for item generation in
+      recipes
+  Pylonstech.pylons.pylons.LongInputParam:
+    type: object
+    properties:
+      key:
+        type: string
+      minValue:
+        type: string
+        format: int64
+        description: The minimum legal value of this parameter.
+      maxValue:
+        type: string
+        format: int64
+        description: The maximum legal value of this parameter.
+    title: >-
+      LongInputParam describes the bounds on an item input/output parameter of
+      type int64
+  Pylonstech.pylons.pylons.LongParam:
+    type: object
+    properties:
+      key:
+        type: string
+      rate:
+        type: string
+        description: >-
+          The likelihood that this parameter is applied to the output item.
+          Between 0.0 (exclusive) and 1.0 (inclusive).
+      weightRanges:
+        type: array
+        items:
+          type: object
+          properties:
+            lower:
+              type: string
+              format: int64
+            upper:
+              type: string
+              format: int64
+            weight:
+              type: string
+              format: int64
+          title: IntWeightRange describes weight range that produce int value
+      program:
+        type: string
+        title: 'When program is not empty, WeightRanges is ignored'
+    title: >-
+      LongParam describes the bounds on an item input/output parameter of type
+      int64
   Pylonstech.pylons.pylons.MsgCreateCookbookResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgCreateRecipeResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgUpdateCookbookResponse:
+    type: object
+  Pylonstech.pylons.pylons.MsgUpdateRecipeResponse:
     type: object
   Pylonstech.pylons.pylons.QueryGetCookbookResponse:
     type: object
@@ -29952,6 +31066,394 @@ definitions:
             format: uint64
           enabled:
             type: boolean
+  Pylonstech.pylons.pylons.QueryGetRecipeResponse:
+    type: object
+    properties:
+      Recipe:
+        type: object
+        properties:
+          creator:
+            type: string
+          index:
+            type: string
+          nodeVersion:
+            type: string
+          cookbookID:
+            type: string
+          name:
+            type: string
+          coinInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+          itemInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      DoubleInputParam describes the bounds on an item
+                      input/output parameter of type float64
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        format: int64
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        format: int64
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      LongInputParam describes the bounds on an item
+                      input/output parameter of type int64
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                        title: The value of the parameter
+                    title: >-
+                      StringInputParam describes the bounds on an item
+                      input/output parameter of type string
+                conditions:
+                  type: object
+                  properties:
+                    doubles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          minValue:
+                            type: string
+                            description: The minimum legal value of this parameter.
+                          maxValue:
+                            type: string
+                            description: The maximum legal value of this parameter.
+                        title: >-
+                          DoubleInputParam describes the bounds on an item
+                          input/output parameter of type float64
+                    longs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          minValue:
+                            type: string
+                            format: int64
+                            description: The minimum legal value of this parameter.
+                          maxValue:
+                            type: string
+                            format: int64
+                            description: The maximum legal value of this parameter.
+                        title: >-
+                          LongInputParam describes the bounds on an item
+                          input/output parameter of type int64
+                    strings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                            title: The value of the parameter
+                        title: >-
+                          StringInputParam describes the bounds on an item
+                          input/output parameter of type string
+                  title: >-
+                    ConditionList is a struct for describing ItemInput
+                    expression conditions
+              title: ItemInput is a struct for describing an input item
+          entries:
+            type: object
+            properties:
+              coinOutputs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
+
+
+                    NOTE: The amount field is an Int which implements the custom
+                    method
+
+                    signatures required by gogoproto.
+              itemOutputs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    doubles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          weightRanges:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                lower:
+                                  type: string
+                                upper:
+                                  type: string
+                                weight:
+                                  type: string
+                                  format: int64
+                              title: >-
+                                DoubleWeightRange describes weight range that
+                                produce double value
+                          program:
+                            type: string
+                            title: 'When program is not empty, WeightRanges is ignored'
+                        title: >-
+                          DoubleParam describes the bounds on an item
+                          input/output parameter of type float64
+                    longs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          weightRanges:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                lower:
+                                  type: string
+                                  format: int64
+                                upper:
+                                  type: string
+                                  format: int64
+                                weight:
+                                  type: string
+                                  format: int64
+                              title: >-
+                                IntWeightRange describes weight range that
+                                produce int value
+                          program:
+                            type: string
+                            title: 'When program is not empty, WeightRanges is ignored'
+                        title: >-
+                          LongParam describes the bounds on an item input/output
+                          parameter of type int64
+                    strings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          key:
+                            type: string
+                          value:
+                            type: string
+                          program:
+                            type: string
+                            title: 'When program is not empty, Value is ignored'
+                        title: >-
+                          StringParam describes an item input/output parameter
+                          of type string
+                    transferFee:
+                      type: string
+                    quantity:
+                      type: string
+                      format: uint64
+                  title: >-
+                    ItemOutput models the continuum of valid outcomes for item
+                    generation in recipes
+              itemModifyOutputs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    itemInputRef:
+                      type: string
+                    doubles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          weightRanges:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                lower:
+                                  type: string
+                                upper:
+                                  type: string
+                                weight:
+                                  type: string
+                                  format: int64
+                              title: >-
+                                DoubleWeightRange describes weight range that
+                                produce double value
+                          program:
+                            type: string
+                            title: 'When program is not empty, WeightRanges is ignored'
+                        title: >-
+                          DoubleParam describes the bounds on an item
+                          input/output parameter of type float64
+                    longs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          weightRanges:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                lower:
+                                  type: string
+                                  format: int64
+                                upper:
+                                  type: string
+                                  format: int64
+                                weight:
+                                  type: string
+                                  format: int64
+                              title: >-
+                                IntWeightRange describes weight range that
+                                produce int value
+                          program:
+                            type: string
+                            title: 'When program is not empty, WeightRanges is ignored'
+                        title: >-
+                          LongParam describes the bounds on an item input/output
+                          parameter of type int64
+                    strings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          key:
+                            type: string
+                          value:
+                            type: string
+                          program:
+                            type: string
+                            title: 'When program is not empty, Value is ignored'
+                        title: >-
+                          StringParam describes an item input/output parameter
+                          of type string
+                    transferFee:
+                      type: string
+                  title: ItemModifyOutput describes what is modified from item input
+            title: EntriesList is a struct to keep list of items and coins
+          outputs:
+            type: array
+            items:
+              type: object
+              properties:
+                entryIDs:
+                  type: array
+                  items:
+                    type: string
+                Weight:
+                  type: string
+              title: >-
+                WeightedOutputs is to make structs which is using weight to be
+                based on
+          description:
+            type: string
+          blockInterval:
+            type: string
+            format: uint64
+          enabled:
+            type: boolean
+          extraInfo:
+            type: string
   Pylonstech.pylons.pylons.QueryListCookbookByCreatorResponse:
     type: object
     properties:
@@ -29984,3 +31486,422 @@ definitions:
               format: uint64
             enabled:
               type: boolean
+  Pylonstech.pylons.pylons.Recipe:
+    type: object
+    properties:
+      creator:
+        type: string
+      index:
+        type: string
+      nodeVersion:
+        type: string
+      cookbookID:
+        type: string
+      name:
+        type: string
+      coinInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+      itemInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  minValue:
+                    type: string
+                    description: The minimum legal value of this parameter.
+                  maxValue:
+                    type: string
+                    description: The maximum legal value of this parameter.
+                title: >-
+                  DoubleInputParam describes the bounds on an item input/output
+                  parameter of type float64
+            longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  minValue:
+                    type: string
+                    format: int64
+                    description: The minimum legal value of this parameter.
+                  maxValue:
+                    type: string
+                    format: int64
+                    description: The maximum legal value of this parameter.
+                title: >-
+                  LongInputParam describes the bounds on an item input/output
+                  parameter of type int64
+            strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+                    title: The value of the parameter
+                title: >-
+                  StringInputParam describes the bounds on an item input/output
+                  parameter of type string
+            conditions:
+              type: object
+              properties:
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      DoubleInputParam describes the bounds on an item
+                      input/output parameter of type float64
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        format: int64
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        format: int64
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      LongInputParam describes the bounds on an item
+                      input/output parameter of type int64
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                        title: The value of the parameter
+                    title: >-
+                      StringInputParam describes the bounds on an item
+                      input/output parameter of type string
+              title: >-
+                ConditionList is a struct for describing ItemInput expression
+                conditions
+          title: ItemInput is a struct for describing an input item
+      entries:
+        type: object
+        properties:
+          coinOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+          itemOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      weightRanges:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            lower:
+                              type: string
+                            upper:
+                              type: string
+                            weight:
+                              type: string
+                              format: int64
+                          title: >-
+                            DoubleWeightRange describes weight range that
+                            produce double value
+                      program:
+                        type: string
+                        title: 'When program is not empty, WeightRanges is ignored'
+                    title: >-
+                      DoubleParam describes the bounds on an item input/output
+                      parameter of type float64
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      weightRanges:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            lower:
+                              type: string
+                              format: int64
+                            upper:
+                              type: string
+                              format: int64
+                            weight:
+                              type: string
+                              format: int64
+                          title: >-
+                            IntWeightRange describes weight range that produce
+                            int value
+                      program:
+                        type: string
+                        title: 'When program is not empty, WeightRanges is ignored'
+                    title: >-
+                      LongParam describes the bounds on an item input/output
+                      parameter of type int64
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      key:
+                        type: string
+                      value:
+                        type: string
+                      program:
+                        type: string
+                        title: 'When program is not empty, Value is ignored'
+                    title: >-
+                      StringParam describes an item input/output parameter of
+                      type string
+                transferFee:
+                  type: string
+                quantity:
+                  type: string
+                  format: uint64
+              title: >-
+                ItemOutput models the continuum of valid outcomes for item
+                generation in recipes
+          itemModifyOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                itemInputRef:
+                  type: string
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      weightRanges:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            lower:
+                              type: string
+                            upper:
+                              type: string
+                            weight:
+                              type: string
+                              format: int64
+                          title: >-
+                            DoubleWeightRange describes weight range that
+                            produce double value
+                      program:
+                        type: string
+                        title: 'When program is not empty, WeightRanges is ignored'
+                    title: >-
+                      DoubleParam describes the bounds on an item input/output
+                      parameter of type float64
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      weightRanges:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            lower:
+                              type: string
+                              format: int64
+                            upper:
+                              type: string
+                              format: int64
+                            weight:
+                              type: string
+                              format: int64
+                          title: >-
+                            IntWeightRange describes weight range that produce
+                            int value
+                      program:
+                        type: string
+                        title: 'When program is not empty, WeightRanges is ignored'
+                    title: >-
+                      LongParam describes the bounds on an item input/output
+                      parameter of type int64
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      key:
+                        type: string
+                      value:
+                        type: string
+                      program:
+                        type: string
+                        title: 'When program is not empty, Value is ignored'
+                    title: >-
+                      StringParam describes an item input/output parameter of
+                      type string
+                transferFee:
+                  type: string
+              title: ItemModifyOutput describes what is modified from item input
+        title: EntriesList is a struct to keep list of items and coins
+      outputs:
+        type: array
+        items:
+          type: object
+          properties:
+            entryIDs:
+              type: array
+              items:
+                type: string
+            Weight:
+              type: string
+          title: >-
+            WeightedOutputs is to make structs which is using weight to be based
+            on
+      description:
+        type: string
+      blockInterval:
+        type: string
+        format: uint64
+      enabled:
+        type: boolean
+      extraInfo:
+        type: string
+  Pylonstech.pylons.pylons.StringInputParam:
+    type: object
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+        title: The value of the parameter
+    title: >-
+      StringInputParam describes the bounds on an item input/output parameter of
+      type string
+  Pylonstech.pylons.pylons.StringParam:
+    type: object
+    properties:
+      rate:
+        type: string
+        description: >-
+          The likelihood that this parameter is applied to the output item.
+          Between 0.0 (exclusive) and 1.0 (inclusive).
+      key:
+        type: string
+      value:
+        type: string
+      program:
+        type: string
+        title: 'When program is not empty, Value is ignored'
+    title: StringParam describes an item input/output parameter of type string
+  Pylonstech.pylons.pylons.WeightedOutputs:
+    type: object
+    properties:
+      entryIDs:
+        type: array
+        items:
+          type: string
+      Weight:
+        type: string
+    title: WeightedOutputs is to make structs which is using weight to be based on

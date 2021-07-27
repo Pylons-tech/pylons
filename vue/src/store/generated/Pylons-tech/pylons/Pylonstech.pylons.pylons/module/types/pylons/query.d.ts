@@ -1,7 +1,14 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetRecipeRequest {
+    index: string;
+}
+export interface QueryGetRecipeResponse {
+    Recipe: Recipe | undefined;
+}
 export interface QueryListCookbookByCreatorRequest {
     creator: string;
 }
@@ -14,6 +21,20 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryGetRecipeRequest: {
+    encode(message: QueryGetRecipeRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetRecipeRequest;
+    fromJSON(object: any): QueryGetRecipeRequest;
+    toJSON(message: QueryGetRecipeRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetRecipeRequest>): QueryGetRecipeRequest;
+};
+export declare const QueryGetRecipeResponse: {
+    encode(message: QueryGetRecipeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetRecipeResponse;
+    fromJSON(object: any): QueryGetRecipeResponse;
+    toJSON(message: QueryGetRecipeResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetRecipeResponse>): QueryGetRecipeResponse;
+};
 export declare const QueryListCookbookByCreatorRequest: {
     encode(message: QueryListCookbookByCreatorRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryListCookbookByCreatorRequest;
@@ -44,6 +65,8 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a recipe by index. */
+    Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>;
     /** Queries a list of listCookbookByCreator items. */
     ListCookbookByCreator(request: QueryListCookbookByCreatorRequest): Promise<QueryListCookbookByCreatorResponse>;
     /** Queries a cookbook by index. */
@@ -52,6 +75,7 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>;
     ListCookbookByCreator(request: QueryListCookbookByCreatorRequest): Promise<QueryListCookbookByCreatorResponse>;
     Cookbook(request: QueryGetCookbookRequest): Promise<QueryGetCookbookResponse>;
 }

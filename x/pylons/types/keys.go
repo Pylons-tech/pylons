@@ -28,3 +28,7 @@ func KeyPrefix(p string) []byte {
 const (
 	CookbookKey = "Cookbook-value-"
 )
+
+const (
+	RecipeKey = "Recipe-value-"
+)

@@ -1,0 +1,139 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+// DoubleInputParam describes the bounds on an item input/output parameter of type float64
+message DoubleInputParam {
+  string key = 1;
+  // The minimum legal value of this parameter.
+  string minValue = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  // The maximum legal value of this parameter.
+  string  maxValue = 3 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+}
+
+// LongInputParam describes the bounds on an item input/output parameter of type int64
+message LongInputParam {
+  string key = 1;
+  // The minimum legal value of this parameter.
+  int64 minValue = 2;
+  // The maximum legal value of this parameter.
+  int64 maxValue = 3;
+}
+
+// StringInputParam describes the bounds on an item input/output parameter of type string
+message StringInputParam {
+  string key = 1;
+  // The value of the parameter
+  string value = 2;
+}
+
+// ConditionList is a struct for describing ItemInput expression conditions
+message ConditionList {
+  repeated DoubleInputParam doubles = 1[(gogoproto.nullable) = false];
+  repeated LongInputParam longs = 2[(gogoproto.nullable) = false];
+  repeated StringInputParam strings = 3[(gogoproto.nullable) = false];
+}
+
+// ItemInput is a struct for describing an input item
+message ItemInput  {
+  repeated DoubleInputParam doubles = 1 [(gogoproto.nullable) = false];
+  repeated LongInputParam longs = 2 [(gogoproto.nullable) = false];
+  repeated StringInputParam strings = 3 [(gogoproto.nullable) = false];
+  ConditionList conditions = 4 [(gogoproto.nullable) = false];
+}
+
+// DoubleWeightRange describes weight range that produce double value
+message DoubleWeightRange {
+  string lower = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"]; // This is added due to amino.Marshal does not support float variable
+  string upper = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  int64 weight = 3;
+}
+
+// DoubleParam describes the bounds on an item input/output parameter of type float64
+message DoubleParam  {
+  string key = 1;
+  // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+  string rate = 2 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  repeated DoubleWeightRange weightRanges = 3 [(gogoproto.nullable) = false];
+  // When program is not empty, WeightRanges is ignored
+  string program = 4;
+}
+
+// IntWeightRange describes weight range that produce int value
+message IntWeightRange {
+  int64 lower = 1;
+  int64 upper = 2;
+  int64 weight = 3;
+}
+
+// LongParam describes the bounds on an item input/output parameter of type int64
+message LongParam {
+  string key = 1;
+  // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+  string rate = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  repeated IntWeightRange weightRanges = 3 [(gogoproto.nullable) = false];
+  // When program is not empty, WeightRanges is ignored
+  string program = 4;
+}
+
+// StringParam describes an item input/output parameter of type string
+message StringParam {
+  // The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+  string rate = 1 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string key = 2;
+  string value = 3;
+  // When program is not empty, Value is ignored
+  string program = 4;
+}
+
+// ItemOutput models the continuum of valid outcomes for item generation in recipes
+message ItemOutput {
+  repeated DoubleParam doubles = 1 [(gogoproto.nullable) = false];
+  repeated LongParam longs = 2 [(gogoproto.nullable) = false];
+  repeated StringParam strings = 3 [(gogoproto.nullable) = false];
+  string transferFee = 4 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  uint64 quantity = 5;
+}
+
+// ItemModifyOutput describes what is modified from item input
+message ItemModifyOutput {
+  string itemInputRef = 1;
+  repeated DoubleParam doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongParam longs = 3 [(gogoproto.nullable) = false];
+  repeated StringParam strings = 4 [(gogoproto.nullable) = false];
+  string transferFee = 5 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+}
+
+// EntriesList is a struct to keep list of items and coins
+message EntriesList {
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 1 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemOutput itemOutputs = 2 [(gogoproto.nullable) = false];
+  repeated ItemModifyOutput itemModifyOutputs = 3 [(gogoproto.nullable) = false];
+}
+
+// WeightedOutputs is to make structs which is using weight to be based on
+message  WeightedOutputs {
+  repeated string entryIDs = 1;
+  string Weight = 2;
+}
+
+message Recipe {
+  string creator = 1;
+  string index = 2;
+  string nodeVersion = 3;
+  string cookbookID = 4;
+  string name = 5;
+  repeated cosmos.base.v1beta1.Coin coinInputs = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemInput itemInputs = 7 [(gogoproto.nullable) = false];
+  EntriesList entries = 8 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 9 [(gogoproto.nullable) = false];
+  string description = 10;
+  uint64 blockInterval = 11;
+  bool enabled = 12;
+  string extraInfo = 13;
+}
+
