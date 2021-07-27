@@ -42,6 +42,10 @@ export interface PylonsQueryGetCookbookResponse {
   Cookbook?: PylonsCookbook;
 }
 
+export interface PylonsQueryListCookbookByCreatorResponse {
+  Cookbooks?: PylonsCookbook[];
+}
+
 export interface RpcStatus {
   /** @format int32 */
   code?: number;
@@ -256,6 +260,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryCookbook = (index: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetCookbookResponse, RpcStatus>({
       path: `/pylons/cookbook/${index}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListCookbookByCreator
+   * @summary Queries a list of listCookbookByCreator items.
+   * @request GET:/pylons/listCookbooks/{creator}
+   */
+  queryListCookbookByCreator = (creator: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListCookbookByCreatorResponse, RpcStatus>({
+      path: `/pylons/listCookbooks/${creator}`,
       method: "GET",
       format: "json",
       ...params,

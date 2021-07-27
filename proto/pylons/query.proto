@@ -3,6 +3,7 @@ package Pylonstech.pylons.pylons;
 
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
+import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
 import "pylons/cookbook.proto";
 
@@ -12,6 +13,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 service Query {
     // this line is used by starport scaffolding # 2
 
+	// Queries a list of listCookbookByCreator items.
+	rpc ListCookbookByCreator(QueryListCookbookByCreatorRequest) returns (QueryListCookbookByCreatorResponse) {
+		option (google.api.http).get = "/pylons/listCookbooks/{creator}";
+	}
+
+
 	// Queries a cookbook by index.
 	rpc Cookbook(QueryGetCookbookRequest) returns (QueryGetCookbookResponse) {
 		option (google.api.http).get = "/pylons/cookbook/{index}";
@@ -20,6 +27,14 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryListCookbookByCreatorRequest {
+  string creator = 1;
+}
+
+message QueryListCookbookByCreatorResponse {
+  repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
+}
+
 message QueryGetCookbookRequest {
 	string index = 1;
 }

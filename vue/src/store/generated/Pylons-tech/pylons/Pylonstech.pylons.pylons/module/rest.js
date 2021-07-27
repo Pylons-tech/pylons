@@ -150,5 +150,19 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryListCookbookByCreator
+         * @summary Queries a list of listCookbookByCreator items.
+         * @request GET:/pylons/listCookbooks/{creator}
+         */
+        this.queryListCookbookByCreator = (creator, params = {}) => this.request({
+            path: `/pylons/listCookbooks/${creator}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

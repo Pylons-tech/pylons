@@ -19,7 +19,7 @@ func NewMsgCreateCookbook(creator string, index string, nodeVersion string, name
 		SupportEmail: supportEmail,
 		Level:        level,
 		CostPerBlock: costPerBlock,
-		Enabled: true, // Cookbook is enabled by default at creation
+		Enabled:      true, // Cookbook is enabled by default at creation
 	}
 }
 
@@ -66,7 +66,7 @@ func NewMsgUpdateCookbook(creator string, index string, nodeVersion string, name
 		SupportEmail: supportEmail,
 		Level:        level,
 		CostPerBlock: costPerBlock,
-		Enabled: enabled,
+		Enabled:      enabled,
 	}
 }
 

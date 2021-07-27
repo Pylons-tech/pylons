@@ -23,6 +23,9 @@ export declare type PylonsMsgUpdateCookbookResponse = object;
 export interface PylonsQueryGetCookbookResponse {
     Cookbook?: PylonsCookbook;
 }
+export interface PylonsQueryListCookbookByCreatorResponse {
+    Cookbooks?: PylonsCookbook[];
+}
 export interface RpcStatus {
     /** @format int32 */
     code?: number;
@@ -96,5 +99,14 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/pylons/cookbook/{index}
      */
     queryCookbook: (index: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetCookbookResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListCookbookByCreator
+     * @summary Queries a list of listCookbookByCreator items.
+     * @request GET:/pylons/listCookbooks/{creator}
+     */
+    queryListCookbookByCreator: (creator: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListCookbookByCreatorResponse, RpcStatus>>;
 }
 export {};

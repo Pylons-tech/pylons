@@ -43,6 +43,7 @@ function getStructure(template) {
 
 const getDefaultState = () => {
 	return {
+				ListCookbookByCreator: {},
 				Cookbook: {},
 				
 				_Structure: {
@@ -74,6 +75,12 @@ export default {
 		}
 	},
 	getters: {
+				getListCookbookByCreator: (state) => (params = { params: {}}) => {
+					if (!(<any> params).query) {
+						(<any> params).query=null
+					}
+			return state.ListCookbookByCreator[JSON.stringify(params)] ?? {}
+		},
 				getCookbook: (state) => (params = { params: {}}) => {
 					if (!(<any> params).query) {
 						(<any> params).query=null
@@ -109,6 +116,27 @@ export default {
 				}
 			})
 		},
+		
+		
+		
+		 		
+		
+		
+		async QueryListCookbookByCreator({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+			try {
+				const queryClient=await initQueryClient(rootGetters)
+				let value= (await queryClient.queryListCookbookByCreator( key.creator)).data
+				
+					
+				commit('QUERY', { query: 'ListCookbookByCreator', key: { params: {...key}, query}, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryListCookbookByCreator', payload: { options: { all }, params: {...key},query }})
+				return getters['getListCookbookByCreator']( { params: {...key}, query}) ?? {}
+			} catch (e) {
+				throw new SpVuexError('QueryClient:QueryListCookbookByCreator', 'API Node Unavailable. Could not perform query: ' + e.message)
+				
+			}
+		},
+		
 		
 		
 		

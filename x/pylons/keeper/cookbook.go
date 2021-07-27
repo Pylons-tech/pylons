@@ -4,6 +4,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"strings"
 )
 
 // SetCookbook set a specific cookbook in the store from its index
@@ -24,4 +25,20 @@ func (k Keeper) GetCookbook(ctx sdk.Context, index string) (val types.Cookbook, 
 
 	k.cdc.MustUnmarshalBinaryBare(b, &val)
 	return val, true
+}
+
+
+// GetCookbooksByCreator returns cookbooks owned by a specific creator
+func (k Keeper) GetCookbooksByCreator(ctx sdk.Context, creator sdk.AccAddress) []types.Cookbook {
+	var cookbooks []types.Cookbook
+	iterator := sdk.KVStorePrefixIterator(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Cookbook
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		if strings.Contains(val.Creator, creator.String()) {
+			cookbooks = append(cookbooks, val)
+		}
+	}
+
+	return cookbooks
 }

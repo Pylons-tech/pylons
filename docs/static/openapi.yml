@@ -19539,6 +19539,72 @@ paths:
           type: string
       tags:
         - Query
+  '/pylons/listCookbooks/{creator}':
+    get:
+      summary: Queries a list of listCookbookByCreator items.
+      operationId: PylonstechPylonsPylonsListCookbookByCreator
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Cookbooks:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    creator:
+                      type: string
+                    index:
+                      type: string
+                    nodeVersion:
+                      type: string
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    developer:
+                      type: string
+                    version:
+                      type: string
+                    supportEmail:
+                      type: string
+                    level:
+                      type: string
+                      format: int64
+                    costPerBlock:
+                      type: string
+                      format: uint64
+                    enabled:
+                      type: boolean
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: creator
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
 definitions:
   cosmos.bank.v1beta1.DenomUnit:
     type: object
@@ -29886,3 +29952,35 @@ definitions:
             format: uint64
           enabled:
             type: boolean
+  Pylonstech.pylons.pylons.QueryListCookbookByCreatorResponse:
+    type: object
+    properties:
+      Cookbooks:
+        type: array
+        items:
+          type: object
+          properties:
+            creator:
+              type: string
+            index:
+              type: string
+            nodeVersion:
+              type: string
+            name:
+              type: string
+            description:
+              type: string
+            developer:
+              type: string
+            version:
+              type: string
+            supportEmail:
+              type: string
+            level:
+              type: string
+              format: int64
+            costPerBlock:
+              type: string
+              format: uint64
+            enabled:
+              type: boolean
