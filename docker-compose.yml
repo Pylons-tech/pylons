@@ -1,16 +1,15 @@
 version: '3.4'
 services:
-  node0:
-    hostname: node0
+  validator:
+    hostname: validator
     build:
       dockerfile: Dockerfile.starport
       context: .
-      target: node
+      target: validator
     ports:
       - 1317:1317
     networks:
       - pylonsnet
-    command: pylonsd start --home=/root/.pylons
 
   mongo:
     image: mongo:latest
@@ -45,4 +44,5 @@ networks:
   pylonsnet:
 
 volumes:
+  pylons_home:
   data:

@@ -19557,9 +19557,9 @@ paths:
   '/custom/pylons/check_google_iap_order/{purchaseToken}':
     get:
       summary: >-
-        CheckGoogleIapOrder check if google iap order is given to user with
+        CheckGoogleIAPOrder check if google iap order is given to user with
         purchase token
-      operationId: PylonsCheckGoogleIapOrder
+      operationId: PylonsCheckGoogleIAPOrder
       responses:
         '200':
           description: A successful response.
@@ -32648,7 +32648,7 @@ definitions:
     properties:
       Bech32Addr:
         type: string
-  pylons.CheckGoogleIapOrderResponse:
+  pylons.CheckGoogleIAPOrderResponse:
     type: object
     properties:
       purchaseToken:

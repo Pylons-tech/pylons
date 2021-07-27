@@ -1,6 +1,6 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
 # Start from the latest starport image
-FROM starport/cli:0.17.0 as build
+FROM starport/cli:0.17.0 as base
 
 # Add Maintainer Info
 LABEL maintainer="Rafael de Andrade <rafael.andrade@tendermint.com>"
@@ -11,13 +11,13 @@ USER root
 
 ENV GOPROXY https://proxy.golang.org
 
-COPY ./app          ./app
-COPY ./cmd          ./cmd
-COPY ./docs         ./docs
-COPY ./proto        ./proto
-COPY ./x            ./x
-COPY ./config.yml   ./config.yml
-COPY ./go.mod       ./go.mod
+COPY ./app                                          ./app
+COPY ./cmd                                          ./cmd
+COPY ./docs                                         ./docs
+COPY ./proto                                        ./proto
+COPY ./x                                            ./x
+COPY ./docker/config-validator.yml                  ./config.yml
+COPY ./go.mod                                       ./go.mod
 
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
 RUN starport chain build --release
@@ -25,33 +25,13 @@ RUN starport chain init
 RUN tar -xzvf /apps/release/pylons_linux_amd64.tar.gz
 
 
-## Node
-FROM ubuntu:21.04 as node
+## validator
+FROM ubuntu:21.04 as build
 
-ENV PYLONSHOME="/root/.pylons/"
+ENV PYLONSHOME="/root/.pylonsd/"
 
-COPY --from=build /apps/pylonsd /bin/pylonsd
-COPY --from=build /root/.pylons $PYLONSHOME
+COPY --from=validatorbuild /apps/pylonsd /bin/pylonsd
+COPY --from=validatorbuild $PYLONSHOME $PYLONSHOME
+COPY docker/entrypoint_validator.sh /root/entrypoint.sh
 
-
-CMD pylonsd --home $PYLONSHOME start
-
-## Ui
-FROM node:latest
-
-RUN apt update && apt install -y python3
-
-RUN alias python="/usr/bin/python3.5"
-
-RUN useradd -ms /bin/bash pylons
-
-USER pylons
-
-WORKDIR /home/pylons
-
-COPY --from=build /apps/vue/* /home/pylons/
-
-RUN npm i
-RUN npm run build
-
-CMD /bin/bash
+ENTRYPOINT /root/entrypoint.sh

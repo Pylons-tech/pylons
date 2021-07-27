@@ -1,0 +1,24 @@
+genesis:
+  chain_id: "pylons"
+
+build:
+  binary: "pylonsd"
+
+init:
+  home: "$HOME/.pylonsd"
+  config:
+    api:
+      swagger: false
+
+accounts:
+  - name: notary
+    coins: ["10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin"]
+    mnemonic: "achieve patch rabbit delay you stairs flag nation lady outside answer property olive man dwarf used chapter sunset bundle sniff between since review logic"
+
+validator:
+  name: notary
+  staked: "100000000stake"
+
+faucet:
+  name: notary
+  coins: [ "100pylons" ]

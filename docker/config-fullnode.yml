@@ -22,6 +22,7 @@ accounts:
 
 validator:
   name: node0
+
   staked: "100000000stake"
 
 client:
