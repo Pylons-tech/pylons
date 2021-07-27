@@ -1,0 +1,20 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
+
+message Cookbook {
+  string creator = 1;
+  string index = 2;
+  string nodeVersion = 3; 
+  string name = 4; 
+  string description = 5; 
+  string developer = 6; 
+  string version = 7; 
+  string supportEmail = 8; 
+  int64 level = 9;
+  uint64 costPerBlock = 10;
+  bool enabled = 11;
+}

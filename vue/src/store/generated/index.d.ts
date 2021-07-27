@@ -1,4 +1,5 @@
 declare const _default: {
+    PylonsTechPylonsPylonstechPylonsPylons: (store: any) => void;
     CosmosCosmosSdkCosmosBankV1Beta1: (store: any) => void;
     CosmosCosmosSdkCosmosBaseAbciV1Beta1: (store: any) => void;
     CosmosCosmosSdkCosmosBaseV1Beta1: (store: any) => void;

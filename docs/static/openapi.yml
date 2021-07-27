@@ -19475,6 +19475,70 @@ paths:
           format: uint64
       tags:
         - Query
+  '/pylons/cookbook/{index}':
+    get:
+      summary: Queries a cookbook by index.
+      operationId: PylonstechPylonsPylonsCookbook
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Cookbook:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  index:
+                    type: string
+                  nodeVersion:
+                    type: string
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  developer:
+                    type: string
+                  version:
+                    type: string
+                  supportEmail:
+                    type: string
+                  level:
+                    type: string
+                    format: int64
+                  costPerBlock:
+                    type: string
+                    format: uint64
+                  enabled:
+                    type: boolean
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
 definitions:
   cosmos.bank.v1beta1.DenomUnit:
     type: object
@@ -29761,3 +29825,64 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  Pylonstech.pylons.pylons.Cookbook:
+    type: object
+    properties:
+      creator:
+        type: string
+      index:
+        type: string
+      nodeVersion:
+        type: string
+      name:
+        type: string
+      description:
+        type: string
+      developer:
+        type: string
+      version:
+        type: string
+      supportEmail:
+        type: string
+      level:
+        type: string
+        format: int64
+      costPerBlock:
+        type: string
+        format: uint64
+      enabled:
+        type: boolean
+  Pylonstech.pylons.pylons.MsgCreateCookbookResponse:
+    type: object
+  Pylonstech.pylons.pylons.MsgUpdateCookbookResponse:
+    type: object
+  Pylonstech.pylons.pylons.QueryGetCookbookResponse:
+    type: object
+    properties:
+      Cookbook:
+        type: object
+        properties:
+          creator:
+            type: string
+          index:
+            type: string
+          nodeVersion:
+            type: string
+          name:
+            type: string
+          description:
+            type: string
+          developer:
+            type: string
+          version:
+            type: string
+          supportEmail:
+            type: string
+          level:
+            type: string
+            format: int64
+          costPerBlock:
+            type: string
+            format: uint64
+          enabled:
+            type: boolean

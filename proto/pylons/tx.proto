@@ -2,12 +2,45 @@ syntax = "proto3";
 package Pylonstech.pylons.pylons;
 
 // this line is used by starport scaffolding # proto/tx/import
+import "pylons/cookbook.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Msg defines the Msg service.
 service Msg {
-    // this line is used by starport scaffolding # proto/tx/rpc
+  // this line is used by starport scaffolding # proto/tx/rpc
+  rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
+  rpc UpdateCookbook(MsgUpdateCookbook) returns (MsgUpdateCookbookResponse);
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgCreateCookbook {
+  string creator = 1;
+  string index = 2;
+  string nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string developer = 6;
+  string version = 7;
+  string supportEmail = 8;
+  int64 level = 9;
+  uint64 costPerBlock = 10;
+  bool enabled = 11;
+}
+message MsgCreateCookbookResponse { }
+
+message MsgUpdateCookbook {
+  string creator = 1;
+  string index = 2;
+  string nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string developer = 6;
+  string version = 7;
+  string supportEmail = 8;
+  int64 level = 9;
+  uint64 costPerBlock = 10;
+  bool enabled = 11;
+}
+message MsgUpdateCookbookResponse { }
+
