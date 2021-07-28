@@ -1,4 +1,4 @@
-package keeper
+ package keeper
 
 import (
 	"fmt"
@@ -19,10 +19,10 @@ func TestCookbookMsgServerCreate(t *testing.T) {
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
-		expected := &types.MsgCreateCookbook{Creator: creator, Index: idx}
+		expected := &types.MsgCreateCookbook{Creator: creator, ID: idx}
 		_, err := srv.CreateCookbook(wctx, expected)
 		require.NoError(t, err)
-		rst, found := keeper.GetCookbook(ctx, expected.Index)
+		rst, found := keeper.GetCookbook(ctx, expected.ID)
 		require.True(t, found)
 		assert.Equal(t, expected.Creator, rst.Creator)
 	}
@@ -39,16 +39,16 @@ func TestCookbookMsgServerUpdate(t *testing.T) {
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgUpdateCookbook{Creator: creator, Index: index},
+			request: &types.MsgUpdateCookbook{Creator: creator, ID: index},
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgUpdateCookbook{Creator: "B", Index: index},
+			request: &types.MsgUpdateCookbook{Creator: "B", ID: index},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.MsgUpdateCookbook{Creator: creator, Index: "missing"},
+			request: &types.MsgUpdateCookbook{Creator: creator, ID: "missing"},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 	} {
@@ -57,7 +57,7 @@ func TestCookbookMsgServerUpdate(t *testing.T) {
 			keeper, ctx := setupKeeper(t)
 			srv := NewMsgServerImpl(*keeper)
 			wctx := sdk.WrapSDKContext(ctx)
-			expected := &types.MsgCreateCookbook{Creator: creator, Index: index}
+			expected := &types.MsgCreateCookbook{Creator: creator, ID: index}
 			_, err := srv.CreateCookbook(wctx, expected)
 			require.NoError(t, err)
 
@@ -66,7 +66,7 @@ func TestCookbookMsgServerUpdate(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				rst, found := keeper.GetCookbook(ctx, expected.Index)
+				rst, found := keeper.GetCookbook(ctx, expected.ID)
 				require.True(t, found)
 				assert.Equal(t, expected.Creator, rst.Creator)
 			}

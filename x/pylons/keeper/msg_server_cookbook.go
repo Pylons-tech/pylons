@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -18,6 +19,11 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	}
 
 	// TODO get config fee from application and perform fee logic
+	fee := config.DefaultBasicFee
+	if msg.Tier == types.Premium {
+		fee = config.DefaultPremiumFee
+	}
+	_ = fee
 
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
@@ -48,9 +54,19 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("ID %v not set", msg.ID))
 	}
 
-	// Checks if the the msg sender is the same as the current owner
+	// Check if the the msg sender is the same as the current owner
 	if msg.Creator != valFound.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	}
+
+	// Check if tier update is legal
+	if msg.Tier != valFound.Tier && msg.Tier == types.Basic {
+		return nil, sdkerrors.Wrap(types.ErrInvalidTierUpgrade, "cannot downgrade tier on cookbook")
+	}
+
+	// TODO if upgrade requested pay fee as PremiumFee - BasicFee
+	if msg.Tier != valFound.Tier && msg.Tier == types.Premium{
+
 	}
 
 	var cookbook = types.Cookbook{

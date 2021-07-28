@@ -34,7 +34,7 @@ func TestListCookbooksByCreator(t *testing.T) {
 		{
 			desc:    "KeyNotFound",
 			request: &types.QueryListCookbooksByCreatorRequest{Creator: "missing"},
-			err:     status.Error(codes.InvalidArgument, "not found"),
+			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook(nil)},
 		},
 		{
 			desc: "InvalidRequest",

@@ -41,9 +41,7 @@ func TestCookbookGetAllByCreator(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	items := createNCookbook(keeper, ctx, 10)
 	for _, item := range items {
-		addr, err := sdk.AccAddressFromBech32(item.Creator)
-		assert.NotNil(t, err)
-		rst := keeper.GetAllCookbookByCreator(ctx, addr)
-		assert.Equal(t, item, rst)
+		rst := keeper.GetAllCookbookByCreator(ctx, item.Creator)
+		assert.Equal(t, item, rst[0])
 	}
 }

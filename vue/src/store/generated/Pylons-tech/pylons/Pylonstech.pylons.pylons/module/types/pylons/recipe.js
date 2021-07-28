@@ -1610,61 +1610,47 @@ export const WeightedOutputs = {
         return message;
     }
 };
-const baseRecipe = {
-    creator: '',
-    cookbookID: '',
-    ID: '',
-    nodeVersion: '',
-    name: '',
-    description: '',
-    version: '',
-    blockInterval: 0,
-    enabled: false,
-    extraInfo: ''
-};
+const baseRecipe = { cookbookID: '', ID: '', nodeVersion: '', name: '', description: '', version: '', blockInterval: 0, enabled: false, extraInfo: '' };
 export const Recipe = {
     encode(message, writer = Writer.create()) {
-        if (message.creator !== '') {
-            writer.uint32(10).string(message.creator);
-        }
         if (message.cookbookID !== '') {
-            writer.uint32(18).string(message.cookbookID);
+            writer.uint32(10).string(message.cookbookID);
         }
         if (message.ID !== '') {
-            writer.uint32(26).string(message.ID);
+            writer.uint32(18).string(message.ID);
         }
         if (message.nodeVersion !== '') {
-            writer.uint32(34).string(message.nodeVersion);
+            writer.uint32(26).string(message.nodeVersion);
         }
         if (message.name !== '') {
-            writer.uint32(42).string(message.name);
+            writer.uint32(34).string(message.name);
         }
         if (message.description !== '') {
-            writer.uint32(50).string(message.description);
+            writer.uint32(42).string(message.description);
         }
         if (message.version !== '') {
-            writer.uint32(58).string(message.version);
+            writer.uint32(50).string(message.version);
         }
         for (const v of message.coinInputs) {
-            Coin.encode(v, writer.uint32(66).fork()).ldelim();
+            Coin.encode(v, writer.uint32(58).fork()).ldelim();
         }
         for (const v of message.itemInputs) {
-            ItemInput.encode(v, writer.uint32(74).fork()).ldelim();
+            ItemInput.encode(v, writer.uint32(66).fork()).ldelim();
         }
         if (message.entries !== undefined) {
-            EntriesList.encode(message.entries, writer.uint32(82).fork()).ldelim();
+            EntriesList.encode(message.entries, writer.uint32(74).fork()).ldelim();
         }
         for (const v of message.outputs) {
-            WeightedOutputs.encode(v, writer.uint32(90).fork()).ldelim();
+            WeightedOutputs.encode(v, writer.uint32(82).fork()).ldelim();
         }
         if (message.blockInterval !== 0) {
-            writer.uint32(96).uint64(message.blockInterval);
+            writer.uint32(88).uint64(message.blockInterval);
         }
         if (message.enabled === true) {
-            writer.uint32(104).bool(message.enabled);
+            writer.uint32(96).bool(message.enabled);
         }
         if (message.extraInfo !== '') {
-            writer.uint32(114).string(message.extraInfo);
+            writer.uint32(106).string(message.extraInfo);
         }
         return writer;
     },
@@ -1679,45 +1665,42 @@ export const Recipe = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.creator = reader.string();
-                    break;
-                case 2:
                     message.cookbookID = reader.string();
                     break;
-                case 3:
+                case 2:
                     message.ID = reader.string();
                     break;
-                case 4:
+                case 3:
                     message.nodeVersion = reader.string();
                     break;
-                case 5:
+                case 4:
                     message.name = reader.string();
                     break;
-                case 6:
+                case 5:
                     message.description = reader.string();
                     break;
-                case 7:
+                case 6:
                     message.version = reader.string();
                     break;
-                case 8:
+                case 7:
                     message.coinInputs.push(Coin.decode(reader, reader.uint32()));
                     break;
-                case 9:
+                case 8:
                     message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
                     break;
-                case 10:
+                case 9:
                     message.entries = EntriesList.decode(reader, reader.uint32());
                     break;
-                case 11:
+                case 10:
                     message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
                     break;
-                case 12:
+                case 11:
                     message.blockInterval = longToNumber(reader.uint64());
                     break;
-                case 13:
+                case 12:
                     message.enabled = reader.bool();
                     break;
-                case 14:
+                case 13:
                     message.extraInfo = reader.string();
                     break;
                 default:
@@ -1732,12 +1715,6 @@ export const Recipe = {
         message.coinInputs = [];
         message.itemInputs = [];
         message.outputs = [];
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = String(object.creator);
-        }
-        else {
-            message.creator = '';
-        }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = String(object.cookbookID);
         }
@@ -1817,7 +1794,6 @@ export const Recipe = {
     },
     toJSON(message) {
         const obj = {};
-        message.creator !== undefined && (obj.creator = message.creator);
         message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
         message.ID !== undefined && (obj.ID = message.ID);
         message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
@@ -1853,12 +1829,6 @@ export const Recipe = {
         message.coinInputs = [];
         message.itemInputs = [];
         message.outputs = [];
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = object.creator;
-        }
-        else {
-            message.creator = '';
-        }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = object.cookbookID;
         }

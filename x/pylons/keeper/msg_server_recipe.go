@@ -24,12 +24,13 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook does not exist")
 	}
 	if cookbook.Creator != msg.Creator {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user does not own this cookbook")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
+
+	// TODO handle fees
 
 	var recipe = types.Recipe{
 		ID:              msg.ID,
-		Creator:         msg.Creator,
 		NodeVersion:     "", //TODO add logic for getting configured node version
 		CookbookID:      msg.CookbookID,
 		Name:            msg.Name,
@@ -54,14 +55,9 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
-	valFound, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
+	_, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
 	if !isFound {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("recipe with ID %v in cookbook with ID %v not set", msg.ID, msg.CookbookID))
-	}
-
-	// Checks if the the msg sender is the same as the current owner
-	if msg.Creator != valFound.Creator {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
 	// verify that the Creator is owner of the cookbook
@@ -70,12 +66,13 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook does not exist")
 	}
 	if cookbook.Creator != msg.Creator {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user does not own this cookbook")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "user does not own the cookbook")
 	}
+
+	// TODO handle fees
 
 	var recipe = types.Recipe{
 		ID:              msg.ID,
-		Creator:         msg.Creator,
 		NodeVersion:     "", //TODO add logic for getting configured node version
 		CookbookID:      msg.CookbookID,
 		Name:            msg.Name,

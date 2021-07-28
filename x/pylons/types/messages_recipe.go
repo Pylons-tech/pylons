@@ -72,13 +72,15 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// Validate sdk coins
-	if !msg.CoinInputs.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
-	}
+	if !msg.CoinInputs.Empty() {
+		// Validate sdk coins
+		if !msg.CoinInputs.IsValid() {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+		}
 
-	if !msg.CoinInputs.IsAllPositive() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+		if !msg.CoinInputs.IsAllPositive() {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+		}
 	}
 
 	for _, ii := range msg.ItemInputs {
@@ -148,6 +150,53 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
+	if err = ValidateID(msg.CookbookID); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if err = ValidateID(msg.ID); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if len(msg.Name) < 8 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+	}
+
+	if len(msg.Description) < 20 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+	}
+
+	if err = ValidateVersion(msg.Version); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if !msg.CoinInputs.Empty() {
+		// Validate sdk coins
+		if !msg.CoinInputs.IsValid() {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+		}
+
+		if !msg.CoinInputs.IsAllPositive() {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+		}
+	}
+
+	for _, ii := range msg.ItemInputs {
+		if err = ValidateItemInput(ii); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	idMap := make(map[string]bool)
+	if err = ValidateEntriesList(msg.Entries, idMap); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	for _, o := range msg.Outputs {
+		if err = ValidateOutputs(o, idMap); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
 
 	return nil
 }

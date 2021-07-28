@@ -16,7 +16,7 @@ import (
 func CmdCreateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [enabled] [extraInfo]",
-		Short: "Create a new Recipe",
+		Short: "Create a new recipe",
 		Args:  cobra.ExactArgs(12),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID, err := cast.ToStringE(args[0])
@@ -106,7 +106,7 @@ func CmdCreateRecipe() *cobra.Command {
 func CmdUpdateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [enabled] [extraInfo]",
-		Short: "Update a Recipe",
+		Short: "Update a recipe",
 		Args:  cobra.ExactArgs(12),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID, err := cast.ToStringE(args[0])

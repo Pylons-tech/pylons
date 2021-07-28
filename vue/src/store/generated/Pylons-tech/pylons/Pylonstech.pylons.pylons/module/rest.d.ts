@@ -118,7 +118,6 @@ export interface PylonsQueryListCookbooksByCreatorResponse {
     Cookbooks?: PylonsCookbook[];
 }
 export interface PylonsRecipe {
-    creator?: string;
     cookbookID?: string;
     ID?: string;
     nodeVersion?: string;

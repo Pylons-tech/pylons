@@ -135,19 +135,18 @@ message  WeightedOutputs {
 }
 
 message Recipe {
-  string creator = 1;
-  string cookbookID = 2;
-  string ID = 3;
-  string nodeVersion = 4;
-  string name = 5;
-  string description = 6;
-  string version = 7;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 8 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated ItemInput itemInputs = 9 [(gogoproto.nullable) = false];
-  EntriesList entries = 10 [(gogoproto.nullable) = false];
-  repeated WeightedOutputs outputs = 11 [(gogoproto.nullable) = false];
-  uint64 blockInterval = 12;
-  bool enabled = 13;
-  string extraInfo = 14;
+  string cookbookID = 1;
+  string ID = 2;
+  string nodeVersion = 3;
+  string name = 4;
+  string description = 5;
+  string version = 6;
+  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  EntriesList entries = 9 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
+  uint64 blockInterval = 11;
+  bool enabled = 12;
+  string extraInfo = 13;
 }
 

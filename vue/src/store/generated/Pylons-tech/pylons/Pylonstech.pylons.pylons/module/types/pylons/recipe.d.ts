@@ -115,7 +115,6 @@ export interface WeightedOutputs {
     weight: number;
 }
 export interface Recipe {
-    creator: string;
     cookbookID: string;
     ID: string;
     nodeVersion: string;

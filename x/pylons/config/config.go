@@ -4,6 +4,9 @@ import sdk "github.com/cosmos/cosmos-sdk/types"
 
 const (
 	PylonsCoinDenom = "pylon"
+
+	DefaultBasicFee = 10000
+	DefaultPremiumFee = 50000
 )
 
 // RequestFieldConfig holds parameters for validating request fields
@@ -26,7 +29,7 @@ type FeeConfig struct {
 
 func NewFeeConfig() FeeConfig {
 	return FeeConfig{
-		BasicFee: sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, 10000)},
-		PremiumFee: sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, 50000)},
+		BasicFee: sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBasicFee)},
+		PremiumFee: sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultPremiumFee)},
 	}
 }

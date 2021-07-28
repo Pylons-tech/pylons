@@ -19618,8 +19618,6 @@ paths:
               Recipe:
                 type: object
                 properties:
-                  creator:
-                    type: string
                   cookbookID:
                     type: string
                   ID:
@@ -31242,8 +31240,6 @@ definitions:
       Recipe:
         type: object
         properties:
-          creator:
-            type: string
           cookbookID:
             type: string
           ID:
@@ -31712,8 +31708,6 @@ definitions:
   Pylonstech.pylons.pylons.Recipe:
     type: object
     properties:
-      creator:
-        type: string
       cookbookID:
         type: string
       ID:
