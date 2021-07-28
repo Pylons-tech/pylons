@@ -3,6 +3,10 @@ export interface ProtobufAny {
     /** @format byte */
     value?: string;
 }
+export interface PylonsCoinOutput {
+    ID?: string;
+    coins?: V1Beta1Coin[];
+}
 export interface PylonsConditionList {
     doubles?: PylonsDoubleInputParam[];
     longs?: PylonsLongInputParam[];
@@ -10,7 +14,7 @@ export interface PylonsConditionList {
 }
 export interface PylonsCookbook {
     creator?: string;
-    index?: string;
+    ID?: string;
     nodeVersion?: string;
     name?: string;
     description?: string;
@@ -18,7 +22,7 @@ export interface PylonsCookbook {
     version?: string;
     supportEmail?: string;
     /** @format int64 */
-    level?: string;
+    tier?: string;
     /** @format uint64 */
     costPerBlock?: string;
     enabled?: boolean;
@@ -40,11 +44,11 @@ export interface PylonsDoubleParam {
 export interface PylonsDoubleWeightRange {
     lower?: string;
     upper?: string;
-    /** @format int64 */
+    /** @format uint64 */
     weight?: string;
 }
 export interface PylonsEntriesList {
-    coinOutputs?: V1Beta1Coin[];
+    coinOutputs?: PylonsCoinOutput[];
     itemOutputs?: PylonsItemOutput[];
     itemModifyOutputs?: PylonsItemModifyOutput[];
 }
@@ -53,7 +57,7 @@ export interface PylonsIntWeightRange {
     lower?: string;
     /** @format int64 */
     upper?: string;
-    /** @format int64 */
+    /** @format uint64 */
     weight?: string;
 }
 export interface PylonsItemInput {
@@ -63,6 +67,7 @@ export interface PylonsItemInput {
     conditions?: PylonsConditionList;
 }
 export interface PylonsItemModifyOutput {
+    ID?: string;
     itemInputRef?: string;
     doubles?: PylonsDoubleParam[];
     longs?: PylonsLongParam[];
@@ -70,9 +75,11 @@ export interface PylonsItemModifyOutput {
     transferFee?: string;
 }
 export interface PylonsItemOutput {
+    ID?: string;
     doubles?: PylonsDoubleParam[];
     longs?: PylonsLongParam[];
     strings?: PylonsStringParam[];
+    mutableStrings?: PylonsStringParam[];
     transferFee?: string;
     /** @format uint64 */
     quantity?: string;
@@ -107,20 +114,21 @@ export interface PylonsQueryGetCookbookResponse {
 export interface PylonsQueryGetRecipeResponse {
     Recipe?: PylonsRecipe;
 }
-export interface PylonsQueryListCookbookByCreatorResponse {
+export interface PylonsQueryListCookbooksByCreatorResponse {
     Cookbooks?: PylonsCookbook[];
 }
 export interface PylonsRecipe {
     creator?: string;
-    index?: string;
-    nodeVersion?: string;
     cookbookID?: string;
+    ID?: string;
+    nodeVersion?: string;
     name?: string;
+    description?: string;
+    version?: string;
     coinInputs?: V1Beta1Coin[];
     itemInputs?: PylonsItemInput[];
     entries?: PylonsEntriesList;
     outputs?: PylonsWeightedOutputs[];
-    description?: string;
     /** @format uint64 */
     blockInterval?: string;
     enabled?: boolean;
@@ -131,15 +139,16 @@ export interface PylonsStringInputParam {
     value?: string;
 }
 export interface PylonsStringParam {
+    key?: string;
     /** The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive). */
     rate?: string;
-    key?: string;
     value?: string;
     program?: string;
 }
 export interface PylonsWeightedOutputs {
     entryIDs?: string[];
-    Weight?: string;
+    /** @format uint64 */
+    weight?: string;
 }
 export interface RpcStatus {
     /** @format int32 */
@@ -221,26 +230,26 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @tags Query
      * @name QueryCookbook
      * @summary Queries a cookbook by index.
-     * @request GET:/pylons/cookbook/{index}
+     * @request GET:/pylons/cookbook/{ID}
      */
-    queryCookbook: (index: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetCookbookResponse, RpcStatus>>;
+    queryCookbook: (ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetCookbookResponse, RpcStatus>>;
     /**
      * No description
      *
      * @tags Query
-     * @name QueryListCookbookByCreator
+     * @name QueryListCookbooksByCreator
      * @summary Queries a list of listCookbookByCreator items.
      * @request GET:/pylons/listCookbooks/{creator}
      */
-    queryListCookbookByCreator: (creator: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListCookbookByCreatorResponse, RpcStatus>>;
+    queryListCookbooksByCreator: (creator: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>>;
     /**
      * No description
      *
      * @tags Query
      * @name QueryRecipe
      * @summary Queries a recipe by index.
-     * @request GET:/pylons/recipe/{index}
+     * @request GET:/pylons/recipe/{CookbookID}/{ID}
      */
-    queryRecipe: (index: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetRecipeResponse, RpcStatus>>;
+    queryRecipe: (CookbookID: string, ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetRecipeResponse, RpcStatus>>;
 }
 export {};

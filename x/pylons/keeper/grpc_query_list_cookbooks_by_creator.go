@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func (k Keeper) ListCookbookByCreator(goCtx context.Context, req *types.QueryListCookbookByCreatorRequest) (*types.QueryListCookbookByCreatorResponse, error) {
+func (k Keeper) ListCookbooksByCreator(goCtx context.Context, req *types.QueryListCookbooksByCreatorRequest) (*types.QueryListCookbooksByCreatorResponse, error) {
 	var err error
 	var addr sdk.AccAddress
 
@@ -27,7 +27,7 @@ func (k Keeper) ListCookbookByCreator(goCtx context.Context, req *types.QueryLis
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}
-	cbs := k.GetCookbooksByCreator(ctx, addr)
+	cbs := k.GetAllCookbookByCreator(ctx, addr)
 
-	return &types.QueryListCookbookByCreatorResponse{Cookbooks: cbs}, nil
+	return &types.QueryListCookbooksByCreatorResponse{Cookbooks: cbs}, nil
 }

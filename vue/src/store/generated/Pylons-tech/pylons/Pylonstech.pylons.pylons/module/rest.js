@@ -142,10 +142,10 @@ export class Api extends HttpClient {
          * @tags Query
          * @name QueryCookbook
          * @summary Queries a cookbook by index.
-         * @request GET:/pylons/cookbook/{index}
+         * @request GET:/pylons/cookbook/{ID}
          */
-        this.queryCookbook = (index, params = {}) => this.request({
-            path: `/pylons/cookbook/${index}`,
+        this.queryCookbook = (ID, params = {}) => this.request({
+            path: `/pylons/cookbook/${ID}`,
             method: "GET",
             format: "json",
             ...params,
@@ -154,11 +154,11 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
-         * @name QueryListCookbookByCreator
+         * @name QueryListCookbooksByCreator
          * @summary Queries a list of listCookbookByCreator items.
          * @request GET:/pylons/listCookbooks/{creator}
          */
-        this.queryListCookbookByCreator = (creator, params = {}) => this.request({
+        this.queryListCookbooksByCreator = (creator, params = {}) => this.request({
             path: `/pylons/listCookbooks/${creator}`,
             method: "GET",
             format: "json",
@@ -170,10 +170,10 @@ export class Api extends HttpClient {
          * @tags Query
          * @name QueryRecipe
          * @summary Queries a recipe by index.
-         * @request GET:/pylons/recipe/{index}
+         * @request GET:/pylons/recipe/{CookbookID}/{ID}
          */
-        this.queryRecipe = (index, params = {}) => this.request({
-            path: `/pylons/recipe/${index}`,
+        this.queryRecipe = (CookbookID, ID, params = {}) => this.request({
+            path: `/pylons/recipe/${CookbookID}/${ID}`,
             method: "GET",
             format: "json",
             ...params,

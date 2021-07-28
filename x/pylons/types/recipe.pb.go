@@ -325,7 +325,7 @@ func (m *ItemInput) GetConditions() ConditionList {
 type DoubleWeightRange struct {
 	Lower  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,1,opt,name=lower,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"lower"`
 	Upper  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=upper,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"upper"`
-	Weight int64                                  `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
+	Weight uint64                                 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
 func (m *DoubleWeightRange) Reset()         { *m = DoubleWeightRange{} }
@@ -361,7 +361,7 @@ func (m *DoubleWeightRange) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DoubleWeightRange proto.InternalMessageInfo
 
-func (m *DoubleWeightRange) GetWeight() int64 {
+func (m *DoubleWeightRange) GetWeight() uint64 {
 	if m != nil {
 		return m.Weight
 	}
@@ -374,7 +374,7 @@ type DoubleParam struct {
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate         github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=rate,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"rate"`
 	WeightRanges []DoubleWeightRange                    `protobuf:"bytes,3,rep,name=weightRanges,proto3" json:"weightRanges"`
-	// When program is not empty, WeightRanges is ignored
+	// When program is not empty, weightRanges is ignored
 	Program string `protobuf:"bytes,4,opt,name=program,proto3" json:"program,omitempty"`
 }
 
@@ -434,9 +434,9 @@ func (m *DoubleParam) GetProgram() string {
 
 // IntWeightRange describes weight range that produce int value
 type IntWeightRange struct {
-	Lower  int64 `protobuf:"varint,1,opt,name=lower,proto3" json:"lower,omitempty"`
-	Upper  int64 `protobuf:"varint,2,opt,name=upper,proto3" json:"upper,omitempty"`
-	Weight int64 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
+	Lower  int64  `protobuf:"varint,1,opt,name=lower,proto3" json:"lower,omitempty"`
+	Upper  int64  `protobuf:"varint,2,opt,name=upper,proto3" json:"upper,omitempty"`
+	Weight uint64 `protobuf:"varint,3,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
 func (m *IntWeightRange) Reset()         { *m = IntWeightRange{} }
@@ -486,7 +486,7 @@ func (m *IntWeightRange) GetUpper() int64 {
 	return 0
 }
 
-func (m *IntWeightRange) GetWeight() int64 {
+func (m *IntWeightRange) GetWeight() uint64 {
 	if m != nil {
 		return m.Weight
 	}
@@ -499,7 +499,7 @@ type LongParam struct {
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
 	Rate         github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=rate,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"rate"`
 	WeightRanges []IntWeightRange                       `protobuf:"bytes,3,rep,name=weightRanges,proto3" json:"weightRanges"`
-	// When program is not empty, WeightRanges is ignored
+	// When program is not empty, weightRanges is ignored
 	Program string `protobuf:"bytes,4,opt,name=program,proto3" json:"program,omitempty"`
 }
 
@@ -559,11 +559,11 @@ func (m *LongParam) GetProgram() string {
 
 // StringParam describes an item input/output parameter of type string
 type StringParam struct {
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
 	// The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-	Rate  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,1,opt,name=rate,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"rate"`
-	Key   string                                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
+	Rate  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,2,opt,name=rate,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"rate"`
 	Value string                                 `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
-	// When program is not empty, Value is ignored
+	// When program is not empty, value is ignored
 	Program string `protobuf:"bytes,4,opt,name=program,proto3" json:"program,omitempty"`
 }
 
@@ -621,20 +621,78 @@ func (m *StringParam) GetProgram() string {
 	return ""
 }
 
+// CoinOutput models the continuum of valid outcomes for coin generation in recipes
+type CoinOutput struct {
+	ID    string                                   `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	Coins github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=coins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coins"`
+}
+
+func (m *CoinOutput) Reset()         { *m = CoinOutput{} }
+func (m *CoinOutput) String() string { return proto.CompactTextString(m) }
+func (*CoinOutput) ProtoMessage()    {}
+func (*CoinOutput) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a4f7af5045b890df, []int{10}
+}
+func (m *CoinOutput) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CoinOutput) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CoinOutput.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CoinOutput) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CoinOutput.Merge(m, src)
+}
+func (m *CoinOutput) XXX_Size() int {
+	return m.Size()
+}
+func (m *CoinOutput) XXX_DiscardUnknown() {
+	xxx_messageInfo_CoinOutput.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CoinOutput proto.InternalMessageInfo
+
+func (m *CoinOutput) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
+
+func (m *CoinOutput) GetCoins() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.Coins
+	}
+	return nil
+}
+
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
 type ItemOutput struct {
-	Doubles     []DoubleParam                          `protobuf:"bytes,1,rep,name=doubles,proto3" json:"doubles"`
-	Longs       []LongParam                            `protobuf:"bytes,2,rep,name=longs,proto3" json:"longs"`
-	Strings     []StringParam                          `protobuf:"bytes,3,rep,name=strings,proto3" json:"strings"`
-	TransferFee github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,4,opt,name=transferFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"transferFee"`
-	Quantity    uint64                                 `protobuf:"varint,5,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	ID      string        `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	Doubles []DoubleParam `protobuf:"bytes,2,rep,name=doubles,proto3" json:"doubles"`
+	Longs   []LongParam   `protobuf:"bytes,3,rep,name=longs,proto3" json:"longs"`
+	Strings []StringParam `protobuf:"bytes,4,rep,name=strings,proto3" json:"strings"`
+	// defines a list of mutable strings whose value can be customized by the user
+	MutableStrings []StringParam `protobuf:"bytes,5,rep,name=mutableStrings,proto3" json:"mutableStrings"`
+	// transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive)
+	TransferFee github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,6,opt,name=transferFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"transferFee"`
+	// quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
+	Quantity uint64 `protobuf:"varint,7,opt,name=quantity,proto3" json:"quantity,omitempty"`
 }
 
 func (m *ItemOutput) Reset()         { *m = ItemOutput{} }
 func (m *ItemOutput) String() string { return proto.CompactTextString(m) }
 func (*ItemOutput) ProtoMessage()    {}
 func (*ItemOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a4f7af5045b890df, []int{10}
+	return fileDescriptor_a4f7af5045b890df, []int{11}
 }
 func (m *ItemOutput) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -663,6 +721,13 @@ func (m *ItemOutput) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ItemOutput proto.InternalMessageInfo
 
+func (m *ItemOutput) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
+
 func (m *ItemOutput) GetDoubles() []DoubleParam {
 	if m != nil {
 		return m.Doubles
@@ -684,6 +749,13 @@ func (m *ItemOutput) GetStrings() []StringParam {
 	return nil
 }
 
+func (m *ItemOutput) GetMutableStrings() []StringParam {
+	if m != nil {
+		return m.MutableStrings
+	}
+	return nil
+}
+
 func (m *ItemOutput) GetQuantity() uint64 {
 	if m != nil {
 		return m.Quantity
@@ -693,18 +765,20 @@ func (m *ItemOutput) GetQuantity() uint64 {
 
 // ItemModifyOutput describes what is modified from item input
 type ItemModifyOutput struct {
-	ItemInputRef string                                 `protobuf:"bytes,1,opt,name=itemInputRef,proto3" json:"itemInputRef,omitempty"`
-	Doubles      []DoubleParam                          `protobuf:"bytes,2,rep,name=doubles,proto3" json:"doubles"`
-	Longs        []LongParam                            `protobuf:"bytes,3,rep,name=longs,proto3" json:"longs"`
-	Strings      []StringParam                          `protobuf:"bytes,4,rep,name=strings,proto3" json:"strings"`
-	TransferFee  github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,5,opt,name=transferFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"transferFee"`
+	ID           string        `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
+	ItemInputRef string        `protobuf:"bytes,2,opt,name=itemInputRef,proto3" json:"itemInputRef,omitempty"`
+	Doubles      []DoubleParam `protobuf:"bytes,3,rep,name=doubles,proto3" json:"doubles"`
+	Longs        []LongParam   `protobuf:"bytes,4,rep,name=longs,proto3" json:"longs"`
+	Strings      []StringParam `protobuf:"bytes,5,rep,name=strings,proto3" json:"strings"`
+	// transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive)
+	TransferFee github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,6,opt,name=transferFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"transferFee"`
 }
 
 func (m *ItemModifyOutput) Reset()         { *m = ItemModifyOutput{} }
 func (m *ItemModifyOutput) String() string { return proto.CompactTextString(m) }
 func (*ItemModifyOutput) ProtoMessage()    {}
 func (*ItemModifyOutput) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a4f7af5045b890df, []int{11}
+	return fileDescriptor_a4f7af5045b890df, []int{12}
 }
 func (m *ItemModifyOutput) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -732,6 +806,13 @@ func (m *ItemModifyOutput) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_ItemModifyOutput proto.InternalMessageInfo
+
+func (m *ItemModifyOutput) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
 
 func (m *ItemModifyOutput) GetItemInputRef() string {
 	if m != nil {
@@ -763,16 +844,16 @@ func (m *ItemModifyOutput) GetStrings() []StringParam {
 
 // EntriesList is a struct to keep list of items and coins
 type EntriesList struct {
-	CoinOutputs       github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,1,rep,name=coinOutputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinOutputs"`
-	ItemOutputs       []ItemOutput                             `protobuf:"bytes,2,rep,name=itemOutputs,proto3" json:"itemOutputs"`
-	ItemModifyOutputs []ItemModifyOutput                       `protobuf:"bytes,3,rep,name=itemModifyOutputs,proto3" json:"itemModifyOutputs"`
+	CoinOutputs       []CoinOutput       `protobuf:"bytes,1,rep,name=coinOutputs,proto3" json:"coinOutputs"`
+	ItemOutputs       []ItemOutput       `protobuf:"bytes,2,rep,name=itemOutputs,proto3" json:"itemOutputs"`
+	ItemModifyOutputs []ItemModifyOutput `protobuf:"bytes,3,rep,name=itemModifyOutputs,proto3" json:"itemModifyOutputs"`
 }
 
 func (m *EntriesList) Reset()         { *m = EntriesList{} }
 func (m *EntriesList) String() string { return proto.CompactTextString(m) }
 func (*EntriesList) ProtoMessage()    {}
 func (*EntriesList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a4f7af5045b890df, []int{12}
+	return fileDescriptor_a4f7af5045b890df, []int{13}
 }
 func (m *EntriesList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -801,7 +882,7 @@ func (m *EntriesList) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EntriesList proto.InternalMessageInfo
 
-func (m *EntriesList) GetCoinOutputs() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *EntriesList) GetCoinOutputs() []CoinOutput {
 	if m != nil {
 		return m.CoinOutputs
 	}
@@ -825,14 +906,14 @@ func (m *EntriesList) GetItemModifyOutputs() []ItemModifyOutput {
 // WeightedOutputs is to make structs which is using weight to be based on
 type WeightedOutputs struct {
 	EntryIDs []string `protobuf:"bytes,1,rep,name=entryIDs,proto3" json:"entryIDs,omitempty"`
-	Weight   string   `protobuf:"bytes,2,opt,name=Weight,proto3" json:"Weight,omitempty"`
+	Weight   uint64   `protobuf:"varint,2,opt,name=weight,proto3" json:"weight,omitempty"`
 }
 
 func (m *WeightedOutputs) Reset()         { *m = WeightedOutputs{} }
 func (m *WeightedOutputs) String() string { return proto.CompactTextString(m) }
 func (*WeightedOutputs) ProtoMessage()    {}
 func (*WeightedOutputs) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a4f7af5045b890df, []int{13}
+	return fileDescriptor_a4f7af5045b890df, []int{14}
 }
 func (m *WeightedOutputs) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -868,34 +949,35 @@ func (m *WeightedOutputs) GetEntryIDs() []string {
 	return nil
 }
 
-func (m *WeightedOutputs) GetWeight() string {
+func (m *WeightedOutputs) GetWeight() uint64 {
 	if m != nil {
 		return m.Weight
 	}
-	return ""
+	return 0
 }
 
 type Recipe struct {
 	Creator       string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	Index         string                                   `protobuf:"bytes,2,opt,name=index,proto3" json:"index,omitempty"`
-	NodeVersion   string                                   `protobuf:"bytes,3,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	CookbookID    string                                   `protobuf:"bytes,4,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	CookbookID    string                                   `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	ID            string                                   `protobuf:"bytes,3,opt,name=ID,proto3" json:"ID,omitempty"`
+	NodeVersion   string                                   `protobuf:"bytes,4,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
 	Name          string                                   `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`
-	CoinInputs    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,6,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
-	ItemInputs    []ItemInput                              `protobuf:"bytes,7,rep,name=itemInputs,proto3" json:"itemInputs"`
-	Entries       EntriesList                              `protobuf:"bytes,8,opt,name=entries,proto3" json:"entries"`
-	Outputs       []WeightedOutputs                        `protobuf:"bytes,9,rep,name=outputs,proto3" json:"outputs"`
-	Description   string                                   `protobuf:"bytes,10,opt,name=description,proto3" json:"description,omitempty"`
-	BlockInterval uint64                                   `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
-	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+	Description   string                                   `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
+	Version       string                                   `protobuf:"bytes,7,opt,name=version,proto3" json:"version,omitempty"`
+	CoinInputs    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,8,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
+	ItemInputs    []ItemInput                              `protobuf:"bytes,9,rep,name=itemInputs,proto3" json:"itemInputs"`
+	Entries       EntriesList                              `protobuf:"bytes,10,opt,name=entries,proto3" json:"entries"`
+	Outputs       []WeightedOutputs                        `protobuf:"bytes,11,rep,name=outputs,proto3" json:"outputs"`
+	BlockInterval uint64                                   `protobuf:"varint,12,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	Enabled       bool                                     `protobuf:"varint,13,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExtraInfo     string                                   `protobuf:"bytes,14,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
 }
 
 func (m *Recipe) Reset()         { *m = Recipe{} }
 func (m *Recipe) String() string { return proto.CompactTextString(m) }
 func (*Recipe) ProtoMessage()    {}
 func (*Recipe) Descriptor() ([]byte, []int) {
-	return fileDescriptor_a4f7af5045b890df, []int{14}
+	return fileDescriptor_a4f7af5045b890df, []int{15}
 }
 func (m *Recipe) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -931,9 +1013,16 @@ func (m *Recipe) GetCreator() string {
 	return ""
 }
 
-func (m *Recipe) GetIndex() string {
+func (m *Recipe) GetCookbookID() string {
 	if m != nil {
-		return m.Index
+		return m.CookbookID
+	}
+	return ""
+}
+
+func (m *Recipe) GetID() string {
+	if m != nil {
+		return m.ID
 	}
 	return ""
 }
@@ -945,16 +1034,23 @@ func (m *Recipe) GetNodeVersion() string {
 	return ""
 }
 
-func (m *Recipe) GetCookbookID() string {
+func (m *Recipe) GetName() string {
 	if m != nil {
-		return m.CookbookID
+		return m.Name
 	}
 	return ""
 }
 
-func (m *Recipe) GetName() string {
+func (m *Recipe) GetDescription() string {
 	if m != nil {
-		return m.Name
+		return m.Description
+	}
+	return ""
+}
+
+func (m *Recipe) GetVersion() string {
+	if m != nil {
+		return m.Version
 	}
 	return ""
 }
@@ -985,13 +1081,6 @@ func (m *Recipe) GetOutputs() []WeightedOutputs {
 		return m.Outputs
 	}
 	return nil
-}
-
-func (m *Recipe) GetDescription() string {
-	if m != nil {
-		return m.Description
-	}
-	return ""
 }
 
 func (m *Recipe) GetBlockInterval() uint64 {
@@ -1026,6 +1115,7 @@ func init() {
 	proto.RegisterType((*IntWeightRange)(nil), "Pylonstech.pylons.pylons.IntWeightRange")
 	proto.RegisterType((*LongParam)(nil), "Pylonstech.pylons.pylons.LongParam")
 	proto.RegisterType((*StringParam)(nil), "Pylonstech.pylons.pylons.StringParam")
+	proto.RegisterType((*CoinOutput)(nil), "Pylonstech.pylons.pylons.CoinOutput")
 	proto.RegisterType((*ItemOutput)(nil), "Pylonstech.pylons.pylons.ItemOutput")
 	proto.RegisterType((*ItemModifyOutput)(nil), "Pylonstech.pylons.pylons.ItemModifyOutput")
 	proto.RegisterType((*EntriesList)(nil), "Pylonstech.pylons.pylons.EntriesList")
@@ -1036,72 +1126,75 @@ func init() {
 func init() { proto.RegisterFile("pylons/recipe.proto", fileDescriptor_a4f7af5045b890df) }
 
 var fileDescriptor_a4f7af5045b890df = []byte{
-	// 1037 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x57, 0xcd, 0x8e, 0x1b, 0x45,
-	0x10, 0xde, 0xf1, 0x78, 0x7f, 0x5c, 0x93, 0x0d, 0x9b, 0x66, 0x85, 0x06, 0x0b, 0x79, 0xad, 0x21,
-	0x01, 0xf3, 0x93, 0x31, 0x09, 0x37, 0x2e, 0x48, 0x8e, 0x37, 0x92, 0xa3, 0x8d, 0x58, 0x0d, 0x10,
-	0xa4, 0x1c, 0x90, 0xc6, 0xe3, 0x5e, 0x6f, 0xcb, 0x76, 0xb7, 0x99, 0x6e, 0xef, 0xae, 0xdf, 0x02,
-	0x89, 0xb7, 0xc8, 0x0b, 0xc0, 0x81, 0x07, 0x08, 0x27, 0x72, 0x40, 0x22, 0xe2, 0x10, 0xd0, 0xee,
-	0x99, 0x77, 0x40, 0xfd, 0x33, 0xde, 0xf6, 0xe0, 0x9f, 0xec, 0x0f, 0x17, 0x4e, 0x9e, 0x6a, 0x77,
-	0x7d, 0x53, 0xf5, 0x55, 0xd5, 0xe7, 0x32, 0xbc, 0x39, 0x1c, 0xf7, 0x19, 0xe5, 0xf5, 0x14, 0x27,
-	0x64, 0x88, 0xc3, 0x61, 0xca, 0x04, 0x43, 0xfe, 0xbe, 0x3a, 0x14, 0x38, 0x39, 0x0c, 0xf5, 0xf7,
-	0xe6, 0xa3, 0xbc, 0xdd, 0x65, 0x5d, 0xa6, 0x2e, 0xd5, 0xe5, 0x93, 0xbe, 0x5f, 0xae, 0x24, 0x8c,
-	0x0f, 0x18, 0xaf, 0xb7, 0x63, 0x8e, 0xeb, 0x47, 0xf7, 0xda, 0x58, 0xc4, 0xf7, 0xea, 0x09, 0x23,
-	0x54, 0x7f, 0x1f, 0xfc, 0xec, 0xc0, 0x56, 0x93, 0x8d, 0xda, 0x7d, 0xdc, 0xa2, 0xc3, 0x91, 0xd8,
-	0x8f, 0xd3, 0x78, 0x80, 0xb6, 0xc0, 0xed, 0xe1, 0xb1, 0xef, 0x54, 0x9d, 0x5a, 0x29, 0x92, 0x8f,
-	0xe8, 0x11, 0x6c, 0x0c, 0x08, 0x7d, 0x12, 0xf7, 0x47, 0xd8, 0x2f, 0xc8, 0xe3, 0x46, 0xf8, 0xfc,
-	0xd5, 0xce, 0xca, 0x1f, 0xaf, 0x76, 0xde, 0xeb, 0x12, 0x71, 0x38, 0x6a, 0x87, 0x09, 0x1b, 0xd4,
-	0xcd, 0xbb, 0xf4, 0xc7, 0x5d, 0xde, 0xe9, 0xd5, 0xc5, 0x78, 0x88, 0x79, 0xd8, 0xc4, 0x49, 0x34,
-	0xf1, 0x57, 0x58, 0xf1, 0x89, 0xc6, 0x72, 0x2f, 0x89, 0x65, 0xfc, 0x83, 0xa7, 0x70, 0x73, 0x8f,
-	0xd1, 0xee, 0xc2, 0xd8, 0xcb, 0xb9, 0xd8, 0x5d, 0x2b, 0x96, 0x72, 0x2e, 0x16, 0xd7, 0xc2, 0xfe,
-	0x0c, 0xb6, 0xbe, 0x14, 0x29, 0x59, 0x82, 0xbe, 0x0d, 0xab, 0x47, 0xe7, 0xb4, 0x44, 0xda, 0x08,
-	0xfe, 0x76, 0x60, 0xf3, 0x01, 0xa3, 0x1d, 0x22, 0x08, 0xa3, 0x7b, 0x84, 0x0b, 0xf4, 0x08, 0xd6,
-	0x3b, 0x8a, 0x67, 0xee, 0x3b, 0x55, 0xb7, 0xe6, 0xdd, 0xff, 0x30, 0x9c, 0x57, 0xca, 0x30, 0x5f,
-	0x90, 0x46, 0x51, 0x12, 0x14, 0x65, 0x00, 0xa8, 0x09, 0xab, 0x7d, 0x46, 0xbb, 0xdc, 0x2f, 0x28,
-	0xa4, 0xda, 0x7c, 0xa4, 0x69, 0x72, 0x0c, 0x8e, 0x76, 0x96, 0x11, 0x71, 0x95, 0x1f, 0xf7, 0xdd,
-	0x65, 0x11, 0xe5, 0x89, 0xc8, 0x22, 0x32, 0x00, 0xc1, 0x4f, 0x05, 0x28, 0xb5, 0x04, 0x1e, 0xa8,
-	0x1b, 0xff, 0xef, 0x5c, 0xd1, 0x63, 0x80, 0x24, 0x2b, 0x2d, 0xf7, 0x8b, 0x55, 0xa7, 0xe6, 0xdd,
-	0x7f, 0x7f, 0x3e, 0xdc, 0x54, 0x1b, 0x18, 0x2c, 0x0b, 0x20, 0xf8, 0xd1, 0x81, 0x5b, 0x9a, 0x84,
-	0x6f, 0x30, 0xe9, 0x1e, 0x8a, 0x28, 0xa6, 0x5d, 0xac, 0xd3, 0x3e, 0xc6, 0xa9, 0x6e, 0xb5, 0x0b,
-	0x4f, 0x88, 0x76, 0x96, 0x28, 0xa3, 0xe1, 0x10, 0xa7, 0x97, 0x9c, 0x59, 0xed, 0x8c, 0xde, 0x82,
-	0xb5, 0x63, 0x15, 0x9a, 0x19, 0x11, 0x63, 0x05, 0xbf, 0x39, 0xe0, 0xe9, 0xc8, 0xe7, 0x0d, 0x47,
-	0x03, 0x8a, 0x69, 0x2c, 0x2e, 0x2b, 0x19, 0xca, 0x17, 0x7d, 0x0d, 0x37, 0x8e, 0xcf, 0x89, 0xc9,
-	0xea, 0xf7, 0xd1, 0xb2, 0x8e, 0xb2, 0xc8, 0x34, 0xa4, 0x4f, 0xc1, 0x20, 0x1f, 0xd6, 0x87, 0x29,
-	0xeb, 0xa6, 0xf1, 0x40, 0x95, 0xb0, 0x14, 0x65, 0x66, 0xf0, 0x15, 0xdc, 0x6c, 0x51, 0x61, 0x17,
-	0x63, 0xdb, 0x2e, 0x86, 0x9b, 0x91, 0xbb, 0x6d, 0x93, 0xeb, 0x2e, 0x23, 0xeb, 0x57, 0x07, 0x4a,
-	0xb2, 0x43, 0xff, 0x4b, 0xaa, 0xa2, 0x99, 0x54, 0x2d, 0x18, 0x99, 0xe9, 0x3c, 0x2f, 0xc8, 0xd3,
-	0x0f, 0x0e, 0x78, 0x7a, 0x56, 0x74, 0x4e, 0x59, 0x06, 0xce, 0x15, 0x32, 0x30, 0xbc, 0x14, 0x66,
-	0xe8, 0xab, 0x6b, 0xe9, 0xeb, 0x82, 0xa8, 0x7e, 0x29, 0x00, 0x48, 0x25, 0xfa, 0x62, 0x24, 0xa4,
-	0x14, 0xed, 0xe6, 0xa5, 0xe8, 0xce, 0xb2, 0xc6, 0x99, 0xa9, 0x42, 0x9f, 0x4f, 0xab, 0xd0, 0xbb,
-	0x8b, 0x55, 0x68, 0x86, 0x00, 0xed, 0xe6, 0x05, 0xe8, 0xce, 0x32, 0x01, 0x9a, 0xa9, 0x3d, 0xfb,
-	0xe0, 0x89, 0x34, 0xa6, 0xfc, 0x00, 0xa7, 0x0f, 0x31, 0xd6, 0xb9, 0x5f, 0x98, 0x6a, 0x1b, 0x42,
-	0xfe, 0x02, 0x7e, 0x37, 0x8a, 0xa9, 0x20, 0x62, 0xec, 0xaf, 0x56, 0x9d, 0x5a, 0x31, 0x9a, 0xd8,
-	0xc1, 0xef, 0x05, 0xd8, 0x92, 0x5c, 0x3e, 0x66, 0x1d, 0x72, 0x30, 0x36, 0x8c, 0x06, 0x70, 0x83,
-	0x64, 0x4a, 0x1f, 0xe1, 0x03, 0xd3, 0xc3, 0x53, 0x67, 0x36, 0xeb, 0x85, 0xeb, 0x60, 0xdd, 0xbd,
-	0x3a, 0xeb, 0xc5, 0xeb, 0x63, 0x7d, 0xf5, 0xca, 0xac, 0x07, 0xcf, 0x0a, 0xe0, 0xed, 0x52, 0x91,
-	0x12, 0xcc, 0xd5, 0x76, 0x30, 0x00, 0x4f, 0x2e, 0x65, 0x9a, 0xe2, 0xac, 0x55, 0xdf, 0x0e, 0x35,
-	0x50, 0x28, 0x97, 0xb7, 0xd0, 0x2c, 0x6f, 0xe1, 0x03, 0x46, 0x68, 0xe3, 0x13, 0xf9, 0xf2, 0x67,
-	0x7f, 0xee, 0xd4, 0x5e, 0xe3, 0xe5, 0xd2, 0x81, 0x47, 0x36, 0x3e, 0xda, 0x03, 0x8f, 0x4c, 0x66,
-	0x24, 0xab, 0xd1, 0xed, 0x05, 0x3a, 0x31, 0xb9, 0x6c, 0xa8, 0xb1, 0xdd, 0xd1, 0xb7, 0x70, 0x8b,
-	0xe4, 0xba, 0xe4, 0x35, 0x7e, 0x66, 0xf3, 0x8d, 0x65, 0x90, 0xff, 0x0d, 0x15, 0xec, 0xc2, 0x1b,
-	0x5a, 0xa5, 0x70, 0x27, 0x7b, 0x65, 0x19, 0x36, 0x30, 0x15, 0xe9, 0xb8, 0xd5, 0xd4, 0x64, 0x95,
-	0xa2, 0x89, 0x2d, 0x15, 0x58, 0x5f, 0x37, 0x32, 0x62, 0xac, 0xe0, 0x65, 0x11, 0xd6, 0x22, 0xb5,
-	0x4b, 0x4b, 0xf9, 0x48, 0x52, 0x1c, 0x0b, 0x66, 0x7e, 0x5f, 0xa3, 0xcc, 0x94, 0x72, 0x43, 0x68,
-	0x07, 0x9f, 0x64, 0xeb, 0x9c, 0x32, 0x50, 0x15, 0x3c, 0xca, 0x3a, 0xf8, 0x09, 0x4e, 0x39, 0x61,
-	0xd4, 0x48, 0x91, 0x7d, 0x84, 0x2a, 0x72, 0x29, 0x60, 0xbd, 0x36, 0x63, 0xbd, 0x56, 0xd3, 0x68,
-	0x92, 0x75, 0x82, 0x10, 0x14, 0x69, 0x3c, 0x30, 0xbd, 0x13, 0xa9, 0x67, 0xd4, 0x93, 0x3e, 0x84,
-	0xaa, 0xa9, 0xe1, 0xfe, 0xda, 0xf5, 0xd7, 0xdc, 0x82, 0x47, 0x2d, 0x80, 0xc9, 0x88, 0x72, 0x7f,
-	0x7d, 0xd9, 0x40, 0x4d, 0x96, 0xb9, 0x6c, 0x63, 0x39, 0x77, 0x96, 0x53, 0x85, 0x75, 0xef, 0xfa,
-	0x1b, 0x6a, 0xfb, 0x59, 0x30, 0x55, 0x56, 0x93, 0x67, 0x53, 0x65, 0x7c, 0x51, 0x0b, 0xd6, 0x99,
-	0x69, 0x96, 0x92, 0x0a, 0xe7, 0x83, 0xf9, 0x30, 0xb9, 0xfa, 0x67, 0x50, 0xc6, 0x5f, 0xd6, 0xa7,
-	0x83, 0x79, 0x92, 0x92, 0xa1, 0xdc, 0xa9, 0x7c, 0xd0, 0xf5, 0xb1, 0x8e, 0xd0, 0x6d, 0xd8, 0x6c,
-	0xf7, 0x59, 0xd2, 0x6b, 0x51, 0x81, 0xd3, 0xa3, 0xb8, 0xef, 0x7b, 0x4a, 0xeb, 0xa6, 0x0f, 0x65,
-	0x5f, 0x60, 0x1a, 0xb7, 0xfb, 0xb8, 0xe3, 0xdf, 0xa8, 0x3a, 0xb5, 0x8d, 0x28, 0x33, 0xd1, 0x3b,
-	0x50, 0xc2, 0x27, 0x22, 0x8d, 0x5b, 0xf4, 0x80, 0xf9, 0x9b, 0x0a, 0xff, 0xfc, 0xa0, 0xf1, 0xf0,
-	0xf9, 0x69, 0xc5, 0x79, 0x71, 0x5a, 0x71, 0xfe, 0x3a, 0xad, 0x38, 0xdf, 0x9f, 0x55, 0x56, 0x5e,
-	0x9c, 0x55, 0x56, 0x5e, 0x9e, 0x55, 0x56, 0x9e, 0x7e, 0x6c, 0x15, 0x4b, 0x67, 0x77, 0x57, 0xa6,
-	0x57, 0x37, 0xff, 0xed, 0x4e, 0xb2, 0x07, 0x55, 0xb6, 0xf6, 0x9a, 0xfa, 0x53, 0xf6, 0xe9, 0x3f,
-	0x01, 0x00, 0x00, 0xff, 0xff, 0xf5, 0x4f, 0x5d, 0xe0, 0xfb, 0x0d, 0x00, 0x00,
+	// 1084 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x57, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xce, 0x7a, 0xed, 0x24, 0x7e, 0x6e, 0x42, 0x3a, 0x44, 0x68, 0xb1, 0x90, 0x63, 0x2d, 0x05,
+	0xcc, 0x8f, 0xae, 0x69, 0xb9, 0x71, 0x41, 0x72, 0x9d, 0x4a, 0x5b, 0xa5, 0x22, 0xda, 0x40, 0x91,
+	0x7a, 0x40, 0x5a, 0xaf, 0x27, 0xce, 0xca, 0xf6, 0x8c, 0xd9, 0x19, 0x27, 0xf1, 0x89, 0x33, 0x37,
+	0x24, 0xfe, 0x0b, 0x0e, 0x5c, 0xe1, 0xc0, 0x1f, 0xd0, 0x1b, 0x3d, 0x70, 0x40, 0x1c, 0x0a, 0x4a,
+	0x0e, 0x5c, 0xe0, 0x7f, 0x40, 0xf3, 0xcb, 0x1e, 0x9b, 0xd8, 0x6e, 0xd2, 0xf4, 0xc2, 0x69, 0x77,
+	0x66, 0xf7, 0x7d, 0xfb, 0xcd, 0xfb, 0xde, 0xfb, 0x66, 0x16, 0x5e, 0x1d, 0x8c, 0x7a, 0x94, 0xb0,
+	0x7a, 0x86, 0x93, 0x74, 0x80, 0x83, 0x41, 0x46, 0x39, 0x45, 0xde, 0xbe, 0x9c, 0xe4, 0x38, 0x39,
+	0x0a, 0xd4, 0x73, 0x7d, 0x29, 0x6f, 0x77, 0x68, 0x87, 0xca, 0x97, 0xea, 0xe2, 0x4e, 0xbd, 0x5f,
+	0xae, 0x24, 0x94, 0xf5, 0x29, 0xab, 0xb7, 0x62, 0x86, 0xeb, 0xc7, 0x77, 0x5a, 0x98, 0xc7, 0x77,
+	0xea, 0x09, 0x4d, 0x89, 0x7a, 0xee, 0xff, 0xec, 0xc0, 0x56, 0x93, 0x0e, 0x5b, 0x3d, 0x1c, 0x92,
+	0xc1, 0x90, 0xef, 0xc7, 0x59, 0xdc, 0x47, 0x5b, 0xe0, 0x76, 0xf1, 0xc8, 0x73, 0xaa, 0x4e, 0xad,
+	0x18, 0x89, 0x5b, 0xf4, 0x00, 0xd6, 0xfb, 0x29, 0x79, 0x14, 0xf7, 0x86, 0xd8, 0xcb, 0x89, 0xe9,
+	0x46, 0xf0, 0xe4, 0xd9, 0xce, 0xca, 0xef, 0xcf, 0x76, 0xde, 0xee, 0xa4, 0xfc, 0x68, 0xd8, 0x0a,
+	0x12, 0xda, 0xaf, 0xeb, 0x6f, 0xa9, 0xcb, 0x6d, 0xd6, 0xee, 0xd6, 0xf9, 0x68, 0x80, 0x59, 0xd0,
+	0xc4, 0x49, 0x34, 0x8e, 0x97, 0x58, 0xf1, 0xa9, 0xc2, 0x72, 0xaf, 0x88, 0xa5, 0xe3, 0xfd, 0xc7,
+	0xb0, 0xb9, 0x47, 0x49, 0x67, 0x21, 0xf7, 0xf2, 0x0c, 0x77, 0xd7, 0xe2, 0x52, 0x9e, 0xe1, 0xe2,
+	0x5a, 0xd8, 0x1f, 0xc3, 0xd6, 0x01, 0xcf, 0xd2, 0x25, 0xe8, 0xdb, 0x50, 0x38, 0x9e, 0xa4, 0x25,
+	0x52, 0x03, 0xff, 0x1f, 0x07, 0x36, 0xee, 0x51, 0xd2, 0x4e, 0x79, 0x4a, 0xc9, 0x5e, 0xca, 0x38,
+	0x7a, 0x00, 0x6b, 0x6d, 0x99, 0x67, 0xe6, 0x39, 0x55, 0xb7, 0x56, 0xba, 0xfb, 0x5e, 0x30, 0x4f,
+	0xca, 0x60, 0x56, 0x90, 0x46, 0x5e, 0x24, 0x28, 0x32, 0x00, 0xa8, 0x09, 0x85, 0x1e, 0x25, 0x1d,
+	0xe6, 0xe5, 0x24, 0x52, 0x6d, 0x3e, 0xd2, 0x74, 0x72, 0x34, 0x8e, 0x0a, 0x16, 0x8c, 0x98, 0x5c,
+	0x1f, 0xf3, 0xdc, 0x65, 0x8c, 0x66, 0x13, 0x61, 0x18, 0x69, 0x00, 0xff, 0xa7, 0x1c, 0x14, 0x43,
+	0x8e, 0xfb, 0xf2, 0x8d, 0xff, 0xf7, 0x5a, 0xd1, 0x43, 0x80, 0xc4, 0x48, 0xcb, 0xbc, 0x7c, 0xd5,
+	0xa9, 0x95, 0xee, 0xbe, 0x33, 0x1f, 0x6e, 0xaa, 0x0c, 0x34, 0x96, 0x05, 0xe0, 0xff, 0xe8, 0xc0,
+	0x4d, 0x95, 0x84, 0x2f, 0x70, 0xda, 0x39, 0xe2, 0x51, 0x4c, 0x3a, 0x58, 0x2d, 0xfb, 0x04, 0x67,
+	0xaa, 0xd4, 0x2e, 0xdd, 0x21, 0x2a, 0x58, 0xa0, 0x0c, 0x07, 0x03, 0x9c, 0x5d, 0xb1, 0x67, 0x55,
+	0x30, 0x7a, 0x0d, 0x56, 0x4f, 0x24, 0x35, 0xd9, 0x22, 0xf9, 0x48, 0x8f, 0xfc, 0x5f, 0x1d, 0x28,
+	0x29, 0xe6, 0xf3, 0x9a, 0xa3, 0x01, 0xf9, 0x2c, 0xe6, 0x57, 0xb5, 0x0c, 0x19, 0x8b, 0x3e, 0x87,
+	0x1b, 0x27, 0x93, 0xc4, 0x18, 0xfd, 0xde, 0x5f, 0x56, 0x51, 0x56, 0x32, 0x75, 0xd2, 0xa7, 0x60,
+	0x90, 0x07, 0x6b, 0x83, 0x8c, 0x76, 0xb2, 0xb8, 0x2f, 0x25, 0x2c, 0x46, 0x66, 0xe8, 0x7f, 0x06,
+	0x9b, 0x21, 0xe1, 0xb6, 0x18, 0xdb, 0xb6, 0x18, 0xae, 0x49, 0xee, 0xb6, 0x9d, 0x5c, 0x77, 0x59,
+	0xb2, 0x7e, 0x71, 0xa0, 0x28, 0x2a, 0xf4, 0x65, 0xa6, 0x2a, 0xba, 0x30, 0x55, 0x0b, 0x5a, 0x66,
+	0x7a, 0x9d, 0x97, 0xcc, 0xd3, 0x77, 0x0e, 0x94, 0x54, 0xaf, 0xbc, 0xcc, 0x35, 0x8d, 0xfd, 0xd5,
+	0xb5, 0xfc, 0x75, 0x01, 0xab, 0xaf, 0x01, 0xee, 0xd1, 0x94, 0x7c, 0x3a, 0xe4, 0xc2, 0x89, 0x36,
+	0x21, 0x17, 0x36, 0x35, 0xa5, 0x5c, 0xd8, 0x44, 0x31, 0x14, 0xc4, 0xe6, 0x67, 0xdc, 0xe4, 0xf5,
+	0x40, 0x7d, 0x39, 0x10, 0xdb, 0x63, 0xa0, 0xb7, 0xc7, 0x40, 0xc4, 0x37, 0x3e, 0x14, 0x6c, 0xbf,
+	0xff, 0x63, 0xa7, 0xf6, 0x1c, 0x6c, 0x45, 0x00, 0x8b, 0x14, 0xb2, 0xff, 0x83, 0x0b, 0x20, 0xac,
+	0x70, 0x0e, 0x83, 0xdd, 0x89, 0x37, 0x2a, 0x0e, 0x6f, 0x2d, 0xab, 0xe4, 0x0b, 0x6d, 0xf1, 0x13,
+	0x63, 0x8b, 0x4a, 0xe3, 0x37, 0x17, 0xdb, 0xe2, 0x05, 0x8e, 0xb8, 0x3b, 0x71, 0xc4, 0xfc, 0x32,
+	0x1e, 0x96, 0xca, 0xb3, 0x66, 0x78, 0x00, 0x9b, 0xfd, 0x21, 0x8f, 0x5b, 0x3d, 0x7c, 0xa0, 0xd1,
+	0x0a, 0x97, 0x47, 0x9b, 0x81, 0x40, 0xfb, 0x50, 0xe2, 0x59, 0x4c, 0xd8, 0x21, 0xce, 0xee, 0x63,
+	0xec, 0xad, 0x5e, 0xa9, 0x7c, 0x6c, 0x08, 0xb1, 0xcf, 0x7f, 0x35, 0x8c, 0x09, 0x4f, 0xf9, 0xc8,
+	0x5b, 0x93, 0x7d, 0x39, 0x1e, 0xfb, 0x7f, 0xe5, 0x60, 0x4b, 0x08, 0xf6, 0x90, 0xb6, 0xd3, 0xc3,
+	0xd1, 0x1c, 0xd9, 0x7c, 0xb8, 0x91, 0x9a, 0xfd, 0x2d, 0xc2, 0x87, 0x7a, 0xb7, 0x9f, 0x9a, 0xb3,
+	0xa5, 0x75, 0xaf, 0x43, 0xda, 0xfc, 0x8b, 0x4b, 0x5b, 0x78, 0x01, 0x69, 0xaf, 0x5d, 0x05, 0xff,
+	0x9b, 0x1c, 0x94, 0x76, 0x09, 0xcf, 0x52, 0xcc, 0xe4, 0x99, 0x68, 0x0f, 0x4a, 0xc9, 0xb8, 0x57,
+	0xcd, 0x59, 0xe1, 0xd6, 0xa2, 0xad, 0xd4, 0xbc, 0xac, 0xb9, 0xda, 0xe1, 0x02, 0x2d, 0x1d, 0xf7,
+	0x9d, 0xe9, 0xae, 0x05, 0x68, 0x93, 0x26, 0x35, 0x68, 0x56, 0x38, 0xfa, 0x12, 0x6e, 0xa6, 0x33,
+	0x45, 0xf1, 0x1c, 0x67, 0x87, 0xd9, 0x3a, 0xd2, 0xc8, 0xff, 0x85, 0xf2, 0x77, 0xe1, 0x15, 0x65,
+	0xbd, 0xb8, 0x6d, 0x3e, 0x59, 0x86, 0x75, 0x4c, 0x78, 0x36, 0x0a, 0x9b, 0x2a, 0x17, 0xc5, 0x68,
+	0x3c, 0xb6, 0xb6, 0x95, 0xdc, 0xd4, 0xb6, 0xf2, 0x77, 0x1e, 0x56, 0x23, 0xf9, 0x83, 0x20, 0x3c,
+	0x31, 0xc9, 0x70, 0xcc, 0xa9, 0x3e, 0x34, 0x44, 0x66, 0x88, 0x2a, 0xe2, 0xc4, 0x42, 0xbb, 0x2d,
+	0x4a, 0xbb, 0x61, 0x53, 0x97, 0xae, 0x35, 0xa3, 0x8b, 0xdd, 0x1d, 0x17, 0x7b, 0x15, 0x4a, 0x84,
+	0xb6, 0xf1, 0x23, 0x9c, 0xb1, 0x94, 0x12, 0xed, 0xb0, 0xf6, 0x14, 0x42, 0x90, 0x27, 0x71, 0x1f,
+	0x7b, 0x05, 0xf9, 0x48, 0xde, 0x8b, 0xa8, 0x36, 0x66, 0x49, 0x96, 0x0e, 0xc4, 0xc1, 0x46, 0xd5,
+	0x4b, 0x64, 0x4f, 0x09, 0x86, 0xc7, 0x1a, 0x73, 0x4d, 0x31, 0xd4, 0x43, 0xd4, 0x15, 0x0c, 0x53,
+	0x22, 0x5b, 0x89, 0x79, 0xeb, 0xd7, 0x6f, 0xce, 0x16, 0x3c, 0x0a, 0x01, 0xc6, 0x7d, 0xcb, 0xbc,
+	0xe2, 0xb2, 0x2e, 0x1b, 0x9f, 0x6b, 0xcd, 0xe1, 0x6d, 0x12, 0x2c, 0x5a, 0x0d, 0xab, 0x82, 0xf6,
+	0x40, 0x1e, 0x04, 0x17, 0xb4, 0x9a, 0x55, 0xf9, 0xa6, 0xd5, 0x74, 0x2c, 0x0a, 0x61, 0x8d, 0xea,
+	0x12, 0x2b, 0x49, 0x3a, 0xef, 0xce, 0x87, 0x99, 0xa9, 0x1a, 0x03, 0xa5, 0xe3, 0xd1, 0x2d, 0xd8,
+	0x68, 0xf5, 0x68, 0xd2, 0x0d, 0x09, 0xc7, 0xd9, 0x71, 0xdc, 0xf3, 0x6e, 0xc8, 0x7a, 0x99, 0x9e,
+	0x14, 0x4a, 0x60, 0x22, 0x2c, 0xb7, 0xed, 0x6d, 0x54, 0x9d, 0xda, 0x7a, 0x64, 0x86, 0xe8, 0x0d,
+	0x28, 0xe2, 0x53, 0x9e, 0xc5, 0x21, 0x39, 0xa4, 0xde, 0xa6, 0x54, 0x69, 0x32, 0xd1, 0xb8, 0xff,
+	0xe4, 0xac, 0xe2, 0x3c, 0x3d, 0xab, 0x38, 0x7f, 0x9e, 0x55, 0x9c, 0x6f, 0xcf, 0x2b, 0x2b, 0x4f,
+	0xcf, 0x2b, 0x2b, 0xbf, 0x9d, 0x57, 0x56, 0x1e, 0x7f, 0x60, 0x49, 0xa1, 0xb8, 0xdf, 0x16, 0xe4,
+	0xeb, 0xfa, 0x27, 0xf6, 0xd4, 0xdc, 0x48, 0x51, 0x5a, 0xab, 0xf2, 0xef, 0xf3, 0xa3, 0x7f, 0x03,
+	0x00, 0x00, 0xff, 0xff, 0x48, 0x82, 0x03, 0x6b, 0xe4, 0x0e, 0x00, 0x00,
 }
 
 func (m *DoubleInputParam) Marshal() (dAtA []byte, err error) {
@@ -1613,13 +1706,6 @@ func (m *StringParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0x12
-	}
 	{
 		size := m.Rate.Size()
 		i -= size
@@ -1629,7 +1715,58 @@ func (m *StringParam) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintRecipe(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0xa
+	dAtA[i] = 0x12
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Key)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CoinOutput) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CoinOutput) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CoinOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Coins) > 0 {
+		for iNdEx := len(m.Coins) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Coins[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintRecipe(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0xa
+	}
 	return len(dAtA) - i, nil
 }
 
@@ -1656,7 +1793,7 @@ func (m *ItemOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.Quantity != 0 {
 		i = encodeVarintRecipe(dAtA, i, uint64(m.Quantity))
 		i--
-		dAtA[i] = 0x28
+		dAtA[i] = 0x38
 	}
 	{
 		size := m.TransferFee.Size()
@@ -1667,11 +1804,11 @@ func (m *ItemOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintRecipe(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x22
-	if len(m.Strings) > 0 {
-		for iNdEx := len(m.Strings) - 1; iNdEx >= 0; iNdEx-- {
+	dAtA[i] = 0x32
+	if len(m.MutableStrings) > 0 {
+		for iNdEx := len(m.MutableStrings) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.Strings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.MutableStrings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1679,70 +1816,9 @@ func (m *ItemOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintRecipe(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x2a
 		}
 	}
-	if len(m.Longs) > 0 {
-		for iNdEx := len(m.Longs) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Longs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintRecipe(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Doubles) > 0 {
-		for iNdEx := len(m.Doubles) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Doubles[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintRecipe(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *ItemModifyOutput) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ItemModifyOutput) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ItemModifyOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size := m.TransferFee.Size()
-		i -= size
-		if _, err := m.TransferFee.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintRecipe(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x2a
 	if len(m.Strings) > 0 {
 		for iNdEx := len(m.Strings) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1785,10 +1861,99 @@ func (m *ItemModifyOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0x12
 		}
 	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ItemModifyOutput) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ItemModifyOutput) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ItemModifyOutput) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size := m.TransferFee.Size()
+		i -= size
+		if _, err := m.TransferFee.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintRecipe(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x32
+	if len(m.Strings) > 0 {
+		for iNdEx := len(m.Strings) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Strings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintRecipe(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.Longs) > 0 {
+		for iNdEx := len(m.Longs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Longs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintRecipe(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Doubles) > 0 {
+		for iNdEx := len(m.Doubles) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Doubles[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintRecipe(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
 	if len(m.ItemInputRef) > 0 {
 		i -= len(m.ItemInputRef)
 		copy(dAtA[i:], m.ItemInputRef)
 		i = encodeVarintRecipe(dAtA, i, uint64(len(m.ItemInputRef)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.ID)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1880,12 +2045,10 @@ func (m *WeightedOutputs) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Weight) > 0 {
-		i -= len(m.Weight)
-		copy(dAtA[i:], m.Weight)
-		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Weight)))
+	if m.Weight != 0 {
+		i = encodeVarintRecipe(dAtA, i, uint64(m.Weight))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x10
 	}
 	if len(m.EntryIDs) > 0 {
 		for iNdEx := len(m.EntryIDs) - 1; iNdEx >= 0; iNdEx-- {
@@ -1924,7 +2087,7 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.ExtraInfo)
 		i = encodeVarintRecipe(dAtA, i, uint64(len(m.ExtraInfo)))
 		i--
-		dAtA[i] = 0x6a
+		dAtA[i] = 0x72
 	}
 	if m.Enabled {
 		i--
@@ -1934,19 +2097,12 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x60
+		dAtA[i] = 0x68
 	}
 	if m.BlockInterval != 0 {
 		i = encodeVarintRecipe(dAtA, i, uint64(m.BlockInterval))
 		i--
-		dAtA[i] = 0x58
-	}
-	if len(m.Description) > 0 {
-		i -= len(m.Description)
-		copy(dAtA[i:], m.Description)
-		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Description)))
-		i--
-		dAtA[i] = 0x52
+		dAtA[i] = 0x60
 	}
 	if len(m.Outputs) > 0 {
 		for iNdEx := len(m.Outputs) - 1; iNdEx >= 0; iNdEx-- {
@@ -1959,7 +2115,7 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintRecipe(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x4a
+			dAtA[i] = 0x5a
 		}
 	}
 	{
@@ -1971,7 +2127,7 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintRecipe(dAtA, i, uint64(size))
 	}
 	i--
-	dAtA[i] = 0x42
+	dAtA[i] = 0x52
 	if len(m.ItemInputs) > 0 {
 		for iNdEx := len(m.ItemInputs) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1983,7 +2139,7 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintRecipe(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x3a
+			dAtA[i] = 0x4a
 		}
 	}
 	if len(m.CoinInputs) > 0 {
@@ -1997,8 +2153,22 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintRecipe(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x42
 		}
+	}
+	if len(m.Version) > 0 {
+		i -= len(m.Version)
+		copy(dAtA[i:], m.Version)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Version)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.Description) > 0 {
+		i -= len(m.Description)
+		copy(dAtA[i:], m.Description)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Description)))
+		i--
+		dAtA[i] = 0x32
 	}
 	if len(m.Name) > 0 {
 		i -= len(m.Name)
@@ -2007,24 +2177,24 @@ func (m *Recipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x2a
 	}
-	if len(m.CookbookID) > 0 {
-		i -= len(m.CookbookID)
-		copy(dAtA[i:], m.CookbookID)
-		i = encodeVarintRecipe(dAtA, i, uint64(len(m.CookbookID)))
-		i--
-		dAtA[i] = 0x22
-	}
 	if len(m.NodeVersion) > 0 {
 		i -= len(m.NodeVersion)
 		copy(dAtA[i:], m.NodeVersion)
 		i = encodeVarintRecipe(dAtA, i, uint64(len(m.NodeVersion)))
 		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.ID)))
+		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.Index) > 0 {
-		i -= len(m.Index)
-		copy(dAtA[i:], m.Index)
-		i = encodeVarintRecipe(dAtA, i, uint64(len(m.Index)))
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintRecipe(dAtA, i, uint64(len(m.CookbookID)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -2248,12 +2418,12 @@ func (m *StringParam) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = m.Rate.Size()
-	n += 1 + l + sovRecipe(uint64(l))
 	l = len(m.Key)
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
 	}
+	l = m.Rate.Size()
+	n += 1 + l + sovRecipe(uint64(l))
 	l = len(m.Value)
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
@@ -2265,12 +2435,35 @@ func (m *StringParam) Size() (n int) {
 	return n
 }
 
+func (m *CoinOutput) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovRecipe(uint64(l))
+	}
+	if len(m.Coins) > 0 {
+		for _, e := range m.Coins {
+			l = e.Size()
+			n += 1 + l + sovRecipe(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *ItemOutput) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovRecipe(uint64(l))
+	}
 	if len(m.Doubles) > 0 {
 		for _, e := range m.Doubles {
 			l = e.Size()
@@ -2289,6 +2482,12 @@ func (m *ItemOutput) Size() (n int) {
 			n += 1 + l + sovRecipe(uint64(l))
 		}
 	}
+	if len(m.MutableStrings) > 0 {
+		for _, e := range m.MutableStrings {
+			l = e.Size()
+			n += 1 + l + sovRecipe(uint64(l))
+		}
+	}
 	l = m.TransferFee.Size()
 	n += 1 + l + sovRecipe(uint64(l))
 	if m.Quantity != 0 {
@@ -2303,6 +2502,10 @@ func (m *ItemModifyOutput) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovRecipe(uint64(l))
+	}
 	l = len(m.ItemInputRef)
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
@@ -2369,9 +2572,8 @@ func (m *WeightedOutputs) Size() (n int) {
 			n += 1 + l + sovRecipe(uint64(l))
 		}
 	}
-	l = len(m.Weight)
-	if l > 0 {
-		n += 1 + l + sovRecipe(uint64(l))
+	if m.Weight != 0 {
+		n += 1 + sovRecipe(uint64(m.Weight))
 	}
 	return n
 }
@@ -2386,7 +2588,11 @@ func (m *Recipe) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
 	}
-	l = len(m.Index)
+	l = len(m.CookbookID)
+	if l > 0 {
+		n += 1 + l + sovRecipe(uint64(l))
+	}
+	l = len(m.ID)
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
 	}
@@ -2394,11 +2600,15 @@ func (m *Recipe) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
 	}
-	l = len(m.CookbookID)
+	l = len(m.Name)
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
 	}
-	l = len(m.Name)
+	l = len(m.Description)
+	if l > 0 {
+		n += 1 + l + sovRecipe(uint64(l))
+	}
+	l = len(m.Version)
 	if l > 0 {
 		n += 1 + l + sovRecipe(uint64(l))
 	}
@@ -2421,10 +2631,6 @@ func (m *Recipe) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovRecipe(uint64(l))
 		}
-	}
-	l = len(m.Description)
-	if l > 0 {
-		n += 1 + l + sovRecipe(uint64(l))
 	}
 	if m.BlockInterval != 0 {
 		n += 1 + sovRecipe(uint64(m.BlockInterval))
@@ -3277,7 +3483,7 @@ func (m *DoubleWeightRange) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Weight |= int64(b&0x7F) << shift
+				m.Weight |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3566,7 +3772,7 @@ func (m *IntWeightRange) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.Weight |= int64(b&0x7F) << shift
+				m.Weight |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -3805,6 +4011,38 @@ func (m *StringParam) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Key = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Rate", wireType)
 			}
 			var stringLen uint64
@@ -3836,38 +4074,6 @@ func (m *StringParam) Unmarshal(dAtA []byte) error {
 			if err := m.Rate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRecipe
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -3954,6 +4160,122 @@ func (m *StringParam) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *CoinOutput) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowRecipe
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CoinOutput: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CoinOutput: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Coins", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Coins = append(m.Coins, types.Coin{})
+			if err := m.Coins[len(m.Coins)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipRecipe(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3984,6 +4306,38 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Doubles", wireType)
 			}
@@ -4017,7 +4371,7 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Longs", wireType)
 			}
@@ -4051,7 +4405,7 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Strings", wireType)
 			}
@@ -4085,7 +4439,41 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MutableStrings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MutableStrings = append(m.MutableStrings, StringParam{})
+			if err := m.MutableStrings[len(m.MutableStrings)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TransferFee", wireType)
 			}
@@ -4119,7 +4507,7 @@ func (m *ItemOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 7:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Quantity", wireType)
 			}
@@ -4190,6 +4578,38 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputRef", wireType)
 			}
 			var stringLen uint64
@@ -4220,7 +4640,7 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 			}
 			m.ItemInputRef = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 2:
+		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Doubles", wireType)
 			}
@@ -4254,7 +4674,7 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Longs", wireType)
 			}
@@ -4288,7 +4708,7 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 4:
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Strings", wireType)
 			}
@@ -4322,7 +4742,7 @@ func (m *ItemModifyOutput) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TransferFee", wireType)
 			}
@@ -4435,7 +4855,7 @@ func (m *EntriesList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CoinOutputs = append(m.CoinOutputs, types.Coin{})
+			m.CoinOutputs = append(m.CoinOutputs, CoinOutput{})
 			if err := m.CoinOutputs[len(m.CoinOutputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -4591,10 +5011,10 @@ func (m *WeightedOutputs) Unmarshal(dAtA []byte) error {
 			m.EntryIDs = append(m.EntryIDs, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Weight", wireType)
 			}
-			var stringLen uint64
+			m.Weight = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowRecipe
@@ -4604,24 +5024,11 @@ func (m *WeightedOutputs) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.Weight |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Weight = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipRecipe(dAtA[iNdEx:])
@@ -4706,7 +5113,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -4734,9 +5141,41 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Index = string(dAtA[iNdEx:postIndex])
+			m.CookbookID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
 			}
@@ -4767,38 +5206,6 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.NodeVersion = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRecipe
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CookbookID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
@@ -4834,6 +5241,70 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Description = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowRecipe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthRecipe
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Version = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputs", wireType)
 			}
 			var msglen int
@@ -4866,7 +5337,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 7:
+		case 9:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ItemInputs", wireType)
 			}
@@ -4900,7 +5371,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 8:
+		case 10:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
 			}
@@ -4933,7 +5404,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 9:
+		case 11:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Outputs", wireType)
 			}
@@ -4967,39 +5438,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowRecipe
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthRecipe
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Description = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
+		case 12:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BlockInterval", wireType)
 			}
@@ -5018,7 +5457,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 12:
+		case 13:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Enabled", wireType)
 			}
@@ -5038,7 +5477,7 @@ func (m *Recipe) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Enabled = bool(v != 0)
-		case 13:
+		case 14:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ExtraInfo", wireType)
 			}

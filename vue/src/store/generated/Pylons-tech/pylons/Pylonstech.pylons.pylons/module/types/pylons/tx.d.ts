@@ -5,15 +5,15 @@ export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgCreateRecipe {
     creator: string;
-    index: string;
-    nodeVersion: string;
     cookbookID: string;
+    ID: string;
     name: string;
+    description: string;
+    version: string;
     coinInputs: Coin[];
     itemInputs: ItemInput[];
     entries: EntriesList | undefined;
-    Outputs: WeightedOutputs[];
-    description: string;
+    outputs: WeightedOutputs[];
     blockInterval: number;
     enabled: boolean;
     extraInfo: string;
@@ -22,15 +22,15 @@ export interface MsgCreateRecipeResponse {
 }
 export interface MsgUpdateRecipe {
     creator: string;
-    index: string;
-    nodeVersion: string;
     cookbookID: string;
+    ID: string;
     name: string;
+    description: string;
+    version: string;
     coinInputs: Coin[];
     itemInputs: ItemInput[];
     entries: EntriesList | undefined;
-    Outputs: WeightedOutputs[];
-    description: string;
+    outputs: WeightedOutputs[];
     blockInterval: number;
     enabled: boolean;
     extraInfo: string;
@@ -39,14 +39,13 @@ export interface MsgUpdateRecipeResponse {
 }
 export interface MsgCreateCookbook {
     creator: string;
-    index: string;
-    nodeVersion: string;
+    ID: string;
     name: string;
     description: string;
     developer: string;
     version: string;
     supportEmail: string;
-    level: number;
+    tier: number;
     costPerBlock: number;
     enabled: boolean;
 }
@@ -54,14 +53,13 @@ export interface MsgCreateCookbookResponse {
 }
 export interface MsgUpdateCookbook {
     creator: string;
-    index: string;
-    nodeVersion: string;
+    ID: string;
     name: string;
     description: string;
     developer: string;
     version: string;
     supportEmail: string;
-    level: number;
+    tier: number;
     costPerBlock: number;
     enabled: boolean;
 }

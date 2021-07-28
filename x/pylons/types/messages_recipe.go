@@ -7,18 +7,18 @@ import (
 
 var _ sdk.Msg = &MsgCreateRecipe{}
 
-func NewMsgCreateRecipe(creator string, index string, nodeVersion string, cookbookID string, name string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, description string, blockInterval uint64, enabled bool, extraInfo string) *MsgCreateRecipe {
+func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval uint64, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
 		Creator:         creator,
-		Index:           index,
-		NodeVersion:     nodeVersion,
 		CookbookID:      cookbookID,
+		ID:           	 id,
 		Name:            name,
+		Description:     description,
+		Version:         version,
 		CoinInputs:      coinInput,
 		ItemInputs:      itemInput,
 		Entries:         entries,
 		Outputs: 		 weightedOutputs,
-		Description:     description,
 		BlockInterval:   blockInterval,
 		Enabled:         enabled,
 		ExtraInfo:       extraInfo,
@@ -51,23 +51,70 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
+	if err = ValidateID(msg.CookbookID); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if err = ValidateID(msg.ID); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if len(msg.Name) < 8 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+	}
+
+	if len(msg.Description) < 20 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+	}
+
+	if err = ValidateVersion(msg.Version); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	// Validate sdk coins
+	if !msg.CoinInputs.IsValid() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+	}
+
+	if !msg.CoinInputs.IsAllPositive() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+	}
+
+	for _, ii := range msg.ItemInputs {
+		if err = ValidateItemInput(ii); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	idMap := make(map[string]bool)
+	if err = ValidateEntriesList(msg.Entries, idMap); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	for _, o := range msg.Outputs {
+		if err = ValidateOutputs(o, idMap); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
 	return nil
 }
 
 var _ sdk.Msg = &MsgUpdateRecipe{}
 
-func NewMsgUpdateRecipe(creator string, index string, nodeVersion string, cookbookID string, name string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, description string, blockInterval uint64, enabled bool, extraInfo string) *MsgUpdateRecipe {
+func NewMsgUpdateRecipe(creator string, cookbookID string, id string,  name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval uint64, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
 		Creator:         creator,
-		Index:           index,
-		NodeVersion:     nodeVersion,
 		CookbookID:      cookbookID,
+		ID:           	 id,
 		Name:            name,
+		Description:     description,
+		Version:         version,
 		CoinInputs:      coinInput,
 		ItemInputs:      itemInput,
 		Entries:         entries,
 		Outputs: 		 weightedOutputs,
-		Description:     description,
 		BlockInterval:   blockInterval,
 		Enabled:         enabled,
 		ExtraInfo:       extraInfo,
@@ -100,5 +147,7 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
+
 	return nil
 }

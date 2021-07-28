@@ -15,42 +15,46 @@ import (
 
 func CmdCreateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-recipe [index] [nodeVersion] [cookbookId] [name] [coinInput] [itemInput] [entries] [weightedOutputs] [description] [blockInterval] [enabled] [extraInfo]",
+		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [enabled] [extraInfo]",
 		Short: "Create a new Recipe",
 		Args:  cobra.ExactArgs(12),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			index := args[0]
-			argsNodeVersion, err := cast.ToStringE(args[1])
+			argsCookbookID, err := cast.ToStringE(args[0])
 			if err != nil {
 				return err
 			}
-			argsCookbookId, err := cast.ToStringE(args[2])
+			id := args[1]
+			argsName, err := cast.ToStringE(args[2])
 			if err != nil {
 				return err
 			}
-			argsName, err := cast.ToStringE(args[3])
+			argsDescription, err := cast.ToStringE(args[3])
 			if err != nil {
 				return err
 			}
-			argsCoinInput, err := cast.ToStringE(args[4])
+			argsVersion, err := cast.ToStringE(args[4])
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInput := github_com_cosmos_cosmos_sdk_types.Coins{}
-			err = json.Unmarshal([]byte(argsCoinInput), &jsonArgsCoinInput)
+			argsCoinInputs, err := cast.ToStringE(args[5])
 			if err != nil {
 				return err
 			}
-			argsItemInput, err := cast.ToStringE(args[5])
+			jsonArgsCoinInputs := github_com_cosmos_cosmos_sdk_types.Coins{}
+			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err
 			}
-			jsonArgsItemInput := make([]types.ItemInput, 0)
-			err = json.Unmarshal([]byte(argsItemInput), &jsonArgsItemInput)
+			argsItemInputs, err := cast.ToStringE(args[6])
 			if err != nil {
 				return err
 			}
-			argsEntries, err := cast.ToStringE(args[6])
+			jsonArgsItemInputs := make([]types.ItemInput, 0)
+			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
+			if err != nil {
+				return err
+			}
+			argsEntries, err := cast.ToStringE(args[7])
 			if err != nil {
 				return err
 			}
@@ -59,16 +63,12 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsWeightedOutputs, err := cast.ToStringE(args[7])
+			argsOutputs, err := cast.ToStringE(args[8])
 			if err != nil {
 				return err
 			}
-			jsonArgsWeightedOutputs := make([]types.WeightedOutputs, 0)
-			err = json.Unmarshal([]byte(argsWeightedOutputs), &jsonArgsWeightedOutputs)
-			if err != nil {
-				return err
-			}
-			argsDescription, err := cast.ToStringE(args[8])
+			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
+			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
 			if err != nil {
 				return err
 			}
@@ -90,7 +90,7 @@ func CmdCreateRecipe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), index, argsNodeVersion, argsCookbookId, argsName, jsonArgsCoinInput, jsonArgsItemInput, jsonArgsEntries, jsonArgsWeightedOutputs, argsDescription, argsBlockInterval, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgCreateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -105,43 +105,46 @@ func CmdCreateRecipe() *cobra.Command {
 
 func CmdUpdateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-recipe [index] [nodeVersion] [cookbookId] [name] [coinInput] [itemInput] [entries] [weightedOutputs] [description] [blockInterval] [enabled] [extraInfo]",
+		Use:   "update-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [enabled] [extraInfo]",
 		Short: "Update a Recipe",
 		Args:  cobra.ExactArgs(12),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			index := args[0]
-
-			argsNodeVersion, err := cast.ToStringE(args[1])
+			argsCookbookID, err := cast.ToStringE(args[0])
 			if err != nil {
 				return err
 			}
-			argsCookbookId, err := cast.ToStringE(args[2])
+			id := args[1]
+			argsName, err := cast.ToStringE(args[2])
 			if err != nil {
 				return err
 			}
-			argsName, err := cast.ToStringE(args[3])
+			argsDescription, err := cast.ToStringE(args[3])
 			if err != nil {
 				return err
 			}
-			argsCoinInput, err := cast.ToStringE(args[4])
+			argsVersion, err := cast.ToStringE(args[4])
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInput := github_com_cosmos_cosmos_sdk_types.Coins{}
-			err = json.Unmarshal([]byte(argsCoinInput), &jsonArgsCoinInput)
+			argsCoinInputs, err := cast.ToStringE(args[5])
 			if err != nil {
 				return err
 			}
-			argsItemInput, err := cast.ToStringE(args[5])
+			jsonArgsCoinInputs := github_com_cosmos_cosmos_sdk_types.Coins{}
+			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err
 			}
-			jsonArgsItemInput := make([]types.ItemInput, 0)
-			err = json.Unmarshal([]byte(argsItemInput), &jsonArgsItemInput)
+			argsItemInputs, err := cast.ToStringE(args[6])
 			if err != nil {
 				return err
 			}
-			argsEntries, err := cast.ToStringE(args[6])
+			jsonArgsItemInputs := make([]types.ItemInput, 0)
+			err = json.Unmarshal([]byte(argsItemInputs), &jsonArgsItemInputs)
+			if err != nil {
+				return err
+			}
+			argsEntries, err := cast.ToStringE(args[7])
 			if err != nil {
 				return err
 			}
@@ -150,16 +153,12 @@ func CmdUpdateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsWeightedOutputs, err := cast.ToStringE(args[7])
+			argsOutputs, err := cast.ToStringE(args[8])
 			if err != nil {
 				return err
 			}
-			jsonArgsWeightedOutputs := make([]types.WeightedOutputs, 0)
-			err = json.Unmarshal([]byte(argsWeightedOutputs), &jsonArgsWeightedOutputs)
-			if err != nil {
-				return err
-			}
-			argsDescription, err := cast.ToStringE(args[8])
+			jsonArgsOutputs := make([]types.WeightedOutputs, 0)
+			err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
 			if err != nil {
 				return err
 			}
@@ -181,7 +180,7 @@ func CmdUpdateRecipe() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), index, argsNodeVersion, argsCookbookId, argsName, jsonArgsCoinInput, jsonArgsItemInput, jsonArgsEntries, jsonArgsWeightedOutputs, argsDescription, argsBlockInterval, argsEnabled, argsExtraInfo)
+			msg := types.NewMsgUpdateRecipe(clientCtx.GetFromAddress().String(), argsCookbookID, id, argsName, argsDescription, argsVersion, jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsEntries, jsonArgsOutputs, argsBlockInterval, argsEnabled, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

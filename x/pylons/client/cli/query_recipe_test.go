@@ -23,7 +23,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.R
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.RecipeList = append(state.RecipeList, &types.Recipe{CookbookID: strconv.Itoa(i), Index: strconv.Itoa(i)})
+		state.RecipeList = append(state.RecipeList, &types.Recipe{CookbookID: strconv.Itoa(i), ID: strconv.Itoa(i)})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
@@ -47,7 +47,7 @@ func TestShowRecipe(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].Index,
+			id:   objs[0].ID,
 			args: common,
 			obj:  objs[0],
 		},
@@ -60,7 +60,7 @@ func TestShowRecipe(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.id}
+			args := []string{tc.id, tc.id}
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowRecipe(), args)
 			if tc.err != nil {

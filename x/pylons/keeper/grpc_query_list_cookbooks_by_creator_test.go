@@ -1,39 +1,39 @@
 package keeper
 
 import (
-	"testing"
-
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"testing"
 )
 
-func TestCookbookQuerySingle(t *testing.T) {
+func TestListCookbooksByCreator(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNCookbook(keeper, ctx, 2)
+
+
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetCookbookRequest
-		response *types.QueryGetCookbookResponse
+		request  *types.QueryListCookbooksByCreatorRequest
+		response *types.QueryListCookbooksByCreatorResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetCookbookRequest{ID: msgs[0].ID},
-			response: &types.QueryGetCookbookResponse{Cookbook: &msgs[0]},
+			request:  &types.QueryListCookbooksByCreatorRequest{Creator: msgs[0].Creator},
+			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{msgs[0]}},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetCookbookRequest{ID: msgs[1].ID},
-			response: &types.QueryGetCookbookResponse{Cookbook: &msgs[1]},
+			request:  &types.QueryListCookbooksByCreatorRequest{Creator: msgs[1].Creator},
+			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{msgs[1]}},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetCookbookRequest{ID: "missing"},
+			request: &types.QueryListCookbooksByCreatorRequest{Creator: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
@@ -43,7 +43,7 @@ func TestCookbookQuerySingle(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Cookbook(wctx, tc.request)
+			response, err := keeper.ListCookbooksByCreator(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

@@ -4,14 +4,14 @@ import { util, configure, Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
 const baseCookbook = {
     creator: '',
-    index: '',
+    ID: '',
     nodeVersion: '',
     name: '',
     description: '',
     developer: '',
     version: '',
     supportEmail: '',
-    level: 0,
+    tier: 0,
     costPerBlock: 0,
     enabled: false
 };
@@ -20,8 +20,8 @@ export const Cookbook = {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.index !== '') {
-            writer.uint32(18).string(message.index);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         if (message.nodeVersion !== '') {
             writer.uint32(26).string(message.nodeVersion);
@@ -41,8 +41,8 @@ export const Cookbook = {
         if (message.supportEmail !== '') {
             writer.uint32(66).string(message.supportEmail);
         }
-        if (message.level !== 0) {
-            writer.uint32(72).int64(message.level);
+        if (message.tier !== 0) {
+            writer.uint32(72).int64(message.tier);
         }
         if (message.costPerBlock !== 0) {
             writer.uint32(80).uint64(message.costPerBlock);
@@ -63,7 +63,7 @@ export const Cookbook = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.index = reader.string();
+                    message.ID = reader.string();
                     break;
                 case 3:
                     message.nodeVersion = reader.string();
@@ -84,7 +84,7 @@ export const Cookbook = {
                     message.supportEmail = reader.string();
                     break;
                 case 9:
-                    message.level = longToNumber(reader.int64());
+                    message.tier = longToNumber(reader.int64());
                     break;
                 case 10:
                     message.costPerBlock = longToNumber(reader.uint64());
@@ -107,11 +107,11 @@ export const Cookbook = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.index = '';
+            message.ID = '';
         }
         if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
             message.nodeVersion = String(object.nodeVersion);
@@ -149,11 +149,11 @@ export const Cookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.level !== undefined && object.level !== null) {
-            message.level = Number(object.level);
+        if (object.tier !== undefined && object.tier !== null) {
+            message.tier = Number(object.tier);
         }
         else {
-            message.level = 0;
+            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = Number(object.costPerBlock);
@@ -172,14 +172,14 @@ export const Cookbook = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.index !== undefined && (obj.index = message.index);
+        message.ID !== undefined && (obj.ID = message.ID);
         message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
         message.name !== undefined && (obj.name = message.name);
         message.description !== undefined && (obj.description = message.description);
         message.developer !== undefined && (obj.developer = message.developer);
         message.version !== undefined && (obj.version = message.version);
         message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail);
-        message.level !== undefined && (obj.level = message.level);
+        message.tier !== undefined && (obj.tier = message.tier);
         message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         return obj;
@@ -192,11 +192,11 @@ export const Cookbook = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.index = '';
+            message.ID = '';
         }
         if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
             message.nodeVersion = object.nodeVersion;
@@ -234,11 +234,11 @@ export const Cookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.level !== undefined && object.level !== null) {
-            message.level = object.level;
+        if (object.tier !== undefined && object.tier !== null) {
+            message.tier = object.tier;
         }
         else {
-            message.level = 0;
+            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = object.costPerBlock;

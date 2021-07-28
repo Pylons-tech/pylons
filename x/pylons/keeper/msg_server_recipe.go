@@ -13,9 +13,9 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value already exists
-	_, isFound := k.GetRecipe(ctx, msg.Index)
+	_, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
 	if isFound {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("index %v already set", msg.Index))
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("recipe with ID %v in cookbook with ID %v already set", msg.ID, msg.CookbookID))
 	}
 
 	// verify that the Creator is owner of the cookbook
@@ -28,9 +28,9 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	}
 
 	var recipe = types.Recipe{
-		Index:           msg.Index,
+		ID:              msg.ID,
 		Creator:         msg.Creator,
-		NodeVersion:     msg.NodeVersion,
+		NodeVersion:     "", //TODO add logic for getting configured node version
 		CookbookID:      msg.CookbookID,
 		Name:            msg.Name,
 		CoinInputs:      msg.CoinInputs,
@@ -54,9 +54,9 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
-	valFound, isFound := k.GetRecipe(ctx, msg.Index)
+	valFound, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
 	if !isFound {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("index %v not set", msg.Index))
+		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("recipe with ID %v in cookbook with ID %v not set", msg.ID, msg.CookbookID))
 	}
 
 	// Checks if the the msg sender is the same as the current owner
@@ -74,9 +74,9 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	}
 
 	var recipe = types.Recipe{
-		Index:           msg.Index,
+		ID:              msg.ID,
 		Creator:         msg.Creator,
-		NodeVersion:     msg.NodeVersion,
+		NodeVersion:     "", //TODO add logic for getting configured node version
 		CookbookID:      msg.CookbookID,
 		Name:            msg.Name,
 		CoinInputs:      msg.CoinInputs,

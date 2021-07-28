@@ -8,6 +8,6 @@ import (
 
 // x/pylons module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrInvalidRequestField = sdkerrors.Register(ModuleName, 1100, "invalid field provided in request")
 	// this line is used by starport scaffolding # ibc/errors
 )

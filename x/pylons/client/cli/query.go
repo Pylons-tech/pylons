@@ -28,8 +28,7 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 
 	cmd.AddCommand(CmdShowRecipe())
 
-	cmd.AddCommand(CmdListCookbookByCreator())
-
+	cmd.AddCommand(CmdListCookbooksByCreator())
 	cmd.AddCommand(CmdShowCookbook())
 
 	return cmd

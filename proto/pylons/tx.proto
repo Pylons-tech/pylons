@@ -21,15 +21,15 @@ service Msg {
 // this line is used by starport scaffolding # proto/tx/message
 message MsgCreateRecipe {
   string creator = 1;
-  string index = 2;
-  string nodeVersion = 3;
-  string cookbookID = 4;
-  string name = 5;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated ItemInput itemInputs = 7 [(gogoproto.nullable) = false];
-  EntriesList entries = 8 [(gogoproto.nullable) = false];
-  repeated WeightedOutputs Outputs = 9 [(gogoproto.nullable) = false];
-  string description = 10;
+  string cookbookID = 2;
+  string ID = 3;
+  string name = 4;
+  string description = 5;
+  string version = 6;
+  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  EntriesList entries = 9 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   uint64 blockInterval = 11;
   bool enabled = 12;
   string extraInfo = 13;
@@ -38,15 +38,15 @@ message MsgCreateRecipeResponse { }
 
 message MsgUpdateRecipe {
   string creator = 1;
-  string index = 2;
-  string nodeVersion = 3;
-  string cookbookID = 4;
-  string name = 5;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated ItemInput itemInputs = 7 [(gogoproto.nullable) = false];
-  EntriesList entries = 8 [(gogoproto.nullable) = false];
-  repeated WeightedOutputs Outputs = 9 [(gogoproto.nullable) = false];
-  string description = 10;
+  string cookbookID = 2;
+  string ID = 3;
+  string name = 4;
+  string description = 5;
+  string version = 6;
+  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
+  EntriesList entries = 9 [(gogoproto.nullable) = false];
+  repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
   uint64 blockInterval = 11;
   bool enabled = 12;
   string extraInfo = 13;
@@ -55,31 +55,29 @@ message MsgUpdateRecipeResponse { }
 
 message MsgCreateCookbook {
   string creator = 1;
-  string index = 2;
-  string nodeVersion = 3;
-  string name = 4;
-  string description = 5;
-  string developer = 6;
-  string version = 7;
-  string supportEmail = 8;
-  int64 level = 9;
-  uint64 costPerBlock = 10;
-  bool enabled = 11;
+  string ID = 2;
+  string name = 3;
+  string description = 4;
+  string developer = 5;
+  string version = 6;
+  string supportEmail = 7;
+  int64 tier = 8;
+  uint64 costPerBlock = 9;
+  bool enabled = 10;
 }
 message MsgCreateCookbookResponse { }
 
 message MsgUpdateCookbook {
   string creator = 1;
-  string index = 2;
-  string nodeVersion = 3;
-  string name = 4;
-  string description = 5;
-  string developer = 6;
-  string version = 7;
-  string supportEmail = 8;
-  int64 level = 9;
-  uint64 costPerBlock = 10;
-  bool enabled = 11;
+  string ID = 2;
+  string name = 3;
+  string description = 4;
+  string developer = 5;
+  string version = 6;
+  string supportEmail = 7;
+  int64 tier = 8;
+  uint64 costPerBlock = 9;
+  bool enabled = 10;
 }
 message MsgUpdateCookbookResponse { }
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -101,12 +102,17 @@ type AppModule struct {
 	AppModuleBasic
 
 	keeper keeper.Keeper
+	requestFieldConfig config.RequestFieldConfig
+	feeConfig config.FeeConfig
 }
 
-func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper) AppModule {
+func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, rfCfg config.RequestFieldConfig, feeCfg config.FeeConfig) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
+
+		requestFieldConfig: rfCfg,
+		feeConfig: feeCfg,
 	}
 }
 

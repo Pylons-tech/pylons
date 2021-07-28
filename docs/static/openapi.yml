@@ -19475,7 +19475,7 @@ paths:
           format: uint64
       tags:
         - Query
-  '/pylons/cookbook/{index}':
+  '/pylons/cookbook/{ID}':
     get:
       summary: Queries a cookbook by index.
       operationId: PylonstechPylonsPylonsCookbook
@@ -19490,7 +19490,7 @@ paths:
                 properties:
                   creator:
                     type: string
-                  index:
+                  ID:
                     type: string
                   nodeVersion:
                     type: string
@@ -19504,7 +19504,7 @@ paths:
                     type: string
                   supportEmail:
                     type: string
-                  level:
+                  tier:
                     type: string
                     format: int64
                   costPerBlock:
@@ -19533,7 +19533,7 @@ paths:
                       type: string
                       format: byte
       parameters:
-        - name: index
+        - name: ID
           in: path
           required: true
           type: string
@@ -19542,7 +19542,7 @@ paths:
   '/pylons/listCookbooks/{creator}':
     get:
       summary: Queries a list of listCookbookByCreator items.
-      operationId: PylonstechPylonsPylonsListCookbookByCreator
+      operationId: PylonstechPylonsPylonsListCookbooksByCreator
       responses:
         '200':
           description: A successful response.
@@ -19556,7 +19556,7 @@ paths:
                   properties:
                     creator:
                       type: string
-                    index:
+                    ID:
                       type: string
                     nodeVersion:
                       type: string
@@ -19570,7 +19570,7 @@ paths:
                       type: string
                     supportEmail:
                       type: string
-                    level:
+                    tier:
                       type: string
                       format: int64
                     costPerBlock:
@@ -19605,7 +19605,7 @@ paths:
           type: string
       tags:
         - Query
-  '/pylons/recipe/{index}':
+  '/pylons/recipe/{CookbookID}/{ID}':
     get:
       summary: Queries a recipe by index.
       operationId: PylonstechPylonsPylonsRecipe
@@ -19620,13 +19620,17 @@ paths:
                 properties:
                   creator:
                     type: string
-                  index:
+                  cookbookID:
+                    type: string
+                  ID:
                     type: string
                   nodeVersion:
                     type: string
-                  cookbookID:
-                    type: string
                   name:
+                    type: string
+                  description:
+                    type: string
+                  version:
                     type: string
                   coinInputs:
                     type: array
@@ -19759,24 +19763,36 @@ paths:
                         items:
                           type: object
                           properties:
-                            denom:
+                            ID:
                               type: string
-                            amount:
-                              type: string
-                          description: >-
-                            Coin defines a token with a denomination and an
-                            amount.
+                            coins:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  denom:
+                                    type: string
+                                  amount:
+                                    type: string
+                                description: >-
+                                  Coin defines a token with a denomination and
+                                  an amount.
 
 
-                            NOTE: The amount field is an Int which implements
-                            the custom method
+                                  NOTE: The amount field is an Int which
+                                  implements the custom method
 
-                            signatures required by gogoproto.
+                                  signatures required by gogoproto.
+                          title: >-
+                            CoinOutput models the continuum of valid outcomes
+                            for coin generation in recipes
                       itemOutputs:
                         type: array
                         items:
                           type: object
                           properties:
+                            ID:
+                              type: string
                             doubles:
                               type: array
                               items:
@@ -19801,14 +19817,14 @@ paths:
                                           type: string
                                         weight:
                                           type: string
-                                          format: int64
+                                          format: uint64
                                       title: >-
                                         DoubleWeightRange describes weight range
                                         that produce double value
                                   program:
                                     type: string
                                     title: >-
-                                      When program is not empty, WeightRanges is
+                                      When program is not empty, weightRanges is
                                       ignored
                                 title: >-
                                   DoubleParam describes the bounds on an item
@@ -19839,14 +19855,14 @@ paths:
                                           format: int64
                                         weight:
                                           type: string
-                                          format: int64
+                                          format: uint64
                                       title: >-
                                         IntWeightRange describes weight range
                                         that produce int value
                                   program:
                                     type: string
                                     title: >-
-                                      When program is not empty, WeightRanges is
+                                      When program is not empty, weightRanges is
                                       ignored
                                 title: >-
                                   LongParam describes the bounds on an item
@@ -19856,29 +19872,64 @@ paths:
                               items:
                                 type: object
                                 properties:
+                                  key:
+                                    type: string
                                   rate:
                                     type: string
                                     description: >-
                                       The likelihood that this parameter is
                                       applied to the output item. Between 0.0
                                       (exclusive) and 1.0 (inclusive).
-                                  key:
-                                    type: string
                                   value:
                                     type: string
                                   program:
                                     type: string
                                     title: >-
-                                      When program is not empty, Value is
+                                      When program is not empty, value is
                                       ignored
                                 title: >-
                                   StringParam describes an item input/output
                                   parameter of type string
+                            mutableStrings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  rate:
+                                    type: string
+                                    description: >-
+                                      The likelihood that this parameter is
+                                      applied to the output item. Between 0.0
+                                      (exclusive) and 1.0 (inclusive).
+                                  value:
+                                    type: string
+                                  program:
+                                    type: string
+                                    title: >-
+                                      When program is not empty, value is
+                                      ignored
+                                title: >-
+                                  StringParam describes an item input/output
+                                  parameter of type string
+                              title: >-
+                                defines a list of mutable strings whose value
+                                can be customized by the user
                             transferFee:
                               type: string
+                              title: >-
+                                transferFee defines the residual percentage that
+                                is sent to the cookbook owner when the item is
+                                sold. Between 0.0 (inclusive) and 1.0
+                                (exclusive)
                             quantity:
                               type: string
                               format: uint64
+                              title: >-
+                                quantity defines the maximum amount of these
+                                items that can be created. A 0 value indicates
+                                an infinite supply
                           title: >-
                             ItemOutput models the continuum of valid outcomes
                             for item generation in recipes
@@ -19887,6 +19938,8 @@ paths:
                         items:
                           type: object
                           properties:
+                            ID:
+                              type: string
                             itemInputRef:
                               type: string
                             doubles:
@@ -19913,14 +19966,14 @@ paths:
                                           type: string
                                         weight:
                                           type: string
-                                          format: int64
+                                          format: uint64
                                       title: >-
                                         DoubleWeightRange describes weight range
                                         that produce double value
                                   program:
                                     type: string
                                     title: >-
-                                      When program is not empty, WeightRanges is
+                                      When program is not empty, weightRanges is
                                       ignored
                                 title: >-
                                   DoubleParam describes the bounds on an item
@@ -19951,14 +20004,14 @@ paths:
                                           format: int64
                                         weight:
                                           type: string
-                                          format: int64
+                                          format: uint64
                                       title: >-
                                         IntWeightRange describes weight range
                                         that produce int value
                                   program:
                                     type: string
                                     title: >-
-                                      When program is not empty, WeightRanges is
+                                      When program is not empty, weightRanges is
                                       ignored
                                 title: >-
                                   LongParam describes the bounds on an item
@@ -19968,26 +20021,31 @@ paths:
                               items:
                                 type: object
                                 properties:
+                                  key:
+                                    type: string
                                   rate:
                                     type: string
                                     description: >-
                                       The likelihood that this parameter is
                                       applied to the output item. Between 0.0
                                       (exclusive) and 1.0 (inclusive).
-                                  key:
-                                    type: string
                                   value:
                                     type: string
                                   program:
                                     type: string
                                     title: >-
-                                      When program is not empty, Value is
+                                      When program is not empty, value is
                                       ignored
                                 title: >-
                                   StringParam describes an item input/output
                                   parameter of type string
                             transferFee:
                               type: string
+                              title: >-
+                                transferFee defines the residual percentage that
+                                is sent to the cookbook owner when the item is
+                                sold. Between 0.0 (inclusive) and 1.0
+                                (exclusive)
                           title: >-
                             ItemModifyOutput describes what is modified from
                             item input
@@ -20001,13 +20059,12 @@ paths:
                           type: array
                           items:
                             type: string
-                        Weight:
+                        weight:
                           type: string
+                          format: uint64
                       title: >-
                         WeightedOutputs is to make structs which is using weight
                         to be based on
-                  description:
-                    type: string
                   blockInterval:
                     type: string
                     format: uint64
@@ -20036,7 +20093,11 @@ paths:
                       type: string
                       format: byte
       parameters:
-        - name: index
+        - name: CookbookID
+          in: path
+          required: true
+          type: string
+        - name: ID
           in: path
           required: true
           type: string
@@ -30328,6 +30389,28 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  Pylonstech.pylons.pylons.CoinOutput:
+    type: object
+    properties:
+      ID:
+        type: string
+      coins:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+    title: >-
+      CoinOutput models the continuum of valid outcomes for coin generation in
+      recipes
   Pylonstech.pylons.pylons.ConditionList:
     type: object
     properties:
@@ -30384,7 +30467,7 @@ definitions:
     properties:
       creator:
         type: string
-      index:
+      ID:
         type: string
       nodeVersion:
         type: string
@@ -30398,7 +30481,7 @@ definitions:
         type: string
       supportEmail:
         type: string
-      level:
+      tier:
         type: string
         format: int64
       costPerBlock:
@@ -30441,11 +30524,11 @@ definitions:
               type: string
             weight:
               type: string
-              format: int64
+              format: uint64
           title: DoubleWeightRange describes weight range that produce double value
       program:
         type: string
-        title: 'When program is not empty, WeightRanges is ignored'
+        title: 'When program is not empty, weightRanges is ignored'
     title: >-
       DoubleParam describes the bounds on an item input/output parameter of type
       float64
@@ -30458,7 +30541,7 @@ definitions:
         type: string
       weight:
         type: string
-        format: int64
+        format: uint64
     title: DoubleWeightRange describes weight range that produce double value
   Pylonstech.pylons.pylons.EntriesList:
     type: object
@@ -30468,20 +30551,35 @@ definitions:
         items:
           type: object
           properties:
-            denom:
+            ID:
               type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
+            coins:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
 
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+          title: >-
+            CoinOutput models the continuum of valid outcomes for coin
+            generation in recipes
       itemOutputs:
         type: array
         items:
           type: object
           properties:
+            ID:
+              type: string
             doubles:
               type: array
               items:
@@ -30505,13 +30603,13 @@ definitions:
                           type: string
                         weight:
                           type: string
-                          format: int64
+                          format: uint64
                       title: >-
                         DoubleWeightRange describes weight range that produce
                         double value
                   program:
                     type: string
-                    title: 'When program is not empty, WeightRanges is ignored'
+                    title: 'When program is not empty, weightRanges is ignored'
                 title: >-
                   DoubleParam describes the bounds on an item input/output
                   parameter of type float64
@@ -30540,13 +30638,13 @@ definitions:
                           format: int64
                         weight:
                           type: string
-                          format: int64
+                          format: uint64
                       title: >-
                         IntWeightRange describes weight range that produce int
                         value
                   program:
                     type: string
-                    title: 'When program is not empty, WeightRanges is ignored'
+                    title: 'When program is not empty, weightRanges is ignored'
                 title: >-
                   LongParam describes the bounds on an item input/output
                   parameter of type int64
@@ -30555,26 +30653,56 @@ definitions:
               items:
                 type: object
                 properties:
+                  key:
+                    type: string
                   rate:
                     type: string
                     description: >-
                       The likelihood that this parameter is applied to the
                       output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-                  key:
-                    type: string
                   value:
                     type: string
                   program:
                     type: string
-                    title: 'When program is not empty, Value is ignored'
+                    title: 'When program is not empty, value is ignored'
                 title: >-
                   StringParam describes an item input/output parameter of type
                   string
+            mutableStrings:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  rate:
+                    type: string
+                    description: >-
+                      The likelihood that this parameter is applied to the
+                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
+                  value:
+                    type: string
+                  program:
+                    type: string
+                    title: 'When program is not empty, value is ignored'
+                title: >-
+                  StringParam describes an item input/output parameter of type
+                  string
+              title: >-
+                defines a list of mutable strings whose value can be customized
+                by the user
             transferFee:
               type: string
+              title: >-
+                transferFee defines the residual percentage that is sent to the
+                cookbook owner when the item is sold. Between 0.0 (inclusive)
+                and 1.0 (exclusive)
             quantity:
               type: string
               format: uint64
+              title: >-
+                quantity defines the maximum amount of these items that can be
+                created. A 0 value indicates an infinite supply
           title: >-
             ItemOutput models the continuum of valid outcomes for item
             generation in recipes
@@ -30583,6 +30711,8 @@ definitions:
         items:
           type: object
           properties:
+            ID:
+              type: string
             itemInputRef:
               type: string
             doubles:
@@ -30608,13 +30738,13 @@ definitions:
                           type: string
                         weight:
                           type: string
-                          format: int64
+                          format: uint64
                       title: >-
                         DoubleWeightRange describes weight range that produce
                         double value
                   program:
                     type: string
-                    title: 'When program is not empty, WeightRanges is ignored'
+                    title: 'When program is not empty, weightRanges is ignored'
                 title: >-
                   DoubleParam describes the bounds on an item input/output
                   parameter of type float64
@@ -30643,13 +30773,13 @@ definitions:
                           format: int64
                         weight:
                           type: string
-                          format: int64
+                          format: uint64
                       title: >-
                         IntWeightRange describes weight range that produce int
                         value
                   program:
                     type: string
-                    title: 'When program is not empty, WeightRanges is ignored'
+                    title: 'When program is not empty, weightRanges is ignored'
                 title: >-
                   LongParam describes the bounds on an item input/output
                   parameter of type int64
@@ -30658,23 +30788,27 @@ definitions:
               items:
                 type: object
                 properties:
+                  key:
+                    type: string
                   rate:
                     type: string
                     description: >-
                       The likelihood that this parameter is applied to the
                       output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-                  key:
-                    type: string
                   value:
                     type: string
                   program:
                     type: string
-                    title: 'When program is not empty, Value is ignored'
+                    title: 'When program is not empty, value is ignored'
                 title: >-
                   StringParam describes an item input/output parameter of type
                   string
             transferFee:
               type: string
+              title: >-
+                transferFee defines the residual percentage that is sent to the
+                cookbook owner when the item is sold. Between 0.0 (inclusive)
+                and 1.0 (exclusive)
           title: ItemModifyOutput describes what is modified from item input
     title: EntriesList is a struct to keep list of items and coins
   Pylonstech.pylons.pylons.IntWeightRange:
@@ -30688,7 +30822,7 @@ definitions:
         format: int64
       weight:
         type: string
-        format: int64
+        format: uint64
     title: IntWeightRange describes weight range that produce int value
   Pylonstech.pylons.pylons.ItemInput:
     type: object
@@ -30797,6 +30931,8 @@ definitions:
   Pylonstech.pylons.pylons.ItemModifyOutput:
     type: object
     properties:
+      ID:
+        type: string
       itemInputRef:
         type: string
       doubles:
@@ -30822,13 +30958,13 @@ definitions:
                     type: string
                   weight:
                     type: string
-                    format: int64
+                    format: uint64
                 title: >-
                   DoubleWeightRange describes weight range that produce double
                   value
             program:
               type: string
-              title: 'When program is not empty, WeightRanges is ignored'
+              title: 'When program is not empty, weightRanges is ignored'
           title: >-
             DoubleParam describes the bounds on an item input/output parameter
             of type float64
@@ -30857,11 +30993,11 @@ definitions:
                     format: int64
                   weight:
                     type: string
-                    format: int64
+                    format: uint64
                 title: IntWeightRange describes weight range that produce int value
             program:
               type: string
-              title: 'When program is not empty, WeightRanges is ignored'
+              title: 'When program is not empty, weightRanges is ignored'
           title: >-
             LongParam describes the bounds on an item input/output parameter of
             type int64
@@ -30870,25 +31006,31 @@ definitions:
         items:
           type: object
           properties:
+            key:
+              type: string
             rate:
               type: string
               description: >-
                 The likelihood that this parameter is applied to the output
                 item. Between 0.0 (exclusive) and 1.0 (inclusive).
-            key:
-              type: string
             value:
               type: string
             program:
               type: string
-              title: 'When program is not empty, Value is ignored'
+              title: 'When program is not empty, value is ignored'
           title: StringParam describes an item input/output parameter of type string
       transferFee:
         type: string
+        title: >-
+          transferFee defines the residual percentage that is sent to the
+          cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0
+          (exclusive)
     title: ItemModifyOutput describes what is modified from item input
   Pylonstech.pylons.pylons.ItemOutput:
     type: object
     properties:
+      ID:
+        type: string
       doubles:
         type: array
         items:
@@ -30912,13 +31054,13 @@ definitions:
                     type: string
                   weight:
                     type: string
-                    format: int64
+                    format: uint64
                 title: >-
                   DoubleWeightRange describes weight range that produce double
                   value
             program:
               type: string
-              title: 'When program is not empty, WeightRanges is ignored'
+              title: 'When program is not empty, weightRanges is ignored'
           title: >-
             DoubleParam describes the bounds on an item input/output parameter
             of type float64
@@ -30947,11 +31089,11 @@ definitions:
                     format: int64
                   weight:
                     type: string
-                    format: int64
+                    format: uint64
                 title: IntWeightRange describes weight range that produce int value
             program:
               type: string
-              title: 'When program is not empty, WeightRanges is ignored'
+              title: 'When program is not empty, weightRanges is ignored'
           title: >-
             LongParam describes the bounds on an item input/output parameter of
             type int64
@@ -30960,24 +31102,52 @@ definitions:
         items:
           type: object
           properties:
+            key:
+              type: string
             rate:
               type: string
               description: >-
                 The likelihood that this parameter is applied to the output
                 item. Between 0.0 (exclusive) and 1.0 (inclusive).
-            key:
-              type: string
             value:
               type: string
             program:
               type: string
-              title: 'When program is not empty, Value is ignored'
+              title: 'When program is not empty, value is ignored'
           title: StringParam describes an item input/output parameter of type string
+      mutableStrings:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            rate:
+              type: string
+              description: >-
+                The likelihood that this parameter is applied to the output
+                item. Between 0.0 (exclusive) and 1.0 (inclusive).
+            value:
+              type: string
+            program:
+              type: string
+              title: 'When program is not empty, value is ignored'
+          title: StringParam describes an item input/output parameter of type string
+        title: >-
+          defines a list of mutable strings whose value can be customized by the
+          user
       transferFee:
         type: string
+        title: >-
+          transferFee defines the residual percentage that is sent to the
+          cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0
+          (exclusive)
       quantity:
         type: string
         format: uint64
+        title: >-
+          quantity defines the maximum amount of these items that can be
+          created. A 0 value indicates an infinite supply
     title: >-
       ItemOutput models the continuum of valid outcomes for item generation in
       recipes
@@ -31020,11 +31190,11 @@ definitions:
               format: int64
             weight:
               type: string
-              format: int64
+              format: uint64
           title: IntWeightRange describes weight range that produce int value
       program:
         type: string
-        title: 'When program is not empty, WeightRanges is ignored'
+        title: 'When program is not empty, weightRanges is ignored'
     title: >-
       LongParam describes the bounds on an item input/output parameter of type
       int64
@@ -31044,7 +31214,7 @@ definitions:
         properties:
           creator:
             type: string
-          index:
+          ID:
             type: string
           nodeVersion:
             type: string
@@ -31058,7 +31228,7 @@ definitions:
             type: string
           supportEmail:
             type: string
-          level:
+          tier:
             type: string
             format: int64
           costPerBlock:
@@ -31074,13 +31244,17 @@ definitions:
         properties:
           creator:
             type: string
-          index:
+          cookbookID:
+            type: string
+          ID:
             type: string
           nodeVersion:
             type: string
-          cookbookID:
-            type: string
           name:
+            type: string
+          description:
+            type: string
+          version:
             type: string
           coinInputs:
             type: array
@@ -31213,23 +31387,36 @@ definitions:
                 items:
                   type: object
                   properties:
-                    denom:
+                    ID:
                       type: string
-                    amount:
-                      type: string
-                  description: >-
-                    Coin defines a token with a denomination and an amount.
+                    coins:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
 
 
-                    NOTE: The amount field is an Int which implements the custom
-                    method
+                          NOTE: The amount field is an Int which implements the
+                          custom method
 
-                    signatures required by gogoproto.
+                          signatures required by gogoproto.
+                  title: >-
+                    CoinOutput models the continuum of valid outcomes for coin
+                    generation in recipes
               itemOutputs:
                 type: array
                 items:
                   type: object
                   properties:
+                    ID:
+                      type: string
                     doubles:
                       type: array
                       items:
@@ -31254,13 +31441,13 @@ definitions:
                                   type: string
                                 weight:
                                   type: string
-                                  format: int64
+                                  format: uint64
                               title: >-
                                 DoubleWeightRange describes weight range that
                                 produce double value
                           program:
                             type: string
-                            title: 'When program is not empty, WeightRanges is ignored'
+                            title: 'When program is not empty, weightRanges is ignored'
                         title: >-
                           DoubleParam describes the bounds on an item
                           input/output parameter of type float64
@@ -31290,13 +31477,13 @@ definitions:
                                   format: int64
                                 weight:
                                   type: string
-                                  format: int64
+                                  format: uint64
                               title: >-
                                 IntWeightRange describes weight range that
                                 produce int value
                           program:
                             type: string
-                            title: 'When program is not empty, WeightRanges is ignored'
+                            title: 'When program is not empty, weightRanges is ignored'
                         title: >-
                           LongParam describes the bounds on an item input/output
                           parameter of type int64
@@ -31305,27 +31492,58 @@ definitions:
                       items:
                         type: object
                         properties:
+                          key:
+                            type: string
                           rate:
                             type: string
                             description: >-
                               The likelihood that this parameter is applied to
                               the output item. Between 0.0 (exclusive) and 1.0
                               (inclusive).
-                          key:
-                            type: string
                           value:
                             type: string
                           program:
                             type: string
-                            title: 'When program is not empty, Value is ignored'
+                            title: 'When program is not empty, value is ignored'
                         title: >-
                           StringParam describes an item input/output parameter
                           of type string
+                    mutableStrings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          rate:
+                            type: string
+                            description: >-
+                              The likelihood that this parameter is applied to
+                              the output item. Between 0.0 (exclusive) and 1.0
+                              (inclusive).
+                          value:
+                            type: string
+                          program:
+                            type: string
+                            title: 'When program is not empty, value is ignored'
+                        title: >-
+                          StringParam describes an item input/output parameter
+                          of type string
+                      title: >-
+                        defines a list of mutable strings whose value can be
+                        customized by the user
                     transferFee:
                       type: string
+                      title: >-
+                        transferFee defines the residual percentage that is sent
+                        to the cookbook owner when the item is sold. Between 0.0
+                        (inclusive) and 1.0 (exclusive)
                     quantity:
                       type: string
                       format: uint64
+                      title: >-
+                        quantity defines the maximum amount of these items that
+                        can be created. A 0 value indicates an infinite supply
                   title: >-
                     ItemOutput models the continuum of valid outcomes for item
                     generation in recipes
@@ -31334,6 +31552,8 @@ definitions:
                 items:
                   type: object
                   properties:
+                    ID:
+                      type: string
                     itemInputRef:
                       type: string
                     doubles:
@@ -31360,13 +31580,13 @@ definitions:
                                   type: string
                                 weight:
                                   type: string
-                                  format: int64
+                                  format: uint64
                               title: >-
                                 DoubleWeightRange describes weight range that
                                 produce double value
                           program:
                             type: string
-                            title: 'When program is not empty, WeightRanges is ignored'
+                            title: 'When program is not empty, weightRanges is ignored'
                         title: >-
                           DoubleParam describes the bounds on an item
                           input/output parameter of type float64
@@ -31396,13 +31616,13 @@ definitions:
                                   format: int64
                                 weight:
                                   type: string
-                                  format: int64
+                                  format: uint64
                               title: >-
                                 IntWeightRange describes weight range that
                                 produce int value
                           program:
                             type: string
-                            title: 'When program is not empty, WeightRanges is ignored'
+                            title: 'When program is not empty, weightRanges is ignored'
                         title: >-
                           LongParam describes the bounds on an item input/output
                           parameter of type int64
@@ -31411,24 +31631,28 @@ definitions:
                       items:
                         type: object
                         properties:
+                          key:
+                            type: string
                           rate:
                             type: string
                             description: >-
                               The likelihood that this parameter is applied to
                               the output item. Between 0.0 (exclusive) and 1.0
                               (inclusive).
-                          key:
-                            type: string
                           value:
                             type: string
                           program:
                             type: string
-                            title: 'When program is not empty, Value is ignored'
+                            title: 'When program is not empty, value is ignored'
                         title: >-
                           StringParam describes an item input/output parameter
                           of type string
                     transferFee:
                       type: string
+                      title: >-
+                        transferFee defines the residual percentage that is sent
+                        to the cookbook owner when the item is sold. Between 0.0
+                        (inclusive) and 1.0 (exclusive)
                   title: ItemModifyOutput describes what is modified from item input
             title: EntriesList is a struct to keep list of items and coins
           outputs:
@@ -31440,13 +31664,12 @@ definitions:
                   type: array
                   items:
                     type: string
-                Weight:
+                weight:
                   type: string
+                  format: uint64
               title: >-
                 WeightedOutputs is to make structs which is using weight to be
                 based on
-          description:
-            type: string
           blockInterval:
             type: string
             format: uint64
@@ -31454,7 +31677,7 @@ definitions:
             type: boolean
           extraInfo:
             type: string
-  Pylonstech.pylons.pylons.QueryListCookbookByCreatorResponse:
+  Pylonstech.pylons.pylons.QueryListCookbooksByCreatorResponse:
     type: object
     properties:
       Cookbooks:
@@ -31464,7 +31687,7 @@ definitions:
           properties:
             creator:
               type: string
-            index:
+            ID:
               type: string
             nodeVersion:
               type: string
@@ -31478,7 +31701,7 @@ definitions:
               type: string
             supportEmail:
               type: string
-            level:
+            tier:
               type: string
               format: int64
             costPerBlock:
@@ -31491,13 +31714,17 @@ definitions:
     properties:
       creator:
         type: string
-      index:
+      cookbookID:
+        type: string
+      ID:
         type: string
       nodeVersion:
         type: string
-      cookbookID:
-        type: string
       name:
+        type: string
+      description:
+        type: string
+      version:
         type: string
       coinInputs:
         type: array
@@ -31627,23 +31854,35 @@ definitions:
             items:
               type: object
               properties:
-                denom:
+                ID:
                   type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
+                coins:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-                NOTE: The amount field is an Int which implements the custom
-                method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-                signatures required by gogoproto.
+                      signatures required by gogoproto.
+              title: >-
+                CoinOutput models the continuum of valid outcomes for coin
+                generation in recipes
           itemOutputs:
             type: array
             items:
               type: object
               properties:
+                ID:
+                  type: string
                 doubles:
                   type: array
                   items:
@@ -31668,13 +31907,13 @@ definitions:
                               type: string
                             weight:
                               type: string
-                              format: int64
+                              format: uint64
                           title: >-
                             DoubleWeightRange describes weight range that
                             produce double value
                       program:
                         type: string
-                        title: 'When program is not empty, WeightRanges is ignored'
+                        title: 'When program is not empty, weightRanges is ignored'
                     title: >-
                       DoubleParam describes the bounds on an item input/output
                       parameter of type float64
@@ -31704,13 +31943,13 @@ definitions:
                               format: int64
                             weight:
                               type: string
-                              format: int64
+                              format: uint64
                           title: >-
                             IntWeightRange describes weight range that produce
                             int value
                       program:
                         type: string
-                        title: 'When program is not empty, WeightRanges is ignored'
+                        title: 'When program is not empty, weightRanges is ignored'
                     title: >-
                       LongParam describes the bounds on an item input/output
                       parameter of type int64
@@ -31719,27 +31958,58 @@ definitions:
                   items:
                     type: object
                     properties:
+                      key:
+                        type: string
                       rate:
                         type: string
                         description: >-
                           The likelihood that this parameter is applied to the
                           output item. Between 0.0 (exclusive) and 1.0
                           (inclusive).
-                      key:
-                        type: string
                       value:
                         type: string
                       program:
                         type: string
-                        title: 'When program is not empty, Value is ignored'
+                        title: 'When program is not empty, value is ignored'
                     title: >-
                       StringParam describes an item input/output parameter of
                       type string
+                mutableStrings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      rate:
+                        type: string
+                        description: >-
+                          The likelihood that this parameter is applied to the
+                          output item. Between 0.0 (exclusive) and 1.0
+                          (inclusive).
+                      value:
+                        type: string
+                      program:
+                        type: string
+                        title: 'When program is not empty, value is ignored'
+                    title: >-
+                      StringParam describes an item input/output parameter of
+                      type string
+                  title: >-
+                    defines a list of mutable strings whose value can be
+                    customized by the user
                 transferFee:
                   type: string
+                  title: >-
+                    transferFee defines the residual percentage that is sent to
+                    the cookbook owner when the item is sold. Between 0.0
+                    (inclusive) and 1.0 (exclusive)
                 quantity:
                   type: string
                   format: uint64
+                  title: >-
+                    quantity defines the maximum amount of these items that can
+                    be created. A 0 value indicates an infinite supply
               title: >-
                 ItemOutput models the continuum of valid outcomes for item
                 generation in recipes
@@ -31748,6 +32018,8 @@ definitions:
             items:
               type: object
               properties:
+                ID:
+                  type: string
                 itemInputRef:
                   type: string
                 doubles:
@@ -31774,13 +32046,13 @@ definitions:
                               type: string
                             weight:
                               type: string
-                              format: int64
+                              format: uint64
                           title: >-
                             DoubleWeightRange describes weight range that
                             produce double value
                       program:
                         type: string
-                        title: 'When program is not empty, WeightRanges is ignored'
+                        title: 'When program is not empty, weightRanges is ignored'
                     title: >-
                       DoubleParam describes the bounds on an item input/output
                       parameter of type float64
@@ -31810,13 +32082,13 @@ definitions:
                               format: int64
                             weight:
                               type: string
-                              format: int64
+                              format: uint64
                           title: >-
                             IntWeightRange describes weight range that produce
                             int value
                       program:
                         type: string
-                        title: 'When program is not empty, WeightRanges is ignored'
+                        title: 'When program is not empty, weightRanges is ignored'
                     title: >-
                       LongParam describes the bounds on an item input/output
                       parameter of type int64
@@ -31825,24 +32097,28 @@ definitions:
                   items:
                     type: object
                     properties:
+                      key:
+                        type: string
                       rate:
                         type: string
                         description: >-
                           The likelihood that this parameter is applied to the
                           output item. Between 0.0 (exclusive) and 1.0
                           (inclusive).
-                      key:
-                        type: string
                       value:
                         type: string
                       program:
                         type: string
-                        title: 'When program is not empty, Value is ignored'
+                        title: 'When program is not empty, value is ignored'
                     title: >-
                       StringParam describes an item input/output parameter of
                       type string
                 transferFee:
                   type: string
+                  title: >-
+                    transferFee defines the residual percentage that is sent to
+                    the cookbook owner when the item is sold. Between 0.0
+                    (inclusive) and 1.0 (exclusive)
               title: ItemModifyOutput describes what is modified from item input
         title: EntriesList is a struct to keep list of items and coins
       outputs:
@@ -31854,13 +32130,12 @@ definitions:
               type: array
               items:
                 type: string
-            Weight:
+            weight:
               type: string
+              format: uint64
           title: >-
             WeightedOutputs is to make structs which is using weight to be based
             on
-      description:
-        type: string
       blockInterval:
         type: string
         format: uint64
@@ -31882,18 +32157,18 @@ definitions:
   Pylonstech.pylons.pylons.StringParam:
     type: object
     properties:
+      key:
+        type: string
       rate:
         type: string
         description: >-
           The likelihood that this parameter is applied to the output item.
           Between 0.0 (exclusive) and 1.0 (inclusive).
-      key:
-        type: string
       value:
         type: string
       program:
         type: string
-        title: 'When program is not empty, Value is ignored'
+        title: 'When program is not empty, value is ignored'
     title: StringParam describes an item input/output parameter of type string
   Pylonstech.pylons.pylons.WeightedOutputs:
     type: object
@@ -31902,6 +32177,7 @@ definitions:
         type: array
         items:
           type: string
-      Weight:
+      weight:
         type: string
+        format: uint64
     title: WeightedOutputs is to make structs which is using weight to be based on

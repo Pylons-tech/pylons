@@ -38,7 +38,6 @@ export interface ItemInput {
 }
 /** DoubleWeightRange describes weight range that produce double value */
 export interface DoubleWeightRange {
-    /** This is added due to amino.Marshal does not support float variable */
     lower: string;
     upper: string;
     weight: number;
@@ -49,7 +48,7 @@ export interface DoubleParam {
     /** The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive). */
     rate: string;
     weightRanges: DoubleWeightRange[];
-    /** When program is not empty, WeightRanges is ignored */
+    /** When program is not empty, weightRanges is ignored */
     program: string;
 }
 /** IntWeightRange describes weight range that produce int value */
@@ -64,56 +63,69 @@ export interface LongParam {
     /** The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive). */
     rate: string;
     weightRanges: IntWeightRange[];
-    /** When program is not empty, WeightRanges is ignored */
+    /** When program is not empty, weightRanges is ignored */
     program: string;
 }
 /** StringParam describes an item input/output parameter of type string */
 export interface StringParam {
+    key: string;
     /** The likelihood that this parameter is applied to the output item. Between 0.0 (exclusive) and 1.0 (inclusive). */
     rate: string;
-    key: string;
     value: string;
-    /** When program is not empty, Value is ignored */
+    /** When program is not empty, value is ignored */
     program: string;
+}
+/** CoinOutput models the continuum of valid outcomes for coin generation in recipes */
+export interface CoinOutput {
+    ID: string;
+    coins: Coin[];
 }
 /** ItemOutput models the continuum of valid outcomes for item generation in recipes */
 export interface ItemOutput {
+    ID: string;
     doubles: DoubleParam[];
     longs: LongParam[];
     strings: StringParam[];
+    /** defines a list of mutable strings whose value can be customized by the user */
+    mutableStrings: StringParam[];
+    /** transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive) */
     transferFee: string;
+    /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
     quantity: number;
 }
 /** ItemModifyOutput describes what is modified from item input */
 export interface ItemModifyOutput {
+    ID: string;
     itemInputRef: string;
     doubles: DoubleParam[];
     longs: LongParam[];
     strings: StringParam[];
+    /** transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive) */
     transferFee: string;
 }
 /** EntriesList is a struct to keep list of items and coins */
 export interface EntriesList {
-    coinOutputs: Coin[];
+    coinOutputs: CoinOutput[];
     itemOutputs: ItemOutput[];
     itemModifyOutputs: ItemModifyOutput[];
 }
 /** WeightedOutputs is to make structs which is using weight to be based on */
 export interface WeightedOutputs {
     entryIDs: string[];
-    Weight: string;
+    weight: number;
 }
 export interface Recipe {
     creator: string;
-    index: string;
-    nodeVersion: string;
     cookbookID: string;
+    ID: string;
+    nodeVersion: string;
     name: string;
+    description: string;
+    version: string;
     coinInputs: Coin[];
     itemInputs: ItemInput[];
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];
-    description: string;
     blockInterval: number;
     enabled: boolean;
     extraInfo: string;
@@ -187,6 +199,13 @@ export declare const StringParam: {
     fromJSON(object: any): StringParam;
     toJSON(message: StringParam): unknown;
     fromPartial(object: DeepPartial<StringParam>): StringParam;
+};
+export declare const CoinOutput: {
+    encode(message: CoinOutput, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): CoinOutput;
+    fromJSON(object: any): CoinOutput;
+    toJSON(message: CoinOutput): unknown;
+    fromPartial(object: DeepPartial<CoinOutput>): CoinOutput;
 };
 export declare const ItemOutput: {
     encode(message: ItemOutput, writer?: Writer): Writer;

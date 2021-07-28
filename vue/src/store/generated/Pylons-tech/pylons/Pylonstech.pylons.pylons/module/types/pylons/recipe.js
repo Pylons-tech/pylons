@@ -494,7 +494,7 @@ export const DoubleWeightRange = {
             writer.uint32(18).string(message.upper);
         }
         if (message.weight !== 0) {
-            writer.uint32(24).int64(message.weight);
+            writer.uint32(24).uint64(message.weight);
         }
         return writer;
     },
@@ -512,7 +512,7 @@ export const DoubleWeightRange = {
                     message.upper = reader.string();
                     break;
                 case 3:
-                    message.weight = longToNumber(reader.int64());
+                    message.weight = longToNumber(reader.uint64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -697,7 +697,7 @@ export const IntWeightRange = {
             writer.uint32(16).int64(message.upper);
         }
         if (message.weight !== 0) {
-            writer.uint32(24).int64(message.weight);
+            writer.uint32(24).uint64(message.weight);
         }
         return writer;
     },
@@ -715,7 +715,7 @@ export const IntWeightRange = {
                     message.upper = longToNumber(reader.int64());
                     break;
                 case 3:
-                    message.weight = longToNumber(reader.int64());
+                    message.weight = longToNumber(reader.uint64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -890,14 +890,14 @@ export const LongParam = {
         return message;
     }
 };
-const baseStringParam = { rate: '', key: '', value: '', program: '' };
+const baseStringParam = { key: '', rate: '', value: '', program: '' };
 export const StringParam = {
     encode(message, writer = Writer.create()) {
-        if (message.rate !== '') {
-            writer.uint32(10).string(message.rate);
-        }
         if (message.key !== '') {
-            writer.uint32(18).string(message.key);
+            writer.uint32(10).string(message.key);
+        }
+        if (message.rate !== '') {
+            writer.uint32(18).string(message.rate);
         }
         if (message.value !== '') {
             writer.uint32(26).string(message.value);
@@ -915,10 +915,10 @@ export const StringParam = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.rate = reader.string();
+                    message.key = reader.string();
                     break;
                 case 2:
-                    message.key = reader.string();
+                    message.rate = reader.string();
                     break;
                 case 3:
                     message.value = reader.string();
@@ -935,17 +935,17 @@ export const StringParam = {
     },
     fromJSON(object) {
         const message = { ...baseStringParam };
-        if (object.rate !== undefined && object.rate !== null) {
-            message.rate = String(object.rate);
-        }
-        else {
-            message.rate = '';
-        }
         if (object.key !== undefined && object.key !== null) {
             message.key = String(object.key);
         }
         else {
             message.key = '';
+        }
+        if (object.rate !== undefined && object.rate !== null) {
+            message.rate = String(object.rate);
+        }
+        else {
+            message.rate = '';
         }
         if (object.value !== undefined && object.value !== null) {
             message.value = String(object.value);
@@ -963,25 +963,25 @@ export const StringParam = {
     },
     toJSON(message) {
         const obj = {};
-        message.rate !== undefined && (obj.rate = message.rate);
         message.key !== undefined && (obj.key = message.key);
+        message.rate !== undefined && (obj.rate = message.rate);
         message.value !== undefined && (obj.value = message.value);
         message.program !== undefined && (obj.program = message.program);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseStringParam };
-        if (object.rate !== undefined && object.rate !== null) {
-            message.rate = object.rate;
-        }
-        else {
-            message.rate = '';
-        }
         if (object.key !== undefined && object.key !== null) {
             message.key = object.key;
         }
         else {
             message.key = '';
+        }
+        if (object.rate !== undefined && object.rate !== null) {
+            message.rate = object.rate;
+        }
+        else {
+            message.rate = '';
         }
         if (object.value !== undefined && object.value !== null) {
             message.value = object.value;
@@ -998,23 +998,105 @@ export const StringParam = {
         return message;
     }
 };
-const baseItemOutput = { transferFee: '', quantity: 0 };
+const baseCoinOutput = { ID: '' };
+export const CoinOutput = {
+    encode(message, writer = Writer.create()) {
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
+        }
+        for (const v of message.coins) {
+            Coin.encode(v, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseCoinOutput };
+        message.coins = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ID = reader.string();
+                    break;
+                case 2:
+                    message.coins.push(Coin.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseCoinOutput };
+        message.coins = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
+        if (object.coins !== undefined && object.coins !== null) {
+            for (const e of object.coins) {
+                message.coins.push(Coin.fromJSON(e));
+            }
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
+        if (message.coins) {
+            obj.coins = message.coins.map((e) => (e ? Coin.toJSON(e) : undefined));
+        }
+        else {
+            obj.coins = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseCoinOutput };
+        message.coins = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
+        if (object.coins !== undefined && object.coins !== null) {
+            for (const e of object.coins) {
+                message.coins.push(Coin.fromPartial(e));
+            }
+        }
+        return message;
+    }
+};
+const baseItemOutput = { ID: '', transferFee: '', quantity: 0 };
 export const ItemOutput = {
     encode(message, writer = Writer.create()) {
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
+        }
         for (const v of message.doubles) {
-            DoubleParam.encode(v, writer.uint32(10).fork()).ldelim();
+            DoubleParam.encode(v, writer.uint32(18).fork()).ldelim();
         }
         for (const v of message.longs) {
-            LongParam.encode(v, writer.uint32(18).fork()).ldelim();
+            LongParam.encode(v, writer.uint32(26).fork()).ldelim();
         }
         for (const v of message.strings) {
-            StringParam.encode(v, writer.uint32(26).fork()).ldelim();
+            StringParam.encode(v, writer.uint32(34).fork()).ldelim();
+        }
+        for (const v of message.mutableStrings) {
+            StringParam.encode(v, writer.uint32(42).fork()).ldelim();
         }
         if (message.transferFee !== '') {
-            writer.uint32(34).string(message.transferFee);
+            writer.uint32(50).string(message.transferFee);
         }
         if (message.quantity !== 0) {
-            writer.uint32(40).uint64(message.quantity);
+            writer.uint32(56).uint64(message.quantity);
         }
         return writer;
     },
@@ -1025,22 +1107,29 @@ export const ItemOutput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        message.mutableStrings = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.doubles.push(DoubleParam.decode(reader, reader.uint32()));
+                    message.ID = reader.string();
                     break;
                 case 2:
-                    message.longs.push(LongParam.decode(reader, reader.uint32()));
+                    message.doubles.push(DoubleParam.decode(reader, reader.uint32()));
                     break;
                 case 3:
-                    message.strings.push(StringParam.decode(reader, reader.uint32()));
+                    message.longs.push(LongParam.decode(reader, reader.uint32()));
                     break;
                 case 4:
-                    message.transferFee = reader.string();
+                    message.strings.push(StringParam.decode(reader, reader.uint32()));
                     break;
                 case 5:
+                    message.mutableStrings.push(StringParam.decode(reader, reader.uint32()));
+                    break;
+                case 6:
+                    message.transferFee = reader.string();
+                    break;
+                case 7:
                     message.quantity = longToNumber(reader.uint64());
                     break;
                 default:
@@ -1055,6 +1144,13 @@ export const ItemOutput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        message.mutableStrings = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
         if (object.doubles !== undefined && object.doubles !== null) {
             for (const e of object.doubles) {
                 message.doubles.push(DoubleParam.fromJSON(e));
@@ -1068,6 +1164,11 @@ export const ItemOutput = {
         if (object.strings !== undefined && object.strings !== null) {
             for (const e of object.strings) {
                 message.strings.push(StringParam.fromJSON(e));
+            }
+        }
+        if (object.mutableStrings !== undefined && object.mutableStrings !== null) {
+            for (const e of object.mutableStrings) {
+                message.mutableStrings.push(StringParam.fromJSON(e));
             }
         }
         if (object.transferFee !== undefined && object.transferFee !== null) {
@@ -1086,6 +1187,7 @@ export const ItemOutput = {
     },
     toJSON(message) {
         const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
         if (message.doubles) {
             obj.doubles = message.doubles.map((e) => (e ? DoubleParam.toJSON(e) : undefined));
         }
@@ -1104,6 +1206,12 @@ export const ItemOutput = {
         else {
             obj.strings = [];
         }
+        if (message.mutableStrings) {
+            obj.mutableStrings = message.mutableStrings.map((e) => (e ? StringParam.toJSON(e) : undefined));
+        }
+        else {
+            obj.mutableStrings = [];
+        }
         message.transferFee !== undefined && (obj.transferFee = message.transferFee);
         message.quantity !== undefined && (obj.quantity = message.quantity);
         return obj;
@@ -1113,6 +1221,13 @@ export const ItemOutput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        message.mutableStrings = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
         if (object.doubles !== undefined && object.doubles !== null) {
             for (const e of object.doubles) {
                 message.doubles.push(DoubleParam.fromPartial(e));
@@ -1126,6 +1241,11 @@ export const ItemOutput = {
         if (object.strings !== undefined && object.strings !== null) {
             for (const e of object.strings) {
                 message.strings.push(StringParam.fromPartial(e));
+            }
+        }
+        if (object.mutableStrings !== undefined && object.mutableStrings !== null) {
+            for (const e of object.mutableStrings) {
+                message.mutableStrings.push(StringParam.fromPartial(e));
             }
         }
         if (object.transferFee !== undefined && object.transferFee !== null) {
@@ -1143,23 +1263,26 @@ export const ItemOutput = {
         return message;
     }
 };
-const baseItemModifyOutput = { itemInputRef: '', transferFee: '' };
+const baseItemModifyOutput = { ID: '', itemInputRef: '', transferFee: '' };
 export const ItemModifyOutput = {
     encode(message, writer = Writer.create()) {
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
+        }
         if (message.itemInputRef !== '') {
-            writer.uint32(10).string(message.itemInputRef);
+            writer.uint32(18).string(message.itemInputRef);
         }
         for (const v of message.doubles) {
-            DoubleParam.encode(v, writer.uint32(18).fork()).ldelim();
+            DoubleParam.encode(v, writer.uint32(26).fork()).ldelim();
         }
         for (const v of message.longs) {
-            LongParam.encode(v, writer.uint32(26).fork()).ldelim();
+            LongParam.encode(v, writer.uint32(34).fork()).ldelim();
         }
         for (const v of message.strings) {
-            StringParam.encode(v, writer.uint32(34).fork()).ldelim();
+            StringParam.encode(v, writer.uint32(42).fork()).ldelim();
         }
         if (message.transferFee !== '') {
-            writer.uint32(42).string(message.transferFee);
+            writer.uint32(50).string(message.transferFee);
         }
         return writer;
     },
@@ -1174,18 +1297,21 @@ export const ItemModifyOutput = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.itemInputRef = reader.string();
+                    message.ID = reader.string();
                     break;
                 case 2:
-                    message.doubles.push(DoubleParam.decode(reader, reader.uint32()));
+                    message.itemInputRef = reader.string();
                     break;
                 case 3:
-                    message.longs.push(LongParam.decode(reader, reader.uint32()));
+                    message.doubles.push(DoubleParam.decode(reader, reader.uint32()));
                     break;
                 case 4:
-                    message.strings.push(StringParam.decode(reader, reader.uint32()));
+                    message.longs.push(LongParam.decode(reader, reader.uint32()));
                     break;
                 case 5:
+                    message.strings.push(StringParam.decode(reader, reader.uint32()));
+                    break;
+                case 6:
                     message.transferFee = reader.string();
                     break;
                 default:
@@ -1200,6 +1326,12 @@ export const ItemModifyOutput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
         if (object.itemInputRef !== undefined && object.itemInputRef !== null) {
             message.itemInputRef = String(object.itemInputRef);
         }
@@ -1231,6 +1363,7 @@ export const ItemModifyOutput = {
     },
     toJSON(message) {
         const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
         message.itemInputRef !== undefined && (obj.itemInputRef = message.itemInputRef);
         if (message.doubles) {
             obj.doubles = message.doubles.map((e) => (e ? DoubleParam.toJSON(e) : undefined));
@@ -1258,6 +1391,12 @@ export const ItemModifyOutput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
         if (object.itemInputRef !== undefined && object.itemInputRef !== null) {
             message.itemInputRef = object.itemInputRef;
         }
@@ -1292,7 +1431,7 @@ const baseEntriesList = {};
 export const EntriesList = {
     encode(message, writer = Writer.create()) {
         for (const v of message.coinOutputs) {
-            Coin.encode(v, writer.uint32(10).fork()).ldelim();
+            CoinOutput.encode(v, writer.uint32(10).fork()).ldelim();
         }
         for (const v of message.itemOutputs) {
             ItemOutput.encode(v, writer.uint32(18).fork()).ldelim();
@@ -1313,7 +1452,7 @@ export const EntriesList = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.coinOutputs.push(Coin.decode(reader, reader.uint32()));
+                    message.coinOutputs.push(CoinOutput.decode(reader, reader.uint32()));
                     break;
                 case 2:
                     message.itemOutputs.push(ItemOutput.decode(reader, reader.uint32()));
@@ -1335,7 +1474,7 @@ export const EntriesList = {
         message.itemModifyOutputs = [];
         if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
             for (const e of object.coinOutputs) {
-                message.coinOutputs.push(Coin.fromJSON(e));
+                message.coinOutputs.push(CoinOutput.fromJSON(e));
             }
         }
         if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
@@ -1353,7 +1492,7 @@ export const EntriesList = {
     toJSON(message) {
         const obj = {};
         if (message.coinOutputs) {
-            obj.coinOutputs = message.coinOutputs.map((e) => (e ? Coin.toJSON(e) : undefined));
+            obj.coinOutputs = message.coinOutputs.map((e) => (e ? CoinOutput.toJSON(e) : undefined));
         }
         else {
             obj.coinOutputs = [];
@@ -1379,7 +1518,7 @@ export const EntriesList = {
         message.itemModifyOutputs = [];
         if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
             for (const e of object.coinOutputs) {
-                message.coinOutputs.push(Coin.fromPartial(e));
+                message.coinOutputs.push(CoinOutput.fromPartial(e));
             }
         }
         if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
@@ -1395,14 +1534,14 @@ export const EntriesList = {
         return message;
     }
 };
-const baseWeightedOutputs = { entryIDs: '', Weight: '' };
+const baseWeightedOutputs = { entryIDs: '', weight: 0 };
 export const WeightedOutputs = {
     encode(message, writer = Writer.create()) {
         for (const v of message.entryIDs) {
             writer.uint32(10).string(v);
         }
-        if (message.Weight !== '') {
-            writer.uint32(18).string(message.Weight);
+        if (message.weight !== 0) {
+            writer.uint32(16).uint64(message.weight);
         }
         return writer;
     },
@@ -1418,7 +1557,7 @@ export const WeightedOutputs = {
                     message.entryIDs.push(reader.string());
                     break;
                 case 2:
-                    message.Weight = reader.string();
+                    message.weight = longToNumber(reader.uint64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1435,11 +1574,11 @@ export const WeightedOutputs = {
                 message.entryIDs.push(String(e));
             }
         }
-        if (object.Weight !== undefined && object.Weight !== null) {
-            message.Weight = String(object.Weight);
+        if (object.weight !== undefined && object.weight !== null) {
+            message.weight = Number(object.weight);
         }
         else {
-            message.Weight = '';
+            message.weight = 0;
         }
         return message;
     },
@@ -1451,7 +1590,7 @@ export const WeightedOutputs = {
         else {
             obj.entryIDs = [];
         }
-        message.Weight !== undefined && (obj.Weight = message.Weight);
+        message.weight !== undefined && (obj.weight = message.weight);
         return obj;
     },
     fromPartial(object) {
@@ -1462,22 +1601,23 @@ export const WeightedOutputs = {
                 message.entryIDs.push(e);
             }
         }
-        if (object.Weight !== undefined && object.Weight !== null) {
-            message.Weight = object.Weight;
+        if (object.weight !== undefined && object.weight !== null) {
+            message.weight = object.weight;
         }
         else {
-            message.Weight = '';
+            message.weight = 0;
         }
         return message;
     }
 };
 const baseRecipe = {
     creator: '',
-    index: '',
-    nodeVersion: '',
     cookbookID: '',
+    ID: '',
+    nodeVersion: '',
     name: '',
     description: '',
+    version: '',
     blockInterval: 0,
     enabled: false,
     extraInfo: ''
@@ -1487,41 +1627,44 @@ export const Recipe = {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.index !== '') {
-            writer.uint32(18).string(message.index);
+        if (message.cookbookID !== '') {
+            writer.uint32(18).string(message.cookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         if (message.nodeVersion !== '') {
-            writer.uint32(26).string(message.nodeVersion);
-        }
-        if (message.cookbookID !== '') {
-            writer.uint32(34).string(message.cookbookID);
+            writer.uint32(34).string(message.nodeVersion);
         }
         if (message.name !== '') {
             writer.uint32(42).string(message.name);
         }
+        if (message.description !== '') {
+            writer.uint32(50).string(message.description);
+        }
+        if (message.version !== '') {
+            writer.uint32(58).string(message.version);
+        }
         for (const v of message.coinInputs) {
-            Coin.encode(v, writer.uint32(50).fork()).ldelim();
+            Coin.encode(v, writer.uint32(66).fork()).ldelim();
         }
         for (const v of message.itemInputs) {
-            ItemInput.encode(v, writer.uint32(58).fork()).ldelim();
+            ItemInput.encode(v, writer.uint32(74).fork()).ldelim();
         }
         if (message.entries !== undefined) {
-            EntriesList.encode(message.entries, writer.uint32(66).fork()).ldelim();
+            EntriesList.encode(message.entries, writer.uint32(82).fork()).ldelim();
         }
         for (const v of message.outputs) {
-            WeightedOutputs.encode(v, writer.uint32(74).fork()).ldelim();
-        }
-        if (message.description !== '') {
-            writer.uint32(82).string(message.description);
+            WeightedOutputs.encode(v, writer.uint32(90).fork()).ldelim();
         }
         if (message.blockInterval !== 0) {
-            writer.uint32(88).uint64(message.blockInterval);
+            writer.uint32(96).uint64(message.blockInterval);
         }
         if (message.enabled === true) {
-            writer.uint32(96).bool(message.enabled);
+            writer.uint32(104).bool(message.enabled);
         }
         if (message.extraInfo !== '') {
-            writer.uint32(106).string(message.extraInfo);
+            writer.uint32(114).string(message.extraInfo);
         }
         return writer;
     },
@@ -1539,39 +1682,42 @@ export const Recipe = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.index = reader.string();
+                    message.cookbookID = reader.string();
                     break;
                 case 3:
-                    message.nodeVersion = reader.string();
+                    message.ID = reader.string();
                     break;
                 case 4:
-                    message.cookbookID = reader.string();
+                    message.nodeVersion = reader.string();
                     break;
                 case 5:
                     message.name = reader.string();
                     break;
                 case 6:
-                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
-                    break;
-                case 7:
-                    message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
-                    break;
-                case 8:
-                    message.entries = EntriesList.decode(reader, reader.uint32());
-                    break;
-                case 9:
-                    message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
-                    break;
-                case 10:
                     message.description = reader.string();
                     break;
+                case 7:
+                    message.version = reader.string();
+                    break;
+                case 8:
+                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
+                    break;
+                case 9:
+                    message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
+                    break;
+                case 10:
+                    message.entries = EntriesList.decode(reader, reader.uint32());
+                    break;
                 case 11:
-                    message.blockInterval = longToNumber(reader.uint64());
+                    message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
                     break;
                 case 12:
-                    message.enabled = reader.bool();
+                    message.blockInterval = longToNumber(reader.uint64());
                     break;
                 case 13:
+                    message.enabled = reader.bool();
+                    break;
+                case 14:
                     message.extraInfo = reader.string();
                     break;
                 default:
@@ -1592,11 +1738,17 @@ export const Recipe = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
+        if (object.cookbookID !== undefined && object.cookbookID !== null) {
+            message.cookbookID = String(object.cookbookID);
         }
         else {
-            message.index = '';
+            message.cookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
         }
         if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
             message.nodeVersion = String(object.nodeVersion);
@@ -1604,17 +1756,23 @@ export const Recipe = {
         else {
             message.nodeVersion = '';
         }
-        if (object.cookbookID !== undefined && object.cookbookID !== null) {
-            message.cookbookID = String(object.cookbookID);
-        }
-        else {
-            message.cookbookID = '';
-        }
         if (object.name !== undefined && object.name !== null) {
             message.name = String(object.name);
         }
         else {
             message.name = '';
+        }
+        if (object.description !== undefined && object.description !== null) {
+            message.description = String(object.description);
+        }
+        else {
+            message.description = '';
+        }
+        if (object.version !== undefined && object.version !== null) {
+            message.version = String(object.version);
+        }
+        else {
+            message.version = '';
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -1636,12 +1794,6 @@ export const Recipe = {
             for (const e of object.outputs) {
                 message.outputs.push(WeightedOutputs.fromJSON(e));
             }
-        }
-        if (object.description !== undefined && object.description !== null) {
-            message.description = String(object.description);
-        }
-        else {
-            message.description = '';
         }
         if (object.blockInterval !== undefined && object.blockInterval !== null) {
             message.blockInterval = Number(object.blockInterval);
@@ -1666,10 +1818,12 @@ export const Recipe = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.index !== undefined && (obj.index = message.index);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
         message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
+        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
         message.name !== undefined && (obj.name = message.name);
+        message.description !== undefined && (obj.description = message.description);
+        message.version !== undefined && (obj.version = message.version);
         if (message.coinInputs) {
             obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -1689,7 +1843,6 @@ export const Recipe = {
         else {
             obj.outputs = [];
         }
-        message.description !== undefined && (obj.description = message.description);
         message.blockInterval !== undefined && (obj.blockInterval = message.blockInterval);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo);
@@ -1706,11 +1859,17 @@ export const Recipe = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
+        if (object.cookbookID !== undefined && object.cookbookID !== null) {
+            message.cookbookID = object.cookbookID;
         }
         else {
-            message.index = '';
+            message.cookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
         }
         if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
             message.nodeVersion = object.nodeVersion;
@@ -1718,17 +1877,23 @@ export const Recipe = {
         else {
             message.nodeVersion = '';
         }
-        if (object.cookbookID !== undefined && object.cookbookID !== null) {
-            message.cookbookID = object.cookbookID;
-        }
-        else {
-            message.cookbookID = '';
-        }
         if (object.name !== undefined && object.name !== null) {
             message.name = object.name;
         }
         else {
             message.name = '';
+        }
+        if (object.description !== undefined && object.description !== null) {
+            message.description = object.description;
+        }
+        else {
+            message.description = '';
+        }
+        if (object.version !== undefined && object.version !== null) {
+            message.version = object.version;
+        }
+        else {
+            message.version = '';
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -1750,12 +1915,6 @@ export const Recipe = {
             for (const e of object.outputs) {
                 message.outputs.push(WeightedOutputs.fromPartial(e));
             }
-        }
-        if (object.description !== undefined && object.description !== null) {
-            message.description = object.description;
-        }
-        else {
-            message.description = '';
         }
         if (object.blockInterval !== undefined && object.blockInterval !== null) {
             message.blockInterval = object.blockInterval;

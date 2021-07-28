@@ -28,19 +28,19 @@ func (gs GenesisState) Validate() error {
 	recipeIndexMap := make(map[string]bool)
 
 	for _, elem := range gs.RecipeList {
-		if _, ok := recipeIndexMap[elem.Index]; ok {
+		if _, ok := recipeIndexMap[elem.ID]; ok {
 			return fmt.Errorf("duplicated index for recipe")
 		}
-		recipeIndexMap[elem.Index] = true
+		recipeIndexMap[elem.ID] = true
 	}
 	// Check for duplicated index in cookbook
 	cookbookIndexMap := make(map[string]bool)
 
 	for _, elem := range gs.CookbookList {
-		if _, ok := cookbookIndexMap[elem.Index]; ok {
+		if _, ok := cookbookIndexMap[elem.ID]; ok {
 			return fmt.Errorf("duplicated index for cookbook")
 		}
-		cookbookIndexMap[elem.Index] = true
+		cookbookIndexMap[elem.ID] = true
 	}
 
 	return nil

@@ -23,7 +23,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []*types
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.CookbookList = append(state.CookbookList, &types.Cookbook{Creator: "ANY", Index: strconv.Itoa(i)})
+		state.CookbookList = append(state.CookbookList, &types.Cookbook{Creator: "ANY", ID: strconv.Itoa(i)})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
@@ -47,7 +47,7 @@ func TestShowCookbook(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   objs[0].Index,
+			id:   objs[0].ID,
 			args: common,
 			obj:  objs[0],
 		},

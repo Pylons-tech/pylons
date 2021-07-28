@@ -20,7 +20,7 @@ func TestCreateCookbook(t *testing.T) {
 	ctx := val.ClientCtx
 	id := "0"
 
-	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "111"}
+	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "111", "true"}
 	for _, tc := range []struct {
 		desc string
 		id   string
@@ -63,7 +63,7 @@ func TestUpdateCookbook(t *testing.T) {
 	ctx := val.ClientCtx
 	id := "0"
 
-	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "111"}
+	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "111", "true"}
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),

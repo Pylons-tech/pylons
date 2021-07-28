@@ -3,11 +3,14 @@ import { Reader, Writer } from 'protobufjs/minimal';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseQueryGetRecipeRequest = { index: '' };
+const baseQueryGetRecipeRequest = { CookbookID: '', ID: '' };
 export const QueryGetRecipeRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.index !== '') {
-            writer.uint32(10).string(message.index);
+        if (message.CookbookID !== '') {
+            writer.uint32(10).string(message.CookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -19,7 +22,10 @@ export const QueryGetRecipeRequest = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.index = reader.string();
+                    message.CookbookID = reader.string();
+                    break;
+                case 2:
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -30,26 +36,39 @@ export const QueryGetRecipeRequest = {
     },
     fromJSON(object) {
         const message = { ...baseQueryGetRecipeRequest };
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = String(object.CookbookID);
         }
         else {
-            message.index = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.index !== undefined && (obj.index = message.index);
+        message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseQueryGetRecipeRequest };
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = object.CookbookID;
         }
         else {
-            message.index = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
         }
         return message;
     }
@@ -105,8 +124,8 @@ export const QueryGetRecipeResponse = {
         return message;
     }
 };
-const baseQueryListCookbookByCreatorRequest = { creator: '' };
-export const QueryListCookbookByCreatorRequest = {
+const baseQueryListCookbooksByCreatorRequest = { creator: '' };
+export const QueryListCookbooksByCreatorRequest = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
@@ -116,7 +135,7 @@ export const QueryListCookbookByCreatorRequest = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryListCookbookByCreatorRequest };
+        const message = { ...baseQueryListCookbooksByCreatorRequest };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -131,7 +150,7 @@ export const QueryListCookbookByCreatorRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryListCookbookByCreatorRequest };
+        const message = { ...baseQueryListCookbooksByCreatorRequest };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
@@ -146,7 +165,7 @@ export const QueryListCookbookByCreatorRequest = {
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryListCookbookByCreatorRequest };
+        const message = { ...baseQueryListCookbooksByCreatorRequest };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
@@ -156,8 +175,8 @@ export const QueryListCookbookByCreatorRequest = {
         return message;
     }
 };
-const baseQueryListCookbookByCreatorResponse = {};
-export const QueryListCookbookByCreatorResponse = {
+const baseQueryListCookbooksByCreatorResponse = {};
+export const QueryListCookbooksByCreatorResponse = {
     encode(message, writer = Writer.create()) {
         for (const v of message.Cookbooks) {
             Cookbook.encode(v, writer.uint32(10).fork()).ldelim();
@@ -167,7 +186,7 @@ export const QueryListCookbookByCreatorResponse = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryListCookbookByCreatorResponse };
+        const message = { ...baseQueryListCookbooksByCreatorResponse };
         message.Cookbooks = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
@@ -183,7 +202,7 @@ export const QueryListCookbookByCreatorResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryListCookbookByCreatorResponse };
+        const message = { ...baseQueryListCookbooksByCreatorResponse };
         message.Cookbooks = [];
         if (object.Cookbooks !== undefined && object.Cookbooks !== null) {
             for (const e of object.Cookbooks) {
@@ -203,7 +222,7 @@ export const QueryListCookbookByCreatorResponse = {
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryListCookbookByCreatorResponse };
+        const message = { ...baseQueryListCookbooksByCreatorResponse };
         message.Cookbooks = [];
         if (object.Cookbooks !== undefined && object.Cookbooks !== null) {
             for (const e of object.Cookbooks) {
@@ -213,11 +232,11 @@ export const QueryListCookbookByCreatorResponse = {
         return message;
     }
 };
-const baseQueryGetCookbookRequest = { index: '' };
+const baseQueryGetCookbookRequest = { ID: '' };
 export const QueryGetCookbookRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.index !== '') {
-            writer.uint32(10).string(message.index);
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
         }
         return writer;
     },
@@ -229,7 +248,7 @@ export const QueryGetCookbookRequest = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.index = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -240,26 +259,26 @@ export const QueryGetCookbookRequest = {
     },
     fromJSON(object) {
         const message = { ...baseQueryGetCookbookRequest };
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.index = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.index !== undefined && (obj.index = message.index);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseQueryGetCookbookRequest };
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.index = '';
+            message.ID = '';
         }
         return message;
     }
@@ -324,10 +343,10 @@ export class QueryClientImpl {
         const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Recipe', data);
         return promise.then((data) => QueryGetRecipeResponse.decode(new Reader(data)));
     }
-    ListCookbookByCreator(request) {
-        const data = QueryListCookbookByCreatorRequest.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListCookbookByCreator', data);
-        return promise.then((data) => QueryListCookbookByCreatorResponse.decode(new Reader(data)));
+    ListCookbooksByCreator(request) {
+        const data = QueryListCookbooksByCreatorRequest.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListCookbooksByCreator', data);
+        return promise.then((data) => QueryListCookbooksByCreatorResponse.decode(new Reader(data)));
     }
     Cookbook(request) {
         const data = QueryGetCookbookRequest.encode(request).finish();

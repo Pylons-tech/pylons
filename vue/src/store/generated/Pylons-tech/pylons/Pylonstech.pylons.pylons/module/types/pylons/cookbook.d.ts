@@ -2,14 +2,14 @@ import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface Cookbook {
     creator: string;
-    index: string;
+    ID: string;
     nodeVersion: string;
     name: string;
     description: string;
     developer: string;
     version: string;
     supportEmail: string;
-    level: number;
+    tier: number;
     costPerBlock: number;
     enabled: boolean;
 }

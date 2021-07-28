@@ -14,7 +14,8 @@ import (
 func TestRecipeQuerySingle(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNRecipe(keeper, ctx, 2)
+	cookbooks := createNCookbook(keeper, ctx, 1)
+	msgs := createNRecipe(keeper, ctx, cookbooks[0], 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetRecipeRequest
@@ -23,17 +24,17 @@ func TestRecipeQuerySingle(t *testing.T) {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetRecipeRequest{Index: msgs[0].Index},
+			request:  &types.QueryGetRecipeRequest{CookbookID: msgs[0].CookbookID, ID: msgs[0].ID},
 			response: &types.QueryGetRecipeResponse{Recipe: &msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetRecipeRequest{Index: msgs[1].Index},
+			request:  &types.QueryGetRecipeRequest{CookbookID: msgs[1].CookbookID, ID: msgs[1].ID},
 			response: &types.QueryGetRecipeResponse{Recipe: &msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetRecipeRequest{Index: "missing"},
+			request: &types.QueryGetRecipeRequest{CookbookID: "missing", ID: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

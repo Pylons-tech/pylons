@@ -7,19 +7,18 @@ import (
 
 var _ sdk.Msg = &MsgCreateCookbook{}
 
-func NewMsgCreateCookbook(creator string, index string, nodeVersion string, name string, description string, developer string, version string, supportEmail string, level int64, costPerBlock uint64) *MsgCreateCookbook {
+func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, tier int64, costPerBlock uint64, enabled bool) *MsgCreateCookbook {
 	return &MsgCreateCookbook{
 		Creator:      creator,
-		Index:        index,
-		NodeVersion:  nodeVersion,
+		ID:        	  id,
 		Name:         name,
 		Description:  description,
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		Level:        level,
+		Tier:         tier,
 		CostPerBlock: costPerBlock,
-		Enabled:      true, // Cookbook is enabled by default at creation
+		Enabled:      enabled,
 	}
 }
 
@@ -49,22 +48,45 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
+	if err = ValidateID(msg.ID); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if len(msg.Name) < 8 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+	}
+
+	if len(msg.Description) < 20 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+	}
+
+	if err = ValidateEmail(msg.SupportEmail); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if err = ValidateTier(msg.Tier); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if err = ValidateVersion(msg.Version); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
 	return nil
 }
 
 var _ sdk.Msg = &MsgUpdateCookbook{}
 
-func NewMsgUpdateCookbook(creator string, index string, nodeVersion string, name string, description string, developer string, version string, supportEmail string, level int64, costPerBlock uint64, enabled bool) *MsgUpdateCookbook {
+func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, tier int64, costPerBlock uint64, enabled bool) *MsgUpdateCookbook {
 	return &MsgUpdateCookbook{
 		Creator:      creator,
-		Index:        index,
-		NodeVersion:  nodeVersion,
+		ID:           id,
 		Name:         name,
 		Description:  description,
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		Level:        level,
 		CostPerBlock: costPerBlock,
 		Enabled:      enabled,
 	}
@@ -96,5 +118,30 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
+	if err = ValidateID(msg.ID); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if len(msg.Name) < 8 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+	}
+
+	if len(msg.Description) < 20 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+	}
+
+	if err = ValidateEmail(msg.SupportEmail); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if err = ValidateTier(msg.Tier); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if err = ValidateVersion(msg.Version); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
 	return nil
 }

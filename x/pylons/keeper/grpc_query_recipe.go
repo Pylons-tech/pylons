@@ -16,7 +16,7 @@ func (k Keeper) Recipe(c context.Context, req *types.QueryGetRecipeRequest) (*ty
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 
-	val, found := k.GetRecipe(ctx, req.Index)
+	val, found := k.GetRecipe(ctx, req.CookbookID, req.ID)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}

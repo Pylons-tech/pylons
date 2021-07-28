@@ -11,9 +11,9 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdListCookbookByCreator() *cobra.Command {
+func CmdListCookbooksByCreator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-cookbook-by-creator [creator]",
+		Use:   "list-cookbooks [creator]",
 		Short: "List cookbooks by creator",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -26,12 +26,11 @@ func CmdListCookbookByCreator() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryListCookbookByCreatorRequest{
-
+			params := &types.QueryListCookbooksByCreatorRequest{
 				Creator: reqCreator,
 			}
 
-			res, err := queryClient.ListCookbookByCreator(cmd.Context(), params)
+			res, err := queryClient.ListCookbooksByCreator(cmd.Context(), params)
 			if err != nil {
 				return err
 			}

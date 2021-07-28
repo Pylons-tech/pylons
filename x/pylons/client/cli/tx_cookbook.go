@@ -13,40 +13,40 @@ import (
 
 func CmdCreateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-cookbook [index] [nodeVersion] [name] [description] [developer] [version] [supportEmail] [level] [costPerBlock]",
-		Short: "Create a new Cookbook",
+		Use:   "create-cookbook [id] [name] [description] [developer] [version] [supportEmail] [tier] [costPerBlock] [enabled]",
+		Short: "Create a new cookbook",
 		Args:  cobra.ExactArgs(9),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			index := args[0]
-			argsNodeVersion, err := cast.ToStringE(args[1])
+			id := args[0]
+			argsName, err := cast.ToStringE(args[1])
 			if err != nil {
 				return err
 			}
-			argsName, err := cast.ToStringE(args[2])
+			argsDescription, err := cast.ToStringE(args[2])
 			if err != nil {
 				return err
 			}
-			argsDescription, err := cast.ToStringE(args[3])
+			argsDeveloper, err := cast.ToStringE(args[3])
 			if err != nil {
 				return err
 			}
-			argsDeveloper, err := cast.ToStringE(args[4])
+			argsVersion, err := cast.ToStringE(args[4])
 			if err != nil {
 				return err
 			}
-			argsVersion, err := cast.ToStringE(args[5])
+			argsSupportEmail, err := cast.ToStringE(args[5])
 			if err != nil {
 				return err
 			}
-			argsSupportEmail, err := cast.ToStringE(args[6])
+			argsTier, err := cast.ToInt64E(args[6])
 			if err != nil {
 				return err
 			}
-			argsLevel, err := cast.ToInt64E(args[7])
+			argsCostPerBlock, err := cast.ToUint64E(args[7])
 			if err != nil {
 				return err
 			}
-			argsCostPerBlock, err := cast.ToUint64E(args[8])
+			argsEnabled, err := cast.ToBoolE(args[8])
 			if err != nil {
 				return err
 			}
@@ -56,7 +56,7 @@ func CmdCreateCookbook() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), index, argsNodeVersion, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsLevel, argsCostPerBlock)
+			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsTier, argsCostPerBlock, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -71,45 +71,40 @@ func CmdCreateCookbook() *cobra.Command {
 
 func CmdUpdateCookbook() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "update-cookbook [index] [nodeVersion] [name] [description] [developer] [version] [supportEmail] [level] [costPerBlock] [enabled]",
-		Short: "Update a Cookbook",
-		Args:  cobra.ExactArgs(10),
+		Use:   "update-cookbook [id] [name] [description] [developer] [version] [supportEmail] [tier] [costPerBlock] [enabled]",
+		Short: "Update a cookbook",
+		Args:  cobra.ExactArgs(8),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			index := args[0]
-
-			argsNodeVersion, err := cast.ToStringE(args[1])
+			id := args[0]
+			argsName, err := cast.ToStringE(args[1])
 			if err != nil {
 				return err
 			}
-			argsName, err := cast.ToStringE(args[2])
+			argsDescription, err := cast.ToStringE(args[2])
 			if err != nil {
 				return err
 			}
-			argsDescription, err := cast.ToStringE(args[3])
+			argsDeveloper, err := cast.ToStringE(args[3])
 			if err != nil {
 				return err
 			}
-			argsDeveloper, err := cast.ToStringE(args[4])
+			argsVersion, err := cast.ToStringE(args[4])
 			if err != nil {
 				return err
 			}
-			argsVersion, err := cast.ToStringE(args[5])
+			argsSupportEmail, err := cast.ToStringE(args[5])
 			if err != nil {
 				return err
 			}
-			argsSupportEmail, err := cast.ToStringE(args[6])
+			argsTier, err := cast.ToInt64E(args[6])
 			if err != nil {
 				return err
 			}
-			argsLevel, err := cast.ToInt64E(args[7])
+			argsCostPerBlock, err := cast.ToUint64E(args[6])
 			if err != nil {
 				return err
 			}
-			argsCostPerBlock, err := cast.ToUint64E(args[8])
-			if err != nil {
-				return err
-			}
-			argsEnabled, err := cast.ToBoolE(args[9])
+			argsEnabled, err := cast.ToBoolE(args[7])
 			if err != nil {
 				return err
 			}
@@ -119,7 +114,7 @@ func CmdUpdateCookbook() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), index, argsNodeVersion, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsLevel, argsCostPerBlock, argsEnabled)
+			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, argsTier, argsCostPerBlock, argsEnabled)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

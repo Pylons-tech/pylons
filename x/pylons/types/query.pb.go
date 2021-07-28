@@ -32,7 +32,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // this line is used by starport scaffolding # 3
 type QueryGetRecipeRequest struct {
-	Index string `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
+	CookbookID string `protobuf:"bytes,1,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
+	ID         string `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
 }
 
 func (m *QueryGetRecipeRequest) Reset()         { *m = QueryGetRecipeRequest{} }
@@ -68,9 +69,16 @@ func (m *QueryGetRecipeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryGetRecipeRequest proto.InternalMessageInfo
 
-func (m *QueryGetRecipeRequest) GetIndex() string {
+func (m *QueryGetRecipeRequest) GetCookbookID() string {
 	if m != nil {
-		return m.Index
+		return m.CookbookID
+	}
+	return ""
+}
+
+func (m *QueryGetRecipeRequest) GetID() string {
+	if m != nil {
+		return m.ID
 	}
 	return ""
 }
@@ -119,22 +127,22 @@ func (m *QueryGetRecipeResponse) GetRecipe() *Recipe {
 	return nil
 }
 
-type QueryListCookbookByCreatorRequest struct {
+type QueryListCookbooksByCreatorRequest struct {
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 }
 
-func (m *QueryListCookbookByCreatorRequest) Reset()         { *m = QueryListCookbookByCreatorRequest{} }
-func (m *QueryListCookbookByCreatorRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryListCookbookByCreatorRequest) ProtoMessage()    {}
-func (*QueryListCookbookByCreatorRequest) Descriptor() ([]byte, []int) {
+func (m *QueryListCookbooksByCreatorRequest) Reset()         { *m = QueryListCookbooksByCreatorRequest{} }
+func (m *QueryListCookbooksByCreatorRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryListCookbooksByCreatorRequest) ProtoMessage()    {}
+func (*QueryListCookbooksByCreatorRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_dbe4a0dc0744f938, []int{2}
 }
-func (m *QueryListCookbookByCreatorRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryListCookbooksByCreatorRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryListCookbookByCreatorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryListCookbooksByCreatorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryListCookbookByCreatorRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryListCookbooksByCreatorRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -144,41 +152,41 @@ func (m *QueryListCookbookByCreatorRequest) XXX_Marshal(b []byte, deterministic 
 		return b[:n], nil
 	}
 }
-func (m *QueryListCookbookByCreatorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryListCookbookByCreatorRequest.Merge(m, src)
+func (m *QueryListCookbooksByCreatorRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListCookbooksByCreatorRequest.Merge(m, src)
 }
-func (m *QueryListCookbookByCreatorRequest) XXX_Size() int {
+func (m *QueryListCookbooksByCreatorRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryListCookbookByCreatorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryListCookbookByCreatorRequest.DiscardUnknown(m)
+func (m *QueryListCookbooksByCreatorRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListCookbooksByCreatorRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryListCookbookByCreatorRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryListCookbooksByCreatorRequest proto.InternalMessageInfo
 
-func (m *QueryListCookbookByCreatorRequest) GetCreator() string {
+func (m *QueryListCookbooksByCreatorRequest) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
 	return ""
 }
 
-type QueryListCookbookByCreatorResponse struct {
+type QueryListCookbooksByCreatorResponse struct {
 	Cookbooks []Cookbook `protobuf:"bytes,1,rep,name=Cookbooks,proto3" json:"Cookbooks"`
 }
 
-func (m *QueryListCookbookByCreatorResponse) Reset()         { *m = QueryListCookbookByCreatorResponse{} }
-func (m *QueryListCookbookByCreatorResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryListCookbookByCreatorResponse) ProtoMessage()    {}
-func (*QueryListCookbookByCreatorResponse) Descriptor() ([]byte, []int) {
+func (m *QueryListCookbooksByCreatorResponse) Reset()         { *m = QueryListCookbooksByCreatorResponse{} }
+func (m *QueryListCookbooksByCreatorResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryListCookbooksByCreatorResponse) ProtoMessage()    {}
+func (*QueryListCookbooksByCreatorResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_dbe4a0dc0744f938, []int{3}
 }
-func (m *QueryListCookbookByCreatorResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryListCookbooksByCreatorResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryListCookbookByCreatorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryListCookbooksByCreatorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryListCookbookByCreatorResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryListCookbooksByCreatorResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -188,19 +196,19 @@ func (m *QueryListCookbookByCreatorResponse) XXX_Marshal(b []byte, deterministic
 		return b[:n], nil
 	}
 }
-func (m *QueryListCookbookByCreatorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryListCookbookByCreatorResponse.Merge(m, src)
+func (m *QueryListCookbooksByCreatorResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryListCookbooksByCreatorResponse.Merge(m, src)
 }
-func (m *QueryListCookbookByCreatorResponse) XXX_Size() int {
+func (m *QueryListCookbooksByCreatorResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryListCookbookByCreatorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryListCookbookByCreatorResponse.DiscardUnknown(m)
+func (m *QueryListCookbooksByCreatorResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryListCookbooksByCreatorResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryListCookbookByCreatorResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryListCookbooksByCreatorResponse proto.InternalMessageInfo
 
-func (m *QueryListCookbookByCreatorResponse) GetCookbooks() []Cookbook {
+func (m *QueryListCookbooksByCreatorResponse) GetCookbooks() []Cookbook {
 	if m != nil {
 		return m.Cookbooks
 	}
@@ -208,7 +216,7 @@ func (m *QueryListCookbookByCreatorResponse) GetCookbooks() []Cookbook {
 }
 
 type QueryGetCookbookRequest struct {
-	Index string `protobuf:"bytes,1,opt,name=index,proto3" json:"index,omitempty"`
+	ID string `protobuf:"bytes,1,opt,name=ID,proto3" json:"ID,omitempty"`
 }
 
 func (m *QueryGetCookbookRequest) Reset()         { *m = QueryGetCookbookRequest{} }
@@ -244,9 +252,9 @@ func (m *QueryGetCookbookRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryGetCookbookRequest proto.InternalMessageInfo
 
-func (m *QueryGetCookbookRequest) GetIndex() string {
+func (m *QueryGetCookbookRequest) GetID() string {
 	if m != nil {
-		return m.Index
+		return m.ID
 	}
 	return ""
 }
@@ -298,8 +306,8 @@ func (m *QueryGetCookbookResponse) GetCookbook() *Cookbook {
 func init() {
 	proto.RegisterType((*QueryGetRecipeRequest)(nil), "Pylonstech.pylons.pylons.QueryGetRecipeRequest")
 	proto.RegisterType((*QueryGetRecipeResponse)(nil), "Pylonstech.pylons.pylons.QueryGetRecipeResponse")
-	proto.RegisterType((*QueryListCookbookByCreatorRequest)(nil), "Pylonstech.pylons.pylons.QueryListCookbookByCreatorRequest")
-	proto.RegisterType((*QueryListCookbookByCreatorResponse)(nil), "Pylonstech.pylons.pylons.QueryListCookbookByCreatorResponse")
+	proto.RegisterType((*QueryListCookbooksByCreatorRequest)(nil), "Pylonstech.pylons.pylons.QueryListCookbooksByCreatorRequest")
+	proto.RegisterType((*QueryListCookbooksByCreatorResponse)(nil), "Pylonstech.pylons.pylons.QueryListCookbooksByCreatorResponse")
 	proto.RegisterType((*QueryGetCookbookRequest)(nil), "Pylonstech.pylons.pylons.QueryGetCookbookRequest")
 	proto.RegisterType((*QueryGetCookbookResponse)(nil), "Pylonstech.pylons.pylons.QueryGetCookbookResponse")
 }
@@ -307,38 +315,39 @@ func init() {
 func init() { proto.RegisterFile("pylons/query.proto", fileDescriptor_dbe4a0dc0744f938) }
 
 var fileDescriptor_dbe4a0dc0744f938 = []byte{
-	// 486 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0xbf, 0x6f, 0xd4, 0x30,
-	0x14, 0xc7, 0xcf, 0x94, 0x16, 0xea, 0x6e, 0xa6, 0x57, 0xa2, 0x08, 0xa5, 0x57, 0x2f, 0x54, 0x88,
-	0xc6, 0xdc, 0xb1, 0x20, 0xf1, 0x63, 0x68, 0xa5, 0xb2, 0x30, 0x40, 0xc6, 0x6e, 0x49, 0xb0, 0xd2,
-	0xa8, 0x69, 0x5e, 0x1a, 0xfb, 0x50, 0xa3, 0xaa, 0x0b, 0x2b, 0x0b, 0x52, 0xff, 0x1c, 0xfe, 0x81,
-	0x8e, 0x95, 0x58, 0x98, 0x10, 0xba, 0x63, 0xe1, 0xbf, 0x40, 0xb1, 0x9f, 0x5b, 0x38, 0x7a, 0xd7,
-	0xd2, 0x29, 0xce, 0xd7, 0xef, 0xfb, 0xde, 0xc7, 0xcf, 0xcf, 0x94, 0x55, 0x4d, 0x01, 0xa5, 0x12,
-	0x07, 0x43, 0x59, 0x37, 0x61, 0x55, 0x83, 0x06, 0xe6, 0xbd, 0x35, 0x9a, 0x96, 0xe9, 0x6e, 0x68,
-	0xb7, 0xf1, 0xe3, 0x3f, 0xc8, 0x00, 0xb2, 0x42, 0x8a, 0xb8, 0xca, 0x45, 0x5c, 0x96, 0xa0, 0x63,
-	0x9d, 0x9b, 0xed, 0xd6, 0xe7, 0x3f, 0x4a, 0x41, 0xed, 0x83, 0x12, 0x49, 0xac, 0xa4, 0x4d, 0x28,
-	0x3e, 0xf4, 0x13, 0xa9, 0xe3, 0xbe, 0xa8, 0xe2, 0x2c, 0x2f, 0x4d, 0x30, 0xc6, 0x2e, 0x67, 0x90,
-	0x81, 0x59, 0x8a, 0x76, 0x85, 0xea, 0x3d, 0xa4, 0xa9, 0x65, 0x9a, 0x57, 0x12, 0xc5, 0x2e, 0x8a,
-	0x29, 0xc0, 0x5e, 0x02, 0xb0, 0x67, 0x65, 0xbe, 0x41, 0xbb, 0xef, 0xda, 0x1a, 0xaf, 0xa5, 0x8e,
-	0x4c, 0x78, 0x24, 0x0f, 0x86, 0x52, 0x69, 0xb6, 0x4c, 0xe7, 0xf3, 0xf2, 0xbd, 0x3c, 0xf4, 0x48,
-	0x8f, 0xac, 0x2f, 0x46, 0xf6, 0x87, 0x47, 0x74, 0x65, 0x32, 0x5c, 0x55, 0x50, 0x2a, 0xc9, 0x9e,
-	0xd1, 0x05, 0xab, 0x18, 0xc3, 0xd2, 0xa0, 0x17, 0x4e, 0x3b, 0x7f, 0x88, 0x4e, 0x8c, 0xe7, 0x2f,
-	0xe9, 0x9a, 0xc9, 0xf9, 0x26, 0x57, 0x7a, 0x0b, 0xe9, 0x36, 0x9b, 0xad, 0x5a, 0xc6, 0x1a, 0x6a,
-	0x87, 0xe3, 0xd1, 0x3b, 0xa9, 0x55, 0x10, 0xc8, 0xfd, 0xf2, 0x82, 0xf2, 0x59, 0x76, 0xc4, 0xdb,
-	0xa6, 0x8b, 0x6e, 0x53, 0x79, 0xa4, 0x37, 0xb7, 0xbe, 0x34, 0xe0, 0xd3, 0x09, 0xcf, 0xf3, 0xdc,
-	0x3e, 0xfd, 0xbe, 0xda, 0x89, 0x2e, 0xac, 0x5c, 0xd0, 0xfb, 0xae, 0x01, 0x4e, 0x9c, 0xdd, 0xb1,
-	0x1d, 0xea, 0xfd, 0x6b, 0x40, 0xa8, 0x57, 0xf4, 0xae, 0xd3, 0xb0, 0x6b, 0xd7, 0x60, 0x8a, 0xce,
-	0x3d, 0x83, 0x5f, 0x73, 0x74, 0xde, 0x24, 0x67, 0x9f, 0x88, 0x6b, 0x3f, 0x13, 0xd3, 0x53, 0x5c,
-	0x7a, 0xd3, 0xfe, 0x93, 0xeb, 0x1b, 0x2c, 0x37, 0x0f, 0x3e, 0x7e, 0xfd, 0x79, 0x72, 0xcb, 0x63,
-	0x2b, 0xe2, 0xaf, 0x49, 0x13, 0x47, 0xe6, 0xc8, 0xc7, 0xec, 0x0b, 0xa1, 0xdd, 0x4b, 0xaf, 0x83,
-	0x3d, 0xbf, 0xa2, 0xd6, 0xac, 0x19, 0xf0, 0x5f, 0xdc, 0xcc, 0x8c, 0xd0, 0x0f, 0x0d, 0xf4, 0x1a,
-	0x5b, 0x75, 0xd0, 0xc5, 0x1f, 0xe1, 0x4a, 0x1c, 0xe1, 0x3c, 0x1d, 0xb3, 0x13, 0x72, 0x71, 0x2d,
-	0xac, 0x7f, 0x75, 0x73, 0x26, 0xe6, 0xc0, 0x1f, 0xfc, 0x8f, 0x05, 0xe1, 0x7a, 0x06, 0xce, 0x67,
-	0x9e, 0x98, 0x78, 0xa6, 0xae, 0xa7, 0x9b, 0xdb, 0xa7, 0xa3, 0x80, 0x9c, 0x8d, 0x02, 0xf2, 0x63,
-	0x14, 0x90, 0xcf, 0xe3, 0xa0, 0x73, 0x36, 0x0e, 0x3a, 0xdf, 0xc6, 0x41, 0x67, 0xe7, 0x71, 0x96,
-	0xeb, 0xdd, 0x61, 0x12, 0xa6, 0xb0, 0x2f, 0x6c, 0xe5, 0x8d, 0xb6, 0xb4, 0xcb, 0x74, 0xe8, 0x16,
-	0xba, 0xa9, 0xa4, 0x4a, 0x16, 0xcc, 0xbb, 0x7f, 0xfa, 0x3b, 0x00, 0x00, 0xff, 0xff, 0x66, 0xc6,
-	0xdf, 0x27, 0xb3, 0x04, 0x00, 0x00,
+	// 510 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x3f, 0x6f, 0xd3, 0x40,
+	0x1c, 0xcd, 0xa5, 0x50, 0xe8, 0x55, 0x62, 0x38, 0x48, 0x6b, 0x59, 0xe0, 0x86, 0x63, 0x20, 0x20,
+	0xf0, 0x91, 0xb0, 0x30, 0x40, 0x87, 0x34, 0x6a, 0x15, 0x89, 0x01, 0x3c, 0x76, 0xb3, 0xad, 0x93,
+	0x6b, 0x35, 0xf1, 0xcf, 0xf5, 0x5d, 0x10, 0x51, 0x94, 0x85, 0x4f, 0x50, 0x09, 0xf1, 0x75, 0x98,
+	0x3b, 0x56, 0x62, 0x61, 0x42, 0x28, 0xe1, 0x1b, 0xf0, 0x05, 0x90, 0xef, 0x4f, 0x52, 0x42, 0xd3,
+	0x96, 0x4e, 0x3e, 0xbf, 0x7b, 0xef, 0xf7, 0x7b, 0xf7, 0xee, 0x67, 0x63, 0x92, 0x0f, 0x7b, 0x90,
+	0x09, 0x76, 0x34, 0xe0, 0xc5, 0xd0, 0xcf, 0x0b, 0x90, 0x40, 0x9c, 0x77, 0x0a, 0x93, 0x3c, 0x3e,
+	0xf0, 0xf5, 0xb6, 0x79, 0xb8, 0xf7, 0x13, 0x80, 0xa4, 0xc7, 0x59, 0x98, 0xa7, 0x2c, 0xcc, 0x32,
+	0x90, 0xa1, 0x4c, 0xd5, 0x76, 0xa9, 0x73, 0x9f, 0xc6, 0x20, 0xfa, 0x20, 0x58, 0x14, 0x0a, 0xae,
+	0x0b, 0xb2, 0x0f, 0xcd, 0x88, 0xcb, 0xb0, 0xc9, 0xf2, 0x30, 0x49, 0x33, 0x45, 0x36, 0xdc, 0x7b,
+	0x09, 0x24, 0xa0, 0x96, 0xac, 0x5c, 0x19, 0xf4, 0xae, 0x71, 0x53, 0xf0, 0x38, 0xcd, 0xb9, 0x01,
+	0x6b, 0x06, 0x8c, 0x01, 0x0e, 0x23, 0x80, 0x43, 0x0d, 0xd3, 0x3d, 0x5c, 0x7b, 0x5f, 0xf6, 0xd8,
+	0xe3, 0x32, 0x50, 0xf4, 0x80, 0x1f, 0x0d, 0xb8, 0x90, 0xc4, 0xc3, 0x78, 0xc7, 0x50, 0xbb, 0x1d,
+	0x07, 0xd5, 0x51, 0x63, 0x2d, 0x38, 0x83, 0x90, 0x3b, 0xb8, 0xda, 0xed, 0x38, 0x55, 0x85, 0x57,
+	0xbb, 0x1d, 0x1a, 0xe0, 0x8d, 0xc5, 0x42, 0x22, 0x87, 0x4c, 0x70, 0xf2, 0x0a, 0xaf, 0x6a, 0x44,
+	0x55, 0x59, 0x6f, 0xd5, 0xfd, 0x65, 0xc9, 0xf8, 0x46, 0x69, 0xf8, 0x74, 0x1b, 0x53, 0x55, 0xf3,
+	0x6d, 0x2a, 0xa4, 0x6d, 0x2d, 0xda, 0xc3, 0x9d, 0x82, 0x87, 0x12, 0x0a, 0xeb, 0xd4, 0xc1, 0xb7,
+	0x62, 0x8d, 0x18, 0x9b, 0xf6, 0x95, 0xf6, 0xf1, 0xa3, 0x0b, 0xf5, 0xc6, 0xe0, 0x2e, 0x5e, 0x9b,
+	0xed, 0x3a, 0xa8, 0xbe, 0xd2, 0x58, 0x6f, 0xd1, 0xe5, 0x1e, 0x2d, 0xb5, 0x7d, 0xe3, 0xe4, 0xc7,
+	0x56, 0x25, 0x98, 0x4b, 0xe9, 0x13, 0xbc, 0x69, 0x23, 0xb0, 0xa0, 0xf5, 0xa8, 0xd3, 0x42, 0xb3,
+	0xb4, 0xf6, 0xb1, 0xf3, 0x2f, 0xd5, 0xd8, 0xd9, 0xc6, 0xb7, 0x2d, 0x66, 0x12, 0xbb, 0x82, 0x9b,
+	0x60, 0xa6, 0x69, 0xfd, 0x5e, 0xc1, 0x37, 0x55, 0x71, 0xf2, 0x05, 0xd9, 0xe8, 0x09, 0x5b, 0x5e,
+	0xe2, 0xdc, 0xfb, 0x77, 0x5f, 0x5c, 0x5d, 0xa0, 0x7d, 0xd3, 0xc6, 0xa7, 0x6f, 0xbf, 0x3e, 0x57,
+	0x29, 0xa9, 0xb3, 0xbf, 0xe6, 0x8f, 0x8d, 0xe6, 0x53, 0x33, 0x66, 0xa3, 0x6e, 0x67, 0x4c, 0xbe,
+	0x22, 0xbc, 0x71, 0xfe, 0x9d, 0x90, 0xd7, 0x97, 0xb4, 0xbd, 0x70, 0x14, 0xdc, 0x37, 0xd7, 0x54,
+	0x9b, 0x13, 0x3c, 0x56, 0x27, 0x78, 0x48, 0xb6, 0xec, 0x09, 0x7a, 0x67, 0xf9, 0x6c, 0x64, 0xe6,
+	0x6a, 0x4c, 0x8e, 0xd1, 0xfc, 0x8e, 0x48, 0xf3, 0xf2, 0xa4, 0x16, 0xc6, 0xc1, 0x6d, 0xfd, 0x8f,
+	0xc4, 0x98, 0x7b, 0xa0, 0xcc, 0x6d, 0x92, 0x1a, 0x5b, 0xf8, 0x92, 0x55, 0xa6, 0xed, 0xdd, 0x93,
+	0x89, 0x87, 0x4e, 0x27, 0x1e, 0xfa, 0x39, 0xf1, 0xd0, 0xf1, 0xd4, 0xab, 0x9c, 0x4e, 0xbd, 0xca,
+	0xf7, 0xa9, 0x57, 0xd9, 0x7f, 0x96, 0xa4, 0xf2, 0x60, 0x10, 0xf9, 0x31, 0xf4, 0x99, 0x6e, 0xfb,
+	0xbc, 0xec, 0x6b, 0xcb, 0x7c, 0xb4, 0x0b, 0x39, 0xcc, 0xb9, 0x88, 0x56, 0xd5, 0x7f, 0xe1, 0xe5,
+	0x9f, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd8, 0xcc, 0x8f, 0xdf, 0xd3, 0x04, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -356,7 +365,7 @@ type QueryClient interface {
 	// Queries a recipe by index.
 	Recipe(ctx context.Context, in *QueryGetRecipeRequest, opts ...grpc.CallOption) (*QueryGetRecipeResponse, error)
 	// Queries a list of listCookbookByCreator items.
-	ListCookbookByCreator(ctx context.Context, in *QueryListCookbookByCreatorRequest, opts ...grpc.CallOption) (*QueryListCookbookByCreatorResponse, error)
+	ListCookbooksByCreator(ctx context.Context, in *QueryListCookbooksByCreatorRequest, opts ...grpc.CallOption) (*QueryListCookbooksByCreatorResponse, error)
 	// Queries a cookbook by index.
 	Cookbook(ctx context.Context, in *QueryGetCookbookRequest, opts ...grpc.CallOption) (*QueryGetCookbookResponse, error)
 }
@@ -378,9 +387,9 @@ func (c *queryClient) Recipe(ctx context.Context, in *QueryGetRecipeRequest, opt
 	return out, nil
 }
 
-func (c *queryClient) ListCookbookByCreator(ctx context.Context, in *QueryListCookbookByCreatorRequest, opts ...grpc.CallOption) (*QueryListCookbookByCreatorResponse, error) {
-	out := new(QueryListCookbookByCreatorResponse)
-	err := c.cc.Invoke(ctx, "/Pylonstech.pylons.pylons.Query/ListCookbookByCreator", in, out, opts...)
+func (c *queryClient) ListCookbooksByCreator(ctx context.Context, in *QueryListCookbooksByCreatorRequest, opts ...grpc.CallOption) (*QueryListCookbooksByCreatorResponse, error) {
+	out := new(QueryListCookbooksByCreatorResponse)
+	err := c.cc.Invoke(ctx, "/Pylonstech.pylons.pylons.Query/ListCookbooksByCreator", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -401,7 +410,7 @@ type QueryServer interface {
 	// Queries a recipe by index.
 	Recipe(context.Context, *QueryGetRecipeRequest) (*QueryGetRecipeResponse, error)
 	// Queries a list of listCookbookByCreator items.
-	ListCookbookByCreator(context.Context, *QueryListCookbookByCreatorRequest) (*QueryListCookbookByCreatorResponse, error)
+	ListCookbooksByCreator(context.Context, *QueryListCookbooksByCreatorRequest) (*QueryListCookbooksByCreatorResponse, error)
 	// Queries a cookbook by index.
 	Cookbook(context.Context, *QueryGetCookbookRequest) (*QueryGetCookbookResponse, error)
 }
@@ -413,8 +422,8 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Recipe(ctx context.Context, req *QueryGetRecipeRequest) (*QueryGetRecipeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Recipe not implemented")
 }
-func (*UnimplementedQueryServer) ListCookbookByCreator(ctx context.Context, req *QueryListCookbookByCreatorRequest) (*QueryListCookbookByCreatorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListCookbookByCreator not implemented")
+func (*UnimplementedQueryServer) ListCookbooksByCreator(ctx context.Context, req *QueryListCookbooksByCreatorRequest) (*QueryListCookbooksByCreatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListCookbooksByCreator not implemented")
 }
 func (*UnimplementedQueryServer) Cookbook(ctx context.Context, req *QueryGetCookbookRequest) (*QueryGetCookbookResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Cookbook not implemented")
@@ -442,20 +451,20 @@ func _Query_Recipe_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_ListCookbookByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryListCookbookByCreatorRequest)
+func _Query_ListCookbooksByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryListCookbooksByCreatorRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).ListCookbookByCreator(ctx, in)
+		return srv.(QueryServer).ListCookbooksByCreator(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Pylonstech.pylons.pylons.Query/ListCookbookByCreator",
+		FullMethod: "/Pylonstech.pylons.pylons.Query/ListCookbooksByCreator",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ListCookbookByCreator(ctx, req.(*QueryListCookbookByCreatorRequest))
+		return srv.(QueryServer).ListCookbooksByCreator(ctx, req.(*QueryListCookbooksByCreatorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -487,8 +496,8 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Recipe_Handler,
 		},
 		{
-			MethodName: "ListCookbookByCreator",
-			Handler:    _Query_ListCookbookByCreator_Handler,
+			MethodName: "ListCookbooksByCreator",
+			Handler:    _Query_ListCookbooksByCreator_Handler,
 		},
 		{
 			MethodName: "Cookbook",
@@ -519,10 +528,17 @@ func (m *QueryGetRecipeRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Index) > 0 {
-		i -= len(m.Index)
-		copy(dAtA[i:], m.Index)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Index)))
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.CookbookID)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -564,7 +580,7 @@ func (m *QueryGetRecipeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryListCookbookByCreatorRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryListCookbooksByCreatorRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -574,12 +590,12 @@ func (m *QueryListCookbookByCreatorRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryListCookbookByCreatorRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryListCookbooksByCreatorRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryListCookbookByCreatorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryListCookbooksByCreatorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -594,7 +610,7 @@ func (m *QueryListCookbookByCreatorRequest) MarshalToSizedBuffer(dAtA []byte) (i
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryListCookbookByCreatorResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryListCookbooksByCreatorResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -604,12 +620,12 @@ func (m *QueryListCookbookByCreatorResponse) Marshal() (dAtA []byte, err error) 
 	return dAtA[:n], nil
 }
 
-func (m *QueryListCookbookByCreatorResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryListCookbooksByCreatorResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryListCookbookByCreatorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryListCookbooksByCreatorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -651,10 +667,10 @@ func (m *QueryGetCookbookRequest) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Index) > 0 {
-		i -= len(m.Index)
-		copy(dAtA[i:], m.Index)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Index)))
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintQuery(dAtA, i, uint64(len(m.ID)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -713,7 +729,11 @@ func (m *QueryGetRecipeRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Index)
+	l = len(m.CookbookID)
+	if l > 0 {
+		n += 1 + l + sovQuery(uint64(l))
+	}
+	l = len(m.ID)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
@@ -733,7 +753,7 @@ func (m *QueryGetRecipeResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryListCookbookByCreatorRequest) Size() (n int) {
+func (m *QueryListCookbooksByCreatorRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -746,7 +766,7 @@ func (m *QueryListCookbookByCreatorRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryListCookbookByCreatorResponse) Size() (n int) {
+func (m *QueryListCookbooksByCreatorResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -767,7 +787,7 @@ func (m *QueryGetCookbookRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.Index)
+	l = len(m.ID)
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
@@ -824,7 +844,7 @@ func (m *QueryGetRecipeRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -852,7 +872,39 @@ func (m *QueryGetRecipeRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Index = string(dAtA[iNdEx:postIndex])
+			m.CookbookID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -961,7 +1013,7 @@ func (m *QueryGetRecipeResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryListCookbookByCreatorRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryListCookbooksByCreatorRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -984,10 +1036,10 @@ func (m *QueryListCookbookByCreatorRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryListCookbookByCreatorRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryListCookbooksByCreatorRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryListCookbookByCreatorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryListCookbooksByCreatorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1043,7 +1095,7 @@ func (m *QueryListCookbookByCreatorRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryListCookbookByCreatorResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryListCookbooksByCreatorResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1066,10 +1118,10 @@ func (m *QueryListCookbookByCreatorResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryListCookbookByCreatorResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryListCookbooksByCreatorResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryListCookbookByCreatorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryListCookbooksByCreatorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1158,7 +1210,7 @@ func (m *QueryGetCookbookRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1186,7 +1238,7 @@ func (m *QueryGetCookbookRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Index = string(dAtA[iNdEx:postIndex])
+			m.ID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

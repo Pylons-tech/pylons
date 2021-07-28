@@ -6,11 +6,11 @@ import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
 const baseMsgCreateRecipe = {
     creator: '',
-    index: '',
-    nodeVersion: '',
     cookbookID: '',
+    ID: '',
     name: '',
     description: '',
+    version: '',
     blockInterval: 0,
     enabled: false,
     extraInfo: ''
@@ -20,32 +20,32 @@ export const MsgCreateRecipe = {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.index !== '') {
-            writer.uint32(18).string(message.index);
-        }
-        if (message.nodeVersion !== '') {
-            writer.uint32(26).string(message.nodeVersion);
-        }
         if (message.cookbookID !== '') {
-            writer.uint32(34).string(message.cookbookID);
+            writer.uint32(18).string(message.cookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         if (message.name !== '') {
-            writer.uint32(42).string(message.name);
-        }
-        for (const v of message.coinInputs) {
-            Coin.encode(v, writer.uint32(50).fork()).ldelim();
-        }
-        for (const v of message.itemInputs) {
-            ItemInput.encode(v, writer.uint32(58).fork()).ldelim();
-        }
-        if (message.entries !== undefined) {
-            EntriesList.encode(message.entries, writer.uint32(66).fork()).ldelim();
-        }
-        for (const v of message.Outputs) {
-            WeightedOutputs.encode(v, writer.uint32(74).fork()).ldelim();
+            writer.uint32(34).string(message.name);
         }
         if (message.description !== '') {
-            writer.uint32(82).string(message.description);
+            writer.uint32(42).string(message.description);
+        }
+        if (message.version !== '') {
+            writer.uint32(50).string(message.version);
+        }
+        for (const v of message.coinInputs) {
+            Coin.encode(v, writer.uint32(58).fork()).ldelim();
+        }
+        for (const v of message.itemInputs) {
+            ItemInput.encode(v, writer.uint32(66).fork()).ldelim();
+        }
+        if (message.entries !== undefined) {
+            EntriesList.encode(message.entries, writer.uint32(74).fork()).ldelim();
+        }
+        for (const v of message.outputs) {
+            WeightedOutputs.encode(v, writer.uint32(82).fork()).ldelim();
         }
         if (message.blockInterval !== 0) {
             writer.uint32(88).uint64(message.blockInterval);
@@ -64,7 +64,7 @@ export const MsgCreateRecipe = {
         const message = { ...baseMsgCreateRecipe };
         message.coinInputs = [];
         message.itemInputs = [];
-        message.Outputs = [];
+        message.outputs = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -72,31 +72,31 @@ export const MsgCreateRecipe = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.index = reader.string();
-                    break;
-                case 3:
-                    message.nodeVersion = reader.string();
-                    break;
-                case 4:
                     message.cookbookID = reader.string();
                     break;
-                case 5:
+                case 3:
+                    message.ID = reader.string();
+                    break;
+                case 4:
                     message.name = reader.string();
                     break;
+                case 5:
+                    message.description = reader.string();
+                    break;
                 case 6:
-                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
+                    message.version = reader.string();
                     break;
                 case 7:
-                    message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
+                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
                     break;
                 case 8:
-                    message.entries = EntriesList.decode(reader, reader.uint32());
+                    message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
                     break;
                 case 9:
-                    message.Outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
+                    message.entries = EntriesList.decode(reader, reader.uint32());
                     break;
                 case 10:
-                    message.description = reader.string();
+                    message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
                     break;
                 case 11:
                     message.blockInterval = longToNumber(reader.uint64());
@@ -118,24 +118,12 @@ export const MsgCreateRecipe = {
         const message = { ...baseMsgCreateRecipe };
         message.coinInputs = [];
         message.itemInputs = [];
-        message.Outputs = [];
+        message.outputs = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
             message.creator = '';
-        }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
-        }
-        else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = String(object.nodeVersion);
-        }
-        else {
-            message.nodeVersion = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = String(object.cookbookID);
@@ -143,11 +131,29 @@ export const MsgCreateRecipe = {
         else {
             message.cookbookID = '';
         }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
         if (object.name !== undefined && object.name !== null) {
             message.name = String(object.name);
         }
         else {
             message.name = '';
+        }
+        if (object.description !== undefined && object.description !== null) {
+            message.description = String(object.description);
+        }
+        else {
+            message.description = '';
+        }
+        if (object.version !== undefined && object.version !== null) {
+            message.version = String(object.version);
+        }
+        else {
+            message.version = '';
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -165,16 +171,10 @@ export const MsgCreateRecipe = {
         else {
             message.entries = undefined;
         }
-        if (object.Outputs !== undefined && object.Outputs !== null) {
-            for (const e of object.Outputs) {
-                message.Outputs.push(WeightedOutputs.fromJSON(e));
+        if (object.outputs !== undefined && object.outputs !== null) {
+            for (const e of object.outputs) {
+                message.outputs.push(WeightedOutputs.fromJSON(e));
             }
-        }
-        if (object.description !== undefined && object.description !== null) {
-            message.description = String(object.description);
-        }
-        else {
-            message.description = '';
         }
         if (object.blockInterval !== undefined && object.blockInterval !== null) {
             message.blockInterval = Number(object.blockInterval);
@@ -199,10 +199,11 @@ export const MsgCreateRecipe = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.index !== undefined && (obj.index = message.index);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
         message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
         message.name !== undefined && (obj.name = message.name);
+        message.description !== undefined && (obj.description = message.description);
+        message.version !== undefined && (obj.version = message.version);
         if (message.coinInputs) {
             obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -216,13 +217,12 @@ export const MsgCreateRecipe = {
             obj.itemInputs = [];
         }
         message.entries !== undefined && (obj.entries = message.entries ? EntriesList.toJSON(message.entries) : undefined);
-        if (message.Outputs) {
-            obj.Outputs = message.Outputs.map((e) => (e ? WeightedOutputs.toJSON(e) : undefined));
+        if (message.outputs) {
+            obj.outputs = message.outputs.map((e) => (e ? WeightedOutputs.toJSON(e) : undefined));
         }
         else {
-            obj.Outputs = [];
+            obj.outputs = [];
         }
-        message.description !== undefined && (obj.description = message.description);
         message.blockInterval !== undefined && (obj.blockInterval = message.blockInterval);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo);
@@ -232,24 +232,12 @@ export const MsgCreateRecipe = {
         const message = { ...baseMsgCreateRecipe };
         message.coinInputs = [];
         message.itemInputs = [];
-        message.Outputs = [];
+        message.outputs = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
             message.creator = '';
-        }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
-        }
-        else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = object.nodeVersion;
-        }
-        else {
-            message.nodeVersion = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = object.cookbookID;
@@ -257,11 +245,29 @@ export const MsgCreateRecipe = {
         else {
             message.cookbookID = '';
         }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
         if (object.name !== undefined && object.name !== null) {
             message.name = object.name;
         }
         else {
             message.name = '';
+        }
+        if (object.description !== undefined && object.description !== null) {
+            message.description = object.description;
+        }
+        else {
+            message.description = '';
+        }
+        if (object.version !== undefined && object.version !== null) {
+            message.version = object.version;
+        }
+        else {
+            message.version = '';
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -279,16 +285,10 @@ export const MsgCreateRecipe = {
         else {
             message.entries = undefined;
         }
-        if (object.Outputs !== undefined && object.Outputs !== null) {
-            for (const e of object.Outputs) {
-                message.Outputs.push(WeightedOutputs.fromPartial(e));
+        if (object.outputs !== undefined && object.outputs !== null) {
+            for (const e of object.outputs) {
+                message.outputs.push(WeightedOutputs.fromPartial(e));
             }
-        }
-        if (object.description !== undefined && object.description !== null) {
-            message.description = object.description;
-        }
-        else {
-            message.description = '';
         }
         if (object.blockInterval !== undefined && object.blockInterval !== null) {
             message.blockInterval = object.blockInterval;
@@ -345,11 +345,11 @@ export const MsgCreateRecipeResponse = {
 };
 const baseMsgUpdateRecipe = {
     creator: '',
-    index: '',
-    nodeVersion: '',
     cookbookID: '',
+    ID: '',
     name: '',
     description: '',
+    version: '',
     blockInterval: 0,
     enabled: false,
     extraInfo: ''
@@ -359,32 +359,32 @@ export const MsgUpdateRecipe = {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.index !== '') {
-            writer.uint32(18).string(message.index);
-        }
-        if (message.nodeVersion !== '') {
-            writer.uint32(26).string(message.nodeVersion);
-        }
         if (message.cookbookID !== '') {
-            writer.uint32(34).string(message.cookbookID);
+            writer.uint32(18).string(message.cookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         if (message.name !== '') {
-            writer.uint32(42).string(message.name);
-        }
-        for (const v of message.coinInputs) {
-            Coin.encode(v, writer.uint32(50).fork()).ldelim();
-        }
-        for (const v of message.itemInputs) {
-            ItemInput.encode(v, writer.uint32(58).fork()).ldelim();
-        }
-        if (message.entries !== undefined) {
-            EntriesList.encode(message.entries, writer.uint32(66).fork()).ldelim();
-        }
-        for (const v of message.Outputs) {
-            WeightedOutputs.encode(v, writer.uint32(74).fork()).ldelim();
+            writer.uint32(34).string(message.name);
         }
         if (message.description !== '') {
-            writer.uint32(82).string(message.description);
+            writer.uint32(42).string(message.description);
+        }
+        if (message.version !== '') {
+            writer.uint32(50).string(message.version);
+        }
+        for (const v of message.coinInputs) {
+            Coin.encode(v, writer.uint32(58).fork()).ldelim();
+        }
+        for (const v of message.itemInputs) {
+            ItemInput.encode(v, writer.uint32(66).fork()).ldelim();
+        }
+        if (message.entries !== undefined) {
+            EntriesList.encode(message.entries, writer.uint32(74).fork()).ldelim();
+        }
+        for (const v of message.outputs) {
+            WeightedOutputs.encode(v, writer.uint32(82).fork()).ldelim();
         }
         if (message.blockInterval !== 0) {
             writer.uint32(88).uint64(message.blockInterval);
@@ -403,7 +403,7 @@ export const MsgUpdateRecipe = {
         const message = { ...baseMsgUpdateRecipe };
         message.coinInputs = [];
         message.itemInputs = [];
-        message.Outputs = [];
+        message.outputs = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -411,31 +411,31 @@ export const MsgUpdateRecipe = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.index = reader.string();
-                    break;
-                case 3:
-                    message.nodeVersion = reader.string();
-                    break;
-                case 4:
                     message.cookbookID = reader.string();
                     break;
-                case 5:
+                case 3:
+                    message.ID = reader.string();
+                    break;
+                case 4:
                     message.name = reader.string();
                     break;
+                case 5:
+                    message.description = reader.string();
+                    break;
                 case 6:
-                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
+                    message.version = reader.string();
                     break;
                 case 7:
-                    message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
+                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
                     break;
                 case 8:
-                    message.entries = EntriesList.decode(reader, reader.uint32());
+                    message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
                     break;
                 case 9:
-                    message.Outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
+                    message.entries = EntriesList.decode(reader, reader.uint32());
                     break;
                 case 10:
-                    message.description = reader.string();
+                    message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
                     break;
                 case 11:
                     message.blockInterval = longToNumber(reader.uint64());
@@ -457,24 +457,12 @@ export const MsgUpdateRecipe = {
         const message = { ...baseMsgUpdateRecipe };
         message.coinInputs = [];
         message.itemInputs = [];
-        message.Outputs = [];
+        message.outputs = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
             message.creator = '';
-        }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
-        }
-        else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = String(object.nodeVersion);
-        }
-        else {
-            message.nodeVersion = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = String(object.cookbookID);
@@ -482,11 +470,29 @@ export const MsgUpdateRecipe = {
         else {
             message.cookbookID = '';
         }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
         if (object.name !== undefined && object.name !== null) {
             message.name = String(object.name);
         }
         else {
             message.name = '';
+        }
+        if (object.description !== undefined && object.description !== null) {
+            message.description = String(object.description);
+        }
+        else {
+            message.description = '';
+        }
+        if (object.version !== undefined && object.version !== null) {
+            message.version = String(object.version);
+        }
+        else {
+            message.version = '';
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -504,16 +510,10 @@ export const MsgUpdateRecipe = {
         else {
             message.entries = undefined;
         }
-        if (object.Outputs !== undefined && object.Outputs !== null) {
-            for (const e of object.Outputs) {
-                message.Outputs.push(WeightedOutputs.fromJSON(e));
+        if (object.outputs !== undefined && object.outputs !== null) {
+            for (const e of object.outputs) {
+                message.outputs.push(WeightedOutputs.fromJSON(e));
             }
-        }
-        if (object.description !== undefined && object.description !== null) {
-            message.description = String(object.description);
-        }
-        else {
-            message.description = '';
         }
         if (object.blockInterval !== undefined && object.blockInterval !== null) {
             message.blockInterval = Number(object.blockInterval);
@@ -538,10 +538,11 @@ export const MsgUpdateRecipe = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.index !== undefined && (obj.index = message.index);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
         message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
         message.name !== undefined && (obj.name = message.name);
+        message.description !== undefined && (obj.description = message.description);
+        message.version !== undefined && (obj.version = message.version);
         if (message.coinInputs) {
             obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -555,13 +556,12 @@ export const MsgUpdateRecipe = {
             obj.itemInputs = [];
         }
         message.entries !== undefined && (obj.entries = message.entries ? EntriesList.toJSON(message.entries) : undefined);
-        if (message.Outputs) {
-            obj.Outputs = message.Outputs.map((e) => (e ? WeightedOutputs.toJSON(e) : undefined));
+        if (message.outputs) {
+            obj.outputs = message.outputs.map((e) => (e ? WeightedOutputs.toJSON(e) : undefined));
         }
         else {
-            obj.Outputs = [];
+            obj.outputs = [];
         }
-        message.description !== undefined && (obj.description = message.description);
         message.blockInterval !== undefined && (obj.blockInterval = message.blockInterval);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo);
@@ -571,24 +571,12 @@ export const MsgUpdateRecipe = {
         const message = { ...baseMsgUpdateRecipe };
         message.coinInputs = [];
         message.itemInputs = [];
-        message.Outputs = [];
+        message.outputs = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
             message.creator = '';
-        }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
-        }
-        else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = object.nodeVersion;
-        }
-        else {
-            message.nodeVersion = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = object.cookbookID;
@@ -596,11 +584,29 @@ export const MsgUpdateRecipe = {
         else {
             message.cookbookID = '';
         }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
         if (object.name !== undefined && object.name !== null) {
             message.name = object.name;
         }
         else {
             message.name = '';
+        }
+        if (object.description !== undefined && object.description !== null) {
+            message.description = object.description;
+        }
+        else {
+            message.description = '';
+        }
+        if (object.version !== undefined && object.version !== null) {
+            message.version = object.version;
+        }
+        else {
+            message.version = '';
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -618,16 +624,10 @@ export const MsgUpdateRecipe = {
         else {
             message.entries = undefined;
         }
-        if (object.Outputs !== undefined && object.Outputs !== null) {
-            for (const e of object.Outputs) {
-                message.Outputs.push(WeightedOutputs.fromPartial(e));
+        if (object.outputs !== undefined && object.outputs !== null) {
+            for (const e of object.outputs) {
+                message.outputs.push(WeightedOutputs.fromPartial(e));
             }
-        }
-        if (object.description !== undefined && object.description !== null) {
-            message.description = object.description;
-        }
-        else {
-            message.description = '';
         }
         if (object.blockInterval !== undefined && object.blockInterval !== null) {
             message.blockInterval = object.blockInterval;
@@ -684,14 +684,13 @@ export const MsgUpdateRecipeResponse = {
 };
 const baseMsgCreateCookbook = {
     creator: '',
-    index: '',
-    nodeVersion: '',
+    ID: '',
     name: '',
     description: '',
     developer: '',
     version: '',
     supportEmail: '',
-    level: 0,
+    tier: 0,
     costPerBlock: 0,
     enabled: false
 };
@@ -700,35 +699,32 @@ export const MsgCreateCookbook = {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.index !== '') {
-            writer.uint32(18).string(message.index);
-        }
-        if (message.nodeVersion !== '') {
-            writer.uint32(26).string(message.nodeVersion);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         if (message.name !== '') {
-            writer.uint32(34).string(message.name);
+            writer.uint32(26).string(message.name);
         }
         if (message.description !== '') {
-            writer.uint32(42).string(message.description);
+            writer.uint32(34).string(message.description);
         }
         if (message.developer !== '') {
-            writer.uint32(50).string(message.developer);
+            writer.uint32(42).string(message.developer);
         }
         if (message.version !== '') {
-            writer.uint32(58).string(message.version);
+            writer.uint32(50).string(message.version);
         }
         if (message.supportEmail !== '') {
-            writer.uint32(66).string(message.supportEmail);
+            writer.uint32(58).string(message.supportEmail);
         }
-        if (message.level !== 0) {
-            writer.uint32(72).int64(message.level);
+        if (message.tier !== 0) {
+            writer.uint32(64).int64(message.tier);
         }
         if (message.costPerBlock !== 0) {
-            writer.uint32(80).uint64(message.costPerBlock);
+            writer.uint32(72).uint64(message.costPerBlock);
         }
         if (message.enabled === true) {
-            writer.uint32(88).bool(message.enabled);
+            writer.uint32(80).bool(message.enabled);
         }
         return writer;
     },
@@ -743,33 +739,30 @@ export const MsgCreateCookbook = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.index = reader.string();
+                    message.ID = reader.string();
                     break;
                 case 3:
-                    message.nodeVersion = reader.string();
-                    break;
-                case 4:
                     message.name = reader.string();
                     break;
-                case 5:
+                case 4:
                     message.description = reader.string();
                     break;
-                case 6:
+                case 5:
                     message.developer = reader.string();
                     break;
-                case 7:
+                case 6:
                     message.version = reader.string();
                     break;
-                case 8:
+                case 7:
                     message.supportEmail = reader.string();
                     break;
-                case 9:
-                    message.level = longToNumber(reader.int64());
+                case 8:
+                    message.tier = longToNumber(reader.int64());
                     break;
-                case 10:
+                case 9:
                     message.costPerBlock = longToNumber(reader.uint64());
                     break;
-                case 11:
+                case 10:
                     message.enabled = reader.bool();
                     break;
                 default:
@@ -787,17 +780,11 @@ export const MsgCreateCookbook = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = String(object.nodeVersion);
-        }
-        else {
-            message.nodeVersion = '';
+            message.ID = '';
         }
         if (object.name !== undefined && object.name !== null) {
             message.name = String(object.name);
@@ -829,11 +816,11 @@ export const MsgCreateCookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.level !== undefined && object.level !== null) {
-            message.level = Number(object.level);
+        if (object.tier !== undefined && object.tier !== null) {
+            message.tier = Number(object.tier);
         }
         else {
-            message.level = 0;
+            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = Number(object.costPerBlock);
@@ -852,14 +839,13 @@ export const MsgCreateCookbook = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.index !== undefined && (obj.index = message.index);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
+        message.ID !== undefined && (obj.ID = message.ID);
         message.name !== undefined && (obj.name = message.name);
         message.description !== undefined && (obj.description = message.description);
         message.developer !== undefined && (obj.developer = message.developer);
         message.version !== undefined && (obj.version = message.version);
         message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail);
-        message.level !== undefined && (obj.level = message.level);
+        message.tier !== undefined && (obj.tier = message.tier);
         message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         return obj;
@@ -872,17 +858,11 @@ export const MsgCreateCookbook = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = object.nodeVersion;
-        }
-        else {
-            message.nodeVersion = '';
+            message.ID = '';
         }
         if (object.name !== undefined && object.name !== null) {
             message.name = object.name;
@@ -914,11 +894,11 @@ export const MsgCreateCookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.level !== undefined && object.level !== null) {
-            message.level = object.level;
+        if (object.tier !== undefined && object.tier !== null) {
+            message.tier = object.tier;
         }
         else {
-            message.level = 0;
+            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = object.costPerBlock;
@@ -969,14 +949,13 @@ export const MsgCreateCookbookResponse = {
 };
 const baseMsgUpdateCookbook = {
     creator: '',
-    index: '',
-    nodeVersion: '',
+    ID: '',
     name: '',
     description: '',
     developer: '',
     version: '',
     supportEmail: '',
-    level: 0,
+    tier: 0,
     costPerBlock: 0,
     enabled: false
 };
@@ -985,35 +964,32 @@ export const MsgUpdateCookbook = {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.index !== '') {
-            writer.uint32(18).string(message.index);
-        }
-        if (message.nodeVersion !== '') {
-            writer.uint32(26).string(message.nodeVersion);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         if (message.name !== '') {
-            writer.uint32(34).string(message.name);
+            writer.uint32(26).string(message.name);
         }
         if (message.description !== '') {
-            writer.uint32(42).string(message.description);
+            writer.uint32(34).string(message.description);
         }
         if (message.developer !== '') {
-            writer.uint32(50).string(message.developer);
+            writer.uint32(42).string(message.developer);
         }
         if (message.version !== '') {
-            writer.uint32(58).string(message.version);
+            writer.uint32(50).string(message.version);
         }
         if (message.supportEmail !== '') {
-            writer.uint32(66).string(message.supportEmail);
+            writer.uint32(58).string(message.supportEmail);
         }
-        if (message.level !== 0) {
-            writer.uint32(72).int64(message.level);
+        if (message.tier !== 0) {
+            writer.uint32(64).int64(message.tier);
         }
         if (message.costPerBlock !== 0) {
-            writer.uint32(80).uint64(message.costPerBlock);
+            writer.uint32(72).uint64(message.costPerBlock);
         }
         if (message.enabled === true) {
-            writer.uint32(88).bool(message.enabled);
+            writer.uint32(80).bool(message.enabled);
         }
         return writer;
     },
@@ -1028,33 +1004,30 @@ export const MsgUpdateCookbook = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.index = reader.string();
+                    message.ID = reader.string();
                     break;
                 case 3:
-                    message.nodeVersion = reader.string();
-                    break;
-                case 4:
                     message.name = reader.string();
                     break;
-                case 5:
+                case 4:
                     message.description = reader.string();
                     break;
-                case 6:
+                case 5:
                     message.developer = reader.string();
                     break;
-                case 7:
+                case 6:
                     message.version = reader.string();
                     break;
-                case 8:
+                case 7:
                     message.supportEmail = reader.string();
                     break;
-                case 9:
-                    message.level = longToNumber(reader.int64());
+                case 8:
+                    message.tier = longToNumber(reader.int64());
                     break;
-                case 10:
+                case 9:
                     message.costPerBlock = longToNumber(reader.uint64());
                     break;
-                case 11:
+                case 10:
                     message.enabled = reader.bool();
                     break;
                 default:
@@ -1072,17 +1045,11 @@ export const MsgUpdateCookbook = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = String(object.index);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = String(object.nodeVersion);
-        }
-        else {
-            message.nodeVersion = '';
+            message.ID = '';
         }
         if (object.name !== undefined && object.name !== null) {
             message.name = String(object.name);
@@ -1114,11 +1081,11 @@ export const MsgUpdateCookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.level !== undefined && object.level !== null) {
-            message.level = Number(object.level);
+        if (object.tier !== undefined && object.tier !== null) {
+            message.tier = Number(object.tier);
         }
         else {
-            message.level = 0;
+            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = Number(object.costPerBlock);
@@ -1137,14 +1104,13 @@ export const MsgUpdateCookbook = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.index !== undefined && (obj.index = message.index);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
+        message.ID !== undefined && (obj.ID = message.ID);
         message.name !== undefined && (obj.name = message.name);
         message.description !== undefined && (obj.description = message.description);
         message.developer !== undefined && (obj.developer = message.developer);
         message.version !== undefined && (obj.version = message.version);
         message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail);
-        message.level !== undefined && (obj.level = message.level);
+        message.tier !== undefined && (obj.tier = message.tier);
         message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         return obj;
@@ -1157,17 +1123,11 @@ export const MsgUpdateCookbook = {
         else {
             message.creator = '';
         }
-        if (object.index !== undefined && object.index !== null) {
-            message.index = object.index;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.index = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = object.nodeVersion;
-        }
-        else {
-            message.nodeVersion = '';
+            message.ID = '';
         }
         if (object.name !== undefined && object.name !== null) {
             message.name = object.name;
@@ -1199,11 +1159,11 @@ export const MsgUpdateCookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.level !== undefined && object.level !== null) {
-            message.level = object.level;
+        if (object.tier !== undefined && object.tier !== null) {
+            message.tier = object.tier;
         }
         else {
-            message.level = 0;
+            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = object.costPerBlock;

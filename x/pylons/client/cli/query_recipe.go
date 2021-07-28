@@ -11,16 +11,17 @@ import (
 
 func CmdShowRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show-recipe [index]",
-		Short: "shows a Recipe",
-		Args:  cobra.ExactArgs(1),
+		Use:   "get-recipe [cookbook-id] [id]",
+		Short: "Retrieve a recipe",
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryGetRecipeRequest{
-				Index: args[0],
+				CookbookID: args[0],
+				ID: args[1],
 			}
 
 			res, err := queryClient.Recipe(context.Background(), params)

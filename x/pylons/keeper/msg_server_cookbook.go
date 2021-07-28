@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"fmt"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,21 +12,23 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value already exists
-	_, isFound := k.GetCookbook(ctx, msg.Index)
+	_, isFound := k.GetCookbook(ctx, msg.ID)
 	if isFound {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("index %v already set", msg.Index))
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("ID %v already set", msg.ID))
 	}
 
+	// TODO get config fee from application and perform fee logic
+
 	var cookbook = types.Cookbook{
-		Index:        msg.Index,
+		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  msg.NodeVersion,
+		NodeVersion:  "", //TODO add logic for getting configured node version
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
-		Level:        msg.Level,
+		Tier:         msg.Tier,
 		CostPerBlock: msg.CostPerBlock,
 	}
 
@@ -42,9 +43,9 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// Check if the value exists
-	valFound, isFound := k.GetCookbook(ctx, msg.Index)
+	valFound, isFound := k.GetCookbook(ctx, msg.ID)
 	if !isFound {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("index %v not set", msg.Index))
+		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("ID %v not set", msg.ID))
 	}
 
 	// Checks if the the msg sender is the same as the current owner
@@ -53,15 +54,15 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	}
 
 	var cookbook = types.Cookbook{
-		Index:        msg.Index,
+		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  msg.NodeVersion,
+		NodeVersion:  "", //TODO add logic for getting configured node version
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
-		Level:        msg.Level,
+		Tier:         msg.Tier,
 		CostPerBlock: msg.CostPerBlock,
 	}
 

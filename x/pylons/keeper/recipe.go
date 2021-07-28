@@ -6,18 +6,20 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// SetRecipe set a specific recipe in the store from its index
+// SetRecipe set a specific recipe in the store from its ID
 func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
 	b := k.cdc.MustMarshalBinaryBare(&recipe)
-	store.Set(types.KeyPrefix(recipe.Index), b)
+	gid := recipe.CookbookID + "-" + recipe.ID
+	store.Set(types.KeyPrefix(gid), b)
 }
 
-// GetRecipe returns a recipe from its index
-func (k Keeper) GetRecipe(ctx sdk.Context, index string) (val types.Recipe, found bool) {
+// GetRecipe returns a recipe from its ID
+func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val types.Recipe, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
+	gid := cookbookID + "-" + id
 
-	b := store.Get(types.KeyPrefix(index))
+	b := store.Get(types.KeyPrefix(gid))
 	if b == nil {
 		return val, false
 	}

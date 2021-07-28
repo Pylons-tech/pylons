@@ -85,6 +85,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
+	pylonsconfig "github.com/Pylons-tech/pylons/x/pylons/config"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	pylonsmoduletypes "github.com/Pylons-tech/pylons/x/pylons/types"
 
@@ -213,7 +214,7 @@ type App struct {
 	mm *module.Manager
 }
 
-// New returns a reference to an initialized Gaia.
+// New returns a reference to an initialized Pylons.
 func New(
 	logger log.Logger,
 	db dbm.DB,
@@ -338,12 +339,17 @@ func New(
 		&stakingKeeper, govRouter,
 	)
 
+	pylonsRequestFieldConfig := pylonsconfig.NewRequestFieldConfig()
+	pylonsFeeConfig := pylonsconfig.NewFeeConfig()
+	// TODO read in '~/.pylons/config/pylons.toml'
+	// for user configuration
+
 	app.PylonsKeeper = *pylonsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[pylonsmoduletypes.StoreKey],
 		keys[pylonsmoduletypes.MemStoreKey],
 	)
-	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper)
+	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, pylonsRequestFieldConfig, pylonsFeeConfig)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 

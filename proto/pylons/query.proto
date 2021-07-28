@@ -16,26 +16,27 @@ service Query {
 
 	// Queries a recipe by index.
 	rpc Recipe(QueryGetRecipeRequest) returns (QueryGetRecipeResponse) {
-		option (google.api.http).get = "/pylons/recipe/{index}";
+		option (google.api.http).get = "/pylons/recipe/{CookbookID}/{ID}";
 	}
 
 
 	// Queries a list of listCookbookByCreator items.
-	rpc ListCookbookByCreator(QueryListCookbookByCreatorRequest) returns (QueryListCookbookByCreatorResponse) {
+	rpc ListCookbooksByCreator(QueryListCookbooksByCreatorRequest) returns (QueryListCookbooksByCreatorResponse) {
 		option (google.api.http).get = "/pylons/listCookbooks/{creator}";
 	}
 
 
 	// Queries a cookbook by index.
 	rpc Cookbook(QueryGetCookbookRequest) returns (QueryGetCookbookResponse) {
-		option (google.api.http).get = "/pylons/cookbook/{index}";
+		option (google.api.http).get = "/pylons/cookbook/{ID}";
 	}
 
 }
 
 // this line is used by starport scaffolding # 3
 message QueryGetRecipeRequest {
-	string index = 1;
+	string CookbookID = 1;
+	string ID = 2;
 }
 
 message QueryGetRecipeResponse {
@@ -43,16 +44,16 @@ message QueryGetRecipeResponse {
 }
 
 
-message QueryListCookbookByCreatorRequest {
+message QueryListCookbooksByCreatorRequest {
   string creator = 1;
 }
 
-message QueryListCookbookByCreatorResponse {
+message QueryListCookbooksByCreatorResponse {
   repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetCookbookRequest {
-	string index = 1;
+	string ID = 1;
 }
 
 message QueryGetCookbookResponse {
