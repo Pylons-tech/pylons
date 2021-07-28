@@ -16,22 +16,51 @@ COPY ./cmd                                          ./cmd
 COPY ./docs                                         ./docs
 COPY ./proto                                        ./proto
 COPY ./x                                            ./x
-COPY ./docker/config-validator.yml                  ./config.yml
 COPY ./go.mod                                       ./go.mod
+RUN starport chain build
 
 # Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+
+FROM base as validatorbuild
+LABEL maintainer="Rafael de Andrade <rafael.andrade@tendermint.com>"
+USER root
+ENV GOPROXY https://proxy.golang.org
+COPY ./docker/config-validator.yml                  ./config.yml
 RUN starport chain build --release
 RUN starport chain init
 RUN tar -xzvf /apps/release/pylons_linux_amd64.tar.gz
 
 
+
 ## validator
-FROM ubuntu:21.04 as build
+FROM debian:latest as validator
 
 ENV PYLONSHOME="/root/.pylonsd/"
 
 COPY --from=validatorbuild /apps/pylonsd /bin/pylonsd
 COPY --from=validatorbuild $PYLONSHOME $PYLONSHOME
 COPY docker/entrypoint_validator.sh /root/entrypoint.sh
+
+ENTRYPOINT /root/entrypoint.sh
+
+
+FROM debian:latest as fullnode
+LABEL maintainer="Rafael de Andrade <rafael.andrade@tendermint.com>"
+USER root
+
+RUN apt-get update && apt-get install -y curl jq
+
+ENV PYLONSHOME="/root/.pylonsd/"
+
+COPY --from=validatorbuild /apps/pylonsd                    /bin/pylonsd
+
+RUN pylonsd init fullnode --chain-id=pylons --home=$HOME/.pylonsd
+
+COPY --from=validatorbuild $PYLONSHOME/config/genesis.json  $PYLONSHOME/config/genesis.json
+
+COPY docker/init_accounts.sh /root/init_accounts.sh
+COPY docker/entrypoint_fullnode.sh /root/entrypoint.sh
+
+RUN bash /root/init_accounts.sh
 
 ENTRYPOINT /root/entrypoint.sh
