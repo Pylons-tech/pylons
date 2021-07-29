@@ -57,3 +57,4 @@ volumes:
   pylons_home:
   data:
   validator_id:
+  portainer_data:
