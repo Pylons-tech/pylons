@@ -21,32 +21,32 @@ services:
     networks:
       - pylonsnet
 
-#  mongo:
-#    image: mongo:latest
-#    container_name: mongo
-#    hostname: mongo
-#    networks:
-#      - pylonsnet
-#    command:
-#      - --storageEngine=wiredTiger
-#    volumes:
-#      - data:/data/db
-#
-#  big-dipper:
-#    image: rafaeldeandrade/big-dipper:v0.0.3
-#    container_name: explorer
-#    hostname: explorer
-#    ports:
-#      - 3000:3000
-#    networks:
-#      - pylonsnet
-#    depends_on:
-#      - mongo
-#    environment:
-#      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
-#      MONGO_URL: mongodb://mongo:27017/meteor
-#      METEOR_SETTINGS: ${METEOR_SETTINGS}
-#      PORT: 3000
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    hostname: mongo
+    networks:
+      - pylonsnet
+    command:
+      - --storageEngine=wiredTiger
+    volumes:
+      - data:/data/db
+
+  big-dipper:
+    image: rafaeldeandrade/big-dipper:v0.0.3
+    container_name: explorer
+    hostname: explorer
+    ports:
+      - "3000:3000"
+    networks:
+      - pylonsnet
+    depends_on:
+      - mongo
+    environment:
+      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
+      MONGO_URL: mongodb://mongo:27017/meteor
+      METEOR_SETTINGS: ${METEOR_SETTINGS}
+      PORT: 3000
 
 
 
