@@ -3,10 +3,11 @@ package cli
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/spf13/cobra"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func CmdShowRecipe() *cobra.Command {
@@ -21,7 +22,7 @@ func CmdShowRecipe() *cobra.Command {
 
 			params := &types.QueryGetRecipeRequest{
 				CookbookID: args[0],
-				ID: args[1],
+				ID:         args[1],
 			}
 
 			res, err := queryClient.Recipe(context.Background(), params)

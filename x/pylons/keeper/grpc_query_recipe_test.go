@@ -53,5 +53,3 @@ func TestRecipeQuerySingle(t *testing.T) {
 		})
 	}
 }
-
-

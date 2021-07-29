@@ -4,9 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecipe) (*types.MsgCreateRecipeResponse, error) {
@@ -30,18 +31,18 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	// TODO handle fees
 
 	var recipe = types.Recipe{
-		ID:              msg.ID,
-		NodeVersion:     "", //TODO add logic for getting configured node version
-		CookbookID:      msg.CookbookID,
-		Name:            msg.Name,
-		CoinInputs:      msg.CoinInputs,
-		ItemInputs:      msg.ItemInputs,
-		Entries:         msg.Entries,
-		Outputs: 		 msg.Outputs,
-		Description:     msg.Description,
-		BlockInterval:   msg.BlockInterval,
-		Enabled:         msg.Enabled,
-		ExtraInfo:       msg.ExtraInfo,
+		ID:            msg.ID,
+		NodeVersion:   "", // TODO add logic for getting configured node version
+		CookbookID:    msg.CookbookID,
+		Name:          msg.Name,
+		CoinInputs:    msg.CoinInputs,
+		ItemInputs:    msg.ItemInputs,
+		Entries:       msg.Entries,
+		Outputs:       msg.Outputs,
+		Description:   msg.Description,
+		BlockInterval: msg.BlockInterval,
+		Enabled:       msg.Enabled,
+		ExtraInfo:     msg.ExtraInfo,
 	}
 
 	k.SetRecipe(
@@ -72,22 +73,21 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	// TODO handle fees
 
 	var recipe = types.Recipe{
-		ID:              msg.ID,
-		NodeVersion:     "", //TODO add logic for getting configured node version
-		CookbookID:      msg.CookbookID,
-		Name:            msg.Name,
-		CoinInputs:      msg.CoinInputs,
-		ItemInputs:      msg.ItemInputs,
-		Entries:         msg.Entries,
-		Outputs: 		 msg.Outputs,
-		Description:     msg.Description,
-		BlockInterval:   msg.BlockInterval,
-		Enabled:         msg.Enabled,
-		ExtraInfo:       msg.ExtraInfo,
+		ID:            msg.ID,
+		NodeVersion:   "", // TODO add logic for getting configured node version
+		CookbookID:    msg.CookbookID,
+		Name:          msg.Name,
+		CoinInputs:    msg.CoinInputs,
+		ItemInputs:    msg.ItemInputs,
+		Entries:       msg.Entries,
+		Outputs:       msg.Outputs,
+		Description:   msg.Description,
+		BlockInterval: msg.BlockInterval,
+		Enabled:       msg.Enabled,
+		ExtraInfo:     msg.ExtraInfo,
 	}
 
 	k.SetRecipe(ctx, recipe)
 
 	return &types.MsgUpdateRecipeResponse{}, nil
 }
-

@@ -9,19 +9,19 @@ var _ sdk.Msg = &MsgCreateRecipe{}
 
 func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval uint64, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
-		Creator:         creator,
-		CookbookID:      cookbookID,
-		ID:           	 id,
-		Name:            name,
-		Description:     description,
-		Version:         version,
-		CoinInputs:      coinInput,
-		ItemInputs:      itemInput,
-		Entries:         entries,
-		Outputs: 		 weightedOutputs,
-		BlockInterval:   blockInterval,
-		Enabled:         enabled,
-		ExtraInfo:       extraInfo,
+		Creator:       creator,
+		CookbookID:    cookbookID,
+		ID:            id,
+		Name:          name,
+		Description:   description,
+		Version:       version,
+		CoinInputs:    coinInput,
+		ItemInputs:    itemInput,
+		Entries:       entries,
+		Outputs:       weightedOutputs,
+		BlockInterval: blockInterval,
+		Enabled:       enabled,
+		ExtraInfo:     extraInfo,
 	}
 }
 
@@ -105,21 +105,21 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 
 var _ sdk.Msg = &MsgUpdateRecipe{}
 
-func NewMsgUpdateRecipe(creator string, cookbookID string, id string,  name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval uint64, enabled bool, extraInfo string) *MsgUpdateRecipe {
+func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval uint64, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
-		Creator:         creator,
-		CookbookID:      cookbookID,
-		ID:           	 id,
-		Name:            name,
-		Description:     description,
-		Version:         version,
-		CoinInputs:      coinInput,
-		ItemInputs:      itemInput,
-		Entries:         entries,
-		Outputs: 		 weightedOutputs,
-		BlockInterval:   blockInterval,
-		Enabled:         enabled,
-		ExtraInfo:       extraInfo,
+		Creator:       creator,
+		CookbookID:    cookbookID,
+		ID:            id,
+		Name:          name,
+		Description:   description,
+		Version:       version,
+		CoinInputs:    coinInput,
+		ItemInputs:    itemInput,
+		Entries:       entries,
+		Outputs:       weightedOutputs,
+		BlockInterval: blockInterval,
+		Enabled:       enabled,
+		ExtraInfo:     extraInfo,
 	}
 }
 

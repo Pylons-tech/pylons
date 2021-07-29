@@ -15,7 +15,6 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/Pylons-tech/pylons/docs"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
@@ -83,6 +82,9 @@ import (
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	tmjson "github.com/tendermint/tendermint/libs/json"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+
+	"github.com/Pylons-tech/pylons/docs"
+
 	// this line is used by starport scaffolding # stargate/app/moduleImport
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsconfig "github.com/Pylons-tech/pylons/x/pylons/config"

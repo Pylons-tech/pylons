@@ -1,9 +1,10 @@
 package pylons
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // InitGenesis initializes the capability module's state from a provided genesis

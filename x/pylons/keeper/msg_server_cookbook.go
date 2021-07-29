@@ -3,10 +3,12 @@ package keeper
 import (
 	"context"
 	"fmt"
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCookbook) (*types.MsgCreateCookbookResponse, error) {
@@ -28,7 +30,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  "", //TODO add logic for getting configured node version
+		NodeVersion:  "", // TODO add logic for getting configured node version
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
@@ -65,14 +67,14 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	}
 
 	// TODO if upgrade requested pay fee as PremiumFee - BasicFee
-	if msg.Tier != valFound.Tier && msg.Tier == types.Premium{
+	if msg.Tier != valFound.Tier && msg.Tier == types.Premium {
 
 	}
 
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  "", //TODO add logic for getting configured node version
+		NodeVersion:  "", // TODO add logic for getting configured node version
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,

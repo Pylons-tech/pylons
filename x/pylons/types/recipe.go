@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -27,11 +28,11 @@ func ValidateInputDoubles(dip []DoubleInputParam) error {
 func ValidateInputLongs(lip []LongInputParam) error {
 	longsKeyMap := make(map[string]bool)
 	for _, l := range lip {
-		if l.MaxValue < l.MinValue{
+		if l.MaxValue < l.MinValue {
 			return sdkerrors.Wrap(ErrInvalidRequestField, fmt.Sprintf("minValue cannot be less than maxValue for long %s", l.Key))
 		}
 		if l.MinValue < 0 {
-			return sdkerrors.Wrap(ErrInvalidRequestField,fmt.Sprintf("minValue cannot be less than 0 for long %s", l.Key))
+			return sdkerrors.Wrap(ErrInvalidRequestField, fmt.Sprintf("minValue cannot be less than 0 for long %s", l.Key))
 		}
 		if _, ok := longsKeyMap[l.Key]; ok {
 			return sdkerrors.Wrap(ErrInvalidRequestField, fmt.Sprintf("key %s repeated in long itemInput list", l.Key))
@@ -285,7 +286,9 @@ func ValidateEntriesList(el EntriesList, idMap map[string]bool) error {
 	}
 
 	err = ValidateItemModifyOutputs(el.ItemModifyOutputs, idMap)
-	if err != nil {return err}
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

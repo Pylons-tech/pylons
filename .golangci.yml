@@ -1,0 +1,69 @@
+run:
+  tests: false
+  # timeout for analysis, e.g. 30s, 5m, default is 1m
+  timeout: 5m
+
+linters:
+  disable-all: true
+  enable:
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    # - errcheck
+    - goconst
+    - gocritic
+    - gofmt
+    - goimports
+    - revive
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    - misspell
+    - nakedret
+    - prealloc
+    - exportloopref
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unused
+    - unparam
+    - misspell
+    # - wsl
+    - nolintlint
+
+issues:
+  exclude-rules:
+    - text: "comment on exported var"
+      linters:
+        - revive
+    - text: "don't use an underscore in package name"
+      linters:
+        - revive
+
+  max-issues-per-linter: 10000
+  max-same-issues: 10000
+
+linters-settings:
+  dogsled:
+    max-blank-identifiers: 3
+  gosec:
+    excludes:
+      - G404
+  maligned:
+    # print struct with more effective memory layout or not, false by default
+    suggest-new: true
+  nolintlint:
+    allow-unused: false
+    allow-leading-space: true
+    require-explanation: false
+    require-specific: false
+
+  staticcheck:
+    go: "1.16"
+    checks: ["all", "-SA1019"]
+  stylecheck:
+    checks: ["all", "-ST1016", "ST1003"]

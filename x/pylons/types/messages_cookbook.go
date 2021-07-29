@@ -10,7 +10,7 @@ var _ sdk.Msg = &MsgCreateCookbook{}
 func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, tier int64, costPerBlock uint64, enabled bool) *MsgCreateCookbook {
 	return &MsgCreateCookbook{
 		Creator:      creator,
-		ID:        	  id,
+		ID:           id,
 		Name:         name,
 		Description:  description,
 		Developer:    developer,

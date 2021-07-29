@@ -1,19 +1,20 @@
 package keeper
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestListCookbooksByCreator(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNCookbook(keeper, ctx, 2)
-
 
 	for _, tc := range []struct {
 		desc     string
@@ -32,8 +33,8 @@ func TestListCookbooksByCreator(t *testing.T) {
 			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{msgs[1]}},
 		},
 		{
-			desc:    "KeyNotFound",
-			request: &types.QueryListCookbooksByCreatorRequest{Creator: "missing"},
+			desc:     "KeyNotFound",
+			request:  &types.QueryListCookbooksByCreatorRequest{Creator: "missing"},
 			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook(nil)},
 		},
 		{

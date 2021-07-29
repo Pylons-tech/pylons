@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 
 	"github.com/gorilla/mux"
@@ -12,14 +13,15 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	// this line is used by starport scaffolding # ibc/module/import
 )
 
@@ -101,9 +103,9 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 type AppModule struct {
 	AppModuleBasic
 
-	keeper keeper.Keeper
+	keeper             keeper.Keeper
 	requestFieldConfig config.RequestFieldConfig
-	feeConfig config.FeeConfig
+	feeConfig          config.FeeConfig
 }
 
 func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, rfCfg config.RequestFieldConfig, feeCfg config.FeeConfig) AppModule {
@@ -112,7 +114,7 @@ func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, rfCfg config.Reques
 		keeper:         keeper,
 
 		requestFieldConfig: rfCfg,
-		feeConfig: feeCfg,
+		feeConfig:          feeCfg,
 	}
 }
 

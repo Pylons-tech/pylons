@@ -1,8 +1,9 @@
 package types
 
 import (
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"regexp"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // ValidateEmail validates the email string provided

@@ -1,12 +1,14 @@
 package cli
 
 import (
-	"github.com/spf13/cobra"
 	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/spf13/cobra"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)

@@ -4,17 +4,17 @@ import { StdFee } from "@cosmjs/launchpad";
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry, OfflineSigner, EncodeObject, DirectSecp256k1HdWallet } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgCreateRecipe } from "./types/pylons/tx";
-import { MsgUpdateRecipe } from "./types/pylons/tx";
-import { MsgCreateCookbook } from "./types/pylons/tx";
 import { MsgUpdateCookbook } from "./types/pylons/tx";
+import { MsgCreateRecipe } from "./types/pylons/tx";
+import { MsgCreateCookbook } from "./types/pylons/tx";
+import { MsgUpdateRecipe } from "./types/pylons/tx";
 
 
 const types = [
-  ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
-  ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
-  ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
   ["/Pylonstech.pylons.pylons.MsgUpdateCookbook", MsgUpdateCookbook],
+  ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
+  ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
+  ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
   
 ];
 export const MissingWalletError = new Error("wallet is required");
@@ -43,10 +43,10 @@ const txClient = async (wallet: OfflineSigner, { addr: addr }: TxClientOptions =
 
   return {
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }: SignAndBroadcastOptions = {fee: defaultFee, memo: ""}) => client.signAndBroadcast(address, msgs, fee,memo),
-    msgCreateRecipe: (data: MsgCreateRecipe): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
-    msgUpdateRecipe: (data: MsgUpdateRecipe): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
-    msgCreateCookbook: (data: MsgCreateCookbook): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
     msgUpdateCookbook: (data: MsgUpdateCookbook): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateCookbook", value: data }),
+    msgCreateRecipe: (data: MsgCreateRecipe): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
+    msgCreateCookbook: (data: MsgCreateCookbook): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
+    msgUpdateRecipe: (data: MsgUpdateRecipe): EncodeObject => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
     
   };
 };
