@@ -8,7 +8,9 @@ on:
   push:
     branches:
       - develop
+      - develop-no-stripe
       - master
+      - starport
 
 jobs:
   build:
@@ -32,7 +34,7 @@ jobs:
             go.mod
             go.sum
       - name: Build
-        run: GOARCH=${{matrix.go-arch}} make build
+        run: GOARCH=${{matrix.go-arch}} make
 
 
   test:
