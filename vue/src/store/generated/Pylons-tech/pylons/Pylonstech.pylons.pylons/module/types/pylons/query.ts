@@ -387,11 +387,11 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Queries a recipe by index. */
+  /** Retrieves a recipe by ID. */
   Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>
-  /** Queries a list of listCookbookByCreator items. */
+  /** Retrieves the list of cookbooks owned by an address */
   ListCookbooksByCreator(request: QueryListCookbooksByCreatorRequest): Promise<QueryListCookbooksByCreatorResponse>
-  /** Queries a cookbook by index. */
+  /** Retrieves a cookbook by ID. */
   Cookbook(request: QueryGetCookbookRequest): Promise<QueryGetCookbookResponse>
 }
 

@@ -26,6 +26,8 @@ func ValidateVersion(s string) error {
 	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid semVer")
 }
 
+// ValidateID validates IDs
+// A valid ID follows the same rules as variable names in a programming language
 func ValidateID(s string) error {
 	regex := regexp.MustCompile(`^[a-zA-Z_][a-zA-Z_0-9]*$`)
 	if regex.MatchString(s) {

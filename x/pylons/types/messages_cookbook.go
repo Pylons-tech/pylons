@@ -87,6 +87,7 @@ func NewMsgUpdateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
+		Tier:         tier,
 		CostPerBlock: costPerBlock,
 		Enabled:      enabled,
 	}

@@ -1,18 +1,39 @@
 package types
 
-import sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+)
 
-// Tier defines the kind of cookbook this is
 const (
-	// Basic is the free int64 which does allow developers to use pylons ( paid currency ) in their
-	// games
+	// Basic only allows creation of recipes that do not use pylons
 	Basic int64 = iota
+	// Premium allows creation of recipes that use pylons
 	Premium
 )
 
+// Tier defines the kind of cookbook this is
+type Tier struct {
+	Tier int64
+	Fee  sdk.Coins
+}
+
+// BasicTier is the cookbook tier which doesn't allow paid recipes which means
+// the developers cannot have recipes where they can actually charge a fee in pylons
+//var BasicTier = Tier{
+//	Tier: Basic,
+//	Fee:   BasicFee,
+//}
+
+// PremiumTier the cookbook tier which does allow paid recipes
+//var PremiumTier = Tier{
+//	Tier: Premium,
+//	Fee:   PremiumFee,
+//}
+
 // ValidateTier validates the tier
-func ValidateTier(level int64) error {
-	if level == Basic || level == Premium {
+func ValidateTier(tier int64) error {
+	if tier == Basic || tier == Premium {
 		return nil
 	}
 

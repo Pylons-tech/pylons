@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"testing"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
@@ -23,7 +25,23 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.R
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.RecipeList = append(state.RecipeList, &types.Recipe{CookbookID: strconv.Itoa(i), ID: strconv.Itoa(i)})
+		state.RecipeList = append(
+			state.RecipeList,
+			&types.Recipe{
+				CookbookID:    strconv.Itoa(i),
+				ID:            strconv.Itoa(i),
+				NodeVersion:   "",
+				Name:          "",
+				Description:   "",
+				Version:       "",
+				CoinInputs:    sdk.Coins{},
+				ItemInputs:    []types.ItemInput{},
+				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
+				Outputs:       []types.WeightedOutputs{},
+				BlockInterval: 0x0,
+				Enabled:       false,
+				ExtraInfo:     "",
+			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)

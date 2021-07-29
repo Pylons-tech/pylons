@@ -3,7 +3,7 @@ package cli
 import (
 	"encoding/json"
 
-	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
 	"github.com/spf13/cast"
@@ -42,7 +42,7 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs := github_com_cosmos_cosmos_sdk_types.Coins{}
+			jsonArgsCoinInputs := sdk.Coins{}
 			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err
@@ -132,7 +132,7 @@ func CmdUpdateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs := github_com_cosmos_cosmos_sdk_types.Coins{}
+			jsonArgsCoinInputs := sdk.Coins{}
 			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err

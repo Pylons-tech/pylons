@@ -19,7 +19,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("recipe with ID %v in cookbook with ID %v already set", msg.ID, msg.CookbookID))
 	}
 
-	// verify that the Creator is owner of the cookbook
+	// Check if the the msg sender is also the cookbook owner
 	cookbook, f := k.GetCookbook(ctx, msg.CookbookID)
 	if !f {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook does not exist")
@@ -61,7 +61,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("recipe with ID %v in cookbook with ID %v not set", msg.ID, msg.CookbookID))
 	}
 
-	// verify that the Creator is owner of the cookbook
+	// Check if the the msg sender is also the cookbook owner
 	cookbook, f := k.GetCookbook(ctx, msg.CookbookID)
 	if !f {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cookbook does not exist")

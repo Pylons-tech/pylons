@@ -18,9 +18,18 @@ func TestCreateCookbook(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
-	id := "0"
+	id := "testID"
 
-	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "111", "true"}
+	fields := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"0.0.1",
+		"test@email.com",
+		"0",
+		"1",
+		"true",
+	}
 	for _, tc := range []struct {
 		desc string
 		id   string
@@ -61,9 +70,18 @@ func TestUpdateCookbook(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
-	id := "0"
+	id := "testID"
 
-	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "111", "true"}
+	fields := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"0.0.1",
+		"test@email.com",
+		"0",
+		"1",
+		"true",
+	}
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -90,7 +108,7 @@ func TestUpdateCookbook(t *testing.T) {
 		},
 		{
 			desc: "key not found",
-			id:   "1",
+			id:   "not_found",
 			args: common,
 			code: sdkerrors.ErrKeyNotFound.ABCICode(),
 		},

@@ -19477,7 +19477,7 @@ paths:
         - Query
   '/pylons/cookbook/{ID}':
     get:
-      summary: Queries a cookbook by index.
+      summary: Retrieves a cookbook by ID.
       operationId: PylonstechPylonsPylonsCookbook
       responses:
         '200':
@@ -19541,7 +19541,7 @@ paths:
         - Query
   '/pylons/listCookbooks/{creator}':
     get:
-      summary: Queries a list of listCookbookByCreator items.
+      summary: Retrieves the list of cookbooks owned by an address
       operationId: PylonstechPylonsPylonsListCookbooksByCreator
       responses:
         '200':
@@ -19607,7 +19607,7 @@ paths:
         - Query
   '/pylons/recipe/{CookbookID}/{ID}':
     get:
-      summary: Queries a recipe by index.
+      summary: Retrieves a recipe by ID.
       operationId: PylonstechPylonsPylonsRecipe
       responses:
         '200':

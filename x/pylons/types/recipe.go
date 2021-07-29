@@ -229,7 +229,7 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 			return err
 		}
 
-		if item.TransferFee.IsNegative() || item.TransferFee.GTE(sdk.NewDec(1)) {
+		if item.TransferFee.IsNil() || item.TransferFee.IsNegative() || item.TransferFee.GTE(sdk.NewDec(1)) {
 			return sdkerrors.Wrap(ErrInvalidRequestField, fmt.Sprintf("invalid transferFee on ItemOutput %s", item.ID))
 		}
 

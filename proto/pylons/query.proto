@@ -12,21 +12,21 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Query defines the gRPC querier service.
 service Query {
-    // this line is used by starport scaffolding # 2
+	// this line is used by starport scaffolding # 2
 
-	// Queries a recipe by index.
+	// Retrieves a recipe by ID.
 	rpc Recipe(QueryGetRecipeRequest) returns (QueryGetRecipeResponse) {
 		option (google.api.http).get = "/pylons/recipe/{CookbookID}/{ID}";
 	}
 
 
-	// Queries a list of listCookbookByCreator items.
+	// Retrieves the list of cookbooks owned by an address
 	rpc ListCookbooksByCreator(QueryListCookbooksByCreatorRequest) returns (QueryListCookbooksByCreatorResponse) {
 		option (google.api.http).get = "/pylons/listCookbooks/{creator}";
 	}
 
 
-	// Queries a cookbook by index.
+	// Retrieves a cookbook by ID.
 	rpc Cookbook(QueryGetCookbookRequest) returns (QueryGetCookbookResponse) {
 		option (google.api.http).get = "/pylons/cookbook/{ID}";
 	}

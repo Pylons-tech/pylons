@@ -18,30 +18,61 @@ func TestCreateRecipe(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
-	id := "0"
+	cookbookID := "testCookbookID"
+	recipeID := "testRecipeID"
 
-	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "true", "xyz"}
+	cbFields := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"0.0.1",
+		"test@email.com",
+		"0",
+		"1",
+		"true",
+	}
+	fields := []string{
+		"testRecipeName",
+		"DescriptionDescriptionDescriptionDescription",
+		"0.0.1",
+		"[]",
+		"[]",
+		"{}",
+		"[]",
+		"1",
+		"true",
+		"extraInfo",
+	}
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+	args := []string{cookbookID}
+	args = append(args, cbFields...)
+	args = append(args, common...)
+	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
+	require.NoError(t, err)
+
 	for _, tc := range []struct {
 		desc string
-		id   string
+		id1  string
+		id2  string
 		args []string
 		err  error
 		code uint32
 	}{
 		{
-			id:   id,
+			id1:  cookbookID,
+			id2:  recipeID,
 			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			args: common,
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.id}
+			args := []string{cookbookID, recipeID}
 			args = append(args, fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
@@ -61,43 +92,73 @@ func TestUpdateRecipe(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
-	id := "0"
+	cookbookID := "testCookbookID"
+	recipeID := "testRecipeID"
 
-	fields := []string{"xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "xyz", "111", "true", "xyz"}
+	cbFields := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"0.0.1",
+		"test@email.com",
+		"0",
+		"1",
+		"true",
+	}
+	fields := []string{
+		"testRecipeName",
+		"DescriptionDescriptionDescriptionDescription",
+		"0.0.1",
+		"[]",
+		"[]",
+		"{}",
+		"[]",
+		"1",
+		"true",
+		"extraInfo",
+	}
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
-	args := []string{id}
+	args := []string{cookbookID}
+	args = append(args, cbFields...)
+	args = append(args, common...)
+	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
+	require.NoError(t, err)
+	args = []string{cookbookID, recipeID}
 	args = append(args, fields...)
 	args = append(args, common...)
-	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
 	for _, tc := range []struct {
 		desc string
-		id   string
+		id1  string
+		id2  string
 		args []string
 		code uint32
 		err  error
 	}{
 		{
 			desc: "valid",
-			id:   id,
+			id1:  cookbookID,
+			id2:  recipeID,
 			args: common,
 		},
 		{
 			desc: "key not found",
-			id:   "1",
+			id1:  "not_found",
+			id2:  "not_found",
 			args: common,
 			code: sdkerrors.ErrKeyNotFound.ABCICode(),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.id}
+			args := []string{tc.id1, tc.id2}
 			args = append(args, fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateRecipe(), args)

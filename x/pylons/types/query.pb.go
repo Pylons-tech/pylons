@@ -362,11 +362,11 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type QueryClient interface {
-	// Queries a recipe by index.
+	// Retrieves a recipe by ID.
 	Recipe(ctx context.Context, in *QueryGetRecipeRequest, opts ...grpc.CallOption) (*QueryGetRecipeResponse, error)
-	// Queries a list of listCookbookByCreator items.
+	// Retrieves the list of cookbooks owned by an address
 	ListCookbooksByCreator(ctx context.Context, in *QueryListCookbooksByCreatorRequest, opts ...grpc.CallOption) (*QueryListCookbooksByCreatorResponse, error)
-	// Queries a cookbook by index.
+	// Retrieves a cookbook by ID.
 	Cookbook(ctx context.Context, in *QueryGetCookbookRequest, opts ...grpc.CallOption) (*QueryGetCookbookResponse, error)
 }
 
@@ -407,11 +407,11 @@ func (c *queryClient) Cookbook(ctx context.Context, in *QueryGetCookbookRequest,
 
 // QueryServer is the server API for Query service.
 type QueryServer interface {
-	// Queries a recipe by index.
+	// Retrieves a recipe by ID.
 	Recipe(context.Context, *QueryGetRecipeRequest) (*QueryGetRecipeResponse, error)
-	// Queries a list of listCookbookByCreator items.
+	// Retrieves the list of cookbooks owned by an address
 	ListCookbooksByCreator(context.Context, *QueryListCookbooksByCreatorRequest) (*QueryListCookbooksByCreatorResponse, error)
-	// Queries a cookbook by index.
+	// Retrieves a cookbook by ID.
 	Cookbook(context.Context, *QueryGetCookbookRequest) (*QueryGetCookbookResponse, error)
 }
 
