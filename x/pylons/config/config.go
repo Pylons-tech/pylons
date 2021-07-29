@@ -3,9 +3,11 @@ package config
 import sdk "github.com/cosmos/cosmos-sdk/types"
 
 const (
-	PylonsCoinDenom = "pylon"
+	pylonsCoinDenom = "pylon"
 
-	DefaultBasicFee   = 10000
+	// DefaultBasicFee holds the value of the default basic fee if not configured externally
+	DefaultBasicFee = 10000
+	// DefaultPremiumFee holds the value of the default premium fee if not configured externally
 	DefaultPremiumFee = 50000
 )
 
@@ -29,7 +31,7 @@ type FeeConfig struct {
 
 func NewFeeConfig() FeeConfig {
 	return FeeConfig{
-		BasicFee:   sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBasicFee)},
-		PremiumFee: sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultPremiumFee)},
+		BasicFee:   sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultBasicFee)},
+		PremiumFee: sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultPremiumFee)},
 	}
 }

@@ -36,6 +36,7 @@ func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []types.Recipe) {
 
 	defer func(iterator sdk.Iterator) {
 		err := iterator.Close()
+		// nolint: staticcheck
 		if err != nil {
 		}
 	}(iterator)

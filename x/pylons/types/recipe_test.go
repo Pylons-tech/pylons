@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"testing"
@@ -152,7 +153,7 @@ func TestValidateCoinOutput(t *testing.T) {
 		}, err: sdkerrors.ErrInvalidCoins},
 		{desc: "Invalid2", obj: CoinOutput{
 			ID: "test", Coins: sdk.Coins{},
-		}, err:  sdkerrors.ErrInvalidCoins},
+		}, err: sdkerrors.ErrInvalidCoins},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

@@ -34,6 +34,7 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 
 	defer func(iterator sdk.Iterator) {
 		err := iterator.Close()
+		// nolint: staticcheck
 		if err != nil {
 		}
 	}(iterator)
@@ -53,6 +54,7 @@ func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator string) (list [
 
 	defer func(iterator sdk.Iterator) {
 		err := iterator.Close()
+		// nolint: staticcheck
 		if err != nil {
 		}
 	}(iterator)

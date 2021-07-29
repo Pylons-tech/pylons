@@ -16,6 +16,7 @@ var (
 )
 
 const (
+	// nolint: deadcode, unused
 	flagPacketTimeoutTimestamp = "packet-timeout-timestamp"
 )
 

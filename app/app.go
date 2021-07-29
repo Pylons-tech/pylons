@@ -95,8 +95,10 @@ import (
 )
 
 const (
+	// AccountAddressPrefix is the prefix of a bech32 account, ex: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt33"
 	AccountAddressPrefix = "cosmos"
-	Name                 = "pylons"
+	// Name is the name of the chain, here "pylons"
+	Name = "pylons"
 )
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals

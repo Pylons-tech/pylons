@@ -20,16 +20,16 @@ type Tier struct {
 
 // BasicTier is the cookbook tier which doesn't allow paid recipes which means
 // the developers cannot have recipes where they can actually charge a fee in pylons
-//var BasicTier = Tier{
-//	Tier: Basic,
-//	Fee:   BasicFee,
-//}
+// var BasicTier = Tier{
+//	 Tier: Basic,
+//	 Fee:   BasicFee,
+// }
 
 // PremiumTier the cookbook tier which does allow paid recipes
-//var PremiumTier = Tier{
-//	Tier: Premium,
-//	Fee:   PremiumFee,
-//}
+// var PremiumTier = Tier{
+//	 Tier: Premium,
+//	 Fee:   PremiumFee,
+// }
 
 // ValidateTier validates the tier
 func ValidateTier(tier int64) error {

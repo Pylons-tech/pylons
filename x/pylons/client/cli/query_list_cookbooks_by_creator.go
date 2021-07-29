@@ -19,7 +19,7 @@ func CmdListCookbooksByCreator() *cobra.Command {
 		Short: "List cookbooks by creator",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			reqCreator := string(args[0])
+			reqCreator := args[0]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
