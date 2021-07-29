@@ -1,14 +1,32 @@
 #!/usr/bin/make -f
 
-
 ###############################################################################
 ###                               Build                                     ###
 ###############################################################################
 
-build:
-	starport chain build --verbose
+PACKAGES=$(shell go list ./... | grep -v '/simulation')
 
-.PHONY: build
+VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
+COMMIT := $(shell git log -1 --format='%H')
+
+ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
+	-X github.com/cosmos/cosmos-sdk/version.ServerName=pylonsd \
+	-X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
+	-X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT)
+
+BUILD_FLAGS := -ldflags '$(ldflags)'
+
+all: install
+
+install: go.sum
+	@echo "--> Installing pylonsd"
+	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
+
+go.sum: go.mod
+	@echo "--> Ensure dependencies have not been modified"
+	GO111MODULE=on go mod verify
+
+.PHONY: install, go.sum
 
 ###############################################################################
 ###                               Commands                                  ###
@@ -24,7 +42,7 @@ run:
 ###############################################################################
 
 test:
-	go test -v ./x/... ${ARGS}
+	@go test -mod=readonly -v $(PACKAGES)
 
 .PHONY: test
 
