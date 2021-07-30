@@ -11,6 +11,18 @@ const (
 	DefaultPremiumFee = 50000
 )
 
+var (
+	nodeVersionString = ""
+)
+
+func SetNodeVersionString(s string) {
+	nodeVersionString = s
+}
+
+func GetNodeVersionString() string {
+	return nodeVersionString
+}
+
 // RequestFieldConfig holds parameters for validating request fields
 type RequestFieldConfig struct {
 	minNameLength        uint64

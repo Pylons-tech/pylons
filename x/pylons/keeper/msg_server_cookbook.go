@@ -30,7 +30,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  "", // TODO add logic for getting configured node version
+		NodeVersion:  config.GetNodeVersionString(), // TODO add logic for getting configured node version
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
@@ -74,7 +74,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  "", // TODO add logic for getting configured node version
+		NodeVersion:  config.GetNodeVersionString(), // TODO add logic for getting configured node version
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,

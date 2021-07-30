@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -32,7 +34,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 
 	var recipe = types.Recipe{
 		ID:            msg.ID,
-		NodeVersion:   "", // TODO add logic for getting configured node version
+		NodeVersion:   config.GetNodeVersionString(),
 		CookbookID:    msg.CookbookID,
 		Name:          msg.Name,
 		CoinInputs:    msg.CoinInputs,
@@ -74,7 +76,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 
 	var recipe = types.Recipe{
 		ID:            msg.ID,
-		NodeVersion:   "", // TODO add logic for getting configured node version
+		NodeVersion:   config.GetNodeVersionString(),
 		CookbookID:    msg.CookbookID,
 		Name:          msg.Name,
 		CoinInputs:    msg.CoinInputs,

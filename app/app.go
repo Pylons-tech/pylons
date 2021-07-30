@@ -354,6 +354,9 @@ func New(
 		keys[pylonsmoduletypes.StoreKey],
 		keys[pylonsmoduletypes.MemStoreKey],
 	)
+
+	// Set node version from build configuration
+	pylonsconfig.SetNodeVersionString(version.Version)
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, pylonsRequestFieldConfig, pylonsFeeConfig)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
