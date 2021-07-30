@@ -75,6 +75,15 @@ reset_chain:
 .PHONY: init_accounts proto-gen reset_chain
 
 ###############################################################################
+###                                Deployment                               ###
+###############################################################################
+images:
+	starport chain build --release -t linux:amd64
+	starport chain init --home docker/.pylonsd
+	docker build -t rafaeldeandrade/pylonsnode .
+
+
+###############################################################################
 ###                                Testing                                  ###
 ###############################################################################
 

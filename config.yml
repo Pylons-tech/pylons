@@ -1,35 +1,38 @@
 genesis:
   chain_id: "pylons"
+  app_state:
+    staking:
+      params:
+        bond_denom: "bedrock"
+    crisis:
+      constant_fee:
+        denom: bedrock
+    gov:
+      deposit_params:
+        min_deposit:
+          denom: bedrock
 
 build:
   binary: "pylonsd"
 
 init:
+  home: "$HOME/.pylonsd"
   config:
     api:
       swagger: true
 
-accounts:
-  - name: michael
-    coins: [ "10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin" ]
-    mnemonic: "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
-  - name: eugen
-    coins: [ "10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin" ]
-    mnemonic: "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
-  - name: node0
-    coins: ["10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin"]
-    mnemonic: "cat indoor zoo vivid actress steak female fat shrug payment harvest sadness hazard frown alcohol mountain erode latin symbol peace repair inspire blade supply"
-
-validator:
-  name: node0
-  staked: "100000000stake"
-
 client:
-#  vuex:
-#    path: "vue/src/store"
   openapi:
     path: "docs/static/openapi.yml"
 
-faucet:
-  name: michael
-  coins: [ "100pylons" ]
+accounts:
+  - name: pylonsinc
+    coins: ["9000000000pylon,900000000bedrock"]
+    mnemonic: "achieve patch rabbit delay you stairs flag nation lady outside answer property olive man dwarf used chapter sunset bundle sniff between since review logic"
+  - name: tendermint
+    coins: ["1000000000pylon,100000000bedrock"]
+    mnemonic: "oil inflict cup nation circle palace cactus uphold clarify vibrant believe stem farm aerobic casino treat early amazing remain produce exhaust bachelor flame own"
+
+validator:
+  name: pylonsinc
+  staked: "300000000bedrock"

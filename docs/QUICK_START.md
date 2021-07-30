@@ -26,6 +26,6 @@ starport chain serve
 
 ## Using Docker compose
 ```shell
-METEOR_SETTINGS=$(cat settings.json) docker-compose -f docker-compose-starport.yml up -d
+METEOR_SETTINGS=$(cat settings.json) docker-compose up -d
 ```
 

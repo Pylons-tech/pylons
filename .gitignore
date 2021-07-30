@@ -12,3 +12,4 @@ signed_transaction.json
 /.idea
 /testnet
 /release
+docker/.pylonsd

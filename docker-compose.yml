@@ -1,26 +1,70 @@
 version: '3.4'
 services:
-  validator:
-    hostname: validator
-    build:
-      dockerfile: Dockerfile.starport
-      context: .
-      target: validator
-    networks:
-      - pylonsnet
-  fullnode:
-    hostname: fullnode
-    depends_on:
-      - validator
-    build:
-      dockerfile: Dockerfile.starport
-      context: .
-      target: fullnode
-    ports:
-      - "1317:1317"
-    networks:
-      - pylonsnet
 
+  alpha:
+    hostname: alpha
+    container_name: alpha
+    build: .
+    image: rafaeldeandrade/pylonsnode
+    ports:
+      - "26656-26657:26656-26657"
+    networks:
+      - pylonsnet
+    volumes:
+      - alpha_data:/root/.pylonsd
+    environment:
+      - MONIKER=alpha
+      - NODETYPE=VALIDATOR
+      - CHAIN_ID=pylons
+
+  beta:
+    container_name: beta
+    hostname: beta
+    depends_on:
+      - alpha
+    build: .
+    ports:
+      - "26659-26660:26656-26657"
+    networks:
+      - pylonsnet
+    volumes:
+      - beta_data:/root/.pylonsd
+    environment:
+      - SEEDS=alpha
+
+
+
+  gamma:
+    container_name: gamma
+    hostname: gamma
+    depends_on:
+      - alpha
+      - beta
+    build: .
+    ports:
+      - "26661-26662:26656-26657"
+    networks:
+      - pylonsnet
+    volumes:
+      - gamma_data:/root/.pylonsd
+    environment:
+      - SEEDS=alpha,beta
+
+#
+#
+#  fullnode:
+#    hostname: fullnode
+#    depends_on:
+#      - coordinator
+#    build:
+#      dockerfile: Dockerfile.starport
+#      context: .
+#      target: fullnode
+#    ports:
+#      - "1317:1317"
+#    networks:
+#      - pylonsnet
+#
   mongo:
     image: mongo:latest
     container_name: mongo
@@ -48,13 +92,12 @@ services:
       METEOR_SETTINGS: ${METEOR_SETTINGS}
       PORT: 3000
 
-
-
 networks:
   pylonsnet:
 
 volumes:
   pylons_home:
   data:
-  validator_id:
-  portainer_data:
+  alpha_data:
+  beta_data:
+  gamma_data:

@@ -7,13 +7,13 @@
         "uptimeWindow": 250,
         "initialPageSize": 30,
         "secp256k1": false,
-        "bech32PrefixAccAddr": "cosmos",
-        "bech32PrefixAccPub": "cosmospub",
-        "bech32PrefixValAddr": "cosmosvaloper",
-        "bech32PrefixValPub": "cosmosvaloperpub",
-        "bech32PrefixConsAddr": "cosmosvalcons",
-        "bech32PrefixConsPub": "cosmosvalconspub",
-        "bondDenom": "uatom",
+        "bech32PrefixAccAddr": "pylon",
+        "bech32PrefixAccPub": "pylon",
+        "bech32PrefixValAddr": "pylonvaloper",
+        "bech32PrefixValPub": "pylonvaloperpub",
+        "bech32PrefixConsAddr": "pylonvalcons",
+        "bech32PrefixConsPub": "pylonvalconspub",
+        "bondDenom": "bedrock",
         "powerReduction": 1000000,
         "coins": [
             {
@@ -30,7 +30,12 @@
                 "denom": "pylon",
                 "displayName": "PYLON",
                 "fraction": 1000000
-            } 
+            },{
+                "denom": "bedrock",
+                "displayName": "BEDROCK",
+                "fraction": 1000000
+            }
+
         ],
         "ledger":{
             "coinType": 118,
@@ -50,8 +55,8 @@
         "banners": false
     },
     "remote":{
-        "rpc":"http://node0:26657",
-        "api":"http://node0:1317"
+        "rpc":"http://alpha:26657",
+        "api":"http://alpha:1317"
     },
     "debug": {
         "startTimer": true
