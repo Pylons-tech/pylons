@@ -9,7 +9,7 @@ const (
 	baseAccAddrBech32 = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt33"
 )
 
-func CreateTestAccounts(numAccount uint) []string {
+func CreateTestAddressList(numAccount uint) []string {
 	accounts := make([]string, numAccount)
 	for i := uint(0); i < numAccount; i++ {
 		addr := baseAccAddrBech32 + strconv.Itoa(int(i))

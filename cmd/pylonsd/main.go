@@ -1,6 +1,8 @@
 package main
 
 import (
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/spf13/cobra"
 	"os"
 
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
@@ -19,7 +21,19 @@ func main() {
 		app.New,
 		// this line is used by starport scaffolding # root/arguments
 	)
+	rootCmd.Short = "Stargate Pylons App"
+	removeLineBreaksInCobraArgs(rootCmd)
 	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
 		os.Exit(1)
+	}
+}
+
+// removeLineBreaksInCobraArgs recursively removes line breaks from a parent cobra command.
+// Line breaks are added in cosmos-sdk, however cobra ends up printing commands in the help in alphabetical order,
+// resulting in one or more blank lines at the top of the list
+func removeLineBreaksInCobraArgs(cmd *cobra.Command){
+	cmd.RemoveCommand(flags.LineBreak)
+	for _, c := range cmd.Commands() {
+		removeLineBreaksInCobraArgs(c)
 	}
 }

@@ -96,9 +96,9 @@ import (
 )
 
 const (
-	// AccountAddressPrefix is the prefix of a bech32 account, ex: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt33"
+	// AccountAddressPrefix is the prefix used for bech32 addresses ex: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
 	AccountAddressPrefix = "cosmos"
-	// Name is the name of the chain, here "pylons"
+	// Name is the name of the app, here "pylons"
 	Name = "pylons"
 )
 
