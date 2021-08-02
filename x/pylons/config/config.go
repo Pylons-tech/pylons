@@ -35,11 +35,11 @@ func NewRequestFieldConfig() RequestFieldConfig {
 }
 
 type FeeConfig struct {
-	BaseFee   sdk.Coins
+	BaseFee sdk.Coins
 }
 
 func NewFeeConfig() FeeConfig {
 	return FeeConfig{
-		BaseFee:   sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultBasicFee)},
+		BaseFee: sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultBasicFee)},
 	}
 }

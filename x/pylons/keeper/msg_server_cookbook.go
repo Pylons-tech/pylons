@@ -53,7 +53,6 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
