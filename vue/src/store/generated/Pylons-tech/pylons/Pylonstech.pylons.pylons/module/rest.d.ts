@@ -21,8 +21,6 @@ export interface PylonsCookbook {
     developer?: string;
     version?: string;
     supportEmail?: string;
-    /** @format int64 */
-    tier?: string;
     /** @format uint64 */
     costPerBlock?: string;
     enabled?: boolean;

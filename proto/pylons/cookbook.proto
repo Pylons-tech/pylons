@@ -12,7 +12,6 @@ message Cookbook {
   string developer = 6; 
   string version = 7; 
   string supportEmail = 8; 
-  int64 tier = 9;
-  uint64 costPerBlock = 10;
-  bool enabled = 11;
+  uint64 costPerBlock = 9;
+  bool enabled = 10;
 }

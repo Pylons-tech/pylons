@@ -19504,9 +19504,6 @@ paths:
                     type: string
                   supportEmail:
                     type: string
-                  tier:
-                    type: string
-                    format: int64
                   costPerBlock:
                     type: string
                     format: uint64
@@ -19570,9 +19567,6 @@ paths:
                       type: string
                     supportEmail:
                       type: string
-                    tier:
-                      type: string
-                      format: int64
                     costPerBlock:
                       type: string
                       format: uint64
@@ -30479,9 +30473,6 @@ definitions:
         type: string
       supportEmail:
         type: string
-      tier:
-        type: string
-        format: int64
       costPerBlock:
         type: string
         format: uint64
@@ -31226,9 +31217,6 @@ definitions:
             type: string
           supportEmail:
             type: string
-          tier:
-            type: string
-            format: int64
           costPerBlock:
             type: string
             format: uint64
@@ -31697,9 +31685,6 @@ definitions:
               type: string
             supportEmail:
               type: string
-            tier:
-              type: string
-              format: int64
             costPerBlock:
               type: string
               format: uint64

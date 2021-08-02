@@ -11,7 +11,6 @@ const baseCookbook = {
     developer: '',
     version: '',
     supportEmail: '',
-    tier: 0,
     costPerBlock: 0,
     enabled: false
 };
@@ -41,14 +40,11 @@ export const Cookbook = {
         if (message.supportEmail !== '') {
             writer.uint32(66).string(message.supportEmail);
         }
-        if (message.tier !== 0) {
-            writer.uint32(72).int64(message.tier);
-        }
         if (message.costPerBlock !== 0) {
-            writer.uint32(80).uint64(message.costPerBlock);
+            writer.uint32(72).uint64(message.costPerBlock);
         }
         if (message.enabled === true) {
-            writer.uint32(88).bool(message.enabled);
+            writer.uint32(80).bool(message.enabled);
         }
         return writer;
     },
@@ -84,12 +80,9 @@ export const Cookbook = {
                     message.supportEmail = reader.string();
                     break;
                 case 9:
-                    message.tier = longToNumber(reader.int64());
-                    break;
-                case 10:
                     message.costPerBlock = longToNumber(reader.uint64());
                     break;
-                case 11:
+                case 10:
                     message.enabled = reader.bool();
                     break;
                 default:
@@ -149,12 +142,6 @@ export const Cookbook = {
         else {
             message.supportEmail = '';
         }
-        if (object.tier !== undefined && object.tier !== null) {
-            message.tier = Number(object.tier);
-        }
-        else {
-            message.tier = 0;
-        }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = Number(object.costPerBlock);
         }
@@ -179,7 +166,6 @@ export const Cookbook = {
         message.developer !== undefined && (obj.developer = message.developer);
         message.version !== undefined && (obj.version = message.version);
         message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail);
-        message.tier !== undefined && (obj.tier = message.tier);
         message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock);
         message.enabled !== undefined && (obj.enabled = message.enabled);
         return obj;
@@ -233,12 +219,6 @@ export const Cookbook = {
         }
         else {
             message.supportEmail = '';
-        }
-        if (object.tier !== undefined && object.tier !== null) {
-            message.tier = object.tier;
-        }
-        else {
-            message.tier = 0;
         }
         if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
             message.costPerBlock = object.costPerBlock;

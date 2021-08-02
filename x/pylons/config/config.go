@@ -7,8 +7,6 @@ const (
 
 	// DefaultBasicFee holds the value of the default basic fee if not configured externally
 	DefaultBasicFee = 10000
-	// DefaultPremiumFee holds the value of the default premium fee if not configured externally
-	DefaultPremiumFee = 50000
 )
 
 var (
@@ -37,13 +35,11 @@ func NewRequestFieldConfig() RequestFieldConfig {
 }
 
 type FeeConfig struct {
-	BasicFee   sdk.Coins
-	PremiumFee sdk.Coins
+	BaseFee   sdk.Coins
 }
 
 func NewFeeConfig() FeeConfig {
 	return FeeConfig{
-		BasicFee:   sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultBasicFee)},
-		PremiumFee: sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultPremiumFee)},
+		BaseFee:   sdk.Coins{sdk.NewInt64Coin(pylonsCoinDenom, DefaultBasicFee)},
 	}
 }

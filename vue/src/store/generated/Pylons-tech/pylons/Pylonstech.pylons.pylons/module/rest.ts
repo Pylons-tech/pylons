@@ -37,9 +37,6 @@ export interface PylonsCookbook {
   version?: string;
   supportEmail?: string;
 
-  /** @format int64 */
-  tier?: string;
-
   /** @format uint64 */
   costPerBlock?: string;
   enabled?: boolean;

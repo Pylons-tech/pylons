@@ -9,7 +9,6 @@ export interface Cookbook {
     developer: string;
     version: string;
     supportEmail: string;
-    tier: number;
     costPerBlock: number;
     enabled: boolean;
 }
