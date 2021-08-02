@@ -4,25 +4,23 @@ services:
   alpha:
     hostname: alpha
     container_name: alpha
-    build: .
+    build:
+      context: .
+      target: alpha-validator
     image: rafaeldeandrade/pylonsnode
     ports:
       - "26656-26657:26656-26657"
     networks:
       - pylonsnet
-    volumes:
-      - alpha_data:/root/.pylonsd
-    environment:
-      - MONIKER=alpha
-      - NODETYPE=VALIDATOR
-      - CHAIN_ID=pylons
 
   beta:
     container_name: beta
     hostname: beta
     depends_on:
       - alpha
-    build: .
+    build:
+      context: .
+      target: validator
     ports:
       - "26659-26660:26656-26657"
     networks:
@@ -30,17 +28,16 @@ services:
     volumes:
       - beta_data:/root/.pylonsd
     environment:
-      - SEEDS=alpha
-
-
+      - PEERS=alpha
 
   gamma:
     container_name: gamma
     hostname: gamma
     depends_on:
       - alpha
-      - beta
-    build: .
+    build:
+      context: .
+      target: validator
     ports:
       - "26661-26662:26656-26657"
     networks:
@@ -48,7 +45,7 @@ services:
     volumes:
       - gamma_data:/root/.pylonsd
     environment:
-      - SEEDS=alpha,beta
+      - PEERS=alpha
 
 #
 #
@@ -65,32 +62,32 @@ services:
 #    networks:
 #      - pylonsnet
 #
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    hostname: mongo
-    networks:
-      - pylonsnet
-    command:
-      - --storageEngine=wiredTiger
-    volumes:
-      - data:/data/db
-
-  big-dipper:
-    image: rafaeldeandrade/big-dipper:v0.0.3
-    container_name: explorer
-    hostname: explorer
-    ports:
-      - "3000:3000"
-    networks:
-      - pylonsnet
-    depends_on:
-      - mongo
-    environment:
-      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
-      MONGO_URL: mongodb://mongo:27017/meteor
-      METEOR_SETTINGS: ${METEOR_SETTINGS}
-      PORT: 3000
+#  mongo:
+#    image: mongo:latest
+#    container_name: mongo
+#    hostname: mongo
+#    networks:
+#      - pylonsnet
+#    command:
+#      - --storageEngine=wiredTiger
+#    volumes:
+#      - data:/data/db
+#
+#  big-dipper:
+#    image: rafaeldeandrade/big-dipper:v0.0.3
+#    container_name: explorer
+#    hostname: explorer
+#    ports:
+#      - "3000:3000"
+#    networks:
+#      - pylonsnet
+#    depends_on:
+#      - mongo
+#    environment:
+#      ROOT_URL: ${APP_ROOT_URL:-http://localhost}
+#      MONGO_URL: mongodb://mongo:27017/meteor
+#      METEOR_SETTINGS: ${METEOR_SETTINGS}
+#      PORT: 3000
 
 networks:
   pylonsnet:
