@@ -10,7 +10,7 @@ const (
 )
 
 var (
-	nodeVersionString = ""
+	nodeVersionString = "dev"
 )
 
 func SetNodeVersionString(s string) {

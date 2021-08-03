@@ -11,24 +11,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestDoubleSDKDecMarshal(t *testing.T) {
-	expectedDec1 := "100.000000000000000000"
-	expectedDec2 := "0.000000000000000100"
-
-	numStr := "100"
-	numByte := []byte(numStr)
-
-	dec1, err := sdk.NewDecFromStr(numStr)
-	require.NoError(t, err)
-
-	dec2 := sdk.Dec{}
-	err = dec2.Unmarshal(numByte)
-	require.NoError(t, err)
-
-	require.Equal(t, expectedDec1, dec1.String())
-	require.Equal(t, expectedDec2, dec2.String())
-}
-
 func TestValidateInputDoubles(t *testing.T) {
 	valGTone, _ := sdk.NewDecFromStr("1.01")
 	valLTone, _ := sdk.NewDecFromStr("0.99")
