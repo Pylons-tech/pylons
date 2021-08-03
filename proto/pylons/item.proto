@@ -1,0 +1,40 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
+
+// DoubleKeyValue describes double key/value set
+message  DoubleKeyValue {
+  string Key = 1;
+  string Value = 2 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+}
+
+// LongKeyValue describes long key/value set
+message  LongKeyValue {
+  string Key = 1;
+  int64 Value = 2;
+}
+
+// StringKeyValue describes string key/value set
+message  StringKeyValue {
+  string Key = 1;
+  string Value = 2;
+}
+
+message Item {
+  string creator = 1;
+  string ID = 2;
+  string cookbookID = 3; 
+  string nodeVersion = 4;
+  repeated DoubleKeyValue Doubles = 5 [(gogoproto.nullable) = false];
+  repeated LongKeyValue Longs = 6 [(gogoproto.nullable) = false];
+  repeated StringKeyValue Strings = 7 [(gogoproto.nullable) = false];
+  string ownerRecipeID = 8;
+  string ownerTradeID = 9;
+  bool tradeable = 10;
+  uint64 lastUpdate = 11;
+  uint64 transferFee = 12;
+}

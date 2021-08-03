@@ -1,8 +1,23 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Item } from '../pylons/item';
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetItemRequest {
+    index: string;
+}
+export interface QueryGetItemResponse {
+    Item: Item | undefined;
+}
+export interface QueryAllItemRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryAllItemResponse {
+    Item: Item[];
+    pagination: PageResponse | undefined;
+}
 export interface QueryGetRecipeRequest {
     CookbookID: string;
     ID: string;
@@ -22,6 +37,34 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryGetItemRequest: {
+    encode(message: QueryGetItemRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetItemRequest;
+    fromJSON(object: any): QueryGetItemRequest;
+    toJSON(message: QueryGetItemRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetItemRequest>): QueryGetItemRequest;
+};
+export declare const QueryGetItemResponse: {
+    encode(message: QueryGetItemResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetItemResponse;
+    fromJSON(object: any): QueryGetItemResponse;
+    toJSON(message: QueryGetItemResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetItemResponse>): QueryGetItemResponse;
+};
+export declare const QueryAllItemRequest: {
+    encode(message: QueryAllItemRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllItemRequest;
+    fromJSON(object: any): QueryAllItemRequest;
+    toJSON(message: QueryAllItemRequest): unknown;
+    fromPartial(object: DeepPartial<QueryAllItemRequest>): QueryAllItemRequest;
+};
+export declare const QueryAllItemResponse: {
+    encode(message: QueryAllItemResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllItemResponse;
+    fromJSON(object: any): QueryAllItemResponse;
+    toJSON(message: QueryAllItemResponse): unknown;
+    fromPartial(object: DeepPartial<QueryAllItemResponse>): QueryAllItemResponse;
+};
 export declare const QueryGetRecipeRequest: {
     encode(message: QueryGetRecipeRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetRecipeRequest;
@@ -66,6 +109,10 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a item by index. */
+    Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse>;
+    /** Queries a list of item items. */
+    ItemAll(request: QueryAllItemRequest): Promise<QueryAllItemResponse>;
     /** Retrieves a recipe by ID. */
     Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>;
     /** Retrieves the list of cookbooks owned by an address */
@@ -76,6 +123,8 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse>;
+    ItemAll(request: QueryAllItemRequest): Promise<QueryAllItemResponse>;
     Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>;
     ListCookbooksByCreator(request: QueryListCookbooksByCreatorRequest): Promise<QueryListCookbooksByCreatorResponse>;
     Cookbook(request: QueryGetCookbookRequest): Promise<QueryGetCookbookResponse>;

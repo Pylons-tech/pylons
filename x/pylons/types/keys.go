@@ -34,3 +34,7 @@ const (
 	// RecipeKey is a string key used as a prefix to the KVStore
 	RecipeKey = "Recipe-value-"
 )
+
+const (
+	ItemKey = "Item-value-"
+)

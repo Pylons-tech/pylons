@@ -11,6 +11,11 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the item
+	for _, elem := range genState.ItemList {
+		k.SetItem(ctx, *elem)
+	}
+
 	// Set all the recipe
 	for _, elem := range genState.RecipeList {
 		k.SetRecipe(ctx, *elem)
@@ -29,6 +34,13 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all item
+	itemList := k.GetAllItem(ctx)
+	for _, elem := range itemList {
+		elem := elem
+		genesis.ItemList = append(genesis.ItemList, &elem)
+	}
+
 	// Get all recipe
 	recipeList := k.GetAllRecipe(ctx)
 	for _, elem := range recipeList {

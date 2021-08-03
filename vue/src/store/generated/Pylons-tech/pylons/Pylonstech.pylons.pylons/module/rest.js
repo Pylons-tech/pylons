@@ -154,6 +154,35 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryItemAll
+         * @summary Queries a list of item items.
+         * @request GET:/pylons/item
+         */
+        this.queryItemAll = (query, params = {}) => this.request({
+            path: `/pylons/item`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryItem
+         * @summary Queries a item by index.
+         * @request GET:/pylons/item/{index}
+         */
+        this.queryItem = (index, params = {}) => this.request({
+            path: `/pylons/item/${index}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryListCookbooksByCreator
          * @summary Retrieves the list of cookbooks owned by an address
          * @request GET:/pylons/listCookbooks/{creator}

@@ -2,6 +2,7 @@ syntax = "proto3";
 package Pylonstech.pylons.pylons;
 
 // this line is used by starport scaffolding # genesis/proto/import
+import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
 
@@ -10,6 +11,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // GenesisState defines the pylons module's genesis state.
 message GenesisState {
     // this line is used by starport scaffolding # genesis/proto/state
+		repeated Item itemList = 3; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Recipe recipeList = 2; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Cookbook cookbookList = 1; // this line is used by starport scaffolding # genesis/proto/stateField
     // this line is used by starport scaffolding # ibc/genesis/proto

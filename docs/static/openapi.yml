@@ -19536,6 +19536,259 @@ paths:
           type: string
       tags:
         - Query
+  /pylons/item:
+    get:
+      summary: Queries a list of item items.
+      operationId: PylonstechPylonsPylonsItemAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Item:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    creator:
+                      type: string
+                    ID:
+                      type: string
+                    cookbookID:
+                      type: string
+                    nodeVersion:
+                      type: string
+                    Doubles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                        title: DoubleKeyValue describes double key/value set
+                    Longs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                            format: int64
+                        title: LongKeyValue describes long key/value set
+                    Strings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                        title: StringKeyValue describes string key/value set
+                    ownerRecipeID:
+                      type: string
+                    ownerTradeID:
+                      type: string
+                    tradeable:
+                      type: boolean
+                    lastUpdate:
+                      type: string
+                      format: uint64
+                    transferFee:
+                      type: string
+                      format: uint64
+              pagination:
+                type: object
+                properties:
+                  nextKey:
+                    type: string
+                    format: byte
+                    title: |-
+                      next_key is the key to be passed to PageRequest.key to
+                      query the next page most efficiently
+                  total:
+                    type: string
+                    format: uint64
+                    title: >-
+                      total is total number of results available if
+                      PageRequest.count_total
+
+                      was set, its value is undefined otherwise
+                description: >-
+                  PageResponse is to be embedded in gRPC response messages where
+                  the
+
+                  corresponding request message has used PageRequest.
+
+                   message SomeResponse {
+                           repeated Bar results = 1;
+                           PageResponse page = 2;
+                   }
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: pagination.key
+          description: |-
+            key is a value returned in PageResponse.next_key to begin
+            querying the next page most efficiently. Only one of offset or key
+            should be set.
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          description: >-
+            offset is a numeric offset that can be used when key is unavailable.
+
+            It is less efficient than using key. Only one of offset or key
+            should
+
+            be set.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          description: >-
+            limit is the total number of results to be returned in the result
+            page.
+
+            If left empty it will default to a value to be set by each app.
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.countTotal
+          description: >-
+            count_total is set to true  to indicate that the result set should
+            include
+
+            a count of the total number of items available for pagination in
+            UIs.
+
+            count_total is only respected when offset is used. It is ignored
+            when key
+
+            is set.
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  '/pylons/item/{index}':
+    get:
+      summary: Queries a item by index.
+      operationId: PylonstechPylonsPylonsItem
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Item:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  ID:
+                    type: string
+                  cookbookID:
+                    type: string
+                  nodeVersion:
+                    type: string
+                  Doubles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                      title: DoubleKeyValue describes double key/value set
+                  Longs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                          format: int64
+                      title: LongKeyValue describes long key/value set
+                  Strings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                      title: StringKeyValue describes string key/value set
+                  ownerRecipeID:
+                    type: string
+                  ownerTradeID:
+                    type: string
+                  tradeable:
+                    type: boolean
+                  lastUpdate:
+                    type: string
+                    format: uint64
+                  transferFee:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   '/pylons/listCookbooks/{creator}':
     get:
       summary: Retrieves the list of cookbooks owned by an address
@@ -30492,6 +30745,14 @@ definitions:
     title: >-
       DoubleInputParam describes the bounds on an item input/output parameter of
       type float64
+  Pylonstech.pylons.pylons.DoubleKeyValue:
+    type: object
+    properties:
+      Key:
+        type: string
+      Value:
+        type: string
+    title: DoubleKeyValue describes double key/value set
   Pylonstech.pylons.pylons.DoubleParam:
     type: object
     properties:
@@ -30813,6 +31074,60 @@ definitions:
         type: string
         format: uint64
     title: IntWeightRange describes weight range that produce int value
+  Pylonstech.pylons.pylons.Item:
+    type: object
+    properties:
+      creator:
+        type: string
+      ID:
+        type: string
+      cookbookID:
+        type: string
+      nodeVersion:
+        type: string
+      Doubles:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+          title: DoubleKeyValue describes double key/value set
+      Longs:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+              format: int64
+          title: LongKeyValue describes long key/value set
+      Strings:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+          title: StringKeyValue describes string key/value set
+      ownerRecipeID:
+        type: string
+      ownerTradeID:
+        type: string
+      tradeable:
+        type: boolean
+      lastUpdate:
+        type: string
+        format: uint64
+      transferFee:
+        type: string
+        format: uint64
   Pylonstech.pylons.pylons.ItemInput:
     type: object
     properties:
@@ -31156,6 +31471,15 @@ definitions:
     title: >-
       LongInputParam describes the bounds on an item input/output parameter of
       type int64
+  Pylonstech.pylons.pylons.LongKeyValue:
+    type: object
+    properties:
+      Key:
+        type: string
+      Value:
+        type: string
+        format: int64
+    title: LongKeyValue describes long key/value set
   Pylonstech.pylons.pylons.LongParam:
     type: object
     properties:
@@ -31189,12 +31513,102 @@ definitions:
       int64
   Pylonstech.pylons.pylons.MsgCreateCookbookResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgCreateItemResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgCreateRecipeResponse:
+    type: object
+  Pylonstech.pylons.pylons.MsgDeleteItemResponse:
     type: object
   Pylonstech.pylons.pylons.MsgUpdateCookbookResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgUpdateItemResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgUpdateRecipeResponse:
     type: object
+  Pylonstech.pylons.pylons.QueryAllItemResponse:
+    type: object
+    properties:
+      Item:
+        type: array
+        items:
+          type: object
+          properties:
+            creator:
+              type: string
+            ID:
+              type: string
+            cookbookID:
+              type: string
+            nodeVersion:
+              type: string
+            Doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: DoubleKeyValue describes double key/value set
+            Longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                    format: int64
+                title: LongKeyValue describes long key/value set
+            Strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: StringKeyValue describes string key/value set
+            ownerRecipeID:
+              type: string
+            ownerTradeID:
+              type: string
+            tradeable:
+              type: boolean
+            lastUpdate:
+              type: string
+              format: uint64
+            transferFee:
+              type: string
+              format: uint64
+      pagination:
+        type: object
+        properties:
+          nextKey:
+            type: string
+            format: byte
+            title: |-
+              next_key is the key to be passed to PageRequest.key to
+              query the next page most efficiently
+          total:
+            type: string
+            format: uint64
+            title: >-
+              total is total number of results available if
+              PageRequest.count_total
+
+              was set, its value is undefined otherwise
+        description: |-
+          PageResponse is to be embedded in gRPC response messages where the
+          corresponding request message has used PageRequest.
+
+           message SomeResponse {
+                   repeated Bar results = 1;
+                   PageResponse page = 2;
+           }
   Pylonstech.pylons.pylons.QueryGetCookbookResponse:
     type: object
     properties:
@@ -31222,6 +31636,63 @@ definitions:
             format: uint64
           enabled:
             type: boolean
+  Pylonstech.pylons.pylons.QueryGetItemResponse:
+    type: object
+    properties:
+      Item:
+        type: object
+        properties:
+          creator:
+            type: string
+          ID:
+            type: string
+          cookbookID:
+            type: string
+          nodeVersion:
+            type: string
+          Doubles:
+            type: array
+            items:
+              type: object
+              properties:
+                Key:
+                  type: string
+                Value:
+                  type: string
+              title: DoubleKeyValue describes double key/value set
+          Longs:
+            type: array
+            items:
+              type: object
+              properties:
+                Key:
+                  type: string
+                Value:
+                  type: string
+                  format: int64
+              title: LongKeyValue describes long key/value set
+          Strings:
+            type: array
+            items:
+              type: object
+              properties:
+                Key:
+                  type: string
+                Value:
+                  type: string
+              title: StringKeyValue describes string key/value set
+          ownerRecipeID:
+            type: string
+          ownerTradeID:
+            type: string
+          tradeable:
+            type: boolean
+          lastUpdate:
+            type: string
+            format: uint64
+          transferFee:
+            type: string
+            format: uint64
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:
@@ -32133,6 +32604,14 @@ definitions:
     title: >-
       StringInputParam describes the bounds on an item input/output parameter of
       type string
+  Pylonstech.pylons.pylons.StringKeyValue:
+    type: object
+    properties:
+      Key:
+        type: string
+      Value:
+        type: string
+    title: StringKeyValue describes string key/value set
   Pylonstech.pylons.pylons.StringParam:
     type: object
     properties:

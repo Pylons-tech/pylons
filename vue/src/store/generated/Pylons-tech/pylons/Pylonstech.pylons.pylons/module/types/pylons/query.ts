@@ -1,11 +1,30 @@
 /* eslint-disable */
 import { Reader, Writer } from 'protobufjs/minimal'
+import { Item } from '../pylons/item'
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Recipe } from '../pylons/recipe'
 import { Cookbook } from '../pylons/cookbook'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetItemRequest {
+  index: string
+}
+
+export interface QueryGetItemResponse {
+  Item: Item | undefined
+}
+
+export interface QueryAllItemRequest {
+  pagination: PageRequest | undefined
+}
+
+export interface QueryAllItemResponse {
+  Item: Item[]
+  pagination: PageResponse | undefined
+}
+
 export interface QueryGetRecipeRequest {
   CookbookID: string
   ID: string
@@ -29,6 +48,250 @@ export interface QueryGetCookbookRequest {
 
 export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
+}
+
+const baseQueryGetItemRequest: object = { index: '' }
+
+export const QueryGetItemRequest = {
+  encode(message: QueryGetItemRequest, writer: Writer = Writer.create()): Writer {
+    if (message.index !== '') {
+      writer.uint32(10).string(message.index)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetItemRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetItemRequest } as QueryGetItemRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.index = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetItemRequest {
+    const message = { ...baseQueryGetItemRequest } as QueryGetItemRequest
+    if (object.index !== undefined && object.index !== null) {
+      message.index = String(object.index)
+    } else {
+      message.index = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetItemRequest): unknown {
+    const obj: any = {}
+    message.index !== undefined && (obj.index = message.index)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetItemRequest>): QueryGetItemRequest {
+    const message = { ...baseQueryGetItemRequest } as QueryGetItemRequest
+    if (object.index !== undefined && object.index !== null) {
+      message.index = object.index
+    } else {
+      message.index = ''
+    }
+    return message
+  }
+}
+
+const baseQueryGetItemResponse: object = {}
+
+export const QueryGetItemResponse = {
+  encode(message: QueryGetItemResponse, writer: Writer = Writer.create()): Writer {
+    if (message.Item !== undefined) {
+      Item.encode(message.Item, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetItemResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetItemResponse } as QueryGetItemResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.Item = Item.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetItemResponse {
+    const message = { ...baseQueryGetItemResponse } as QueryGetItemResponse
+    if (object.Item !== undefined && object.Item !== null) {
+      message.Item = Item.fromJSON(object.Item)
+    } else {
+      message.Item = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetItemResponse): unknown {
+    const obj: any = {}
+    message.Item !== undefined && (obj.Item = message.Item ? Item.toJSON(message.Item) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetItemResponse>): QueryGetItemResponse {
+    const message = { ...baseQueryGetItemResponse } as QueryGetItemResponse
+    if (object.Item !== undefined && object.Item !== null) {
+      message.Item = Item.fromPartial(object.Item)
+    } else {
+      message.Item = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryAllItemRequest: object = {}
+
+export const QueryAllItemRequest = {
+  encode(message: QueryAllItemRequest, writer: Writer = Writer.create()): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryAllItemRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryAllItemRequest } as QueryAllItemRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryAllItemRequest {
+    const message = { ...baseQueryAllItemRequest } as QueryAllItemRequest
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryAllItemRequest): unknown {
+    const obj: any = {}
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryAllItemRequest>): QueryAllItemRequest {
+    const message = { ...baseQueryAllItemRequest } as QueryAllItemRequest
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryAllItemResponse: object = {}
+
+export const QueryAllItemResponse = {
+  encode(message: QueryAllItemResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.Item) {
+      Item.encode(v!, writer.uint32(10).fork()).ldelim()
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryAllItemResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryAllItemResponse } as QueryAllItemResponse
+    message.Item = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.Item.push(Item.decode(reader, reader.uint32()))
+          break
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryAllItemResponse {
+    const message = { ...baseQueryAllItemResponse } as QueryAllItemResponse
+    message.Item = []
+    if (object.Item !== undefined && object.Item !== null) {
+      for (const e of object.Item) {
+        message.Item.push(Item.fromJSON(e))
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryAllItemResponse): unknown {
+    const obj: any = {}
+    if (message.Item) {
+      obj.Item = message.Item.map((e) => (e ? Item.toJSON(e) : undefined))
+    } else {
+      obj.Item = []
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryAllItemResponse>): QueryAllItemResponse {
+    const message = { ...baseQueryAllItemResponse } as QueryAllItemResponse
+    message.Item = []
+    if (object.Item !== undefined && object.Item !== null) {
+      for (const e of object.Item) {
+        message.Item.push(Item.fromPartial(e))
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  }
 }
 
 const baseQueryGetRecipeRequest: object = { CookbookID: '', ID: '' }
@@ -387,6 +650,10 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a item by index. */
+  Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse>
+  /** Queries a list of item items. */
+  ItemAll(request: QueryAllItemRequest): Promise<QueryAllItemResponse>
   /** Retrieves a recipe by ID. */
   Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>
   /** Retrieves the list of cookbooks owned by an address */
@@ -400,6 +667,18 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse> {
+    const data = QueryGetItemRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Item', data)
+    return promise.then((data) => QueryGetItemResponse.decode(new Reader(data)))
+  }
+
+  ItemAll(request: QueryAllItemRequest): Promise<QueryAllItemResponse> {
+    const data = QueryAllItemRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ItemAll', data)
+    return promise.then((data) => QueryAllItemResponse.decode(new Reader(data)))
+  }
+
   Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse> {
     const data = QueryGetRecipeRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Recipe', data)
