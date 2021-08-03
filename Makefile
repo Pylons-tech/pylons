@@ -82,6 +82,14 @@ images:
 	starport chain init --home docker/.pylonsd
 	docker build -t rafaeldeandrade/pylonsnode .
 
+###############################################################################
+###                                Genesis                                  ###
+###############################################################################
+genesis:
+	starport chain build --release -t linux:amd64
+	starport chain init --home docker/.pylonsd
+	docker build -t rafaeldeandrade/pylonsnode -f Dockerfile .
+
 
 ###############################################################################
 ###                                Testing                                  ###
