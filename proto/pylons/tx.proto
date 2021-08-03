@@ -13,9 +13,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
-  rpc CreateItem(MsgCreateItem) returns (MsgCreateItemResponse);
-  rpc UpdateItem(MsgUpdateItem) returns (MsgUpdateItemResponse);
-  rpc DeleteItem(MsgDeleteItem) returns (MsgDeleteItemResponse);
+  rpc SetItemString(MsgSetItemString) returns (MsgSetItemStringResponse);
   rpc CreateRecipe(MsgCreateRecipe) returns (MsgCreateRecipeResponse);
   rpc UpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
   rpc CreateCookbook(MsgCreateCookbook) returns (MsgCreateCookbookResponse);
@@ -23,43 +21,18 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
-message MsgCreateItem {
+message MsgSetItemString {
   string creator = 1;
-  string ID = 2;
-  string cookbookID = 3;
-  string nodeVersion = 4;
-  repeated DoubleKeyValue Doubles = 5 [(gogoproto.nullable) = false];
-  repeated LongKeyValue Longs = 6 [(gogoproto.nullable) = false];
-  repeated StringKeyValue Strings = 7 [(gogoproto.nullable) = false];
-  string ownerRecipeID = 9;
-  string ownerTradeID = 10;
-  bool tradable = 11;
-  uint64 lastUpdate = 12;
-  uint64 transferFee = 13;
+  string cookbookID = 2;
+  string recipeID = 3;
+  string ID = 4;
+  string field = 5;
+  string value = 6;
 }
-message MsgCreateItemResponse { }
 
-message MsgUpdateItem {
-  string creator = 1;
-  string ID = 2;
-  string cookbookID = 3;
-  string nodeVersion = 4;
-  repeated DoubleKeyValue Doubles = 5 [(gogoproto.nullable) = false];
-  repeated LongKeyValue Longs = 6 [(gogoproto.nullable) = false];
-  repeated StringKeyValue Strings = 7 [(gogoproto.nullable) = false];
-  string ownerRecipeID = 9;
-  string ownerTradeID = 10;
-  bool tradable = 11;
-  uint64 lastUpdate = 12;
-  uint64 transferFee = 13;
+message MsgSetItemStringResponse {
 }
-message MsgUpdateItemResponse { }
 
-message MsgDeleteItem {
-  string creator = 1;
-  string ID = 2;
-}
-message MsgDeleteItemResponse { }
 
 message MsgCreateRecipe {
   string creator = 1;

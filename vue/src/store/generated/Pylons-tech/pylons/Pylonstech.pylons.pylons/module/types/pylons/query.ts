@@ -1,15 +1,25 @@
 /* eslint-disable */
 import { Reader, Writer } from 'protobufjs/minimal'
+import { Recipe } from '../pylons/recipe'
 import { Item } from '../pylons/item'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
-import { Recipe } from '../pylons/recipe'
 import { Cookbook } from '../pylons/cookbook'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryListRecipesByCookbookRequest {
+  CookbookID: string
+}
+
+export interface QueryListRecipesByCookbookResponse {
+  Recipes: Recipe[]
+}
+
 export interface QueryGetItemRequest {
-  index: string
+  CookbookID: string
+  RecipeID: string
+  ID: string
 }
 
 export interface QueryGetItemResponse {
@@ -50,12 +60,135 @@ export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
 }
 
-const baseQueryGetItemRequest: object = { index: '' }
+const baseQueryListRecipesByCookbookRequest: object = { CookbookID: '' }
+
+export const QueryListRecipesByCookbookRequest = {
+  encode(message: QueryListRecipesByCookbookRequest, writer: Writer = Writer.create()): Writer {
+    if (message.CookbookID !== '') {
+      writer.uint32(10).string(message.CookbookID)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryListRecipesByCookbookRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryListRecipesByCookbookRequest } as QueryListRecipesByCookbookRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.CookbookID = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryListRecipesByCookbookRequest {
+    const message = { ...baseQueryListRecipesByCookbookRequest } as QueryListRecipesByCookbookRequest
+    if (object.CookbookID !== undefined && object.CookbookID !== null) {
+      message.CookbookID = String(object.CookbookID)
+    } else {
+      message.CookbookID = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryListRecipesByCookbookRequest): unknown {
+    const obj: any = {}
+    message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryListRecipesByCookbookRequest>): QueryListRecipesByCookbookRequest {
+    const message = { ...baseQueryListRecipesByCookbookRequest } as QueryListRecipesByCookbookRequest
+    if (object.CookbookID !== undefined && object.CookbookID !== null) {
+      message.CookbookID = object.CookbookID
+    } else {
+      message.CookbookID = ''
+    }
+    return message
+  }
+}
+
+const baseQueryListRecipesByCookbookResponse: object = {}
+
+export const QueryListRecipesByCookbookResponse = {
+  encode(message: QueryListRecipesByCookbookResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.Recipes) {
+      Recipe.encode(v!, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryListRecipesByCookbookResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryListRecipesByCookbookResponse } as QueryListRecipesByCookbookResponse
+    message.Recipes = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.Recipes.push(Recipe.decode(reader, reader.uint32()))
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryListRecipesByCookbookResponse {
+    const message = { ...baseQueryListRecipesByCookbookResponse } as QueryListRecipesByCookbookResponse
+    message.Recipes = []
+    if (object.Recipes !== undefined && object.Recipes !== null) {
+      for (const e of object.Recipes) {
+        message.Recipes.push(Recipe.fromJSON(e))
+      }
+    }
+    return message
+  },
+
+  toJSON(message: QueryListRecipesByCookbookResponse): unknown {
+    const obj: any = {}
+    if (message.Recipes) {
+      obj.Recipes = message.Recipes.map((e) => (e ? Recipe.toJSON(e) : undefined))
+    } else {
+      obj.Recipes = []
+    }
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryListRecipesByCookbookResponse>): QueryListRecipesByCookbookResponse {
+    const message = { ...baseQueryListRecipesByCookbookResponse } as QueryListRecipesByCookbookResponse
+    message.Recipes = []
+    if (object.Recipes !== undefined && object.Recipes !== null) {
+      for (const e of object.Recipes) {
+        message.Recipes.push(Recipe.fromPartial(e))
+      }
+    }
+    return message
+  }
+}
+
+const baseQueryGetItemRequest: object = { CookbookID: '', RecipeID: '', ID: '' }
 
 export const QueryGetItemRequest = {
   encode(message: QueryGetItemRequest, writer: Writer = Writer.create()): Writer {
-    if (message.index !== '') {
-      writer.uint32(10).string(message.index)
+    if (message.CookbookID !== '') {
+      writer.uint32(10).string(message.CookbookID)
+    }
+    if (message.RecipeID !== '') {
+      writer.uint32(18).string(message.RecipeID)
+    }
+    if (message.ID !== '') {
+      writer.uint32(26).string(message.ID)
     }
     return writer
   },
@@ -68,7 +201,13 @@ export const QueryGetItemRequest = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.index = reader.string()
+          message.CookbookID = reader.string()
+          break
+        case 2:
+          message.RecipeID = reader.string()
+          break
+        case 3:
+          message.ID = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -80,26 +219,48 @@ export const QueryGetItemRequest = {
 
   fromJSON(object: any): QueryGetItemRequest {
     const message = { ...baseQueryGetItemRequest } as QueryGetItemRequest
-    if (object.index !== undefined && object.index !== null) {
-      message.index = String(object.index)
+    if (object.CookbookID !== undefined && object.CookbookID !== null) {
+      message.CookbookID = String(object.CookbookID)
     } else {
-      message.index = ''
+      message.CookbookID = ''
+    }
+    if (object.RecipeID !== undefined && object.RecipeID !== null) {
+      message.RecipeID = String(object.RecipeID)
+    } else {
+      message.RecipeID = ''
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = String(object.ID)
+    } else {
+      message.ID = ''
     }
     return message
   },
 
   toJSON(message: QueryGetItemRequest): unknown {
     const obj: any = {}
-    message.index !== undefined && (obj.index = message.index)
+    message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID)
+    message.RecipeID !== undefined && (obj.RecipeID = message.RecipeID)
+    message.ID !== undefined && (obj.ID = message.ID)
     return obj
   },
 
   fromPartial(object: DeepPartial<QueryGetItemRequest>): QueryGetItemRequest {
     const message = { ...baseQueryGetItemRequest } as QueryGetItemRequest
-    if (object.index !== undefined && object.index !== null) {
-      message.index = object.index
+    if (object.CookbookID !== undefined && object.CookbookID !== null) {
+      message.CookbookID = object.CookbookID
     } else {
-      message.index = ''
+      message.CookbookID = ''
+    }
+    if (object.RecipeID !== undefined && object.RecipeID !== null) {
+      message.RecipeID = object.RecipeID
+    } else {
+      message.RecipeID = ''
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
+    } else {
+      message.ID = ''
     }
     return message
   }
@@ -650,10 +811,10 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Queries a item by index. */
+  /** Queries a list of listRecipesByCookbook items. */
+  ListRecipesByCookbook(request: QueryListRecipesByCookbookRequest): Promise<QueryListRecipesByCookbookResponse>
+  /** Queries a item by ID. */
   Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse>
-  /** Queries a list of item items. */
-  ItemAll(request: QueryAllItemRequest): Promise<QueryAllItemResponse>
   /** Retrieves a recipe by ID. */
   Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>
   /** Retrieves the list of cookbooks owned by an address */
@@ -667,16 +828,16 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  ListRecipesByCookbook(request: QueryListRecipesByCookbookRequest): Promise<QueryListRecipesByCookbookResponse> {
+    const data = QueryListRecipesByCookbookRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListRecipesByCookbook', data)
+    return promise.then((data) => QueryListRecipesByCookbookResponse.decode(new Reader(data)))
+  }
+
   Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse> {
     const data = QueryGetItemRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Item', data)
     return promise.then((data) => QueryGetItemResponse.decode(new Reader(data)))
-  }
-
-  ItemAll(request: QueryAllItemRequest): Promise<QueryAllItemResponse> {
-    const data = QueryAllItemRequest.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ItemAll', data)
-    return promise.then((data) => QueryAllItemResponse.decode(new Reader(data)))
   }
 
   Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse> {

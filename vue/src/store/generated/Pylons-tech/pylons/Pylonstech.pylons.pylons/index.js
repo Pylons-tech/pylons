@@ -6,6 +6,8 @@ import { DoubleKeyValue } from "./module/types/pylons/item";
 import { LongKeyValue } from "./module/types/pylons/item";
 import { StringKeyValue } from "./module/types/pylons/item";
 import { Item } from "./module/types/pylons/item";
+import { QueryAllItemRequest } from "./module/types/pylons/query";
+import { QueryAllItemResponse } from "./module/types/pylons/query";
 import { DoubleInputParam } from "./module/types/pylons/recipe";
 import { LongInputParam } from "./module/types/pylons/recipe";
 import { StringInputParam } from "./module/types/pylons/recipe";
@@ -22,7 +24,7 @@ import { ItemModifyOutput } from "./module/types/pylons/recipe";
 import { EntriesList } from "./module/types/pylons/recipe";
 import { WeightedOutputs } from "./module/types/pylons/recipe";
 import { Recipe } from "./module/types/pylons/recipe";
-export { Cookbook, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, Recipe };
+export { Cookbook, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, QueryAllItemRequest, QueryAllItemResponse, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, Recipe };
 async function initTxClient(vuexGetters) {
     return await txClient(vuexGetters['common/wallet/signer'], {
         addr: vuexGetters['common/env/apiTendermint']
@@ -56,8 +58,8 @@ function getStructure(template) {
 }
 const getDefaultState = () => {
     return {
+        ListRecipesByCookbook: {},
         Item: {},
-        ItemAll: {},
         Recipe: {},
         ListCookbooksByCreator: {},
         Cookbook: {},
@@ -67,6 +69,8 @@ const getDefaultState = () => {
             LongKeyValue: getStructure(LongKeyValue.fromPartial({})),
             StringKeyValue: getStructure(StringKeyValue.fromPartial({})),
             Item: getStructure(Item.fromPartial({})),
+            QueryAllItemRequest: getStructure(QueryAllItemRequest.fromPartial({})),
+            QueryAllItemResponse: getStructure(QueryAllItemResponse.fromPartial({})),
             DoubleInputParam: getStructure(DoubleInputParam.fromPartial({})),
             LongInputParam: getStructure(LongInputParam.fromPartial({})),
             StringInputParam: getStructure(StringInputParam.fromPartial({})),
@@ -107,17 +111,17 @@ export default {
         }
     },
     getters: {
+        getListRecipesByCookbook: (state) => (params = { params: {} }) => {
+            if (!params.query) {
+                params.query = null;
+            }
+            return state.ListRecipesByCookbook[JSON.stringify(params)] ?? {};
+        },
         getItem: (state) => (params = { params: {} }) => {
             if (!params.query) {
                 params.query = null;
             }
             return state.Item[JSON.stringify(params)] ?? {};
-        },
-        getItemAll: (state) => (params = { params: {} }) => {
-            if (!params.query) {
-                params.query = null;
-            }
-            return state.ItemAll[JSON.stringify(params)] ?? {};
         },
         getRecipe: (state) => (params = { params: {} }) => {
             if (!params.query) {
@@ -166,10 +170,23 @@ export default {
                 }
             });
         },
+        async QueryListRecipesByCookbook({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
+            try {
+                const queryClient = await initQueryClient(rootGetters);
+                let value = (await queryClient.queryListRecipesByCookbook(key.CookbookID)).data;
+                commit('QUERY', { query: 'ListRecipesByCookbook', key: { params: { ...key }, query }, value });
+                if (subscribe)
+                    commit('SUBSCRIBE', { action: 'QueryListRecipesByCookbook', payload: { options: { all }, params: { ...key }, query } });
+                return getters['getListRecipesByCookbook']({ params: { ...key }, query }) ?? {};
+            }
+            catch (e) {
+                throw new SpVuexError('QueryClient:QueryListRecipesByCookbook', 'API Node Unavailable. Could not perform query: ' + e.message);
+            }
+        },
         async QueryItem({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
             try {
                 const queryClient = await initQueryClient(rootGetters);
-                let value = (await queryClient.queryItem(key.index)).data;
+                let value = (await queryClient.queryItem(key.CookbookID, key.RecipeID, key.ID)).data;
                 commit('QUERY', { query: 'Item', key: { params: { ...key }, query }, value });
                 if (subscribe)
                     commit('SUBSCRIBE', { action: 'QueryItem', payload: { options: { all }, params: { ...key }, query } });
@@ -177,23 +194,6 @@ export default {
             }
             catch (e) {
                 throw new SpVuexError('QueryClient:QueryItem', 'API Node Unavailable. Could not perform query: ' + e.message);
-            }
-        },
-        async QueryItemAll({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
-            try {
-                const queryClient = await initQueryClient(rootGetters);
-                let value = (await queryClient.queryItemAll(query)).data;
-                while (all && value.pagination && value.pagination.nextKey != null) {
-                    let next_values = (await queryClient.queryItemAll({ ...query, 'pagination.key': value.pagination.nextKey })).data;
-                    value = mergeResults(value, next_values);
-                }
-                commit('QUERY', { query: 'ItemAll', key: { params: { ...key }, query }, value });
-                if (subscribe)
-                    commit('SUBSCRIBE', { action: 'QueryItemAll', payload: { options: { all }, params: { ...key }, query } });
-                return getters['getItemAll']({ params: { ...key }, query }) ?? {};
-            }
-            catch (e) {
-                throw new SpVuexError('QueryClient:QueryItemAll', 'API Node Unavailable. Could not perform query: ' + e.message);
             }
         },
         async QueryRecipe({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
@@ -235,37 +235,20 @@ export default {
                 throw new SpVuexError('QueryClient:QueryCookbook', 'API Node Unavailable. Could not perform query: ' + e.message);
             }
         },
-        async sendMsgUpdateRecipe({ rootGetters }, { value, fee = [], memo = '' }) {
+        async sendMsgSetItemString({ rootGetters }, { value, fee = [], memo = '' }) {
             try {
                 const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgUpdateRecipe(value);
+                const msg = await txClient.msgSetItemString(value);
                 const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
                         gas: "200000" }, memo });
                 return result;
             }
             catch (e) {
                 if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgUpdateRecipe:Init', 'Could not initialize signing client. Wallet is required.');
+                    throw new SpVuexError('TxClient:MsgSetItemString:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgUpdateRecipe:Send', 'Could not broadcast Tx: ' + e.message);
-                }
-            }
-        },
-        async sendMsgDeleteItem({ rootGetters }, { value, fee = [], memo = '' }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgDeleteItem(value);
-                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
-                        gas: "200000" }, memo });
-                return result;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgDeleteItem:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgDeleteItem:Send', 'Could not broadcast Tx: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgSetItemString:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
@@ -283,23 +266,6 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgCreateRecipe:Send', 'Could not broadcast Tx: ' + e.message);
-                }
-            }
-        },
-        async sendMsgUpdateItem({ rootGetters }, { value, fee = [], memo = '' }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgUpdateItem(value);
-                const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
-                        gas: "200000" }, memo });
-                return result;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgUpdateItem:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgUpdateItem:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
@@ -337,50 +303,35 @@ export default {
                 }
             }
         },
-        async sendMsgCreateItem({ rootGetters }, { value, fee = [], memo = '' }) {
+        async sendMsgUpdateRecipe({ rootGetters }, { value, fee = [], memo = '' }) {
             try {
                 const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgCreateItem(value);
+                const msg = await txClient.msgUpdateRecipe(value);
                 const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee,
                         gas: "200000" }, memo });
                 return result;
             }
             catch (e) {
                 if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgCreateItem:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgCreateItem:Send', 'Could not broadcast Tx: ' + e.message);
-                }
-            }
-        },
-        async MsgUpdateRecipe({ rootGetters }, { value }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgUpdateRecipe(value);
-                return msg;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
                     throw new SpVuexError('TxClient:MsgUpdateRecipe:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgUpdateRecipe:Create', 'Could not create message: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgUpdateRecipe:Send', 'Could not broadcast Tx: ' + e.message);
                 }
             }
         },
-        async MsgDeleteItem({ rootGetters }, { value }) {
+        async MsgSetItemString({ rootGetters }, { value }) {
             try {
                 const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgDeleteItem(value);
+                const msg = await txClient.msgSetItemString(value);
                 return msg;
             }
             catch (e) {
                 if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgDeleteItem:Init', 'Could not initialize signing client. Wallet is required.');
+                    throw new SpVuexError('TxClient:MsgSetItemString:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgDeleteItem:Create', 'Could not create message: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgSetItemString:Create', 'Could not create message: ' + e.message);
                 }
             }
         },
@@ -396,21 +347,6 @@ export default {
                 }
                 else {
                     throw new SpVuexError('TxClient:MsgCreateRecipe:Create', 'Could not create message: ' + e.message);
-                }
-            }
-        },
-        async MsgUpdateItem({ rootGetters }, { value }) {
-            try {
-                const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgUpdateItem(value);
-                return msg;
-            }
-            catch (e) {
-                if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgUpdateItem:Init', 'Could not initialize signing client. Wallet is required.');
-                }
-                else {
-                    throw new SpVuexError('TxClient:MsgUpdateItem:Create', 'Could not create message: ' + e.message);
                 }
             }
         },
@@ -444,18 +380,18 @@ export default {
                 }
             }
         },
-        async MsgCreateItem({ rootGetters }, { value }) {
+        async MsgUpdateRecipe({ rootGetters }, { value }) {
             try {
                 const txClient = await initTxClient(rootGetters);
-                const msg = await txClient.msgCreateItem(value);
+                const msg = await txClient.msgUpdateRecipe(value);
                 return msg;
             }
             catch (e) {
                 if (e == MissingWalletError) {
-                    throw new SpVuexError('TxClient:MsgCreateItem:Init', 'Could not initialize signing client. Wallet is required.');
+                    throw new SpVuexError('TxClient:MsgUpdateRecipe:Init', 'Could not initialize signing client. Wallet is required.');
                 }
                 else {
-                    throw new SpVuexError('TxClient:MsgCreateItem:Create', 'Could not create message: ' + e.message);
+                    throw new SpVuexError('TxClient:MsgUpdateRecipe:Create', 'Could not create message: ' + e.message);
                 }
             }
         },

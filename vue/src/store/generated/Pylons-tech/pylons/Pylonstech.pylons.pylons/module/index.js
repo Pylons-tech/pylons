@@ -2,21 +2,17 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgUpdateRecipe } from "./types/pylons/tx";
-import { MsgDeleteItem } from "./types/pylons/tx";
+import { MsgSetItemString } from "./types/pylons/tx";
 import { MsgCreateRecipe } from "./types/pylons/tx";
-import { MsgUpdateItem } from "./types/pylons/tx";
 import { MsgCreateCookbook } from "./types/pylons/tx";
 import { MsgUpdateCookbook } from "./types/pylons/tx";
-import { MsgCreateItem } from "./types/pylons/tx";
+import { MsgUpdateRecipe } from "./types/pylons/tx";
 const types = [
-    ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
-    ["/Pylonstech.pylons.pylons.MsgDeleteItem", MsgDeleteItem],
+    ["/Pylonstech.pylons.pylons.MsgSetItemString", MsgSetItemString],
     ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
-    ["/Pylonstech.pylons.pylons.MsgUpdateItem", MsgUpdateItem],
     ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
     ["/Pylonstech.pylons.pylons.MsgUpdateCookbook", MsgUpdateCookbook],
-    ["/Pylonstech.pylons.pylons.MsgCreateItem", MsgCreateItem],
+    ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
 ];
 export const MissingWalletError = new Error("wallet is required");
 const registry = new Registry(types);
@@ -31,13 +27,11 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     const { address } = (await wallet.getAccounts())[0];
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
-        msgUpdateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
-        msgDeleteItem: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgDeleteItem", value: data }),
+        msgSetItemString: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSetItemString", value: data }),
         msgCreateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
-        msgUpdateItem: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateItem", value: data }),
         msgCreateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
         msgUpdateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateCookbook", value: data }),
-        msgCreateItem: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateItem", value: data }),
+        msgUpdateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {

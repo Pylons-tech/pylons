@@ -1,68 +1,36 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal';
 import * as Long from 'long';
-import { DoubleKeyValue, LongKeyValue, StringKeyValue } from '../pylons/item';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseMsgCreateItem = {
-    creator: '',
-    ID: '',
-    cookbookID: '',
-    nodeVersion: '',
-    ownerRecipeID: '',
-    ownerTradeID: '',
-    tradable: false,
-    lastUpdate: 0,
-    transferFee: 0
-};
-export const MsgCreateItem = {
+const baseMsgSetItemString = { creator: '', cookbookID: '', recipeID: '', ID: '', field: '', value: '' };
+export const MsgSetItemString = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.ID !== '') {
-            writer.uint32(18).string(message.ID);
-        }
         if (message.cookbookID !== '') {
-            writer.uint32(26).string(message.cookbookID);
+            writer.uint32(18).string(message.cookbookID);
         }
-        if (message.nodeVersion !== '') {
-            writer.uint32(34).string(message.nodeVersion);
+        if (message.recipeID !== '') {
+            writer.uint32(26).string(message.recipeID);
         }
-        for (const v of message.Doubles) {
-            DoubleKeyValue.encode(v, writer.uint32(42).fork()).ldelim();
+        if (message.ID !== '') {
+            writer.uint32(34).string(message.ID);
         }
-        for (const v of message.Longs) {
-            LongKeyValue.encode(v, writer.uint32(50).fork()).ldelim();
+        if (message.field !== '') {
+            writer.uint32(42).string(message.field);
         }
-        for (const v of message.Strings) {
-            StringKeyValue.encode(v, writer.uint32(58).fork()).ldelim();
-        }
-        if (message.ownerRecipeID !== '') {
-            writer.uint32(74).string(message.ownerRecipeID);
-        }
-        if (message.ownerTradeID !== '') {
-            writer.uint32(82).string(message.ownerTradeID);
-        }
-        if (message.tradable === true) {
-            writer.uint32(88).bool(message.tradable);
-        }
-        if (message.lastUpdate !== 0) {
-            writer.uint32(96).uint64(message.lastUpdate);
-        }
-        if (message.transferFee !== 0) {
-            writer.uint32(104).uint64(message.transferFee);
+        if (message.value !== '') {
+            writer.uint32(50).string(message.value);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgCreateItem };
-        message.Doubles = [];
-        message.Longs = [];
-        message.Strings = [];
+        const message = { ...baseMsgSetItemString };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -70,37 +38,19 @@ export const MsgCreateItem = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.ID = reader.string();
-                    break;
-                case 3:
                     message.cookbookID = reader.string();
                     break;
+                case 3:
+                    message.recipeID = reader.string();
+                    break;
                 case 4:
-                    message.nodeVersion = reader.string();
+                    message.ID = reader.string();
                     break;
                 case 5:
-                    message.Doubles.push(DoubleKeyValue.decode(reader, reader.uint32()));
+                    message.field = reader.string();
                     break;
                 case 6:
-                    message.Longs.push(LongKeyValue.decode(reader, reader.uint32()));
-                    break;
-                case 7:
-                    message.Strings.push(StringKeyValue.decode(reader, reader.uint32()));
-                    break;
-                case 9:
-                    message.ownerRecipeID = reader.string();
-                    break;
-                case 10:
-                    message.ownerTradeID = reader.string();
-                    break;
-                case 11:
-                    message.tradable = reader.bool();
-                    break;
-                case 12:
-                    message.lastUpdate = longToNumber(reader.uint64());
-                    break;
-                case 13:
-                    message.transferFee = longToNumber(reader.uint64());
+                    message.value = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -110,21 +60,12 @@ export const MsgCreateItem = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseMsgCreateItem };
-        message.Doubles = [];
-        message.Longs = [];
-        message.Strings = [];
+        const message = { ...baseMsgSetItemString };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
             message.creator = '';
-        }
-        if (object.ID !== undefined && object.ID !== null) {
-            message.ID = String(object.ID);
-        }
-        else {
-            message.ID = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = String(object.cookbookID);
@@ -132,313 +73,11 @@ export const MsgCreateItem = {
         else {
             message.cookbookID = '';
         }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = String(object.nodeVersion);
+        if (object.recipeID !== undefined && object.recipeID !== null) {
+            message.recipeID = String(object.recipeID);
         }
         else {
-            message.nodeVersion = '';
-        }
-        if (object.Doubles !== undefined && object.Doubles !== null) {
-            for (const e of object.Doubles) {
-                message.Doubles.push(DoubleKeyValue.fromJSON(e));
-            }
-        }
-        if (object.Longs !== undefined && object.Longs !== null) {
-            for (const e of object.Longs) {
-                message.Longs.push(LongKeyValue.fromJSON(e));
-            }
-        }
-        if (object.Strings !== undefined && object.Strings !== null) {
-            for (const e of object.Strings) {
-                message.Strings.push(StringKeyValue.fromJSON(e));
-            }
-        }
-        if (object.ownerRecipeID !== undefined && object.ownerRecipeID !== null) {
-            message.ownerRecipeID = String(object.ownerRecipeID);
-        }
-        else {
-            message.ownerRecipeID = '';
-        }
-        if (object.ownerTradeID !== undefined && object.ownerTradeID !== null) {
-            message.ownerTradeID = String(object.ownerTradeID);
-        }
-        else {
-            message.ownerTradeID = '';
-        }
-        if (object.tradable !== undefined && object.tradable !== null) {
-            message.tradable = Boolean(object.tradable);
-        }
-        else {
-            message.tradable = false;
-        }
-        if (object.lastUpdate !== undefined && object.lastUpdate !== null) {
-            message.lastUpdate = Number(object.lastUpdate);
-        }
-        else {
-            message.lastUpdate = 0;
-        }
-        if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = Number(object.transferFee);
-        }
-        else {
-            message.transferFee = 0;
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        message.creator !== undefined && (obj.creator = message.creator);
-        message.ID !== undefined && (obj.ID = message.ID);
-        message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
-        if (message.Doubles) {
-            obj.Doubles = message.Doubles.map((e) => (e ? DoubleKeyValue.toJSON(e) : undefined));
-        }
-        else {
-            obj.Doubles = [];
-        }
-        if (message.Longs) {
-            obj.Longs = message.Longs.map((e) => (e ? LongKeyValue.toJSON(e) : undefined));
-        }
-        else {
-            obj.Longs = [];
-        }
-        if (message.Strings) {
-            obj.Strings = message.Strings.map((e) => (e ? StringKeyValue.toJSON(e) : undefined));
-        }
-        else {
-            obj.Strings = [];
-        }
-        message.ownerRecipeID !== undefined && (obj.ownerRecipeID = message.ownerRecipeID);
-        message.ownerTradeID !== undefined && (obj.ownerTradeID = message.ownerTradeID);
-        message.tradable !== undefined && (obj.tradable = message.tradable);
-        message.lastUpdate !== undefined && (obj.lastUpdate = message.lastUpdate);
-        message.transferFee !== undefined && (obj.transferFee = message.transferFee);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseMsgCreateItem };
-        message.Doubles = [];
-        message.Longs = [];
-        message.Strings = [];
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = object.creator;
-        }
-        else {
-            message.creator = '';
-        }
-        if (object.ID !== undefined && object.ID !== null) {
-            message.ID = object.ID;
-        }
-        else {
-            message.ID = '';
-        }
-        if (object.cookbookID !== undefined && object.cookbookID !== null) {
-            message.cookbookID = object.cookbookID;
-        }
-        else {
-            message.cookbookID = '';
-        }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = object.nodeVersion;
-        }
-        else {
-            message.nodeVersion = '';
-        }
-        if (object.Doubles !== undefined && object.Doubles !== null) {
-            for (const e of object.Doubles) {
-                message.Doubles.push(DoubleKeyValue.fromPartial(e));
-            }
-        }
-        if (object.Longs !== undefined && object.Longs !== null) {
-            for (const e of object.Longs) {
-                message.Longs.push(LongKeyValue.fromPartial(e));
-            }
-        }
-        if (object.Strings !== undefined && object.Strings !== null) {
-            for (const e of object.Strings) {
-                message.Strings.push(StringKeyValue.fromPartial(e));
-            }
-        }
-        if (object.ownerRecipeID !== undefined && object.ownerRecipeID !== null) {
-            message.ownerRecipeID = object.ownerRecipeID;
-        }
-        else {
-            message.ownerRecipeID = '';
-        }
-        if (object.ownerTradeID !== undefined && object.ownerTradeID !== null) {
-            message.ownerTradeID = object.ownerTradeID;
-        }
-        else {
-            message.ownerTradeID = '';
-        }
-        if (object.tradable !== undefined && object.tradable !== null) {
-            message.tradable = object.tradable;
-        }
-        else {
-            message.tradable = false;
-        }
-        if (object.lastUpdate !== undefined && object.lastUpdate !== null) {
-            message.lastUpdate = object.lastUpdate;
-        }
-        else {
-            message.lastUpdate = 0;
-        }
-        if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = object.transferFee;
-        }
-        else {
-            message.transferFee = 0;
-        }
-        return message;
-    }
-};
-const baseMsgCreateItemResponse = {};
-export const MsgCreateItemResponse = {
-    encode(_, writer = Writer.create()) {
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgCreateItemResponse };
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(_) {
-        const message = { ...baseMsgCreateItemResponse };
-        return message;
-    },
-    toJSON(_) {
-        const obj = {};
-        return obj;
-    },
-    fromPartial(_) {
-        const message = { ...baseMsgCreateItemResponse };
-        return message;
-    }
-};
-const baseMsgUpdateItem = {
-    creator: '',
-    ID: '',
-    cookbookID: '',
-    nodeVersion: '',
-    ownerRecipeID: '',
-    ownerTradeID: '',
-    tradable: false,
-    lastUpdate: 0,
-    transferFee: 0
-};
-export const MsgUpdateItem = {
-    encode(message, writer = Writer.create()) {
-        if (message.creator !== '') {
-            writer.uint32(10).string(message.creator);
-        }
-        if (message.ID !== '') {
-            writer.uint32(18).string(message.ID);
-        }
-        if (message.cookbookID !== '') {
-            writer.uint32(26).string(message.cookbookID);
-        }
-        if (message.nodeVersion !== '') {
-            writer.uint32(34).string(message.nodeVersion);
-        }
-        for (const v of message.Doubles) {
-            DoubleKeyValue.encode(v, writer.uint32(42).fork()).ldelim();
-        }
-        for (const v of message.Longs) {
-            LongKeyValue.encode(v, writer.uint32(50).fork()).ldelim();
-        }
-        for (const v of message.Strings) {
-            StringKeyValue.encode(v, writer.uint32(58).fork()).ldelim();
-        }
-        if (message.ownerRecipeID !== '') {
-            writer.uint32(74).string(message.ownerRecipeID);
-        }
-        if (message.ownerTradeID !== '') {
-            writer.uint32(82).string(message.ownerTradeID);
-        }
-        if (message.tradable === true) {
-            writer.uint32(88).bool(message.tradable);
-        }
-        if (message.lastUpdate !== 0) {
-            writer.uint32(96).uint64(message.lastUpdate);
-        }
-        if (message.transferFee !== 0) {
-            writer.uint32(104).uint64(message.transferFee);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgUpdateItem };
-        message.Doubles = [];
-        message.Longs = [];
-        message.Strings = [];
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.creator = reader.string();
-                    break;
-                case 2:
-                    message.ID = reader.string();
-                    break;
-                case 3:
-                    message.cookbookID = reader.string();
-                    break;
-                case 4:
-                    message.nodeVersion = reader.string();
-                    break;
-                case 5:
-                    message.Doubles.push(DoubleKeyValue.decode(reader, reader.uint32()));
-                    break;
-                case 6:
-                    message.Longs.push(LongKeyValue.decode(reader, reader.uint32()));
-                    break;
-                case 7:
-                    message.Strings.push(StringKeyValue.decode(reader, reader.uint32()));
-                    break;
-                case 9:
-                    message.ownerRecipeID = reader.string();
-                    break;
-                case 10:
-                    message.ownerTradeID = reader.string();
-                    break;
-                case 11:
-                    message.tradable = reader.bool();
-                    break;
-                case 12:
-                    message.lastUpdate = longToNumber(reader.uint64());
-                    break;
-                case 13:
-                    message.transferFee = longToNumber(reader.uint64());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseMsgUpdateItem };
-        message.Doubles = [];
-        message.Longs = [];
-        message.Strings = [];
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = String(object.creator);
-        }
-        else {
-            message.creator = '';
+            message.recipeID = '';
         }
         if (object.ID !== undefined && object.ID !== null) {
             message.ID = String(object.ID);
@@ -446,112 +85,37 @@ export const MsgUpdateItem = {
         else {
             message.ID = '';
         }
-        if (object.cookbookID !== undefined && object.cookbookID !== null) {
-            message.cookbookID = String(object.cookbookID);
+        if (object.field !== undefined && object.field !== null) {
+            message.field = String(object.field);
         }
         else {
-            message.cookbookID = '';
+            message.field = '';
         }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = String(object.nodeVersion);
-        }
-        else {
-            message.nodeVersion = '';
-        }
-        if (object.Doubles !== undefined && object.Doubles !== null) {
-            for (const e of object.Doubles) {
-                message.Doubles.push(DoubleKeyValue.fromJSON(e));
-            }
-        }
-        if (object.Longs !== undefined && object.Longs !== null) {
-            for (const e of object.Longs) {
-                message.Longs.push(LongKeyValue.fromJSON(e));
-            }
-        }
-        if (object.Strings !== undefined && object.Strings !== null) {
-            for (const e of object.Strings) {
-                message.Strings.push(StringKeyValue.fromJSON(e));
-            }
-        }
-        if (object.ownerRecipeID !== undefined && object.ownerRecipeID !== null) {
-            message.ownerRecipeID = String(object.ownerRecipeID);
+        if (object.value !== undefined && object.value !== null) {
+            message.value = String(object.value);
         }
         else {
-            message.ownerRecipeID = '';
-        }
-        if (object.ownerTradeID !== undefined && object.ownerTradeID !== null) {
-            message.ownerTradeID = String(object.ownerTradeID);
-        }
-        else {
-            message.ownerTradeID = '';
-        }
-        if (object.tradable !== undefined && object.tradable !== null) {
-            message.tradable = Boolean(object.tradable);
-        }
-        else {
-            message.tradable = false;
-        }
-        if (object.lastUpdate !== undefined && object.lastUpdate !== null) {
-            message.lastUpdate = Number(object.lastUpdate);
-        }
-        else {
-            message.lastUpdate = 0;
-        }
-        if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = Number(object.transferFee);
-        }
-        else {
-            message.transferFee = 0;
+            message.value = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.ID !== undefined && (obj.ID = message.ID);
         message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
-        message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
-        if (message.Doubles) {
-            obj.Doubles = message.Doubles.map((e) => (e ? DoubleKeyValue.toJSON(e) : undefined));
-        }
-        else {
-            obj.Doubles = [];
-        }
-        if (message.Longs) {
-            obj.Longs = message.Longs.map((e) => (e ? LongKeyValue.toJSON(e) : undefined));
-        }
-        else {
-            obj.Longs = [];
-        }
-        if (message.Strings) {
-            obj.Strings = message.Strings.map((e) => (e ? StringKeyValue.toJSON(e) : undefined));
-        }
-        else {
-            obj.Strings = [];
-        }
-        message.ownerRecipeID !== undefined && (obj.ownerRecipeID = message.ownerRecipeID);
-        message.ownerTradeID !== undefined && (obj.ownerTradeID = message.ownerTradeID);
-        message.tradable !== undefined && (obj.tradable = message.tradable);
-        message.lastUpdate !== undefined && (obj.lastUpdate = message.lastUpdate);
-        message.transferFee !== undefined && (obj.transferFee = message.transferFee);
+        message.recipeID !== undefined && (obj.recipeID = message.recipeID);
+        message.ID !== undefined && (obj.ID = message.ID);
+        message.field !== undefined && (obj.field = message.field);
+        message.value !== undefined && (obj.value = message.value);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseMsgUpdateItem };
-        message.Doubles = [];
-        message.Longs = [];
-        message.Strings = [];
+        const message = { ...baseMsgSetItemString };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
             message.creator = '';
-        }
-        if (object.ID !== undefined && object.ID !== null) {
-            message.ID = object.ID;
-        }
-        else {
-            message.ID = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = object.cookbookID;
@@ -559,152 +123,11 @@ export const MsgUpdateItem = {
         else {
             message.cookbookID = '';
         }
-        if (object.nodeVersion !== undefined && object.nodeVersion !== null) {
-            message.nodeVersion = object.nodeVersion;
+        if (object.recipeID !== undefined && object.recipeID !== null) {
+            message.recipeID = object.recipeID;
         }
         else {
-            message.nodeVersion = '';
-        }
-        if (object.Doubles !== undefined && object.Doubles !== null) {
-            for (const e of object.Doubles) {
-                message.Doubles.push(DoubleKeyValue.fromPartial(e));
-            }
-        }
-        if (object.Longs !== undefined && object.Longs !== null) {
-            for (const e of object.Longs) {
-                message.Longs.push(LongKeyValue.fromPartial(e));
-            }
-        }
-        if (object.Strings !== undefined && object.Strings !== null) {
-            for (const e of object.Strings) {
-                message.Strings.push(StringKeyValue.fromPartial(e));
-            }
-        }
-        if (object.ownerRecipeID !== undefined && object.ownerRecipeID !== null) {
-            message.ownerRecipeID = object.ownerRecipeID;
-        }
-        else {
-            message.ownerRecipeID = '';
-        }
-        if (object.ownerTradeID !== undefined && object.ownerTradeID !== null) {
-            message.ownerTradeID = object.ownerTradeID;
-        }
-        else {
-            message.ownerTradeID = '';
-        }
-        if (object.tradable !== undefined && object.tradable !== null) {
-            message.tradable = object.tradable;
-        }
-        else {
-            message.tradable = false;
-        }
-        if (object.lastUpdate !== undefined && object.lastUpdate !== null) {
-            message.lastUpdate = object.lastUpdate;
-        }
-        else {
-            message.lastUpdate = 0;
-        }
-        if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = object.transferFee;
-        }
-        else {
-            message.transferFee = 0;
-        }
-        return message;
-    }
-};
-const baseMsgUpdateItemResponse = {};
-export const MsgUpdateItemResponse = {
-    encode(_, writer = Writer.create()) {
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgUpdateItemResponse };
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(_) {
-        const message = { ...baseMsgUpdateItemResponse };
-        return message;
-    },
-    toJSON(_) {
-        const obj = {};
-        return obj;
-    },
-    fromPartial(_) {
-        const message = { ...baseMsgUpdateItemResponse };
-        return message;
-    }
-};
-const baseMsgDeleteItem = { creator: '', ID: '' };
-export const MsgDeleteItem = {
-    encode(message, writer = Writer.create()) {
-        if (message.creator !== '') {
-            writer.uint32(10).string(message.creator);
-        }
-        if (message.ID !== '') {
-            writer.uint32(18).string(message.ID);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgDeleteItem };
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.creator = reader.string();
-                    break;
-                case 2:
-                    message.ID = reader.string();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseMsgDeleteItem };
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = String(object.creator);
-        }
-        else {
-            message.creator = '';
-        }
-        if (object.ID !== undefined && object.ID !== null) {
-            message.ID = String(object.ID);
-        }
-        else {
-            message.ID = '';
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        message.creator !== undefined && (obj.creator = message.creator);
-        message.ID !== undefined && (obj.ID = message.ID);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseMsgDeleteItem };
-        if (object.creator !== undefined && object.creator !== null) {
-            message.creator = object.creator;
-        }
-        else {
-            message.creator = '';
+            message.recipeID = '';
         }
         if (object.ID !== undefined && object.ID !== null) {
             message.ID = object.ID;
@@ -712,18 +135,30 @@ export const MsgDeleteItem = {
         else {
             message.ID = '';
         }
+        if (object.field !== undefined && object.field !== null) {
+            message.field = object.field;
+        }
+        else {
+            message.field = '';
+        }
+        if (object.value !== undefined && object.value !== null) {
+            message.value = object.value;
+        }
+        else {
+            message.value = '';
+        }
         return message;
     }
 };
-const baseMsgDeleteItemResponse = {};
-export const MsgDeleteItemResponse = {
+const baseMsgSetItemStringResponse = {};
+export const MsgSetItemStringResponse = {
     encode(_, writer = Writer.create()) {
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgDeleteItemResponse };
+        const message = { ...baseMsgSetItemStringResponse };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -735,7 +170,7 @@ export const MsgDeleteItemResponse = {
         return message;
     },
     fromJSON(_) {
-        const message = { ...baseMsgDeleteItemResponse };
+        const message = { ...baseMsgSetItemStringResponse };
         return message;
     },
     toJSON(_) {
@@ -743,7 +178,7 @@ export const MsgDeleteItemResponse = {
         return obj;
     },
     fromPartial(_) {
-        const message = { ...baseMsgDeleteItemResponse };
+        const message = { ...baseMsgSetItemStringResponse };
         return message;
     }
 };
@@ -1959,20 +1394,10 @@ export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
     }
-    CreateItem(request) {
-        const data = MsgCreateItem.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'CreateItem', data);
-        return promise.then((data) => MsgCreateItemResponse.decode(new Reader(data)));
-    }
-    UpdateItem(request) {
-        const data = MsgUpdateItem.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'UpdateItem', data);
-        return promise.then((data) => MsgUpdateItemResponse.decode(new Reader(data)));
-    }
-    DeleteItem(request) {
-        const data = MsgDeleteItem.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'DeleteItem', data);
-        return promise.then((data) => MsgDeleteItemResponse.decode(new Reader(data)));
+    SetItemString(request) {
+        const data = MsgSetItemString.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'SetItemString', data);
+        return promise.then((data) => MsgSetItemStringResponse.decode(new Reader(data)));
     }
     CreateRecipe(request) {
         const data = MsgCreateRecipe.encode(request).finish();

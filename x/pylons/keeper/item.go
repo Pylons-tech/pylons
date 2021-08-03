@@ -9,16 +9,16 @@ import (
 
 // SetItem set a specific item in the store from its index
 func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey+item.CookbookID+item.RecipeID))
 	b := k.cdc.MustMarshalBinaryBare(&item)
 	store.Set(types.KeyPrefix(item.ID), b)
 }
 
-// GetItem returns a item from its index
-func (k Keeper) GetItem(ctx sdk.Context, index string) (val types.Item, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
+// GetItem returns an item from its index
+func (k Keeper) GetItem(ctx sdk.Context, cookbookID string, recipeID string, id string) (val types.Item, found bool) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey+cookbookID+recipeID))
 
-	b := store.Get(types.KeyPrefix(index))
+	b := store.Get(types.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -27,18 +27,18 @@ func (k Keeper) GetItem(ctx sdk.Context, index string) (val types.Item, found bo
 	return val, true
 }
 
-// RemoveItem removes a item from the store
-func (k Keeper) RemoveItem(ctx sdk.Context, index string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
-	store.Delete(types.KeyPrefix(index))
-}
-
 // GetAllItem returns all item
 func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
-	defer iterator.Close()
+	defer func(iterator sdk.Iterator) {
+		err := iterator.Close()
+		// nolint: staticcheck
+		if err != nil {
+
+		}
+	}(iterator)
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Item

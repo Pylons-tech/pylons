@@ -25,17 +25,17 @@ func TestItemQuerySingle(t *testing.T) {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetItemRequest{Index: msgs[0].ID},
+			request:  &types.QueryGetItemRequest{CookbookID: msgs[0].CookbookID, RecipeID: msgs[0].RecipeID, ID: msgs[0].ID},
 			response: &types.QueryGetItemResponse{Item: &msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetItemRequest{Index: msgs[1].ID},
+			request:  &types.QueryGetItemRequest{CookbookID: msgs[1].CookbookID, RecipeID: msgs[1].RecipeID, ID: msgs[1].ID},
 			response: &types.QueryGetItemResponse{Item: &msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetItemRequest{Index: "missing"},
+			request: &types.QueryGetItemRequest{ID: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{

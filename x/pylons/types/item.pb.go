@@ -177,18 +177,19 @@ func (m *StringKeyValue) GetValue() string {
 }
 
 type Item struct {
-	Creator       string           `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ID            string           `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	CookbookID    string           `protobuf:"bytes,3,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	NodeVersion   string           `protobuf:"bytes,4,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
-	Doubles       []DoubleKeyValue `protobuf:"bytes,5,rep,name=Doubles,proto3" json:"Doubles"`
-	Longs         []LongKeyValue   `protobuf:"bytes,6,rep,name=Longs,proto3" json:"Longs"`
-	Strings       []StringKeyValue `protobuf:"bytes,7,rep,name=Strings,proto3" json:"Strings"`
-	OwnerRecipeID string           `protobuf:"bytes,8,opt,name=ownerRecipeID,proto3" json:"ownerRecipeID,omitempty"`
-	OwnerTradeID  string           `protobuf:"bytes,9,opt,name=ownerTradeID,proto3" json:"ownerTradeID,omitempty"`
-	Tradeable     bool             `protobuf:"varint,10,opt,name=tradeable,proto3" json:"tradeable,omitempty"`
-	LastUpdate    uint64           `protobuf:"varint,11,opt,name=lastUpdate,proto3" json:"lastUpdate,omitempty"`
-	TransferFee   uint64           `protobuf:"varint,12,opt,name=transferFee,proto3" json:"transferFee,omitempty"`
+	Creator        string           `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	CookbookID     string           `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	RecipeID       string           `protobuf:"bytes,3,opt,name=recipeID,proto3" json:"recipeID,omitempty"`
+	ID             string           `protobuf:"bytes,4,opt,name=ID,proto3" json:"ID,omitempty"`
+	NodeVersion    string           `protobuf:"bytes,5,opt,name=nodeVersion,proto3" json:"nodeVersion,omitempty"`
+	Doubles        []DoubleKeyValue `protobuf:"bytes,6,rep,name=doubles,proto3" json:"doubles"`
+	Longs          []LongKeyValue   `protobuf:"bytes,7,rep,name=longs,proto3" json:"longs"`
+	Strings        []StringKeyValue `protobuf:"bytes,8,rep,name=strings,proto3" json:"strings"`
+	MutableStrings []StringKeyValue `protobuf:"bytes,9,rep,name=mutableStrings,proto3" json:"mutableStrings"`
+	LastTradeID    string           `protobuf:"bytes,10,opt,name=lastTradeID,proto3" json:"lastTradeID,omitempty"`
+	Tradeable      bool             `protobuf:"varint,11,opt,name=tradeable,proto3" json:"tradeable,omitempty"`
+	LastUpdate     uint64           `protobuf:"varint,12,opt,name=lastUpdate,proto3" json:"lastUpdate,omitempty"`
+	TransferFee    uint64           `protobuf:"varint,13,opt,name=transferFee,proto3" json:"transferFee,omitempty"`
 }
 
 func (m *Item) Reset()         { *m = Item{} }
@@ -231,16 +232,23 @@ func (m *Item) GetCreator() string {
 	return ""
 }
 
-func (m *Item) GetID() string {
+func (m *Item) GetCookbookID() string {
 	if m != nil {
-		return m.ID
+		return m.CookbookID
 	}
 	return ""
 }
 
-func (m *Item) GetCookbookID() string {
+func (m *Item) GetRecipeID() string {
 	if m != nil {
-		return m.CookbookID
+		return m.RecipeID
+	}
+	return ""
+}
+
+func (m *Item) GetID() string {
+	if m != nil {
+		return m.ID
 	}
 	return ""
 }
@@ -273,16 +281,16 @@ func (m *Item) GetStrings() []StringKeyValue {
 	return nil
 }
 
-func (m *Item) GetOwnerRecipeID() string {
+func (m *Item) GetMutableStrings() []StringKeyValue {
 	if m != nil {
-		return m.OwnerRecipeID
+		return m.MutableStrings
 	}
-	return ""
+	return nil
 }
 
-func (m *Item) GetOwnerTradeID() string {
+func (m *Item) GetLastTradeID() string {
 	if m != nil {
-		return m.OwnerTradeID
+		return m.LastTradeID
 	}
 	return ""
 }
@@ -318,36 +326,37 @@ func init() {
 func init() { proto.RegisterFile("pylons/item.proto", fileDescriptor_5354a600fdd82843) }
 
 var fileDescriptor_5354a600fdd82843 = []byte{
-	// 459 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0x41, 0x8b, 0xd3, 0x40,
-	0x14, 0xc7, 0x9b, 0xa6, 0xdd, 0x6e, 0x5f, 0x6b, 0xd1, 0x61, 0x0f, 0x83, 0x48, 0x36, 0x14, 0x59,
-	0x72, 0x70, 0x13, 0x50, 0x10, 0xcf, 0x25, 0x2c, 0x86, 0xf5, 0x20, 0x51, 0xf7, 0xe0, 0x2d, 0x49,
-	0x9f, 0x6d, 0x68, 0x9a, 0x17, 0x32, 0x53, 0xb4, 0xdf, 0xc2, 0x8f, 0xb5, 0xc7, 0x3d, 0x8a, 0x87,
-	0x45, 0xda, 0xaf, 0xe0, 0x07, 0x90, 0x99, 0x24, 0x98, 0x1e, 0xaa, 0x7b, 0x9a, 0x97, 0xdf, 0xfc,
-	0xff, 0x33, 0x93, 0xff, 0x9b, 0x81, 0x27, 0xc5, 0x36, 0xa3, 0x5c, 0x78, 0xa9, 0xc4, 0xb5, 0x5b,
-	0x94, 0x24, 0x89, 0xf1, 0xf7, 0x1a, 0x49, 0x4c, 0x96, 0x6e, 0x35, 0x5b, 0x0f, 0x4f, 0xcf, 0x16,
-	0xb4, 0x20, 0x2d, 0xf2, 0x54, 0x55, 0xe9, 0xa7, 0x4b, 0x98, 0xf8, 0xb4, 0x89, 0x33, 0xbc, 0xc6,
-	0xed, 0x4d, 0x94, 0x6d, 0x90, 0x3d, 0x06, 0xf3, 0x1a, 0xb7, 0xdc, 0xb0, 0x0d, 0x67, 0x18, 0xaa,
-	0x92, 0xf9, 0xd0, 0xd7, 0x53, 0xbc, 0xab, 0xd8, 0xcc, 0xbd, 0xbd, 0x3f, 0xef, 0xfc, 0xbc, 0x3f,
-	0xbf, 0x58, 0xa4, 0x72, 0xb9, 0x89, 0xdd, 0x84, 0xd6, 0x5e, 0x42, 0x62, 0x4d, 0xa2, 0x1e, 0x2e,
-	0xc5, 0x7c, 0xe5, 0xc9, 0x6d, 0x81, 0xc2, 0xf5, 0x31, 0x09, 0x2b, 0xf3, 0xf4, 0x35, 0x8c, 0xdf,
-	0x51, 0xbe, 0xf8, 0xc7, 0x3e, 0x67, 0xed, 0x7d, 0xcc, 0xc6, 0xf7, 0x06, 0x26, 0x1f, 0x64, 0x99,
-	0x3e, 0xdc, 0x39, 0x6c, 0x9c, 0xbf, 0x4d, 0xe8, 0x05, 0x12, 0xd7, 0x8c, 0xc3, 0x20, 0x29, 0x31,
-	0x92, 0x54, 0xd6, 0xa6, 0xe6, 0x93, 0x4d, 0xa0, 0x1b, 0xf8, 0xb5, 0xab, 0x1b, 0xf8, 0xcc, 0x02,
-	0x48, 0x88, 0x56, 0x31, 0xd1, 0x2a, 0xf0, 0xb9, 0xa9, 0x79, 0x8b, 0x30, 0x1b, 0x46, 0x39, 0xcd,
-	0xf1, 0x06, 0x4b, 0x91, 0x52, 0xce, 0x7b, 0x5a, 0xd0, 0x46, 0xec, 0x2d, 0x0c, 0xaa, 0x40, 0x05,
-	0xef, 0xdb, 0xa6, 0x33, 0x7a, 0xe9, 0xb8, 0xc7, 0x5a, 0xe2, 0x1e, 0x26, 0x3f, 0xeb, 0xa9, 0x60,
-	0xc3, 0xc6, 0xce, 0x66, 0xd0, 0x57, 0x81, 0x09, 0x7e, 0xa2, 0xd7, 0xb9, 0x38, 0xbe, 0x4e, 0x3b,
-	0xd7, 0x7a, 0x95, 0xca, 0xaa, 0x4e, 0x53, 0x85, 0x27, 0xf8, 0xe0, 0x7f, 0xa7, 0x39, 0x4c, 0xb9,
-	0x39, 0x4d, 0x6d, 0x67, 0xcf, 0xe1, 0x11, 0x7d, 0xcd, 0xb1, 0x0c, 0x31, 0x49, 0x0b, 0x0c, 0x7c,
-	0x7e, 0xaa, 0xff, 0xfd, 0x10, 0xb2, 0x29, 0x8c, 0x35, 0xf8, 0x58, 0x46, 0x73, 0x25, 0x1a, 0x6a,
-	0xd1, 0x01, 0x63, 0xcf, 0x60, 0x28, 0x55, 0x19, 0xc5, 0x19, 0x72, 0xb0, 0x0d, 0xe7, 0x34, 0xfc,
-	0x0b, 0x54, 0x07, 0xb2, 0x48, 0xc8, 0x4f, 0xc5, 0x3c, 0x92, 0xc8, 0x47, 0xb6, 0xe1, 0xf4, 0xc2,
-	0x16, 0x51, 0x1d, 0x90, 0x65, 0x94, 0x8b, 0x2f, 0x58, 0x5e, 0x21, 0xf2, 0xb1, 0x16, 0xb4, 0xd1,
-	0xec, 0xea, 0x76, 0x67, 0x19, 0x77, 0x3b, 0xcb, 0xf8, 0xb5, 0xb3, 0x8c, 0xef, 0x7b, 0xab, 0x73,
-	0xb7, 0xb7, 0x3a, 0x3f, 0xf6, 0x56, 0xe7, 0xf3, 0x8b, 0xd6, 0x8d, 0xad, 0x62, 0xb8, 0x54, 0x39,
-	0x78, 0xf5, 0x33, 0xfa, 0xd6, 0x14, 0xfa, 0xee, 0xc6, 0x27, 0xfa, 0x85, 0xbc, 0xfa, 0x13, 0x00,
-	0x00, 0xff, 0xff, 0x2c, 0xa7, 0xd0, 0xc7, 0x66, 0x03, 0x00, 0x00,
+	// 472 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x53, 0x4d, 0x6f, 0xd3, 0x40,
+	0x10, 0x8d, 0x1b, 0xa7, 0x49, 0x36, 0x25, 0x82, 0x55, 0x0f, 0xab, 0x0a, 0xb9, 0x56, 0x0f, 0x95,
+	0x0f, 0xd4, 0x96, 0x40, 0x42, 0x9c, 0x23, 0xab, 0xc2, 0x2a, 0x07, 0xe4, 0x42, 0x0e, 0xdc, 0xfc,
+	0x31, 0x38, 0x56, 0x6c, 0x8f, 0xb5, 0xbb, 0x91, 0xc8, 0xbf, 0xe0, 0x27, 0x71, 0xec, 0xb1, 0x47,
+	0xc4, 0xa1, 0x42, 0xc9, 0x1f, 0x41, 0xbb, 0xb6, 0xc1, 0x45, 0x2a, 0x20, 0x4e, 0x9e, 0x7d, 0x33,
+	0xef, 0xed, 0xec, 0x1b, 0x0f, 0x79, 0x52, 0x6f, 0x0b, 0xac, 0x84, 0x97, 0x4b, 0x28, 0xdd, 0x9a,
+	0xa3, 0x44, 0xca, 0xde, 0x6a, 0x48, 0x42, 0xb2, 0x72, 0x9b, 0x6c, 0xfb, 0x39, 0x39, 0xce, 0x30,
+	0x43, 0x5d, 0xe4, 0xa9, 0xa8, 0xa9, 0x3f, 0x5b, 0x91, 0xb9, 0x8f, 0x9b, 0xb8, 0x80, 0x2b, 0xd8,
+	0x2e, 0xa3, 0x62, 0x03, 0xf4, 0x31, 0x19, 0x5e, 0xc1, 0x96, 0x19, 0xb6, 0xe1, 0x4c, 0x43, 0x15,
+	0x52, 0x9f, 0x8c, 0x74, 0x8a, 0x1d, 0x28, 0x6c, 0xe1, 0xde, 0xdc, 0x9d, 0x0e, 0xbe, 0xdd, 0x9d,
+	0x9e, 0x67, 0xb9, 0x5c, 0x6d, 0x62, 0x37, 0xc1, 0xd2, 0x4b, 0x50, 0x94, 0x28, 0xda, 0xcf, 0x85,
+	0x48, 0xd7, 0x9e, 0xdc, 0xd6, 0x20, 0x5c, 0x1f, 0x92, 0xb0, 0x21, 0x9f, 0xbd, 0x24, 0x47, 0x6f,
+	0xb0, 0xca, 0xfe, 0x70, 0xcf, 0x71, 0xff, 0x9e, 0x61, 0xc7, 0x7b, 0x45, 0xe6, 0xd7, 0x92, 0xe7,
+	0xff, 0xce, 0x9c, 0x76, 0xcc, 0x2f, 0x26, 0x31, 0x03, 0x09, 0x25, 0x65, 0x64, 0x9c, 0x70, 0x88,
+	0x24, 0xf2, 0x96, 0xd4, 0x1d, 0xa9, 0x45, 0x48, 0x82, 0xb8, 0x8e, 0x11, 0xd7, 0x81, 0xdf, 0xb2,
+	0x7b, 0x08, 0x3d, 0x21, 0x13, 0x0e, 0x49, 0x5e, 0x43, 0xe0, 0xb3, 0xa1, 0xce, 0xfe, 0x3c, 0xd3,
+	0x39, 0x39, 0x08, 0x7c, 0x66, 0x6a, 0xf4, 0x20, 0xf0, 0xa9, 0x4d, 0x66, 0x15, 0xa6, 0xb0, 0x04,
+	0x2e, 0x72, 0xac, 0xd8, 0x48, 0x27, 0xfa, 0x10, 0x7d, 0x4d, 0xc6, 0xa9, 0x36, 0x5b, 0xb0, 0x43,
+	0x7b, 0xe8, 0xcc, 0x9e, 0x3b, 0xee, 0x43, 0xe3, 0x72, 0xef, 0x4f, 0x65, 0x61, 0x2a, 0xd3, 0xc3,
+	0x8e, 0x4e, 0x17, 0x64, 0x54, 0x60, 0x95, 0x09, 0x36, 0xd6, 0x3a, 0xe7, 0x0f, 0xeb, 0xf4, 0x3d,
+	0x6f, 0x55, 0x1a, 0xaa, 0xea, 0x46, 0x68, 0x63, 0x05, 0x9b, 0xfc, 0xad, 0x9b, 0xfb, 0x13, 0xe8,
+	0xba, 0x69, 0xe9, 0x74, 0x49, 0xe6, 0xe5, 0x46, 0x46, 0x71, 0x01, 0xd7, 0xad, 0xe0, 0xf4, 0xbf,
+	0x04, 0x7f, 0x53, 0x51, 0x8e, 0x16, 0x91, 0x90, 0xef, 0x78, 0x94, 0xaa, 0x01, 0x90, 0xc6, 0xd1,
+	0x1e, 0x44, 0x9f, 0x92, 0xa9, 0x54, 0xa1, 0x62, 0xb1, 0x99, 0x6d, 0x38, 0x93, 0xf0, 0x17, 0xa0,
+	0xa6, 0xab, 0x8a, 0xdf, 0xd7, 0x69, 0x24, 0x81, 0x1d, 0xd9, 0x86, 0x63, 0x86, 0x3d, 0x44, 0xe9,
+	0x4b, 0x1e, 0x55, 0xe2, 0x23, 0xf0, 0x4b, 0x00, 0xf6, 0x48, 0x17, 0xf4, 0xa1, 0xc5, 0xe5, 0xcd,
+	0xce, 0x32, 0x6e, 0x77, 0x96, 0xf1, 0x7d, 0x67, 0x19, 0x9f, 0xf7, 0xd6, 0xe0, 0x76, 0x6f, 0x0d,
+	0xbe, 0xee, 0xad, 0xc1, 0x87, 0x67, 0xbd, 0xbf, 0xbf, 0x79, 0xe5, 0x85, 0x7a, 0xa6, 0xd7, 0xae,
+	0xe4, 0xa7, 0x2e, 0xd0, 0x7b, 0x10, 0x1f, 0xea, 0x6d, 0x7b, 0xf1, 0x23, 0x00, 0x00, 0xff, 0xff,
+	0xd1, 0x2e, 0x00, 0x8a, 0xb2, 0x03, 0x00, 0x00,
 }
 
 func (m *DoubleKeyValue) Marshal() (dAtA []byte, err error) {
@@ -485,12 +494,12 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	if m.TransferFee != 0 {
 		i = encodeVarintItem(dAtA, i, uint64(m.TransferFee))
 		i--
-		dAtA[i] = 0x60
+		dAtA[i] = 0x68
 	}
 	if m.LastUpdate != 0 {
 		i = encodeVarintItem(dAtA, i, uint64(m.LastUpdate))
 		i--
-		dAtA[i] = 0x58
+		dAtA[i] = 0x60
 	}
 	if m.Tradeable {
 		i--
@@ -500,21 +509,28 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			dAtA[i] = 0
 		}
 		i--
-		dAtA[i] = 0x50
+		dAtA[i] = 0x58
 	}
-	if len(m.OwnerTradeID) > 0 {
-		i -= len(m.OwnerTradeID)
-		copy(dAtA[i:], m.OwnerTradeID)
-		i = encodeVarintItem(dAtA, i, uint64(len(m.OwnerTradeID)))
+	if len(m.LastTradeID) > 0 {
+		i -= len(m.LastTradeID)
+		copy(dAtA[i:], m.LastTradeID)
+		i = encodeVarintItem(dAtA, i, uint64(len(m.LastTradeID)))
 		i--
-		dAtA[i] = 0x4a
+		dAtA[i] = 0x52
 	}
-	if len(m.OwnerRecipeID) > 0 {
-		i -= len(m.OwnerRecipeID)
-		copy(dAtA[i:], m.OwnerRecipeID)
-		i = encodeVarintItem(dAtA, i, uint64(len(m.OwnerRecipeID)))
-		i--
-		dAtA[i] = 0x42
+	if len(m.MutableStrings) > 0 {
+		for iNdEx := len(m.MutableStrings) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.MutableStrings[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintItem(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
 	}
 	if len(m.Strings) > 0 {
 		for iNdEx := len(m.Strings) - 1; iNdEx >= 0; iNdEx-- {
@@ -527,7 +543,7 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintItem(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x3a
+			dAtA[i] = 0x42
 		}
 	}
 	if len(m.Longs) > 0 {
@@ -541,7 +557,7 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintItem(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x32
+			dAtA[i] = 0x3a
 		}
 	}
 	if len(m.Doubles) > 0 {
@@ -555,7 +571,7 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintItem(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x32
 		}
 	}
 	if len(m.NodeVersion) > 0 {
@@ -563,19 +579,26 @@ func (m *Item) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		copy(dAtA[i:], m.NodeVersion)
 		i = encodeVarintItem(dAtA, i, uint64(len(m.NodeVersion)))
 		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.CookbookID) > 0 {
-		i -= len(m.CookbookID)
-		copy(dAtA[i:], m.CookbookID)
-		i = encodeVarintItem(dAtA, i, uint64(len(m.CookbookID)))
-		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x2a
 	}
 	if len(m.ID) > 0 {
 		i -= len(m.ID)
 		copy(dAtA[i:], m.ID)
 		i = encodeVarintItem(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.RecipeID) > 0 {
+		i -= len(m.RecipeID)
+		copy(dAtA[i:], m.RecipeID)
+		i = encodeVarintItem(dAtA, i, uint64(len(m.RecipeID)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.CookbookID) > 0 {
+		i -= len(m.CookbookID)
+		copy(dAtA[i:], m.CookbookID)
+		i = encodeVarintItem(dAtA, i, uint64(len(m.CookbookID)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -658,11 +681,15 @@ func (m *Item) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovItem(uint64(l))
 	}
-	l = len(m.ID)
+	l = len(m.CookbookID)
 	if l > 0 {
 		n += 1 + l + sovItem(uint64(l))
 	}
-	l = len(m.CookbookID)
+	l = len(m.RecipeID)
+	if l > 0 {
+		n += 1 + l + sovItem(uint64(l))
+	}
+	l = len(m.ID)
 	if l > 0 {
 		n += 1 + l + sovItem(uint64(l))
 	}
@@ -688,11 +715,13 @@ func (m *Item) Size() (n int) {
 			n += 1 + l + sovItem(uint64(l))
 		}
 	}
-	l = len(m.OwnerRecipeID)
-	if l > 0 {
-		n += 1 + l + sovItem(uint64(l))
+	if len(m.MutableStrings) > 0 {
+		for _, e := range m.MutableStrings {
+			l = e.Size()
+			n += 1 + l + sovItem(uint64(l))
+		}
 	}
-	l = len(m.OwnerTradeID)
+	l = len(m.LastTradeID)
 	if l > 0 {
 		n += 1 + l + sovItem(uint64(l))
 	}
@@ -1108,38 +1137,6 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowItem
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthItem
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthItem
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CookbookID", wireType)
 			}
 			var stringLen uint64
@@ -1170,7 +1167,71 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			}
 			m.CookbookID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RecipeID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowItem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthItem
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthItem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RecipeID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowItem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthItem
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthItem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field NodeVersion", wireType)
 			}
@@ -1202,7 +1263,7 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			}
 			m.NodeVersion = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 5:
+		case 6:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Doubles", wireType)
 			}
@@ -1236,7 +1297,7 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Longs", wireType)
 			}
@@ -1270,7 +1331,7 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 7:
+		case 8:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Strings", wireType)
 			}
@@ -1304,41 +1365,43 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OwnerRecipeID", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowItem
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthItem
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthItem
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OwnerRecipeID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 9:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OwnerTradeID", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field MutableStrings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowItem
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthItem
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthItem
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MutableStrings = append(m.MutableStrings, StringKeyValue{})
+			if err := m.MutableStrings[len(m.MutableStrings)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastTradeID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -1366,9 +1429,9 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.OwnerTradeID = string(dAtA[iNdEx:postIndex])
+			m.LastTradeID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
-		case 10:
+		case 11:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Tradeable", wireType)
 			}
@@ -1388,7 +1451,7 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Tradeable = bool(v != 0)
-		case 11:
+		case 12:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LastUpdate", wireType)
 			}
@@ -1407,7 +1470,7 @@ func (m *Item) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
-		case 12:
+		case 13:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field TransferFee", wireType)
 			}

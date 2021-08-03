@@ -18,7 +18,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.Recipe) {
+func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.Recipe, []*types.Cookbook) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
@@ -46,11 +46,11 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.R
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.RecipeList
+	return network.New(t, cfg), state.RecipeList, nil
 }
 
 func TestShowRecipe(t *testing.T) {
-	net, objs := networkWithRecipeObjects(t, 2)
+	net, objs, _ := networkWithRecipeObjects(t, 2)
 
 	ctx := net.Validators[0].ClientCtx
 	common := []string{

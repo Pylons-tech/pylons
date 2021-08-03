@@ -36,5 +36,6 @@ const (
 )
 
 const (
+	// ItemKey is a string key used as a prefix to the KVStore
 	ItemKey = "Item-value-"
 )

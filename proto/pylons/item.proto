@@ -26,15 +26,16 @@ message  StringKeyValue {
 
 message Item {
   string creator = 1;
-  string ID = 2;
-  string cookbookID = 3; 
-  string nodeVersion = 4;
-  repeated DoubleKeyValue Doubles = 5 [(gogoproto.nullable) = false];
-  repeated LongKeyValue Longs = 6 [(gogoproto.nullable) = false];
-  repeated StringKeyValue Strings = 7 [(gogoproto.nullable) = false];
-  string ownerRecipeID = 8;
-  string ownerTradeID = 9;
-  bool tradeable = 10;
-  uint64 lastUpdate = 11;
-  uint64 transferFee = 12;
+  string cookbookID = 2;
+  string recipeID = 3;
+  string ID = 4;
+  string nodeVersion = 5;
+  repeated DoubleKeyValue doubles = 6 [(gogoproto.nullable) = false];
+  repeated LongKeyValue longs = 7 [(gogoproto.nullable) = false];
+  repeated StringKeyValue strings = 8 [(gogoproto.nullable) = false];
+  repeated StringKeyValue mutableStrings = 9 [(gogoproto.nullable) = false];
+  string lastTradeID = 10;
+  bool tradeable = 11;
+  uint64 lastUpdate = 12;
+  uint64 transferFee = 13;
 }

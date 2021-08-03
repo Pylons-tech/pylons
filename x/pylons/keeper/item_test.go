@@ -14,6 +14,8 @@ func createNItem(keeper *Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
 	for i := range items {
 		items[i].Creator = "any"
+		items[i].CookbookID = fmt.Sprintf("%d", i)
+		items[i].RecipeID = fmt.Sprintf("%d", i)
 		items[i].ID = fmt.Sprintf("%d", i)
 		keeper.SetItem(ctx, items[i])
 	}
@@ -24,18 +26,9 @@ func TestItemGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	items := createNItem(keeper, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetItem(ctx, item.ID)
+		rst, found := keeper.GetItem(ctx, item.CookbookID, item.RecipeID, item.ID)
 		assert.True(t, found)
 		assert.Equal(t, item, rst)
-	}
-}
-func TestItemRemove(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNItem(keeper, ctx, 10)
-	for _, item := range items {
-		keeper.RemoveItem(ctx, item.ID)
-		_, found := keeper.GetItem(ctx, item.ID)
-		assert.False(t, found)
 	}
 }
 

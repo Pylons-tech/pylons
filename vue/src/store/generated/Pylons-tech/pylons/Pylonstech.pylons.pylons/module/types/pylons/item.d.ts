@@ -17,14 +17,15 @@ export interface StringKeyValue {
 }
 export interface Item {
     creator: string;
-    ID: string;
     cookbookID: string;
+    recipeID: string;
+    ID: string;
     nodeVersion: string;
-    Doubles: DoubleKeyValue[];
-    Longs: LongKeyValue[];
-    Strings: StringKeyValue[];
-    ownerRecipeID: string;
-    ownerTradeID: string;
+    doubles: DoubleKeyValue[];
+    longs: LongKeyValue[];
+    strings: StringKeyValue[];
+    mutableStrings: StringKeyValue[];
+    lastTradeID: string;
     tradeable: boolean;
     lastUpdate: number;
     transferFee: number;

@@ -1,46 +1,17 @@
 import { Reader, Writer } from 'protobufjs/minimal';
-import { DoubleKeyValue, LongKeyValue, StringKeyValue } from '../pylons/item';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
-export interface MsgCreateItem {
+export interface MsgSetItemString {
     creator: string;
-    ID: string;
     cookbookID: string;
-    nodeVersion: string;
-    Doubles: DoubleKeyValue[];
-    Longs: LongKeyValue[];
-    Strings: StringKeyValue[];
-    ownerRecipeID: string;
-    ownerTradeID: string;
-    tradable: boolean;
-    lastUpdate: number;
-    transferFee: number;
-}
-export interface MsgCreateItemResponse {
-}
-export interface MsgUpdateItem {
-    creator: string;
+    recipeID: string;
     ID: string;
-    cookbookID: string;
-    nodeVersion: string;
-    Doubles: DoubleKeyValue[];
-    Longs: LongKeyValue[];
-    Strings: StringKeyValue[];
-    ownerRecipeID: string;
-    ownerTradeID: string;
-    tradable: boolean;
-    lastUpdate: number;
-    transferFee: number;
+    field: string;
+    value: string;
 }
-export interface MsgUpdateItemResponse {
-}
-export interface MsgDeleteItem {
-    creator: string;
-    ID: string;
-}
-export interface MsgDeleteItemResponse {
+export interface MsgSetItemStringResponse {
 }
 export interface MsgCreateRecipe {
     creator: string;
@@ -104,47 +75,19 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
-export declare const MsgCreateItem: {
-    encode(message: MsgCreateItem, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgCreateItem;
-    fromJSON(object: any): MsgCreateItem;
-    toJSON(message: MsgCreateItem): unknown;
-    fromPartial(object: DeepPartial<MsgCreateItem>): MsgCreateItem;
+export declare const MsgSetItemString: {
+    encode(message: MsgSetItemString, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSetItemString;
+    fromJSON(object: any): MsgSetItemString;
+    toJSON(message: MsgSetItemString): unknown;
+    fromPartial(object: DeepPartial<MsgSetItemString>): MsgSetItemString;
 };
-export declare const MsgCreateItemResponse: {
-    encode(_: MsgCreateItemResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgCreateItemResponse;
-    fromJSON(_: any): MsgCreateItemResponse;
-    toJSON(_: MsgCreateItemResponse): unknown;
-    fromPartial(_: DeepPartial<MsgCreateItemResponse>): MsgCreateItemResponse;
-};
-export declare const MsgUpdateItem: {
-    encode(message: MsgUpdateItem, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgUpdateItem;
-    fromJSON(object: any): MsgUpdateItem;
-    toJSON(message: MsgUpdateItem): unknown;
-    fromPartial(object: DeepPartial<MsgUpdateItem>): MsgUpdateItem;
-};
-export declare const MsgUpdateItemResponse: {
-    encode(_: MsgUpdateItemResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgUpdateItemResponse;
-    fromJSON(_: any): MsgUpdateItemResponse;
-    toJSON(_: MsgUpdateItemResponse): unknown;
-    fromPartial(_: DeepPartial<MsgUpdateItemResponse>): MsgUpdateItemResponse;
-};
-export declare const MsgDeleteItem: {
-    encode(message: MsgDeleteItem, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgDeleteItem;
-    fromJSON(object: any): MsgDeleteItem;
-    toJSON(message: MsgDeleteItem): unknown;
-    fromPartial(object: DeepPartial<MsgDeleteItem>): MsgDeleteItem;
-};
-export declare const MsgDeleteItemResponse: {
-    encode(_: MsgDeleteItemResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgDeleteItemResponse;
-    fromJSON(_: any): MsgDeleteItemResponse;
-    toJSON(_: MsgDeleteItemResponse): unknown;
-    fromPartial(_: DeepPartial<MsgDeleteItemResponse>): MsgDeleteItemResponse;
+export declare const MsgSetItemStringResponse: {
+    encode(_: MsgSetItemStringResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSetItemStringResponse;
+    fromJSON(_: any): MsgSetItemStringResponse;
+    toJSON(_: MsgSetItemStringResponse): unknown;
+    fromPartial(_: DeepPartial<MsgSetItemStringResponse>): MsgSetItemStringResponse;
 };
 export declare const MsgCreateRecipe: {
     encode(message: MsgCreateRecipe, writer?: Writer): Writer;
@@ -205,9 +148,7 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
-    CreateItem(request: MsgCreateItem): Promise<MsgCreateItemResponse>;
-    UpdateItem(request: MsgUpdateItem): Promise<MsgUpdateItemResponse>;
-    DeleteItem(request: MsgDeleteItem): Promise<MsgDeleteItemResponse>;
+    SetItemString(request: MsgSetItemString): Promise<MsgSetItemStringResponse>;
     CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;
     UpdateRecipe(request: MsgUpdateRecipe): Promise<MsgUpdateRecipeResponse>;
     CreateCookbook(request: MsgCreateCookbook): Promise<MsgCreateCookbookResponse>;
@@ -216,9 +157,7 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
-    CreateItem(request: MsgCreateItem): Promise<MsgCreateItemResponse>;
-    UpdateItem(request: MsgUpdateItem): Promise<MsgUpdateItemResponse>;
-    DeleteItem(request: MsgDeleteItem): Promise<MsgDeleteItemResponse>;
+    SetItemString(request: MsgSetItemString): Promise<MsgSetItemStringResponse>;
     CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;
     UpdateRecipe(request: MsgUpdateRecipe): Promise<MsgUpdateRecipeResponse>;
     CreateCookbook(request: MsgCreateCookbook): Promise<MsgCreateCookbookResponse>;
