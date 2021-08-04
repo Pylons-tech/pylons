@@ -13,3 +13,4 @@ signed_transaction.json
 /testnet
 /release
 docker/.pylonsd
+.pylonsd
