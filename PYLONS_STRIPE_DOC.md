@@ -88,10 +88,12 @@
     method : GET 
     Response : 
     {
-         "paymentID": "pi_3JKT31EdpQgutKvr1fya1Wp6",
-          "exist": false
+        "result": {
+            "paymentID": "pi_3JKT31EdpQgutKvr1fya1Wp3",
+            "exist": false
+        }
     }
-    ex->params : {"Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"} 
+    ex->params : {"paymentID":"pi_3JKT31EdpQgutKvr1fya1Wp6"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ###  stripe_payment_history_list  
     url : http://localhost:1317/custom/pylons/check_payment/stripe_payment_history_list

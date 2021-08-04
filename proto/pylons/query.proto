@@ -137,6 +137,10 @@ message CheckPaymentRequest {
 }
 
 message CheckPaymentResponse {
+  CheckPaymentResult result = 1;
+}
+
+message CheckPaymentResult {
   string paymentID = 1;
   bool exist = 2;
 }

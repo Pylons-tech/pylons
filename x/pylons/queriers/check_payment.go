@@ -17,7 +17,9 @@ func (querier *querierServer) CheckPayment(ctx context.Context, req *types.Check
 	exist := querier.HasGoogleIAPOrder(sdk.UnwrapSDKContext(ctx), req.PaymentID)
 
 	return &types.CheckPaymentResponse{
-		PaymentID: req.PaymentID,
-		Exist:     exist,
+		Result: &types.CheckPaymentResult{
+			PaymentID: req.PaymentID,
+			Exist:     exist,
+		},
 	}, nil
 }
