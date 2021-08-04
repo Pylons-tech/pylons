@@ -19,7 +19,7 @@ type PaymentHistoryStu struct {
 	PaymentMethod string
 	Amount        int64
 	Currency      string
-	CustomerId    string
+	CustomerID    string
 	ClientSecret  string
 	Description   string
 	Status        string
@@ -28,7 +28,7 @@ type PaymentHistoryStu struct {
 type stripePaymentHistoryListReq struct {
 	BaseReq    rest.BaseReq `json:"base_req"`
 	StripeKey  string
-	CustomerId string
+	CustomerID string
 	Sender     string
 }
 
@@ -50,7 +50,7 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = string(config.Config.ChainID)
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -61,7 +61,7 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
 
 		// create the message
-		msg := types.NewMsgStripePaymentHistoryLIst(req.StripeKey, req.CustomerId, addr.String())
+		msg := types.NewMsgStripePaymentHistoryList(req.StripeKey, req.CustomerID, addr.String())
 
 		err = msg.ValidateBasic()
 		if err != nil {
@@ -90,12 +90,12 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			payment.Amount = pi.Amount
 			payment.ClientSecret = pi.ClientSecret
 			payment.Currency = pi.Currency
-			payment.CustomerId = pi.Customer.ID
+			payment.CustomerID = pi.Customer.ID
 			payment.Description = pi.Description
 			payment.ID = pi.ID
 			payment.PaymentMethod = string(pi.PaymentMethod.ID)
 			payment.Status = string(pi.Status)
-			if pi.Customer.ID == msg.CustomerId {
+			if pi.Customer.ID == msg.CustomerID {
 				paymentHistory.PaymentList = append(paymentHistory.PaymentList, payment)
 				length = length + 1
 			}

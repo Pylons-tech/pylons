@@ -22,11 +22,13 @@ type stripeCheckPaymentReq struct {
 }
 
 type stripeCheckPaymentRes struct {
-	Payment_status int `json:"payment_status"`
+	PaymentStatus int `json:"payment_status"`
 }
 
-const PAYMENT_SUCCESS = 1
-const PAYMENT_FAILED = -1
+const (
+	PAYMENT_SUCCESS = iota
+	PAYMENT_FAILED
+)
 
 func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -41,7 +43,7 @@ func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = string(config.Config.ChainID)
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -67,16 +69,10 @@ func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 		)
 
 		var result stripeCheckPaymentRes
-		result.Payment_status = PAYMENT_SUCCESS
+		result.PaymentStatus = PAYMENT_SUCCESS
 		if pi.Status != "succeeded" {
-			result.Payment_status = PAYMENT_FAILED
+			result.PaymentStatus = PAYMENT_FAILED
 		}
-
-		// err = k.RegisterPaymentForStripe(sdkCtx, msg.PaymentID)
-
-		// if err != nil {
-		// 	return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
-		// } //to do  RegisterPaymentForStripe RegisterPaymentForStripe
 
 		rest.PostProcessResponse(w, cliCtx, result)
 	}

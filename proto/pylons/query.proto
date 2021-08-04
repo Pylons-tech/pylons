@@ -62,12 +62,7 @@ service Query {
   // ListCookbook returns a cookbook based on the cookbook id
   rpc ListCookbook(ListCookbookRequest) returns (ListCookbookResponse){
     option (google.api.http).get = "/custom/pylons/list_cookbook/{address}";
-  }
-
-  // ListCookbook returns a cookbook based on the cookbook id
-  rpc ActiveListCookbook(ActiveListCookbookRequest) returns (ActiveListCookbookResponse){
-    option (google.api.http).get = "/custom/pylons/active_list_cookbook/{address}";
-  }
+  } 
 
   // ListExecutions lists all the executions based on the sender address
   rpc ListExecutions(ListExecutionsRequest) returns (ListExecutionsResponse){
@@ -249,21 +244,11 @@ message ItemsBySenderResponse {
 
 message ListCookbookRequest {
   string address = 1;
-}
-
-message ActiveListCookbookRequest {
-  string address = 1;
-}
+} 
 
 message ListCookbookResponse {
   repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
-}
-
-
-message ActiveListCookbookResponse {
-  repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
-}
-
+} 
 
 message ListExecutionsRequest {
   string sender = 1;

@@ -3129,7 +3129,7 @@ type MsgStripeCreatePaymentIntent struct {
 	Currency   string `protobuf:"bytes,3,opt,name=Currency,proto3" json:"Currency,omitempty"`
 	SKUID      string `protobuf:"bytes,4,opt,name=SKUID,proto3" json:"SKUID,omitempty"`
 	Sender     string `protobuf:"bytes,5,opt,name=Sender,proto3" json:"Sender,omitempty"`
-	CustomerId string `protobuf:"bytes,6,opt,name=CustomerId,proto3" json:"CustomerId,omitempty"`
+	CustomerID string `protobuf:"bytes,6,opt,name=CustomerID,proto3" json:"CustomerID,omitempty"`
 }
 
 func (m *MsgStripeCreatePaymentIntent) Reset()         { *m = MsgStripeCreatePaymentIntent{} }
@@ -3200,9 +3200,9 @@ func (m *MsgStripeCreatePaymentIntent) GetSender() string {
 	return ""
 }
 
-func (m *MsgStripeCreatePaymentIntent) GetCustomerId() string {
+func (m *MsgStripeCreatePaymentIntent) GetCustomerID() string {
 	if m != nil {
-		return m.CustomerId
+		return m.CustomerID
 	}
 	return ""
 }
@@ -3807,23 +3807,23 @@ func (m *MsgStripeOauthTokenResponse) GetStatus() string {
 	return ""
 }
 
-type MsgStripeCreateCustomerId struct {
+type MsgStripeCreateCustomerID struct {
 	StripeKey string `protobuf:"bytes,1,opt,name=StripeKey,proto3" json:"StripeKey,omitempty"`
 	Sender    string `protobuf:"bytes,2,opt,name=Sender,proto3" json:"Sender,omitempty"`
 }
 
-func (m *MsgStripeCreateCustomerId) Reset()         { *m = MsgStripeCreateCustomerId{} }
-func (m *MsgStripeCreateCustomerId) String() string { return proto.CompactTextString(m) }
-func (*MsgStripeCreateCustomerId) ProtoMessage()    {}
-func (*MsgStripeCreateCustomerId) Descriptor() ([]byte, []int) {
+func (m *MsgStripeCreateCustomerID) Reset()         { *m = MsgStripeCreateCustomerID{} }
+func (m *MsgStripeCreateCustomerID) String() string { return proto.CompactTextString(m) }
+func (*MsgStripeCreateCustomerID) ProtoMessage()    {}
+func (*MsgStripeCreateCustomerID) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d4a7b7e7ad73d5a4, []int{56}
 }
-func (m *MsgStripeCreateCustomerId) XXX_Unmarshal(b []byte) error {
+func (m *MsgStripeCreateCustomerID) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgStripeCreateCustomerId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgStripeCreateCustomerID) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgStripeCreateCustomerId.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgStripeCreateCustomerID.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -3833,50 +3833,50 @@ func (m *MsgStripeCreateCustomerId) XXX_Marshal(b []byte, deterministic bool) ([
 		return b[:n], nil
 	}
 }
-func (m *MsgStripeCreateCustomerId) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgStripeCreateCustomerId.Merge(m, src)
+func (m *MsgStripeCreateCustomerID) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStripeCreateCustomerID.Merge(m, src)
 }
-func (m *MsgStripeCreateCustomerId) XXX_Size() int {
+func (m *MsgStripeCreateCustomerID) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgStripeCreateCustomerId) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgStripeCreateCustomerId.DiscardUnknown(m)
+func (m *MsgStripeCreateCustomerID) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStripeCreateCustomerID.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgStripeCreateCustomerId proto.InternalMessageInfo
+var xxx_messageInfo_MsgStripeCreateCustomerID proto.InternalMessageInfo
 
-func (m *MsgStripeCreateCustomerId) GetStripeKey() string {
+func (m *MsgStripeCreateCustomerID) GetStripeKey() string {
 	if m != nil {
 		return m.StripeKey
 	}
 	return ""
 }
 
-func (m *MsgStripeCreateCustomerId) GetSender() string {
+func (m *MsgStripeCreateCustomerID) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-type MsgStripeCreateCustomerIdResponse struct {
-	CustomerId string `protobuf:"bytes,1,opt,name=CustomerId,proto3" json:"CustomerId"`
+type MsgStripeCreateCustomerIDResponse struct {
+	CustomerID string `protobuf:"bytes,1,opt,name=CustomerID,proto3" json:"CustomerID"`
 	Message    string `protobuf:"bytes,2,opt,name=Message,proto3" json:"Message,omitempty"`
 	Status     string `protobuf:"bytes,3,opt,name=Status,proto3" json:"Status,omitempty"`
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) Reset()         { *m = MsgStripeCreateCustomerIdResponse{} }
-func (m *MsgStripeCreateCustomerIdResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgStripeCreateCustomerIdResponse) ProtoMessage()    {}
-func (*MsgStripeCreateCustomerIdResponse) Descriptor() ([]byte, []int) {
+func (m *MsgStripeCreateCustomerIDResponse) Reset()         { *m = MsgStripeCreateCustomerIDResponse{} }
+func (m *MsgStripeCreateCustomerIDResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgStripeCreateCustomerIDResponse) ProtoMessage()    {}
+func (*MsgStripeCreateCustomerIDResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d4a7b7e7ad73d5a4, []int{57}
 }
-func (m *MsgStripeCreateCustomerIdResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgStripeCreateCustomerIDResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgStripeCreateCustomerIdResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgStripeCreateCustomerIDResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgStripeCreateCustomerIdResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgStripeCreateCustomerIDResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -3886,33 +3886,33 @@ func (m *MsgStripeCreateCustomerIdResponse) XXX_Marshal(b []byte, deterministic 
 		return b[:n], nil
 	}
 }
-func (m *MsgStripeCreateCustomerIdResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgStripeCreateCustomerIdResponse.Merge(m, src)
+func (m *MsgStripeCreateCustomerIDResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStripeCreateCustomerIDResponse.Merge(m, src)
 }
-func (m *MsgStripeCreateCustomerIdResponse) XXX_Size() int {
+func (m *MsgStripeCreateCustomerIDResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgStripeCreateCustomerIdResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgStripeCreateCustomerIdResponse.DiscardUnknown(m)
+func (m *MsgStripeCreateCustomerIDResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStripeCreateCustomerIDResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgStripeCreateCustomerIdResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgStripeCreateCustomerIDResponse proto.InternalMessageInfo
 
-func (m *MsgStripeCreateCustomerIdResponse) GetCustomerId() string {
+func (m *MsgStripeCreateCustomerIDResponse) GetCustomerID() string {
 	if m != nil {
-		return m.CustomerId
+		return m.CustomerID
 	}
 	return ""
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) GetMessage() string {
+func (m *MsgStripeCreateCustomerIDResponse) GetMessage() string {
 	if m != nil {
 		return m.Message
 	}
 	return ""
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) GetStatus() string {
+func (m *MsgStripeCreateCustomerIDResponse) GetStatus() string {
 	if m != nil {
 		return m.Status
 	}
@@ -4039,24 +4039,24 @@ func (m *MsgStripeCheckPaymentResponse) GetStatus() string {
 	return ""
 }
 
-type MsgStripePaymentHistoryLIst struct {
+type MsgStripePaymentHistoryList struct {
 	StripeKey  string `protobuf:"bytes,1,opt,name=StripeKey,proto3" json:"StripeKey,omitempty"`
-	CustomerId string `protobuf:"bytes,2,opt,name=CustomerId,proto3" json:"CustomerId,omitempty"`
+	CustomerID string `protobuf:"bytes,2,opt,name=CustomerID,proto3" json:"CustomerID,omitempty"`
 	Sender     string `protobuf:"bytes,3,opt,name=Sender,proto3" json:"Sender,omitempty"`
 }
 
-func (m *MsgStripePaymentHistoryLIst) Reset()         { *m = MsgStripePaymentHistoryLIst{} }
-func (m *MsgStripePaymentHistoryLIst) String() string { return proto.CompactTextString(m) }
-func (*MsgStripePaymentHistoryLIst) ProtoMessage()    {}
-func (*MsgStripePaymentHistoryLIst) Descriptor() ([]byte, []int) {
+func (m *MsgStripePaymentHistoryList) Reset()         { *m = MsgStripePaymentHistoryList{} }
+func (m *MsgStripePaymentHistoryList) String() string { return proto.CompactTextString(m) }
+func (*MsgStripePaymentHistoryList) ProtoMessage()    {}
+func (*MsgStripePaymentHistoryList) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d4a7b7e7ad73d5a4, []int{60}
 }
-func (m *MsgStripePaymentHistoryLIst) XXX_Unmarshal(b []byte) error {
+func (m *MsgStripePaymentHistoryList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgStripePaymentHistoryLIst) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgStripePaymentHistoryList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgStripePaymentHistoryLIst.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgStripePaymentHistoryList.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -4066,58 +4066,58 @@ func (m *MsgStripePaymentHistoryLIst) XXX_Marshal(b []byte, deterministic bool) 
 		return b[:n], nil
 	}
 }
-func (m *MsgStripePaymentHistoryLIst) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgStripePaymentHistoryLIst.Merge(m, src)
+func (m *MsgStripePaymentHistoryList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStripePaymentHistoryList.Merge(m, src)
 }
-func (m *MsgStripePaymentHistoryLIst) XXX_Size() int {
+func (m *MsgStripePaymentHistoryList) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgStripePaymentHistoryLIst) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgStripePaymentHistoryLIst.DiscardUnknown(m)
+func (m *MsgStripePaymentHistoryList) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStripePaymentHistoryList.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgStripePaymentHistoryLIst proto.InternalMessageInfo
+var xxx_messageInfo_MsgStripePaymentHistoryList proto.InternalMessageInfo
 
-func (m *MsgStripePaymentHistoryLIst) GetStripeKey() string {
+func (m *MsgStripePaymentHistoryList) GetStripeKey() string {
 	if m != nil {
 		return m.StripeKey
 	}
 	return ""
 }
 
-func (m *MsgStripePaymentHistoryLIst) GetCustomerId() string {
+func (m *MsgStripePaymentHistoryList) GetCustomerID() string {
 	if m != nil {
-		return m.CustomerId
+		return m.CustomerID
 	}
 	return ""
 }
 
-func (m *MsgStripePaymentHistoryLIst) GetSender() string {
+func (m *MsgStripePaymentHistoryList) GetSender() string {
 	if m != nil {
 		return m.Sender
 	}
 	return ""
 }
 
-type MsgStripePaymentHistoryLIstResponse struct {
-	HistoryLIst string `protobuf:"bytes,1,opt,name=HistoryLIst,proto3" json:"HistoryList"`
+type MsgStripePaymentHistoryListResponse struct {
+	HistoryList string `protobuf:"bytes,1,opt,name=HistoryList,proto3" json:"HistoryList"`
 	Length      string `protobuf:"bytes,2,opt,name=Length,proto3" json:"Length"`
 	Message     string `protobuf:"bytes,3,opt,name=Message,proto3" json:"Message,omitempty"`
 	Status      string `protobuf:"bytes,4,opt,name=Status,proto3" json:"Status,omitempty"`
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) Reset()         { *m = MsgStripePaymentHistoryLIstResponse{} }
-func (m *MsgStripePaymentHistoryLIstResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgStripePaymentHistoryLIstResponse) ProtoMessage()    {}
-func (*MsgStripePaymentHistoryLIstResponse) Descriptor() ([]byte, []int) {
+func (m *MsgStripePaymentHistoryListResponse) Reset()         { *m = MsgStripePaymentHistoryListResponse{} }
+func (m *MsgStripePaymentHistoryListResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgStripePaymentHistoryListResponse) ProtoMessage()    {}
+func (*MsgStripePaymentHistoryListResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_d4a7b7e7ad73d5a4, []int{61}
 }
-func (m *MsgStripePaymentHistoryLIstResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgStripePaymentHistoryListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgStripePaymentHistoryLIstResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgStripePaymentHistoryListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgStripePaymentHistoryLIstResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgStripePaymentHistoryListResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -4127,40 +4127,40 @@ func (m *MsgStripePaymentHistoryLIstResponse) XXX_Marshal(b []byte, deterministi
 		return b[:n], nil
 	}
 }
-func (m *MsgStripePaymentHistoryLIstResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgStripePaymentHistoryLIstResponse.Merge(m, src)
+func (m *MsgStripePaymentHistoryListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgStripePaymentHistoryListResponse.Merge(m, src)
 }
-func (m *MsgStripePaymentHistoryLIstResponse) XXX_Size() int {
+func (m *MsgStripePaymentHistoryListResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgStripePaymentHistoryLIstResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgStripePaymentHistoryLIstResponse.DiscardUnknown(m)
+func (m *MsgStripePaymentHistoryListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgStripePaymentHistoryListResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgStripePaymentHistoryLIstResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgStripePaymentHistoryListResponse proto.InternalMessageInfo
 
-func (m *MsgStripePaymentHistoryLIstResponse) GetHistoryLIst() string {
+func (m *MsgStripePaymentHistoryListResponse) GetHistoryList() string {
 	if m != nil {
-		return m.HistoryLIst
+		return m.HistoryList
 	}
 	return ""
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) GetLength() string {
+func (m *MsgStripePaymentHistoryListResponse) GetLength() string {
 	if m != nil {
 		return m.Length
 	}
 	return ""
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) GetMessage() string {
+func (m *MsgStripePaymentHistoryListResponse) GetMessage() string {
 	if m != nil {
 		return m.Message
 	}
 	return ""
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) GetStatus() string {
+func (m *MsgStripePaymentHistoryListResponse) GetStatus() string {
 	if m != nil {
 		return m.Status
 	}
@@ -4224,18 +4224,18 @@ func init() {
 	proto.RegisterType((*MsgStripeInfoResponse)(nil), "pylons.MsgStripeInfoResponse")
 	proto.RegisterType((*MsgStripeOauthToken)(nil), "pylons.MsgStripeOauthToken")
 	proto.RegisterType((*MsgStripeOauthTokenResponse)(nil), "pylons.MsgStripeOauthTokenResponse")
-	proto.RegisterType((*MsgStripeCreateCustomerId)(nil), "pylons.MsgStripeCreateCustomerId")
-	proto.RegisterType((*MsgStripeCreateCustomerIdResponse)(nil), "pylons.MsgStripeCreateCustomerIdResponse")
+	proto.RegisterType((*MsgStripeCreateCustomerID)(nil), "pylons.MsgStripeCreateCustomerID")
+	proto.RegisterType((*MsgStripeCreateCustomerIDResponse)(nil), "pylons.MsgStripeCreateCustomerIDResponse")
 	proto.RegisterType((*MsgStripeCheckPayment)(nil), "pylons.MsgStripeCheckPayment")
 	proto.RegisterType((*MsgStripeCheckPaymentResponse)(nil), "pylons.MsgStripeCheckPaymentResponse")
-	proto.RegisterType((*MsgStripePaymentHistoryLIst)(nil), "pylons.MsgStripePaymentHistoryLIst")
-	proto.RegisterType((*MsgStripePaymentHistoryLIstResponse)(nil), "pylons.MsgStripePaymentHistoryLIstResponse")
+	proto.RegisterType((*MsgStripePaymentHistoryList)(nil), "pylons.MsgStripePaymentHistoryList")
+	proto.RegisterType((*MsgStripePaymentHistoryListResponse)(nil), "pylons.MsgStripePaymentHistoryListResponse")
 }
 
 func init() { proto.RegisterFile("pylons/tx.proto", fileDescriptor_d4a7b7e7ad73d5a4) }
 
 var fileDescriptor_d4a7b7e7ad73d5a4 = []byte{
-	// 2630 bytes of a gzipped FileDescriptorProto
+	// 2624 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x5a, 0xcf, 0x6f, 0x1c, 0x49,
 	0xf5, 0x4f, 0xcf, 0x0f, 0xdb, 0xf3, 0xc6, 0xce, 0x8f, 0xb6, 0xbf, 0xce, 0x64, 0x92, 0x9d, 0xf1,
 	0xf6, 0x66, 0xbf, 0x18, 0xd8, 0xb5, 0x93, 0xec, 0xb2, 0xb9, 0x44, 0x42, 0xf1, 0xaf, 0xf5, 0x60,
@@ -4345,62 +4345,61 @@ var fileDescriptor_d4a7b7e7ad73d5a4 = []byte{
 	0xa1, 0x7c, 0xb0, 0xf3, 0x58, 0x98, 0xa1, 0x72, 0x76, 0xda, 0x64, 0x80, 0xc9, 0x1e, 0x63, 0xa8,
 	0xff, 0x6f, 0x5a, 0x7a, 0x8b, 0xf1, 0x7a, 0xcd, 0xc5, 0xc8, 0x3d, 0xcf, 0x45, 0xe3, 0x70, 0x50,
 	0xa0, 0x1a, 0xcb, 0x0a, 0x07, 0xc5, 0x84, 0xca, 0x16, 0xa2, 0x55, 0x30, 0x27, 0xe4, 0xa2, 0xe7,
-	0x15, 0xd0, 0xe4, 0xd8, 0xc0, 0x37, 0x60, 0xab, 0xc3, 0xc3, 0x83, 0x84, 0x18, 0x9f, 0x6a, 0x70,
-	0x73, 0xd4, 0x02, 0x94, 0x48, 0xcb, 0x09, 0x6a, 0xa4, 0x8d, 0xc0, 0xb8, 0x52, 0x1d, 0x47, 0x91,
-	0xbf, 0x49, 0x67, 0x36, 0xe9, 0xf3, 0xd2, 0x68, 0x5f, 0x5e, 0x27, 0xdd, 0xfc, 0x93, 0x68, 0x2a,
-	0xde, 0x8c, 0xe3, 0x4d, 0x51, 0x8e, 0x37, 0x0b, 0x50, 0x3e, 0x24, 0x95, 0x47, 0xa4, 0x3e, 0xda,
-	0xc8, 0x53, 0x5f, 0x46, 0x06, 0xe2, 0x52, 0xc9, 0x7a, 0xe1, 0x90, 0xaa, 0x17, 0x01, 0x9a, 0xf1,
-	0xeb, 0x78, 0x77, 0xe3, 0xd7, 0xb2, 0x73, 0xe0, 0xf9, 0xdb, 0xfc, 0xd5, 0x26, 0x7d, 0x35, 0x34,
-	0x94, 0xc7, 0x0d, 0x0d, 0x53, 0x79, 0xa1, 0x61, 0x7a, 0x54, 0x68, 0x98, 0x79, 0xe9, 0xd0, 0x40,
-	0x58, 0xf6, 0x1d, 0x76, 0x83, 0x52, 0xe1, 0x2c, 0x79, 0x5b, 0xb2, 0x32, 0x28, 0x56, 0xfe, 0x1a,
-	0xcc, 0x09, 0x1d, 0x27, 0x2e, 0xd1, 0x35, 0xa5, 0xe3, 0x2f, 0xd9, 0x85, 0x41, 0xdc, 0x53, 0xae,
-	0x99, 0xf6, 0xc3, 0x76, 0x6c, 0x06, 0xde, 0x92, 0xc4, 0x89, 0x0e, 0xed, 0xa2, 0xad, 0x5f, 0x86,
-	0xe2, 0x63, 0xb3, 0xc5, 0x6d, 0x40, 0x5e, 0x65, 0xff, 0x28, 0xe5, 0xf9, 0x47, 0x59, 0xf1, 0x8f,
-	0x1f, 0xd0, 0xea, 0x91, 0x09, 0xf4, 0xd0, 0x0a, 0xf1, 0x11, 0xbb, 0x7b, 0xb8, 0x01, 0x95, 0x0f,
-	0x7d, 0xcb, 0xc5, 0xc4, 0xbb, 0x23, 0xc7, 0x10, 0x00, 0x71, 0x8c, 0x75, 0xaf, 0x23, 0x1c, 0x83,
-	0xbc, 0xe7, 0xd5, 0x90, 0xc6, 0x67, 0x05, 0x5a, 0x2c, 0x26, 0x67, 0x10, 0x0b, 0x6f, 0x00, 0xdc,
-	0xb7, 0x51, 0x10, 0xb0, 0x8b, 0x10, 0x7e, 0xf7, 0x18, 0x23, 0x44, 0x01, 0xbb, 0xce, 0x31, 0xda,
-	0x8b, 0xe7, 0x13, 0x6d, 0x52, 0xb6, 0x99, 0xe8, 0x89, 0x8f, 0x02, 0xc6, 0x93, 0xcf, 0xac, 0x60,
-	0x64, 0x25, 0xf4, 0x85, 0xae, 0x84, 0x17, 0x7e, 0x02, 0xd0, 0xbf, 0x01, 0x97, 0x79, 0xa2, 0x0e,
-	0xdb, 0x7d, 0x27, 0x38, 0x22, 0x06, 0x60, 0x0a, 0x4a, 0xe1, 0xb4, 0x48, 0xa4, 0xd8, 0xe3, 0x00,
-	0xf9, 0xad, 0x0d, 0xf1, 0x51, 0x56, 0xc2, 0x68, 0x70, 0xb5, 0xbd, 0x21, 0xe2, 0xde, 0xc8, 0x1a,
-	0xb2, 0x59, 0x66, 0xf2, 0xcc, 0x52, 0x51, 0xcc, 0xf2, 0x28, 0xb5, 0x6b, 0xe3, 0x98, 0x7b, 0x7e,
-	0x4e, 0xc8, 0xbc, 0x4d, 0xff, 0x54, 0x83, 0x37, 0x73, 0x79, 0x2a, 0x05, 0x6b, 0x1c, 0xef, 0xe5,
-	0x82, 0x35, 0xee, 0x2b, 0xbd, 0x8f, 0x11, 0x91, 0x7a, 0xd2, 0x16, 0xa0, 0xa7, 0x1d, 0x1e, 0xf6,
-	0xcf, 0x59, 0xd6, 0x0d, 0x39, 0x7f, 0x14, 0xd4, 0xab, 0xcd, 0x8d, 0x5c, 0xef, 0xfb, 0xb9, 0x46,
-	0xaf, 0xb6, 0xd2, 0xb3, 0x89, 0x05, 0xdf, 0x15, 0xa7, 0x3c, 0xf9, 0xce, 0x62, 0xed, 0xca, 0xd9,
-	0x69, 0x53, 0x25, 0x98, 0x6a, 0x73, 0x8c, 0x95, 0x07, 0xd2, 0x4e, 0xe0, 0xbc, 0xb6, 0x9d, 0x80,
-	0x44, 0x9d, 0xdd, 0x56, 0x70, 0xde, 0xfa, 0xd5, 0x44, 0x5c, 0x48, 0x26, 0xe2, 0x5c, 0x0d, 0xfc,
-	0x59, 0x83, 0xb7, 0x46, 0xcc, 0x2a, 0xf4, 0x70, 0x1b, 0xaa, 0x12, 0xcc, 0xb5, 0x70, 0xe9, 0xec,
-	0xb4, 0x29, 0x60, 0x27, 0xc0, 0xa6, 0xdc, 0x47, 0x37, 0x60, 0x6a, 0x17, 0xb9, 0x5d, 0x7c, 0xc4,
-	0xc4, 0x61, 0x77, 0xe4, 0x0c, 0x31, 0xf9, 0x53, 0xd6, 0x52, 0x31, 0x4f, 0x4b, 0x25, 0x59, 0x4b,
-	0x77, 0x7e, 0x7a, 0x11, 0x8a, 0x7b, 0x41, 0x57, 0xdf, 0x83, 0x39, 0x35, 0x8f, 0xd7, 0xa2, 0xe8,
-	0x9d, 0xfc, 0x81, 0xa4, 0x6e, 0xa4, 0x28, 0xe9, 0x1f, 0x45, 0xbe, 0x0d, 0x95, 0xf8, 0x7a, 0x76,
-	0x41, 0x1a, 0x20, 0xd0, 0xfa, 0x8d, 0x2c, 0x54, 0x30, 0xf8, 0x04, 0xf4, 0x8c, 0x8b, 0xde, 0x37,
-	0xe4, 0x31, 0x29, 0x72, 0xfd, 0xed, 0x91, 0x64, 0x59, 0xb8, 0xf8, 0xa6, 0x54, 0x16, 0x4e, 0xa0,
-	0x8a, 0x70, 0xa9, 0xcb, 0xca, 0x88, 0x01, 0xbb, 0xa9, 0x4c, 0x32, 0xa0, 0x68, 0x8a, 0x81, 0x7a,
-	0xef, 0xf8, 0x00, 0x2e, 0x26, 0xfe, 0x88, 0xb9, 0x96, 0x52, 0x6a, 0x44, 0xaa, 0xbf, 0x99, 0x4b,
-	0x12, 0xfc, 0xbe, 0x0b, 0xb5, 0x6d, 0xcb, 0xed, 0xf4, 0x91, 0x9f, 0xbe, 0xd7, 0x93, 0x39, 0xab,
-	0x24, 0x85, 0x73, 0xce, 0x95, 0xda, 0x36, 0xcc, 0x2a, 0xbf, 0x88, 0x5c, 0x4d, 0x09, 0xc3, 0x08,
-	0xf5, 0x66, 0x0e, 0x41, 0x70, 0x32, 0x61, 0x31, 0x29, 0x63, 0x06, 0x4f, 0x99, 0xa0, 0xf0, 0xcc,
-	0xbc, 0xbd, 0xd9, 0x81, 0x39, 0xf5, 0x1b, 0xa3, 0xec, 0xb5, 0x0a, 0xa5, 0xbe, 0x94, 0x47, 0x91,
-	0x8d, 0x92, 0xa8, 0x58, 0x65, 0xd5, 0xa9, 0x24, 0x45, 0x75, 0x39, 0xb5, 0xe4, 0xf7, 0x61, 0x3e,
-	0xeb, 0xea, 0xa7, 0x91, 0x1e, 0x29, 0xd3, 0xeb, 0xff, 0x3f, 0x9a, 0x2e, 0xd8, 0x7f, 0x0c, 0x57,
-	0x32, 0x6e, 0x3a, 0x72, 0x07, 0x3b, 0x36, 0xaa, 0xdf, 0x1c, 0x45, 0x15, 0x8c, 0x1f, 0xc1, 0xa5,
-	0x64, 0x81, 0x5a, 0xcf, 0x19, 0x78, 0xd0, 0x0b, 0x95, 0x70, 0x90, 0x57, 0xcb, 0xed, 0xc0, 0x9c,
-	0xfa, 0x63, 0x81, 0x6c, 0x27, 0x85, 0xa2, 0xd8, 0x29, 0xfb, 0x27, 0x82, 0x6d, 0x98, 0x55, 0xbe,
-	0xbe, 0xcb, 0xee, 0x23, 0x13, 0x14, 0xf7, 0xc9, 0xfc, 0xd0, 0x4e, 0xb6, 0xa1, 0xfa, 0xb7, 0x9f,
-	0xb2, 0x0d, 0x15, 0x92, 0xba, 0x0d, 0xb3, 0x7f, 0xdc, 0xbb, 0x07, 0x33, 0xe2, 0x2b, 0xef, 0xbc,
-	0xd4, 0x3d, 0x02, 0xeb, 0xd7, 0x33, 0x40, 0x31, 0xfa, 0x10, 0x2e, 0xa7, 0xbe, 0x2b, 0x5c, 0x4f,
-	0xed, 0x80, 0x98, 0x58, 0x7f, 0x6b, 0x04, 0x51, 0x70, 0xdd, 0x84, 0xaa, 0xfc, 0xab, 0xce, 0x62,
-	0x6a, 0x9b, 0x52, 0xbc, 0xde, 0xc8, 0xc6, 0x65, 0xa5, 0x2b, 0xdf, 0x51, 0x65, 0xa5, 0xcb, 0x04,
-	0x45, 0xe9, 0x99, 0x9f, 0x35, 0xb7, 0x61, 0x56, 0xf9, 0x9d, 0xe3, 0x6a, 0xda, 0xe0, 0x69, 0x4e,
-	0x99, 0xff, 0x6e, 0x6c, 0x42, 0x55, 0xfe, 0xe5, 0x61, 0x31, 0x65, 0xee, 0xf4, 0xd2, 0x32, 0x7e,
-	0x6f, 0x58, 0xdb, 0xfa, 0xfc, 0x79, 0x43, 0xfb, 0xe2, 0x79, 0x43, 0xfb, 0xf7, 0xf3, 0x86, 0xf6,
-	0xab, 0x17, 0x8d, 0x0b, 0x5f, 0xbc, 0x68, 0x5c, 0xf8, 0xe7, 0x8b, 0xc6, 0x85, 0x4f, 0xde, 0x91,
-	0x3e, 0x89, 0xb1, 0x1c, 0xf2, 0x2e, 0x46, 0xf6, 0x11, 0xff, 0x6b, 0x74, 0xf5, 0x59, 0xf4, 0x42,
-	0x3f, 0x8e, 0xb5, 0xa7, 0xe8, 0x5f, 0xa4, 0xef, 0xfd, 0x37, 0x00, 0x00, 0xff, 0xff, 0xca, 0x2d,
-	0xc3, 0x06, 0xab, 0x2a, 0x00, 0x00,
+	0x15, 0xd0, 0xe4, 0xd8, 0xc0, 0x37, 0x60, 0x6b, 0x83, 0x87, 0x07, 0x09, 0x31, 0x3e, 0xd5, 0xe0,
+	0xe6, 0xa8, 0x05, 0x28, 0x91, 0x96, 0x13, 0xd4, 0x48, 0x1b, 0x81, 0x71, 0xa5, 0x3a, 0x8e, 0x22,
+	0x7f, 0x93, 0xce, 0x6c, 0xd2, 0xe7, 0xa5, 0xd1, 0xbe, 0xbc, 0x4e, 0xba, 0xf9, 0x27, 0xd1, 0x54,
+	0xbc, 0x19, 0xc7, 0x9b, 0xa2, 0x1c, 0x6f, 0x16, 0xa0, 0x7c, 0x48, 0x2a, 0x8f, 0x48, 0x7d, 0xb4,
+	0x91, 0xa7, 0xbe, 0x8c, 0x0c, 0xc4, 0xa5, 0x92, 0xf5, 0xc2, 0x21, 0x55, 0x2f, 0x02, 0x34, 0xe3,
+	0xd7, 0xf1, 0xee, 0xc6, 0xaf, 0x65, 0xe7, 0xc0, 0xf3, 0xb7, 0xf9, 0xab, 0x4d, 0xfa, 0x6a, 0x68,
+	0x28, 0x8f, 0x1b, 0x1a, 0xa6, 0xf2, 0x42, 0xc3, 0xf4, 0xa8, 0xd0, 0x30, 0xf3, 0xd2, 0xa1, 0x81,
+	0xb0, 0xec, 0x3b, 0xec, 0x06, 0xa5, 0xc2, 0x59, 0xf2, 0xb6, 0x64, 0x65, 0x50, 0xac, 0xfc, 0x35,
+	0x98, 0x13, 0x3a, 0x4e, 0x5c, 0xa2, 0x6b, 0x4a, 0xc7, 0x5f, 0xb2, 0x0b, 0x83, 0xb8, 0xa7, 0x5c,
+	0x33, 0xed, 0x87, 0xed, 0xd8, 0x0c, 0xbc, 0x25, 0x89, 0x13, 0x1d, 0xda, 0x45, 0x5b, 0xbf, 0x0c,
+	0xc5, 0xc7, 0x66, 0x8b, 0xdb, 0x80, 0xbc, 0xca, 0xfe, 0x51, 0xca, 0xf3, 0x8f, 0xb2, 0xe2, 0x1f,
+	0x3f, 0xa0, 0xd5, 0x23, 0x13, 0xe8, 0xa1, 0x15, 0xe2, 0x23, 0x76, 0xf7, 0x70, 0x03, 0x2a, 0x1f,
+	0xfa, 0x96, 0x8b, 0x89, 0x77, 0x47, 0x8e, 0x21, 0x00, 0xe2, 0x18, 0xeb, 0x5e, 0x47, 0x38, 0x06,
+	0x79, 0xcf, 0xab, 0x21, 0x8d, 0xcf, 0x0a, 0xb4, 0x58, 0x4c, 0xce, 0x20, 0x16, 0xde, 0x00, 0xb8,
+	0x6f, 0xa3, 0x20, 0x60, 0x17, 0x21, 0xfc, 0xee, 0x31, 0x46, 0x88, 0x02, 0x76, 0x9d, 0x63, 0xb4,
+	0x17, 0xcf, 0x27, 0xda, 0xa4, 0x6c, 0x33, 0xd1, 0x13, 0x1f, 0x05, 0x8c, 0x27, 0x9f, 0x59, 0xc1,
+	0xc8, 0x4a, 0xe8, 0x0b, 0x5d, 0x09, 0x2f, 0xfc, 0x04, 0xa0, 0x7f, 0x03, 0x2e, 0xf3, 0x44, 0x1d,
+	0xb6, 0xfb, 0x4e, 0x70, 0x44, 0x0c, 0xc0, 0x14, 0x94, 0xc2, 0x69, 0x91, 0x48, 0xb1, 0xc7, 0x81,
+	0x14, 0x0c, 0x15, 0x8c, 0x06, 0x57, 0xdb, 0x1b, 0x22, 0xee, 0x8d, 0xac, 0x21, 0x9b, 0x65, 0x26,
+	0xcf, 0x2c, 0x15, 0xc5, 0x2c, 0x8f, 0x52, 0xbb, 0x36, 0x8e, 0xb9, 0xe7, 0xe7, 0x84, 0xcc, 0xdb,
+	0xf4, 0x4f, 0x35, 0x78, 0x33, 0x97, 0xa7, 0x52, 0xb0, 0xc6, 0xf1, 0x5e, 0x2e, 0x58, 0xe3, 0xbe,
+	0xd2, 0xfb, 0x18, 0x11, 0xa9, 0x27, 0x6d, 0x01, 0x7a, 0xda, 0xe1, 0x61, 0xff, 0x9c, 0x65, 0xdd,
+	0x90, 0xf3, 0x47, 0x41, 0xbd, 0xda, 0xdc, 0xc8, 0xf5, 0xbe, 0x9f, 0x6b, 0xf4, 0x6a, 0x2b, 0x3d,
+	0x9b, 0x58, 0xf0, 0x5d, 0x71, 0xca, 0x93, 0xef, 0x2c, 0xd6, 0xae, 0x9c, 0x9d, 0x36, 0x55, 0x82,
+	0xa9, 0x36, 0xc7, 0x58, 0x79, 0x20, 0xed, 0x04, 0xce, 0x6b, 0xdb, 0x09, 0x48, 0xd4, 0x21, 0x05,
+	0xe4, 0x39, 0xeb, 0x57, 0x13, 0x71, 0x21, 0x99, 0x88, 0x73, 0x35, 0xf0, 0x67, 0x0d, 0xde, 0x1a,
+	0x31, 0xab, 0xd0, 0xc3, 0x6d, 0xa8, 0x4a, 0x30, 0xd7, 0xc2, 0xa5, 0xb3, 0xd3, 0xa6, 0x0c, 0x9b,
+	0x72, 0x43, 0x37, 0x60, 0x6a, 0x17, 0xb9, 0x5d, 0x7c, 0xc4, 0xc4, 0x61, 0x77, 0xe4, 0x0c, 0x31,
+	0xf9, 0x53, 0xd6, 0x52, 0x31, 0x4f, 0x4b, 0x25, 0x59, 0x4b, 0x77, 0x7e, 0x7a, 0x11, 0x8a, 0x7b,
+	0x41, 0x57, 0xdf, 0x83, 0x39, 0x35, 0x8f, 0xd7, 0xa2, 0xe8, 0x9d, 0xfc, 0x81, 0xa4, 0x6e, 0xa4,
+	0x28, 0xe9, 0x1f, 0x45, 0xbe, 0x0d, 0x95, 0xf8, 0x7a, 0x76, 0x41, 0x1a, 0x20, 0xd0, 0xfa, 0x8d,
+	0x2c, 0x54, 0x30, 0xf8, 0x04, 0xf4, 0x8c, 0x8b, 0xde, 0x37, 0xe4, 0x31, 0x29, 0x72, 0xfd, 0xed,
+	0x91, 0x64, 0x59, 0xb8, 0xf8, 0xa6, 0x54, 0x16, 0x4e, 0xa0, 0x8a, 0x70, 0xa9, 0xcb, 0xca, 0x88,
+	0x01, 0xbb, 0xa9, 0x4c, 0x32, 0xa0, 0x68, 0x8a, 0x81, 0x7a, 0xef, 0xf8, 0x00, 0x2e, 0x26, 0xfe,
+	0x88, 0xb9, 0x96, 0x52, 0x6a, 0x44, 0xaa, 0xbf, 0x99, 0x4b, 0x12, 0xfc, 0xbe, 0x0b, 0xb5, 0x6d,
+	0xcb, 0xed, 0xf4, 0x91, 0x9f, 0xbe, 0xd7, 0x93, 0x39, 0xab, 0x24, 0x85, 0x73, 0xce, 0x95, 0xda,
+	0x36, 0xcc, 0x2a, 0xbf, 0x88, 0x5c, 0x4d, 0x09, 0xc3, 0x08, 0xf5, 0x66, 0x0e, 0x41, 0x70, 0x32,
+	0x61, 0x31, 0x29, 0x63, 0x06, 0x4f, 0x99, 0xa0, 0xf0, 0xcc, 0xbc, 0xbd, 0xd9, 0x81, 0x39, 0xf5,
+	0x1b, 0xa3, 0xec, 0xb5, 0x0a, 0xa5, 0xbe, 0x94, 0x47, 0x91, 0x8d, 0x92, 0xa8, 0x58, 0x65, 0xd5,
+	0xa9, 0x24, 0x45, 0x75, 0x39, 0xb5, 0xe4, 0xf7, 0x61, 0x3e, 0xeb, 0xea, 0xa7, 0x91, 0x1e, 0x29,
+	0xd3, 0xeb, 0xff, 0x3f, 0x9a, 0x2e, 0xd8, 0x7f, 0x0c, 0x57, 0x32, 0x6e, 0x3a, 0x72, 0x07, 0x3b,
+	0x36, 0xaa, 0xdf, 0x1c, 0x45, 0x15, 0x8c, 0x1f, 0xc1, 0xa5, 0x64, 0x81, 0x5a, 0xcf, 0x19, 0x78,
+	0xd0, 0x0b, 0x95, 0x70, 0x90, 0x57, 0xcb, 0xed, 0xc0, 0x9c, 0xfa, 0x63, 0x81, 0x6c, 0x27, 0x85,
+	0xa2, 0xd8, 0x29, 0xfb, 0x27, 0x82, 0x6d, 0x98, 0x55, 0xbe, 0xbe, 0xcb, 0xee, 0x23, 0x13, 0x14,
+	0xf7, 0xc9, 0xfc, 0xd0, 0x4e, 0xb6, 0xa1, 0xfa, 0xb7, 0x9f, 0xb2, 0x0d, 0x15, 0x92, 0xba, 0x0d,
+	0xb3, 0x7f, 0xdc, 0xbb, 0x07, 0x33, 0xe2, 0x2b, 0xef, 0xbc, 0xd4, 0x3d, 0x02, 0xeb, 0xd7, 0x33,
+	0x40, 0x31, 0xfa, 0x10, 0x2e, 0xa7, 0xbe, 0x2b, 0x5c, 0x4f, 0xed, 0x80, 0x98, 0x58, 0x7f, 0x6b,
+	0x04, 0x51, 0x70, 0xdd, 0x84, 0xaa, 0xfc, 0xab, 0xce, 0x62, 0x6a, 0x9b, 0x52, 0xbc, 0xde, 0xc8,
+	0xc6, 0x65, 0xa5, 0x2b, 0xdf, 0x51, 0x65, 0xa5, 0xcb, 0x04, 0x45, 0xe9, 0x99, 0x9f, 0x35, 0xb7,
+	0x61, 0x56, 0xf9, 0x9d, 0xe3, 0x6a, 0xda, 0xe0, 0x69, 0x4e, 0x99, 0xff, 0x6e, 0x6c, 0x42, 0x55,
+	0xfe, 0xe5, 0x61, 0x31, 0x65, 0xee, 0xf4, 0xd2, 0x32, 0x7e, 0x6f, 0x58, 0xdb, 0xfa, 0xfc, 0x79,
+	0x43, 0xfb, 0xe2, 0x79, 0x43, 0xfb, 0xf7, 0xf3, 0x86, 0xf6, 0xab, 0x17, 0x8d, 0x0b, 0x5f, 0xbc,
+	0x68, 0x5c, 0xf8, 0xe7, 0x8b, 0xc6, 0x85, 0x4f, 0xde, 0x91, 0x3e, 0x89, 0xb1, 0x1c, 0xf2, 0x2e,
+	0x46, 0xf6, 0x11, 0xff, 0x6b, 0x74, 0xf5, 0x59, 0xf4, 0x42, 0x3f, 0x8e, 0xb5, 0xa7, 0xe8, 0x5f,
+	0xa4, 0xef, 0xfd, 0x37, 0x00, 0x00, 0xff, 0xff, 0xc7, 0x55, 0xfa, 0x79, 0xab, 0x2a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -7739,10 +7738,10 @@ func (m *MsgStripeCreatePaymentIntent) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
-	if len(m.CustomerId) > 0 {
-		i -= len(m.CustomerId)
-		copy(dAtA[i:], m.CustomerId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.CustomerId)))
+	if len(m.CustomerID) > 0 {
+		i -= len(m.CustomerID)
+		copy(dAtA[i:], m.CustomerID)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.CustomerID)))
 		i--
 		dAtA[i] = 0x32
 	}
@@ -8251,7 +8250,7 @@ func (m *MsgStripeOauthTokenResponse) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgStripeCreateCustomerId) Marshal() (dAtA []byte, err error) {
+func (m *MsgStripeCreateCustomerID) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -8261,12 +8260,12 @@ func (m *MsgStripeCreateCustomerId) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgStripeCreateCustomerId) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgStripeCreateCustomerID) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgStripeCreateCustomerId) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgStripeCreateCustomerID) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -8288,7 +8287,7 @@ func (m *MsgStripeCreateCustomerId) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgStripeCreateCustomerIDResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -8298,12 +8297,12 @@ func (m *MsgStripeCreateCustomerIdResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgStripeCreateCustomerIDResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgStripeCreateCustomerIDResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -8322,10 +8321,10 @@ func (m *MsgStripeCreateCustomerIdResponse) MarshalToSizedBuffer(dAtA []byte) (i
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.CustomerId) > 0 {
-		i -= len(m.CustomerId)
-		copy(dAtA[i:], m.CustomerId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.CustomerId)))
+	if len(m.CustomerID) > 0 {
+		i -= len(m.CustomerID)
+		copy(dAtA[i:], m.CustomerID)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.CustomerID)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -8420,7 +8419,7 @@ func (m *MsgStripeCheckPaymentResponse) MarshalToSizedBuffer(dAtA []byte) (int, 
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgStripePaymentHistoryLIst) Marshal() (dAtA []byte, err error) {
+func (m *MsgStripePaymentHistoryList) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -8430,12 +8429,12 @@ func (m *MsgStripePaymentHistoryLIst) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgStripePaymentHistoryLIst) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgStripePaymentHistoryList) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgStripePaymentHistoryLIst) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgStripePaymentHistoryList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -8447,10 +8446,10 @@ func (m *MsgStripePaymentHistoryLIst) MarshalToSizedBuffer(dAtA []byte) (int, er
 		i--
 		dAtA[i] = 0x1a
 	}
-	if len(m.CustomerId) > 0 {
-		i -= len(m.CustomerId)
-		copy(dAtA[i:], m.CustomerId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.CustomerId)))
+	if len(m.CustomerID) > 0 {
+		i -= len(m.CustomerID)
+		copy(dAtA[i:], m.CustomerID)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.CustomerID)))
 		i--
 		dAtA[i] = 0x12
 	}
@@ -8464,7 +8463,7 @@ func (m *MsgStripePaymentHistoryLIst) MarshalToSizedBuffer(dAtA []byte) (int, er
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgStripePaymentHistoryListResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -8474,12 +8473,12 @@ func (m *MsgStripePaymentHistoryLIstResponse) Marshal() (dAtA []byte, err error)
 	return dAtA[:n], nil
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgStripePaymentHistoryListResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgStripePaymentHistoryListResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -8505,10 +8504,10 @@ func (m *MsgStripePaymentHistoryLIstResponse) MarshalToSizedBuffer(dAtA []byte) 
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.HistoryLIst) > 0 {
-		i -= len(m.HistoryLIst)
-		copy(dAtA[i:], m.HistoryLIst)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.HistoryLIst)))
+	if len(m.HistoryList) > 0 {
+		i -= len(m.HistoryList)
+		copy(dAtA[i:], m.HistoryList)
+		i = encodeVarintTx(dAtA, i, uint64(len(m.HistoryList)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -9683,7 +9682,7 @@ func (m *MsgStripeCreatePaymentIntent) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.CustomerId)
+	l = len(m.CustomerID)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -9921,7 +9920,7 @@ func (m *MsgStripeOauthTokenResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgStripeCreateCustomerId) Size() (n int) {
+func (m *MsgStripeCreateCustomerID) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -9938,13 +9937,13 @@ func (m *MsgStripeCreateCustomerId) Size() (n int) {
 	return n
 }
 
-func (m *MsgStripeCreateCustomerIdResponse) Size() (n int) {
+func (m *MsgStripeCreateCustomerIDResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.CustomerId)
+	l = len(m.CustomerID)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -10001,7 +10000,7 @@ func (m *MsgStripeCheckPaymentResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgStripePaymentHistoryLIst) Size() (n int) {
+func (m *MsgStripePaymentHistoryList) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -10011,7 +10010,7 @@ func (m *MsgStripePaymentHistoryLIst) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.CustomerId)
+	l = len(m.CustomerID)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -10022,13 +10021,13 @@ func (m *MsgStripePaymentHistoryLIst) Size() (n int) {
 	return n
 }
 
-func (m *MsgStripePaymentHistoryLIstResponse) Size() (n int) {
+func (m *MsgStripePaymentHistoryListResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	l = len(m.HistoryLIst)
+	l = len(m.HistoryList)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
@@ -17977,7 +17976,7 @@ func (m *MsgStripeCreatePaymentIntent) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 6:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -18005,7 +18004,7 @@ func (m *MsgStripeCreatePaymentIntent) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CustomerId = string(dAtA[iNdEx:postIndex])
+			m.CustomerID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -19669,7 +19668,7 @@ func (m *MsgStripeOauthTokenResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgStripeCreateCustomerId) Unmarshal(dAtA []byte) error {
+func (m *MsgStripeCreateCustomerID) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -19692,10 +19691,10 @@ func (m *MsgStripeCreateCustomerId) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgStripeCreateCustomerId: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgStripeCreateCustomerID: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgStripeCreateCustomerId: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgStripeCreateCustomerID: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -19783,7 +19782,7 @@ func (m *MsgStripeCreateCustomerId) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgStripeCreateCustomerIdResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgStripeCreateCustomerIDResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -19806,15 +19805,15 @@ func (m *MsgStripeCreateCustomerIdResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgStripeCreateCustomerIdResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgStripeCreateCustomerIDResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgStripeCreateCustomerIdResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgStripeCreateCustomerIDResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -19842,7 +19841,7 @@ func (m *MsgStripeCreateCustomerIdResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CustomerId = string(dAtA[iNdEx:postIndex])
+			m.CustomerID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -20221,7 +20220,7 @@ func (m *MsgStripeCheckPaymentResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgStripePaymentHistoryLIst) Unmarshal(dAtA []byte) error {
+func (m *MsgStripePaymentHistoryList) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -20244,10 +20243,10 @@ func (m *MsgStripePaymentHistoryLIst) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgStripePaymentHistoryLIst: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgStripePaymentHistoryList: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgStripePaymentHistoryLIst: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgStripePaymentHistoryList: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -20284,7 +20283,7 @@ func (m *MsgStripePaymentHistoryLIst) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CustomerId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CustomerID", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -20312,7 +20311,7 @@ func (m *MsgStripePaymentHistoryLIst) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CustomerId = string(dAtA[iNdEx:postIndex])
+			m.CustomerID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
@@ -20367,7 +20366,7 @@ func (m *MsgStripePaymentHistoryLIst) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgStripePaymentHistoryLIstResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgStripePaymentHistoryListResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -20390,15 +20389,15 @@ func (m *MsgStripePaymentHistoryLIstResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgStripePaymentHistoryLIstResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgStripePaymentHistoryListResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgStripePaymentHistoryLIstResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgStripePaymentHistoryListResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HistoryLIst", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field HistoryList", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
@@ -20426,7 +20425,7 @@ func (m *MsgStripePaymentHistoryLIstResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.HistoryLIst = string(dAtA[iNdEx:postIndex])
+			m.HistoryList = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {

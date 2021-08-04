@@ -8,6 +8,7 @@ import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/product"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
@@ -40,7 +41,7 @@ func stripeCreateProductHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = string(config.Config.ChainID)
 		baseReq.From = addr.String()
 
 		if err != nil {

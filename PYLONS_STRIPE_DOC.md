@@ -59,7 +59,7 @@
 ###  stripe_create_payment_intent  
     url : http://localhost:1317/pylons/stripe_create_payment_intent
     method : POST
-    params : {"Amount":"Amount","Country":"Country", "SKUID": "SKUID","Sender":"Sender","CustomerId: "CustomerId"} 
+    params : {"Amount":"Amount","Country":"Country", "SKUID": "SKUID","Sender":"Sender","CustomerID: "CustomerID"} 
     Response : 
     {
         "result": {
@@ -69,7 +69,7 @@
             "stripe_customer_id": "cus_Jy47JClSoIn9ZP"
         }
     }
-    ex->params : {"Amount":"2300","Country":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz", "CustomerId": "cus_Jy47JClSoIn9ZP"} 
+    ex->params : {"Amount":"2300","Country":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz", "CustomerID": "cus_Jy47JClSoIn9ZP"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ###  stripe_create_customer_id  
     url : http://localhost:1317/pylons/stripe_create_customer_id
@@ -98,7 +98,7 @@
 ###  stripe_payment_history_list  
     url : http://localhost:1317/custom/pylons/check_payment/stripe_payment_history_list
     method : POST 
-    params: {"Sender":"Sender","CustomerId":"CustomerId"} 
+    params: {"Sender":"Sender","CustomerID":"CustomerID"} 
     Response : 
     {
          "result": {
@@ -106,5 +106,5 @@
             "length": "0"
         }
     }
-    ex->params : {"Sender":"cosmos1zv9lypqpgtwjcmhup7650wukcull9jehjd3njy","CustomerId":"cus_JyPsIGUthoUKDk"} 
+    ex->params : {"Sender":"cosmos1zv9lypqpgtwjcmhup7650wukcull9jehjd3njy","CustomerID":"cus_JyPsIGUthoUKDk"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

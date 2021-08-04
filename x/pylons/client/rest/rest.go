@@ -82,7 +82,7 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		stripeCreatePaymentIntentHandler(cliCtx)).Methods("POST")
 
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_customer_id", storeName),
-		stripeCreateCustomerIdHandler(cliCtx)).Methods("POST")
+		stripeCreateCustomerIDHandler(cliCtx)).Methods("POST")
 
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_check_payment", storeName),
 		stripeCheckPaymentHandler(cliCtx)).Methods("POST")
@@ -134,9 +134,6 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		listCookbooksHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks/{%s}", storeName, ownerKeyName),
 		listCookbooksHandler(cliCtx, storeName)).Methods("GET")
-
-	r.HandleFunc(fmt.Sprintf("/%s/active_list_cookbooks", storeName),
-		activeListCookbooksHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_trade", storeName),
 		listTradesHandler(cliCtx, storeName)).Methods("GET")

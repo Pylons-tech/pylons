@@ -23,7 +23,7 @@ type stripeCreatePaymentIntentReq struct {
 	Currency   string
 	SKUID      string
 	Sender     string
-	CustomerId string
+	CustomerID string
 }
 
 type stripePaymentRes struct {
@@ -50,7 +50,7 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = string(config.Config.ChainID)
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -73,24 +73,15 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		// create the message
-		msg := types.NewMsgStripeCreatePaymentIntent(req.StripeKey, req.Amount, req.Currency, req.SKUID, addr.String(), req.CustomerId)
+		msg := types.NewMsgStripeCreatePaymentIntent(req.StripeKey, req.Amount, req.Currency, req.SKUID, addr.String(), req.CustomerID)
 		err = msg.ValidateBasic()
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
 
-		// customerParams := &stripe.CustomerParams{
-		// 	Description: stripe.String(addr.String()),
-		// }
-		// customer, err := customer.New(customerParams)
-		// if err != nil {
-		// 	rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create customer: %s", err.Error()))
-		// 	return
-		// }
-
 		ephEmeralKeyParams := &stripe.EphemeralKeyParams{
-			Customer:      &req.CustomerId,
+			Customer:      &req.CustomerID,
 			StripeVersion: stripe.String("2020-08-27"),
 		}
 
@@ -104,7 +95,7 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 		params := &stripe.PaymentIntentParams{
 			Amount:     stripe.Int64(skuResult.Price),
 			Currency:   stripe.String(string(skuResult.Currency)),
-			Customer:   stripe.String(req.CustomerId),
+			Customer:   stripe.String(req.CustomerID),
 			OnBehalfOf: stripe.String(skuResult.Metadata["ClientId"]),
 		}
 
@@ -117,7 +108,7 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 		var result stripePaymentRes
 		result.PAYMENT_ID = paymentIntent.ID
 		result.CLIENT_SECRET = paymentIntent.ClientSecret
-		result.CURSTOMER_ID = req.CustomerId
+		result.CURSTOMER_ID = req.CustomerID
 		result.EPHEMERAL_KEY = ephEmeralKey.ID
 		rest.PostProcessResponse(w, cliCtx, result)
 		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)

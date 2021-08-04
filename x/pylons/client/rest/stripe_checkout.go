@@ -43,7 +43,7 @@ func stripeCheckoutHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = string(config.Config.ChainID)
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {

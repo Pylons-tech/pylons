@@ -433,22 +433,22 @@ func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string
 	return msg
 }
 
-func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string, CustomerId string) MsgStripeCreatePaymentIntent {
+func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string, CustomerID string) MsgStripeCreatePaymentIntent {
 	msg := MsgStripeCreatePaymentIntent{
 		StripeKey:  StripeKey,
 		Amount:     Amount,
 		Currency:   Currency,
 		SKUID:      SKUID,
 		Sender:     Sender,
-		CustomerId: CustomerId,
+		CustomerID: CustomerID,
 	}
 	return msg
 }
 
-func NewMsgStripePaymentHistoryLIst(StripeKey string, CustomerId string, Sender string) MsgStripePaymentHistoryLIst {
-	msg := MsgStripePaymentHistoryLIst{
+func NewMsgStripePaymentHistoryList(StripeKey string, CustomerID string, Sender string) MsgStripePaymentHistoryList {
+	msg := MsgStripePaymentHistoryList{
 		StripeKey:  StripeKey,
-		CustomerId: CustomerId,
+		CustomerID: CustomerID,
 		Sender:     Sender,
 	}
 	return msg
@@ -463,8 +463,8 @@ func NewMsgStripeCheckPayment(StripeKey string, PaymentID string, Sender string)
 	return msg
 }
 
-func NewMsgStripeCreateCustomerId(StripeKey string, Sender string) MsgStripeCreateCustomerId {
-	msg := MsgStripeCreateCustomerId{
+func NewMsgStripeCreateCustomerID(StripeKey string, Sender string) MsgStripeCreateCustomerID {
+	msg := MsgStripeCreateCustomerID{
 		StripeKey: StripeKey,
 		Sender:    Sender,
 	}
@@ -733,7 +733,7 @@ func (msg MsgStripeInfo) ValidateBasic() error {
 	return nil
 }
 
-func (msg MsgStripePaymentHistoryLIst) GetSignBytes() []byte {
+func (msg MsgStripePaymentHistoryList) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
@@ -741,7 +741,7 @@ func (msg MsgStripePaymentHistoryLIst) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-func (msg MsgStripePaymentHistoryLIst) GetSigners() []sdk.AccAddress {
+func (msg MsgStripePaymentHistoryList) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -749,11 +749,11 @@ func (msg MsgStripePaymentHistoryLIst) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from}
 }
 
-func (msg MsgStripePaymentHistoryLIst) Route() string { return RouterKey }
+func (msg MsgStripePaymentHistoryList) Route() string { return RouterKey }
 
-func (msg MsgStripePaymentHistoryLIst) Type() string { return "stripe_payment_history_list" }
+func (msg MsgStripePaymentHistoryList) Type() string { return "stripe_payment_history_list" }
 
-func (msg MsgStripePaymentHistoryLIst) ValidateBasic() error {
+func (msg MsgStripePaymentHistoryList) ValidateBasic() error {
 
 	// if msg.Sender == "" {
 	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
@@ -791,7 +791,7 @@ func (msg MsgStripeCheckPayment) ValidateBasic() error {
 	return nil
 }
 
-func (msg MsgStripeCreateCustomerId) GetSignBytes() []byte {
+func (msg MsgStripeCreateCustomerID) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
 		panic(err)
@@ -799,7 +799,7 @@ func (msg MsgStripeCreateCustomerId) GetSignBytes() []byte {
 	return sdk.MustSortJSON(b)
 }
 
-func (msg MsgStripeCreateCustomerId) GetSigners() []sdk.AccAddress {
+func (msg MsgStripeCreateCustomerID) GetSigners() []sdk.AccAddress {
 	from, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		panic(err)
@@ -807,11 +807,11 @@ func (msg MsgStripeCreateCustomerId) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{from}
 }
 
-func (msg MsgStripeCreateCustomerId) Route() string { return RouterKey }
+func (msg MsgStripeCreateCustomerID) Route() string { return RouterKey }
 
-func (msg MsgStripeCreateCustomerId) Type() string { return "stripe_create_customer_id" }
+func (msg MsgStripeCreateCustomerID) Type() string { return "stripe_create_customer_id" }
 
-func (msg MsgStripeCreateCustomerId) ValidateBasic() error {
+func (msg MsgStripeCreateCustomerID) ValidateBasic() error {
 
 	// if msg.Sender == "" {
 	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)

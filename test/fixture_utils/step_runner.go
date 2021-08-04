@@ -932,7 +932,7 @@ func StripeCreatePaymentIntentMsgFromRef(ref string, t *testing.T) types.MsgStri
 		"execType":  testutils.AminoCodecFormatter(execType),
 		"new_bytes": string(newByteValue),
 	}).MustNil(err, "error reading using json.Unmarshal")
-	return types.NewMsgStripeCreatePaymentIntent(execType.StripeKey, execType.Amount, execType.Currency, execType.SKUID, execType.Sender, execType.CustomerId)
+	return types.NewMsgStripeCreatePaymentIntent(execType.StripeKey, execType.Amount, execType.Currency, execType.SKUID, execType.Sender, execType.CustomerID)
 }
 
 // RunExecuteRecipe is executed when an action "execute_recipe" is called

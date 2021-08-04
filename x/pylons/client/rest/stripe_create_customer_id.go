@@ -14,19 +14,19 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/rest"
 )
 
-type stripeCreateCustomerIdReq struct {
+type stripeCreateCustomerIDReq struct {
 	BaseReq   rest.BaseReq `json:"base_req"`
 	StripeKey string
 	Sender    string
 }
 
-type stripeCreateCustomerIdRes struct {
+type stripeCreateCustomerIDRes struct {
 	CURSTOMER_ID string `json:"stripe_customer_id"`
 }
 
-func stripeCreateCustomerIdHandler(cliCtx client.Context) http.HandlerFunc {
+func stripeCreateCustomerIDHandler(cliCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req stripeCreateCustomerIdReq
+		var req stripeCreateCustomerIDReq
 		if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse request")
 			return
@@ -38,7 +38,7 @@ func stripeCreateCustomerIdHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = string(config.Config.ChainID)
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -55,7 +55,7 @@ func stripeCreateCustomerIdHandler(cliCtx client.Context) http.HandlerFunc {
 		stripe.Key = req.StripeKey
 
 		// create the message
-		msg := types.NewMsgStripeCreateCustomerId(req.StripeKey, addr.String())
+		msg := types.NewMsgStripeCreateCustomerID(req.StripeKey, addr.String())
 
 		err = msg.ValidateBasic()
 		if err != nil {
@@ -70,7 +70,7 @@ func stripeCreateCustomerIdHandler(cliCtx client.Context) http.HandlerFunc {
 			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error create customer: %s", err.Error()))
 			return
 		}
-		var result stripeCreateCustomerIdRes
+		var result stripeCreateCustomerIDRes
 		result.CURSTOMER_ID = customer.ID
 		//rest.PostProcessResponse(w, cliCtx, result)
 		rest.PostProcessResponse(w, cliCtx, result)

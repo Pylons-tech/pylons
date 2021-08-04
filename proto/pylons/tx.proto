@@ -443,7 +443,7 @@ message MsgStripeCreatePaymentIntent  {
   string Currency = 3;
   string SKUID = 4;
   string Sender = 5;
-  string CustomerId = 6;
+  string CustomerID = 6;
 }
 
 message MsgStripeCreatePaymentIntentResponse{
@@ -511,13 +511,13 @@ message MsgStripeOauthTokenResponse {
   string Status = 9;
 }
 
-message MsgStripeCreateCustomerId  { 
+message MsgStripeCreateCustomerID  { 
   string StripeKey = 1; 
   string Sender = 2; 
 }
 
-message MsgStripeCreateCustomerIdResponse{
-  string CustomerId = 1 [(gogoproto.jsontag) = "CustomerId"];
+message MsgStripeCreateCustomerIDResponse{
+  string CustomerID = 1 [(gogoproto.jsontag) = "CustomerID"];
   string Message = 2;
   string Status = 3;
 }
@@ -534,14 +534,14 @@ message MsgStripeCheckPaymentResponse{
   string Status = 3;
 }
 
-message MsgStripePaymentHistoryLIst  {  
+message MsgStripePaymentHistoryList  {  
   string StripeKey = 1; 
-  string CustomerId = 2;
+  string CustomerID = 2;
   string Sender = 3; 
 }
 
-message MsgStripePaymentHistoryLIstResponse{
-  string HistoryLIst = 1 [(gogoproto.jsontag) = "HistoryList"];
+message MsgStripePaymentHistoryListResponse{
+  string HistoryList = 1 [(gogoproto.jsontag) = "HistoryList"];
   string Length = 2 [(gogoproto.jsontag) = "Length"];
   string Message = 3;
   string Status = 4;
