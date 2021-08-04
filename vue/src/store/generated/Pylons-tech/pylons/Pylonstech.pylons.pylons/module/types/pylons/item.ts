@@ -32,7 +32,6 @@ export interface Item {
   longs: LongKeyValue[]
   strings: StringKeyValue[]
   mutableStrings: StringKeyValue[]
-  lastTradeID: string
   tradeable: boolean
   lastUpdate: number
   transferFee: number
@@ -254,17 +253,7 @@ export const StringKeyValue = {
   }
 }
 
-const baseItem: object = {
-  creator: '',
-  cookbookID: '',
-  recipeID: '',
-  ID: '',
-  nodeVersion: '',
-  lastTradeID: '',
-  tradeable: false,
-  lastUpdate: 0,
-  transferFee: 0
-}
+const baseItem: object = { creator: '', cookbookID: '', recipeID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, transferFee: 0 }
 
 export const Item = {
   encode(message: Item, writer: Writer = Writer.create()): Writer {
@@ -295,17 +284,14 @@ export const Item = {
     for (const v of message.mutableStrings) {
       StringKeyValue.encode(v!, writer.uint32(74).fork()).ldelim()
     }
-    if (message.lastTradeID !== '') {
-      writer.uint32(82).string(message.lastTradeID)
-    }
     if (message.tradeable === true) {
-      writer.uint32(88).bool(message.tradeable)
+      writer.uint32(80).bool(message.tradeable)
     }
     if (message.lastUpdate !== 0) {
-      writer.uint32(96).uint64(message.lastUpdate)
+      writer.uint32(88).uint64(message.lastUpdate)
     }
     if (message.transferFee !== 0) {
-      writer.uint32(104).uint64(message.transferFee)
+      writer.uint32(96).uint64(message.transferFee)
     }
     return writer
   },
@@ -349,15 +335,12 @@ export const Item = {
           message.mutableStrings.push(StringKeyValue.decode(reader, reader.uint32()))
           break
         case 10:
-          message.lastTradeID = reader.string()
-          break
-        case 11:
           message.tradeable = reader.bool()
           break
-        case 12:
+        case 11:
           message.lastUpdate = longToNumber(reader.uint64() as Long)
           break
-        case 13:
+        case 12:
           message.transferFee = longToNumber(reader.uint64() as Long)
           break
         default:
@@ -419,11 +402,6 @@ export const Item = {
         message.mutableStrings.push(StringKeyValue.fromJSON(e))
       }
     }
-    if (object.lastTradeID !== undefined && object.lastTradeID !== null) {
-      message.lastTradeID = String(object.lastTradeID)
-    } else {
-      message.lastTradeID = ''
-    }
     if (object.tradeable !== undefined && object.tradeable !== null) {
       message.tradeable = Boolean(object.tradeable)
     } else {
@@ -469,7 +447,6 @@ export const Item = {
     } else {
       obj.mutableStrings = []
     }
-    message.lastTradeID !== undefined && (obj.lastTradeID = message.lastTradeID)
     message.tradeable !== undefined && (obj.tradeable = message.tradeable)
     message.lastUpdate !== undefined && (obj.lastUpdate = message.lastUpdate)
     message.transferFee !== undefined && (obj.transferFee = message.transferFee)
@@ -526,11 +503,6 @@ export const Item = {
       for (const e of object.mutableStrings) {
         message.mutableStrings.push(StringKeyValue.fromPartial(e))
       }
-    }
-    if (object.lastTradeID !== undefined && object.lastTradeID !== null) {
-      message.lastTradeID = object.lastTradeID
-    } else {
-      message.lastTradeID = ''
     }
     if (object.tradeable !== undefined && object.tradeable !== null) {
       message.tradeable = object.tradeable

@@ -25,7 +25,6 @@ export interface Item {
     longs: LongKeyValue[];
     strings: StringKeyValue[];
     mutableStrings: StringKeyValue[];
-    lastTradeID: string;
     tradeable: boolean;
     lastUpdate: number;
     transferFee: number;

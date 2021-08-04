@@ -4,6 +4,171 @@ import * as Long from 'long';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
+const baseMsgExecuteRecipe = { creator: '', cookbookID: '', recipeID: '', itemIDs: '' };
+export const MsgExecuteRecipe = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== '') {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.cookbookID !== '') {
+            writer.uint32(18).string(message.cookbookID);
+        }
+        if (message.recipeID !== '') {
+            writer.uint32(26).string(message.recipeID);
+        }
+        for (const v of message.itemIDs) {
+            writer.uint32(34).string(v);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgExecuteRecipe };
+        message.itemIDs = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.cookbookID = reader.string();
+                    break;
+                case 3:
+                    message.recipeID = reader.string();
+                    break;
+                case 4:
+                    message.itemIDs.push(reader.string());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgExecuteRecipe };
+        message.itemIDs = [];
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = '';
+        }
+        if (object.cookbookID !== undefined && object.cookbookID !== null) {
+            message.cookbookID = String(object.cookbookID);
+        }
+        else {
+            message.cookbookID = '';
+        }
+        if (object.recipeID !== undefined && object.recipeID !== null) {
+            message.recipeID = String(object.recipeID);
+        }
+        else {
+            message.recipeID = '';
+        }
+        if (object.itemIDs !== undefined && object.itemIDs !== null) {
+            for (const e of object.itemIDs) {
+                message.itemIDs.push(String(e));
+            }
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
+        message.recipeID !== undefined && (obj.recipeID = message.recipeID);
+        if (message.itemIDs) {
+            obj.itemIDs = message.itemIDs.map((e) => e);
+        }
+        else {
+            obj.itemIDs = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgExecuteRecipe };
+        message.itemIDs = [];
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = '';
+        }
+        if (object.cookbookID !== undefined && object.cookbookID !== null) {
+            message.cookbookID = object.cookbookID;
+        }
+        else {
+            message.cookbookID = '';
+        }
+        if (object.recipeID !== undefined && object.recipeID !== null) {
+            message.recipeID = object.recipeID;
+        }
+        else {
+            message.recipeID = '';
+        }
+        if (object.itemIDs !== undefined && object.itemIDs !== null) {
+            for (const e of object.itemIDs) {
+                message.itemIDs.push(e);
+            }
+        }
+        return message;
+    }
+};
+const baseMsgExecuteRecipeResponse = { ID: 0 };
+export const MsgExecuteRecipeResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.ID !== 0) {
+            writer.uint32(8).uint64(message.ID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgExecuteRecipeResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ID = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgExecuteRecipeResponse };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgExecuteRecipeResponse };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    }
+};
 const baseMsgSetItemString = { creator: '', cookbookID: '', recipeID: '', ID: '', field: '', value: '' };
 export const MsgSetItemString = {
     encode(message, writer = Writer.create()) {
@@ -1393,6 +1558,11 @@ export const MsgUpdateCookbookResponse = {
 export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
+    }
+    ExecuteRecipe(request) {
+        const data = MsgExecuteRecipe.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'ExecuteRecipe', data);
+        return promise.then((data) => MsgExecuteRecipeResponse.decode(new Reader(data)));
     }
     SetItemString(request) {
         const data = MsgSetItemString.encode(request).finish();

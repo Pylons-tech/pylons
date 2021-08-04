@@ -1,10 +1,24 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Execution } from '../pylons/execution';
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Recipe } from '../pylons/recipe';
 import { Item } from '../pylons/item';
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetExecutionRequest {
+    id: number;
+}
+export interface QueryGetExecutionResponse {
+    Execution: Execution | undefined;
+}
+export interface QueryAllExecutionRequest {
+    pagination: PageRequest | undefined;
+}
+export interface QueryAllExecutionResponse {
+    Execution: Execution[];
+    pagination: PageResponse | undefined;
+}
 export interface QueryListRecipesByCookbookRequest {
     CookbookID: string;
 }
@@ -45,6 +59,34 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryGetExecutionRequest: {
+    encode(message: QueryGetExecutionRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetExecutionRequest;
+    fromJSON(object: any): QueryGetExecutionRequest;
+    toJSON(message: QueryGetExecutionRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetExecutionRequest>): QueryGetExecutionRequest;
+};
+export declare const QueryGetExecutionResponse: {
+    encode(message: QueryGetExecutionResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetExecutionResponse;
+    fromJSON(object: any): QueryGetExecutionResponse;
+    toJSON(message: QueryGetExecutionResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetExecutionResponse>): QueryGetExecutionResponse;
+};
+export declare const QueryAllExecutionRequest: {
+    encode(message: QueryAllExecutionRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllExecutionRequest;
+    fromJSON(object: any): QueryAllExecutionRequest;
+    toJSON(message: QueryAllExecutionRequest): unknown;
+    fromPartial(object: DeepPartial<QueryAllExecutionRequest>): QueryAllExecutionRequest;
+};
+export declare const QueryAllExecutionResponse: {
+    encode(message: QueryAllExecutionResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryAllExecutionResponse;
+    fromJSON(object: any): QueryAllExecutionResponse;
+    toJSON(message: QueryAllExecutionResponse): unknown;
+    fromPartial(object: DeepPartial<QueryAllExecutionResponse>): QueryAllExecutionResponse;
+};
 export declare const QueryListRecipesByCookbookRequest: {
     encode(message: QueryListRecipesByCookbookRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryListRecipesByCookbookRequest;
@@ -131,6 +173,8 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a execution by id. */
+    Execution(request: QueryGetExecutionRequest): Promise<QueryGetExecutionResponse>;
     /** Queries a list of listRecipesByCookbook items. */
     ListRecipesByCookbook(request: QueryListRecipesByCookbookRequest): Promise<QueryListRecipesByCookbookResponse>;
     /** Queries a item by ID. */
@@ -145,6 +189,7 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    Execution(request: QueryGetExecutionRequest): Promise<QueryGetExecutionResponse>;
     ListRecipesByCookbook(request: QueryListRecipesByCookbookRequest): Promise<QueryListRecipesByCookbookResponse>;
     Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse>;
     Recipe(request: QueryGetRecipeRequest): Promise<QueryGetRecipeResponse>;

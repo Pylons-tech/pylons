@@ -4,6 +4,7 @@ package Pylonstech.pylons.pylons;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 // this line is used by starport scaffolding # proto/tx/import
+import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
@@ -13,6 +14,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
   rpc SetItemString(MsgSetItemString) returns (MsgSetItemStringResponse);
   rpc CreateRecipe(MsgCreateRecipe) returns (MsgCreateRecipeResponse);
   rpc UpdateRecipe(MsgUpdateRecipe) returns (MsgUpdateRecipeResponse);
@@ -21,6 +23,17 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgExecuteRecipe {
+  string creator = 1;
+  string cookbookID = 2;
+  string recipeID = 3;
+  repeated string itemIDs = 4;
+}
+
+message MsgExecuteRecipeResponse {
+  uint64 ID = 1;
+}
+
 message MsgSetItemString {
   string creator = 1;
   string cookbookID = 2;

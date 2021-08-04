@@ -80,6 +80,22 @@ export interface PylonsEntriesList {
   itemModifyOutputs?: PylonsItemModifyOutput[];
 }
 
+export interface PylonsExecution {
+  creator?: string;
+
+  /** @format uint64 */
+  id?: string;
+  cookbookID?: string;
+  recipeID?: string;
+  nodeVersion?: string;
+
+  /** @format uint64 */
+  blockHeight?: string;
+  coinInputs?: V1Beta1Coin[];
+  itemInputs?: PylonsItemRecord[];
+  itemOutputIDs?: string[];
+}
+
 export interface PylonsIntWeightRange {
   /** @format int64 */
   lower?: string;
@@ -101,7 +117,6 @@ export interface PylonsItem {
   longs?: PylonsLongKeyValue[];
   strings?: PylonsStringKeyValue[];
   mutableStrings?: PylonsStringKeyValue[];
-  lastTradeID?: string;
   tradeable?: boolean;
 
   /** @format uint64 */
@@ -137,6 +152,13 @@ export interface PylonsItemOutput {
 
   /** @format uint64 */
   quantity?: string;
+}
+
+export interface PylonsItemRecord {
+  ID?: string;
+  doubles?: PylonsDoubleKeyValue[];
+  longs?: PylonsLongKeyValue[];
+  strings?: PylonsStringKeyValue[];
 }
 
 export interface PylonsLongInputParam {
@@ -175,6 +197,11 @@ export type PylonsMsgCreateCookbookResponse = object;
 
 export type PylonsMsgCreateRecipeResponse = object;
 
+export interface PylonsMsgExecuteRecipeResponse {
+  /** @format uint64 */
+  ID?: string;
+}
+
 export type PylonsMsgSetItemStringResponse = object;
 
 export type PylonsMsgUpdateCookbookResponse = object;
@@ -183,6 +210,10 @@ export type PylonsMsgUpdateRecipeResponse = object;
 
 export interface PylonsQueryGetCookbookResponse {
   Cookbook?: PylonsCookbook;
+}
+
+export interface PylonsQueryGetExecutionResponse {
+  Execution?: PylonsExecution;
 }
 
 export interface PylonsQueryGetItemResponse {
@@ -459,6 +490,22 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryExecution
+   * @summary Queries a execution by id.
+   * @request GET:/Pylons-tech/pylons/pylons/execution/{id}
+   */
+  queryExecution = (id: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetExecutionResponse, RpcStatus>({
+      path: `/Pylons-tech/pylons/pylons/execution/${id}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

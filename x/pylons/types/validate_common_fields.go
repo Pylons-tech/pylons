@@ -36,3 +36,13 @@ func ValidateID(s string) error {
 
 	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid ID")
 }
+
+// ValidateNumber validates numbers
+func ValidateNumber(s string) error {
+	regex := regexp.MustCompile(`^[0-9]+$`)
+	if regex.MatchString(s) {
+		return nil
+	}
+
+	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid number")
+}

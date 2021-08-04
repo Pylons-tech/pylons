@@ -34,8 +34,10 @@ message Item {
   repeated LongKeyValue longs = 7 [(gogoproto.nullable) = false];
   repeated StringKeyValue strings = 8 [(gogoproto.nullable) = false];
   repeated StringKeyValue mutableStrings = 9 [(gogoproto.nullable) = false];
-  string lastTradeID = 10;
-  bool tradeable = 11;
-  uint64 lastUpdate = 12;
-  uint64 transferFee = 13;
+  bool tradeable = 10;
+  uint64 lastUpdate = 11;
+  uint64 transferFee = 12;
 }
+
+
+

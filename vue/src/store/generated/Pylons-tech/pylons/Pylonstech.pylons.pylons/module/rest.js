@@ -140,6 +140,20 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryExecution
+         * @summary Queries a execution by id.
+         * @request GET:/Pylons-tech/pylons/pylons/execution/{id}
+         */
+        this.queryExecution = (id, params = {}) => this.request({
+            path: `/Pylons-tech/pylons/pylons/execution/${id}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryCookbook
          * @summary Retrieves a cookbook by ID.
          * @request GET:/pylons/cookbook/{ID}

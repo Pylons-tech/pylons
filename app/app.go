@@ -353,11 +353,12 @@ func New(
 		appCodec,
 		keys[pylonsmoduletypes.StoreKey],
 		keys[pylonsmoduletypes.MemStoreKey],
+		app.BankKeeper,
 	)
 
 	// Set node version from build configuration
 	pylonsconfig.SetNodeVersionString(version.Version)
-	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, pylonsRequestFieldConfig, pylonsFeeConfig)
+	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper, pylonsRequestFieldConfig, pylonsFeeConfig)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
 

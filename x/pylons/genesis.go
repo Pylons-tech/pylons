@@ -11,6 +11,22 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the execution
+	for _, elem := range genState.ExecutionList {
+		k.SetExecution(ctx, *elem)
+	}
+
+	// Set execution count
+	k.SetExecutionCount(ctx, genState.ExecutionCount)
+
+	// Set all the pending execution
+	for _, elem := range genState.PendingExecutionList {
+		k.SetPendingExecution(ctx, *elem)
+	}
+
+	// Set execution count
+	k.SetExecutionCount(ctx, genState.PendingExecutionCount)
+
 	// Set all the item
 	for _, elem := range genState.ItemList {
 		k.SetItem(ctx, *elem)
@@ -34,24 +50,34 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all execution
+	executionList := k.GetAllExecution(ctx)
+	for _, elem := range executionList {
+		elem := elem // nolint: typecheck
+		genesis.ExecutionList = append(genesis.ExecutionList, &elem)
+	}
+
+	// Set the current count
+	genesis.ExecutionCount = k.GetExecutionCount(ctx)
+
 	// Get all item
 	itemList := k.GetAllItem(ctx)
 	for _, elem := range itemList {
-		elem := elem
+		elem := elem // nolint: typecheck
 		genesis.ItemList = append(genesis.ItemList, &elem)
 	}
 
 	// Get all recipe
 	recipeList := k.GetAllRecipe(ctx)
 	for _, elem := range recipeList {
-		elem := elem
+		elem := elem // nolint: typecheck
 		genesis.RecipeList = append(genesis.RecipeList, &elem)
 	}
 
 	// Get all cookbook
 	cookbookList := k.GetAllCookbook(ctx)
 	for _, elem := range cookbookList {
-		elem := elem
+		elem := elem // nolint: typecheck
 		genesis.CookbookList = append(genesis.CookbookList, &elem)
 	}
 

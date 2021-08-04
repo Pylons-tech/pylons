@@ -28,14 +28,16 @@ func KeyPrefix(p string) []byte {
 const (
 	// CookbookKey is a string key used as a prefix to the KVStore
 	CookbookKey = "Cookbook-value-"
-)
-
-const (
 	// RecipeKey is a string key used as a prefix to the KVStore
 	RecipeKey = "Recipe-value-"
-)
-
-const (
 	// ItemKey is a string key used as a prefix to the KVStore
 	ItemKey = "Item-value-"
+	// ExecutionKey is a string key used as a prefix to the KVStore
+	ExecutionKey = "Execution-value-"
+	// ExecutionCountKey is a string key used as a prefix to the KVStore
+	ExecutionCountKey = "Execution-count-"
+	// PendingExecutionKey is a string key used as a prefix to the KVStore
+	PendingExecutionKey = "PendingExecution-value-"
+	// PendingExecutionCountKey is a string key used as a prefix to the KVStore
+	PendingExecutionCountKey = "PendingExecution-count-"
 )

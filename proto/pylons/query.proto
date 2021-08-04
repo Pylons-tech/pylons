@@ -5,6 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
+import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
@@ -14,6 +15,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Query defines the gRPC querier service.
 service Query {
 	// this line is used by starport scaffolding # 2
+
+	// Queries a execution by id.
+	rpc Execution(QueryGetExecutionRequest) returns (QueryGetExecutionResponse) {
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/execution/{id}";
+	}
+
 
 	// Queries a list of listRecipesByCookbook items.
 	rpc ListRecipesByCookbook(QueryListRecipesByCookbookRequest) returns (QueryListRecipesByCookbookResponse) {
@@ -47,6 +54,22 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetExecutionRequest {
+	uint64 id = 1;
+}
+
+message QueryGetExecutionResponse {
+	Execution Execution = 1;
+}
+
+message QueryAllExecutionRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllExecutionResponse {
+	repeated Execution Execution = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
 message QueryListRecipesByCookbookRequest {
   string CookbookID = 1;
 }

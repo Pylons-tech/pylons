@@ -104,14 +104,16 @@ type AppModule struct {
 	AppModuleBasic
 
 	keeper             keeper.Keeper
+	bankKeeper         types.BankKeeper
 	requestFieldConfig config.RequestFieldConfig
 	feeConfig          config.FeeConfig
 }
 
-func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, rfCfg config.RequestFieldConfig, feeCfg config.FeeConfig) AppModule {
+func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, bk types.BankKeeper, rfCfg config.RequestFieldConfig, feeCfg config.FeeConfig) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
+		bankKeeper:     bk,
 
 		requestFieldConfig: rfCfg,
 		feeConfig:          feeCfg,

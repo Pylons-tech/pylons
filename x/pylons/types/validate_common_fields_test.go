@@ -74,3 +74,26 @@ func TestValidateID(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateNumber(t *testing.T) {
+	for _, tc := range []struct {
+		desc string
+		id   string
+		err  error
+	}{
+		{desc: "ValidNum", id: "0"},
+		{desc: "ValidNum1", id: "42"},
+		{desc: "InvalidNum1", id: "_1", err: ErrInvalidRequestField},
+		{desc: "InvalidNum2", id: "", err: ErrInvalidRequestField},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			err := ValidateNumber(tc.id)
+			if tc.err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}

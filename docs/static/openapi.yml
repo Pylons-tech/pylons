@@ -19475,6 +19475,120 @@ paths:
           format: uint64
       tags:
         - Query
+  '/Pylons-tech/pylons/pylons/execution/{id}':
+    get:
+      summary: Queries a execution by id.
+      operationId: PylonstechPylonsPylonsExecution
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Execution:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  id:
+                    type: string
+                    format: uint64
+                  cookbookID:
+                    type: string
+                  recipeID:
+                    type: string
+                  nodeVersion:
+                    type: string
+                  blockHeight:
+                    type: string
+                    format: uint64
+                  coinInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                  itemInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ID:
+                          type: string
+                        doubles:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              Key:
+                                type: string
+                              Value:
+                                type: string
+                            title: DoubleKeyValue describes double key/value set
+                        longs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              Key:
+                                type: string
+                              Value:
+                                type: string
+                                format: int64
+                            title: LongKeyValue describes long key/value set
+                        strings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              Key:
+                                type: string
+                              Value:
+                                type: string
+                            title: StringKeyValue describes string key/value set
+                  itemOutputIDs:
+                    type: array
+                    items:
+                      type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          format: uint64
+      tags:
+        - Query
   '/pylons/cookbook/{ID}':
     get:
       summary: Retrieves a cookbook by ID.
@@ -19600,8 +19714,6 @@ paths:
                         Value:
                           type: string
                       title: StringKeyValue describes string key/value set
-                  lastTradeID:
-                    type: string
                   tradeable:
                     type: boolean
                   lastUpdate:
@@ -31420,6 +31532,79 @@ definitions:
                 and 1.0 (exclusive)
           title: ItemModifyOutput describes what is modified from item input
     title: EntriesList is a struct to keep list of items and coins
+  Pylonstech.pylons.pylons.Execution:
+    type: object
+    properties:
+      creator:
+        type: string
+      id:
+        type: string
+        format: uint64
+      cookbookID:
+        type: string
+      recipeID:
+        type: string
+      nodeVersion:
+        type: string
+      blockHeight:
+        type: string
+        format: uint64
+      coinInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+      itemInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            ID:
+              type: string
+            doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: DoubleKeyValue describes double key/value set
+            longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                    format: int64
+                title: LongKeyValue describes long key/value set
+            strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: StringKeyValue describes string key/value set
+      itemOutputIDs:
+        type: array
+        items:
+          type: string
   Pylonstech.pylons.pylons.IntWeightRange:
     type: object
     properties:
@@ -31487,8 +31672,6 @@ definitions:
             Value:
               type: string
           title: StringKeyValue describes string key/value set
-      lastTradeID:
-        type: string
       tradeable:
         type: boolean
       lastUpdate:
@@ -31824,6 +32007,42 @@ definitions:
     title: >-
       ItemOutput models the continuum of valid outcomes for item generation in
       recipes
+  Pylonstech.pylons.pylons.ItemRecord:
+    type: object
+    properties:
+      ID:
+        type: string
+      doubles:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+          title: DoubleKeyValue describes double key/value set
+      longs:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+              format: int64
+          title: LongKeyValue describes long key/value set
+      strings:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+          title: StringKeyValue describes string key/value set
   Pylonstech.pylons.pylons.LongInputParam:
     type: object
     properties:
@@ -31884,6 +32103,12 @@ definitions:
     type: object
   Pylonstech.pylons.pylons.MsgCreateRecipeResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgExecuteRecipeResponse:
+    type: object
+    properties:
+      ID:
+        type: string
+        format: uint64
   Pylonstech.pylons.pylons.MsgSetItemStringResponse:
     type: object
   Pylonstech.pylons.pylons.MsgUpdateCookbookResponse:
@@ -31917,6 +32142,85 @@ definitions:
             format: uint64
           enabled:
             type: boolean
+  Pylonstech.pylons.pylons.QueryGetExecutionResponse:
+    type: object
+    properties:
+      Execution:
+        type: object
+        properties:
+          creator:
+            type: string
+          id:
+            type: string
+            format: uint64
+          cookbookID:
+            type: string
+          recipeID:
+            type: string
+          nodeVersion:
+            type: string
+          blockHeight:
+            type: string
+            format: uint64
+          coinInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+          itemInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      Key:
+                        type: string
+                      Value:
+                        type: string
+                    title: DoubleKeyValue describes double key/value set
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      Key:
+                        type: string
+                      Value:
+                        type: string
+                        format: int64
+                    title: LongKeyValue describes long key/value set
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      Key:
+                        type: string
+                      Value:
+                        type: string
+                    title: StringKeyValue describes string key/value set
+          itemOutputIDs:
+            type: array
+            items:
+              type: string
   Pylonstech.pylons.pylons.QueryGetItemResponse:
     type: object
     properties:
@@ -31974,8 +32278,6 @@ definitions:
                 Value:
                   type: string
               title: StringKeyValue describes string key/value set
-          lastTradeID:
-            type: string
           tradeable:
             type: boolean
           lastUpdate:

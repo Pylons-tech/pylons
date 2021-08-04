@@ -34,7 +34,6 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Ite
 				Strings:        []types.StringKeyValue{},
 				MutableStrings: []types.StringKeyValue{},
 				RecipeID:       "testOwnerRecipeID",
-				LastTradeID:    "testOwnerTradeID",
 				Tradeable:      false,
 				LastUpdate:     0,
 				TransferFee:    0,
