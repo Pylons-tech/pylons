@@ -11,9 +11,10 @@ import (
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
 	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 type CoinLockTestCase struct {

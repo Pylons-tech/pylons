@@ -11,7 +11,7 @@ require (
 	github.com/google/cel-go v0.5.1
 	github.com/google/uuid v1.1.2
 	github.com/gorilla/mux v1.8.0
-	github.com/grpc-ecosystem/grpc-gateway v1.16.0 
+	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/sirupsen/logrus v1.7.0
 	github.com/spf13/cast v1.3.1
 	github.com/spf13/cobra v1.1.1
@@ -23,6 +23,7 @@ require (
 	github.com/tendermint/tm-db v0.6.4
 	golang.org/x/net v0.0.0-20210525063256-abc453219eb5 // indirect
 	golang.org/x/sys v0.0.0-20210531225629-47163c9f4e4f // indirect
+	golang.org/x/tools v0.1.5 // indirect
 	google.golang.org/genproto v0.0.0-20210617175327-b9e0b3197ced
 	google.golang.org/grpc v1.38.0
 	google.golang.org/protobuf v1.26.0

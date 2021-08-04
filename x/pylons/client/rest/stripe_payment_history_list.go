@@ -7,11 +7,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/stripe/stripe-go"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/stripe/stripe-go/paymentintent"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type PaymentHistoryStu struct {
@@ -50,7 +51,7 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = string(config.Config.ChainID)
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -58,7 +59,7 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
+		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 
 		// create the message
 		msg := types.NewMsgStripePaymentHistoryList(req.StripeKey, req.CustomerID, addr.String())
@@ -93,11 +94,11 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			payment.CustomerID = pi.Customer.ID
 			payment.Description = pi.Description
 			payment.ID = pi.ID
-			payment.PaymentMethod = string(pi.PaymentMethod.ID)
+			payment.PaymentMethod = pi.PaymentMethod.ID
 			payment.Status = string(pi.Status)
 			if pi.Customer.ID == msg.CustomerID {
 				paymentHistory.PaymentList = append(paymentHistory.PaymentList, payment)
-				length = length + 1
+				length++
 			}
 		}
 		paymentHistory.Length = length

@@ -40,7 +40,7 @@ func (srv msgServer) CreateRecipe(ctx context.Context, msg *types.MsgCreateRecip
 
 	if msg.RecipeID != "" {
 		if srv.HasRecipeWithCookbookID(sdkCtx, msg.CookbookID, msg.RecipeID) {
-			return nil, errInternal(fmt.Errorf("The recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
+			return nil, errInternal(fmt.Errorf("the recipeID %s is already present in CookbookID %s", msg.RecipeID, msg.CookbookID))
 		}
 		recipe.ID = msg.RecipeID
 	}

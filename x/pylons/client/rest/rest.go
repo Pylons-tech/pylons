@@ -16,7 +16,7 @@ const (
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
 	purchaseTokenKey      = "purchaseTokenKey"
-	paymentId             = "paymentId"
+	paymentID             = "paymentID"
 	ownerKeyName          = "ownerKey"
 	tradeKeyName          = "tradeKey"
 	cookbookKeyName       = "cookbookKey"
@@ -110,7 +110,7 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 	r.HandleFunc(fmt.Sprintf("/%s/check_google_iap_order/{%s}", storeName, purchaseTokenKey),
 		checkGoogleIAPOrderHandler(cliCtx, storeName)).Methods("GET")
 
-	r.HandleFunc(fmt.Sprintf("/%s/check_payment/{%s}", storeName, paymentId),
+	r.HandleFunc(fmt.Sprintf("/%s/check_payment/{%s}", storeName, paymentID),
 		checkPaymentHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),

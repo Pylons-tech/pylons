@@ -128,9 +128,9 @@ func (msg MsgCreateCookbook) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateCookbook a constructor for UpdateCookbook msg
-func NewMsgUpdateCookbook(ID, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
+func NewMsgUpdateCookbook(id, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
 	return MsgUpdateCookbook{
-		ID:           ID,
+		ID:           id,
 		Description:  desc,
 		Developer:    developer,
 		Version:      version,
@@ -229,10 +229,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			continue
 		}
 		if err := ii.IDValidationError(); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
+			return err
 		}
 		if itemInputRefsMap[ii.ID] {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item input with same ID available: ID=%s", ii.ID))
+			return fmt.Errorf("item input with same ID available: ID=%s", ii.ID)
 		}
 		itemInputRefsMap[ii.ID] = true
 	}
@@ -240,10 +240,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	// validation for the invalid item input reference on a coins outputs
 	for _, entry := range msg.Entries.CoinOutputs {
 		if err := EntryIDValidationError(entry.GetID()); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
+			return err
 		}
 		if entryIDsMap[entry.GetID()] {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("entry with same ID available: ID=%s", entry.GetID()))
+			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
 		}
 		entryIDsMap[entry.GetID()] = true
 		coinOutput := entry
@@ -261,10 +261,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	// validation for the invalid item input reference on a items with modified outputs
 	for _, entry := range msg.Entries.ItemModifyOutputs {
 		if err := EntryIDValidationError(entry.GetID()); err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
+			return err
 		}
 		if entryIDsMap[entry.GetID()] {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("entry with same ID available: ID=%s", entry.GetID()))
+			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
 		}
 		entryIDsMap[entry.GetID()] = true
 		if !itemInputRefsMap[entry.ItemInputRef] {
@@ -420,15 +420,15 @@ func NewMsgStripeCheckout(stripeKey string, paymentMethod string, price *StripeP
 	return msg
 }
 
-func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string, Images []string, StatementDescriptor string, UnitLabel string, Sender string) MsgStripeCreateProduct {
+func NewMsgStripeCreateProduct(stripeKey string, name string, description string, images []string, statementDescriptor string, unitLabel string, sender string) MsgStripeCreateProduct {
 	msg := MsgStripeCreateProduct{
-		StripeKey:           StripeKey,
-		Name:                Name,
-		Description:         Description,
-		Images:              Images,
-		StatementDescriptor: StatementDescriptor,
-		UnitLabel:           UnitLabel,
-		Sender:              Sender,
+		StripeKey:           stripeKey,
+		Name:                name,
+		Description:         description,
+		Images:              images,
+		StatementDescriptor: statementDescriptor,
+		UnitLabel:           unitLabel,
+		Sender:              sender,
 	}
 	return msg
 }
@@ -482,54 +482,54 @@ func NewMsgStripeCreateAccount(StripeKey string, Country string, Email string, T
 	return msg
 }
 
-func NewMsgStripeOauthToken(GrantType string, Code string, Sender string) MsgStripeOauthToken {
+func NewMsgStripeOauthToken(grantType string, code string, sender string) MsgStripeOauthToken {
 	msg := MsgStripeOauthToken{
-		GrantType: GrantType,
-		Code:      Code,
-		Sender:    Sender,
+		GrantType: grantType,
+		Code:      code,
+		Sender:    sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreatePrice(StripeKey string, Product string, Amount string, Currency string, Description string, Sender string) MsgStripeCreatePrice {
+func NewMsgStripeCreatePrice(stripeKey string, product string, amount string, currency string, description string, sender string) MsgStripeCreatePrice {
 	msg := MsgStripeCreatePrice{
-		StripeKey:   StripeKey,
-		Product:     Product,
-		Amount:      Amount,
-		Currency:    Currency,
-		Description: Description,
-		Sender:      Sender,
+		StripeKey:   stripeKey,
+		Product:     product,
+		Amount:      amount,
+		Currency:    currency,
+		Description: description,
+		Sender:      sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreateSku(StripeKey string, Product string, Attributes StringKeyValueList, Price int64, Currency string, Inventory *StripeInventory, Sender string) MsgStripeCreateSku {
+func NewMsgStripeCreateSku(stripeKey string, product string, attributes StringKeyValueList, price int64, currency string, inventory *StripeInventory, sender string) MsgStripeCreateSku {
 	msg := MsgStripeCreateSku{
-		StripeKey:  StripeKey,
-		Product:    Product,
-		Attributes: Attributes,
-		Price:      Price,
-		Currency:   Currency,
-		Inventory:  Inventory,
-		Sender:     Sender,
+		StripeKey:  stripeKey,
+		Product:    product,
+		Attributes: attributes,
+		Price:      price,
+		Currency:   currency,
+		Inventory:  inventory,
+		Sender:     sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreateProductSku(StripeKey string, Name string, Description string, Images []string,
-	Attributes StringKeyValueList, Price int64, Currency string,
-	Inventory *StripeInventory, ClientId string, Sender string) MsgStripeCreateProductSku {
+func NewMsgStripeCreateProductSku(stripeKey string, name string, description string, images []string,
+	attributes StringKeyValueList, price int64, currency string,
+	inventory *StripeInventory, clientID string, sender string) MsgStripeCreateProductSku {
 	msg := MsgStripeCreateProductSku{
-		StripeKey:   StripeKey,
-		Name:        Name,
-		Description: Description,
-		Images:      Images,
-		Attributes:  Attributes,
-		Price:       Price,
-		Currency:    Currency,
-		Inventory:   Inventory,
-		ClientId:    ClientId,
-		Sender:      Sender,
+		StripeKey:   stripeKey,
+		Name:        name,
+		Description: description,
+		Images:      images,
+		Attributes:  attributes,
+		Price:       price,
+		Currency:    currency,
+		Inventory:   inventory,
+		ClientID:    clientID,
+		Sender:      sender,
 	}
 	return msg
 }

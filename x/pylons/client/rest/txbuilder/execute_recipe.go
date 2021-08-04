@@ -25,8 +25,6 @@ func ExecuteRecipeTxBuilder(cliCtx client.Context) http.HandlerFunc {
 
 		msg := types.NewMsgExecuteRecipe("id0001", sender.String(), "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa", []string{"alpha", "beta", "gamma"})
 
-		//msg := types.NewMsgExecuteRecipe("id0001", sender.String(), types.PaymentInfo{"stripe", "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa"}, []string{"alpha", "beta", "gamma"})
-
 		txf := tx.Factory{}.
 			WithChainID("testing").
 			WithTxConfig(cliCtx.TxConfig)

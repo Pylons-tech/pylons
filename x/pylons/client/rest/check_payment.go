@@ -14,9 +14,9 @@ import (
 func checkPaymentHandler(cliCtx client.Context, storeName string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		paymentId := vars[paymentId]
+		paymentID := vars[paymentID]
 
-		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/check_payment/%s", storeName, paymentId), nil)
+		res, _, err := cliCtx.QueryWithData(fmt.Sprintf("custom/%s/check_payment/%s", storeName, paymentID), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return

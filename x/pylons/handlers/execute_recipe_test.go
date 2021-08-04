@@ -24,26 +24,27 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 	cbData := MockCookbook(tci, sender1)
 
 	// mock coin to coin recipe
-	//c2cRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xChaircoin, tci, "existing recipe", cbData.CookbookID, sender1)
+	c2cRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xChaircoin, tci, "existing recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
 
-	// mock coin to item recipe
-	//zeroInOneOutItemRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xRaichuItemBuy, tci, "existing recipe", cbData.CookbookID, sender1)
+	//mock coin to item recipe
+	zeroInOneOutItemRecipeData := MockPopularRecipe(Rcp5xWoodcoinTo1xRaichuItemBuy, tci, "existing recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
 
-	// mock 1 input 1 output recipe
-	// oneInputOneOutputRecipeData := MockRecipe(
-	// 	tci, "existing recipe",
-	// 	types.GenCoinInputList("wood", 5),
-	// 	types.GenItemInputList("Raichu"),
-	// 	types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("Zombie")}},
-	// 	types.GenOneOutput("Zombie"),
-	// 	cbData.CookbookID,
-	// 	0,
-	// 	sender1,
-	// )
-	// mock 1 input 1 output recipe
-	usdInputRecipeData := MockRecipe(
+	//mock 1 input 1 output recipe
+	oneInputOneOutputRecipeData := MockRecipe(
 		tci, "existing recipe",
-		types.GenCoinInputList("USD", 100),
+		types.GenCoinInputList("wood", 5),
+		types.GenItemInputList("Raichu"),
+		types.EntriesList{ItemOutputs: []types.ItemOutput{types.GenItemOnlyEntry("Zombie")}},
+		types.GenOneOutput("Zombie"),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
+
+	//mock pylon input recipe
+	pylonInputRecipeData := MockRecipe(
+		tci, "existing recipe",
+		types.GenCoinInputList(types.Pylon, 100),
 		types.ItemInputList{},
 		types.EntriesList{},
 		types.WeightedOutputsList{},
@@ -52,65 +53,53 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		sender1,
 	)
 
-	// mock pylon input recipe
-	// pylonInputRecipeData := MockRecipe(
-	// 	tci, "existing recipe",
-	// 	types.GenCoinInputList(types.Pylon, 100),
-	// 	types.ItemInputList{},
-	// 	types.EntriesList{},
-	// 	types.WeightedOutputsList{},
-	// 	cbData.CookbookID,
-	// 	0,
-	// 	sender1,
-	// )
+	genItemModifyOutput := types.NewItemModifyOutput(
+		"catalystOutputEntry", "catalyst", types.ItemModifyParams{},
+	)
+	// mock 1 catalyst input 1 output recipe
+	oneCatalystOneOutputRecipeData := MockRecipe(
+		tci, "existing recipe",
+		types.GenCoinInputList("wood", 5),
+		types.GenItemInputList("catalyst"),
+		types.EntriesList{
+			ItemOutputs:       []types.ItemOutput{types.GenItemOnlyEntry("Catalyst2")},
+			ItemModifyOutputs: []types.ItemModifyOutput{genItemModifyOutput},
+		},
+		types.GenAllOutput("catalystOutputEntry", "Catalyst2"),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
 
-	// genItemModifyOutput := types.NewItemModifyOutput(
-	// 	"catalystOutputEntry", "catalyst", types.ItemModifyParams{},
-	// )
-	// // mock 1 catalyst input 1 output recipe
-	// oneCatalystOneOutputRecipeData := MockRecipe(
-	// 	tci, "existing recipe",
-	// 	types.GenCoinInputList("wood", 5),
-	// 	types.GenItemInputList("catalyst"),
-	// 	types.EntriesList{
-	// 		ItemOutputs:       []types.ItemOutput{types.GenItemOnlyEntry("Catalyst2")},
-	// 		ItemModifyOutputs: []types.ItemModifyOutput{genItemModifyOutput},
-	// 	},
-	// 	types.GenAllOutput("catalystOutputEntry", "Catalyst2"),
-	// 	cbData.CookbookID,
-	// 	0,
-	// 	sender1,
-	// )
+	// mock no input 1 coin | 1 item output recipe
+	noInput1Coin1ItemRecipeData := MockRecipe(
+		tci, "existing recipe",
+		types.CoinInputList{},
+		types.ItemInputList{},
+		types.GenEntries("chaira", "ZombieA"),
+		types.GenOneOutput("chaira", "ZombieA"),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
 
-	// // mock no input 1 coin | 1 item output recipe
-	// noInput1Coin1ItemRecipeData := MockRecipe(
-	// 	tci, "existing recipe",
-	// 	types.CoinInputList{},
-	// 	types.ItemInputList{},
-	// 	types.GenEntries("chaira", "ZombieA"),
-	// 	types.GenOneOutput("chaira", "ZombieA"),
-	// 	cbData.CookbookID,
-	// 	0,
-	// 	sender1,
-	// )
+	// mock no input 1 coin | 1 item output recipe
+	noInput1Coin1ItemRandRecipeData := MockRecipe(
+		tci, "existing recipe",
+		types.CoinInputList{},
+		types.ItemInputList{},
+		types.GenEntriesRand("zmbr", "ZombieRand"),
+		types.GenOneOutput("zmbr", "ZombieRand"),
+		cbData.CookbookID,
+		0,
+		sender1,
+	)
 
-	// // mock no input 1 coin | 1 item output recipe
-	// noInput1Coin1ItemRandRecipeData := MockRecipe(
-	// 	tci, "existing recipe",
-	// 	types.CoinInputList{},
-	// 	types.ItemInputList{},
-	// 	types.GenEntriesRand("zmbr", "ZombieRand"),
-	// 	types.GenOneOutput("zmbr", "ZombieRand"),
-	// 	cbData.CookbookID,
-	// 	0,
-	// 	sender1,
-	// )
+	// item upgrade recipe
+	itemUpgradeRecipeData := MockPopularRecipe(RcpRaichuNameUpgrade, tci, "existing recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
 
-	// // item upgrade recipe
-	// itemUpgradeRecipeData := MockPopularRecipe(RcpRaichuNameUpgrade, tci, "existing recipe", cbData.CookbookID, sender1)
-
-	// // item upgrade recipe with catalyst item
-	// itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RcpRaichuNameUpgradeWithCatalyst, tci, "existing recipe", cbData.CookbookID, sender1)
+	// item upgrade recipe with catalyst item
+	itemUpgradeWithCatalystRecipeData := MockPopularRecipe(RcpRaichuNameUpgradeWithCatalyst, tci, "existing recipe", cbData.CookbookID, sender1, "pi_1DoShv2eZvKYlo2CqsROyFun", "pm_card_visa")
 
 	cases := map[string]struct {
 		cookbookID               string
@@ -131,182 +120,167 @@ func TestHandlerMsgExecuteRecipe(t *testing.T) {
 		checkPylonDistribution   bool
 		pylonsLLCDistribution    int64
 	}{
-		// "insufficient coin balance check": {
-		// 	itemIDs:            []string{},
-		// 	addInputCoin:       false,
-		// 	rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	sender:             sender2,
-		// 	desiredError:       "insufficient coin balance",
-		// 	showError:          true,
-		// 	checkItemName:      "",
-		// 	checkItemAvailable: false,
-		// },
-		// "the item IDs count doesn't match the recipe input": {
-		// 	itemIDs:            []string{"Raichu"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	sender:             sender1,
-		// 	desiredError:       "the item IDs count doesn't match the recipe input",
-		// 	showError:          true,
-		// 	checkItemName:      "",
-		// 	checkItemAvailable: false,
-		// },
-		// "coin to coin recipe execution test": {
-		// 	itemIDs:            []string{},
-		// 	addInputCoin:       true,
-		// 	rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	sender:             sender1,
-		// 	desiredError:       "",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          false,
-		// 	checkCoinName:      "chair",
-		// 	checkCoinAvailable: true,
-		// 	checkItemName:      "",
-		// 	checkItemAvailable: false,
-		// },
-		// "pylon distribution check on pylon input recipes": {
-		// 	itemIDs:                []string{},
-		// 	addInputCoin:           false,
-		// 	rcpID:                  pylonInputRecipeData.RecipeID, // coin 2 coin Recipe ID
-		// 	sender:                 sender1,
-		// 	desiredError:           "",
-		// 	successMsg:             "successfully executed the recipe",
-		// 	showError:              false,
-		// 	checkCoinName:          types.Pylon,
-		// 	checkCoinAvailable:     true,
-		// 	checkItemName:          "",
-		// 	checkItemAvailable:     false,
-		// 	checkPylonDistribution: true,
-		// 	pylonsLLCDistribution:  100 * config.Config.Fee.RecipePercent / 100,
-		// },
-		// "zero input item and 1 output item recipe test": {
-		// 	itemIDs:            []string{},
-		// 	addInputCoin:       true,
-		// 	rcpID:              zeroInOneOutItemRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          false,
-		// 	checkItemName:      "Raichu",
-		// 	checkItemAvailable: true,
-		// },
-		// "not existing item in input": {
-		// 	itemIDs:            []string{"invaliditemID"},
-		// 	dynamicItemSet:     false,
-		// 	dynamicItemNames:   []string{"Raichu"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "The item doesn't exist",
-		// 	showError:          true,
-		// 	checkItemName:      "",
-		// 	checkItemAvailable: false,
-		// },
-		// "wrong item in input": {
-		// 	itemIDs:            []string{"invaliditemID"},
-		// 	dynamicItemSet:     true,
-		// 	dynamicItemNames:   []string{"NoRaichu"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "[0]th item does not match",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          true,
-		// 	checkItemName:      "",
-		// 	checkItemAvailable: false,
-		// },
-		// "1 input item and 1 output item recipe test": {
-		// 	itemIDs:            []string{},
-		// 	dynamicItemSet:     true,
-		// 	dynamicItemNames:   []string{"Raichu"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          false,
-		// 	checkItemName:      "Zombie",
-		// 	checkItemAvailable: true,
-		// },
-		// "item generation with catalyst item test": {
-		// 	itemIDs:            []string{},
-		// 	dynamicItemSet:     true,
-		// 	dynamicItemNames:   []string{"catalyst"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              oneCatalystOneOutputRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          false,
-		// 	checkItemName:      "catalyst", // "catalyst" item should be kept
-		// 	checkItemAvailable: true,
-		// },
-		// "randomness test on no input (1 coin | 1) item output recipe": {
-		// 	itemIDs:                  []string{},
-		// 	dynamicItemSet:           false,
-		// 	addInputCoin:             true,
-		// 	rcpID:                    noInput1Coin1ItemRecipeData.RecipeID, // available ID
-		// 	sender:                   sender1,
-		// 	desiredError:             "",
-		// 	successMsg:               "successfully executed the recipe",
-		// 	showError:                false,
-		// 	checkCoinName:            "chaira",
-		// 	checkItemName:            "ZombieA",
-		// 	checkItemOrCoinAvailable: true,
-		// },
-		// "random function test on program on no input (1 coin | 1) item output recipe": {
-		// 	itemIDs:                  []string{},
-		// 	dynamicItemSet:           false,
-		// 	addInputCoin:             true,
-		// 	rcpID:                    noInput1Coin1ItemRandRecipeData.RecipeID, // available ID
-		// 	sender:                   sender1,
-		// 	desiredError:             "",
-		// 	successMsg:               "successfully executed the recipe",
-		// 	showError:                false,
-		// 	checkCoinName:            "zmbr",
-		// 	checkItemName:            "ZombieRand",
-		// 	checkItemOrCoinAvailable: true,
-		// },
-		// "item upgrade test": {
-		// 	itemIDs:            []string{},
-		// 	dynamicItemSet:     true,
-		// 	dynamicItemNames:   []string{"Raichu"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              itemUpgradeRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          false,
-		// 	checkItemName:      "RaichuV2",
-		// 	checkItemAvailable: true,
-		// },
-		// "item upgrade with catalyst item test": {
-		// 	itemIDs:            []string{},
-		// 	dynamicItemSet:     true,
-		// 	dynamicItemNames:   []string{"RaichuTC", "catalyst"},
-		// 	addInputCoin:       true,
-		// 	rcpID:              itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
-		// 	sender:             sender1,
-		// 	desiredError:       "",
-		// 	successMsg:         "successfully executed the recipe",
-		// 	showError:          false,
-		// 	checkItemName:      "RaichuTCV2",
-		// 	checkItemAvailable: true,
-		// },
+		"insufficient coin balance check": {
+			itemIDs:            []string{},
+			addInputCoin:       false,
+			rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			sender:             sender2,
+			desiredError:       "insufficient coin balance",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"the item IDs count doesn't match the recipe input": {
+			itemIDs:            []string{"Raichu"},
+			addInputCoin:       true,
+			rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			sender:             sender1,
+			desiredError:       "the item IDs count doesn't match the recipe input",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"coin to coin recipe execution test": {
+			itemIDs:            []string{},
+			addInputCoin:       true,
+			rcpID:              c2cRecipeData.RecipeID, // coin 2 coin Recipe ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkCoinName:      "chair",
+			checkCoinAvailable: true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
 		"pylon distribution check on pylon input recipes": {
 			itemIDs:                []string{},
 			addInputCoin:           false,
-			rcpID:                  usdInputRecipeData.RecipeID, // coin 2 coin Recipe ID
+			rcpID:                  pylonInputRecipeData.RecipeID, // coin 2 coin Recipe ID
 			sender:                 sender1,
 			desiredError:           "",
 			successMsg:             "successfully executed the recipe",
 			showError:              false,
-			checkCoinName:          "usd",
-			checkCoinAvailable:     false,
+			checkCoinName:          types.Pylon,
+			checkCoinAvailable:     true,
 			checkItemName:          "",
 			checkItemAvailable:     false,
 			checkPylonDistribution: true,
 			pylonsLLCDistribution:  100 * config.Config.Fee.RecipePercent / 100,
+		},
+		"zero input item and 1 output item recipe test": {
+			itemIDs:            []string{},
+			addInputCoin:       true,
+			rcpID:              zeroInOneOutItemRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkItemName:      "Raichu",
+			checkItemAvailable: true,
+		},
+		"not existing item in input": {
+			itemIDs:            []string{"invaliditemID"},
+			dynamicItemSet:     false,
+			dynamicItemNames:   []string{"Raichu"},
+			addInputCoin:       true,
+			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "The item doesn't exist",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"wrong item in input": {
+			itemIDs:            []string{"invaliditemID"},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"NoRaichu"},
+			addInputCoin:       true,
+			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "[0]th item does not match",
+			successMsg:         "successfully executed the recipe",
+			showError:          true,
+			checkItemName:      "",
+			checkItemAvailable: false,
+		},
+		"1 input item and 1 output item recipe test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"Raichu"},
+			addInputCoin:       true,
+			rcpID:              oneInputOneOutputRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkItemName:      "Zombie",
+			checkItemAvailable: true,
+		},
+		"item generation with catalyst item test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"catalyst"},
+			addInputCoin:       true,
+			rcpID:              oneCatalystOneOutputRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkItemName:      "catalyst", // "catalyst" item should be kept
+			checkItemAvailable: true,
+		},
+		"randomness test on no input (1 coin | 1) item output recipe": {
+			itemIDs:                  []string{},
+			dynamicItemSet:           false,
+			addInputCoin:             true,
+			rcpID:                    noInput1Coin1ItemRecipeData.RecipeID, // available ID
+			sender:                   sender1,
+			desiredError:             "",
+			successMsg:               "successfully executed the recipe",
+			showError:                false,
+			checkCoinName:            "chaira",
+			checkItemName:            "ZombieA",
+			checkItemOrCoinAvailable: true,
+		},
+		"random function test on program on no input (1 coin | 1) item output recipe": {
+			itemIDs:                  []string{},
+			dynamicItemSet:           false,
+			addInputCoin:             true,
+			rcpID:                    noInput1Coin1ItemRandRecipeData.RecipeID, // available ID
+			sender:                   sender1,
+			desiredError:             "",
+			successMsg:               "successfully executed the recipe",
+			showError:                false,
+			checkCoinName:            "zmbr",
+			checkItemName:            "ZombieRand",
+			checkItemOrCoinAvailable: true,
+		},
+		"item upgrade test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"Raichu"},
+			addInputCoin:       true,
+			rcpID:              itemUpgradeRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkItemName:      "RaichuV2",
+			checkItemAvailable: true,
+		},
+		"item upgrade with catalyst item test": {
+			itemIDs:            []string{},
+			dynamicItemSet:     true,
+			dynamicItemNames:   []string{"RaichuTC", "catalyst"},
+			addInputCoin:       true,
+			rcpID:              itemUpgradeWithCatalystRecipeData.RecipeID, // available ID
+			sender:             sender1,
+			desiredError:       "",
+			successMsg:         "successfully executed the recipe",
+			showError:          false,
+			checkItemName:      "RaichuTCV2",
+			checkItemAvailable: true,
 		},
 	}
 	for testName, tc := range cases {

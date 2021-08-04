@@ -47,14 +47,14 @@
  ###  stripe_create_product_sku  
     url : http://localhost:1317/pylons/stripe_create_product_sku
     method : POST
-    params :   {"Name":"Name","Description":"Description","Images":["Images"], "Attributes":["Attributes"], "Price":"Price", "Currency":"Currency", "Inventory":["Inventory"], "ClientId": "ClientId" , "Sender":"Sender"}
+    params :   {"Name":"Name","Description":"Description","Images":["Images"], "Attributes":["Attributes"], "Price":"Price", "Currency":"Currency", "Inventory":["Inventory"], "ClientID": "ClientID" , "Sender":"Sender"}
     Response : 
     {
          "result": {
 	        "stripe_sku_id": "sku_Jk5qFGcANahYdp"
 	    }
     }
-    ex->params : {"Name":"Shirt","Description":"Short Pant","Images":[], "Attributes":[], "Price":"300", "Currency":"USD", "Inventory":{"Quantity": "1", "Type": "finite"}, "ClientId": "acct_1J5z25RLdjb1W5P7" , "Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"}
+    ex->params : {"Name":"Shirt","Description":"Short Pant","Images":[], "Attributes":[], "Price":"300", "Currency":"USD", "Inventory":{"Quantity": "1", "Type": "finite"}, "ClientID": "acct_1J5z25RLdjb1W5P7" , "Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ###  stripe_create_payment_intent  
     url : http://localhost:1317/pylons/stripe_create_payment_intent

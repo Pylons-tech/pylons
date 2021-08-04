@@ -7,11 +7,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/stripe/stripe-go"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/stripe/stripe-go/paymentintent"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type stripeCheckPaymentReq struct {
@@ -26,8 +27,8 @@ type stripeCheckPaymentRes struct {
 }
 
 const (
-	PAYMENT_SUCCESS = iota
-	PAYMENT_FAILED
+	PaymentSuccess = iota
+	PaymentFailed
 )
 
 func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
@@ -43,7 +44,7 @@ func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = string(config.Config.ChainID)
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -51,7 +52,7 @@ func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
+		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 
 		// create the message
 		msg := types.NewMsgStripeCheckPayment(req.StripeKey, req.PaymentID, addr.String())
@@ -69,9 +70,9 @@ func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 		)
 
 		var result stripeCheckPaymentRes
-		result.PaymentStatus = PAYMENT_SUCCESS
+		result.PaymentStatus = PaymentSuccess
 		if pi.Status != "succeeded" {
-			result.PaymentStatus = PAYMENT_FAILED
+			result.PaymentStatus = PaymentFailed
 		}
 
 		rest.PostProcessResponse(w, cliCtx, result)

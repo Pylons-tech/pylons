@@ -5,11 +5,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/paymentintent"
+
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/stripe/stripe-go"
-	"github.com/stripe/stripe-go/paymentintent"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -53,7 +54,7 @@ func (srv msgServer) CreateTrade(ctx context.Context, msg *types.MsgCreateTrade)
 		}
 	}
 
-	if isStripePayment == false {
+	if !isStripePayment {
 		if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, msg.CoinOutputs) {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "sender doesn't have enough coins for the trade")
 		}
@@ -158,7 +159,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 
 		if inp.Coin == config.Config.StripeConfig.Currency {
 
-			stripeSecKeyBytes := string(config.Config.StripeConfig.StripeSecretKey)
+			stripeSecKeyBytes := config.Config.StripeConfig.StripeSecretKey
 			stripe.Key = stripeSecKeyBytes
 
 			if msg.PaymentId == "" {
@@ -187,7 +188,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 
 	}
 
-	if isStripePayment == false {
+	if !isStripePayment {
 		// Unlock trade creator's coins
 		err = srv.UnlockCoin(sdkCtx, types.NewLockedCoin(tradeSender, trade.CoinOutputs))
 		if err != nil {
@@ -196,7 +197,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	inputCoins := types.CoinInputList(trade.CoinInputs).ToCoins()
-	if isStripePayment == false {
+	if !isStripePayment {
 		if !keeper.HasCoins(srv.Keeper, sdkCtx, sender, inputCoins) {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "the sender doesn't have sufficient coins")
 		}
@@ -234,7 +235,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	inputPylonsAmount := sdk.ZeroInt()
 	outputPylonsAmount := sdk.ZeroInt()
 
-	if isStripePayment == false {
+	if !isStripePayment {
 		// ----------------- handle coin interaction ----------------------
 		inputPylonsAmount = inputCoins.AmountOf(types.Pylon)
 		outputPylonsAmount = trade.CoinOutputs.AmountOf(types.Pylon)
@@ -247,18 +248,18 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 
 	totalFee := Max(totalItemTransferFee, totalPylonsAmountFee)
 	// if total fee exceeds the total pylons amount, it fails
-	if totalFee > totalPylonsAmount && isStripePayment == false {
+	if totalFee > totalPylonsAmount && !isStripePayment {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "total pylons amount is not enough to pay fees")
 	}
 
 	// divide total fee between the sender and fullfiller
-	if totalPylonsAmount == 0 && isStripePayment == false {
+	if totalPylonsAmount == 0 && !isStripePayment {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalPylonsAmount is 0 unexpectedly")
 	}
 
 	// trade creator to trade acceptor the coin output
 	// Send output coin from sender to fullfiller
-	if isStripePayment == false {
+	if !isStripePayment {
 		err = keeper.SendCoins(srv.Keeper, sdkCtx, tradeSender, sender, trade.CoinOutputs)
 		if err != nil {
 			return nil, errInternal(err)
@@ -266,7 +267,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	senderFee := int64(0)
-	if isStripePayment == false {
+	if !isStripePayment {
 		senderFee = totalFee * outputPylonsAmount.Int64() / totalPylonsAmount
 		if senderFee != 0 {
 			// sender process fee after receiving coins from trade.Sender
@@ -285,7 +286,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	fulfillerFee := totalFee - senderFee
-	if fulfillerFee != 0 && isStripePayment == false {
+	if fulfillerFee != 0 && !isStripePayment {
 		// trade.Sender process fee after receiving coins from sender
 		err = keeper.SendCoins(srv.Keeper, sdkCtx, tradeSender, pylonsLLCAddress, types.NewPylon(fulfillerFee))
 		if err != nil {
@@ -297,16 +298,16 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	feeForCB := int64(0)
 	for _, item := range refreshedOutputItems {
 
-		if totalItemTransferFee == 0 && isStripePayment == false {
+		if totalItemTransferFee == 0 && !isStripePayment {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 		}
-		if isStripePayment == false {
+		if !isStripePayment {
 			feeForCB = totalFeeForCBOwners * item.CalculateTransferFee() / totalItemTransferFee
 		}
 
 		cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
-		if err != nil && isStripePayment == false {
-			return nil, errInternal(errors.New("Invalid cookbook id"))
+		if err != nil && !isStripePayment {
+			return nil, errInternal(errors.New("invalid cookbook id"))
 		}
 
 		cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
@@ -314,7 +315,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 			return nil, errInternal(err)
 		}
 
-		if feeForCB > 0 && isStripePayment == false {
+		if feeForCB > 0 && !isStripePayment {
 			err = keeper.SendCoins(srv.Keeper, sdkCtx, pylonsLLCAddress, cookbookSender, types.NewPylon(feeForCB))
 			if err != nil {
 				return nil, errInternal(err)
@@ -338,7 +339,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	for _, item := range matchedItems {
-		if isStripePayment == false {
+		if !isStripePayment {
 			if totalItemTransferFee == 0 {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "totalItemTransferFee is 0 unexpectedly")
 			}
@@ -347,7 +348,7 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 
 			cookbook, err := srv.GetCookbook(sdkCtx, item.CookbookID)
 			if err != nil {
-				return nil, errInternal(errors.New("Invalid cookbook id"))
+				return nil, errInternal(errors.New("invalid cookbook id"))
 			}
 
 			cookbookSender, err := sdk.AccAddressFromBech32(cookbook.Sender)
@@ -468,7 +469,7 @@ func (srv msgServer) DisableTrade(ctx context.Context, msg *types.MsgDisableTrad
 	}
 
 	if trade.Completed && (trade.FulFiller != "") {
-		return nil, errInternal(errors.New("Cannot disable a completed trade"))
+		return nil, errInternal(errors.New("cannot disable a completed trade"))
 	}
 
 	trade.Disabled = true

@@ -8,10 +8,11 @@ import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/customer"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type stripeCreateCustomerIDReq struct {
@@ -21,7 +22,7 @@ type stripeCreateCustomerIDReq struct {
 }
 
 type stripeCreateCustomerIDRes struct {
-	CURSTOMER_ID string `json:"stripe_customer_id"`
+	CustomerID string `json:"stripe_customer_id"`
 }
 
 func stripeCreateCustomerIDHandler(cliCtx client.Context) http.HandlerFunc {
@@ -33,12 +34,11 @@ func stripeCreateCustomerIDHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			//rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error create address: %s", err.Error()))
 			return
 		}
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = string(config.Config.ChainID)
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -46,11 +46,7 @@ func stripeCreateCustomerIDHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		// stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripeSecretKey)
-		// if err != nil {
-		// 	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		// }
-		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
+		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 
 		stripe.Key = req.StripeKey
 
@@ -71,8 +67,7 @@ func stripeCreateCustomerIDHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 		var result stripeCreateCustomerIDRes
-		result.CURSTOMER_ID = customer.ID
-		//rest.PostProcessResponse(w, cliCtx, result)
+		result.CustomerID = customer.ID
 		rest.PostProcessResponse(w, cliCtx, result)
 	}
 }

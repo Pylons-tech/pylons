@@ -69,24 +69,24 @@ func GenItem(cbID string, sender sdk.AccAddress, name string) types.Item {
 	)
 }
 
-var (
-	t = types.DoubleInputParamList{
-		{
-			Key:      "endurance",
-			MinValue: sdk.NewDec(100.00),
-			MaxValue: sdk.NewDec(500.00),
-		},
-	}
-)
+// var (
+// 	t = types.DoubleInputParamList{
+// 		{
+// 			Key:      "endurance",
+// 			MinValue: sdk.NewDec(100.00),
+// 			MaxValue: sdk.NewDec(500.00),
+// 		},
+// 	}
+// )
 
-func createTestCodec() *codec.LegacyAmino {
-	cdc := codec.NewLegacyAmino()
-	authtypes.RegisterLegacyAminoCodec(cdc)
-	distrtypes.RegisterLegacyAminoCodec(cdc)
-	sdk.RegisterLegacyAminoCodec(cdc)
-	codec.RegisterEvidences(cdc)
-	return cdc
-}
+// func createTestCodec() *codec.LegacyAmino {
+// 	cdc := codec.NewLegacyAmino()
+// 	authtypes.RegisterLegacyAminoCodec(cdc)
+// 	distrtypes.RegisterLegacyAminoCodec(cdc)
+// 	sdk.RegisterLegacyAminoCodec(cdc)
+// 	codec.RegisterEvidences(cdc)
+// 	return cdc
+// }
 
 // SetupTestCoinInput mock chain env
 func SetupTestCoinInput() TestCoinInput {

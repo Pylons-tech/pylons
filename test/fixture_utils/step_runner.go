@@ -821,7 +821,7 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	var execType struct {
 		RecipeID      string
 		Sender        string
-		PaymentId     string
+		paymentID     string
 		PaymentMethod string
 		ItemIDs       []string `json:"ItemIDs"`
 	}
@@ -836,7 +836,7 @@ func ExecuteRecipeMsgFromRef(ref string, t *testing.T) types.MsgExecuteRecipe {
 	sender, err := sdk.AccAddressFromBech32(execType.Sender)
 	t.MustNil(err, "error parsing sender address")
 	ItemIDs := GetItemIDsFromNames(newByteValue, sender, false, false, t)
-	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.PaymentId, execType.PaymentMethod, ItemIDs)
+	return types.NewMsgExecuteRecipe(execType.RecipeID, execType.Sender, execType.paymentID, execType.PaymentMethod, ItemIDs)
 }
 
 // StripeCheckoutMsgFromRef collect checkout stripe msg from reference string
@@ -845,7 +845,7 @@ func StripeCheckoutMsgFromRef(ref string, t *testing.T) types.MsgStripeCheckout 
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 	// translate recipe name to recipe id
-	newByteValue = UpdateRecipeName(newByteValue, t) //???
+	newByteValue = UpdateRecipeName(newByteValue, t)
 
 	var execType struct {
 		StripeKey     string
@@ -887,7 +887,7 @@ func StripeCreatePriceMsgFromRef(ref string, t *testing.T) types.MsgStripeCreate
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 	// translate recipe name to recipe id
-	newByteValue = UpdateRecipeName(newByteValue, t) //???
+	newByteValue = UpdateRecipeName(newByteValue, t)
 
 	var execType types.MsgStripeCreatePrice
 
@@ -905,7 +905,7 @@ func StripeCreateSkuMsgFromRef(ref string, t *testing.T) types.MsgStripeCreateSk
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 	// translate recipe name to recipe id
-	newByteValue = UpdateRecipeName(newByteValue, t) //???
+	newByteValue = UpdateRecipeName(newByteValue, t)
 
 	var execType types.MsgStripeCreateSku
 
@@ -923,7 +923,7 @@ func StripeCreatePaymentIntentMsgFromRef(ref string, t *testing.T) types.MsgStri
 	// translate sender from account name to account address
 	newByteValue := UpdateSenderKeyToAddress(byteValue, t)
 	// translate recipe name to recipe id
-	newByteValue = UpdateRecipeName(newByteValue, t) //???
+	newByteValue = UpdateRecipeName(newByteValue, t)
 
 	var execType types.MsgStripeCreatePaymentIntent
 

@@ -10,10 +10,11 @@ import (
 	"github.com/stripe/stripe-go/paymentintent"
 	"github.com/stripe/stripe-go/sku"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type stripeCreatePaymentIntentReq struct {
@@ -27,10 +28,10 @@ type stripeCreatePaymentIntentReq struct {
 }
 
 type stripePaymentRes struct {
-	PAYMENT_ID    string `json:"stripe_payment_intent_id"`
-	CLIENT_SECRET string `json:"client_secret"`
-	EPHEMERAL_KEY string `json:"stripe_ephemeralKey"`
-	CURSTOMER_ID  string `json:"stripe_customer_id"`
+	PaymentID    string `json:"stripe_payment_intent_id"`
+	ClientSecret string `json:"client_secret"`
+	EphemeralKey string `json:"stripe_ephemeralKey"`
+	CustomerID   string `json:"stripe_customer_id"`
 }
 
 func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
@@ -44,13 +45,12 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			//rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			rest.PostProcessResponse(w, cliCtx, err.Error())
 			return
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = string(config.Config.ChainID)
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -58,11 +58,7 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		// stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(config.Config.StripeConfig.StripeSecretKey)
-		// if err != nil {
-		// 	rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		// }
-		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
+		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 
 		stripe.Key = req.StripeKey
 		skuResult, err := sku.Get(req.SKUID, nil)
@@ -106,11 +102,10 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		var result stripePaymentRes
-		result.PAYMENT_ID = paymentIntent.ID
-		result.CLIENT_SECRET = paymentIntent.ClientSecret
-		result.CURSTOMER_ID = req.CustomerID
-		result.EPHEMERAL_KEY = ephEmeralKey.ID
+		result.PaymentID = paymentIntent.ID
+		result.ClientSecret = paymentIntent.ClientSecret
+		result.CustomerID = req.CustomerID
+		result.EphemeralKey = ephEmeralKey.ID
 		rest.PostProcessResponse(w, cliCtx, result)
-		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
 	}
 }

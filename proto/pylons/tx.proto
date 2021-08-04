@@ -477,7 +477,7 @@ message MsgStripeCreateProductSku  {
   int64 Price = 6;
   string Currency = 7;
   StripeInventory Inventory = 8; 
-  string ClientId = 9;
+  string ClientID = 9;
   string Sender = 10;
 }
 

@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/base64"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/checkout/session"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // StripeCheckout is used to execute a recipe
@@ -17,8 +18,6 @@ func (k msgServer) StripeCheckout(ctx context.Context, msg *types.MsgStripeCheck
 		return nil, errInternal(err)
 	}
 
-	//sdkCtx := sdk.UnwrapSDKContext(ctx)
-	//sender, _ := sdk.AccAddressFromBech32(msg.Sender)
 	stripeSecKeyBytes, err := base64.StdEncoding.DecodeString(msg.StripeKey)
 	if err != nil {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error stripe key store base64 public key decoding failure: %s", err.Error())
@@ -40,12 +39,12 @@ func (k msgServer) StripeCheckout(ctx context.Context, msg *types.MsgStripeCheck
 		Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
 	}
 
-	sessionId, err := session.New(params)
+	sessionID, err := session.New(params)
 	if err != nil {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error checkout session: %s", err.Error())
 	}
 	return &types.MsgStripeCheckoutResponse{
-		SessionID: sessionId.ID,
+		SessionID: sessionID.ID,
 		Message:   "successfully checkout session",
 		Status:    "Success",
 	}, nil
