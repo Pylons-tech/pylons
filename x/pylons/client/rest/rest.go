@@ -16,6 +16,7 @@ const (
 	DefaultCoinPerRequest = 500
 	pubKeyName            = "pubkey"
 	purchaseTokenKey      = "purchaseTokenKey"
+	paymentId             = "paymentId"
 	ownerKeyName          = "ownerKey"
 	tradeKeyName          = "tradeKey"
 	cookbookKeyName       = "cookbookKey"
@@ -78,7 +79,16 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		stripeCreateProductSkuHandler(cliCtx)).Methods("POST")
 
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_payment_intent", storeName),
-		stripeCratePaymentIntentHandler(cliCtx)).Methods("POST")
+		stripeCreatePaymentIntentHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_customer_id", storeName),
+		stripeCreateCustomerIdHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_check_payment", storeName),
+		stripeCheckPaymentHandler(cliCtx)).Methods("POST")
+
+	r.HandleFunc(fmt.Sprintf("/%s/stripe_payment_history_list", storeName),
+		stripePaymentHistoryListHandler(cliCtx)).Methods("POST")
 
 	r.HandleFunc(fmt.Sprintf("/%s/stripe_create_account", storeName),
 		stripeCrateAccountHandler(cliCtx)).Methods("POST")
@@ -99,6 +109,9 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		getTradeHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/check_google_iap_order/{%s}", storeName, purchaseTokenKey),
 		checkGoogleIAPOrderHandler(cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/check_payment/{%s}", storeName, paymentId),
+		checkPaymentHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_recipe", storeName),
 		listRecipesHandler(cliCtx, storeName)).Methods("GET")
@@ -121,6 +134,9 @@ func RegisterRoutes(cliCtx client.Context, r *mux.Router, storeName string) {
 		listCookbooksHandler(cliCtx, storeName)).Methods("GET")
 	r.HandleFunc(fmt.Sprintf("/%s/list_cookbooks/{%s}", storeName, ownerKeyName),
 		listCookbooksHandler(cliCtx, storeName)).Methods("GET")
+
+	r.HandleFunc(fmt.Sprintf("/%s/active_list_cookbooks", storeName),
+		activeListCookbooksHandler(cliCtx, storeName)).Methods("GET")
 
 	r.HandleFunc(fmt.Sprintf("/%s/list_trade", storeName),
 		listTradesHandler(cliCtx, storeName)).Methods("GET")

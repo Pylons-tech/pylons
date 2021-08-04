@@ -229,10 +229,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			continue
 		}
 		if err := ii.IDValidationError(); err != nil {
-			return err
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
 		}
 		if itemInputRefsMap[ii.ID] {
-			return fmt.Errorf("item input with same ID available: ID=%s", ii.ID)
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item input with same ID available: ID=%s", ii.ID))
 		}
 		itemInputRefsMap[ii.ID] = true
 	}
@@ -240,10 +240,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	// validation for the invalid item input reference on a coins outputs
 	for _, entry := range msg.Entries.CoinOutputs {
 		if err := EntryIDValidationError(entry.GetID()); err != nil {
-			return err
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
 		}
 		if entryIDsMap[entry.GetID()] {
-			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("entry with same ID available: ID=%s", entry.GetID()))
 		}
 		entryIDsMap[entry.GetID()] = true
 		coinOutput := entry
@@ -261,10 +261,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	// validation for the invalid item input reference on a items with modified outputs
 	for _, entry := range msg.Entries.ItemModifyOutputs {
 		if err := EntryIDValidationError(entry.GetID()); err != nil {
-			return err
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
 		}
 		if entryIDsMap[entry.GetID()] {
-			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("entry with same ID available: ID=%s", entry.GetID()))
 		}
 		entryIDsMap[entry.GetID()] = true
 		if !itemInputRefsMap[entry.ItemInputRef] {
@@ -433,12 +433,39 @@ func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string
 	return msg
 }
 
-func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string) MsgStripeCreatePaymentIntent {
+func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string, CustomerId string) MsgStripeCreatePaymentIntent {
 	msg := MsgStripeCreatePaymentIntent{
+		StripeKey:  StripeKey,
+		Amount:     Amount,
+		Currency:   Currency,
+		SKUID:      SKUID,
+		Sender:     Sender,
+		CustomerId: CustomerId,
+	}
+	return msg
+}
+
+func NewMsgStripePaymentHistoryLIst(StripeKey string, CustomerId string, Sender string) MsgStripePaymentHistoryLIst {
+	msg := MsgStripePaymentHistoryLIst{
+		StripeKey:  StripeKey,
+		CustomerId: CustomerId,
+		Sender:     Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCheckPayment(StripeKey string, PaymentID string, Sender string) MsgStripeCheckPayment {
+	msg := MsgStripeCheckPayment{
 		StripeKey: StripeKey,
-		Amount:    Amount,
-		Currency:  Currency,
-		SKUID:     SKUID,
+		PaymentID: PaymentID,
+		Sender:    Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCreateCustomerId(StripeKey string, Sender string) MsgStripeCreateCustomerId {
+	msg := MsgStripeCreateCustomerId{
+		StripeKey: StripeKey,
 		Sender:    Sender,
 	}
 	return msg
@@ -706,6 +733,93 @@ func (msg MsgStripeInfo) ValidateBasic() error {
 	return nil
 }
 
+func (msg MsgStripePaymentHistoryLIst) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripePaymentHistoryLIst) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripePaymentHistoryLIst) Route() string { return RouterKey }
+
+func (msg MsgStripePaymentHistoryLIst) Type() string { return "stripe_payment_history_list" }
+
+func (msg MsgStripePaymentHistoryLIst) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeCheckPayment) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCheckPayment) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCheckPayment) Route() string { return RouterKey }
+
+func (msg MsgStripeCheckPayment) Type() string { return "stripe_check_payment" }
+
+func (msg MsgStripeCheckPayment) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeCreateCustomerId) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateCustomerId) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreateCustomerId) Route() string { return RouterKey }
+
+func (msg MsgStripeCreateCustomerId) Type() string { return "stripe_create_customer_id" }
+
+func (msg MsgStripeCreateCustomerId) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
 func (msg MsgStripeCreatePaymentIntent) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -724,7 +838,7 @@ func (msg MsgStripeCreatePaymentIntent) GetSigners() []sdk.AccAddress {
 
 func (msg MsgStripeCreatePaymentIntent) Route() string { return RouterKey }
 
-func (msg MsgStripeCreatePaymentIntent) Type() string { return "stripe_create_sku" }
+func (msg MsgStripeCreatePaymentIntent) Type() string { return "stripe_create_payment_intent" }
 
 func (msg MsgStripeCreatePaymentIntent) ValidateBasic() error {
 
@@ -1155,36 +1269,45 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not providing anything in exchange of the trade: empty outputs")
 	}
 
-	if msg.CoinOutputs != nil {
-		for _, coinOutput := range msg.CoinOutputs {
-			if !coinOutput.IsPositive() {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
-			}
+	var isStripePayment = false
+	for _, inp := range msg.CoinInputs {
+		if inp.Coin == config.Config.StripeConfig.Currency {
+			isStripePayment = true
 		}
-		tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 	}
 
-	if msg.ItemInputs == nil && msg.CoinInputs == nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
-	}
-
-	if msg.CoinInputs != nil {
-		for _, coinInput := range msg.CoinInputs {
-			if coinInput.Count == 0 {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
+	if isStripePayment == false {
+		if msg.CoinOutputs != nil {
+			for _, coinOutput := range msg.CoinOutputs {
+				if !coinOutput.IsPositive() {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
+				}
 			}
+			tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 		}
-		tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
-	}
 
-	if tradePylonAmount < config.Config.Fee.MinTradePrice {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
-	}
+		if msg.ItemInputs == nil && msg.CoinInputs == nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
+		}
 
-	if msg.ItemInputs != nil {
-		err := TradeItemInputList(msg.ItemInputs).Validate()
-		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		if msg.CoinInputs != nil {
+			for _, coinInput := range msg.CoinInputs {
+				if coinInput.Count == 0 {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
+				}
+			}
+			tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
+		}
+
+		if tradePylonAmount < config.Config.Fee.MinTradePrice {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
+		}
+
+		if msg.ItemInputs != nil {
+			err := TradeItemInputList(msg.ItemInputs).Validate()
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
 		}
 	}
 
@@ -1210,11 +1333,13 @@ func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgFulfillTrade a constructor for FulfillTrade msg
-func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string) MsgFulfillTrade {
+func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string, paymentId string, paymentMethod string) MsgFulfillTrade {
 	return MsgFulfillTrade{
-		TradeID: TradeID,
-		Sender:  sender,
-		ItemIDs: itemIDs,
+		TradeID:       TradeID,
+		Sender:        sender,
+		ItemIDs:       itemIDs,
+		PaymentId:     paymentId,
+		PaymentMethod: paymentMethod,
 	}
 }
 

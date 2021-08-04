@@ -88,9 +88,6 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
 			}
 
-			if inp.Count != payIntentResult.Amount/100 {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment error!")
-			}
 			if k.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "payment id for Stripe is already being used")
 			}

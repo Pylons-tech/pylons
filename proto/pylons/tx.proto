@@ -255,8 +255,10 @@ message MsgFiatItemResponse  {
 // MsgFulfillTrade defines a FulfillTrade message
 message MsgFulfillTrade {
   string TradeID = 1;
-  string Sender = 2;
+  string Sender = 2; 
   repeated string ItemIDs = 3;
+  string PaymentId = 4; 
+  string PaymentMethod = 5;
 }
 
 
@@ -441,6 +443,7 @@ message MsgStripeCreatePaymentIntent  {
   string Currency = 3;
   string SKUID = 4;
   string Sender = 5;
+  string CustomerId = 6;
 }
 
 message MsgStripeCreatePaymentIntentResponse{
@@ -506,4 +509,40 @@ message MsgStripeOauthTokenResponse {
   string Scope = 7;
   string Message = 8;
   string Status = 9;
+}
+
+message MsgStripeCreateCustomerId  { 
+  string StripeKey = 1; 
+  string Sender = 2; 
+}
+
+message MsgStripeCreateCustomerIdResponse{
+  string CustomerId = 1 [(gogoproto.jsontag) = "CustomerId"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripeCheckPayment  {  
+  string StripeKey = 1; 
+  string PaymentID = 2;
+  string Sender = 3; 
+}
+
+message MsgStripeCheckPaymentResponse{
+  string PaymentStatus = 1 [(gogoproto.jsontag) = "PaymentStatus"];
+  string Message = 2;
+  string Status = 3;
+}
+
+message MsgStripePaymentHistoryLIst  {  
+  string StripeKey = 1; 
+  string CustomerId = 2;
+  string Sender = 3; 
+}
+
+message MsgStripePaymentHistoryLIstResponse{
+  string HistoryLIst = 1 [(gogoproto.jsontag) = "HistoryList"];
+  string Length = 2 [(gogoproto.jsontag) = "Length"];
+  string Message = 3;
+  string Status = 4;
 }

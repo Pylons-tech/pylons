@@ -59,15 +59,50 @@
 ###  stripe_create_payment_intent  
     url : http://localhost:1317/pylons/stripe_create_payment_intent
     method : POST
-    params : {"Amount":"Amount","Country":"Country", "SKUID": "SKUID","Sender":"Sender"} 
+    params : {"Amount":"Amount","Country":"Country", "SKUID": "SKUID","Sender":"Sender","CustomerId: "CustomerId"} 
+    Response : 
+    {
+        "result": {
+            "stripe_payment_intent_id": "pi_3JK84OEdpQgutKvr0T0uKCK9",
+            "client_secret": "pi_3JK84OEdpQgutKvr0T0uKCK9_secret_WbgbZAwDtH2TY0Ykxs7Af2DVJ",
+            "stripe_ephemeralKey": "ephkey_1JK84OEdpQgutKvryqPxs9Y1",
+            "stripe_customer_id": "cus_Jy47JClSoIn9ZP"
+        }
+    }
+    ex->params : {"Amount":"2300","Country":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz", "CustomerId": "cus_Jy47JClSoIn9ZP"} 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+###  stripe_create_customer_id  
+    url : http://localhost:1317/pylons/stripe_create_customer_id
+    method : POST
+    params : {"Sender":"Sender"} 
     Response : 
     {
          "result": {
-	        "stripe_payment_id": "pi_1J6bf0EdpQgutKvrv5oQZSXB",
-            "stripe_ephemeralKey": "ephkey_1J7ncvEdpQgutKvrIRuTTqMB",
-            "stripe_customer_id": "cus_JlKHxhA0nuVBnd"
-	    }
+             "stripe_customer_id": "cus_Jy47JClSoIn9ZP"
+         }
     }
-    ex->params : {"Amount":"2300","Country":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"} 
+    ex->params : {"Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+###  check_payment  
+    url : http://localhost:1317/custom/pylons/check_payment/paymentID
+    method : GET 
+    Response : 
+    {
+         "paymentID": "pi_3JKT31EdpQgutKvr1fya1Wp6",
+          "exist": false
+    }
+    ex->params : {"Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz"} 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+###  stripe_payment_history_list  
+    url : http://localhost:1317/custom/pylons/check_payment/stripe_payment_history_list
+    method : POST 
+    params: {"Sender":"Sender","CustomerId":"CustomerId"} 
+    Response : 
+    {
+         "result": {
+            "stripe_payment_history": null,
+            "length": "0"
+        }
+    }
+    ex->params : {"Sender":"cosmos1zv9lypqpgtwjcmhup7650wukcull9jehjd3njy","CustomerId":"cus_JyPsIGUthoUKDk"} 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
