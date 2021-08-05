@@ -1,6 +1,0 @@
-=============== Aug 5, 2021 (UTC) ===============
-12:28:14.754830 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
-12:28:14.761958 db@open opening
-12:28:14.762210 version@stat F·[] S·0B[] Sc·[]
-12:28:14.764177 db@janitor F·2 G·0
-12:28:14.764216 db@open done T·2.232362ms
