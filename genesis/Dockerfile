@@ -3,13 +3,9 @@ FROM ubuntu:latest as pylonsnode
 RUN apt-get update && \
     apt-get -y install curl jq file
 
-ADD  /release/pylons_linux_amd64.tar.gz                         /usr/bin/
+ARG CONFIG_DIR
 
-RUN pylonsd init $(hostname) --home /root/.pylonsd
-
-COPY /genesis/genesis.json                                      /root/.pylonsd/config/genesis.json
-
-USER root
+ADD  pylonsd                        /usr/bin/
 
 STOPSIGNAL SIGTERM
 

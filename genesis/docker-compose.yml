@@ -4,37 +4,44 @@ services:
   alpha:
     hostname: alpha
     container_name: alpha
-    image: rafaeldeandrade/pylonsnode
+    build:
+      context: .
+      args:
+        - CONFIG_DIR=alpha
     ports:
       - "26656-26657:26656-26657"
     networks:
       - pylonsnet
     volumes:
-      - alpha_data:/root/.pylonsd
+      - ./alpha:/root/.pylonsd
 
   beta:
     container_name: beta
     hostname: beta
-    image: rafaeldeandrade/pylonsnode
+    build:
+      context: .
+      args:
+        - CONFIG_DIR=alpha
     ports:
       - "26659-26660:26656-26657"
     networks:
       - pylonsnet
     volumes:
-      - beta_data:/root/.pylonsd
+      - ./beta:/root/.pylonsd
 
   gamma:
     container_name: gamma
     hostname: gamma
-    depends_on:
-      - alpha
-    image: rafaeldeandrade/pylonsnode
+    build:
+      context: .
+      args:
+        - CONFIG_DIR=alpha
     ports:
       - "26661-26662:26656-26657"
     networks:
       - pylonsnet
     volumes:
-      - gamma_data:/root/.pylonsd
+      - ./gamma/:/root/.pylonsd
 
 #
 #
