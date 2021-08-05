@@ -96,7 +96,7 @@
     ex->params : {"paymentID":"pi_3JKT31EdpQgutKvr1fya1Wp6"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ###  stripe_payment_history_list  
-    url : http://localhost:1317/custom/pylons/check_payment/stripe_payment_history_list
+    url : http://localhost:1317/pylons/stripe_payment_history_list
     method : POST 
     params: {"Sender":"Sender","CustomerID":"CustomerID"} 
     Response : 

@@ -16,14 +16,12 @@ import (
 )
 
 type PaymentHistoryStu struct {
-	ID            string
-	PaymentMethod string
-	Amount        int64
-	Currency      string
-	CustomerID    string
-	ClientSecret  string
-	Description   string
-	Status        string
+	ID           string
+	Amount       int64
+	Currency     string
+	CustomerID   string
+	ClientSecret string
+	Status       string
 }
 
 type stripePaymentHistoryListReq struct {
@@ -72,15 +70,14 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 
 		stripe.Key = req.StripeKey
 
-		params := &stripe.PaymentIntentListParams{}
+		params := &stripe.PaymentIntentListParams{
+			Customer: stripe.String(req.CustomerID),
+		}
 
 		var paymentHistory stripePaymentHistoryListRes
 		paymentHistory.Length = 0
 		paymentHistory.PaymentList = nil
-		if params.Context == nil {
-			rest.PostProcessResponse(w, cliCtx, paymentHistory)
-			return
-		}
+
 		var length = 0
 		params.Filters.AddFilter("limit", "", "100")
 		i := paymentintent.List(params)
@@ -92,14 +89,10 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			payment.ClientSecret = pi.ClientSecret
 			payment.Currency = pi.Currency
 			payment.CustomerID = pi.Customer.ID
-			payment.Description = pi.Description
 			payment.ID = pi.ID
-			payment.PaymentMethod = pi.PaymentMethod.ID
 			payment.Status = string(pi.Status)
-			if pi.Customer.ID == msg.CustomerID {
-				paymentHistory.PaymentList = append(paymentHistory.PaymentList, payment)
-				length++
-			}
+			paymentHistory.PaymentList = append(paymentHistory.PaymentList, payment)
+			length++
 		}
 		paymentHistory.Length = length
 		rest.PostProcessResponse(w, cliCtx, paymentHistory.PaymentList)
