@@ -9,14 +9,30 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNExecution(keeper *Keeper, ctx sdk.Context, n int) []types.Execution {
-	items := make([]types.Execution, n)
+func createNExecution(k *Keeper, ctx sdk.Context, n int) []types.Execution {
+	execs := make([]types.Execution, n)
 	for i := range items {
-		items[i].Creator = "any"
-		items[i].Id = uint64(i)
-		keeper.appendExecution(ctx, items[i])
+		execs[i].Creator = "any"
+		execs[i].Id = uint64(i)
+		k.appendExecution(ctx, execs[i])
 	}
-	return items
+	return execs
+}
+
+func createNExecutionForSingleItem(k *Keeper, ctx sdk.Context, n int) types.Execution {
+	exec := types.Execution{
+		RecipeID:   "testRecipeID",
+		CookbookID: "testCookbookID",
+		// TODO fill fields
+		ItemInputs:    nil,
+		ItemOutputIDs: nil,
+	}
+	for i := 0; i < n; i++ {
+		exec.Creator = Sprintf("any%v", i) // ok if different people ran executions
+		exec.ID = uint64(i)
+		k.appendExecution(ctx, exec)
+	}
+	return item
 }
 
 func TestExecutionGet(t *testing.T) {
@@ -24,6 +40,21 @@ func TestExecutionGet(t *testing.T) {
 	items := createNExecution(keeper, ctx, 10)
 	for _, item := range items {
 		assert.Equal(t, item, keeper.GetExecution(ctx, item.Id))
+	}
+}
+
+// TODO verify
+func TestExecutionsGetByItem(t *testing.T) {
+	numExecs := 10
+	keeper, ctx := setupKeeper(t)
+	itemExec := createNExecutionForSingleItem(keeper, ctx, numExecs)
+	execs := keeper.GetExecutionsByItem(ctx, itemExec.CookbookID, itemExec.RecipeID, itemExec.ID)
+	assert.Equal(t, numExecs, len(execs))
+	for _, exec := range execs {
+		assert.Equal(t, exec.CookbookID, itemExec.CookbookID)
+		assert.Equal(t, exec.RecipeID, itemExec.RecipeID)
+		assert.Equal(t, exec.ID, itemExec.Id)
+
 	}
 }
 

@@ -12,19 +12,19 @@ func (dp DoubleInputParam) Has(input sdk.Dec) bool {
 // Actualize creates a (key, value) list from ParamList
 func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []DoubleKeyValue
-	for _, param := range dpm {
-		m = append(m, DoubleKeyValue{
+	m := make([]DoubleKeyValue, len(dpm))
+	for i, param := range dpm {
+		m[i] = DoubleKeyValue{
 			Key:   param.Key,
 			Value: param.MinValue.Add(param.MaxValue).QuoInt64(2),
-		})
+		}
 	}
 	return m
 }
 
 // TODO check if needed
 // Has validates if input is between min max range
-//func (lp FeeInputParam) Has(input int64) bool {
+// func (lp FeeInputParam) Has(input int64) bool {
 //	// it means fee restriction is not set
 //	if lp.MinValue == 0 && lp.MaxValue == 0 {
 //		return true
@@ -40,12 +40,12 @@ func (lp LongInputParam) Has(input int) bool {
 // Actualize generate a value from range
 func (lpm LongInputParamList) Actualize() []LongKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []LongKeyValue
-	for _, param := range lpm {
-		m = append(m, LongKeyValue{
+	m := make([]LongKeyValue, len(lpm))
+	for i, param := range lpm {
+		m[i] = LongKeyValue{
 			Key:   param.Key,
 			Value: (param.MinValue + param.MaxValue) / 2,
-		})
+		}
 	}
 	return m
 }
@@ -53,12 +53,9 @@ func (lpm LongInputParamList) Actualize() []LongKeyValue {
 // Actualize actualize string from StringInputParamList
 func (lpm StringInputParamList) Actualize() []StringKeyValue {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []StringKeyValue
-	for _, param := range lpm {
-		m = append(m, StringKeyValue{
-			Key:   param.Key,
-			Value: param.Value,
-		})
+	m := make([]StringKeyValue, len(lpm))
+	for i, param := range lpm {
+		m[i] = StringKeyValue(param)
 	}
 	return m
 }

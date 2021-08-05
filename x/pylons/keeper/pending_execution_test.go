@@ -9,11 +9,11 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNPendingExecution(keeper *Keeper, ctx sdk.Context, n int) []types.Execution {
+func createNPendingExecution(k *Keeper, ctx sdk.Context, n int) []types.Execution {
 	items := make([]types.Execution, n)
 	for i := range items {
 		items[i].Creator = "any"
-		items[i].Id = keeper.AppendPendingExecution(ctx, items[i])
+		items[i].Id = k.AppendPendingExecution(ctx, items[i])
 	}
 	return items
 }

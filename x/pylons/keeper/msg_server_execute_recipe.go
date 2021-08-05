@@ -3,11 +3,11 @@ package keeper
 import (
 	"context"
 	"fmt"
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -97,7 +97,7 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, reci
 	matchedItems := make([]types.Item, len(recipe.ItemInputs))
 
 	// build Item list from inputItemIDs
-	inputItemMap := make(map[string]types.Item, 0)
+	inputItemMap := make(map[string]types.Item)
 	checkedInputItems := make([]bool, len(inputItemsIDs))
 
 	for i, recipeItemInput := range recipe.ItemInputs {
@@ -134,7 +134,6 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, reci
 	return matchedItems, nil
 }
 
-
 func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRecipe) (*types.MsgExecuteRecipeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -151,9 +150,9 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	// if true, lock these coins
 
 	// create ItemRecord list
-	itemsRecord := make([]types.ItemRecord, len(matchedItems))
-	for i, item := range matchedItems{
-		itemsRecord[i] = types.ItemRecord{
+	itemRecords := make([]types.ItemRecord, len(matchedItems))
+	for i, item := range matchedItems {
+		itemRecords[i] = types.ItemRecord{
 			ID:      item.ID,
 			Doubles: item.Doubles,
 			Longs:   item.Longs,
@@ -162,13 +161,13 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{
-		Creator:       msg.Creator,
-		CookbookID:    msg.CookbookID,
-		RecipeID:      msg.RecipeID,
-		NodeVersion:   config.GetNodeVersionString(),
-		BlockHeight:   uint64(ctx.BlockHeight()),
-		CoinInputs:    nil, // TODO
-		ItemInputs:    itemsRecord,
+		Creator:     msg.Creator,
+		CookbookID:  msg.CookbookID,
+		RecipeID:    msg.RecipeID,
+		NodeVersion: config.GetNodeVersionString(),
+		BlockHeight: uint64(ctx.BlockHeight()),
+		CoinInputs:  nil, // TODO
+		ItemInputs:  itemRecords,
 	}
 
 	id := k.AppendPendingExecution(ctx, execution)

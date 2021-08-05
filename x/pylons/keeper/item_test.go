@@ -10,14 +10,14 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNItem(keeper *Keeper, ctx sdk.Context, n int) []types.Item {
+func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
 	for i := range items {
 		items[i].Creator = "any"
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].RecipeID = fmt.Sprintf("%d", i)
 		items[i].ID = fmt.Sprintf("%d", i)
-		keeper.SetItem(ctx, items[i])
+		k.SetItem(ctx, items[i])
 	}
 	return items
 }

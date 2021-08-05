@@ -27,7 +27,7 @@ func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 	if lastWeight == 0 {
 		return sdk.NewDec(0), errors.New("total weight of DoubleWeightTable shouldn't be zero")
 	}
-	randWeight := rand.Int63n(int64(lastWeight))
+	randWeight := rand.Int63n(lastWeight)
 
 	var first int64
 	chosenIndex := -1

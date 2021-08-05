@@ -10,13 +10,13 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNCookbook(keeper *Keeper, ctx sdk.Context, n int) []types.Cookbook {
+func createNCookbook(k *Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creators := CreateTestAddressList(uint(n))
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].ID = fmt.Sprintf("%d", i)
-		keeper.SetCookbook(ctx, items[i])
+		k.SetCookbook(ctx, items[i])
 	}
 	return items
 }

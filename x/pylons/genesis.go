@@ -53,7 +53,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	// Get all execution
 	executionList := k.GetAllExecution(ctx)
 	for _, elem := range executionList {
-		elem := elem // nolint: typecheck
+		elem := elem
 		genesis.ExecutionList = append(genesis.ExecutionList, &elem)
 	}
 
@@ -63,21 +63,21 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	// Get all item
 	itemList := k.GetAllItem(ctx)
 	for _, elem := range itemList {
-		elem := elem // nolint: typecheck
+		elem := elem
 		genesis.ItemList = append(genesis.ItemList, &elem)
 	}
 
 	// Get all recipe
 	recipeList := k.GetAllRecipe(ctx)
 	for _, elem := range recipeList {
-		elem := elem // nolint: typecheck
+		elem := elem
 		genesis.RecipeList = append(genesis.RecipeList, &elem)
 	}
 
 	// Get all cookbook
 	cookbookList := k.GetAllCookbook(ctx)
 	for _, elem := range cookbookList {
-		elem := elem // nolint: typecheck
+		elem := elem
 		genesis.CookbookList = append(genesis.CookbookList, &elem)
 	}
 

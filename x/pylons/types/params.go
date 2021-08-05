@@ -22,11 +22,11 @@ type LongInputParamList []LongInputParam
 type StringInputParamList []StringInputParam
 type WeightedOutputsList []WeightedOutputs
 
-//type CoinInputList []CoinInput
+// type CoinInputList []CoinInput
 type ItemList []Item
 type ItemInputList []ItemInput
 
-//type TradeItemInputList []TradeItemInput
+// type TradeItemInputList []TradeItemInput
 
 type DoubleWeightTable []DoubleWeightRange
 type IntWeightTable []IntWeightRange
@@ -57,6 +57,7 @@ func getFloat(unk interface{}) (float64, error) {
 	default:
 		v := reflect.ValueOf(unk)
 		v = reflect.Indirect(v)
+		// nolint: gocritic
 		if v.Type().ConvertibleTo(floatType) {
 			fv := v.Convert(floatType)
 			return fv.Float(), nil
@@ -65,7 +66,7 @@ func getFloat(unk interface{}) (float64, error) {
 			s := sv.String()
 			return strconv.ParseFloat(s, 64)
 		} else {
-			return math.NaN(), fmt.Errorf("Can't convert %v to float64", v.Type())
+			return math.NaN(), fmt.Errorf("cannot convert type %v to float64", v.Type())
 		}
 	}
 }
@@ -73,7 +74,7 @@ func getFloat(unk interface{}) (float64, error) {
 // Actualize creates a (key, value) list from ParamList
 func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []DoubleKeyValue
+	m := make([]DoubleKeyValue, 0, len(dpm))
 	for _, param := range dpm {
 		var valDec sdk.Dec
 		var err error
@@ -99,7 +100,7 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 // Actualize builds the params
 func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []LongKeyValue
+	m := make([]LongKeyValue, 0, len(lpm))
 	for _, param := range lpm {
 		var val int64
 		var err error
@@ -123,7 +124,7 @@ func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error
 // Actualize actualize string param using cel program
 func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
 	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	var m []StringKeyValue
+	m := make([]StringKeyValue, 0, len(spm))
 	for _, param := range spm {
 		var val string
 		var err error

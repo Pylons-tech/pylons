@@ -10,12 +10,12 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNRecipe(keeper *Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
+func createNRecipe(k *Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
 	items := make([]types.Recipe, n)
 	for i := range items {
 		items[i].CookbookID = cb.ID
 		items[i].ID = fmt.Sprintf("%d", i)
-		keeper.SetRecipe(ctx, items[i])
+		k.SetRecipe(ctx, items[i])
 	}
 	return items
 }

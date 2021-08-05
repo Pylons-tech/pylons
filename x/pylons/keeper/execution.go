@@ -31,6 +31,30 @@ func (k Keeper) GetExecutionCount(ctx sdk.Context) uint64 {
 	return count
 }
 
+// GetExecutionsByItem returns a slice of Executions that relate to a given Item
+func (k Keeper) GetExecutionsByItem(ctx sdk.Context, cookbookID, recipeID, itemID string) []types.Execution {
+	executions := make([]types.Execution, 0)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Execution
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+
+		// if we match the item, append to list
+		if val.CookbookID == cookbookID && val.RecipeID == recipeID {
+			// TODO
+			// CHECK the itemID
+			executions = append(executions, val)
+		}
+	}
+
+	return executions
+}
+
 // SetExecutionCount set the total number of execution
 func (k Keeper) SetExecutionCount(ctx sdk.Context, count uint64) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionCountKey))
