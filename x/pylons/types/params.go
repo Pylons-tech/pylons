@@ -25,11 +25,11 @@ type WeightedOutputsList []WeightedOutputs
 //type CoinInputList []CoinInput
 type ItemList []Item
 type ItemInputList []ItemInput
+
 //type TradeItemInputList []TradeItemInput
 
 type DoubleWeightTable []DoubleWeightRange
 type IntWeightTable []IntWeightRange
-
 
 var floatType = reflect.TypeOf(float64(0))
 var stringType = reflect.TypeOf("")

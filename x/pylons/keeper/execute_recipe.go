@@ -15,7 +15,7 @@ package keeper
 //          Mint Items or Modify existing with the computed value
 //	  send coins owed
 
-// we should add a message CompleteExecutionEarly that can be called on pendingExections
+// we should add a message CompleteExecutionEarly that can be called on pendingExecutions
 //     compute the cost to pay as remaining blocks*cookbook.costPerBlock
 //     distribute payments
 // 	   change pendingExecution.blockHeight so that when summed to recipe.BlockInterval it gives the current block
