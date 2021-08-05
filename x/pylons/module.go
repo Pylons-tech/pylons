@@ -173,6 +173,24 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
-func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+	// TODO add functionality for execution of Recipes after
+	pendingExecs := am.keeper.GetAllPendingExecution(ctx)
+
+	for _, pendingExec := range pendingExecs {
+		// get exec recipe
+		recipe, found := am.keeper.GetRecipe(ctx, pendingExec.CookbookID, pendingExec.RecipeID)
+		if !found {
+			panic("TODO REMOVE")
+		}
+		// TODO could this recipe not exist in the store?  I dont think, but we should probably be safe
+		// TODO should this be <= or == ? We should be removing the pending, so its shouldnt matter?
+		if pendingExec.BlockHeight+recipe.BlockInterval == uint64(ctx.BlockHeight()) {
+			// TODO execute
+			// TODO move from pendingExec -> exec
+			panic("TODO REMOVE")
+		}
+	}
+
 	return []abci.ValidatorUpdate{}
 }
