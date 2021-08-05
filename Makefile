@@ -90,6 +90,14 @@ genesis:
 	starport chain init --home docker/.pylonsd
 	docker build -t rafaeldeandrade/pylonsnode -f Dockerfile .
 
+###############################################################################
+###                                Testnet                                  ###
+###############################################################################
+testnet:
+	pylonsd co
+	starport chain init --home docker/.pylonsd
+	docker build -t rafaeldeandrade/pylonsnode -f Dockerfile .
+
 
 ###############################################################################
 ###                                Testing                                  ###

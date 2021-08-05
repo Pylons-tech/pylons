@@ -33,6 +33,7 @@ accounts:
     coins: ["1000000000pylon,100000000bedrock"]
     mnemonic: "oil inflict cup nation circle palace cactus uphold clarify vibrant believe stem farm aerobic casino treat early amazing remain produce exhaust bachelor flame own"
 
+
 validator:
   name: pylonsinc
   staked: "300000000bedrock"
