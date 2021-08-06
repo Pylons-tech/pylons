@@ -473,14 +473,14 @@ func NewItemOutput(ID string, Doubles DoubleParamList, Longs LongParamList, Stri
 	}
 }
 
-func NewStripePrice(Amount int64, Currency string, Description string, Images []string, Name string, Quantity int64) StripePrice {
+func NewStripePrice(amount int64, currency string, description string, images []string, name string, quantity int64) StripePrice {
 	return StripePrice{
-		Amount:      Amount,
-		Currency:    Currency,
-		Description: Description,
-		Images:      Images,
-		Name:        Name,
-		Quantity:    Quantity,
+		Amount:      amount,
+		Currency:    currency,
+		Description: description,
+		Images:      images,
+		Name:        name,
+		Quantity:    quantity,
 	}
 }
 

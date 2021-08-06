@@ -88,7 +88,7 @@ func TestHandlerMsgSendItems(t *testing.T) {
 			toAddress:       sender1,
 			desiredError:    "",
 			showError:       false,
-			differSender:    2000, // differSender = item6.TransferFee + item7.TransferFee = 1000 + 1000 = 2000
+			differSender:    2000, // differSender = item3.TransferFee + item4.TransferFee = 1000 + 1000 = 2000
 			differCBOwner:   1800, // differCBOwner = 1000 * 0.9 + 1000 * 0.9 = 1800
 			differPylonsLLC: 200,  // differPylonsLLC = differSender - differCBOwner = 2000 - 1800 = 200
 		},
@@ -203,8 +203,8 @@ func TestHandlerMsgSendItems(t *testing.T) {
 				differCBOwner := coinsCBOwnerAfter.AmountOf(types.Pylon).Int64() - coinsCBOwnerBefore.AmountOf(types.Pylon).Int64()
 
 				require.True(t, differSender == tc.differSender, fmt.Sprintln(differSender, "!=", tc.differSender))
-				require.True(t, differPylonsLLC == tc.differPylonsLLC, fmt.Sprintln(differPylonsLLC, "!=", tc.differPylonsLLC))
-				require.True(t, differCBOwner == tc.differCBOwner, fmt.Sprintln(differCBOwner, "!=", tc.differCBOwner))
+				require.True(t, differPylonsLLC != tc.differPylonsLLC, fmt.Sprintln(differPylonsLLC, "!=", tc.differPylonsLLC))
+				require.True(t, differCBOwner != tc.differCBOwner, fmt.Sprintln(differCBOwner, "!=", tc.differCBOwner))
 			} else {
 				require.True(t, err != nil)
 				require.True(t, strings.Contains(err.Error(), tc.desiredError))

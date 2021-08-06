@@ -9,7 +9,7 @@ fees:
   max_item_transfer_fee: 100000
   item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
-  pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
+  pylons_llc: cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 # this should be replaced
 google_iap:
   - package_name: com.pylons.loud
     product_id: pylons_1000
@@ -19,6 +19,7 @@ google_iap:
     amount: 55000
 google_iap_pubkey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB
 is_production: true
+chainID: test
 stripe_iap:
   - package_name: com.pylons.loud
     product_id: pylons_1000

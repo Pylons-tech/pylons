@@ -8,10 +8,11 @@ import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/oauth"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type stripeOauthTokenReq struct {
@@ -34,13 +35,12 @@ func stripeOAuthTokenHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			//rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			rest.PostProcessResponse(w, cliCtx, err.Error())
 			return
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -48,9 +48,8 @@ func stripeOAuthTokenHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey) //stripeSecKeyBytes
-		req.StripeClientID = string(config.Config.StripeConfig.StripeClientID)
-		// create the message
+		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
+		req.StripeClientID = config.Config.StripeConfig.StripeClientID
 		msg := types.NewMsgStripeOauthToken(req.GrantType, req.Code, addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
@@ -63,13 +62,12 @@ func stripeOAuthTokenHandler(cliCtx client.Context) http.HandlerFunc {
 			Code:      stripe.String(msg.Code),
 		}
 
-		oauth_token, err := oauth.New(params)
+		oauthToken, err := oauth.New(params)
 
 		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error oauth_token: %s - stripe.StripeClientID %s", err.Error(), req.StripeClientID))
+			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error oauthToken: %s - stripe.StripeClientID %s", err.Error(), req.StripeClientID))
 			return
 		}
-		rest.PostProcessResponse(w, cliCtx, oauth_token)
-		//tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, []sdk.Msg{&msg}...)
+		rest.PostProcessResponse(w, cliCtx, oauthToken)
 	}
 }

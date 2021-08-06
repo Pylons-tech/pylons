@@ -6,10 +6,11 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestCustomCreateRecipeValidateBasic(t *testing.T) {
@@ -272,7 +273,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 
 	// try creating it 2nd time
 	_, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
-	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
+	require.True(t, strings.Contains(err.Error(), "the recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
 }
 

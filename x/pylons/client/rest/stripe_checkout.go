@@ -8,10 +8,11 @@ import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/checkout/session"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type stripeCreateCheckoutReq struct {
@@ -43,7 +44,7 @@ func stripeCheckoutHandler(cliCtx client.Context) http.HandlerFunc {
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if !baseReq.ValidateBasic(w) {
@@ -60,7 +61,7 @@ func stripeCheckoutHandler(cliCtx client.Context) http.HandlerFunc {
 			Quantity:    req.Quantity,
 		}
 
-		req.StripeKey = string(config.Config.StripeConfig.StripeSecretKey)
+		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 		msg := types.NewMsgStripeCheckout(req.StripeKey, req.PaymentMethod, &price, addr.String())
 		err = msg.ValidateBasic()
 		if err != nil {
@@ -96,10 +97,10 @@ func stripeCheckoutHandler(cliCtx client.Context) http.HandlerFunc {
 			Mode: stripe.String(string(stripe.CheckoutSessionModePayment)),
 		}
 
-		sessionId, err := session.New(params)
+		sessionID, err := session.New(params)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error checkout session: %s", err.Error()))
 		}
-		rest.PostProcessResponse(w, cliCtx, sessionId)
+		rest.PostProcessResponse(w, cliCtx, sessionID)
 	}
 }

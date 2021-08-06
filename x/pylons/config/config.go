@@ -58,6 +58,7 @@ type Configuration struct {
 	Validators      ValidatorsConfiguration  `yaml:"validators"`
 	GoogleIAP       []GoogleIAPConfiguration `yaml:"google_iap"`
 	GoogleIAPPubKey string                   `yaml:"google_iap_pubkey"`
+	ChainID         string                   `yaml:"chainID"`
 	StripeIAP       []StripeIAPConfiguration `yaml:"stripe_iap"`
 	StripeConfig    StripeConfiguration      `yaml:"stripe_config"`
 	IsProduction    bool                     `yaml:"is_production"`
@@ -78,9 +79,8 @@ func PaymentMethods() string {
 	paymentMethodsString := os.Getenv("PAYMENT_METHODS")
 	if paymentMethodsString == "" {
 		return "card"
-	} else {
-		return paymentMethodsString //strings.Split(paymentMethodsString, ", ")
 	}
+	return paymentMethodsString
 }
 
 // ReadConfig is a function to read configuration
@@ -119,7 +119,7 @@ func ReadConfig() error {
 			ItemTransferCookbookOwnerProfitPercent: 90,
 		},
 		Validators: ValidatorsConfiguration{
-			PylonsLLC: "cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7",
+			PylonsLLC: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337",
 		},
 		GoogleIAP: []GoogleIAPConfiguration{
 			{

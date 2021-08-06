@@ -8,9 +8,11 @@ import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/product"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 type stripeCreateProductReq struct {
@@ -34,13 +36,12 @@ func stripeCreateProductHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			//rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			rest.PostProcessResponse(w, cliCtx, err.Error())
 			return
 		}
 
 		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = "test"
+		baseReq.ChainID = config.Config.ChainID
 		baseReq.From = addr.String()
 
 		if err != nil {
@@ -56,7 +57,7 @@ func stripeCreateProductHandler(cliCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		stripe.Key = string(msg.StripeKey)
+		stripe.Key = msg.StripeKey
 
 		params := &stripe.ProductParams{
 			Name:        stripe.String(msg.Name),
@@ -65,12 +66,12 @@ func stripeCreateProductHandler(cliCtx client.Context) http.HandlerFunc {
 			StatementDescriptor: stripe.String(msg.StatementDescriptor),
 			UnitLabel:           stripe.String(msg.UnitLabel),
 		}
-		productId, err := product.New(params)
+		productID, err := product.New(params)
 
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("error create product: %s", err.Error()))
 		}
 
-		rest.PostProcessResponse(w, cliCtx, productId.ID)
+		rest.PostProcessResponse(w, cliCtx, productID.ID)
 	}
 }

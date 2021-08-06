@@ -56,7 +56,7 @@ RUN pylonsd keys add michael --keyring-backend=test  --home=$HOME/.pylonsd
 #--recover <<< "primary push only kiwi elephant give nut roast nature fury jaguar certain distance endorse earn reform fatal edge mother submit team neither gaze whip"
 RUN pylonsd keys add eugen --keyring-backend=test --home=$HOME/.pylonsd 
 #--recover <<< "shiver pencil sauce original thank real stick armed inform cradle very elder drink planet scheme assault test science kite better chronic visa village order"
-RUN pylonsd add-genesis-account cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 10000000000pylon # Pylons LLC validator
+RUN pylonsd add-genesis-account cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 10000000000pylon # Pylons LLC validator
 RUN pylonsd add-genesis-account $(pylonsd keys show node0 -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
 RUN pylonsd add-genesis-account $(pylonsd keys show michael -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin
 RUN pylonsd add-genesis-account $(pylonsd keys show eugen -a --keyring-backend=test --home=$HOME/.pylonsd) 10000000000pylon,1000000000node0token,1000000000stake,10000000loudcoin

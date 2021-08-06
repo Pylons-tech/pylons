@@ -128,9 +128,9 @@ func (msg MsgCreateCookbook) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateCookbook a constructor for UpdateCookbook msg
-func NewMsgUpdateCookbook(ID, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
+func NewMsgUpdateCookbook(id, desc, developer, version, sEmail, sender string) MsgUpdateCookbook {
 	return MsgUpdateCookbook{
-		ID:           ID,
+		ID:           id,
 		Description:  desc,
 		Developer:    developer,
 		Version:      version,
@@ -420,25 +420,52 @@ func NewMsgStripeCheckout(stripeKey string, paymentMethod string, price *StripeP
 	return msg
 }
 
-func NewMsgStripeCreateProduct(StripeKey string, Name string, Description string, Images []string, StatementDescriptor string, UnitLabel string, Sender string) MsgStripeCreateProduct {
+func NewMsgStripeCreateProduct(stripeKey string, name string, description string, images []string, statementDescriptor string, unitLabel string, sender string) MsgStripeCreateProduct {
 	msg := MsgStripeCreateProduct{
-		StripeKey:           StripeKey,
-		Name:                Name,
-		Description:         Description,
-		Images:              Images,
-		StatementDescriptor: StatementDescriptor,
-		UnitLabel:           UnitLabel,
-		Sender:              Sender,
+		StripeKey:           stripeKey,
+		Name:                name,
+		Description:         description,
+		Images:              images,
+		StatementDescriptor: statementDescriptor,
+		UnitLabel:           unitLabel,
+		Sender:              sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string) MsgStripeCreatePaymentIntent {
+func NewMsgStripeCreatePaymentIntent(StripeKey string, Amount int64, Currency string, SKUID string, Sender string, CustomerID string) MsgStripeCreatePaymentIntent {
 	msg := MsgStripeCreatePaymentIntent{
+		StripeKey:  StripeKey,
+		Amount:     Amount,
+		Currency:   Currency,
+		SKUID:      SKUID,
+		Sender:     Sender,
+		CustomerID: CustomerID,
+	}
+	return msg
+}
+
+func NewMsgStripePaymentHistoryList(StripeKey string, CustomerID string, Sender string) MsgStripePaymentHistoryList {
+	msg := MsgStripePaymentHistoryList{
+		StripeKey:  StripeKey,
+		CustomerID: CustomerID,
+		Sender:     Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCheckPayment(StripeKey string, PaymentID string, Sender string) MsgStripeCheckPayment {
+	msg := MsgStripeCheckPayment{
 		StripeKey: StripeKey,
-		Amount:    Amount,
-		Currency:  Currency,
-		SKUID:     SKUID,
+		PaymentID: PaymentID,
+		Sender:    Sender,
+	}
+	return msg
+}
+
+func NewMsgStripeCreateCustomerID(StripeKey string, Sender string) MsgStripeCreateCustomerID {
+	msg := MsgStripeCreateCustomerID{
+		StripeKey: StripeKey,
 		Sender:    Sender,
 	}
 	return msg
@@ -455,54 +482,54 @@ func NewMsgStripeCreateAccount(StripeKey string, Country string, Email string, T
 	return msg
 }
 
-func NewMsgStripeOauthToken(GrantType string, Code string, Sender string) MsgStripeOauthToken {
+func NewMsgStripeOauthToken(grantType string, code string, sender string) MsgStripeOauthToken {
 	msg := MsgStripeOauthToken{
-		GrantType: GrantType,
-		Code:      Code,
-		Sender:    Sender,
+		GrantType: grantType,
+		Code:      code,
+		Sender:    sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreatePrice(StripeKey string, Product string, Amount string, Currency string, Description string, Sender string) MsgStripeCreatePrice {
+func NewMsgStripeCreatePrice(stripeKey string, product string, amount string, currency string, description string, sender string) MsgStripeCreatePrice {
 	msg := MsgStripeCreatePrice{
-		StripeKey:   StripeKey,
-		Product:     Product,
-		Amount:      Amount,
-		Currency:    Currency,
-		Description: Description,
-		Sender:      Sender,
+		StripeKey:   stripeKey,
+		Product:     product,
+		Amount:      amount,
+		Currency:    currency,
+		Description: description,
+		Sender:      sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreateSku(StripeKey string, Product string, Attributes StringKeyValueList, Price int64, Currency string, Inventory *StripeInventory, Sender string) MsgStripeCreateSku {
+func NewMsgStripeCreateSku(stripeKey string, product string, attributes StringKeyValueList, price int64, currency string, inventory *StripeInventory, sender string) MsgStripeCreateSku {
 	msg := MsgStripeCreateSku{
-		StripeKey:  StripeKey,
-		Product:    Product,
-		Attributes: Attributes,
-		Price:      Price,
-		Currency:   Currency,
-		Inventory:  Inventory,
-		Sender:     Sender,
+		StripeKey:  stripeKey,
+		Product:    product,
+		Attributes: attributes,
+		Price:      price,
+		Currency:   currency,
+		Inventory:  inventory,
+		Sender:     sender,
 	}
 	return msg
 }
 
-func NewMsgStripeCreateProductSku(StripeKey string, Name string, Description string, Images []string,
-	Attributes StringKeyValueList, Price int64, Currency string,
-	Inventory *StripeInventory, ClientId string, Sender string) MsgStripeCreateProductSku {
+func NewMsgStripeCreateProductSku(stripeKey string, name string, description string, images []string,
+	attributes StringKeyValueList, price int64, currency string,
+	inventory *StripeInventory, clientID string, sender string) MsgStripeCreateProductSku {
 	msg := MsgStripeCreateProductSku{
-		StripeKey:   StripeKey,
-		Name:        Name,
-		Description: Description,
-		Images:      Images,
-		Attributes:  Attributes,
-		Price:       Price,
-		Currency:    Currency,
-		Inventory:   Inventory,
-		ClientId:    ClientId,
-		Sender:      Sender,
+		StripeKey:   stripeKey,
+		Name:        name,
+		Description: description,
+		Images:      images,
+		Attributes:  attributes,
+		Price:       price,
+		Currency:    currency,
+		Inventory:   inventory,
+		ClientID:    clientID,
+		Sender:      sender,
 	}
 	return msg
 }
@@ -706,6 +733,93 @@ func (msg MsgStripeInfo) ValidateBasic() error {
 	return nil
 }
 
+func (msg MsgStripePaymentHistoryList) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripePaymentHistoryList) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripePaymentHistoryList) Route() string { return RouterKey }
+
+func (msg MsgStripePaymentHistoryList) Type() string { return "stripe_payment_history_list" }
+
+func (msg MsgStripePaymentHistoryList) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeCheckPayment) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCheckPayment) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCheckPayment) Route() string { return RouterKey }
+
+func (msg MsgStripeCheckPayment) Type() string { return "stripe_check_payment" }
+
+func (msg MsgStripeCheckPayment) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
+func (msg MsgStripeCreateCustomerID) GetSignBytes() []byte {
+	b, err := json.Marshal(msg)
+	if err != nil {
+		panic(err)
+	}
+	return sdk.MustSortJSON(b)
+}
+
+func (msg MsgStripeCreateCustomerID) GetSigners() []sdk.AccAddress {
+	from, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{from}
+}
+
+func (msg MsgStripeCreateCustomerID) Route() string { return RouterKey }
+
+func (msg MsgStripeCreateCustomerID) Type() string { return "stripe_create_customer_id" }
+
+func (msg MsgStripeCreateCustomerID) ValidateBasic() error {
+
+	// if msg.Sender == "" {
+	// 	return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Sender)
+	// }
+
+	return nil
+}
+
 func (msg MsgStripeCreatePaymentIntent) GetSignBytes() []byte {
 	b, err := json.Marshal(msg)
 	if err != nil {
@@ -724,7 +838,7 @@ func (msg MsgStripeCreatePaymentIntent) GetSigners() []sdk.AccAddress {
 
 func (msg MsgStripeCreatePaymentIntent) Route() string { return RouterKey }
 
-func (msg MsgStripeCreatePaymentIntent) Type() string { return "stripe_create_sku" }
+func (msg MsgStripeCreatePaymentIntent) Type() string { return "stripe_create_payment_intent" }
 
 func (msg MsgStripeCreatePaymentIntent) ValidateBasic() error {
 
@@ -1155,36 +1269,45 @@ func (msg MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not providing anything in exchange of the trade: empty outputs")
 	}
 
-	if msg.CoinOutputs != nil {
-		for _, coinOutput := range msg.CoinOutputs {
-			if !coinOutput.IsPositive() {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
-			}
+	var isStripePayment = false
+	for _, inp := range msg.CoinInputs {
+		if inp.Coin == config.Config.StripeConfig.Currency {
+			isStripePayment = true
 		}
-		tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 	}
 
-	if msg.ItemInputs == nil && msg.CoinInputs == nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
-	}
-
-	if msg.CoinInputs != nil {
-		for _, coinInput := range msg.CoinInputs {
-			if coinInput.Count == 0 {
-				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
+	if isStripePayment == false {
+		if msg.CoinOutputs != nil {
+			for _, coinOutput := range msg.CoinOutputs {
+				if !coinOutput.IsPositive() {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on outputs")
+				}
 			}
+			tradePylonAmount += msg.CoinOutputs.AmountOf(Pylon).Int64()
 		}
-		tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
-	}
 
-	if tradePylonAmount < config.Config.Fee.MinTradePrice {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
-	}
+		if msg.ItemInputs == nil && msg.CoinInputs == nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "sender not receiving anything for the trade: empty inputs")
+		}
 
-	if msg.ItemInputs != nil {
-		err := TradeItemInputList(msg.ItemInputs).Validate()
-		if err != nil {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		if msg.CoinInputs != nil {
+			for _, coinInput := range msg.CoinInputs {
+				if coinInput.Count == 0 {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "there should be no 0 amount denom on coin inputs")
+				}
+			}
+			tradePylonAmount += CoinInputList(msg.CoinInputs).ToCoins().AmountOf(Pylon).Int64()
+		}
+
+		if tradePylonAmount < config.Config.Fee.MinTradePrice {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("there should be more than %d amount of pylon per trade", config.Config.Fee.MinTradePrice))
+		}
+
+		if msg.ItemInputs != nil {
+			err := TradeItemInputList(msg.ItemInputs).Validate()
+			if err != nil {
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+			}
 		}
 	}
 
@@ -1210,11 +1333,13 @@ func (msg MsgCreateTrade) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgFulfillTrade a constructor for FulfillTrade msg
-func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string) MsgFulfillTrade {
+func NewMsgFulfillTrade(TradeID string, sender string, itemIDs []string, paymentId string, paymentMethod string) MsgFulfillTrade {
 	return MsgFulfillTrade{
-		TradeID: TradeID,
-		Sender:  sender,
-		ItemIDs: itemIDs,
+		TradeID:       TradeID,
+		Sender:        sender,
+		ItemIDs:       itemIDs,
+		PaymentId:     paymentId,
+		PaymentMethod: paymentMethod,
 	}
 }
 

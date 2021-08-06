@@ -5,12 +5,12 @@ import (
 	originT "testing"
 	"time"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	testing "github.com/Pylons-tech/pylons_sdk/cmd/evtesting"
-	"github.com/Pylons-tech/pylons_sdk/x/pylons/types"
 
 	inttestSDK "github.com/Pylons-tech/pylons_sdk/cmd/test_utils"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func TestExecuteRecipeViaCLI(originT *originT.T) {
@@ -57,7 +57,7 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 				"recipe_guid": guid,
 			}).MustNil(err, "error getting recipe from guid")
 
-			execMsg := types.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, tc.itemIDs)
+			execMsg := types.NewMsgExecuteRecipe(rcp.ID, rcpExecutorBalance.Address, "pi_1DoShv2eZvKYlo2CqsROyFun", "card", tc.itemIDs)
 			txhash, err := inttestSDK.TestTxWithMsgWithNonce(t, &execMsg, rcpExecutorKey, false)
 			if err != nil {
 				TxBroadcastErrorCheck(txhash, err, t)
@@ -83,8 +83,8 @@ func TestExecuteRecipeViaCLI(originT *originT.T) {
 					"origin_amount":       originPylonAmount.Int64(),
 					"target_distribution": tc.pylonsLLCDistribution,
 					"actual_amount":       accInfo.Coins.AmountOf(types.Pylon).Int64(),
-				}).Log("Pylons LLC amount change")
-				t.MustTrue(balanceOk, "Pylons LLC should get correct revenue")
+				}).MustTrue(balanceOk, "Pylons LLC should get correct revenue")
+
 			}
 			if tc.cbOwnerDistribution > 0 {
 				accInfo := inttestSDK.GetAccountBalanceFromAddr(cbOwnerAccBalance.Address, t)

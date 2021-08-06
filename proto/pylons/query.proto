@@ -14,6 +14,11 @@ service Query {
     option (google.api.http).get = "/custom/pylons/addr_from_pub_key/{hex_pub_key}";
   }
 
+  // CheckPayment check if check payment is given to user with valid payment
+  rpc CheckPayment(CheckPaymentRequest) returns (CheckPaymentResponse){
+    option (google.api.http).get = "/custom/pylons/check_payment/{paymentID}";
+  }
+
   // CheckGoogleIAPOrder check if google iap order is given to user with purchase token
   rpc CheckGoogleIAPOrder(CheckGoogleIAPOrderRequest) returns (CheckGoogleIAPOrderResponse){
     option (google.api.http).get = "/custom/pylons/check_google_iap_order/{purchaseToken}";
@@ -57,7 +62,7 @@ service Query {
   // ListCookbook returns a cookbook based on the cookbook id
   rpc ListCookbook(ListCookbookRequest) returns (ListCookbookResponse){
     option (google.api.http).get = "/custom/pylons/list_cookbook/{address}";
-  }
+  } 
 
   // ListExecutions lists all the executions based on the sender address
   rpc ListExecutions(ListExecutionsRequest) returns (ListExecutionsResponse){
@@ -119,6 +124,19 @@ message CheckGoogleIAPOrderRequest {
 
 message CheckGoogleIAPOrderResponse {
   string purchaseToken = 1;
+  bool exist = 2;
+}
+
+message CheckPaymentRequest {
+  string paymentID = 1;
+}
+
+message CheckPaymentResponse {
+  CheckPaymentResult result = 1;
+}
+
+message CheckPaymentResult {
+  string paymentID = 1;
   bool exist = 2;
 }
 
@@ -226,12 +244,11 @@ message ItemsBySenderResponse {
 
 message ListCookbookRequest {
   string address = 1;
-}
+} 
 
 message ListCookbookResponse {
   repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
-}
-
+} 
 
 message ListExecutionsRequest {
   string sender = 1;

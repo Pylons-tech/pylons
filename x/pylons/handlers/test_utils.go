@@ -9,9 +9,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const (
-	mnemonicEntropySize = 256
-)
+// const (
+// 	mnemonicEntropySize = 256
+// )
 
 // MockCookbook mock cookbook
 func MockCookbook(tci keeper.TestCoinInput, sender sdk.AccAddress) *types.MsgCreateCookbookResponse {
@@ -149,7 +149,7 @@ func MockPopularRecipe(
 	rcpName string,
 	cbID string,
 	sender sdk.AccAddress,
-	paymentId string,
+	paymentID string,
 	paymentMethod string,
 ) *types.MsgCreateRecipeResponse {
 	ciL, iiL, entries, outputs, bI := GetParamsForPopularRecipe(hfrt)
@@ -167,11 +167,11 @@ func MockExecution(
 	tci keeper.TestCoinInput,
 	rcpID string, // rcpID of blockInterval > 0
 	sender sdk.AccAddress,
-	paymentId string,
+	paymentID string,
 	paymentMethod string,
 	itemIDs []string,
 ) (*types.MsgExecuteRecipeResponse, error) {
-	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), paymentId, paymentMethod, itemIDs)
+	msg := types.NewMsgExecuteRecipe(rcpID, sender.String(), paymentID, paymentMethod, itemIDs)
 	result, err := tci.PlnH.ExecuteRecipe(sdk.WrapSDKContext(tci.Ctx), &msg)
 	if err != nil {
 		return nil, err
@@ -196,7 +196,7 @@ func MockTrade(
 	return result, err
 }
 
-// AnteHandle is a handler for NewAccountCreationDecorator
+//AnteHandle is a handler for NewAccountCreationDecorator
 func emptyAnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool) (sdk.Context, error) {
 	return ctx, nil
 }

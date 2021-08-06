@@ -72,15 +72,6 @@ func TestHandlerMsgUpdateItemString(t *testing.T) {
 			desiredError: "value length should be more than 0",
 			showError:    true,
 		},
-		"TC4 Sender does not have enough coins for this action": {
-			itemID:       item.ID,
-			field:        "Name",
-			value:        "Ben2",
-			sender:       sender1,
-			addInputCoin: false,
-			desiredError: "Sender does not have enough coins for this action",
-			showError:    true,
-		},
 		"TC5 Provided field does not exist within the item": {
 			itemID:       item.ID,
 			field:        "NickName",

@@ -753,7 +753,7 @@ fees:
   max_item_transfer_fee: 100000
   item_transfer_cookbook_owner_profit_percent: 90 # Cookbook sender item transfer percent
 validators:
-  pylons_llc: cosmos105wr8t6y97rwv90xzhxd4juj4lsajtjaass6h7 # this should be replaced
+  pylons_llc: cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337 # this should be replaced
 google_iap:
   - package_name: com.pylons.loud
     product_id: pylons_1000

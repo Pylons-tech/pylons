@@ -3,10 +3,11 @@ package handlers
 import (
 	"context"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/sku"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // StripeCreateSku is used to execute a recipe
@@ -16,11 +17,10 @@ func (k msgServer) StripeCreateSku(ctx context.Context, msg *types.MsgStripeCrea
 		return nil, errInternal(err)
 	}
 
-	stripe.Key = string(msg.StripeKey)
+	stripe.Key = msg.StripeKey
 	inventoryParams := stripe.InventoryParams{
 		Quantity: &msg.Inventory.Quantity,
-		Type:     &msg.Inventory.Type, //stripe.SKUInventoryTypeFinite
-		// Value:    &msg.Inventory.Value,
+		Type:     &msg.Inventory.Type,
 	}
 	mapAttribute := make(map[string]string)
 	for _, attr := range msg.Attributes {
