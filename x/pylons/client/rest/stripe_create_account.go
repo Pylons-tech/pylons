@@ -36,18 +36,10 @@ func stripeCrateAccountHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			rest.PostProcessResponse(w, cliCtx, err.Error())
+			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error valid address: %s", err.Error()))
 			return
 		}
 
-		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = config.Config.ChainID
-		baseReq.From = addr.String()
-
-		if !baseReq.ValidateBasic(w) {
-			rest.PostProcessResponse(w, cliCtx, "ValidateBasic error")
-			return
-		}
 		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 		// create the message
 		msg := types.NewMsgStripeCreateAccount(req.StripeKey, req.Country, req.Email, req.Type, addr.String())

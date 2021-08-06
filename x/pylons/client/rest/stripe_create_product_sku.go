@@ -44,16 +44,7 @@ func stripeCreateProductSkuHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			rest.PostProcessResponse(w, cliCtx, err.Error())
-			return
-		}
-
-		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = config.Config.ChainID
-		baseReq.From = addr.String()
-
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
+			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error valid address: %s", err.Error()))
 			return
 		}
 

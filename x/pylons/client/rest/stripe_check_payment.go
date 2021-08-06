@@ -43,14 +43,6 @@ func stripeCheckPaymentHandler(cliCtx client.Context) http.HandlerFunc {
 			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error valid address: %s", err.Error()))
 			return
 		}
-		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = config.Config.ChainID
-		baseReq.From = addr.String()
-
-		if !baseReq.ValidateBasic(w) {
-			rest.PostProcessResponse(w, cliCtx, "ValidateBasic error")
-			return
-		}
 
 		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 

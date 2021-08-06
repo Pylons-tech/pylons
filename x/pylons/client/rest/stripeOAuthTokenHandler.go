@@ -39,15 +39,6 @@ func stripeOAuthTokenHandler(cliCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = config.Config.ChainID
-		baseReq.From = addr.String()
-
-		if !baseReq.ValidateBasic(w) {
-			rest.PostProcessResponse(w, cliCtx, "ValidateBasic error")
-			return
-		}
-
 		req.StripeKey = config.Config.StripeConfig.StripeSecretKey
 		req.StripeClientID = config.Config.StripeConfig.StripeClientID
 		msg := types.NewMsgStripeOauthToken(req.GrantType, req.Code, addr.String())
