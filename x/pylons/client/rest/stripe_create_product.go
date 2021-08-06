@@ -11,7 +11,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -36,13 +35,9 @@ func stripeCreateProductHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			rest.PostProcessResponse(w, cliCtx, err.Error())
+			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error valid address: %s", err.Error()))
 			return
 		}
-
-		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = config.Config.ChainID
-		baseReq.From = addr.String()
 
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())

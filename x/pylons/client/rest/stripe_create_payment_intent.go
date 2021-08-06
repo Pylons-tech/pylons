@@ -45,16 +45,7 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 
 		addr, err := sdk.AccAddressFromBech32(req.Sender)
 		if err != nil {
-			rest.PostProcessResponse(w, cliCtx, err.Error())
-			return
-		}
-
-		baseReq := req.BaseReq.Sanitize()
-		baseReq.ChainID = config.Config.ChainID
-		baseReq.From = addr.String()
-
-		if !baseReq.ValidateBasic(w) {
-			rest.PostProcessResponse(w, cliCtx, "ValidateBasic error")
+			rest.PostProcessResponse(w, cliCtx, fmt.Sprintf("error valid address: %s", err.Error()))
 			return
 		}
 
