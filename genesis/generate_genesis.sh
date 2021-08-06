@@ -54,22 +54,30 @@ cp $HOME/.pylonsd/config/gentx/*  $ALPHA_HOME/config/gentx/
 cp $HOME/.pylonsd/config/gentx/*  $BETA_HOME/config/gentx/
 cp $HOME/.pylonsd/config/gentx/*  $GAMMA_HOME/config/gentx/
 
-# Adjust persistent peers info in each node
-sed -i "s/^\(addr_book_strict\s*=\s*\).*$/\1false/g" $ALPHA_HOME/config/config.toml
-sed -i "s/^\(addr_book_strict\s*=\s*\).*$/\1false/g" $BETA_HOME/config/config.toml
-sed -i "s/^\(addr_book_strict\s*=\s*\).*$/\1false/g" $GAMMA_HOME/config/config.toml
 
-#alpha_persistent_info="$(pylonsd tendermint show-node-id --home=$ALPHA_HOME)@192.168.2.118:26656"
-#beta_persistent_info="$(pylonsd tendermint show-node-id --home=$BETA_HOME)@192.168.2.119:26656"
-#gamma_persistent_info="$(pylonsd tendermint show-node-id --home=$GAMMA_HOME)@192.168.2.120:26656"
-#
-#sed -i "s/^\(persistent_peers\s*=\s*\).*$/\1\"$beta_persistent_info,$gamma_persistent_info\"/g" $ALPHA_HOME/config/config.toml
-#sed -i "s/^\(persistent_peers\s*=\s*\).*$/\1\"$alpha_persistent_info,$gamma_persistent_info\"/g" $BETA_HOME/config/config.toml
-#sed -i "s/^\(persistent_peers\s*=\s*\).*$/\1\"$alpha_persistent_info,$beta_persistent_info\"/g" $GAMMA_HOME/config/config.toml
+##### Set values in config files #######
+directories="alpha beta gamma"
 
-pylonsd collect-gentxs --home $ALPHA_HOME
-pylonsd collect-gentxs --home $BETA_HOME
-pylonsd collect-gentxs --home $GAMMA_HOME
+for directory in $directories; do
 
-docker-compose up -d --build
+  pylonsd collect-gentxs --home $directory
 
+  # Change parameters to make localnet to work
+
+  dasel put string -p toml -f $directory/config/config.toml           "rpc.laddr"           "tcp://127.0.0.1:26657"
+  dasel put string -p toml -f $directory/config/config.toml           "rpc.pprof_laddr"     "0.0.0.0:6060"
+  dasel put string -p toml -f $directory/config/config.toml           "rpc.laddr"           "tcp://0.0.0.0:26657"
+  dasel put object -p toml -t string -f $directory/config/config.toml "rpc" cors_allowed_origins = ["*"]
+
+
+
+  dasel put bool -p toml -f $directory/config/app.toml ".api.enable"              true
+  dasel put bool -p toml -f $directory/config/app.toml ".api.enabled-unsafe-cors"     true
+  dasel put bool -p toml -f $directory/config/app.toml ".api.swagger"             true
+  dasel put object -p toml -t string -f $directory/config/app.toml "rpc" cors_allowed_origins = ["*"]
+
+
+done
+
+
+METEOR_SETTINGS=$(cat settings.json) docker-compose up -d --build --force-recreate

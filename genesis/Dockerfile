@@ -5,10 +5,11 @@ RUN apt-get update && \
 
 ARG CONFIG_DIR
 
-ADD  pylonsd                        /usr/bin/
+COPY pylonsd                        /usr/bin/
+COPY dasel                          /usr/bin/
 
 STOPSIGNAL SIGTERM
 
 CMD pylonsd start
 
-EXPOSE 26656 26657
+EXPOSE 26656 26657 1317
