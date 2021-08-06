@@ -11,8 +11,8 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// Match checks if all the constraint match the given item
-func Match(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollection) error {
+// MatchItem checks if all the constraint match the given item
+func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollection) error {
 	if itemInput.Doubles != nil {
 		for _, param := range itemInput.Doubles {
 			double, ok := item.FindDouble(param.Key)
@@ -116,11 +116,11 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, reci
 			inputItemMap[id] = inputItem
 			// match
 			var ec types.CelEnvCollection
-			ec, err = k.EnvCollection(ctx, recipe.ID, "", inputItem)
+			ec, err = k.NewCelEnvCollectionFromItem(ctx, recipe.ID, "", inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			err = Match(inputItem, recipeItemInput, ec)
+			err = MatchItem(inputItem, recipeItemInput, ec)
 			if err != nil {
 				matchedItems[i] = inputItem
 				checkedInputItems[j] = true
@@ -139,7 +139,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	recipe, found := k.GetRecipe(ctx, msg.CookbookID, msg.RecipeID)
 	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "could not find recipe")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "requested recipe not found")
 	}
 	matchedItems, err := k.MatchItemInputs(ctx, msg.ItemIDs, recipe)
 	if err != nil {
@@ -159,13 +159,16 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 			Strings: item.Strings,
 		}
 	}
+
+	// TODO LOCK ITEMS
+
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{
 		Creator:     msg.Creator,
 		CookbookID:  msg.CookbookID,
 		RecipeID:    msg.RecipeID,
 		NodeVersion: config.GetNodeVersionString(),
-		BlockHeight: uint64(ctx.BlockHeight()),
+		BlockHeight: ctx.BlockHeight(),
 		CoinInputs:  nil, // TODO
 		ItemInputs:  itemRecords,
 	}

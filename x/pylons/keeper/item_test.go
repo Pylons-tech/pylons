@@ -13,7 +13,7 @@ import (
 func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
 	for i := range items {
-		items[i].Creator = "any"
+		items[i].Owner = "any"
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].RecipeID = fmt.Sprintf("%d", i)
 		items[i].ID = fmt.Sprintf("%d", i)

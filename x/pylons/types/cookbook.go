@@ -5,6 +5,8 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+// TODO cleanup
+
 const (
 	// Basic only allows creation of recipes that do not use pylons
 	Basic int64 = iota

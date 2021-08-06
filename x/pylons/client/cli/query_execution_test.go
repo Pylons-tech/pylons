@@ -27,7 +27,7 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []*type
 		state.ExecutionList = append(state.ExecutionList,
 			&types.Execution{
 				Creator:       "ANY",
-				Id:            uint64(i),
+				ID:            uint64(i),
 				CookbookID:    "",
 				RecipeID:      "",
 				NodeVersion:   "",
@@ -58,7 +58,7 @@ func TestShowExecution(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   fmt.Sprintf("%d", objs[0].Id),
+			id:   fmt.Sprintf("%d", objs[0].ID),
 			args: common,
 			obj:  objs[0],
 		},

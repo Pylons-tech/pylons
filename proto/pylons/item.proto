@@ -25,7 +25,7 @@ message  StringKeyValue {
 }
 
 message Item {
-  string creator = 1;
+  string owner = 1;
   string cookbookID = 2;
   string recipeID = 3;
   string ID = 4;
@@ -36,6 +36,7 @@ message Item {
   repeated StringKeyValue mutableStrings = 9 [(gogoproto.nullable) = false];
   bool tradeable = 10;
   uint64 lastUpdate = 11;
+  // TODO we should make this uniform with other transferFee once we address fees
   uint64 transferFee = 12;
 }
 

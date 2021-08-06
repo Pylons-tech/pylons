@@ -48,11 +48,11 @@ func (k Keeper) AppendPendingExecution(
 
 	id := count + k.GetExecutionCount(ctx)
 	// Set the ID of the appended value
-	execution.Id = id
+	execution.ID = id
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	appendedValue := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.Id), appendedValue)
+	store.Set(GetExecutionIDBytes(execution.ID), appendedValue)
 
 	// Update execution count
 	k.SetPendingExecutionCount(ctx, count+1)
@@ -72,7 +72,7 @@ func (k Keeper) GetPendingExecution(ctx sdk.Context, id uint64) types.Execution 
 func (k Keeper) SetPendingExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	value := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.Id), value)
+	store.Set(GetExecutionIDBytes(execution.ID), value)
 }
 
 // HasPendingExecution checks if the execution exists in the store

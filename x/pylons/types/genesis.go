@@ -13,10 +13,11 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
-		ExecutionList: []*Execution{},
-		ItemList:      []*Item{},
-		RecipeList:    []*Recipe{},
-		CookbookList:  []*Cookbook{},
+		PendingExecutionList: []*Execution{},
+		ExecutionList:        []*Execution{},
+		ItemList:             []*Item{},
+		RecipeList:           []*Recipe{},
+		CookbookList:         []*Cookbook{},
 	}
 }
 
@@ -26,14 +27,24 @@ func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # ibc/genesistype/validate
 
 	// this line is used by starport scaffolding # genesis/types/validate
+	// Check for duplicated ID in pendingExecution
+	pendingExecutionIDMap := make(map[uint64]bool)
+
+	for _, elem := range gs.PendingExecutionList {
+		if _, ok := pendingExecutionIDMap[elem.ID]; ok {
+			return fmt.Errorf("duplicated id for pending execution")
+		}
+		pendingExecutionIDMap[elem.ID] = true
+	}
+
 	// Check for duplicated ID in execution
 	executionIDMap := make(map[uint64]bool)
 
 	for _, elem := range gs.ExecutionList {
-		if _, ok := executionIDMap[elem.Id]; ok {
+		if _, ok := executionIDMap[elem.ID]; ok {
 			return fmt.Errorf("duplicated id for execution")
 		}
-		executionIDMap[elem.Id] = true
+		executionIDMap[elem.ID] = true
 	}
 	// Check for duplicated index in item
 	itemIndexMap := make(map[string]bool)

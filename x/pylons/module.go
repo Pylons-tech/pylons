@@ -108,7 +108,7 @@ type AppModule struct {
 
 	keeper             keeper.Keeper
 	bankKeeper         types.BankKeeper
-	requestFieldConfig config.RequestFieldConfig
+	requestFieldConfig config.RequestFieldConfig // TODO cleanup
 	feeConfig          config.FeeConfig
 }
 
@@ -118,7 +118,7 @@ func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, bk types.BankKeeper
 		keeper:         keeper,
 		bankKeeper:     bk,
 
-		requestFieldConfig: rfCfg,
+		requestFieldConfig: rfCfg, // TODO cleanup
 		feeConfig:          feeCfg,
 	}
 }
@@ -174,21 +174,20 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	// TODO add functionality for execution of Recipes after
 	pendingExecs := am.keeper.GetAllPendingExecution(ctx)
 
 	for _, pendingExec := range pendingExecs {
 		// get exec recipe
 		recipe, found := am.keeper.GetRecipe(ctx, pendingExec.CookbookID, pendingExec.RecipeID)
 		if !found {
-			panic("TODO REMOVE")
+			// panic if recipe not found. This should never happen
+			panic(fmt.Errorf("recipe with ID %v in cookbook with ID %v not found", pendingExec.RecipeID, pendingExec.CookbookID))
 		}
-		// TODO could this recipe not exist in the store?  I dont think, but we should probably be safe
-		// TODO should this be <= or == ? We should be removing the pending, so its shouldnt matter?
-		if pendingExec.BlockHeight+recipe.BlockInterval == uint64(ctx.BlockHeight()) {
-			// TODO execute
-			// TODO move from pendingExec -> exec
-			panic("TODO REMOVE")
+		blockHeight := ctx.BlockHeight()
+		if pendingExec.BlockHeight + int64(recipe.BlockInterval) == blockHeight {
+			am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
+			pendingExec.BlockHeight = blockHeight
+			am.keeper.ActualizeExecution(ctx, pendingExec)
 		}
 	}
 

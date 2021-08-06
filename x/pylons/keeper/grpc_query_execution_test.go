@@ -26,17 +26,17 @@ func TestExecutionQuerySingle(t *testing.T) {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetExecutionRequest{Id: msgs[0].Id},
+			request:  &types.QueryGetExecutionRequest{ID: msgs[0].ID},
 			response: &types.QueryGetExecutionResponse{Execution: &msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetExecutionRequest{Id: msgs[1].Id},
+			request:  &types.QueryGetExecutionRequest{ID: msgs[1].ID},
 			response: &types.QueryGetExecutionResponse{Execution: &msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetExecutionRequest{Id: uint64(len(msgs))},
+			request: &types.QueryGetExecutionRequest{ID: uint64(len(msgs))},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 		{

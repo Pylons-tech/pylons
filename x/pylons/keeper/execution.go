@@ -65,7 +65,7 @@ func (k Keeper) SetExecutionCount(ctx sdk.Context, count uint64) {
 
 // ActualizeExecution removes a pending execution and moves it to the execution store
 func (k Keeper) ActualizeExecution(ctx sdk.Context, execution types.Execution) {
-	k.removePendingExecution(ctx, execution.Id)
+	k.removePendingExecution(ctx, execution.ID)
 	k.appendExecution(ctx, execution)
 }
 
@@ -79,7 +79,7 @@ func (k Keeper) appendExecution(
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	appendedValue := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.Id), appendedValue)
+	store.Set(GetExecutionIDBytes(execution.ID), appendedValue)
 
 	// Update execution count
 	k.SetExecutionCount(ctx, count+1)
@@ -97,7 +97,7 @@ func (k Keeper) GetExecution(ctx sdk.Context, id uint64) types.Execution {
 func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	value := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.Id), value)
+	store.Set(GetExecutionIDBytes(execution.ID), value)
 }
 
 // HasExecution checks if the execution exists in the store

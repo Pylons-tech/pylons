@@ -10,6 +10,7 @@ import (
 	"github.com/google/cel-go/common/types/ref"
 )
 
+
 // CelEnvCollection struct manage cel program work flow
 type CelEnvCollection struct {
 	env       *cel.Env

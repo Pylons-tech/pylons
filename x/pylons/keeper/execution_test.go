@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -13,7 +14,7 @@ func createNExecution(k *Keeper, ctx sdk.Context, n int) []types.Execution {
 	execs := make([]types.Execution, n)
 	for i := range items {
 		execs[i].Creator = "any"
-		execs[i].Id = uint64(i)
+		execs[i].ID = uint64(i)
 		k.appendExecution(ctx, execs[i])
 	}
 	return execs
@@ -28,7 +29,7 @@ func createNExecutionForSingleItem(k *Keeper, ctx sdk.Context, n int) types.Exec
 		ItemOutputIDs: nil,
 	}
 	for i := 0; i < n; i++ {
-		exec.Creator = Sprintf("any%v", i) // ok if different people ran executions
+		exec.Creator = fmt.Sprintf("any%v", i) // ok if different people ran executions
 		exec.ID = uint64(i)
 		k.appendExecution(ctx, exec)
 	}
@@ -39,7 +40,7 @@ func TestExecutionGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	items := createNExecution(keeper, ctx, 10)
 	for _, item := range items {
-		assert.Equal(t, item, keeper.GetExecution(ctx, item.Id))
+		assert.Equal(t, item, keeper.GetExecution(ctx, item.ID))
 	}
 }
 
@@ -53,7 +54,7 @@ func TestExecutionsGetByItem(t *testing.T) {
 	for _, exec := range execs {
 		assert.Equal(t, exec.CookbookID, itemExec.CookbookID)
 		assert.Equal(t, exec.RecipeID, itemExec.RecipeID)
-		assert.Equal(t, exec.ID, itemExec.Id)
+		assert.Equal(t, exec.ID, itemExec.ID)
 
 	}
 }
@@ -62,7 +63,7 @@ func TestExecutionExist(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	items := createNExecution(keeper, ctx, 10)
 	for _, item := range items {
-		assert.True(t, keeper.HasExecution(ctx, item.Id))
+		assert.True(t, keeper.HasExecution(ctx, item.ID))
 	}
 }
 
@@ -70,8 +71,8 @@ func TestActualizeExecution(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	pending := createNPendingExecution(keeper, ctx, 1)
 	keeper.ActualizeExecution(ctx, pending[0])
-	assert.Empty(t, keeper.GetPendingExecution(ctx, pending[0].Id))
-	assert.Equal(t, pending[0], keeper.GetExecution(ctx, pending[0].Id))
+	assert.Empty(t, keeper.GetPendingExecution(ctx, pending[0].ID))
+	assert.Equal(t, pending[0], keeper.GetExecution(ctx, pending[0].ID))
 }
 
 func TestExecutionGetAll(t *testing.T) {

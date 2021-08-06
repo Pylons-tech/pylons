@@ -16,11 +16,11 @@ message ItemRecord {
 
 message Execution {
   string creator = 1;
-  uint64 id = 2;
+  uint64 ID = 2;
   string cookbookID = 3; 
   string recipeID = 4; 
   string nodeVersion = 5;
-  uint64 blockHeight = 6;
+  int64 blockHeight = 6;
   repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
   repeated string itemOutputIDs = 9;

@@ -1,3 +1,3 @@
-package cli_test
+package keeper
 
 // TODO ADD TESTS

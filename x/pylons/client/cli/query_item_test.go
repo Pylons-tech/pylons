@@ -25,7 +25,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Ite
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
 			&types.Item{
-				Creator:        "ANY",
+				Owner:          "ANY",
 				ID:             strconv.Itoa(i),
 				CookbookID:     "testCookbookID",
 				NodeVersion:    "0.0.1",

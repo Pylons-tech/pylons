@@ -50,6 +50,16 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all pending execution
+	pendingExecutionList := k.GetAllPendingExecution(ctx)
+	for _, elem := range pendingExecutionList {
+		elem := elem
+		genesis.PendingExecutionList = append(genesis.PendingExecutionList, &elem)
+	}
+
+	// Set the current count
+	genesis.PendingExecutionCount = k.GetPendingExecutionCount(ctx)
+
 	// Get all execution
 	executionList := k.GetAllExecution(ctx)
 	for _, elem := range executionList {

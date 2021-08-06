@@ -1,11 +1,9 @@
 package keeper
 
-// tx.EndBlocker
-// foreach pe in PendingExecutions
-//    retrieve matching recipe
-//    if pe.blocHeight + recipe.BlockInterval is equal to current blockHeight
-//       append from list of PendingExecutions to complete
-// complete PendingExecutions
+import (
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+)
 
 // func CompletePendingExecution
 //    Unlock coins
@@ -14,6 +12,16 @@ package keeper
 //          Actualize values for both ItemOutput and ItemModifyOutput
 //          Mint Items or Modify existing with the computed value
 //	  send coins owed
+
+// CompletePendingExecution
+func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution, recipe types.Recipe) error {
+
+
+	// TODO unlock the locked coins and perform payment
+
+
+	return nil
+}
 
 // we should add a message CompleteExecutionEarly that can be called on pendingExecutions
 //     compute the cost to pay as remaining blocks*cookbook.costPerBlock

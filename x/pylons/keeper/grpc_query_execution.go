@@ -49,12 +49,12 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 	var execution types.Execution
 	ctx := sdk.UnwrapSDKContext(c)
 
-	if !k.HasExecution(ctx, req.Id) {
+	if !k.HasExecution(ctx, req.ID) {
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetExecutionIDBytes(req.Id)), &execution)
+	k.cdc.MustUnmarshalBinaryBare(store.Get(GetExecutionIDBytes(req.ID)), &execution)
 
 	return &types.QueryGetExecutionResponse{Execution: &execution}, nil
 }

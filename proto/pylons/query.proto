@@ -18,7 +18,7 @@ service Query {
 
 	// Queries a execution by id.
 	rpc Execution(QueryGetExecutionRequest) returns (QueryGetExecutionResponse) {
-		option (google.api.http).get = "/Pylons-tech/pylons/pylons/execution/{id}";
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/execution/{ID}";
 	}
 
 
@@ -55,7 +55,7 @@ service Query {
 
 // this line is used by starport scaffolding # 3
 message QueryGetExecutionRequest {
-	uint64 id = 1;
+	uint64 ID = 1;
 }
 
 message QueryGetExecutionResponse {

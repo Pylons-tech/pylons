@@ -44,15 +44,15 @@ func request_Query_Execution_0(ctx context.Context, marshaler runtime.Marshaler,
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["ID"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.ID, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
 	}
 
 	msg, err := client.Execution(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -71,15 +71,15 @@ func local_request_Query_Execution_0(ctx context.Context, marshaler runtime.Mars
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["ID"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.ID, err = runtime.Uint64(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "ID", err)
 	}
 
 	msg, err := server.Execution(ctx, &protoReq)
@@ -732,7 +732,7 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_Execution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"Pylons-tech", "pylons", "execution", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Execution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"Pylons-tech", "pylons", "execution", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_ListRecipesByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "listRecipesByCookbook", "CookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 

@@ -27,7 +27,7 @@ func CmdShowExecution() *cobra.Command {
 			}
 
 			params := &types.QueryGetExecutionRequest{
-				Id: id,
+				ID: id,
 			}
 
 			res, err := queryClient.Execution(context.Background(), params)
