@@ -58,6 +58,7 @@ type Configuration struct {
 	Validators      ValidatorsConfiguration  `yaml:"validators"`
 	GoogleIAP       []GoogleIAPConfiguration `yaml:"google_iap"`
 	GoogleIAPPubKey string                   `yaml:"google_iap_pubkey"`
+	ChainID         string                   `yaml:"chainID"`
 	StripeIAP       []StripeIAPConfiguration `yaml:"stripe_iap"`
 	StripeConfig    StripeConfiguration      `yaml:"stripe_config"`
 	IsProduction    bool                     `yaml:"is_production"`
@@ -105,6 +106,8 @@ func ReadConfig() error {
 			return cfg
 		}
 	}
+
+
 	Config = Configuration{
 		Fee: FeeConfiguration{
 			RecipePercent:                          10,
@@ -146,9 +149,9 @@ func ReadConfig() error {
 			},
 		},
 		StripeConfig: StripeConfiguration{
-			StripeSecretKey:   "StripeSecretKey",
-			StripePubKey:      "StripePubKey",
-			StripeClientID:    "StripeClientID",
+			StripeSecretKey:   "sk_test_51Iy5pOEdpQgutKvr1vkMGl6z4KoqNOkHCtfSskbJBYhpfwuemglQtcNn4XqgiqooiStO9P1k4rxUd83CUqV3kWqM00zG97ZVD8",
+			StripePubKey:      "pk_test_51Iy5pOEdpQgutKvrWuZVvM0fPB4LRm0tzP1y17hWDCxBcISFb6X07BtIpOQArSfQgApOceoAwUX0qJXPC07OBLCn005w7KGtWE",
+			StripeClientID:    "ca_Jd44I5yQ4pKBpePVtiROVcTFRzQVU6cT",
 			StripeRedirectURI: "https://wallet.pylons.tech",
 			StripeCancelURI:   "https://wallet.pylons.tech/cancel",
 			StripeCountry:     "us",
@@ -159,5 +162,7 @@ func ReadConfig() error {
 		},
 		IsProduction: false,
 	}
+
 	return nil
+	
 }
