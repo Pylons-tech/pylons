@@ -22,6 +22,7 @@ type PaymentHistoryStu struct {
 	CustomerID   string
 	ClientSecret string
 	Status       string
+	Created      int64
 }
 
 type stripePaymentHistoryListReq struct {
@@ -91,6 +92,7 @@ func stripePaymentHistoryListHandler(cliCtx client.Context) http.HandlerFunc {
 			payment.CustomerID = pi.Customer.ID
 			payment.ID = pi.ID
 			payment.Status = string(pi.Status)
+			payment.Created = pi.Created
 			paymentHistory.PaymentList = append(paymentHistory.PaymentList, payment)
 			length++
 		}

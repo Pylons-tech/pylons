@@ -273,7 +273,7 @@ func TestSameRecipeIDCreation(t *testing.T) {
 
 	// try creating it 2nd time
 	_, err := tci.PlnH.CreateRecipe(sdk.WrapSDKContext(tci.Ctx), &rcpMsg)
-	require.True(t, strings.Contains(err.Error(), "The recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
+	require.True(t, strings.Contains(err.Error(), "the recipeID sameRecipeID-0001 is already present in CookbookID samecookbookID-0001"))
 
 }
 

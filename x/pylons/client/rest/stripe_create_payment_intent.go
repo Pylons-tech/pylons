@@ -92,7 +92,7 @@ func stripeCreatePaymentIntentHandler(cliCtx client.Context) http.HandlerFunc {
 			Amount:     stripe.Int64(skuResult.Price),
 			Currency:   stripe.String(string(skuResult.Currency)),
 			Customer:   stripe.String(req.CustomerID),
-			OnBehalfOf: stripe.String(skuResult.Metadata["ClientId"]),
+			OnBehalfOf: stripe.String(skuResult.Metadata["ClientID"]),
 		}
 
 		paymentIntent, err := paymentintent.New(params)

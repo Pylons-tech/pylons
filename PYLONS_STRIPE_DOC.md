@@ -59,7 +59,7 @@
 ###  stripe_create_payment_intent  
     url : http://localhost:1317/pylons/stripe_create_payment_intent
     method : POST
-    params : {"Amount":"Amount","Country":"Country", "SKUID": "SKUID","Sender":"Sender","CustomerID: "CustomerID"} 
+    params : {"Amount":"Amount","Currency":"Currency", "SKUID": "SKUID","Sender":"Sender","CustomerID: "CustomerID"} 
     Response : 
     {
         "result": {
@@ -69,7 +69,7 @@
             "stripe_customer_id": "cus_Jy47JClSoIn9ZP"
         }
     }
-    ex->params : {"Amount":"2300","Country":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz", "CustomerID": "cus_Jy47JClSoIn9ZP"} 
+    ex->params : {"Amount":"2300","Currency":"US", "SKUID": "sku_JjSCkPYQc32AEa","Sender":"cosmos1wqn2lerx5d5dpzf5lafq9jfje34g82jkkc4zfz", "CustomerID": "cus_Jy47JClSoIn9ZP"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ###  stripe_create_customer_id  
     url : http://localhost:1317/pylons/stripe_create_customer_id
@@ -102,9 +102,25 @@
     Response : 
     {
          "result": {
-            "stripe_payment_history": null,
-            "length": "0"
+            {
+                "ID": "pi_3JKkPpEdpQgutKvr0Wd18yxK",
+                "Amount": "2200",
+                "Currency": "usd",
+                "CustomerID": "cus_JyhlxC3I7hdYcL",
+                "ClientSecret": "pi_3JKkPpEdpQgutKvr0Wd18yxK_secret_kFMAqEEgVE9Z15079FcFicxrz",
+                "Status": "requires_payment_method"
+                "Created": "Created"
+            },
+            {
+                "ID": "pi_3JKkPdEdpQgutKvr14xs3LvP",
+                "Amount": "2200",
+                "Currency": "usd",
+                "CustomerID": "cus_JyhlxC3I7hdYcL",
+                "ClientSecret": "pi_3JKkPdEdpQgutKvr14xs3LvP_secret_ANZGRoOvBeBxDVMBEcCDIm41A",
+                "Status": "requires_payment_method"
+                "Created": "Created"
+            },
         }
     }
-    ex->params : {"Sender":"cosmos1zv9lypqpgtwjcmhup7650wukcull9jehjd3njy","CustomerID":"cus_JyPsIGUthoUKDk"} 
+    ex->params : {"Sender":"cosmos1zv9lypqpgtwjcmhup7650wukcull9jehjd3njy","CustomerID":"cus_JyhlxC3I7hdYcL"} 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
