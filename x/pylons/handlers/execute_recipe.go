@@ -87,17 +87,18 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			// 	return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
 			// }
 
-			if k.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "payment id for Stripe is already being used")
-			}
+			// if k.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
+			// 	return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "payment id for Stripe is already being used")
+			// }
 
-			// Register paymentId for Stripe before giving coins
-			err = k.RegisterPaymentForStripe(sdkCtx, msg.PaymentId)
+			// // Register paymentId for Stripe before giving coins
+			// err = k.RegisterPaymentForStripe(sdkCtx, msg.PaymentId)
 
 			if err != nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
 			}
 			isStripePayment = true
+			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		} else {
 			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		}
