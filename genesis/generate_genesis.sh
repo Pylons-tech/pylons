@@ -64,17 +64,15 @@ for directory in $directories; do
 
   # Change parameters to make localnet to work
 
-  dasel put string -p toml -f $directory/config/config.toml           "rpc.laddr"           "tcp://127.0.0.1:26657"
-  dasel put string -p toml -f $directory/config/config.toml           "rpc.pprof_laddr"     "0.0.0.0:6060"
-  dasel put string -p toml -f $directory/config/config.toml           "rpc.laddr"           "tcp://0.0.0.0:26657"
-  dasel put object -p toml -t string -f $directory/config/config.toml "rpc" cors_allowed_origins = ["*"]
+  dasel put string -p toml -f $directory/config/config.toml "rpc.laddr"                   "tcp://127.0.0.1:26657"
+  dasel put string -p toml -f $directory/config/config.toml "rpc.pprof_laddr"             "0.0.0.0:6060"
+  dasel put string -p toml -f $directory/config/config.toml "rpc.laddr"                   "tcp://0.0.0.0:26657"
+  dasel put string -p toml -f $directory/config/config.toml -s ".rpc.cors_allowed_origins.[]" "*"
 
-
-
-  dasel put bool -p toml -f $directory/config/app.toml ".api.enable"              true
+  dasel put bool -p toml -f $directory/config/app.toml ".api.enable"                  true
   dasel put bool -p toml -f $directory/config/app.toml ".api.enabled-unsafe-cors"     true
-  dasel put bool -p toml -f $directory/config/app.toml ".api.swagger"             true
-  dasel put object -p toml -t string -f $directory/config/app.toml "rpc" cors_allowed_origins = ["*"]
+  dasel put bool -p toml -f $directory/config/app.toml ".api.swagger"                 true
+  dasel put string -p toml -f $directory/config/app.toml -s ".rpc.cors_allowed_origins.[]" "*"
 
 
 done
