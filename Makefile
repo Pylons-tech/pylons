@@ -74,29 +74,16 @@ reset_chain:
 
 .PHONY: init_accounts proto-gen reset_chain
 
-###############################################################################
-###                                Deployment                               ###
-###############################################################################
-images:
-	starport chain build --release -t linux:amd64
-	starport chain init --home docker/.pylonsd
-	docker build -t rafaeldeandrade/pylonsnode .
 
 ###############################################################################
 ###                                Genesis                                  ###
 ###############################################################################
+.PHONY: genesis
 genesis:
 	starport chain build --release -t linux:amd64
-	starport chain init --home docker/.pylonsd
-	docker build -t rafaeldeandrade/pylonsnode -f Dockerfile .
+	tar xzvf release/pylons_linux_amd64.tar.gz -C genesis/
+	cd genesis && bash generate_genesis.sh
 
-###############################################################################
-###                                Testnet                                  ###
-###############################################################################
-testnet:
-	pylonsd co
-	starport chain init --home docker/.pylonsd
-	docker build -t rafaeldeandrade/pylonsnode -f Dockerfile .
 
 
 ###############################################################################
