@@ -80,6 +80,7 @@ reset_chain:
 ###############################################################################
 .PHONY: genesis
 genesis:
+	go install github.com/tomwright/dasel/cmd/dasel@master
 	starport chain build --release -t linux:amd64
 	tar xzvf release/pylons_linux_amd64.tar.gz -C genesis/
 	cd genesis && bash generate_genesis.sh

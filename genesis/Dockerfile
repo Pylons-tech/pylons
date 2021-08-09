@@ -6,7 +6,6 @@ RUN apt-get update && \
 ARG CONFIG_DIR
 
 COPY pylonsd                        /usr/bin/
-COPY dasel                          /usr/bin/
 
 STOPSIGNAL SIGTERM
 
