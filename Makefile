@@ -45,10 +45,22 @@ proto-gen:
 ###                                Testing                                  ###
 ###############################################################################
 
-test:
+test: test-unit
+
+test-unit:
 	@go test -mod=readonly -v $(PACKAGES)
 
-.PHONY: test
+test-race:
+	@go test -mod=readonly -v -race $(PACKAGES) 
+
+test-cover:
+	@go test -mod=readonly -v -timeout 30m -race -coverprofile=coverage.txt -covermode=atomic $(PACKAGES)
+
+bench:
+	@go test -mod=readonly -v -bench=. $(PACKAGES)
+
+
+.PHONY: test test-unit test-race test-cover bench
 
 ###############################################################################
 ###                                Linting                                  ###
