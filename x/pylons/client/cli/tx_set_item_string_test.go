@@ -45,44 +45,60 @@ func TestSetItemString(t *testing.T) {
 		"true",
 		"extraInfo",
 	}
+
+	// no IDs for this recipe since is just a "generator" recipe
+	itemIDs := "[]"
+
 	common := []string{
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
+
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
 	args = append(args, common...)
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
+
 	args = []string{cookbookID, recipeID}
 	args = append(args, rpFields...)
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
+	args = []string{cookbookID, recipeID, itemIDs}
+	args = append(args, common...)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	require.NoError(t, err)
+
+	// TODO GET ITEM ID HERE
+	executedItemID :=""
+
 	for _, tc := range []struct {
 		desc string
-		id1  string
-		id2  string
+		mutableStringField  string
+		mutableStringValue  string
 		args []string
 		err  error
 		code uint32
 	}{
 		{
-			id1:  cookbookID,
-			id2:  recipeID,
+			mutableStringField: "field",
+			mutableStringValue: "valueNew",
 			desc: "valid",
 			args: common,
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{cookbookID, recipeID}
-			args = append(args, rpFields...)
+
+			// TODO set item ID from a query
+			args := []string{cookbookID, recipeID, executedItemID}
+			args = append(args, tc.mutableStringField, tc.mutableStringValue)
 			args = append(args, tc.args...)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdSetItemString(), args)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
