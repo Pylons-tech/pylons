@@ -3,9 +3,6 @@ package config
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-
-	"gopkg.in/yaml.v2"
 )
 
 // FeeConfiguration is a struct to manage fee configuration
@@ -84,6 +81,7 @@ func PaymentMethods() string {
 
 // ReadConfig is a function to read configuration
 func ReadConfig() error {
+	/*
 	userHomeDir, err := os.UserHomeDir()
 	if err != nil {
 		panic(err)
@@ -105,6 +103,8 @@ func ReadConfig() error {
 			return cfg
 		}
 	}
+*/
+
 	Config = Configuration{
 		Fee: FeeConfiguration{
 			RecipePercent:                          10,
