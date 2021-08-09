@@ -142,10 +142,10 @@ export class Api extends HttpClient {
          * @tags Query
          * @name QueryExecution
          * @summary Queries a execution by id.
-         * @request GET:/Pylons-tech/pylons/pylons/execution/{id}
+         * @request GET:/Pylons-tech/pylons/pylons/execution/{ID}
          */
-        this.queryExecution = (id, params = {}) => this.request({
-            path: `/Pylons-tech/pylons/pylons/execution/${id}`,
+        this.queryExecution = (ID, params = {}) => this.request({
+            path: `/Pylons-tech/pylons/pylons/execution/${ID}`,
             method: "GET",
             format: "json",
             ...params,

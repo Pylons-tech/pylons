@@ -57,11 +57,11 @@ export interface PylonsEntriesList {
 export interface PylonsExecution {
     creator?: string;
     /** @format uint64 */
-    id?: string;
+    ID?: string;
     cookbookID?: string;
     recipeID?: string;
     nodeVersion?: string;
-    /** @format uint64 */
+    /** @format int64 */
     blockHeight?: string;
     coinInputs?: V1Beta1Coin[];
     itemInputs?: PylonsItemRecord[];
@@ -76,7 +76,7 @@ export interface PylonsIntWeightRange {
     weight?: string;
 }
 export interface PylonsItem {
-    creator?: string;
+    owner?: string;
     cookbookID?: string;
     recipeID?: string;
     ID?: string;
@@ -289,9 +289,9 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @tags Query
      * @name QueryExecution
      * @summary Queries a execution by id.
-     * @request GET:/Pylons-tech/pylons/pylons/execution/{id}
+     * @request GET:/Pylons-tech/pylons/pylons/execution/{ID}
      */
-    queryExecution: (id: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetExecutionResponse, RpcStatus>>;
+    queryExecution: (ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetExecutionResponse, RpcStatus>>;
     /**
      * No description
      *

@@ -11,7 +11,7 @@ export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetExecutionRequest {
-  id: number
+  ID: number
 }
 
 export interface QueryGetExecutionResponse {
@@ -79,12 +79,12 @@ export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
 }
 
-const baseQueryGetExecutionRequest: object = { id: 0 }
+const baseQueryGetExecutionRequest: object = { ID: 0 }
 
 export const QueryGetExecutionRequest = {
   encode(message: QueryGetExecutionRequest, writer: Writer = Writer.create()): Writer {
-    if (message.id !== 0) {
-      writer.uint32(8).uint64(message.id)
+    if (message.ID !== 0) {
+      writer.uint32(8).uint64(message.ID)
     }
     return writer
   },
@@ -97,7 +97,7 @@ export const QueryGetExecutionRequest = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.id = longToNumber(reader.uint64() as Long)
+          message.ID = longToNumber(reader.uint64() as Long)
           break
         default:
           reader.skipType(tag & 7)
@@ -109,26 +109,26 @@ export const QueryGetExecutionRequest = {
 
   fromJSON(object: any): QueryGetExecutionRequest {
     const message = { ...baseQueryGetExecutionRequest } as QueryGetExecutionRequest
-    if (object.id !== undefined && object.id !== null) {
-      message.id = Number(object.id)
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID)
     } else {
-      message.id = 0
+      message.ID = 0
     }
     return message
   },
 
   toJSON(message: QueryGetExecutionRequest): unknown {
     const obj: any = {}
-    message.id !== undefined && (obj.id = message.id)
+    message.ID !== undefined && (obj.ID = message.ID)
     return obj
   },
 
   fromPartial(object: DeepPartial<QueryGetExecutionRequest>): QueryGetExecutionRequest {
     const message = { ...baseQueryGetExecutionRequest } as QueryGetExecutionRequest
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
     } else {
-      message.id = 0
+      message.ID = 0
     }
     return message
   }

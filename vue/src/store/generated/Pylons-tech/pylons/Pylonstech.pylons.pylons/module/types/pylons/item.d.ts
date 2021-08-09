@@ -16,7 +16,7 @@ export interface StringKeyValue {
     Value: string;
 }
 export interface Item {
-    creator: string;
+    owner: string;
     cookbookID: string;
     recipeID: string;
     ID: string;
@@ -27,6 +27,7 @@ export interface Item {
     mutableStrings: StringKeyValue[];
     tradeable: boolean;
     lastUpdate: number;
+    /** TODO we should make this uniform with other transferFee once we address fees */
     transferFee: number;
 }
 export declare const DoubleKeyValue: {

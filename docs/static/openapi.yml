@@ -19475,7 +19475,7 @@ paths:
           format: uint64
       tags:
         - Query
-  '/Pylons-tech/pylons/pylons/execution/{id}':
+  '/Pylons-tech/pylons/pylons/execution/{ID}':
     get:
       summary: Queries a execution by id.
       operationId: PylonstechPylonsPylonsExecution
@@ -19490,7 +19490,7 @@ paths:
                 properties:
                   creator:
                     type: string
-                  id:
+                  ID:
                     type: string
                     format: uint64
                   cookbookID:
@@ -19501,7 +19501,7 @@ paths:
                     type: string
                   blockHeight:
                     type: string
-                    format: uint64
+                    format: int64
                   coinInputs:
                     type: array
                     items:
@@ -19582,7 +19582,7 @@ paths:
                       type: string
                       format: byte
       parameters:
-        - name: id
+        - name: ID
           in: path
           required: true
           type: string
@@ -19663,7 +19663,7 @@ paths:
               Item:
                 type: object
                 properties:
-                  creator:
+                  owner:
                     type: string
                   cookbookID:
                     type: string
@@ -19722,6 +19722,9 @@ paths:
                   transferFee:
                     type: string
                     format: uint64
+                    title: >-
+                      TODO we should make this uniform with other transferFee
+                      once we address fees
         default:
           description: An unexpected error response.
           schema:
@@ -31537,7 +31540,7 @@ definitions:
     properties:
       creator:
         type: string
-      id:
+      ID:
         type: string
         format: uint64
       cookbookID:
@@ -31548,7 +31551,7 @@ definitions:
         type: string
       blockHeight:
         type: string
-        format: uint64
+        format: int64
       coinInputs:
         type: array
         items:
@@ -31621,7 +31624,7 @@ definitions:
   Pylonstech.pylons.pylons.Item:
     type: object
     properties:
-      creator:
+      owner:
         type: string
       cookbookID:
         type: string
@@ -31680,6 +31683,9 @@ definitions:
       transferFee:
         type: string
         format: uint64
+        title: >-
+          TODO we should make this uniform with other transferFee once we
+          address fees
   Pylonstech.pylons.pylons.ItemInput:
     type: object
     properties:
@@ -32150,7 +32156,7 @@ definitions:
         properties:
           creator:
             type: string
-          id:
+          ID:
             type: string
             format: uint64
           cookbookID:
@@ -32161,7 +32167,7 @@ definitions:
             type: string
           blockHeight:
             type: string
-            format: uint64
+            format: int64
           coinInputs:
             type: array
             items:
@@ -32227,7 +32233,7 @@ definitions:
       Item:
         type: object
         properties:
-          creator:
+          owner:
             type: string
           cookbookID:
             type: string
@@ -32286,6 +32292,9 @@ definitions:
           transferFee:
             type: string
             format: uint64
+            title: >-
+              TODO we should make this uniform with other transferFee once we
+              address fees
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:

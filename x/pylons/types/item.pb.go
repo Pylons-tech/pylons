@@ -188,7 +188,8 @@ type Item struct {
 	MutableStrings []StringKeyValue `protobuf:"bytes,9,rep,name=mutableStrings,proto3" json:"mutableStrings"`
 	Tradeable      bool             `protobuf:"varint,10,opt,name=tradeable,proto3" json:"tradeable,omitempty"`
 	LastUpdate     uint64           `protobuf:"varint,11,opt,name=lastUpdate,proto3" json:"lastUpdate,omitempty"`
-	TransferFee    uint64           `protobuf:"varint,12,opt,name=transferFee,proto3" json:"transferFee,omitempty"`
+	// TODO we should make this uniform with other transferFee once we address fees
+	TransferFee uint64 `protobuf:"varint,12,opt,name=transferFee,proto3" json:"transferFee,omitempty"`
 }
 
 func (m *Item) Reset()         { *m = Item{} }

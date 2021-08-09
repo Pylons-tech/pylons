@@ -7,7 +7,7 @@ import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetExecutionRequest {
-    id: number;
+    ID: number;
 }
 export interface QueryGetExecutionResponse {
     Execution: Execution | undefined;

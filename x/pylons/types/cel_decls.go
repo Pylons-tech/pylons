@@ -259,8 +259,8 @@ var ExecutedByCountDecls = decls.NewFunction("executed_by_count",
 )
 
 // BasicVarDefs collect basic variable definitions
-func BasicVarDefs() [](*exprpb.Decl) {
-	varDefs := [](*exprpb.Decl){}
+func BasicVarDefs() []*exprpb.Decl {
+	varDefs := []*exprpb.Decl{}
 
 	varDefs = append(varDefs,
 		decls.NewVar("lastBlockHeight", decls.Int),
@@ -289,8 +289,8 @@ func BasicVariables(blockHeight int64, recipeID, tradeID string) map[string]inte
 }
 
 // BasicOverloads collect basic functions
-func BasicOverloads() [](*functions.Overload) {
-	return [](*functions.Overload){
+func BasicOverloads() []*functions.Overload {
+	return []*functions.Overload{
 		RandIntFunc,
 		RandFunc,
 		Log2DoubleFunc,
@@ -307,7 +307,7 @@ func BasicOverloads() [](*functions.Overload) {
 }
 
 // AddVariableFromItem collect variables from item inputs
-func AddVariableFromItem(varDefs [](*exprpb.Decl), variables map[string]interface{}, prefix string, item Item) ([](*exprpb.Decl), map[string]interface{}) {
+func AddVariableFromItem(varDefs []*exprpb.Decl, variables map[string]interface{}, prefix string, item Item) ([]*exprpb.Decl, map[string]interface{}) {
 	varDefs = append(varDefs,
 		decls.NewVar(prefix+"lastUpdate", decls.Int),
 		decls.NewVar(prefix+"itemID", decls.String),

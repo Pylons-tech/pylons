@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // func CompletePendingExecution
@@ -16,9 +17,7 @@ import (
 // CompletePendingExecution
 func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution, recipe types.Recipe) error {
 
-
 	// TODO unlock the locked coins and perform payment
-
 
 	return nil
 }

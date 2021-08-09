@@ -2,6 +2,8 @@ package keeper
 
 import (
 	"fmt"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/google/cel-go/cel"
 	celTypes "github.com/google/cel-go/common/types"
 	"github.com/google/cel-go/common/types/ref"
@@ -76,26 +78,34 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 	// create environment variables from matched items
 	varDefs := types.BasicVarDefs()
 	variables := types.BasicVariables(ctx.BlockHeight(), recipe.ID, "")
-	itemInputs := recipe.ItemInputs
+	// itemInputs := recipe.ItemInputs
 
 	for idx, itemRecord := range pendingExecution.ItemInputs {
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
-		item, _ := k.GetItem(ctx, recipe.CookbookID, recipe.ID, itemRecord.ID)
-
-		varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
-		if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" && itemInputs[idx].IDValidationError() == nil {
-			iPrefix2 := itemInputs[idx].ID + "."
-			varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
+		item, found := k.GetItem(ctx, recipe.CookbookID, recipe.ID, itemRecord.ID)
+		if !found {
+			return types.NewCelEnvCollection(nil, nil, nil), sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store")
 		}
+
+		// What is this doing?
+		// our itemInput does not have an ID field
+		// if we are executing the recipe, shouldn't the itemRecord.ID be the same as the matchedItem.ID ?
+		// this should be the same for their code as well too right?  It seems to me like they are adding items twice to this env
+		// TODO FIX
+		varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix1, item) // input0.level, input1.attack, input2.HP
+		// if itemInputs != nil && len(itemInputs) > idx && itemInputs[idx].ID != "" {
+		//	iPrefix2 := itemInputs[idx].ID + "."
+		//	varDefs, variables = types.AddVariableFromItem(varDefs, variables, iPrefix2, item) // sword.attack, monster.attack
+		//}
 		// TODO ELSE???
 	}
 
-	if len(p.matchedItems) > 0 {
-		// first matched item
-		varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
-	}
+	// if len(p.matchedItems) > 0 {
+	//	// first matched item
+	//	varDefs, variables = types.AddVariableFromItem(varDefs, variables, "", p.GetMatchedItemFromIndex(0)) // HP, level, attack
+	//}
 
-	funcs := cel.Functions(p.keeper.Overloads(p.ctx)...)
+	funcs := cel.Functions(k.Overloads(ctx)...)
 
 	env, err := cel.NewEnv(
 		cel.Declarations(

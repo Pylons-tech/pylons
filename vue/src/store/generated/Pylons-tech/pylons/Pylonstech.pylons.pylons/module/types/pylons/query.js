@@ -7,11 +7,11 @@ import { Recipe } from '../pylons/recipe';
 import { Item } from '../pylons/item';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseQueryGetExecutionRequest = { id: 0 };
+const baseQueryGetExecutionRequest = { ID: 0 };
 export const QueryGetExecutionRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.id !== 0) {
-            writer.uint32(8).uint64(message.id);
+        if (message.ID !== 0) {
+            writer.uint32(8).uint64(message.ID);
         }
         return writer;
     },
@@ -23,7 +23,7 @@ export const QueryGetExecutionRequest = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.id = longToNumber(reader.uint64());
+                    message.ID = longToNumber(reader.uint64());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -34,26 +34,26 @@ export const QueryGetExecutionRequest = {
     },
     fromJSON(object) {
         const message = { ...baseQueryGetExecutionRequest };
-        if (object.id !== undefined && object.id !== null) {
-            message.id = Number(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
         }
         else {
-            message.id = 0;
+            message.ID = 0;
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseQueryGetExecutionRequest };
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = 0;
+            message.ID = 0;
         }
         return message;
     }

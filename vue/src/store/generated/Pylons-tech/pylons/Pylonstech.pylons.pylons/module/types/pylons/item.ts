@@ -23,7 +23,7 @@ export interface StringKeyValue {
 }
 
 export interface Item {
-  creator: string
+  owner: string
   cookbookID: string
   recipeID: string
   ID: string
@@ -34,6 +34,7 @@ export interface Item {
   mutableStrings: StringKeyValue[]
   tradeable: boolean
   lastUpdate: number
+  /** TODO we should make this uniform with other transferFee once we address fees */
   transferFee: number
 }
 
@@ -253,12 +254,12 @@ export const StringKeyValue = {
   }
 }
 
-const baseItem: object = { creator: '', cookbookID: '', recipeID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, transferFee: 0 }
+const baseItem: object = { owner: '', cookbookID: '', recipeID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, transferFee: 0 }
 
 export const Item = {
   encode(message: Item, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== '') {
-      writer.uint32(10).string(message.creator)
+    if (message.owner !== '') {
+      writer.uint32(10).string(message.owner)
     }
     if (message.cookbookID !== '') {
       writer.uint32(18).string(message.cookbookID)
@@ -308,7 +309,7 @@ export const Item = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string()
+          message.owner = reader.string()
           break
         case 2:
           message.cookbookID = reader.string()
@@ -357,10 +358,10 @@ export const Item = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator)
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = String(object.owner)
     } else {
-      message.creator = ''
+      message.owner = ''
     }
     if (object.cookbookID !== undefined && object.cookbookID !== null) {
       message.cookbookID = String(object.cookbookID)
@@ -422,7 +423,7 @@ export const Item = {
 
   toJSON(message: Item): unknown {
     const obj: any = {}
-    message.creator !== undefined && (obj.creator = message.creator)
+    message.owner !== undefined && (obj.owner = message.owner)
     message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
     message.recipeID !== undefined && (obj.recipeID = message.recipeID)
     message.ID !== undefined && (obj.ID = message.ID)
@@ -459,10 +460,10 @@ export const Item = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner
     } else {
-      message.creator = ''
+      message.owner = ''
     }
     if (object.cookbookID !== undefined && object.cookbookID !== null) {
       message.cookbookID = object.cookbookID

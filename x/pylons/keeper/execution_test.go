@@ -12,7 +12,7 @@ import (
 
 func createNExecution(k *Keeper, ctx sdk.Context, n int) []types.Execution {
 	execs := make([]types.Execution, n)
-	for i := range items {
+	for i := range execs {
 		execs[i].Creator = "any"
 		execs[i].ID = uint64(i)
 		k.appendExecution(ctx, execs[i])
@@ -20,20 +20,28 @@ func createNExecution(k *Keeper, ctx sdk.Context, n int) []types.Execution {
 	return execs
 }
 
-func createNExecutionForSingleItem(k *Keeper, ctx sdk.Context, n int) types.Execution {
+func createNExecutionForSingleItem(k *Keeper, ctx sdk.Context, n int) []types.Execution {
 	exec := types.Execution{
 		RecipeID:   "testRecipeID",
 		CookbookID: "testCookbookID",
-		// TODO fill fields
-		ItemInputs:    nil,
-		ItemOutputIDs: nil,
+		ItemInputs: []types.ItemRecord{
+			{
+				ID: "test1",
+			},
+		},
+		ItemOutputIDs: []string{"test1"},
 	}
-	for i := 0; i < n; i++ {
-		exec.Creator = fmt.Sprintf("any%v", i) // ok if different people ran executions
-		exec.ID = uint64(i)
-		k.appendExecution(ctx, exec)
+
+	execs := make([]types.Execution, n)
+
+	for i := range execs {
+		execs[i] = exec
+		execs[i].Creator = fmt.Sprintf("any%v", i) // ok if different people ran executions
+		execs[i].ID = uint64(i)
+		k.appendExecution(ctx, execs[i])
 	}
-	return item
+
+	return execs
 }
 
 func TestExecutionGet(t *testing.T) {
@@ -48,14 +56,18 @@ func TestExecutionGet(t *testing.T) {
 func TestExecutionsGetByItem(t *testing.T) {
 	numExecs := 10
 	keeper, ctx := setupKeeper(t)
-	itemExec := createNExecutionForSingleItem(keeper, ctx, numExecs)
-	execs := keeper.GetExecutionsByItem(ctx, itemExec.CookbookID, itemExec.RecipeID, itemExec.ID)
-	assert.Equal(t, numExecs, len(execs))
-	for _, exec := range execs {
-		assert.Equal(t, exec.CookbookID, itemExec.CookbookID)
-		assert.Equal(t, exec.RecipeID, itemExec.RecipeID)
-		assert.Equal(t, exec.ID, itemExec.ID)
+	itemExecs := createNExecutionForSingleItem(keeper, ctx, numExecs)
+	itemCookbookID := itemExecs[0].CookbookID
+	itemRecipeID := itemExecs[0].RecipeID
+	itemItemID := itemExecs[0].ItemOutputIDs[0]
 
+	execs := keeper.GetExecutionsByItem(ctx, itemCookbookID, itemRecipeID, itemItemID)
+	assert.Equal(t, numExecs, len(itemExecs))
+	assert.Equal(t, numExecs, len(execs))
+	for i, exec := range execs {
+		assert.Equal(t, exec.CookbookID, itemCookbookID)
+		assert.Equal(t, exec.RecipeID, itemRecipeID)
+		assert.Equal(t, exec.ID, itemExecs[i].ID)
 	}
 }
 
@@ -77,13 +89,13 @@ func TestActualizeExecution(t *testing.T) {
 
 func TestExecutionGetAll(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNExecution(keeper, ctx, 10)
-	assert.Equal(t, items, keeper.GetAllExecution(ctx))
+	execs := createNExecution(keeper, ctx, 10)
+	assert.Equal(t, execs, keeper.GetAllExecution(ctx))
 }
 
 func TestExecutionCount(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNExecution(keeper, ctx, 10)
-	count := uint64(len(items))
+	execs := createNExecution(keeper, ctx, 10)
+	count := uint64(len(execs))
 	assert.Equal(t, count, keeper.GetExecutionCount(ctx))
 }

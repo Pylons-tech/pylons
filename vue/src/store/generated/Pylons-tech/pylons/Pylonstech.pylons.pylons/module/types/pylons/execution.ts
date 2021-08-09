@@ -15,7 +15,7 @@ export interface ItemRecord {
 
 export interface Execution {
   creator: string
-  id: number
+  ID: number
   cookbookID: string
   recipeID: string
   nodeVersion: string
@@ -152,15 +152,15 @@ export const ItemRecord = {
   }
 }
 
-const baseExecution: object = { creator: '', id: 0, cookbookID: '', recipeID: '', nodeVersion: '', blockHeight: 0, itemOutputIDs: '' }
+const baseExecution: object = { creator: '', ID: 0, cookbookID: '', recipeID: '', nodeVersion: '', blockHeight: 0, itemOutputIDs: '' }
 
 export const Execution = {
   encode(message: Execution, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
-    if (message.id !== 0) {
-      writer.uint32(16).uint64(message.id)
+    if (message.ID !== 0) {
+      writer.uint32(16).uint64(message.ID)
     }
     if (message.cookbookID !== '') {
       writer.uint32(26).string(message.cookbookID)
@@ -172,7 +172,7 @@ export const Execution = {
       writer.uint32(42).string(message.nodeVersion)
     }
     if (message.blockHeight !== 0) {
-      writer.uint32(48).uint64(message.blockHeight)
+      writer.uint32(48).int64(message.blockHeight)
     }
     for (const v of message.coinInputs) {
       Coin.encode(v!, writer.uint32(58).fork()).ldelim()
@@ -200,7 +200,7 @@ export const Execution = {
           message.creator = reader.string()
           break
         case 2:
-          message.id = longToNumber(reader.uint64() as Long)
+          message.ID = longToNumber(reader.uint64() as Long)
           break
         case 3:
           message.cookbookID = reader.string()
@@ -212,7 +212,7 @@ export const Execution = {
           message.nodeVersion = reader.string()
           break
         case 6:
-          message.blockHeight = longToNumber(reader.uint64() as Long)
+          message.blockHeight = longToNumber(reader.int64() as Long)
           break
         case 7:
           message.coinInputs.push(Coin.decode(reader, reader.uint32()))
@@ -241,10 +241,10 @@ export const Execution = {
     } else {
       message.creator = ''
     }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = Number(object.id)
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID)
     } else {
-      message.id = 0
+      message.ID = 0
     }
     if (object.cookbookID !== undefined && object.cookbookID !== null) {
       message.cookbookID = String(object.cookbookID)
@@ -287,7 +287,7 @@ export const Execution = {
   toJSON(message: Execution): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
-    message.id !== undefined && (obj.id = message.id)
+    message.ID !== undefined && (obj.ID = message.ID)
     message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
     message.recipeID !== undefined && (obj.recipeID = message.recipeID)
     message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion)
@@ -320,10 +320,10 @@ export const Execution = {
     } else {
       message.creator = ''
     }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
     } else {
-      message.id = 0
+      message.ID = 0
     }
     if (object.cookbookID !== undefined && object.cookbookID !== null) {
       message.cookbookID = object.cookbookID

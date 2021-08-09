@@ -184,7 +184,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			panic(fmt.Errorf("recipe with ID %v in cookbook with ID %v not found", pendingExec.RecipeID, pendingExec.CookbookID))
 		}
 		blockHeight := ctx.BlockHeight()
-		if pendingExec.BlockHeight + int64(recipe.BlockInterval) == blockHeight {
+		if pendingExec.BlockHeight+int64(recipe.BlockInterval) == blockHeight {
 			am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
 			pendingExec.BlockHeight = blockHeight
 			am.keeper.ActualizeExecution(ctx, pendingExec)
