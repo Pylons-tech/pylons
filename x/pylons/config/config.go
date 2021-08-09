@@ -58,7 +58,6 @@ type Configuration struct {
 	Validators      ValidatorsConfiguration  `yaml:"validators"`
 	GoogleIAP       []GoogleIAPConfiguration `yaml:"google_iap"`
 	GoogleIAPPubKey string                   `yaml:"google_iap_pubkey"`
-	ChainID         string                   `yaml:"chainID"`
 	StripeIAP       []StripeIAPConfiguration `yaml:"stripe_iap"`
 	StripeConfig    StripeConfiguration      `yaml:"stripe_config"`
 	IsProduction    bool                     `yaml:"is_production"`
@@ -106,8 +105,6 @@ func ReadConfig() error {
 			return cfg
 		}
 	}
-
-
 	Config = Configuration{
 		Fee: FeeConfiguration{
 			RecipePercent:                          10,
@@ -162,7 +159,5 @@ func ReadConfig() error {
 		},
 		IsProduction: false,
 	}
-
 	return nil
-	
 }

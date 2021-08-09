@@ -31,6 +31,7 @@ stripe_config:
   stripe_pubkey: pk_test_51Iy5pOEdpQgutKvrWuZVvM0fPB4LRm0tzP1y17hWDCxBcISFb6X07BtIpOQArSfQgApOceoAwUX0qJXPC07OBLCn005w7KGtWE 
   stripe_client_id: ca_Jd44I5yQ4pKBpePVtiROVcTFRzQVU6cT
   stripe_redirect_uri: https://wallet.pylons.tech
+  stripe_cancel_url: https://wallet.pylons.tech/cancel
   stripeCountry: us
   country: US
   currency: USD

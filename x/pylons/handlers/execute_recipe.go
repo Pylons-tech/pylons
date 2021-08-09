@@ -12,7 +12,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stripe/stripe-go"
-	"github.com/stripe/stripe-go/paymentintent"
 )
 
 // SafeExecute execute a msg and returns result
@@ -80,13 +79,13 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			if msg.PaymentId == "" {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no paymentId error!")
 			}
-			payIntentResult, _ := paymentintent.Get(
-				msg.PaymentId,
-				nil,
-			)
-			if payIntentResult.Status != "succeeded" {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
-			}
+			// payIntentResult, _ := paymentintent.Get(
+			// 	msg.PaymentId,
+			// 	nil,
+			// )
+			// if payIntentResult.Status != "succeeded" {
+			// 	return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
+			// }
 
 			if k.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "payment id for Stripe is already being used")
@@ -99,7 +98,6 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
 			}
 			isStripePayment = true
-			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		} else {
 			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		}
