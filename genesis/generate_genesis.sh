@@ -40,39 +40,34 @@ pylonsd gentx helder 1000000bedrock --ip alpha --node-id $(pylonsd tendermint sh
 pylonsd gentx jacob  1000000bedrock --ip beta --node-id $(pylonsd tendermint show-node-id --home $BETA_HOME)    --moniker="beta" --pubkey $(pylonsd tendermint show-validator --home $BETA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylonsd/config/gentx/beta.json
 pylonsd gentx jack   1000000bedrock --ip gamma --node-id $(pylonsd tendermint show-node-id --home $GAMMA_HOME)   --moniker="gamma" --pubkey $(pylonsd tendermint show-validator --home $GAMMA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylonsd/config/gentx/gamma.json
 
-# Now I copy the genesis and gentx to each node
-
-mkdir -p $ALPHA_HOME/config/gentx/
-mkdir -p $BETA_HOME/config/gentx/
-mkdir -p $GAMMA_HOME/config/gentx/
-
-cp $HOME/.pylonsd/config/genesis.json  $ALPHA_HOME/config/
-cp $HOME/.pylonsd/config/genesis.json  $BETA_HOME/config/
-cp $HOME/.pylonsd/config/genesis.json  $GAMMA_HOME/config/
-
-cp $HOME/.pylonsd/config/gentx/*  $ALPHA_HOME/config/gentx/
-cp $HOME/.pylonsd/config/gentx/*  $BETA_HOME/config/gentx/
-cp $HOME/.pylonsd/config/gentx/*  $GAMMA_HOME/config/gentx/
 
 
 ##### Set values in config files #######
-directories="alpha beta gamma"
+nodes="alpha beta gamma"
 
-for directory in $directories; do
+for node in $nodes; do
 
-  pylonsd collect-gentxs --home $directory
+  # Copy the genesis and gentx to each node
+
+  mkdir -p $node/config/gentx/
+  cp $HOME/.pylonsd/config/genesis.json  $node/config/
+  cp $HOME/.pylonsd/config/gentx/*  $node/config/gentx/
+
+
+
+  pylonsd collect-gentxs --home $node
 
   # Change parameters to make localnet to work
 
-  dasel put string -p toml -f $directory/config/config.toml "rpc.laddr"                   "tcp://127.0.0.1:26657"
-  dasel put string -p toml -f $directory/config/config.toml "rpc.pprof_laddr"             "0.0.0.0:6060"
-  dasel put string -p toml -f $directory/config/config.toml "rpc.laddr"                   "tcp://0.0.0.0:26657"
-  dasel put string -p toml -f $directory/config/config.toml -s ".rpc.cors_allowed_origins.[]" "*"
+  dasel put string -p toml -f $node/config/config.toml "rpc.laddr"                   "tcp://127.0.0.1:26657"
+  dasel put string -p toml -f $node/config/config.toml "rpc.pprof_laddr"             "0.0.0.0:6060"
+  dasel put string -p toml -f $node/config/config.toml "rpc.laddr"                   "tcp://0.0.0.0:26657"
+  dasel put string -p toml -f $node/config/config.toml -s ".rpc.cors_allowed_origins.[]" "*"
 
-  dasel put bool -p toml -f $directory/config/app.toml ".api.enable"                  true
-  dasel put bool -p toml -f $directory/config/app.toml ".api.enabled-unsafe-cors"     true
-  dasel put bool -p toml -f $directory/config/app.toml ".api.swagger"                 true
-  dasel put string -p toml -f $directory/config/app.toml -s ".rpc.cors_allowed_origins.[]" "*"
+  dasel put bool -p toml -f $node/config/app.toml ".api.enable"                  true
+  dasel put bool -p toml -f $node/config/app.toml ".api.enabled-unsafe-cors"     true
+  dasel put bool -p toml -f $node/config/app.toml ".api.swagger"                 true
+  dasel put string -p toml -f $node/config/app.toml -s ".rpc.cors_allowed_origins.[]" "*"
 
 
 done
