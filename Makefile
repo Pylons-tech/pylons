@@ -1,9 +1,4 @@
 #!/usr/bin/make -f
-
-###############################################################################
-###                               Build                                     ###
-###############################################################################
-
 PACKAGES=$(shell go list ./... | grep -v '/simulation')
 
 VERSION := $(shell echo $(shell git describe --tags 2> /dev/null || echo "dev-$(shell git describe --always)") | sed 's/^v//')
@@ -16,7 +11,11 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
 
 BUILD_FLAGS := -ldflags '$(ldflags)'
 
-all: install
+###############################################################################
+###                               Build                                     ###
+###############################################################################
+
+all: install lint test
 
 install: go.sum
 	@echo "--> Installing pylonsd"
@@ -24,7 +23,7 @@ install: go.sum
 
 go.sum: go.mod
 	@echo "--> Ensure dependencies have not been modified"
-	GO111MODULE=on go mod verify
+	@GO111MODULE=on go mod verify
 
 .PHONY: install, go.sum
 
