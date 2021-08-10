@@ -13,7 +13,7 @@ import (
 
 func TestItemMsgServerSetStringField(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	srv := NewMsgServerImpl(*keeper)
+	srv := NewMsgServerImpl(keeper)
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "A"
 	for i := 0; i < 5; i++ {

@@ -74,21 +74,21 @@ func TestSetItemString(t *testing.T) {
 	require.NoError(t, err)
 
 	// TODO GET ITEM ID HERE
-	executedItemID :=""
+	executedItemID := ""
 
 	for _, tc := range []struct {
-		desc string
-		mutableStringField  string
-		mutableStringValue  string
-		args []string
-		err  error
-		code uint32
+		desc               string
+		mutableStringField string
+		mutableStringValue string
+		args               []string
+		err                error
+		code               uint32
 	}{
 		{
 			mutableStringField: "field",
 			mutableStringValue: "valueNew",
-			desc: "valid",
-			args: common,
+			desc:               "valid",
+			args:               common,
 		},
 	} {
 		tc := tc

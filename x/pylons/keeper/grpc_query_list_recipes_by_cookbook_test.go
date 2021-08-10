@@ -14,8 +14,8 @@ import (
 func TestListRecipesByCookbook(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	cookbooks := createNCookbook(keeper, ctx, 1)
-	msgs := createNRecipe(keeper, ctx, cookbooks[0], 10)
+	cookbooks := createNCookbook(&keeper, ctx, 1)
+	msgs := createNRecipe(&keeper, ctx, cookbooks[0], 10)
 
 	for _, tc := range []struct {
 		desc     string

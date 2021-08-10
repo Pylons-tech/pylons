@@ -27,4 +27,4 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 //     distribute payments
 // 	   change pendingExecution.blockHeight so that when summed to recipe.BlockInterval it gives the current block
 
-// 2 moduleAccounts "PylonsFeeAccount", "LockedCoinsAccount"
+// 3 moduleAccounts "PylonsFeeAccount", "LockedCoinsAccount", "LockedItemsAccount"

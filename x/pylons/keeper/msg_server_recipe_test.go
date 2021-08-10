@@ -14,7 +14,7 @@ import (
 
 func TestRecipeMsgServerCreate(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	srv := NewMsgServerImpl(*keeper)
+	srv := NewMsgServerImpl(keeper)
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "A"
 	for i := 0; i < 5; i++ {
@@ -58,7 +58,7 @@ func TestRecipeMsgServerUpdate(t *testing.T) {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			keeper, ctx := setupKeeper(t)
-			srv := NewMsgServerImpl(*keeper)
+			srv := NewMsgServerImpl(keeper)
 			wctx := sdk.WrapSDKContext(ctx)
 			cookbook := &types.MsgCreateCookbook{Creator: creator, ID: index}
 			_, err := srv.CreateCookbook(wctx, cookbook)

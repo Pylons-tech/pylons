@@ -16,7 +16,7 @@ import (
 func TestItemQuerySingle(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNItem(keeper, ctx, 2)
+	msgs := createNItem(&keeper, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetItemRequest
@@ -58,7 +58,7 @@ func TestItemQuerySingle(t *testing.T) {
 func TestItemQueryPaginated(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNItem(keeper, ctx, 5)
+	msgs := createNItem(&keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllItemRequest {
 		return &types.QueryAllItemRequest{

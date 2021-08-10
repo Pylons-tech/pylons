@@ -46,7 +46,7 @@ func createNExecutionForSingleItem(k *Keeper, ctx sdk.Context, n int) []types.Ex
 
 func TestExecutionGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNExecution(keeper, ctx, 10)
+	items := createNExecution(&keeper, ctx, 10)
 	for _, item := range items {
 		assert.Equal(t, item, keeper.GetExecution(ctx, item.ID))
 	}
@@ -56,7 +56,7 @@ func TestExecutionGet(t *testing.T) {
 func TestExecutionsGetByItem(t *testing.T) {
 	numExecs := 10
 	keeper, ctx := setupKeeper(t)
-	itemExecs := createNExecutionForSingleItem(keeper, ctx, numExecs)
+	itemExecs := createNExecutionForSingleItem(&keeper, ctx, numExecs)
 	itemCookbookID := itemExecs[0].CookbookID
 	itemRecipeID := itemExecs[0].RecipeID
 	itemItemID := itemExecs[0].ItemOutputIDs[0]
@@ -73,7 +73,7 @@ func TestExecutionsGetByItem(t *testing.T) {
 
 func TestExecutionExist(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNExecution(keeper, ctx, 10)
+	items := createNExecution(&keeper, ctx, 10)
 	for _, item := range items {
 		assert.True(t, keeper.HasExecution(ctx, item.ID))
 	}
@@ -81,7 +81,7 @@ func TestExecutionExist(t *testing.T) {
 
 func TestActualizeExecution(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	pending := createNPendingExecution(keeper, ctx, 1)
+	pending := createNPendingExecution(&keeper, ctx, 1)
 	keeper.ActualizeExecution(ctx, pending[0])
 	assert.Empty(t, keeper.GetPendingExecution(ctx, pending[0].ID))
 	assert.Equal(t, pending[0], keeper.GetExecution(ctx, pending[0].ID))
@@ -89,13 +89,13 @@ func TestActualizeExecution(t *testing.T) {
 
 func TestExecutionGetAll(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	execs := createNExecution(keeper, ctx, 10)
+	execs := createNExecution(&keeper, ctx, 10)
 	assert.Equal(t, execs, keeper.GetAllExecution(ctx))
 }
 
 func TestExecutionCount(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	execs := createNExecution(keeper, ctx, 10)
+	execs := createNExecution(&keeper, ctx, 10)
 	count := uint64(len(execs))
 	assert.Equal(t, count, keeper.GetExecutionCount(ctx))
 }

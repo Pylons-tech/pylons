@@ -23,7 +23,7 @@ func createNCookbook(k *Keeper, ctx sdk.Context, n int) []types.Cookbook {
 
 func TestCookbookGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNCookbook(keeper, ctx, 10)
+	items := createNCookbook(&keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetCookbook(ctx, item.ID)
 		assert.True(t, found)
@@ -33,13 +33,13 @@ func TestCookbookGet(t *testing.T) {
 
 func TestCookbookGetAll(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNCookbook(keeper, ctx, 10)
+	items := createNCookbook(&keeper, ctx, 10)
 	assert.Equal(t, items, keeper.GetAllCookbook(ctx))
 }
 
 func TestCookbookGetAllByCreator(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNCookbook(keeper, ctx, 10)
+	items := createNCookbook(&keeper, ctx, 10)
 	for _, item := range items {
 		rst := keeper.GetAllCookbookByCreator(ctx, item.Creator)
 		assert.Equal(t, item, rst[0])

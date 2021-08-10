@@ -149,13 +149,16 @@ var (
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:     nil,
-		distrtypes.ModuleName:          nil,
-		minttypes.ModuleName:           {authtypes.Minter},
-		stakingtypes.BondedPoolName:    {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName: {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:            {authtypes.Burner},
-		ibctransfertypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		authtypes.FeeCollectorName:               nil,
+		distrtypes.ModuleName:                    nil,
+		minttypes.ModuleName:                     {authtypes.Minter},
+		stakingtypes.BondedPoolName:              {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:           {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                      {authtypes.Burner},
+		ibctransfertypes.ModuleName:              {authtypes.Minter, authtypes.Burner},
+		pylonsmoduletypes.PylonsFeeCollectorName: nil,
+		pylonsmoduletypes.PylonsCoinsLockerName:  nil,
+		pylonsmoduletypes.PylonsItemsLockerName:  nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -349,11 +352,12 @@ func New(
 	// TODO read in '~/.pylons/config/pylons.toml'
 	// for user configuration
 
-	app.PylonsKeeper = *pylonsmodulekeeper.NewKeeper(
+	app.PylonsKeeper = pylonsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[pylonsmoduletypes.StoreKey],
 		keys[pylonsmoduletypes.MemStoreKey],
 		app.BankKeeper,
+		app.AccountKeeper,
 	)
 
 	// Set node version from build configuration
@@ -407,10 +411,10 @@ func New(
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
 		upgradetypes.ModuleName, minttypes.ModuleName, distrtypes.ModuleName, slashingtypes.ModuleName,
-		evidencetypes.ModuleName, stakingtypes.ModuleName, ibchost.ModuleName,
+		evidencetypes.ModuleName, stakingtypes.ModuleName, ibchost.ModuleName, pylonsmoduletypes.ModuleName,
 	)
 
-	app.mm.SetOrderEndBlockers(crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName)
+	app.mm.SetOrderEndBlockers(crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName, pylonsmoduletypes.ModuleName)
 
 	// NOTE: The genutils module must occur after staking so that pools are
 	// properly initialized with tokens from genesis accounts.
@@ -523,7 +527,7 @@ func (app *App) LegacyAmino() *codec.LegacyAmino {
 	return app.cdc
 }
 
-// AppCodec returns Gaia's app codec.
+// AppCodec returns Pylons' app codec.
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
@@ -531,7 +535,7 @@ func (app *App) AppCodec() codec.Marshaler {
 	return app.appCodec
 }
 
-// InterfaceRegistry returns Gaia's InterfaceRegistry
+// InterfaceRegistry returns Pylons' InterfaceRegistry
 func (app *App) InterfaceRegistry() types.InterfaceRegistry {
 	return app.interfaceRegistry
 }

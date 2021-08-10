@@ -17,7 +17,7 @@ import (
 func TestExecutionQuerySingle(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNExecution(keeper, ctx, 2)
+	msgs := createNExecution(&keeper, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetExecutionRequest
@@ -59,7 +59,7 @@ func TestExecutionQuerySingle(t *testing.T) {
 func TestExecutionQueryPaginated(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNExecution(keeper, ctx, 5)
+	msgs := createNExecution(&keeper, ctx, 5)
 
 	request := func(next []byte, offset, limit uint64, total bool) *types.QueryAllExecutionRequest {
 		return &types.QueryAllExecutionRequest{

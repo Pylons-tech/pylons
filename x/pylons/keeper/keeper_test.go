@@ -27,7 +27,10 @@ import (
 var (
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName: nil,
+		authtypes.FeeCollectorName:   nil,
+		types.PylonsFeeCollectorName: nil,
+		types.PylonsCoinsLockerName:  nil,
+		types.PylonsItemsLockerName:  nil,
 	}
 )
 
@@ -57,7 +60,7 @@ func GetSubspace(paramsKeeper paramskeeper.Keeper, moduleName string) paramstype
 	return subspace
 }
 
-func setupKeeper(t testing.TB) (*Keeper, sdk.Context) {
+func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
 	storeKeys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, banktypes.StoreKey,
 		types.StoreKey,
@@ -87,6 +90,7 @@ func setupKeeper(t testing.TB) (*Keeper, sdk.Context) {
 		storeKeys[types.StoreKey],
 		memStoreKey,
 		bankKeeper,
+		accountKeeper,
 	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())

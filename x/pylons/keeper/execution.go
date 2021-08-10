@@ -85,7 +85,7 @@ func (k Keeper) appendExecution(
 	k.SetExecutionCount(ctx, count+1)
 }
 
-// GetExecution returns a execution from its id
+// GetExecution returns an execution from its id
 func (k Keeper) GetExecution(ctx sdk.Context, id uint64) types.Execution {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	var execution types.Execution

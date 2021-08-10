@@ -24,7 +24,7 @@ func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 
 func TestItemGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNItem(keeper, ctx, 10)
+	items := createNItem(&keeper, ctx, 10)
 	for _, item := range items {
 		rst, found := keeper.GetItem(ctx, item.CookbookID, item.RecipeID, item.ID)
 		assert.True(t, found)
@@ -34,6 +34,6 @@ func TestItemGet(t *testing.T) {
 
 func TestItemGetAll(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNItem(keeper, ctx, 10)
+	items := createNItem(&keeper, ctx, 10)
 	assert.Equal(t, items, keeper.GetAllItem(ctx))
 }

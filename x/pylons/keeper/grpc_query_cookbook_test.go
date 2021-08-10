@@ -14,7 +14,7 @@ import (
 func TestCookbookQuerySingle(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNCookbook(keeper, ctx, 2)
+	msgs := createNCookbook(&keeper, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetCookbookRequest

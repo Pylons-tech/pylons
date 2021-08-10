@@ -14,10 +14,11 @@ import (
 
 type (
 	Keeper struct {
-		cdc        codec.Marshaler
-		storeKey   sdk.StoreKey
-		memKey     sdk.StoreKey
-		bankKeeper types.BankKeeper
+		cdc           codec.Marshaler
+		storeKey      sdk.StoreKey
+		memKey        sdk.StoreKey
+		bankKeeper    types.BankKeeper
+		accountKeeper types.AccountKeeper
 		// this line is used by starport scaffolding # ibc/keeper/attribute
 
 	}
@@ -27,15 +28,29 @@ func NewKeeper(
 	cdc codec.Marshaler,
 	storeKey,
 	memKey sdk.StoreKey,
-	bankKeeper types.BankKeeper,
+	bk types.BankKeeper,
+	ak types.AccountKeeper,
 	// this line is used by starport scaffolding # ibc/keeper/parameter
 
-) *Keeper {
-	return &Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		memKey:     memKey,
-		bankKeeper: bankKeeper,
+) Keeper {
+
+	// ensure pylons module accounts are set
+	if addr := ak.GetModuleAddress(types.PylonsFeeCollectorName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.PylonsFeeCollectorName))
+	}
+	if addr := ak.GetModuleAddress(types.PylonsCoinsLockerName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.PylonsCoinsLockerName))
+	}
+	if addr := ak.GetModuleAddress(types.PylonsItemsLockerName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.PylonsItemsLockerName))
+	}
+
+	return Keeper{
+		cdc:           cdc,
+		storeKey:      storeKey,
+		memKey:        memKey,
+		bankKeeper:    bk,
+		accountKeeper: ak,
 		// this line is used by starport scaffolding # ibc/keeper/return
 
 	}

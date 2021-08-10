@@ -20,7 +20,7 @@ func createNPendingExecution(k *Keeper, ctx sdk.Context, n int) []types.Executio
 
 func TestPendingExecutionGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(keeper, ctx, 10)
+	items := createNPendingExecution(&keeper, ctx, 10)
 	for _, item := range items {
 		assert.Equal(t, item, keeper.GetPendingExecution(ctx, item.ID))
 	}
@@ -28,7 +28,7 @@ func TestPendingExecutionGet(t *testing.T) {
 
 func TestPendingExecutionExist(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(keeper, ctx, 10)
+	items := createNPendingExecution(&keeper, ctx, 10)
 	for _, item := range items {
 		assert.True(t, keeper.HasPendingExecution(ctx, item.ID))
 	}
@@ -36,13 +36,13 @@ func TestPendingExecutionExist(t *testing.T) {
 
 func TestPendingExecutionGetAll(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(keeper, ctx, 10)
+	items := createNPendingExecution(&keeper, ctx, 10)
 	assert.Equal(t, items, keeper.GetAllPendingExecution(ctx))
 }
 
 func TestPendingExecutionCount(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(keeper, ctx, 10)
+	items := createNPendingExecution(&keeper, ctx, 10)
 	count := uint64(len(items))
 	assert.Equal(t, count, keeper.GetPendingExecutionCount(ctx))
 }
