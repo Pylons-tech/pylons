@@ -9,6 +9,8 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
+	cdc.RegisterConcrete(&MsgSendItems{}, "pylons/SendItems", nil)
+
 	cdc.RegisterConcrete(&MsgExecuteRecipe{}, "pylons/ExecuteRecipe", nil)
 
 	cdc.RegisterConcrete(&MsgSetItemString{}, "pylons/SetItemString", nil)
@@ -23,6 +25,9 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgSendItems{},
+	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgExecuteRecipe{},
 	)

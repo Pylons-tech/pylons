@@ -14,6 +14,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc SendItems(MsgSendItems) returns (MsgSendItemsResponse);
   rpc ExecuteRecipe(MsgExecuteRecipe) returns (MsgExecuteRecipeResponse);
   rpc SetItemString(MsgSetItemString) returns (MsgSetItemStringResponse);
   rpc CreateRecipe(MsgCreateRecipe) returns (MsgCreateRecipeResponse);
@@ -23,6 +24,17 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgSendItems {
+  string creator = 1;
+  string receiver = 2;
+  string cookbookID = 3;
+  string recipeID = 4;
+  repeated string itemIDs = 5;
+}
+
+message MsgSendItemsResponse {
+}
+
 message MsgExecuteRecipe {
   string creator = 1;
   string cookbookID = 2;

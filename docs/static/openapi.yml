@@ -32115,6 +32115,8 @@ definitions:
       ID:
         type: string
         format: uint64
+  Pylonstech.pylons.pylons.MsgSendItemsResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgSetItemStringResponse:
     type: object
   Pylonstech.pylons.pylons.MsgUpdateCookbookResponse:

@@ -3,6 +3,15 @@ import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgSendItems {
+    creator: string;
+    receiver: string;
+    cookbookID: string;
+    recipeID: string;
+    itemIDs: string[];
+}
+export interface MsgSendItemsResponse {
+}
 export interface MsgExecuteRecipe {
     creator: string;
     cookbookID: string;
@@ -84,6 +93,20 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
+export declare const MsgSendItems: {
+    encode(message: MsgSendItems, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSendItems;
+    fromJSON(object: any): MsgSendItems;
+    toJSON(message: MsgSendItems): unknown;
+    fromPartial(object: DeepPartial<MsgSendItems>): MsgSendItems;
+};
+export declare const MsgSendItemsResponse: {
+    encode(_: MsgSendItemsResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgSendItemsResponse;
+    fromJSON(_: any): MsgSendItemsResponse;
+    toJSON(_: MsgSendItemsResponse): unknown;
+    fromPartial(_: DeepPartial<MsgSendItemsResponse>): MsgSendItemsResponse;
+};
 export declare const MsgExecuteRecipe: {
     encode(message: MsgExecuteRecipe, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgExecuteRecipe;
@@ -171,6 +194,7 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
+    SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>;
     ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>;
     SetItemString(request: MsgSetItemString): Promise<MsgSetItemStringResponse>;
     CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;
@@ -181,6 +205,7 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
+    SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>;
     ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>;
     SetItemString(request: MsgSetItemString): Promise<MsgSetItemStringResponse>;
     CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>;

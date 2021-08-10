@@ -152,6 +152,7 @@ export interface PylonsMsgExecuteRecipeResponse {
     /** @format uint64 */
     ID?: string;
 }
+export declare type PylonsMsgSendItemsResponse = object;
 export declare type PylonsMsgSetItemStringResponse = object;
 export declare type PylonsMsgUpdateCookbookResponse = object;
 export declare type PylonsMsgUpdateRecipeResponse = object;

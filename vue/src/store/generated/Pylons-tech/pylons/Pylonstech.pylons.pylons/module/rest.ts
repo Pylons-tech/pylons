@@ -202,6 +202,8 @@ export interface PylonsMsgExecuteRecipeResponse {
   ID?: string;
 }
 
+export type PylonsMsgSendItemsResponse = object;
+
 export type PylonsMsgSetItemStringResponse = object;
 
 export type PylonsMsgUpdateCookbookResponse = object;

@@ -7,6 +7,16 @@ import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgSendItems {
+  creator: string
+  receiver: string
+  cookbookID: string
+  recipeID: string
+  itemIDs: string[]
+}
+
+export interface MsgSendItemsResponse {}
+
 export interface MsgExecuteRecipe {
   creator: string
   cookbookID: string
@@ -94,6 +104,174 @@ export interface MsgUpdateCookbook {
 }
 
 export interface MsgUpdateCookbookResponse {}
+
+const baseMsgSendItems: object = { creator: '', receiver: '', cookbookID: '', recipeID: '', itemIDs: '' }
+
+export const MsgSendItems = {
+  encode(message: MsgSendItems, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.receiver !== '') {
+      writer.uint32(18).string(message.receiver)
+    }
+    if (message.cookbookID !== '') {
+      writer.uint32(26).string(message.cookbookID)
+    }
+    if (message.recipeID !== '') {
+      writer.uint32(34).string(message.recipeID)
+    }
+    for (const v of message.itemIDs) {
+      writer.uint32(42).string(v!)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSendItems {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgSendItems } as MsgSendItems
+    message.itemIDs = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.receiver = reader.string()
+          break
+        case 3:
+          message.cookbookID = reader.string()
+          break
+        case 4:
+          message.recipeID = reader.string()
+          break
+        case 5:
+          message.itemIDs.push(reader.string())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgSendItems {
+    const message = { ...baseMsgSendItems } as MsgSendItems
+    message.itemIDs = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = String(object.receiver)
+    } else {
+      message.receiver = ''
+    }
+    if (object.cookbookID !== undefined && object.cookbookID !== null) {
+      message.cookbookID = String(object.cookbookID)
+    } else {
+      message.cookbookID = ''
+    }
+    if (object.recipeID !== undefined && object.recipeID !== null) {
+      message.recipeID = String(object.recipeID)
+    } else {
+      message.recipeID = ''
+    }
+    if (object.itemIDs !== undefined && object.itemIDs !== null) {
+      for (const e of object.itemIDs) {
+        message.itemIDs.push(String(e))
+      }
+    }
+    return message
+  },
+
+  toJSON(message: MsgSendItems): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.receiver !== undefined && (obj.receiver = message.receiver)
+    message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
+    message.recipeID !== undefined && (obj.recipeID = message.recipeID)
+    if (message.itemIDs) {
+      obj.itemIDs = message.itemIDs.map((e) => e)
+    } else {
+      obj.itemIDs = []
+    }
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgSendItems>): MsgSendItems {
+    const message = { ...baseMsgSendItems } as MsgSendItems
+    message.itemIDs = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.receiver !== undefined && object.receiver !== null) {
+      message.receiver = object.receiver
+    } else {
+      message.receiver = ''
+    }
+    if (object.cookbookID !== undefined && object.cookbookID !== null) {
+      message.cookbookID = object.cookbookID
+    } else {
+      message.cookbookID = ''
+    }
+    if (object.recipeID !== undefined && object.recipeID !== null) {
+      message.recipeID = object.recipeID
+    } else {
+      message.recipeID = ''
+    }
+    if (object.itemIDs !== undefined && object.itemIDs !== null) {
+      for (const e of object.itemIDs) {
+        message.itemIDs.push(e)
+      }
+    }
+    return message
+  }
+}
+
+const baseMsgSendItemsResponse: object = {}
+
+export const MsgSendItemsResponse = {
+  encode(_: MsgSendItemsResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSendItemsResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgSendItemsResponse } as MsgSendItemsResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgSendItemsResponse {
+    const message = { ...baseMsgSendItemsResponse } as MsgSendItemsResponse
+    return message
+  },
+
+  toJSON(_: MsgSendItemsResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgSendItemsResponse>): MsgSendItemsResponse {
+    const message = { ...baseMsgSendItemsResponse } as MsgSendItemsResponse
+    return message
+  }
+}
 
 const baseMsgExecuteRecipe: object = { creator: '', cookbookID: '', recipeID: '', itemIDs: '' }
 
@@ -1614,6 +1792,7 @@ export const MsgUpdateCookbookResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
+  SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>
   ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>
   SetItemString(request: MsgSetItemString): Promise<MsgSetItemStringResponse>
   CreateRecipe(request: MsgCreateRecipe): Promise<MsgCreateRecipeResponse>
@@ -1627,6 +1806,12 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse> {
+    const data = MsgSendItems.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'SendItems', data)
+    return promise.then((data) => MsgSendItemsResponse.decode(new Reader(data)))
+  }
+
   ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse> {
     const data = MsgExecuteRecipe.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'ExecuteRecipe', data)
