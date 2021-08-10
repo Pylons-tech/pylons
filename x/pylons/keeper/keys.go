@@ -12,9 +12,10 @@ const (
 	KeyPylonsTrade      = "pylons_trade"
 	KeyPylonsHistory    = "pylons_history"
 	KeyPylonsLockedCoin = "pylons_locked_coin"
+	KeyPylonsPaymentID  = "pylons_payment_id"
 )
 
-func GetStoreKysList() (string, string, string, string, string, string, string, string, string) {
+func GetStoreKysList() (string, string, string, string, string, string, string, string, string, string) {
 	return KeyPylonsEntity,
 		KeyGoogleIAPOrder,
 		KeyPaymentForStripe,
@@ -23,7 +24,8 @@ func GetStoreKysList() (string, string, string, string, string, string, string, 
 		KeyPylonsItem,
 		KeyPylonsExecution,
 		KeyPylonsTrade,
-		KeyPylonsLockedCoin
+		KeyPylonsLockedCoin,
+		KeyPylonsPaymentID
 }
 
 // StoreKeyList has keys in ordered array
@@ -38,4 +40,5 @@ var StoreKeyList = []string{
 	KeyPylonsTrade,
 	KeyPylonsHistory,
 	KeyPylonsLockedCoin,
+	KeyPylonsPaymentID,
 }

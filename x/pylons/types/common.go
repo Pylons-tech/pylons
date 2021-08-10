@@ -99,6 +99,7 @@ const (
 	TypeItem        = "item"
 	TypeItemHistory = "item_history"
 	TypeExecution   = "execution"
+	TypePaymentID   = "payment_id"
 )
 
 // tier fee types
