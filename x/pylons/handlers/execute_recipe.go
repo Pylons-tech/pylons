@@ -80,6 +80,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			if msg.PaymentId == "" {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no paymentId error!")
 			}
+
 			payIntentResult, _ := paymentintent.Get(
 				msg.PaymentId,
 				nil,
@@ -92,6 +93,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			}
 			execMsg := types.NewMsgExecuteRecipe(msg.RecipeID, msg.Sender, msg.PaymentId, msg.PaymentMethod, msg.ItemIDs)
 			err = k.SetPaymentID(sdkCtx, execMsg)
+
 			if err != nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
 			}
