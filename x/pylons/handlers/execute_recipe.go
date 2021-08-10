@@ -80,6 +80,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			if msg.PaymentId == "" {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no paymentId error!")
 			}
+
 			payIntentResult, _ := paymentintent.Get(
 				msg.PaymentId,
 				nil,
@@ -87,6 +88,7 @@ func (k msgServer) ExecuteRecipe(ctx context.Context, msg *types.MsgExecuteRecip
 			if payIntentResult.Status != "succeeded" {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
 			} 
+
 			isStripePayment = true
 			cl = append(cl, sdk.NewCoin(inp.Coin, sdk.NewInt(inp.Count)))
 		} else {
