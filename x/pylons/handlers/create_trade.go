@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/stripe/stripe-go"
-	"github.com/stripe/stripe-go/paymentintent"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
@@ -165,20 +164,6 @@ func (srv msgServer) FulfillTrade(ctx context.Context, msg *types.MsgFulfillTrad
 			if msg.PaymentId == "" {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "no paymentId error!")
 			}
-			payIntentResult, _ := paymentintent.Get(
-				msg.PaymentId,
-				nil,
-			)
-			if payIntentResult.Status != "succeeded" {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Stripe for Payment succeeded error!")
-			}
-
-			if srv.HasPaymentForStripe(sdkCtx, msg.PaymentId) {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "payment id for Stripe is already being used")
-			}
-
-			// Register paymentId for Stripe before giving coins
-			err = srv.RegisterPaymentForStripe(sdkCtx, msg.PaymentId)
 
 			if err != nil {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "error registering payment id for Stripe")
