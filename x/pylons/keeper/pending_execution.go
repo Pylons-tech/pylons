@@ -51,7 +51,7 @@ func (k Keeper) AppendPendingExecution(
 	// Target height is the block height where the pending execution
 	// is actually able to be executed in the EndBlocker
 	targetHeight := execution.BlockHeight + int64(blockInterval)
-	id := fmt.Sprintf("%d-%d", targetHeight, count + k.GetExecutionCount(ctx))
+	id := fmt.Sprintf("%d-%d", targetHeight, count+k.GetExecutionCount(ctx))
 	// Set the ID of the appended value
 	execution.ID = id
 
@@ -126,4 +126,3 @@ func (k Keeper) GetAllPendingExecutionAtBlockHeight(ctx sdk.Context, blockHeight
 
 	return
 }
-

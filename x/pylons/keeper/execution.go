@@ -119,4 +119,3 @@ func (k Keeper) GetAllExecution(ctx sdk.Context) (list []types.Execution) {
 
 	return
 }
-

@@ -358,20 +358,23 @@ export const ConditionList = {
         return message;
     }
 };
-const baseItemInput = {};
+const baseItemInput = { ID: '' };
 export const ItemInput = {
     encode(message, writer = Writer.create()) {
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
+        }
         for (const v of message.doubles) {
-            DoubleInputParam.encode(v, writer.uint32(10).fork()).ldelim();
+            DoubleInputParam.encode(v, writer.uint32(18).fork()).ldelim();
         }
         for (const v of message.longs) {
-            LongInputParam.encode(v, writer.uint32(18).fork()).ldelim();
+            LongInputParam.encode(v, writer.uint32(26).fork()).ldelim();
         }
         for (const v of message.strings) {
-            StringInputParam.encode(v, writer.uint32(26).fork()).ldelim();
+            StringInputParam.encode(v, writer.uint32(34).fork()).ldelim();
         }
         if (message.conditions !== undefined) {
-            ConditionList.encode(message.conditions, writer.uint32(34).fork()).ldelim();
+            ConditionList.encode(message.conditions, writer.uint32(42).fork()).ldelim();
         }
         return writer;
     },
@@ -386,15 +389,18 @@ export const ItemInput = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.doubles.push(DoubleInputParam.decode(reader, reader.uint32()));
+                    message.ID = reader.string();
                     break;
                 case 2:
-                    message.longs.push(LongInputParam.decode(reader, reader.uint32()));
+                    message.doubles.push(DoubleInputParam.decode(reader, reader.uint32()));
                     break;
                 case 3:
-                    message.strings.push(StringInputParam.decode(reader, reader.uint32()));
+                    message.longs.push(LongInputParam.decode(reader, reader.uint32()));
                     break;
                 case 4:
+                    message.strings.push(StringInputParam.decode(reader, reader.uint32()));
+                    break;
+                case 5:
                     message.conditions = ConditionList.decode(reader, reader.uint32());
                     break;
                 default:
@@ -409,6 +415,12 @@ export const ItemInput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
         if (object.doubles !== undefined && object.doubles !== null) {
             for (const e of object.doubles) {
                 message.doubles.push(DoubleInputParam.fromJSON(e));
@@ -434,6 +446,7 @@ export const ItemInput = {
     },
     toJSON(message) {
         const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
         if (message.doubles) {
             obj.doubles = message.doubles.map((e) => (e ? DoubleInputParam.toJSON(e) : undefined));
         }
@@ -460,6 +473,12 @@ export const ItemInput = {
         message.doubles = [];
         message.longs = [];
         message.strings = [];
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
         if (object.doubles !== undefined && object.doubles !== null) {
             for (const e of object.doubles) {
                 message.doubles.push(DoubleInputParam.fromPartial(e));
@@ -1004,8 +1023,8 @@ export const CoinOutput = {
         if (message.ID !== '') {
             writer.uint32(10).string(message.ID);
         }
-        for (const v of message.coins) {
-            Coin.encode(v, writer.uint32(18).fork()).ldelim();
+        if (message.coin !== undefined) {
+            Coin.encode(message.coin, writer.uint32(18).fork()).ldelim();
         }
         return writer;
     },
@@ -1013,7 +1032,6 @@ export const CoinOutput = {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = { ...baseCoinOutput };
-        message.coins = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -1021,7 +1039,7 @@ export const CoinOutput = {
                     message.ID = reader.string();
                     break;
                 case 2:
-                    message.coins.push(Coin.decode(reader, reader.uint32()));
+                    message.coin = Coin.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1032,44 +1050,39 @@ export const CoinOutput = {
     },
     fromJSON(object) {
         const message = { ...baseCoinOutput };
-        message.coins = [];
         if (object.ID !== undefined && object.ID !== null) {
             message.ID = String(object.ID);
         }
         else {
             message.ID = '';
         }
-        if (object.coins !== undefined && object.coins !== null) {
-            for (const e of object.coins) {
-                message.coins.push(Coin.fromJSON(e));
-            }
+        if (object.coin !== undefined && object.coin !== null) {
+            message.coin = Coin.fromJSON(object.coin);
+        }
+        else {
+            message.coin = undefined;
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.ID !== undefined && (obj.ID = message.ID);
-        if (message.coins) {
-            obj.coins = message.coins.map((e) => (e ? Coin.toJSON(e) : undefined));
-        }
-        else {
-            obj.coins = [];
-        }
+        message.coin !== undefined && (obj.coin = message.coin ? Coin.toJSON(message.coin) : undefined);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseCoinOutput };
-        message.coins = [];
         if (object.ID !== undefined && object.ID !== null) {
             message.ID = object.ID;
         }
         else {
             message.ID = '';
         }
-        if (object.coins !== undefined && object.coins !== null) {
-            for (const e of object.coins) {
-                message.coins.push(Coin.fromPartial(e));
-            }
+        if (object.coin !== undefined && object.coin !== null) {
+            message.coin = Coin.fromPartial(object.coin);
+        }
+        else {
+            message.coin = undefined;
         }
         return message;
     }

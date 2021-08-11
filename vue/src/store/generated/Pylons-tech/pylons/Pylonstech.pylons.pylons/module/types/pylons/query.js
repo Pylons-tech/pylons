@@ -1,17 +1,16 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal';
-import * as Long from 'long';
+import { Reader, Writer } from 'protobufjs/minimal';
 import { Execution } from '../pylons/execution';
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Recipe } from '../pylons/recipe';
 import { Item } from '../pylons/item';
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseQueryGetExecutionRequest = { ID: 0 };
+const baseQueryGetExecutionRequest = { ID: '' };
 export const QueryGetExecutionRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.ID !== 0) {
-            writer.uint32(8).uint64(message.ID);
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
         }
         return writer;
     },
@@ -23,7 +22,7 @@ export const QueryGetExecutionRequest = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.ID = longToNumber(reader.uint64());
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -35,10 +34,10 @@ export const QueryGetExecutionRequest = {
     fromJSON(object) {
         const message = { ...baseQueryGetExecutionRequest };
         if (object.ID !== undefined && object.ID !== null) {
-            message.ID = Number(object.ID);
+            message.ID = String(object.ID);
         }
         else {
-            message.ID = 0;
+            message.ID = '';
         }
         return message;
     },
@@ -53,7 +52,7 @@ export const QueryGetExecutionRequest = {
             message.ID = object.ID;
         }
         else {
-            message.ID = 0;
+            message.ID = '';
         }
         return message;
     }
@@ -105,133 +104,6 @@ export const QueryGetExecutionResponse = {
         }
         else {
             message.Execution = undefined;
-        }
-        return message;
-    }
-};
-const baseQueryAllExecutionRequest = {};
-export const QueryAllExecutionRequest = {
-    encode(message, writer = Writer.create()) {
-        if (message.pagination !== undefined) {
-            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryAllExecutionRequest };
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.pagination = PageRequest.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseQueryAllExecutionRequest };
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageRequest.fromJSON(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseQueryAllExecutionRequest };
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageRequest.fromPartial(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
-        }
-        return message;
-    }
-};
-const baseQueryAllExecutionResponse = {};
-export const QueryAllExecutionResponse = {
-    encode(message, writer = Writer.create()) {
-        for (const v of message.Execution) {
-            Execution.encode(v, writer.uint32(10).fork()).ldelim();
-        }
-        if (message.pagination !== undefined) {
-            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryAllExecutionResponse };
-        message.Execution = [];
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.Execution.push(Execution.decode(reader, reader.uint32()));
-                    break;
-                case 2:
-                    message.pagination = PageResponse.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseQueryAllExecutionResponse };
-        message.Execution = [];
-        if (object.Execution !== undefined && object.Execution !== null) {
-            for (const e of object.Execution) {
-                message.Execution.push(Execution.fromJSON(e));
-            }
-        }
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageResponse.fromJSON(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        if (message.Execution) {
-            obj.Execution = message.Execution.map((e) => (e ? Execution.toJSON(e) : undefined));
-        }
-        else {
-            obj.Execution = [];
-        }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseQueryAllExecutionResponse };
-        message.Execution = [];
-        if (object.Execution !== undefined && object.Execution !== null) {
-            for (const e of object.Execution) {
-                message.Execution.push(Execution.fromPartial(e));
-            }
-        }
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageResponse.fromPartial(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
         }
         return message;
     }
@@ -976,25 +848,4 @@ export class QueryClientImpl {
         const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Cookbook', data);
         return promise.then((data) => QueryGetCookbookResponse.decode(new Reader(data)));
     }
-}
-var globalThis = (() => {
-    if (typeof globalThis !== 'undefined')
-        return globalThis;
-    if (typeof self !== 'undefined')
-        return self;
-    if (typeof window !== 'undefined')
-        return window;
-    if (typeof global !== 'undefined')
-        return global;
-    throw 'Unable to locate global object';
-})();
-function longToNumber(long) {
-    if (long.gt(Number.MAX_SAFE_INTEGER)) {
-        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
-    }
-    return long.toNumber();
-}
-if (util.Long !== Long) {
-    util.Long = Long;
-    configure();
 }

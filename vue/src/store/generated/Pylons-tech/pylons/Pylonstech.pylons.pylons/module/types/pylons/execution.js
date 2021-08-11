@@ -130,14 +130,14 @@ export const ItemRecord = {
         return message;
     }
 };
-const baseExecution = { creator: '', ID: 0, cookbookID: '', recipeID: '', nodeVersion: '', blockHeight: 0, itemOutputIDs: '' };
+const baseExecution = { creator: '', ID: '', cookbookID: '', recipeID: '', nodeVersion: '', blockHeight: 0, itemOutputIDs: '', itemModifyOutputIDs: '' };
 export const Execution = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.ID !== 0) {
-            writer.uint32(16).uint64(message.ID);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         if (message.cookbookID !== '') {
             writer.uint32(26).string(message.cookbookID);
@@ -157,8 +157,14 @@ export const Execution = {
         for (const v of message.itemInputs) {
             ItemRecord.encode(v, writer.uint32(66).fork()).ldelim();
         }
+        for (const v of message.coinOutputs) {
+            Coin.encode(v, writer.uint32(74).fork()).ldelim();
+        }
         for (const v of message.itemOutputIDs) {
-            writer.uint32(74).string(v);
+            writer.uint32(82).string(v);
+        }
+        for (const v of message.itemModifyOutputIDs) {
+            writer.uint32(90).string(v);
         }
         return writer;
     },
@@ -168,7 +174,9 @@ export const Execution = {
         const message = { ...baseExecution };
         message.coinInputs = [];
         message.itemInputs = [];
+        message.coinOutputs = [];
         message.itemOutputIDs = [];
+        message.itemModifyOutputIDs = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -176,7 +184,7 @@ export const Execution = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.ID = longToNumber(reader.uint64());
+                    message.ID = reader.string();
                     break;
                 case 3:
                     message.cookbookID = reader.string();
@@ -197,7 +205,13 @@ export const Execution = {
                     message.itemInputs.push(ItemRecord.decode(reader, reader.uint32()));
                     break;
                 case 9:
+                    message.coinOutputs.push(Coin.decode(reader, reader.uint32()));
+                    break;
+                case 10:
                     message.itemOutputIDs.push(reader.string());
+                    break;
+                case 11:
+                    message.itemModifyOutputIDs.push(reader.string());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -210,7 +224,9 @@ export const Execution = {
         const message = { ...baseExecution };
         message.coinInputs = [];
         message.itemInputs = [];
+        message.coinOutputs = [];
         message.itemOutputIDs = [];
+        message.itemModifyOutputIDs = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
@@ -218,10 +234,10 @@ export const Execution = {
             message.creator = '';
         }
         if (object.ID !== undefined && object.ID !== null) {
-            message.ID = Number(object.ID);
+            message.ID = String(object.ID);
         }
         else {
-            message.ID = 0;
+            message.ID = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = String(object.cookbookID);
@@ -257,9 +273,19 @@ export const Execution = {
                 message.itemInputs.push(ItemRecord.fromJSON(e));
             }
         }
+        if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+            for (const e of object.coinOutputs) {
+                message.coinOutputs.push(Coin.fromJSON(e));
+            }
+        }
         if (object.itemOutputIDs !== undefined && object.itemOutputIDs !== null) {
             for (const e of object.itemOutputIDs) {
                 message.itemOutputIDs.push(String(e));
+            }
+        }
+        if (object.itemModifyOutputIDs !== undefined && object.itemModifyOutputIDs !== null) {
+            for (const e of object.itemModifyOutputIDs) {
+                message.itemModifyOutputIDs.push(String(e));
             }
         }
         return message;
@@ -284,11 +310,23 @@ export const Execution = {
         else {
             obj.itemInputs = [];
         }
+        if (message.coinOutputs) {
+            obj.coinOutputs = message.coinOutputs.map((e) => (e ? Coin.toJSON(e) : undefined));
+        }
+        else {
+            obj.coinOutputs = [];
+        }
         if (message.itemOutputIDs) {
             obj.itemOutputIDs = message.itemOutputIDs.map((e) => e);
         }
         else {
             obj.itemOutputIDs = [];
+        }
+        if (message.itemModifyOutputIDs) {
+            obj.itemModifyOutputIDs = message.itemModifyOutputIDs.map((e) => e);
+        }
+        else {
+            obj.itemModifyOutputIDs = [];
         }
         return obj;
     },
@@ -296,7 +334,9 @@ export const Execution = {
         const message = { ...baseExecution };
         message.coinInputs = [];
         message.itemInputs = [];
+        message.coinOutputs = [];
         message.itemOutputIDs = [];
+        message.itemModifyOutputIDs = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
@@ -307,7 +347,7 @@ export const Execution = {
             message.ID = object.ID;
         }
         else {
-            message.ID = 0;
+            message.ID = '';
         }
         if (object.cookbookID !== undefined && object.cookbookID !== null) {
             message.cookbookID = object.cookbookID;
@@ -343,9 +383,19 @@ export const Execution = {
                 message.itemInputs.push(ItemRecord.fromPartial(e));
             }
         }
+        if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+            for (const e of object.coinOutputs) {
+                message.coinOutputs.push(Coin.fromPartial(e));
+            }
+        }
         if (object.itemOutputIDs !== undefined && object.itemOutputIDs !== null) {
             for (const e of object.itemOutputIDs) {
                 message.itemOutputIDs.push(e);
+            }
+        }
+        if (object.itemModifyOutputIDs !== undefined && object.itemModifyOutputIDs !== null) {
+            for (const e of object.itemModifyOutputIDs) {
+                message.itemModifyOutputIDs.push(e);
             }
         }
         return message;

@@ -19,7 +19,7 @@ export interface MsgExecuteRecipe {
     itemIDs: string[];
 }
 export interface MsgExecuteRecipeResponse {
-    ID: number;
+    ID: string;
 }
 export interface MsgSetItemString {
     creator: string;

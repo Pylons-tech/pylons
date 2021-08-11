@@ -116,7 +116,7 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, reci
 			inputItemMap[id] = inputItem
 			// match
 			var ec types.CelEnvCollection
-			ec, err = k.NewCelEnvCollectionFromItem(ctx,  recipe.ID, "", inputItem)
+			ec, err = k.NewCelEnvCollectionFromItem(ctx, recipe.ID, "", inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}

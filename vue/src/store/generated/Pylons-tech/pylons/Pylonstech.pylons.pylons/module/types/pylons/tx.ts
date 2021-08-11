@@ -25,7 +25,7 @@ export interface MsgExecuteRecipe {
 }
 
 export interface MsgExecuteRecipeResponse {
-  ID: number
+  ID: string
 }
 
 export interface MsgSetItemString {
@@ -386,12 +386,12 @@ export const MsgExecuteRecipe = {
   }
 }
 
-const baseMsgExecuteRecipeResponse: object = { ID: 0 }
+const baseMsgExecuteRecipeResponse: object = { ID: '' }
 
 export const MsgExecuteRecipeResponse = {
   encode(message: MsgExecuteRecipeResponse, writer: Writer = Writer.create()): Writer {
-    if (message.ID !== 0) {
-      writer.uint32(8).uint64(message.ID)
+    if (message.ID !== '') {
+      writer.uint32(10).string(message.ID)
     }
     return writer
   },
@@ -404,7 +404,7 @@ export const MsgExecuteRecipeResponse = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.ID = longToNumber(reader.uint64() as Long)
+          message.ID = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -417,9 +417,9 @@ export const MsgExecuteRecipeResponse = {
   fromJSON(object: any): MsgExecuteRecipeResponse {
     const message = { ...baseMsgExecuteRecipeResponse } as MsgExecuteRecipeResponse
     if (object.ID !== undefined && object.ID !== null) {
-      message.ID = Number(object.ID)
+      message.ID = String(object.ID)
     } else {
-      message.ID = 0
+      message.ID = ''
     }
     return message
   },
@@ -435,7 +435,7 @@ export const MsgExecuteRecipeResponse = {
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
-      message.ID = 0
+      message.ID = ''
     }
     return message
   }

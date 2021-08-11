@@ -1,21 +1,25 @@
 package types
 
 import (
-	"encoding/base64"
+	"encoding/binary"
+	"github.com/btcsuite/btcutil/base58"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"strconv"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 )
 
-// EncodeItemID
+// EncodeItemID encodes the internal uint64 representation of an ItemID to a base64 string
 func EncodeItemID(id uint64) string {
-	return base64.StdEncoding.EncodeToString([]byte(strconv.ParseUint(id, 10)))
+	b := make([]byte, 8)
+	binary.LittleEndian.PutUint64(b, id)
+	return base58.Encode(b)
 }
 
-// DecodeItemID()
-// func DecodeItemID(id string) uint64 {
-//	bytes := base64.StdEncoding.Decode([]byte(strconv.ParseUint(id, 10)))
-// }
-
+// DecodeItemID decodes base64 string representation of an ItemID to the internal uint64 representation
+func DecodeItemID(id string) uint64 {
+	bytes := base58.Decode(id)
+	return binary.LittleEndian.Uint64(bytes)
+}
 
 // FindDouble is a function to get a double attribute from an item
 func (it Item) FindDouble(key string) (sdk.Dec, bool) {
@@ -78,7 +82,7 @@ func (it Item) FindStringKey(key string) (int, bool) {
 }
 
 // Actualize function actualize an item from item output data
-func (io ItemOutput) Actualize(cookbookID string, recipeID string, addr sdk.AccAddress, ec CelEnvCollection) (Item, error) {
+func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID string, addr sdk.AccAddress, ec CelEnvCollection) (Item, error) {
 	dblActualize, err := DoubleParamList(io.Doubles).Actualize(ec)
 	if err != nil {
 		return Item{}, err
@@ -92,22 +96,28 @@ func (io ItemOutput) Actualize(cookbookID string, recipeID string, addr sdk.AccA
 		return Item{}, err
 	}
 
-	transferFee := io.TransferFee
+	// transferFee := io.TransferFee
 
-	lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
+	// TODO
+	// Can't we just remove the ec "lastBlockHeight" var entirely?
+	// lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
+
+	// GetItemCount from keeper
+	// item ID = EncodeItemID(itemCount + 1)
+	// SetItemCount to (itemCount + 1) in keeper
 
 	return Item{
 		Owner:          addr.String(),
-		CookbookID:     ,
-		RecipeID:       "",
-		ID:             "",
-		NodeVersion:    "",
-		Doubles:        nil,
-		Longs:          nil,
-		Strings:        nil,
-		MutableStrings: nil,
-		Tradeable:      false,
-		LastUpdate:     0,
-		TransferFee:    0,
+		CookbookID:     cookbookID,
+		RecipeID:       recipeID,
+		ID:             "", // TODO SET
+		NodeVersion:    config.GetNodeVersionString(),
+		Doubles:        dblActualize,
+		Longs:          longActualize,
+		Strings:        stringActualize,
+		MutableStrings: nil,  // TODO HOW DO WE SET THIS?
+		Tradeable:      true, // TODO HOW DO WE SET THIS?
+		LastUpdate:     uint64(ctx.BlockHeight()),
+		TransferFee:    0, // TODO ItemOutput Transfer fee is an sdk.Dec and this is a uint
 	}, nil
 }

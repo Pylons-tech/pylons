@@ -19492,7 +19492,6 @@ paths:
                     type: string
                   ID:
                     type: string
-                    format: uint64
                   cookbookID:
                     type: string
                   recipeID:
@@ -19557,7 +19556,28 @@ paths:
                               Value:
                                 type: string
                             title: StringKeyValue describes string key/value set
+                  coinOutputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
                   itemOutputIDs:
+                    type: array
+                    items:
+                      type: string
+                  itemModifyOutputIDs:
                     type: array
                     items:
                       type: string
@@ -19586,7 +19606,6 @@ paths:
           in: path
           required: true
           type: string
-          format: uint64
       tags:
         - Query
   '/pylons/cookbook/{ID}':
@@ -19873,6 +19892,8 @@ paths:
                       items:
                         type: object
                         properties:
+                          ID:
+                            type: string
                           doubles:
                             type: array
                             items:
@@ -19992,24 +20013,22 @@ paths:
                             properties:
                               ID:
                                 type: string
-                              coins:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    denom:
-                                      type: string
-                                    amount:
-                                      type: string
-                                  description: >-
-                                    Coin defines a token with a denomination and
-                                    an amount.
+                              coin:
+                                type: object
+                                properties:
+                                  denom:
+                                    type: string
+                                  amount:
+                                    type: string
+                                description: >-
+                                  Coin defines a token with a denomination and
+                                  an amount.
 
 
-                                    NOTE: The amount field is an Int which
-                                    implements the custom method
+                                  NOTE: The amount field is an Int which
+                                  implements the custom method
 
-                                    signatures required by gogoproto.
+                                  signatures required by gogoproto.
                             title: >-
                               CoinOutput models the continuum of valid outcomes
                               for coin generation in recipes
@@ -20373,6 +20392,8 @@ paths:
                     items:
                       type: object
                       properties:
+                        ID:
+                          type: string
                         doubles:
                           type: array
                           items:
@@ -20484,24 +20505,22 @@ paths:
                           properties:
                             ID:
                               type: string
-                            coins:
-                              type: array
-                              items:
-                                type: object
-                                properties:
-                                  denom:
-                                    type: string
-                                  amount:
-                                    type: string
-                                description: >-
-                                  Coin defines a token with a denomination and
-                                  an amount.
+                            coin:
+                              type: object
+                              properties:
+                                denom:
+                                  type: string
+                                amount:
+                                  type: string
+                              description: >-
+                                Coin defines a token with a denomination and an
+                                amount.
 
 
-                                  NOTE: The amount field is an Int which
-                                  implements the custom method
+                                NOTE: The amount field is an Int which
+                                implements the custom method
 
-                                  signatures required by gogoproto.
+                                signatures required by gogoproto.
                           title: >-
                             CoinOutput models the continuum of valid outcomes
                             for coin generation in recipes
@@ -31113,20 +31132,18 @@ definitions:
     properties:
       ID:
         type: string
-      coins:
-        type: array
-        items:
-          type: object
-          properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
+      coin:
+        type: object
+        properties:
+          denom:
+            type: string
+          amount:
+            type: string
+        description: |-
+          Coin defines a token with a denomination and an amount.
 
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
+          NOTE: The amount field is an Int which implements the custom method
+          signatures required by gogoproto.
     title: >-
       CoinOutput models the continuum of valid outcomes for coin generation in
       recipes
@@ -31277,23 +31294,21 @@ definitions:
           properties:
             ID:
               type: string
-            coins:
-              type: array
-              items:
-                type: object
-                properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
+            coin:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
 
 
-                  NOTE: The amount field is an Int which implements the custom
-                  method
+                NOTE: The amount field is an Int which implements the custom
+                method
 
-                  signatures required by gogoproto.
+                signatures required by gogoproto.
           title: >-
             CoinOutput models the continuum of valid outcomes for coin
             generation in recipes
@@ -31542,7 +31557,6 @@ definitions:
         type: string
       ID:
         type: string
-        format: uint64
       cookbookID:
         type: string
       recipeID:
@@ -31604,7 +31618,25 @@ definitions:
                   Value:
                     type: string
                 title: StringKeyValue describes string key/value set
+      coinOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
       itemOutputIDs:
+        type: array
+        items:
+          type: string
+      itemModifyOutputIDs:
         type: array
         items:
           type: string
@@ -31689,6 +31721,8 @@ definitions:
   Pylonstech.pylons.pylons.ItemInput:
     type: object
     properties:
+      ID:
+        type: string
       doubles:
         type: array
         items:
@@ -32114,7 +32148,6 @@ definitions:
     properties:
       ID:
         type: string
-        format: uint64
   Pylonstech.pylons.pylons.MsgSendItemsResponse:
     type: object
   Pylonstech.pylons.pylons.MsgSetItemStringResponse:
@@ -32160,7 +32193,6 @@ definitions:
             type: string
           ID:
             type: string
-            format: uint64
           cookbookID:
             type: string
           recipeID:
@@ -32225,7 +32257,28 @@ definitions:
                       Value:
                         type: string
                     title: StringKeyValue describes string key/value set
+          coinOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
           itemOutputIDs:
+            type: array
+            items:
+              type: string
+          itemModifyOutputIDs:
             type: array
             items:
               type: string
@@ -32337,6 +32390,8 @@ definitions:
             items:
               type: object
               properties:
+                ID:
+                  type: string
                 doubles:
                   type: array
                   items:
@@ -32448,24 +32503,21 @@ definitions:
                   properties:
                     ID:
                       type: string
-                    coins:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          denom:
-                            type: string
-                          amount:
-                            type: string
-                        description: >-
-                          Coin defines a token with a denomination and an
-                          amount.
+                    coin:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
 
 
-                          NOTE: The amount field is an Int which implements the
-                          custom method
+                        NOTE: The amount field is an Int which implements the
+                        custom method
 
-                          signatures required by gogoproto.
+                        signatures required by gogoproto.
                   title: >-
                     CoinOutput models the continuum of valid outcomes for coin
                     generation in recipes
@@ -32807,6 +32859,8 @@ definitions:
               items:
                 type: object
                 properties:
+                  ID:
+                    type: string
                   doubles:
                     type: array
                     items:
@@ -32918,24 +32972,22 @@ definitions:
                     properties:
                       ID:
                         type: string
-                      coins:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            denom:
-                              type: string
-                            amount:
-                              type: string
-                          description: >-
-                            Coin defines a token with a denomination and an
-                            amount.
+                      coin:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
 
 
-                            NOTE: The amount field is an Int which implements
-                            the custom method
+                          NOTE: The amount field is an Int which implements the
+                          custom method
 
-                            signatures required by gogoproto.
+                          signatures required by gogoproto.
                     title: >-
                       CoinOutput models the continuum of valid outcomes for coin
                       generation in recipes
@@ -33251,6 +33303,8 @@ definitions:
         items:
           type: object
           properties:
+            ID:
+              type: string
             doubles:
               type: array
               items:
@@ -33362,23 +33416,21 @@ definitions:
               properties:
                 ID:
                   type: string
-                coins:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
+                coin:
+                  type: object
+                  properties:
+                    denom:
+                      type: string
+                    amount:
+                      type: string
+                  description: >-
+                    Coin defines a token with a denomination and an amount.
 
 
-                      NOTE: The amount field is an Int which implements the
-                      custom method
+                    NOTE: The amount field is an Int which implements the custom
+                    method
 
-                      signatures required by gogoproto.
+                    signatures required by gogoproto.
               title: >-
                 CoinOutput models the continuum of valid outcomes for coin
                 generation in recipes

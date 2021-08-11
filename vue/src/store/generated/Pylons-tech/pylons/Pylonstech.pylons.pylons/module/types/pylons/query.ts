@@ -1,30 +1,20 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal'
-import * as Long from 'long'
+import { Reader, Writer } from 'protobufjs/minimal'
 import { Execution } from '../pylons/execution'
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Recipe } from '../pylons/recipe'
 import { Item } from '../pylons/item'
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Cookbook } from '../pylons/cookbook'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetExecutionRequest {
-  ID: number
+  ID: string
 }
 
 export interface QueryGetExecutionResponse {
   Execution: Execution | undefined
-}
-
-export interface QueryAllExecutionRequest {
-  pagination: PageRequest | undefined
-}
-
-export interface QueryAllExecutionResponse {
-  Execution: Execution[]
-  pagination: PageResponse | undefined
 }
 
 export interface QueryListRecipesByCookbookRequest {
@@ -79,12 +69,12 @@ export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
 }
 
-const baseQueryGetExecutionRequest: object = { ID: 0 }
+const baseQueryGetExecutionRequest: object = { ID: '' }
 
 export const QueryGetExecutionRequest = {
   encode(message: QueryGetExecutionRequest, writer: Writer = Writer.create()): Writer {
-    if (message.ID !== 0) {
-      writer.uint32(8).uint64(message.ID)
+    if (message.ID !== '') {
+      writer.uint32(10).string(message.ID)
     }
     return writer
   },
@@ -97,7 +87,7 @@ export const QueryGetExecutionRequest = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.ID = longToNumber(reader.uint64() as Long)
+          message.ID = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -110,9 +100,9 @@ export const QueryGetExecutionRequest = {
   fromJSON(object: any): QueryGetExecutionRequest {
     const message = { ...baseQueryGetExecutionRequest } as QueryGetExecutionRequest
     if (object.ID !== undefined && object.ID !== null) {
-      message.ID = Number(object.ID)
+      message.ID = String(object.ID)
     } else {
-      message.ID = 0
+      message.ID = ''
     }
     return message
   },
@@ -128,7 +118,7 @@ export const QueryGetExecutionRequest = {
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
-      message.ID = 0
+      message.ID = ''
     }
     return message
   }
@@ -184,140 +174,6 @@ export const QueryGetExecutionResponse = {
       message.Execution = Execution.fromPartial(object.Execution)
     } else {
       message.Execution = undefined
-    }
-    return message
-  }
-}
-
-const baseQueryAllExecutionRequest: object = {}
-
-export const QueryAllExecutionRequest = {
-  encode(message: QueryAllExecutionRequest, writer: Writer = Writer.create()): Writer {
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): QueryAllExecutionRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllExecutionRequest } as QueryAllExecutionRequest
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): QueryAllExecutionRequest {
-    const message = { ...baseQueryAllExecutionRequest } as QueryAllExecutionRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  },
-
-  toJSON(message: QueryAllExecutionRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<QueryAllExecutionRequest>): QueryAllExecutionRequest {
-    const message = { ...baseQueryAllExecutionRequest } as QueryAllExecutionRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
-}
-
-const baseQueryAllExecutionResponse: object = {}
-
-export const QueryAllExecutionResponse = {
-  encode(message: QueryAllExecutionResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.Execution) {
-      Execution.encode(v!, writer.uint32(10).fork()).ldelim()
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): QueryAllExecutionResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllExecutionResponse } as QueryAllExecutionResponse
-    message.Execution = []
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.Execution.push(Execution.decode(reader, reader.uint32()))
-          break
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): QueryAllExecutionResponse {
-    const message = { ...baseQueryAllExecutionResponse } as QueryAllExecutionResponse
-    message.Execution = []
-    if (object.Execution !== undefined && object.Execution !== null) {
-      for (const e of object.Execution) {
-        message.Execution.push(Execution.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  },
-
-  toJSON(message: QueryAllExecutionResponse): unknown {
-    const obj: any = {}
-    if (message.Execution) {
-      obj.Execution = message.Execution.map((e) => (e ? Execution.toJSON(e) : undefined))
-    } else {
-      obj.Execution = []
-    }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<QueryAllExecutionResponse>): QueryAllExecutionResponse {
-    const message = { ...baseQueryAllExecutionResponse } as QueryAllExecutionResponse
-    message.Execution = []
-    if (object.Execution !== undefined && object.Execution !== null) {
-      for (const e of object.Execution) {
-        message.Execution.push(Execution.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
     }
     return message
   }
@@ -1134,16 +990,6 @@ interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>
 }
 
-declare var self: any | undefined
-declare var window: any | undefined
-var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
-})()
-
 type Builtin = Date | Function | Uint8Array | string | number | undefined
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -1154,15 +1000,3 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>
-
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
-  }
-  return long.toNumber()
-}
-
-if (util.Long !== Long) {
-  util.Long = Long as any
-  configure()
-}

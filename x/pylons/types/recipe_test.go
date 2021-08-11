@@ -146,13 +146,13 @@ func TestValidateCoinOutput(t *testing.T) {
 		err  error
 	}{
 		{desc: "Valid", obj: CoinOutput{
-			ID: "test", Coins: sdk.Coins{{Denom: "test", Amount: sdk.NewInt(1)}},
+			ID: "test", Coin: &sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
 		}},
 		{desc: "Invalid1", obj: CoinOutput{
-			ID: "test", Coins: sdk.Coins{{Denom: "test", Amount: sdk.NewInt(-1)}},
+			ID: "test", Coin: &sdk.Coin{Denom: "test", Amount: sdk.NewInt(-1)},
 		}, err: sdkerrors.ErrInvalidCoins},
 		{desc: "Invalid2", obj: CoinOutput{
-			ID: "test", Coins: sdk.Coins{},
+			ID: "test", Coin: &sdk.Coin{},
 		}, err: sdkerrors.ErrInvalidCoins},
 	} {
 		tc := tc

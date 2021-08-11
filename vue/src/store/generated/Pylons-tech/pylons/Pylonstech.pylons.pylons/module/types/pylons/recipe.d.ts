@@ -31,6 +31,7 @@ export interface ConditionList {
 }
 /** ItemInput is a struct for describing an input item */
 export interface ItemInput {
+    ID: string;
     doubles: DoubleInputParam[];
     longs: LongInputParam[];
     strings: StringInputParam[];
@@ -78,7 +79,7 @@ export interface StringParam {
 /** CoinOutput models the continuum of valid outcomes for coin generation in recipes */
 export interface CoinOutput {
     ID: string;
-    coins: Coin[];
+    coin: Coin | undefined;
 }
 /** ItemOutput models the continuum of valid outcomes for item generation in recipes */
 export interface ItemOutput {

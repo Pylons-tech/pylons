@@ -18,7 +18,14 @@ export interface ProtobufAny {
 
 export interface PylonsCoinOutput {
   ID?: string;
-  coins?: V1Beta1Coin[];
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  coin?: V1Beta1Coin;
 }
 
 export interface PylonsConditionList {
@@ -82,8 +89,6 @@ export interface PylonsEntriesList {
 
 export interface PylonsExecution {
   creator?: string;
-
-  /** @format uint64 */
   ID?: string;
   cookbookID?: string;
   recipeID?: string;
@@ -93,7 +98,9 @@ export interface PylonsExecution {
   blockHeight?: string;
   coinInputs?: V1Beta1Coin[];
   itemInputs?: PylonsItemRecord[];
+  coinOutputs?: V1Beta1Coin[];
   itemOutputIDs?: string[];
+  itemModifyOutputIDs?: string[];
 }
 
 export interface PylonsIntWeightRange {
@@ -127,6 +134,7 @@ export interface PylonsItem {
 }
 
 export interface PylonsItemInput {
+  ID?: string;
   doubles?: PylonsDoubleInputParam[];
   longs?: PylonsLongInputParam[];
   strings?: PylonsStringInputParam[];
@@ -198,7 +206,6 @@ export type PylonsMsgCreateCookbookResponse = object;
 export type PylonsMsgCreateRecipeResponse = object;
 
 export interface PylonsMsgExecuteRecipeResponse {
-  /** @format uint64 */
   ID?: string;
 }
 

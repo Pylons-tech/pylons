@@ -10,14 +10,16 @@ export interface ItemRecord {
 }
 export interface Execution {
     creator: string;
-    ID: number;
+    ID: string;
     cookbookID: string;
     recipeID: string;
     nodeVersion: string;
     blockHeight: number;
     coinInputs: Coin[];
     itemInputs: ItemRecord[];
+    coinOutputs: Coin[];
     itemOutputIDs: string[];
+    itemModifyOutputIDs: string[];
 }
 export declare const ItemRecord: {
     encode(message: ItemRecord, writer?: Writer): Writer;

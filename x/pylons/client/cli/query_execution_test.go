@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -26,14 +27,16 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []*type
 	for i := 0; i < n; i++ {
 		state.ExecutionList = append(state.ExecutionList,
 			&types.Execution{
-				Creator:       "ANY",
-				ID:            uint64(i),
-				CookbookID:    "",
-				RecipeID:      "",
-				NodeVersion:   "",
-				CoinInputs:    sdk.Coins{},
-				ItemInputs:    make([]types.ItemRecord, 0),
-				ItemOutputIDs: make([]string, 0),
+				Creator:             "ANY",
+				ID:                  strconv.Itoa(i),
+				CookbookID:          "",
+				RecipeID:            "",
+				NodeVersion:         "",
+				CoinInputs:          sdk.Coins{},
+				CoinOutputs:         sdk.Coins{},
+				ItemInputs:          make([]types.ItemRecord, 0),
+				ItemOutputIDs:       make([]string, 0),
+				ItemModifyOutputIDs: make([]string, 0),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -58,7 +61,7 @@ func TestShowExecution(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   fmt.Sprintf("%d", objs[0].ID),
+			id:   fmt.Sprintf("%s", objs[0].ID),
 			args: common,
 			obj:  objs[0],
 		},

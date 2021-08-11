@@ -2,21 +2,20 @@ package keeper
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-
-
 // EntryListsByIDs is a function to find an entry by ID
-func EntryListsByIDs(IDs []string, recipe types.Recipe) ([]types.CoinOutput,  []types.ItemOutput,  []types.ItemModifyOutput, error) {
+func EntryListsByIDs(idList []string, recipe types.Recipe) ([]types.CoinOutput, []types.ItemOutput, []types.ItemModifyOutput, error) {
 	coinOutputs := make([]types.CoinOutput, 0)
 	itemOutputs := make([]types.ItemOutput, 0)
 	itemModifyOutputs := make([]types.ItemModifyOutput, 0)
 
-	Loop:
-	for _, id := range IDs {
+Loop:
+	for _, id := range idList {
 		for _, coinOutput := range recipe.Entries.CoinOutputs {
 			if coinOutput.ID == id {
 				coinOutputs = append(coinOutputs, coinOutput)
@@ -44,11 +43,8 @@ func EntryListsByIDs(IDs []string, recipe types.Recipe) ([]types.CoinOutput,  []
 	return coinOutputs, itemOutputs, itemModifyOutputs, nil
 }
 
-
-
-
 // AddExecutedResult add executed result from ExecProcess
-func (k Keeper) AddExecutedResult(ctx sdk.Context, addr sdk.AccAddress, entryIDs []string, recipe types.Recipe) ([]string, error) {
+func (k Keeper) AddExecutedResult(ctx sdk.Context, addr sdk.AccAddress, entryIDs []string, recipe types.Recipe, ec types.CelEnvCollection) ([]string, error) {
 	coinOutputs, itemOutputs, itemModifyOutputs, err := EntryListsByIDs(entryIDs, recipe)
 	if err != nil {
 		return nil, err
@@ -65,107 +61,112 @@ func (k Keeper) AddExecutedResult(ctx sdk.Context, addr sdk.AccAddress, entryIDs
 		return nil, err
 	}
 
-	itemIDs := make([]string, 0)
-	for _, itemOutput := range itemOutputs {
-		k.AppendItem()
-	}
-
-	itemModifyIDs := make([]string, 0)
-	for _, itemModifyOutput := range itemModifyOutputs {
-
-	}
-
-
-
-
-	usedItemInputIndexes := []int{}
-	for _, entryID := range entryIDs {
-
-
-
-
-		output, err :=
+	itemIDs := make([]string, len(itemOutputs))
+	for i, itemOutput := range itemOutputs {
+		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, recipe.ID, addr, ec)
 		if err != nil {
-			return ersl, err
+			return nil, err
 		}
+		itemIDs[i] = k.AppendItem(ctx, item)
+	}
 
-		switch output := output.(type) {
-		case *types.CoinOutput:
-			coinOutput := output
-			var coinAmount int64
-			if len(coinOutput.Count) > 0 {
-				val64, err := p.ec.EvalInt64(coinOutput.Count)
-				if err != nil {
-					return ersl, errInternal(err)
-				}
-				coinAmount = val64
-			} else {
-				return ersl, errInternal(errors.New("length of coin output program shouldn't be zero"))
-			}
-			ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
+	itemModifyIDs := make([]string, len(itemModifyOutputs))
+	for i, itemModifyOutput := range itemModifyOutputs {
+		itemModifyIDs[i] = itemModifyOutput.ID // TODO add actualize logic
+	}
 
-			err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
+	// TODO
+	// are we checking if there are any unused IDs in
+	// between entryIDs and [itemOutputs, itemModifyOutputs, coinOutputs] ???
+
+	// usedItemInputIndexes := []int{}
+	for _, entryID := range entryIDs {
+		panic(entryID)
+	}
+	/*
+			output, err :=
 			if err != nil {
 				return ersl, err
 			}
-			ersl = append(ersl, types.ExecuteRecipeSerialize{
-				Type:   "COIN",
-				Coin:   coinOutput.Coin,
-				Amount: coinAmount,
-			})
-		case *types.ItemModifyOutput:
-			var outputItem *types.Item
 
-			itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
-			if itemInputIndex < 0 {
-				return ersl, errInternal(fmt.Errorf("no item input with ID=%s exist", output.ItemInputRef))
-			}
-			inputItem := p.GetMatchedItemFromIndex(itemInputIndex)
+			switch output := output.(type) {
+			case *types.CoinOutput:
+				coinOutput := output
+				var coinAmount int64
+				if len(coinOutput.Count) > 0 {
+					val64, err := p.ec.EvalInt64(coinOutput.Count)
+					if err != nil {
+						return ersl, errInternal(err)
+					}
+					coinAmount = val64
+				} else {
+					return ersl, errInternal(errors.New("length of coin output program shouldn't be zero"))
+				}
+				ocl := sdk.Coins{sdk.NewCoin(coinOutput.Coin, sdk.NewInt(coinAmount))}
 
-			// Collect itemInputRefs that are used on output
-			usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
+				err := p.keeper.CoinKeeper.AddCoins(p.ctx, sender, ocl)
+				if err != nil {
+					return ersl, err
+				}
+				ersl = append(ersl, types.ExecuteRecipeSerialize{
+					Type:   "COIN",
+					Coin:   coinOutput.Coin,
+					Amount: coinAmount,
+				})
+			case *types.ItemModifyOutput:
+				var outputItem *types.Item
 
-			// Modify item according to ModifyParams section
-			outputItem, err = p.UpdateItemFromModifyParams(inputItem, *output)
-			if err != nil {
-				return ersl, errInternal(err)
-			}
-			if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
-				return ersl, errInternal(err)
+				itemInputIndex := p.recipe.GetItemInputRefIndex(output.ItemInputRef)
+				if itemInputIndex < 0 {
+					return ersl, errInternal(fmt.Errorf("no item input with ID=%s exist", output.ItemInputRef))
+				}
+				inputItem := p.GetMatchedItemFromIndex(itemInputIndex)
 
+				// Collect itemInputRefs that are used on output
+				usedItemInputIndexes = append(usedItemInputIndexes, itemInputIndex)
+
+				// Modify item according to ModifyParams section
+				outputItem, err = p.UpdateItemFromModifyParams(inputItem, *output)
+				if err != nil {
+					return ersl, errInternal(err)
+				}
+				if err = p.keeper.SetItem(p.ctx, *outputItem); err != nil {
+					return ersl, errInternal(err)
+
+				}
+				ersl = append(ersl, types.ExecuteRecipeSerialize{
+					Type:   "ITEM",
+					ItemID: outputItem.ID,
+				})
+			case *types.ItemOutput:
+				itemOutput := output
+				outputItem, err := itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
+				if err != nil {
+					return ersl, errInternal(err)
+				}
+				if err = p.keeper.SetItem(p.ctx, outputItem); err != nil {
+					return ersl, errInternal(err)
+				}
+				ersl = append(ersl, types.ExecuteRecipeSerialize{
+					Type:   "ITEM",
+					ItemID: outputItem.ID,
+				})
+			default:
+				return ersl, errInternal(errors.New("no item nor coin type created"))
 			}
-			ersl = append(ersl, types.ExecuteRecipeSerialize{
-				Type:   "ITEM",
-				ItemID: outputItem.ID,
-			})
-		case *types.ItemOutput:
-			itemOutput := output
-			outputItem, err := itemOutput.Item(p.recipe.CookbookID, sender, p.ec)
-			if err != nil {
-				return ersl, errInternal(err)
-			}
-			if err = p.keeper.SetItem(p.ctx, outputItem); err != nil {
-				return ersl, errInternal(err)
-			}
-			ersl = append(ersl, types.ExecuteRecipeSerialize{
-				Type:   "ITEM",
-				ItemID: outputItem.ID,
-			})
-		default:
-			return ersl, errInternal(errors.New("no item nor coin type created"))
 		}
-	}
 
-	// Remove items which are not referenced on output
-	for idx, ci := range p.matchedItems {
-		if !Contains(usedItemInputIndexes, idx) {
-			p.keeper.DeleteItem(p.ctx, ci.ID)
+		// Remove items which are not referenced on output
+		for idx, ci := range p.matchedItems {
+			if !Contains(usedItemInputIndexes, idx) {
+				p.keeper.DeleteItem(p.ctx, ci.ID)
+			}
 		}
-	}
-	return ersl, nil
+		return ersl, nil
+	*/
+
+	return nil, nil
 }
-
-
 
 // func CompletePendingExecution
 //    Unlock coins
@@ -183,6 +184,17 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	}
 
 	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize(celEnv)
+	if err != nil {
+		return err
+	}
+
+	creator, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
+	if err != nil {
+		return err
+	}
+
+	// TODO use this output list
+	_, err = k.AddExecutedResult(ctx, creator, outputs, recipe, celEnv)
 	if err != nil {
 		return err
 	}

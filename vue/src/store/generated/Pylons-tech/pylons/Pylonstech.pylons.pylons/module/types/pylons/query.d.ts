@@ -1,23 +1,16 @@
 import { Reader, Writer } from 'protobufjs/minimal';
 import { Execution } from '../pylons/execution';
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Recipe } from '../pylons/recipe';
 import { Item } from '../pylons/item';
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetExecutionRequest {
-    ID: number;
+    ID: string;
 }
 export interface QueryGetExecutionResponse {
     Execution: Execution | undefined;
-}
-export interface QueryAllExecutionRequest {
-    pagination: PageRequest | undefined;
-}
-export interface QueryAllExecutionResponse {
-    Execution: Execution[];
-    pagination: PageResponse | undefined;
 }
 export interface QueryListRecipesByCookbookRequest {
     CookbookID: string;
@@ -72,20 +65,6 @@ export declare const QueryGetExecutionResponse: {
     fromJSON(object: any): QueryGetExecutionResponse;
     toJSON(message: QueryGetExecutionResponse): unknown;
     fromPartial(object: DeepPartial<QueryGetExecutionResponse>): QueryGetExecutionResponse;
-};
-export declare const QueryAllExecutionRequest: {
-    encode(message: QueryAllExecutionRequest, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): QueryAllExecutionRequest;
-    fromJSON(object: any): QueryAllExecutionRequest;
-    toJSON(message: QueryAllExecutionRequest): unknown;
-    fromPartial(object: DeepPartial<QueryAllExecutionRequest>): QueryAllExecutionRequest;
-};
-export declare const QueryAllExecutionResponse: {
-    encode(message: QueryAllExecutionResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): QueryAllExecutionResponse;
-    fromJSON(object: any): QueryAllExecutionResponse;
-    toJSON(message: QueryAllExecutionResponse): unknown;
-    fromPartial(object: DeepPartial<QueryAllExecutionResponse>): QueryAllExecutionResponse;
 };
 export declare const QueryListRecipesByCookbookRequest: {
     encode(message: QueryListRecipesByCookbookRequest, writer?: Writer): Writer;
