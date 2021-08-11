@@ -32,6 +32,8 @@ const (
 	RecipeKey = "Recipe-value-"
 	// ItemKey is a string key used as a prefix to the KVStore
 	ItemKey = "Item-value-"
+	// ItemCountKey is a string key used as a prefix to the KVStore
+	ItemCountKey = "Item-count-"
 	// ExecutionKey is a string key used as a prefix to the KVStore
 	ExecutionKey = "Execution-value-"
 	// ExecutionCountKey is a string key used as a prefix to the KVStore

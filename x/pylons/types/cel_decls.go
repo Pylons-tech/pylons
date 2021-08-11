@@ -22,7 +22,7 @@ var RandFuncDecls = decls.NewFunction("rand",
 		decls.Double),
 )
 
-// RandIntFunc is a overload function
+// RandIntFunc is an overload function
 var RandIntFunc = &functions.Overload{
 	// operator for 1 param
 	Operator: "rand_int",
@@ -31,7 +31,7 @@ var RandIntFunc = &functions.Overload{
 	},
 }
 
-// RandFunc is a overload function
+// RandFunc is an overload function
 var RandFunc = &functions.Overload{
 	// operator for 1 param
 	Operator: "rand",

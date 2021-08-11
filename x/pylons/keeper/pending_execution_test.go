@@ -13,7 +13,7 @@ func createNPendingExecution(k *Keeper, ctx sdk.Context, n int) []types.Executio
 	items := make([]types.Execution, n)
 	for i := range items {
 		items[i].Creator = "any"
-		items[i].ID = k.AppendPendingExecution(ctx, items[i])
+		items[i].ID = k.AppendPendingExecution(ctx, items[i], 0)
 	}
 	return items
 }

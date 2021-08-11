@@ -174,21 +174,22 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	pendingExecs := am.keeper.GetAllPendingExecution(ctx)
+	blockHeight := ctx.BlockHeight()
+	pendingExecs := am.keeper.GetAllPendingExecutionAtBlockHeight(ctx, blockHeight)
 
 	for _, pendingExec := range pendingExecs {
-		// get exec recipe
+		// get execution recipe
 		recipe, found := am.keeper.GetRecipe(ctx, pendingExec.CookbookID, pendingExec.RecipeID)
 		if !found {
 			// panic if recipe not found. This should never happen
 			panic(fmt.Errorf("recipe with ID %v in cookbook with ID %v not found", pendingExec.RecipeID, pendingExec.CookbookID))
 		}
-		blockHeight := ctx.BlockHeight()
-		if pendingExec.BlockHeight+int64(recipe.BlockInterval) == blockHeight {
-			am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
-			pendingExec.BlockHeight = blockHeight
-			am.keeper.ActualizeExecution(ctx, pendingExec)
+		err := am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
+		if err != nil {
+			panic(err.Error())
 		}
+		pendingExec.BlockHeight = blockHeight
+		am.keeper.ActualizeExecution(ctx, pendingExec)
 	}
 
 	return []abci.ValidatorUpdate{}

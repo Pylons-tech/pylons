@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"encoding/binary"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -69,27 +68,26 @@ func (k Keeper) ActualizeExecution(ctx sdk.Context, execution types.Execution) {
 	k.appendExecution(ctx, execution)
 }
 
-// AppendExecution appends an execution in the store with a new id and update the count
+// appendExecution appends an execution in the store and updates the count
 func (k Keeper) appendExecution(
 	ctx sdk.Context,
 	execution types.Execution,
 ) {
 	// Create the execution
-	count := k.GetExecutionCount(ctx)
-
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	appendedValue := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.ID), appendedValue)
+	store.Set(types.KeyPrefix(execution.ID), appendedValue)
 
 	// Update execution count
+	count := k.GetExecutionCount(ctx)
 	k.SetExecutionCount(ctx, count+1)
 }
 
 // GetExecution returns an execution from its id
-func (k Keeper) GetExecution(ctx sdk.Context, id uint64) types.Execution {
+func (k Keeper) GetExecution(ctx sdk.Context, id string) types.Execution {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	var execution types.Execution
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetExecutionIDBytes(id)), &execution)
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(id)), &execution)
 	return execution
 }
 
@@ -97,13 +95,13 @@ func (k Keeper) GetExecution(ctx sdk.Context, id uint64) types.Execution {
 func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	value := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.ID), value)
+	store.Set(types.KeyPrefix(execution.ID), value)
 }
 
 // HasExecution checks if the execution exists in the store
-func (k Keeper) HasExecution(ctx sdk.Context, id uint64) bool {
+func (k Keeper) HasExecution(ctx sdk.Context, id string) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
-	return store.Has(GetExecutionIDBytes(id))
+	return store.Has(types.KeyPrefix(id))
 }
 
 // GetAllExecution returns all execution
@@ -122,14 +120,3 @@ func (k Keeper) GetAllExecution(ctx sdk.Context) (list []types.Execution) {
 	return
 }
 
-// GetExecutionIDBytes returns the byte representation of the ID
-func GetExecutionIDBytes(id uint64) []byte {
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, id)
-	return bz
-}
-
-// GetExecutionIDFromBytes returns ID in uint64 format from a byte array
-func GetExecutionIDFromBytes(bz []byte) uint64 {
-	return binary.BigEndian.Uint64(bz)
-}

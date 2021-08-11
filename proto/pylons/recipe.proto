@@ -40,10 +40,11 @@ message ConditionList {
 
 // ItemInput is a struct for describing an input item
 message ItemInput  {
-  repeated DoubleInputParam doubles = 1 [(gogoproto.nullable) = false];
-  repeated LongInputParam longs = 2 [(gogoproto.nullable) = false];
-  repeated StringInputParam strings = 3 [(gogoproto.nullable) = false];
-  ConditionList conditions = 4 [(gogoproto.nullable) = false];
+  string ID = 1;
+  repeated DoubleInputParam doubles = 2 [(gogoproto.nullable) = false];
+  repeated LongInputParam longs = 3 [(gogoproto.nullable) = false];
+  repeated StringInputParam strings = 4[(gogoproto.nullable) = false];
+  ConditionList conditions = 5 [(gogoproto.nullable) = false];
 }
 
 // DoubleWeightRange describes weight range that produce double value
@@ -93,7 +94,7 @@ message StringParam {
 // CoinOutput models the continuum of valid outcomes for coin generation in recipes
 message CoinOutput{
   string ID = 1;
-  repeated cosmos.base.v1beta1.Coin coins = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  cosmos.base.v1beta1.Coin coin = 2;
 }
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -42,29 +43,31 @@ func (k Keeper) SetPendingExecutionCount(ctx sdk.Context, count uint64) {
 func (k Keeper) AppendPendingExecution(
 	ctx sdk.Context,
 	execution types.Execution,
-) uint64 {
+	blockInterval uint64,
+) string {
 	// Create the execution
 	count := k.GetPendingExecutionCount(ctx)
 
-	id := count + k.GetExecutionCount(ctx)
+	// Target height is the block height where the pending execution
+	// is actually able to be executed in the EndBlocker
+	targetHeight := execution.BlockHeight + int64(blockInterval)
+	id := fmt.Sprintf("%d-%d", targetHeight, count + k.GetExecutionCount(ctx))
 	// Set the ID of the appended value
 	execution.ID = id
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
-	appendedValue := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.ID), appendedValue)
+	k.SetPendingExecution(ctx, execution)
 
 	// Update execution count
 	k.SetPendingExecutionCount(ctx, count+1)
 
-	return count
+	return id
 }
 
 // GetPendingExecution returns an execution from its id
-func (k Keeper) GetPendingExecution(ctx sdk.Context, id uint64) types.Execution {
+func (k Keeper) GetPendingExecution(ctx sdk.Context, id string) types.Execution {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	var execution types.Execution
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetExecutionIDBytes(id)), &execution)
+	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(id)), &execution)
 	return execution
 }
 
@@ -72,19 +75,19 @@ func (k Keeper) GetPendingExecution(ctx sdk.Context, id uint64) types.Execution 
 func (k Keeper) SetPendingExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	value := k.cdc.MustMarshalBinaryBare(&execution)
-	store.Set(GetExecutionIDBytes(execution.ID), value)
+	store.Set(types.KeyPrefix(execution.ID), value)
 }
 
 // HasPendingExecution checks if the execution exists in the store
-func (k Keeper) HasPendingExecution(ctx sdk.Context, id uint64) bool {
+func (k Keeper) HasPendingExecution(ctx sdk.Context, id string) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
-	return store.Has(GetExecutionIDBytes(id))
+	return store.Has(types.KeyPrefix(id))
 }
 
 // RemovePendingExecution removes an execution from the store
-func (k Keeper) removePendingExecution(ctx sdk.Context, id uint64) {
+func (k Keeper) removePendingExecution(ctx sdk.Context, id string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
-	store.Delete(GetExecutionIDBytes(id))
+	store.Delete(types.KeyPrefix(id))
 
 	// Update pending execution count
 	count := k.GetPendingExecutionCount(ctx)
@@ -106,3 +109,21 @@ func (k Keeper) GetAllPendingExecution(ctx sdk.Context) (list []types.Execution)
 
 	return
 }
+
+// GetAllPendingExecutionAtBlockHeight returns all execution
+func (k Keeper) GetAllPendingExecutionAtBlockHeight(ctx sdk.Context, blockHeight int64) (list []types.Execution) {
+	keyPrefix := fmt.Sprintf("%s%d-", types.PendingExecutionKey, blockHeight)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Execution
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		list = append(list, val)
+	}
+
+	return
+}
+

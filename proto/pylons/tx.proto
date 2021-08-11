@@ -43,7 +43,7 @@ message MsgExecuteRecipe {
 }
 
 message MsgExecuteRecipeResponse {
-  uint64 ID = 1;
+  string ID = 1;
 }
 
 message MsgSetItemString {

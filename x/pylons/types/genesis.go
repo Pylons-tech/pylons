@@ -28,7 +28,7 @@ func (gs GenesisState) Validate() error {
 
 	// this line is used by starport scaffolding # genesis/types/validate
 	// Check for duplicated ID in pendingExecution
-	pendingExecutionIDMap := make(map[uint64]bool)
+	pendingExecutionIDMap := make(map[string]bool)
 
 	for _, elem := range gs.PendingExecutionList {
 		if _, ok := pendingExecutionIDMap[elem.ID]; ok {
@@ -38,7 +38,7 @@ func (gs GenesisState) Validate() error {
 	}
 
 	// Check for duplicated ID in execution
-	executionIDMap := make(map[uint64]bool)
+	executionIDMap := make(map[string]bool)
 
 	for _, elem := range gs.ExecutionList {
 		if _, ok := executionIDMap[elem.ID]; ok {

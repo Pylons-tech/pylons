@@ -116,7 +116,7 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, reci
 			inputItemMap[id] = inputItem
 			// match
 			var ec types.CelEnvCollection
-			ec, err = k.NewCelEnvCollectionFromItem(ctx, recipe.ID, "", inputItem)
+			ec, err = k.NewCelEnvCollectionFromItem(ctx,  recipe.ID, "", inputItem)
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
@@ -173,6 +173,6 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		ItemInputs:  itemRecords,
 	}
 
-	id := k.AppendPendingExecution(ctx, execution)
+	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
 	return &types.MsgExecuteRecipeResponse{ID: id}, nil
 }

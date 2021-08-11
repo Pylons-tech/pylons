@@ -56,7 +56,12 @@ func ValidateInputStrings(sip []StringInputParam) error {
 }
 
 func ValidateItemInput(i ItemInput) error {
-	err := ValidateInputDoubles(i.Doubles)
+	err := ValidateID(i.ID)
+	if i.ID != "" && err != nil {
+		return err
+	}
+
+	err = ValidateInputDoubles(i.Doubles)
 	if err != nil {
 		return err
 	}
@@ -101,12 +106,8 @@ func ValidateCoinOutput(co CoinOutput, idMap map[string]bool) error {
 	idMap[co.ID] = true
 
 	// Validate sdk coins
-	if !co.Coins.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, co.Coins.String())
-	}
-
-	if !co.Coins.IsAllPositive() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, co.Coins.String())
+	if !co.Coin.IsValid() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, co.Coin.String())
 	}
 
 	return nil

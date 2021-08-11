@@ -55,21 +55,13 @@ service Query {
 
 // this line is used by starport scaffolding # 3
 message QueryGetExecutionRequest {
-	uint64 ID = 1;
+	string ID = 1;
 }
 
 message QueryGetExecutionResponse {
 	Execution Execution = 1;
 }
 
-message QueryAllExecutionRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllExecutionResponse {
-	repeated Execution Execution = 1;
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
 message QueryListRecipesByCookbookRequest {
   string CookbookID = 1;
 }
