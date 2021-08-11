@@ -229,10 +229,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 			continue
 		}
 		if err := ii.IDValidationError(); err != nil {
-			return err
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
 		}
 		if itemInputRefsMap[ii.ID] {
-			return fmt.Errorf("item input with same ID available: ID=%s", ii.ID)
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item input with same ID available: ID=%s", ii.ID))
 		}
 		itemInputRefsMap[ii.ID] = true
 	}
@@ -240,10 +240,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	// validation for the invalid item input reference on a coins outputs
 	for _, entry := range msg.Entries.CoinOutputs {
 		if err := EntryIDValidationError(entry.GetID()); err != nil {
-			return err
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
 		}
 		if entryIDsMap[entry.GetID()] {
-			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("entry with same ID available: ID=%s", entry.GetID()))
 		}
 		entryIDsMap[entry.GetID()] = true
 		coinOutput := entry
@@ -261,10 +261,10 @@ func (msg MsgCreateRecipe) ValidateBasic() error {
 	// validation for the invalid item input reference on a items with modified outputs
 	for _, entry := range msg.Entries.ItemModifyOutputs {
 		if err := EntryIDValidationError(entry.GetID()); err != nil {
-			return err
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "Entry ID Invalid")
 		}
 		if entryIDsMap[entry.GetID()] {
-			return fmt.Errorf("entry with same ID available: ID=%s", entry.GetID())
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("entry with same ID available: ID=%s", entry.GetID()))
 		}
 		entryIDsMap[entry.GetID()] = true
 		if !itemInputRefsMap[entry.ItemInputRef] {
