@@ -17,7 +17,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	// STATEFUL CHECKS
 	for _, itemID := range msg.ItemIDs {
 		// check it item exists and if it is owned by message creator
-		item, found := k.Keeper.GetItem(ctx, msg.CookbookID, msg.RecipeID, itemID)
+		item, found := k.Keeper.GetItem(ctx, msg.CookbookID, itemID)
 		if !found {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "item does not exist in store")
 		}
@@ -31,7 +31,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	// Get item from keeper, change owner to receiver and re-set in store
 	for _, itemID := range msg.ItemIDs {
 		// get item
-		item, _ := k.Keeper.GetItem(ctx, msg.CookbookID, msg.RecipeID, itemID)
+		item, _ := k.Keeper.GetItem(ctx, msg.CookbookID, itemID)
 		item.Owner = msg.Receiver
 		k.Keeper.SetItem(ctx, item)
 	}

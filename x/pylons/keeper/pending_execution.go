@@ -39,7 +39,7 @@ func (k Keeper) SetPendingExecutionCount(ctx sdk.Context, count uint64) {
 	store.Set(byteKey, bz)
 }
 
-// AppendPendingExecution appends a execution in the store with a new id and update the count
+// AppendPendingExecution appends a pending execution in the store with a new id and update the count
 func (k Keeper) AppendPendingExecution(
 	ctx sdk.Context,
 	execution types.Execution,

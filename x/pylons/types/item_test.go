@@ -1,15 +1,16 @@
 package types
 
 import (
-	"github.com/stretchr/testify/require"
 	"math"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestEncodeItemID(t *testing.T) {
 	for _, tc := range []struct {
-		desc string
-		uintID  uint64
+		desc   string
+		uintID uint64
 	}{
 		{desc: "Valid1", uintID: 12031028235},
 		{desc: "Valid2", uintID: 2341},
@@ -22,12 +23,10 @@ func TestEncodeItemID(t *testing.T) {
 			encoded := EncodeItemID(tc.uintID)
 			decoded := DecodeItemID(encoded)
 			if tc.desc == "Invalid" {
-				recover()  // recover from decoding 0 in Invalid case
+				recover() // recover from decoding 0 in Invalid case
 			} else {
 				require.Equal(t, decoded, tc.uintID)
 			}
 		})
 	}
 }
-
-

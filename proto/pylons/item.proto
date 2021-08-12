@@ -27,17 +27,16 @@ message  StringKeyValue {
 message Item {
   string owner = 1;
   string cookbookID = 2;
-  string recipeID = 3;
-  string ID = 4;
-  string nodeVersion = 5;
-  repeated DoubleKeyValue doubles = 6 [(gogoproto.nullable) = false];
-  repeated LongKeyValue longs = 7 [(gogoproto.nullable) = false];
-  repeated StringKeyValue strings = 8 [(gogoproto.nullable) = false];
-  repeated StringKeyValue mutableStrings = 9 [(gogoproto.nullable) = false];
-  bool tradeable = 10;
-  uint64 lastUpdate = 11;
+  string ID = 3;
+  string nodeVersion = 4;
+  repeated DoubleKeyValue doubles = 5 [(gogoproto.nullable) = false];
+  repeated LongKeyValue longs = 6 [(gogoproto.nullable) = false];
+  repeated StringKeyValue strings = 7 [(gogoproto.nullable) = false];
+  repeated StringKeyValue mutableStrings = 8 [(gogoproto.nullable) = false];
+  bool tradeable = 9;
+  uint64 lastUpdate = 10;
   // TODO we should make this uniform with other transferFee once we address fees
-  uint64 transferFee = 12;
+  string transferFee = 11 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 
 

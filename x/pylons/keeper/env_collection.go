@@ -82,7 +82,7 @@ func (k Keeper) NewCelEnvCollectionFromRecipe(ctx sdk.Context, pendingExecution 
 
 	for idx, itemRecord := range pendingExecution.ItemInputs {
 		iPrefix1 := fmt.Sprintf("input%d", idx) + "."
-		item, found := k.GetItem(ctx, recipe.CookbookID, recipe.ID, itemRecord.ID)
+		item, found := k.GetItem(ctx, recipe.CookbookID, itemRecord.ID)
 		if !found {
 			return types.NewCelEnvCollection(nil, nil, nil), sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "itemRecord item not found in store")
 		}

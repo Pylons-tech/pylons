@@ -7,12 +7,11 @@ import (
 
 var _ sdk.Msg = &MsgSendItems{}
 
-func NewMsgSendItems(sender string, receiver string, cookbookID string, recipeID string, itemIDs []string) *MsgSendItems {
+func NewMsgSendItems(sender string, receiver string, cookbookID string, itemIDs []string) *MsgSendItems {
 	return &MsgSendItems{
 		Creator:    sender,
 		Receiver:   receiver,
 		CookbookID: cookbookID,
-		RecipeID:   recipeID,
 		ItemIDs:    itemIDs,
 	}
 }
@@ -51,9 +50,6 @@ func (msg *MsgSendItems) ValidateBasic() error {
 	}
 
 	if err = ValidateID(msg.CookbookID); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-	if err = ValidateID(msg.RecipeID); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 

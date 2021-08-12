@@ -18,11 +18,16 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	if !k.HasExecution(ctx, req.ID) {
+	completed := false
+	execution := types.Execution{}
+	if k.HasPendingExecution(ctx, req.ID) {
+		execution = k.GetPendingExecution(ctx, req.ID)
+	} else if k.HasExecution(ctx, req.ID) {
+		completed = true
+		execution = k.GetExecution(ctx, req.ID)
+	} else {
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	execution := k.GetExecution(ctx, req.ID)
-
-	return &types.QueryGetExecutionResponse{Execution: &execution}, nil
+	return &types.QueryGetExecutionResponse{Execution: &execution, Completed: completed}, nil
 }

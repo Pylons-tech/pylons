@@ -11,7 +11,7 @@ import (
 
 func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemString) (*types.MsgSetItemStringResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	item, found := k.GetItem(ctx, msg.CookbookID, msg.RecipeID, msg.ID)
+	item, found := k.GetItem(ctx, msg.CookbookID, msg.ID)
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, "item not found")
 	}

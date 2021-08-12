@@ -16,22 +16,21 @@ var _ = strconv.Itoa(0)
 
 func CmdSetItemString() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set-item-string [cookbookID] [recipeID] [id] [field] [value]",
+		Use:   "set-item-string [cookbookID] [id] [field] [value]",
 		Short: "Set a mutable string field within an item",
-		Args:  cobra.ExactArgs(5),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsCookbookID := args[0]
-			argsRecipeID := args[1]
-			argsID := args[2]
-			argsField := args[3]
-			argsValue := args[4]
+			argsID := args[1]
+			argsField := args[2]
+			argsValue := args[3]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgSetItemString(clientCtx.GetFromAddress().String(), argsCookbookID, argsRecipeID, argsID, argsField, argsValue)
+			msg := types.NewMsgSetItemString(clientCtx.GetFromAddress().String(), argsCookbookID, argsID, argsField, argsValue)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

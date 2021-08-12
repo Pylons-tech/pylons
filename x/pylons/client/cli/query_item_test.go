@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"testing"
 
@@ -33,10 +34,9 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Ite
 				Longs:          make([]types.LongKeyValue, 0),
 				Strings:        make([]types.StringKeyValue, 0),
 				MutableStrings: make([]types.StringKeyValue, 0),
-				RecipeID:       "testOwnerRecipeID",
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    0,
+				TransferFee:    sdk.ZeroDec(),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -55,7 +55,6 @@ func TestShowItem(t *testing.T) {
 	for _, tc := range []struct {
 		desc       string
 		cookbookID string
-		recipeID   string
 		id         string
 		args       []string
 		err        error
@@ -64,7 +63,6 @@ func TestShowItem(t *testing.T) {
 		{
 			desc:       "found",
 			cookbookID: objs[0].CookbookID,
-			recipeID:   objs[0].RecipeID,
 			id:         objs[0].ID,
 			args:       common,
 			obj:        objs[0],
@@ -72,7 +70,6 @@ func TestShowItem(t *testing.T) {
 		{
 			desc:       "not found",
 			cookbookID: "not_found",
-			recipeID:   "not_found",
 			id:         "not_found",
 			args:       common,
 			err:        status.Error(codes.InvalidArgument, "not found"),
@@ -80,7 +77,7 @@ func TestShowItem(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.cookbookID, tc.recipeID, tc.id}
+			args := []string{tc.cookbookID, tc.id}
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 			if tc.err != nil {

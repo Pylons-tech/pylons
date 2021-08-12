@@ -47,39 +47,31 @@ func (k Keeper) AppendItem(
 	// Create the execution
 	count := k.GetItemCount(ctx)
 
-	item.ID = strconv.FormatUint(count, 10)
-
+	item.ID = types.EncodeItemID(count)
 	k.SetItem(ctx, item)
 
-	// Update execution count
-	k.SetPendingExecutionCount(ctx, count+1)
+	// Update item count
+	k.SetItemCount(ctx, count+1)
 
 	return item.ID
 }
 
 // SetItem set a specific item in the store from its index
 func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
-	keyPrefix := fmt.Sprintf("%s%s-%s-", types.ItemKey, item.CookbookID, item.RecipeID)
+	keyPrefix := fmt.Sprintf("%s%s-", types.ItemKey, item.CookbookID)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
 	b := k.cdc.MustMarshalBinaryBare(&item)
-
-	// TODO encode id
-
 	store.Set(types.KeyPrefix(item.ID), b)
 }
 
 // GetItem returns an item from its index
-func (k Keeper) GetItem(ctx sdk.Context, cookbookID string, recipeID string, id string) (val types.Item, found bool) {
-	keyPrefix := fmt.Sprintf("%s%s-%s-", types.ItemKey, cookbookID, recipeID)
+func (k Keeper) GetItem(ctx sdk.Context, cookbookID string, id string) (val types.Item, found bool) {
+	keyPrefix := fmt.Sprintf("%s%s-", types.ItemKey, cookbookID)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
-
-	// TODO decode id
-
 	b := store.Get(types.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
-
 	k.cdc.MustUnmarshalBinaryBare(b, &val)
 	return val, true
 }

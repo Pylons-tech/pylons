@@ -12,9 +12,9 @@ import (
 
 func CmdShowItem() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-item [cookbookID] [recipeID] [ID]",
+		Use:   "get-item [cookbookID] [ID]",
 		Short: "gets an Item",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 
@@ -22,8 +22,7 @@ func CmdShowItem() *cobra.Command {
 
 			params := &types.QueryGetItemRequest{
 				CookbookID: args[0],
-				RecipeID:   args[1],
-				ID:         args[2],
+				ID:         args[1],
 			}
 
 			res, err := queryClient.Item(context.Background(), params)

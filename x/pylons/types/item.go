@@ -2,8 +2,11 @@ package types
 
 import (
 	"encoding/binary"
+	"fmt"
+
 	"github.com/btcsuite/btcutil/base58"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/config"
 )
@@ -109,7 +112,6 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 	return Item{
 		Owner:          addr.String(),
 		CookbookID:     cookbookID,
-		RecipeID:       recipeID,
 		ID:             "", // TODO SET
 		NodeVersion:    config.GetNodeVersionString(),
 		Doubles:        dblActualize,
@@ -118,6 +120,67 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		MutableStrings: nil,  // TODO HOW DO WE SET THIS?
 		Tradeable:      true, // TODO HOW DO WE SET THIS?
 		LastUpdate:     uint64(ctx.BlockHeight()),
-		TransferFee:    0, // TODO ItemOutput Transfer fee is an sdk.Dec and this is a uint
+		TransferFee:    sdk.ZeroDec(), // TODO ItemOutput Transfer fee is an sdk.Dec and this is a uint
 	}, nil
+}
+
+// Actualize is used to update an existing item from an ItemModifyOutout
+func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk.AccAddress, ec CelEnvCollection) error {
+	if io.Doubles != nil {
+		dblKeyValues, err := DoubleParamList(io.Doubles).Actualize(ec)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrLogic, err.Error())
+		}
+		for idx, dbl := range dblKeyValues {
+			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
+			if !ok {
+				return sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("could not find double %s on item to be updated", dbl.Key))
+			}
+			if len(io.Doubles[idx].Program) == 0 { // NO PROGRAM
+				originValue := targetItem.Doubles[dblKey].Value
+				upgradeAmount := dbl.Value
+				targetItem.Doubles[dblKey].Value = originValue.Add(upgradeAmount)
+			} else {
+				targetItem.Doubles[dblKey].Value = dbl.Value
+			}
+		}
+	}
+
+	if io.Longs != nil {
+		lngKeyValues, err := LongParamList(io.Longs).Actualize(ec)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrLogic, err.Error())
+		}
+		for idx, lng := range lngKeyValues {
+			lngKey, ok := targetItem.FindLongKey(lng.Key)
+			if !ok {
+				return sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("could not find long %s on item to be updated", lng.Key))
+			}
+			if len(io.Longs[idx].Program) == 0 { // NO PROGRAM
+				targetItem.Longs[lngKey].Value += lng.Value
+			} else {
+				targetItem.Longs[lngKey].Value = lng.Value
+			}
+		}
+	}
+
+	if io.Strings != nil {
+		strKeyValues, err := StringParamList(io.Strings).Actualize(ec)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrLogic, err.Error())
+		}
+		for _, str := range strKeyValues {
+			strKey, ok := targetItem.FindStringKey(str.Key)
+			if !ok {
+				return sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("could not find string %s on item to be updated", str.Key))
+			}
+			targetItem.Strings[strKey].Value = str.Value
+		}
+	}
+
+	targetItem.LastUpdate = uint64(ctx.BlockHeight())
+	targetItem.Owner = addr.String()
+	// TODO HANDLE TRANSFER FEE - previously it was targetItem.TransferFee + io.TransferFee
+	targetItem.TransferFee = io.TransferFee
+	return nil
 }

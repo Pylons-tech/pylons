@@ -17,17 +17,16 @@ var _ = strconv.Itoa(0)
 
 func CmdSendItems() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "send-items [receiver] [cookbookID] [recipeID] [itemIDs]",
+		Use:   "send-items [receiver] [cookbookID] [itemIDs]",
 		Short: "send items to receiver",
-		Args:  cobra.ExactArgs(4),
+		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsReceiver := args[0]
 
 			argsCookbookID := args[1]
-			argsRecipeID := args[2]
 
 			// convert "ID0 ID1 ID2" to [ID0, ID1, ID2]
-			argsItemIDsStr := args[3]
+			argsItemIDsStr := args[2]
 			argsItemIDs := strings.Fields(argsItemIDsStr)
 
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -35,7 +34,7 @@ func CmdSendItems() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgSendItems(clientCtx.GetFromAddress().String(), argsReceiver, argsCookbookID, argsRecipeID, argsItemIDs)
+			msg := types.NewMsgSendItems(clientCtx.GetFromAddress().String(), argsReceiver, argsCookbookID, argsItemIDs)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

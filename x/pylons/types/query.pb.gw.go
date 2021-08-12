@@ -163,17 +163,6 @@ func request_Query_Item_0(ctx context.Context, marshaler runtime.Marshaler, clie
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
 	}
 
-	val, ok = pathParams["RecipeID"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "RecipeID")
-	}
-
-	protoReq.RecipeID, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "RecipeID", err)
-	}
-
 	val, ok = pathParams["ID"]
 	if !ok {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "ID")
@@ -210,17 +199,6 @@ func local_request_Query_Item_0(ctx context.Context, marshaler runtime.Marshaler
 
 	if err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "CookbookID", err)
-	}
-
-	val, ok = pathParams["RecipeID"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "RecipeID")
-	}
-
-	protoReq.RecipeID, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "RecipeID", err)
 	}
 
 	val, ok = pathParams["ID"]
@@ -736,7 +714,7 @@ var (
 
 	pattern_Query_ListRecipesByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "listRecipesByCookbook", "CookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Item_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"pylons", "item", "CookbookID", "RecipeID", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Item_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "item", "CookbookID", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_Recipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "recipe", "CookbookID", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
 

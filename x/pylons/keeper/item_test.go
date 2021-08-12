@@ -15,8 +15,8 @@ func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 	for i := range items {
 		items[i].Owner = "any"
 		items[i].CookbookID = fmt.Sprintf("%d", i)
-		items[i].RecipeID = fmt.Sprintf("%d", i)
-		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].ID = types.EncodeItemID(uint64(i))
+		items[i].TransferFee = sdk.ZeroDec()
 		k.SetItem(ctx, items[i])
 	}
 	return items
@@ -26,7 +26,7 @@ func TestItemGet(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
 	items := createNItem(&keeper, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetItem(ctx, item.CookbookID, item.RecipeID, item.ID)
+		rst, found := keeper.GetItem(ctx, item.CookbookID, item.ID)
 		assert.True(t, found)
 		assert.Equal(t, item, rst)
 	}

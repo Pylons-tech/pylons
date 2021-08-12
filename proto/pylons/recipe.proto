@@ -109,6 +109,7 @@ message ItemOutput {
   string transferFee = 6 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 7;
+  uint64 amountMinted = 8;
 }
 
 // ItemModifyOutput describes what is modified from item input

@@ -1,31 +1,16 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-// LockItems sends an account's items to the Items Locker Module Account for Pylons
-func (k Keeper) LockItems(ctx sdk.Context, senderAddr sdk.AccAddress, itemIDs []string) error {
-	// TODO complete
-	for _, itemID := range itemIDs {
-		panic(itemID)
-
-		// check if items belong to senderAddr
-		// set owner to Item Locker Module Account
-	}
-
-	return nil
+// LockItem sends an account's items to the Items Locker Module Account for Pylons
+// Changing ownership of the item in the store will unlock the item from the module account
+func (k Keeper) LockItem(ctx sdk.Context, item types.Item) {
+	// lock item by transferring ownership to module account
+	modAcc := k.accountKeeper.GetModuleAddress(types.PylonsItemsLockerName)
+	item.Owner = modAcc.String()
+	k.SetItem(ctx, item)
 }
 
-// UnlockItems sends the locked coins from the Coins Locker Module Account to an account
-func (k Keeper) UnlockItems(ctx sdk.Context, recieverAddr sdk.AccAddress, itemIDs []string) error {
-	// TODO complete
-	for _, itemID := range itemIDs {
-		panic(itemID)
-
-		// check if items belong to Item Locker Module Account
-		// set owner to recieverAddr
-	}
-
-	return nil
-}

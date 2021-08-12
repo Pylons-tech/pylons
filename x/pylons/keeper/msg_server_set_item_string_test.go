@@ -22,14 +22,10 @@ func TestItemMsgServerSetStringField(t *testing.T) {
 		cookbook := &types.MsgCreateCookbook{Creator: creator, ID: idx}
 		_, err := srv.CreateCookbook(wctx, cookbook)
 		require.NoError(t, err)
-		recipe := &types.MsgCreateRecipe{Creator: creator, CookbookID: idx, ID: idx}
-		_, err = srv.CreateRecipe(wctx, recipe)
-		require.NoError(t, err)
 
 		// set dummy item in store
 		item := types.Item{
 			CookbookID: idx,
-			RecipeID:   idx,
 			ID:         idx,
 			MutableStrings: []types.StringKeyValue{
 				{Key: expectedString, Value: expectedString},
@@ -40,7 +36,6 @@ func TestItemMsgServerSetStringField(t *testing.T) {
 		updateItemStringMsg := &types.MsgSetItemString{
 			Creator:    creator,
 			CookbookID: idx,
-			RecipeID:   idx,
 			ID:         idx,
 			Field:      expectedString,
 			Value:      "",
@@ -49,7 +44,7 @@ func TestItemMsgServerSetStringField(t *testing.T) {
 		require.NoError(t, err)
 
 		// get item
-		rst, found := keeper.GetItem(ctx, item.CookbookID, item.RecipeID, item.ID)
+		rst, found := keeper.GetItem(ctx, item.CookbookID, item.ID)
 		require.True(t, found)
 		assert.NotEqual(t, expectedString, rst.MutableStrings[0].Value)
 		expectedString = ""

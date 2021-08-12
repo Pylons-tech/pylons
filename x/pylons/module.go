@@ -184,12 +184,26 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			// panic if recipe not found. This should never happen
 			panic(fmt.Errorf("recipe with ID %v in cookbook with ID %v not found", pendingExec.RecipeID, pendingExec.CookbookID))
 		}
-		err := am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
+		finalizedExec, err := am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
 		if err != nil {
-			panic(err.Error())
+			// drop execution since it became invalid, user will have to resubmit
+			pendingExec.BlockHeight = blockHeight
+			// TODO UNLOCK COINS
+			pendingExec.CoinInputs = nil
+			// make sure items ownership is set to the execution creator in case they are locked
+			for _, itemRecord := range pendingExec.ItemInputs {
+				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookID, itemRecord.ID)
+				if !found {
+					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.CookbookID))
+				}
+				item.Owner = pendingExec.Creator
+				am.keeper.SetItem(ctx, item)
+			}
+			am.keeper.ActualizeExecution(ctx, pendingExec)
+			continue
 		}
-		pendingExec.BlockHeight = blockHeight
-		am.keeper.ActualizeExecution(ctx, pendingExec)
+		finalizedExec.BlockHeight = blockHeight
+		am.keeper.ActualizeExecution(ctx, finalizedExec)
 	}
 
 	return []abci.ValidatorUpdate{}

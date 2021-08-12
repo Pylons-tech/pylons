@@ -30,7 +30,7 @@ service Query {
 
 	// Queries a item by ID.
 	rpc Item(QueryGetItemRequest) returns (QueryGetItemResponse) {
-		option (google.api.http).get = "/pylons/item/{CookbookID}/{RecipeID}/{ID}";
+		option (google.api.http).get = "/pylons/item/{CookbookID}/{ID}";
 	}
 
 
@@ -60,6 +60,7 @@ message QueryGetExecutionRequest {
 
 message QueryGetExecutionResponse {
 	Execution Execution = 1;
+	bool Completed = 2;
 }
 
 message QueryListRecipesByCookbookRequest {
@@ -72,7 +73,6 @@ message QueryListRecipesByCookbookResponse {
 
 message QueryGetItemRequest {
 	string CookbookID = 1;
-	string RecipeID = 2;
 	string ID = 3;
 }
 

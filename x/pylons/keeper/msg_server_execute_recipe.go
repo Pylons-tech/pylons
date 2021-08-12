@@ -90,7 +90,7 @@ func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollec
 	return nil
 }
 
-func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
+func (k msgServer) MatchItemInputs(ctx sdk.Context, creatorAddr string, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
 	if len(inputItemsIDs) != len(recipe.ItemInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe")
 	}
@@ -108,9 +108,12 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, inputItemsIDs []string, reci
 			}
 			inputItem, found := inputItemMap[id]
 			if !found {
-				inputItem, found = k.GetItem(ctx, recipe.CookbookID, recipe.ID, id)
+				inputItem, found = k.GetItem(ctx, recipe.CookbookID, id)
 				if !found {
 					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item with id %v not found", id))
+				}
+				if inputItem.Owner != creatorAddr {
+					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item with id %s not owned by sender", inputItem.ID))
 				}
 			}
 			inputItemMap[id] = inputItem
@@ -141,7 +144,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "requested recipe not found")
 	}
-	matchedItems, err := k.MatchItemInputs(ctx, msg.ItemIDs, recipe)
+	matchedItems, err := k.MatchItemInputs(ctx, msg.Creator, msg.ItemIDs, recipe)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -158,9 +161,10 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 			Longs:   item.Longs,
 			Strings: item.Strings,
 		}
+
+		k.LockItem(ctx, item)
 	}
 
-	// TODO LOCK ITEMS
 
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{

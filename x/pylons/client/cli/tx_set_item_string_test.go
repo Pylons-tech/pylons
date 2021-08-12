@@ -95,7 +95,7 @@ func TestSetItemString(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 
 			// TODO set item ID from a query
-			args := []string{cookbookID, recipeID, executedItemID}
+			args := []string{cookbookID, executedItemID}
 			args = append(args, tc.mutableStringField, tc.mutableStringValue)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdSetItemString(), args)

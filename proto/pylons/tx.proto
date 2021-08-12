@@ -28,7 +28,6 @@ message MsgSendItems {
   string creator = 1;
   string receiver = 2;
   string cookbookID = 3;
-  string recipeID = 4;
   repeated string itemIDs = 5;
 }
 
@@ -49,7 +48,6 @@ message MsgExecuteRecipeResponse {
 message MsgSetItemString {
   string creator = 1;
   string cookbookID = 2;
-  string recipeID = 3;
   string ID = 4;
   string field = 5;
   string value = 6;
