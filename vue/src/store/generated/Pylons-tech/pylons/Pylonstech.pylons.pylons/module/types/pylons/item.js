@@ -212,7 +212,7 @@ export const StringKeyValue = {
         return message;
     }
 };
-const baseItem = { owner: '', cookbookID: '', recipeID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, transferFee: 0 };
+const baseItem = { owner: '', cookbookID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, transferFee: '' };
 export const Item = {
     encode(message, writer = Writer.create()) {
         if (message.owner !== '') {
@@ -221,35 +221,32 @@ export const Item = {
         if (message.cookbookID !== '') {
             writer.uint32(18).string(message.cookbookID);
         }
-        if (message.recipeID !== '') {
-            writer.uint32(26).string(message.recipeID);
-        }
         if (message.ID !== '') {
-            writer.uint32(34).string(message.ID);
+            writer.uint32(26).string(message.ID);
         }
         if (message.nodeVersion !== '') {
-            writer.uint32(42).string(message.nodeVersion);
+            writer.uint32(34).string(message.nodeVersion);
         }
         for (const v of message.doubles) {
-            DoubleKeyValue.encode(v, writer.uint32(50).fork()).ldelim();
+            DoubleKeyValue.encode(v, writer.uint32(42).fork()).ldelim();
         }
         for (const v of message.longs) {
-            LongKeyValue.encode(v, writer.uint32(58).fork()).ldelim();
+            LongKeyValue.encode(v, writer.uint32(50).fork()).ldelim();
         }
         for (const v of message.strings) {
-            StringKeyValue.encode(v, writer.uint32(66).fork()).ldelim();
+            StringKeyValue.encode(v, writer.uint32(58).fork()).ldelim();
         }
         for (const v of message.mutableStrings) {
-            StringKeyValue.encode(v, writer.uint32(74).fork()).ldelim();
+            StringKeyValue.encode(v, writer.uint32(66).fork()).ldelim();
         }
         if (message.tradeable === true) {
-            writer.uint32(80).bool(message.tradeable);
+            writer.uint32(72).bool(message.tradeable);
         }
         if (message.lastUpdate !== 0) {
-            writer.uint32(88).uint64(message.lastUpdate);
+            writer.uint32(80).uint64(message.lastUpdate);
         }
-        if (message.transferFee !== 0) {
-            writer.uint32(96).uint64(message.transferFee);
+        if (message.transferFee !== '') {
+            writer.uint32(90).string(message.transferFee);
         }
         return writer;
     },
@@ -271,34 +268,31 @@ export const Item = {
                     message.cookbookID = reader.string();
                     break;
                 case 3:
-                    message.recipeID = reader.string();
-                    break;
-                case 4:
                     message.ID = reader.string();
                     break;
-                case 5:
+                case 4:
                     message.nodeVersion = reader.string();
                     break;
-                case 6:
+                case 5:
                     message.doubles.push(DoubleKeyValue.decode(reader, reader.uint32()));
                     break;
-                case 7:
+                case 6:
                     message.longs.push(LongKeyValue.decode(reader, reader.uint32()));
                     break;
-                case 8:
+                case 7:
                     message.strings.push(StringKeyValue.decode(reader, reader.uint32()));
                     break;
-                case 9:
+                case 8:
                     message.mutableStrings.push(StringKeyValue.decode(reader, reader.uint32()));
                     break;
-                case 10:
+                case 9:
                     message.tradeable = reader.bool();
                     break;
-                case 11:
+                case 10:
                     message.lastUpdate = longToNumber(reader.uint64());
                     break;
-                case 12:
-                    message.transferFee = longToNumber(reader.uint64());
+                case 11:
+                    message.transferFee = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -324,12 +318,6 @@ export const Item = {
         }
         else {
             message.cookbookID = '';
-        }
-        if (object.recipeID !== undefined && object.recipeID !== null) {
-            message.recipeID = String(object.recipeID);
-        }
-        else {
-            message.recipeID = '';
         }
         if (object.ID !== undefined && object.ID !== null) {
             message.ID = String(object.ID);
@@ -376,10 +364,10 @@ export const Item = {
             message.lastUpdate = 0;
         }
         if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = Number(object.transferFee);
+            message.transferFee = String(object.transferFee);
         }
         else {
-            message.transferFee = 0;
+            message.transferFee = '';
         }
         return message;
     },
@@ -387,7 +375,6 @@ export const Item = {
         const obj = {};
         message.owner !== undefined && (obj.owner = message.owner);
         message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
-        message.recipeID !== undefined && (obj.recipeID = message.recipeID);
         message.ID !== undefined && (obj.ID = message.ID);
         message.nodeVersion !== undefined && (obj.nodeVersion = message.nodeVersion);
         if (message.doubles) {
@@ -437,12 +424,6 @@ export const Item = {
         else {
             message.cookbookID = '';
         }
-        if (object.recipeID !== undefined && object.recipeID !== null) {
-            message.recipeID = object.recipeID;
-        }
-        else {
-            message.recipeID = '';
-        }
         if (object.ID !== undefined && object.ID !== null) {
             message.ID = object.ID;
         }
@@ -491,7 +472,7 @@ export const Item = {
             message.transferFee = object.transferFee;
         }
         else {
-            message.transferFee = 0;
+            message.transferFee = '';
         }
         return message;
     }

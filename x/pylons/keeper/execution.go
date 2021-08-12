@@ -31,7 +31,49 @@ func (k Keeper) GetExecutionCount(ctx sdk.Context) uint64 {
 }
 
 // GetExecutionsByItem returns a slice of Executions that relate to a given Item
-func (k Keeper) GetExecutionsByItem(ctx sdk.Context, cookbookID, recipeID, itemID string) []types.Execution {
+func (k Keeper) GetExecutionsByItem(ctx sdk.Context, cookbookID, itemID string) []types.Execution {
+	executions := make([]types.Execution, 0)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
+	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+
+	defer iterator.Close()
+
+Loop:
+	for ; iterator.Valid(); iterator.Next() {
+		var val types.Execution
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+
+		// if we match the item, append to list
+		if val.CookbookID == cookbookID {
+			// TODO verify logic is correct
+			// CHECK if the item ID is in ItemInputs, ItemOutputIDs or ItemModifyOutputIDs
+			for _, record := range val.ItemInputs {
+				if record.ID == itemID {
+					executions = append(executions, val)
+					continue Loop
+				}
+			}
+			for _, ID := range val.ItemOutputIDs {
+				if ID == itemID {
+					executions = append(executions, val)
+					continue Loop
+				}
+			}
+			for _, ID := range val.ItemModifyOutputIDs {
+				if ID == itemID {
+					executions = append(executions, val)
+					continue Loop
+				}
+			}
+		}
+	}
+
+	return executions
+}
+
+// GetExecutionsByRecipe returns a slice of Executions of the specified RecipeID
+func (k Keeper) GetExecutionsByRecipe(ctx sdk.Context, cookbookID, recipeID string) []types.Execution {
 	executions := make([]types.Execution, 0)
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
@@ -43,10 +85,9 @@ func (k Keeper) GetExecutionsByItem(ctx sdk.Context, cookbookID, recipeID, itemI
 		var val types.Execution
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
 
-		// if we match the item, append to list
+		// if we match the recipe, append to list
 		if val.CookbookID == cookbookID && val.RecipeID == recipeID {
-			// TODO
-			// CHECK the itemID
+			// TODO verify logic is correct
 			executions = append(executions, val)
 		}
 	}

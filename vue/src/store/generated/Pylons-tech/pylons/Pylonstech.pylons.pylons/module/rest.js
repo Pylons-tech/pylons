@@ -170,10 +170,10 @@ export class Api extends HttpClient {
          * @tags Query
          * @name QueryItem
          * @summary Queries a item by ID.
-         * @request GET:/pylons/item/{CookbookID}/{RecipeID}/{ID}
+         * @request GET:/pylons/item/{CookbookID}/{ID}
          */
-        this.queryItem = (CookbookID, RecipeID, ID, params = {}) => this.request({
-            path: `/pylons/item/${CookbookID}/${RecipeID}/${ID}`,
+        this.queryItem = (CookbookID, ID, params = {}) => this.request({
+            path: `/pylons/item/${CookbookID}/${ID}`,
             method: "GET",
             format: "json",
             ...params,
@@ -188,6 +188,34 @@ export class Api extends HttpClient {
          */
         this.queryListCookbooksByCreator = (creator, params = {}) => this.request({
             path: `/pylons/listCookbooks/${creator}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryListExecutionsByItem
+         * @summary Queries a list of listExecutionsByItem items.
+         * @request GET:/pylons/listExecutionsByItem/{CookbookID}/{ItemID}
+         */
+        this.queryListExecutionsByItem = (CookbookID, ItemID, params = {}) => this.request({
+            path: `/pylons/listExecutionsByItem/${CookbookID}/${ItemID}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryListExecutionsByRecipe
+         * @summary Queries a list of listExecutionsByRecipe items.
+         * @request GET:/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}
+         */
+        this.queryListExecutionsByRecipe = (CookbookID, RecipeID, params = {}) => this.request({
+            path: `/pylons/listExecutionsByRecipe/${CookbookID}/${RecipeID}`,
             method: "GET",
             format: "json",
             ...params,

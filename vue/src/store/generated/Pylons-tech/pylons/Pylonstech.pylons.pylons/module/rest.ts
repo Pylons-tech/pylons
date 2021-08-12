@@ -117,7 +117,6 @@ export interface PylonsIntWeightRange {
 export interface PylonsItem {
   owner?: string;
   cookbookID?: string;
-  recipeID?: string;
   ID?: string;
   nodeVersion?: string;
   doubles?: PylonsDoubleKeyValue[];
@@ -128,8 +127,6 @@ export interface PylonsItem {
 
   /** @format uint64 */
   lastUpdate?: string;
-
-  /** @format uint64 */
   transferFee?: string;
 }
 
@@ -160,6 +157,9 @@ export interface PylonsItemOutput {
 
   /** @format uint64 */
   quantity?: string;
+
+  /** @format uint64 */
+  amountMinted?: string;
 }
 
 export interface PylonsItemRecord {
@@ -223,6 +223,7 @@ export interface PylonsQueryGetCookbookResponse {
 
 export interface PylonsQueryGetExecutionResponse {
   Execution?: PylonsExecution;
+  Completed?: boolean;
 }
 
 export interface PylonsQueryGetItemResponse {
@@ -235,6 +236,14 @@ export interface PylonsQueryGetRecipeResponse {
 
 export interface PylonsQueryListCookbooksByCreatorResponse {
   Cookbooks?: PylonsCookbook[];
+}
+
+export interface PylonsQueryListExecutionsByItemResponse {
+  Executions?: PylonsExecution[];
+}
+
+export interface PylonsQueryListExecutionsByRecipeResponse {
+  Executions?: PylonsExecution[];
 }
 
 export interface PylonsQueryListRecipesByCookbookResponse {
@@ -537,11 +546,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @tags Query
    * @name QueryItem
    * @summary Queries a item by ID.
-   * @request GET:/pylons/item/{CookbookID}/{RecipeID}/{ID}
+   * @request GET:/pylons/item/{CookbookID}/{ID}
    */
-  queryItem = (CookbookID: string, RecipeID: string, ID: string, params: RequestParams = {}) =>
+  queryItem = (CookbookID: string, ID: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetItemResponse, RpcStatus>({
-      path: `/pylons/item/${CookbookID}/${RecipeID}/${ID}`,
+      path: `/pylons/item/${CookbookID}/${ID}`,
       method: "GET",
       format: "json",
       ...params,
@@ -558,6 +567,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryListCookbooksByCreator = (creator: string, params: RequestParams = {}) =>
     this.request<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>({
       path: `/pylons/listCookbooks/${creator}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListExecutionsByItem
+   * @summary Queries a list of listExecutionsByItem items.
+   * @request GET:/pylons/listExecutionsByItem/{CookbookID}/{ItemID}
+   */
+  queryListExecutionsByItem = (CookbookID: string, ItemID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListExecutionsByItemResponse, RpcStatus>({
+      path: `/pylons/listExecutionsByItem/${CookbookID}/${ItemID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListExecutionsByRecipe
+   * @summary Queries a list of listExecutionsByRecipe items.
+   * @request GET:/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}
+   */
+  queryListExecutionsByRecipe = (CookbookID: string, RecipeID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>({
+      path: `/pylons/listExecutionsByRecipe/${CookbookID}/${RecipeID}`,
       method: "GET",
       format: "json",
       ...params,

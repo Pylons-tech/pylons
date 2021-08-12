@@ -108,6 +108,7 @@ export interface ItemOutput {
   transferFee: string
   /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
   quantity: number
+  amountMinted: number
 }
 
 /** ItemModifyOutput describes what is modified from item input */
@@ -1236,7 +1237,7 @@ export const CoinOutput = {
   }
 }
 
-const baseItemOutput: object = { ID: '', transferFee: '', quantity: 0 }
+const baseItemOutput: object = { ID: '', transferFee: '', quantity: 0, amountMinted: 0 }
 
 export const ItemOutput = {
   encode(message: ItemOutput, writer: Writer = Writer.create()): Writer {
@@ -1260,6 +1261,9 @@ export const ItemOutput = {
     }
     if (message.quantity !== 0) {
       writer.uint32(56).uint64(message.quantity)
+    }
+    if (message.amountMinted !== 0) {
+      writer.uint32(64).uint64(message.amountMinted)
     }
     return writer
   },
@@ -1295,6 +1299,9 @@ export const ItemOutput = {
           break
         case 7:
           message.quantity = longToNumber(reader.uint64() as Long)
+          break
+        case 8:
+          message.amountMinted = longToNumber(reader.uint64() as Long)
           break
         default:
           reader.skipType(tag & 7)
@@ -1345,6 +1352,11 @@ export const ItemOutput = {
     } else {
       message.quantity = 0
     }
+    if (object.amountMinted !== undefined && object.amountMinted !== null) {
+      message.amountMinted = Number(object.amountMinted)
+    } else {
+      message.amountMinted = 0
+    }
     return message
   },
 
@@ -1373,6 +1385,7 @@ export const ItemOutput = {
     }
     message.transferFee !== undefined && (obj.transferFee = message.transferFee)
     message.quantity !== undefined && (obj.quantity = message.quantity)
+    message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
     return obj
   },
 
@@ -1416,6 +1429,11 @@ export const ItemOutput = {
       message.quantity = object.quantity
     } else {
       message.quantity = 0
+    }
+    if (object.amountMinted !== undefined && object.amountMinted !== null) {
+      message.amountMinted = object.amountMinted
+    } else {
+      message.amountMinted = 0
     }
     return message
   }

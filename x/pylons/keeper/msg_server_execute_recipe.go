@@ -165,7 +165,6 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		k.LockItem(ctx, item)
 	}
 
-
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{
 		Creator:     msg.Creator,

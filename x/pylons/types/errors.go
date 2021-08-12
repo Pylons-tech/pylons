@@ -8,8 +8,8 @@ import (
 
 // x/pylons module sentinel errors
 var (
-	ErrInvalidRequestField = sdkerrors.Register(ModuleName, 1100, "invalid field provided in request")
-	ErrItemMatch           = sdkerrors.Register(ModuleName, 1101, "item mismatch")
+	ErrInvalidRequestField  = sdkerrors.Register(ModuleName, 1100, "invalid field provided in request")
+	ErrItemMatch            = sdkerrors.Register(ModuleName, 1101, "item mismatch")
 	ErrItemQuantityExceeded = sdkerrors.Register(ModuleName, 1102, "item exceeded maximum quantity")
 	// this line is used by starport scaffolding # ibc/errors
 )

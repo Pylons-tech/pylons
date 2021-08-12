@@ -6,11 +6,26 @@ import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/paginati
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryListExecutionsByItemRequest {
+    CookbookID: string;
+    ItemID: string;
+}
+export interface QueryListExecutionsByItemResponse {
+    Executions: Execution[];
+}
+export interface QueryListExecutionsByRecipeRequest {
+    CookbookID: string;
+    RecipeID: string;
+}
+export interface QueryListExecutionsByRecipeResponse {
+    Executions: Execution[];
+}
 export interface QueryGetExecutionRequest {
     ID: string;
 }
 export interface QueryGetExecutionResponse {
     Execution: Execution | undefined;
+    Completed: boolean;
 }
 export interface QueryListRecipesByCookbookRequest {
     CookbookID: string;
@@ -20,7 +35,6 @@ export interface QueryListRecipesByCookbookResponse {
 }
 export interface QueryGetItemRequest {
     CookbookID: string;
-    RecipeID: string;
     ID: string;
 }
 export interface QueryGetItemResponse {
@@ -52,6 +66,34 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryListExecutionsByItemRequest: {
+    encode(message: QueryListExecutionsByItemRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListExecutionsByItemRequest;
+    fromJSON(object: any): QueryListExecutionsByItemRequest;
+    toJSON(message: QueryListExecutionsByItemRequest): unknown;
+    fromPartial(object: DeepPartial<QueryListExecutionsByItemRequest>): QueryListExecutionsByItemRequest;
+};
+export declare const QueryListExecutionsByItemResponse: {
+    encode(message: QueryListExecutionsByItemResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListExecutionsByItemResponse;
+    fromJSON(object: any): QueryListExecutionsByItemResponse;
+    toJSON(message: QueryListExecutionsByItemResponse): unknown;
+    fromPartial(object: DeepPartial<QueryListExecutionsByItemResponse>): QueryListExecutionsByItemResponse;
+};
+export declare const QueryListExecutionsByRecipeRequest: {
+    encode(message: QueryListExecutionsByRecipeRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListExecutionsByRecipeRequest;
+    fromJSON(object: any): QueryListExecutionsByRecipeRequest;
+    toJSON(message: QueryListExecutionsByRecipeRequest): unknown;
+    fromPartial(object: DeepPartial<QueryListExecutionsByRecipeRequest>): QueryListExecutionsByRecipeRequest;
+};
+export declare const QueryListExecutionsByRecipeResponse: {
+    encode(message: QueryListExecutionsByRecipeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListExecutionsByRecipeResponse;
+    fromJSON(object: any): QueryListExecutionsByRecipeResponse;
+    toJSON(message: QueryListExecutionsByRecipeResponse): unknown;
+    fromPartial(object: DeepPartial<QueryListExecutionsByRecipeResponse>): QueryListExecutionsByRecipeResponse;
+};
 export declare const QueryGetExecutionRequest: {
     encode(message: QueryGetExecutionRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetExecutionRequest;
@@ -152,6 +194,10 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a list of listExecutionsByItem items. */
+    ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse>;
+    /** Queries a list of listExecutionsByRecipe items. */
+    ListExecutionsByRecipe(request: QueryListExecutionsByRecipeRequest): Promise<QueryListExecutionsByRecipeResponse>;
     /** Queries a execution by id. */
     Execution(request: QueryGetExecutionRequest): Promise<QueryGetExecutionResponse>;
     /** Queries a list of listRecipesByCookbook items. */
@@ -168,6 +214,8 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse>;
+    ListExecutionsByRecipe(request: QueryListExecutionsByRecipeRequest): Promise<QueryListExecutionsByRecipeResponse>;
     Execution(request: QueryGetExecutionRequest): Promise<QueryGetExecutionResponse>;
     ListRecipesByCookbook(request: QueryListRecipesByCookbookRequest): Promise<QueryListRecipesByCookbookResponse>;
     Item(request: QueryGetItemRequest): Promise<QueryGetItemResponse>;

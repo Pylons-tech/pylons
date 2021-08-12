@@ -19581,6 +19581,8 @@ paths:
                     type: array
                     items:
                       type: string
+              Completed:
+                type: boolean
         default:
           description: An unexpected error response.
           schema:
@@ -19669,7 +19671,7 @@ paths:
           type: string
       tags:
         - Query
-  '/pylons/item/{CookbookID}/{RecipeID}/{ID}':
+  '/pylons/item/{CookbookID}/{ID}':
     get:
       summary: Queries a item by ID.
       operationId: PylonstechPylonsPylonsItem
@@ -19685,8 +19687,6 @@ paths:
                   owner:
                     type: string
                   cookbookID:
-                    type: string
-                  recipeID:
                     type: string
                   ID:
                     type: string
@@ -19740,7 +19740,6 @@ paths:
                     format: uint64
                   transferFee:
                     type: string
-                    format: uint64
                     title: >-
                       TODO we should make this uniform with other transferFee
                       once we address fees
@@ -19766,10 +19765,6 @@ paths:
                       format: byte
       parameters:
         - name: CookbookID
-          in: path
-          required: true
-          type: string
-        - name: RecipeID
           in: path
           required: true
           type: string
@@ -19837,6 +19832,288 @@ paths:
                       format: byte
       parameters:
         - name: creator
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  '/pylons/listExecutionsByItem/{CookbookID}/{ItemID}':
+    get:
+      summary: Queries a list of listExecutionsByItem items.
+      operationId: PylonstechPylonsPylonsListExecutionsByItem
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Executions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    creator:
+                      type: string
+                    ID:
+                      type: string
+                    cookbookID:
+                      type: string
+                    recipeID:
+                      type: string
+                    nodeVersion:
+                      type: string
+                    blockHeight:
+                      type: string
+                      format: int64
+                    coinInputs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
+                    itemInputs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          ID:
+                            type: string
+                          doubles:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                Key:
+                                  type: string
+                                Value:
+                                  type: string
+                              title: DoubleKeyValue describes double key/value set
+                          longs:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                Key:
+                                  type: string
+                                Value:
+                                  type: string
+                                  format: int64
+                              title: LongKeyValue describes long key/value set
+                          strings:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                Key:
+                                  type: string
+                                Value:
+                                  type: string
+                              title: StringKeyValue describes string key/value set
+                    coinOutputs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
+                    itemOutputIDs:
+                      type: array
+                      items:
+                        type: string
+                    itemModifyOutputIDs:
+                      type: array
+                      items:
+                        type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: CookbookID
+          in: path
+          required: true
+          type: string
+        - name: ItemID
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  '/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}':
+    get:
+      summary: Queries a list of listExecutionsByRecipe items.
+      operationId: PylonstechPylonsPylonsListExecutionsByRecipe
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Executions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    creator:
+                      type: string
+                    ID:
+                      type: string
+                    cookbookID:
+                      type: string
+                    recipeID:
+                      type: string
+                    nodeVersion:
+                      type: string
+                    blockHeight:
+                      type: string
+                      format: int64
+                    coinInputs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
+                    itemInputs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          ID:
+                            type: string
+                          doubles:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                Key:
+                                  type: string
+                                Value:
+                                  type: string
+                              title: DoubleKeyValue describes double key/value set
+                          longs:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                Key:
+                                  type: string
+                                Value:
+                                  type: string
+                                  format: int64
+                              title: LongKeyValue describes long key/value set
+                          strings:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                Key:
+                                  type: string
+                                Value:
+                                  type: string
+                              title: StringKeyValue describes string key/value set
+                    coinOutputs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
+                    itemOutputIDs:
+                      type: array
+                      items:
+                        type: string
+                    itemModifyOutputIDs:
+                      type: array
+                      items:
+                        type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: CookbookID
+          in: path
+          required: true
+          type: string
+        - name: RecipeID
           in: path
           required: true
           type: string
@@ -20176,6 +20453,9 @@ paths:
                                   quantity defines the maximum amount of these
                                   items that can be created. A 0 value indicates
                                   an infinite supply
+                              amountMinted:
+                                type: string
+                                format: uint64
                             title: >-
                               ItemOutput models the continuum of valid outcomes
                               for item generation in recipes
@@ -20668,6 +20948,9 @@ paths:
                                 quantity defines the maximum amount of these
                                 items that can be created. A 0 value indicates
                                 an infinite supply
+                            amountMinted:
+                              type: string
+                              format: uint64
                           title: >-
                             ItemOutput models the continuum of valid outcomes
                             for item generation in recipes
@@ -31442,6 +31725,9 @@ definitions:
               title: >-
                 quantity defines the maximum amount of these items that can be
                 created. A 0 value indicates an infinite supply
+            amountMinted:
+              type: string
+              format: uint64
           title: >-
             ItemOutput models the continuum of valid outcomes for item
             generation in recipes
@@ -31660,8 +31946,6 @@ definitions:
         type: string
       cookbookID:
         type: string
-      recipeID:
-        type: string
       ID:
         type: string
       nodeVersion:
@@ -31714,7 +31998,6 @@ definitions:
         format: uint64
       transferFee:
         type: string
-        format: uint64
         title: >-
           TODO we should make this uniform with other transferFee once we
           address fees
@@ -32044,6 +32327,9 @@ definitions:
         title: >-
           quantity defines the maximum amount of these items that can be
           created. A 0 value indicates an infinite supply
+      amountMinted:
+        type: string
+        format: uint64
     title: >-
       ItemOutput models the continuum of valid outcomes for item generation in
       recipes
@@ -32282,6 +32568,8 @@ definitions:
             type: array
             items:
               type: string
+      Completed:
+        type: boolean
   Pylonstech.pylons.pylons.QueryGetItemResponse:
     type: object
     properties:
@@ -32291,8 +32579,6 @@ definitions:
           owner:
             type: string
           cookbookID:
-            type: string
-          recipeID:
             type: string
           ID:
             type: string
@@ -32346,7 +32632,6 @@ definitions:
             format: uint64
           transferFee:
             type: string
-            format: uint64
             title: >-
               TODO we should make this uniform with other transferFee once we
               address fees
@@ -32655,6 +32940,9 @@ definitions:
                       title: >-
                         quantity defines the maximum amount of these items that
                         can be created. A 0 value indicates an infinite supply
+                    amountMinted:
+                      type: string
+                      format: uint64
                   title: >-
                     ItemOutput models the continuum of valid outcomes for item
                     generation in recipes
@@ -32817,6 +33105,208 @@ definitions:
               format: uint64
             enabled:
               type: boolean
+  Pylonstech.pylons.pylons.QueryListExecutionsByItemResponse:
+    type: object
+    properties:
+      Executions:
+        type: array
+        items:
+          type: object
+          properties:
+            creator:
+              type: string
+            ID:
+              type: string
+            cookbookID:
+              type: string
+            recipeID:
+              type: string
+            nodeVersion:
+              type: string
+            blockHeight:
+              type: string
+              format: int64
+            coinInputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+            itemInputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  ID:
+                    type: string
+                  doubles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                      title: DoubleKeyValue describes double key/value set
+                  longs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                          format: int64
+                      title: LongKeyValue describes long key/value set
+                  strings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                      title: StringKeyValue describes string key/value set
+            coinOutputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+            itemOutputIDs:
+              type: array
+              items:
+                type: string
+            itemModifyOutputIDs:
+              type: array
+              items:
+                type: string
+  Pylonstech.pylons.pylons.QueryListExecutionsByRecipeResponse:
+    type: object
+    properties:
+      Executions:
+        type: array
+        items:
+          type: object
+          properties:
+            creator:
+              type: string
+            ID:
+              type: string
+            cookbookID:
+              type: string
+            recipeID:
+              type: string
+            nodeVersion:
+              type: string
+            blockHeight:
+              type: string
+              format: int64
+            coinInputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+            itemInputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  ID:
+                    type: string
+                  doubles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                      title: DoubleKeyValue describes double key/value set
+                  longs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                          format: int64
+                      title: LongKeyValue describes long key/value set
+                  strings:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Key:
+                          type: string
+                        Value:
+                          type: string
+                      title: StringKeyValue describes string key/value set
+            coinOutputs:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+            itemOutputIDs:
+              type: array
+              items:
+                type: string
+            itemModifyOutputIDs:
+              type: array
+              items:
+                type: string
   Pylonstech.pylons.pylons.QueryListRecipesByCookbookResponse:
     type: object
     properties:
@@ -33130,6 +33620,9 @@ definitions:
                           quantity defines the maximum amount of these items
                           that can be created. A 0 value indicates an infinite
                           supply
+                      amountMinted:
+                        type: string
+                        format: uint64
                     title: >-
                       ItemOutput models the continuum of valid outcomes for item
                       generation in recipes
@@ -33568,6 +34061,9 @@ definitions:
                   title: >-
                     quantity defines the maximum amount of these items that can
                     be created. A 0 value indicates an infinite supply
+                amountMinted:
+                  type: string
+                  format: uint64
               title: >-
                 ItemOutput models the continuum of valid outcomes for item
                 generation in recipes

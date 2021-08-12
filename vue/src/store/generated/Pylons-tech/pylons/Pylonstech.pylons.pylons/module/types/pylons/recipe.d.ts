@@ -93,6 +93,7 @@ export interface ItemOutput {
     transferFee: string;
     /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
     quantity: number;
+    amountMinted: number;
 }
 /** ItemModifyOutput describes what is modified from item input */
 export interface ItemModifyOutput {

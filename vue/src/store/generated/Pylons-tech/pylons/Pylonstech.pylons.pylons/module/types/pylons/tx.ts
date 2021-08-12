@@ -11,7 +11,6 @@ export interface MsgSendItems {
   creator: string
   receiver: string
   cookbookID: string
-  recipeID: string
   itemIDs: string[]
 }
 
@@ -31,7 +30,6 @@ export interface MsgExecuteRecipeResponse {
 export interface MsgSetItemString {
   creator: string
   cookbookID: string
-  recipeID: string
   ID: string
   field: string
   value: string
@@ -105,7 +103,7 @@ export interface MsgUpdateCookbook {
 
 export interface MsgUpdateCookbookResponse {}
 
-const baseMsgSendItems: object = { creator: '', receiver: '', cookbookID: '', recipeID: '', itemIDs: '' }
+const baseMsgSendItems: object = { creator: '', receiver: '', cookbookID: '', itemIDs: '' }
 
 export const MsgSendItems = {
   encode(message: MsgSendItems, writer: Writer = Writer.create()): Writer {
@@ -117,9 +115,6 @@ export const MsgSendItems = {
     }
     if (message.cookbookID !== '') {
       writer.uint32(26).string(message.cookbookID)
-    }
-    if (message.recipeID !== '') {
-      writer.uint32(34).string(message.recipeID)
     }
     for (const v of message.itemIDs) {
       writer.uint32(42).string(v!)
@@ -143,9 +138,6 @@ export const MsgSendItems = {
           break
         case 3:
           message.cookbookID = reader.string()
-          break
-        case 4:
-          message.recipeID = reader.string()
           break
         case 5:
           message.itemIDs.push(reader.string())
@@ -176,11 +168,6 @@ export const MsgSendItems = {
     } else {
       message.cookbookID = ''
     }
-    if (object.recipeID !== undefined && object.recipeID !== null) {
-      message.recipeID = String(object.recipeID)
-    } else {
-      message.recipeID = ''
-    }
     if (object.itemIDs !== undefined && object.itemIDs !== null) {
       for (const e of object.itemIDs) {
         message.itemIDs.push(String(e))
@@ -194,7 +181,6 @@ export const MsgSendItems = {
     message.creator !== undefined && (obj.creator = message.creator)
     message.receiver !== undefined && (obj.receiver = message.receiver)
     message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
-    message.recipeID !== undefined && (obj.recipeID = message.recipeID)
     if (message.itemIDs) {
       obj.itemIDs = message.itemIDs.map((e) => e)
     } else {
@@ -220,11 +206,6 @@ export const MsgSendItems = {
       message.cookbookID = object.cookbookID
     } else {
       message.cookbookID = ''
-    }
-    if (object.recipeID !== undefined && object.recipeID !== null) {
-      message.recipeID = object.recipeID
-    } else {
-      message.recipeID = ''
     }
     if (object.itemIDs !== undefined && object.itemIDs !== null) {
       for (const e of object.itemIDs) {
@@ -441,7 +422,7 @@ export const MsgExecuteRecipeResponse = {
   }
 }
 
-const baseMsgSetItemString: object = { creator: '', cookbookID: '', recipeID: '', ID: '', field: '', value: '' }
+const baseMsgSetItemString: object = { creator: '', cookbookID: '', ID: '', field: '', value: '' }
 
 export const MsgSetItemString = {
   encode(message: MsgSetItemString, writer: Writer = Writer.create()): Writer {
@@ -450,9 +431,6 @@ export const MsgSetItemString = {
     }
     if (message.cookbookID !== '') {
       writer.uint32(18).string(message.cookbookID)
-    }
-    if (message.recipeID !== '') {
-      writer.uint32(26).string(message.recipeID)
     }
     if (message.ID !== '') {
       writer.uint32(34).string(message.ID)
@@ -478,9 +456,6 @@ export const MsgSetItemString = {
           break
         case 2:
           message.cookbookID = reader.string()
-          break
-        case 3:
-          message.recipeID = reader.string()
           break
         case 4:
           message.ID = reader.string()
@@ -511,11 +486,6 @@ export const MsgSetItemString = {
     } else {
       message.cookbookID = ''
     }
-    if (object.recipeID !== undefined && object.recipeID !== null) {
-      message.recipeID = String(object.recipeID)
-    } else {
-      message.recipeID = ''
-    }
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = String(object.ID)
     } else {
@@ -538,7 +508,6 @@ export const MsgSetItemString = {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
-    message.recipeID !== undefined && (obj.recipeID = message.recipeID)
     message.ID !== undefined && (obj.ID = message.ID)
     message.field !== undefined && (obj.field = message.field)
     message.value !== undefined && (obj.value = message.value)
@@ -556,11 +525,6 @@ export const MsgSetItemString = {
       message.cookbookID = object.cookbookID
     } else {
       message.cookbookID = ''
-    }
-    if (object.recipeID !== undefined && object.recipeID !== null) {
-      message.recipeID = object.recipeID
-    } else {
-      message.recipeID = ''
     }
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID

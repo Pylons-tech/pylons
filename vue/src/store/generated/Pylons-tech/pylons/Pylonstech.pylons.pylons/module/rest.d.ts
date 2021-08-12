@@ -85,7 +85,6 @@ export interface PylonsIntWeightRange {
 export interface PylonsItem {
     owner?: string;
     cookbookID?: string;
-    recipeID?: string;
     ID?: string;
     nodeVersion?: string;
     doubles?: PylonsDoubleKeyValue[];
@@ -95,7 +94,6 @@ export interface PylonsItem {
     tradeable?: boolean;
     /** @format uint64 */
     lastUpdate?: string;
-    /** @format uint64 */
     transferFee?: string;
 }
 export interface PylonsItemInput {
@@ -122,6 +120,8 @@ export interface PylonsItemOutput {
     transferFee?: string;
     /** @format uint64 */
     quantity?: string;
+    /** @format uint64 */
+    amountMinted?: string;
 }
 export interface PylonsItemRecord {
     ID?: string;
@@ -168,6 +168,7 @@ export interface PylonsQueryGetCookbookResponse {
 }
 export interface PylonsQueryGetExecutionResponse {
     Execution?: PylonsExecution;
+    Completed?: boolean;
 }
 export interface PylonsQueryGetItemResponse {
     Item?: PylonsItem;
@@ -177,6 +178,12 @@ export interface PylonsQueryGetRecipeResponse {
 }
 export interface PylonsQueryListCookbooksByCreatorResponse {
     Cookbooks?: PylonsCookbook[];
+}
+export interface PylonsQueryListExecutionsByItemResponse {
+    Executions?: PylonsExecution[];
+}
+export interface PylonsQueryListExecutionsByRecipeResponse {
+    Executions?: PylonsExecution[];
 }
 export interface PylonsQueryListRecipesByCookbookResponse {
     Recipes?: PylonsRecipe[];
@@ -315,9 +322,9 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @tags Query
      * @name QueryItem
      * @summary Queries a item by ID.
-     * @request GET:/pylons/item/{CookbookID}/{RecipeID}/{ID}
+     * @request GET:/pylons/item/{CookbookID}/{ID}
      */
-    queryItem: (CookbookID: string, RecipeID: string, ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetItemResponse, RpcStatus>>;
+    queryItem: (CookbookID: string, ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetItemResponse, RpcStatus>>;
     /**
      * No description
      *
@@ -327,6 +334,24 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/pylons/listCookbooks/{creator}
      */
     queryListCookbooksByCreator: (creator: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListExecutionsByItem
+     * @summary Queries a list of listExecutionsByItem items.
+     * @request GET:/pylons/listExecutionsByItem/{CookbookID}/{ItemID}
+     */
+    queryListExecutionsByItem: (CookbookID: string, ItemID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByItemResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListExecutionsByRecipe
+     * @summary Queries a list of listExecutionsByRecipe items.
+     * @request GET:/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}
+     */
+    queryListExecutionsByRecipe: (CookbookID: string, RecipeID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>>;
     /**
      * No description
      *

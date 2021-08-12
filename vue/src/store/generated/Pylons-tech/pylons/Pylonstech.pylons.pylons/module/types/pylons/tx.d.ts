@@ -7,7 +7,6 @@ export interface MsgSendItems {
     creator: string;
     receiver: string;
     cookbookID: string;
-    recipeID: string;
     itemIDs: string[];
 }
 export interface MsgSendItemsResponse {
@@ -24,7 +23,6 @@ export interface MsgExecuteRecipeResponse {
 export interface MsgSetItemString {
     creator: string;
     cookbookID: string;
-    recipeID: string;
     ID: string;
     field: string;
     value: string;

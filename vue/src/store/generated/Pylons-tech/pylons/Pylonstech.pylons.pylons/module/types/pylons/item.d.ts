@@ -18,7 +18,6 @@ export interface StringKeyValue {
 export interface Item {
     owner: string;
     cookbookID: string;
-    recipeID: string;
     ID: string;
     nodeVersion: string;
     doubles: DoubleKeyValue[];
@@ -28,7 +27,7 @@ export interface Item {
     tradeable: boolean;
     lastUpdate: number;
     /** TODO we should make this uniform with other transferFee once we address fees */
-    transferFee: number;
+    transferFee: string;
 }
 export declare const DoubleKeyValue: {
     encode(message: DoubleKeyValue, writer?: Writer): Writer;

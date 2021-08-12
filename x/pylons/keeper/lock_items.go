@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // LockItem sends an account's items to the Items Locker Module Account for Pylons
@@ -13,4 +14,3 @@ func (k Keeper) LockItem(ctx sdk.Context, item types.Item) {
 	item.Owner = modAcc.String()
 	k.SetItem(ctx, item)
 }
-

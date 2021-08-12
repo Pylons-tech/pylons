@@ -19,10 +19,9 @@ func (k Keeper) ExecutedByAddrCount(ctx sdk.Context, args ...ref.Val) ref.Val {
 	// $addr, $cookbook_id, $recipe_id, $item_id
 	addr := args[0].Value().(string)
 	cookbookID := args[1].Value().(string)
-	recipeID := args[2].Value().(string)
-	itemID := args[3].Value().(string)
+	itemID := args[2].Value().(string)
 	count := 0
-	executions := k.GetExecutionsByItem(ctx, cookbookID, recipeID, itemID)
+	executions := k.GetExecutionsByItem(ctx, cookbookID, itemID)
 	for _, exec := range executions {
 		if exec.Creator == addr {
 			count++

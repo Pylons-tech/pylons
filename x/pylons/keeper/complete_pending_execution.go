@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -12,7 +13,7 @@ import (
 // EntryListsByIDs is a function to find an entry by ID
 func EntryListsByIDs(idList []string, recipe types.Recipe) ([]types.CoinOutput, map[int]types.ItemOutput, []types.ItemModifyOutput, error) {
 	coinOutputs := make([]types.CoinOutput, 0)
-	itemOutputs := make(map[int]types.ItemOutput, 0)
+	itemOutputs := make(map[int]types.ItemOutput)
 	itemModifyOutputs := make([]types.ItemModifyOutput, 0)
 
 Loop:
@@ -126,8 +127,8 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	}
 	// add mint items to keeper
 	itemOutputIDs := make([]string, len(mintItems))
- 	for i, item := range mintItems {
- 		k.SetItem(ctx, item)
+	for i, item := range mintItems {
+		k.SetItem(ctx, item)
 		itemOutputIDs[i] = item.ID
 	}
 	// update modify items in keeper
@@ -154,4 +155,3 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 // 	   change pendingExecution.blockHeight so that when summed to recipe.BlockInterval it gives the current block
 
 // 3 moduleAccounts "PylonsFeeAccount", "LockedCoinsAccount", "LockedItemsAccount"
-

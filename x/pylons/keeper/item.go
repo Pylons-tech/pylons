@@ -65,7 +65,7 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 }
 
 // GetItem returns an item from its index
-func (k Keeper) GetItem(ctx sdk.Context, cookbookID string, id string) (val types.Item, found bool) {
+func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item, found bool) {
 	keyPrefix := fmt.Sprintf("%s%s-", types.ItemKey, cookbookID)
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
 	b := store.Get(types.KeyPrefix(id))

@@ -20,12 +20,13 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 
 	completed := false
 	execution := types.Execution{}
-	if k.HasPendingExecution(ctx, req.ID) {
+	switch {
+	case k.HasPendingExecution(ctx, req.ID):
 		execution = k.GetPendingExecution(ctx, req.ID)
-	} else if k.HasExecution(ctx, req.ID) {
+	case k.HasExecution(ctx, req.ID):
 		completed = true
 		execution = k.GetExecution(ctx, req.ID)
-	} else {
+	default:
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 

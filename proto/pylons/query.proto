@@ -16,6 +16,18 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 service Query {
 	// this line is used by starport scaffolding # 2
 
+	// Queries a list of listExecutionsByItem items.
+	rpc ListExecutionsByItem(QueryListExecutionsByItemRequest) returns (QueryListExecutionsByItemResponse) {
+		option (google.api.http).get = "/pylons/listExecutionsByItem/{CookbookID}/{ItemID}";
+	}
+
+
+	// Queries a list of listExecutionsByRecipe items.
+	rpc ListExecutionsByRecipe(QueryListExecutionsByRecipeRequest) returns (QueryListExecutionsByRecipeResponse) {
+		option (google.api.http).get = "/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}";
+	}
+
+
 	// Queries a execution by id.
 	rpc Execution(QueryGetExecutionRequest) returns (QueryGetExecutionResponse) {
 		option (google.api.http).get = "/Pylons-tech/pylons/pylons/execution/{ID}";
@@ -54,6 +66,24 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryListExecutionsByItemRequest {
+	string CookbookID = 1;
+	string ItemID = 2;
+}
+
+message QueryListExecutionsByItemResponse {
+	repeated Execution Executions = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryListExecutionsByRecipeRequest {
+	string CookbookID = 1;
+  string RecipeID = 2;
+}
+
+message QueryListExecutionsByRecipeResponse {
+	repeated Execution Executions = 1 [(gogoproto.nullable) = false];
+}
+
 message QueryGetExecutionRequest {
 	string ID = 1;
 }
