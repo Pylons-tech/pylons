@@ -2,145 +2,120 @@ package types
 
 import (
 	"fmt"
-	"math"
-	"reflect"
-	"strconv"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"gopkg.in/yaml.v2"
 )
 
-type StringKeyValueList []StringKeyValue
-type DoubleKeyValueList []DoubleKeyValue
-type LongKeyValueList []LongKeyValue
+const (
+	// PylonsCoinDenom is the pylons denom string
+	PylonsCoinDenom = "pylon"
 
-type LongParamList []LongParam
-type DoubleParamList []DoubleParam
-type StringParamList []StringParam
+	// DefaultBaseFee holds the value of the default base fee
+	DefaultBaseFee = 10000
 
-type DoubleInputParamList []DoubleInputParam
-type LongInputParamList []LongInputParam
-type StringInputParamList []StringInputParam
-type WeightedOutputsList []WeightedOutputs
+	// DefaultMinNameFieldLength is the default minimum character length of a request's name field
+	DefaultMinNameFieldLength = 8
+	// DefaultMinDescriptionFieldLength is the default minimum character length of a request's description field
+	DefaultMinDescriptionFieldLength = 20
+)
 
-// type CoinInputList []CoinInput
-type ItemList []Item
-type ItemInputList []ItemInput
+// Parameter Keys
+var (
+	ParamStoreKeyMinNameFieldLength = []byte("minnamefieldlength")
+	ParamStoreKeyMinDescriptionFieldLength = []byte("mindescriptionfieldlength")
+	ParamStoreKeyBaseFee = []byte("basefee")
+)
 
-// type TradeItemInputList []TradeItemInput
+type Params struct {
+	MinNameFieldLength uint64
+	MinDescriptionFieldLength uint64
+	BaseFee sdk.Coins
+}
 
-type DoubleWeightTable []DoubleWeightRange
-type IntWeightTable []IntWeightRange
-
-var floatType = reflect.TypeOf(float64(0))
-var stringType = reflect.TypeOf("")
-
-func getFloat(unk interface{}) (float64, error) {
-	switch i := unk.(type) {
-	case float64:
-		return i, nil
-	case float32:
-		return float64(i), nil
-	case int64:
-		return float64(i), nil
-	case int32:
-		return float64(i), nil
-	case int:
-		return float64(i), nil
-	case uint64:
-		return float64(i), nil
-	case uint32:
-		return float64(i), nil
-	case uint:
-		return float64(i), nil
-	case string:
-		return strconv.ParseFloat(i, 64)
-	default:
-		v := reflect.ValueOf(unk)
-		v = reflect.Indirect(v)
-		// nolint: gocritic
-		if v.Type().ConvertibleTo(floatType) {
-			fv := v.Convert(floatType)
-			return fv.Float(), nil
-		} else if v.Type().ConvertibleTo(stringType) {
-			sv := v.Convert(stringType)
-			s := sv.String()
-			return strconv.ParseFloat(s, 64)
-		} else {
-			return math.NaN(), fmt.Errorf("cannot convert type %v to float64", v.Type())
-		}
+// DefaultParams returns default pylons parameters
+func DefaultParams() Params {
+	return Params {
+		MinNameFieldLength: DefaultMinNameFieldLength,
+		MinDescriptionFieldLength: DefaultMinDescriptionFieldLength,
+		BaseFee: 	sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBaseFee)},
 	}
 }
 
-// Actualize creates a (key, value) list from ParamList
-func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make([]DoubleKeyValue, 0, len(dpm))
-	for _, param := range dpm {
-		var valDec sdk.Dec
-		var err error
-
-		if len(param.Program) > 0 {
-			var val float64
-			val, err = ec.EvalFloat64(param.Program)
-			valDec, _ = sdk.NewDecFromStr(fmt.Sprintf("%v", val))
-		} else {
-			valDec, err = DoubleWeightTable(param.WeightRanges).Generate()
-		}
-		if err != nil {
-			return m, err
-		}
-		m = append(m, DoubleKeyValue{
-			Key:   param.Key,
-			Value: valDec,
-		})
-	}
-	return m, nil
+// ParamKeyTable returns the parameter by key
+func ParamKeyTable() paramtypes.KeyTable {
+	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
 }
 
-// Actualize builds the params
-func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error) {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make([]LongKeyValue, 0, len(lpm))
-	for _, param := range lpm {
-		var val int64
-		var err error
-
-		if len(param.Program) > 0 {
-			val, err = ec.EvalInt64(param.Program)
-		} else {
-			val, err = IntWeightTable(param.WeightRanges).Generate()
-		}
-		if err != nil {
-			return m, err
-		}
-		m = append(m, LongKeyValue{
-			Key:   param.Key,
-			Value: val,
-		})
-	}
-	return m, nil
+// String returns a human-readable string representation of the parameters.
+func (p Params) String() string {
+	out, _ := yaml.Marshal(p)
+	return string(out)
 }
 
-// Actualize actualize string param using cel program
-func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
-	m := make([]StringKeyValue, 0, len(spm))
-	for _, param := range spm {
-		var val string
-		var err error
+// ParamSetPairs returns the parameter set pairs.
+func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
+	return paramtypes.ParamSetPairs{
+		paramtypes.NewParamSetPair(ParamStoreKeyMinNameFieldLength, &p.MinNameFieldLength, validateUint),
+		paramtypes.NewParamSetPair(ParamStoreKeyMinDescriptionFieldLength, &p.MinDescriptionFieldLength, validateUint),
+		paramtypes.NewParamSetPair(ParamStoreKeyBaseFee, &p.BaseFee, validateBaseFee),
 
-		if len(param.Program) > 0 {
-			val, err = ec.EvalString(param.Program)
-		} else {
-			val = param.Value
-		}
-		if err != nil {
-			return m, err
-		}
-		m = append(m, StringKeyValue{
-			Key:   param.Key,
-			Value: val,
-		})
 	}
-	return m, nil
 }
+
+// ValidateBasic performs basic validation on distribution parameters.
+func (p Params) ValidateBasic() error {
+	// TODO validate new params
+	// these may be unnecessary
+	// if gov decides that we should make Description 0, maybe thats ok
+	if p.MinNameFieldLength == 0 {
+		return fmt.Errorf("MinNameFieldLength must at least be 1")
+	}
+
+	if p.MinDescriptionFieldLength == 0 {
+		return fmt.Errorf("MinDescriptionFieldLength must at least be 1")
+	}
+
+	if p.BaseFee.Empty() || p.BaseFee.IsAnyNegative() {
+		return fmt.Errorf("base fee is invalid")
+	}
+
+	return nil
+}
+
+func defaultValidateFunction(i interface{}) error {
+	return nil
+}
+
+func validateUint(i interface {}) error {
+	v, ok := i.(uint64)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if v <= 0 {
+		return fmt.Errorf("min length parameter must be greater than 0")
+	}
+
+	return nil
+}
+
+func validateBaseFee(i interface {}) error {
+	v, ok := i.(sdk.Coins)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	for _, coin := range v {
+		if coin.IsValid() {
+			return fmt.Errorf("fee must be valid (valid denom and non-negative)")
+		}
+
+		if coin.IsZero() {
+			return fmt.Errorf("fee must be non-zero")
+		}
+	}
+
+	return nil
+}
+
