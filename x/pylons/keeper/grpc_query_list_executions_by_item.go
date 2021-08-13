@@ -20,7 +20,7 @@ func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *types.QueryList
 	// Get the item from the store
 	item, found := k.GetItem(ctx, req.CookbookID, req.ItemID)
 	if !found {
-		return &types.QueryListExecutionsByItemResponse{},  status.Error(codes.InvalidArgument, "item does not exist")
+		return &types.QueryListExecutionsByItemResponse{}, status.Error(codes.InvalidArgument, "item does not exist")
 	}
 
 	execs := k.GetExecutionsByItem(ctx, item.CookbookID, item.ID)

@@ -5,6 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
+import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
@@ -15,6 +16,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Query defines the gRPC querier service.
 service Query {
 	// this line is used by starport scaffolding # 2
+
+	// Queries a googlIAPOrder by id.
+	rpc GoogleIAPOrder(QueryGetGoogleIAPOrderRequest) returns (QueryGetGoogleIAPOrderResponse) {
+		option (google.api.http).get = "/Pylons-tech/pylons/pylons/googleIAPOrder/{id}";
+	}
+
 
 	// Queries a list of listExecutionsByItem items.
 	rpc ListExecutionsByItem(QueryListExecutionsByItemRequest) returns (QueryListExecutionsByItemResponse) {
@@ -66,6 +73,14 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetGoogleIAPOrderRequest {
+	uint64 id = 1;
+}
+
+message QueryGetGoogleIAPOrderResponse {
+	GoogleIAPOrder GoogleIAPOrder = 1;
+}
+
 message QueryListExecutionsByItemRequest {
 	string CookbookID = 1;
 	string ItemID = 2;

@@ -19,6 +19,26 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 		// this line is used by starport scaffolding # 1
+		case *types.MsgCreateGooglIAPOrder:
+					res, err := msgServer.CreateGooglIAPOrder(sdk.WrapSDKContext(ctx), msg)
+					return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgUpdateGooglIAPOrder:
+					res, err := msgServer.UpdateGooglIAPOrder(sdk.WrapSDKContext(ctx), msg)
+					return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgDeleteGooglIAPOrder:
+					res, err := msgServer.DeleteGooglIAPOrder(sdk.WrapSDKContext(ctx), msg)
+					return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgGoogleIAPGetPylons:
+			res, err := msgServer.GoogleIAPGetPylons(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *types.MsgCreateAccount:
+			res, err := msgServer.CreateAccount(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		case *types.MsgSendItems:
 			res, err := msgServer.SendItems(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)

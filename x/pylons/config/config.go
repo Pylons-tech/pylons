@@ -3,7 +3,7 @@ package config
 import sdk "github.com/cosmos/cosmos-sdk/types"
 
 const (
-	pylonsCoinDenom = "pylon"
+	PylonsCoinDenom = "pylon"
 
 	// DefaultBasicFee holds the value of the default basic fee if not configured externally
 	DefaultBasicFee = 10000

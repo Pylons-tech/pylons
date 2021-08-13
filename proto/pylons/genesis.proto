@@ -2,6 +2,7 @@ syntax = "proto3";
 package Pylonstech.pylons.pylons;
 
 // this line is used by starport scaffolding # genesis/proto/import
+import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
@@ -12,6 +13,8 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // GenesisState defines the pylons module's genesis state.
 message GenesisState {
     // this line is used by starport scaffolding # genesis/proto/state
+		repeated GoogleIAPOrder googleIAPOrderList = 8; // this line is used by starport scaffolding # genesis/proto/stateField
+		uint64 googleIAPOrderCount = 9; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Execution executionList = 7; // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 executionCount = 6; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Execution pendingExecutionList = 5; // this line is used by starport scaffolding # genesis/proto/stateField

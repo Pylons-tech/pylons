@@ -32425,6 +32425,8 @@ definitions:
     title: >-
       LongParam describes the bounds on an item input/output parameter of type
       int64
+  Pylonstech.pylons.pylons.MsgCreateAccountResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgCreateCookbookResponse:
     type: object
   Pylonstech.pylons.pylons.MsgCreateRecipeResponse:
@@ -32434,6 +32436,8 @@ definitions:
     properties:
       ID:
         type: string
+  Pylonstech.pylons.pylons.MsgGoogleIAPGetPylonsResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgSendItemsResponse:
     type: object
   Pylonstech.pylons.pylons.MsgSetItemStringResponse:

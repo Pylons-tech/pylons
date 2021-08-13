@@ -27,7 +27,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authrest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
@@ -452,10 +451,11 @@ func New(
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
 	app.SetAnteHandler(
-		ante.NewAnteHandler(
-			app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
-			encodingConfig.TxConfig.SignModeHandler(),
-		),
+		// ante.NewAnteHandler(
+		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
+		//	encodingConfig.TxConfig.SignModeHandler(),
+		// ),
+		pylonsmodulekeeper.NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler()),
 	)
 	app.SetEndBlocker(app.EndBlocker)
 

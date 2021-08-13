@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
+import { GooglIAPOrder } from '../pylons/googl_iap_order'
 import { Execution } from '../pylons/execution'
 import { Item } from '../pylons/item'
 import { Recipe } from '../pylons/recipe'
@@ -11,6 +12,10 @@ export const protobufPackage = 'Pylonstech.pylons.pylons'
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
   /** this line is used by starport scaffolding # genesis/proto/state */
+  googlIAPOrderList: GooglIAPOrder[]
+  /** this line is used by starport scaffolding # genesis/proto/stateField */
+  googlIAPOrderCount: number
+  /** this line is used by starport scaffolding # genesis/proto/stateField */
   executionList: Execution[]
   /** this line is used by starport scaffolding # genesis/proto/stateField */
   executionCount: number
@@ -26,10 +31,16 @@ export interface GenesisState {
   cookbookList: Cookbook[]
 }
 
-const baseGenesisState: object = { executionCount: 0, pendingExecutionCount: 0 }
+const baseGenesisState: object = { googlIAPOrderCount: 0, executionCount: 0, pendingExecutionCount: 0 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
+    for (const v of message.googlIAPOrderList) {
+      GooglIAPOrder.encode(v!, writer.uint32(66).fork()).ldelim()
+    }
+    if (message.googlIAPOrderCount !== 0) {
+      writer.uint32(72).uint64(message.googlIAPOrderCount)
+    }
     for (const v of message.executionList) {
       Execution.encode(v!, writer.uint32(58).fork()).ldelim()
     }
@@ -58,6 +69,7 @@ export const GenesisState = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseGenesisState } as GenesisState
+    message.googlIAPOrderList = []
     message.executionList = []
     message.pendingExecutionList = []
     message.itemList = []
@@ -66,6 +78,12 @@ export const GenesisState = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
+        case 8:
+          message.googlIAPOrderList.push(GooglIAPOrder.decode(reader, reader.uint32()))
+          break
+        case 9:
+          message.googlIAPOrderCount = longToNumber(reader.uint64() as Long)
+          break
         case 7:
           message.executionList.push(Execution.decode(reader, reader.uint32()))
           break
@@ -97,11 +115,22 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState
+    message.googlIAPOrderList = []
     message.executionList = []
     message.pendingExecutionList = []
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
+    if (object.googlIAPOrderList !== undefined && object.googlIAPOrderList !== null) {
+      for (const e of object.googlIAPOrderList) {
+        message.googlIAPOrderList.push(GooglIAPOrder.fromJSON(e))
+      }
+    }
+    if (object.googlIAPOrderCount !== undefined && object.googlIAPOrderCount !== null) {
+      message.googlIAPOrderCount = Number(object.googlIAPOrderCount)
+    } else {
+      message.googlIAPOrderCount = 0
+    }
     if (object.executionList !== undefined && object.executionList !== null) {
       for (const e of object.executionList) {
         message.executionList.push(Execution.fromJSON(e))
@@ -142,6 +171,12 @@ export const GenesisState = {
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {}
+    if (message.googlIAPOrderList) {
+      obj.googlIAPOrderList = message.googlIAPOrderList.map((e) => (e ? GooglIAPOrder.toJSON(e) : undefined))
+    } else {
+      obj.googlIAPOrderList = []
+    }
+    message.googlIAPOrderCount !== undefined && (obj.googlIAPOrderCount = message.googlIAPOrderCount)
     if (message.executionList) {
       obj.executionList = message.executionList.map((e) => (e ? Execution.toJSON(e) : undefined))
     } else {
@@ -174,11 +209,22 @@ export const GenesisState = {
 
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState
+    message.googlIAPOrderList = []
     message.executionList = []
     message.pendingExecutionList = []
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
+    if (object.googlIAPOrderList !== undefined && object.googlIAPOrderList !== null) {
+      for (const e of object.googlIAPOrderList) {
+        message.googlIAPOrderList.push(GooglIAPOrder.fromPartial(e))
+      }
+    }
+    if (object.googlIAPOrderCount !== undefined && object.googlIAPOrderCount !== null) {
+      message.googlIAPOrderCount = object.googlIAPOrderCount
+    } else {
+      message.googlIAPOrderCount = 0
+    }
     if (object.executionList !== undefined && object.executionList !== null) {
       for (const e of object.executionList) {
         message.executionList.push(Execution.fromPartial(e))

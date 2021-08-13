@@ -13,6 +13,7 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
+GooglIAPOrderList: []*GooglIAPOrder{},
 		PendingExecutionList: []*Execution{},
 		ExecutionList:        []*Execution{},
 		ItemList:             []*Item{},
@@ -27,6 +28,15 @@ func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # ibc/genesistype/validate
 
 	// this line is used by starport scaffolding # genesis/types/validate
+// Check for duplicated ID in googlIAPOrder
+googlIAPOrderIdMap := make(map[uint64]bool)
+
+for _, elem := range gs.GooglIAPOrderList {
+	if _, ok := googlIAPOrderIdMap[elem.Id]; ok {
+		return fmt.Errorf("duplicated id for googlIAPOrder")
+	}
+	googlIAPOrderIdMap[elem.Id] = true
+}
 	// Check for duplicated ID in pendingExecution
 	pendingExecutionIDMap := make(map[string]bool)
 
