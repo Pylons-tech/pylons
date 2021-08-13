@@ -18,6 +18,7 @@ func (k Keeper) ListCookbooksByCreator(goCtx context.Context, req *types.QueryLi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// no errors, default case is an empty list meaning there is no cookbook owned by this address
 	cbs := k.GetAllCookbookByCreator(ctx, req.Creator)
 
 	return &types.QueryListCookbooksByCreatorResponse{Cookbooks: cbs}, nil

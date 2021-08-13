@@ -85,7 +85,6 @@ func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 		err := iterator.Close()
 		// nolint: staticcheck
 		if err != nil {
-
 		}
 	}(iterator)
 

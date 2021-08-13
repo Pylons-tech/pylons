@@ -12,8 +12,8 @@ import (
 
 func CmdShowExecution() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "show-execution [id]",
-		Short: "shows a Execution",
+		Use:   "get-execution [id]",
+		Short: "retrieve an execution",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

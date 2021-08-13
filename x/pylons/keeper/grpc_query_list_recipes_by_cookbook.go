@@ -17,6 +17,7 @@ func (k Keeper) ListRecipesByCookbook(goCtx context.Context, req *types.QueryLis
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	// no errors, default case is an empty list meaning there are no recipes for this cookbook
 	recipes := k.GetAllRecipesByCookbook(ctx, req.CookbookID)
 
 	return &types.QueryListRecipesByCookbookResponse{Recipes: recipes}, nil

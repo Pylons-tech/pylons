@@ -17,7 +17,7 @@ var _ = strconv.Itoa(0)
 
 func CmdSendItems() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "send-items [receiver] [cookbookID] [itemIDs]",
+		Use:   "send-items [receiver] [cookbook-id] [item-ids]",
 		Short: "send items to receiver",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {

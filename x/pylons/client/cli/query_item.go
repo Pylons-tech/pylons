@@ -12,8 +12,8 @@ import (
 
 func CmdShowItem() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "get-item [cookbookID] [ID]",
-		Short: "gets an Item",
+		Use:   "get-item [cookbook-id] [id]",
+		Short: "retrieve an item",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

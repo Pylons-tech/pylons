@@ -190,7 +190,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			pendingExec.BlockHeight = blockHeight
 			// TODO UNLOCK COINS
 			pendingExec.CoinInputs = nil
-			// make sure items ownership is set to the execution creator in case they are locked
+			// make sure locked items ownership is set back to the execution creator
 			for _, itemRecord := range pendingExec.ItemInputs {
 				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookID, itemRecord.ID)
 				if !found {

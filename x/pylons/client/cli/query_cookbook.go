@@ -13,7 +13,7 @@ import (
 func CmdShowCookbook() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "get-cookbook [id]",
-		Short: "Retrieve a cookbook",
+		Short: "retrieve a cookbook",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -27,7 +26,7 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 		completed = true
 		execution = k.GetExecution(ctx, req.ID)
 	default:
-		return nil, sdkerrors.ErrKeyNotFound
+		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
 	return &types.QueryGetExecutionResponse{Execution: &execution, Completed: completed}, nil

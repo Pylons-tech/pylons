@@ -30,8 +30,8 @@ func main() {
 }
 
 // removeLineBreaksInCobraArgs recursively removes line breaks from a parent cobra command.
-// Line breaks are added in cosmos-sdk, however cobra ends up printing commands in the help in alphabetical order,
-// resulting in one or more blank lines at the top of the list
+// The cosmos-sdk adds several line breaks in the commands tree, however cobra ends up printing commands in the help
+// in alphabetical order, resulting in one or more blank lines at the top of commands lists
 func removeLineBreaksInCobraArgs(cmd *cobra.Command) {
 	cmd.RemoveCommand(flags.LineBreak)
 	for _, c := range cmd.Commands() {

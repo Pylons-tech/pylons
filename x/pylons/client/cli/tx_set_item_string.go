@@ -16,7 +16,7 @@ var _ = strconv.Itoa(0)
 
 func CmdSetItemString() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "set-item-string [cookbookID] [id] [field] [value]",
+		Use:   "set-item-string [cookbook-id] [id] [field] [value]",
 		Short: "Set a mutable string field within an item",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {

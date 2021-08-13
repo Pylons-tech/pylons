@@ -17,7 +17,7 @@ import (
 
 func CmdCreateRecipe() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coinInputs] [itemInputs] [entries] [outputs] [blockInterval] [enabled] [extraInfo]",
+		Use:   "create-recipe [cookbook-id] [id] [name] [description] [version] [coin-inputs] [item-inputs] [entries] [outputs] [block-interval] [enabled] [extra-info]",
 		Short: "Create a new recipe",
 		Args:  cobra.ExactArgs(12),
 		RunE: func(cmd *cobra.Command, args []string) error {

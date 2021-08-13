@@ -3,8 +3,6 @@ package keeper
 import (
 	"context"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -22,7 +20,7 @@ func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *types.QueryList
 	// Get the item from the store
 	item, found := k.GetItem(ctx, req.CookbookID, req.ItemID)
 	if !found {
-		return &types.QueryListExecutionsByItemResponse{}, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "item does not exist")
+		return &types.QueryListExecutionsByItemResponse{},  status.Error(codes.InvalidArgument, "item does not exist")
 	}
 
 	execs := k.GetExecutionsByItem(ctx, item.CookbookID, item.ID)
