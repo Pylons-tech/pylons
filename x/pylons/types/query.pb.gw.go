@@ -44,15 +44,15 @@ func request_Query_GoogleIAPOrder_0(ctx context.Context, marshaler runtime.Marsh
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["PurchaseToken"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "PurchaseToken")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.PurchaseToken, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "PurchaseToken", err)
 	}
 
 	msg, err := client.GoogleIAPOrder(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
@@ -71,15 +71,15 @@ func local_request_Query_GoogleIAPOrder_0(ctx context.Context, marshaler runtime
 		_   = err
 	)
 
-	val, ok = pathParams["id"]
+	val, ok = pathParams["PurchaseToken"]
 	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "id")
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "PurchaseToken")
 	}
 
-	protoReq.Id, err = runtime.Uint64(val)
+	protoReq.PurchaseToken, err = runtime.String(val)
 
 	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "id", err)
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "PurchaseToken", err)
 	}
 
 	msg, err := server.GoogleIAPOrder(ctx, &protoReq)
@@ -1045,13 +1045,13 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_GoogleIAPOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"Pylons-tech", "pylons", "googleIAPOrder", "id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_GoogleIAPOrder_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "googleIAPOrder", "PurchaseToken"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_ListExecutionsByItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "listExecutionsByItem", "CookbookID", "ItemID"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_ListExecutionsByRecipe_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2, 1, 0, 4, 1, 5, 3}, []string{"pylons", "listExecutionsByRecipe", "CookbookID", "RecipeID"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Execution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"Pylons-tech", "pylons", "execution", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Execution_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "execution", "ID"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_ListRecipesByCookbook_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 1, 0, 4, 1, 5, 2}, []string{"pylons", "listRecipesByCookbook", "CookbookID"}, "", runtime.AssumeColonVerbOpt(true)))
 

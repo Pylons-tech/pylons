@@ -103,14 +103,11 @@ export interface PylonsExecution {
   itemModifyOutputIDs?: string[];
 }
 
-export interface PylonsGooglIAPOrder {
+export interface PylonsGoogleIAPOrder {
   creator?: string;
-
-  /** @format uint64 */
-  id?: string;
   productID?: string;
   purchaseToken?: string;
-  receiptDaBase64?: string;
+  receiptDataBase64?: string;
   signature?: string;
 }
 
@@ -216,14 +213,7 @@ export type PylonsMsgCreateAccountResponse = object;
 
 export type PylonsMsgCreateCookbookResponse = object;
 
-export interface PylonsMsgCreateGooglIAPOrderResponse {
-  /** @format uint64 */
-  id?: string;
-}
-
 export type PylonsMsgCreateRecipeResponse = object;
-
-export type PylonsMsgDeleteGooglIAPOrderResponse = object;
 
 export interface PylonsMsgExecuteRecipeResponse {
   ID?: string;
@@ -237,24 +227,7 @@ export type PylonsMsgSetItemStringResponse = object;
 
 export type PylonsMsgUpdateCookbookResponse = object;
 
-export type PylonsMsgUpdateGooglIAPOrderResponse = object;
-
 export type PylonsMsgUpdateRecipeResponse = object;
-
-export interface PylonsQueryAllGooglIAPOrderResponse {
-  GooglIAPOrder?: PylonsGooglIAPOrder[];
-
-  /**
-   * PageResponse is to be embedded in gRPC response messages where the
-   * corresponding request message has used PageRequest.
-   *
-   *  message SomeResponse {
-   *          repeated Bar results = 1;
-   *          PageResponse page = 2;
-   *  }
-   */
-  pagination?: V1Beta1PageResponse;
-}
 
 export interface PylonsQueryGetCookbookResponse {
   Cookbook?: PylonsCookbook;
@@ -265,8 +238,8 @@ export interface PylonsQueryGetExecutionResponse {
   Completed?: boolean;
 }
 
-export interface PylonsQueryGetGooglIAPOrderResponse {
-  GooglIAPOrder?: PylonsGooglIAPOrder;
+export interface PylonsQueryGetGoogleIAPOrderResponse {
+  GoogleIAPOrder?: PylonsGoogleIAPOrder;
 }
 
 export interface PylonsQueryGetItemResponse {
@@ -353,62 +326,6 @@ signatures required by gogoproto.
 export interface V1Beta1Coin {
   denom?: string;
   amount?: string;
-}
-
-/**
-* message SomeRequest {
-         Foo some_parameter = 1;
-         PageRequest pagination = 2;
- }
-*/
-export interface V1Beta1PageRequest {
-  /**
-   * key is a value returned in PageResponse.next_key to begin
-   * querying the next page most efficiently. Only one of offset or key
-   * should be set.
-   * @format byte
-   */
-  key?: string;
-
-  /**
-   * offset is a numeric offset that can be used when key is unavailable.
-   * It is less efficient than using key. Only one of offset or key should
-   * be set.
-   * @format uint64
-   */
-  offset?: string;
-
-  /**
-   * limit is the total number of results to be returned in the result page.
-   * If left empty it will default to a value to be set by each app.
-   * @format uint64
-   */
-  limit?: string;
-
-  /**
-   * count_total is set to true  to indicate that the result set should include
-   * a count of the total number of items available for pagination in UIs.
-   * count_total is only respected when offset is used. It is ignored when key
-   * is set.
-   */
-  countTotal?: boolean;
-}
-
-/**
-* PageResponse is to be embedded in gRPC response messages where the
-corresponding request message has used PageRequest.
-
- message SomeResponse {
-         repeated Bar results = 1;
-         PageResponse page = 2;
- }
-*/
-export interface V1Beta1PageResponse {
-  /** @format byte */
-  nextKey?: string;
-
-  /** @format uint64 */
-  total?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -611,63 +528,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryExecution
-   * @summary Queries a execution by id.
-   * @request GET:/Pylons-tech/pylons/pylons/execution/{ID}
-   */
-  queryExecution = (ID: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetExecutionResponse, RpcStatus>({
-      path: `/Pylons-tech/pylons/pylons/execution/${ID}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryGooglIapOrderAll
-   * @summary Queries a list of googlIAPOrder items.
-   * @request GET:/Pylons-tech/pylons/pylons/googlIAPOrder
-   */
-  queryGooglIapOrderAll = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.countTotal"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<PylonsQueryAllGooglIAPOrderResponse, RpcStatus>({
-      path: `/Pylons-tech/pylons/pylons/googlIAPOrder`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryGooglIapOrder
-   * @summary Queries a googlIAPOrder by id.
-   * @request GET:/Pylons-tech/pylons/pylons/googlIAPOrder/{id}
-   */
-  queryGooglIapOrder = (id: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetGooglIAPOrderResponse, RpcStatus>({
-      path: `/Pylons-tech/pylons/pylons/googlIAPOrder/${id}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryCookbook
    * @summary Retrieves a cookbook by ID.
    * @request GET:/pylons/cookbook/{ID}
@@ -675,6 +535,38 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryCookbook = (ID: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetCookbookResponse, RpcStatus>({
       path: `/pylons/cookbook/${ID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryExecution
+   * @summary Queries a execution by id.
+   * @request GET:/pylons/execution/{ID}
+   */
+  queryExecution = (ID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetExecutionResponse, RpcStatus>({
+      path: `/pylons/execution/${ID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryGoogleIapOrder
+   * @summary Queries a googleIAPOrder by PurchaseToken.
+   * @request GET:/pylons/googleIAPOrder/{PurchaseToken}
+   */
+  queryGoogleIapOrder = (PurchaseToken: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetGoogleIAPOrderResponse, RpcStatus>({
+      path: `/pylons/googleIAPOrder/${PurchaseToken}`,
       method: "GET",
       format: "json",
       ...params,

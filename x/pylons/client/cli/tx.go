@@ -32,10 +32,6 @@ func GetTxCmd() *cobra.Command {
 
 	// this line is used by starport scaffolding # 1
 
-	cmd.AddCommand(CmdCreateGooglIAPOrder())
-	cmd.AddCommand(CmdUpdateGooglIAPOrder())
-	cmd.AddCommand(CmdDeleteGooglIAPOrder())
-
 	cmd.AddCommand(CmdGoogleIAPGetPylons())
 
 	cmd.AddCommand(CmdCreateAccount())

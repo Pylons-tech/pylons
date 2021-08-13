@@ -1,31 +1,21 @@
 /* eslint-disable */
-import { Reader, util, configure, Writer } from 'protobufjs/minimal'
-import * as Long from 'long'
-import { GooglIAPOrder } from '../pylons/googl_iap_order'
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
+import { Reader, Writer } from 'protobufjs/minimal'
+import { GoogleIAPOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
 import { Recipe } from '../pylons/recipe'
 import { Item } from '../pylons/item'
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Cookbook } from '../pylons/cookbook'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
-export interface QueryGetGooglIAPOrderRequest {
-  id: number
+export interface QueryGetGoogleIAPOrderRequest {
+  PurchaseToken: string
 }
 
-export interface QueryGetGooglIAPOrderResponse {
-  GooglIAPOrder: GooglIAPOrder | undefined
-}
-
-export interface QueryAllGooglIAPOrderRequest {
-  pagination: PageRequest | undefined
-}
-
-export interface QueryAllGooglIAPOrderResponse {
-  GooglIAPOrder: GooglIAPOrder[]
-  pagination: PageResponse | undefined
+export interface QueryGetGoogleIAPOrderResponse {
+  GoogleIAPOrder: GoogleIAPOrder | undefined
 }
 
 export interface QueryListExecutionsByItemRequest {
@@ -106,25 +96,25 @@ export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
 }
 
-const baseQueryGetGooglIAPOrderRequest: object = { id: 0 }
+const baseQueryGetGoogleIAPOrderRequest: object = { PurchaseToken: '' }
 
-export const QueryGetGooglIAPOrderRequest = {
-  encode(message: QueryGetGooglIAPOrderRequest, writer: Writer = Writer.create()): Writer {
-    if (message.id !== 0) {
-      writer.uint32(8).uint64(message.id)
+export const QueryGetGoogleIAPOrderRequest = {
+  encode(message: QueryGetGoogleIAPOrderRequest, writer: Writer = Writer.create()): Writer {
+    if (message.PurchaseToken !== '') {
+      writer.uint32(10).string(message.PurchaseToken)
     }
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetGooglIAPOrderRequest {
+  decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleIAPOrderRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetGooglIAPOrderRequest } as QueryGetGooglIAPOrderRequest
+    const message = { ...baseQueryGetGoogleIAPOrderRequest } as QueryGetGoogleIAPOrderRequest
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.id = longToNumber(reader.uint64() as Long)
+          message.PurchaseToken = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -134,52 +124,52 @@ export const QueryGetGooglIAPOrderRequest = {
     return message
   },
 
-  fromJSON(object: any): QueryGetGooglIAPOrderRequest {
-    const message = { ...baseQueryGetGooglIAPOrderRequest } as QueryGetGooglIAPOrderRequest
-    if (object.id !== undefined && object.id !== null) {
-      message.id = Number(object.id)
+  fromJSON(object: any): QueryGetGoogleIAPOrderRequest {
+    const message = { ...baseQueryGetGoogleIAPOrderRequest } as QueryGetGoogleIAPOrderRequest
+    if (object.PurchaseToken !== undefined && object.PurchaseToken !== null) {
+      message.PurchaseToken = String(object.PurchaseToken)
     } else {
-      message.id = 0
+      message.PurchaseToken = ''
     }
     return message
   },
 
-  toJSON(message: QueryGetGooglIAPOrderRequest): unknown {
+  toJSON(message: QueryGetGoogleIAPOrderRequest): unknown {
     const obj: any = {}
-    message.id !== undefined && (obj.id = message.id)
+    message.PurchaseToken !== undefined && (obj.PurchaseToken = message.PurchaseToken)
     return obj
   },
 
-  fromPartial(object: DeepPartial<QueryGetGooglIAPOrderRequest>): QueryGetGooglIAPOrderRequest {
-    const message = { ...baseQueryGetGooglIAPOrderRequest } as QueryGetGooglIAPOrderRequest
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id
+  fromPartial(object: DeepPartial<QueryGetGoogleIAPOrderRequest>): QueryGetGoogleIAPOrderRequest {
+    const message = { ...baseQueryGetGoogleIAPOrderRequest } as QueryGetGoogleIAPOrderRequest
+    if (object.PurchaseToken !== undefined && object.PurchaseToken !== null) {
+      message.PurchaseToken = object.PurchaseToken
     } else {
-      message.id = 0
+      message.PurchaseToken = ''
     }
     return message
   }
 }
 
-const baseQueryGetGooglIAPOrderResponse: object = {}
+const baseQueryGetGoogleIAPOrderResponse: object = {}
 
-export const QueryGetGooglIAPOrderResponse = {
-  encode(message: QueryGetGooglIAPOrderResponse, writer: Writer = Writer.create()): Writer {
-    if (message.GooglIAPOrder !== undefined) {
-      GooglIAPOrder.encode(message.GooglIAPOrder, writer.uint32(10).fork()).ldelim()
+export const QueryGetGoogleIAPOrderResponse = {
+  encode(message: QueryGetGoogleIAPOrderResponse, writer: Writer = Writer.create()): Writer {
+    if (message.GoogleIAPOrder !== undefined) {
+      GoogleIAPOrder.encode(message.GoogleIAPOrder, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetGooglIAPOrderResponse {
+  decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleIAPOrderResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetGooglIAPOrderResponse } as QueryGetGooglIAPOrderResponse
+    const message = { ...baseQueryGetGoogleIAPOrderResponse } as QueryGetGoogleIAPOrderResponse
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.GooglIAPOrder = GooglIAPOrder.decode(reader, reader.uint32())
+          message.GoogleIAPOrder = GoogleIAPOrder.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -189,162 +179,28 @@ export const QueryGetGooglIAPOrderResponse = {
     return message
   },
 
-  fromJSON(object: any): QueryGetGooglIAPOrderResponse {
-    const message = { ...baseQueryGetGooglIAPOrderResponse } as QueryGetGooglIAPOrderResponse
-    if (object.GooglIAPOrder !== undefined && object.GooglIAPOrder !== null) {
-      message.GooglIAPOrder = GooglIAPOrder.fromJSON(object.GooglIAPOrder)
+  fromJSON(object: any): QueryGetGoogleIAPOrderResponse {
+    const message = { ...baseQueryGetGoogleIAPOrderResponse } as QueryGetGoogleIAPOrderResponse
+    if (object.GoogleIAPOrder !== undefined && object.GoogleIAPOrder !== null) {
+      message.GoogleIAPOrder = GoogleIAPOrder.fromJSON(object.GoogleIAPOrder)
     } else {
-      message.GooglIAPOrder = undefined
+      message.GoogleIAPOrder = undefined
     }
     return message
   },
 
-  toJSON(message: QueryGetGooglIAPOrderResponse): unknown {
+  toJSON(message: QueryGetGoogleIAPOrderResponse): unknown {
     const obj: any = {}
-    message.GooglIAPOrder !== undefined && (obj.GooglIAPOrder = message.GooglIAPOrder ? GooglIAPOrder.toJSON(message.GooglIAPOrder) : undefined)
+    message.GoogleIAPOrder !== undefined && (obj.GoogleIAPOrder = message.GoogleIAPOrder ? GoogleIAPOrder.toJSON(message.GoogleIAPOrder) : undefined)
     return obj
   },
 
-  fromPartial(object: DeepPartial<QueryGetGooglIAPOrderResponse>): QueryGetGooglIAPOrderResponse {
-    const message = { ...baseQueryGetGooglIAPOrderResponse } as QueryGetGooglIAPOrderResponse
-    if (object.GooglIAPOrder !== undefined && object.GooglIAPOrder !== null) {
-      message.GooglIAPOrder = GooglIAPOrder.fromPartial(object.GooglIAPOrder)
+  fromPartial(object: DeepPartial<QueryGetGoogleIAPOrderResponse>): QueryGetGoogleIAPOrderResponse {
+    const message = { ...baseQueryGetGoogleIAPOrderResponse } as QueryGetGoogleIAPOrderResponse
+    if (object.GoogleIAPOrder !== undefined && object.GoogleIAPOrder !== null) {
+      message.GoogleIAPOrder = GoogleIAPOrder.fromPartial(object.GoogleIAPOrder)
     } else {
-      message.GooglIAPOrder = undefined
-    }
-    return message
-  }
-}
-
-const baseQueryAllGooglIAPOrderRequest: object = {}
-
-export const QueryAllGooglIAPOrderRequest = {
-  encode(message: QueryAllGooglIAPOrderRequest, writer: Writer = Writer.create()): Writer {
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): QueryAllGooglIAPOrderRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllGooglIAPOrderRequest } as QueryAllGooglIAPOrderRequest
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): QueryAllGooglIAPOrderRequest {
-    const message = { ...baseQueryAllGooglIAPOrderRequest } as QueryAllGooglIAPOrderRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  },
-
-  toJSON(message: QueryAllGooglIAPOrderRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<QueryAllGooglIAPOrderRequest>): QueryAllGooglIAPOrderRequest {
-    const message = { ...baseQueryAllGooglIAPOrderRequest } as QueryAllGooglIAPOrderRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
-}
-
-const baseQueryAllGooglIAPOrderResponse: object = {}
-
-export const QueryAllGooglIAPOrderResponse = {
-  encode(message: QueryAllGooglIAPOrderResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.GooglIAPOrder) {
-      GooglIAPOrder.encode(v!, writer.uint32(10).fork()).ldelim()
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): QueryAllGooglIAPOrderResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllGooglIAPOrderResponse } as QueryAllGooglIAPOrderResponse
-    message.GooglIAPOrder = []
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.GooglIAPOrder.push(GooglIAPOrder.decode(reader, reader.uint32()))
-          break
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): QueryAllGooglIAPOrderResponse {
-    const message = { ...baseQueryAllGooglIAPOrderResponse } as QueryAllGooglIAPOrderResponse
-    message.GooglIAPOrder = []
-    if (object.GooglIAPOrder !== undefined && object.GooglIAPOrder !== null) {
-      for (const e of object.GooglIAPOrder) {
-        message.GooglIAPOrder.push(GooglIAPOrder.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  },
-
-  toJSON(message: QueryAllGooglIAPOrderResponse): unknown {
-    const obj: any = {}
-    if (message.GooglIAPOrder) {
-      obj.GooglIAPOrder = message.GooglIAPOrder.map((e) => (e ? GooglIAPOrder.toJSON(e) : undefined))
-    } else {
-      obj.GooglIAPOrder = []
-    }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<QueryAllGooglIAPOrderResponse>): QueryAllGooglIAPOrderResponse {
-    const message = { ...baseQueryAllGooglIAPOrderResponse } as QueryAllGooglIAPOrderResponse
-    message.GooglIAPOrder = []
-    if (object.GooglIAPOrder !== undefined && object.GooglIAPOrder !== null) {
-      for (const e of object.GooglIAPOrder) {
-        message.GooglIAPOrder.push(GooglIAPOrder.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
+      message.GoogleIAPOrder = undefined
     }
     return message
   }
@@ -1479,10 +1335,8 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
-  /** Queries a googlIAPOrder by id. */
-  GooglIAPOrder(request: QueryGetGooglIAPOrderRequest): Promise<QueryGetGooglIAPOrderResponse>
-  /** Queries a list of googlIAPOrder items. */
-  GooglIAPOrderAll(request: QueryAllGooglIAPOrderRequest): Promise<QueryAllGooglIAPOrderResponse>
+  /** Queries a googleIAPOrder by PurchaseToken. */
+  GoogleIAPOrder(request: QueryGetGoogleIAPOrderRequest): Promise<QueryGetGoogleIAPOrderResponse>
   /** Queries a list of listExecutionsByItem items. */
   ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse>
   /** Queries a list of listExecutionsByRecipe items. */
@@ -1506,16 +1360,10 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
-  GooglIAPOrder(request: QueryGetGooglIAPOrderRequest): Promise<QueryGetGooglIAPOrderResponse> {
-    const data = QueryGetGooglIAPOrderRequest.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'GooglIAPOrder', data)
-    return promise.then((data) => QueryGetGooglIAPOrderResponse.decode(new Reader(data)))
-  }
-
-  GooglIAPOrderAll(request: QueryAllGooglIAPOrderRequest): Promise<QueryAllGooglIAPOrderResponse> {
-    const data = QueryAllGooglIAPOrderRequest.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'GooglIAPOrderAll', data)
-    return promise.then((data) => QueryAllGooglIAPOrderResponse.decode(new Reader(data)))
+  GoogleIAPOrder(request: QueryGetGoogleIAPOrderRequest): Promise<QueryGetGoogleIAPOrderResponse> {
+    const data = QueryGetGoogleIAPOrderRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'GoogleIAPOrder', data)
+    return promise.then((data) => QueryGetGoogleIAPOrderResponse.decode(new Reader(data)))
   }
 
   ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse> {
@@ -1571,16 +1419,6 @@ interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>
 }
 
-declare var self: any | undefined
-declare var window: any | undefined
-var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
-})()
-
 type Builtin = Date | Function | Uint8Array | string | number | undefined
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -1591,15 +1429,3 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>
-
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
-  }
-  return long.toNumber()
-}
-
-if (util.Long !== Long) {
-  util.Long = Long as any
-  configure()
-}

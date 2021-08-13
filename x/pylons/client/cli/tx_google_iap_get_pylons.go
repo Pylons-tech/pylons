@@ -1,13 +1,15 @@
 package cli
 
 import (
-	"github.com/spf13/cobra"
 	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/spf13/cobra"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -18,17 +20,17 @@ func CmdGoogleIAPGetPylons() *cobra.Command {
 		Short: "Buy pylons using Google IAP",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsProductID := string(args[0])
-			argsPurchaseToken := string(args[1])
-			argsRecieptDataBase64 := string(args[2])
-			argsSignature := string(args[3])
+			argsProductID := args[0]
+			argsPurchaseToken := args[1]
+			argsRecieptDataBase64 := args[2]
+			argsSignature := args[3]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgGoogleIAPGetPylons(clientCtx.GetFromAddress().String(), string(argsProductID), string(argsPurchaseToken), string(argsRecieptDataBase64), string(argsSignature))
+			msg := types.NewMsgGoogleIAPGetPylons(clientCtx.GetFromAddress().String(), argsProductID, argsPurchaseToken, argsRecieptDataBase64, argsSignature)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

@@ -3,13 +3,18 @@ package types
 import (
 	"crypto"
 	"crypto/rsa"
-	"crypto/sha1"
+
+	// Google forces us to use unsafe sha1 for IAP verification
+	"crypto/sha1" // nolint: gosec
 	"crypto/x509"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/config"
 )
 
 var _ sdk.Msg = &MsgGoogleIAPGetPylons{}
@@ -68,7 +73,8 @@ func (msg MsgGoogleIAPGetPylons) ValidateGoogleIAPSignature() error {
 		return err
 	}
 
-	h := sha1.New()
+	// Google forces us to use unsafe sha1 for IAP verification
+	h := sha1.New() // nolint: gosec
 	_, err = h.Write(receiptData)
 	if err != nil {
 		return err

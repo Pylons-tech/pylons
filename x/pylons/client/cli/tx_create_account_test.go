@@ -2,13 +2,15 @@ package cli_test
 
 import (
 	"fmt"
-	"github.com/Pylons-tech/pylons/testutil/network"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"testing"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
-	"testing"
+
+	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
 
 func TestCreateAccount(t *testing.T) {

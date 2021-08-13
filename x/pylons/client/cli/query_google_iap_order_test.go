@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"fmt"
+	"strconv"
 	"testing"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -19,14 +20,14 @@ func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
-    require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.GoogleIAPOrderList = append(state.GoogleIAPOrderList, &types.GoogleIAPOrder{Creator: "ANY", Id: uint64(i)})
+		state.GoogleIAPOrderList = append(state.GoogleIAPOrderList, &types.GoogleIAPOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
-    cfg.GenesisState[types.ModuleName] = buf
+	cfg.GenesisState[types.ModuleName] = buf
 	return network.New(t, cfg), state.GoogleIAPOrderList
 }
 
@@ -46,7 +47,7 @@ func TestShowGoogleIAPOrder(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   fmt.Sprintf("%d", objs[0].Id),
+			id:   objs[0].PurchaseToken,
 			args: common,
 			obj:  objs[0],
 		},

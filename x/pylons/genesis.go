@@ -11,13 +11,13 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
-// Set all the googlIAPOrder
-for _, elem := range genState.GooglIAPOrderList {
-	k.SetGoogleIAPOrder(ctx, *elem)
-}
+	// Set all the googlIAPOrder
+	for _, elem := range genState.GoogleIAPOrderList {
+		k.SetGoogleIAPOrder(ctx, *elem)
+	}
 
-// Set googlIAPOrder count
-k.SetGooglIAPOrderCount(ctx, genState.GooglIAPOrderCount)
+	// Set googlIAPOrder count
+	k.SetGoogleIAPOrderCount(ctx, genState.GoogleIAPOrderCount)
 
 	// Set all the execution
 	for _, elem := range genState.ExecutionList {
@@ -58,15 +58,15 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
 	// this line is used by starport scaffolding # genesis/module/export
-// Get all googlIAPOrder
-googlIAPOrderList := k.GetAllGoogleIAPOrder(ctx)
-for _, elem := range googlIAPOrderList {
-	elem := elem
-	genesis.GooglIAPOrderList = append(genesis.GooglIAPOrderList, &elem)
-}
+	// Get all googlIAPOrder
+	googlIAPOrderList := k.GetAllGoogleIAPOrder(ctx)
+	for _, elem := range googlIAPOrderList {
+		elem := elem
+		genesis.GoogleIAPOrderList = append(genesis.GoogleIAPOrderList, &elem)
+	}
 
-// Set the current count
-genesis.GooglIAPOrderCount = k.GetGooglIAPOrderCount(ctx)
+	// Set the current count
+	genesis.GoogleIAPOrderCount = k.GetGoogleIAPOrderCount(ctx)
 
 	// Get all pending execution
 	pendingExecutionList := k.GetAllPendingExecution(ctx)

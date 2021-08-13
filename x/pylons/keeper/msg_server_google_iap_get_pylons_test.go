@@ -9,14 +9,13 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestHandlerMsgGoogleIAPGetPylons(t *testing.T) {
-	tci := keeper.SetupTestCoinInput()
+	tci := SetupTestCoinInput()
 	tci.PlnH = NewMsgServerImpl(tci.PlnK)
-	sender1, sender2, sender3, _ := keeper.SetupTestAccounts(t, tci, nil, nil, nil, nil)
+	sender1, sender2, sender3, _ := SetupTestAccounts(t, tci, nil, nil, nil, nil)
 
 	cases := map[string]struct {
 		productID       string

@@ -2,11 +2,12 @@ package keeper
 
 import (
 	"context"
-	"github.com/Workiva/go-datastructures/threadsafe/err"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogleIAPGetPylons) (*types.MsgGoogleIAPGetPylonsResponse, error) {
@@ -16,14 +17,13 @@ func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogl
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
 	}
 
-
-iap := types.GoogleIAPOrder{
-	Creator:           msg.Creator,
-	ProductID:         msg.ProductID,
-	PurchaseToken:     msg.PurchaseToken,
-	ReceiptDataBase64: msg.ReceiptDataBase64,
-	Signature:         msg.Signature,
-}
+	iap := types.GoogleIAPOrder{
+		Creator:           msg.Creator,
+		ProductID:         msg.ProductID,
+		PurchaseToken:     msg.PurchaseToken,
+		ReceiptDataBase64: msg.ReceiptDataBase64,
+		Signature:         msg.Signature,
+	}
 
 	k.SetGoogleIAPOrder(ctx, iap)
 
@@ -31,7 +31,7 @@ iap := types.GoogleIAPOrder{
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	// Add coins based on the package
-	err = k.bankKeeper.AddCoins(ctx, addr, iap.GetAmount())
+	err := k.bankKeeper.AddCoins(ctx, addr, iap.GetAmount())
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}

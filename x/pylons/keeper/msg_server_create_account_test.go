@@ -1,11 +1,13 @@
 package keeper
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"testing"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
-	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestCreateAccount(t *testing.T) {

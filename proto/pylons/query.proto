@@ -17,9 +17,9 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 service Query {
 	// this line is used by starport scaffolding # 2
 
-	// Queries a googlIAPOrder by id.
+	// Queries a googleIAPOrder by PurchaseToken.
 	rpc GoogleIAPOrder(QueryGetGoogleIAPOrderRequest) returns (QueryGetGoogleIAPOrderResponse) {
-		option (google.api.http).get = "/Pylons-tech/pylons/pylons/googleIAPOrder/{id}";
+		option (google.api.http).get = "/pylons/googleIAPOrder/{PurchaseToken}";
 	}
 
 
@@ -37,7 +37,7 @@ service Query {
 
 	// Queries a execution by id.
 	rpc Execution(QueryGetExecutionRequest) returns (QueryGetExecutionResponse) {
-		option (google.api.http).get = "/Pylons-tech/pylons/pylons/execution/{ID}";
+		option (google.api.http).get = "/pylons/execution/{ID}";
 	}
 
 
@@ -74,7 +74,7 @@ service Query {
 
 // this line is used by starport scaffolding # 3
 message QueryGetGoogleIAPOrderRequest {
-	uint64 id = 1;
+	string PurchaseToken = 1;
 }
 
 message QueryGetGoogleIAPOrderResponse {

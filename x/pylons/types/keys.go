@@ -42,9 +42,8 @@ const (
 	PendingExecutionKey = "PendingExecution-value-"
 	// PendingExecutionCountKey is a string key used as a prefix to the KVStore
 	PendingExecutionCountKey = "PendingExecution-count-"
-)
-
-const (
-	GoogleIAPOrderKey      = "GoogleIAPOrder-value-"
+	// GoogleIAPOrderKey is a string key used as a prefix to the KVStore
+	GoogleIAPOrderKey = "GoogleIAPOrder-value-"
+	// GoogleIAPOrderCountKey is a string key used as a prefix to the KVStore
 	GoogleIAPOrderCountKey = "GoogleIAPOrder-count-"
 )

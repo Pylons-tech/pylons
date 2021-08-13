@@ -9,9 +9,6 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
-cdc.RegisterConcrete(&MsgCreateGooglIAPOrder{}, "pylons/CreateGooglIAPOrder", nil)
-cdc.RegisterConcrete(&MsgUpdateGooglIAPOrder{}, "pylons/UpdateGooglIAPOrder", nil)
-cdc.RegisterConcrete(&MsgDeleteGooglIAPOrder{}, "pylons/DeleteGooglIAPOrder", nil)
 
 	cdc.RegisterConcrete(&MsgGoogleIAPGetPylons{}, "pylons/GoogleIAPGetPylons", nil)
 
@@ -33,11 +30,6 @@ cdc.RegisterConcrete(&MsgDeleteGooglIAPOrder{}, "pylons/DeleteGooglIAPOrder", ni
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
-registry.RegisterImplementations((*sdk.Msg)(nil),
-	&MsgCreateGooglIAPOrder{},
-	&MsgUpdateGooglIAPOrder{},
-	&MsgDeleteGooglIAPOrder{},
-)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgGoogleIAPGetPylons{},
 	)

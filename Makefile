@@ -1,7 +1,6 @@
 #!/usr/bin/make -f
 PACKAGES=$(shell go list ./... | grep -v '/simulation')
 GOBIN ?= $(GOPATH)/bin
-GOSUM := $(shell which gosum)
 DOCKER := $(shell which docker)
 VERSION := $(shell echo $(shell git describe --tags 2> /dev/null || echo "dev-$(shell git describe --always)") | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')

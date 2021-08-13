@@ -6,7 +6,7 @@ import (
 
 const (
 	// original address: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	validBech32AccAddr = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
+	validBech32AccAddr = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337" // nolint: deadcode
 	baseAccAddrBech32  = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt33"
 )
 
