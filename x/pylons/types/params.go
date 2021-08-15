@@ -2,9 +2,10 @@ package types
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	"gopkg.in/yaml.v2"
+	yaml "gopkg.in/yaml.v2"
 )
 
 const (
@@ -22,23 +23,23 @@ const (
 
 // Parameter Keys
 var (
-	ParamStoreKeyMinNameFieldLength = []byte("minnamefieldlength")
-	ParamStoreKeyMinDescriptionFieldLength = []byte("mindescriptionfieldlength")
-	ParamStoreKeyBaseFee = []byte("basefee")
+	ParamStoreKeyMinNameFieldLength        = []byte("MinNameFieldLength")
+	ParamStoreKeyMinDescriptionFieldLength = []byte("MinDescriptionFieldLength")
+	ParamStoreKeyBaseFee                   = []byte("BaseFee")
 )
 
 type Params struct {
-	MinNameFieldLength uint64
+	MinNameFieldLength        uint64
 	MinDescriptionFieldLength uint64
-	BaseFee sdk.Coins
+	BaseFee                   sdk.Coins
 }
 
 // DefaultParams returns default pylons parameters
 func DefaultParams() Params {
-	return Params {
-		MinNameFieldLength: DefaultMinNameFieldLength,
+	return Params{
+		MinNameFieldLength:        DefaultMinNameFieldLength,
 		MinDescriptionFieldLength: DefaultMinDescriptionFieldLength,
-		BaseFee: 	sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBaseFee)},
+		BaseFee:                   sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBaseFee)},
 	}
 }
 
@@ -59,7 +60,6 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyMinNameFieldLength, &p.MinNameFieldLength, validateUint),
 		paramtypes.NewParamSetPair(ParamStoreKeyMinDescriptionFieldLength, &p.MinDescriptionFieldLength, validateUint),
 		paramtypes.NewParamSetPair(ParamStoreKeyBaseFee, &p.BaseFee, validateBaseFee),
-
 	}
 }
 
@@ -87,7 +87,7 @@ func defaultValidateFunction(i interface{}) error {
 	return nil
 }
 
-func validateUint(i interface {}) error {
+func validateUint(i interface{}) error {
 	v, ok := i.(uint64)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
@@ -100,7 +100,7 @@ func validateUint(i interface {}) error {
 	return nil
 }
 
-func validateBaseFee(i interface {}) error {
+func validateBaseFee(i interface{}) error {
 	v, ok := i.(sdk.Coins)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
@@ -118,4 +118,3 @@ func validateBaseFee(i interface {}) error {
 
 	return nil
 }
-

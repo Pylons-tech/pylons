@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -53,12 +55,12 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if len(msg.Name) < 8 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+	if uint64(len(msg.Name)) < DefaultParams().MinNameFieldLength {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("the name of the cookbook should have more than %v characters", DefaultParams().MinNameFieldLength))
 	}
 
-	if len(msg.Description) < 20 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+	if uint64(len(msg.Description)) < DefaultParams().MinDescriptionFieldLength {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("the description should have more than %v characters", DefaultParams().MinDescriptionFieldLength))
 	}
 
 	if err = ValidateEmail(msg.SupportEmail); err != nil {
