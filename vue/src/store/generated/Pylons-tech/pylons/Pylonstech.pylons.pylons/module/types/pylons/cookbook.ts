@@ -1,6 +1,6 @@
 /* eslint-disable */
-import * as Long from 'long'
-import { util, configure, Writer, Reader } from 'protobufjs/minimal'
+import { Coin } from '../cosmos/base/v1beta1/coin'
+import { Writer, Reader } from 'protobufjs/minimal'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
@@ -13,22 +13,11 @@ export interface Cookbook {
   developer: string
   version: string
   supportEmail: string
-  costPerBlock: number
+  costPerBlock: Coin | undefined
   enabled: boolean
 }
 
-const baseCookbook: object = {
-  creator: '',
-  ID: '',
-  nodeVersion: '',
-  name: '',
-  description: '',
-  developer: '',
-  version: '',
-  supportEmail: '',
-  costPerBlock: 0,
-  enabled: false
-}
+const baseCookbook: object = { creator: '', ID: '', nodeVersion: '', name: '', description: '', developer: '', version: '', supportEmail: '', enabled: false }
 
 export const Cookbook = {
   encode(message: Cookbook, writer: Writer = Writer.create()): Writer {
@@ -56,8 +45,8 @@ export const Cookbook = {
     if (message.supportEmail !== '') {
       writer.uint32(66).string(message.supportEmail)
     }
-    if (message.costPerBlock !== 0) {
-      writer.uint32(72).uint64(message.costPerBlock)
+    if (message.costPerBlock !== undefined) {
+      Coin.encode(message.costPerBlock, writer.uint32(74).fork()).ldelim()
     }
     if (message.enabled === true) {
       writer.uint32(80).bool(message.enabled)
@@ -97,7 +86,7 @@ export const Cookbook = {
           message.supportEmail = reader.string()
           break
         case 9:
-          message.costPerBlock = longToNumber(reader.uint64() as Long)
+          message.costPerBlock = Coin.decode(reader, reader.uint32())
           break
         case 10:
           message.enabled = reader.bool()
@@ -153,9 +142,9 @@ export const Cookbook = {
       message.supportEmail = ''
     }
     if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Number(object.costPerBlock)
+      message.costPerBlock = Coin.fromJSON(object.costPerBlock)
     } else {
-      message.costPerBlock = 0
+      message.costPerBlock = undefined
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled)
@@ -175,7 +164,7 @@ export const Cookbook = {
     message.developer !== undefined && (obj.developer = message.developer)
     message.version !== undefined && (obj.version = message.version)
     message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail)
-    message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock)
+    message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock ? Coin.toJSON(message.costPerBlock) : undefined)
     message.enabled !== undefined && (obj.enabled = message.enabled)
     return obj
   },
@@ -223,9 +212,9 @@ export const Cookbook = {
       message.supportEmail = ''
     }
     if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = object.costPerBlock
+      message.costPerBlock = Coin.fromPartial(object.costPerBlock)
     } else {
-      message.costPerBlock = 0
+      message.costPerBlock = undefined
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled
@@ -235,16 +224,6 @@ export const Cookbook = {
     return message
   }
 }
-
-declare var self: any | undefined
-declare var window: any | undefined
-var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
-})()
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined
 export type DeepPartial<T> = T extends Builtin
@@ -256,15 +235,3 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>
-
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
-  }
-  return long.toNumber()
-}
-
-if (util.Long !== Long) {
-  util.Long = Long as any
-  configure()
-}

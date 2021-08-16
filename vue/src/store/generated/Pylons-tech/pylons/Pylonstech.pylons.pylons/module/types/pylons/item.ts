@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
+import { Coin } from '../cosmos/base/v1beta1/coin'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
@@ -33,8 +34,7 @@ export interface Item {
   mutableStrings: StringKeyValue[]
   tradeable: boolean
   lastUpdate: number
-  /** TODO we should make this uniform with other transferFee once we address fees */
-  transferFee: string
+  transferFee: Coin | undefined
 }
 
 const baseDoubleKeyValue: object = { Key: '', Value: '' }
@@ -253,7 +253,7 @@ export const StringKeyValue = {
   }
 }
 
-const baseItem: object = { owner: '', cookbookID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, transferFee: '' }
+const baseItem: object = { owner: '', cookbookID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0 }
 
 export const Item = {
   encode(message: Item, writer: Writer = Writer.create()): Writer {
@@ -287,8 +287,8 @@ export const Item = {
     if (message.lastUpdate !== 0) {
       writer.uint32(80).uint64(message.lastUpdate)
     }
-    if (message.transferFee !== '') {
-      writer.uint32(90).string(message.transferFee)
+    if (message.transferFee !== undefined) {
+      Coin.encode(message.transferFee, writer.uint32(90).fork()).ldelim()
     }
     return writer
   },
@@ -335,7 +335,7 @@ export const Item = {
           message.lastUpdate = longToNumber(reader.uint64() as Long)
           break
         case 11:
-          message.transferFee = reader.string()
+          message.transferFee = Coin.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -402,9 +402,9 @@ export const Item = {
       message.lastUpdate = 0
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = String(object.transferFee)
+      message.transferFee = Coin.fromJSON(object.transferFee)
     } else {
-      message.transferFee = ''
+      message.transferFee = undefined
     }
     return message
   },
@@ -437,7 +437,7 @@ export const Item = {
     }
     message.tradeable !== undefined && (obj.tradeable = message.tradeable)
     message.lastUpdate !== undefined && (obj.lastUpdate = message.lastUpdate)
-    message.transferFee !== undefined && (obj.transferFee = message.transferFee)
+    message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
     return obj
   },
 
@@ -498,9 +498,9 @@ export const Item = {
       message.lastUpdate = 0
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = object.transferFee
+      message.transferFee = Coin.fromPartial(object.transferFee)
     } else {
-      message.transferFee = ''
+      message.transferFee = undefined
     }
     return message
   }

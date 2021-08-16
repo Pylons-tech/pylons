@@ -17,6 +17,10 @@ func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogl
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the iap order ID is already being used")
 	}
 
+	if err := k.ValidateGoogleIAPSignature(ctx, msg); err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid")
+	}
+
 	iap := types.GoogleIAPOrder{
 		Creator:           msg.Creator,
 		ProductID:         msg.ProductID,
@@ -31,7 +35,7 @@ func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogl
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	// Add coins based on the package
-	err := k.bankKeeper.AddCoins(ctx, addr, iap.GetAmount())
+	err := k.bankKeeper.AddCoins(ctx, addr, k.GetAmount(ctx, iap))
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}

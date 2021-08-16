@@ -7,7 +7,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -181,7 +180,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		Creator:     msg.Creator,
 		CookbookID:  msg.CookbookID,
 		RecipeID:    msg.RecipeID,
-		NodeVersion: config.GetNodeVersionString(),
+		NodeVersion: types.GetNodeVersionString(),
 		BlockHeight: ctx.BlockHeight(),
 		CoinInputs:  nil, // TODO
 		ItemInputs:  itemRecords,

@@ -5,14 +5,223 @@ import { Coin } from '../cosmos/base/v1beta1/coin'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
+export interface GoogleIAPPackage {
+  PackageName: string
+  ProductID: string
+  Amount: string
+}
+
+export interface CoinIssuer {
+  CoinDenom: string
+  Packages: GoogleIAPPackage[]
+  GoogleIAPPubKey: string
+}
+
 /** Params represent the parameters used by the pylons module */
 export interface Params {
   minNameFieldLength: number
   minDescriptionFieldLength: number
-  baseFee: Coin[]
+  coinIssuers: CoinIssuer[]
+  recipeFeePercentage: string
+  itemTransferFeePercentage: string
+  UpdateItemStringFee: Coin | undefined
+  minTransferFee: string
+  maxTransferFee: string
 }
 
-const baseParams: object = { minNameFieldLength: 0, minDescriptionFieldLength: 0 }
+const baseGoogleIAPPackage: object = { PackageName: '', ProductID: '', Amount: '' }
+
+export const GoogleIAPPackage = {
+  encode(message: GoogleIAPPackage, writer: Writer = Writer.create()): Writer {
+    if (message.PackageName !== '') {
+      writer.uint32(10).string(message.PackageName)
+    }
+    if (message.ProductID !== '') {
+      writer.uint32(18).string(message.ProductID)
+    }
+    if (message.Amount !== '') {
+      writer.uint32(26).string(message.Amount)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): GoogleIAPPackage {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseGoogleIAPPackage } as GoogleIAPPackage
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.PackageName = reader.string()
+          break
+        case 2:
+          message.ProductID = reader.string()
+          break
+        case 3:
+          message.Amount = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): GoogleIAPPackage {
+    const message = { ...baseGoogleIAPPackage } as GoogleIAPPackage
+    if (object.PackageName !== undefined && object.PackageName !== null) {
+      message.PackageName = String(object.PackageName)
+    } else {
+      message.PackageName = ''
+    }
+    if (object.ProductID !== undefined && object.ProductID !== null) {
+      message.ProductID = String(object.ProductID)
+    } else {
+      message.ProductID = ''
+    }
+    if (object.Amount !== undefined && object.Amount !== null) {
+      message.Amount = String(object.Amount)
+    } else {
+      message.Amount = ''
+    }
+    return message
+  },
+
+  toJSON(message: GoogleIAPPackage): unknown {
+    const obj: any = {}
+    message.PackageName !== undefined && (obj.PackageName = message.PackageName)
+    message.ProductID !== undefined && (obj.ProductID = message.ProductID)
+    message.Amount !== undefined && (obj.Amount = message.Amount)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<GoogleIAPPackage>): GoogleIAPPackage {
+    const message = { ...baseGoogleIAPPackage } as GoogleIAPPackage
+    if (object.PackageName !== undefined && object.PackageName !== null) {
+      message.PackageName = object.PackageName
+    } else {
+      message.PackageName = ''
+    }
+    if (object.ProductID !== undefined && object.ProductID !== null) {
+      message.ProductID = object.ProductID
+    } else {
+      message.ProductID = ''
+    }
+    if (object.Amount !== undefined && object.Amount !== null) {
+      message.Amount = object.Amount
+    } else {
+      message.Amount = ''
+    }
+    return message
+  }
+}
+
+const baseCoinIssuer: object = { CoinDenom: '', GoogleIAPPubKey: '' }
+
+export const CoinIssuer = {
+  encode(message: CoinIssuer, writer: Writer = Writer.create()): Writer {
+    if (message.CoinDenom !== '') {
+      writer.uint32(10).string(message.CoinDenom)
+    }
+    for (const v of message.Packages) {
+      GoogleIAPPackage.encode(v!, writer.uint32(18).fork()).ldelim()
+    }
+    if (message.GoogleIAPPubKey !== '') {
+      writer.uint32(26).string(message.GoogleIAPPubKey)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): CoinIssuer {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseCoinIssuer } as CoinIssuer
+    message.Packages = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.CoinDenom = reader.string()
+          break
+        case 2:
+          message.Packages.push(GoogleIAPPackage.decode(reader, reader.uint32()))
+          break
+        case 3:
+          message.GoogleIAPPubKey = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): CoinIssuer {
+    const message = { ...baseCoinIssuer } as CoinIssuer
+    message.Packages = []
+    if (object.CoinDenom !== undefined && object.CoinDenom !== null) {
+      message.CoinDenom = String(object.CoinDenom)
+    } else {
+      message.CoinDenom = ''
+    }
+    if (object.Packages !== undefined && object.Packages !== null) {
+      for (const e of object.Packages) {
+        message.Packages.push(GoogleIAPPackage.fromJSON(e))
+      }
+    }
+    if (object.GoogleIAPPubKey !== undefined && object.GoogleIAPPubKey !== null) {
+      message.GoogleIAPPubKey = String(object.GoogleIAPPubKey)
+    } else {
+      message.GoogleIAPPubKey = ''
+    }
+    return message
+  },
+
+  toJSON(message: CoinIssuer): unknown {
+    const obj: any = {}
+    message.CoinDenom !== undefined && (obj.CoinDenom = message.CoinDenom)
+    if (message.Packages) {
+      obj.Packages = message.Packages.map((e) => (e ? GoogleIAPPackage.toJSON(e) : undefined))
+    } else {
+      obj.Packages = []
+    }
+    message.GoogleIAPPubKey !== undefined && (obj.GoogleIAPPubKey = message.GoogleIAPPubKey)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<CoinIssuer>): CoinIssuer {
+    const message = { ...baseCoinIssuer } as CoinIssuer
+    message.Packages = []
+    if (object.CoinDenom !== undefined && object.CoinDenom !== null) {
+      message.CoinDenom = object.CoinDenom
+    } else {
+      message.CoinDenom = ''
+    }
+    if (object.Packages !== undefined && object.Packages !== null) {
+      for (const e of object.Packages) {
+        message.Packages.push(GoogleIAPPackage.fromPartial(e))
+      }
+    }
+    if (object.GoogleIAPPubKey !== undefined && object.GoogleIAPPubKey !== null) {
+      message.GoogleIAPPubKey = object.GoogleIAPPubKey
+    } else {
+      message.GoogleIAPPubKey = ''
+    }
+    return message
+  }
+}
+
+const baseParams: object = {
+  minNameFieldLength: 0,
+  minDescriptionFieldLength: 0,
+  recipeFeePercentage: '',
+  itemTransferFeePercentage: '',
+  minTransferFee: '',
+  maxTransferFee: ''
+}
 
 export const Params = {
   encode(message: Params, writer: Writer = Writer.create()): Writer {
@@ -22,8 +231,23 @@ export const Params = {
     if (message.minDescriptionFieldLength !== 0) {
       writer.uint32(16).uint64(message.minDescriptionFieldLength)
     }
-    for (const v of message.baseFee) {
-      Coin.encode(v!, writer.uint32(26).fork()).ldelim()
+    for (const v of message.coinIssuers) {
+      CoinIssuer.encode(v!, writer.uint32(26).fork()).ldelim()
+    }
+    if (message.recipeFeePercentage !== '') {
+      writer.uint32(34).string(message.recipeFeePercentage)
+    }
+    if (message.itemTransferFeePercentage !== '') {
+      writer.uint32(42).string(message.itemTransferFeePercentage)
+    }
+    if (message.UpdateItemStringFee !== undefined) {
+      Coin.encode(message.UpdateItemStringFee, writer.uint32(50).fork()).ldelim()
+    }
+    if (message.minTransferFee !== '') {
+      writer.uint32(58).string(message.minTransferFee)
+    }
+    if (message.maxTransferFee !== '') {
+      writer.uint32(66).string(message.maxTransferFee)
     }
     return writer
   },
@@ -32,7 +256,7 @@ export const Params = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseParams } as Params
-    message.baseFee = []
+    message.coinIssuers = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -43,7 +267,22 @@ export const Params = {
           message.minDescriptionFieldLength = longToNumber(reader.uint64() as Long)
           break
         case 3:
-          message.baseFee.push(Coin.decode(reader, reader.uint32()))
+          message.coinIssuers.push(CoinIssuer.decode(reader, reader.uint32()))
+          break
+        case 4:
+          message.recipeFeePercentage = reader.string()
+          break
+        case 5:
+          message.itemTransferFeePercentage = reader.string()
+          break
+        case 6:
+          message.UpdateItemStringFee = Coin.decode(reader, reader.uint32())
+          break
+        case 7:
+          message.minTransferFee = reader.string()
+          break
+        case 8:
+          message.maxTransferFee = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -55,7 +294,7 @@ export const Params = {
 
   fromJSON(object: any): Params {
     const message = { ...baseParams } as Params
-    message.baseFee = []
+    message.coinIssuers = []
     if (object.minNameFieldLength !== undefined && object.minNameFieldLength !== null) {
       message.minNameFieldLength = Number(object.minNameFieldLength)
     } else {
@@ -66,10 +305,35 @@ export const Params = {
     } else {
       message.minDescriptionFieldLength = 0
     }
-    if (object.baseFee !== undefined && object.baseFee !== null) {
-      for (const e of object.baseFee) {
-        message.baseFee.push(Coin.fromJSON(e))
+    if (object.coinIssuers !== undefined && object.coinIssuers !== null) {
+      for (const e of object.coinIssuers) {
+        message.coinIssuers.push(CoinIssuer.fromJSON(e))
       }
+    }
+    if (object.recipeFeePercentage !== undefined && object.recipeFeePercentage !== null) {
+      message.recipeFeePercentage = String(object.recipeFeePercentage)
+    } else {
+      message.recipeFeePercentage = ''
+    }
+    if (object.itemTransferFeePercentage !== undefined && object.itemTransferFeePercentage !== null) {
+      message.itemTransferFeePercentage = String(object.itemTransferFeePercentage)
+    } else {
+      message.itemTransferFeePercentage = ''
+    }
+    if (object.UpdateItemStringFee !== undefined && object.UpdateItemStringFee !== null) {
+      message.UpdateItemStringFee = Coin.fromJSON(object.UpdateItemStringFee)
+    } else {
+      message.UpdateItemStringFee = undefined
+    }
+    if (object.minTransferFee !== undefined && object.minTransferFee !== null) {
+      message.minTransferFee = String(object.minTransferFee)
+    } else {
+      message.minTransferFee = ''
+    }
+    if (object.maxTransferFee !== undefined && object.maxTransferFee !== null) {
+      message.maxTransferFee = String(object.maxTransferFee)
+    } else {
+      message.maxTransferFee = ''
     }
     return message
   },
@@ -78,17 +342,22 @@ export const Params = {
     const obj: any = {}
     message.minNameFieldLength !== undefined && (obj.minNameFieldLength = message.minNameFieldLength)
     message.minDescriptionFieldLength !== undefined && (obj.minDescriptionFieldLength = message.minDescriptionFieldLength)
-    if (message.baseFee) {
-      obj.baseFee = message.baseFee.map((e) => (e ? Coin.toJSON(e) : undefined))
+    if (message.coinIssuers) {
+      obj.coinIssuers = message.coinIssuers.map((e) => (e ? CoinIssuer.toJSON(e) : undefined))
     } else {
-      obj.baseFee = []
+      obj.coinIssuers = []
     }
+    message.recipeFeePercentage !== undefined && (obj.recipeFeePercentage = message.recipeFeePercentage)
+    message.itemTransferFeePercentage !== undefined && (obj.itemTransferFeePercentage = message.itemTransferFeePercentage)
+    message.UpdateItemStringFee !== undefined && (obj.UpdateItemStringFee = message.UpdateItemStringFee ? Coin.toJSON(message.UpdateItemStringFee) : undefined)
+    message.minTransferFee !== undefined && (obj.minTransferFee = message.minTransferFee)
+    message.maxTransferFee !== undefined && (obj.maxTransferFee = message.maxTransferFee)
     return obj
   },
 
   fromPartial(object: DeepPartial<Params>): Params {
     const message = { ...baseParams } as Params
-    message.baseFee = []
+    message.coinIssuers = []
     if (object.minNameFieldLength !== undefined && object.minNameFieldLength !== null) {
       message.minNameFieldLength = object.minNameFieldLength
     } else {
@@ -99,10 +368,35 @@ export const Params = {
     } else {
       message.minDescriptionFieldLength = 0
     }
-    if (object.baseFee !== undefined && object.baseFee !== null) {
-      for (const e of object.baseFee) {
-        message.baseFee.push(Coin.fromPartial(e))
+    if (object.coinIssuers !== undefined && object.coinIssuers !== null) {
+      for (const e of object.coinIssuers) {
+        message.coinIssuers.push(CoinIssuer.fromPartial(e))
       }
+    }
+    if (object.recipeFeePercentage !== undefined && object.recipeFeePercentage !== null) {
+      message.recipeFeePercentage = object.recipeFeePercentage
+    } else {
+      message.recipeFeePercentage = ''
+    }
+    if (object.itemTransferFeePercentage !== undefined && object.itemTransferFeePercentage !== null) {
+      message.itemTransferFeePercentage = object.itemTransferFeePercentage
+    } else {
+      message.itemTransferFeePercentage = ''
+    }
+    if (object.UpdateItemStringFee !== undefined && object.UpdateItemStringFee !== null) {
+      message.UpdateItemStringFee = Coin.fromPartial(object.UpdateItemStringFee)
+    } else {
+      message.UpdateItemStringFee = undefined
+    }
+    if (object.minTransferFee !== undefined && object.minTransferFee !== null) {
+      message.minTransferFee = object.minTransferFee
+    } else {
+      message.minTransferFee = ''
+    }
+    if (object.maxTransferFee !== undefined && object.maxTransferFee !== null) {
+      message.maxTransferFee = object.maxTransferFee
+    } else {
+      message.maxTransferFee = ''
     }
     return message
   }

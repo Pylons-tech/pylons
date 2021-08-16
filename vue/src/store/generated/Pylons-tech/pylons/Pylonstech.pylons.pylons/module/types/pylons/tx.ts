@@ -97,8 +97,7 @@ export interface MsgCreateCookbook {
   developer: string
   version: string
   supportEmail: string
-  tier: number
-  costPerBlock: number
+  costPerBlock: Coin | undefined
   enabled: boolean
 }
 
@@ -112,8 +111,7 @@ export interface MsgUpdateCookbook {
   developer: string
   version: string
   supportEmail: string
-  tier: number
-  costPerBlock: number
+  costPerBlock: Coin | undefined
   enabled: boolean
 }
 
@@ -1509,18 +1507,7 @@ export const MsgUpdateRecipeResponse = {
   }
 }
 
-const baseMsgCreateCookbook: object = {
-  creator: '',
-  ID: '',
-  name: '',
-  description: '',
-  developer: '',
-  version: '',
-  supportEmail: '',
-  tier: 0,
-  costPerBlock: 0,
-  enabled: false
-}
+const baseMsgCreateCookbook: object = { creator: '', ID: '', name: '', description: '', developer: '', version: '', supportEmail: '', enabled: false }
 
 export const MsgCreateCookbook = {
   encode(message: MsgCreateCookbook, writer: Writer = Writer.create()): Writer {
@@ -1545,14 +1532,11 @@ export const MsgCreateCookbook = {
     if (message.supportEmail !== '') {
       writer.uint32(58).string(message.supportEmail)
     }
-    if (message.tier !== 0) {
-      writer.uint32(64).int64(message.tier)
-    }
-    if (message.costPerBlock !== 0) {
-      writer.uint32(72).uint64(message.costPerBlock)
+    if (message.costPerBlock !== undefined) {
+      Coin.encode(message.costPerBlock, writer.uint32(66).fork()).ldelim()
     }
     if (message.enabled === true) {
-      writer.uint32(80).bool(message.enabled)
+      writer.uint32(72).bool(message.enabled)
     }
     return writer
   },
@@ -1586,12 +1570,9 @@ export const MsgCreateCookbook = {
           message.supportEmail = reader.string()
           break
         case 8:
-          message.tier = longToNumber(reader.int64() as Long)
+          message.costPerBlock = Coin.decode(reader, reader.uint32())
           break
         case 9:
-          message.costPerBlock = longToNumber(reader.uint64() as Long)
-          break
-        case 10:
           message.enabled = reader.bool()
           break
         default:
@@ -1639,15 +1620,10 @@ export const MsgCreateCookbook = {
     } else {
       message.supportEmail = ''
     }
-    if (object.tier !== undefined && object.tier !== null) {
-      message.tier = Number(object.tier)
-    } else {
-      message.tier = 0
-    }
     if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Number(object.costPerBlock)
+      message.costPerBlock = Coin.fromJSON(object.costPerBlock)
     } else {
-      message.costPerBlock = 0
+      message.costPerBlock = undefined
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled)
@@ -1666,8 +1642,7 @@ export const MsgCreateCookbook = {
     message.developer !== undefined && (obj.developer = message.developer)
     message.version !== undefined && (obj.version = message.version)
     message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail)
-    message.tier !== undefined && (obj.tier = message.tier)
-    message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock)
+    message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock ? Coin.toJSON(message.costPerBlock) : undefined)
     message.enabled !== undefined && (obj.enabled = message.enabled)
     return obj
   },
@@ -1709,15 +1684,10 @@ export const MsgCreateCookbook = {
     } else {
       message.supportEmail = ''
     }
-    if (object.tier !== undefined && object.tier !== null) {
-      message.tier = object.tier
-    } else {
-      message.tier = 0
-    }
     if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = object.costPerBlock
+      message.costPerBlock = Coin.fromPartial(object.costPerBlock)
     } else {
-      message.costPerBlock = 0
+      message.costPerBlock = undefined
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled
@@ -1766,18 +1736,7 @@ export const MsgCreateCookbookResponse = {
   }
 }
 
-const baseMsgUpdateCookbook: object = {
-  creator: '',
-  ID: '',
-  name: '',
-  description: '',
-  developer: '',
-  version: '',
-  supportEmail: '',
-  tier: 0,
-  costPerBlock: 0,
-  enabled: false
-}
+const baseMsgUpdateCookbook: object = { creator: '', ID: '', name: '', description: '', developer: '', version: '', supportEmail: '', enabled: false }
 
 export const MsgUpdateCookbook = {
   encode(message: MsgUpdateCookbook, writer: Writer = Writer.create()): Writer {
@@ -1802,14 +1761,11 @@ export const MsgUpdateCookbook = {
     if (message.supportEmail !== '') {
       writer.uint32(58).string(message.supportEmail)
     }
-    if (message.tier !== 0) {
-      writer.uint32(64).int64(message.tier)
-    }
-    if (message.costPerBlock !== 0) {
-      writer.uint32(72).uint64(message.costPerBlock)
+    if (message.costPerBlock !== undefined) {
+      Coin.encode(message.costPerBlock, writer.uint32(66).fork()).ldelim()
     }
     if (message.enabled === true) {
-      writer.uint32(80).bool(message.enabled)
+      writer.uint32(72).bool(message.enabled)
     }
     return writer
   },
@@ -1843,12 +1799,9 @@ export const MsgUpdateCookbook = {
           message.supportEmail = reader.string()
           break
         case 8:
-          message.tier = longToNumber(reader.int64() as Long)
+          message.costPerBlock = Coin.decode(reader, reader.uint32())
           break
         case 9:
-          message.costPerBlock = longToNumber(reader.uint64() as Long)
-          break
-        case 10:
           message.enabled = reader.bool()
           break
         default:
@@ -1896,15 +1849,10 @@ export const MsgUpdateCookbook = {
     } else {
       message.supportEmail = ''
     }
-    if (object.tier !== undefined && object.tier !== null) {
-      message.tier = Number(object.tier)
-    } else {
-      message.tier = 0
-    }
     if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = Number(object.costPerBlock)
+      message.costPerBlock = Coin.fromJSON(object.costPerBlock)
     } else {
-      message.costPerBlock = 0
+      message.costPerBlock = undefined
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = Boolean(object.enabled)
@@ -1923,8 +1871,7 @@ export const MsgUpdateCookbook = {
     message.developer !== undefined && (obj.developer = message.developer)
     message.version !== undefined && (obj.version = message.version)
     message.supportEmail !== undefined && (obj.supportEmail = message.supportEmail)
-    message.tier !== undefined && (obj.tier = message.tier)
-    message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock)
+    message.costPerBlock !== undefined && (obj.costPerBlock = message.costPerBlock ? Coin.toJSON(message.costPerBlock) : undefined)
     message.enabled !== undefined && (obj.enabled = message.enabled)
     return obj
   },
@@ -1966,15 +1913,10 @@ export const MsgUpdateCookbook = {
     } else {
       message.supportEmail = ''
     }
-    if (object.tier !== undefined && object.tier !== null) {
-      message.tier = object.tier
-    } else {
-      message.tier = 0
-    }
     if (object.costPerBlock !== undefined && object.costPerBlock !== null) {
-      message.costPerBlock = object.costPerBlock
+      message.costPerBlock = Coin.fromPartial(object.costPerBlock)
     } else {
-      message.costPerBlock = 0
+      message.costPerBlock = undefined
     }
     if (object.enabled !== undefined && object.enabled !== null) {
       message.enabled = object.enabled

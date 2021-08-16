@@ -19,7 +19,7 @@ func DefaultGenesis() *GenesisState {
 		ItemList:             []*Item{},
 		RecipeList:           []*Recipe{},
 		CookbookList:         []*Cookbook{},
-		Params: 			  DefaultParams(),
+		Params:               DefaultParams(),
 	}
 }
 

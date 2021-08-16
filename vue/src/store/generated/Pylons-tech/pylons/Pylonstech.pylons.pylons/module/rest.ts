@@ -44,8 +44,13 @@ export interface PylonsCookbook {
   version?: string;
   supportEmail?: string;
 
-  /** @format uint64 */
-  costPerBlock?: string;
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  costPerBlock?: V1Beta1Coin;
   enabled?: boolean;
 }
 
@@ -135,7 +140,14 @@ export interface PylonsItem {
 
   /** @format uint64 */
   lastUpdate?: string;
-  transferFee?: string;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  transferFee?: V1Beta1Coin;
 }
 
 export interface PylonsItemInput {
@@ -152,7 +164,14 @@ export interface PylonsItemModifyOutput {
   doubles?: PylonsDoubleParam[];
   longs?: PylonsLongParam[];
   strings?: PylonsStringParam[];
-  transferFee?: string;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  transferFee?: V1Beta1Coin;
 }
 
 export interface PylonsItemOutput {
@@ -161,7 +180,14 @@ export interface PylonsItemOutput {
   longs?: PylonsLongParam[];
   strings?: PylonsStringParam[];
   mutableStrings?: PylonsStringParam[];
-  transferFee?: string;
+
+  /**
+   * Coin defines a token with a denomination and an amount.
+   *
+   * NOTE: The amount field is an Int which implements the custom method
+   * signatures required by gogoproto.
+   */
+  transferFee?: V1Beta1Coin;
 
   /** @format uint64 */
   quantity?: string;

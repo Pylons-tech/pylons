@@ -7,8 +7,6 @@ import (
 	"github.com/btcsuite/btcutil/base58"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 )
 
 // EncodeItemID encodes the internal uint64 representation of an ItemID to a base64 string
@@ -113,7 +111,7 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		Owner:          addr.String(),
 		CookbookID:     cookbookID,
 		ID:             "", // TODO SET
-		NodeVersion:    config.GetNodeVersionString(),
+		NodeVersion:    GetNodeVersionString(),
 		Doubles:        dblActualize,
 		Longs:          longActualize,
 		Strings:        stringActualize,

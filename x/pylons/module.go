@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
-
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
@@ -106,20 +104,15 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 type AppModule struct {
 	AppModuleBasic
 
-	keeper             keeper.Keeper
-	bankKeeper         types.BankKeeper
-	requestFieldConfig config.RequestFieldConfig // TODO cleanup
-	feeConfig          config.FeeConfig
+	keeper     keeper.Keeper
+	bankKeeper types.BankKeeper
 }
 
-func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, bk types.BankKeeper, rfCfg config.RequestFieldConfig, feeCfg config.FeeConfig) AppModule {
+func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper, bk types.BankKeeper) AppModule {
 	return AppModule{
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
 		bankKeeper:     bk,
-
-		requestFieldConfig: rfCfg, // TODO cleanup
-		feeConfig:          feeCfg,
 	}
 }
 

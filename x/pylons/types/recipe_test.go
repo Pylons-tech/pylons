@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/json"
-
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"testing"
@@ -290,10 +289,10 @@ func TestValidateItemOutputs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
-		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutableStrings\": [], \"transferFee\": \"0.01\"}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"mutableStrings\": [], \"transferFee\": \"0.01\"}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [], \"transferFee\": \"0.01\"}]"},
-		{desc: "InvalidSingle1", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutableStrings\": [], \"transferFee\": \"1.01\"}]", err: ErrInvalidRequestField},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}], \"mutableStrings\": [], \"transferFee\": \"0.01\"}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [], \"transferFee\": \"0.01\"}]", err: ErrInvalidRequestField},
+		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutableStrings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"mutableStrings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]"},
+		{desc: "InvalidSingle1", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"mutableStrings\": [], \"transferFee\": {\"denom\": \"\", \"amount\": \"\"}}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}], \"mutableStrings\": [], \"transferFee\": {\"denom\": \"\", \"amount\": \"\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"mutableStrings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
@@ -316,10 +315,10 @@ func TestValidateItemModifyOutputs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
-		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"transferFee\": \"0.01\"}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"transferFee\": \"0.01\"}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"transferFee\": \"0.01\"}]"},
-		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"transferFee\": \"1.01\"}]", err: ErrInvalidRequestField},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}], \"transferFee\": \"0.01\"}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"transferFee\": \"0.01\"}]", err: ErrInvalidRequestField},
+		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]"},
+		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"transferFee\": {\"denom\": \"\", \"amount\": \"0.01\"}}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}], \"transferFee\": {\"denom\": \"\", \"amount\": \"0.01\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

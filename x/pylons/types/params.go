@@ -25,15 +25,15 @@ var (
 		{
 			CoinDenom: PylonsCoinDenom,
 			Packages: []*GoogleIAPPackage{
-				{PackageName: "com.pylons.loud", PackageID: "pylons_1000", Amount: sdk.NewDec(1000)},
-				{PackageName: "com.pylons.loud", PackageID: "pylons_55000", Amount: sdk.NewDec(55000)},
+				{PackageName: "com.pylons.loud", ProductID: "pylons_1000", Amount: sdk.NewDec(1000)},
+				{PackageName: "com.pylons.loud", ProductID: "pylons_55000", Amount: sdk.NewDec(55000)},
 			},
 			GoogleIAPPubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
 		},
 	}
 
-	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("10")
-	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("10")
+	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
+	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("0.10")
 	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
 	DefaultMinTransferFee, _            = sdk.NewDecFromStr("1")
 	DefaultMaxTransferFee, _            = sdk.NewDecFromStr("10000")
@@ -152,7 +152,7 @@ func (p Params) ValidateBasic() error {
 			return fmt.Errorf("invalid denom")
 		}
 		for _, iapPackage := range ci.Packages {
-			if iapPackage.PackageID == "" {
+			if iapPackage.ProductID == "" {
 				return fmt.Errorf("empty string for PackageID")
 			}
 			if iapPackage.PackageName == "" {
@@ -226,11 +226,12 @@ func validateCoinIssuers(i interface{}) error {
 	}
 
 	for _, ci := range v {
-		if !sdk.NewCoin(ci.CoinDenom, sdk.NewInt(1)).IsValid() {
+		coin := sdk.Coin{Denom: ci.CoinDenom, Amount: sdk.NewInt(1)}
+		if !coin.IsValid() {
 			return fmt.Errorf("invalid denom")
 		}
 		for _, p := range ci.Packages {
-			if p.PackageID == "" {
+			if p.ProductID == "" {
 				return fmt.Errorf("empty string for PackageID")
 			}
 			if p.PackageName == "" {

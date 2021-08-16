@@ -12,11 +12,12 @@ import (
 
 func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
+	coin := sdk.NewCoin("test", sdk.NewInt(1))
 	for i := range items {
 		items[i].Owner = "any"
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
-		items[i].TransferFee = sdk.ZeroDec()
+		items[i].TransferFee = &coin
 		k.SetItem(ctx, items[i])
 	}
 	return items

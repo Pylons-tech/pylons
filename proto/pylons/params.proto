@@ -9,7 +9,7 @@ import "cosmos/base/v1beta1/coin.proto";
 
 message GoogleIAPPackage {
   string PackageName = 1 [(gogoproto.moretags) = "yaml:\"package_name\""];
-  string PackageID = 2 [(gogoproto.moretags) = "yaml:\"package_id\""];
+  string ProductID = 2 [(gogoproto.moretags) = "yaml:\"product_id\""];
   string Amount = 3 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"amount\"", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }
 

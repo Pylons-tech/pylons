@@ -78,27 +78,27 @@ func (app *App) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []str
 
 	// withdraw all validator commission
 	app.StakingKeeper.IterateValidators(ctx, func(_ int64, val stakingtypes.ValidatorI) (stop bool) {
-		//_, err := app.DistrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
-		//if err != nil {
+		// _, err := app.DistrKeeper.WithdrawValidatorCommission(ctx, val.GetOperator())
+		// if err != nil {
 		//	panic(err)
-		//}
+		// }
 		return false
 	})
 
 	// withdraw all delegator rewards
-	//dels := app.StakingKeeper.GetAllDelegations(ctx)
-	//for _, delegation := range dels {
-	//_, err := app.DistrKeeper.WithdrawDelegationRewards(ctx, delegation.GetDelegatorAddr(), delegation.GetValidatorAddr())
-	//if err != nil {
+	// dels := app.StakingKeeper.GetAllDelegations(ctx)
+	// for _, delegation := range dels {
+	// _, err := app.DistrKeeper.WithdrawDelegationRewards(ctx, delegation.GetDelegatorAddr(), delegation.GetValidatorAddr())
+	// if err != nil {
 	//	panic(err)
-	//}
-	//}
+	// }
+	// }
 
 	// clear validator slash events
-	//app.DistrKeeper.DeleteAllValidatorSlashEvents(ctx)
+	// app.DistrKeeper.DeleteAllValidatorSlashEvents(ctx)
 
 	// clear validator historical rewards
-	//app.DistrKeeper.DeleteAllValidatorHistoricalRewards(ctx)
+	// app.DistrKeeper.DeleteAllValidatorHistoricalRewards(ctx)
 
 	// set context height to zero
 	height := ctx.BlockHeight()
@@ -176,12 +176,12 @@ func (app *App) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []str
 	/* Handle slashing state. */
 
 	// reset start height on signing infos
-	//app.SlashingKeeper.IterateValidatorSigningInfos(
-	//ctx,
-	//func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
+	// app.SlashingKeeper.IterateValidatorSigningInfos(
+	// ctx,
+	// func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
 	//	info.StartHeight = 0
 	//	//app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
 	//	return false
-	//},
-	//)
+	// },
+	// )
 }

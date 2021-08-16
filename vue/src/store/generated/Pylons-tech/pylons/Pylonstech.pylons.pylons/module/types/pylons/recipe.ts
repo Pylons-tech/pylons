@@ -104,8 +104,7 @@ export interface ItemOutput {
   strings: StringParam[]
   /** defines a list of mutable strings whose value can be customized by the user */
   mutableStrings: StringParam[]
-  /** transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive) */
-  transferFee: string
+  transferFee: Coin | undefined
   /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
   quantity: number
   amountMinted: number
@@ -118,8 +117,7 @@ export interface ItemModifyOutput {
   doubles: DoubleParam[]
   longs: LongParam[]
   strings: StringParam[]
-  /** transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive) */
-  transferFee: string
+  transferFee: Coin | undefined
 }
 
 /** EntriesList is a struct to keep list of items and coins */
@@ -1237,7 +1235,7 @@ export const CoinOutput = {
   }
 }
 
-const baseItemOutput: object = { ID: '', transferFee: '', quantity: 0, amountMinted: 0 }
+const baseItemOutput: object = { ID: '', quantity: 0, amountMinted: 0 }
 
 export const ItemOutput = {
   encode(message: ItemOutput, writer: Writer = Writer.create()): Writer {
@@ -1256,8 +1254,8 @@ export const ItemOutput = {
     for (const v of message.mutableStrings) {
       StringParam.encode(v!, writer.uint32(42).fork()).ldelim()
     }
-    if (message.transferFee !== '') {
-      writer.uint32(50).string(message.transferFee)
+    if (message.transferFee !== undefined) {
+      Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim()
     }
     if (message.quantity !== 0) {
       writer.uint32(56).uint64(message.quantity)
@@ -1295,7 +1293,7 @@ export const ItemOutput = {
           message.mutableStrings.push(StringParam.decode(reader, reader.uint32()))
           break
         case 6:
-          message.transferFee = reader.string()
+          message.transferFee = Coin.decode(reader, reader.uint32())
           break
         case 7:
           message.quantity = longToNumber(reader.uint64() as Long)
@@ -1343,9 +1341,9 @@ export const ItemOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = String(object.transferFee)
+      message.transferFee = Coin.fromJSON(object.transferFee)
     } else {
-      message.transferFee = ''
+      message.transferFee = undefined
     }
     if (object.quantity !== undefined && object.quantity !== null) {
       message.quantity = Number(object.quantity)
@@ -1383,7 +1381,7 @@ export const ItemOutput = {
     } else {
       obj.mutableStrings = []
     }
-    message.transferFee !== undefined && (obj.transferFee = message.transferFee)
+    message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
     message.quantity !== undefined && (obj.quantity = message.quantity)
     message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
     return obj
@@ -1421,9 +1419,9 @@ export const ItemOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = object.transferFee
+      message.transferFee = Coin.fromPartial(object.transferFee)
     } else {
-      message.transferFee = ''
+      message.transferFee = undefined
     }
     if (object.quantity !== undefined && object.quantity !== null) {
       message.quantity = object.quantity
@@ -1439,7 +1437,7 @@ export const ItemOutput = {
   }
 }
 
-const baseItemModifyOutput: object = { ID: '', itemInputRef: '', transferFee: '' }
+const baseItemModifyOutput: object = { ID: '', itemInputRef: '' }
 
 export const ItemModifyOutput = {
   encode(message: ItemModifyOutput, writer: Writer = Writer.create()): Writer {
@@ -1458,8 +1456,8 @@ export const ItemModifyOutput = {
     for (const v of message.strings) {
       StringParam.encode(v!, writer.uint32(42).fork()).ldelim()
     }
-    if (message.transferFee !== '') {
-      writer.uint32(50).string(message.transferFee)
+    if (message.transferFee !== undefined) {
+      Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim()
     }
     return writer
   },
@@ -1490,7 +1488,7 @@ export const ItemModifyOutput = {
           message.strings.push(StringParam.decode(reader, reader.uint32()))
           break
         case 6:
-          message.transferFee = reader.string()
+          message.transferFee = Coin.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -1531,9 +1529,9 @@ export const ItemModifyOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = String(object.transferFee)
+      message.transferFee = Coin.fromJSON(object.transferFee)
     } else {
-      message.transferFee = ''
+      message.transferFee = undefined
     }
     return message
   },
@@ -1557,7 +1555,7 @@ export const ItemModifyOutput = {
     } else {
       obj.strings = []
     }
-    message.transferFee !== undefined && (obj.transferFee = message.transferFee)
+    message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
     return obj
   },
 
@@ -1592,9 +1590,9 @@ export const ItemModifyOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = object.transferFee
+      message.transferFee = Coin.fromPartial(object.transferFee)
     } else {
-      message.transferFee = ''
+      message.transferFee = undefined
     }
     return message
   }

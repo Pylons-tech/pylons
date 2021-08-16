@@ -37,7 +37,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Ite
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    sdk.ZeroDec(),
+				TransferFee:    &sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

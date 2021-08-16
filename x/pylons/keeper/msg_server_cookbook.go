@@ -7,7 +7,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/Pylons-tech/pylons/x/pylons/config"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
@@ -31,7 +30,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  config.GetNodeVersionString(),
+		NodeVersion:  types.GetNodeVersionString(),
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,
@@ -72,7 +71,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	var cookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
-		NodeVersion:  config.GetNodeVersionString(),
+		NodeVersion:  types.GetNodeVersionString(),
 		Name:         msg.Name,
 		Description:  msg.Description,
 		Developer:    msg.Developer,

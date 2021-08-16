@@ -1,10 +1,12 @@
 package keeper
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"strconv"
+
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"strconv"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // GetEntityCount get the total number of entities
@@ -12,7 +14,6 @@ func (k Keeper) GetEntityCount(ctx sdk.Context) uint64 {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GlobalEntityCountKey))
 	byteKey := types.KeyPrefix(types.GlobalEntityCountKey)
 	bz := store.Get(byteKey)
-
 
 	// Count doesn't exist: no element
 	if bz == nil {

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
+import { Params } from '../pylons/params'
 import { GoogleIAPOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
 import { Item } from '../pylons/item'
@@ -12,6 +13,8 @@ export const protobufPackage = 'Pylonstech.pylons.pylons'
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
   /** this line is used by starport scaffolding # genesis/proto/state */
+  params: Params | undefined
+  /** this line is used by starport scaffolding # genesis/proto/stateField */
   googleIAPOrderList: GoogleIAPOrder[]
   /** this line is used by starport scaffolding # genesis/proto/stateField */
   googleIAPOrderCount: number
@@ -35,6 +38,9 @@ const baseGenesisState: object = { googleIAPOrderCount: 0, executionCount: 0, pe
 
 export const GenesisState = {
   encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
+    if (message.params !== undefined) {
+      Params.encode(message.params, writer.uint32(82).fork()).ldelim()
+    }
     for (const v of message.googleIAPOrderList) {
       GoogleIAPOrder.encode(v!, writer.uint32(66).fork()).ldelim()
     }
@@ -78,6 +84,9 @@ export const GenesisState = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
+        case 10:
+          message.params = Params.decode(reader, reader.uint32())
+          break
         case 8:
           message.googleIAPOrderList.push(GoogleIAPOrder.decode(reader, reader.uint32()))
           break
@@ -121,6 +130,11 @@ export const GenesisState = {
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromJSON(object.params)
+    } else {
+      message.params = undefined
+    }
     if (object.googleIAPOrderList !== undefined && object.googleIAPOrderList !== null) {
       for (const e of object.googleIAPOrderList) {
         message.googleIAPOrderList.push(GoogleIAPOrder.fromJSON(e))
@@ -171,6 +185,7 @@ export const GenesisState = {
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {}
+    message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined)
     if (message.googleIAPOrderList) {
       obj.googleIAPOrderList = message.googleIAPOrderList.map((e) => (e ? GoogleIAPOrder.toJSON(e) : undefined))
     } else {
@@ -215,6 +230,11 @@ export const GenesisState = {
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
+    if (object.params !== undefined && object.params !== null) {
+      message.params = Params.fromPartial(object.params)
+    } else {
+      message.params = undefined
+    }
     if (object.googleIAPOrderList !== undefined && object.googleIAPOrderList !== null) {
       for (const e of object.googleIAPOrderList) {
         message.googleIAPOrderList.push(GoogleIAPOrder.fromPartial(e))
