@@ -46,4 +46,6 @@ const (
 	GoogleIAPOrderKey = "GoogleIAPOrder-value-"
 	// GoogleIAPOrderCountKey is a string key used as a prefix to the KVStore
 	GoogleIAPOrderCountKey = "GoogleIAPOrder-count-"
+	// GlobalEntityCountKey is a string used as prefix to the KVStore
+	GlobalEntityCountKey = "GlobalEntity-count-"
 )

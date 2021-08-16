@@ -91,6 +91,7 @@ func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
 		memStoreKey,
 		bankKeeper,
 		accountKeeper,
+		GetSubspace(paramsKeeper, types.ModuleName),
 	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())

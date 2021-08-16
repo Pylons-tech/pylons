@@ -15,6 +15,9 @@ func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
 	b := k.cdc.MustMarshalBinaryBare(&recipe)
 	store.Set(types.KeyPrefix(recipe.ID), b)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // GetRecipe returns a recipe from its ID

@@ -1,15 +1,13 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 var _ sdk.Msg = &MsgCreateCookbook{}
 
-func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, tier int64, costPerBlock uint64, enabled bool) *MsgCreateCookbook {
+func NewMsgCreateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, costPerBlock sdk.Coin, enabled bool) *MsgCreateCookbook {
 	return &MsgCreateCookbook{
 		Creator:      creator,
 		ID:           id,
@@ -18,8 +16,7 @@ func NewMsgCreateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		Tier:         tier,
-		CostPerBlock: costPerBlock,
+		CostPerBlock: &costPerBlock,
 		Enabled:      enabled,
 	}
 }
@@ -55,19 +52,7 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if uint64(len(msg.Name)) < DefaultParams().MinNameFieldLength {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("the name of the cookbook should have more than %v characters", DefaultParams().MinNameFieldLength))
-	}
-
-	if uint64(len(msg.Description)) < DefaultParams().MinDescriptionFieldLength {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("the description should have more than %v characters", DefaultParams().MinDescriptionFieldLength))
-	}
-
 	if err = ValidateEmail(msg.SupportEmail); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	if err = ValidateTier(msg.Tier); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
@@ -75,12 +60,15 @@ func (msg *MsgCreateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
+	if !msg.CostPerBlock.IsValid() {
+		return sdkerrors.ErrInvalidCoins
+	}
 	return nil
 }
 
 var _ sdk.Msg = &MsgUpdateCookbook{}
 
-func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, tier int64, costPerBlock uint64, enabled bool) *MsgUpdateCookbook {
+func NewMsgUpdateCookbook(creator string, id string, name string, description string, developer string, version string, supportEmail string, costPerBlock sdk.Coin, enabled bool) *MsgUpdateCookbook {
 	return &MsgUpdateCookbook{
 		Creator:      creator,
 		ID:           id,
@@ -89,8 +77,7 @@ func NewMsgUpdateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		Tier:         tier,
-		CostPerBlock: costPerBlock,
+		CostPerBlock: &costPerBlock,
 		Enabled:      enabled,
 	}
 }
@@ -126,24 +113,16 @@ func (msg *MsgUpdateCookbook) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	if len(msg.Name) < 8 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
-	}
-
-	if len(msg.Description) < 20 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
-	}
-
 	if err = ValidateEmail(msg.SupportEmail); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	if err = ValidateTier(msg.Tier); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	if err = ValidateVersion(msg.Version); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if !msg.CostPerBlock.IsValid() {
+		return sdkerrors.ErrInvalidCoins
 	}
 
 	return nil

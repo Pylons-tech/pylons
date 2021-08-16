@@ -5,6 +5,7 @@ package Pylonstech.pylons.pylons;
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
 
 // DoubleKeyValue describes double key/value set
 message  DoubleKeyValue {
@@ -35,8 +36,7 @@ message Item {
   repeated StringKeyValue mutableStrings = 8 [(gogoproto.nullable) = false];
   bool tradeable = 9;
   uint64 lastUpdate = 10;
-  // TODO we should make this uniform with other transferFee once we address fees
-  string transferFee = 11 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  cosmos.base.v1beta1.Coin transferFee = 11;
 }
 
 

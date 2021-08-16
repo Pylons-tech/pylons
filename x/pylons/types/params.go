@@ -3,6 +3,8 @@ package types
 import (
 	"fmt"
 
+	yaml "gopkg.in/yaml.v2"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
@@ -12,32 +14,63 @@ const (
 	// PylonsCoinDenom is the pylons denom string
 	PylonsCoinDenom = "pylon"
 
-	// DefaultBaseFee holds the value of the default base fee
-	DefaultBaseFee = 10000
-
 	// DefaultMinNameFieldLength is the default minimum character length of a request's name field
 	DefaultMinNameFieldLength = 8
 	// DefaultMinDescriptionFieldLength is the default minimum character length of a request's description field
 	DefaultMinDescriptionFieldLength = 20
 )
 
+var (
+	DefaultCoinIssuers = []CoinIssuer{
+		{
+			CoinDenom: PylonsCoinDenom,
+			Packages: []*GoogleIAPPackage{
+				{PackageName: "com.pylons.loud", PackageID: "pylons_1000", Amount: sdk.NewDec(1000)},
+				{PackageName: "com.pylons.loud", PackageID: "pylons_55000", Amount: sdk.NewDec(55000)},
+			},
+			GoogleIAPPubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
+		},
+	}
+
+	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("10")
+	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("10")
+	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
+	DefaultMinTransferFee, _            = sdk.NewDecFromStr("1")
+	DefaultMaxTransferFee, _            = sdk.NewDecFromStr("10000")
+)
+
 // Parameter Store Keys
 var (
 	ParamStoreKeyMinNameFieldLength        = []byte("MinNameFieldLength")
 	ParamStoreKeyMinDescriptionFieldLength = []byte("MinDescriptionFieldLength")
-	ParamStoreKeyBaseFee                   = []byte("BaseFee")
+	ParamStoreKeyCoinIssuers               = []byte("CoinIssuers")
+	ParamStoreKeyRecipeFeePercentage       = []byte("RecipeFeePercentage")
+	ParamStoreKeyItemTransferFeePercentage = []byte("ItemTransferFeePercentage")
+	ParamStoreKeyUpdateItemStringFee       = []byte("UpdateItemStringFee")
+	ParamStoreKeyMinTransferFee            = []byte("MinTransferFee")
+	ParamStoreKeyMaxTransferFee            = []byte("MaxTransferFee")
 )
 
 // NewParams creates a new Params object
 func NewParams(
 	minNameFieldLength uint64,
 	minDescriptionFieldLength uint64,
-	baseFee sdk.Coins,
+	coinIssuers []CoinIssuer,
+	recipeFeePercentage sdk.Dec,
+	itemTransferFeePercentage sdk.Dec,
+	updateItemStringFee *sdk.Coin,
+	minTransferFee sdk.Dec,
+	maxTransferFee sdk.Dec,
 ) Params {
 	return Params{
 		MinNameFieldLength:        minNameFieldLength,
 		MinDescriptionFieldLength: minDescriptionFieldLength,
-		BaseFee:                   baseFee,
+		CoinIssuers:               coinIssuers,
+		RecipeFeePercentage:       recipeFeePercentage,
+		ItemTransferFeePercentage: itemTransferFeePercentage,
+		UpdateItemStringFee:       updateItemStringFee,
+		MinTransferFee:            minTransferFee,
+		MaxTransferFee:            maxTransferFee,
 	}
 }
 
@@ -46,8 +79,19 @@ func DefaultParams() Params {
 	return NewParams(
 		DefaultMinNameFieldLength,
 		DefaultMinDescriptionFieldLength,
-		sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBaseFee)},
+		DefaultCoinIssuers,
+		DefaultRecipeFeePercentage,
+		DefaultItemTransferFeePercentage,
+		&DefaultUpdateItemStringFee,
+		DefaultMinTransferFee,
+		DefaultMaxTransferFee,
 	)
+}
+
+// String implements stringer interface
+func (p Params) String() string {
+	out, _ := yaml.Marshal(p)
+	return string(out)
 }
 
 // ParamKeyTable returns the parameter by key
@@ -60,15 +104,17 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
 		paramtypes.NewParamSetPair(ParamStoreKeyMinNameFieldLength, &p.MinNameFieldLength, validateUint),
 		paramtypes.NewParamSetPair(ParamStoreKeyMinDescriptionFieldLength, &p.MinDescriptionFieldLength, validateUint),
-		paramtypes.NewParamSetPair(ParamStoreKeyBaseFee, &p.BaseFee, validateBaseFee),
+		paramtypes.NewParamSetPair(ParamStoreKeyItemTransferFeePercentage, &p.ItemTransferFeePercentage, validateDecPercentage),
+		paramtypes.NewParamSetPair(ParamStoreKeyUpdateItemStringFee, &p.UpdateItemStringFee, validateCoinFee),
+		paramtypes.NewParamSetPair(ParamStoreKeyCoinIssuers, &p.CoinIssuers, validateCoinIssuers),
+		paramtypes.NewParamSetPair(ParamStoreKeyRecipeFeePercentage, &p.RecipeFeePercentage, validateDecPercentage),
+		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateDecFee),
+		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateDecFee),
 	}
 }
 
 // ValidateBasic performs basic validation on distribution parameters.
 func (p Params) ValidateBasic() error {
-	// TODO validate new params
-	// these may be unnecessary
-	// if gov decides that we should make Description 0, maybe thats ok
 	if p.MinNameFieldLength == 0 {
 		return fmt.Errorf("MinNameFieldLength must at least be 1")
 	}
@@ -77,8 +123,48 @@ func (p Params) ValidateBasic() error {
 		return fmt.Errorf("MinDescriptionFieldLength must at least be 1")
 	}
 
-	if p.BaseFee.Empty() || p.BaseFee.IsAnyNegative() {
-		return fmt.Errorf("base fee is invalid")
+	if !(p.RecipeFeePercentage.GTE(sdk.ZeroDec()) && p.RecipeFeePercentage.LT(sdk.NewDec(1))) {
+		return fmt.Errorf("percentage parameter should be in the range [0,1)")
+	}
+
+	if !(p.ItemTransferFeePercentage.GTE(sdk.ZeroDec()) && p.ItemTransferFeePercentage.LT(sdk.NewDec(1))) {
+		return fmt.Errorf("percentage parameter should be in the range [0,1)")
+	}
+
+	if p.MinTransferFee.IsNegative() {
+		return fmt.Errorf("parameter cannot be negative")
+	}
+
+	if p.MaxTransferFee.IsNegative() {
+		return fmt.Errorf("parameter cannot be negative")
+	}
+
+	if p.MinTransferFee.GT(p.MaxTransferFee) {
+		return fmt.Errorf("MinTransferFee cannot be larger than MaxTransferFee")
+	}
+
+	if !p.UpdateItemStringFee.IsValid() {
+		return fmt.Errorf("invalid coin")
+	}
+
+	for _, ci := range p.CoinIssuers {
+		if !sdk.NewCoin(ci.CoinDenom, sdk.NewInt(1)).IsValid() {
+			return fmt.Errorf("invalid denom")
+		}
+		for _, iapPackage := range ci.Packages {
+			if iapPackage.PackageID == "" {
+				return fmt.Errorf("empty string for PackageID")
+			}
+			if iapPackage.PackageName == "" {
+				return fmt.Errorf("empty string for PackageName")
+			}
+			if iapPackage.Amount.IsNegative() {
+				return fmt.Errorf("invalid amount")
+			}
+		}
+		if ci.GoogleIAPPubKey == "" {
+			return fmt.Errorf("empty string for GoogleIAPPubKey")
+		}
 	}
 
 	return nil
@@ -97,21 +183,66 @@ func validateUint(i interface{}) error {
 	return nil
 }
 
-func validateBaseFee(i interface{}) error {
-	v, ok := i.(sdk.Coins)
+func validateDecPercentage(i interface{}) error {
+	v, ok := i.(sdk.Dec)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	for _, coin := range v {
-		if !coin.IsValid() {
-			return fmt.Errorf("fee must be valid (valid denom and non-negative)")
-		}
+	if !(v.GTE(sdk.ZeroDec()) && v.LT(sdk.NewDec(1))) {
+		return fmt.Errorf("percentage parameter should be in the range [0,1)")
+	}
+	return nil
+}
 
-		if coin.IsZero() {
-			return fmt.Errorf("fee must be non-zero")
-		}
+func validateDecFee(i interface{}) error {
+	v, ok := i.(sdk.Dec)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
+	if v.IsNegative() {
+		return fmt.Errorf("parameter cannot be negative")
+	}
+	return nil
+}
+
+func validateCoinFee(i interface{}) error {
+	v, ok := i.(sdk.Coin)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	if !v.IsValid() {
+		return fmt.Errorf("invalid coin")
+	}
+	return nil
+}
+
+func validateCoinIssuers(i interface{}) error {
+	v, ok := i.([]CoinIssuer)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	for _, ci := range v {
+		if !sdk.NewCoin(ci.CoinDenom, sdk.NewInt(1)).IsValid() {
+			return fmt.Errorf("invalid denom")
+		}
+		for _, p := range ci.Packages {
+			if p.PackageID == "" {
+				return fmt.Errorf("empty string for PackageID")
+			}
+			if p.PackageName == "" {
+				return fmt.Errorf("empty string for PackageName")
+			}
+			if p.Amount.IsNegative() {
+				return fmt.Errorf("invalid amount")
+			}
+		}
+		if ci.GoogleIAPPubKey == "" {
+			return fmt.Errorf("empty string for GoogleIAPPubKey")
+		}
+	}
 	return nil
 }

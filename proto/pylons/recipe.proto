@@ -105,8 +105,7 @@ message ItemOutput {
   repeated StringParam strings = 4 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
   repeated StringParam mutableStrings = 5 [(gogoproto.nullable) = false];
-  // transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive)
-  string transferFee = 6 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  cosmos.base.v1beta1.Coin transferFee = 6;
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 7;
   uint64 amountMinted = 8;
@@ -119,8 +118,7 @@ message ItemModifyOutput {
   repeated DoubleParam doubles = 3 [(gogoproto.nullable) = false];
   repeated LongParam longs = 4 [(gogoproto.nullable) = false];
   repeated StringParam strings = 5 [(gogoproto.nullable) = false];
-  // transferFee defines the residual percentage that is sent to the cookbook owner when the item is sold. Between 0.0 (inclusive) and 1.0 (exclusive)
-  string transferFee = 6 [(gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  cosmos.base.v1beta1.Coin transferFee = 6;
 }
 
 // EntriesList is a struct to keep list of items and coins

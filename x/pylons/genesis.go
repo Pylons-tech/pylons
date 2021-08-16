@@ -50,6 +50,8 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState
 		k.SetCookbook(ctx, *elem)
 	}
 
+	k.SetParams(ctx, genState.Params)
+
 	// this line is used by starport scaffolding # ibc/genesis/init
 }
 
@@ -109,6 +111,8 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 		genesis.CookbookList = append(genesis.CookbookList, &elem)
 	}
 
+	params := k.GetParams(ctx)
+	genesis.Params = params
 	// this line is used by starport scaffolding # ibc/genesis/export
 
 	return genesis

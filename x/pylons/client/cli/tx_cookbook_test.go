@@ -26,8 +26,7 @@ func TestCreateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.1",
 		"test@email.com",
-		"0",
-		"1",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	for _, tc := range []struct {
@@ -78,8 +77,7 @@ func TestUpdateCookbook(t *testing.T) {
 		"Developer",
 		"0.0.1",
 		"test@email.com",
-		"0",
-		"1",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	common := []string{

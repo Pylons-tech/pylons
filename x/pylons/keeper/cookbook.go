@@ -12,6 +12,9 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
 	b := k.cdc.MustMarshalBinaryBare(&cookbook)
 	store.Set(types.KeyPrefix(cookbook.ID), b)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // GetCookbook returns a cookbook from its ID

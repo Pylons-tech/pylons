@@ -137,6 +137,9 @@ func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	value := k.cdc.MustMarshalBinaryBare(&execution)
 	store.Set(types.KeyPrefix(execution.ID), value)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // HasExecution checks if the execution exists in the store

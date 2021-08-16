@@ -37,6 +37,9 @@ func (k Keeper) SetPendingExecutionCount(ctx sdk.Context, count uint64) {
 	byteKey := types.KeyPrefix(types.PendingExecutionCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // AppendPendingExecution appends a pending execution in the store with a new id and update the count

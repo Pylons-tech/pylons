@@ -37,6 +37,9 @@ func (k Keeper) SetItemCount(ctx sdk.Context, count uint64) {
 	byteKey := types.KeyPrefix(types.ItemCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // AppendItem appends an item in the store with a new id and update the count

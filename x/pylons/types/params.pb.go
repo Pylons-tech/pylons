@@ -25,18 +25,135 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// Params represent the parameters used by the pylons module
-type Params struct {
-	MinNameFieldLength        uint64                                   `protobuf:"varint,1,opt,name=minNameFieldLength,proto3" json:"minNameFieldLength,omitempty" yaml:"min_name_field_length"`
-	MinDescriptionFieldLength uint64                                   `protobuf:"varint,2,opt,name=minDescriptionFieldLength,proto3" json:"minDescriptionFieldLength,omitempty" yaml:"min_description_field_length"`
-	BaseFee                   github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=baseFee,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"baseFee" yaml:"base_fee"`
+type GoogleIAPPackage struct {
+	PackageName string                                 `protobuf:"bytes,1,opt,name=PackageName,proto3" json:"PackageName,omitempty" yaml:"package_name"`
+	PackageID   string                                 `protobuf:"bytes,2,opt,name=PackageID,proto3" json:"PackageID,omitempty" yaml:"package_id"`
+	Amount      github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,3,opt,name=Amount,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"Amount" yaml:"amount"`
 }
 
-func (m *Params) Reset()         { *m = Params{} }
-func (m *Params) String() string { return proto.CompactTextString(m) }
-func (*Params) ProtoMessage()    {}
-func (*Params) Descriptor() ([]byte, []int) {
+func (m *GoogleIAPPackage) Reset()         { *m = GoogleIAPPackage{} }
+func (m *GoogleIAPPackage) String() string { return proto.CompactTextString(m) }
+func (*GoogleIAPPackage) ProtoMessage()    {}
+func (*GoogleIAPPackage) Descriptor() ([]byte, []int) {
 	return fileDescriptor_32b96d3026fd9730, []int{0}
+}
+func (m *GoogleIAPPackage) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GoogleIAPPackage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GoogleIAPPackage.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GoogleIAPPackage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GoogleIAPPackage.Merge(m, src)
+}
+func (m *GoogleIAPPackage) XXX_Size() int {
+	return m.Size()
+}
+func (m *GoogleIAPPackage) XXX_DiscardUnknown() {
+	xxx_messageInfo_GoogleIAPPackage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GoogleIAPPackage proto.InternalMessageInfo
+
+func (m *GoogleIAPPackage) GetPackageName() string {
+	if m != nil {
+		return m.PackageName
+	}
+	return ""
+}
+
+func (m *GoogleIAPPackage) GetPackageID() string {
+	if m != nil {
+		return m.PackageID
+	}
+	return ""
+}
+
+type CoinIssuer struct {
+	CoinDenom       string              `protobuf:"bytes,1,opt,name=CoinDenom,proto3" json:"CoinDenom,omitempty" yaml:"coin_denom"`
+	Packages        []*GoogleIAPPackage `protobuf:"bytes,2,rep,name=Packages,proto3" json:"Packages,omitempty" yaml:"google_iap_packages"`
+	GoogleIAPPubKey string              `protobuf:"bytes,3,opt,name=GoogleIAPPubKey,proto3" json:"GoogleIAPPubKey,omitempty" yaml:"google_iap_pubkey"`
+}
+
+func (m *CoinIssuer) Reset()         { *m = CoinIssuer{} }
+func (m *CoinIssuer) String() string { return proto.CompactTextString(m) }
+func (*CoinIssuer) ProtoMessage()    {}
+func (*CoinIssuer) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32b96d3026fd9730, []int{1}
+}
+func (m *CoinIssuer) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CoinIssuer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CoinIssuer.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CoinIssuer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CoinIssuer.Merge(m, src)
+}
+func (m *CoinIssuer) XXX_Size() int {
+	return m.Size()
+}
+func (m *CoinIssuer) XXX_DiscardUnknown() {
+	xxx_messageInfo_CoinIssuer.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CoinIssuer proto.InternalMessageInfo
+
+func (m *CoinIssuer) GetCoinDenom() string {
+	if m != nil {
+		return m.CoinDenom
+	}
+	return ""
+}
+
+func (m *CoinIssuer) GetPackages() []*GoogleIAPPackage {
+	if m != nil {
+		return m.Packages
+	}
+	return nil
+}
+
+func (m *CoinIssuer) GetGoogleIAPPubKey() string {
+	if m != nil {
+		return m.GoogleIAPPubKey
+	}
+	return ""
+}
+
+// Params represent the parameters used by the pylons module
+type Params struct {
+	MinNameFieldLength        uint64                                 `protobuf:"varint,1,opt,name=minNameFieldLength,proto3" json:"minNameFieldLength,omitempty" yaml:"min_name_field_length"`
+	MinDescriptionFieldLength uint64                                 `protobuf:"varint,2,opt,name=minDescriptionFieldLength,proto3" json:"minDescriptionFieldLength,omitempty" yaml:"min_description_field_length"`
+	CoinIssuers               []CoinIssuer                           `protobuf:"bytes,3,rep,name=coinIssuers,proto3" json:"coinIssuers" yaml:"coin_issuers"`
+	RecipeFeePercentage       github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,4,opt,name=recipeFeePercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"recipeFeePercentage" yaml:"recipe_fee_percentage"`
+	ItemTransferFeePercentage github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,5,opt,name=itemTransferFeePercentage,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"itemTransferFeePercentage" yaml:"item_transfer_fee_percentage"`
+	UpdateItemStringFee       *types.Coin                            `protobuf:"bytes,6,opt,name=UpdateItemStringFee,proto3" json:"UpdateItemStringFee,omitempty" yaml:"update_item_string_fee"`
+	MinTransferFee            github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,7,opt,name=minTransferFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"minTransferFee" yaml:"min_transfer_fee"`
+	MaxTransferFee            github_com_cosmos_cosmos_sdk_types.Dec `protobuf:"bytes,8,opt,name=maxTransferFee,proto3,customtype=github.com/cosmos/cosmos-sdk/types.Dec" json:"maxTransferFee" yaml:"max_transfer_fee"`
+}
+
+func (m *Params) Reset()      { *m = Params{} }
+func (*Params) ProtoMessage() {}
+func (*Params) Descriptor() ([]byte, []int) {
+	return fileDescriptor_32b96d3026fd9730, []int{2}
 }
 func (m *Params) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -79,45 +196,142 @@ func (m *Params) GetMinDescriptionFieldLength() uint64 {
 	return 0
 }
 
-func (m *Params) GetBaseFee() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *Params) GetCoinIssuers() []CoinIssuer {
 	if m != nil {
-		return m.BaseFee
+		return m.CoinIssuers
+	}
+	return nil
+}
+
+func (m *Params) GetUpdateItemStringFee() *types.Coin {
+	if m != nil {
+		return m.UpdateItemStringFee
 	}
 	return nil
 }
 
 func init() {
+	proto.RegisterType((*GoogleIAPPackage)(nil), "Pylonstech.pylons.pylons.GoogleIAPPackage")
+	proto.RegisterType((*CoinIssuer)(nil), "Pylonstech.pylons.pylons.CoinIssuer")
 	proto.RegisterType((*Params)(nil), "Pylonstech.pylons.pylons.Params")
 }
 
 func init() { proto.RegisterFile("pylons/params.proto", fileDescriptor_32b96d3026fd9730) }
 
 var fileDescriptor_32b96d3026fd9730 = []byte{
-	// 345 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x91, 0x41, 0x4e, 0xc2, 0x40,
-	0x14, 0x86, 0x5b, 0x30, 0x98, 0xd4, 0x85, 0x49, 0x75, 0x01, 0xc4, 0x4c, 0x49, 0x5d, 0xc8, 0x42,
-	0x3a, 0x41, 0x77, 0x2e, 0xc1, 0xb0, 0x30, 0xc6, 0x10, 0x96, 0x6e, 0x9a, 0xb6, 0x3c, 0xca, 0xc4,
-	0xce, 0x4c, 0xc3, 0x8c, 0x06, 0x6e, 0xe1, 0x31, 0x8c, 0x57, 0xf0, 0x02, 0x2c, 0x59, 0xba, 0xaa,
-	0xa6, 0xdc, 0x80, 0x13, 0x98, 0xce, 0x94, 0x40, 0x8c, 0xae, 0xde, 0xcb, 0x7b, 0xff, 0x7c, 0x2f,
-	0xff, 0xfc, 0xd6, 0x49, 0xba, 0x48, 0x38, 0x13, 0x38, 0x0d, 0x66, 0x01, 0x15, 0x5e, 0x3a, 0xe3,
-	0x92, 0xdb, 0xf5, 0xa1, 0x1a, 0x4a, 0x88, 0xa6, 0x9e, 0xde, 0x97, 0xa5, 0x79, 0x1a, 0xf3, 0x98,
-	0x2b, 0x11, 0x2e, 0x3a, 0xad, 0x6f, 0xa2, 0x88, 0x0b, 0xca, 0x05, 0x0e, 0x03, 0x01, 0xf8, 0xa5,
-	0x1b, 0x82, 0x0c, 0xba, 0x38, 0xe2, 0x84, 0xe9, 0xbd, 0xfb, 0x51, 0xb1, 0x6a, 0x43, 0x75, 0xc0,
-	0x1e, 0x5a, 0x36, 0x25, 0xec, 0x21, 0xa0, 0x30, 0x20, 0x90, 0x8c, 0xef, 0x81, 0xc5, 0x72, 0x5a,
-	0x37, 0x5b, 0x66, 0xfb, 0xa0, 0xd7, 0xda, 0x64, 0xce, 0xd9, 0x22, 0xa0, 0xc9, 0x8d, 0x4b, 0x09,
-	0xf3, 0x59, 0x40, 0xc1, 0x9f, 0x14, 0x2a, 0x3f, 0x51, 0x32, 0x77, 0xf4, 0xc7, 0x5b, 0x1b, 0xac,
-	0x06, 0x25, 0xec, 0x16, 0x44, 0x34, 0x23, 0xa9, 0x24, 0x9c, 0xed, 0x83, 0x2b, 0x0a, 0x7c, 0xb1,
-	0xc9, 0x9c, 0xf3, 0x1d, 0x78, 0xbc, 0xd3, 0xfe, 0xe2, 0xff, 0x4f, 0xb2, 0xe7, 0xd6, 0x61, 0x61,
-	0x6f, 0x00, 0x50, 0xaf, 0xb6, 0xaa, 0xed, 0xa3, 0xab, 0x86, 0xa7, 0x5d, 0x7b, 0xc5, 0xd8, 0x2b,
-	0x5d, 0x7b, 0x7d, 0x4e, 0x58, 0xaf, 0xbf, 0xcc, 0x1c, 0x63, 0x93, 0x39, 0xc7, 0xfa, 0x66, 0x21,
-	0xf0, 0x27, 0x00, 0xee, 0xfb, 0x97, 0xd3, 0x8e, 0x89, 0x9c, 0x3e, 0x87, 0x5e, 0xc4, 0x29, 0x2e,
-	0x7f, 0x4d, 0x97, 0x8e, 0x18, 0x3f, 0x61, 0xb9, 0x48, 0x41, 0x28, 0x86, 0x18, 0x6d, 0xcf, 0xf5,
-	0xee, 0xde, 0x72, 0x64, 0x2e, 0x73, 0x64, 0xae, 0x72, 0x64, 0x7e, 0xe7, 0xc8, 0x7c, 0x5d, 0x23,
-	0x63, 0xb5, 0x46, 0xc6, 0xe7, 0x1a, 0x19, 0x8f, 0x97, 0x7b, 0x40, 0x1d, 0x5b, 0xa7, 0xc8, 0x0d,
-	0x97, 0xb9, 0xce, 0xb7, 0x8d, 0x42, 0x87, 0x35, 0x15, 0xc8, 0xf5, 0x4f, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0xbc, 0xd6, 0xa6, 0x15, 0xf7, 0x01, 0x00, 0x00,
+	// 710 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x95, 0xcd, 0x6e, 0xd3, 0x4c,
+	0x14, 0x86, 0xe3, 0xb6, 0x5f, 0xda, 0x4e, 0xf4, 0xfd, 0x39, 0xa0, 0xba, 0xa5, 0xd8, 0x61, 0x40,
+	0x50, 0x21, 0x6a, 0xab, 0xed, 0x8a, 0x6e, 0x50, 0x43, 0x15, 0x14, 0x40, 0x55, 0x64, 0xa8, 0x90,
+	0xd8, 0x58, 0x13, 0xe7, 0xc4, 0x1d, 0x35, 0x9e, 0x31, 0x1e, 0x07, 0x35, 0x3b, 0x2e, 0x01, 0x89,
+	0x0d, 0x12, 0x1b, 0x96, 0x5c, 0x4a, 0x97, 0x5d, 0x22, 0x90, 0x2c, 0x94, 0x5e, 0x01, 0xbe, 0x02,
+	0xe4, 0xb1, 0xa9, 0xdd, 0xb4, 0x59, 0x54, 0xac, 0x6c, 0x67, 0xce, 0x79, 0xde, 0xf7, 0xfc, 0x68,
+	0x82, 0xea, 0xc1, 0x68, 0xc0, 0x99, 0xb0, 0x02, 0x12, 0x12, 0x5f, 0x98, 0x41, 0xc8, 0x23, 0xae,
+	0x6a, 0x1d, 0xf9, 0x63, 0x04, 0xee, 0x81, 0x99, 0x9d, 0xe7, 0x8f, 0x95, 0x6b, 0x1e, 0xf7, 0xb8,
+	0x0c, 0xb2, 0xd2, 0xb7, 0x2c, 0x7e, 0x45, 0x77, 0xb9, 0xf0, 0xb9, 0xb0, 0xba, 0x44, 0x80, 0xf5,
+	0x76, 0xa3, 0x0b, 0x11, 0xd9, 0xb0, 0x5c, 0x4e, 0x59, 0x76, 0x8e, 0xbf, 0x2b, 0xe8, 0xbf, 0x27,
+	0x9c, 0x7b, 0x03, 0x68, 0xef, 0x74, 0x3a, 0xc4, 0x3d, 0x24, 0x1e, 0xa8, 0x0f, 0x51, 0x2d, 0x7f,
+	0xdd, 0x23, 0x3e, 0x68, 0x4a, 0x43, 0x59, 0x5b, 0x6c, 0x2e, 0x25, 0xb1, 0x51, 0x1f, 0x11, 0x7f,
+	0xb0, 0x8d, 0x83, 0xec, 0xd0, 0x61, 0xc4, 0x07, 0x6c, 0x97, 0x63, 0xd5, 0x2d, 0xb4, 0x98, 0x7f,
+	0xb6, 0x77, 0xb5, 0x19, 0x99, 0x78, 0x3d, 0x89, 0x8d, 0xff, 0xcf, 0x27, 0xd2, 0x1e, 0xb6, 0x8b,
+	0x38, 0xf5, 0x15, 0xaa, 0xee, 0xf8, 0x7c, 0xc8, 0x22, 0x6d, 0x56, 0x66, 0x3c, 0x3a, 0x8e, 0x8d,
+	0xca, 0xb7, 0xd8, 0xb8, 0xeb, 0xd1, 0xe8, 0x60, 0xd8, 0x35, 0x5d, 0xee, 0x5b, 0x79, 0x1d, 0xd9,
+	0x63, 0x5d, 0xf4, 0x0e, 0xad, 0x68, 0x14, 0x80, 0x30, 0x77, 0xc1, 0x4d, 0x62, 0xe3, 0xef, 0x8c,
+	0x4f, 0x24, 0x05, 0xdb, 0x39, 0x0e, 0xff, 0x54, 0x10, 0x7a, 0xcc, 0x29, 0x6b, 0x0b, 0x31, 0x84,
+	0x30, 0x35, 0x97, 0x7e, 0xed, 0x02, 0xe3, 0x7e, 0x5e, 0x55, 0xc9, 0x5c, 0xda, 0x15, 0xa7, 0x97,
+	0x9e, 0x61, 0xbb, 0x88, 0x53, 0xfb, 0x68, 0x21, 0x77, 0x2a, 0xb4, 0x99, 0xc6, 0xec, 0x5a, 0x6d,
+	0xf3, 0xbe, 0x39, 0x6d, 0x08, 0xe6, 0x64, 0x2b, 0x9b, 0x7a, 0x12, 0x1b, 0x2b, 0x19, 0xdf, 0x93,
+	0x67, 0x0e, 0x25, 0x81, 0x93, 0xf7, 0x41, 0x60, 0xfb, 0x8c, 0xad, 0xb6, 0xd0, 0xbf, 0x45, 0xf6,
+	0xb0, 0xfb, 0x0c, 0x46, 0x79, 0x37, 0x56, 0x93, 0xd8, 0xd0, 0x2e, 0x22, 0x86, 0xdd, 0x43, 0x18,
+	0x61, 0x7b, 0x32, 0x09, 0x7f, 0x9a, 0x47, 0xd5, 0x8e, 0x5c, 0x19, 0xb5, 0x83, 0x54, 0x9f, 0xb2,
+	0x74, 0x2e, 0x2d, 0x0a, 0x83, 0xde, 0x73, 0x60, 0x5e, 0x74, 0x20, 0x0b, 0x9f, 0x6b, 0x36, 0x92,
+	0xd8, 0x58, 0xcd, 0xa8, 0x3e, 0x65, 0x72, 0x94, 0x4e, 0x3f, 0x8d, 0x72, 0x06, 0x32, 0x0c, 0xdb,
+	0x97, 0xe4, 0xaa, 0x80, 0x96, 0xfd, 0xb4, 0x31, 0xc2, 0x0d, 0x69, 0x10, 0x51, 0xce, 0xca, 0xe0,
+	0x19, 0x09, 0xbe, 0x97, 0xc4, 0xc6, 0xed, 0x02, 0xdc, 0x2b, 0x62, 0x27, 0xf8, 0xd3, 0x49, 0xaa,
+	0x8b, 0x6a, 0xee, 0xd9, 0xd8, 0x84, 0x36, 0x2b, 0xdb, 0x7e, 0x67, 0x7a, 0xdb, 0x8b, 0x19, 0x37,
+	0x6f, 0xa4, 0xbb, 0x53, 0xac, 0xaa, 0x1c, 0x2a, 0xcd, 0x38, 0xd8, 0x2e, 0x53, 0xd5, 0x77, 0x0a,
+	0xaa, 0x87, 0xe0, 0xd2, 0x00, 0x5a, 0x00, 0x1d, 0x08, 0x5d, 0x60, 0x11, 0xf1, 0x40, 0x9b, 0x93,
+	0x5d, 0xdf, 0xbb, 0xf2, 0x0e, 0xe6, 0xdd, 0xcc, 0x90, 0x4e, 0x1f, 0xc0, 0x09, 0xce, 0xa0, 0xd8,
+	0xbe, 0x4c, 0x4a, 0xfd, 0xa0, 0xa0, 0x65, 0x1a, 0x81, 0xff, 0x32, 0x24, 0x4c, 0xf4, 0x21, 0x3c,
+	0x6f, 0xe4, 0x2f, 0x69, 0x64, 0xff, 0xca, 0x46, 0xf2, 0xee, 0xa7, 0x60, 0x27, 0xca, 0xc9, 0x17,
+	0xfc, 0x4c, 0xd7, 0x55, 0x19, 0xaa, 0xef, 0x07, 0x3d, 0x12, 0x41, 0x3b, 0x02, 0xff, 0x45, 0x14,
+	0x52, 0xe6, 0xb5, 0x00, 0xb4, 0x6a, 0x43, 0x59, 0xab, 0x6d, 0x2e, 0x9b, 0x99, 0xaa, 0x99, 0xde,
+	0x28, 0x66, 0x7e, 0xa3, 0xc8, 0x01, 0x34, 0x6f, 0x25, 0xb1, 0x71, 0x33, 0xd3, 0x1e, 0xca, 0x7c,
+	0x47, 0x5a, 0x10, 0x92, 0x90, 0x1a, 0xc0, 0xf6, 0x65, 0x60, 0xf5, 0x0d, 0xfa, 0xc7, 0xa7, 0xac,
+	0xe4, 0x45, 0x9b, 0x97, 0x95, 0xb7, 0xaf, 0x5c, 0xf9, 0x52, 0xb1, 0x77, 0xe5, 0xc2, 0xb1, 0x3d,
+	0x21, 0x20, 0x25, 0xc9, 0x51, 0x59, 0x72, 0xe1, 0x0f, 0x25, 0xc9, 0xd1, 0x05, 0xc9, 0x73, 0x02,
+	0xdb, 0x73, 0x1f, 0x3f, 0x1b, 0x95, 0xe6, 0xd3, 0x2f, 0x63, 0x5d, 0x39, 0x1e, 0xeb, 0xca, 0xc9,
+	0x58, 0x57, 0x7e, 0x8c, 0x75, 0xe5, 0xfd, 0xa9, 0x5e, 0x39, 0x39, 0xd5, 0x2b, 0x5f, 0x4f, 0xf5,
+	0xca, 0xeb, 0x07, 0x25, 0xd9, 0x6c, 0xd9, 0xd7, 0xd3, 0x6d, 0xb7, 0xf2, 0x7f, 0x82, 0xa3, 0xdf,
+	0x2f, 0xd2, 0x40, 0xb7, 0x2a, 0xaf, 0xf0, 0xad, 0x5f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x4c, 0xb5,
+	0x91, 0x61, 0x29, 0x06, 0x00, 0x00,
 }
 
+func (this *GoogleIAPPackage) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GoogleIAPPackage)
+	if !ok {
+		that2, ok := that.(GoogleIAPPackage)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.PackageName != that1.PackageName {
+		return false
+	}
+	if this.PackageID != that1.PackageID {
+		return false
+	}
+	if !this.Amount.Equal(that1.Amount) {
+		return false
+	}
+	return true
+}
+func (this *CoinIssuer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CoinIssuer)
+	if !ok {
+		that2, ok := that.(CoinIssuer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CoinDenom != that1.CoinDenom {
+		return false
+	}
+	if len(this.Packages) != len(that1.Packages) {
+		return false
+	}
+	for i := range this.Packages {
+		if !this.Packages[i].Equal(that1.Packages[i]) {
+			return false
+		}
+	}
+	if this.GoogleIAPPubKey != that1.GoogleIAPPubKey {
+		return false
+	}
+	return true
+}
 func (this *Params) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -143,16 +357,129 @@ func (this *Params) Equal(that interface{}) bool {
 	if this.MinDescriptionFieldLength != that1.MinDescriptionFieldLength {
 		return false
 	}
-	if len(this.BaseFee) != len(that1.BaseFee) {
+	if len(this.CoinIssuers) != len(that1.CoinIssuers) {
 		return false
 	}
-	for i := range this.BaseFee {
-		if !this.BaseFee[i].Equal(&that1.BaseFee[i]) {
+	for i := range this.CoinIssuers {
+		if !this.CoinIssuers[i].Equal(&that1.CoinIssuers[i]) {
 			return false
 		}
 	}
+	if !this.RecipeFeePercentage.Equal(that1.RecipeFeePercentage) {
+		return false
+	}
+	if !this.ItemTransferFeePercentage.Equal(that1.ItemTransferFeePercentage) {
+		return false
+	}
+	if !this.UpdateItemStringFee.Equal(that1.UpdateItemStringFee) {
+		return false
+	}
+	if !this.MinTransferFee.Equal(that1.MinTransferFee) {
+		return false
+	}
+	if !this.MaxTransferFee.Equal(that1.MaxTransferFee) {
+		return false
+	}
 	return true
 }
+func (m *GoogleIAPPackage) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GoogleIAPPackage) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GoogleIAPPackage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	{
+		size := m.Amount.Size()
+		i -= size
+		if _, err := m.Amount.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x1a
+	if len(m.PackageID) > 0 {
+		i -= len(m.PackageID)
+		copy(dAtA[i:], m.PackageID)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.PackageID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.PackageName) > 0 {
+		i -= len(m.PackageName)
+		copy(dAtA[i:], m.PackageName)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.PackageName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CoinIssuer) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CoinIssuer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CoinIssuer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.GoogleIAPPubKey) > 0 {
+		i -= len(m.GoogleIAPPubKey)
+		copy(dAtA[i:], m.GoogleIAPPubKey)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.GoogleIAPPubKey)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Packages) > 0 {
+		for iNdEx := len(m.Packages) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Packages[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintParams(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.CoinDenom) > 0 {
+		i -= len(m.CoinDenom)
+		copy(dAtA[i:], m.CoinDenom)
+		i = encodeVarintParams(dAtA, i, uint64(len(m.CoinDenom)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *Params) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -173,10 +500,62 @@ func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.BaseFee) > 0 {
-		for iNdEx := len(m.BaseFee) - 1; iNdEx >= 0; iNdEx-- {
+	{
+		size := m.MaxTransferFee.Size()
+		i -= size
+		if _, err := m.MaxTransferFee.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x42
+	{
+		size := m.MinTransferFee.Size()
+		i -= size
+		if _, err := m.MinTransferFee.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x3a
+	if m.UpdateItemStringFee != nil {
+		{
+			size, err := m.UpdateItemStringFee.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintParams(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	{
+		size := m.ItemTransferFeePercentage.Size()
+		i -= size
+		if _, err := m.ItemTransferFeePercentage.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x2a
+	{
+		size := m.RecipeFeePercentage.Size()
+		i -= size
+		if _, err := m.RecipeFeePercentage.MarshalTo(dAtA[i:]); err != nil {
+			return 0, err
+		}
+		i = encodeVarintParams(dAtA, i, uint64(size))
+	}
+	i--
+	dAtA[i] = 0x22
+	if len(m.CoinIssuers) > 0 {
+		for iNdEx := len(m.CoinIssuers) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.BaseFee[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.CoinIssuers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -211,6 +590,48 @@ func encodeVarintParams(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *GoogleIAPPackage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.PackageName)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = len(m.PackageID)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = m.Amount.Size()
+	n += 1 + l + sovParams(uint64(l))
+	return n
+}
+
+func (m *CoinIssuer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CoinDenom)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	if len(m.Packages) > 0 {
+		for _, e := range m.Packages {
+			l = e.Size()
+			n += 1 + l + sovParams(uint64(l))
+		}
+	}
+	l = len(m.GoogleIAPPubKey)
+	if l > 0 {
+		n += 1 + l + sovParams(uint64(l))
+	}
+	return n
+}
+
 func (m *Params) Size() (n int) {
 	if m == nil {
 		return 0
@@ -223,12 +644,24 @@ func (m *Params) Size() (n int) {
 	if m.MinDescriptionFieldLength != 0 {
 		n += 1 + sovParams(uint64(m.MinDescriptionFieldLength))
 	}
-	if len(m.BaseFee) > 0 {
-		for _, e := range m.BaseFee {
+	if len(m.CoinIssuers) > 0 {
+		for _, e := range m.CoinIssuers {
 			l = e.Size()
 			n += 1 + l + sovParams(uint64(l))
 		}
 	}
+	l = m.RecipeFeePercentage.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.ItemTransferFeePercentage.Size()
+	n += 1 + l + sovParams(uint64(l))
+	if m.UpdateItemStringFee != nil {
+		l = m.UpdateItemStringFee.Size()
+		n += 1 + l + sovParams(uint64(l))
+	}
+	l = m.MinTransferFee.Size()
+	n += 1 + l + sovParams(uint64(l))
+	l = m.MaxTransferFee.Size()
+	n += 1 + l + sovParams(uint64(l))
 	return n
 }
 
@@ -237,6 +670,302 @@ func sovParams(x uint64) (n int) {
 }
 func sozParams(x uint64) (n int) {
 	return sovParams(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *GoogleIAPPackage) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowParams
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GoogleIAPPackage: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GoogleIAPPackage: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PackageName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PackageName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PackageID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PackageID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.Amount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipParams(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthParams
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CoinIssuer) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowParams
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CoinIssuer: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CoinIssuer: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinDenom", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CoinDenom = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Packages", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Packages = append(m.Packages, &GoogleIAPPackage{})
+			if err := m.Packages[len(m.Packages)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GoogleIAPPubKey", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.GoogleIAPPubKey = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipParams(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthParams
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *Params) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -307,7 +1036,7 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			}
 		case 3:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseFee", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinIssuers", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -334,8 +1063,180 @@ func (m *Params) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BaseFee = append(m.BaseFee, types.Coin{})
-			if err := m.BaseFee[len(m.BaseFee)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.CoinIssuers = append(m.CoinIssuers, CoinIssuer{})
+			if err := m.CoinIssuers[len(m.CoinIssuers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RecipeFeePercentage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.RecipeFeePercentage.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemTransferFeePercentage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.ItemTransferFeePercentage.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpdateItemStringFee", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UpdateItemStringFee == nil {
+				m.UpdateItemStringFee = &types.Coin{}
+			}
+			if err := m.UpdateItemStringFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MinTransferFee", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.MinTransferFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaxTransferFee", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowParams
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthParams
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthParams
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if err := m.MaxTransferFee.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

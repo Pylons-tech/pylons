@@ -144,6 +144,16 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	if !found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "requested recipe not found")
 	}
+
+	cookbook, found := k.GetCookbook(ctx, msg.CookbookID)
+	if !found {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "main cookbook not found")
+	}
+
+	if !recipe.Enabled || !cookbook.Enabled {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "this recipe or its parent cookbook are disabled")
+	}
+
 	matchedItems, err := k.MatchItemInputs(ctx, msg.Creator, msg.ItemIDs, recipe)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
@@ -151,6 +161,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	// TODO check that user has balance to cover recipe.CoinInputs
 	// if true, lock these coins
+	// on top of this, lock amount to pay for fees -> percentage from any non-coookbook coin from the param
 
 	// create ItemRecord list
 	itemRecords := make([]types.ItemRecord, len(matchedItems))

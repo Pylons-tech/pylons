@@ -7,12 +7,16 @@ import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
+import "pylons/params.proto";
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
 
 // GenesisState defines the pylons module's genesis state.
 message GenesisState {
     // this line is used by starport scaffolding # genesis/proto/state
+	  Params params = 10 [(gogoproto.nullable) = false];
 		repeated GoogleIAPOrder googleIAPOrderList = 8; // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 googleIAPOrderCount = 9; // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Execution executionList = 7; // this line is used by starport scaffolding # genesis/proto/stateField

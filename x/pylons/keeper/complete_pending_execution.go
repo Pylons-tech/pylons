@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -52,7 +53,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		return nil, nil, nil, err
 	}
 
-	coinPrefix := recipe.CookbookID
+	coinPrefix := strings.ReplaceAll(recipe.CookbookID, "_", "")
 	coins := make([]sdk.Coin, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
 		coins[i].Denom = coinPrefix + "/" + coinOutput.Coin.Denom

@@ -3,6 +3,8 @@ package keeper
 import (
 	"fmt"
 
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -19,6 +21,7 @@ type (
 		memKey        sdk.StoreKey
 		bankKeeper    types.BankKeeper
 		accountKeeper types.AccountKeeper
+		paramSpace    paramtypes.Subspace
 		// this line is used by starport scaffolding # ibc/keeper/attribute
 
 	}
@@ -30,6 +33,7 @@ func NewKeeper(
 	memKey sdk.StoreKey,
 	bk types.BankKeeper,
 	ak types.AccountKeeper,
+	paramSpace paramtypes.Subspace,
 	// this line is used by starport scaffolding # ibc/keeper/parameter
 
 ) Keeper {
@@ -51,6 +55,7 @@ func NewKeeper(
 		memKey:        memKey,
 		bankKeeper:    bk,
 		accountKeeper: ak,
+		paramSpace:    paramSpace,
 		// this line is used by starport scaffolding # ibc/keeper/return
 
 	}

@@ -7,14 +7,27 @@ option (gogoproto.equal_all) = true;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 
+message GoogleIAPPackage {
+  string PackageName = 1 [(gogoproto.moretags) = "yaml:\"package_name\""];
+  string PackageID = 2 [(gogoproto.moretags) = "yaml:\"package_id\""];
+  string Amount = 3 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"amount\"", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+}
+
+message CoinIssuer {
+  string CoinDenom = 1 [(gogoproto.moretags) = "yaml:\"coin_denom\""];
+  repeated GoogleIAPPackage Packages= 2 [(gogoproto.moretags) = "yaml:\"google_iap_packages\""];
+  string GoogleIAPPubKey = 3 [(gogoproto.moretags) = "yaml:\"google_iap_pubkey\""];
+}
 
 // Params represent the parameters used by the pylons module
 message Params {
+  option (gogoproto.goproto_stringer)       = false;
   uint64 minNameFieldLength = 1 [(gogoproto.moretags) = "yaml:\"min_name_field_length\""];
   uint64 minDescriptionFieldLength = 2 [(gogoproto.moretags) = "yaml:\"min_description_field_length\""];
-  repeated cosmos.base.v1beta1.Coin baseFee = 3 [
-    (gogoproto.moretags) = "yaml:\"base_fee\"",
-    (gogoproto.nullable) = false,
-    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
-  ];
+  repeated CoinIssuer coinIssuers = 3 [(gogoproto.moretags) = "yaml:\"coin_issuers\"", (gogoproto.nullable) = false];
+  string recipeFeePercentage = 4 [(gogoproto.moretags) = "yaml:\"recipe_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string itemTransferFeePercentage = 5 [(gogoproto.moretags) = "yaml:\"item_transfer_fee_percentage\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  cosmos.base.v1beta1.Coin UpdateItemStringFee = 6 [(gogoproto.moretags) = "yaml:\"update_item_string_fee\""];
+  string minTransferFee = 7 [(gogoproto.moretags) = "yaml:\"min_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  string maxTransferFee = 8 [(gogoproto.moretags) = "yaml:\"max_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
 }

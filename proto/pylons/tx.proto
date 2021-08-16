@@ -120,9 +120,8 @@ message MsgCreateCookbook {
   string developer = 5;
   string version = 6;
   string supportEmail = 7;
-  int64 tier = 8;
-  uint64 costPerBlock = 9;
-  bool enabled = 10;
+  cosmos.base.v1beta1.Coin costPerBlock = 8;
+  bool enabled = 9;
 }
 message MsgCreateCookbookResponse { }
 
@@ -134,9 +133,8 @@ message MsgUpdateCookbook {
   string developer = 5;
   string version = 6;
   string supportEmail = 7;
-  int64 tier = 8;
-  uint64 costPerBlock = 9;
-  bool enabled = 10;
+  cosmos.base.v1beta1.Coin costPerBlock = 8;
+  bool enabled = 9;
 }
 message MsgUpdateCookbookResponse { }
 
