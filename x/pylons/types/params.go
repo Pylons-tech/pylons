@@ -5,9 +5,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	yaml "gopkg.in/yaml.v2"
 )
 
+// Default parameter namespace
 const (
 	// PylonsCoinDenom is the pylons denom string
 	PylonsCoinDenom = "pylon"
@@ -21,37 +21,38 @@ const (
 	DefaultMinDescriptionFieldLength = 20
 )
 
-// Parameter Keys
+// Parameter Store Keys
 var (
 	ParamStoreKeyMinNameFieldLength        = []byte("MinNameFieldLength")
 	ParamStoreKeyMinDescriptionFieldLength = []byte("MinDescriptionFieldLength")
 	ParamStoreKeyBaseFee                   = []byte("BaseFee")
 )
 
-type Params struct {
-	MinNameFieldLength        uint64
-	MinDescriptionFieldLength uint64
-	BaseFee                   sdk.Coins
+// NewParams creates a new Params object
+func NewParams(
+	minNameFieldLength uint64,
+	minDescriptionFieldLength uint64,
+	baseFee sdk.Coins,
+) Params {
+	return Params{
+		MinNameFieldLength:        minNameFieldLength,
+		MinDescriptionFieldLength: minDescriptionFieldLength,
+		BaseFee:                   baseFee,
+	}
 }
 
-// DefaultParams returns default pylons parameters
+// DefaultParams returns default pylons Params
 func DefaultParams() Params {
-	return Params{
-		MinNameFieldLength:        DefaultMinNameFieldLength,
-		MinDescriptionFieldLength: DefaultMinDescriptionFieldLength,
-		BaseFee:                   sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBaseFee)},
-	}
+	return NewParams(
+		DefaultMinNameFieldLength,
+		DefaultMinDescriptionFieldLength,
+		sdk.Coins{sdk.NewInt64Coin(PylonsCoinDenom, DefaultBaseFee)},
+	)
 }
 
 // ParamKeyTable returns the parameter by key
 func ParamKeyTable() paramtypes.KeyTable {
 	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
-}
-
-// String returns a human-readable string representation of the parameters.
-func (p Params) String() string {
-	out, _ := yaml.Marshal(p)
-	return string(out)
 }
 
 // ParamSetPairs returns the parameter set pairs.
@@ -83,10 +84,6 @@ func (p Params) ValidateBasic() error {
 	return nil
 }
 
-func defaultValidateFunction(i interface{}) error {
-	return nil
-}
-
 func validateUint(i interface{}) error {
 	v, ok := i.(uint64)
 	if !ok {
@@ -107,7 +104,7 @@ func validateBaseFee(i interface{}) error {
 	}
 
 	for _, coin := range v {
-		if coin.IsValid() {
+		if !coin.IsValid() {
 			return fmt.Errorf("fee must be valid (valid denom and non-negative)")
 		}
 

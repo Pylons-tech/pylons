@@ -1,0 +1,20 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+option (gogoproto.equal_all) = true;
+
+import "gogoproto/gogo.proto";
+import "cosmos/base/v1beta1/coin.proto";
+
+
+// Params represent the parameters used by the pylons module
+message Params {
+  uint64 minNameFieldLength = 1 [(gogoproto.moretags) = "yaml:\"min_name_field_length\""];
+  uint64 minDescriptionFieldLength = 2 [(gogoproto.moretags) = "yaml:\"min_description_field_length\""];
+  repeated cosmos.base.v1beta1.Coin baseFee = 3 [
+    (gogoproto.moretags) = "yaml:\"base_fee\"",
+    (gogoproto.nullable) = false,
+    (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"
+  ];
+}
