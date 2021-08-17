@@ -13,12 +13,12 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
-		GoogleIAPOrderList:   []*GoogleIAPOrder{},
-		PendingExecutionList: []*Execution{},
-		ExecutionList:        []*Execution{},
-		ItemList:             []*Item{},
-		RecipeList:           []*Recipe{},
-		CookbookList:         []*Cookbook{},
+		GoogleIAPOrderList:   []GoogleIAPOrder{},
+		PendingExecutionList: []Execution{},
+		ExecutionList:        []Execution{},
+		ItemList:             []Item{},
+		RecipeList:           []Recipe{},
+		CookbookList:         []Cookbook{},
 		Params:               DefaultParams(),
 	}
 }

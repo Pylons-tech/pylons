@@ -39,14 +39,19 @@ func NewKeeper(
 ) Keeper {
 
 	// ensure pylons module accounts are set
-	if addr := ak.GetModuleAddress(types.PylonsFeeCollectorName); addr == nil {
-		panic(fmt.Sprintf("%s module account has not been set", types.PylonsFeeCollectorName))
+	if addr := ak.GetModuleAddress(types.FeeCollectorName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.FeeCollectorName))
 	}
-	if addr := ak.GetModuleAddress(types.PylonsCoinsLockerName); addr == nil {
-		panic(fmt.Sprintf("%s module account has not been set", types.PylonsCoinsLockerName))
+	if addr := ak.GetModuleAddress(types.TradesLockerName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.TradesLockerName))
 	}
-	if addr := ak.GetModuleAddress(types.PylonsItemsLockerName); addr == nil {
-		panic(fmt.Sprintf("%s module account has not been set", types.PylonsItemsLockerName))
+	if addr := ak.GetModuleAddress(types.ExecutionsLockerName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.ExecutionsLockerName))
+	}
+
+	// set KeyTable if it has not already been set
+	if !paramSpace.HasKeyTable() {
+		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
 	}
 
 	return Keeper{

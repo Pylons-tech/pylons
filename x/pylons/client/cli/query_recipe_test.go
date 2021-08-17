@@ -18,7 +18,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.Recipe, []*types.Cookbook) {
+func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Recipe, []types.Cookbook) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
@@ -27,7 +27,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []*types.R
 	for i := 0; i < n; i++ {
 		state.RecipeList = append(
 			state.RecipeList,
-			&types.Recipe{
+			types.Recipe{
 				CookbookID:    strconv.Itoa(i),
 				ID:            strconv.Itoa(i),
 				NodeVersion:   "",
@@ -61,7 +61,7 @@ func TestShowRecipe(t *testing.T) {
 		id   string
 		args []string
 		err  error
-		obj  *types.Recipe
+		obj  types.Recipe
 	}{
 		{
 			desc: "found",

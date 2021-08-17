@@ -17,7 +17,7 @@ func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 		items[i].Owner = "any"
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
-		items[i].TransferFee = &coin
+		items[i].TransferFee = coin
 		k.SetItem(ctx, items[i])
 	}
 	return items

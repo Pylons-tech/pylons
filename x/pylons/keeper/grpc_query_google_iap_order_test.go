@@ -26,12 +26,12 @@ func TestGooglIAPOrderQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetGoogleIAPOrderRequest{PurchaseToken: msgs[0].PurchaseToken},
-			response: &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: &msgs[0]},
+			response: &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: msgs[0]},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetGoogleIAPOrderRequest{PurchaseToken: msgs[1].PurchaseToken},
-			response: &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: &msgs[1]},
+			response: &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",

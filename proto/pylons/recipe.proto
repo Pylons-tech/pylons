@@ -94,7 +94,7 @@ message StringParam {
 // CoinOutput models the continuum of valid outcomes for coin generation in recipes
 message CoinOutput{
   string ID = 1;
-  cosmos.base.v1beta1.Coin coin = 2;
+  cosmos.base.v1beta1.Coin coin = 2 [(gogoproto.nullable) = false];
 }
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
@@ -105,7 +105,7 @@ message ItemOutput {
   repeated StringParam strings = 4 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
   repeated StringParam mutableStrings = 5 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin transferFee = 6;
+  cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 7;
   uint64 amountMinted = 8;
@@ -118,7 +118,7 @@ message ItemModifyOutput {
   repeated DoubleParam doubles = 3 [(gogoproto.nullable) = false];
   repeated LongParam longs = 4 [(gogoproto.nullable) = false];
   repeated StringParam strings = 5 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin transferFee = 6;
+  cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
 }
 
 // EntriesList is a struct to keep list of items and coins
@@ -130,7 +130,7 @@ message EntriesList {
 
 // WeightedOutputs is to make structs which is using weight to be based on
 message  WeightedOutputs {
-  repeated string entryIDs = 1;
+  repeated string entryIDs = 1 [(gogoproto.nullable) = false];
   uint64 weight = 2;
 }
 

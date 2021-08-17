@@ -18,7 +18,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Item) {
+func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
@@ -26,7 +26,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Ite
 
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
-			&types.Item{
+			types.Item{
 				Owner:          "ANY",
 				ID:             strconv.Itoa(i),
 				CookbookID:     "testCookbookID",
@@ -37,7 +37,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []*types.Ite
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    &sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
+				TransferFee:    sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -59,7 +59,7 @@ func TestShowItem(t *testing.T) {
 		id         string
 		args       []string
 		err        error
-		obj        *types.Item
+		obj        types.Item
 	}{
 		{
 			desc:       "found",

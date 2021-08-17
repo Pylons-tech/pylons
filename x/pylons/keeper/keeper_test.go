@@ -27,10 +27,10 @@ import (
 var (
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:   nil,
-		types.PylonsFeeCollectorName: nil,
-		types.PylonsCoinsLockerName:  nil,
-		types.PylonsItemsLockerName:  nil,
+		authtypes.FeeCollectorName: nil,
+		types.FeeCollectorName:     nil,
+		types.TradesLockerName:     nil,
+		types.ExecutionsLockerName: nil,
 	}
 )
 

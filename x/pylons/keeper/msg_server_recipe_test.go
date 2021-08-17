@@ -1,4 +1,4 @@
-package keeper
+ package keeper
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func TestRecipeMsgServerCreate(t *testing.T) {
 		cookbook := &types.MsgCreateCookbook{Creator: creator, ID: idx}
 		_, err := srv.CreateCookbook(wctx, cookbook)
 		require.NoError(t, err)
-		expected := &types.MsgCreateRecipe{Creator: creator, CookbookID: idx, ID: idx}
+		expected := &types.MsgCreateRecipe{Creator: creator, CookbookID: idx, ID: idx, Version: "v0.1"}
 		_, err = srv.CreateRecipe(wctx, expected)
 		require.NoError(t, err)
 		rst, found := keeper.GetRecipe(ctx, expected.CookbookID, expected.ID)
@@ -42,7 +42,7 @@ func TestRecipeMsgServerUpdate(t *testing.T) {
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgUpdateRecipe{Creator: creator, CookbookID: index, ID: index},
+			request: &types.MsgUpdateRecipe{Creator: creator, CookbookID: index, ID: index, Version: "v1.0"},
 		},
 		{
 			desc:    "Unauthorized",

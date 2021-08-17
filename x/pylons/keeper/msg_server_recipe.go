@@ -3,6 +3,7 @@ package keeper
 import (
 	"context"
 	"fmt"
+	"github.com/rogpeppe/go-internal/semver"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -35,8 +36,6 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	if cookbook.Creator != msg.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
-
-	// TODO handle fees
 
 	var recipe = types.Recipe{
 		ID:            msg.ID,
@@ -72,9 +71,13 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	}
 
 	// Check if the value exists
-	_, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
+	origRecipe, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
 	if !isFound {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("recipe with ID %v in cookbook with ID %v not set", msg.ID, msg.CookbookID))
+	}
+
+	if semver.Compare(origRecipe.Version, msg.Version) != -1 {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
 	}
 
 	// Check if the the msg sender is also the cookbook owner
@@ -85,8 +88,6 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	if cookbook.Creator != msg.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "user does not own the cookbook")
 	}
-
-	// TODO handle fees
 
 	var recipe = types.Recipe{
 		ID:            msg.ID,

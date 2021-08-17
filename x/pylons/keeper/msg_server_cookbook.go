@@ -80,6 +80,11 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		CostPerBlock: msg.CostPerBlock,
 	}
 
+	_, err := valFound.Modified(cookbook)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
 	k.SetCookbook(ctx, cookbook)
 
 	return &types.MsgUpdateCookbookResponse{}, nil

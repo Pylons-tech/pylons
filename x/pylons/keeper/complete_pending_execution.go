@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"github.com/rogpeppe/go-internal/semver"
 	"strings"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -100,13 +101,19 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 }
 
 // CompletePendingExecution completes the execution
-func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution, recipe types.Recipe) (types.Execution, error) {
-	celEnv, err := k.NewCelEnvCollectionFromRecipe(ctx, pendingExecution, recipe)
+func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution) (types.Execution, error) {
+	originalRecipe, _ := k.GetRecipe(ctx, pendingExecution.Recipe.CookbookID, pendingExecution.Recipe.ID)
+	// check if recipe was updated after execution is submitted, and error out in such a case
+	if semver.Compare(originalRecipe.Version, pendingExecution.Recipe.Version) != 0 {
+		return types.Execution{}, types.ErrInvalidPendingExecution
+	}
+
+	celEnv, err := k.NewCelEnvCollectionFromRecipe(ctx, pendingExecution, pendingExecution.Recipe)
 	if err != nil {
 		return types.Execution{}, err
 	}
 
-	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize(celEnv)
+	outputs, err := types.WeightedOutputsList(pendingExecution.Recipe.Outputs).Actualize(celEnv)
 	if err != nil {
 		return types.Execution{}, err
 	}
@@ -116,7 +123,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		return types.Execution{}, err
 	}
 
-	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &recipe, celEnv, pendingExecution.ItemInputs)
+	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &pendingExecution.Recipe, celEnv, pendingExecution.ItemInputs)
 	if err != nil {
 		return types.Execution{}, err
 	}
@@ -139,9 +146,10 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		itemModifyOutputIDs[i] = item.ID
 	}
 	// update recipe in keeper to keep track of mintedAmounts
-	k.SetRecipe(ctx, recipe)
+	k.SetRecipe(ctx, pendingExecution.Recipe)
 
 	// TODO unlock the locked coins and perform payment(s)
+	// take percentage to send to module account of any non cookbook coin in coininputs
 
 	pendingExecution.CoinOutputs = coins
 	pendingExecution.ItemModifyOutputIDs = itemModifyOutputIDs

@@ -24,12 +24,12 @@ func TestCookbookQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetCookbookRequest{ID: msgs[0].ID},
-			response: &types.QueryGetCookbookResponse{Cookbook: &msgs[0]},
+			response: &types.QueryGetCookbookResponse{Cookbook: msgs[0]},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetCookbookRequest{ID: msgs[1].ID},
-			response: &types.QueryGetCookbookResponse{Cookbook: &msgs[1]},
+			response: &types.QueryGetCookbookResponse{Cookbook: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",

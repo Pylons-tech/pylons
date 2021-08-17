@@ -150,7 +150,7 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, gs jso
 	// Initialize global index to index in genesis state
 	cdc.MustUnmarshalJSON(gs, &genState)
 
-	InitGenesis(ctx, am.keeper, am.bankKeeper, genState)
+	InitGenesis(ctx, am.keeper, genState)
 
 	return []abci.ValidatorUpdate{}
 }
@@ -171,23 +171,21 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 	pendingExecs := am.keeper.GetAllPendingExecutionAtBlockHeight(ctx, blockHeight)
 
 	for _, pendingExec := range pendingExecs {
-		// get execution recipe
-		recipe, found := am.keeper.GetRecipe(ctx, pendingExec.CookbookID, pendingExec.RecipeID)
-		if !found {
-			// panic if recipe not found. This should never happen
-			panic(fmt.Errorf("recipe with ID %v in cookbook with ID %v not found", pendingExec.RecipeID, pendingExec.CookbookID))
-		}
-		finalizedExec, err := am.keeper.CompletePendingExecution(ctx, pendingExec, recipe)
+		finalizedExec, err := am.keeper.CompletePendingExecution(ctx, pendingExec)
 		if err != nil {
 			// drop execution since it became invalid, user will have to resubmit
 			pendingExec.BlockHeight = blockHeight
-			// TODO UNLOCK COINS
-			pendingExec.CoinInputs = nil
+			// unlock coins
+			addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
+			err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.Recipe.CoinInputs)
+			if err != nil {
+				panic(err.Error())
+			}
 			// make sure locked items ownership is set back to the execution creator
 			for _, itemRecord := range pendingExec.ItemInputs {
-				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookID, itemRecord.ID)
+				item, found := am.keeper.GetItem(ctx, pendingExec.Recipe.CookbookID, itemRecord.ID)
 				if !found {
-					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.CookbookID))
+					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.Recipe.CookbookID))
 				}
 				item.Owner = pendingExec.Creator
 				am.keeper.SetItem(ctx, item)

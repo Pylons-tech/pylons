@@ -14,11 +14,7 @@ import (
 )
 
 func TestListCookbooksByCreator(t *testing.T) {
-	net, objsPtr := networkWithCookbookObjects(t, 2)
-	objs := make([]types.Cookbook, len(objsPtr))
-	for i := range objsPtr {
-		objs[i] = *objsPtr[i]
-	}
+	net, objs := networkWithCookbookObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),

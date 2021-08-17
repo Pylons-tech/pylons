@@ -21,5 +21,5 @@ func (k Keeper) Item(c context.Context, req *types.QueryGetItemRequest) (*types.
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetItemResponse{Item: &val}, nil
+	return &types.QueryGetItemResponse{Item: val}, nil
 }

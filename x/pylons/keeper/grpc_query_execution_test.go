@@ -26,17 +26,17 @@ func TestExecutionQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetExecutionRequest{ID: msgs[0].ID},
-			response: &types.QueryGetExecutionResponse{Completed: true, Execution: &msgs[0]},
+			response: &types.QueryGetExecutionResponse{Completed: true, Execution: msgs[0]},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetExecutionRequest{ID: msgs[1].ID},
-			response: &types.QueryGetExecutionResponse{Completed: true, Execution: &msgs[1]},
+			response: &types.QueryGetExecutionResponse{Completed: true, Execution: msgs[1]},
 		},
 		{
 			desc:     "Pending",
 			request:  &types.QueryGetExecutionRequest{ID: msgs[2].ID},
-			response: &types.QueryGetExecutionResponse{Completed: false, Execution: &msgs[2]},
+			response: &types.QueryGetExecutionResponse{Completed: false, Execution: msgs[2]},
 		},
 		{
 			desc:    "KeyNotFound",

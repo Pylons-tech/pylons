@@ -2,10 +2,106 @@ package types
 
 import (
 	"fmt"
+	"github.com/rogpeppe/go-internal/semver"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
+
+// Modified checks if any field of cookbookA except creator (transfer of ownership is always allowed)
+// is changed with respect to cookbookB. Valid edits require a higher version
+func (recipeA Recipe) Modified(recipeB Recipe) (bool, error) {
+	modified := false
+	if recipeA.Name != recipeB.Name {
+		modified = true
+	}
+
+	if recipeA.Description != recipeB.Description {
+		modified = true
+	}
+
+	if recipeA.CoinInputs.IsEqual(recipeB.CoinInputs) {
+		modified = true
+	}
+
+	// check if ItemInputs are equal
+	if !ItemInputsEqual(recipeA.ItemInputs, recipeB.ItemInputs) {
+		modified = true
+	}
+
+	if !EntriesListEqual(recipeA.Entries, recipeB.Entries) {
+		modified = true
+	}
+
+	if !OutputsEqual(recipeA.Outputs, recipeB.Outputs) {
+		modified = true
+	}
+
+	if recipeA.BlockInterval != recipeB.BlockInterval {
+		modified = true
+	}
+
+	if recipeA.ExtraInfo != recipeB.ExtraInfo {
+		modified = true
+	}
+
+	if modified {
+		if semver.Compare(recipeA.Version, recipeB.Version) != -1 {
+			return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
+		}
+	}
+
+	return modified, nil
+}
+
+func ItemInputsEqual(itemInputsA, itemInputsB []ItemInput) bool {
+	//TODO
+
+	if len(itemInputsA) == len(itemInputsB) {
+		for i := range itemInputsA {
+			itemA := itemInputsA[i]
+			itemB := itemInputsB[i]
+
+			if len(itemA.Longs) == len(itemB.Longs) {
+
+			} else {
+				return false
+			}
+
+			if len(itemA.Strings) == len(itemB.Strings) {
+
+			} else {
+				return false
+			}
+
+			if len(itemA.Doubles) == len(itemB.Doubles) {
+
+			} else {
+				return false
+			}
+
+			//if len(itemA.Conditions) == len(itemB.Conditions) {
+
+			//} else {
+			//	return false
+			//}
+		}
+	} else {
+		return false
+	}
+
+	return true
+}
+
+func EntriesListEqual(entriesA, entriesB EntriesList) bool {
+	// TODO
+	return true
+}
+
+func OutputsEqual(outputsA, outputsB []WeightedOutputs) bool {
+	// TODO
+	return true
+}
 
 func ValidateInputDoubles(dip []DoubleInputParam) error {
 	doublesKeyMap := make(map[string]bool)

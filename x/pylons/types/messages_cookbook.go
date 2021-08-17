@@ -16,7 +16,7 @@ func NewMsgCreateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		CostPerBlock: &costPerBlock,
+		CostPerBlock: costPerBlock,
 		Enabled:      enabled,
 	}
 }
@@ -77,7 +77,7 @@ func NewMsgUpdateCookbook(creator string, id string, name string, description st
 		Developer:    developer,
 		Version:      version,
 		SupportEmail: supportEmail,
-		CostPerBlock: &costPerBlock,
+		CostPerBlock: costPerBlock,
 		Enabled:      enabled,
 	}
 }

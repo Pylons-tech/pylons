@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -16,7 +17,10 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, "item not found")
 	}
 
-	// TODO handle UpdateFee
+	// check if item is owned by msg.Creator if not ERROR
+	if item.Owner != msg.Creator {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Item with ID %v not owned by account %v", msg.ID, msg.Creator))
+	}
 
 	for i, kv := range item.MutableStrings {
 		if msg.Field == kv.Key {
@@ -25,6 +29,14 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 			k.SetItem(ctx, item)
 			return &types.MsgSetItemStringResponse{}, nil
 		}
+	}
+
+	// perform payment after update
+	updateFee := k.Keeper.UpdateItemStringFee(ctx)
+	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
+	err := k.PayFees(ctx, addr, sdk.NewCoins(updateFee))
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	return nil, sdkerrors.Wrap(types.ErrInvalidRequestField, "string field not found")

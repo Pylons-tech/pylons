@@ -25,12 +25,12 @@ func TestRecipeQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetRecipeRequest{CookbookID: msgs[0].CookbookID, ID: msgs[0].ID},
-			response: &types.QueryGetRecipeResponse{Recipe: &msgs[0]},
+			response: &types.QueryGetRecipeResponse{Recipe: msgs[0]},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetRecipeRequest{CookbookID: msgs[1].CookbookID, ID: msgs[1].ID},
-			response: &types.QueryGetRecipeResponse{Recipe: &msgs[1]},
+			response: &types.QueryGetRecipeResponse{Recipe: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",

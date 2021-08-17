@@ -24,9 +24,9 @@ var (
 	DefaultCoinIssuers = []CoinIssuer{
 		{
 			CoinDenom: PylonsCoinDenom,
-			Packages: []*GoogleIAPPackage{
-				{PackageName: "com.pylons.loud", ProductID: "pylons_1000", Amount: sdk.NewDec(1000)},
-				{PackageName: "com.pylons.loud", ProductID: "pylons_55000", Amount: sdk.NewDec(55000)},
+			Packages: []GoogleIAPPackage{
+				{PackageName: "com.pylons.loud", ProductID: "pylons_1000", Amount: sdk.NewInt(1000)},
+				{PackageName: "com.pylons.loud", ProductID: "pylons_55000", Amount: sdk.NewInt(55000)},
 			},
 			GoogleIAPPubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
 		},
@@ -35,8 +35,8 @@ var (
 	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
 	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("0.10")
 	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
-	DefaultMinTransferFee, _            = sdk.NewDecFromStr("1")
-	DefaultMaxTransferFee, _            = sdk.NewDecFromStr("10000")
+	DefaultMinTransferFee               = sdk.NewInt(1)
+	DefaultMaxTransferFee               = sdk.NewInt(10000)
 )
 
 // Parameter Store Keys
@@ -58,9 +58,9 @@ func NewParams(
 	coinIssuers []CoinIssuer,
 	recipeFeePercentage sdk.Dec,
 	itemTransferFeePercentage sdk.Dec,
-	updateItemStringFee *sdk.Coin,
-	minTransferFee sdk.Dec,
-	maxTransferFee sdk.Dec,
+	updateItemStringFee sdk.Coin,
+	minTransferFee sdk.Int,
+	maxTransferFee sdk.Int,
 ) Params {
 	return Params{
 		MinNameFieldLength:        minNameFieldLength,
@@ -82,7 +82,7 @@ func DefaultParams() Params {
 		DefaultCoinIssuers,
 		DefaultRecipeFeePercentage,
 		DefaultItemTransferFeePercentage,
-		&DefaultUpdateItemStringFee,
+		DefaultUpdateItemStringFee,
 		DefaultMinTransferFee,
 		DefaultMaxTransferFee,
 	)
@@ -108,8 +108,8 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateItemStringFee, &p.UpdateItemStringFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyCoinIssuers, &p.CoinIssuers, validateCoinIssuers),
 		paramtypes.NewParamSetPair(ParamStoreKeyRecipeFeePercentage, &p.RecipeFeePercentage, validateDecPercentage),
-		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateDecFee),
-		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateDecFee),
+		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateInt),
+		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
 	}
 }
 
@@ -195,8 +195,8 @@ func validateDecPercentage(i interface{}) error {
 	return nil
 }
 
-func validateDecFee(i interface{}) error {
-	v, ok := i.(sdk.Dec)
+func validateInt(i interface{}) error {
+	v, ok := i.(sdk.Int)
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}

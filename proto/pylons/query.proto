@@ -78,7 +78,7 @@ message QueryGetGoogleIAPOrderRequest {
 }
 
 message QueryGetGoogleIAPOrderResponse {
-	GoogleIAPOrder GoogleIAPOrder = 1;
+	GoogleIAPOrder GoogleIAPOrder = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryListExecutionsByItemRequest {
@@ -104,7 +104,7 @@ message QueryGetExecutionRequest {
 }
 
 message QueryGetExecutionResponse {
-	Execution Execution = 1;
+	Execution Execution = 1 [(gogoproto.nullable) = false];
 	bool Completed = 2;
 }
 
@@ -122,24 +122,16 @@ message QueryGetItemRequest {
 }
 
 message QueryGetItemResponse {
-	Item Item = 1;
+	Item Item = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllItemRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllItemResponse {
-	repeated Item Item = 1;
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
 message QueryGetRecipeRequest {
 	string CookbookID = 1;
 	string ID = 2;
 }
 
 message QueryGetRecipeResponse {
-	Recipe Recipe = 1;
+	Recipe Recipe = 1 [(gogoproto.nullable) = false];
 }
 
 
@@ -156,6 +148,6 @@ message QueryGetCookbookRequest {
 }
 
 message QueryGetCookbookResponse {
-	Cookbook Cookbook = 1;
+	Cookbook Cookbook = 1 [(gogoproto.nullable) = false];
 }
 

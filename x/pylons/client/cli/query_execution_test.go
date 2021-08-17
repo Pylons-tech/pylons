@@ -18,7 +18,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []*types.Execution) {
+func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
@@ -26,7 +26,7 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []*type
 
 	for i := 0; i < n; i++ {
 		state.ExecutionList = append(state.ExecutionList,
-			&types.Execution{
+			types.Execution{
 				Creator:             "ANY",
 				ID:                  strconv.Itoa(i),
 				CookbookID:          "",
@@ -57,7 +57,7 @@ func TestShowExecution(t *testing.T) {
 		id   string
 		args []string
 		err  error
-		obj  *types.Execution
+		obj  types.Execution
 	}{
 		{
 			desc: "found",

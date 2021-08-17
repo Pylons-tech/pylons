@@ -18,7 +18,7 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 	ctx := sdk.UnwrapSDKContext(c)
 
 	completed := false
-	execution := types.Execution{}
+	var execution types.Execution
 	switch {
 	case k.HasPendingExecution(ctx, req.ID):
 		execution = k.GetPendingExecution(ctx, req.ID)
@@ -29,5 +29,5 @@ func (k Keeper) Execution(c context.Context, req *types.QueryGetExecutionRequest
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetExecutionResponse{Execution: &execution, Completed: completed}, nil
+	return &types.QueryGetExecutionResponse{Execution: execution, Completed: completed}, nil
 }

@@ -24,7 +24,7 @@ func TestCreateCookbook(t *testing.T) {
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
 		"Developer",
-		"0.0.1",
+		"v0.0.1",
 		"test@email.com",
 		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
@@ -75,7 +75,7 @@ func TestUpdateCookbook(t *testing.T) {
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
 		"Developer",
-		"0.0.1",
+		"v0.0.1",
 		"test@email.com",
 		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
@@ -92,6 +92,26 @@ func TestUpdateCookbook(t *testing.T) {
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 
+	valid := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Modified",
+		"v1.0.0",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	disable := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"false",
+	}
+
 	for _, tc := range []struct {
 		desc string
 		id   string
@@ -101,6 +121,16 @@ func TestUpdateCookbook(t *testing.T) {
 	}{
 		{
 			desc: "valid",
+			id:   id,
+			args: append(valid, common...),
+		},
+		{
+			desc: "disable",
+			id:   id,
+			args: append(disable, common...),
+		},
+		{
+			desc: "invalid",
 			id:   id,
 			args: common,
 		},

@@ -65,8 +65,8 @@ func Test_validateCoinIssuers(t *testing.T) {
 		i interface{}
 	}
 
-	invalidPackages := make([]*GoogleIAPPackage, 0)
-	invalidPackage := &GoogleIAPPackage{
+	invalidPackages := make([]GoogleIAPPackage, 0)
+	invalidPackage := GoogleIAPPackage{
 		PackageName: "",
 		ProductID:   "",
 		Amount:      sdk.Dec{},
@@ -74,8 +74,8 @@ func Test_validateCoinIssuers(t *testing.T) {
 
 	invalidPackages = append(invalidPackages, invalidPackage)
 
-	validPackages := make([]*GoogleIAPPackage, 0)
-	validPackage := &GoogleIAPPackage{
+	validPackages := make([]GoogleIAPPackage, 0)
+	validPackage := GoogleIAPPackage{
 		PackageName: "package",
 		ProductID:   "product",
 		Amount:      sdk.NewDec(1),
@@ -148,7 +148,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	}
 }
 
-// validateDecFee
+// validateInt
 // validateDecPercentage
 
 func Test_validateParams(t *testing.T) {

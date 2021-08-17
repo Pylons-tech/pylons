@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/rogpeppe/go-internal/semver"
 	"regexp"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -18,8 +19,7 @@ func ValidateEmail(email string) error {
 
 // ValidateVersion validates the SemVer
 func ValidateVersion(s string) error {
-	regex := regexp.MustCompile(`^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$`)
-	if regex.MatchString(s) {
+	if semver.IsValid(s) {
 		return nil
 	}
 

@@ -151,14 +151,14 @@ var (
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		// distrtypes.ModuleName:                    nil,
-		minttypes.ModuleName:                     {authtypes.Minter},
-		stakingtypes.BondedPoolName:              {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName:           {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:                      {authtypes.Burner},
-		ibctransfertypes.ModuleName:              {authtypes.Minter, authtypes.Burner},
-		pylonsmoduletypes.PylonsFeeCollectorName: nil,
-		pylonsmoduletypes.PylonsCoinsLockerName:  nil,
-		pylonsmoduletypes.PylonsItemsLockerName:  nil,
+		minttypes.ModuleName:                   {authtypes.Minter},
+		stakingtypes.BondedPoolName:            {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:         {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                    {authtypes.Burner},
+		ibctransfertypes.ModuleName:            {authtypes.Minter, authtypes.Burner},
+		pylonsmoduletypes.FeeCollectorName:     nil,
+		pylonsmoduletypes.TradesLockerName:     nil,
+		pylonsmoduletypes.ExecutionsLockerName: nil,
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )
@@ -313,6 +313,7 @@ func New(
 	// app.StakingKeeper = *stakingKeeper.SetHooks(
 	//	 stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
 	// )
+	app.StakingKeeper = stakingKeeper
 
 	// ... other modules keepers
 
@@ -355,7 +356,7 @@ func New(
 		keys[pylonsmoduletypes.MemStoreKey],
 		app.BankKeeper,
 		app.AccountKeeper,
-		app.GetSubspace(Name),
+		app.GetSubspace(pylonsmoduletypes.ModuleName),
 	)
 
 	// Set node version from build configuration

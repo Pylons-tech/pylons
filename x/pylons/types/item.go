@@ -118,7 +118,7 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		MutableStrings: nil,  // TODO HOW DO WE SET THIS?
 		Tradeable:      true, // TODO HOW DO WE SET THIS?
 		LastUpdate:     uint64(ctx.BlockHeight()),
-		TransferFee:    &sdk.Coin{},
+		TransferFee:    sdk.Coin{},
 	}, nil
 }
 

@@ -154,7 +154,7 @@ func (k Keeper) GetAmount(ctx sdk.Context, iap types.GoogleIAPOrder) sdk.Coins {
 		pkgs := issuer.Packages
 		for _, pkg := range pkgs {
 			if pkg.ProductID == iap.ProductID {
-				return sdk.Coins{sdk.NewCoin(types.PylonsCoinDenom, pkg.Amount.RoundInt())}
+				return sdk.Coins{sdk.NewCoin(types.PylonsCoinDenom, pkg.Amount)}
 			}
 		}
 	}

@@ -21,5 +21,5 @@ func (k Keeper) Cookbook(c context.Context, req *types.QueryGetCookbookRequest) 
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetCookbookResponse{Cookbook: &val}, nil
+	return &types.QueryGetCookbookResponse{Cookbook: val}, nil
 }

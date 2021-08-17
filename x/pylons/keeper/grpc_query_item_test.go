@@ -24,12 +24,12 @@ func TestItemQuerySingle(t *testing.T) {
 		{
 			desc:     "First",
 			request:  &types.QueryGetItemRequest{CookbookID: msgs[0].CookbookID, ID: msgs[0].ID},
-			response: &types.QueryGetItemResponse{Item: &msgs[0]},
+			response: &types.QueryGetItemResponse{Item: msgs[0]},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetItemRequest{CookbookID: msgs[1].CookbookID, ID: msgs[1].ID},
-			response: &types.QueryGetItemResponse{Item: &msgs[1]},
+			response: &types.QueryGetItemResponse{Item: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",

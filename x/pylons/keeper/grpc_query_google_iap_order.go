@@ -27,5 +27,5 @@ func (k Keeper) GoogleIAPOrder(c context.Context, req *types.QueryGetGoogleIAPOr
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
 	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(req.PurchaseToken)), &googleIAPOrder)
 
-	return &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: &googleIAPOrder}, nil
+	return &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: googleIAPOrder}, nil
 }

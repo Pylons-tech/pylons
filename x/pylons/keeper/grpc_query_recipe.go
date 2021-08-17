@@ -21,5 +21,5 @@ func (k Keeper) Recipe(c context.Context, req *types.QueryGetRecipeRequest) (*ty
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetRecipeResponse{Recipe: &val}, nil
+	return &types.QueryGetRecipeResponse{Recipe: val}, nil
 }

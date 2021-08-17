@@ -158,9 +158,11 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// TODO check that user has balance to cover recipe.CoinInputs
-	// if true, lock these coins
-	// on top of this, lock amount to pay for fees -> percentage from any non-coookbook coin from the param
+	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
+	err = k.LockCoinsForExecution(ctx, addr, recipe.CoinInputs)
+	if err != nil {
+		return nil, err
+	}
 
 	// create ItemRecord list
 	itemRecords := make([]types.ItemRecord, len(matchedItems))
@@ -172,18 +174,16 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 			Strings: item.Strings,
 		}
 
-		k.LockItem(ctx, item)
+		k.LockItemForExecution(ctx, item)
 	}
 
 	// create PendingExecution passing the current blockHeight
 	execution := types.Execution{
 		Creator:     msg.Creator,
-		CookbookID:  msg.CookbookID,
-		RecipeID:    msg.RecipeID,
 		NodeVersion: types.GetNodeVersionString(),
 		BlockHeight: ctx.BlockHeight(),
-		CoinInputs:  nil, // TODO
 		ItemInputs:  itemRecords,
+		Recipe: recipe,
 	}
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)

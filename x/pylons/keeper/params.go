@@ -46,19 +46,19 @@ func (k Keeper) ItemTransferFeePercentage(ctx sdk.Context) (res sdk.Dec) {
 }
 
 // UpdateItemStringFee returns the UpdateItemStringFee param
-func (k Keeper) UpdateItemStringFee(ctx sdk.Context) (res sdk.Dec) {
+func (k Keeper) UpdateItemStringFee(ctx sdk.Context) (res sdk.Coin) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyUpdateItemStringFee, &res)
 	return
 }
 
 // MinTransferFee returns the MinTransferFee param
-func (k Keeper) MinTransferFee(ctx sdk.Context) (res sdk.Dec) {
+func (k Keeper) MinTransferFee(ctx sdk.Context) (res sdk.Int) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyMinTransferFee, &res)
 	return
 }
 
 // MaxTransferFee returns the MaxTransferFee param
-func (k Keeper) MaxTransferFee(ctx sdk.Context) (res sdk.Dec) {
+func (k Keeper) MaxTransferFee(ctx sdk.Context) (res sdk.Int) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyMaxTransferFee, &res)
 	return
 }

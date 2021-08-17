@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"testing"
 
@@ -16,14 +17,18 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []*types.Cookbook) {
+func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.CookbookList = append(state.CookbookList, &types.Cookbook{Creator: "ANY", ID: strconv.Itoa(i)})
+		state.CookbookList = append(state.CookbookList, types.Cookbook{
+			Creator: "ANY",
+			ID: strconv.Itoa(i),
+			CostPerBlock: sdk.NewCoin("test", sdk.NewInt(1)),
+		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
@@ -43,7 +48,7 @@ func TestShowCookbook(t *testing.T) {
 		id   string
 		args []string
 		err  error
-		obj  *types.Cookbook
+		obj  types.Cookbook
 	}{
 		{
 			desc: "found",

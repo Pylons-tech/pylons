@@ -25,16 +25,15 @@ func TestCreateRecipe(t *testing.T) {
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
 		"Developer",
-		"0.0.1",
+		"v0.0.1",
 		"test@email.com",
-		"0",
-		"1",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	fields := []string{
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
-		"0.0.1",
+		"v0.0.1",
 		"[]",
 		"[]",
 		"{}",
@@ -99,16 +98,15 @@ func TestUpdateRecipe(t *testing.T) {
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
 		"Developer",
-		"0.0.1",
+		"v0.0.1",
 		"test@email.com",
-		"0",
-		"1",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 	fields := []string{
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
-		"0.0.1",
+		"v0.0.1",
 		"[]",
 		"[]",
 		"{}",
@@ -134,6 +132,32 @@ func TestUpdateRecipe(t *testing.T) {
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
+	valid := []string{
+		"ModifiedRecipeName",
+		"DescriptionDescriptionDescriptionDescription",
+		"v1.0.0",
+		"[]",
+		"[]",
+		"{}",
+		"[]",
+		"1",
+		"true",
+		"extraInfo",
+	}
+
+	disable := []string{
+		"testRecipeName",
+		"DescriptionDescriptionDescriptionDescription",
+		"v0.0.1",
+		"[]",
+		"[]",
+		"{}",
+		"[]",
+		"1",
+		"false",
+		"extraInfo",
+	}
+
 	for _, tc := range []struct {
 		desc string
 		id1  string
@@ -146,7 +170,13 @@ func TestUpdateRecipe(t *testing.T) {
 			desc: "valid",
 			id1:  cookbookID,
 			id2:  recipeID,
-			args: common,
+			args: append(valid, common...),
+		},
+		{
+			desc: "disable",
+			id1:  cookbookID,
+			id2:  recipeID,
+			args: append(disable, common...),
 		},
 		{
 			desc: "key not found",

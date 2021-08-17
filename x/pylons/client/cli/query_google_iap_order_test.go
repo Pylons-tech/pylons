@@ -16,14 +16,14 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []*types.GoogleIAPOrder) {
+func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleIAPOrder) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.GoogleIAPOrderList = append(state.GoogleIAPOrderList, &types.GoogleIAPOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
+		state.GoogleIAPOrderList = append(state.GoogleIAPOrderList, types.GoogleIAPOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
@@ -43,7 +43,7 @@ func TestShowGoogleIAPOrder(t *testing.T) {
 		id   string
 		args []string
 		err  error
-		obj  *types.GoogleIAPOrder
+		obj  types.GoogleIAPOrder
 	}{
 		{
 			desc: "found",

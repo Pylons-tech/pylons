@@ -9,11 +9,11 @@ import (
 
 // InitGenesis initializes the capability module's state from a provided genesis
 // state.
-func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState types.GenesisState) {
+func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
 	// Set all the googlIAPOrder
 	for _, elem := range genState.GoogleIAPOrderList {
-		k.SetGoogleIAPOrder(ctx, *elem)
+		k.SetGoogleIAPOrder(ctx, elem)
 	}
 
 	// Set googlIAPOrder count
@@ -21,7 +21,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState
 
 	// Set all the execution
 	for _, elem := range genState.ExecutionList {
-		k.SetExecution(ctx, *elem)
+		k.SetExecution(ctx, elem)
 	}
 
 	// Set execution count
@@ -29,7 +29,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState
 
 	// Set all the pending execution
 	for _, elem := range genState.PendingExecutionList {
-		k.SetPendingExecution(ctx, *elem)
+		k.SetPendingExecution(ctx, elem)
 	}
 
 	// Set execution count
@@ -37,17 +37,17 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState
 
 	// Set all the item
 	for _, elem := range genState.ItemList {
-		k.SetItem(ctx, *elem)
+		k.SetItem(ctx, elem)
 	}
 
 	// Set all the recipe
 	for _, elem := range genState.RecipeList {
-		k.SetRecipe(ctx, *elem)
+		k.SetRecipe(ctx, elem)
 	}
 
 	// Set all the cookbook
 	for _, elem := range genState.CookbookList {
-		k.SetCookbook(ctx, *elem)
+		k.SetCookbook(ctx, elem)
 	}
 
 	k.SetParams(ctx, genState.Params)
@@ -59,12 +59,15 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, bk types.BankKeeper, genState
 func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
+	// Set the current count
+	genesis.EntityCount = k.GetEntityCount(ctx)
+
 	// this line is used by starport scaffolding # genesis/module/export
 	// Get all googlIAPOrder
 	googlIAPOrderList := k.GetAllGoogleIAPOrder(ctx)
 	for _, elem := range googlIAPOrderList {
 		elem := elem
-		genesis.GoogleIAPOrderList = append(genesis.GoogleIAPOrderList, &elem)
+		genesis.GoogleIAPOrderList = append(genesis.GoogleIAPOrderList, elem)
 	}
 
 	// Set the current count
@@ -74,7 +77,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	pendingExecutionList := k.GetAllPendingExecution(ctx)
 	for _, elem := range pendingExecutionList {
 		elem := elem
-		genesis.PendingExecutionList = append(genesis.PendingExecutionList, &elem)
+		genesis.PendingExecutionList = append(genesis.PendingExecutionList, elem)
 	}
 
 	// Set the current count
@@ -84,7 +87,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	executionList := k.GetAllExecution(ctx)
 	for _, elem := range executionList {
 		elem := elem
-		genesis.ExecutionList = append(genesis.ExecutionList, &elem)
+		genesis.ExecutionList = append(genesis.ExecutionList, elem)
 	}
 
 	// Set the current count
@@ -94,21 +97,21 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	itemList := k.GetAllItem(ctx)
 	for _, elem := range itemList {
 		elem := elem
-		genesis.ItemList = append(genesis.ItemList, &elem)
+		genesis.ItemList = append(genesis.ItemList, elem)
 	}
 
 	// Get all recipe
 	recipeList := k.GetAllRecipe(ctx)
 	for _, elem := range recipeList {
 		elem := elem
-		genesis.RecipeList = append(genesis.RecipeList, &elem)
+		genesis.RecipeList = append(genesis.RecipeList, elem)
 	}
 
 	// Get all cookbook
 	cookbookList := k.GetAllCookbook(ctx)
 	for _, elem := range cookbookList {
 		elem := elem
-		genesis.CookbookList = append(genesis.CookbookList, &elem)
+		genesis.CookbookList = append(genesis.CookbookList, elem)
 	}
 
 	params := k.GetParams(ctx)
