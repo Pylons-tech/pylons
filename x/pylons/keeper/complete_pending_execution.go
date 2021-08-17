@@ -2,8 +2,9 @@ package keeper
 
 import (
 	"fmt"
-	"github.com/rogpeppe/go-internal/semver"
 	"strings"
+
+	"github.com/rogpeppe/go-internal/semver"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 

@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/json"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"testing"

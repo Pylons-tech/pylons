@@ -92,18 +92,53 @@ func TestUpdateCookbook(t *testing.T) {
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 
+	// NOTE:
+	// for all valid test cases, the version must be increasing from the previous.
+	// all test cases are updating the same cookbook, so the version and other fields
+	// will be carried over between tests
+
 	valid := []string{
-		"testCookbookName",
+		"ModifiedCookbookname",
 		"DescriptionDescriptionDescription",
 		"Modified",
-		"v1.0.0",
+		"v0.0.2",
 		"test@email.com",
 		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
 
 	disable := []string{
-		"testCookbookName",
+		"ModifiedCookbooknameNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.3",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"false",
+	}
+
+	invalidVersion := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"false",
+	}
+
+	invalidVersionNoModifications := []string{
+		"ModifiedCookbooknameNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"false",
+	}
+
+	noModifications := []string{
+		"ModifiedCookbooknameNew",
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
@@ -123,28 +158,42 @@ func TestUpdateCookbook(t *testing.T) {
 			desc: "valid",
 			id:   id,
 			args: append(valid, common...),
+			code: 0,
 		},
 		{
 			desc: "disable",
 			id:   id,
 			args: append(disable, common...),
+			code: 0,
 		},
 		{
-			desc: "invalid",
+			desc: "invalidVersion",
 			id:   id,
-			args: common,
+			args: append(invalidVersion, common...),
+			code: sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
+		{
+			desc: "invalidNoMods",
+			id:   id,
+			args: append(invalidVersionNoModifications, common...),
+			code: 0,
+		},
+		{
+			desc: "noMods",
+			id:   id,
+			args: append(noModifications, common...),
+			code: 0,
 		},
 		{
 			desc: "key not found",
 			id:   "not_found",
-			args: common,
+			args: append(valid, common...),
 			code: sdkerrors.ErrKeyNotFound.ABCICode(),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{tc.id}
-			args = append(args, fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateCookbook(), args)
 			if tc.err != nil {

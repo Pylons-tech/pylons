@@ -58,17 +58,17 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	}
 
 	// Check if the value exists
-	valFound, isFound := k.GetCookbook(ctx, msg.ID)
+	origCookbook, isFound := k.GetCookbook(ctx, msg.ID)
 	if !isFound {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("ID %v not set", msg.ID))
 	}
 
 	// Check if the msg sender is the same as the current owner
-	if msg.Creator != valFound.Creator {
+	if msg.Creator != origCookbook.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	var cookbook = types.Cookbook{
+	var updatedCookbook = types.Cookbook{
 		ID:           msg.ID,
 		Creator:      msg.Creator,
 		NodeVersion:  types.GetNodeVersionString(),
@@ -80,12 +80,13 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		CostPerBlock: msg.CostPerBlock,
 	}
 
-	_, err := valFound.Modified(cookbook)
+	modified, err := types.CookbookModified(origCookbook, updatedCookbook)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	k.SetCookbook(ctx, cookbook)
-
+	if modified {
+		k.SetCookbook(ctx, updatedCookbook)
+	}
 	return &types.MsgUpdateCookbookResponse{}, nil
 }

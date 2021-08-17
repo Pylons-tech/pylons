@@ -13,6 +13,7 @@ export const protobufPackage = 'Pylonstech.pylons.pylons'
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
   /** this line is used by starport scaffolding # genesis/proto/state */
+  entityCount: number
   params: Params | undefined
   /** this line is used by starport scaffolding # genesis/proto/stateField */
   googleIAPOrderList: GoogleIAPOrder[]
@@ -34,10 +35,13 @@ export interface GenesisState {
   cookbookList: Cookbook[]
 }
 
-const baseGenesisState: object = { googleIAPOrderCount: 0, executionCount: 0, pendingExecutionCount: 0 }
+const baseGenesisState: object = { entityCount: 0, googleIAPOrderCount: 0, executionCount: 0, pendingExecutionCount: 0 }
 
 export const GenesisState = {
   encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
+    if (message.entityCount !== 0) {
+      writer.uint32(88).uint64(message.entityCount)
+    }
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(82).fork()).ldelim()
     }
@@ -84,6 +88,9 @@ export const GenesisState = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
+        case 11:
+          message.entityCount = longToNumber(reader.uint64() as Long)
+          break
         case 10:
           message.params = Params.decode(reader, reader.uint32())
           break
@@ -130,6 +137,11 @@ export const GenesisState = {
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
+    if (object.entityCount !== undefined && object.entityCount !== null) {
+      message.entityCount = Number(object.entityCount)
+    } else {
+      message.entityCount = 0
+    }
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromJSON(object.params)
     } else {
@@ -185,6 +197,7 @@ export const GenesisState = {
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {}
+    message.entityCount !== undefined && (obj.entityCount = message.entityCount)
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined)
     if (message.googleIAPOrderList) {
       obj.googleIAPOrderList = message.googleIAPOrderList.map((e) => (e ? GoogleIAPOrder.toJSON(e) : undefined))
@@ -230,6 +243,11 @@ export const GenesisState = {
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
+    if (object.entityCount !== undefined && object.entityCount !== null) {
+      message.entityCount = object.entityCount
+    } else {
+      message.entityCount = 0
+    }
     if (object.params !== undefined && object.params !== null) {
       message.params = Params.fromPartial(object.params)
     } else {

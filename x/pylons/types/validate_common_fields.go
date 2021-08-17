@@ -1,8 +1,9 @@
 package types
 
 import (
-	"github.com/rogpeppe/go-internal/semver"
 	"regexp"
+
+	"github.com/rogpeppe/go-internal/semver"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )

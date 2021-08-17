@@ -35,8 +35,8 @@ func TestValidateVersion(t *testing.T) {
 		version string
 		err     error
 	}{
-		{desc: "ValidVersion", version: "1.0.0"},
-		{desc: "ValidVersion1", version: "0.1.0-alpha"},
+		{desc: "ValidVersion", version: "v1.0.0"},
+		{desc: "ValidVersion1", version: "v0.1.0-alpha"},
 		{desc: "InvalidVersion1", version: "xyz", err: ErrInvalidRequestField},
 		{desc: "InvalidVersion2", version: "1.0", err: ErrInvalidRequestField},
 	} {

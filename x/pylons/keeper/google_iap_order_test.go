@@ -12,10 +12,11 @@ import (
 
 func createNGoogleIAPOrder(keeper *Keeper, ctx sdk.Context, n int) []types.GoogleIAPOrder {
 	items := make([]types.GoogleIAPOrder, n)
+	var count uint64
 	for i := range items {
 		items[i].Creator = "any"
-		count := keeper.AppendGoogleIAPOrder(ctx, items[i])
 		items[i].PurchaseToken = strconv.Itoa(int(count))
+		count = keeper.AppendGoogleIAPOrder(ctx, items[i])
 	}
 	return items
 }

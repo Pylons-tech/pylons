@@ -1,9 +1,11 @@
 package keeper
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestLockItemForExecution(t *testing.T) {

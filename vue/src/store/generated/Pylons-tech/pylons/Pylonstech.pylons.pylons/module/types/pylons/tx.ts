@@ -7,6 +7,14 @@ import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgTransferCookbook {
+  creator: string
+  ID: string
+  recipient: string
+}
+
+export interface MsgTransferCookbookResponse {}
+
 export interface MsgGoogleIAPGetPylons {
   creator: string
   productID: string
@@ -116,6 +124,133 @@ export interface MsgUpdateCookbook {
 }
 
 export interface MsgUpdateCookbookResponse {}
+
+const baseMsgTransferCookbook: object = { creator: '', ID: '', recipient: '' }
+
+export const MsgTransferCookbook = {
+  encode(message: MsgTransferCookbook, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.ID !== '') {
+      writer.uint32(18).string(message.ID)
+    }
+    if (message.recipient !== '') {
+      writer.uint32(26).string(message.recipient)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgTransferCookbook {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgTransferCookbook } as MsgTransferCookbook
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.ID = reader.string()
+          break
+        case 3:
+          message.recipient = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgTransferCookbook {
+    const message = { ...baseMsgTransferCookbook } as MsgTransferCookbook
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = String(object.ID)
+    } else {
+      message.ID = ''
+    }
+    if (object.recipient !== undefined && object.recipient !== null) {
+      message.recipient = String(object.recipient)
+    } else {
+      message.recipient = ''
+    }
+    return message
+  },
+
+  toJSON(message: MsgTransferCookbook): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.ID !== undefined && (obj.ID = message.ID)
+    message.recipient !== undefined && (obj.recipient = message.recipient)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgTransferCookbook>): MsgTransferCookbook {
+    const message = { ...baseMsgTransferCookbook } as MsgTransferCookbook
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
+    } else {
+      message.ID = ''
+    }
+    if (object.recipient !== undefined && object.recipient !== null) {
+      message.recipient = object.recipient
+    } else {
+      message.recipient = ''
+    }
+    return message
+  }
+}
+
+const baseMsgTransferCookbookResponse: object = {}
+
+export const MsgTransferCookbookResponse = {
+  encode(_: MsgTransferCookbookResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgTransferCookbookResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgTransferCookbookResponse } as MsgTransferCookbookResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgTransferCookbookResponse {
+    const message = { ...baseMsgTransferCookbookResponse } as MsgTransferCookbookResponse
+    return message
+  },
+
+  toJSON(_: MsgTransferCookbookResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgTransferCookbookResponse>): MsgTransferCookbookResponse {
+    const message = { ...baseMsgTransferCookbookResponse } as MsgTransferCookbookResponse
+    return message
+  }
+}
 
 const baseMsgGoogleIAPGetPylons: object = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' }
 
@@ -1968,6 +2103,7 @@ export const MsgUpdateCookbookResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
+  TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>
   GoogleIAPGetPylons(request: MsgGoogleIAPGetPylons): Promise<MsgGoogleIAPGetPylonsResponse>
   CreateAccount(request: MsgCreateAccount): Promise<MsgCreateAccountResponse>
   SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>
@@ -1984,6 +2120,12 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse> {
+    const data = MsgTransferCookbook.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'TransferCookbook', data)
+    return promise.then((data) => MsgTransferCookbookResponse.decode(new Reader(data)))
+  }
+
   GoogleIAPGetPylons(request: MsgGoogleIAPGetPylons): Promise<MsgGoogleIAPGetPylonsResponse> {
     const data = MsgGoogleIAPGetPylons.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'GoogleIAPGetPylons', data)

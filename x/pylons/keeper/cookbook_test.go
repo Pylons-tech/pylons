@@ -16,6 +16,7 @@ func createNCookbook(k *Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].CostPerBlock = sdk.NewCoin("test", sdk.NewInt(1))
 		k.SetCookbook(ctx, items[i])
 	}
 	return items

@@ -95,17 +95,15 @@ export interface PylonsEntriesList {
 export interface PylonsExecution {
   creator?: string;
   ID?: string;
-  cookbookID?: string;
-  recipeID?: string;
   nodeVersion?: string;
 
   /** @format int64 */
   blockHeight?: string;
-  coinInputs?: V1Beta1Coin[];
   itemInputs?: PylonsItemRecord[];
   coinOutputs?: V1Beta1Coin[];
   itemOutputIDs?: string[];
   itemModifyOutputIDs?: string[];
+  recipe?: PylonsRecipe;
 }
 
 export interface PylonsGoogleIAPOrder {
@@ -250,6 +248,8 @@ export type PylonsMsgGoogleIAPGetPylonsResponse = object;
 export type PylonsMsgSendItemsResponse = object;
 
 export type PylonsMsgSetItemStringResponse = object;
+
+export type PylonsMsgTransferCookbookResponse = object;
 
 export type PylonsMsgUpdateCookbookResponse = object;
 

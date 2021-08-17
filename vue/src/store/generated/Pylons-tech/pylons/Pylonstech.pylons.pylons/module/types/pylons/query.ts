@@ -4,7 +4,6 @@ import { GoogleIAPOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
 import { Recipe } from '../pylons/recipe'
 import { Item } from '../pylons/item'
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Cookbook } from '../pylons/cookbook'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
@@ -60,15 +59,6 @@ export interface QueryGetItemRequest {
 
 export interface QueryGetItemResponse {
   Item: Item | undefined
-}
-
-export interface QueryAllItemRequest {
-  pagination: PageRequest | undefined
-}
-
-export interface QueryAllItemResponse {
-  Item: Item[]
-  pagination: PageResponse | undefined
 }
 
 export interface QueryGetRecipeRequest {
@@ -840,140 +830,6 @@ export const QueryGetItemResponse = {
       message.Item = Item.fromPartial(object.Item)
     } else {
       message.Item = undefined
-    }
-    return message
-  }
-}
-
-const baseQueryAllItemRequest: object = {}
-
-export const QueryAllItemRequest = {
-  encode(message: QueryAllItemRequest, writer: Writer = Writer.create()): Writer {
-    if (message.pagination !== undefined) {
-      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): QueryAllItemRequest {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllItemRequest } as QueryAllItemRequest
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.pagination = PageRequest.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): QueryAllItemRequest {
-    const message = { ...baseQueryAllItemRequest } as QueryAllItemRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  },
-
-  toJSON(message: QueryAllItemRequest): unknown {
-    const obj: any = {}
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<QueryAllItemRequest>): QueryAllItemRequest {
-    const message = { ...baseQueryAllItemRequest } as QueryAllItemRequest
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageRequest.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  }
-}
-
-const baseQueryAllItemResponse: object = {}
-
-export const QueryAllItemResponse = {
-  encode(message: QueryAllItemResponse, writer: Writer = Writer.create()): Writer {
-    for (const v of message.Item) {
-      Item.encode(v!, writer.uint32(10).fork()).ldelim()
-    }
-    if (message.pagination !== undefined) {
-      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): QueryAllItemResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryAllItemResponse } as QueryAllItemResponse
-    message.Item = []
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.Item.push(Item.decode(reader, reader.uint32()))
-          break
-        case 2:
-          message.pagination = PageResponse.decode(reader, reader.uint32())
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): QueryAllItemResponse {
-    const message = { ...baseQueryAllItemResponse } as QueryAllItemResponse
-    message.Item = []
-    if (object.Item !== undefined && object.Item !== null) {
-      for (const e of object.Item) {
-        message.Item.push(Item.fromJSON(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromJSON(object.pagination)
-    } else {
-      message.pagination = undefined
-    }
-    return message
-  },
-
-  toJSON(message: QueryAllItemResponse): unknown {
-    const obj: any = {}
-    if (message.Item) {
-      obj.Item = message.Item.map((e) => (e ? Item.toJSON(e) : undefined))
-    } else {
-      obj.Item = []
-    }
-    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<QueryAllItemResponse>): QueryAllItemResponse {
-    const message = { ...baseQueryAllItemResponse } as QueryAllItemResponse
-    message.Item = []
-    if (object.Item !== undefined && object.Item !== null) {
-      for (const e of object.Item) {
-        message.Item.push(Item.fromPartial(e))
-      }
-    }
-    if (object.pagination !== undefined && object.pagination !== null) {
-      message.pagination = PageResponse.fromPartial(object.pagination)
-    } else {
-      message.pagination = undefined
     }
     return message
   }

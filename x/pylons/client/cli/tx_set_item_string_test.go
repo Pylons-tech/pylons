@@ -25,7 +25,7 @@ func TestSetItemString(t *testing.T) {
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
 		"Developer",
-		"0.0.1",
+		"v0.0.1",
 		"test@email.com",
 		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
@@ -35,7 +35,7 @@ func TestSetItemString(t *testing.T) {
 	rpFields := []string{
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
-		"0.0.1",
+		"v0.0.1",
 		"[]",
 		"[]",
 		"{}",

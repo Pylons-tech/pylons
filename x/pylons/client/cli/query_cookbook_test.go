@@ -2,9 +2,10 @@ package cli_test
 
 import (
 	"fmt"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"testing"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
@@ -25,8 +26,8 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 
 	for i := 0; i < n; i++ {
 		state.CookbookList = append(state.CookbookList, types.Cookbook{
-			Creator: "ANY",
-			ID: strconv.Itoa(i),
+			Creator:      "ANY",
+			ID:           strconv.Itoa(i),
 			CostPerBlock: sdk.NewCoin("test", sdk.NewInt(1)),
 		})
 	}

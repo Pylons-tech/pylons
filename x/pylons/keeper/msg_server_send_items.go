@@ -15,7 +15,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// STATEFUL CHECKS
-	var items map[string]types.Item
+	items := make(map[string]types.Item)
 	for _, itemID := range msg.ItemIDs {
 		// check it item exists and if it is owned by message creator
 		item, found := k.Keeper.GetItem(ctx, msg.CookbookID, itemID)

@@ -132,10 +132,15 @@ func TestUpdateRecipe(t *testing.T) {
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
+	// NOTE:
+	// for all valid test cases, the version must be increasing from the previous.
+	// all test cases are updating the same recipe, so the version and other fields
+	// will be carried over between tests
+
 	valid := []string{
 		"ModifiedRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
-		"v1.0.0",
+		"v0.0.2",
 		"[]",
 		"[]",
 		"{}",
@@ -145,10 +150,25 @@ func TestUpdateRecipe(t *testing.T) {
 		"extraInfo",
 	}
 
+	// disable is a valid transaction that disables the recipe
 	disable := []string{
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
-		"v0.0.1",
+		"v0.0.3",
+		"[]",
+		"[]",
+		"{}",
+		"[]",
+		"1",
+		"false",
+		"extraInfo",
+	}
+
+	// invalidVersion sets the RecipeVersion to be less than the current version, which is invalid
+	invalidVersion := []string{
+		"testRecipeName",
+		"DescriptionDescriptionDescriptionDescription",
+		"v0.0.0",
 		"[]",
 		"[]",
 		"{}",
@@ -163,33 +183,44 @@ func TestUpdateRecipe(t *testing.T) {
 		id1  string
 		id2  string
 		args []string
-		code uint32
 		err  error
+		code uint32
 	}{
 		{
 			desc: "valid",
 			id1:  cookbookID,
 			id2:  recipeID,
 			args: append(valid, common...),
+			err:  nil,
+			code: 0,
 		},
 		{
 			desc: "disable",
 			id1:  cookbookID,
 			id2:  recipeID,
 			args: append(disable, common...),
+			err:  nil,
+			code: 0,
+		},
+		{
+			desc: "invalidVersion",
+			id1:  cookbookID,
+			id2:  recipeID,
+			args: append(invalidVersion, common...),
+			err:  nil,
+			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
 		{
 			desc: "key not found",
 			id1:  "not_found",
 			id2:  "not_found",
-			args: common,
+			args: append(valid, common...),
 			code: sdkerrors.ErrKeyNotFound.ABCICode(),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{tc.id1, tc.id2}
-			args = append(args, fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateRecipe(), args)
 			if tc.err != nil {

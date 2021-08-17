@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 	"fmt"
-	"github.com/rogpeppe/go-internal/semver"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -42,6 +41,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		NodeVersion:   types.GetNodeVersionString(),
 		CookbookID:    msg.CookbookID,
 		Name:          msg.Name,
+		Version:       msg.Version,
 		CoinInputs:    msg.CoinInputs,
 		ItemInputs:    msg.ItemInputs,
 		Entries:       msg.Entries,
@@ -76,10 +76,6 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("recipe with ID %v in cookbook with ID %v not set", msg.ID, msg.CookbookID))
 	}
 
-	if semver.Compare(origRecipe.Version, msg.Version) != -1 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
-	}
-
 	// Check if the the msg sender is also the cookbook owner
 	cookbook, f := k.GetCookbook(ctx, msg.CookbookID)
 	if !f {
@@ -89,11 +85,12 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "user does not own the cookbook")
 	}
 
-	var recipe = types.Recipe{
+	var updatedRecipe = types.Recipe{
 		ID:            msg.ID,
 		NodeVersion:   types.GetNodeVersionString(),
 		CookbookID:    msg.CookbookID,
 		Name:          msg.Name,
+		Version:       msg.Version,
 		CoinInputs:    msg.CoinInputs,
 		ItemInputs:    msg.ItemInputs,
 		Entries:       msg.Entries,
@@ -104,7 +101,14 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		ExtraInfo:     msg.ExtraInfo,
 	}
 
-	k.SetRecipe(ctx, recipe)
+	modified, err := types.RecipeModified(origRecipe, updatedRecipe)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if modified {
+		k.SetRecipe(ctx, updatedRecipe)
+	}
 
 	return &types.MsgUpdateRecipeResponse{}, nil
 }

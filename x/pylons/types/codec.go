@@ -9,6 +9,7 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
+	cdc.RegisterConcrete(&MsgTransferCookbook{}, "pylons/TransferCookbook", nil)
 
 	cdc.RegisterConcrete(&MsgGoogleIAPGetPylons{}, "pylons/GoogleIAPGetPylons", nil)
 
@@ -30,6 +31,9 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgTransferCookbook{},
+	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgGoogleIAPGetPylons{},
 	)

@@ -183,7 +183,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		NodeVersion: types.GetNodeVersionString(),
 		BlockHeight: ctx.BlockHeight(),
 		ItemInputs:  itemRecords,
-		Recipe: recipe,
+		Recipe:      recipe,
 	}
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)

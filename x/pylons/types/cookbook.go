@@ -5,35 +5,36 @@ import (
 	"github.com/rogpeppe/go-internal/semver"
 )
 
-// Modified checks if any field of cookbookA except creator (transfer of ownership is always allowed)
+// CookbookModified checks if any field of cookbookA except creator (transfer of ownership is always allowed)
 // is changed with respect to cookbookB. Valid edits require a higher version
-func (cookbookA Cookbook) Modified(cookbookB Cookbook) (bool, error) {
+func CookbookModified(original, updated Cookbook) (bool, error) {
 	modified := false
-	if cookbookA.Name != cookbookB.Name {
+
+	if original.Name != updated.Name {
 		modified = true
 	}
 
-	if cookbookA.Description != cookbookB.Description {
+	if original.Description != updated.Description {
 		modified = true
 	}
 
-	if cookbookA.Developer != cookbookB.Developer {
+	if original.Developer != updated.Developer {
 		modified = true
 	}
 
-	if cookbookA.SupportEmail != cookbookB.SupportEmail {
+	if original.SupportEmail != updated.SupportEmail {
 		modified = true
 	}
 
-	if !cookbookA.CostPerBlock.IsEqual(cookbookB.CostPerBlock) {
+	if !original.CostPerBlock.IsEqual(updated.CostPerBlock) {
 		modified = true
 	}
 
 	if modified {
-		if semver.Compare(cookbookA.Version, cookbookB.Version) != -1 {
+		comp := semver.Compare(original.Version, updated.Version)
+		if comp != -1 {
 			return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
 		}
 	}
-
 	return modified, nil
 }

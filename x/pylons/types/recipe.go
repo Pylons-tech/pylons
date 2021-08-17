@@ -1,52 +1,59 @@
 package types
 
 import (
+	"errors"
 	"fmt"
+
 	"github.com/rogpeppe/go-internal/semver"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// Modified checks if any field of cookbookA except creator (transfer of ownership is always allowed)
+// RecipeModified checks if any field of recipe except creator (transfer of ownership is always allowed)
 // is changed with respect to cookbookB. Valid edits require a higher version
-func (recipeA Recipe) Modified(recipeB Recipe) (bool, error) {
+func RecipeModified(original, updated Recipe) (bool, error) {
 	modified := false
-	if recipeA.Name != recipeB.Name {
+	if original.Name != updated.Name {
 		modified = true
 	}
 
-	if recipeA.Description != recipeB.Description {
+	if original.Description != updated.Description {
 		modified = true
 	}
 
-	if recipeA.CoinInputs.IsEqual(recipeB.CoinInputs) {
+	if original.CoinInputs.IsEqual(updated.CoinInputs) {
 		modified = true
 	}
 
-	// check if ItemInputs are equal
-	if !ItemInputsEqual(recipeA.ItemInputs, recipeB.ItemInputs) {
+	if original.BlockInterval != updated.BlockInterval {
 		modified = true
 	}
 
-	if !EntriesListEqual(recipeA.Entries, recipeB.Entries) {
+	if original.ExtraInfo != updated.ExtraInfo {
 		modified = true
 	}
 
-	if !OutputsEqual(recipeA.Outputs, recipeB.Outputs) {
+	if !ItemInputsEqual(original.ItemInputs, updated.ItemInputs) {
 		modified = true
 	}
 
-	if recipeA.BlockInterval != recipeB.BlockInterval {
+	equal, err := EntriesListEqual(original.Entries, updated.Entries)
+	if err != nil {
+		return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+
+	if !equal {
 		modified = true
 	}
 
-	if recipeA.ExtraInfo != recipeB.ExtraInfo {
+	if !OutputsEqual(original.Outputs, updated.Outputs) {
 		modified = true
 	}
 
 	if modified {
-		if semver.Compare(recipeA.Version, recipeB.Version) != -1 {
+		comp := semver.Compare(original.Version, updated.Version)
+		if comp != -1 {
 			return modified, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "version needs to be higher when updating")
 		}
 	}
@@ -54,37 +61,71 @@ func (recipeA Recipe) Modified(recipeB Recipe) (bool, error) {
 	return modified, nil
 }
 
-func ItemInputsEqual(itemInputsA, itemInputsB []ItemInput) bool {
-	//TODO
-
-	if len(itemInputsA) == len(itemInputsB) {
-		for i := range itemInputsA {
-			itemA := itemInputsA[i]
-			itemB := itemInputsB[i]
+func ItemInputsEqual(original, updated []ItemInput) bool {
+	if len(original) == len(updated) {
+		for i := range original {
+			itemA := original[i]
+			itemB := updated[i]
 
 			if len(itemA.Longs) == len(itemB.Longs) {
-
+				for j := range itemA.Longs {
+					if itemA.Longs[j] != itemB.Longs[j] {
+						return false
+					}
+				}
 			} else {
 				return false
 			}
 
 			if len(itemA.Strings) == len(itemB.Strings) {
-
+				for j := range itemA.Strings {
+					if itemA.Strings[j] != itemB.Strings[j] {
+						return false
+					}
+				}
 			} else {
 				return false
 			}
 
 			if len(itemA.Doubles) == len(itemB.Doubles) {
-
+				for j := range itemA.Doubles {
+					if itemA.Doubles[j] != itemB.Doubles[j] {
+						return false
+					}
+				}
 			} else {
 				return false
 			}
 
-			//if len(itemA.Conditions) == len(itemB.Conditions) {
+			if len(itemA.Conditions.Doubles) == len(itemB.Conditions.Doubles) {
+				for j := range itemA.Conditions.Doubles {
+					if itemA.Conditions.Doubles[j] != itemB.Conditions.Doubles[j] {
+						return false
+					}
+				}
+			} else {
+				return false
+			}
 
-			//} else {
-			//	return false
-			//}
+			if len(itemA.Conditions.Longs) == len(itemB.Conditions.Longs) {
+				for j := range itemA.Conditions.Longs {
+					if itemA.Conditions.Longs[j] != itemB.Conditions.Longs[j] {
+						return false
+					}
+				}
+			} else {
+				return false
+			}
+
+			if len(itemA.Conditions.Strings) == len(itemB.Conditions.Strings) {
+				for j := range itemA.Conditions.Strings {
+					if itemA.Conditions.Strings[j] != itemB.Conditions.Strings[j] {
+						return false
+					}
+				}
+			} else {
+				return false
+			}
 		}
 	} else {
 		return false
@@ -93,13 +134,371 @@ func ItemInputsEqual(itemInputsA, itemInputsB []ItemInput) bool {
 	return true
 }
 
-func EntriesListEqual(entriesA, entriesB EntriesList) bool {
-	// TODO
-	return true
+func EntriesListEqual(original, updated EntriesList) (bool, error) {
+	if len(original.CoinOutputs) == len(updated.CoinOutputs) {
+		for i := range original.CoinOutputs {
+			coinA := original.CoinOutputs[i]
+			coinB := updated.CoinOutputs[i]
+
+			if coinA.ID != coinB.ID {
+				return false, nil
+			}
+
+			if !coinA.Coin.Equal(coinB.Coin) {
+				return false, nil
+			}
+		}
+	} else {
+		return false, nil
+	}
+
+	if len(original.ItemOutputs) == len(updated.ItemOutputs) {
+		for i := range original.ItemOutputs {
+			originalItem := original.ItemOutputs[i]
+			updatedItem := updated.ItemOutputs[i]
+
+			if originalItem.ID != updatedItem.ID {
+				return false, nil
+			}
+
+			// if AmountMinted is modified, return error as this is
+			if originalItem.AmountMinted != updatedItem.AmountMinted {
+				return false, errors.New("cannot modify AmountMinted field of a recipe")
+			}
+
+			if originalItem.Quantity != updatedItem.Quantity {
+				// User may modify quantity unless updatedItem.Quantity < updatedItem.AmountMinted
+				// return error if true
+				if updatedItem.Quantity < updatedItem.AmountMinted {
+					return false, errors.New("cannot set Quantity to be less than AmountMinted")
+				}
+				return false, nil
+			}
+
+			if !originalItem.TransferFee.Equal(updatedItem.TransferFee) {
+				return false, nil
+			}
+
+			if len(originalItem.Doubles) == len(updatedItem.Doubles) {
+				for j := range originalItem.Doubles {
+					originalDouble := originalItem.Doubles[j]
+					updatedDouble := updatedItem.Doubles[j]
+
+					if originalDouble.Key != updatedDouble.Key {
+						return false, nil
+					}
+
+					if !originalDouble.Rate.Equal(updatedDouble.Rate) {
+						return false, nil
+					}
+
+					if originalDouble.Program != updatedDouble.Program {
+						return false, nil
+					}
+
+					if len(originalDouble.WeightRanges) != len(updatedDouble.WeightRanges) {
+						for k := range originalDouble.WeightRanges {
+							originalWeight := originalDouble.WeightRanges[k]
+							updatedWeight := updatedDouble.WeightRanges[k]
+							if originalWeight.Weight != updatedWeight.Weight {
+								return false, nil
+							}
+							if !originalWeight.Lower.Equal(updatedWeight.Lower) {
+								return false, nil
+							}
+							if !originalWeight.Upper.Equal(updatedWeight.Upper) {
+								return false, nil
+							}
+						}
+					} else {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.Longs) == len(updatedItem.Longs) {
+				for j := range originalItem.Longs {
+					originalLong := originalItem.Longs[j]
+					updatedLong := updatedItem.Longs[j]
+
+					if originalLong.Key != updatedLong.Key {
+						return false, nil
+					}
+
+					if !originalLong.Rate.Equal(updatedLong.Rate) {
+						return false, nil
+					}
+
+					if originalLong.Program != updatedLong.Program {
+						return false, nil
+					}
+
+					if len(originalLong.WeightRanges) != len(updatedLong.WeightRanges) {
+						for k := range originalLong.WeightRanges {
+							originalWeight := originalLong.WeightRanges[k]
+							updatedWeight := updatedLong.WeightRanges[k]
+							if originalWeight.Weight != updatedWeight.Weight {
+								return false, nil
+							}
+							if originalWeight.Lower != updatedWeight.Lower {
+								return false, nil
+							}
+							if originalWeight.Upper != updatedWeight.Upper {
+								return false, nil
+							}
+						}
+					} else {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.MutableStrings) == len(updatedItem.MutableStrings) {
+				for j := range originalItem.MutableStrings {
+					originalString := originalItem.MutableStrings[j]
+					updatedString := updatedItem.MutableStrings[j]
+
+					if originalString.Key != updatedString.Key {
+						return false, nil
+					}
+
+					if !originalString.Rate.Equal(updatedString.Rate) {
+						return false, nil
+					}
+
+					if originalString.Program != updatedString.Program {
+						return false, nil
+					}
+
+					if originalString.Value != updatedString.Value {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.Strings) == len(updatedItem.Strings) {
+				for j := range originalItem.Strings {
+					originalString := originalItem.Strings[j]
+					updatedString := updatedItem.Strings[j]
+
+					if originalString.Key != updatedString.Key {
+						return false, nil
+					}
+
+					if !originalString.Rate.Equal(updatedString.Rate) {
+						return false, nil
+					}
+
+					if originalString.Program != updatedString.Program {
+						return false, nil
+					}
+
+					if originalString.Value != updatedString.Value {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+		}
+	} else {
+		return false, nil
+	}
+
+	if len(original.ItemModifyOutputs) == len(updated.ItemModifyOutputs) {
+		for i := range original.ItemOutputs {
+			originalItem := original.ItemOutputs[i]
+			updatedItem := updated.ItemOutputs[i]
+
+			if originalItem.ID != updatedItem.ID {
+				return false, nil
+			}
+
+			// if AmountMinted is modified, return error as this is
+			if originalItem.AmountMinted != updatedItem.AmountMinted {
+				return false, errors.New("cannot modify AmountMinted field of a recipe")
+			}
+
+			if originalItem.Quantity != updatedItem.Quantity {
+				// User may modify quantity unless updatedItem.Quantity < updatedItem.AmountMinted
+				// return error if true
+				if updatedItem.Quantity < updatedItem.AmountMinted {
+					return false, errors.New("cannot set Quantity to be less than AmountMinted")
+				}
+				return false, nil
+			}
+
+			if !originalItem.TransferFee.Equal(updatedItem.TransferFee) {
+				return false, nil
+			}
+
+			if len(originalItem.Doubles) == len(updatedItem.Doubles) {
+				for j := range originalItem.Doubles {
+					originalDouble := originalItem.Doubles[j]
+					updatedDouble := updatedItem.Doubles[j]
+
+					if originalDouble.Key != updatedDouble.Key {
+						return false, nil
+					}
+
+					if !originalDouble.Rate.Equal(updatedDouble.Rate) {
+						return false, nil
+					}
+
+					if originalDouble.Program != updatedDouble.Program {
+						return false, nil
+					}
+
+					if len(originalDouble.WeightRanges) != len(updatedDouble.WeightRanges) {
+						for k := range originalDouble.WeightRanges {
+							originalWeight := originalDouble.WeightRanges[k]
+							updatedWeight := updatedDouble.WeightRanges[k]
+							if originalWeight.Weight != updatedWeight.Weight {
+								return false, nil
+							}
+							if !originalWeight.Lower.Equal(updatedWeight.Lower) {
+								return false, nil
+							}
+							if !originalWeight.Upper.Equal(updatedWeight.Upper) {
+								return false, nil
+							}
+						}
+					} else {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.Longs) == len(updatedItem.Longs) {
+				for j := range originalItem.Longs {
+					originalLong := originalItem.Longs[j]
+					updatedLong := updatedItem.Longs[j]
+
+					if originalLong.Key != updatedLong.Key {
+						return false, nil
+					}
+
+					if !originalLong.Rate.Equal(updatedLong.Rate) {
+						return false, nil
+					}
+
+					if originalLong.Program != updatedLong.Program {
+						return false, nil
+					}
+
+					if len(originalLong.WeightRanges) != len(updatedLong.WeightRanges) {
+						for k := range originalLong.WeightRanges {
+							originalWeight := originalLong.WeightRanges[k]
+							updatedWeight := updatedLong.WeightRanges[k]
+							if originalWeight.Weight != updatedWeight.Weight {
+								return false, nil
+							}
+							if originalWeight.Lower != updatedWeight.Lower {
+								return false, nil
+							}
+							if originalWeight.Upper != updatedWeight.Upper {
+								return false, nil
+							}
+						}
+					} else {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.MutableStrings) == len(updatedItem.MutableStrings) {
+				for j := range originalItem.MutableStrings {
+					originalString := originalItem.MutableStrings[j]
+					updatedString := updatedItem.MutableStrings[j]
+
+					if originalString.Key != updatedString.Key {
+						return false, nil
+					}
+
+					if !originalString.Rate.Equal(updatedString.Rate) {
+						return false, nil
+					}
+
+					if originalString.Program != updatedString.Program {
+						return false, nil
+					}
+
+					if originalString.Value != updatedString.Value {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.Strings) == len(updatedItem.Strings) {
+				for j := range originalItem.Strings {
+					originalString := originalItem.Strings[j]
+					updatedString := updatedItem.Strings[j]
+
+					if originalString.Key != updatedString.Key {
+						return false, nil
+					}
+
+					if !originalString.Rate.Equal(updatedString.Rate) {
+						return false, nil
+					}
+
+					if originalString.Program != updatedString.Program {
+						return false, nil
+					}
+
+					if originalString.Value != updatedString.Value {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+		}
+	} else {
+		return false, nil
+	}
+
+	return true, nil
 }
 
-func OutputsEqual(outputsA, outputsB []WeightedOutputs) bool {
-	// TODO
+func OutputsEqual(original, updated []WeightedOutputs) bool {
+	if len(original) == len(updated) {
+		for i := range original {
+			originalOutput := original[i]
+			updatedOutput := updated[i]
+
+			if originalOutput.Weight != updatedOutput.Weight {
+				return false
+			}
+
+			if len(originalOutput.EntryIDs) == len(updatedOutput.EntryIDs) {
+				for j := range originalOutput.EntryIDs {
+					originalID := originalOutput.EntryIDs[j]
+					updatedID := updatedOutput.EntryIDs[j]
+					if originalID != updatedID {
+						return false
+					}
+				}
+			} else {
+				return false
+			}
+		}
+	} else {
+		return false
+	}
+
 	return true
 }
 

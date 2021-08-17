@@ -69,7 +69,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	invalidPackage := GoogleIAPPackage{
 		PackageName: "",
 		ProductID:   "",
-		Amount:      sdk.Dec{},
+		Amount:      sdk.Int{},
 	}
 
 	invalidPackages = append(invalidPackages, invalidPackage)
@@ -78,7 +78,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	validPackage := GoogleIAPPackage{
 		PackageName: "package",
 		ProductID:   "product",
-		Amount:      sdk.NewDec(1),
+		Amount:      sdk.NewInt(1),
 	}
 
 	validPackages = append(validPackages, validPackage)
