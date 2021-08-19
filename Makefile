@@ -4,6 +4,8 @@ GOBIN ?= $(GOPATH)/bin
 DOCKER := $(shell which docker)
 VERSION := $(shell echo $(shell git describe --tags 2> /dev/null || echo "dev-$(shell git describe --always)") | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
+PROJECT_NAME = $(shell git remote get-url origin | xargs basename -s .git)
+
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
 	-X github.com/cosmos/cosmos-sdk/version.ServerName=pylonsd \
@@ -23,8 +25,9 @@ install: go.sum
 	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
 
 go.sum: go.mod
-	@echo "--> Ensure dependencies have not been modified"
-	@GO111MODULE=on go mod verify
+	@echo "Ensure dependencies have not been modified ..."
+	@go mod verify
+	@go mod tidy -go=1.17
 
 .PHONY: install, go.sum
 
@@ -66,8 +69,14 @@ bench:
 ###                                Linting                                  ###
 ###############################################################################
 
+markdownLintImage=tmknom/markdownlint
+containerMarkdownLint=$(PROJECT_NAME)-markdownlint
+containerMarkdownLintFix=$(PROJECT_NAME)-markdownlint-fix
+
 lint:
 	@golangci-lint run -c ./.golangci.yml --out-format=tab --issues-exit-code=0
+	@if $(DOCKER) ps -a --format '{{.Names}}' | grep -Eq "^${containerMarkdownLint}$$"; then $(DOCKER) start -a $(containerMarkdownLint); else $(DOCKER) run --name $(containerMarkdownLint) -i -v "$(CURDIR):/work" $(markdownLintImage); fi
+
 
 FIND_ARGS := -name '*.go' -type f -not -path "./sample_txs*" -not -path "*.git*" -not -path "./build_report/*" -not -path "./scripts*" -not -name '*.pb.go'
 

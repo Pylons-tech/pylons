@@ -41,7 +41,6 @@ We could potentially replace this "# Pylons" header with a custom image (see htt
     <img alt="Lint Status" src="https://github.com/Pylons-tech/pylons/workflows/Lint/badge.svg" />
 </div>
 
-
 <!-- TODO rewrite this description --->
 
 Built on [Cosmos](http://www.cosmos.network/), **Pylons** is a fast and interoperable system for brands and creators to build engaging products with meaningful NFT experiences.
@@ -78,6 +77,7 @@ npm run serve
 The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Starport front-end development](https://github.com/tendermint/vue).
 
 ## Release
+
 To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
 
 ```
@@ -88,11 +88,13 @@ git push origin v0.1
 After a draft release is created, make your final changes from the release page and publish it.
 
 ### Install
+
 To install the latest version of your blockchain node's binary, execute the following command on your machine:
 
 ```
 curl https://get.starport.network/Pylons-tech/pylons@latest! | sudo bash
 ```
+
 `Pylons-tech/pylons` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
 
 ## Learn more
