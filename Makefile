@@ -76,7 +76,7 @@ format:
 	@find . $(FIND_ARGS) | xargs goimports -w -local github.com/Pylons-tech/pylons
 
 proto-lint:
-	$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace bufbuild/buf lint --error-format=json
+	@buf lint --error-format=json
 
 
 .PHONY: lint format proto-lint
