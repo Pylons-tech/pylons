@@ -2,7 +2,7 @@
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
 import { Params } from '../pylons/params'
-import { GoogleIAPOrder } from '../pylons/google_iap_order'
+import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
 import { Item } from '../pylons/item'
 import { Recipe } from '../pylons/recipe'
@@ -16,7 +16,7 @@ export interface GenesisState {
   entityCount: number
   params: Params | undefined
   /** this line is used by starport scaffolding # genesis/proto/stateField */
-  googleIAPOrderList: GoogleIAPOrder[]
+  googleInAppPurchaseOrderList: GoogleInAppPurchaseOrder[]
   /** this line is used by starport scaffolding # genesis/proto/stateField */
   googleIAPOrderCount: number
   /** this line is used by starport scaffolding # genesis/proto/stateField */
@@ -45,8 +45,8 @@ export const GenesisState = {
     if (message.params !== undefined) {
       Params.encode(message.params, writer.uint32(82).fork()).ldelim()
     }
-    for (const v of message.googleIAPOrderList) {
-      GoogleIAPOrder.encode(v!, writer.uint32(66).fork()).ldelim()
+    for (const v of message.googleInAppPurchaseOrderList) {
+      GoogleInAppPurchaseOrder.encode(v!, writer.uint32(66).fork()).ldelim()
     }
     if (message.googleIAPOrderCount !== 0) {
       writer.uint32(72).uint64(message.googleIAPOrderCount)
@@ -79,7 +79,7 @@ export const GenesisState = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseGenesisState } as GenesisState
-    message.googleIAPOrderList = []
+    message.googleInAppPurchaseOrderList = []
     message.executionList = []
     message.pendingExecutionList = []
     message.itemList = []
@@ -95,7 +95,7 @@ export const GenesisState = {
           message.params = Params.decode(reader, reader.uint32())
           break
         case 8:
-          message.googleIAPOrderList.push(GoogleIAPOrder.decode(reader, reader.uint32()))
+          message.googleInAppPurchaseOrderList.push(GoogleInAppPurchaseOrder.decode(reader, reader.uint32()))
           break
         case 9:
           message.googleIAPOrderCount = longToNumber(reader.uint64() as Long)
@@ -131,7 +131,7 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState
-    message.googleIAPOrderList = []
+    message.googleInAppPurchaseOrderList = []
     message.executionList = []
     message.pendingExecutionList = []
     message.itemList = []
@@ -147,9 +147,9 @@ export const GenesisState = {
     } else {
       message.params = undefined
     }
-    if (object.googleIAPOrderList !== undefined && object.googleIAPOrderList !== null) {
-      for (const e of object.googleIAPOrderList) {
-        message.googleIAPOrderList.push(GoogleIAPOrder.fromJSON(e))
+    if (object.googleInAppPurchaseOrderList !== undefined && object.googleInAppPurchaseOrderList !== null) {
+      for (const e of object.googleInAppPurchaseOrderList) {
+        message.googleInAppPurchaseOrderList.push(GoogleInAppPurchaseOrder.fromJSON(e))
       }
     }
     if (object.googleIAPOrderCount !== undefined && object.googleIAPOrderCount !== null) {
@@ -199,10 +199,10 @@ export const GenesisState = {
     const obj: any = {}
     message.entityCount !== undefined && (obj.entityCount = message.entityCount)
     message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined)
-    if (message.googleIAPOrderList) {
-      obj.googleIAPOrderList = message.googleIAPOrderList.map((e) => (e ? GoogleIAPOrder.toJSON(e) : undefined))
+    if (message.googleInAppPurchaseOrderList) {
+      obj.googleInAppPurchaseOrderList = message.googleInAppPurchaseOrderList.map((e) => (e ? GoogleInAppPurchaseOrder.toJSON(e) : undefined))
     } else {
-      obj.googleIAPOrderList = []
+      obj.googleInAppPurchaseOrderList = []
     }
     message.googleIAPOrderCount !== undefined && (obj.googleIAPOrderCount = message.googleIAPOrderCount)
     if (message.executionList) {
@@ -237,7 +237,7 @@ export const GenesisState = {
 
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState
-    message.googleIAPOrderList = []
+    message.googleInAppPurchaseOrderList = []
     message.executionList = []
     message.pendingExecutionList = []
     message.itemList = []
@@ -253,9 +253,9 @@ export const GenesisState = {
     } else {
       message.params = undefined
     }
-    if (object.googleIAPOrderList !== undefined && object.googleIAPOrderList !== null) {
-      for (const e of object.googleIAPOrderList) {
-        message.googleIAPOrderList.push(GoogleIAPOrder.fromPartial(e))
+    if (object.googleInAppPurchaseOrderList !== undefined && object.googleInAppPurchaseOrderList !== null) {
+      for (const e of object.googleInAppPurchaseOrderList) {
+        message.googleInAppPurchaseOrderList.push(GoogleInAppPurchaseOrder.fromPartial(e))
       }
     }
     if (object.googleIAPOrderCount !== undefined && object.googleIAPOrderCount !== null) {

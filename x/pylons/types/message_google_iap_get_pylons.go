@@ -11,10 +11,10 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-var _ sdk.Msg = &MsgGoogleIAPGetPylons{}
+var _ sdk.Msg = &MsgGoogleInAppPurchaseGetPylons{}
 
-func NewMsgGoogleIAPGetPylons(creator string, productID string, purchaseToken string, receiptDataBase64 string, signature string) *MsgGoogleIAPGetPylons {
-	return &MsgGoogleIAPGetPylons{
+func NewMsgGoogleIAPGetPylons(creator string, productID string, purchaseToken string, receiptDataBase64 string, signature string) *MsgGoogleInAppPurchaseGetPylons {
+	return &MsgGoogleInAppPurchaseGetPylons{
 		Creator:           creator,
 		ProductID:         productID,
 		PurchaseToken:     purchaseToken,
@@ -23,15 +23,15 @@ func NewMsgGoogleIAPGetPylons(creator string, productID string, purchaseToken st
 	}
 }
 
-func (msg *MsgGoogleIAPGetPylons) Route() string {
+func (msg *MsgGoogleInAppPurchaseGetPylons) Route() string {
 	return RouterKey
 }
 
-func (msg *MsgGoogleIAPGetPylons) Type() string {
+func (msg *MsgGoogleInAppPurchaseGetPylons) Type() string {
 	return "GoogleIAPGetPylons"
 }
 
-func (msg *MsgGoogleIAPGetPylons) GetSigners() []sdk.AccAddress {
+func (msg *MsgGoogleInAppPurchaseGetPylons) GetSigners() []sdk.AccAddress {
 	creator, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		panic(err)
@@ -39,12 +39,12 @@ func (msg *MsgGoogleIAPGetPylons) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{creator}
 }
 
-func (msg *MsgGoogleIAPGetPylons) GetSignBytes() []byte {
+func (msg *MsgGoogleInAppPurchaseGetPylons) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(msg)
 	return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgGoogleIAPGetPylons) ValidateBasic() error {
+func (msg *MsgGoogleInAppPurchaseGetPylons) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid address (%s)", err)

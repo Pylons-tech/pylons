@@ -3,7 +3,7 @@ import { Writer, Reader } from 'protobufjs/minimal'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
-export interface GoogleIAPOrder {
+export interface GoogleInAppPurchaseOrder {
   creator: string
   productID: string
   purchaseToken: string
@@ -11,10 +11,10 @@ export interface GoogleIAPOrder {
   signature: string
 }
 
-const baseGoogleIAPOrder: object = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' }
+const baseGoogleInAppPurchaseOrder: object = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' }
 
-export const GoogleIAPOrder = {
-  encode(message: GoogleIAPOrder, writer: Writer = Writer.create()): Writer {
+export const GoogleInAppPurchaseOrder = {
+  encode(message: GoogleInAppPurchaseOrder, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
@@ -33,10 +33,10 @@ export const GoogleIAPOrder = {
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GoogleIAPOrder {
+  decode(input: Reader | Uint8Array, length?: number): GoogleInAppPurchaseOrder {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseGoogleIAPOrder } as GoogleIAPOrder
+    const message = { ...baseGoogleInAppPurchaseOrder } as GoogleInAppPurchaseOrder
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -63,8 +63,8 @@ export const GoogleIAPOrder = {
     return message
   },
 
-  fromJSON(object: any): GoogleIAPOrder {
-    const message = { ...baseGoogleIAPOrder } as GoogleIAPOrder
+  fromJSON(object: any): GoogleInAppPurchaseOrder {
+    const message = { ...baseGoogleInAppPurchaseOrder } as GoogleInAppPurchaseOrder
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -93,7 +93,7 @@ export const GoogleIAPOrder = {
     return message
   },
 
-  toJSON(message: GoogleIAPOrder): unknown {
+  toJSON(message: GoogleInAppPurchaseOrder): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     message.productID !== undefined && (obj.productID = message.productID)
@@ -103,8 +103,8 @@ export const GoogleIAPOrder = {
     return obj
   },
 
-  fromPartial(object: DeepPartial<GoogleIAPOrder>): GoogleIAPOrder {
-    const message = { ...baseGoogleIAPOrder } as GoogleIAPOrder
+  fromPartial(object: DeepPartial<GoogleInAppPurchaseOrder>): GoogleInAppPurchaseOrder {
+    const message = { ...baseGoogleInAppPurchaseOrder } as GoogleInAppPurchaseOrder
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {

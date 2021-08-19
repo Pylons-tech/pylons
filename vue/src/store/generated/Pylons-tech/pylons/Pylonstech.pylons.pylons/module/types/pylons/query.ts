@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Reader, Writer } from 'protobufjs/minimal'
-import { GoogleIAPOrder } from '../pylons/google_iap_order'
+import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
 import { Recipe } from '../pylons/recipe'
 import { Item } from '../pylons/item'
@@ -9,12 +9,12 @@ import { Cookbook } from '../pylons/cookbook'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
-export interface QueryGetGoogleIAPOrderRequest {
+export interface QueryGetGoogleInAppPurchaseOrderRequest {
   PurchaseToken: string
 }
 
-export interface QueryGetGoogleIAPOrderResponse {
-  GoogleIAPOrder: GoogleIAPOrder | undefined
+export interface QueryGetGoogleInAppPurchaseOrderResponse {
+  Order: GoogleInAppPurchaseOrder | undefined
 }
 
 export interface QueryListExecutionsByItemRequest {
@@ -86,20 +86,20 @@ export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
 }
 
-const baseQueryGetGoogleIAPOrderRequest: object = { PurchaseToken: '' }
+const baseQueryGetGoogleInAppPurchaseOrderRequest: object = { PurchaseToken: '' }
 
-export const QueryGetGoogleIAPOrderRequest = {
-  encode(message: QueryGetGoogleIAPOrderRequest, writer: Writer = Writer.create()): Writer {
+export const QueryGetGoogleInAppPurchaseOrderRequest = {
+  encode(message: QueryGetGoogleInAppPurchaseOrderRequest, writer: Writer = Writer.create()): Writer {
     if (message.PurchaseToken !== '') {
       writer.uint32(10).string(message.PurchaseToken)
     }
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleIAPOrderRequest {
+  decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleInAppPurchaseOrderRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetGoogleIAPOrderRequest } as QueryGetGoogleIAPOrderRequest
+    const message = { ...baseQueryGetGoogleInAppPurchaseOrderRequest } as QueryGetGoogleInAppPurchaseOrderRequest
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -114,8 +114,8 @@ export const QueryGetGoogleIAPOrderRequest = {
     return message
   },
 
-  fromJSON(object: any): QueryGetGoogleIAPOrderRequest {
-    const message = { ...baseQueryGetGoogleIAPOrderRequest } as QueryGetGoogleIAPOrderRequest
+  fromJSON(object: any): QueryGetGoogleInAppPurchaseOrderRequest {
+    const message = { ...baseQueryGetGoogleInAppPurchaseOrderRequest } as QueryGetGoogleInAppPurchaseOrderRequest
     if (object.PurchaseToken !== undefined && object.PurchaseToken !== null) {
       message.PurchaseToken = String(object.PurchaseToken)
     } else {
@@ -124,14 +124,14 @@ export const QueryGetGoogleIAPOrderRequest = {
     return message
   },
 
-  toJSON(message: QueryGetGoogleIAPOrderRequest): unknown {
+  toJSON(message: QueryGetGoogleInAppPurchaseOrderRequest): unknown {
     const obj: any = {}
     message.PurchaseToken !== undefined && (obj.PurchaseToken = message.PurchaseToken)
     return obj
   },
 
-  fromPartial(object: DeepPartial<QueryGetGoogleIAPOrderRequest>): QueryGetGoogleIAPOrderRequest {
-    const message = { ...baseQueryGetGoogleIAPOrderRequest } as QueryGetGoogleIAPOrderRequest
+  fromPartial(object: DeepPartial<QueryGetGoogleInAppPurchaseOrderRequest>): QueryGetGoogleInAppPurchaseOrderRequest {
+    const message = { ...baseQueryGetGoogleInAppPurchaseOrderRequest } as QueryGetGoogleInAppPurchaseOrderRequest
     if (object.PurchaseToken !== undefined && object.PurchaseToken !== null) {
       message.PurchaseToken = object.PurchaseToken
     } else {
@@ -141,25 +141,25 @@ export const QueryGetGoogleIAPOrderRequest = {
   }
 }
 
-const baseQueryGetGoogleIAPOrderResponse: object = {}
+const baseQueryGetGoogleInAppPurchaseOrderResponse: object = {}
 
-export const QueryGetGoogleIAPOrderResponse = {
-  encode(message: QueryGetGoogleIAPOrderResponse, writer: Writer = Writer.create()): Writer {
-    if (message.GoogleIAPOrder !== undefined) {
-      GoogleIAPOrder.encode(message.GoogleIAPOrder, writer.uint32(10).fork()).ldelim()
+export const QueryGetGoogleInAppPurchaseOrderResponse = {
+  encode(message: QueryGetGoogleInAppPurchaseOrderResponse, writer: Writer = Writer.create()): Writer {
+    if (message.Order !== undefined) {
+      GoogleInAppPurchaseOrder.encode(message.Order, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleIAPOrderResponse {
+  decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleInAppPurchaseOrderResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetGoogleIAPOrderResponse } as QueryGetGoogleIAPOrderResponse
+    const message = { ...baseQueryGetGoogleInAppPurchaseOrderResponse } as QueryGetGoogleInAppPurchaseOrderResponse
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.GoogleIAPOrder = GoogleIAPOrder.decode(reader, reader.uint32())
+          message.Order = GoogleInAppPurchaseOrder.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -169,28 +169,28 @@ export const QueryGetGoogleIAPOrderResponse = {
     return message
   },
 
-  fromJSON(object: any): QueryGetGoogleIAPOrderResponse {
-    const message = { ...baseQueryGetGoogleIAPOrderResponse } as QueryGetGoogleIAPOrderResponse
-    if (object.GoogleIAPOrder !== undefined && object.GoogleIAPOrder !== null) {
-      message.GoogleIAPOrder = GoogleIAPOrder.fromJSON(object.GoogleIAPOrder)
+  fromJSON(object: any): QueryGetGoogleInAppPurchaseOrderResponse {
+    const message = { ...baseQueryGetGoogleInAppPurchaseOrderResponse } as QueryGetGoogleInAppPurchaseOrderResponse
+    if (object.Order !== undefined && object.Order !== null) {
+      message.Order = GoogleInAppPurchaseOrder.fromJSON(object.Order)
     } else {
-      message.GoogleIAPOrder = undefined
+      message.Order = undefined
     }
     return message
   },
 
-  toJSON(message: QueryGetGoogleIAPOrderResponse): unknown {
+  toJSON(message: QueryGetGoogleInAppPurchaseOrderResponse): unknown {
     const obj: any = {}
-    message.GoogleIAPOrder !== undefined && (obj.GoogleIAPOrder = message.GoogleIAPOrder ? GoogleIAPOrder.toJSON(message.GoogleIAPOrder) : undefined)
+    message.Order !== undefined && (obj.Order = message.Order ? GoogleInAppPurchaseOrder.toJSON(message.Order) : undefined)
     return obj
   },
 
-  fromPartial(object: DeepPartial<QueryGetGoogleIAPOrderResponse>): QueryGetGoogleIAPOrderResponse {
-    const message = { ...baseQueryGetGoogleIAPOrderResponse } as QueryGetGoogleIAPOrderResponse
-    if (object.GoogleIAPOrder !== undefined && object.GoogleIAPOrder !== null) {
-      message.GoogleIAPOrder = GoogleIAPOrder.fromPartial(object.GoogleIAPOrder)
+  fromPartial(object: DeepPartial<QueryGetGoogleInAppPurchaseOrderResponse>): QueryGetGoogleInAppPurchaseOrderResponse {
+    const message = { ...baseQueryGetGoogleInAppPurchaseOrderResponse } as QueryGetGoogleInAppPurchaseOrderResponse
+    if (object.Order !== undefined && object.Order !== null) {
+      message.Order = GoogleInAppPurchaseOrder.fromPartial(object.Order)
     } else {
-      message.GoogleIAPOrder = undefined
+      message.Order = undefined
     }
     return message
   }
@@ -1192,7 +1192,7 @@ export const QueryGetCookbookResponse = {
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Queries a googleIAPOrder by PurchaseToken. */
-  GoogleIAPOrder(request: QueryGetGoogleIAPOrderRequest): Promise<QueryGetGoogleIAPOrderResponse>
+  GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>
   /** Queries a list of listExecutionsByItem items. */
   ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse>
   /** Queries a list of listExecutionsByRecipe items. */
@@ -1216,10 +1216,10 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
-  GoogleIAPOrder(request: QueryGetGoogleIAPOrderRequest): Promise<QueryGetGoogleIAPOrderResponse> {
-    const data = QueryGetGoogleIAPOrderRequest.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'GoogleIAPOrder', data)
-    return promise.then((data) => QueryGetGoogleIAPOrderResponse.decode(new Reader(data)))
+  GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse> {
+    const data = QueryGetGoogleInAppPurchaseOrderRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'GoogleInAppPurchaseOrder', data)
+    return promise.then((data) => QueryGetGoogleInAppPurchaseOrderResponse.decode(new Reader(data)))
   }
 
   ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse> {

@@ -20,11 +20,11 @@ func CmdShowGoogleIAPOrder() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryGetGoogleIAPOrderRequest{
+			params := &types.QueryGetGoogleInAppPurchaseOrderRequest{
 				PurchaseToken: args[0],
 			}
 
-			res, err := queryClient.GoogleIAPOrder(context.Background(), params)
+			res, err := queryClient.GoogleInAppPurchaseOrder(context.Background(), params)
 			if err != nil {
 				return err
 			}

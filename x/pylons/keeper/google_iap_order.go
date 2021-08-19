@@ -17,8 +17,8 @@ import (
 
 // GetGoogleIAPOrderCount get the total number of TypeName.LowerCamel
 func (k Keeper) GetGoogleIAPOrderCount(ctx sdk.Context) uint64 {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderCountKey))
-	byteKey := types.KeyPrefix(types.GoogleIAPOrderCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderCountKey))
+	byteKey := types.KeyPrefix(types.GoogleInAppPurchaseOrderCountKey)
 	bz := store.Get(byteKey)
 
 	// Count doesn't exist: no element
@@ -38,8 +38,8 @@ func (k Keeper) GetGoogleIAPOrderCount(ctx sdk.Context) uint64 {
 
 // SetGoogleIAPOrderCount set the total number of googlIAPOrder
 func (k Keeper) SetGoogleIAPOrderCount(ctx sdk.Context, count uint64) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderCountKey))
-	byteKey := types.KeyPrefix(types.GoogleIAPOrderCountKey)
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderCountKey))
+	byteKey := types.KeyPrefix(types.GoogleInAppPurchaseOrderCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
 
@@ -50,12 +50,12 @@ func (k Keeper) SetGoogleIAPOrderCount(ctx sdk.Context, count uint64) {
 // AppendGoogleIAPOrder appends a googleIAPOrder in the store with a new id and update the count
 func (k Keeper) AppendGoogleIAPOrder(
 	ctx sdk.Context,
-	googleIAPOrder types.GoogleIAPOrder,
+	googleIAPOrder types.GoogleInAppPurchaseOrder,
 ) uint64 {
 	// Create the googleIAPOrder
 	count := k.GetGoogleIAPOrderCount(ctx)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	appendedValue := k.cdc.MustMarshalBinaryBare(&googleIAPOrder)
 	store.Set(types.KeyPrefix(googleIAPOrder.PurchaseToken), appendedValue)
 
@@ -66,23 +66,23 @@ func (k Keeper) AppendGoogleIAPOrder(
 }
 
 // SetGoogleIAPOrder set a specific googleIAPOrder in the store
-func (k Keeper) SetGoogleIAPOrder(ctx sdk.Context, googleIAPOrder types.GoogleIAPOrder) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
+func (k Keeper) SetGoogleIAPOrder(ctx sdk.Context, googleIAPOrder types.GoogleInAppPurchaseOrder) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	b := k.cdc.MustMarshalBinaryBare(&googleIAPOrder)
 	store.Set(types.KeyPrefix(googleIAPOrder.PurchaseToken), b)
 }
 
 // GetGoogleIAPOrder returns a googleIAPOrder from its id
-func (k Keeper) GetGoogleIAPOrder(ctx sdk.Context, purchaseToken string) types.GoogleIAPOrder {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
-	var googleIAPOrder types.GoogleIAPOrder
+func (k Keeper) GetGoogleIAPOrder(ctx sdk.Context, purchaseToken string) types.GoogleInAppPurchaseOrder {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
+	var googleIAPOrder types.GoogleInAppPurchaseOrder
 	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(purchaseToken)), &googleIAPOrder)
 	return googleIAPOrder
 }
 
 // HasGoogleIAPOrder checks if the googleIAPOrder exists in the store
 func (k Keeper) HasGoogleIAPOrder(ctx sdk.Context, purchaseToken string) bool {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	return store.Has(types.KeyPrefix(purchaseToken))
 }
 
@@ -92,14 +92,14 @@ func (k Keeper) GetGoogleIAPOrderOwner(ctx sdk.Context, purchaseToken string) st
 }
 
 // GetAllGoogleIAPOrder returns all googleIAPOrder
-func (k Keeper) GetAllGoogleIAPOrder(ctx sdk.Context) (list []types.GoogleIAPOrder) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
+func (k Keeper) GetAllGoogleIAPOrder(ctx sdk.Context) (list []types.GoogleInAppPurchaseOrder) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.GoogleIAPOrder
+		var val types.GoogleInAppPurchaseOrder
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
 		list = append(list, val)
 	}
@@ -108,7 +108,7 @@ func (k Keeper) GetAllGoogleIAPOrder(ctx sdk.Context) (list []types.GoogleIAPOrd
 }
 
 // ValidateGoogleIAPSignature is function for testing signature on local
-func (k Keeper) ValidateGoogleIAPSignature(ctx sdk.Context, msg *types.MsgGoogleIAPGetPylons) error {
+func (k Keeper) ValidateGoogleIAPSignature(ctx sdk.Context, msg *types.MsgGoogleInAppPurchaseGetPylons) error {
 	// References
 	// offline verification JS module https://github.com/voltrue2/in-app-purchase/blob/e966ee1348bd4f67581779abeec59c4bbc2b2ebc/lib/google.js#L788
 	// Cordova Plugin code that check offline https://github.com/j3k0/cordova-plugin-purchase/blob/8861bd2392a48d643ffc754b8f59afc1e6afab60/src/android/cc/fovea/Security.java#L94
@@ -148,7 +148,7 @@ func (k Keeper) ValidateGoogleIAPSignature(ctx sdk.Context, msg *types.MsgGoogle
 }
 
 // GetAmount returns pylons amount by product and package
-func (k Keeper) GetAmount(ctx sdk.Context, iap types.GoogleIAPOrder) sdk.Coins {
+func (k Keeper) GetAmount(ctx sdk.Context, iap types.GoogleInAppPurchaseOrder) sdk.Coins {
 
 	for _, issuer := range k.CoinIssuers(ctx) {
 		pkgs := issuer.Packages

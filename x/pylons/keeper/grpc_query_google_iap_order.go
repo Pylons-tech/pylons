@@ -12,20 +12,20 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) GoogleIAPOrder(c context.Context, req *types.QueryGetGoogleIAPOrderRequest) (*types.QueryGetGoogleIAPOrderResponse, error) {
+func (k Keeper) GoogleInAppPurchaseOrder(c context.Context, req *types.QueryGetGoogleInAppPurchaseOrderRequest) (*types.QueryGetGoogleInAppPurchaseOrderResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
-	var googleIAPOrder types.GoogleIAPOrder
+	var googleIAPOrder types.GoogleInAppPurchaseOrder
 	ctx := sdk.UnwrapSDKContext(c)
 
 	if !k.HasGoogleIAPOrder(ctx, req.PurchaseToken) {
 		return nil, sdkerrors.ErrKeyNotFound
 	}
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleIAPOrderKey))
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(req.PurchaseToken)), &googleIAPOrder)
 
-	return &types.QueryGetGoogleIAPOrderResponse{GoogleIAPOrder: googleIAPOrder}, nil
+	return &types.QueryGetGoogleInAppPurchaseOrderResponse{Order: googleIAPOrder}, nil
 }

@@ -27,8 +27,8 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 			res, err := msgServer.TransferCookbook(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *types.MsgGoogleIAPGetPylons:
-			res, err := msgServer.GoogleIAPGetPylons(sdk.WrapSDKContext(ctx), msg)
+		case *types.MsgGoogleInAppPurchaseGetPylons:
+			res, err := msgServer.GoogleInAppPurchaseGetPylons(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *types.MsgCreateAccount:

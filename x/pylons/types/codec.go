@@ -11,7 +11,7 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
 	cdc.RegisterConcrete(&MsgTransferCookbook{}, "pylons/TransferCookbook", nil)
 
-	cdc.RegisterConcrete(&MsgGoogleIAPGetPylons{}, "pylons/GoogleIAPGetPylons", nil)
+	cdc.RegisterConcrete(&MsgGoogleInAppPurchaseGetPylons{}, "pylons/GoogleInAppPurchaseGetPylons", nil)
 
 	cdc.RegisterConcrete(&MsgCreateAccount{}, "pylons/CreateAccount", nil)
 
@@ -35,7 +35,7 @@ func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 		&MsgTransferCookbook{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgGoogleIAPGetPylons{},
+		&MsgGoogleInAppPurchaseGetPylons{},
 	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgCreateAccount{},

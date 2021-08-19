@@ -12,7 +12,7 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
 	// Set all the googlIAPOrder
-	for _, elem := range genState.GoogleIAPOrderList {
+	for _, elem := range genState.GoogleInAppPurchaseOrderList {
 		k.SetGoogleIAPOrder(ctx, elem)
 	}
 
@@ -67,7 +67,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	googlIAPOrderList := k.GetAllGoogleIAPOrder(ctx)
 	for _, elem := range googlIAPOrderList {
 		elem := elem
-		genesis.GoogleIAPOrderList = append(genesis.GoogleIAPOrderList, elem)
+		genesis.GoogleInAppPurchaseOrderList = append(genesis.GoogleInAppPurchaseOrderList, elem)
 	}
 
 	// Set the current count

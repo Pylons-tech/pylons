@@ -15,7 +15,7 @@ export interface MsgTransferCookbook {
 
 export interface MsgTransferCookbookResponse {}
 
-export interface MsgGoogleIAPGetPylons {
+export interface MsgGoogleInAppPurchaseGetPylons {
   creator: string
   productID: string
   purchaseToken: string
@@ -23,7 +23,7 @@ export interface MsgGoogleIAPGetPylons {
   signature: string
 }
 
-export interface MsgGoogleIAPGetPylonsResponse {}
+export interface MsgGoogleInAppPurchaseGetPylonsResponse {}
 
 export interface MsgCreateAccount {
   creator: string
@@ -252,10 +252,10 @@ export const MsgTransferCookbookResponse = {
   }
 }
 
-const baseMsgGoogleIAPGetPylons: object = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' }
+const baseMsgGoogleInAppPurchaseGetPylons: object = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' }
 
-export const MsgGoogleIAPGetPylons = {
-  encode(message: MsgGoogleIAPGetPylons, writer: Writer = Writer.create()): Writer {
+export const MsgGoogleInAppPurchaseGetPylons = {
+  encode(message: MsgGoogleInAppPurchaseGetPylons, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
@@ -274,10 +274,10 @@ export const MsgGoogleIAPGetPylons = {
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgGoogleIAPGetPylons {
+  decode(input: Reader | Uint8Array, length?: number): MsgGoogleInAppPurchaseGetPylons {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgGoogleIAPGetPylons } as MsgGoogleIAPGetPylons
+    const message = { ...baseMsgGoogleInAppPurchaseGetPylons } as MsgGoogleInAppPurchaseGetPylons
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -304,8 +304,8 @@ export const MsgGoogleIAPGetPylons = {
     return message
   },
 
-  fromJSON(object: any): MsgGoogleIAPGetPylons {
-    const message = { ...baseMsgGoogleIAPGetPylons } as MsgGoogleIAPGetPylons
+  fromJSON(object: any): MsgGoogleInAppPurchaseGetPylons {
+    const message = { ...baseMsgGoogleInAppPurchaseGetPylons } as MsgGoogleInAppPurchaseGetPylons
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -334,7 +334,7 @@ export const MsgGoogleIAPGetPylons = {
     return message
   },
 
-  toJSON(message: MsgGoogleIAPGetPylons): unknown {
+  toJSON(message: MsgGoogleInAppPurchaseGetPylons): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     message.productID !== undefined && (obj.productID = message.productID)
@@ -344,8 +344,8 @@ export const MsgGoogleIAPGetPylons = {
     return obj
   },
 
-  fromPartial(object: DeepPartial<MsgGoogleIAPGetPylons>): MsgGoogleIAPGetPylons {
-    const message = { ...baseMsgGoogleIAPGetPylons } as MsgGoogleIAPGetPylons
+  fromPartial(object: DeepPartial<MsgGoogleInAppPurchaseGetPylons>): MsgGoogleInAppPurchaseGetPylons {
+    const message = { ...baseMsgGoogleInAppPurchaseGetPylons } as MsgGoogleInAppPurchaseGetPylons
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -375,17 +375,17 @@ export const MsgGoogleIAPGetPylons = {
   }
 }
 
-const baseMsgGoogleIAPGetPylonsResponse: object = {}
+const baseMsgGoogleInAppPurchaseGetPylonsResponse: object = {}
 
-export const MsgGoogleIAPGetPylonsResponse = {
-  encode(_: MsgGoogleIAPGetPylonsResponse, writer: Writer = Writer.create()): Writer {
+export const MsgGoogleInAppPurchaseGetPylonsResponse = {
+  encode(_: MsgGoogleInAppPurchaseGetPylonsResponse, writer: Writer = Writer.create()): Writer {
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): MsgGoogleIAPGetPylonsResponse {
+  decode(input: Reader | Uint8Array, length?: number): MsgGoogleInAppPurchaseGetPylonsResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgGoogleIAPGetPylonsResponse } as MsgGoogleIAPGetPylonsResponse
+    const message = { ...baseMsgGoogleInAppPurchaseGetPylonsResponse } as MsgGoogleInAppPurchaseGetPylonsResponse
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -397,18 +397,18 @@ export const MsgGoogleIAPGetPylonsResponse = {
     return message
   },
 
-  fromJSON(_: any): MsgGoogleIAPGetPylonsResponse {
-    const message = { ...baseMsgGoogleIAPGetPylonsResponse } as MsgGoogleIAPGetPylonsResponse
+  fromJSON(_: any): MsgGoogleInAppPurchaseGetPylonsResponse {
+    const message = { ...baseMsgGoogleInAppPurchaseGetPylonsResponse } as MsgGoogleInAppPurchaseGetPylonsResponse
     return message
   },
 
-  toJSON(_: MsgGoogleIAPGetPylonsResponse): unknown {
+  toJSON(_: MsgGoogleInAppPurchaseGetPylonsResponse): unknown {
     const obj: any = {}
     return obj
   },
 
-  fromPartial(_: DeepPartial<MsgGoogleIAPGetPylonsResponse>): MsgGoogleIAPGetPylonsResponse {
-    const message = { ...baseMsgGoogleIAPGetPylonsResponse } as MsgGoogleIAPGetPylonsResponse
+  fromPartial(_: DeepPartial<MsgGoogleInAppPurchaseGetPylonsResponse>): MsgGoogleInAppPurchaseGetPylonsResponse {
+    const message = { ...baseMsgGoogleInAppPurchaseGetPylonsResponse } as MsgGoogleInAppPurchaseGetPylonsResponse
     return message
   }
 }
@@ -2104,7 +2104,7 @@ export const MsgUpdateCookbookResponse = {
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
   TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>
-  GoogleIAPGetPylons(request: MsgGoogleIAPGetPylons): Promise<MsgGoogleIAPGetPylonsResponse>
+  GoogleInAppPurchaseGetPylons(request: MsgGoogleInAppPurchaseGetPylons): Promise<MsgGoogleInAppPurchaseGetPylonsResponse>
   CreateAccount(request: MsgCreateAccount): Promise<MsgCreateAccountResponse>
   SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>
   ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>
@@ -2126,10 +2126,10 @@ export class MsgClientImpl implements Msg {
     return promise.then((data) => MsgTransferCookbookResponse.decode(new Reader(data)))
   }
 
-  GoogleIAPGetPylons(request: MsgGoogleIAPGetPylons): Promise<MsgGoogleIAPGetPylonsResponse> {
-    const data = MsgGoogleIAPGetPylons.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'GoogleIAPGetPylons', data)
-    return promise.then((data) => MsgGoogleIAPGetPylonsResponse.decode(new Reader(data)))
+  GoogleInAppPurchaseGetPylons(request: MsgGoogleInAppPurchaseGetPylons): Promise<MsgGoogleInAppPurchaseGetPylonsResponse> {
+    const data = MsgGoogleInAppPurchaseGetPylons.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'GoogleInAppPurchaseGetPylons', data)
+    return promise.then((data) => MsgGoogleInAppPurchaseGetPylonsResponse.decode(new Reader(data)))
   }
 
   CreateAccount(request: MsgCreateAccount): Promise<MsgCreateAccountResponse> {

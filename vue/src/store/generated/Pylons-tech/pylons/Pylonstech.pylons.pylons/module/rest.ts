@@ -106,7 +106,7 @@ export interface PylonsExecution {
   recipe?: PylonsRecipe;
 }
 
-export interface PylonsGoogleIAPOrder {
+export interface PylonsGoogleInAppPurchaseOrder {
   creator?: string;
   productID?: string;
   purchaseToken?: string;
@@ -243,7 +243,7 @@ export interface PylonsMsgExecuteRecipeResponse {
   ID?: string;
 }
 
-export type PylonsMsgGoogleIAPGetPylonsResponse = object;
+export type PylonsMsgGoogleInAppPurchaseGetPylonsResponse = object;
 
 export type PylonsMsgSendItemsResponse = object;
 
@@ -264,8 +264,8 @@ export interface PylonsQueryGetExecutionResponse {
   Completed?: boolean;
 }
 
-export interface PylonsQueryGetGoogleIAPOrderResponse {
-  GoogleIAPOrder?: PylonsGoogleIAPOrder;
+export interface PylonsQueryGetGoogleInAppPurchaseOrderResponse {
+  Order?: PylonsGoogleInAppPurchaseOrder;
 }
 
 export interface PylonsQueryGetItemResponse {
@@ -586,12 +586,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryGoogleIapOrder
+   * @name QueryGoogleInAppPurchaseOrder
    * @summary Queries a googleIAPOrder by PurchaseToken.
    * @request GET:/pylons/googleIAPOrder/{PurchaseToken}
    */
-  queryGoogleIapOrder = (PurchaseToken: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetGoogleIAPOrderResponse, RpcStatus>({
+  queryGoogleInAppPurchaseOrder = (PurchaseToken: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetGoogleInAppPurchaseOrderResponse, RpcStatus>({
       path: `/pylons/googleIAPOrder/${PurchaseToken}`,
       method: "GET",
       format: "json",

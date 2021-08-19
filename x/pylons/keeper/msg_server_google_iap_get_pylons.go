@@ -10,7 +10,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogleIAPGetPylons) (*types.MsgGoogleIAPGetPylonsResponse, error) {
+func (k msgServer) GoogleInAppPurchaseGetPylons(goCtx context.Context, msg *types.MsgGoogleInAppPurchaseGetPylons) (*types.MsgGoogleInAppPurchaseGetPylonsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if k.HasGoogleIAPOrder(ctx, msg.PurchaseToken) {
@@ -21,7 +21,7 @@ func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogl
 		return nil, sdkerrors.Wrap(sdkerrors.ErrorInvalidSigner, "Google IAP Signature is invalid")
 	}
 
-	iap := types.GoogleIAPOrder{
+	iap := types.GoogleInAppPurchaseOrder{
 		Creator:           msg.Creator,
 		ProductID:         msg.ProductID,
 		PurchaseToken:     msg.PurchaseToken,
@@ -40,5 +40,5 @@ func (k msgServer) GoogleIAPGetPylons(goCtx context.Context, msg *types.MsgGoogl
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return &types.MsgGoogleIAPGetPylonsResponse{}, nil
+	return &types.MsgGoogleInAppPurchaseGetPylonsResponse{}, nil
 }

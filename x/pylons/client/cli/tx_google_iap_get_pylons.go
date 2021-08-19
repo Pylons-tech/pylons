@@ -18,7 +18,7 @@ var _ = strconv.Itoa(0)
 // GoogleIAPGetFromCoinIssuer()
 // get coins using IAP from any valid CoinIssuer
 // the CoinIssuer's coins will be given to the Tx creator in exchange for USD
-func CmdGoogleIAPGetPylons() *cobra.Command {
+func CmdGoogleInAppPurchaseGetPylons() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "google-iap-get-pylons [productID] [purchaseToken] [recieptDataBase64] [signature]",
 		Short: "Buy pylons using Google IAP",
