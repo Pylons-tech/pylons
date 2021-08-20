@@ -8,18 +8,18 @@ import (
 // DefaultIndex is the default capability global index
 const DefaultIndex uint64 = 1
 
-// DefaultGenesis returns the default Capability genesis state
+// DefaultGenesis returns the default Pylons genesis state
 func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
-		GoogleInAppPurchaseOrderList:   []GoogleInAppPurchaseOrder{},
-		PendingExecutionList: []Execution{},
-		ExecutionList:        []Execution{},
-		ItemList:             []Item{},
-		RecipeList:           []Recipe{},
-		CookbookList:         []Cookbook{},
-		Params:               DefaultParams(),
+		GoogleInAppPurchaseOrderList: []GoogleInAppPurchaseOrder{},
+		PendingExecutionList:         []Execution{},
+		ExecutionList:                []Execution{},
+		ItemList:                     []Item{},
+		RecipeList:                   []Recipe{},
+		CookbookList:                 []Cookbook{},
+		Params:                       DefaultParams(),
 	}
 }
 

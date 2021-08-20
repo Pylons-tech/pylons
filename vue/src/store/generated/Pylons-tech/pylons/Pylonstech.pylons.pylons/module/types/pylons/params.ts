@@ -5,7 +5,7 @@ import { Coin } from '../cosmos/base/v1beta1/coin'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
-export interface GoogleIAPPackage {
+export interface GoogleInAppPurchasePackage {
   PackageName: string
   ProductID: string
   Amount: string
@@ -13,8 +13,8 @@ export interface GoogleIAPPackage {
 
 export interface CoinIssuer {
   CoinDenom: string
-  Packages: GoogleIAPPackage[]
-  GoogleIAPPubKey: string
+  Packages: GoogleInAppPurchasePackage[]
+  GoogleInAppPurchasePubKey: string
 }
 
 /** Params represent the parameters used by the pylons module */
@@ -29,10 +29,10 @@ export interface Params {
   maxTransferFee: string
 }
 
-const baseGoogleIAPPackage: object = { PackageName: '', ProductID: '', Amount: '' }
+const baseGoogleInAppPurchasePackage: object = { PackageName: '', ProductID: '', Amount: '' }
 
-export const GoogleIAPPackage = {
-  encode(message: GoogleIAPPackage, writer: Writer = Writer.create()): Writer {
+export const GoogleInAppPurchasePackage = {
+  encode(message: GoogleInAppPurchasePackage, writer: Writer = Writer.create()): Writer {
     if (message.PackageName !== '') {
       writer.uint32(10).string(message.PackageName)
     }
@@ -45,10 +45,10 @@ export const GoogleIAPPackage = {
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): GoogleIAPPackage {
+  decode(input: Reader | Uint8Array, length?: number): GoogleInAppPurchasePackage {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseGoogleIAPPackage } as GoogleIAPPackage
+    const message = { ...baseGoogleInAppPurchasePackage } as GoogleInAppPurchasePackage
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -69,8 +69,8 @@ export const GoogleIAPPackage = {
     return message
   },
 
-  fromJSON(object: any): GoogleIAPPackage {
-    const message = { ...baseGoogleIAPPackage } as GoogleIAPPackage
+  fromJSON(object: any): GoogleInAppPurchasePackage {
+    const message = { ...baseGoogleInAppPurchasePackage } as GoogleInAppPurchasePackage
     if (object.PackageName !== undefined && object.PackageName !== null) {
       message.PackageName = String(object.PackageName)
     } else {
@@ -89,7 +89,7 @@ export const GoogleIAPPackage = {
     return message
   },
 
-  toJSON(message: GoogleIAPPackage): unknown {
+  toJSON(message: GoogleInAppPurchasePackage): unknown {
     const obj: any = {}
     message.PackageName !== undefined && (obj.PackageName = message.PackageName)
     message.ProductID !== undefined && (obj.ProductID = message.ProductID)
@@ -97,8 +97,8 @@ export const GoogleIAPPackage = {
     return obj
   },
 
-  fromPartial(object: DeepPartial<GoogleIAPPackage>): GoogleIAPPackage {
-    const message = { ...baseGoogleIAPPackage } as GoogleIAPPackage
+  fromPartial(object: DeepPartial<GoogleInAppPurchasePackage>): GoogleInAppPurchasePackage {
+    const message = { ...baseGoogleInAppPurchasePackage } as GoogleInAppPurchasePackage
     if (object.PackageName !== undefined && object.PackageName !== null) {
       message.PackageName = object.PackageName
     } else {
@@ -118,7 +118,7 @@ export const GoogleIAPPackage = {
   }
 }
 
-const baseCoinIssuer: object = { CoinDenom: '', GoogleIAPPubKey: '' }
+const baseCoinIssuer: object = { CoinDenom: '', GoogleInAppPurchasePubKey: '' }
 
 export const CoinIssuer = {
   encode(message: CoinIssuer, writer: Writer = Writer.create()): Writer {
@@ -126,10 +126,10 @@ export const CoinIssuer = {
       writer.uint32(10).string(message.CoinDenom)
     }
     for (const v of message.Packages) {
-      GoogleIAPPackage.encode(v!, writer.uint32(18).fork()).ldelim()
+      GoogleInAppPurchasePackage.encode(v!, writer.uint32(18).fork()).ldelim()
     }
-    if (message.GoogleIAPPubKey !== '') {
-      writer.uint32(26).string(message.GoogleIAPPubKey)
+    if (message.GoogleInAppPurchasePubKey !== '') {
+      writer.uint32(26).string(message.GoogleInAppPurchasePubKey)
     }
     return writer
   },
@@ -146,10 +146,10 @@ export const CoinIssuer = {
           message.CoinDenom = reader.string()
           break
         case 2:
-          message.Packages.push(GoogleIAPPackage.decode(reader, reader.uint32()))
+          message.Packages.push(GoogleInAppPurchasePackage.decode(reader, reader.uint32()))
           break
         case 3:
-          message.GoogleIAPPubKey = reader.string()
+          message.GoogleInAppPurchasePubKey = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -169,13 +169,13 @@ export const CoinIssuer = {
     }
     if (object.Packages !== undefined && object.Packages !== null) {
       for (const e of object.Packages) {
-        message.Packages.push(GoogleIAPPackage.fromJSON(e))
+        message.Packages.push(GoogleInAppPurchasePackage.fromJSON(e))
       }
     }
-    if (object.GoogleIAPPubKey !== undefined && object.GoogleIAPPubKey !== null) {
-      message.GoogleIAPPubKey = String(object.GoogleIAPPubKey)
+    if (object.GoogleInAppPurchasePubKey !== undefined && object.GoogleInAppPurchasePubKey !== null) {
+      message.GoogleInAppPurchasePubKey = String(object.GoogleInAppPurchasePubKey)
     } else {
-      message.GoogleIAPPubKey = ''
+      message.GoogleInAppPurchasePubKey = ''
     }
     return message
   },
@@ -184,11 +184,11 @@ export const CoinIssuer = {
     const obj: any = {}
     message.CoinDenom !== undefined && (obj.CoinDenom = message.CoinDenom)
     if (message.Packages) {
-      obj.Packages = message.Packages.map((e) => (e ? GoogleIAPPackage.toJSON(e) : undefined))
+      obj.Packages = message.Packages.map((e) => (e ? GoogleInAppPurchasePackage.toJSON(e) : undefined))
     } else {
       obj.Packages = []
     }
-    message.GoogleIAPPubKey !== undefined && (obj.GoogleIAPPubKey = message.GoogleIAPPubKey)
+    message.GoogleInAppPurchasePubKey !== undefined && (obj.GoogleInAppPurchasePubKey = message.GoogleInAppPurchasePubKey)
     return obj
   },
 
@@ -202,13 +202,13 @@ export const CoinIssuer = {
     }
     if (object.Packages !== undefined && object.Packages !== null) {
       for (const e of object.Packages) {
-        message.Packages.push(GoogleIAPPackage.fromPartial(e))
+        message.Packages.push(GoogleInAppPurchasePackage.fromPartial(e))
       }
     }
-    if (object.GoogleIAPPubKey !== undefined && object.GoogleIAPPubKey !== null) {
-      message.GoogleIAPPubKey = object.GoogleIAPPubKey
+    if (object.GoogleInAppPurchasePubKey !== undefined && object.GoogleInAppPurchasePubKey !== null) {
+      message.GoogleInAppPurchasePubKey = object.GoogleInAppPurchasePubKey
     } else {
-      message.GoogleIAPPubKey = ''
+      message.GoogleInAppPurchasePubKey = ''
     }
     return message
   }

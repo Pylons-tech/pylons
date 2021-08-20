@@ -117,7 +117,7 @@ func (k Keeper) ValidateGoogleIAPSignature(ctx sdk.Context, msg *types.MsgGoogle
 	// We should contact google team to check if this is correct use
 
 	// TODO switch coins types
-	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(k.CoinIssuers(ctx)[0].GoogleIAPPubKey)
+	playStorePubKeyBytes, err := base64.StdEncoding.DecodeString(k.CoinIssuers(ctx)[0].GoogleInAppPurchasePubKey)
 	if err != nil {
 		return fmt.Errorf("play store base64 public key decoding failure: %s", err.Error())
 	}

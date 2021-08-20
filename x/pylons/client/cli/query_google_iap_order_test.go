@@ -16,19 +16,19 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleIAPOrder) {
+func networkWithGoogleIAPOrderObjects(t *testing.T, n int) (*network.Network, []types.GoogleInAppPurchaseOrder) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.GoogleIAPOrderList = append(state.GoogleIAPOrderList, types.GoogleIAPOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
+		state.GoogleInAppPurchaseOrderList = append(state.GoogleInAppPurchaseOrderList, types.GoogleInAppPurchaseOrder{Creator: "ANY", PurchaseToken: strconv.Itoa(i)})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.GoogleIAPOrderList
+	return network.New(t, cfg), state.GoogleInAppPurchaseOrderList
 }
 
 func TestShowGoogleIAPOrder(t *testing.T) {
@@ -43,7 +43,7 @@ func TestShowGoogleIAPOrder(t *testing.T) {
 		id   string
 		args []string
 		err  error
-		obj  types.GoogleIAPOrder
+		obj  types.GoogleInAppPurchaseOrder
 	}{
 		{
 			desc: "found",
@@ -69,10 +69,10 @@ func TestShowGoogleIAPOrder(t *testing.T) {
 				require.ErrorIs(t, stat.Err(), tc.err)
 			} else {
 				require.NoError(t, err)
-				var resp types.QueryGetGoogleIAPOrderResponse
+				var resp types.QueryGetGoogleInAppPurchaseOrderResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.NotNil(t, resp.GoogleIAPOrder)
-				require.Equal(t, tc.obj, resp.GoogleIAPOrder)
+				require.NotNil(t, resp.Order)
+				require.Equal(t, tc.obj, resp.Order)
 			}
 		})
 	}

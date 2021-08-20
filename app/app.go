@@ -255,6 +255,7 @@ func New(
 		// this line is used by starport scaffolding # stargate/app/storeKey
 		pylonsmoduletypes.StoreKey,
 	)
+
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 

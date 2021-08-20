@@ -13,7 +13,7 @@ func TestLockItemForExecution(t *testing.T) {
 	orig := createNItem(&keeper, ctx, 1)
 	keeper.LockItemForExecution(ctx, orig[0])
 	item, _ := keeper.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
-	assert.Equal(t, item.Owner, types.ExecutionsLockerName)
+	assert.Equal(t, item.Owner, keeper.accountKeeper.GetModuleAddress(types.ExecutionsLockerName).String())
 }
 
 func TestLockItemForTrade(t *testing.T) {
@@ -21,5 +21,5 @@ func TestLockItemForTrade(t *testing.T) {
 	orig := createNItem(&keeper, ctx, 1)
 	keeper.LockItemForTrade(ctx, orig[0])
 	item, _ := keeper.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
-	assert.Equal(t, item.Owner, types.TradesLockerName)
+	assert.Equal(t, item.Owner, keeper.accountKeeper.GetModuleAddress(types.TradesLockerName).String())
 }

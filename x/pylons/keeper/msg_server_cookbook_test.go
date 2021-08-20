@@ -14,17 +14,34 @@ import (
 
 func TestCookbookMsgServerCreate(t *testing.T) {
 	keeper, ctx := setupKeeper(t)
+	keeper.SetParams(ctx, types.DefaultParams())
 	srv := NewMsgServerImpl(keeper)
 	wctx := sdk.WrapSDKContext(ctx)
-	creator := "A"
+	creator := "TestCreator"
+	desc := "TestDescriptionTestDescription"
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
-		expected := &types.MsgCreateCookbook{Creator: creator, ID: idx}
+		expected := &types.MsgCreateCookbook{
+			Creator:      creator,
+			ID:           idx,
+			Name:         desc,
+			Description:  desc,
+			Developer:    desc,
+			Version:      "v0.0.1",
+			SupportEmail: "test@email.com",
+			CostPerBlock: sdk.Coin{},
+			Enabled:      false,
+		}
 		_, err := srv.CreateCookbook(wctx, expected)
 		require.NoError(t, err)
-		rst, found := keeper.GetCookbook(ctx, expected.ID)
+	}
+
+	for i := 0; i < 5; i++ {
+		idx := fmt.Sprintf("%d", i)
+		rst, found := keeper.GetCookbook(ctx, idx)
 		require.True(t, found)
-		assert.Equal(t, expected.Creator, rst.Creator)
+		assert.Equal(t, creator, rst.Creator)
+		assert.Equal(t, desc, rst.Description)
 	}
 }
 

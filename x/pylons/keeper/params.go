@@ -63,13 +63,13 @@ func (k Keeper) MaxTransferFee(ctx sdk.Context) (res sdk.Int) {
 	return
 }
 
-// GetParams returns the total set of slashing parameters.
+// GetParams returns the total set of pylons parameters.
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
 	k.paramSpace.GetParamSet(ctx, &params)
 	return params
 }
 
-// SetParams sets the slashing parameters to the param space.
+// SetParams sets the pylons parameters to the param space.
 func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 	k.paramSpace.SetParamSet(ctx, &params)
 }

@@ -65,8 +65,8 @@ func Test_validateCoinIssuers(t *testing.T) {
 		i interface{}
 	}
 
-	invalidPackages := make([]GoogleIAPPackage, 0)
-	invalidPackage := GoogleIAPPackage{
+	invalidPackages := make([]GoogleInAppPurchasePackage, 0)
+	invalidPackage := GoogleInAppPurchasePackage{
 		PackageName: "",
 		ProductID:   "",
 		Amount:      sdk.Int{},
@@ -74,8 +74,8 @@ func Test_validateCoinIssuers(t *testing.T) {
 
 	invalidPackages = append(invalidPackages, invalidPackage)
 
-	validPackages := make([]GoogleIAPPackage, 0)
-	validPackage := GoogleIAPPackage{
+	validPackages := make([]GoogleInAppPurchasePackage, 0)
+	validPackage := GoogleInAppPurchasePackage{
 		PackageName: "package",
 		ProductID:   "product",
 		Amount:      sdk.NewInt(1),
@@ -89,27 +89,27 @@ func Test_validateCoinIssuers(t *testing.T) {
 	validCoinIssuer := make([]CoinIssuer, 1)
 
 	invalidCoinIssuerPackages[0] = CoinIssuer{
-		CoinDenom:       "pylons",
-		Packages:        invalidPackages,
-		GoogleIAPPubKey: "asdg",
+		CoinDenom:                 "pylons",
+		Packages:                  invalidPackages,
+		GoogleInAppPurchasePubKey: "asdg",
 	}
 
 	invalidCoinIssuerCoinDenom[0] = CoinIssuer{
-		CoinDenom:       "",
-		Packages:        validPackages,
-		GoogleIAPPubKey: "asdf",
+		CoinDenom:                 "",
+		Packages:                  validPackages,
+		GoogleInAppPurchasePubKey: "asdf",
 	}
 
 	invalidCoinIssuerPubkey[0] = CoinIssuer{
-		CoinDenom:       "pylons",
-		Packages:        validPackages,
-		GoogleIAPPubKey: "",
+		CoinDenom:                 "pylons",
+		Packages:                  validPackages,
+		GoogleInAppPurchasePubKey: "",
 	}
 
 	validCoinIssuer[0] = CoinIssuer{
-		CoinDenom:       "pylons",
-		Packages:        validPackages,
-		GoogleIAPPubKey: "asdf",
+		CoinDenom:                 "pylons",
+		Packages:                  validPackages,
+		GoogleInAppPurchasePubKey: "asdf",
 	}
 
 	tests := []struct {

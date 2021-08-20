@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -39,9 +38,14 @@ func TestExecutionQuerySingle(t *testing.T) {
 			response: &types.QueryGetExecutionResponse{Completed: false, Execution: msgs[2]},
 		},
 		{
-			desc:    "KeyNotFound",
+			desc:    "InvalidKey",
 			request: &types.QueryGetExecutionRequest{ID: "not_found"},
-			err:     sdkerrors.ErrKeyNotFound,
+			err:     status.Error(codes.InvalidArgument, "not found"),
+		},
+		{
+			desc:    "KeyNotFound",
+			request: &types.QueryGetExecutionRequest{ID: "90325"},
+			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
 			desc: "InvalidRequest",

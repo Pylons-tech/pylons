@@ -1,15 +1,15 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
-export interface GoogleIAPPackage {
+export interface GoogleInAppPurchasePackage {
     PackageName: string;
     ProductID: string;
     Amount: string;
 }
 export interface CoinIssuer {
     CoinDenom: string;
-    Packages: GoogleIAPPackage[];
-    GoogleIAPPubKey: string;
+    Packages: GoogleInAppPurchasePackage[];
+    GoogleInAppPurchasePubKey: string;
 }
 /** Params represent the parameters used by the pylons module */
 export interface Params {
@@ -22,12 +22,12 @@ export interface Params {
     minTransferFee: string;
     maxTransferFee: string;
 }
-export declare const GoogleIAPPackage: {
-    encode(message: GoogleIAPPackage, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): GoogleIAPPackage;
-    fromJSON(object: any): GoogleIAPPackage;
-    toJSON(message: GoogleIAPPackage): unknown;
-    fromPartial(object: DeepPartial<GoogleIAPPackage>): GoogleIAPPackage;
+export declare const GoogleInAppPurchasePackage: {
+    encode(message: GoogleInAppPurchasePackage, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): GoogleInAppPurchasePackage;
+    fromJSON(object: any): GoogleInAppPurchasePackage;
+    toJSON(message: GoogleInAppPurchasePackage): unknown;
+    fromPartial(object: DeepPartial<GoogleInAppPurchasePackage>): GoogleInAppPurchasePackage;
 };
 export declare const CoinIssuer: {
     encode(message: CoinIssuer, writer?: Writer): Writer;

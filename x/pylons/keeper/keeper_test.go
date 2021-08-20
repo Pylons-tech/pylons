@@ -50,20 +50,24 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
 
 	paramsKeeper.Subspace(authtypes.ModuleName)
 	paramsKeeper.Subspace(banktypes.ModuleName)
-	paramsKeeper.Subspace(types.ModuleName)
+	paramsKeeper.Subspace(types.ModuleName).WithKeyTable(types.ParamKeyTable())
 
 	return paramsKeeper
 }
 
 func GetSubspace(paramsKeeper paramskeeper.Keeper, moduleName string) paramstypes.Subspace {
-	subspace, _ := paramsKeeper.GetSubspace(moduleName)
+	subspace, found := paramsKeeper.GetSubspace(moduleName)
+	if !found {
+		panic("Params Keeper not properly set up")
+	}
+
 	return subspace
 }
 
 func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
 	storeKeys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, banktypes.StoreKey,
-		types.StoreKey,
+		types.StoreKey, paramstypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memStoreKey := storetypes.NewMemoryStoreKey(types.MemStoreKey)
@@ -95,5 +99,7 @@ func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
 	)
 
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())
+
+	// init genesis to set initial state of the params modules
 	return keeper, ctx
 }
