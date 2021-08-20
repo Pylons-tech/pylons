@@ -1,25 +1,23 @@
-package keeper
+package keeper_test
 
 import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestLockItemForExecution(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	orig := createNItem(&keeper, ctx, 1)
-	keeper.LockItemForExecution(ctx, orig[0])
-	item, _ := keeper.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
-	assert.Equal(t, item.Owner, keeper.accountKeeper.GetModuleAddress(types.ExecutionsLockerName).String())
+	k, ctx := setupKeeper(t)
+	orig := createNItem(&k, ctx, 1)
+	k.LockItemForExecution(ctx, orig[0])
+	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	assert.Equal(t, item.Owner, k.ExecutionsLockerAddress().String())
 }
 
 func TestLockItemForTrade(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	orig := createNItem(&keeper, ctx, 1)
-	keeper.LockItemForTrade(ctx, orig[0])
-	item, _ := keeper.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
-	assert.Equal(t, item.Owner, keeper.accountKeeper.GetModuleAddress(types.TradesLockerName).String())
+	k, ctx := setupKeeper(t)
+	orig := createNItem(&k, ctx, 1)
+	k.LockItemForTrade(ctx, orig[0])
+	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
+	assert.Equal(t, item.Owner, k.TradesLockerAddress().String())
 }

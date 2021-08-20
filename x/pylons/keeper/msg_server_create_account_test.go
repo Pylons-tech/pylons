@@ -1,7 +1,9 @@
-package keeper
+package keeper_test
 
 import (
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -30,8 +32,8 @@ func TestCreateAccount(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			keeper, ctx := setupKeeper(t)
-			srv := NewMsgServerImpl(keeper)
+			k, ctx := setupKeeper(t)
+			srv := keeper.NewMsgServerImpl(k)
 			wctx := sdk.WrapSDKContext(ctx)
 
 			_, err := srv.CreateAccount(wctx, tc.request)

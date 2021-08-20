@@ -1,8 +1,10 @@
-package keeper
+package keeper_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"
@@ -10,7 +12,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
+func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
 	coin := sdk.NewCoin("test", sdk.NewInt(1))
 	for i := range items {
@@ -24,17 +26,17 @@ func createNItem(k *Keeper, ctx sdk.Context, n int) []types.Item {
 }
 
 func TestItemGet(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNItem(&keeper, ctx, 10)
+	k, ctx := setupKeeper(t)
+	items := createNItem(&k, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetItem(ctx, item.CookbookID, item.ID)
+		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
 		assert.True(t, found)
 		assert.Equal(t, item, rst)
 	}
 }
 
 func TestItemGetAll(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNItem(&keeper, ctx, 10)
-	assert.Equal(t, items, keeper.GetAllItem(ctx))
+	k, ctx := setupKeeper(t)
+	items := createNItem(&k, ctx, 10)
+	assert.Equal(t, items, k.GetAllItem(ctx))
 }

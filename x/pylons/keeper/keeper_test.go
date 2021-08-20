@@ -1,7 +1,10 @@
-package keeper
+package keeper_test
 
 import (
+	"strconv"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
@@ -23,6 +26,24 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
+
+const (
+	// original address: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
+	validBech32AccAddr = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337" // nolint: deadcode
+	baseAccAddrBech32  = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt33"
+)
+
+// CreateTestFakeAddressList creates a list of addresses from baseAccAddrBech32.
+// Note, they are not valid Bech32 addresses (except the 7th element), so Bech32 decoding on these will fail
+func CreateTestFakeAddressList(numAccount uint) []string {
+	accounts := make([]string, numAccount)
+	for i := uint(0); i < numAccount; i++ {
+		addr := baseAccAddrBech32 + strconv.Itoa(int(i))
+		accounts[i] = addr
+	}
+
+	return accounts
+}
 
 var (
 	// module account permissions
@@ -64,7 +85,7 @@ func GetSubspace(paramsKeeper paramskeeper.Keeper, moduleName string) paramstype
 	return subspace
 }
 
-func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
+func setupKeeper(t testing.TB) (keeper.Keeper, sdk.Context) {
 	storeKeys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, banktypes.StoreKey,
 		types.StoreKey, paramstypes.StoreKey,
@@ -89,7 +110,7 @@ func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
 	bankKeeper := bankkeeper.NewBaseKeeper(
 		appCodec, storeKeys[banktypes.StoreKey], accountKeeper, GetSubspace(paramsKeeper, banktypes.ModuleName), ModuleAccountAddrs(),
 	)
-	keeper := NewKeeper(
+	k := keeper.NewKeeper(
 		appCodec,
 		storeKeys[types.StoreKey],
 		memStoreKey,
@@ -101,5 +122,6 @@ func setupKeeper(t testing.TB) (Keeper, sdk.Context) {
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())
 
 	// init genesis to set initial state of the params modules
-	return keeper, ctx
+	k.SetParams(ctx, types.DefaultParams())
+	return k, ctx
 }

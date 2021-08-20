@@ -1,4 +1,4 @@
-package keeper
+package keeper_test
 
 import (
 	"testing"
@@ -12,10 +12,10 @@ import (
 )
 
 func TestRecipeQuerySingle(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
+	k, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	cookbooks := createNCookbook(&keeper, ctx, 1)
-	msgs := createNRecipe(&keeper, ctx, cookbooks[0], 2)
+	cookbooks := createNCookbook(&k, ctx, 1)
+	msgs := createNRecipe(&k, ctx, cookbooks[0], 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetRecipeRequest
@@ -44,7 +44,7 @@ func TestRecipeQuerySingle(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Recipe(wctx, tc.request)
+			response, err := k.Recipe(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

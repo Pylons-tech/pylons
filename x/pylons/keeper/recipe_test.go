@@ -1,8 +1,10 @@
-package keeper
+package keeper_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"
@@ -10,7 +12,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNRecipe(k *Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
+func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
 	items := make([]types.Recipe, n)
 	for i := range items {
 		items[i].CookbookID = cb.ID
@@ -21,19 +23,19 @@ func createNRecipe(k *Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types
 }
 
 func TestRecipeGet(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	cookbooks := createNCookbook(&keeper, ctx, 1)
-	items := createNRecipe(&keeper, ctx, cookbooks[0], 10)
+	k, ctx := setupKeeper(t)
+	cookbooks := createNCookbook(&k, ctx, 1)
+	items := createNRecipe(&k, ctx, cookbooks[0], 10)
 	for _, item := range items {
-		rst, found := keeper.GetRecipe(ctx, cookbooks[0].ID, item.ID)
+		rst, found := k.GetRecipe(ctx, cookbooks[0].ID, item.ID)
 		assert.True(t, found)
 		assert.Equal(t, item, rst)
 	}
 }
 
 func TestRecipeGetAll(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	cookbooks := createNCookbook(&keeper, ctx, 1)
-	items := createNRecipe(&keeper, ctx, cookbooks[0], 10)
-	assert.Equal(t, items, keeper.GetAllRecipe(ctx))
+	k, ctx := setupKeeper(t)
+	cookbooks := createNCookbook(&k, ctx, 1)
+	items := createNRecipe(&k, ctx, cookbooks[0], 10)
+	assert.Equal(t, items, k.GetAllRecipe(ctx))
 }

@@ -1,8 +1,10 @@
-package keeper
+package keeper_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"
@@ -12,8 +14,8 @@ import (
 )
 
 func TestItemMsgServerSetStringField(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	srv := NewMsgServerImpl(keeper)
+	k, ctx := setupKeeper(t)
+	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "A"
 	for i := 0; i < 5; i++ {
@@ -31,7 +33,7 @@ func TestItemMsgServerSetStringField(t *testing.T) {
 				{Key: expectedString, Value: expectedString},
 			},
 		}
-		keeper.SetItem(ctx, item)
+		k.SetItem(ctx, item)
 		// update item by setting the MutableString value to ""
 		updateItemStringMsg := &types.MsgSetItemString{
 			Creator:    creator,
@@ -44,7 +46,7 @@ func TestItemMsgServerSetStringField(t *testing.T) {
 		require.NoError(t, err)
 
 		// get item
-		rst, found := keeper.GetItem(ctx, item.CookbookID, item.ID)
+		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
 		require.True(t, found)
 		assert.NotEqual(t, expectedString, rst.MutableStrings[0].Value)
 		expectedString = ""

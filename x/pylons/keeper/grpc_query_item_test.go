@@ -1,4 +1,4 @@
-package keeper
+package keeper_test
 
 import (
 	"testing"
@@ -12,9 +12,9 @@ import (
 )
 
 func TestItemQuerySingle(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
+	k, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNItem(&keeper, ctx, 2)
+	msgs := createNItem(&k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetItemRequest
@@ -43,7 +43,7 @@ func TestItemQuerySingle(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Item(wctx, tc.request)
+			response, err := k.Item(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

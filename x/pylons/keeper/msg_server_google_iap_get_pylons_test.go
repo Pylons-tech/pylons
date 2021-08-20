@@ -1,4 +1,4 @@
-package keeper
+package keeper_test
 
 // TODO FIX
 /*

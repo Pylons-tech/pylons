@@ -1,8 +1,10 @@
-package keeper
+package keeper_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,9 +15,8 @@ import (
 )
 
 func TestCookbookMsgServerCreate(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	keeper.SetParams(ctx, types.DefaultParams())
-	srv := NewMsgServerImpl(keeper)
+	k, ctx := setupKeeper(t)
+	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 	creator := "TestCreator"
 	desc := "TestDescriptionTestDescription"
@@ -38,7 +39,7 @@ func TestCookbookMsgServerCreate(t *testing.T) {
 
 	for i := 0; i < 5; i++ {
 		idx := fmt.Sprintf("%d", i)
-		rst, found := keeper.GetCookbook(ctx, idx)
+		rst, found := k.GetCookbook(ctx, idx)
 		require.True(t, found)
 		assert.Equal(t, creator, rst.Creator)
 		assert.Equal(t, desc, rst.Description)
@@ -71,8 +72,8 @@ func TestCookbookMsgServerUpdate(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			keeper, ctx := setupKeeper(t)
-			srv := NewMsgServerImpl(keeper)
+			k, ctx := setupKeeper(t)
+			srv := keeper.NewMsgServerImpl(k)
 			wctx := sdk.WrapSDKContext(ctx)
 			expected := &types.MsgCreateCookbook{Creator: creator, ID: index}
 			_, err := srv.CreateCookbook(wctx, expected)
@@ -83,7 +84,7 @@ func TestCookbookMsgServerUpdate(t *testing.T) {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				rst, found := keeper.GetCookbook(ctx, expected.ID)
+				rst, found := k.GetCookbook(ctx, expected.ID)
 				require.True(t, found)
 				assert.Equal(t, expected.Creator, rst.Creator)
 			}

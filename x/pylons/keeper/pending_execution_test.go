@@ -1,7 +1,9 @@
-package keeper
+package keeper_test
 
 import (
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"
@@ -9,7 +11,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNPendingExecution(k *Keeper, ctx sdk.Context, n int) []types.Execution {
+func createNPendingExecution(k *keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
 	items := make([]types.Execution, n)
 	for i := range items {
 		items[i].Creator = "any"
@@ -19,30 +21,30 @@ func createNPendingExecution(k *Keeper, ctx sdk.Context, n int) []types.Executio
 }
 
 func TestPendingExecutionGet(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(&keeper, ctx, 10)
+	k, ctx := setupKeeper(t)
+	items := createNPendingExecution(&k, ctx, 10)
 	for _, item := range items {
-		assert.Equal(t, item, keeper.GetPendingExecution(ctx, item.ID))
+		assert.Equal(t, item, k.GetPendingExecution(ctx, item.ID))
 	}
 }
 
 func TestPendingExecutionExist(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(&keeper, ctx, 10)
+	k, ctx := setupKeeper(t)
+	items := createNPendingExecution(&k, ctx, 10)
 	for _, item := range items {
-		assert.True(t, keeper.HasPendingExecution(ctx, item.ID))
+		assert.True(t, k.HasPendingExecution(ctx, item.ID))
 	}
 }
 
 func TestPendingExecutionGetAll(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(&keeper, ctx, 10)
-	assert.Equal(t, items, keeper.GetAllPendingExecution(ctx))
+	k, ctx := setupKeeper(t)
+	items := createNPendingExecution(&k, ctx, 10)
+	assert.Equal(t, items, k.GetAllPendingExecution(ctx))
 }
 
 func TestPendingExecutionCount(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNPendingExecution(&keeper, ctx, 10)
+	k, ctx := setupKeeper(t)
+	items := createNPendingExecution(&k, ctx, 10)
 	count := uint64(len(items))
-	assert.Equal(t, count, keeper.GetPendingExecutionCount(ctx))
+	assert.Equal(t, count, k.GetPendingExecutionCount(ctx))
 }

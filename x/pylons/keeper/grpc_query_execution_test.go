@@ -1,4 +1,4 @@
-package keeper
+package keeper_test
 
 import (
 	"testing"
@@ -12,10 +12,10 @@ import (
 )
 
 func TestExecutionQuerySingle(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
+	k, ctx := setupKeeper(t)
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNExecution(&keeper, ctx, 2)
-	msgs = append(msgs, createNPendingExecution(&keeper, ctx, 1)...)
+	msgs := createNExecution(&k, ctx, 2)
+	msgs = append(msgs, createNPendingExecution(&k, ctx, 1)...)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetExecutionRequest
@@ -54,7 +54,7 @@ func TestExecutionQuerySingle(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			response, err := keeper.Execution(wctx, tc.request)
+			response, err := k.Execution(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {

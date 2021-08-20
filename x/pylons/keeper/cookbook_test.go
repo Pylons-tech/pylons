@@ -1,8 +1,10 @@
-package keeper
+package keeper_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/assert"
@@ -10,7 +12,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func createNCookbook(k *Keeper, ctx sdk.Context, n int) []types.Cookbook {
+func createNCookbook(k *keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creators := CreateTestFakeAddressList(uint(n))
 	for i := range items {
@@ -23,26 +25,26 @@ func createNCookbook(k *Keeper, ctx sdk.Context, n int) []types.Cookbook {
 }
 
 func TestCookbookGet(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNCookbook(&keeper, ctx, 10)
+	k, ctx := setupKeeper(t)
+	items := createNCookbook(&k, ctx, 10)
 	for _, item := range items {
-		rst, found := keeper.GetCookbook(ctx, item.ID)
+		rst, found := k.GetCookbook(ctx, item.ID)
 		assert.True(t, found)
 		assert.Equal(t, item, rst)
 	}
 }
 
 func TestCookbookGetAll(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNCookbook(&keeper, ctx, 10)
-	assert.Equal(t, items, keeper.GetAllCookbook(ctx))
+	k, ctx := setupKeeper(t)
+	items := createNCookbook(&k, ctx, 10)
+	assert.Equal(t, items, k.GetAllCookbook(ctx))
 }
 
 func TestCookbookGetAllByCreator(t *testing.T) {
-	keeper, ctx := setupKeeper(t)
-	items := createNCookbook(&keeper, ctx, 10)
+	k, ctx := setupKeeper(t)
+	items := createNCookbook(&k, ctx, 10)
 	for _, item := range items {
-		rst := keeper.GetAllCookbookByCreator(ctx, item.Creator)
+		rst := k.GetAllCookbookByCreator(ctx, item.Creator)
 		assert.Equal(t, item, rst[0])
 	}
 }

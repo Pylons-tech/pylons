@@ -69,3 +69,15 @@ func NewKeeper(
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
+
+func (k Keeper) FeeCollectorAddress() sdk.AccAddress {
+	return k.accountKeeper.GetModuleAddress(types.FeeCollectorName)
+}
+
+func (k Keeper) TradesLockerAddress() sdk.AccAddress {
+	return k.accountKeeper.GetModuleAddress(types.TradesLockerName)
+}
+
+func (k Keeper) ExecutionsLockerAddress() sdk.AccAddress {
+	return k.accountKeeper.GetModuleAddress(types.ExecutionsLockerName)
+}
