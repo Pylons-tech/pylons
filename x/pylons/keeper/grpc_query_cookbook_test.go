@@ -1,20 +1,20 @@
 package keeper_test
 
 import (
-	"testing"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func TestCookbookQuerySingle(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestCookbookQuerySingle() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNCookbook(&k, ctx, 2)
+	msgs := createNCookbook(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetCookbookRequest
@@ -42,12 +42,12 @@ func TestCookbookQuerySingle(t *testing.T) {
 		},
 	} {
 		tc := tc
-		t.Run(tc.desc, func(t *testing.T) {
+		suite.Run(tc.desc, func() {
 			response, err := k.Cookbook(wctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				require.ErrorIs(err, tc.err)
 			} else {
-				require.Equal(t, tc.response, response)
+				require.Equal(tc.response, response)
 			}
 		})
 	}

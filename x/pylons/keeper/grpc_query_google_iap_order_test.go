@@ -1,20 +1,20 @@
 package keeper_test
 
 import (
-	"strconv"
-	"testing"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"strconv"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func TestGoogleIAPOrderQuerySingle(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestGoogleIAPOrderQuerySingle() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	wctx := sdk.WrapSDKContext(ctx)
 	msgs := createNGoogleIAPOrder(&k, ctx, 2)
 	for _, tc := range []struct {
@@ -44,12 +44,12 @@ func TestGoogleIAPOrderQuerySingle(t *testing.T) {
 		},
 	} {
 		tc := tc
-		t.Run(tc.desc, func(t *testing.T) {
+		suite.Run(tc.desc, func() {
 			response, err := k.GoogleInAppPurchaseOrder(wctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				require.ErrorIs(err, tc.err)
 			} else {
-				require.Equal(t, tc.response, response)
+				require.Equal(tc.response, response)
 			}
 		})
 	}

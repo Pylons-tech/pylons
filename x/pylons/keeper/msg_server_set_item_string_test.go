@@ -2,33 +2,43 @@ package keeper_test
 
 import (
 	"fmt"
-	"testing"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func TestItemMsgServerSetStringField(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
+
 	creator := "A"
 	for i := 0; i < 5; i++ {
 		expectedString := "test"
 		idx := fmt.Sprintf("%d", i)
-		cookbook := &types.MsgCreateCookbook{Creator: creator, ID: idx}
+		cookbook := &types.MsgCreateCookbook{
+			Creator:      creator,
+			ID:           idx,
+			Name:         "testCookbookName",
+			Description:  "descdescdescdescdescdescdescdesc",
+			Developer:    "",
+			Version:      "v0.0.1",
+			SupportEmail: "test@email.com",
+			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
+			Enabled:      false,
+		}
 		_, err := srv.CreateCookbook(wctx, cookbook)
-		require.NoError(t, err)
+		require.NoError(err)
 
 		// set dummy item in store
 		item := types.Item{
 			CookbookID: idx,
 			ID:         idx,
+			Owner: creator,
 			MutableStrings: []types.StringKeyValue{
 				{Key: expectedString, Value: expectedString},
 			},
@@ -43,13 +53,13 @@ func TestItemMsgServerSetStringField(t *testing.T) {
 			Value:      "",
 		}
 		_, err = srv.SetItemString(wctx, updateItemStringMsg)
-		require.NoError(t, err)
+		require.NoError(err)
 
 		// get item
 		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
-		require.True(t, found)
-		assert.NotEqual(t, expectedString, rst.MutableStrings[0].Value)
+		require.True(found)
+		require.NotEqual(expectedString, rst.MutableStrings[0].Value)
 		expectedString = ""
-		assert.Equal(t, expectedString, rst.MutableStrings[0].Value)
+		require.Equal(expectedString, rst.MutableStrings[0].Value)
 	}
 }

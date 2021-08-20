@@ -1,20 +1,19 @@
 package keeper_test
 
 import (
-	"testing"
-
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func TestRecipeQuerySingle(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestRecipeQuerySingle() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	wctx := sdk.WrapSDKContext(ctx)
-	cookbooks := createNCookbook(&k, ctx, 1)
+	cookbooks := createNCookbook(k, ctx, 1)
 	msgs := createNRecipe(&k, ctx, cookbooks[0], 2)
 	for _, tc := range []struct {
 		desc     string
@@ -43,12 +42,12 @@ func TestRecipeQuerySingle(t *testing.T) {
 		},
 	} {
 		tc := tc
-		t.Run(tc.desc, func(t *testing.T) {
+		suite.Run(tc.desc, func() {
 			response, err := k.Recipe(wctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				require.ErrorIs(err, tc.err)
 			} else {
-				require.Equal(t, tc.response, response)
+				require.Equal(tc.response, response)
 			}
 		})
 	}

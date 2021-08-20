@@ -2,14 +2,10 @@ package keeper_test
 
 import (
 	"fmt"
-	"testing"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
@@ -25,18 +21,24 @@ func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	return items
 }
 
-func TestItemGet(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite)  TestItemGet() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	items := createNItem(&k, ctx, 10)
 	for _, item := range items {
 		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
-		assert.True(t, found)
-		assert.Equal(t, item, rst)
+		require.True(found)
+		require.Equal(item, rst)
 	}
 }
 
-func TestItemGetAll(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite)  TestItemGetAll() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	items := createNItem(&k, ctx, 10)
-	assert.Equal(t, items, k.GetAllItem(ctx))
+	require.Equal(items, k.GetAllItem(ctx))
 }

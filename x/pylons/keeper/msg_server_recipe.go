@@ -14,11 +14,11 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if len(msg.Name) < int(k.MinNameFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe name should have more than 8 characters")
 	}
 
 	if len(msg.Description) < int(k.MinDescriptionFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe description should have more than 20 characters")
 	}
 
 	// Check if the value already exists
@@ -63,11 +63,11 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	if len(msg.Name) < int(k.MinNameFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the name of the cookbook should have more than 8 characters")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe name should have more than 8 characters")
 	}
 
 	if len(msg.Description) < int(k.MinDescriptionFieldLength(ctx)) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "the description should have more than 20 characters")
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe description should have more than 20 characters")
 	}
 
 	// Check if the value exists

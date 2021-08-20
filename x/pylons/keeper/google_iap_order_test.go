@@ -2,14 +2,11 @@ package keeper_test
 
 import (
 	"strconv"
-	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/assert"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
@@ -22,31 +19,44 @@ func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.Goo
 	return items
 }
 
-func TestGoogleIAPOrderGet(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestGoogleIAPOrderGet() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	items := createNGoogleIAPOrder(&k, ctx, 10)
 	for _, item := range items {
-		assert.Equal(t, item, k.GetGoogleIAPOrder(ctx, item.PurchaseToken))
+		require.Equal(item, k.GetGoogleIAPOrder(ctx, item.PurchaseToken))
 	}
 }
 
-func TestGoogleIAPOrderExist(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestGoogleIAPOrderExist() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	items := createNGoogleIAPOrder(&k, ctx, 10)
 	for _, item := range items {
-		assert.True(t, k.HasGoogleIAPOrder(ctx, item.PurchaseToken))
+		require.True(k.HasGoogleIAPOrder(ctx, item.PurchaseToken))
 	}
 }
 
-func TestGoogleIAPOrderGetAll(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestGoogleIAPOrderGetAll() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	items := createNGoogleIAPOrder(&k, ctx, 10)
-	assert.Equal(t, items, k.GetAllGoogleIAPOrder(ctx))
+	require.Equal(items, k.GetAllGoogleIAPOrder(ctx))
+	require.Equal(items, k.GetAllGoogleIAPOrder(ctx))
 }
 
-func TestGoogleIAPOrderCount(t *testing.T) {
-	k, ctx := setupKeeper(t)
+func (suite *IntegrationTestSuite) TestGoogleIAPOrderCount() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
 	items := createNGoogleIAPOrder(&k, ctx, 10)
 	count := uint64(len(items))
-	assert.Equal(t, count, k.GetGoogleIAPOrderCount(ctx))
+	require.Equal(count, k.GetGoogleIAPOrderCount(ctx))
 }

@@ -1,18 +1,21 @@
 package keeper_test
 
 import (
-	"testing"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/stretchr/testify/require"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func TestCreateAccount(t *testing.T) {
+func (suite *IntegrationTestSuite) TestCreateAccount() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	srv := keeper.NewMsgServerImpl(k)
+	wctx := sdk.WrapSDKContext(ctx)
+
 	addr := validBech32AccAddr
 
 	for _, tc := range []struct {
@@ -31,16 +34,14 @@ func TestCreateAccount(t *testing.T) {
 		},
 	} {
 		tc := tc
-		t.Run(tc.desc, func(t *testing.T) {
-			k, ctx := setupKeeper(t)
-			srv := keeper.NewMsgServerImpl(k)
-			wctx := sdk.WrapSDKContext(ctx)
+		suite.Run(tc.desc, func() {
+
 
 			_, err := srv.CreateAccount(wctx, tc.request)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				require.ErrorIs(err, tc.err)
 			} else {
-				require.NoError(t, err)
+				require.NoError(err)
 			}
 		})
 	}
