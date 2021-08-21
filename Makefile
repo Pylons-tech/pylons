@@ -5,7 +5,7 @@ DOCKER := $(shell which docker)
 VERSION := $(shell echo $(shell git describe --tags 2> /dev/null || echo "dev-$(shell git describe --always)") | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
 PROJECT_NAME = $(shell git remote get-url origin | xargs basename -s .git)
-
+ARTIFACT_DIR := ./artifacts
 
 ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
 	-X github.com/cosmos/cosmos-sdk/version.ServerName=pylonsd \
@@ -25,8 +25,11 @@ install: go.sum
 	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
 
 build: go.sum
-	@echo "--> Installing pylonsd"
-	@go build -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
+	@echo "--> Building pylonsd"
+	@go build -o $(ARTIFACT_DIR)/pylonsd -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
+
+clean:
+	@rm -rf $(ARTIFACT_DIR)
 
 go.sum: go.mod
 	@echo "Ensure dependencies have not been modified ..."
