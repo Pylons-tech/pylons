@@ -24,6 +24,10 @@ install: go.sum
 	@echo "--> Installing pylonsd"
 	@go install -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
 
+build: go.sum
+	@echo "--> Installing pylonsd"
+	@go build -mod=readonly $(BUILD_FLAGS) ./cmd/pylonsd
+
 go.sum: go.mod
 	@echo "Ensure dependencies have not been modified ..."
 	@go mod verify

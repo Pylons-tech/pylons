@@ -34,7 +34,7 @@ jobs:
             go.mod
             go.sum
       - name: Build
-        run: GOARCH=${{matrix.go-arch}} make
+        run: GOARCH=${{matrix.go-arch}} make build
 
 
   test:
