@@ -1,27 +1,5 @@
 package keeper_test
 
-import (
-	"fmt"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-)
-
-func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
-	items := make([]types.Cookbook, n)
-	creators := CreateTestFakeAddressList(uint(n))
-	for i := range items {
-		items[i].Creator = creators[i]
-		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin("test", sdk.NewInt(1))
-		k.SetCookbook(ctx, items[i])
-	}
-	return items
-}
-
 func (suite *IntegrationTestSuite) TestCookbookGet() {
 	//k, ctx := setupKeeper(t)
 	k := suite.k

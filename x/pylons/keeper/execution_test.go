@@ -1,52 +1,5 @@
 package keeper_test
 
-import (
-	"fmt"
-	"strconv"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-)
-
-func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
-	execs := make([]types.Execution, n)
-	for i := range execs {
-		execs[i].Creator = "any"
-		execs[i].ID = strconv.Itoa(i)
-		//k.appendExecution(ctx, execs[i])
-		k.SetExecution(ctx, execs[i])
-	}
-	return execs
-}
-
-func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
-	exec := types.Execution{
-		ItemInputs: []types.ItemRecord{
-			{
-				ID: "test1",
-			},
-		},
-		ItemOutputIDs: []string{"test1"},
-		Recipe:        types.Recipe{CookbookID: "testCookbookID", ID: "testRecipeID"},
-	}
-
-	execs := make([]types.Execution, n)
-
-	for i := range execs {
-		execs[i] = exec
-		execs[i].Creator = fmt.Sprintf("any%v", i) // ok if different people ran executions
-		execs[i].ID = strconv.Itoa(i)
-		//k.appendExecution(ctx, execs[i])
-		k.SetExecution(ctx, execs[i])
-
-	}
-
-	return execs
-}
-
 func (suite *IntegrationTestSuite) TestExecutionGet() {
 	k := suite.k
 	ctx := suite.ctx

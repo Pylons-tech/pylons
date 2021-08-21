@@ -1,25 +1,5 @@
 package keeper_test
 
-import (
-	"strconv"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-)
-
-func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
-	items := make([]types.GoogleInAppPurchaseOrder, n)
-	for i := range items {
-		items[i].Creator = "any"
-		items[i].PurchaseToken = strconv.Itoa(int(i))
-		k.AppendGoogleIAPOrder(ctx, items[i])
-	}
-	return items
-}
-
 func (suite *IntegrationTestSuite) TestGoogleIAPOrderGet() {
 	k := suite.k
 	ctx := suite.ctx

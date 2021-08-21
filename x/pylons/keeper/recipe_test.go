@@ -1,25 +1,5 @@
 package keeper_test
 
-import (
-	"fmt"
-
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-)
-
-func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
-	items := make([]types.Recipe, n)
-	for i := range items {
-		items[i].CookbookID = cb.ID
-		items[i].ID = fmt.Sprintf("%d", i)
-		k.SetRecipe(ctx, items[i])
-	}
-	return items
-}
-
 func (suite *IntegrationTestSuite) TestRecipeGet() {
 	k := suite.k
 	ctx := suite.ctx
