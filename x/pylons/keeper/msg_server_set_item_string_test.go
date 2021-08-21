@@ -2,10 +2,12 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
@@ -38,7 +40,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 		item := types.Item{
 			CookbookID: idx,
 			ID:         idx,
-			Owner: creator,
+			Owner:      creator,
 			MutableStrings: []types.StringKeyValue{
 				{Key: expectedString, Value: expectedString},
 			},

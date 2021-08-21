@@ -2,11 +2,13 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
@@ -105,7 +107,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		err     error
 	}{
 		{
-			desc:    "Completed",
+			desc: "Completed",
 			request: &types.MsgUpdateRecipe{
 				Creator:       creator,
 				CookbookID:    index,
@@ -123,7 +125,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 			},
 		},
 		{
-			desc:    "Unauthorized",
+			desc: "Unauthorized",
 			request: &types.MsgUpdateRecipe{
 				Creator:       "B",
 				CookbookID:    index,
@@ -139,10 +141,10 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Enabled:       false,
 				ExtraInfo:     "",
 			},
-			err:     sdkerrors.ErrUnauthorized,
+			err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc:    "incorrect version",
+			desc: "incorrect version",
 			request: &types.MsgUpdateRecipe{
 				Creator:       "A",
 				CookbookID:    index,
@@ -158,10 +160,10 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Enabled:       false,
 				ExtraInfo:     "",
 			},
-			err:     sdkerrors.ErrInvalidRequest,
+			err: sdkerrors.ErrInvalidRequest,
 		},
 		{
-			desc:    "KeyNotFound",
+			desc: "KeyNotFound",
 			request: &types.MsgUpdateRecipe{
 				Creator:       creator,
 				CookbookID:    "missing",
@@ -177,7 +179,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 				Enabled:       false,
 				ExtraInfo:     "",
 			},
-			err:     sdkerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 	} {
 		tc := tc

@@ -3,9 +3,10 @@ package keeper_test
 import (
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestCreateAccount() {
@@ -35,7 +36,6 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-
 
 			_, err := srv.CreateAccount(wctx, tc.request)
 			if tc.err != nil {

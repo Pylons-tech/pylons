@@ -11,7 +11,7 @@ func (suite *IntegrationTestSuite) TestLockItemForExecution() {
 	require.Equal(item.Owner, k.ExecutionsLockerAddress().String())
 }
 
-func (suite *IntegrationTestSuite)  TestLockItemForTrade() {
+func (suite *IntegrationTestSuite) TestLockItemForTrade() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()

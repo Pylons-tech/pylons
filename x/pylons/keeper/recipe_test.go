@@ -2,10 +2,12 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {

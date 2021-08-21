@@ -2,10 +2,12 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
@@ -21,7 +23,7 @@ func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	return items
 }
 
-func (suite *IntegrationTestSuite)  TestItemGet() {
+func (suite *IntegrationTestSuite) TestItemGet() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -34,7 +36,7 @@ func (suite *IntegrationTestSuite)  TestItemGet() {
 	}
 }
 
-func (suite *IntegrationTestSuite)  TestItemGetAll() {
+func (suite *IntegrationTestSuite) TestItemGetAll() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()

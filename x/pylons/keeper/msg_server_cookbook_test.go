@@ -2,11 +2,13 @@ package keeper_test
 
 import (
 	"fmt"
+
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestCookbookMsgServerCreate() {
@@ -73,18 +75,17 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 	_, err := srv.CreateCookbook(wctx, expected)
 	require.NoError(err)
 
-
 	for _, tc := range []struct {
 		desc    string
 		request *types.MsgUpdateCookbook
 		err     error
 	}{
 		{
-			desc:    "Completed",
+			desc: "Completed",
 			request: &types.MsgUpdateCookbook{
 				Creator:      creator,
 				ID:           index,
-				Name:        name,
+				Name:         name,
 				Description:  description,
 				Developer:    "",
 				Version:      version,
@@ -92,10 +93,10 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
 				Enabled:      false,
 			},
-			err:     nil,
+			err: nil,
 		},
 		{
-			desc:    "Unauthorized",
+			desc: "Unauthorized",
 			request: &types.MsgUpdateCookbook{
 				Creator:      "B",
 				ID:           index,
@@ -106,10 +107,10 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				SupportEmail: email,
 				CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
 				Enabled:      false,
-			},			err:     sdkerrors.ErrUnauthorized,
+			}, err: sdkerrors.ErrUnauthorized,
 		},
 		{
-			desc:    "KeyNotFound",
+			desc: "KeyNotFound",
 			request: &types.MsgUpdateCookbook{
 				Creator:      creator,
 				ID:           "not-found",
@@ -120,7 +121,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerUpdate() {
 				SupportEmail: email,
 				CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
 				Enabled:      false,
-			},			err:     sdkerrors.ErrKeyNotFound,
+			}, err: sdkerrors.ErrKeyNotFound,
 		},
 	} {
 		tc := tc
