@@ -26,7 +26,9 @@ func CookbookModified(original, updated Cookbook) (bool, error) {
 		modified = true
 	}
 
-	if !original.CostPerBlock.IsEqual(updated.CostPerBlock) {
+	if original.CostPerBlock.Denom != updated.CostPerBlock.Denom {
+		modified = true
+	} else if original.CostPerBlock.IsEqual(updated.CostPerBlock) {
 		modified = true
 	}
 

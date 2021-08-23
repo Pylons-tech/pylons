@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,7 +22,7 @@ func TestCreateCookbook(t *testing.T) {
 	ctx := val.ClientCtx
 	id := "testID"
 
-	fields := []string{
+	validFields := []string{
 		"testCookbookName",
 		"DescriptionDescriptionDescription",
 		"Developer",
@@ -29,28 +31,223 @@ func TestCreateCookbook(t *testing.T) {
 		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"true",
 	}
+
+	validNoDeveloper := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"",
+		"v0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidName := []string{
+		"",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidDescription := []string{
+		"testCookbookName",
+		"",
+		"Developer",
+		"v0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidVersion1 := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidVersion2 := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidVersion3 := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidEmail := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	emptyCoin := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{}",
+		"true",
+	}
+
+	invalidCoinAmount := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{\"denom\": \"pylons\", \"amount\": \"-1\"}",
+		"true",
+	}
+
+	invalidEnabledField := []string{
+		"testCookbookName",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"1",
+	}
+
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
 	for _, tc := range []struct {
-		desc string
-		id   string
-		args []string
-		err  error
-		code uint32
+		desc   string
+		id     string
+		fields []string
+		args   []string
+		err    error
+		code   uint32
 	}{
 		{
-			id:   id,
-			desc: "valid",
-			args: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
+			id:     id,
+			desc:   "valid",
+			fields: validFields,
+			args:   common,
+			err:    nil,
+			code:   0,
+		},
+		{
+			id:     id,
+			desc:   "duplicateID",
+			fields: validFields,
+			args:   common,
+			err:    nil,
+			code:   sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
+		{
+			id:     "ValidNoDeveloper",
+			desc:   "ValidNoDeveloper",
+			fields: validNoDeveloper,
+			args:   common,
+			err:    nil,
+			code:   0,
+		},
+		{
+			id:     "InvalidName",
+			desc:   "InvalidName",
+			fields: invalidName,
+			args:   common,
+			err:    nil,
+			code:   sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
+		{
+			id:     "InvalidDescription",
+			desc:   "InvalidDescription",
+			fields: invalidDescription,
+			args:   common,
+			err:    nil,
+			code:   sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
+		{
+			id:     "InvalidVersion1",
+			desc:   "InvalidVersion1",
+			fields: invalidVersion1,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			id:     "InvalidVersion2",
+			desc:   "InvalidVersion2",
+			fields: invalidVersion2,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			id:     "InvalidVersion3",
+			desc:   "InvalidVersion3",
+			fields: invalidVersion3,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			id:     "InvalidEmail",
+			desc:   "InvalidEmail",
+			fields: invalidEmail,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			id:     "EmptyCoin",
+			desc:   "EmptyCoin",
+			fields: emptyCoin,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			id:     "InvalidCoinAmount",
+			desc:   "InvalidCoinAmount",
+			fields: invalidCoinAmount,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			id:     "InvalidEnabledField",
+			desc:   "InvalidEnabledField",
+			fields: invalidEnabledField,
+			args:   common,
+			err:    sdkerrors.ErrInvalidRequest,
+			code:   types.ErrInvalidRequestField.ABCICode(),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{tc.id}
-			args = append(args, fields...)
+			args = append(args, tc.fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 			if tc.err != nil {
@@ -117,6 +314,26 @@ func TestUpdateCookbook(t *testing.T) {
 		"false",
 	}
 
+	updateEmail := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.4",
+		"newTest@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"false",
+	}
+
+	changeCoin := []string{
+		"ModifiedCookbooknameNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"v0.0.5",
+		"test@email.com",
+		"{\"denom\": \"snolyp\", \"amount\": \"1\"}",
+		"false",
+	}
+
 	invalidVersion := []string{
 		"ModifiedCookbooknameNewNew",
 		"DescriptionDescriptionDescription",
@@ -128,7 +345,7 @@ func TestUpdateCookbook(t *testing.T) {
 	}
 
 	invalidVersionNoModifications := []string{
-		"ModifiedCookbooknameNew",
+		"ModifiedCookbooknameNewNew",
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
@@ -138,13 +355,83 @@ func TestUpdateCookbook(t *testing.T) {
 	}
 
 	noModifications := []string{
-		"ModifiedCookbooknameNew",
+		"ModifiedCookbooknameNewNew",
 		"DescriptionDescriptionDescription",
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
 		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
 		"false",
+	}
+
+	invalidVersion1 := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"0.0.1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidVersion2 := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"1",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidVersion3 := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"test@email.com",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	invalidEmail := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"true",
+	}
+
+	emptyCoin := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{}",
+		"true",
+	}
+
+	invalidCoinAmount := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{\"denom\": \"pylons\", \"amount\": \"-1\"}",
+		"true",
+	}
+
+	invalidEnabledField := []string{
+		"ModifiedCookbooknameNewNew",
+		"DescriptionDescriptionDescription",
+		"Developer",
+		"version",
+		"incorrect email",
+		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"1",
 	}
 
 	for _, tc := range []struct {
@@ -167,7 +454,19 @@ func TestUpdateCookbook(t *testing.T) {
 			code: 0,
 		},
 		{
-			desc: "invalidVersion",
+			desc: "UpdateEmail",
+			id:   id,
+			args: append(updateEmail, common...),
+			code: 0,
+		},
+		{
+			desc: "ChangeCoin",
+			id:   id,
+			args: append(changeCoin, common...),
+			code: 0,
+		},
+		{
+			desc: "invalidVersionStateful",
 			id:   id,
 			args: append(invalidVersion, common...),
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
@@ -176,18 +475,68 @@ func TestUpdateCookbook(t *testing.T) {
 			desc: "invalidNoMods",
 			id:   id,
 			args: append(invalidVersionNoModifications, common...),
-			code: 0,
+			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
 		{
 			desc: "noMods",
 			id:   id,
 			args: append(noModifications, common...),
-			code: 0,
+			code: sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
+		{
+			desc: "InvalidVersion1",
+			id:   id,
+			args: append(invalidVersion1, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			desc: "InvalidVersion2",
+			id:   id,
+			args: append(invalidVersion2, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			desc: "InvalidVersion3",
+			id:   id,
+			args: append(invalidVersion3, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			desc: "InvalidEmail",
+			id:   id,
+			args: append(invalidEmail, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			desc: "EmptyCoin",
+			id:   id,
+			args: append(emptyCoin, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			desc: "InvalidCoinAmount",
+			id:   id,
+			args: append(invalidCoinAmount, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
+		},
+		{
+			desc: "InvalidEnabledField",
+			id:   id,
+			args: append(invalidEnabledField, common...),
+			err:  sdkerrors.ErrInvalidRequest,
+			code: types.ErrInvalidRequestField.ABCICode(),
 		},
 		{
 			desc: "key not found",
 			id:   "not_found",
 			args: append(valid, common...),
+			err:  nil,
 			code: sdkerrors.ErrKeyNotFound.ABCICode(),
 		},
 	} {

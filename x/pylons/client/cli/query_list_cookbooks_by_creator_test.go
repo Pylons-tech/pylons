@@ -27,10 +27,16 @@ func TestListCookbooksByCreator(t *testing.T) {
 		obj  []types.Cookbook
 	}{
 		{
-			desc: "found",
+			desc: "found1",
 			id:   objs[0].Creator,
 			args: common,
-			obj:  objs,
+			obj:  []types.Cookbook{objs[0]},
+		},
+		{
+			desc: "found2",
+			id:   objs[1].Creator,
+			args: common,
+			obj:  []types.Cookbook{objs[1]},
 		},
 		{
 			desc: "not found",

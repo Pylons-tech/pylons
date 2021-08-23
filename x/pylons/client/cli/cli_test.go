@@ -12,6 +12,8 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
+// A network with cookbook object just contains a state of:
+//	 	N cookbooks
 func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
 	t.Helper()
 	cfg := network.DefaultConfig()
@@ -20,9 +22,19 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 
 	for i := 0; i < n; i++ {
 		state.CookbookList = append(state.CookbookList, types.Cookbook{
-			Creator:      "ANY",
+			Creator:      "creator" + strconv.Itoa(i),
 			ID:           strconv.Itoa(i),
-			CostPerBlock: sdk.NewCoin("test", sdk.NewInt(1)),
+			NodeVersion:  "v1.0.0",
+			Name:         "testCookbookName" + strconv.Itoa(i),
+			Description:  "testCookbookDescription" + strconv.Itoa(i),
+			Developer:    "testDeveloper" + strconv.Itoa(i),
+			Version:      "v0.0.1",
+			SupportEmail: "test@email.com",
+			CostPerBlock: sdk.Coin{
+				Denom:  "testDenom" + strconv.Itoa(i),
+				Amount: sdk.NewInt(1),
+			},
+			Enabled: false,
 		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -31,6 +43,10 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	return network.New(t, cfg), state.CookbookList
 }
 
+// A network with execution objects  contains a state of:
+//	 	N cookbooks
+//		N recipes (1 per cookbook)
+// 		N executions (1 per recipe)
 func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
 	t.Helper()
 	cfg := network.DefaultConfig()
@@ -40,10 +56,13 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 	for i := 0; i < n; i++ {
 		state.ExecutionList = append(state.ExecutionList,
 			types.Execution{
-				Creator:             "ANY",
-				ID:                  strconv.Itoa(i),
-				NodeVersion:         "v1.0.0",
-				CoinOutputs:         sdk.Coins{},
+				Creator:     "creator" + strconv.Itoa(i),
+				ID:          strconv.Itoa(i),
+				NodeVersion: "v1.0.0",
+				CoinOutputs: sdk.Coins{sdk.Coin{
+					Denom:  "testDenom" + strconv.Itoa(i),
+					Amount: sdk.NewInt(1),
+				}},
 				ItemInputs:          make([]types.ItemRecord, 0),
 				ItemOutputIDs:       make([]string, 0),
 				ItemModifyOutputIDs: make([]string, 0),
