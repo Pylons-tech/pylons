@@ -2,10 +2,7 @@ package cli_test
 
 import (
 	"fmt"
-	"strconv"
 	"testing"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
@@ -13,29 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
-
-func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
-	t.Helper()
-	cfg := network.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
-
-	for i := 0; i < n; i++ {
-		state.CookbookList = append(state.CookbookList, types.Cookbook{
-			Creator:      "ANY",
-			ID:           strconv.Itoa(i),
-			CostPerBlock: sdk.NewCoin("test", sdk.NewInt(1)),
-		})
-	}
-	buf, err := cfg.Codec.MarshalJSON(&state)
-	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.CookbookList
-}
 
 func TestShowCookbook(t *testing.T) {
 	net, objs := networkWithCookbookObjects(t, 2)

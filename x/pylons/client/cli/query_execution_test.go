@@ -2,10 +2,7 @@ package cli_test
 
 import (
 	"fmt"
-	"strconv"
 	"testing"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
@@ -13,53 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
-
-func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types.Execution) {
-	t.Helper()
-	cfg := network.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
-
-	for i := 0; i < n; i++ {
-		state.ExecutionList = append(state.ExecutionList,
-			types.Execution{
-				Creator:             "ANY",
-				ID:                  strconv.Itoa(i),
-				NodeVersion:         "v1.0.0",
-				CoinOutputs:         sdk.Coins{},
-				ItemInputs:          make([]types.ItemRecord, 0),
-				ItemOutputIDs:       make([]string, 0),
-				ItemModifyOutputIDs: make([]string, 0),
-				Recipe: types.Recipe{
-					CookbookID:  "",
-					ID:          "",
-					NodeVersion: "",
-					Name:        "",
-					Description: "",
-					Version:     "",
-					CoinInputs:  sdk.Coins{},
-					ItemInputs:  make([]types.ItemInput, 0),
-					Entries: types.EntriesList{
-						CoinOutputs:       make([]types.CoinOutput, 0),
-						ItemOutputs:       make([]types.ItemOutput, 0),
-						ItemModifyOutputs: make([]types.ItemModifyOutput, 0),
-					},
-					Outputs:       make([]types.WeightedOutputs, 0),
-					BlockInterval: 0,
-					Enabled:       false,
-					ExtraInfo:     "",
-				},
-			})
-	}
-	buf, err := cfg.Codec.MarshalJSON(&state)
-	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.ExecutionList
-}
 
 func TestShowExecution(t *testing.T) {
 	net, objs := networkWithExecutionObjects(t, 2)

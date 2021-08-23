@@ -2,10 +2,7 @@ package cli_test
 
 import (
 	"fmt"
-	"strconv"
 	"testing"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
@@ -13,38 +10,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
-
-func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item) {
-	t.Helper()
-	cfg := network.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
-
-	for i := 0; i < n; i++ {
-		state.ItemList = append(state.ItemList,
-			types.Item{
-				Owner:          "ANY",
-				ID:             strconv.Itoa(i),
-				CookbookID:     "testCookbookID",
-				NodeVersion:    "0.0.1",
-				Doubles:        make([]types.DoubleKeyValue, 0),
-				Longs:          make([]types.LongKeyValue, 0),
-				Strings:        make([]types.StringKeyValue, 0),
-				MutableStrings: make([]types.StringKeyValue, 0),
-				Tradeable:      false,
-				LastUpdate:     0,
-				TransferFee:    sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
-			})
-	}
-	buf, err := cfg.Codec.MarshalJSON(&state)
-	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.ItemList
-}
 
 func TestShowItem(t *testing.T) {
 	net, objs := networkWithItemObjects(t, 2)
