@@ -82,6 +82,7 @@ func (it Item) FindStringKey(key string) (int, bool) {
 	return 0, false
 }
 
+// TODO fix and make this a keeper function so we can read the item count from the keepers
 // Actualize function actualize an item from item output data
 func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID string, addr sdk.AccAddress, ec CelEnvCollection) (Item, error) {
 	dblActualize, err := DoubleParamList(io.Doubles).Actualize(ec)
@@ -110,7 +111,7 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 	return Item{
 		Owner:          addr.String(),
 		CookbookID:     cookbookID,
-		ID:             "", // TODO SET
+		ID:             "a", // TODO SET
 		NodeVersion:    GetNodeVersionString(),
 		Doubles:        dblActualize,
 		Longs:          longActualize,

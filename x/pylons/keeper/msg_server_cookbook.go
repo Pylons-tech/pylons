@@ -37,6 +37,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		Version:      msg.Version,
 		SupportEmail: msg.SupportEmail,
 		CostPerBlock: msg.CostPerBlock,
+		Enabled:      msg.Enabled,
 	}
 
 	k.SetCookbook(
