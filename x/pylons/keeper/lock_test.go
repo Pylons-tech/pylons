@@ -1,5 +1,7 @@
 package keeper_test
 
+// TODO make coin tests
+
 func (suite *IntegrationTestSuite) TestLockItemForExecution() {
 	k := suite.k
 	ctx := suite.ctx
