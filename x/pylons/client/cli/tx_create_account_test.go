@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	keyringerrors "github.com/99designs/keyring"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -32,12 +33,27 @@ func TestCreateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
+			err: nil,
+		},
+		{
+			desc: "invalidAddress",
+			args: []string{
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, "invalidAddress"),
+				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+			},
+			err: keyringerrors.ErrKeyNotFound,
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), tc.args)
-			require.NoError(t, err)
+			if err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, err)
+			}
 		})
 	}
 }
