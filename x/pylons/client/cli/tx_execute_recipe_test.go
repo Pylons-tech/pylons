@@ -3,6 +3,7 @@ package cli_test
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/spf13/cast"
@@ -137,8 +138,26 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 
 	// simulate waiting for later block heights
 	height, err := net.LatestHeight()
+	// build execID from the execution height
+	execID := strconv.Itoa(int(height)) + "-" + "0"
 	require.NoError(t, err)
-	_, err = net.WaitForHeight(height + 5)
+	_, err = net.WaitForHeight(height + 1)
 	require.NoError(t, err)
 
+	// check the execution
+	args = []string{execID}
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+	require.NoError(t, err)
+	var execResp types.QueryGetExecutionResponse
+	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.Equal(t, uint32(0), resp.Code)
+
+	// check the item, itemID is 1 because we know there is only 1 item
+	itemID := types.EncodeItemID(1)
+	args = []string{cookbookID, itemID}
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+	require.NoError(t, err)
+	var itemResp types.QueryGetItemResponse
+	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.Equal(t, uint32(0), resp.Code)
 }

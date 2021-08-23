@@ -82,6 +82,7 @@ func (it Item) FindStringKey(key string) (int, bool) {
 	return 0, false
 }
 
+/*
 // TODO fix and make this a keeper function so we can read the item count from the keepers
 // Actualize function actualize an item from item output data
 func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID string, addr sdk.AccAddress, ec CelEnvCollection) (Item, error) {
@@ -122,6 +123,7 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		TransferFee:    sdk.Coin{},
 	}, nil
 }
+*/
 
 // Actualize is used to update an existing item from an ItemModifyOutout
 func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk.AccAddress, ec CelEnvCollection) error {

@@ -99,3 +99,43 @@ func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 
 	return
 }
+
+// Actualize function actualize an item from item output data
+func (k Keeper) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccAddress, ec types.CelEnvCollection, io types.ItemOutput) (types.Item, error) {
+	dblActualize, err := types.DoubleParamList(io.Doubles).Actualize(ec)
+	if err != nil {
+		return types.Item{}, err
+	}
+	longActualize, err := types.LongParamList(io.Longs).Actualize(ec)
+	if err != nil {
+		return types.Item{}, err
+	}
+	stringActualize, err := types.StringParamList(io.Strings).Actualize(ec)
+	if err != nil {
+		return types.Item{}, err
+	}
+
+	// transferFee := io.TransferFee
+
+	// TODO
+	// Can't we just remove the ec "lastBlockHeight" var entirely?
+	// lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
+
+	count := k.GetItemCount(ctx)
+	itemID := types.EncodeItemID(count + 1)
+	k.SetItemCount(ctx, count+1)
+
+	return types.Item{
+		Owner:          addr.String(),
+		CookbookID:     cookbookID,
+		ID:             itemID,
+		NodeVersion:    types.GetNodeVersionString(),
+		Doubles:        dblActualize,
+		Longs:          longActualize,
+		Strings:        stringActualize,
+		MutableStrings: nil,  // TODO HOW DO WE SET THIS?
+		Tradeable:      true, // TODO HOW DO WE SET THIS?
+		LastUpdate:     uint64(ctx.BlockHeight()),
+		TransferFee:    io.TransferFee,
+	}, nil
+}
