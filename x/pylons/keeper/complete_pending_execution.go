@@ -67,7 +67,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 
 	mintedItems := make([]types.Item, 0)
 	for itemOutputIdx, itemOutput := range itemOutputs {
-		if itemOutput.Quantity != 0 && itemOutput.Quantity >= recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted {
+		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted {
 			return nil, nil, nil, sdkerrors.Wrap(types.ErrItemQuantityExceeded, fmt.Sprintf("quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted))
 		}
 		item, err := k.Actualize(ctx, recipe.CookbookID, addr, ec, itemOutput)
@@ -76,6 +76,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		}
 		mintedItems = append(mintedItems, item)
 		recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted++
+
 	}
 
 	modifiedItems := make([]types.Item, len(itemModifyOutputs))
@@ -137,8 +138,8 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	// add mint items to keeper
 	itemOutputIDs := make([]string, len(mintItems))
 	for i, item := range mintItems {
-		k.SetItem(ctx, item)
-		itemOutputIDs[i] = item.ID
+		id := k.AppendItem(ctx, item)
+		itemOutputIDs[i] = id
 	}
 	// update modify items in keeper
 	itemModifyOutputIDs := make([]string, len(mintItems))

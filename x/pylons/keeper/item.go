@@ -115,20 +115,18 @@ func (k Keeper) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccAddres
 		return types.Item{}, err
 	}
 
-	// transferFee := io.TransferFee
-
 	// TODO
 	// Can't we just remove the ec "lastBlockHeight" var entirely?
 	// lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
 
-	count := k.GetItemCount(ctx)
-	itemID := types.EncodeItemID(count + 1)
-	k.SetItemCount(ctx, count+1)
+	// count := k.GetItemCount(ctx)
+	// itemID := types.EncodeItemID(count + 1)
+	// k.SetItemCount(ctx, count+1)
 
 	return types.Item{
 		Owner:          addr.String(),
 		CookbookID:     cookbookID,
-		ID:             itemID,
+		// ID:             itemID,
 		NodeVersion:    types.GetNodeVersionString(),
 		Doubles:        dblActualize,
 		Longs:          longActualize,

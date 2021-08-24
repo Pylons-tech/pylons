@@ -32,6 +32,10 @@ func CookbookModified(original, updated Cookbook) (bool, error) {
 		modified = true
 	}
 
+	if original.Enabled != updated.Enabled {
+		modified = true
+	}
+
 	if modified {
 		comp := semver.Compare(original.Version, updated.Version)
 		if comp != -1 {

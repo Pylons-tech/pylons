@@ -34,6 +34,10 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 		modified = true
 	}
 
+	if original.Enabled != updated.Enabled {
+		modified = true
+	}
+
 	if !ItemInputsEqual(original.ItemInputs, updated.ItemInputs) {
 		modified = true
 	}
