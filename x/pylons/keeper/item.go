@@ -124,8 +124,8 @@ func (k Keeper) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccAddres
 	// k.SetItemCount(ctx, count+1)
 
 	return types.Item{
-		Owner:          addr.String(),
-		CookbookID:     cookbookID,
+		Owner:      addr.String(),
+		CookbookID: cookbookID,
 		// ID:             itemID,
 		NodeVersion:    types.GetNodeVersionString(),
 		Doubles:        dblActualize,

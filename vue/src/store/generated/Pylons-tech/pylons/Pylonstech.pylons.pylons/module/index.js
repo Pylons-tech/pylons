@@ -2,27 +2,27 @@
 import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgSendItems } from "./types/pylons/tx";
-import { MsgCreateRecipe } from "./types/pylons/tx";
 import { MsgCreateAccount } from "./types/pylons/tx";
-import { MsgGoogleInAppPurchaseGetPylons } from "./types/pylons/tx";
-import { MsgExecuteRecipe } from "./types/pylons/tx";
-import { MsgUpdateRecipe } from "./types/pylons/tx";
 import { MsgUpdateCookbook } from "./types/pylons/tx";
-import { MsgCreateCookbook } from "./types/pylons/tx";
-import { MsgTransferCookbook } from "./types/pylons/tx";
+import { MsgUpdateRecipe } from "./types/pylons/tx";
 import { MsgSetItemString } from "./types/pylons/tx";
+import { MsgExecuteRecipe } from "./types/pylons/tx";
+import { MsgCreateRecipe } from "./types/pylons/tx";
+import { MsgCreateCookbook } from "./types/pylons/tx";
+import { MsgSendItems } from "./types/pylons/tx";
+import { MsgTransferCookbook } from "./types/pylons/tx";
+import { MsgGoogleInAppPurchaseGetPylons } from "./types/pylons/tx";
 const types = [
-    ["/Pylonstech.pylons.pylons.MsgSendItems", MsgSendItems],
-    ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
     ["/Pylonstech.pylons.pylons.MsgCreateAccount", MsgCreateAccount],
-    ["/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetPylons", MsgGoogleInAppPurchaseGetPylons],
-    ["/Pylonstech.pylons.pylons.MsgExecuteRecipe", MsgExecuteRecipe],
-    ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
     ["/Pylonstech.pylons.pylons.MsgUpdateCookbook", MsgUpdateCookbook],
-    ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
-    ["/Pylonstech.pylons.pylons.MsgTransferCookbook", MsgTransferCookbook],
+    ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
     ["/Pylonstech.pylons.pylons.MsgSetItemString", MsgSetItemString],
+    ["/Pylonstech.pylons.pylons.MsgExecuteRecipe", MsgExecuteRecipe],
+    ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
+    ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
+    ["/Pylonstech.pylons.pylons.MsgSendItems", MsgSendItems],
+    ["/Pylonstech.pylons.pylons.MsgTransferCookbook", MsgTransferCookbook],
+    ["/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetPylons", MsgGoogleInAppPurchaseGetPylons],
 ];
 export const MissingWalletError = new Error("wallet is required");
 const registry = new Registry(types);
@@ -37,16 +37,16 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     const { address } = (await wallet.getAccounts())[0];
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
-        msgSendItems: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSendItems", value: data }),
-        msgCreateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
         msgCreateAccount: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateAccount", value: data }),
-        msgGoogleInAppPurchaseGetPylons: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetPylons", value: data }),
-        msgExecuteRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgExecuteRecipe", value: data }),
-        msgUpdateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
         msgUpdateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateCookbook", value: data }),
-        msgCreateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
-        msgTransferCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgTransferCookbook", value: data }),
+        msgUpdateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
         msgSetItemString: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSetItemString", value: data }),
+        msgExecuteRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgExecuteRecipe", value: data }),
+        msgCreateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
+        msgCreateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
+        msgSendItems: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSendItems", value: data }),
+        msgTransferCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgTransferCookbook", value: data }),
+        msgGoogleInAppPurchaseGetPylons: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetPylons", value: data }),
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {
