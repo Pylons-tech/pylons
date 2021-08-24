@@ -24,13 +24,19 @@ func (k Keeper) CoinIssuers(ctx sdk.Context) (res []types.CoinIssuer) {
 	return
 }
 
-// CoinIssuedList returns the CoinIssuedList param
-func (k Keeper) CoinIssuedList(ctx sdk.Context) (res []string) {
+// CoinIssuedDenomsList returns the CoinIssuedList param
+func (k Keeper) CoinIssuedDenomsList(ctx sdk.Context) (res []string) {
 	coinIssuers := k.CoinIssuers(ctx)
 	for _, ci := range coinIssuers {
 		res = append(res, ci.CoinDenom)
 	}
 	return
+}
+
+// GetBasicCoinDenoms returns the lis of the only valid basic coin denoms
+func (k Keeper) GetBasicCoinDenoms(ctx sdk.Context) (res []string) {
+	// TODO - add stripeUSD
+	return append(k.CoinIssuedDenomsList(ctx), types.StakingCoinDenom)
 }
 
 // RecipeFeePercentage returns the RecipeFeePercentage param

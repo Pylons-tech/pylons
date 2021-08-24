@@ -1,11 +1,31 @@
 package keeper
 
 import (
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
+
+func (k Keeper) AddDenomToCookbook(ctx sdk.Context, cookbookID, denom string){
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookCoinDenomKey))
+	byteKey := types.KeyPrefix(cookbookID + "-" + denom)
+	bz := []byte(denom)
+	store.Set(byteKey, bz)
+}
+
+func (k Keeper) GetDenomsByCookbook(ctx sdk.Context, cookbookID string) (list []string){
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookCoinDenomKey))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(cookbookID))
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		list = append(list, string(iterator.Value()))
+	}
+
+	return
+}
+
 
 // SetCookbook set a specific cookbook in the store from its ID
 func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
