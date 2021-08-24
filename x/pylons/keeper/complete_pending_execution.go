@@ -104,18 +104,20 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 
 // CompletePendingExecution completes the execution
 func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution) (types.Execution, error) {
-	originalRecipe, _ := k.GetRecipe(ctx, pendingExecution.Recipe.CookbookID, pendingExecution.Recipe.ID)
+	recipe, _ := k.GetRecipe(ctx, pendingExecution.CookbookID, pendingExecution.RecipeID)
+	cookbook, _ := k.GetCookbook(ctx, pendingExecution.CookbookID)
+	cookbookOwnerAddr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
 	// check if recipe was updated after execution is submitted, and error out in such a case
-	if semver.Compare(originalRecipe.Version, pendingExecution.Recipe.Version) != 0 {
+	if semver.Compare(recipe.Version, pendingExecution.RecipeVersion) != 0 {
 		return types.Execution{}, types.ErrInvalidPendingExecution
 	}
 
-	celEnv, err := k.NewCelEnvCollectionFromRecipe(ctx, pendingExecution, pendingExecution.Recipe)
+	celEnv, err := k.NewCelEnvCollectionFromRecipe(ctx, pendingExecution, recipe)
 	if err != nil {
 		return types.Execution{}, err
 	}
 
-	outputs, err := types.WeightedOutputsList(pendingExecution.Recipe.Outputs).Actualize(celEnv)
+	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize(celEnv)
 	if err != nil {
 		return types.Execution{}, err
 	}
@@ -125,13 +127,20 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		return types.Execution{}, err
 	}
 
-	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &pendingExecution.Recipe, celEnv, pendingExecution.ItemInputs)
+	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &recipe, celEnv, pendingExecution.ItemInputs)
 	if err != nil {
 		return types.Execution{}, err
 	}
 
 	// add coin outputs to accounts
-	err = k.bankKeeper.AddCoins(ctx, creator, coins)
+	err = k.bankKeeper.MintCoins(ctx, types.ExecutionsLockerName, coins)
+	if err != nil {
+		return types.Execution{}, err
+	}
+	for _, coin := range coins {
+		k.AddDenomToCookbook(ctx, recipe.CookbookID, coin.Denom)
+	}
+	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ExecutionsLockerName, creator, coins)
 	if err != nil {
 		return types.Execution{}, err
 	}
@@ -148,10 +157,49 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		itemModifyOutputIDs[i] = item.ID
 	}
 	// update recipe in keeper to keep track of mintedAmounts
-	k.SetRecipe(ctx, pendingExecution.Recipe)
+	k.SetRecipe(ctx, recipe)
 
-	// TODO unlock the locked coins and perform payment(s)
-	// take percentage to send to module account of any non cookbook coin in coininputs
+	// unlock the locked coins and perform payment(s)
+	// separate cookbook coins so they can be burned
+	cookbookCoinDenoms := k.GetDenomsByCookbook(ctx, recipe.CookbookID)
+	burnCoins := sdk.Coins{}
+	payCoins := sdk.Coins{}
+	transferCoins := sdk.Coins{}
+	feeCoins := sdk.Coins{}
+coinLoop:
+	for _, coin := range recipe.CoinInputs {
+		for _, denom := range cookbookCoinDenoms {
+			if coin.Denom == denom {
+				burnCoins.Add(coin)
+				continue coinLoop
+			}
+		}
+		payCoins.Add(coin)
+		feeAmt := coin.Amount.ToDec().Mul(k.RecipeFeePercentage(ctx)).RoundInt()
+		coin.Amount = coin.Amount.Sub(feeAmt)
+		transferCoins.Add(coin)
+		coin.Amount = feeAmt
+		feeCoins.Add(coin)
+	}
+	// burn any cookbook coin and send payment for remaining
+	err = k.bankKeeper.BurnCoins(ctx, types.ExecutionsLockerName, burnCoins)
+	if err != nil {
+		return types.Execution{}, err
+	}
+	// perform payments
+	err = k.UnLockCoinsForExecution(ctx, creator, payCoins)
+	if err != nil {
+		return types.Execution{}, err
+	}
+	err = k.bankKeeper.SendCoins(ctx, creator, cookbookOwnerAddr, transferCoins)
+	if err != nil {
+		return types.Execution{}, err
+	}
+	// send fees
+	err = k.PayFees(ctx, creator, feeCoins)
+	if err != nil {
+		return types.Execution{}, err
+	}
 
 	pendingExecution.CoinOutputs = coins
 	pendingExecution.ItemModifyOutputIDs = itemModifyOutputIDs
@@ -164,5 +212,3 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 //     compute the cost to pay as remaining blocks*cookbook.costPerBlock
 //     distribute payments
 // 	   change pendingExecution.blockHeight so that when summed to recipe.BlockInterval it gives the current block
-
-// 3 moduleAccounts "PylonsFeeAccount", "LockedCoinsAccount", "LockedItemsAccount"

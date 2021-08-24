@@ -68,7 +68,8 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 			},
 		},
 		ItemOutputIDs: []string{"test1"},
-		Recipe:        types.Recipe{CookbookID: "testCookbookID", ID: "testRecipeID"},
+		RecipeID:      "testRecipeID",
+		CookbookID:    "testCookbookID",
 	}
 
 	execs := make([]types.Execution, n)

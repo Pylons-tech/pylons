@@ -3,11 +3,12 @@ package cli_test
 import (
 	"encoding/json"
 	"fmt"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"strconv"
 	"testing"
 	"time"
+
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -148,7 +149,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		height, err := net.LatestHeight()
 		targetHeight := height + 1
 		// build execID from the execution height
-		execID := strconv.Itoa(int(height + 0)) + "-" + strconv.Itoa(i)
+		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(i)
 		require.NoError(t, err)
 		_, err = net.WaitForHeightWithTimeout(targetHeight, 30*time.Second)
 		require.NoError(t, err)
@@ -252,7 +253,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"[]",
 		string(entries),
 		string(itemOutputs),
-		"0",
+		"1",
 		"true",
 		"extraInfo",
 	}
@@ -295,7 +296,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	height, err := net.LatestHeight()
 	require.NoError(t, err)
 	// build execID from the execution height
-	execID := strconv.Itoa(int(height + 0)) + "-" + "0"
+	execID := strconv.Itoa(int(height+0)) + "-" + "0"
 
 	_, err = net.WaitForHeightWithTimeout(height+1, 30*time.Second)
 	require.NoError(t, err)
@@ -341,7 +342,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	// simulate waiting for later block heights
 	height, err = net.LatestHeight()
 	// build execID from the execution height
-	execID = strconv.Itoa(int(height + 0)) + "-" + "1"
+	execID = strconv.Itoa(int(height+0)) + "-" + "1"
 	require.NoError(t, err)
 	_, err = net.WaitForHeightWithTimeout(height+1, 30*time.Second)
 	require.NoError(t, err)
@@ -532,7 +533,6 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	require.True(t, ok)
 	require.Contains(t, stat.Err().Error(), status.Error(codes.InvalidArgument, "not found").Error())
 }
-
 
 func TestExecuteDisableRecipe(t *testing.T) {
 	net := network.New(t)

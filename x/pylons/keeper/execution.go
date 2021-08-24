@@ -45,7 +45,7 @@ Loop:
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
 
 		// if we match the item, append to list
-		if val.Recipe.CookbookID == cookbookID {
+		if val.CookbookID == cookbookID {
 			// TODO verify logic is correct
 			// CHECK if the item ID is in ItemInputs, ItemOutputIDs or ItemModifyOutputIDs
 			for _, record := range val.ItemInputs {
@@ -86,7 +86,7 @@ func (k Keeper) GetExecutionsByRecipe(ctx sdk.Context, cookbookID, recipeID stri
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
 
 		// if we match the recipe, append to list
-		if val.Recipe.CookbookID == cookbookID && val.Recipe.ID == recipeID {
+		if val.CookbookID == cookbookID && val.RecipeID == recipeID {
 			// TODO verify logic is correct
 			executions = append(executions, val)
 		}

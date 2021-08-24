@@ -12,7 +12,8 @@ import (
 // Default parameter namespace
 const (
 	// PylonsCoinDenom is the pylons denom string
-	PylonsCoinDenom = "pylon"
+	PylonsCoinDenom  = "pylon"
+	StakingCoinDenom = "bedrock"
 
 	// DefaultMinNameFieldLength is the default minimum character length of a request's name field
 	DefaultMinNameFieldLength = 8

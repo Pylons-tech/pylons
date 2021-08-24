@@ -21,6 +21,16 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe description should have more than 20 characters")
 	}
 
+	// check if coin outputs are not valid
+	coinDenoms := k.GetBasicCoinDenoms(ctx)
+	for _, denom := range coinDenoms {
+		for _, outCoin := range msg.Entries.CoinOutputs {
+			if outCoin.Coin.Denom == denom {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "recipe cannot have %v as output coin", denom)
+			}
+		}
+	}
+
 	// Check if the value already exists
 	_, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
 	if isFound {
@@ -68,6 +78,16 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 
 	if len(msg.Description) < int(k.MinDescriptionFieldLength(ctx)) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "recipe description should have more than 20 characters")
+	}
+
+	// check if coin outputs are not valid
+	coinDenoms := k.GetBasicCoinDenoms(ctx)
+	for _, denom := range coinDenoms {
+		for _, outCoin := range msg.Entries.CoinOutputs {
+			if outCoin.Coin.Denom == denom {
+				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "recipe cannot have %v as output coin", denom)
+			}
+		}
 	}
 
 	// Check if the value exists

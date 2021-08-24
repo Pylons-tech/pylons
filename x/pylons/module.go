@@ -183,15 +183,15 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			pendingExec.BlockHeight = blockHeight
 			// unlock coins
 			addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
-			err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.Recipe.CoinInputs)
+			err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.CoinInputs)
 			if err != nil {
 				panic(err.Error())
 			}
 			// make sure locked items ownership is set back to the execution creator
 			for _, itemRecord := range pendingExec.ItemInputs {
-				item, found := am.keeper.GetItem(ctx, pendingExec.Recipe.CookbookID, itemRecord.ID)
+				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookID, itemRecord.ID)
 				if !found {
-					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.Recipe.CookbookID))
+					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.CookbookID))
 				}
 				item.Owner = pendingExec.Creator
 				am.keeper.SetItem(ctx, item)

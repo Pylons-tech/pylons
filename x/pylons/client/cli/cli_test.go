@@ -66,25 +66,9 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 				ItemInputs:          make([]types.ItemRecord, 0),
 				ItemOutputIDs:       make([]string, 0),
 				ItemModifyOutputIDs: make([]string, 0),
-				Recipe: types.Recipe{
-					CookbookID:  "",
-					ID:          "",
-					NodeVersion: "",
-					Name:        "",
-					Description: "",
-					Version:     "",
-					CoinInputs:  sdk.Coins{},
-					ItemInputs:  make([]types.ItemInput, 0),
-					Entries: types.EntriesList{
-						CoinOutputs:       make([]types.CoinOutput, 0),
-						ItemOutputs:       make([]types.ItemOutput, 0),
-						ItemModifyOutputs: make([]types.ItemModifyOutput, 0),
-					},
-					Outputs:       make([]types.WeightedOutputs, 0),
-					BlockInterval: 0,
-					Enabled:       false,
-					ExtraInfo:     "",
-				},
+				RecipeID:            "",
+				CookbookID:          "",
+				CoinInputs:          sdk.Coins{},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

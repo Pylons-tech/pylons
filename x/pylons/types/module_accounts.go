@@ -9,4 +9,6 @@ const (
 	TradesLockerName = "pylons_trades_locker"
 	// ExecutionsLockerName is the root name of executions coins and items locker module account
 	ExecutionsLockerName = "pylons_executions_locker"
+	// CoinsIssuerName is the root name of the coins minter module account
+	CoinsIssuerName = "pylons_coins_issuer"
 )

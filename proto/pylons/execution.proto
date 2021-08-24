@@ -18,12 +18,15 @@ message ItemRecord {
 message Execution {
   string creator = 1;
   string ID = 2;
-  string nodeVersion = 3;
-  int64 blockHeight = 4;
-  repeated ItemRecord itemInputs = 5 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 6 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated string itemOutputIDs = 7;
-  repeated string itemModifyOutputIDs = 8;
-  Recipe recipe = 9 [(gogoproto.nullable) = false]; // we need this recipe stored since the referenced recipe could be updated while this execution is pending
-}
+  string recipeID = 3;
+  string cookbookID = 4;
+  string recipeVersion = 5;
+  string nodeVersion = 6;
+  int64 blockHeight = 7;
+  repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated string itemOutputIDs = 11;
+  repeated string itemModifyOutputIDs = 12;
+  }
 

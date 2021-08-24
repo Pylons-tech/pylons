@@ -14,14 +14,10 @@ import (
 
 var _ = strconv.Itoa(0)
 
-// TODO
-// GoogleIAPGetFromCoinIssuer()
-// get coins using IAP from any valid CoinIssuer
-// the CoinIssuer's coins will be given to the Tx creator in exchange for USD
 func CmdGoogleInAppPurchaseGetPylons() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "google-iap-get-pylons [productID] [purchaseToken] [recieptDataBase64] [signature]",
-		Short: "Buy pylons using Google IAP",
+		Short: "Get coins using Google IAP",
 		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsProductID := args[0]
@@ -34,7 +30,7 @@ func CmdGoogleInAppPurchaseGetPylons() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgGoogleIAPGetPylons(clientCtx.GetFromAddress().String(), argsProductID, argsPurchaseToken, argsRecieptDataBase64, argsSignature)
+			msg := types.NewMsgGoogleIAPGetCoins(clientCtx.GetFromAddress().String(), argsProductID, argsPurchaseToken, argsRecieptDataBase64, argsSignature)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

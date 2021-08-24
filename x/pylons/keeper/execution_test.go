@@ -19,14 +19,14 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByItem() {
 	require := suite.Require()
 
 	itemExecs := createNExecutionForSingleItem(k, ctx, numExecs)
-	itemCookbookID := itemExecs[0].Recipe.CookbookID
+	itemCookbookID := itemExecs[0].CookbookID
 	itemItemID := itemExecs[0].ItemOutputIDs[0]
 
 	execs := k.GetExecutionsByItem(ctx, itemCookbookID, itemItemID)
 	require.Equal(numExecs, len(itemExecs))
 	require.Equal(numExecs, len(execs))
 	for i, exec := range execs {
-		require.Equal(exec.Recipe.CookbookID, itemCookbookID)
+		require.Equal(exec.CookbookID, itemCookbookID)
 		require.Equal(exec.ID, itemExecs[i].ID)
 	}
 }
@@ -39,14 +39,14 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByRecipe() {
 	require := suite.Require()
 
 	itemExecs := createNExecutionForSingleItem(k, ctx, numExecs)
-	itemCookbookID := itemExecs[0].Recipe.CookbookID
-	recipeID := itemExecs[0].Recipe.ID
+	itemCookbookID := itemExecs[0].CookbookID
+	recipeID := itemExecs[0].RecipeID
 
 	execs := k.GetExecutionsByRecipe(ctx, itemCookbookID, recipeID)
 	require.Equal(numExecs, len(itemExecs))
 	require.Equal(numExecs, len(execs))
 	for i, exec := range execs {
-		require.Equal(exec.Recipe.CookbookID, itemCookbookID)
+		require.Equal(exec.CookbookID, itemCookbookID)
 		require.Equal(exec.ID, itemExecs[i].ID)
 	}
 }
