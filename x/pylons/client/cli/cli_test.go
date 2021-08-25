@@ -20,9 +20,11 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
+	addresses := types.GenTestBech32List(n)
+
 	for i := 0; i < n; i++ {
 		state.CookbookList = append(state.CookbookList, types.Cookbook{
-			Creator:      "creator" + strconv.Itoa(i),
+			Creator:      addresses[i],
 			ID:           strconv.Itoa(i),
 			NodeVersion:  "v1.0.0",
 			Name:         "testCookbookName" + strconv.Itoa(i),
@@ -53,10 +55,12 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
+	addresses := types.GenTestBech32List(n)
+
 	for i := 0; i < n; i++ {
 		state.ExecutionList = append(state.ExecutionList,
 			types.Execution{
-				Creator:     "creator" + strconv.Itoa(i),
+				Creator:     addresses[i],
 				ID:          strconv.Itoa(i),
 				NodeVersion: "v1.0.0",
 				CoinOutputs: sdk.Coins{sdk.Coin{
@@ -98,10 +102,12 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
+	addresses := types.GenTestBech32List(n)
+
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
 			types.Item{
-				Owner:          "ANY",
+				Owner:          addresses[i],
 				ID:             strconv.Itoa(i),
 				CookbookID:     "testCookbookID",
 				NodeVersion:    "0.0.1",

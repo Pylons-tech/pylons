@@ -2,6 +2,7 @@ package cli_test
 
 import (
 	"fmt"
+	"google.golang.org/grpc/codes"
 	"testing"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
@@ -40,9 +41,15 @@ func TestListCookbooksByCreator(t *testing.T) {
 		},
 		{
 			desc: "not found",
-			id:   "not_found",
+			id:   types.GenTestBech32FromString("not_found"),
 			args: common,
 			obj:  []types.Cookbook{},
+		},
+		{
+			desc: "invalid",
+			id:   "not_found",
+			args: common,
+			err: status.Error(codes.InvalidArgument, "invalid address"),
 		},
 	} {
 		tc := tc

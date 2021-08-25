@@ -34,11 +34,16 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 		},
 		{
 			desc:     "KeyNotFound",
-			request:  &types.QueryListCookbooksByCreatorRequest{Creator: "missing"},
+			request:  &types.QueryListCookbooksByCreatorRequest{Creator: types.GenTestBech32FromString("missing")},
 			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook(nil)},
 		},
 		{
-			desc: "InvalidRequest",
+			desc:    "InvalidRequest1",
+			request: &types.QueryListCookbooksByCreatorRequest{Creator: "invalid"},
+			err:     status.Error(codes.InvalidArgument, "invalid address"),
+		},
+		{
+			desc: "InvalidRequest2",
 			err:  status.Error(codes.InvalidArgument, "invalid request"),
 		},
 	} {

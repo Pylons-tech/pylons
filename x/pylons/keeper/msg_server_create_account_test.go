@@ -17,7 +17,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	addr := validBech32AccAddr
+	addr := types.GenTestBech32List(1)[0]
 
 	for _, tc := range []struct {
 		desc    string

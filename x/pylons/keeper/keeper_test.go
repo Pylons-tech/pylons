@@ -19,27 +19,9 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-const (
-	// original address: "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337"
-	validBech32AccAddr = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt337" // nolint: deadcode
-	baseAccAddrBech32  = "cosmos1y8vysg9hmvavkdxpvccv2ve3nssv5avm0kt33"
-)
-
-// CreateTestFakeAddressList creates a list of addresses from baseAccAddrBech32.
-// Note, they are not valid Bech32 addresses (except the 7th element), so Bech32 decoding on these will fail
-func CreateTestFakeAddressList(numAccount uint) []string {
-	accounts := make([]string, numAccount)
-	for i := uint(0); i < numAccount; i++ {
-		addr := baseAccAddrBech32 + strconv.Itoa(int(i))
-		accounts[i] = addr
-	}
-
-	return accounts
-}
-
 func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
-	creators := CreateTestFakeAddressList(uint(n))
+	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].ID = fmt.Sprintf("%d", i)
@@ -51,8 +33,9 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 
 func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
 	execs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
 	for i := range execs {
-		execs[i].Creator = "any"
+		execs[i].Creator = creators[i]
 		execs[i].ID = strconv.Itoa(i)
 		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
@@ -73,10 +56,11 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	}
 
 	execs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
 
 	for i := range execs {
 		execs[i] = exec
-		execs[i].Creator = fmt.Sprintf("any%v", i) // ok if different people ran executions
+		execs[i].Creator = creators[i] // ok if different people ran executions
 		execs[i].ID = strconv.Itoa(i)
 		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
@@ -88,8 +72,9 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 
 func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
 	items := make([]types.GoogleInAppPurchaseOrder, n)
+	creators := types.GenTestBech32List(n)
 	for i := range items {
-		items[i].Creator = "any"
+		items[i].Creator = creators[i]
 		items[i].PurchaseToken = strconv.Itoa(int(i))
 		k.AppendGoogleIAPOrder(ctx, items[i])
 	}
@@ -98,9 +83,10 @@ func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.Goo
 
 func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
+	owners := types.GenTestBech32List(n)
 	coin := sdk.NewCoin("test", sdk.NewInt(1))
 	for i := range items {
-		items[i].Owner = "any"
+		items[i].Owner = owners[i]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin

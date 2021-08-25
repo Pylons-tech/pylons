@@ -53,7 +53,7 @@ func (k Keeper) GetAllRecipesByCookbook(ctx sdk.Context, cookbookID string) (lis
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
 	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(cookbookID))
 
-	iterator.Close()
+	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Recipe
