@@ -19,25 +19,25 @@ service Query {
 
 	// Queries a list of listItemByOwner items.
 	rpc ListItemByOwner(QueryListItemByOwnerRequest) returns (QueryListItemByOwnerResponse) {
-		option (google.api.http).get = "/pylons/listItemByOwner/{owner}";
+		option (google.api.http).get = "/pylons/items/{owner}";
 	}
 
 
 	// Queries a googleIAPOrder by PurchaseToken.
 	rpc GoogleInAppPurchaseOrder(QueryGetGoogleInAppPurchaseOrderRequest) returns (QueryGetGoogleInAppPurchaseOrderResponse) {
-		option (google.api.http).get = "/pylons/googleIAPOrder/{PurchaseToken}";
+		option (google.api.http).get = "/pylons/purchase/{PurchaseToken}";
 	}
 
 
 	// Queries a list of listExecutionsByItem items.
 	rpc ListExecutionsByItem(QueryListExecutionsByItemRequest) returns (QueryListExecutionsByItemResponse) {
-		option (google.api.http).get = "/pylons/listExecutionsByItem/{CookbookID}/{ItemID}";
+		option (google.api.http).get = "/pylons/executions/item/{CookbookID}/{ItemID}";
 	}
 
 
 	// Queries a list of listExecutionsByRecipe items.
 	rpc ListExecutionsByRecipe(QueryListExecutionsByRecipeRequest) returns (QueryListExecutionsByRecipeResponse) {
-		option (google.api.http).get = "/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}";
+		option (google.api.http).get = "/pylons/executions/recipe/{CookbookID}/{RecipeID}";
 	}
 
 
@@ -49,7 +49,7 @@ service Query {
 
 	// Queries a list of listRecipesByCookbook items.
 	rpc ListRecipesByCookbook(QueryListRecipesByCookbookRequest) returns (QueryListRecipesByCookbookResponse) {
-		option (google.api.http).get = "/pylons/listRecipesByCookbook/{CookbookID}";
+		option (google.api.http).get = "/pylons/recipes/{CookbookID}";
 	}
 
 
@@ -67,7 +67,7 @@ service Query {
 
 	// Retrieves the list of cookbooks owned by an address
 	rpc ListCookbooksByCreator(QueryListCookbooksByCreatorRequest) returns (QueryListCookbooksByCreatorResponse) {
-		option (google.api.http).get = "/pylons/listCookbooks/{creator}";
+		option (google.api.http).get = "/pylons/cookbooks/{creator}";
 	}
 
 
