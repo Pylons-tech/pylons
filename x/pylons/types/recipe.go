@@ -428,7 +428,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				return false, nil
 			}
 
-
 			if len(originalItem.Strings) == len(updatedItem.Strings) {
 				for j := range originalItem.Strings {
 					originalString := originalItem.Strings[j]

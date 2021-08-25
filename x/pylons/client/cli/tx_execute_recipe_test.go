@@ -65,7 +65,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 					{
 						Key:     "testKey",
 						Rate:    sdk.NewDec(1),
-						Value:   "testValue",w
+						Value:   "testValue",
 						Program: "",
 					},
 				},

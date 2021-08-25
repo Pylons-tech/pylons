@@ -142,4 +142,3 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) 
 	}
 	return wol[chosenIndex].EntryIDs, nil
 }
-

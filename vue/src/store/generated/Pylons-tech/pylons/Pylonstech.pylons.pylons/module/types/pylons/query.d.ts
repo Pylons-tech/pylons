@@ -6,6 +6,12 @@ import { Item } from '../pylons/item';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryListItemByOwnerRequest {
+    owner: string;
+}
+export interface QueryListItemByOwnerResponse {
+    items: string;
+}
 export interface QueryGetGoogleInAppPurchaseOrderRequest {
     PurchaseToken: string;
 }
@@ -65,6 +71,20 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryListItemByOwnerRequest: {
+    encode(message: QueryListItemByOwnerRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListItemByOwnerRequest;
+    fromJSON(object: any): QueryListItemByOwnerRequest;
+    toJSON(message: QueryListItemByOwnerRequest): unknown;
+    fromPartial(object: DeepPartial<QueryListItemByOwnerRequest>): QueryListItemByOwnerRequest;
+};
+export declare const QueryListItemByOwnerResponse: {
+    encode(message: QueryListItemByOwnerResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListItemByOwnerResponse;
+    fromJSON(object: any): QueryListItemByOwnerResponse;
+    toJSON(message: QueryListItemByOwnerResponse): unknown;
+    fromPartial(object: DeepPartial<QueryListItemByOwnerResponse>): QueryListItemByOwnerResponse;
+};
 export declare const QueryGetGoogleInAppPurchaseOrderRequest: {
     encode(message: QueryGetGoogleInAppPurchaseOrderRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetGoogleInAppPurchaseOrderRequest;
@@ -193,6 +213,8 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a list of listItemByOwner items. */
+    ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>;
     /** Queries a googleIAPOrder by PurchaseToken. */
     GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>;
     /** Queries a list of listExecutionsByItem items. */
@@ -215,6 +237,7 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>;
     GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>;
     ListExecutionsByItem(request: QueryListExecutionsByItemRequest): Promise<QueryListExecutionsByItemResponse>;
     ListExecutionsByRecipe(request: QueryListExecutionsByRecipeRequest): Promise<QueryListExecutionsByRecipeResponse>;

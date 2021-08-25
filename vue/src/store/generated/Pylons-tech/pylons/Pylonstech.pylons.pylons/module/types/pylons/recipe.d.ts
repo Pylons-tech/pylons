@@ -1,5 +1,6 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 import { Coin } from '../cosmos/base/v1beta1/coin';
+import { StringKeyValue } from '../pylons/item';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** DoubleInputParam describes the bounds on an item input/output parameter of type float64 */
 export interface DoubleInputParam {
@@ -88,11 +89,12 @@ export interface ItemOutput {
     longs: LongParam[];
     strings: StringParam[];
     /** defines a list of mutable strings whose value can be customized by the user */
-    mutableStrings: StringParam[];
+    mutableStrings: StringKeyValue[];
     transferFee: Coin | undefined;
     /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
     quantity: number;
     amountMinted: number;
+    tradeable: boolean;
 }
 /** ItemModifyOutput describes what is modified from item input */
 export interface ItemModifyOutput {
@@ -102,6 +104,9 @@ export interface ItemModifyOutput {
     longs: LongParam[];
     strings: StringParam[];
     transferFee: Coin | undefined;
+    quantity: number;
+    amountMinted: number;
+    tradeable: boolean;
 }
 /** EntriesList is a struct to keep list of items and coins */
 export interface EntriesList {

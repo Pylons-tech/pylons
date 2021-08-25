@@ -99,19 +99,18 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccA
 
 	return Item{
 		// ID not set - it's handled internally
-		Owner:      	addr.String(),
-		CookbookID: 	cookbookID,
+		Owner:          addr.String(),
+		CookbookID:     cookbookID,
 		NodeVersion:    GetNodeVersionString(),
 		Doubles:        dblActualize,
 		Longs:          longActualize,
 		Strings:        stringActualize,
 		MutableStrings: io.MutableStrings,
-		Tradeable:		io.Tradeable,
+		Tradeable:      io.Tradeable,
 		LastUpdate:     ctx.BlockHeight(),
 		TransferFee:    io.TransferFee,
 	}, nil
 }
-
 
 // Actualize is used to update an existing item from an ItemModifyOutout
 func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk.AccAddress, ec CelEnvCollection) error {

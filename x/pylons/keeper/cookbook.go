@@ -95,7 +95,7 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator sdk.AccAddress) (list []types.Cookbook) {
 	cookbookIDs := k.getCookbookIDsByAddr(ctx, creator)
 
-	for _, id := range cookbookIDs{
+	for _, id := range cookbookIDs {
 		cookbook, _ := k.GetCookbook(ctx, id)
 		list = append(list, cookbook)
 	}

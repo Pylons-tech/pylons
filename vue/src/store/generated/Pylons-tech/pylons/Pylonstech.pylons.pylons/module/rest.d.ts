@@ -105,7 +105,7 @@ export interface PylonsItem {
     strings?: PylonsStringKeyValue[];
     mutableStrings?: PylonsStringKeyValue[];
     tradeable?: boolean;
-    /** @format uint64 */
+    /** @format int64 */
     lastUpdate?: string;
     /**
      * Coin defines a token with a denomination and an amount.
@@ -135,13 +135,18 @@ export interface PylonsItemModifyOutput {
      * signatures required by gogoproto.
      */
     transferFee?: V1Beta1Coin;
+    /** @format uint64 */
+    quantity?: string;
+    /** @format uint64 */
+    amountMinted?: string;
+    tradeable?: boolean;
 }
 export interface PylonsItemOutput {
     ID?: string;
     doubles?: PylonsDoubleParam[];
     longs?: PylonsLongParam[];
     strings?: PylonsStringParam[];
-    mutableStrings?: PylonsStringParam[];
+    mutableStrings?: PylonsStringKeyValue[];
     /**
      * Coin defines a token with a denomination and an amount.
      *
@@ -153,6 +158,7 @@ export interface PylonsItemOutput {
     quantity?: string;
     /** @format uint64 */
     amountMinted?: string;
+    tradeable?: boolean;
 }
 export interface PylonsItemRecord {
     ID?: string;
@@ -225,6 +231,9 @@ export interface PylonsQueryListExecutionsByItemResponse {
 export interface PylonsQueryListExecutionsByRecipeResponse {
     Executions?: PylonsExecution[];
 }
+export interface PylonsQueryListItemByOwnerResponse {
+    items?: string;
+}
 export interface PylonsQueryListRecipesByCookbookResponse {
     Recipes?: PylonsRecipe[];
 }
@@ -239,7 +248,7 @@ export interface PylonsRecipe {
     itemInputs?: PylonsItemInput[];
     entries?: PylonsEntriesList;
     outputs?: PylonsWeightedOutputs[];
-    /** @format uint64 */
+    /** @format int64 */
     blockInterval?: string;
     enabled?: boolean;
     extraInfo?: string;
@@ -338,6 +347,17 @@ export declare class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListItemByOwner
+     * @summary Queries a list of listItemByOwner items.
+     * @request GET:/Pylons-tech/pylons/pylons/listItemByOwner
+     */
+    queryListItemByOwner: (query?: {
+        owner?: string;
+    }, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListItemByOwnerResponse, RpcStatus>>;
     /**
      * No description
      *

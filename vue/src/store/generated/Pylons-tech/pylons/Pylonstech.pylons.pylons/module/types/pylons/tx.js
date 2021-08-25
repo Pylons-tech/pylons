@@ -1002,7 +1002,7 @@ export const MsgCreateRecipe = {
             WeightedOutputs.encode(v, writer.uint32(82).fork()).ldelim();
         }
         if (message.blockInterval !== 0) {
-            writer.uint32(88).uint64(message.blockInterval);
+            writer.uint32(88).int64(message.blockInterval);
         }
         if (message.enabled === true) {
             writer.uint32(96).bool(message.enabled);
@@ -1053,7 +1053,7 @@ export const MsgCreateRecipe = {
                     message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
                     break;
                 case 11:
-                    message.blockInterval = longToNumber(reader.uint64());
+                    message.blockInterval = longToNumber(reader.int64());
                     break;
                 case 12:
                     message.enabled = reader.bool();
@@ -1341,7 +1341,7 @@ export const MsgUpdateRecipe = {
             WeightedOutputs.encode(v, writer.uint32(82).fork()).ldelim();
         }
         if (message.blockInterval !== 0) {
-            writer.uint32(88).uint64(message.blockInterval);
+            writer.uint32(88).int64(message.blockInterval);
         }
         if (message.enabled === true) {
             writer.uint32(96).bool(message.enabled);
@@ -1392,7 +1392,7 @@ export const MsgUpdateRecipe = {
                     message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()));
                     break;
                 case 11:
-                    message.blockInterval = longToNumber(reader.uint64());
+                    message.blockInterval = longToNumber(reader.int64());
                     break;
                 case 12:
                     message.enabled = reader.bool();

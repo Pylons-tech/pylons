@@ -17,6 +17,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 service Query {
 	// this line is used by starport scaffolding # 2
 
+	// Queries a list of listItemByOwner items.
+	rpc ListItemByOwner(QueryListItemByOwnerRequest) returns (QueryListItemByOwnerResponse) {
+		option (google.api.http).get = "/pylons/listItemByOwner/{owner}";
+	}
+
+
 	// Queries a googleIAPOrder by PurchaseToken.
 	rpc GoogleInAppPurchaseOrder(QueryGetGoogleInAppPurchaseOrderRequest) returns (QueryGetGoogleInAppPurchaseOrderResponse) {
 		option (google.api.http).get = "/pylons/googleIAPOrder/{PurchaseToken}";
@@ -73,12 +79,20 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryListItemByOwnerRequest {
+  string owner = 1;
+}
+
+message QueryListItemByOwnerResponse {
+	repeated Item Items = 1 [(gogoproto.nullable) = false];
+}
+
 message QueryGetGoogleInAppPurchaseOrderRequest {
 	string PurchaseToken = 1;
 }
 
 message QueryGetGoogleInAppPurchaseOrderResponse {
-	GoogleInAppPurchaseOrder  Order = 1 [(gogoproto.nullable) = false];
+	GoogleInAppPurchaseOrder Order = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryListExecutionsByItemRequest {

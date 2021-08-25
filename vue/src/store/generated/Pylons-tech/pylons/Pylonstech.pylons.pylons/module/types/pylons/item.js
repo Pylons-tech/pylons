@@ -244,7 +244,7 @@ export const Item = {
             writer.uint32(72).bool(message.tradeable);
         }
         if (message.lastUpdate !== 0) {
-            writer.uint32(80).uint64(message.lastUpdate);
+            writer.uint32(80).int64(message.lastUpdate);
         }
         if (message.transferFee !== undefined) {
             Coin.encode(message.transferFee, writer.uint32(90).fork()).ldelim();
@@ -290,7 +290,7 @@ export const Item = {
                     message.tradeable = reader.bool();
                     break;
                 case 10:
-                    message.lastUpdate = longToNumber(reader.uint64());
+                    message.lastUpdate = longToNumber(reader.int64());
                     break;
                 case 11:
                     message.transferFee = Coin.decode(reader, reader.uint32());

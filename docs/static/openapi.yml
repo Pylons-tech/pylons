@@ -19475,6 +19475,45 @@ paths:
           format: uint64
       tags:
         - Query
+  /Pylons-tech/pylons/pylons/listItemByOwner:
+    get:
+      summary: Queries a list of listItemByOwner items.
+      operationId: PylonstechPylonsPylonsListItemByOwner
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              items:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: owner
+          in: query
+          required: false
+          type: string
+      tags:
+        - Query
   '/pylons/cookbook/{ID}':
     get:
       summary: Retrieves a cookbook by ID.
@@ -19801,7 +19840,7 @@ paths:
                     type: boolean
                   lastUpdate:
                     type: string
-                    format: uint64
+                    format: int64
                   transferFee:
                     type: object
                     properties:
@@ -20508,24 +20547,13 @@ paths:
                                 items:
                                   type: object
                                   properties:
-                                    key:
+                                    Key:
                                       type: string
-                                    rate:
+                                    Value:
                                       type: string
-                                      description: >-
-                                        The likelihood that this parameter is
-                                        applied to the output item. Between 0.0
-                                        (exclusive) and 1.0 (inclusive).
-                                    value:
-                                      type: string
-                                    program:
-                                      type: string
-                                      title: >-
-                                        When program is not empty, value is
-                                        ignored
                                   title: >-
-                                    StringParam describes an item input/output
-                                    parameter of type string
+                                    StringKeyValue describes string key/value
+                                    set
                                 title: >-
                                   defines a list of mutable strings whose value
                                   can be customized by the user
@@ -20555,6 +20583,8 @@ paths:
                               amountMinted:
                                 type: string
                                 format: uint64
+                              tradeable:
+                                type: boolean
                             title: >-
                               ItemOutput models the continuum of valid outcomes
                               for item generation in recipes
@@ -20680,6 +20710,14 @@ paths:
                                   implements the custom method
 
                                   signatures required by gogoproto.
+                              quantity:
+                                type: string
+                                format: uint64
+                              amountMinted:
+                                type: string
+                                format: uint64
+                              tradeable:
+                                type: boolean
                             title: >-
                               ItemModifyOutput describes what is modified from
                               item input
@@ -20701,7 +20739,7 @@ paths:
                           weight to be based on
                     blockInterval:
                       type: string
-                      format: uint64
+                      format: int64
                     enabled:
                       type: boolean
                     extraInfo:
@@ -21021,24 +21059,11 @@ paths:
                               items:
                                 type: object
                                 properties:
-                                  key:
+                                  Key:
                                     type: string
-                                  rate:
+                                  Value:
                                     type: string
-                                    description: >-
-                                      The likelihood that this parameter is
-                                      applied to the output item. Between 0.0
-                                      (exclusive) and 1.0 (inclusive).
-                                  value:
-                                    type: string
-                                  program:
-                                    type: string
-                                    title: >-
-                                      When program is not empty, value is
-                                      ignored
-                                title: >-
-                                  StringParam describes an item input/output
-                                  parameter of type string
+                                title: StringKeyValue describes string key/value set
                               title: >-
                                 defines a list of mutable strings whose value
                                 can be customized by the user
@@ -21068,6 +21093,8 @@ paths:
                             amountMinted:
                               type: string
                               format: uint64
+                            tradeable:
+                              type: boolean
                           title: >-
                             ItemOutput models the continuum of valid outcomes
                             for item generation in recipes
@@ -21193,6 +21220,14 @@ paths:
                                 implements the custom method
 
                                 signatures required by gogoproto.
+                            quantity:
+                              type: string
+                              format: uint64
+                            amountMinted:
+                              type: string
+                              format: uint64
+                            tradeable:
+                              type: boolean
                           title: >-
                             ItemModifyOutput describes what is modified from
                             item input
@@ -21214,7 +21249,7 @@ paths:
                         to be based on
                   blockInterval:
                     type: string
-                    format: uint64
+                    format: int64
                   enabled:
                     type: boolean
                   extraInfo:
@@ -31830,21 +31865,11 @@ definitions:
               items:
                 type: object
                 properties:
-                  key:
+                  Key:
                     type: string
-                  rate:
+                  Value:
                     type: string
-                    description: >-
-                      The likelihood that this parameter is applied to the
-                      output item. Between 0.0 (exclusive) and 1.0 (inclusive).
-                  value:
-                    type: string
-                  program:
-                    type: string
-                    title: 'When program is not empty, value is ignored'
-                title: >-
-                  StringParam describes an item input/output parameter of type
-                  string
+                title: StringKeyValue describes string key/value set
               title: >-
                 defines a list of mutable strings whose value can be customized
                 by the user
@@ -31872,6 +31897,8 @@ definitions:
             amountMinted:
               type: string
               format: uint64
+            tradeable:
+              type: boolean
           title: >-
             ItemOutput models the continuum of valid outcomes for item
             generation in recipes
@@ -31987,6 +32014,14 @@ definitions:
                 method
 
                 signatures required by gogoproto.
+            quantity:
+              type: string
+              format: uint64
+            amountMinted:
+              type: string
+              format: uint64
+            tradeable:
+              type: boolean
           title: ItemModifyOutput describes what is modified from item input
     title: EntriesList is a struct to keep list of items and coins
   Pylonstech.pylons.pylons.Execution:
@@ -32163,7 +32198,7 @@ definitions:
         type: boolean
       lastUpdate:
         type: string
-        format: uint64
+        format: int64
       transferFee:
         type: object
         properties:
@@ -32385,6 +32420,14 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+      quantity:
+        type: string
+        format: uint64
+      amountMinted:
+        type: string
+        format: uint64
+      tradeable:
+        type: boolean
     title: ItemModifyOutput describes what is modified from item input
   Pylonstech.pylons.pylons.ItemOutput:
     type: object
@@ -32480,19 +32523,11 @@ definitions:
         items:
           type: object
           properties:
-            key:
+            Key:
               type: string
-            rate:
+            Value:
               type: string
-              description: >-
-                The likelihood that this parameter is applied to the output
-                item. Between 0.0 (exclusive) and 1.0 (inclusive).
-            value:
-              type: string
-            program:
-              type: string
-              title: 'When program is not empty, value is ignored'
-          title: StringParam describes an item input/output parameter of type string
+          title: StringKeyValue describes string key/value set
         title: >-
           defines a list of mutable strings whose value can be customized by the
           user
@@ -32517,6 +32552,8 @@ definitions:
       amountMinted:
         type: string
         format: uint64
+      tradeable:
+        type: boolean
     title: >-
       ItemOutput models the continuum of valid outcomes for item generation in
       recipes
@@ -32857,7 +32894,7 @@ definitions:
             type: boolean
           lastUpdate:
             type: string
-            format: uint64
+            format: int64
           transferFee:
             type: object
             properties:
@@ -33147,22 +33184,11 @@ definitions:
                       items:
                         type: object
                         properties:
-                          key:
+                          Key:
                             type: string
-                          rate:
+                          Value:
                             type: string
-                            description: >-
-                              The likelihood that this parameter is applied to
-                              the output item. Between 0.0 (exclusive) and 1.0
-                              (inclusive).
-                          value:
-                            type: string
-                          program:
-                            type: string
-                            title: 'When program is not empty, value is ignored'
-                        title: >-
-                          StringParam describes an item input/output parameter
-                          of type string
+                        title: StringKeyValue describes string key/value set
                       title: >-
                         defines a list of mutable strings whose value can be
                         customized by the user
@@ -33190,6 +33216,8 @@ definitions:
                     amountMinted:
                       type: string
                       format: uint64
+                    tradeable:
+                      type: boolean
                   title: >-
                     ItemOutput models the continuum of valid outcomes for item
                     generation in recipes
@@ -33308,6 +33336,14 @@ definitions:
                         custom method
 
                         signatures required by gogoproto.
+                    quantity:
+                      type: string
+                      format: uint64
+                    amountMinted:
+                      type: string
+                      format: uint64
+                    tradeable:
+                      type: boolean
                   title: ItemModifyOutput describes what is modified from item input
             title: EntriesList is a struct to keep list of items and coins
           outputs:
@@ -33327,7 +33363,7 @@ definitions:
                 based on
           blockInterval:
             type: string
-            format: uint64
+            format: int64
           enabled:
             type: boolean
           extraInfo:
@@ -33579,6 +33615,11 @@ definitions:
               type: array
               items:
                 type: string
+  Pylonstech.pylons.pylons.QueryListItemByOwnerResponse:
+    type: object
+    properties:
+      items:
+        type: string
   Pylonstech.pylons.pylons.QueryListRecipesByCookbookResponse:
     type: object
     properties:
@@ -33860,22 +33901,11 @@ definitions:
                         items:
                           type: object
                           properties:
-                            key:
+                            Key:
                               type: string
-                            rate:
+                            Value:
                               type: string
-                              description: >-
-                                The likelihood that this parameter is applied to
-                                the output item. Between 0.0 (exclusive) and 1.0
-                                (inclusive).
-                            value:
-                              type: string
-                            program:
-                              type: string
-                              title: 'When program is not empty, value is ignored'
-                          title: >-
-                            StringParam describes an item input/output parameter
-                            of type string
+                          title: StringKeyValue describes string key/value set
                         title: >-
                           defines a list of mutable strings whose value can be
                           customized by the user
@@ -33905,6 +33935,8 @@ definitions:
                       amountMinted:
                         type: string
                         format: uint64
+                      tradeable:
+                        type: boolean
                     title: >-
                       ItemOutput models the continuum of valid outcomes for item
                       generation in recipes
@@ -34028,6 +34060,14 @@ definitions:
                           custom method
 
                           signatures required by gogoproto.
+                      quantity:
+                        type: string
+                        format: uint64
+                      amountMinted:
+                        type: string
+                        format: uint64
+                      tradeable:
+                        type: boolean
                     title: >-
                       ItemModifyOutput describes what is modified from item
                       input
@@ -34049,7 +34089,7 @@ definitions:
                   based on
             blockInterval:
               type: string
-              format: uint64
+              format: int64
             enabled:
               type: boolean
             extraInfo:
@@ -34322,22 +34362,11 @@ definitions:
                   items:
                     type: object
                     properties:
-                      key:
+                      Key:
                         type: string
-                      rate:
+                      Value:
                         type: string
-                        description: >-
-                          The likelihood that this parameter is applied to the
-                          output item. Between 0.0 (exclusive) and 1.0
-                          (inclusive).
-                      value:
-                        type: string
-                      program:
-                        type: string
-                        title: 'When program is not empty, value is ignored'
-                    title: >-
-                      StringParam describes an item input/output parameter of
-                      type string
+                    title: StringKeyValue describes string key/value set
                   title: >-
                     defines a list of mutable strings whose value can be
                     customized by the user
@@ -34365,6 +34394,8 @@ definitions:
                 amountMinted:
                   type: string
                   format: uint64
+                tradeable:
+                  type: boolean
               title: >-
                 ItemOutput models the continuum of valid outcomes for item
                 generation in recipes
@@ -34483,6 +34514,14 @@ definitions:
                     method
 
                     signatures required by gogoproto.
+                quantity:
+                  type: string
+                  format: uint64
+                amountMinted:
+                  type: string
+                  format: uint64
+                tradeable:
+                  type: boolean
               title: ItemModifyOutput describes what is modified from item input
         title: EntriesList is a struct to keep list of items and coins
       outputs:
@@ -34502,7 +34541,7 @@ definitions:
             on
       blockInterval:
         type: string
-        format: uint64
+        format: int64
       enabled:
         type: boolean
       extraInfo:

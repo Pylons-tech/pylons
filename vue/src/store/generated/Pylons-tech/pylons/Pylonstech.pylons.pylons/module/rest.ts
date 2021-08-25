@@ -139,7 +139,7 @@ export interface PylonsItem {
   mutableStrings?: PylonsStringKeyValue[];
   tradeable?: boolean;
 
-  /** @format uint64 */
+  /** @format int64 */
   lastUpdate?: string;
 
   /**
@@ -173,6 +173,13 @@ export interface PylonsItemModifyOutput {
    * signatures required by gogoproto.
    */
   transferFee?: V1Beta1Coin;
+
+  /** @format uint64 */
+  quantity?: string;
+
+  /** @format uint64 */
+  amountMinted?: string;
+  tradeable?: boolean;
 }
 
 export interface PylonsItemOutput {
@@ -180,7 +187,7 @@ export interface PylonsItemOutput {
   doubles?: PylonsDoubleParam[];
   longs?: PylonsLongParam[];
   strings?: PylonsStringParam[];
-  mutableStrings?: PylonsStringParam[];
+  mutableStrings?: PylonsStringKeyValue[];
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -195,6 +202,7 @@ export interface PylonsItemOutput {
 
   /** @format uint64 */
   amountMinted?: string;
+  tradeable?: boolean;
 }
 
 export interface PylonsItemRecord {
@@ -295,6 +303,10 @@ export interface PylonsQueryListExecutionsByRecipeResponse {
   Executions?: PylonsExecution[];
 }
 
+export interface PylonsQueryListItemByOwnerResponse {
+  items?: string;
+}
+
 export interface PylonsQueryListRecipesByCookbookResponse {
   Recipes?: PylonsRecipe[];
 }
@@ -311,7 +323,7 @@ export interface PylonsRecipe {
   entries?: PylonsEntriesList;
   outputs?: PylonsWeightedOutputs[];
 
-  /** @format uint64 */
+  /** @format int64 */
   blockInterval?: string;
   enabled?: boolean;
   extraInfo?: string;
@@ -557,6 +569,23 @@ export class HttpClient<SecurityDataType = unknown> {
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListItemByOwner
+   * @summary Queries a list of listItemByOwner items.
+   * @request GET:/Pylons-tech/pylons/pylons/listItemByOwner
+   */
+  queryListItemByOwner = (query?: { owner?: string }, params: RequestParams = {}) =>
+    this.request<PylonsQueryListItemByOwnerResponse, RpcStatus>({
+      path: `/Pylons-tech/pylons/pylons/listItemByOwner`,
+      method: "GET",
+      query: query,
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

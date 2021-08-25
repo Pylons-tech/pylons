@@ -2,6 +2,7 @@
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
 import { Coin } from '../cosmos/base/v1beta1/coin'
+import { StringKeyValue } from '../pylons/item'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
@@ -103,11 +104,12 @@ export interface ItemOutput {
   longs: LongParam[]
   strings: StringParam[]
   /** defines a list of mutable strings whose value can be customized by the user */
-  mutableStrings: StringParam[]
+  mutableStrings: StringKeyValue[]
   transferFee: Coin | undefined
   /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
   quantity: number
   amountMinted: number
+  tradeable: boolean
 }
 
 /** ItemModifyOutput describes what is modified from item input */
@@ -118,6 +120,9 @@ export interface ItemModifyOutput {
   longs: LongParam[]
   strings: StringParam[]
   transferFee: Coin | undefined
+  quantity: number
+  amountMinted: number
+  tradeable: boolean
 }
 
 /** EntriesList is a struct to keep list of items and coins */
@@ -1235,7 +1240,7 @@ export const CoinOutput = {
   }
 }
 
-const baseItemOutput: object = { ID: '', quantity: 0, amountMinted: 0 }
+const baseItemOutput: object = { ID: '', quantity: 0, amountMinted: 0, tradeable: false }
 
 export const ItemOutput = {
   encode(message: ItemOutput, writer: Writer = Writer.create()): Writer {
@@ -1252,7 +1257,7 @@ export const ItemOutput = {
       StringParam.encode(v!, writer.uint32(34).fork()).ldelim()
     }
     for (const v of message.mutableStrings) {
-      StringParam.encode(v!, writer.uint32(42).fork()).ldelim()
+      StringKeyValue.encode(v!, writer.uint32(42).fork()).ldelim()
     }
     if (message.transferFee !== undefined) {
       Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim()
@@ -1262,6 +1267,9 @@ export const ItemOutput = {
     }
     if (message.amountMinted !== 0) {
       writer.uint32(64).uint64(message.amountMinted)
+    }
+    if (message.tradeable === true) {
+      writer.uint32(72).bool(message.tradeable)
     }
     return writer
   },
@@ -1290,7 +1298,7 @@ export const ItemOutput = {
           message.strings.push(StringParam.decode(reader, reader.uint32()))
           break
         case 5:
-          message.mutableStrings.push(StringParam.decode(reader, reader.uint32()))
+          message.mutableStrings.push(StringKeyValue.decode(reader, reader.uint32()))
           break
         case 6:
           message.transferFee = Coin.decode(reader, reader.uint32())
@@ -1300,6 +1308,9 @@ export const ItemOutput = {
           break
         case 8:
           message.amountMinted = longToNumber(reader.uint64() as Long)
+          break
+        case 9:
+          message.tradeable = reader.bool()
           break
         default:
           reader.skipType(tag & 7)
@@ -1337,7 +1348,7 @@ export const ItemOutput = {
     }
     if (object.mutableStrings !== undefined && object.mutableStrings !== null) {
       for (const e of object.mutableStrings) {
-        message.mutableStrings.push(StringParam.fromJSON(e))
+        message.mutableStrings.push(StringKeyValue.fromJSON(e))
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
@@ -1354,6 +1365,11 @@ export const ItemOutput = {
       message.amountMinted = Number(object.amountMinted)
     } else {
       message.amountMinted = 0
+    }
+    if (object.tradeable !== undefined && object.tradeable !== null) {
+      message.tradeable = Boolean(object.tradeable)
+    } else {
+      message.tradeable = false
     }
     return message
   },
@@ -1377,13 +1393,14 @@ export const ItemOutput = {
       obj.strings = []
     }
     if (message.mutableStrings) {
-      obj.mutableStrings = message.mutableStrings.map((e) => (e ? StringParam.toJSON(e) : undefined))
+      obj.mutableStrings = message.mutableStrings.map((e) => (e ? StringKeyValue.toJSON(e) : undefined))
     } else {
       obj.mutableStrings = []
     }
     message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
     message.quantity !== undefined && (obj.quantity = message.quantity)
     message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
+    message.tradeable !== undefined && (obj.tradeable = message.tradeable)
     return obj
   },
 
@@ -1415,7 +1432,7 @@ export const ItemOutput = {
     }
     if (object.mutableStrings !== undefined && object.mutableStrings !== null) {
       for (const e of object.mutableStrings) {
-        message.mutableStrings.push(StringParam.fromPartial(e))
+        message.mutableStrings.push(StringKeyValue.fromPartial(e))
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
@@ -1433,11 +1450,16 @@ export const ItemOutput = {
     } else {
       message.amountMinted = 0
     }
+    if (object.tradeable !== undefined && object.tradeable !== null) {
+      message.tradeable = object.tradeable
+    } else {
+      message.tradeable = false
+    }
     return message
   }
 }
 
-const baseItemModifyOutput: object = { ID: '', itemInputRef: '' }
+const baseItemModifyOutput: object = { ID: '', itemInputRef: '', quantity: 0, amountMinted: 0, tradeable: false }
 
 export const ItemModifyOutput = {
   encode(message: ItemModifyOutput, writer: Writer = Writer.create()): Writer {
@@ -1458,6 +1480,15 @@ export const ItemModifyOutput = {
     }
     if (message.transferFee !== undefined) {
       Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim()
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(56).uint64(message.quantity)
+    }
+    if (message.amountMinted !== 0) {
+      writer.uint32(64).uint64(message.amountMinted)
+    }
+    if (message.tradeable === true) {
+      writer.uint32(72).bool(message.tradeable)
     }
     return writer
   },
@@ -1489,6 +1520,15 @@ export const ItemModifyOutput = {
           break
         case 6:
           message.transferFee = Coin.decode(reader, reader.uint32())
+          break
+        case 7:
+          message.quantity = longToNumber(reader.uint64() as Long)
+          break
+        case 8:
+          message.amountMinted = longToNumber(reader.uint64() as Long)
+          break
+        case 9:
+          message.tradeable = reader.bool()
           break
         default:
           reader.skipType(tag & 7)
@@ -1533,6 +1573,21 @@ export const ItemModifyOutput = {
     } else {
       message.transferFee = undefined
     }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = Number(object.quantity)
+    } else {
+      message.quantity = 0
+    }
+    if (object.amountMinted !== undefined && object.amountMinted !== null) {
+      message.amountMinted = Number(object.amountMinted)
+    } else {
+      message.amountMinted = 0
+    }
+    if (object.tradeable !== undefined && object.tradeable !== null) {
+      message.tradeable = Boolean(object.tradeable)
+    } else {
+      message.tradeable = false
+    }
     return message
   },
 
@@ -1556,6 +1611,9 @@ export const ItemModifyOutput = {
       obj.strings = []
     }
     message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
+    message.quantity !== undefined && (obj.quantity = message.quantity)
+    message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
+    message.tradeable !== undefined && (obj.tradeable = message.tradeable)
     return obj
   },
 
@@ -1593,6 +1651,21 @@ export const ItemModifyOutput = {
       message.transferFee = Coin.fromPartial(object.transferFee)
     } else {
       message.transferFee = undefined
+    }
+    if (object.quantity !== undefined && object.quantity !== null) {
+      message.quantity = object.quantity
+    } else {
+      message.quantity = 0
+    }
+    if (object.amountMinted !== undefined && object.amountMinted !== null) {
+      message.amountMinted = object.amountMinted
+    } else {
+      message.amountMinted = 0
+    }
+    if (object.tradeable !== undefined && object.tradeable !== null) {
+      message.tradeable = object.tradeable
+    } else {
+      message.tradeable = false
     }
     return message
   }
@@ -1822,7 +1895,7 @@ export const Recipe = {
       WeightedOutputs.encode(v!, writer.uint32(82).fork()).ldelim()
     }
     if (message.blockInterval !== 0) {
-      writer.uint32(88).uint64(message.blockInterval)
+      writer.uint32(88).int64(message.blockInterval)
     }
     if (message.enabled === true) {
       writer.uint32(96).bool(message.enabled)
@@ -1874,7 +1947,7 @@ export const Recipe = {
           message.outputs.push(WeightedOutputs.decode(reader, reader.uint32()))
           break
         case 11:
-          message.blockInterval = longToNumber(reader.uint64() as Long)
+          message.blockInterval = longToNumber(reader.int64() as Long)
           break
         case 12:
           message.enabled = reader.bool()

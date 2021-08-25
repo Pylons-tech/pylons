@@ -9,6 +9,14 @@ import { Cookbook } from '../pylons/cookbook'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryListItemByOwnerRequest {
+  owner: string
+}
+
+export interface QueryListItemByOwnerResponse {
+  items: string
+}
+
 export interface QueryGetGoogleInAppPurchaseOrderRequest {
   PurchaseToken: string
 }
@@ -84,6 +92,116 @@ export interface QueryGetCookbookRequest {
 
 export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
+}
+
+const baseQueryListItemByOwnerRequest: object = { owner: '' }
+
+export const QueryListItemByOwnerRequest = {
+  encode(message: QueryListItemByOwnerRequest, writer: Writer = Writer.create()): Writer {
+    if (message.owner !== '') {
+      writer.uint32(10).string(message.owner)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryListItemByOwnerRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryListItemByOwnerRequest } as QueryListItemByOwnerRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.owner = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryListItemByOwnerRequest {
+    const message = { ...baseQueryListItemByOwnerRequest } as QueryListItemByOwnerRequest
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = String(object.owner)
+    } else {
+      message.owner = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryListItemByOwnerRequest): unknown {
+    const obj: any = {}
+    message.owner !== undefined && (obj.owner = message.owner)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryListItemByOwnerRequest>): QueryListItemByOwnerRequest {
+    const message = { ...baseQueryListItemByOwnerRequest } as QueryListItemByOwnerRequest
+    if (object.owner !== undefined && object.owner !== null) {
+      message.owner = object.owner
+    } else {
+      message.owner = ''
+    }
+    return message
+  }
+}
+
+const baseQueryListItemByOwnerResponse: object = { items: '' }
+
+export const QueryListItemByOwnerResponse = {
+  encode(message: QueryListItemByOwnerResponse, writer: Writer = Writer.create()): Writer {
+    if (message.items !== '') {
+      writer.uint32(10).string(message.items)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryListItemByOwnerResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryListItemByOwnerResponse } as QueryListItemByOwnerResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.items = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryListItemByOwnerResponse {
+    const message = { ...baseQueryListItemByOwnerResponse } as QueryListItemByOwnerResponse
+    if (object.items !== undefined && object.items !== null) {
+      message.items = String(object.items)
+    } else {
+      message.items = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryListItemByOwnerResponse): unknown {
+    const obj: any = {}
+    message.items !== undefined && (obj.items = message.items)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryListItemByOwnerResponse>): QueryListItemByOwnerResponse {
+    const message = { ...baseQueryListItemByOwnerResponse } as QueryListItemByOwnerResponse
+    if (object.items !== undefined && object.items !== null) {
+      message.items = object.items
+    } else {
+      message.items = ''
+    }
+    return message
+  }
 }
 
 const baseQueryGetGoogleInAppPurchaseOrderRequest: object = { PurchaseToken: '' }
@@ -1191,6 +1309,8 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a list of listItemByOwner items. */
+  ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>
   /** Queries a googleIAPOrder by PurchaseToken. */
   GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>
   /** Queries a list of listExecutionsByItem items. */
@@ -1216,6 +1336,12 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse> {
+    const data = QueryListItemByOwnerRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListItemByOwner', data)
+    return promise.then((data) => QueryListItemByOwnerResponse.decode(new Reader(data)))
+  }
+
   GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse> {
     const data = QueryGetGoogleInAppPurchaseOrderRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'GoogleInAppPurchaseOrder', data)
