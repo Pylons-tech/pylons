@@ -82,10 +82,8 @@ func (it Item) FindStringKey(key string) (int, bool) {
 	return 0, false
 }
 
-/*
-// TODO fix and make this a keeper function so we can read the item count from the keepers
 // Actualize function actualize an item from item output data
-func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID string, addr sdk.AccAddress, ec CelEnvCollection) (Item, error) {
+func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccAddress, ec CelEnvCollection) (Item, error) {
 	dblActualize, err := DoubleParamList(io.Doubles).Actualize(ec)
 	if err != nil {
 		return Item{}, err
@@ -99,31 +97,21 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, recipeID stri
 		return Item{}, err
 	}
 
-	// transferFee := io.TransferFee
-
-	// TODO
-	// Can't we just remove the ec "lastBlockHeight" var entirely?
-	// lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
-
-	// GetItemCount from keeper
-	// item ID = EncodeItemID(itemCount + 1)
-	// SetItemCount to (itemCount + 1) in keeper
-
 	return Item{
-		Owner:          addr.String(),
-		CookbookID:     cookbookID,
-		ID:             "a", // TODO SET
+		// ID not set - it's handled internally
+		Owner:      	addr.String(),
+		CookbookID: 	cookbookID,
 		NodeVersion:    GetNodeVersionString(),
 		Doubles:        dblActualize,
 		Longs:          longActualize,
 		Strings:        stringActualize,
-		MutableStrings: nil,  // TODO HOW DO WE SET THIS?
-		Tradeable:      true, // TODO HOW DO WE SET THIS?
-		LastUpdate:     uint64(ctx.BlockHeight()),
-		TransferFee:    sdk.Coin{},
+		MutableStrings: io.MutableStrings,
+		Tradeable:		io.Tradeable,
+		LastUpdate:     ctx.BlockHeight(),
+		TransferFee:    io.TransferFee,
 	}, nil
 }
-*/
+
 
 // Actualize is used to update an existing item from an ItemModifyOutout
 func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk.AccAddress, ec CelEnvCollection) error {
@@ -179,9 +167,8 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 		}
 	}
 
-	targetItem.LastUpdate = uint64(ctx.BlockHeight())
+	targetItem.LastUpdate = ctx.BlockHeight()
 	targetItem.Owner = addr.String()
-	// TODO HANDLE TRANSFER FEE - previously it was targetItem.TransferFee + io.TransferFee
 	targetItem.TransferFee = io.TransferFee
 	return nil
 }

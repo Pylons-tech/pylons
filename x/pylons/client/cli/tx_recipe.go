@@ -74,7 +74,7 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsBlockInterval, err := cast.ToUint64E(args[9])
+			argsBlockInterval, err := cast.ToInt64E(args[9])
 			if err != nil {
 				return err
 			}
@@ -164,7 +164,7 @@ func CmdUpdateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsBlockInterval, err := cast.ToUint64E(args[9])
+			argsBlockInterval, err := cast.ToInt64E(args[9])
 			if err != nil {
 				return err
 			}

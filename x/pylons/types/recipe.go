@@ -179,6 +179,10 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				return false, nil
 			}
 
+			if originalItem.Tradeable != updatedItem.Tradeable {
+				return false, nil
+			}
+
 			if !originalItem.TransferFee.Equal(updatedItem.TransferFee) {
 				return false, nil
 			}
@@ -316,9 +320,9 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 	}
 
 	if len(original.ItemModifyOutputs) == len(updated.ItemModifyOutputs) {
-		for i := range original.ItemOutputs {
-			originalItem := original.ItemOutputs[i]
-			updatedItem := updated.ItemOutputs[i]
+		for i := range original.ItemModifyOutputs {
+			originalItem := original.ItemModifyOutputs[i]
+			updatedItem := updated.ItemModifyOutputs[i]
 
 			if originalItem.ID != updatedItem.ID {
 				return false, nil
@@ -335,6 +339,10 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				if updatedItem.Quantity < updatedItem.AmountMinted {
 					return false, errors.New("cannot set Quantity to be less than AmountMinted")
 				}
+				return false, nil
+			}
+
+			if originalItem.Tradeable != updatedItem.Tradeable {
 				return false, nil
 			}
 
@@ -420,30 +428,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				return false, nil
 			}
 
-			if len(originalItem.MutableStrings) == len(updatedItem.MutableStrings) {
-				for j := range originalItem.MutableStrings {
-					originalString := originalItem.MutableStrings[j]
-					updatedString := updatedItem.MutableStrings[j]
-
-					if originalString.Key != updatedString.Key {
-						return false, nil
-					}
-
-					if !originalString.Rate.Equal(updatedString.Rate) {
-						return false, nil
-					}
-
-					if originalString.Program != updatedString.Program {
-						return false, nil
-					}
-
-					if originalString.Value != updatedString.Value {
-						return false, nil
-					}
-				}
-			} else {
-				return false, nil
-			}
 
 			if len(originalItem.Strings) == len(updatedItem.Strings) {
 				for j := range originalItem.Strings {

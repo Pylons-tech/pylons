@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -11,10 +9,10 @@ import (
 
 // SetRecipe set a specific recipe in the store from its ID
 func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
-	keyPrefix := fmt.Sprintf("%s%s-", types.RecipeKey, recipe.CookbookID)
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
+	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(recipe.CookbookID))
 	b := k.cdc.MustMarshalBinaryBare(&recipe)
-	store.Set(types.KeyPrefix(recipe.ID), b)
+	cookbookRecipesStore.Set(types.KeyPrefix(recipe.ID), b)
 
 	// required for random seed init given how it's handled rn
 	k.IncrementEntityCount(ctx)
@@ -22,10 +20,10 @@ func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
 
 // GetRecipe returns a recipe from its ID
 func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val types.Recipe, found bool) {
-	keyPrefix := fmt.Sprintf("%s%s-", types.RecipeKey, cookbookID)
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
+	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
+	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(cookbookID))
 
-	b := store.Get(types.KeyPrefix(id))
+	b := cookbookRecipesStore.Get(types.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -39,12 +37,7 @@ func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []types.Recipe) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
-	defer func(iterator sdk.Iterator) {
-		err := iterator.Close()
-		// nolint: staticcheck
-		if err != nil {
-		}
-	}(iterator)
+	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Recipe
@@ -57,15 +50,10 @@ func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []types.Recipe) {
 
 // GetAllRecipesByCookbook returns all recipes owned by cookbook
 func (k Keeper) GetAllRecipesByCookbook(ctx sdk.Context, cookbookID string) (list []types.Recipe) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey+cookbookID))
-	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(cookbookID))
 
-	defer func(iterator sdk.Iterator) {
-		err := iterator.Close()
-		// nolint: staticcheck
-		if err != nil {
-		}
-	}(iterator)
+	iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Recipe

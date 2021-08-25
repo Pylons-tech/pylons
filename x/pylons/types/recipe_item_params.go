@@ -22,11 +22,8 @@ type LongInputParamList []LongInputParam
 type StringInputParamList []StringInputParam
 type WeightedOutputsList []WeightedOutputs
 
-// type CoinInputList []CoinInput
 type ItemList []Item
 type ItemInputList []ItemInput
-
-// type TradeItemInputList []TradeItemInput
 
 type DoubleWeightTable []DoubleWeightRange
 type IntWeightTable []IntWeightRange
@@ -73,7 +70,6 @@ func getFloat(unk interface{}) (float64, error) {
 
 // Actualize creates a (key, value) list from ParamList
 func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, error) {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make([]DoubleKeyValue, 0, len(dpm))
 	for _, param := range dpm {
 		var valDec sdk.Dec
@@ -99,7 +95,6 @@ func (dpm DoubleParamList) Actualize(ec CelEnvCollection) (DoubleKeyValueList, e
 
 // Actualize builds the params
 func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error) {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make([]LongKeyValue, 0, len(lpm))
 	for _, param := range lpm {
 		var val int64
@@ -123,7 +118,6 @@ func (lpm LongParamList) Actualize(ec CelEnvCollection) (LongKeyValueList, error
 
 // Actualize actualize string param using cel program
 func (spm StringParamList) Actualize(ec CelEnvCollection) (StringKeyValueList, error) {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make([]StringKeyValue, 0, len(spm))
 	for _, param := range spm {
 		var val string
@@ -152,7 +146,6 @@ func (dp DoubleInputParam) Has(input sdk.Dec) bool {
 
 // Actualize creates a (key, value) list from ParamList
 func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
-	// We don't have the ability to do random numbers in a verifiable way rn, so don't worry about it
 	m := make([]DoubleKeyValue, len(dpm))
 	for i, param := range dpm {
 		m[i] = DoubleKeyValue{
@@ -162,16 +155,6 @@ func (dpm DoubleInputParamList) Actualize() []DoubleKeyValue {
 	}
 	return m
 }
-
-// TODO check if needed
-// Has validates if input is between min max range
-// func (lp FeeInputParam) Has(input int64) bool {
-//	// it means fee restriction is not set
-//	if lp.MinValue == 0 && lp.MaxValue == 0 {
-//		return true
-//	}
-//	return input >= lp.MinValue && input <= lp.MaxValue
-//}
 
 // Has validate if input is between min max range
 func (lp LongInputParam) Has(input int) bool {

@@ -756,7 +756,7 @@ type MsgCreateRecipe struct {
 	ItemInputs    []ItemInput                              `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
 	Entries       EntriesList                              `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
 	Outputs       []WeightedOutputs                        `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
-	BlockInterval uint64                                   `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	BlockInterval int64                                    `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
 	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
 }
@@ -864,7 +864,7 @@ func (m *MsgCreateRecipe) GetOutputs() []WeightedOutputs {
 	return nil
 }
 
-func (m *MsgCreateRecipe) GetBlockInterval() uint64 {
+func (m *MsgCreateRecipe) GetBlockInterval() int64 {
 	if m != nil {
 		return m.BlockInterval
 	}
@@ -932,7 +932,7 @@ type MsgUpdateRecipe struct {
 	ItemInputs    []ItemInput                              `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
 	Entries       EntriesList                              `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
 	Outputs       []WeightedOutputs                        `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
-	BlockInterval uint64                                   `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	BlockInterval int64                                    `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
 	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
 	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
 }
@@ -1040,7 +1040,7 @@ func (m *MsgUpdateRecipe) GetOutputs() []WeightedOutputs {
 	return nil
 }
 
-func (m *MsgUpdateRecipe) GetBlockInterval() uint64 {
+func (m *MsgUpdateRecipe) GetBlockInterval() int64 {
 	if m != nil {
 		return m.BlockInterval
 	}
@@ -1461,7 +1461,7 @@ var fileDescriptor_d4a7b7e7ad73d5a4 = []byte{
 	0x66, 0x14, 0x2b, 0x5a, 0x6d, 0x6e, 0xfb, 0xc3, 0xf1, 0x76, 0x9a, 0x42, 0xf0, 0x2b, 0x97, 0xc5,
 	0x96, 0x62, 0x5d, 0xdd, 0x84, 0x02, 0xe9, 0xf3, 0x88, 0x0e, 0x44, 0x74, 0x9e, 0x8c, 0x37, 0xf3,
 	0x2d, 0xba, 0xce, 0x09, 0xc7, 0xce, 0xd7, 0x42, 0x21, 0x36, 0x25, 0xf5, 0xc3, 0xd6, 0xd6, 0xf6,
-	0x88, 0xdd, 0x35, 0x7d, 0x8e, 0x74, 0x60, 0x79, 0xc6, 0x5c, 0x45, 0xab, 0xe5, 0x5b, 0x69, 0x30,
+	0x88, 0xdd, 0x35, 0x7d, 0x8e, 0x74, 0x60, 0x79, 0xc6, 0x5c, 0x45, 0xab, 0xe5, 0x5a, 0x69, 0x30,
 	0x3c, 0x09, 0xf4, 0xad, 0xb6, 0x87, 0x1d, 0x63, 0xbe, 0xa2, 0xd5, 0x66, 0x5b, 0xf1, 0x32, 0x6c,
 	0x63, 0x78, 0xca, 0xa9, 0x65, 0xfa, 0xc7, 0xc4, 0x58, 0x10, 0x6d, 0x4c, 0x01, 0xd5, 0x15, 0x78,
 	0x77, 0xa8, 0xa8, 0x86, 0x0b, 0xee, 0x9b, 0xa0, 0x73, 0x5b, 0x70, 0xb7, 0x05, 0xf7, 0xff, 0x16,
@@ -1486,7 +1486,7 @@ var fileDescriptor_d4a7b7e7ad73d5a4 = []byte{
 	0x59, 0xfb, 0xf7, 0xbc, 0xac, 0xfd, 0x7c, 0x51, 0x9e, 0x7a, 0x7d, 0x51, 0x9e, 0xfa, 0xeb, 0xa2,
 	0x3c, 0xf5, 0xdd, 0x46, 0x62, 0xd0, 0x12, 0x86, 0x37, 0x43, 0xcb, 0x0d, 0xf9, 0x27, 0xc9, 0x69,
 	0xfc, 0x11, 0x8d, 0x5c, 0xed, 0x3b, 0xd1, 0x7f, 0x25, 0x3b, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff,
-	0x57, 0xab, 0x2f, 0x5d, 0x04, 0x12, 0x00, 0x00,
+	0x40, 0x2f, 0x0d, 0xf3, 0x04, 0x12, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -5392,7 +5392,7 @@ func (m *MsgCreateRecipe) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BlockInterval |= uint64(b&0x7F) << shift
+				m.BlockInterval |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -5890,7 +5890,7 @@ func (m *MsgUpdateRecipe) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				m.BlockInterval |= uint64(b&0x7F) << shift
+				m.BlockInterval |= int64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

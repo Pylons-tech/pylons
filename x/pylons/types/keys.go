@@ -30,12 +30,16 @@ const (
 	CookbookKey = "Cookbook-value-"
 	// CookbookCoinDenomKey is a string key used as a prefix to the KVStore
 	CookbookCoinDenomKey = "Cookbook-denom-"
+	// AddrCookbookKey is a string key used as a prefix to the KVStore
+	AddrCookbookKey = "Address-cookbook-"
 	// RecipeKey is a string key used as a prefix to the KVStore
 	RecipeKey = "Recipe-value-"
 	// ItemKey is a string key used as a prefix to the KVStore
 	ItemKey = "Item-value-"
 	// ItemCountKey is a string key used as a prefix to the KVStore
 	ItemCountKey = "Item-count-"
+	// AddrItemKey is a string key used as a prefix to the KVStore
+	AddrItemKey = "Address-item-"
 	// ExecutionKey is a string key used as a prefix to the KVStore
 	ExecutionKey = "Execution-value-"
 	// ExecutionCountKey is a string key used as a prefix to the KVStore

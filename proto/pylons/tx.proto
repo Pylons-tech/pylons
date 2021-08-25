@@ -109,7 +109,7 @@ message MsgCreateRecipe {
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
-  uint64 blockInterval = 11;
+  int64 blockInterval = 11;
   bool enabled = 12;
   string extraInfo = 13;
 }
@@ -126,7 +126,7 @@ message MsgUpdateRecipe {
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
-  uint64 blockInterval = 11;
+  int64 blockInterval = 11;
   bool enabled = 12;
   string extraInfo = 13;
 }

@@ -5,6 +5,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "pylons/item.proto";
 
 // DoubleInputParam describes the bounds on an item input/output parameter of type float64
 message DoubleInputParam {
@@ -104,11 +105,12 @@ message ItemOutput {
   repeated LongParam longs = 3 [(gogoproto.nullable) = false];
   repeated StringParam strings = 4 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
-  repeated StringParam mutableStrings = 5 [(gogoproto.nullable) = false];
+  repeated StringKeyValue mutableStrings = 5 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 7;
   uint64 amountMinted = 8;
+  bool tradeable = 9;
 }
 
 // ItemModifyOutput describes what is modified from item input
@@ -119,6 +121,9 @@ message ItemModifyOutput {
   repeated LongParam longs = 4 [(gogoproto.nullable) = false];
   repeated StringParam strings = 5 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
+  uint64 quantity = 7;
+  uint64 amountMinted = 8;
+  bool tradeable = 9;
 }
 
 // EntriesList is a struct to keep list of items and coins
@@ -145,7 +150,7 @@ message Recipe {
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
-  uint64 blockInterval = 11;
+  int64 blockInterval = 11;
   bool enabled = 12;
   string extraInfo = 13;
 }

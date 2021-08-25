@@ -1,5 +1,7 @@
 package keeper_test
 
+import sdk "github.com/cosmos/cosmos-sdk/types"
+
 func (suite *IntegrationTestSuite) TestCookbookGet() {
 	//k, ctx := setupKeeper(t)
 	k := suite.k
@@ -33,7 +35,8 @@ func (suite *IntegrationTestSuite) TestCookbookGetAllByCreator() {
 
 	items := createNCookbook(k, ctx, 10)
 	for _, item := range items {
-		rst := k.GetAllCookbookByCreator(ctx, item.Creator)
+		addr, _ := sdk.AccAddressFromBech32(item.Creator)
+		rst := k.GetAllCookbookByCreator(ctx, addr)
 		require.Equal(item, rst[0])
 	}
 }

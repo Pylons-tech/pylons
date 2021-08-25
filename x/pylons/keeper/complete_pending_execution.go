@@ -70,13 +70,12 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted {
 			return nil, nil, nil, sdkerrors.Wrap(types.ErrItemQuantityExceeded, fmt.Sprintf("quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted))
 		}
-		item, err := k.Actualize(ctx, recipe.CookbookID, addr, ec, itemOutput)
+		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, addr, ec)
 		if err != nil {
 			return nil, nil, nil, err
 		}
 		mintedItems = append(mintedItems, item)
 		recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted++
-
 	}
 
 	modifiedItems := make([]types.Item, len(itemModifyOutputs))

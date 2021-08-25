@@ -35,7 +35,7 @@ message Item {
   repeated StringKeyValue strings = 7 [(gogoproto.nullable) = false];
   repeated StringKeyValue mutableStrings = 8 [(gogoproto.nullable) = false];
   bool tradeable = 9;
-  uint64 lastUpdate = 10;
+  int64 lastUpdate = 10;
   cosmos.base.v1beta1.Coin transferFee = 11 [(gogoproto.nullable) = false];
 }
 

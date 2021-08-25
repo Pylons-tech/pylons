@@ -3,6 +3,7 @@ package keeper
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -61,17 +62,17 @@ func (k Keeper) AppendItem(
 
 // SetItem set a specific item in the store from its index
 func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
-	keyPrefix := fmt.Sprintf("%s%s-", types.ItemKey, item.CookbookID)
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
+	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
+	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(item.CookbookID))
 	b := k.cdc.MustMarshalBinaryBare(&item)
-	store.Set(types.KeyPrefix(item.ID), b)
+	cookbookItemsStore.Set(types.KeyPrefix(item.ID), b)
 }
 
 // GetItem returns an item from its index
 func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item, found bool) {
-	keyPrefix := fmt.Sprintf("%s%s-", types.ItemKey, cookbookID)
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
-	b := store.Get(types.KeyPrefix(id))
+	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
+	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(cookbookID))
+	b := cookbookItemsStore.Get(types.KeyPrefix(id))
 	if b == nil {
 		return val, false
 	}
@@ -84,12 +85,7 @@ func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
-	defer func(iterator sdk.Iterator) {
-		err := iterator.Close()
-		// nolint: staticcheck
-		if err != nil {
-		}
-	}(iterator)
+	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Item
@@ -100,40 +96,26 @@ func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 	return
 }
 
-// Actualize function actualize an item from item output data
-func (k Keeper) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccAddress, ec types.CelEnvCollection, io types.ItemOutput) (types.Item, error) {
-	dblActualize, err := types.DoubleParamList(io.Doubles).Actualize(ec)
-	if err != nil {
-		return types.Item{}, err
-	}
-	longActualize, err := types.LongParamList(io.Longs).Actualize(ec)
-	if err != nil {
-		return types.Item{}, err
-	}
-	stringActualize, err := types.StringParamList(io.Strings).Actualize(ec)
-	if err != nil {
-		return types.Item{}, err
+func (k Keeper) addItemToAddress(ctx sdk.Context, cookbookID, itemID string, addr sdk.AccAddress) {
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	addrStore := prefix.NewStore(parentStore, addr.Bytes())
+	store := prefix.NewStore(addrStore, types.KeyPrefix(cookbookID))
+	byteKey := types.KeyPrefix(itemID)
+	bz := []byte(fmt.Sprintf("%v-%v", cookbookID, itemID))
+	store.Set(byteKey, bz)
+}
+
+func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list []types.Item) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	iterator := sdk.KVStorePrefixIterator(store, owner.Bytes())
+
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		idParts := strings.Split(string(iterator.Value()), "-")
+		item, _ := k.GetItem(ctx, idParts[0], idParts[1])
+		list = append(list, item)
 	}
 
-	// TODO
-	// Can't we just remove the ec "lastBlockHeight" var entirely?
-	// lastBlockHeight := ec.variables["lastBlockHeight"].(int64)
-
-	// count := k.GetItemCount(ctx)
-	// itemID := types.EncodeItemID(count + 1)
-	// k.SetItemCount(ctx, count+1)
-
-	return types.Item{
-		Owner:      addr.String(),
-		CookbookID: cookbookID,
-		// ID:             itemID,
-		NodeVersion:    types.GetNodeVersionString(),
-		Doubles:        dblActualize,
-		Longs:          longActualize,
-		Strings:        stringActualize,
-		MutableStrings: nil,  // TODO HOW DO WE SET THIS?
-		Tradeable:      true, // TODO HOW DO WE SET THIS?
-		LastUpdate:     uint64(ctx.BlockHeight()),
-		TransferFee:    io.TransferFee,
-	}, nil
+	return
 }

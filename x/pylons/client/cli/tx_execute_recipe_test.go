@@ -65,7 +65,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 					{
 						Key:     "testKey",
 						Rate:    sdk.NewDec(1),
-						Value:   "testValue",
+						Value:   "testValue",w
 						Program: "",
 					},
 				},
@@ -220,12 +220,10 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Program: "",
 					},
 				},
-				MutableStrings: []types.StringParam{
+				MutableStrings: []types.StringKeyValue{
 					{
 						Key:     "testMutKey",
-						Rate:    sdk.NewDec(1),
 						Value:   "testMutValue",
-						Program: "",
 					},
 				},
 				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
@@ -410,12 +408,10 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Program: "",
 					},
 				},
-				MutableStrings: []types.StringParam{
+				MutableStrings: []types.StringKeyValue{
 					{
 						Key:     "testMutKey",
-						Rate:    sdk.NewDec(1),
 						Value:   "testMutValue",
-						Program: "",
 					},
 				},
 				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
@@ -579,12 +575,10 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Program: "",
 					},
 				},
-				MutableStrings: []types.StringParam{
+				MutableStrings: []types.StringKeyValue{
 					{
 						Key:     "testMutKey",
-						Rate:    sdk.NewDec(1),
 						Value:   "testMutValue",
-						Program: "",
 					},
 				},
 				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),

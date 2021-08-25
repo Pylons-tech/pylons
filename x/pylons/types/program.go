@@ -22,6 +22,18 @@ func NewCelEnvCollection(env *cel.Env, variables map[string]interface{}, funcs c
 	return CelEnvCollection{env, variables, funcs}
 }
 
+func (ec *CelEnvCollection) GetVariables() map[string]interface{} {
+	return ec.variables
+}
+
+func (ec *CelEnvCollection) GetEnv() *cel.Env {
+	return ec.env
+}
+
+func (ec *CelEnvCollection) GetFuncs() cel.ProgramOption {
+	return ec.funcs
+}
+
 // Eval calculate a value
 func (ec *CelEnvCollection) Eval(program string) (ref.Val, error) {
 	parsed, issues := ec.env.Parse(program)
@@ -78,7 +90,6 @@ func (ec *CelEnvCollection) EvalString(program string) (string, error) {
 	return fmt.Sprintf("%v", refVal.Value()), nil
 }
 
-// TODO convert weight uint64 to string?
 // GetWeightInt calculate weight value using program
 func (ol WeightedOutputs) GetWeightInt(ec CelEnvCollection) (int, error) {
 	weightStr := strconv.FormatUint(ol.Weight, 10)
@@ -132,10 +143,3 @@ func (wol WeightedOutputsList) Actualize(ec CelEnvCollection) ([]string, error) 
 	return wol[chosenIndex].EntryIDs, nil
 }
 
-// ProgramValidateBasic validate program
-func ProgramValidateBasic(program string) error {
-	if len(program) == 0 {
-		return errors.New("length of program code shouldn't be 0")
-	}
-	return nil
-}

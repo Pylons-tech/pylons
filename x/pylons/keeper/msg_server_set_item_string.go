@@ -25,7 +25,7 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 	for i, kv := range item.MutableStrings {
 		if msg.Field == kv.Key {
 			item.MutableStrings[i].Value = msg.Value
-			item.LastUpdate = uint64(ctx.BlockHeight())
+			item.LastUpdate = ctx.BlockHeight()
 			k.SetItem(ctx, item)
 			return &types.MsgSetItemStringResponse{}, nil
 		}

@@ -47,15 +47,15 @@ func (k Keeper) SetPendingExecutionCount(ctx sdk.Context, count uint64) {
 func (k Keeper) AppendPendingExecution(
 	ctx sdk.Context,
 	execution types.Execution,
-	blockInterval uint64,
+	blockInterval int64,
 ) string {
 	// Create the execution
 	count := k.GetPendingExecutionCount(ctx)
 
 	// Target height is the block height where the pending execution
 	// is actually able to be executed in the EndBlocker
-	targetHeight := execution.BlockHeight + int64(blockInterval)
-	id := fmt.Sprintf("%v-%v", targetHeight, int64(count+k.GetExecutionCount(ctx)))
+	targetHeight := execution.BlockHeight + blockInterval
+	id := fmt.Sprintf("%v-%v", targetHeight, count+k.GetExecutionCount(ctx))
 	// Set the ID of the appended value
 	execution.ID = id
 
@@ -128,9 +128,8 @@ func (k Keeper) GetAllPendingExecution(ctx sdk.Context) (list []types.Execution)
 
 // GetAllPendingExecutionAtBlockHeight returns all execution
 func (k Keeper) GetAllPendingExecutionAtBlockHeight(ctx sdk.Context, blockHeight int64) (list []types.Execution) {
-	keyPrefix := fmt.Sprintf("%s%d-", types.PendingExecutionKey, blockHeight)
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(keyPrefix))
-	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(fmt.Sprintf("%v-", blockHeight)))
 
 	defer iterator.Close()
 
