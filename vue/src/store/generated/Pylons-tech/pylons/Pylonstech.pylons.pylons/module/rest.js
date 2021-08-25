@@ -140,21 +140,6 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
-         * @name QueryListItemByOwner
-         * @summary Queries a list of listItemByOwner items.
-         * @request GET:/Pylons-tech/pylons/pylons/listItemByOwner
-         */
-        this.queryListItemByOwner = (query, params = {}) => this.request({
-            path: `/Pylons-tech/pylons/pylons/listItemByOwner`,
-            method: "GET",
-            query: query,
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
          * @name QueryCookbook
          * @summary Retrieves a cookbook by ID.
          * @request GET:/pylons/cookbook/{ID}
@@ -245,6 +230,20 @@ export class Api extends HttpClient {
          */
         this.queryListExecutionsByRecipe = (CookbookID, RecipeID, params = {}) => this.request({
             path: `/pylons/listExecutionsByRecipe/${CookbookID}/${RecipeID}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryListItemByOwner
+         * @summary Queries a list of listItemByOwner items.
+         * @request GET:/pylons/listItemByOwner/{owner}
+         */
+        this.queryListItemByOwner = (owner, params = {}) => this.request({
+            path: `/pylons/listItemByOwner/${owner}`,
             method: "GET",
             format: "json",
             ...params,

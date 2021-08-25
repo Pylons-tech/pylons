@@ -274,14 +274,6 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 						return false, nil
 					}
 
-					if !originalString.Rate.Equal(updatedString.Rate) {
-						return false, nil
-					}
-
-					if originalString.Program != updatedString.Program {
-						return false, nil
-					}
-
 					if originalString.Value != updatedString.Value {
 						return false, nil
 					}
@@ -442,6 +434,23 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 					}
 
 					if originalString.Program != updatedString.Program {
+						return false, nil
+					}
+
+					if originalString.Value != updatedString.Value {
+						return false, nil
+					}
+				}
+			} else {
+				return false, nil
+			}
+
+			if len(originalItem.MutableStrings) == len(updatedItem.MutableStrings) {
+				for j := range originalItem.MutableStrings {
+					originalString := originalItem.MutableStrings[j]
+					updatedString := updatedItem.MutableStrings[j]
+
+					if originalString.Key != updatedString.Key {
 						return false, nil
 					}
 
@@ -680,6 +689,23 @@ func ValidateStrings(sp []StringParam) error {
 	return nil
 }
 
+func ValidateMutableStrings(skv []StringKeyValue) error {
+	keyMap := make(map[string]bool)
+	for _, kv := range skv {
+		err := ValidateID(kv.Key)
+		if err != nil {
+			return err
+		}
+
+		if _, ok := keyMap[kv.Key]; ok {
+			return sdkerrors.Wrap(ErrInvalidRequestField, fmt.Sprintf("key %s repeated in string param list", kv.Key))
+		}
+		keyMap[kv.Key] = true
+	}
+
+	return nil
+}
+
 func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 	for _, item := range io {
 		err := ValidateID(item.ID)
@@ -707,7 +733,7 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 			return err
 		}
 
-		err = ValidateStrings(item.MutableStrings)
+		err = ValidateMutableStrings(item.MutableStrings)
 		if err != nil {
 			return err
 		}
@@ -715,7 +741,6 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 		if !item.TransferFee.IsValid() {
 			return sdkerrors.Wrap(ErrInvalidRequestField, fmt.Sprintf("invalid transferFee on ItemOutput %s", item.ID))
 		}
-
 	}
 	return nil
 }
@@ -743,6 +768,11 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 		}
 
 		err = ValidateStrings(item.Strings)
+		if err != nil {
+			return err
+		}
+
+		err = ValidateMutableStrings(item.MutableStrings)
 		if err != nil {
 			return err
 		}

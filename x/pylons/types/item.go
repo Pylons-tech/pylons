@@ -166,6 +166,20 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 		}
 	}
 
+	// only add non-existing key-value pairs
+	if io.MutableStrings != nil {
+		OuterLoop:
+		for _, newStr := range io.MutableStrings{
+			for _, str := range targetItem.MutableStrings {
+				if str.Key == newStr.Key {
+					continue OuterLoop
+				}
+			}
+			// entry not found
+			targetItem.MutableStrings = append(targetItem.MutableStrings, newStr)
+		}
+	}
+
 	targetItem.LastUpdate = ctx.BlockHeight()
 	targetItem.Owner = addr.String()
 	targetItem.TransferFee = io.TransferFee

@@ -103,6 +103,8 @@ export interface ItemModifyOutput {
     doubles: DoubleParam[];
     longs: LongParam[];
     strings: StringParam[];
+    /** defines a list of mutable strings whose value can be customized by the user */
+    mutableStrings: StringKeyValue[];
     transferFee: Coin | undefined;
     quantity: number;
     amountMinted: number;

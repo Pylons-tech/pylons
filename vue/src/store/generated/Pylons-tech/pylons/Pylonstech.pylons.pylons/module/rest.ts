@@ -165,6 +165,7 @@ export interface PylonsItemModifyOutput {
   doubles?: PylonsDoubleParam[];
   longs?: PylonsLongParam[];
   strings?: PylonsStringParam[];
+  mutableStrings?: PylonsStringKeyValue[];
 
   /**
    * Coin defines a token with a denomination and an amount.
@@ -304,7 +305,7 @@ export interface PylonsQueryListExecutionsByRecipeResponse {
 }
 
 export interface PylonsQueryListItemByOwnerResponse {
-  items?: string;
+  Items?: PylonsItem[];
 }
 
 export interface PylonsQueryListRecipesByCookbookResponse {
@@ -573,23 +574,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryListItemByOwner
-   * @summary Queries a list of listItemByOwner items.
-   * @request GET:/Pylons-tech/pylons/pylons/listItemByOwner
-   */
-  queryListItemByOwner = (query?: { owner?: string }, params: RequestParams = {}) =>
-    this.request<PylonsQueryListItemByOwnerResponse, RpcStatus>({
-      path: `/Pylons-tech/pylons/pylons/listItemByOwner`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryCookbook
    * @summary Retrieves a cookbook by ID.
    * @request GET:/pylons/cookbook/{ID}
@@ -693,6 +677,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryListExecutionsByRecipe = (CookbookID: string, RecipeID: string, params: RequestParams = {}) =>
     this.request<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>({
       path: `/pylons/listExecutionsByRecipe/${CookbookID}/${RecipeID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListItemByOwner
+   * @summary Queries a list of listItemByOwner items.
+   * @request GET:/pylons/listItemByOwner/{owner}
+   */
+  queryListItemByOwner = (owner: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListItemByOwnerResponse, RpcStatus>({
+      path: `/pylons/listItemByOwner/${owner}`,
       method: "GET",
       format: "json",
       ...params,

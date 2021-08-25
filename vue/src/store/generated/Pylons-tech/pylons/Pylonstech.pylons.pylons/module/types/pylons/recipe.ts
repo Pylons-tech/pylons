@@ -119,6 +119,8 @@ export interface ItemModifyOutput {
   doubles: DoubleParam[]
   longs: LongParam[]
   strings: StringParam[]
+  /** defines a list of mutable strings whose value can be customized by the user */
+  mutableStrings: StringKeyValue[]
   transferFee: Coin | undefined
   quantity: number
   amountMinted: number
@@ -1478,17 +1480,20 @@ export const ItemModifyOutput = {
     for (const v of message.strings) {
       StringParam.encode(v!, writer.uint32(42).fork()).ldelim()
     }
+    for (const v of message.mutableStrings) {
+      StringKeyValue.encode(v!, writer.uint32(50).fork()).ldelim()
+    }
     if (message.transferFee !== undefined) {
-      Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim()
+      Coin.encode(message.transferFee, writer.uint32(58).fork()).ldelim()
     }
     if (message.quantity !== 0) {
-      writer.uint32(56).uint64(message.quantity)
+      writer.uint32(64).uint64(message.quantity)
     }
     if (message.amountMinted !== 0) {
-      writer.uint32(64).uint64(message.amountMinted)
+      writer.uint32(72).uint64(message.amountMinted)
     }
     if (message.tradeable === true) {
-      writer.uint32(72).bool(message.tradeable)
+      writer.uint32(80).bool(message.tradeable)
     }
     return writer
   },
@@ -1500,6 +1505,7 @@ export const ItemModifyOutput = {
     message.doubles = []
     message.longs = []
     message.strings = []
+    message.mutableStrings = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -1519,15 +1525,18 @@ export const ItemModifyOutput = {
           message.strings.push(StringParam.decode(reader, reader.uint32()))
           break
         case 6:
-          message.transferFee = Coin.decode(reader, reader.uint32())
+          message.mutableStrings.push(StringKeyValue.decode(reader, reader.uint32()))
           break
         case 7:
-          message.quantity = longToNumber(reader.uint64() as Long)
+          message.transferFee = Coin.decode(reader, reader.uint32())
           break
         case 8:
-          message.amountMinted = longToNumber(reader.uint64() as Long)
+          message.quantity = longToNumber(reader.uint64() as Long)
           break
         case 9:
+          message.amountMinted = longToNumber(reader.uint64() as Long)
+          break
+        case 10:
           message.tradeable = reader.bool()
           break
         default:
@@ -1543,6 +1552,7 @@ export const ItemModifyOutput = {
     message.doubles = []
     message.longs = []
     message.strings = []
+    message.mutableStrings = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = String(object.ID)
     } else {
@@ -1566,6 +1576,11 @@ export const ItemModifyOutput = {
     if (object.strings !== undefined && object.strings !== null) {
       for (const e of object.strings) {
         message.strings.push(StringParam.fromJSON(e))
+      }
+    }
+    if (object.mutableStrings !== undefined && object.mutableStrings !== null) {
+      for (const e of object.mutableStrings) {
+        message.mutableStrings.push(StringKeyValue.fromJSON(e))
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
@@ -1610,6 +1625,11 @@ export const ItemModifyOutput = {
     } else {
       obj.strings = []
     }
+    if (message.mutableStrings) {
+      obj.mutableStrings = message.mutableStrings.map((e) => (e ? StringKeyValue.toJSON(e) : undefined))
+    } else {
+      obj.mutableStrings = []
+    }
     message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
     message.quantity !== undefined && (obj.quantity = message.quantity)
     message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
@@ -1622,6 +1642,7 @@ export const ItemModifyOutput = {
     message.doubles = []
     message.longs = []
     message.strings = []
+    message.mutableStrings = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
@@ -1645,6 +1666,11 @@ export const ItemModifyOutput = {
     if (object.strings !== undefined && object.strings !== null) {
       for (const e of object.strings) {
         message.strings.push(StringParam.fromPartial(e))
+      }
+    }
+    if (object.mutableStrings !== undefined && object.mutableStrings !== null) {
+      for (const e of object.mutableStrings) {
+        message.mutableStrings.push(StringKeyValue.fromPartial(e))
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {

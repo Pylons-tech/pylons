@@ -1,8 +1,8 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Item } from '../pylons/item';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
 import { Recipe } from '../pylons/recipe';
-import { Item } from '../pylons/item';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
@@ -10,7 +10,7 @@ export interface QueryListItemByOwnerRequest {
     owner: string;
 }
 export interface QueryListItemByOwnerResponse {
-    items: string;
+    Items: Item[];
 }
 export interface QueryGetGoogleInAppPurchaseOrderRequest {
     PurchaseToken: string;

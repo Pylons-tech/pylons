@@ -120,10 +120,12 @@ message ItemModifyOutput {
   repeated DoubleParam doubles = 3 [(gogoproto.nullable) = false];
   repeated LongParam longs = 4 [(gogoproto.nullable) = false];
   repeated StringParam strings = 5 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
-  uint64 quantity = 7;
-  uint64 amountMinted = 8;
-  bool tradeable = 9;
+  // defines a list of mutable strings whose value can be customized by the user
+  repeated StringKeyValue mutableStrings = 6 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin transferFee = 7 [(gogoproto.nullable) = false];
+  uint64 quantity = 8;
+  uint64 amountMinted = 9;
+  bool tradeable = 10;
 }
 
 // EntriesList is a struct to keep list of items and coins

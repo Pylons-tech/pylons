@@ -19475,45 +19475,6 @@ paths:
           format: uint64
       tags:
         - Query
-  /Pylons-tech/pylons/pylons/listItemByOwner:
-    get:
-      summary: Queries a list of listItemByOwner items.
-      operationId: PylonstechPylonsPylonsListItemByOwner
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              items:
-                type: string
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    typeUrl:
-                      type: string
-                    value:
-                      type: string
-                      format: byte
-      parameters:
-        - name: owner
-          in: query
-          required: false
-          type: string
-      tags:
-        - Query
   '/pylons/cookbook/{ID}':
     get:
       summary: Retrieves a cookbook by ID.
@@ -20248,6 +20209,117 @@ paths:
           type: string
       tags:
         - Query
+  '/pylons/listItemByOwner/{owner}':
+    get:
+      summary: Queries a list of listItemByOwner items.
+      operationId: PylonstechPylonsPylonsListItemByOwner
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    owner:
+                      type: string
+                    cookbookID:
+                      type: string
+                    ID:
+                      type: string
+                    nodeVersion:
+                      type: string
+                    doubles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                        title: DoubleKeyValue describes double key/value set
+                    longs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                            format: int64
+                        title: LongKeyValue describes long key/value set
+                    strings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                        title: StringKeyValue describes string key/value set
+                    mutableStrings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                        title: StringKeyValue describes string key/value set
+                    tradeable:
+                      type: boolean
+                    lastUpdate:
+                      type: string
+                      format: int64
+                    transferFee:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: owner
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   '/pylons/listRecipesByCookbook/{CookbookID}':
     get:
       summary: Queries a list of listRecipesByCookbook items.
@@ -20694,6 +20766,21 @@ paths:
                                   title: >-
                                     StringParam describes an item input/output
                                     parameter of type string
+                              mutableStrings:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    Key:
+                                      type: string
+                                    Value:
+                                      type: string
+                                  title: >-
+                                    StringKeyValue describes string key/value
+                                    set
+                                title: >-
+                                  defines a list of mutable strings whose value
+                                  can be customized by the user
                               transferFee:
                                 type: object
                                 properties:
@@ -21204,6 +21291,19 @@ paths:
                                 title: >-
                                   StringParam describes an item input/output
                                   parameter of type string
+                            mutableStrings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  Key:
+                                    type: string
+                                  Value:
+                                    type: string
+                                title: StringKeyValue describes string key/value set
+                              title: >-
+                                defines a list of mutable strings whose value
+                                can be customized by the user
                             transferFee:
                               type: object
                               properties:
@@ -31999,6 +32099,19 @@ definitions:
                 title: >-
                   StringParam describes an item input/output parameter of type
                   string
+            mutableStrings:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: StringKeyValue describes string key/value set
+              title: >-
+                defines a list of mutable strings whose value can be customized
+                by the user
             transferFee:
               type: object
               properties:
@@ -32408,6 +32521,19 @@ definitions:
               type: string
               title: 'When program is not empty, value is ignored'
           title: StringParam describes an item input/output parameter of type string
+      mutableStrings:
+        type: array
+        items:
+          type: object
+          properties:
+            Key:
+              type: string
+            Value:
+              type: string
+          title: StringKeyValue describes string key/value set
+        title: >-
+          defines a list of mutable strings whose value can be customized by the
+          user
       transferFee:
         type: object
         properties:
@@ -33321,6 +33447,19 @@ definitions:
                         title: >-
                           StringParam describes an item input/output parameter
                           of type string
+                    mutableStrings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          Key:
+                            type: string
+                          Value:
+                            type: string
+                        title: StringKeyValue describes string key/value set
+                      title: >-
+                        defines a list of mutable strings whose value can be
+                        customized by the user
                     transferFee:
                       type: object
                       properties:
@@ -33618,8 +33757,80 @@ definitions:
   Pylonstech.pylons.pylons.QueryListItemByOwnerResponse:
     type: object
     properties:
-      items:
-        type: string
+      Items:
+        type: array
+        items:
+          type: object
+          properties:
+            owner:
+              type: string
+            cookbookID:
+              type: string
+            ID:
+              type: string
+            nodeVersion:
+              type: string
+            doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: DoubleKeyValue describes double key/value set
+            longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                    format: int64
+                title: LongKeyValue describes long key/value set
+            strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: StringKeyValue describes string key/value set
+            mutableStrings:
+              type: array
+              items:
+                type: object
+                properties:
+                  Key:
+                    type: string
+                  Value:
+                    type: string
+                title: StringKeyValue describes string key/value set
+            tradeable:
+              type: boolean
+            lastUpdate:
+              type: string
+              format: int64
+            transferFee:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
   Pylonstech.pylons.pylons.QueryListRecipesByCookbookResponse:
     type: object
     properties:
@@ -34044,6 +34255,19 @@ definitions:
                           title: >-
                             StringParam describes an item input/output parameter
                             of type string
+                      mutableStrings:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            Key:
+                              type: string
+                            Value:
+                              type: string
+                          title: StringKeyValue describes string key/value set
+                        title: >-
+                          defines a list of mutable strings whose value can be
+                          customized by the user
                       transferFee:
                         type: object
                         properties:
@@ -34499,6 +34723,19 @@ definitions:
                     title: >-
                       StringParam describes an item input/output parameter of
                       type string
+                mutableStrings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      Key:
+                        type: string
+                      Value:
+                        type: string
+                    title: StringKeyValue describes string key/value set
+                  title: >-
+                    defines a list of mutable strings whose value can be
+                    customized by the user
                 transferFee:
                   type: object
                   properties:

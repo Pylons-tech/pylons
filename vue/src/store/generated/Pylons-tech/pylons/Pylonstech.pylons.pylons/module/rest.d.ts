@@ -128,6 +128,7 @@ export interface PylonsItemModifyOutput {
     doubles?: PylonsDoubleParam[];
     longs?: PylonsLongParam[];
     strings?: PylonsStringParam[];
+    mutableStrings?: PylonsStringKeyValue[];
     /**
      * Coin defines a token with a denomination and an amount.
      *
@@ -232,7 +233,7 @@ export interface PylonsQueryListExecutionsByRecipeResponse {
     Executions?: PylonsExecution[];
 }
 export interface PylonsQueryListItemByOwnerResponse {
-    items?: string;
+    Items?: PylonsItem[];
 }
 export interface PylonsQueryListRecipesByCookbookResponse {
     Recipes?: PylonsRecipe[];
@@ -351,17 +352,6 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
-     * @name QueryListItemByOwner
-     * @summary Queries a list of listItemByOwner items.
-     * @request GET:/Pylons-tech/pylons/pylons/listItemByOwner
-     */
-    queryListItemByOwner: (query?: {
-        owner?: string;
-    }, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListItemByOwnerResponse, RpcStatus>>;
-    /**
-     * No description
-     *
-     * @tags Query
      * @name QueryCookbook
      * @summary Retrieves a cookbook by ID.
      * @request GET:/pylons/cookbook/{ID}
@@ -421,6 +411,15 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}
      */
     queryListExecutionsByRecipe: (CookbookID: string, RecipeID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListItemByOwner
+     * @summary Queries a list of listItemByOwner items.
+     * @request GET:/pylons/listItemByOwner/{owner}
+     */
+    queryListItemByOwner: (owner: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListItemByOwnerResponse, RpcStatus>>;
     /**
      * No description
      *
