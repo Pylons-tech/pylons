@@ -25,7 +25,7 @@ service Query {
 
 	// Queries a googleIAPOrder by PurchaseToken.
 	rpc GoogleInAppPurchaseOrder(QueryGetGoogleInAppPurchaseOrderRequest) returns (QueryGetGoogleInAppPurchaseOrderResponse) {
-		option (google.api.http).get = "/pylons/purchase/{PurchaseToken}";
+		option (google.api.http).get = "/pylons/iap/{PurchaseToken}";
 	}
 
 
