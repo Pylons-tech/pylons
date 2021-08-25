@@ -151,7 +151,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		// build execID from the execution height
 		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(i)
 		require.NoError(t, err)
-		_, err = net.WaitForHeightWithTimeout(targetHeight, 30*time.Second)
+		_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 		require.NoError(t, err)
 
 		// check the execution
