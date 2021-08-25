@@ -185,7 +185,9 @@ export interface PylonsLongParam {
     weightRanges?: PylonsIntWeightRange[];
     program?: string;
 }
-export declare type PylonsMsgCompleteExecutionEarlyResponse = object;
+export interface PylonsMsgCompleteExecutionEarlyResponse {
+    ID?: string;
+}
 export declare type PylonsMsgCreateAccountResponse = object;
 export declare type PylonsMsgCreateCookbookResponse = object;
 export declare type PylonsMsgCreateRecipeResponse = object;

@@ -4,14 +4,14 @@ import * as Long from 'long';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseMsgCompleteExecutionEarly = { creator: '', id: '' };
+const baseMsgCompleteExecutionEarly = { creator: '', ID: '' };
 export const MsgCompleteExecutionEarly = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -26,7 +26,7 @@ export const MsgCompleteExecutionEarly = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -43,18 +43,18 @@ export const MsgCompleteExecutionEarly = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -65,18 +65,21 @@ export const MsgCompleteExecutionEarly = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
 };
-const baseMsgCompleteExecutionEarlyResponse = {};
+const baseMsgCompleteExecutionEarlyResponse = { ID: '' };
 export const MsgCompleteExecutionEarlyResponse = {
-    encode(_, writer = Writer.create()) {
+    encode(message, writer = Writer.create()) {
+        if (message.ID !== '') {
+            writer.uint32(10).string(message.ID);
+        }
         return writer;
     },
     decode(input, length) {
@@ -86,6 +89,9 @@ export const MsgCompleteExecutionEarlyResponse = {
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 1:
+                    message.ID = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -93,16 +99,29 @@ export const MsgCompleteExecutionEarlyResponse = {
         }
         return message;
     },
-    fromJSON(_) {
+    fromJSON(object) {
         const message = { ...baseMsgCompleteExecutionEarlyResponse };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
+        }
         return message;
     },
-    toJSON(_) {
+    toJSON(message) {
         const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
-    fromPartial(_) {
+    fromPartial(object) {
         const message = { ...baseMsgCompleteExecutionEarlyResponse };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
+        }
         return message;
     }
 };

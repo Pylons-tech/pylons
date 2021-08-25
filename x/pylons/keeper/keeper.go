@@ -49,6 +49,10 @@ func NewKeeper(
 		panic(fmt.Sprintf("%s module account has not been set", types.ExecutionsLockerName))
 	}
 
+	if addr := ak.GetModuleAddress(types.CoinsIssuerName); addr == nil {
+		panic(fmt.Sprintf("%s module account has not been set", types.CoinsIssuerName))
+	}
+
 	// set KeyTable if it has not already been set
 	if !paramSpace.HasKeyTable() {
 		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())

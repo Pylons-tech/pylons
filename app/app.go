@@ -158,7 +158,8 @@ var (
 		ibctransfertypes.ModuleName:            {authtypes.Minter, authtypes.Burner},
 		pylonsmoduletypes.FeeCollectorName:     nil,
 		pylonsmoduletypes.TradesLockerName:     nil,
-		pylonsmoduletypes.ExecutionsLockerName: nil,
+		pylonsmoduletypes.ExecutionsLockerName: {authtypes.Burner, authtypes.Minter},
+		pylonsmoduletypes.CoinsIssuerName:      {authtypes.Minter},
 		// this line is used by starport scaffolding # stargate/app/maccPerms
 	}
 )

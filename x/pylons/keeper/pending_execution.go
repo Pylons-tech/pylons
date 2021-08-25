@@ -103,8 +103,8 @@ func (k Keeper) UpdatePendingExecutionWithTargetBlockHeight(ctx sdk.Context, exe
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	store.Delete(types.KeyPrefix(execution.ID))
 
-	id_parts := strings.Split(execution.ID, "-")
-	execution.ID = fmt.Sprintf("%v-%v", blockHeight, id_parts[1])
+	idParts := strings.Split(execution.ID, "-")
+	execution.ID = fmt.Sprintf("%v-%v", blockHeight, idParts[1])
 	k.SetPendingExecution(ctx, execution)
 
 	return execution.ID

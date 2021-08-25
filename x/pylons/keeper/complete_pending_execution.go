@@ -133,7 +133,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	}
 
 	// add coin outputs to accounts
-	err = k.bankKeeper.MintCoins(ctx, types.ExecutionsLockerName, coins)
+	err = k.MintCoins(ctx, types.ExecutionsLockerName, coins)
 	if err != nil {
 		return types.Execution{}, err
 	}

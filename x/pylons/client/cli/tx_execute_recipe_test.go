@@ -253,7 +253,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"[]",
 		string(entries),
 		string(itemOutputs),
-		"1",
+		"0",
 		"true",
 		"extraInfo",
 	}
@@ -296,9 +296,9 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	height, err := net.LatestHeight()
 	require.NoError(t, err)
 	// build execID from the execution height
-	execID := strconv.Itoa(int(height+0)) + "-" + "0"
+	execID := strconv.Itoa(int(height)) + "-" + "0"
 
-	_, err = net.WaitForHeightWithTimeout(height+1, 30*time.Second)
+	_, err = net.WaitForHeightWithTimeout(height+2, 30*time.Second)
 	require.NoError(t, err)
 
 	// check the execution

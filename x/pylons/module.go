@@ -5,9 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/telemetry"
-	"github.com/tendermint/tendermint/types/time"
-
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
@@ -172,9 +169,6 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	blockHeight := ctx.BlockHeight()
 	pendingExecs := am.keeper.GetAllPendingExecutionAtBlockHeight(ctx, blockHeight)
-
-	// basic telemetry hook for measuring time between blocks
-	defer telemetry.ModuleMeasureSince(types.ModuleName, time.Now(), telemetry.MetricKeyEndBlocker)
 
 	for _, pendingExec := range pendingExecs {
 		finalizedExec, err := am.keeper.CompletePendingExecution(ctx, pendingExec)

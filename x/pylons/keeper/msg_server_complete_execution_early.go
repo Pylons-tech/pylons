@@ -2,12 +2,14 @@ package keeper
 
 import (
 	"context"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"strconv"
 	"strings"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgCompleteExecutionEarly) (*types.MsgCompleteExecutionEarlyResponse, error) {
@@ -18,8 +20,8 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 	}
 	pendingExecution := k.GetPendingExecution(ctx, msg.ID)
 	cookbook, _ := k.GetCookbook(ctx, pendingExecution.CookbookID)
-	executionIdSplit := strings.Split(pendingExecution.ID, "-")
-	targetBlockHeight, _ := strconv.ParseInt(executionIdSplit[0], 10, 64)
+	executionIDSplit := strings.Split(pendingExecution.ID, "-")
+	targetBlockHeight, _ := strconv.ParseInt(executionIDSplit[0], 10, 64)
 	completeEarlyAmt := cookbook.CostPerBlock.Amount.Mul(sdk.NewInt(targetBlockHeight - ctx.BlockHeight()))
 	completeEarlyCoin := sdk.NewCoin(cookbook.CostPerBlock.Denom, completeEarlyAmt)
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
@@ -29,5 +31,5 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 	}
 	pendingExecution.CoinInputs = pendingExecution.CoinInputs.Add(completeEarlyCoin)
 	id := k.UpdatePendingExecutionWithTargetBlockHeight(ctx, pendingExecution, ctx.BlockHeight())
-	return &types.MsgCompleteExecutionEarlyResponse{ID:id}, nil
+	return &types.MsgCompleteExecutionEarlyResponse{ID: id}, nil
 }

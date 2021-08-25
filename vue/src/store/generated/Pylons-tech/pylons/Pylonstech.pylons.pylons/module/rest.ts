@@ -236,7 +236,9 @@ export interface PylonsLongParam {
   program?: string;
 }
 
-export type PylonsMsgCompleteExecutionEarlyResponse = object;
+export interface PylonsMsgCompleteExecutionEarlyResponse {
+  ID?: string;
+}
 
 export type PylonsMsgCreateAccountResponse = object;
 

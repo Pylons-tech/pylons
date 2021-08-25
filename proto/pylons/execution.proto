@@ -26,7 +26,7 @@ message Execution {
   repeated ItemRecord itemInputs = 8 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin coinInputs = 9 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   repeated cosmos.base.v1beta1.Coin coinOutputs = 10 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
-  repeated string itemOutputIDs = 11;
-  repeated string itemModifyOutputIDs = 12;
+  repeated string itemOutputIDs = 11 [(gogoproto.nullable) = false];
+  repeated string itemModifyOutputIDs = 12 [(gogoproto.nullable) = false];
   }
 

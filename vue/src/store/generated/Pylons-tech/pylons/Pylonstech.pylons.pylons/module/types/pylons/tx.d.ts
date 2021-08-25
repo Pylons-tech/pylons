@@ -5,9 +5,10 @@ export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgCompleteExecutionEarly {
     creator: string;
-    id: string;
+    ID: string;
 }
 export interface MsgCompleteExecutionEarlyResponse {
+    ID: string;
 }
 export interface MsgTransferCookbook {
     creator: string;
@@ -124,11 +125,11 @@ export declare const MsgCompleteExecutionEarly: {
     fromPartial(object: DeepPartial<MsgCompleteExecutionEarly>): MsgCompleteExecutionEarly;
 };
 export declare const MsgCompleteExecutionEarlyResponse: {
-    encode(_: MsgCompleteExecutionEarlyResponse, writer?: Writer): Writer;
+    encode(message: MsgCompleteExecutionEarlyResponse, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCompleteExecutionEarlyResponse;
-    fromJSON(_: any): MsgCompleteExecutionEarlyResponse;
-    toJSON(_: MsgCompleteExecutionEarlyResponse): unknown;
-    fromPartial(_: DeepPartial<MsgCompleteExecutionEarlyResponse>): MsgCompleteExecutionEarlyResponse;
+    fromJSON(object: any): MsgCompleteExecutionEarlyResponse;
+    toJSON(message: MsgCompleteExecutionEarlyResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCompleteExecutionEarlyResponse>): MsgCompleteExecutionEarlyResponse;
 };
 export declare const MsgTransferCookbook: {
     encode(message: MsgTransferCookbook, writer?: Writer): Writer;
