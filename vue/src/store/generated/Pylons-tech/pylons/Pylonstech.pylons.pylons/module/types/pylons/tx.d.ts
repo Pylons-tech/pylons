@@ -3,6 +3,12 @@ import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgCompleteExecutionEarly {
+    creator: string;
+    id: string;
+}
+export interface MsgCompleteExecutionEarlyResponse {
+}
 export interface MsgTransferCookbook {
     creator: string;
     ID: string;
@@ -10,14 +16,14 @@ export interface MsgTransferCookbook {
 }
 export interface MsgTransferCookbookResponse {
 }
-export interface MsgGoogleInAppPurchaseGetPylons {
+export interface MsgGoogleInAppPurchaseGetCoins {
     creator: string;
     productID: string;
     purchaseToken: string;
     receiptDataBase64: string;
     signature: string;
 }
-export interface MsgGoogleInAppPurchaseGetPylonsResponse {
+export interface MsgGoogleInAppPurchaseGetCoinsResponse {
 }
 export interface MsgCreateAccount {
     creator: string;
@@ -110,6 +116,20 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
+export declare const MsgCompleteExecutionEarly: {
+    encode(message: MsgCompleteExecutionEarly, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCompleteExecutionEarly;
+    fromJSON(object: any): MsgCompleteExecutionEarly;
+    toJSON(message: MsgCompleteExecutionEarly): unknown;
+    fromPartial(object: DeepPartial<MsgCompleteExecutionEarly>): MsgCompleteExecutionEarly;
+};
+export declare const MsgCompleteExecutionEarlyResponse: {
+    encode(_: MsgCompleteExecutionEarlyResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCompleteExecutionEarlyResponse;
+    fromJSON(_: any): MsgCompleteExecutionEarlyResponse;
+    toJSON(_: MsgCompleteExecutionEarlyResponse): unknown;
+    fromPartial(_: DeepPartial<MsgCompleteExecutionEarlyResponse>): MsgCompleteExecutionEarlyResponse;
+};
 export declare const MsgTransferCookbook: {
     encode(message: MsgTransferCookbook, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgTransferCookbook;
@@ -124,19 +144,19 @@ export declare const MsgTransferCookbookResponse: {
     toJSON(_: MsgTransferCookbookResponse): unknown;
     fromPartial(_: DeepPartial<MsgTransferCookbookResponse>): MsgTransferCookbookResponse;
 };
-export declare const MsgGoogleInAppPurchaseGetPylons: {
-    encode(message: MsgGoogleInAppPurchaseGetPylons, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgGoogleInAppPurchaseGetPylons;
-    fromJSON(object: any): MsgGoogleInAppPurchaseGetPylons;
-    toJSON(message: MsgGoogleInAppPurchaseGetPylons): unknown;
-    fromPartial(object: DeepPartial<MsgGoogleInAppPurchaseGetPylons>): MsgGoogleInAppPurchaseGetPylons;
+export declare const MsgGoogleInAppPurchaseGetCoins: {
+    encode(message: MsgGoogleInAppPurchaseGetCoins, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgGoogleInAppPurchaseGetCoins;
+    fromJSON(object: any): MsgGoogleInAppPurchaseGetCoins;
+    toJSON(message: MsgGoogleInAppPurchaseGetCoins): unknown;
+    fromPartial(object: DeepPartial<MsgGoogleInAppPurchaseGetCoins>): MsgGoogleInAppPurchaseGetCoins;
 };
-export declare const MsgGoogleInAppPurchaseGetPylonsResponse: {
-    encode(_: MsgGoogleInAppPurchaseGetPylonsResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgGoogleInAppPurchaseGetPylonsResponse;
-    fromJSON(_: any): MsgGoogleInAppPurchaseGetPylonsResponse;
-    toJSON(_: MsgGoogleInAppPurchaseGetPylonsResponse): unknown;
-    fromPartial(_: DeepPartial<MsgGoogleInAppPurchaseGetPylonsResponse>): MsgGoogleInAppPurchaseGetPylonsResponse;
+export declare const MsgGoogleInAppPurchaseGetCoinsResponse: {
+    encode(_: MsgGoogleInAppPurchaseGetCoinsResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgGoogleInAppPurchaseGetCoinsResponse;
+    fromJSON(_: any): MsgGoogleInAppPurchaseGetCoinsResponse;
+    toJSON(_: MsgGoogleInAppPurchaseGetCoinsResponse): unknown;
+    fromPartial(_: DeepPartial<MsgGoogleInAppPurchaseGetCoinsResponse>): MsgGoogleInAppPurchaseGetCoinsResponse;
 };
 export declare const MsgCreateAccount: {
     encode(message: MsgCreateAccount, writer?: Writer): Writer;
@@ -253,8 +273,9 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
+    CompleteExecutionEarly(request: MsgCompleteExecutionEarly): Promise<MsgCompleteExecutionEarlyResponse>;
     TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>;
-    GoogleInAppPurchaseGetPylons(request: MsgGoogleInAppPurchaseGetPylons): Promise<MsgGoogleInAppPurchaseGetPylonsResponse>;
+    GoogleInAppPurchaseGetCoins(request: MsgGoogleInAppPurchaseGetCoins): Promise<MsgGoogleInAppPurchaseGetCoinsResponse>;
     CreateAccount(request: MsgCreateAccount): Promise<MsgCreateAccountResponse>;
     SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>;
     ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>;
@@ -267,8 +288,9 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
+    CompleteExecutionEarly(request: MsgCompleteExecutionEarly): Promise<MsgCompleteExecutionEarlyResponse>;
     TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>;
-    GoogleInAppPurchaseGetPylons(request: MsgGoogleInAppPurchaseGetPylons): Promise<MsgGoogleInAppPurchaseGetPylonsResponse>;
+    GoogleInAppPurchaseGetCoins(request: MsgGoogleInAppPurchaseGetCoins): Promise<MsgGoogleInAppPurchaseGetCoinsResponse>;
     CreateAccount(request: MsgCreateAccount): Promise<MsgCreateAccountResponse>;
     SendItems(request: MsgSendItems): Promise<MsgSendItemsResponse>;
     ExecuteRecipe(request: MsgExecuteRecipe): Promise<MsgExecuteRecipeResponse>;

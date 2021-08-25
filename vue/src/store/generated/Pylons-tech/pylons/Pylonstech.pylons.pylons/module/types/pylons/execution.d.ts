@@ -1,7 +1,6 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 import { DoubleKeyValue, LongKeyValue, StringKeyValue } from '../pylons/item';
 import { Coin } from '../cosmos/base/v1beta1/coin';
-import { Recipe } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface ItemRecord {
     ID: string;
@@ -12,14 +11,16 @@ export interface ItemRecord {
 export interface Execution {
     creator: string;
     ID: string;
+    recipeID: string;
+    cookbookID: string;
+    recipeVersion: string;
     nodeVersion: string;
     blockHeight: number;
     itemInputs: ItemRecord[];
+    coinInputs: Coin[];
     coinOutputs: Coin[];
     itemOutputIDs: string[];
     itemModifyOutputIDs: string[];
-    /** we need this recipe stored since the referenced recipe could be updated while this execution is pending */
-    recipe: Recipe | undefined;
 }
 export declare const ItemRecord: {
     encode(message: ItemRecord, writer?: Writer): Writer;

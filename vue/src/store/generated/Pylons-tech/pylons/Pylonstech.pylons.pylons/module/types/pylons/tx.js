@@ -4,6 +4,108 @@ import * as Long from 'long';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
+const baseMsgCompleteExecutionEarly = { creator: '', id: '' };
+export const MsgCompleteExecutionEarly = {
+    encode(message, writer = Writer.create()) {
+        if (message.creator !== '') {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.id !== '') {
+            writer.uint32(18).string(message.id);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgCompleteExecutionEarly };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.id = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseMsgCompleteExecutionEarly };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
+        }
+        else {
+            message.creator = '';
+        }
+        if (object.id !== undefined && object.id !== null) {
+            message.id = String(object.id);
+        }
+        else {
+            message.id = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.id !== undefined && (obj.id = message.id);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseMsgCompleteExecutionEarly };
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
+        }
+        else {
+            message.creator = '';
+        }
+        if (object.id !== undefined && object.id !== null) {
+            message.id = object.id;
+        }
+        else {
+            message.id = '';
+        }
+        return message;
+    }
+};
+const baseMsgCompleteExecutionEarlyResponse = {};
+export const MsgCompleteExecutionEarlyResponse = {
+    encode(_, writer = Writer.create()) {
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseMsgCompleteExecutionEarlyResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(_) {
+        const message = { ...baseMsgCompleteExecutionEarlyResponse };
+        return message;
+    },
+    toJSON(_) {
+        const obj = {};
+        return obj;
+    },
+    fromPartial(_) {
+        const message = { ...baseMsgCompleteExecutionEarlyResponse };
+        return message;
+    }
+};
 const baseMsgTransferCookbook = { creator: '', ID: '', recipient: '' };
 export const MsgTransferCookbook = {
     encode(message, writer = Writer.create()) {
@@ -125,8 +227,8 @@ export const MsgTransferCookbookResponse = {
         return message;
     }
 };
-const baseMsgGoogleInAppPurchaseGetPylons = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' };
-export const MsgGoogleInAppPurchaseGetPylons = {
+const baseMsgGoogleInAppPurchaseGetCoins = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' };
+export const MsgGoogleInAppPurchaseGetCoins = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
@@ -148,7 +250,7 @@ export const MsgGoogleInAppPurchaseGetPylons = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgGoogleInAppPurchaseGetPylons };
+        const message = { ...baseMsgGoogleInAppPurchaseGetCoins };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -175,7 +277,7 @@ export const MsgGoogleInAppPurchaseGetPylons = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseMsgGoogleInAppPurchaseGetPylons };
+        const message = { ...baseMsgGoogleInAppPurchaseGetCoins };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
@@ -218,7 +320,7 @@ export const MsgGoogleInAppPurchaseGetPylons = {
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseMsgGoogleInAppPurchaseGetPylons };
+        const message = { ...baseMsgGoogleInAppPurchaseGetCoins };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
@@ -252,15 +354,15 @@ export const MsgGoogleInAppPurchaseGetPylons = {
         return message;
     }
 };
-const baseMsgGoogleInAppPurchaseGetPylonsResponse = {};
-export const MsgGoogleInAppPurchaseGetPylonsResponse = {
+const baseMsgGoogleInAppPurchaseGetCoinsResponse = {};
+export const MsgGoogleInAppPurchaseGetCoinsResponse = {
     encode(_, writer = Writer.create()) {
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseMsgGoogleInAppPurchaseGetPylonsResponse };
+        const message = { ...baseMsgGoogleInAppPurchaseGetCoinsResponse };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -272,7 +374,7 @@ export const MsgGoogleInAppPurchaseGetPylonsResponse = {
         return message;
     },
     fromJSON(_) {
-        const message = { ...baseMsgGoogleInAppPurchaseGetPylonsResponse };
+        const message = { ...baseMsgGoogleInAppPurchaseGetCoinsResponse };
         return message;
     },
     toJSON(_) {
@@ -280,7 +382,7 @@ export const MsgGoogleInAppPurchaseGetPylonsResponse = {
         return obj;
     },
     fromPartial(_) {
-        const message = { ...baseMsgGoogleInAppPurchaseGetPylonsResponse };
+        const message = { ...baseMsgGoogleInAppPurchaseGetCoinsResponse };
         return message;
     }
 };
@@ -1989,15 +2091,20 @@ export class MsgClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
     }
+    CompleteExecutionEarly(request) {
+        const data = MsgCompleteExecutionEarly.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'CompleteExecutionEarly', data);
+        return promise.then((data) => MsgCompleteExecutionEarlyResponse.decode(new Reader(data)));
+    }
     TransferCookbook(request) {
         const data = MsgTransferCookbook.encode(request).finish();
         const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'TransferCookbook', data);
         return promise.then((data) => MsgTransferCookbookResponse.decode(new Reader(data)));
     }
-    GoogleInAppPurchaseGetPylons(request) {
-        const data = MsgGoogleInAppPurchaseGetPylons.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'GoogleInAppPurchaseGetPylons', data);
-        return promise.then((data) => MsgGoogleInAppPurchaseGetPylonsResponse.decode(new Reader(data)));
+    GoogleInAppPurchaseGetCoins(request) {
+        const data = MsgGoogleInAppPurchaseGetCoins.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'GoogleInAppPurchaseGetCoins', data);
+        return promise.then((data) => MsgGoogleInAppPurchaseGetCoinsResponse.decode(new Reader(data)));
     }
     CreateAccount(request) {
         const data = MsgCreateAccount.encode(request).finish();

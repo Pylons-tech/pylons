@@ -9,6 +9,8 @@ import (
 
 func RegisterCodec(cdc *codec.LegacyAmino) {
 	// this line is used by starport scaffolding # 2
+	cdc.RegisterConcrete(&MsgCompleteExecutionEarly{}, "pylons/CompleteExecutionEarly", nil)
+
 	cdc.RegisterConcrete(&MsgTransferCookbook{}, "pylons/TransferCookbook", nil)
 
 	cdc.RegisterConcrete(&MsgGoogleInAppPurchaseGetCoins{}, "pylons/GoogleInAppPurchaseGetPylons", nil)
@@ -31,6 +33,9 @@ func RegisterCodec(cdc *codec.LegacyAmino) {
 
 func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
 	// this line is used by starport scaffolding # 3
+	registry.RegisterImplementations((*sdk.Msg)(nil),
+		&MsgCompleteExecutionEarly{},
+	)
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgTransferCookbook{},
 	)

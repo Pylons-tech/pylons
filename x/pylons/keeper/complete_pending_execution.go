@@ -167,7 +167,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	transferCoins := sdk.Coins{}
 	feeCoins := sdk.Coins{}
 coinLoop:
-	for _, coin := range recipe.CoinInputs {
+	for _, coin := range pendingExecution.CoinInputs {
 		for _, denom := range cookbookCoinDenoms {
 			if coin.Denom == denom {
 				burnCoins.Add(coin)
@@ -207,8 +207,3 @@ coinLoop:
 
 	return pendingExecution, nil
 }
-
-// we should add a message CompleteExecutionEarly that can be called on pendingExecutions
-//     compute the cost to pay as remaining blocks*cookbook.costPerBlock
-//     distribute payments
-// 	   change pendingExecution.blockHeight so that when summed to recipe.BlockInterval it gives the current block

@@ -68,14 +68,17 @@ export interface PylonsEntriesList {
 export interface PylonsExecution {
     creator?: string;
     ID?: string;
+    recipeID?: string;
+    cookbookID?: string;
+    recipeVersion?: string;
     nodeVersion?: string;
     /** @format int64 */
     blockHeight?: string;
     itemInputs?: PylonsItemRecord[];
+    coinInputs?: V1Beta1Coin[];
     coinOutputs?: V1Beta1Coin[];
     itemOutputIDs?: string[];
     itemModifyOutputIDs?: string[];
-    recipe?: PylonsRecipe;
 }
 export interface PylonsGoogleInAppPurchaseOrder {
     creator?: string;
@@ -182,13 +185,14 @@ export interface PylonsLongParam {
     weightRanges?: PylonsIntWeightRange[];
     program?: string;
 }
+export declare type PylonsMsgCompleteExecutionEarlyResponse = object;
 export declare type PylonsMsgCreateAccountResponse = object;
 export declare type PylonsMsgCreateCookbookResponse = object;
 export declare type PylonsMsgCreateRecipeResponse = object;
 export interface PylonsMsgExecuteRecipeResponse {
     ID?: string;
 }
-export declare type PylonsMsgGoogleInAppPurchaseGetPylonsResponse = object;
+export declare type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 export declare type PylonsMsgSendItemsResponse = object;
 export declare type PylonsMsgSetItemStringResponse = object;
 export declare type PylonsMsgTransferCookbookResponse = object;

@@ -95,15 +95,18 @@ export interface PylonsEntriesList {
 export interface PylonsExecution {
   creator?: string;
   ID?: string;
+  recipeID?: string;
+  cookbookID?: string;
+  recipeVersion?: string;
   nodeVersion?: string;
 
   /** @format int64 */
   blockHeight?: string;
   itemInputs?: PylonsItemRecord[];
+  coinInputs?: V1Beta1Coin[];
   coinOutputs?: V1Beta1Coin[];
   itemOutputIDs?: string[];
   itemModifyOutputIDs?: string[];
-  recipe?: PylonsRecipe;
 }
 
 export interface PylonsGoogleInAppPurchaseOrder {
@@ -233,6 +236,8 @@ export interface PylonsLongParam {
   program?: string;
 }
 
+export type PylonsMsgCompleteExecutionEarlyResponse = object;
+
 export type PylonsMsgCreateAccountResponse = object;
 
 export type PylonsMsgCreateCookbookResponse = object;
@@ -243,7 +248,7 @@ export interface PylonsMsgExecuteRecipeResponse {
   ID?: string;
 }
 
-export type PylonsMsgGoogleInAppPurchaseGetPylonsResponse = object;
+export type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 
 export type PylonsMsgSendItemsResponse = object;
 

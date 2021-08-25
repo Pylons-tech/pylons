@@ -3,6 +3,7 @@ package keeper
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -54,7 +55,7 @@ func (k Keeper) AppendPendingExecution(
 	// Target height is the block height where the pending execution
 	// is actually able to be executed in the EndBlocker
 	targetHeight := execution.BlockHeight + int64(blockInterval)
-	id := fmt.Sprintf("%d-%d", targetHeight, count+k.GetExecutionCount(ctx))
+	id := fmt.Sprintf("%v-%v", targetHeight, int64(count+k.GetExecutionCount(ctx)))
 	// Set the ID of the appended value
 	execution.ID = id
 
@@ -95,6 +96,18 @@ func (k Keeper) removePendingExecution(ctx sdk.Context, id string) {
 	// Update pending execution count
 	count := k.GetPendingExecutionCount(ctx)
 	k.SetPendingExecutionCount(ctx, count-1)
+}
+
+// UpdatePendingExecutionWithTargetBlockHeight updates a pendingExecution with a new ID
+func (k Keeper) UpdatePendingExecutionWithTargetBlockHeight(ctx sdk.Context, execution types.Execution, blockHeight int64) string {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
+	store.Delete(types.KeyPrefix(execution.ID))
+
+	id_parts := strings.Split(execution.ID, "-")
+	execution.ID = fmt.Sprintf("%v-%v", blockHeight, id_parts[1])
+	k.SetPendingExecution(ctx, execution)
+
+	return execution.ID
 }
 
 // GetAllPendingExecution returns all execution

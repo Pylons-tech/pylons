@@ -15,6 +15,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc CompleteExecutionEarly(MsgCompleteExecutionEarly) returns (MsgCompleteExecutionEarlyResponse);
   rpc TransferCookbook(MsgTransferCookbook) returns (MsgTransferCookbookResponse);
   rpc GoogleInAppPurchaseGetCoins(MsgGoogleInAppPurchaseGetCoins) returns (MsgGoogleInAppPurchaseGetCoinsResponse);
   rpc CreateAccount(MsgCreateAccount) returns (MsgCreateAccountResponse);
@@ -28,6 +29,15 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgCompleteExecutionEarly {
+  string creator = 1;
+  string ID = 2;
+}
+
+message MsgCompleteExecutionEarlyResponse {
+  string ID = 1;
+}
+
 message MsgTransferCookbook {
   string creator = 1;
   string ID = 2;
