@@ -222,8 +222,8 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				},
 				MutableStrings: []types.StringKeyValue{
 					{
-						Key:     "testMutKey",
-						Value:   "testMutValue",
+						Key:   "testMutKey",
+						Value: "testMutValue",
 					},
 				},
 				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
@@ -410,8 +410,8 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				},
 				MutableStrings: []types.StringKeyValue{
 					{
-						Key:     "testMutKey",
-						Value:   "testMutValue",
+						Key:   "testMutKey",
+						Value: "testMutValue",
 					},
 				},
 				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
@@ -577,8 +577,8 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				},
 				MutableStrings: []types.StringKeyValue{
 					{
-						Key:     "testMutKey",
-						Value:   "testMutValue",
+						Key:   "testMutKey",
+						Value: "testMutValue",
 					},
 				},
 				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),

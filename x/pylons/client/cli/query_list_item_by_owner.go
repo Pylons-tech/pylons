@@ -1,12 +1,14 @@
 package cli
 
 import (
-	"github.com/spf13/cobra"
 	"strconv"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"github.com/spf13/cobra"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 var _ = strconv.Itoa(0)
@@ -17,7 +19,7 @@ func CmdListItemByOwner() *cobra.Command {
 		Short: "List items by owner",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			reqOwner := string(args[0])
+			reqOwner := args[0]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -27,8 +29,7 @@ func CmdListItemByOwner() *cobra.Command {
 			queryClient := types.NewQueryClient(clientCtx)
 
 			params := &types.QueryListItemByOwnerRequest{
-
-				Owner: string(reqOwner),
+				Owner: reqOwner,
 			}
 
 			res, err := queryClient.ListItemByOwner(cmd.Context(), params)

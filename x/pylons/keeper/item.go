@@ -66,6 +66,9 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(item.CookbookID))
 	b := k.cdc.MustMarshalBinaryBare(&item)
 	cookbookItemsStore.Set(types.KeyPrefix(item.ID), b)
+
+	addr, _ := sdk.AccAddressFromBech32(item.Owner)
+	k.addItemToAddress(ctx, item.CookbookID, item.ID, addr)
 }
 
 // GetItem returns an item from its index
