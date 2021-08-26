@@ -3,55 +3,83 @@ package Pylonstech.pylons.pylons;
 
 option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
+import "gogoproto/gogo.proto";
+
 message EventCreateAccount {
   string msg_type_url = 2;
+  string address = 3;
 }
 
 message EventCreateCookbook {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message EventUpdateCookbook {
   string msg_type_url = 2;
+  string id = 3;
 }
 
 message EventTransferCookbook {
   string msg_type_url = 2;
+  string sender = 3;
+  string receiver = 4;
+  string id = 5;
 }
 
 message EventCreateRecipe {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message EventUpdateRecipe {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message EventCreateExecution {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message EventCompleteExecution {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message EventCompleteExecutionEarly {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
-message EventSentItems {
+message EventSendItems {
   string msg_type_url = 2;
+  string sender = 3;
+  string receiver = 4;
+  repeated string IDs = 5  [(gogoproto.nullable) = false];
 }
 
 message EventSetIemString {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message GooglePurchase {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 
 message StripePurchase {
   string msg_type_url = 2;
+  string creator = 3;
+  string id = 4;
 }
 

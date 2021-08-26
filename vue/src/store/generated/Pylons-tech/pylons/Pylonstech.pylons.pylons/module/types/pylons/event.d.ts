@@ -2,42 +2,68 @@ import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
     msgTypeUrl: string;
+    address: string;
 }
 export interface EventCreateCookbook {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface EventUpdateCookbook {
     msgTypeUrl: string;
+    id: string;
 }
 export interface EventTransferCookbook {
     msgTypeUrl: string;
+    sender: string;
+    receiver: string;
+    id: string;
 }
 export interface EventCreateRecipe {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface EventUpdateRecipe {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface EventCreateExecution {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface EventCompleteExecution {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface EventCompleteExecutionEarly {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
-export interface EventSentItems {
+export interface EventSendItems {
     msgTypeUrl: string;
+    sender: string;
+    receiver: string;
+    IDs: string[];
 }
 export interface EventSetIemString {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface GooglePurchase {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export interface StripePurchase {
     msgTypeUrl: string;
+    creator: string;
+    id: string;
 }
 export declare const EventCreateAccount: {
     encode(message: EventCreateAccount, writer?: Writer): Writer;
@@ -102,12 +128,12 @@ export declare const EventCompleteExecutionEarly: {
     toJSON(message: EventCompleteExecutionEarly): unknown;
     fromPartial(object: DeepPartial<EventCompleteExecutionEarly>): EventCompleteExecutionEarly;
 };
-export declare const EventSentItems: {
-    encode(message: EventSentItems, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): EventSentItems;
-    fromJSON(object: any): EventSentItems;
-    toJSON(message: EventSentItems): unknown;
-    fromPartial(object: DeepPartial<EventSentItems>): EventSentItems;
+export declare const EventSendItems: {
+    encode(message: EventSendItems, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventSendItems;
+    fromJSON(object: any): EventSendItems;
+    toJSON(message: EventSendItems): unknown;
+    fromPartial(object: DeepPartial<EventSendItems>): EventSendItems;
 };
 export declare const EventSetIemString: {
     encode(message: EventSetIemString, writer?: Writer): Writer;
