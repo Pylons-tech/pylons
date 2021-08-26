@@ -20496,6 +20496,8 @@ paths:
                                 implements the custom method
 
                                 signatures required by gogoproto.
+                            program:
+                              type: string
                           title: >-
                             CoinOutput models the continuum of valid outcomes
                             for coin generation in recipes
@@ -21034,6 +21036,8 @@ paths:
                                   implements the custom method
 
                                   signatures required by gogoproto.
+                              program:
+                                type: string
                             title: >-
                               CoinOutput models the continuum of valid outcomes
                               for coin generation in recipes
@@ -31688,6 +31692,8 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+      program:
+        type: string
     title: >-
       CoinOutput models the continuum of valid outcomes for coin generation in
       recipes
@@ -31862,6 +31868,8 @@ definitions:
                 method
 
                 signatures required by gogoproto.
+            program:
+              type: string
           title: >-
             CoinOutput models the continuum of valid outcomes for coin
             generation in recipes
@@ -33204,6 +33212,8 @@ definitions:
                         custom method
 
                         signatures required by gogoproto.
+                    program:
+                      type: string
                   title: >-
                     CoinOutput models the continuum of valid outcomes for coin
                     generation in recipes
@@ -34002,6 +34012,8 @@ definitions:
                           custom method
 
                           signatures required by gogoproto.
+                      program:
+                        type: string
                     title: >-
                       CoinOutput models the continuum of valid outcomes for coin
                       generation in recipes
@@ -34480,6 +34492,8 @@ definitions:
                     method
 
                     signatures required by gogoproto.
+                program:
+                  type: string
               title: >-
                 CoinOutput models the continuum of valid outcomes for coin
                 generation in recipes

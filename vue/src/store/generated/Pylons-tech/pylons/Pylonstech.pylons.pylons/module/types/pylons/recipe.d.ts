@@ -81,6 +81,7 @@ export interface StringParam {
 export interface CoinOutput {
     ID: string;
     coin: Coin | undefined;
+    program: string;
 }
 /** ItemOutput models the continuum of valid outcomes for item generation in recipes */
 export interface ItemOutput {

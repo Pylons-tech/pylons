@@ -26,6 +26,7 @@ export interface PylonsCoinOutput {
    * signatures required by gogoproto.
    */
   coin?: V1Beta1Coin;
+  program?: string;
 }
 
 export interface PylonsConditionList {

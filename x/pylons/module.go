@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"math/rand"
 
+	"github.com/cosmos/cosmos-sdk/telemetry"
+
 	"github.com/Pylons-tech/pylons/x/pylons/simulation"
 
 	"github.com/gorilla/mux"
@@ -174,6 +176,12 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	blockHeight := ctx.BlockHeight()
 	pendingExecs := am.keeper.GetAllPendingExecutionAtBlockHeight(ctx, blockHeight)
+
+	defer func() {
+		for _, exec := range pendingExecs {
+			telemetry.IncrCounter(1, "execution", "cookbookID", exec.CookbookID, "recipeID", exec.RecipeID)
+		}
+	}()
 
 	for _, pendingExec := range pendingExecs {
 		finalizedExec, err := am.keeper.CompletePendingExecution(ctx, pendingExec)

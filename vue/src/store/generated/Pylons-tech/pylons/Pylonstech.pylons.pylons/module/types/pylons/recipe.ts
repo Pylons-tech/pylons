@@ -95,6 +95,7 @@ export interface StringParam {
 export interface CoinOutput {
   ID: string
   coin: Coin | undefined
+  program: string
 }
 
 /** ItemOutput models the continuum of valid outcomes for item generation in recipes */
@@ -1170,7 +1171,7 @@ export const StringParam = {
   }
 }
 
-const baseCoinOutput: object = { ID: '' }
+const baseCoinOutput: object = { ID: '', program: '' }
 
 export const CoinOutput = {
   encode(message: CoinOutput, writer: Writer = Writer.create()): Writer {
@@ -1179,6 +1180,9 @@ export const CoinOutput = {
     }
     if (message.coin !== undefined) {
       Coin.encode(message.coin, writer.uint32(18).fork()).ldelim()
+    }
+    if (message.program !== '') {
+      writer.uint32(26).string(message.program)
     }
     return writer
   },
@@ -1195,6 +1199,9 @@ export const CoinOutput = {
           break
         case 2:
           message.coin = Coin.decode(reader, reader.uint32())
+          break
+        case 3:
+          message.program = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -1216,6 +1223,11 @@ export const CoinOutput = {
     } else {
       message.coin = undefined
     }
+    if (object.program !== undefined && object.program !== null) {
+      message.program = String(object.program)
+    } else {
+      message.program = ''
+    }
     return message
   },
 
@@ -1223,6 +1235,7 @@ export const CoinOutput = {
     const obj: any = {}
     message.ID !== undefined && (obj.ID = message.ID)
     message.coin !== undefined && (obj.coin = message.coin ? Coin.toJSON(message.coin) : undefined)
+    message.program !== undefined && (obj.program = message.program)
     return obj
   },
 
@@ -1237,6 +1250,11 @@ export const CoinOutput = {
       message.coin = Coin.fromPartial(object.coin)
     } else {
       message.coin = undefined
+    }
+    if (object.program !== undefined && object.program !== null) {
+      message.program = object.program
+    } else {
+      message.program = ''
     }
     return message
   }

@@ -1018,7 +1018,7 @@ export const StringParam = {
         return message;
     }
 };
-const baseCoinOutput = { ID: '' };
+const baseCoinOutput = { ID: '', program: '' };
 export const CoinOutput = {
     encode(message, writer = Writer.create()) {
         if (message.ID !== '') {
@@ -1026,6 +1026,9 @@ export const CoinOutput = {
         }
         if (message.coin !== undefined) {
             Coin.encode(message.coin, writer.uint32(18).fork()).ldelim();
+        }
+        if (message.program !== '') {
+            writer.uint32(26).string(message.program);
         }
         return writer;
     },
@@ -1041,6 +1044,9 @@ export const CoinOutput = {
                     break;
                 case 2:
                     message.coin = Coin.decode(reader, reader.uint32());
+                    break;
+                case 3:
+                    message.program = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -1063,12 +1069,19 @@ export const CoinOutput = {
         else {
             message.coin = undefined;
         }
+        if (object.program !== undefined && object.program !== null) {
+            message.program = String(object.program);
+        }
+        else {
+            message.program = '';
+        }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.ID !== undefined && (obj.ID = message.ID);
         message.coin !== undefined && (obj.coin = message.coin ? Coin.toJSON(message.coin) : undefined);
+        message.program !== undefined && (obj.program = message.program);
         return obj;
     },
     fromPartial(object) {
@@ -1084,6 +1097,12 @@ export const CoinOutput = {
         }
         else {
             message.coin = undefined;
+        }
+        if (object.program !== undefined && object.program !== null) {
+            message.program = object.program;
+        }
+        else {
+            message.program = '';
         }
         return message;
     }
