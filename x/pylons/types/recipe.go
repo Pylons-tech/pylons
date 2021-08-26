@@ -153,7 +153,7 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				return false, nil
 			}
 
-			if strings.Compare(coinA.Program, coinB.Program) != 0{
+			if strings.Compare(coinA.Program, coinB.Program) != 0 {
 				return false, nil
 			}
 		}
