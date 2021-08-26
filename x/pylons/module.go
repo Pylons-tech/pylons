@@ -4,6 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math/rand"
+
+	"github.com/Pylons-tech/pylons/x/pylons/simulation"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -16,6 +19,7 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
+	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
@@ -24,8 +28,9 @@ import (
 )
 
 var (
-	_ module.AppModule      = AppModule{}
-	_ module.AppModuleBasic = AppModuleBasic{}
+	_ module.AppModule           = AppModule{}
+	_ module.AppModuleBasic      = AppModuleBasic{}
+	_ module.AppModuleSimulation = AppModule{}
 	// this line is used by starport scaffolding # ibc/module/interface
 )
 
@@ -198,4 +203,33 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 	}
 
 	return []abci.ValidatorUpdate{}
+}
+
+// ____________________________________________________________________________
+
+// AppModuleSimulation functions
+
+// GenerateGenesisState creates a randomized GenState of the bank module.
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	simulation.RandomizedGenState(simState)
+}
+
+// ProposalContents doesn't return any content functions for governance proposals.
+func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+	return nil
+}
+
+// RandomizedParams creates randomized bank param changes for the simulator.
+func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	return simulation.ParamChanges(r)
+}
+
+// RegisterStoreDecoder registers a decoder for supply module's types
+func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
+
+// WeightedOperations returns the all the gov module operations with their respective weights.
+func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	return simulation.WeightedOperations(
+		simState.AppParams, simState.Cdc, am.keeper,
+	)
 }
