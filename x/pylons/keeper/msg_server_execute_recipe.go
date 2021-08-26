@@ -174,6 +174,8 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 			Strings: item.Strings,
 		}
 
+		// lock input item for the execution - they are not unlocked if execution completes successfully, which means
+		// items given as input are never returned to the owner when not modified, by design
 		k.LockItemForExecution(ctx, item)
 	}
 
