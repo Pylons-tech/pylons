@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/rogpeppe/go-internal/semver"
 
@@ -149,6 +150,10 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 			}
 
 			if !coinA.Coin.Equal(coinB.Coin) {
+				return false, nil
+			}
+
+			if strings.Compare(coinA.Program, coinB.Program) != 0{
 				return false, nil
 			}
 		}

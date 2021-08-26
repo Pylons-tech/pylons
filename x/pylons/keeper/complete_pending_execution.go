@@ -59,7 +59,15 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 	coins := make([]sdk.Coin, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
 		coins[i].Denom = coinPrefix + "/" + coinOutput.Coin.Denom
-		coins[i].Amount = coinOutput.Coin.Amount
+		if coinOutput.Program != "" {
+			val, err := ec.EvalInt64(coinOutput.Program)
+			if err != nil {
+				return nil, nil, nil, err
+			}
+			coins[i].Amount = sdk.NewInt(val)
+		} else {
+			coins[i].Amount = coinOutput.Coin.Amount
+		}
 		if !coins[i].IsValid() {
 			return nil, nil, nil, sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs from execution")
 		}

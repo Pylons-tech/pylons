@@ -96,6 +96,7 @@ message StringParam {
 message CoinOutput{
   string ID = 1;
   cosmos.base.v1beta1.Coin coin = 2 [(gogoproto.nullable) = false];
+  string program = 3;
 }
 
 // ItemOutput models the continuum of valid outcomes for item generation in recipes
