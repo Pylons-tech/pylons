@@ -66,8 +66,8 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 	}
 
 	mintedItems := make([]types.Item, 0)
-	for itemOutputIdx, itemOutput := range itemOutputs {
-		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted {
+	for idx, itemOutput := range itemOutputs {
+		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
 			return nil, nil, nil, sdkerrors.Wrap(types.ErrItemQuantityExceeded, fmt.Sprintf("quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted))
 		}
 		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, addr, ec)
@@ -75,11 +75,14 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 			return nil, nil, nil, err
 		}
 		mintedItems = append(mintedItems, item)
-		recipe.Entries.ItemOutputs[itemOutputIdx].AmountMinted++
+		recipe.Entries.ItemOutputs[idx].AmountMinted++
 	}
 
 	modifiedItems := make([]types.Item, len(itemModifyOutputs))
-	for _, itemModifyOutput := range itemModifyOutputs {
+	for idx, itemModifyOutput := range itemModifyOutputs {
+		if itemModifyOutput.Quantity != 0 && itemModifyOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
+			return nil, nil, nil, sdkerrors.Wrap(types.ErrItemQuantityExceeded, fmt.Sprintf("quantity: %d, already minted: %d", itemModifyOutput.Quantity, itemModifyOutput.AmountMinted))
+		}
 		itemInputIdx := 0
 		for i, itemInput := range recipe.ItemInputs {
 			if itemInput.ID == itemModifyOutput.ItemInputRef {
@@ -96,6 +99,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 			return nil, nil, nil, err
 		}
 		modifiedItems = append(modifiedItems, item)
+		recipe.Entries.ItemOutputs[idx].AmountMinted++
 	}
 
 	return coins, mintedItems, modifiedItems, nil
