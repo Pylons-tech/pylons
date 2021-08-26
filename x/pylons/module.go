@@ -186,7 +186,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			if err != nil {
 				panic(err.Error())
 			}
-			// make sure locked items ownership is set back to the execution creator
+			// make sure locked item's ownership is set back to the execution creator
 			for _, itemRecord := range pendingExec.ItemInputs {
 				item, found := am.keeper.GetItem(ctx, pendingExec.CookbookID, itemRecord.ID)
 				if !found {
@@ -208,8 +208,9 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 // ____________________________________________________________________________
 
 // AppModuleSimulation functions
+// TODO finish simulation functionality in /x/pylons/simulation
 
-// GenerateGenesisState creates a randomized GenState of the bank module.
+// GenerateGenesisState creates a randomized GenState of the pylons module.
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 	simulation.RandomizedGenState(simState)
 }
@@ -219,7 +220,7 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 	return nil
 }
 
-// RandomizedParams creates randomized bank param changes for the simulator.
+// RandomizedParams creates randomized pylons param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
 	return simulation.ParamChanges(r)
 }
