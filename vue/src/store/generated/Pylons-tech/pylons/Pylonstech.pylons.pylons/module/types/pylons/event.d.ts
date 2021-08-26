@@ -1,67 +1,54 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
-    msgTypeUrl: string;
     address: string;
 }
 export interface EventCreateCookbook {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface EventUpdateCookbook {
-    msgTypeUrl: string;
     id: string;
 }
 export interface EventTransferCookbook {
-    msgTypeUrl: string;
     sender: string;
     receiver: string;
     id: string;
 }
 export interface EventCreateRecipe {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface EventUpdateRecipe {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface EventCreateExecution {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface EventCompleteExecution {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface EventCompleteExecutionEarly {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface EventSendItems {
-    msgTypeUrl: string;
     sender: string;
     receiver: string;
     IDs: string[];
 }
 export interface EventSetIemString {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface GooglePurchase {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }
 export interface StripePurchase {
-    msgTypeUrl: string;
     creator: string;
     id: string;
 }

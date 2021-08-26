@@ -4,92 +4,76 @@ import { Writer, Reader } from 'protobufjs/minimal'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 export interface EventCreateAccount {
-  msgTypeUrl: string
   address: string
 }
 
 export interface EventCreateCookbook {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface EventUpdateCookbook {
-  msgTypeUrl: string
   id: string
 }
 
 export interface EventTransferCookbook {
-  msgTypeUrl: string
   sender: string
   receiver: string
   id: string
 }
 
 export interface EventCreateRecipe {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface EventUpdateRecipe {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface EventCreateExecution {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface EventCompleteExecution {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface EventCompleteExecutionEarly {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface EventSendItems {
-  msgTypeUrl: string
   sender: string
   receiver: string
   IDs: string[]
 }
 
 export interface EventSetIemString {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface GooglePurchase {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
 export interface StripePurchase {
-  msgTypeUrl: string
   creator: string
   id: string
 }
 
-const baseEventCreateAccount: object = { msgTypeUrl: '', address: '' }
+const baseEventCreateAccount: object = { address: '' }
 
 export const EventCreateAccount = {
   encode(message: EventCreateAccount, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.address !== '') {
-      writer.uint32(26).string(message.address)
+      writer.uint32(10).string(message.address)
     }
     return writer
   },
@@ -101,10 +85,7 @@ export const EventCreateAccount = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.address = reader.string()
           break
         default:
@@ -117,11 +98,6 @@ export const EventCreateAccount = {
 
   fromJSON(object: any): EventCreateAccount {
     const message = { ...baseEventCreateAccount } as EventCreateAccount
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.address !== undefined && object.address !== null) {
       message.address = String(object.address)
     } else {
@@ -132,18 +108,12 @@ export const EventCreateAccount = {
 
   toJSON(message: EventCreateAccount): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.address !== undefined && (obj.address = message.address)
     return obj
   },
 
   fromPartial(object: DeepPartial<EventCreateAccount>): EventCreateAccount {
     const message = { ...baseEventCreateAccount } as EventCreateAccount
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address
     } else {
@@ -153,18 +123,15 @@ export const EventCreateAccount = {
   }
 }
 
-const baseEventCreateCookbook: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventCreateCookbook: object = { creator: '', id: '' }
 
 export const EventCreateCookbook = {
   encode(message: EventCreateCookbook, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -176,13 +143,10 @@ export const EventCreateCookbook = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -195,11 +159,6 @@ export const EventCreateCookbook = {
 
   fromJSON(object: any): EventCreateCookbook {
     const message = { ...baseEventCreateCookbook } as EventCreateCookbook
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -215,7 +174,6 @@ export const EventCreateCookbook = {
 
   toJSON(message: EventCreateCookbook): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -223,11 +181,6 @@ export const EventCreateCookbook = {
 
   fromPartial(object: DeepPartial<EventCreateCookbook>): EventCreateCookbook {
     const message = { ...baseEventCreateCookbook } as EventCreateCookbook
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -242,15 +195,12 @@ export const EventCreateCookbook = {
   }
 }
 
-const baseEventUpdateCookbook: object = { msgTypeUrl: '', id: '' }
+const baseEventUpdateCookbook: object = { id: '' }
 
 export const EventUpdateCookbook = {
   encode(message: EventUpdateCookbook, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.id !== '') {
-      writer.uint32(26).string(message.id)
+      writer.uint32(10).string(message.id)
     }
     return writer
   },
@@ -262,10 +212,7 @@ export const EventUpdateCookbook = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.id = reader.string()
           break
         default:
@@ -278,11 +225,6 @@ export const EventUpdateCookbook = {
 
   fromJSON(object: any): EventUpdateCookbook {
     const message = { ...baseEventUpdateCookbook } as EventUpdateCookbook
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.id !== undefined && object.id !== null) {
       message.id = String(object.id)
     } else {
@@ -293,18 +235,12 @@ export const EventUpdateCookbook = {
 
   toJSON(message: EventUpdateCookbook): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.id !== undefined && (obj.id = message.id)
     return obj
   },
 
   fromPartial(object: DeepPartial<EventUpdateCookbook>): EventUpdateCookbook {
     const message = { ...baseEventUpdateCookbook } as EventUpdateCookbook
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.id !== undefined && object.id !== null) {
       message.id = object.id
     } else {
@@ -314,21 +250,18 @@ export const EventUpdateCookbook = {
   }
 }
 
-const baseEventTransferCookbook: object = { msgTypeUrl: '', sender: '', receiver: '', id: '' }
+const baseEventTransferCookbook: object = { sender: '', receiver: '', id: '' }
 
 export const EventTransferCookbook = {
   encode(message: EventTransferCookbook, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.sender !== '') {
-      writer.uint32(26).string(message.sender)
+      writer.uint32(10).string(message.sender)
     }
     if (message.receiver !== '') {
-      writer.uint32(34).string(message.receiver)
+      writer.uint32(18).string(message.receiver)
     }
     if (message.id !== '') {
-      writer.uint32(42).string(message.id)
+      writer.uint32(26).string(message.id)
     }
     return writer
   },
@@ -340,16 +273,13 @@ export const EventTransferCookbook = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.sender = reader.string()
           break
-        case 4:
+        case 2:
           message.receiver = reader.string()
           break
-        case 5:
+        case 3:
           message.id = reader.string()
           break
         default:
@@ -362,11 +292,6 @@ export const EventTransferCookbook = {
 
   fromJSON(object: any): EventTransferCookbook {
     const message = { ...baseEventTransferCookbook } as EventTransferCookbook
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = String(object.sender)
     } else {
@@ -387,7 +312,6 @@ export const EventTransferCookbook = {
 
   toJSON(message: EventTransferCookbook): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.sender !== undefined && (obj.sender = message.sender)
     message.receiver !== undefined && (obj.receiver = message.receiver)
     message.id !== undefined && (obj.id = message.id)
@@ -396,11 +320,6 @@ export const EventTransferCookbook = {
 
   fromPartial(object: DeepPartial<EventTransferCookbook>): EventTransferCookbook {
     const message = { ...baseEventTransferCookbook } as EventTransferCookbook
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = object.sender
     } else {
@@ -420,18 +339,15 @@ export const EventTransferCookbook = {
   }
 }
 
-const baseEventCreateRecipe: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventCreateRecipe: object = { creator: '', id: '' }
 
 export const EventCreateRecipe = {
   encode(message: EventCreateRecipe, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -443,13 +359,10 @@ export const EventCreateRecipe = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -462,11 +375,6 @@ export const EventCreateRecipe = {
 
   fromJSON(object: any): EventCreateRecipe {
     const message = { ...baseEventCreateRecipe } as EventCreateRecipe
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -482,7 +390,6 @@ export const EventCreateRecipe = {
 
   toJSON(message: EventCreateRecipe): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -490,11 +397,6 @@ export const EventCreateRecipe = {
 
   fromPartial(object: DeepPartial<EventCreateRecipe>): EventCreateRecipe {
     const message = { ...baseEventCreateRecipe } as EventCreateRecipe
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -509,18 +411,15 @@ export const EventCreateRecipe = {
   }
 }
 
-const baseEventUpdateRecipe: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventUpdateRecipe: object = { creator: '', id: '' }
 
 export const EventUpdateRecipe = {
   encode(message: EventUpdateRecipe, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -532,13 +431,10 @@ export const EventUpdateRecipe = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -551,11 +447,6 @@ export const EventUpdateRecipe = {
 
   fromJSON(object: any): EventUpdateRecipe {
     const message = { ...baseEventUpdateRecipe } as EventUpdateRecipe
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -571,7 +462,6 @@ export const EventUpdateRecipe = {
 
   toJSON(message: EventUpdateRecipe): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -579,11 +469,6 @@ export const EventUpdateRecipe = {
 
   fromPartial(object: DeepPartial<EventUpdateRecipe>): EventUpdateRecipe {
     const message = { ...baseEventUpdateRecipe } as EventUpdateRecipe
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -598,18 +483,15 @@ export const EventUpdateRecipe = {
   }
 }
 
-const baseEventCreateExecution: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventCreateExecution: object = { creator: '', id: '' }
 
 export const EventCreateExecution = {
   encode(message: EventCreateExecution, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -621,13 +503,10 @@ export const EventCreateExecution = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -640,11 +519,6 @@ export const EventCreateExecution = {
 
   fromJSON(object: any): EventCreateExecution {
     const message = { ...baseEventCreateExecution } as EventCreateExecution
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -660,7 +534,6 @@ export const EventCreateExecution = {
 
   toJSON(message: EventCreateExecution): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -668,11 +541,6 @@ export const EventCreateExecution = {
 
   fromPartial(object: DeepPartial<EventCreateExecution>): EventCreateExecution {
     const message = { ...baseEventCreateExecution } as EventCreateExecution
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -687,18 +555,15 @@ export const EventCreateExecution = {
   }
 }
 
-const baseEventCompleteExecution: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventCompleteExecution: object = { creator: '', id: '' }
 
 export const EventCompleteExecution = {
   encode(message: EventCompleteExecution, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -710,13 +575,10 @@ export const EventCompleteExecution = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -729,11 +591,6 @@ export const EventCompleteExecution = {
 
   fromJSON(object: any): EventCompleteExecution {
     const message = { ...baseEventCompleteExecution } as EventCompleteExecution
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -749,7 +606,6 @@ export const EventCompleteExecution = {
 
   toJSON(message: EventCompleteExecution): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -757,11 +613,6 @@ export const EventCompleteExecution = {
 
   fromPartial(object: DeepPartial<EventCompleteExecution>): EventCompleteExecution {
     const message = { ...baseEventCompleteExecution } as EventCompleteExecution
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -776,18 +627,15 @@ export const EventCompleteExecution = {
   }
 }
 
-const baseEventCompleteExecutionEarly: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventCompleteExecutionEarly: object = { creator: '', id: '' }
 
 export const EventCompleteExecutionEarly = {
   encode(message: EventCompleteExecutionEarly, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -799,13 +647,10 @@ export const EventCompleteExecutionEarly = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -818,11 +663,6 @@ export const EventCompleteExecutionEarly = {
 
   fromJSON(object: any): EventCompleteExecutionEarly {
     const message = { ...baseEventCompleteExecutionEarly } as EventCompleteExecutionEarly
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -838,7 +678,6 @@ export const EventCompleteExecutionEarly = {
 
   toJSON(message: EventCompleteExecutionEarly): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -846,11 +685,6 @@ export const EventCompleteExecutionEarly = {
 
   fromPartial(object: DeepPartial<EventCompleteExecutionEarly>): EventCompleteExecutionEarly {
     const message = { ...baseEventCompleteExecutionEarly } as EventCompleteExecutionEarly
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -865,21 +699,18 @@ export const EventCompleteExecutionEarly = {
   }
 }
 
-const baseEventSendItems: object = { msgTypeUrl: '', sender: '', receiver: '', IDs: '' }
+const baseEventSendItems: object = { sender: '', receiver: '', IDs: '' }
 
 export const EventSendItems = {
   encode(message: EventSendItems, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.sender !== '') {
-      writer.uint32(26).string(message.sender)
+      writer.uint32(10).string(message.sender)
     }
     if (message.receiver !== '') {
-      writer.uint32(34).string(message.receiver)
+      writer.uint32(18).string(message.receiver)
     }
     for (const v of message.IDs) {
-      writer.uint32(42).string(v!)
+      writer.uint32(26).string(v!)
     }
     return writer
   },
@@ -892,16 +723,13 @@ export const EventSendItems = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.sender = reader.string()
           break
-        case 4:
+        case 2:
           message.receiver = reader.string()
           break
-        case 5:
+        case 3:
           message.IDs.push(reader.string())
           break
         default:
@@ -915,11 +743,6 @@ export const EventSendItems = {
   fromJSON(object: any): EventSendItems {
     const message = { ...baseEventSendItems } as EventSendItems
     message.IDs = []
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = String(object.sender)
     } else {
@@ -940,7 +763,6 @@ export const EventSendItems = {
 
   toJSON(message: EventSendItems): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.sender !== undefined && (obj.sender = message.sender)
     message.receiver !== undefined && (obj.receiver = message.receiver)
     if (message.IDs) {
@@ -954,11 +776,6 @@ export const EventSendItems = {
   fromPartial(object: DeepPartial<EventSendItems>): EventSendItems {
     const message = { ...baseEventSendItems } as EventSendItems
     message.IDs = []
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.sender !== undefined && object.sender !== null) {
       message.sender = object.sender
     } else {
@@ -978,18 +795,15 @@ export const EventSendItems = {
   }
 }
 
-const baseEventSetIemString: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseEventSetIemString: object = { creator: '', id: '' }
 
 export const EventSetIemString = {
   encode(message: EventSetIemString, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -1001,13 +815,10 @@ export const EventSetIemString = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -1020,11 +831,6 @@ export const EventSetIemString = {
 
   fromJSON(object: any): EventSetIemString {
     const message = { ...baseEventSetIemString } as EventSetIemString
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -1040,7 +846,6 @@ export const EventSetIemString = {
 
   toJSON(message: EventSetIemString): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -1048,11 +853,6 @@ export const EventSetIemString = {
 
   fromPartial(object: DeepPartial<EventSetIemString>): EventSetIemString {
     const message = { ...baseEventSetIemString } as EventSetIemString
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -1067,18 +867,15 @@ export const EventSetIemString = {
   }
 }
 
-const baseGooglePurchase: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseGooglePurchase: object = { creator: '', id: '' }
 
 export const GooglePurchase = {
   encode(message: GooglePurchase, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -1090,13 +887,10 @@ export const GooglePurchase = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -1109,11 +903,6 @@ export const GooglePurchase = {
 
   fromJSON(object: any): GooglePurchase {
     const message = { ...baseGooglePurchase } as GooglePurchase
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -1129,7 +918,6 @@ export const GooglePurchase = {
 
   toJSON(message: GooglePurchase): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -1137,11 +925,6 @@ export const GooglePurchase = {
 
   fromPartial(object: DeepPartial<GooglePurchase>): GooglePurchase {
     const message = { ...baseGooglePurchase } as GooglePurchase
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -1156,18 +939,15 @@ export const GooglePurchase = {
   }
 }
 
-const baseStripePurchase: object = { msgTypeUrl: '', creator: '', id: '' }
+const baseStripePurchase: object = { creator: '', id: '' }
 
 export const StripePurchase = {
   encode(message: StripePurchase, writer: Writer = Writer.create()): Writer {
-    if (message.msgTypeUrl !== '') {
-      writer.uint32(18).string(message.msgTypeUrl)
-    }
     if (message.creator !== '') {
-      writer.uint32(26).string(message.creator)
+      writer.uint32(10).string(message.creator)
     }
     if (message.id !== '') {
-      writer.uint32(34).string(message.id)
+      writer.uint32(18).string(message.id)
     }
     return writer
   },
@@ -1179,13 +959,10 @@ export const StripePurchase = {
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
-        case 2:
-          message.msgTypeUrl = reader.string()
-          break
-        case 3:
+        case 1:
           message.creator = reader.string()
           break
-        case 4:
+        case 2:
           message.id = reader.string()
           break
         default:
@@ -1198,11 +975,6 @@ export const StripePurchase = {
 
   fromJSON(object: any): StripePurchase {
     const message = { ...baseStripePurchase } as StripePurchase
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = String(object.msgTypeUrl)
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -1218,7 +990,6 @@ export const StripePurchase = {
 
   toJSON(message: StripePurchase): unknown {
     const obj: any = {}
-    message.msgTypeUrl !== undefined && (obj.msgTypeUrl = message.msgTypeUrl)
     message.creator !== undefined && (obj.creator = message.creator)
     message.id !== undefined && (obj.id = message.id)
     return obj
@@ -1226,11 +997,6 @@ export const StripePurchase = {
 
   fromPartial(object: DeepPartial<StripePurchase>): StripePurchase {
     const message = { ...baseStripePurchase } as StripePurchase
-    if (object.msgTypeUrl !== undefined && object.msgTypeUrl !== null) {
-      message.msgTypeUrl = object.msgTypeUrl
-    } else {
-      message.msgTypeUrl = ''
-    }
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {

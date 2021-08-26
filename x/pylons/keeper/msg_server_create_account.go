@@ -24,7 +24,6 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
-		MsgTypeUrl: "",
 		Address:    addr.String(),
 	})
 
