@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"testing"
 
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
 	"github.com/Pylons-tech/pylons/app"
 
 	"github.com/stretchr/testify/suite"
@@ -17,6 +19,27 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+)
+
+const (
+	fooDenom     = "foo"
+	barDenom     = "bar"
+	initialPower = int64(100)
+	holder       = "holder"
+	multiPerm    = "multiple permissions account"
+	randomPerm   = "random permission"
+)
+
+var (
+	holderAcc     = authtypes.NewEmptyModuleAccount(holder)
+	burnerAcc     = authtypes.NewEmptyModuleAccount(authtypes.Burner, authtypes.Burner)
+	minterAcc     = authtypes.NewEmptyModuleAccount(authtypes.Minter, authtypes.Minter)
+	multiPermAcc  = authtypes.NewEmptyModuleAccount(multiPerm, authtypes.Burner, authtypes.Minter, authtypes.Staking)
+	randomPermAcc = authtypes.NewEmptyModuleAccount(randomPerm, "random")
+
+	// The default power validators are initialized to have within tests
+	initTokens = sdk.TokensFromConsensusPower(initialPower)
+	initCoins  = sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, initTokens))
 )
 
 func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
@@ -125,7 +148,6 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	}
 
 	ctx := a.BaseApp.NewContext(false, tmproto.Header{})
-
 	a.PylonsKeeper.SetParams(ctx, types.DefaultParams())
 
 	suite.app = a

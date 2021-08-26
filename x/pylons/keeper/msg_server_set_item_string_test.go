@@ -18,7 +18,15 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	creator := "A"
+	creatorList := types.GenTestBech32List(1)
+	creator := creatorList[0]
+	updateFee := k.UpdateItemStringFee(ctx)
+
+	creatorAddr, err := sdk.AccAddressFromBech32(creator)
+	require.NoError(err)
+	err = k.MintCoinsToAddr(ctx, creatorAddr, sdk.NewCoins(updateFee))
+	require.NoError(err)
+
 	for i := 0; i < 5; i++ {
 		expectedString := "test"
 		idx := fmt.Sprintf("%d", i)
@@ -52,7 +60,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 			CookbookID: idx,
 			ID:         idx,
 			Field:      expectedString,
-			Value:      "",
+			Value:      "new string",
 		}
 		_, err = srv.SetItemString(wctx, updateItemStringMsg)
 		require.NoError(err)
@@ -61,7 +69,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
 		require.True(found)
 		require.NotEqual(expectedString, rst.MutableStrings[0].Value)
-		expectedString = ""
+		expectedString = "new string"
 		require.Equal(expectedString, rst.MutableStrings[0].Value)
 	}
 }

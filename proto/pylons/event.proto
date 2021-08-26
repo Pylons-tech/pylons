@@ -11,62 +11,70 @@ message EventCreateAccount {
 
 message EventCreateCookbook {
   string creator = 1;
-  string id = 2;
+  string ID = 2;
 }
 
 message EventUpdateCookbook {
-  string id = 1;
+  string creator = 1;
+  string ID = 2;
 }
 
 message EventTransferCookbook {
   string sender = 1;
   string receiver = 2;
-  string id = 3;
+  string ID = 3;
 }
 
 message EventCreateRecipe {
   string creator = 1;
-  string id = 2;
+  string CookbookID = 2;
+  string ID = 3;
 }
 
 message EventUpdateRecipe {
   string creator = 1;
-  string id = 2;
+  string CookbookID = 2;
+  string ID = 3;
 }
 
 message EventCreateExecution {
   string creator = 1;
-  string id = 2;
+  string ID = 2;
 }
 
 message EventCompleteExecution {
   string creator = 1;
-  string id = 2;
+  string ID = 2;
 }
 
 message EventCompleteExecutionEarly {
   string creator = 1;
-  string id = 2;
+  string ID = 2;
 }
 
 message EventSendItems {
   string sender = 1;
   string receiver = 2;
-  repeated string IDs = 3  [(gogoproto.nullable) = false];
+  string CookbookID = 3;
+  repeated string IDs = 4  [(gogoproto.nullable) = false];
 }
 
-message EventSetIemString {
+message EventSetItemString {
   string creator = 1;
-  string id = 2;
+  string CookbookID = 2;
+  string ID = 3;
 }
 
-message GooglePurchase {
+message EventGooglePurchase {
   string creator = 1;
-  string id = 2;
+  string productID = 2;
+  string purchaseToken = 3;
+  string receiptDataBase64 = 4;
+  string signature = 5;
 }
 
-message StripePurchase {
+message EventStripePurchase {
   string creator = 1;
-  string id = 2;
+  string ID = 2;
 }
 

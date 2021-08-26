@@ -5,52 +5,60 @@ export interface EventCreateAccount {
 }
 export interface EventCreateCookbook {
     creator: string;
-    id: string;
+    ID: string;
 }
 export interface EventUpdateCookbook {
-    id: string;
+    creator: string;
+    ID: string;
 }
 export interface EventTransferCookbook {
     sender: string;
     receiver: string;
-    id: string;
+    ID: string;
 }
 export interface EventCreateRecipe {
     creator: string;
-    id: string;
+    CookbookID: string;
+    ID: string;
 }
 export interface EventUpdateRecipe {
     creator: string;
-    id: string;
+    CookbookID: string;
+    ID: string;
 }
 export interface EventCreateExecution {
     creator: string;
-    id: string;
+    ID: string;
 }
 export interface EventCompleteExecution {
     creator: string;
-    id: string;
+    ID: string;
 }
 export interface EventCompleteExecutionEarly {
     creator: string;
-    id: string;
+    ID: string;
 }
 export interface EventSendItems {
     sender: string;
     receiver: string;
+    CookbookID: string;
     IDs: string[];
 }
-export interface EventSetIemString {
+export interface EventSetItemString {
     creator: string;
-    id: string;
+    CookbookID: string;
+    ID: string;
 }
-export interface GooglePurchase {
+export interface EventGooglePurchase {
     creator: string;
-    id: string;
+    productID: string;
+    purchaseToken: string;
+    receiptDataBase64: string;
+    signature: string;
 }
-export interface StripePurchase {
+export interface EventStripePurchase {
     creator: string;
-    id: string;
+    ID: string;
 }
 export declare const EventCreateAccount: {
     encode(message: EventCreateAccount, writer?: Writer): Writer;
@@ -122,26 +130,26 @@ export declare const EventSendItems: {
     toJSON(message: EventSendItems): unknown;
     fromPartial(object: DeepPartial<EventSendItems>): EventSendItems;
 };
-export declare const EventSetIemString: {
-    encode(message: EventSetIemString, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): EventSetIemString;
-    fromJSON(object: any): EventSetIemString;
-    toJSON(message: EventSetIemString): unknown;
-    fromPartial(object: DeepPartial<EventSetIemString>): EventSetIemString;
+export declare const EventSetItemString: {
+    encode(message: EventSetItemString, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventSetItemString;
+    fromJSON(object: any): EventSetItemString;
+    toJSON(message: EventSetItemString): unknown;
+    fromPartial(object: DeepPartial<EventSetItemString>): EventSetItemString;
 };
-export declare const GooglePurchase: {
-    encode(message: GooglePurchase, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): GooglePurchase;
-    fromJSON(object: any): GooglePurchase;
-    toJSON(message: GooglePurchase): unknown;
-    fromPartial(object: DeepPartial<GooglePurchase>): GooglePurchase;
+export declare const EventGooglePurchase: {
+    encode(message: EventGooglePurchase, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventGooglePurchase;
+    fromJSON(object: any): EventGooglePurchase;
+    toJSON(message: EventGooglePurchase): unknown;
+    fromPartial(object: DeepPartial<EventGooglePurchase>): EventGooglePurchase;
 };
-export declare const StripePurchase: {
-    encode(message: StripePurchase, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): StripePurchase;
-    fromJSON(object: any): StripePurchase;
-    toJSON(message: StripePurchase): unknown;
-    fromPartial(object: DeepPartial<StripePurchase>): StripePurchase;
+export declare const EventStripePurchase: {
+    encode(message: EventStripePurchase, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventStripePurchase;
+    fromJSON(object: any): EventStripePurchase;
+    toJSON(message: EventStripePurchase): unknown;
+    fromPartial(object: DeepPartial<EventStripePurchase>): EventStripePurchase;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

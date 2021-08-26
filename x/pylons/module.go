@@ -203,6 +203,13 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 				item.Owner = pendingExec.Creator
 				am.keeper.SetItem(ctx, item)
 			}
+
+			// TODO should this event be more fleshed out?
+			_ = ctx.EventManager().EmitTypedEvent(&types.EventCompleteExecution{
+				Creator: pendingExec.Creator,
+				ID:      pendingExec.ID,
+			})
+
 			am.keeper.ActualizeExecution(ctx, pendingExec)
 			continue
 		}

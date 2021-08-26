@@ -66,7 +66,15 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 		ctx,
 		recipe,
 	)
-	return &types.MsgCreateRecipeResponse{}, nil
+
+	// TODO should this event be more fleshed out?
+	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateRecipe{
+		Creator:    cookbook.Creator,
+		CookbookID: recipe.ID,
+		ID:         recipe.ID,
+	})
+
+	return &types.MsgCreateRecipeResponse{}, err
 }
 
 func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecipe) (*types.MsgUpdateRecipeResponse, error) {
@@ -130,5 +138,12 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 		k.SetRecipe(ctx, updatedRecipe)
 	}
 
-	return &types.MsgUpdateRecipeResponse{}, nil
+	// TODO should this event be more fleshed out?
+	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateRecipe{
+		Creator:    cookbook.Creator,
+		CookbookID: updatedRecipe.ID,
+		ID:         updatedRecipe.ID,
+	})
+
+	return &types.MsgUpdateRecipeResponse{}, err
 }

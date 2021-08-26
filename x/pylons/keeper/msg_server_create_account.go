@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+
 	"github.com/cosmos/cosmos-sdk/telemetry"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -24,7 +25,7 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
-		Address:    addr.String(),
+		Address: addr.String(),
 	})
 
 	return &types.MsgCreateAccountResponse{}, err

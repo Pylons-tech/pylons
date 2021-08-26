@@ -44,7 +44,14 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		ctx,
 		cookbook,
 	)
-	return &types.MsgCreateCookbookResponse{}, nil
+
+	// TODO should this event be more fleshed out?
+	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateCookbook{
+		Creator: cookbook.Creator,
+		ID:      cookbook.ID,
+	})
+
+	return &types.MsgCreateCookbookResponse{}, err
 }
 
 func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCookbook) (*types.MsgUpdateCookbookResponse, error) {
@@ -89,5 +96,12 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	if modified {
 		k.SetCookbook(ctx, updatedCookbook)
 	}
-	return &types.MsgUpdateCookbookResponse{}, nil
+
+	// TODO should this event be more fleshed out?
+	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateCookbook{
+		Creator: updatedCookbook.Creator,
+		ID:      updatedCookbook.ID,
+	})
+
+	return &types.MsgUpdateCookbookResponse{}, err
 }

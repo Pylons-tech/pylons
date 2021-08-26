@@ -102,5 +102,13 @@ CoinIssuersLoop:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return &types.MsgGoogleInAppPurchaseGetCoinsResponse{}, nil
+	err = ctx.EventManager().EmitTypedEvent(&types.EventGooglePurchase{
+		Creator:           iap.Creator,
+		ProductID:         iap.ProductID,
+		PurchaseToken:     iap.PurchaseToken,
+		ReceiptDataBase64: iap.ReceiptDataBase64,
+		Signature:         iap.Signature,
+	})
+
+	return &types.MsgGoogleInAppPurchaseGetCoinsResponse{}, err
 }

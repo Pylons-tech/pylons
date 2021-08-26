@@ -192,5 +192,12 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
-	return &types.MsgExecuteRecipeResponse{ID: id}, nil
+
+	// TODO should this event be more fleshed out?
+	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateExecution{
+		Creator: execution.Creator,
+		ID:      id,
+	})
+
+	return &types.MsgExecuteRecipeResponse{ID: id}, err
 }

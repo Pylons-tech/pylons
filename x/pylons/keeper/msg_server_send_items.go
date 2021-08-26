@@ -45,9 +45,11 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	cookbookOwnerAddr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
 	senderAddr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	// clamp transferFee between min and max allowed and separate amounts to be sent to payee and module account
+
 	minTransferFee := k.MinTransferFee(ctx)
 	maxTransferFee := k.MaxTransferFee(ctx)
 	itemTransferFeePercentage := k.ItemTransferFeePercentage(ctx)
+
 	for _, coin := range transferFee {
 		if coin.Amount.LT(minTransferFee) {
 			coin.Amount = minTransferFee
@@ -71,5 +73,12 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return &types.MsgSendItemsResponse{}, nil
+	// TODO should this event be more fleshed out?
+	err = ctx.EventManager().EmitTypedEvent(&types.EventSendItems{
+		Sender:   msg.Creator,
+		Receiver: msg.Receiver,
+		IDs:      msg.ItemIDs,
+	})
+
+	return &types.MsgSendItemsResponse{}, err
 }

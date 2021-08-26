@@ -26,18 +26,28 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 		if msg.Field == kv.Key {
 			item.MutableStrings[i].Value = msg.Value
 			item.LastUpdate = ctx.BlockHeight()
-			k.SetItem(ctx, item)
-			return &types.MsgSetItemStringResponse{}, nil
 		}
 	}
 
+	k.SetItem(ctx, item)
+
 	// perform payment after update
 	updateFee := k.Keeper.UpdateItemStringFee(ctx)
-	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	err := k.PayFees(ctx, addr, sdk.NewCoins(updateFee))
+	addr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
+	err = k.PayFees(ctx, addr, sdk.NewCoins(updateFee))
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	return nil, sdkerrors.Wrap(types.ErrInvalidRequestField, "string field not found")
+	// TODO should this event be more fleshed out?
+	err = ctx.EventManager().EmitTypedEvent(&types.EventSetItemString{
+		Creator:    msg.Creator,
+		CookbookID: msg.CookbookID,
+		ID:         msg.ID,
+	})
+
+	return &types.MsgSetItemStringResponse{}, err
 }

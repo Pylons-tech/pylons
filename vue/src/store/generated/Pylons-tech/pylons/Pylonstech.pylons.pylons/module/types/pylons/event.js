@@ -52,14 +52,14 @@ export const EventCreateAccount = {
         return message;
     }
 };
-const baseEventCreateCookbook = { creator: '', id: '' };
+const baseEventCreateCookbook = { creator: '', ID: '' };
 export const EventCreateCookbook = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -74,7 +74,7 @@ export const EventCreateCookbook = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -91,18 +91,18 @@ export const EventCreateCookbook = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -113,20 +113,23 @@ export const EventCreateCookbook = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventUpdateCookbook = { id: '' };
+const baseEventUpdateCookbook = { creator: '', ID: '' };
 export const EventUpdateCookbook = {
     encode(message, writer = Writer.create()) {
-        if (message.id !== '') {
-            writer.uint32(10).string(message.id);
+        if (message.creator !== '') {
+            writer.uint32(10).string(message.creator);
+        }
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -138,7 +141,10 @@ export const EventUpdateCookbook = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.id = reader.string();
+                    message.creator = reader.string();
+                    break;
+                case 2:
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -149,31 +155,44 @@ export const EventUpdateCookbook = {
     },
     fromJSON(object) {
         const message = { ...baseEventUpdateCookbook };
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = String(object.creator);
         }
         else {
-            message.id = '';
+            message.creator = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.id !== undefined && (obj.id = message.id);
+        message.creator !== undefined && (obj.creator = message.creator);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseEventUpdateCookbook };
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.creator !== undefined && object.creator !== null) {
+            message.creator = object.creator;
         }
         else {
-            message.id = '';
+            message.creator = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventTransferCookbook = { sender: '', receiver: '', id: '' };
+const baseEventTransferCookbook = { sender: '', receiver: '', ID: '' };
 export const EventTransferCookbook = {
     encode(message, writer = Writer.create()) {
         if (message.sender !== '') {
@@ -182,8 +201,8 @@ export const EventTransferCookbook = {
         if (message.receiver !== '') {
             writer.uint32(18).string(message.receiver);
         }
-        if (message.id !== '') {
-            writer.uint32(26).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         return writer;
     },
@@ -201,7 +220,7 @@ export const EventTransferCookbook = {
                     message.receiver = reader.string();
                     break;
                 case 3:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -224,11 +243,11 @@ export const EventTransferCookbook = {
         else {
             message.receiver = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
@@ -236,7 +255,7 @@ export const EventTransferCookbook = {
         const obj = {};
         message.sender !== undefined && (obj.sender = message.sender);
         message.receiver !== undefined && (obj.receiver = message.receiver);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -253,23 +272,26 @@ export const EventTransferCookbook = {
         else {
             message.receiver = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventCreateRecipe = { creator: '', id: '' };
+const baseEventCreateRecipe = { creator: '', CookbookID: '', ID: '' };
 export const EventCreateRecipe = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.CookbookID !== '') {
+            writer.uint32(18).string(message.CookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         return writer;
     },
@@ -284,7 +306,10 @@ export const EventCreateRecipe = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.CookbookID = reader.string();
+                    break;
+                case 3:
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -301,18 +326,25 @@ export const EventCreateRecipe = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = String(object.CookbookID);
         }
         else {
-            message.id = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -323,23 +355,32 @@ export const EventCreateRecipe = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = object.CookbookID;
         }
         else {
-            message.id = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventUpdateRecipe = { creator: '', id: '' };
+const baseEventUpdateRecipe = { creator: '', CookbookID: '', ID: '' };
 export const EventUpdateRecipe = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.CookbookID !== '') {
+            writer.uint32(18).string(message.CookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         return writer;
     },
@@ -354,7 +395,10 @@ export const EventUpdateRecipe = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.CookbookID = reader.string();
+                    break;
+                case 3:
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -371,18 +415,25 @@ export const EventUpdateRecipe = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = String(object.CookbookID);
         }
         else {
-            message.id = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -393,23 +444,29 @@ export const EventUpdateRecipe = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = object.CookbookID;
         }
         else {
-            message.id = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventCreateExecution = { creator: '', id: '' };
+const baseEventCreateExecution = { creator: '', ID: '' };
 export const EventCreateExecution = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -424,7 +481,7 @@ export const EventCreateExecution = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -441,18 +498,18 @@ export const EventCreateExecution = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -463,23 +520,23 @@ export const EventCreateExecution = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventCompleteExecution = { creator: '', id: '' };
+const baseEventCompleteExecution = { creator: '', ID: '' };
 export const EventCompleteExecution = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -494,7 +551,7 @@ export const EventCompleteExecution = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -511,18 +568,18 @@ export const EventCompleteExecution = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -533,23 +590,23 @@ export const EventCompleteExecution = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventCompleteExecutionEarly = { creator: '', id: '' };
+const baseEventCompleteExecutionEarly = { creator: '', ID: '' };
 export const EventCompleteExecutionEarly = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
@@ -564,7 +621,7 @@ export const EventCompleteExecutionEarly = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -581,18 +638,18 @@ export const EventCompleteExecutionEarly = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
@@ -603,16 +660,16 @@ export const EventCompleteExecutionEarly = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
 };
-const baseEventSendItems = { sender: '', receiver: '', IDs: '' };
+const baseEventSendItems = { sender: '', receiver: '', CookbookID: '', IDs: '' };
 export const EventSendItems = {
     encode(message, writer = Writer.create()) {
         if (message.sender !== '') {
@@ -621,8 +678,11 @@ export const EventSendItems = {
         if (message.receiver !== '') {
             writer.uint32(18).string(message.receiver);
         }
+        if (message.CookbookID !== '') {
+            writer.uint32(26).string(message.CookbookID);
+        }
         for (const v of message.IDs) {
-            writer.uint32(26).string(v);
+            writer.uint32(34).string(v);
         }
         return writer;
     },
@@ -641,6 +701,9 @@ export const EventSendItems = {
                     message.receiver = reader.string();
                     break;
                 case 3:
+                    message.CookbookID = reader.string();
+                    break;
+                case 4:
                     message.IDs.push(reader.string());
                     break;
                 default:
@@ -665,6 +728,12 @@ export const EventSendItems = {
         else {
             message.receiver = '';
         }
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = String(object.CookbookID);
+        }
+        else {
+            message.CookbookID = '';
+        }
         if (object.IDs !== undefined && object.IDs !== null) {
             for (const e of object.IDs) {
                 message.IDs.push(String(e));
@@ -676,6 +745,7 @@ export const EventSendItems = {
         const obj = {};
         message.sender !== undefined && (obj.sender = message.sender);
         message.receiver !== undefined && (obj.receiver = message.receiver);
+        message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID);
         if (message.IDs) {
             obj.IDs = message.IDs.map((e) => e);
         }
@@ -699,6 +769,12 @@ export const EventSendItems = {
         else {
             message.receiver = '';
         }
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = object.CookbookID;
+        }
+        else {
+            message.CookbookID = '';
+        }
         if (object.IDs !== undefined && object.IDs !== null) {
             for (const e of object.IDs) {
                 message.IDs.push(e);
@@ -707,21 +783,24 @@ export const EventSendItems = {
         return message;
     }
 };
-const baseEventSetIemString = { creator: '', id: '' };
-export const EventSetIemString = {
+const baseEventSetItemString = { creator: '', CookbookID: '', ID: '' };
+export const EventSetItemString = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.CookbookID !== '') {
+            writer.uint32(18).string(message.CookbookID);
+        }
+        if (message.ID !== '') {
+            writer.uint32(26).string(message.ID);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseEventSetIemString };
+        const message = { ...baseEventSetItemString };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -729,7 +808,10 @@ export const EventSetIemString = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.CookbookID = reader.string();
+                    break;
+                case 3:
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -739,59 +821,81 @@ export const EventSetIemString = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseEventSetIemString };
+        const message = { ...baseEventSetItemString };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = String(object.CookbookID);
         }
         else {
-            message.id = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
+        }
+        else {
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseEventSetIemString };
+        const message = { ...baseEventSetItemString };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.CookbookID !== undefined && object.CookbookID !== null) {
+            message.CookbookID = object.CookbookID;
         }
         else {
-            message.id = '';
+            message.CookbookID = '';
+        }
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = '';
         }
         return message;
     }
 };
-const baseGooglePurchase = { creator: '', id: '' };
-export const GooglePurchase = {
+const baseEventGooglePurchase = { creator: '', productID: '', purchaseToken: '', receiptDataBase64: '', signature: '' };
+export const EventGooglePurchase = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.productID !== '') {
+            writer.uint32(18).string(message.productID);
+        }
+        if (message.purchaseToken !== '') {
+            writer.uint32(26).string(message.purchaseToken);
+        }
+        if (message.receiptDataBase64 !== '') {
+            writer.uint32(34).string(message.receiptDataBase64);
+        }
+        if (message.signature !== '') {
+            writer.uint32(42).string(message.signature);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseGooglePurchase };
+        const message = { ...baseEventGooglePurchase };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -799,7 +903,16 @@ export const GooglePurchase = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.productID = reader.string();
+                    break;
+                case 3:
+                    message.purchaseToken = reader.string();
+                    break;
+                case 4:
+                    message.receiptDataBase64 = reader.string();
+                    break;
+                case 5:
+                    message.signature = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -809,59 +922,98 @@ export const GooglePurchase = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseGooglePurchase };
+        const message = { ...baseEventGooglePurchase };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.productID !== undefined && object.productID !== null) {
+            message.productID = String(object.productID);
         }
         else {
-            message.id = '';
+            message.productID = '';
+        }
+        if (object.purchaseToken !== undefined && object.purchaseToken !== null) {
+            message.purchaseToken = String(object.purchaseToken);
+        }
+        else {
+            message.purchaseToken = '';
+        }
+        if (object.receiptDataBase64 !== undefined && object.receiptDataBase64 !== null) {
+            message.receiptDataBase64 = String(object.receiptDataBase64);
+        }
+        else {
+            message.receiptDataBase64 = '';
+        }
+        if (object.signature !== undefined && object.signature !== null) {
+            message.signature = String(object.signature);
+        }
+        else {
+            message.signature = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.productID !== undefined && (obj.productID = message.productID);
+        message.purchaseToken !== undefined && (obj.purchaseToken = message.purchaseToken);
+        message.receiptDataBase64 !== undefined && (obj.receiptDataBase64 = message.receiptDataBase64);
+        message.signature !== undefined && (obj.signature = message.signature);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseGooglePurchase };
+        const message = { ...baseEventGooglePurchase };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.productID !== undefined && object.productID !== null) {
+            message.productID = object.productID;
         }
         else {
-            message.id = '';
+            message.productID = '';
+        }
+        if (object.purchaseToken !== undefined && object.purchaseToken !== null) {
+            message.purchaseToken = object.purchaseToken;
+        }
+        else {
+            message.purchaseToken = '';
+        }
+        if (object.receiptDataBase64 !== undefined && object.receiptDataBase64 !== null) {
+            message.receiptDataBase64 = object.receiptDataBase64;
+        }
+        else {
+            message.receiptDataBase64 = '';
+        }
+        if (object.signature !== undefined && object.signature !== null) {
+            message.signature = object.signature;
+        }
+        else {
+            message.signature = '';
         }
         return message;
     }
 };
-const baseStripePurchase = { creator: '', id: '' };
-export const StripePurchase = {
+const baseEventStripePurchase = { creator: '', ID: '' };
+export const EventStripePurchase = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== '') {
-            writer.uint32(18).string(message.id);
+        if (message.ID !== '') {
+            writer.uint32(18).string(message.ID);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseStripePurchase };
+        const message = { ...baseEventStripePurchase };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -869,7 +1021,7 @@ export const StripePurchase = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = reader.string();
+                    message.ID = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -879,40 +1031,40 @@ export const StripePurchase = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseStripePurchase };
+        const message = { ...baseEventStripePurchase };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = String(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = String(object.ID);
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseStripePurchase };
+        const message = { ...baseEventStripePurchase };
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = '';
+            message.ID = '';
         }
         return message;
     }
