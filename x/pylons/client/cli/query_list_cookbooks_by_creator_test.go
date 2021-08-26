@@ -2,8 +2,9 @@ package cli_test
 
 import (
 	"fmt"
-	"google.golang.org/grpc/codes"
 	"testing"
+
+	"google.golang.org/grpc/codes"
 
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
@@ -49,7 +50,7 @@ func TestListCookbooksByCreator(t *testing.T) {
 			desc: "invalid",
 			id:   "not_found",
 			args: common,
-			err: status.Error(codes.InvalidArgument, "invalid address"),
+			err:  status.Error(codes.InvalidArgument, "invalid address"),
 		},
 	} {
 		tc := tc

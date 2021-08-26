@@ -171,7 +171,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		var itemResp types.QueryGetItemResponse
 		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
 		require.Equal(t, cookbookID, itemResp.Item.CookbookID)
-		require.Equal(t, uint64(height), itemResp.Item.LastUpdate)
+		require.Equal(t, height, itemResp.Item.LastUpdate)
 	}
 }
 
@@ -316,7 +316,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
-	require.Equal(t, uint64(height), itemResp.Item.LastUpdate)
+	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// check the recipe to see if the AmountMinted has been updated
 	expectedAmountMinted := uint64(1)

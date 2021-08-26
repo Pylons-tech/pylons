@@ -590,6 +590,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryListCookbooksByCreator
+   * @summary Retrieves the list of cookbooks owned by an address
+   * @request GET:/pylons/cookbooks/{creator}
+   */
+  queryListCookbooksByCreator = (creator: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>({
+      path: `/pylons/cookbooks/${creator}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryExecution
    * @summary Queries a execution by id.
    * @request GET:/pylons/execution/{ID}
@@ -606,13 +622,45 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryListExecutionsByItem
+   * @summary Queries a list of listExecutionsByItem items.
+   * @request GET:/pylons/executions/item/{CookbookID}/{ItemID}
+   */
+  queryListExecutionsByItem = (CookbookID: string, ItemID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListExecutionsByItemResponse, RpcStatus>({
+      path: `/pylons/executions/item/${CookbookID}/${ItemID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListExecutionsByRecipe
+   * @summary Queries a list of listExecutionsByRecipe items.
+   * @request GET:/pylons/executions/recipe/{CookbookID}/{RecipeID}
+   */
+  queryListExecutionsByRecipe = (CookbookID: string, RecipeID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>({
+      path: `/pylons/executions/recipe/${CookbookID}/${RecipeID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryGoogleInAppPurchaseOrder
    * @summary Queries a googleIAPOrder by PurchaseToken.
-   * @request GET:/pylons/googleIAPOrder/{PurchaseToken}
+   * @request GET:/pylons/iap/{PurchaseToken}
    */
   queryGoogleInAppPurchaseOrder = (PurchaseToken: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetGoogleInAppPurchaseOrderResponse, RpcStatus>({
-      path: `/pylons/googleIAPOrder/${PurchaseToken}`,
+      path: `/pylons/iap/${PurchaseToken}`,
       method: "GET",
       format: "json",
       ...params,
@@ -638,77 +686,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryListCookbooksByCreator
-   * @summary Retrieves the list of cookbooks owned by an address
-   * @request GET:/pylons/listCookbooks/{creator}
-   */
-  queryListCookbooksByCreator = (creator: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>({
-      path: `/pylons/listCookbooks/${creator}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryListExecutionsByItem
-   * @summary Queries a list of listExecutionsByItem items.
-   * @request GET:/pylons/listExecutionsByItem/{CookbookID}/{ItemID}
-   */
-  queryListExecutionsByItem = (CookbookID: string, ItemID: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryListExecutionsByItemResponse, RpcStatus>({
-      path: `/pylons/listExecutionsByItem/${CookbookID}/${ItemID}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryListExecutionsByRecipe
-   * @summary Queries a list of listExecutionsByRecipe items.
-   * @request GET:/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}
-   */
-  queryListExecutionsByRecipe = (CookbookID: string, RecipeID: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>({
-      path: `/pylons/listExecutionsByRecipe/${CookbookID}/${RecipeID}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
    * @name QueryListItemByOwner
    * @summary Queries a list of listItemByOwner items.
-   * @request GET:/pylons/listItemByOwner/{owner}
+   * @request GET:/pylons/items/{owner}
    */
   queryListItemByOwner = (owner: string, params: RequestParams = {}) =>
     this.request<PylonsQueryListItemByOwnerResponse, RpcStatus>({
-      path: `/pylons/listItemByOwner/${owner}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryListRecipesByCookbook
-   * @summary Queries a list of listRecipesByCookbook items.
-   * @request GET:/pylons/listRecipesByCookbook/{CookbookID}
-   */
-  queryListRecipesByCookbook = (CookbookID: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryListRecipesByCookbookResponse, RpcStatus>({
-      path: `/pylons/listRecipesByCookbook/${CookbookID}`,
+      path: `/pylons/items/${owner}`,
       method: "GET",
       format: "json",
       ...params,
@@ -725,6 +709,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryRecipe = (CookbookID: string, ID: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetRecipeResponse, RpcStatus>({
       path: `/pylons/recipe/${CookbookID}/${ID}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListRecipesByCookbook
+   * @summary Queries a list of listRecipesByCookbook items.
+   * @request GET:/pylons/recipes/{CookbookID}
+   */
+  queryListRecipesByCookbook = (CookbookID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryListRecipesByCookbookResponse, RpcStatus>({
+      path: `/pylons/recipes/${CookbookID}`,
       method: "GET",
       format: "json",
       ...params,

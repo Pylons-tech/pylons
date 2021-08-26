@@ -361,6 +361,15 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
+     * @name QueryListCookbooksByCreator
+     * @summary Retrieves the list of cookbooks owned by an address
+     * @request GET:/pylons/cookbooks/{creator}
+     */
+    queryListCookbooksByCreator: (creator: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
      * @name QueryExecution
      * @summary Queries a execution by id.
      * @request GET:/pylons/execution/{ID}
@@ -370,9 +379,27 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
+     * @name QueryListExecutionsByItem
+     * @summary Queries a list of listExecutionsByItem items.
+     * @request GET:/pylons/executions/item/{CookbookID}/{ItemID}
+     */
+    queryListExecutionsByItem: (CookbookID: string, ItemID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByItemResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListExecutionsByRecipe
+     * @summary Queries a list of listExecutionsByRecipe items.
+     * @request GET:/pylons/executions/recipe/{CookbookID}/{RecipeID}
+     */
+    queryListExecutionsByRecipe: (CookbookID: string, RecipeID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
      * @name QueryGoogleInAppPurchaseOrder
      * @summary Queries a googleIAPOrder by PurchaseToken.
-     * @request GET:/pylons/googleIAPOrder/{PurchaseToken}
+     * @request GET:/pylons/iap/{PurchaseToken}
      */
     queryGoogleInAppPurchaseOrder: (PurchaseToken: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetGoogleInAppPurchaseOrderResponse, RpcStatus>>;
     /**
@@ -388,47 +415,11 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
-     * @name QueryListCookbooksByCreator
-     * @summary Retrieves the list of cookbooks owned by an address
-     * @request GET:/pylons/listCookbooks/{creator}
-     */
-    queryListCookbooksByCreator: (creator: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>>;
-    /**
-     * No description
-     *
-     * @tags Query
-     * @name QueryListExecutionsByItem
-     * @summary Queries a list of listExecutionsByItem items.
-     * @request GET:/pylons/listExecutionsByItem/{CookbookID}/{ItemID}
-     */
-    queryListExecutionsByItem: (CookbookID: string, ItemID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByItemResponse, RpcStatus>>;
-    /**
-     * No description
-     *
-     * @tags Query
-     * @name QueryListExecutionsByRecipe
-     * @summary Queries a list of listExecutionsByRecipe items.
-     * @request GET:/pylons/listExecutionsByRecipe/{CookbookID}/{RecipeID}
-     */
-    queryListExecutionsByRecipe: (CookbookID: string, RecipeID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>>;
-    /**
-     * No description
-     *
-     * @tags Query
      * @name QueryListItemByOwner
      * @summary Queries a list of listItemByOwner items.
-     * @request GET:/pylons/listItemByOwner/{owner}
+     * @request GET:/pylons/items/{owner}
      */
     queryListItemByOwner: (owner: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListItemByOwnerResponse, RpcStatus>>;
-    /**
-     * No description
-     *
-     * @tags Query
-     * @name QueryListRecipesByCookbook
-     * @summary Queries a list of listRecipesByCookbook items.
-     * @request GET:/pylons/listRecipesByCookbook/{CookbookID}
-     */
-    queryListRecipesByCookbook: (CookbookID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListRecipesByCookbookResponse, RpcStatus>>;
     /**
      * No description
      *
@@ -438,5 +429,14 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * @request GET:/pylons/recipe/{CookbookID}/{ID}
      */
     queryRecipe: (CookbookID: string, ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetRecipeResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryListRecipesByCookbook
+     * @summary Queries a list of listRecipesByCookbook items.
+     * @request GET:/pylons/recipes/{CookbookID}
+     */
+    queryListRecipesByCookbook: (CookbookID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListRecipesByCookbookResponse, RpcStatus>>;
 }
 export {};

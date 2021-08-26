@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/binary"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 )
@@ -27,13 +28,13 @@ func GenTestBech32List(numAccount int) []string {
 
 // GenTestBech32FromString creates a bech32-encoded string padding or trimming the input string to be exactly
 // 20 bytes. This does not generate a valid address and should only be used for testing
-func GenTestBech32FromString(s string) string{
+func GenTestBech32FromString(s string) string {
 	bech32PrefixAccAddr := sdk.GetConfig().GetBech32AccountAddrPrefix()
 
 	if len(s) < 20 {
 		pad := 20 - len(s)
-		for i := 0; i < pad; i++{
-			s = s + "-"
+		for i := 0; i < pad; i++ {
+			s += "-"
 		}
 	} else {
 		s = s[:20]
