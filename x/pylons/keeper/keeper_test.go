@@ -139,6 +139,7 @@ type IntegrationTestSuite struct {
 func (suite *IntegrationTestSuite) SetupTest() {
 	cmdApp := pylonsSimapp.New("./")
 
+	// cast to pylons app
 	var a *app.App
 	switch cmdApp.(type) {
 	case *app.App:

@@ -5,6 +5,8 @@ package types
 
 import (
 	fmt "fmt"
+	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
+	types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
@@ -383,8 +385,15 @@ func (m *EventCreateExecution) GetID() string {
 }
 
 type EventCompleteExecution struct {
-	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ID      string `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	Creator       string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	ID            string                                   `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	BurnCoins     github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,3,rep,name=burnCoins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"burnCoins"`
+	PayCoins      github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,4,rep,name=payCoins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"payCoins"`
+	TransferCoins github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,5,rep,name=transferCoins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"transferCoins"`
+	FeeCoins      github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,6,rep,name=feeCoins,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"feeCoins"`
+	CoinOutputs   github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,7,rep,name=coinOutputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinOutputs"`
+	MintItems     []Item                                   `protobuf:"bytes,8,rep,name=mintItems,proto3" json:"mintItems"`
+	ModifyItems   []Item                                   `protobuf:"bytes,9,rep,name=modifyItems,proto3" json:"modifyItems"`
 }
 
 func (m *EventCompleteExecution) Reset()         { *m = EventCompleteExecution{} }
@@ -434,6 +443,107 @@ func (m *EventCompleteExecution) GetID() string {
 	return ""
 }
 
+func (m *EventCompleteExecution) GetBurnCoins() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.BurnCoins
+	}
+	return nil
+}
+
+func (m *EventCompleteExecution) GetPayCoins() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.PayCoins
+	}
+	return nil
+}
+
+func (m *EventCompleteExecution) GetTransferCoins() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.TransferCoins
+	}
+	return nil
+}
+
+func (m *EventCompleteExecution) GetFeeCoins() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.FeeCoins
+	}
+	return nil
+}
+
+func (m *EventCompleteExecution) GetCoinOutputs() github_com_cosmos_cosmos_sdk_types.Coins {
+	if m != nil {
+		return m.CoinOutputs
+	}
+	return nil
+}
+
+func (m *EventCompleteExecution) GetMintItems() []Item {
+	if m != nil {
+		return m.MintItems
+	}
+	return nil
+}
+
+func (m *EventCompleteExecution) GetModifyItems() []Item {
+	if m != nil {
+		return m.ModifyItems
+	}
+	return nil
+}
+
+type EventDropExecution struct {
+	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	ID      string `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
+}
+
+func (m *EventDropExecution) Reset()         { *m = EventDropExecution{} }
+func (m *EventDropExecution) String() string { return proto.CompactTextString(m) }
+func (*EventDropExecution) ProtoMessage()    {}
+func (*EventDropExecution) Descriptor() ([]byte, []int) {
+	return fileDescriptor_3d5fff376ba53ecd, []int{8}
+}
+func (m *EventDropExecution) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *EventDropExecution) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_EventDropExecution.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *EventDropExecution) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EventDropExecution.Merge(m, src)
+}
+func (m *EventDropExecution) XXX_Size() int {
+	return m.Size()
+}
+func (m *EventDropExecution) XXX_DiscardUnknown() {
+	xxx_messageInfo_EventDropExecution.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EventDropExecution proto.InternalMessageInfo
+
+func (m *EventDropExecution) GetCreator() string {
+	if m != nil {
+		return m.Creator
+	}
+	return ""
+}
+
+func (m *EventDropExecution) GetID() string {
+	if m != nil {
+		return m.ID
+	}
+	return ""
+}
+
 type EventCompleteExecutionEarly struct {
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	ID      string `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
@@ -443,7 +553,7 @@ func (m *EventCompleteExecutionEarly) Reset()         { *m = EventCompleteExecut
 func (m *EventCompleteExecutionEarly) String() string { return proto.CompactTextString(m) }
 func (*EventCompleteExecutionEarly) ProtoMessage()    {}
 func (*EventCompleteExecutionEarly) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d5fff376ba53ecd, []int{8}
+	return fileDescriptor_3d5fff376ba53ecd, []int{9}
 }
 func (m *EventCompleteExecutionEarly) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -497,7 +607,7 @@ func (m *EventSendItems) Reset()         { *m = EventSendItems{} }
 func (m *EventSendItems) String() string { return proto.CompactTextString(m) }
 func (*EventSendItems) ProtoMessage()    {}
 func (*EventSendItems) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d5fff376ba53ecd, []int{9}
+	return fileDescriptor_3d5fff376ba53ecd, []int{10}
 }
 func (m *EventSendItems) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -565,7 +675,7 @@ func (m *EventSetItemString) Reset()         { *m = EventSetItemString{} }
 func (m *EventSetItemString) String() string { return proto.CompactTextString(m) }
 func (*EventSetItemString) ProtoMessage()    {}
 func (*EventSetItemString) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d5fff376ba53ecd, []int{10}
+	return fileDescriptor_3d5fff376ba53ecd, []int{11}
 }
 func (m *EventSetItemString) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -634,7 +744,7 @@ func (m *EventGooglePurchase) Reset()         { *m = EventGooglePurchase{} }
 func (m *EventGooglePurchase) String() string { return proto.CompactTextString(m) }
 func (*EventGooglePurchase) ProtoMessage()    {}
 func (*EventGooglePurchase) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d5fff376ba53ecd, []int{11}
+	return fileDescriptor_3d5fff376ba53ecd, []int{12}
 }
 func (m *EventGooglePurchase) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -707,7 +817,7 @@ func (m *EventStripePurchase) Reset()         { *m = EventStripePurchase{} }
 func (m *EventStripePurchase) String() string { return proto.CompactTextString(m) }
 func (*EventStripePurchase) ProtoMessage()    {}
 func (*EventStripePurchase) Descriptor() ([]byte, []int) {
-	return fileDescriptor_3d5fff376ba53ecd, []int{12}
+	return fileDescriptor_3d5fff376ba53ecd, []int{13}
 }
 func (m *EventStripePurchase) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -759,6 +869,7 @@ func init() {
 	proto.RegisterType((*EventUpdateRecipe)(nil), "Pylonstech.pylons.pylons.EventUpdateRecipe")
 	proto.RegisterType((*EventCreateExecution)(nil), "Pylonstech.pylons.pylons.EventCreateExecution")
 	proto.RegisterType((*EventCompleteExecution)(nil), "Pylonstech.pylons.pylons.EventCompleteExecution")
+	proto.RegisterType((*EventDropExecution)(nil), "Pylonstech.pylons.pylons.EventDropExecution")
 	proto.RegisterType((*EventCompleteExecutionEarly)(nil), "Pylonstech.pylons.pylons.EventCompleteExecutionEarly")
 	proto.RegisterType((*EventSendItems)(nil), "Pylonstech.pylons.pylons.EventSendItems")
 	proto.RegisterType((*EventSetItemString)(nil), "Pylonstech.pylons.pylons.EventSetItemString")
@@ -769,46 +880,57 @@ func init() {
 func init() { proto.RegisterFile("pylons/event.proto", fileDescriptor_3d5fff376ba53ecd) }
 
 var fileDescriptor_3d5fff376ba53ecd = []byte{
-	// 611 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x94, 0x41, 0x6f, 0xd3, 0x30,
-	0x14, 0xc7, 0x9b, 0x75, 0x0c, 0xe6, 0x89, 0x89, 0x65, 0x5b, 0x15, 0x0d, 0x08, 0x55, 0xc4, 0xa1,
-	0x87, 0x91, 0x4a, 0x03, 0x71, 0x05, 0xba, 0x96, 0xa9, 0x42, 0xa0, 0xa9, 0x2d, 0x1c, 0x40, 0x68,
-	0x72, 0x9d, 0xb7, 0x34, 0x6a, 0x1a, 0x47, 0x8e, 0x33, 0xad, 0x12, 0x1f, 0x82, 0x6f, 0xc4, 0x0d,
-	0xed, 0xb8, 0x23, 0x27, 0x84, 0xda, 0x2f, 0x82, 0x12, 0x3f, 0x87, 0x6e, 0xa5, 0x13, 0x9b, 0x38,
-	0xb5, 0xfe, 0xf9, 0xf9, 0xff, 0xfc, 0xfe, 0xef, 0xc5, 0xc4, 0x8c, 0xc7, 0x21, 0x8f, 0x92, 0x3a,
-	0x9c, 0x40, 0x24, 0xdd, 0x58, 0x70, 0xc9, 0x4d, 0xeb, 0x30, 0x67, 0x12, 0xd8, 0xc0, 0x55, 0xdb,
-	0xf8, 0xb3, 0xb3, 0xe5, 0x73, 0x9f, 0xe7, 0x41, 0xf5, 0xec, 0x9f, 0x8a, 0xdf, 0x79, 0x88, 0x1a,
-	0x3e, 0xe7, 0x7e, 0x08, 0x47, 0x01, 0x8d, 0x8f, 0xb8, 0xf0, 0x40, 0xe0, 0x76, 0x45, 0xa7, 0x38,
-	0x05, 0x96, 0xca, 0x80, 0x47, 0xc8, 0x37, 0x90, 0x07, 0x12, 0x46, 0x88, 0x36, 0x11, 0x09, 0x60,
-	0x41, 0x0c, 0x08, 0xb7, 0x11, 0x32, 0xce, 0x87, 0x7d, 0xce, 0x87, 0x0a, 0x3b, 0x2e, 0x31, 0x5b,
-	0xd9, 0xa5, 0xf7, 0x05, 0x50, 0x09, 0xaf, 0x18, 0xe3, 0x69, 0x24, 0x4d, 0x8b, 0xdc, 0xa6, 0x9e,
-	0x27, 0x20, 0x49, 0x2c, 0xa3, 0x6a, 0xd4, 0x56, 0x3b, 0x7a, 0xe9, 0xbc, 0x20, 0x9b, 0x33, 0xf1,
-	0xfb, 0x28, 0x96, 0x1d, 0x60, 0x19, 0xe1, 0x42, 0x1f, 0xc0, 0xa5, 0xb9, 0x4e, 0x96, 0xda, 0x4d,
-	0x6b, 0x29, 0x87, 0x4b, 0xed, 0xa6, 0x33, 0x44, 0x81, 0xf7, 0xb1, 0x37, 0x2b, 0xd0, 0x23, 0xf7,
-	0xb8, 0x08, 0xfc, 0x20, 0xa2, 0xa1, 0x66, 0xb9, 0xd2, 0xda, 0x9e, 0xe3, 0x2e, 0x32, 0xd2, 0xd5,
-	0x91, 0x8d, 0xe5, 0xb3, 0x9f, 0x8f, 0x4a, 0x9d, 0x39, 0x05, 0xe7, 0x13, 0xd9, 0xce, 0x93, 0xf5,
-	0x04, 0x8d, 0x92, 0x63, 0x10, 0x45, 0xba, 0x0a, 0x59, 0x49, 0x20, 0xf2, 0x40, 0x5f, 0x17, 0x57,
-	0xe6, 0x0e, 0xb9, 0x23, 0x80, 0x41, 0x70, 0x02, 0x02, 0xef, 0x5c, 0xac, 0xb1, 0x92, 0x72, 0x51,
-	0xc9, 0x67, 0xb2, 0x31, 0x63, 0x45, 0x27, 0x37, 0xfb, 0x0a, 0x23, 0x6c, 0x42, 0x74, 0xfa, 0xc2,
-	0x90, 0x19, 0x32, 0x27, 0xcf, 0x50, 0x5e, 0x19, 0x85, 0xf2, 0xef, 0xc8, 0xba, 0x2e, 0x52, 0x11,
-	0x34, 0xa9, 0xba, 0xd8, 0x24, 0x15, 0x87, 0x16, 0x5d, 0x3a, 0xed, 0xbc, 0x24, 0x5b, 0x33, 0x35,
-	0xb4, 0xf4, 0x6c, 0x5d, 0xa3, 0x9f, 0x0d, 0x52, 0x51, 0x0a, 0x7c, 0x14, 0x87, 0x70, 0x33, 0x8d,
-	0x03, 0x72, 0xff, 0xef, 0x1a, 0x2d, 0x2a, 0xc2, 0xf1, 0x35, 0x84, 0xbe, 0x90, 0xf5, 0x5c, 0xa8,
-	0x0b, 0x91, 0xd7, 0x96, 0x30, 0x4a, 0x6e, 0xd4, 0xe8, 0x8b, 0x9d, 0x2a, 0xcf, 0x75, 0xaa, 0x42,
-	0xca, 0xed, 0x66, 0x62, 0x2d, 0x57, 0xcb, 0xb5, 0x55, 0xf4, 0x35, 0x03, 0xce, 0x77, 0x03, 0x3f,
-	0xa6, 0x2e, 0xc8, 0x2c, 0x7b, 0x57, 0x8a, 0x20, 0xf2, 0xff, 0xdf, 0x48, 0x98, 0xc7, 0xa4, 0xa2,
-	0xfb, 0xf7, 0x36, 0x95, 0xb4, 0x1f, 0x82, 0x4a, 0xa1, 0xee, 0xb2, 0xb6, 0x57, 0x5b, 0x3c, 0x05,
-	0x2a, 0xf0, 0x0d, 0x8c, 0x3f, 0xd0, 0x30, 0xd5, 0xd3, 0xb0, 0x40, 0xcd, 0xf9, 0x66, 0xe0, 0x47,
-	0x7a, 0x90, 0xbf, 0x45, 0x87, 0xa9, 0x60, 0x03, 0x9a, 0x5c, 0x35, 0xdc, 0x0f, 0xc8, 0x6a, 0x2c,
-	0xb8, 0x97, 0x32, 0x59, 0x14, 0xf2, 0x07, 0x98, 0x8f, 0xc9, 0xdd, 0x18, 0x35, 0x7a, 0x7c, 0x08,
-	0x11, 0x96, 0x74, 0x11, 0x9a, 0xbb, 0x64, 0x23, 0x6f, 0x41, 0x2c, 0x9b, 0x54, 0xd2, 0x06, 0x4d,
-	0xe0, 0xf9, 0x33, 0x6b, 0x39, 0x8f, 0x9c, 0xdf, 0xc8, 0x32, 0x26, 0x81, 0x1f, 0x51, 0x99, 0x0a,
-	0xb0, 0x6e, 0xa9, 0x8c, 0x05, 0x28, 0x9e, 0xa9, 0xac, 0xa2, 0xf8, 0x5f, 0x0a, 0xb8, 0x34, 0x49,
-	0x8d, 0xd7, 0x67, 0x13, 0xdb, 0x38, 0x9f, 0xd8, 0xc6, 0xaf, 0x89, 0x6d, 0x7c, 0x9d, 0xda, 0xa5,
-	0xf3, 0xa9, 0x5d, 0xfa, 0x31, 0xb5, 0x4b, 0x1f, 0x77, 0xfd, 0x40, 0x0e, 0xd2, 0xbe, 0xcb, 0xf8,
-	0xa8, 0xae, 0xec, 0x7e, 0x92, 0xf9, 0x5d, 0xc7, 0xf7, 0xf5, 0x54, 0xff, 0x91, 0xe3, 0x18, 0x92,
-	0xfe, 0x4a, 0xfe, 0xcc, 0x3e, 0xfd, 0x1d, 0x00, 0x00, 0xff, 0xff, 0x80, 0x54, 0x94, 0xd5, 0x22,
-	0x06, 0x00, 0x00,
+	// 793 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0xcd, 0x4e, 0xdb, 0x4a,
+	0x14, 0x4e, 0x08, 0x7f, 0x99, 0x08, 0x74, 0x31, 0x10, 0xf9, 0x72, 0x6f, 0x0d, 0xb2, 0xba, 0xc8,
+	0x02, 0xec, 0x42, 0xab, 0x2e, 0xfb, 0x13, 0x02, 0x28, 0xaa, 0xda, 0xa2, 0x40, 0xbb, 0x68, 0x55,
+	0xa1, 0x89, 0x7d, 0x62, 0xac, 0xc4, 0x1e, 0x77, 0x66, 0x8c, 0x88, 0xd4, 0x87, 0xe8, 0x73, 0xf4,
+	0x25, 0xba, 0xab, 0x58, 0xb2, 0xec, 0xaa, 0xad, 0x60, 0xdd, 0x77, 0xa8, 0xec, 0x99, 0x31, 0x86,
+	0x34, 0xa8, 0xa0, 0x74, 0x65, 0xcf, 0x37, 0xe7, 0x7c, 0x9f, 0xcf, 0xe7, 0x39, 0xc7, 0x46, 0x5a,
+	0xd4, 0xef, 0x91, 0x90, 0xd9, 0x70, 0x04, 0x21, 0xb7, 0x22, 0x4a, 0x38, 0xd1, 0xf4, 0xdd, 0x14,
+	0xe3, 0xe0, 0x1c, 0x5a, 0x62, 0x5b, 0x5e, 0x96, 0x16, 0x3c, 0xe2, 0x91, 0x34, 0xc8, 0x4e, 0xee,
+	0x44, 0xfc, 0x92, 0xe1, 0x10, 0x16, 0x10, 0x66, 0xb7, 0x31, 0x03, 0xfb, 0x68, 0xbd, 0x0d, 0x1c,
+	0xaf, 0xdb, 0x0e, 0xf1, 0x43, 0xb9, 0x7f, 0x47, 0x6a, 0x78, 0x84, 0x78, 0x3d, 0x38, 0xf0, 0x71,
+	0x74, 0x40, 0xa8, 0x0b, 0x54, 0x6e, 0x57, 0xd5, 0x23, 0x1c, 0x83, 0x13, 0x73, 0x9f, 0xa8, 0xb4,
+	0x39, 0x89, 0xfb, 0x1c, 0x02, 0x09, 0xcd, 0x4b, 0x88, 0x82, 0xe3, 0x47, 0x20, 0xc1, 0x45, 0x09,
+	0x3a, 0x84, 0x74, 0xdb, 0x84, 0x74, 0x05, 0x6c, 0x5a, 0x48, 0xdb, 0x4a, 0x8a, 0xda, 0xa4, 0x80,
+	0x39, 0x3c, 0x75, 0x1c, 0x12, 0x87, 0x5c, 0xd3, 0xd1, 0x14, 0x76, 0x5d, 0x0a, 0x8c, 0xe9, 0xc5,
+	0x95, 0x62, 0xad, 0xdc, 0x52, 0x4b, 0xf3, 0x31, 0x9a, 0xcf, 0xc5, 0x6f, 0x4a, 0xb2, 0x24, 0xc1,
+	0x49, 0x10, 0x42, 0x55, 0x82, 0x5c, 0x6a, 0xb3, 0x68, 0xac, 0xd9, 0xd0, 0xc7, 0x52, 0x70, 0xac,
+	0xd9, 0x30, 0xbb, 0x92, 0xe0, 0x55, 0xe4, 0xe6, 0x09, 0xf6, 0xd1, 0x3f, 0x84, 0xfa, 0x9e, 0x1f,
+	0xe2, 0x9e, 0xc2, 0x52, 0xa6, 0xca, 0x86, 0x69, 0x0d, 0x33, 0xda, 0x52, 0x91, 0xf5, 0xf1, 0x93,
+	0x6f, 0xcb, 0x85, 0xd6, 0x00, 0x83, 0xf9, 0x16, 0x2d, 0xa6, 0x62, 0xfb, 0x14, 0x87, 0xac, 0x03,
+	0x34, 0x93, 0xab, 0xa2, 0x49, 0x06, 0xa1, 0x0b, 0xea, 0x71, 0xe5, 0x4a, 0x5b, 0x42, 0xd3, 0x14,
+	0x1c, 0xf0, 0x8f, 0x80, 0xca, 0x67, 0xce, 0xd6, 0xb2, 0x92, 0x52, 0x56, 0xc9, 0x3b, 0x34, 0x97,
+	0xb3, 0xa2, 0x95, 0x9a, 0x7d, 0x8d, 0x11, 0x06, 0x42, 0x4a, 0x3e, 0x33, 0x24, 0x87, 0x0c, 0xd0,
+	0x3b, 0x92, 0x5e, 0x18, 0x25, 0xe9, 0x5f, 0xa0, 0x59, 0x55, 0xa4, 0x40, 0xa4, 0x49, 0x2b, 0xc3,
+	0x4d, 0x12, 0x71, 0xd2, 0xa2, 0x2b, 0xd9, 0xe6, 0x13, 0xb4, 0x90, 0xab, 0x61, 0x4b, 0x9d, 0xad,
+	0x1b, 0xbc, 0xcf, 0x9f, 0x13, 0xa8, 0x2a, 0x28, 0x48, 0x10, 0xf5, 0xe0, 0x56, 0x24, 0x9a, 0x8f,
+	0xca, 0xed, 0x98, 0x86, 0x9b, 0xc4, 0x0f, 0x99, 0x5e, 0x5a, 0x29, 0xd5, 0x2a, 0x1b, 0xff, 0x5a,
+	0xa2, 0x5f, 0xac, 0xa4, 0x5f, 0x2c, 0xd9, 0x2f, 0x56, 0x12, 0x51, 0xbf, 0x97, 0x94, 0xf2, 0xe9,
+	0xfb, 0x72, 0xcd, 0xf3, 0xf9, 0x61, 0xdc, 0xb6, 0x1c, 0x12, 0xd8, 0xb2, 0xb9, 0xc4, 0x65, 0x8d,
+	0xb9, 0x5d, 0x9b, 0xf7, 0x23, 0x60, 0x69, 0x02, 0x6b, 0x5d, 0xb0, 0x6b, 0x1e, 0x9a, 0x8e, 0x70,
+	0x5f, 0x28, 0x8d, 0x8f, 0x5e, 0x29, 0x23, 0xd7, 0xde, 0xa3, 0x19, 0x9e, 0x1d, 0xbb, 0x44, 0x6d,
+	0x62, 0xf4, 0x6a, 0x97, 0x15, 0x92, 0xda, 0x3a, 0x00, 0x42, 0x6d, 0xf2, 0x2f, 0xd4, 0xa6, 0xc8,
+	0xb5, 0x00, 0x55, 0x92, 0xc9, 0xf5, 0x32, 0xe6, 0x51, 0xcc, 0x99, 0x3e, 0x35, 0x7a, 0xad, 0x3c,
+	0xbf, 0x56, 0x47, 0xe5, 0xc0, 0x0f, 0x79, 0x93, 0x43, 0xc0, 0xf4, 0xe9, 0x54, 0xcc, 0x18, 0x7e,
+	0xe0, 0x93, 0x30, 0x79, 0xdc, 0x2f, 0xd2, 0xb4, 0x6d, 0x54, 0x09, 0x88, 0xeb, 0x77, 0xfa, 0x82,
+	0xa5, 0x7c, 0x03, 0x96, 0x7c, 0xa2, 0xf9, 0x48, 0x0e, 0xcc, 0x06, 0x25, 0xd1, 0x6d, 0xfa, 0x65,
+	0x07, 0xfd, 0xf7, 0xfb, 0x76, 0xd9, 0xc2, 0xb4, 0xd7, 0xbf, 0x01, 0xd1, 0x07, 0x34, 0x9b, 0x12,
+	0xed, 0x41, 0xe8, 0x8a, 0x12, 0x6f, 0x33, 0xd4, 0x2e, 0x4f, 0xa5, 0xd2, 0xc0, 0x54, 0xaa, 0xa2,
+	0x52, 0xb3, 0x21, 0x3a, 0xa5, 0x2c, 0xed, 0x48, 0x00, 0xf3, 0x4b, 0x51, 0xfa, 0xb0, 0x07, 0xa9,
+	0xc1, 0x7b, 0x9c, 0xfa, 0xa1, 0x37, 0xba, 0xf1, 0xa7, 0x75, 0x50, 0x55, 0xcd, 0xaa, 0xe7, 0x31,
+	0xc7, 0xed, 0x1e, 0x08, 0x09, 0xd5, 0xb5, 0xb5, 0xe1, 0xaf, 0x4e, 0x04, 0x3e, 0x83, 0xfe, 0x6b,
+	0xdc, 0x8b, 0xd5, 0xe4, 0x1b, 0xc2, 0x66, 0x7e, 0x2e, 0xca, 0x0f, 0xd2, 0x4e, 0xfa, 0xdd, 0xdd,
+	0x8d, 0xa9, 0x73, 0x88, 0xd9, 0x75, 0x83, 0xfc, 0x7f, 0x54, 0x8e, 0x28, 0x71, 0x63, 0x87, 0x67,
+	0x85, 0x5c, 0x00, 0xda, 0x5d, 0x34, 0x13, 0x49, 0x8e, 0x7d, 0xd2, 0x85, 0x50, 0x96, 0x74, 0x19,
+	0xd4, 0x56, 0xd1, 0x5c, 0xfa, 0x0a, 0x22, 0xde, 0xc0, 0x1c, 0xd7, 0x31, 0x83, 0x87, 0x0f, 0xf4,
+	0xf1, 0x34, 0x72, 0x70, 0x23, 0x51, 0x64, 0xbe, 0x17, 0x62, 0x1e, 0x53, 0xd0, 0x27, 0x84, 0x62,
+	0x06, 0x64, 0x9f, 0xe4, 0xa4, 0xa2, 0xe8, 0x4f, 0x0a, 0xb8, 0x72, 0x92, 0xea, 0xdb, 0x27, 0x67,
+	0x46, 0xf1, 0xf4, 0xcc, 0x28, 0xfe, 0x38, 0x33, 0x8a, 0x1f, 0xcf, 0x8d, 0xc2, 0xe9, 0xb9, 0x51,
+	0xf8, 0x7a, 0x6e, 0x14, 0xde, 0xac, 0xe6, 0xfa, 0x55, 0xd8, 0xbd, 0x96, 0xf8, 0x6d, 0xcb, 0x7f,
+	0x89, 0x63, 0x75, 0x93, 0x76, 0x6e, 0x7b, 0x32, 0xfd, 0xa5, 0xb8, 0xff, 0x2b, 0x00, 0x00, 0xff,
+	0xff, 0x4e, 0x1c, 0x41, 0xa8, 0x2e, 0x09, 0x00, 0x00,
 }
 
 func (m *EventCreateAccount) Marshal() (dAtA []byte, err error) {
@@ -1085,6 +1207,141 @@ func (m *EventCompleteExecution) MarshalTo(dAtA []byte) (int, error) {
 }
 
 func (m *EventCompleteExecution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ModifyItems) > 0 {
+		for iNdEx := len(m.ModifyItems) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ModifyItems[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x4a
+		}
+	}
+	if len(m.MintItems) > 0 {
+		for iNdEx := len(m.MintItems) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.MintItems[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x42
+		}
+	}
+	if len(m.CoinOutputs) > 0 {
+		for iNdEx := len(m.CoinOutputs) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CoinOutputs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if len(m.FeeCoins) > 0 {
+		for iNdEx := len(m.FeeCoins) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.FeeCoins[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x32
+		}
+	}
+	if len(m.TransferCoins) > 0 {
+		for iNdEx := len(m.TransferCoins) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.TransferCoins[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if len(m.PayCoins) > 0 {
+		for iNdEx := len(m.PayCoins) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.PayCoins[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.BurnCoins) > 0 {
+		for iNdEx := len(m.BurnCoins) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.BurnCoins[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintEvent(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.ID) > 0 {
+		i -= len(m.ID)
+		copy(dAtA[i:], m.ID)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.ID)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Creator) > 0 {
+		i -= len(m.Creator)
+		copy(dAtA[i:], m.Creator)
+		i = encodeVarintEvent(dAtA, i, uint64(len(m.Creator)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *EventDropExecution) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *EventDropExecution) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *EventDropExecution) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1472,6 +1729,65 @@ func (m *EventCreateExecution) Size() (n int) {
 }
 
 func (m *EventCompleteExecution) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Creator)
+	if l > 0 {
+		n += 1 + l + sovEvent(uint64(l))
+	}
+	l = len(m.ID)
+	if l > 0 {
+		n += 1 + l + sovEvent(uint64(l))
+	}
+	if len(m.BurnCoins) > 0 {
+		for _, e := range m.BurnCoins {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	if len(m.PayCoins) > 0 {
+		for _, e := range m.PayCoins {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	if len(m.TransferCoins) > 0 {
+		for _, e := range m.TransferCoins {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	if len(m.FeeCoins) > 0 {
+		for _, e := range m.FeeCoins {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	if len(m.CoinOutputs) > 0 {
+		for _, e := range m.CoinOutputs {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	if len(m.MintItems) > 0 {
+		for _, e := range m.MintItems {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	if len(m.ModifyItems) > 0 {
+		for _, e := range m.ModifyItems {
+			l = e.Size()
+			n += 1 + l + sovEvent(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *EventDropExecution) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2406,6 +2722,358 @@ func (m *EventCompleteExecution) Unmarshal(dAtA []byte) error {
 		}
 		if fieldNum <= 0 {
 			return fmt.Errorf("proto: EventCompleteExecution: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Creator", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Creator = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ID = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BurnCoins", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BurnCoins = append(m.BurnCoins, types.Coin{})
+			if err := m.BurnCoins[len(m.BurnCoins)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PayCoins", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PayCoins = append(m.PayCoins, types.Coin{})
+			if err := m.PayCoins[len(m.PayCoins)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TransferCoins", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.TransferCoins = append(m.TransferCoins, types.Coin{})
+			if err := m.TransferCoins[len(m.TransferCoins)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FeeCoins", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.FeeCoins = append(m.FeeCoins, types.Coin{})
+			if err := m.FeeCoins[len(m.FeeCoins)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinOutputs", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CoinOutputs = append(m.CoinOutputs, types.Coin{})
+			if err := m.CoinOutputs[len(m.CoinOutputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MintItems", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.MintItems = append(m.MintItems, Item{})
+			if err := m.MintItems[len(m.MintItems)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ModifyItems", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowEvent
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthEvent
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ModifyItems = append(m.ModifyItems, Item{})
+			if err := m.ModifyItems[len(m.ModifyItems)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipEvent(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthEvent
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EventDropExecution) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowEvent
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EventDropExecution: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EventDropExecution: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

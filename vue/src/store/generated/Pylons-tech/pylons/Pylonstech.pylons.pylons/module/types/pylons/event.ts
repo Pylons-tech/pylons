@@ -1,7 +1,8 @@
 /* eslint-disable */
 import { Cookbook } from '../pylons/cookbook'
 import { Recipe } from '../pylons/recipe'
-import { StringKeyValue } from '../pylons/item'
+import { Coin } from '../cosmos/base/v1beta1/coin'
+import { Item, StringKeyValue } from '../pylons/item'
 import { Writer, Reader } from 'protobufjs/minimal'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
@@ -44,6 +45,18 @@ export interface EventCreateExecution {
 }
 
 export interface EventCompleteExecution {
+  creator: string
+  ID: string
+  burnCoins: Coin[]
+  payCoins: Coin[]
+  transferCoins: Coin[]
+  feeCoins: Coin[]
+  coinOutputs: Coin[]
+  mintItems: Item[]
+  modifyItems: Item[]
+}
+
+export interface EventDropExecution {
   creator: string
   ID: string
 }
@@ -577,6 +590,27 @@ export const EventCompleteExecution = {
     if (message.ID !== '') {
       writer.uint32(18).string(message.ID)
     }
+    for (const v of message.burnCoins) {
+      Coin.encode(v!, writer.uint32(26).fork()).ldelim()
+    }
+    for (const v of message.payCoins) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim()
+    }
+    for (const v of message.transferCoins) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim()
+    }
+    for (const v of message.feeCoins) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim()
+    }
+    for (const v of message.coinOutputs) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim()
+    }
+    for (const v of message.mintItems) {
+      Item.encode(v!, writer.uint32(66).fork()).ldelim()
+    }
+    for (const v of message.modifyItems) {
+      Item.encode(v!, writer.uint32(74).fork()).ldelim()
+    }
     return writer
   },
 
@@ -584,6 +618,225 @@ export const EventCompleteExecution = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseEventCompleteExecution } as EventCompleteExecution
+    message.burnCoins = []
+    message.payCoins = []
+    message.transferCoins = []
+    message.feeCoins = []
+    message.coinOutputs = []
+    message.mintItems = []
+    message.modifyItems = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.ID = reader.string()
+          break
+        case 3:
+          message.burnCoins.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 4:
+          message.payCoins.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 5:
+          message.transferCoins.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 6:
+          message.feeCoins.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 7:
+          message.coinOutputs.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 8:
+          message.mintItems.push(Item.decode(reader, reader.uint32()))
+          break
+        case 9:
+          message.modifyItems.push(Item.decode(reader, reader.uint32()))
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): EventCompleteExecution {
+    const message = { ...baseEventCompleteExecution } as EventCompleteExecution
+    message.burnCoins = []
+    message.payCoins = []
+    message.transferCoins = []
+    message.feeCoins = []
+    message.coinOutputs = []
+    message.mintItems = []
+    message.modifyItems = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = String(object.ID)
+    } else {
+      message.ID = ''
+    }
+    if (object.burnCoins !== undefined && object.burnCoins !== null) {
+      for (const e of object.burnCoins) {
+        message.burnCoins.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.payCoins !== undefined && object.payCoins !== null) {
+      for (const e of object.payCoins) {
+        message.payCoins.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.transferCoins !== undefined && object.transferCoins !== null) {
+      for (const e of object.transferCoins) {
+        message.transferCoins.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.feeCoins !== undefined && object.feeCoins !== null) {
+      for (const e of object.feeCoins) {
+        message.feeCoins.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+      for (const e of object.coinOutputs) {
+        message.coinOutputs.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.mintItems !== undefined && object.mintItems !== null) {
+      for (const e of object.mintItems) {
+        message.mintItems.push(Item.fromJSON(e))
+      }
+    }
+    if (object.modifyItems !== undefined && object.modifyItems !== null) {
+      for (const e of object.modifyItems) {
+        message.modifyItems.push(Item.fromJSON(e))
+      }
+    }
+    return message
+  },
+
+  toJSON(message: EventCompleteExecution): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.ID !== undefined && (obj.ID = message.ID)
+    if (message.burnCoins) {
+      obj.burnCoins = message.burnCoins.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.burnCoins = []
+    }
+    if (message.payCoins) {
+      obj.payCoins = message.payCoins.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.payCoins = []
+    }
+    if (message.transferCoins) {
+      obj.transferCoins = message.transferCoins.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.transferCoins = []
+    }
+    if (message.feeCoins) {
+      obj.feeCoins = message.feeCoins.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.feeCoins = []
+    }
+    if (message.coinOutputs) {
+      obj.coinOutputs = message.coinOutputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.coinOutputs = []
+    }
+    if (message.mintItems) {
+      obj.mintItems = message.mintItems.map((e) => (e ? Item.toJSON(e) : undefined))
+    } else {
+      obj.mintItems = []
+    }
+    if (message.modifyItems) {
+      obj.modifyItems = message.modifyItems.map((e) => (e ? Item.toJSON(e) : undefined))
+    } else {
+      obj.modifyItems = []
+    }
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<EventCompleteExecution>): EventCompleteExecution {
+    const message = { ...baseEventCompleteExecution } as EventCompleteExecution
+    message.burnCoins = []
+    message.payCoins = []
+    message.transferCoins = []
+    message.feeCoins = []
+    message.coinOutputs = []
+    message.mintItems = []
+    message.modifyItems = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
+    } else {
+      message.ID = ''
+    }
+    if (object.burnCoins !== undefined && object.burnCoins !== null) {
+      for (const e of object.burnCoins) {
+        message.burnCoins.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.payCoins !== undefined && object.payCoins !== null) {
+      for (const e of object.payCoins) {
+        message.payCoins.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.transferCoins !== undefined && object.transferCoins !== null) {
+      for (const e of object.transferCoins) {
+        message.transferCoins.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.feeCoins !== undefined && object.feeCoins !== null) {
+      for (const e of object.feeCoins) {
+        message.feeCoins.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+      for (const e of object.coinOutputs) {
+        message.coinOutputs.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.mintItems !== undefined && object.mintItems !== null) {
+      for (const e of object.mintItems) {
+        message.mintItems.push(Item.fromPartial(e))
+      }
+    }
+    if (object.modifyItems !== undefined && object.modifyItems !== null) {
+      for (const e of object.modifyItems) {
+        message.modifyItems.push(Item.fromPartial(e))
+      }
+    }
+    return message
+  }
+}
+
+const baseEventDropExecution: object = { creator: '', ID: '' }
+
+export const EventDropExecution = {
+  encode(message: EventDropExecution, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.ID !== '') {
+      writer.uint32(18).string(message.ID)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): EventDropExecution {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseEventDropExecution } as EventDropExecution
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -601,8 +854,8 @@ export const EventCompleteExecution = {
     return message
   },
 
-  fromJSON(object: any): EventCompleteExecution {
-    const message = { ...baseEventCompleteExecution } as EventCompleteExecution
+  fromJSON(object: any): EventDropExecution {
+    const message = { ...baseEventDropExecution } as EventDropExecution
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -616,15 +869,15 @@ export const EventCompleteExecution = {
     return message
   },
 
-  toJSON(message: EventCompleteExecution): unknown {
+  toJSON(message: EventDropExecution): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     message.ID !== undefined && (obj.ID = message.ID)
     return obj
   },
 
-  fromPartial(object: DeepPartial<EventCompleteExecution>): EventCompleteExecution {
-    const message = { ...baseEventCompleteExecution } as EventCompleteExecution
+  fromPartial(object: DeepPartial<EventDropExecution>): EventDropExecution {
+    const message = { ...baseEventDropExecution } as EventDropExecution
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {

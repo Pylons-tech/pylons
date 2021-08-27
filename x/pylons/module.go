@@ -184,13 +184,14 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 	}()
 
 	for _, pendingExec := range pendingExecs {
-		finalizedExec, err := am.keeper.CompletePendingExecution(ctx, pendingExec)
+		finalizedExec, event, err := am.keeper.CompletePendingExecution(ctx, pendingExec)
 		if err != nil {
 			// drop execution since it became invalid, user will have to resubmit
 			pendingExec.BlockHeight = blockHeight
 			// unlock coins
 			addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
-			// TODO CompletePendingExecution could return an error
+			// TODO CompletePendingExecution could return an error AFTER fees are already paid
+			// this could cause this panic to occur
 			err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.CoinInputs)
 			if err != nil {
 				panic(err.Error())
@@ -205,17 +206,18 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 				am.keeper.SetItem(ctx, item)
 			}
 
-			// TODO should this event be more fleshed out?
-			_ = ctx.EventManager().EmitTypedEvent(&types.EventCompleteExecution{
+			am.keeper.ActualizeExecution(ctx, pendingExec)
+			_ = ctx.EventManager().EmitTypedEvent(&types.EventDropExecution{
 				Creator: pendingExec.Creator,
 				ID:      pendingExec.ID,
 			})
 
-			am.keeper.ActualizeExecution(ctx, pendingExec)
 			continue
 		}
+
 		finalizedExec.BlockHeight = blockHeight
 		am.keeper.ActualizeExecution(ctx, finalizedExec)
+		_ = ctx.EventManager().EmitTypedEvent(&event)
 	}
 
 	return []abci.ValidatorUpdate{}

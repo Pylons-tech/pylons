@@ -1,6 +1,7 @@
 import { Cookbook } from '../pylons/cookbook';
 import { Recipe } from '../pylons/recipe';
-import { StringKeyValue } from '../pylons/item';
+import { Coin } from '../cosmos/base/v1beta1/coin';
+import { Item, StringKeyValue } from '../pylons/item';
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
@@ -34,6 +35,17 @@ export interface EventCreateExecution {
     ID: string;
 }
 export interface EventCompleteExecution {
+    creator: string;
+    ID: string;
+    burnCoins: Coin[];
+    payCoins: Coin[];
+    transferCoins: Coin[];
+    feeCoins: Coin[];
+    coinOutputs: Coin[];
+    mintItems: Item[];
+    modifyItems: Item[];
+}
+export interface EventDropExecution {
     creator: string;
     ID: string;
 }
@@ -119,6 +131,13 @@ export declare const EventCompleteExecution: {
     fromJSON(object: any): EventCompleteExecution;
     toJSON(message: EventCompleteExecution): unknown;
     fromPartial(object: DeepPartial<EventCompleteExecution>): EventCompleteExecution;
+};
+export declare const EventDropExecution: {
+    encode(message: EventDropExecution, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventDropExecution;
+    fromJSON(object: any): EventDropExecution;
+    toJSON(message: EventDropExecution): unknown;
+    fromPartial(object: DeepPartial<EventDropExecution>): EventDropExecution;
 };
 export declare const EventCompleteExecutionEarly: {
     encode(message: EventCompleteExecutionEarly, writer?: Writer): Writer;
