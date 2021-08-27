@@ -2,9 +2,10 @@ package keeper
 
 import (
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/types/query"
 	"strconv"
 	"strings"
+
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -139,4 +140,3 @@ func (k Keeper) getItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, 
 
 	return items, pageRes, nil
 }
-

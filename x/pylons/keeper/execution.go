@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	"github.com/cosmos/cosmos-sdk/types/query"
 	"strconv"
+
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -106,7 +107,7 @@ func (k Keeper) GetAllExecutionByRecipe(ctx sdk.Context, cookbookID, recipeID st
 func (k Keeper) setExecutionByItem(ctx sdk.Context, execution types.Execution) {
 	itemExecStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemExecutionKey))
 	itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(execution.CookbookID))
-	for _, itemOutputID := range execution.ItemOutputIDs{
+	for _, itemOutputID := range execution.ItemOutputIDs {
 		itemExecStore = prefix.NewStore(itemExecStore, types.KeyPrefix(itemOutputID))
 		byteKey := types.KeyPrefix(execution.ID)
 		bz := []byte(execution.ID)
@@ -197,7 +198,7 @@ func (k Keeper) ActualizeExecution(ctx sdk.Context, execution types.Execution) {
 }
 
 // appendExecution appends an execution in the store and updates the count
-func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution, ) {
+func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution) {
 	// Create the execution
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	appendedValue := k.cdc.MustMarshalBinaryBare(&execution)
