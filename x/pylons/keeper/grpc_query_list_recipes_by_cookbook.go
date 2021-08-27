@@ -18,7 +18,11 @@ func (k Keeper) ListRecipesByCookbook(goCtx context.Context, req *types.QueryLis
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// no errors, default case is an empty list meaning there are no recipes for this cookbook
-	recipes := k.GetAllRecipesByCookbook(ctx, req.CookbookID)
+	recipes, pageRes, err := k.getRecipesByCookbookPaginated(ctx, req.CookbookID, req.Pagination)
 
-	return &types.QueryListRecipesByCookbookResponse{Recipes: recipes}, nil
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
+	}
+
+	return &types.QueryListRecipesByCookbookResponse{Recipes: recipes, Pagination: pageRes}, nil
 }

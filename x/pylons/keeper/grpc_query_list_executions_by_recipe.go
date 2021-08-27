@@ -17,7 +17,11 @@ func (k Keeper) ListExecutionsByRecipe(goCtx context.Context, req *types.QueryLi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	execs := k.GetExecutionsByRecipe(ctx, req.CookbookID, req.RecipeID)
+	completedExecs, pendingExecs, pageRes, err := k.getExecutionsByRecipePaginated(ctx, req.CookbookID, req.RecipeID, req.Pagination)
 
-	return &types.QueryListExecutionsByRecipeResponse{Executions: execs}, nil
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
+	}
+
+	return &types.QueryListExecutionsByRecipeResponse{CompletedExecutions: completedExecs, PendingExecutions: pendingExecs, Pagination: pageRes}, nil
 }

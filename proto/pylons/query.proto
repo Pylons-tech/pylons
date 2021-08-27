@@ -81,10 +81,18 @@ service Query {
 // this line is used by starport scaffolding # 3
 message QueryListItemByOwnerRequest {
   string owner = 1;
+
+	// pagination defines an optional pagination for the request.
+	cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryListItemByOwnerResponse {
+	option (gogoproto.equal)           = false;
+	option (gogoproto.goproto_getters) = false;
 	repeated Item Items = 1 [(gogoproto.nullable) = false];
+
+	// pagination defines the pagination in the response.
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryGetGoogleInAppPurchaseOrderRequest {
@@ -96,21 +104,41 @@ message QueryGetGoogleInAppPurchaseOrderResponse {
 }
 
 message QueryListExecutionsByItemRequest {
+	option (gogoproto.equal)           = false;
+	option (gogoproto.goproto_getters) = false;
+
 	string CookbookID = 1;
 	string ItemID = 2;
+
+	// pagination defines an optional pagination for the request.
+	cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryListExecutionsByItemResponse {
-	repeated Execution Executions = 1 [(gogoproto.nullable) = false];
+	repeated Execution CompletedExecutions = 1 [(gogoproto.nullable) = false];
+	repeated Execution PendingExecutions = 2 [(gogoproto.nullable) = false];
+
+	// pagination defines the pagination in the response.
+	cosmos.base.query.v1beta1.PageResponse pagination = 3;
 }
 
 message QueryListExecutionsByRecipeRequest {
+	option (gogoproto.equal)           = false;
+	option (gogoproto.goproto_getters) = false;
+
 	string CookbookID = 1;
-  string RecipeID = 2;
+	string RecipeID = 2;
+
+	// pagination defines an optional pagination for the request.
+	cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryListExecutionsByRecipeResponse {
-	repeated Execution Executions = 1 [(gogoproto.nullable) = false];
+	repeated Execution CompletedExecutions = 1 [(gogoproto.nullable) = false];
+	repeated Execution PendingExecutions = 2 [(gogoproto.nullable) = false];
+
+	// pagination defines the pagination in the response.
+	cosmos.base.query.v1beta1.PageResponse pagination = 3;
 }
 
 message QueryGetExecutionRequest {
@@ -124,10 +152,16 @@ message QueryGetExecutionResponse {
 
 message QueryListRecipesByCookbookRequest {
   string CookbookID = 1;
+
+	// pagination defines an optional pagination for the request.
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
 }
 
 message QueryListRecipesByCookbookResponse {
 	repeated Recipe Recipes = 1 [(gogoproto.nullable) = false];
+
+	// pagination defines the pagination in the response.
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 message QueryGetItemRequest {
@@ -151,10 +185,16 @@ message QueryGetRecipeResponse {
 
 message QueryListCookbooksByCreatorRequest {
   string creator = 1;
+
+	// pagination defines an optional pagination for the request.
+	cosmos.base.query.v1beta1.PageRequest pagination = 3;
 }
 
 message QueryListCookbooksByCreatorResponse {
   repeated Cookbook Cookbooks = 1 [(gogoproto.nullable) = false];
+
+	// pagination defines the pagination in the response.
+	cosmos.base.query.v1beta1.PageResponse pagination = 3;
 }
 
 message QueryGetCookbookRequest {

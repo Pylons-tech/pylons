@@ -38,17 +38,10 @@ func (k Keeper) SetPendingExecutionCount(ctx sdk.Context, count uint64) {
 	byteKey := types.KeyPrefix(types.PendingExecutionCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
-
-	// required for random seed init given how it's handled rn
-	k.IncrementEntityCount(ctx)
 }
 
 // AppendPendingExecution appends a pending execution in the store with a new id and update the count
-func (k Keeper) AppendPendingExecution(
-	ctx sdk.Context,
-	execution types.Execution,
-	blockInterval int64,
-) string {
+func (k Keeper) AppendPendingExecution(ctx sdk.Context, execution types.Execution, blockInterval int64) string {
 	// Create the execution
 	count := k.GetPendingExecutionCount(ctx)
 
@@ -80,6 +73,14 @@ func (k Keeper) SetPendingExecution(ctx sdk.Context, execution types.Execution) 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	value := k.cdc.MustMarshalBinaryBare(&execution)
 	store.Set(types.KeyPrefix(execution.ID), value)
+
+	// add execution to recipe mapping
+	k.setExecutionByRecipe(ctx, execution)
+	// add execution to item mapping
+	k.setExecutionByItem(ctx, execution)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // HasPendingExecution checks if the execution exists in the store

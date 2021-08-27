@@ -22,7 +22,11 @@ func (k Keeper) ListItemByOwner(goCtx context.Context, req *types.QueryListItemB
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
 	}
 
-	items := k.GetAllItemByOwner(ctx, addr)
+	items, pageRes, err := k.getItemsByOwnerPaginated(ctx, addr, req.Pagination)
 
-	return &types.QueryListItemByOwnerResponse{Items: items}, nil
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
+	}
+
+	return &types.QueryListItemByOwnerResponse{Items: items, Pagination: pageRes}, nil
 }

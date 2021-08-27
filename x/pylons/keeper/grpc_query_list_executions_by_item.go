@@ -17,13 +17,11 @@ func (k Keeper) ListExecutionsByItem(goCtx context.Context, req *types.QueryList
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// Get the item from the store
-	item, found := k.GetItem(ctx, req.CookbookID, req.ItemID)
-	if !found {
-		return &types.QueryListExecutionsByItemResponse{}, status.Error(codes.InvalidArgument, "item does not exist")
+	completedExecs, pendingExecs, pageRes, err := k.getExecutionsByItemPaginated(ctx, req.CookbookID, req.ItemID, req.Pagination)
+
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}
 
-	execs := k.GetExecutionsByItem(ctx, item.CookbookID, item.ID)
-
-	return &types.QueryListExecutionsByItemResponse{Executions: execs}, nil
+	return &types.QueryListExecutionsByItemResponse{CompletedExecutions: completedExecs, PendingExecutions: pendingExecs, Pagination: pageRes}, nil
 }

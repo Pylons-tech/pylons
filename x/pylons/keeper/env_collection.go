@@ -21,7 +21,7 @@ func (k Keeper) ExecutedByAddrCount(ctx sdk.Context, args ...ref.Val) ref.Val {
 	cookbookID := args[1].Value().(string)
 	itemID := args[2].Value().(string)
 	count := 0
-	executions := k.GetExecutionsByItem(ctx, cookbookID, itemID)
+	executions := k.getCompletedExecutionsByItem(ctx, cookbookID, itemID)
 	for _, exec := range executions {
 		if exec.Creator == addr {
 			count++

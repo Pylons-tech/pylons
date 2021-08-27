@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/types/query"
 	"strconv"
 	"strings"
 
@@ -38,16 +39,10 @@ func (k Keeper) SetItemCount(ctx sdk.Context, count uint64) {
 	byteKey := types.KeyPrefix(types.ItemCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
-
-	// required for random seed init given how it's handled rn
-	k.IncrementEntityCount(ctx)
 }
 
 // AppendItem appends an item in the store with a new id and update the count
-func (k Keeper) AppendItem(
-	ctx sdk.Context,
-	item types.Item,
-) string {
+func (k Keeper) AppendItem(ctx sdk.Context, item types.Item) string {
 	// Create the execution
 	count := k.GetItemCount(ctx)
 
@@ -69,6 +64,8 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 
 	addr, _ := sdk.AccAddressFromBech32(item.Owner)
 	k.addItemToAddress(ctx, item.CookbookID, item.ID, addr)
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // GetItem returns an item from its index
@@ -122,3 +119,24 @@ func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list [
 
 	return
 }
+
+func (k Keeper) getItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, pagination *query.PageRequest) ([]types.Item, *query.PageResponse, error) {
+	items := make([]types.Item, 0)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	store = prefix.NewStore(store, owner.Bytes())
+
+	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
+		idParts := strings.Split(string(value), "-")
+		item, _ := k.GetItem(ctx, idParts[0], idParts[1])
+		items = append(items, item)
+		return nil
+	})
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return items, pageRes, nil
+}
+

@@ -36,9 +36,6 @@ func (k Keeper) SetGoogleIAPOrderCount(ctx sdk.Context, count uint64) {
 	byteKey := types.KeyPrefix(types.GoogleInAppPurchaseOrderCountKey)
 	bz := []byte(strconv.FormatUint(count, 10))
 	store.Set(byteKey, bz)
-
-	// required for random seed init given how it's handled rn
-	k.IncrementEntityCount(ctx)
 }
 
 // AppendGoogleIAPOrder appends a googleIAPOrder in the store with a new id and update the count
@@ -49,9 +46,7 @@ func (k Keeper) AppendGoogleIAPOrder(
 	// Create the googleIAPOrder
 	count := k.GetGoogleIAPOrderCount(ctx)
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
-	appendedValue := k.cdc.MustMarshalBinaryBare(&googleIAPOrder)
-	store.Set(types.KeyPrefix(googleIAPOrder.PurchaseToken), appendedValue)
+	k.SetGoogleIAPOrder(ctx, googleIAPOrder)
 
 	// Update googleIAPOrder count
 	k.SetGoogleIAPOrderCount(ctx, count+1)
@@ -64,6 +59,9 @@ func (k Keeper) SetGoogleIAPOrder(ctx sdk.Context, googleIAPOrder types.GoogleIn
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	b := k.cdc.MustMarshalBinaryBare(&googleIAPOrder)
 	store.Set(types.KeyPrefix(googleIAPOrder.PurchaseToken), b)
+
+	// required for random seed init given how it's handled rn
+	k.IncrementEntityCount(ctx)
 }
 
 // GetGoogleIAPOrder returns a googleIAPOrder from its id

@@ -22,7 +22,7 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByItem() {
 	itemCookbookID := itemExecs[0].CookbookID
 	itemItemID := itemExecs[0].ItemOutputIDs[0]
 
-	execs := k.GetExecutionsByItem(ctx, itemCookbookID, itemItemID)
+	execs, _ := k.GetAllExecutionByItem(ctx, itemCookbookID, itemItemID)
 	require.Equal(numExecs, len(itemExecs))
 	require.Equal(numExecs, len(execs))
 	for i, exec := range execs {
@@ -42,7 +42,7 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByRecipe() {
 	itemCookbookID := itemExecs[0].CookbookID
 	recipeID := itemExecs[0].RecipeID
 
-	execs := k.GetExecutionsByRecipe(ctx, itemCookbookID, recipeID)
+	execs, _ := k.GetAllExecutionByRecipe(ctx, itemCookbookID, recipeID)
 	require.Equal(numExecs, len(itemExecs))
 	require.Equal(numExecs, len(execs))
 	for i, exec := range execs {

@@ -3,6 +3,7 @@ package keeper
 import (
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -124,4 +125,24 @@ func (k Keeper) GetAllCookbookByCreator(ctx sdk.Context, creator sdk.AccAddress)
 	}
 
 	return
+}
+
+func (k Keeper) getCookbooksByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddress, pagination *query.PageRequest) ([]types.Cookbook, *query.PageResponse, error) {
+	cookbooks := make([]types.Cookbook, 0)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
+	store = prefix.NewStore(store, creator.Bytes())
+
+	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
+		id := string(value)
+		val, _ := k.GetCookbook(ctx, id)
+		cookbooks = append(cookbooks, val)
+		return nil
+	})
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return cookbooks, pageRes, nil
 }

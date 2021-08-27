@@ -6,7 +6,7 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	_ "github.com/cosmos/cosmos-sdk/types/query"
+	query "github.com/cosmos/cosmos-sdk/types/query"
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
@@ -33,6 +33,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // this line is used by starport scaffolding # 3
 type QueryListItemByOwnerRequest struct {
 	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListItemByOwnerRequest) Reset()         { *m = QueryListItemByOwnerRequest{} }
@@ -75,8 +77,17 @@ func (m *QueryListItemByOwnerRequest) GetOwner() string {
 	return ""
 }
 
+func (m *QueryListItemByOwnerRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 type QueryListItemByOwnerResponse struct {
 	Items []Item `protobuf:"bytes,1,rep,name=Items,proto3" json:"Items"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListItemByOwnerResponse) Reset()         { *m = QueryListItemByOwnerResponse{} }
@@ -111,13 +122,6 @@ func (m *QueryListItemByOwnerResponse) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_QueryListItemByOwnerResponse proto.InternalMessageInfo
-
-func (m *QueryListItemByOwnerResponse) GetItems() []Item {
-	if m != nil {
-		return m.Items
-	}
-	return nil
-}
 
 type QueryGetGoogleInAppPurchaseOrderRequest struct {
 	PurchaseToken string `protobuf:"bytes,1,opt,name=PurchaseToken,proto3" json:"PurchaseToken,omitempty"`
@@ -214,6 +218,8 @@ func (m *QueryGetGoogleInAppPurchaseOrderResponse) GetOrder() GoogleInAppPurchas
 type QueryListExecutionsByItemRequest struct {
 	CookbookID string `protobuf:"bytes,1,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
 	ItemID     string `protobuf:"bytes,2,opt,name=ItemID,proto3" json:"ItemID,omitempty"`
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListExecutionsByItemRequest) Reset()         { *m = QueryListExecutionsByItemRequest{} }
@@ -249,22 +255,11 @@ func (m *QueryListExecutionsByItemRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryListExecutionsByItemRequest proto.InternalMessageInfo
 
-func (m *QueryListExecutionsByItemRequest) GetCookbookID() string {
-	if m != nil {
-		return m.CookbookID
-	}
-	return ""
-}
-
-func (m *QueryListExecutionsByItemRequest) GetItemID() string {
-	if m != nil {
-		return m.ItemID
-	}
-	return ""
-}
-
 type QueryListExecutionsByItemResponse struct {
-	Executions []Execution `protobuf:"bytes,1,rep,name=Executions,proto3" json:"Executions"`
+	CompletedExecutions []Execution `protobuf:"bytes,1,rep,name=CompletedExecutions,proto3" json:"CompletedExecutions"`
+	PendingExecutions   []Execution `protobuf:"bytes,2,rep,name=PendingExecutions,proto3" json:"PendingExecutions"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListExecutionsByItemResponse) Reset()         { *m = QueryListExecutionsByItemResponse{} }
@@ -300,9 +295,23 @@ func (m *QueryListExecutionsByItemResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryListExecutionsByItemResponse proto.InternalMessageInfo
 
-func (m *QueryListExecutionsByItemResponse) GetExecutions() []Execution {
+func (m *QueryListExecutionsByItemResponse) GetCompletedExecutions() []Execution {
 	if m != nil {
-		return m.Executions
+		return m.CompletedExecutions
+	}
+	return nil
+}
+
+func (m *QueryListExecutionsByItemResponse) GetPendingExecutions() []Execution {
+	if m != nil {
+		return m.PendingExecutions
+	}
+	return nil
+}
+
+func (m *QueryListExecutionsByItemResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
 	}
 	return nil
 }
@@ -310,6 +319,8 @@ func (m *QueryListExecutionsByItemResponse) GetExecutions() []Execution {
 type QueryListExecutionsByRecipeRequest struct {
 	CookbookID string `protobuf:"bytes,1,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
 	RecipeID   string `protobuf:"bytes,2,opt,name=RecipeID,proto3" json:"RecipeID,omitempty"`
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListExecutionsByRecipeRequest) Reset()         { *m = QueryListExecutionsByRecipeRequest{} }
@@ -345,22 +356,11 @@ func (m *QueryListExecutionsByRecipeRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryListExecutionsByRecipeRequest proto.InternalMessageInfo
 
-func (m *QueryListExecutionsByRecipeRequest) GetCookbookID() string {
-	if m != nil {
-		return m.CookbookID
-	}
-	return ""
-}
-
-func (m *QueryListExecutionsByRecipeRequest) GetRecipeID() string {
-	if m != nil {
-		return m.RecipeID
-	}
-	return ""
-}
-
 type QueryListExecutionsByRecipeResponse struct {
-	Executions []Execution `protobuf:"bytes,1,rep,name=Executions,proto3" json:"Executions"`
+	CompletedExecutions []Execution `protobuf:"bytes,1,rep,name=CompletedExecutions,proto3" json:"CompletedExecutions"`
+	PendingExecutions   []Execution `protobuf:"bytes,2,rep,name=PendingExecutions,proto3" json:"PendingExecutions"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListExecutionsByRecipeResponse) Reset()         { *m = QueryListExecutionsByRecipeResponse{} }
@@ -396,9 +396,23 @@ func (m *QueryListExecutionsByRecipeResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryListExecutionsByRecipeResponse proto.InternalMessageInfo
 
-func (m *QueryListExecutionsByRecipeResponse) GetExecutions() []Execution {
+func (m *QueryListExecutionsByRecipeResponse) GetCompletedExecutions() []Execution {
 	if m != nil {
-		return m.Executions
+		return m.CompletedExecutions
+	}
+	return nil
+}
+
+func (m *QueryListExecutionsByRecipeResponse) GetPendingExecutions() []Execution {
+	if m != nil {
+		return m.PendingExecutions
+	}
+	return nil
+}
+
+func (m *QueryListExecutionsByRecipeResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
 	}
 	return nil
 }
@@ -501,6 +515,8 @@ func (m *QueryGetExecutionResponse) GetCompleted() bool {
 
 type QueryListRecipesByCookbookRequest struct {
 	CookbookID string `protobuf:"bytes,1,opt,name=CookbookID,proto3" json:"CookbookID,omitempty"`
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListRecipesByCookbookRequest) Reset()         { *m = QueryListRecipesByCookbookRequest{} }
@@ -543,8 +559,17 @@ func (m *QueryListRecipesByCookbookRequest) GetCookbookID() string {
 	return ""
 }
 
+func (m *QueryListRecipesByCookbookRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 type QueryListRecipesByCookbookResponse struct {
 	Recipes []Recipe `protobuf:"bytes,1,rep,name=Recipes,proto3" json:"Recipes"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListRecipesByCookbookResponse) Reset()         { *m = QueryListRecipesByCookbookResponse{} }
@@ -583,6 +608,13 @@ var xxx_messageInfo_QueryListRecipesByCookbookResponse proto.InternalMessageInfo
 func (m *QueryListRecipesByCookbookResponse) GetRecipes() []Recipe {
 	if m != nil {
 		return m.Recipes
+	}
+	return nil
+}
+
+func (m *QueryListRecipesByCookbookResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
 	}
 	return nil
 }
@@ -781,6 +813,8 @@ func (m *QueryGetRecipeResponse) GetRecipe() Recipe {
 
 type QueryListCookbooksByCreatorRequest struct {
 	Creator string `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	// pagination defines an optional pagination for the request.
+	Pagination *query.PageRequest `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListCookbooksByCreatorRequest) Reset()         { *m = QueryListCookbooksByCreatorRequest{} }
@@ -823,8 +857,17 @@ func (m *QueryListCookbooksByCreatorRequest) GetCreator() string {
 	return ""
 }
 
+func (m *QueryListCookbooksByCreatorRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 type QueryListCookbooksByCreatorResponse struct {
 	Cookbooks []Cookbook `protobuf:"bytes,1,rep,name=Cookbooks,proto3" json:"Cookbooks"`
+	// pagination defines the pagination in the response.
+	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryListCookbooksByCreatorResponse) Reset()         { *m = QueryListCookbooksByCreatorResponse{} }
@@ -863,6 +906,13 @@ var xxx_messageInfo_QueryListCookbooksByCreatorResponse proto.InternalMessageInf
 func (m *QueryListCookbooksByCreatorResponse) GetCookbooks() []Cookbook {
 	if m != nil {
 		return m.Cookbooks
+	}
+	return nil
+}
+
+func (m *QueryListCookbooksByCreatorResponse) GetPagination() *query.PageResponse {
+	if m != nil {
+		return m.Pagination
 	}
 	return nil
 }
@@ -981,73 +1031,81 @@ func init() {
 func init() { proto.RegisterFile("pylons/query.proto", fileDescriptor_dbe4a0dc0744f938) }
 
 var fileDescriptor_dbe4a0dc0744f938 = []byte{
-	// 1042 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0x41, 0x6f, 0x1b, 0x45,
-	0x14, 0xce, 0xba, 0x4d, 0x9a, 0xbc, 0xaa, 0x20, 0xa6, 0x89, 0x6b, 0xb6, 0xc9, 0x62, 0x26, 0x15,
-	0x84, 0x8a, 0x78, 0x88, 0xa3, 0x22, 0x28, 0xa5, 0xa2, 0x8e, 0xdb, 0xc8, 0x12, 0x22, 0xc1, 0xe2,
-	0x80, 0x72, 0x69, 0xd7, 0xee, 0xe0, 0x58, 0x89, 0x77, 0xb6, 0xde, 0x35, 0xd4, 0x58, 0xbe, 0xf4,
-	0x8e, 0x54, 0x09, 0x38, 0xf3, 0x37, 0x10, 0x3f, 0x00, 0xf5, 0x18, 0x89, 0x4b, 0x4e, 0x08, 0x25,
-	0xfc, 0x10, 0xb4, 0x33, 0x6f, 0xd6, 0xeb, 0xcd, 0x6e, 0xbc, 0x0e, 0x3d, 0x79, 0xe7, 0xcd, 0xbc,
-	0x37, 0xdf, 0xf7, 0xcd, 0x9b, 0xfd, 0xd6, 0x40, 0xdc, 0xfe, 0xa1, 0x70, 0x3c, 0xf6, 0xac, 0xc7,
-	0xbb, 0xfd, 0x92, 0xdb, 0x15, 0xbe, 0x20, 0x85, 0x5d, 0x19, 0xf3, 0x79, 0x73, 0xbf, 0xa4, 0xa6,
-	0xf1, 0xc7, 0x5c, 0x6e, 0x09, 0xd1, 0x3a, 0xe4, 0xcc, 0x76, 0xdb, 0xcc, 0x76, 0x1c, 0xe1, 0xdb,
-	0x7e, 0x5b, 0x4e, 0x07, 0x79, 0xe6, 0xed, 0xa6, 0xf0, 0x3a, 0xc2, 0x63, 0x0d, 0xdb, 0xe3, 0xaa,
-	0x20, 0xfb, 0x7e, 0xa3, 0xc1, 0x7d, 0x7b, 0x83, 0xb9, 0x76, 0xab, 0xed, 0xc8, 0xc5, 0xb8, 0x76,
-	0xb1, 0x25, 0x5a, 0x42, 0x3e, 0xb2, 0xe0, 0x09, 0xa3, 0x2b, 0x88, 0x46, 0x6d, 0xf3, 0xb8, 0x6d,
-	0xbb, 0x8f, 0x45, 0xf7, 0x29, 0xef, 0xe2, 0x74, 0x1e, 0xa7, 0xf9, 0x73, 0xde, 0xec, 0x45, 0x8a,
-	0xbd, 0x85, 0xf1, 0xb6, 0xcf, 0x3b, 0x18, 0xba, 0x8e, 0xa1, 0x2e, 0x6f, 0xb6, 0x5d, 0x8e, 0xc1,
-	0x25, 0x0c, 0x36, 0x85, 0x38, 0x68, 0x08, 0x71, 0xa0, 0xc2, 0x74, 0x13, 0x6e, 0x7e, 0x1d, 0xa0,
-	0xfd, 0xb2, 0xed, 0xf9, 0x35, 0x9f, 0x77, 0x2a, 0xfd, 0x9d, 0x1f, 0x1c, 0xde, 0xad, 0xf3, 0x67,
-	0x3d, 0xee, 0xf9, 0x64, 0x11, 0x66, 0x45, 0x30, 0x2e, 0x18, 0x45, 0x63, 0x6d, 0xa1, 0xae, 0x06,
-	0x74, 0x0f, 0x96, 0x93, 0x93, 0x3c, 0x57, 0x38, 0x1e, 0x27, 0x77, 0x61, 0x36, 0x08, 0x7b, 0x05,
-	0xa3, 0x78, 0x69, 0xed, 0x6a, 0xd9, 0x2a, 0xa5, 0x89, 0x5a, 0x92, 0xd9, 0x97, 0x5f, 0xfd, 0xfd,
-	0xce, 0x4c, 0x5d, 0xa5, 0xd0, 0x1d, 0x78, 0x5f, 0xd6, 0xde, 0xe6, 0xfe, 0xb6, 0x54, 0xa2, 0xe6,
-	0x3c, 0x70, 0xdd, 0xdd, 0x5e, 0xb7, 0xb9, 0x6f, 0x7b, 0x7c, 0x27, 0x50, 0x44, 0x83, 0xbb, 0x05,
-	0xd7, 0x74, 0xfc, 0x1b, 0x71, 0xc0, 0x1d, 0x04, 0x39, 0x1e, 0xa4, 0x3f, 0xc2, 0xda, 0xe4, 0x82,
-	0x08, 0xfc, 0x2b, 0x98, 0x95, 0x01, 0x59, 0xe9, 0x6a, 0xb9, 0x9c, 0x0e, 0x3c, 0xad, 0x94, 0x26,
-	0x23, 0x07, 0x74, 0x0f, 0x8a, 0xa1, 0x50, 0x0f, 0xf5, 0xc1, 0x79, 0x95, 0x7e, 0x40, 0x55, 0xb3,
-	0xb0, 0x00, 0xb6, 0xf0, 0x4c, 0x6a, 0x55, 0xa4, 0x10, 0x89, 0x90, 0x3c, 0xcc, 0x05, 0xcb, 0x6b,
-	0xd5, 0x42, 0x4e, 0xce, 0xe1, 0x88, 0x3a, 0xf0, 0xee, 0x39, 0xb5, 0x91, 0x50, 0x0d, 0x60, 0x34,
-	0x87, 0xc7, 0xb1, 0x9a, 0xce, 0x2a, 0x5c, 0x8b, 0x34, 0x22, 0xc9, 0xf4, 0x09, 0xd0, 0xc4, 0xfd,
-	0xea, 0xb2, 0xcb, 0xb2, 0xb2, 0x31, 0x61, 0x5e, 0x25, 0x84, 0x7c, 0xc2, 0x31, 0x75, 0x61, 0xf5,
-	0xdc, 0x1d, 0x5e, 0x3f, 0xa7, 0xdb, 0x50, 0xd0, 0xbd, 0x11, 0x46, 0x35, 0x93, 0x37, 0x20, 0x17,
-	0x32, 0xc8, 0xd5, 0xaa, 0xf4, 0x85, 0x01, 0x6f, 0x27, 0x2c, 0x46, 0x50, 0xdb, 0xb0, 0x10, 0x06,
-	0xb1, 0x7b, 0xa6, 0xc0, 0x34, 0xca, 0x25, 0xcb, 0xb0, 0xb0, 0x25, 0x3a, 0xee, 0x21, 0xf7, 0xf9,
-	0x53, 0xa9, 0xd0, 0x7c, 0x7d, 0x14, 0xa0, 0x5b, 0x91, 0x43, 0x57, 0xb2, 0x78, 0x95, 0xbe, 0x96,
-	0x37, 0xe3, 0x19, 0xd0, 0xef, 0x22, 0x27, 0x99, 0x50, 0x04, 0x19, 0x7d, 0x01, 0x57, 0x70, 0x12,
-	0x35, 0x2e, 0xa6, 0xf3, 0x51, 0x0b, 0x91, 0x8c, 0x4e, 0xa3, 0x0f, 0xe1, 0xba, 0x16, 0x6c, 0x9a,
-	0x86, 0x57, 0xc2, 0x5f, 0x0a, 0x85, 0xdf, 0x85, 0xc5, 0xf1, 0x32, 0x08, 0xf0, 0x13, 0xb8, 0x1c,
-	0x8c, 0x51, 0xed, 0x6c, 0x2f, 0x19, 0x99, 0x41, 0xb7, 0x61, 0x49, 0x57, 0x9c, 0xae, 0x7b, 0x15,
-	0xb4, 0x5c, 0x08, 0xed, 0x5b, 0xc8, 0xc7, 0x0b, 0x21, 0xb8, 0xfb, 0x30, 0xa7, 0x22, 0x08, 0x2f,
-	0xab, 0x78, 0x98, 0x45, 0xef, 0x47, 0xce, 0x48, 0x03, 0x08, 0x4e, 0xa9, 0xcb, 0x6d, 0x5f, 0x84,
-	0x6f, 0xc0, 0x02, 0x5c, 0x69, 0xaa, 0x08, 0x82, 0xd5, 0x43, 0xda, 0x89, 0xdc, 0xa5, 0xa4, 0x7c,
-	0x84, 0xf9, 0x28, 0xe8, 0x36, 0x9c, 0xc5, 0x63, 0xa6, 0xe9, 0x48, 0xf5, 0x52, 0xdd, 0xb5, 0x61,
-	0x2a, 0xfd, 0x00, 0x6e, 0x68, 0x21, 0xe2, 0xdd, 0x18, 0xbf, 0x47, 0x4f, 0x46, 0x77, 0xee, 0x4c,
-	0xcf, 0x55, 0x61, 0x5e, 0xc7, 0x50, 0xb7, 0xec, 0x68, 0xc2, 0xcc, 0xf2, 0xf1, 0x35, 0x98, 0x95,
-	0x5b, 0x90, 0xdf, 0x0c, 0x78, 0x33, 0x66, 0x52, 0xe4, 0x4e, 0x7a, 0xc5, 0x73, 0x9c, 0xd0, 0xfc,
-	0x78, 0xda, 0x34, 0x45, 0x89, 0xae, 0xbc, 0xf8, 0xeb, 0xdf, 0x9f, 0x73, 0x37, 0xc8, 0x12, 0x8b,
-	0x18, 0xb5, 0xc7, 0x06, 0xd2, 0x49, 0x87, 0xe4, 0x4f, 0x03, 0x0a, 0x69, 0x5e, 0x42, 0x1e, 0x4c,
-	0xd8, 0x73, 0xb2, 0x47, 0x9a, 0x95, 0xff, 0x53, 0x02, 0x29, 0xac, 0x4a, 0x0a, 0x2b, 0xe4, 0x66,
-	0x48, 0xc1, 0x76, 0xd9, 0x60, 0xcc, 0x65, 0x25, 0x91, 0xc5, 0x24, 0x2b, 0x22, 0x77, 0x33, 0x08,
-	0x97, 0xe2, 0x8d, 0xe6, 0x67, 0x17, 0xca, 0x45, 0xd8, 0x77, 0x24, 0x6c, 0x46, 0xd6, 0x59, 0xfc,
-	0xd3, 0x49, 0x1d, 0x02, 0x1b, 0x8c, 0x6e, 0xf6, 0x90, 0x0d, 0x94, 0xad, 0x0e, 0xc9, 0x91, 0x01,
-	0xf9, 0x64, 0x07, 0x22, 0xf7, 0xa6, 0x84, 0x33, 0xf6, 0x72, 0x31, 0x3f, 0xbf, 0x60, 0x36, 0xd2,
-	0xf9, 0x54, 0xd2, 0xd9, 0x24, 0x1b, 0x09, 0x74, 0xd4, 0x97, 0x5e, 0x8c, 0x90, 0xf6, 0xd5, 0x21,
-	0xf9, 0xc5, 0x88, 0xb8, 0x13, 0x29, 0x4f, 0x6e, 0x89, 0xb8, 0x19, 0x9a, 0x9b, 0x53, 0xe5, 0x20,
-	0x62, 0x4b, 0x22, 0x2e, 0x90, 0xfc, 0x19, 0xc4, 0x6c, 0x10, 0xc0, 0xfa, 0xdd, 0x80, 0xa5, 0x44,
-	0x0f, 0x22, 0x59, 0xce, 0x3d, 0xcd, 0xfe, 0xcc, 0x7b, 0x17, 0x4b, 0x46, 0xd0, 0xb7, 0x24, 0x68,
-	0x8b, 0x2c, 0xb3, 0xb1, 0xaf, 0x68, 0x6f, 0x4c, 0x5c, 0xf2, 0x93, 0xa1, 0xcc, 0x87, 0xac, 0x4f,
-	0x16, 0x26, 0xda, 0xd0, 0xa5, 0xac, 0xcb, 0x11, 0xcd, 0x7b, 0x12, 0x4d, 0x91, 0x58, 0xd1, 0xb7,
-	0x47, 0xbc, 0x71, 0xab, 0x43, 0xf2, 0xab, 0xa1, 0xfd, 0x86, 0xb0, 0xc9, 0x5b, 0x8c, 0xf7, 0xe5,
-	0x47, 0xd9, 0x13, 0x10, 0xd5, 0x9a, 0x44, 0x45, 0x49, 0x71, 0x5c, 0xa3, 0x04, 0x5c, 0x7f, 0xe0,
-	0x65, 0x3a, 0x6b, 0x41, 0x99, 0x2e, 0x53, 0xaa, 0xf3, 0x65, 0xba, 0x4c, 0xe9, 0xbe, 0x77, 0xf6,
-	0x95, 0xa6, 0xff, 0x16, 0x79, 0x6c, 0x80, 0x16, 0x3a, 0x24, 0x2f, 0x8d, 0x91, 0x1d, 0x91, 0x8d,
-	0xc9, 0x2a, 0xc5, 0x1b, 0xb1, 0x3c, 0x4d, 0x4a, 0x9a, 0x5d, 0x68, 0x60, 0x52, 0xcf, 0xca, 0xa3,
-	0x57, 0x27, 0x96, 0x71, 0x74, 0x62, 0x19, 0xff, 0x9c, 0x58, 0xc6, 0xcb, 0x53, 0x6b, 0xe6, 0xe8,
-	0xd4, 0x9a, 0x39, 0x3e, 0xb5, 0x66, 0xf6, 0x3e, 0x6c, 0xb5, 0xfd, 0xfd, 0x5e, 0xa3, 0xd4, 0x14,
-	0x1d, 0xa6, 0xb6, 0x5d, 0x0f, 0xf6, 0xd5, 0x65, 0x9e, 0xeb, 0x07, 0xbf, 0xef, 0x72, 0xaf, 0x31,
-	0x27, 0xff, 0xfd, 0x6d, 0xfe, 0x17, 0x00, 0x00, 0xff, 0xff, 0x8f, 0xc5, 0x33, 0x33, 0x03, 0x0f,
-	0x00, 0x00,
+	// 1181 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6f, 0x1b, 0x45,
+	0x14, 0xf7, 0x38, 0x4d, 0x9a, 0xbc, 0xa8, 0xa0, 0x4e, 0xfe, 0xd4, 0xb8, 0xc9, 0xc6, 0x6c, 0xaa,
+	0x36, 0x54, 0x64, 0x97, 0x38, 0x2a, 0x82, 0x50, 0x10, 0x4d, 0xd3, 0x44, 0x91, 0x10, 0x09, 0x16,
+	0x12, 0x08, 0x0e, 0x65, 0xe3, 0x8c, 0x1c, 0x2b, 0xc9, 0xce, 0xd6, 0xbb, 0x86, 0x1a, 0xcb, 0x97,
+	0x1e, 0x10, 0x12, 0x42, 0xaa, 0x04, 0x9c, 0xa9, 0x10, 0x47, 0x10, 0x12, 0x07, 0x84, 0xf8, 0x00,
+	0xa8, 0xc7, 0x48, 0x5c, 0x7a, 0x42, 0x28, 0xe1, 0xc0, 0xc7, 0x40, 0x3b, 0xf3, 0x66, 0xbd, 0x5e,
+	0xef, 0xc6, 0x6b, 0x13, 0x6e, 0x3d, 0xc5, 0xf3, 0x66, 0xde, 0x9b, 0xdf, 0xfb, 0xbd, 0x37, 0xef,
+	0xbd, 0x0d, 0x50, 0xa7, 0x71, 0xc0, 0x6d, 0xd7, 0xbc, 0x57, 0x67, 0xb5, 0x86, 0xe1, 0xd4, 0xb8,
+	0xc7, 0x69, 0x6e, 0x5b, 0xc8, 0x3c, 0x56, 0xde, 0x33, 0xe4, 0x36, 0xfe, 0xc9, 0xcf, 0x54, 0x38,
+	0xaf, 0x1c, 0x30, 0xd3, 0x72, 0xaa, 0xa6, 0x65, 0xdb, 0xdc, 0xb3, 0xbc, 0xaa, 0xd8, 0xf6, 0xf5,
+	0xf2, 0xd7, 0xcb, 0xdc, 0x3d, 0xe4, 0xae, 0xb9, 0x63, 0xb9, 0x4c, 0x1a, 0x34, 0x3f, 0x5e, 0xda,
+	0x61, 0x9e, 0xb5, 0x64, 0x3a, 0x56, 0xa5, 0x6a, 0x8b, 0xc3, 0x78, 0x76, 0xb2, 0xc2, 0x2b, 0x5c,
+	0xfc, 0x34, 0xfd, 0x5f, 0x28, 0x9d, 0x45, 0x34, 0xf2, 0x9a, 0xbb, 0x55, 0xcb, 0xb9, 0xcb, 0x6b,
+	0xbb, 0xac, 0x86, 0xdb, 0xd3, 0xb8, 0xcd, 0xee, 0xb3, 0x72, 0x3d, 0x64, 0xec, 0x22, 0xca, 0xab,
+	0x1e, 0x3b, 0x44, 0xd1, 0x04, 0x8a, 0x6a, 0xac, 0x5c, 0x75, 0x18, 0x0a, 0xa7, 0x50, 0x58, 0xe6,
+	0x7c, 0x7f, 0x87, 0xf3, 0x7d, 0x29, 0xd6, 0x9b, 0x70, 0xf9, 0x1d, 0x1f, 0xed, 0x5b, 0x55, 0xd7,
+	0xdb, 0xf4, 0xd8, 0xe1, 0x6a, 0x63, 0xeb, 0x13, 0x9b, 0xd5, 0x4a, 0xec, 0x5e, 0x9d, 0xb9, 0x1e,
+	0x9d, 0x84, 0x61, 0xee, 0xaf, 0x73, 0xa4, 0x40, 0x16, 0xc6, 0x4a, 0x72, 0x41, 0xd7, 0x01, 0xda,
+	0x4e, 0xe5, 0x86, 0x0a, 0x64, 0x61, 0xbc, 0x78, 0xd5, 0x90, 0x0c, 0x18, 0x3e, 0x03, 0x86, 0xa4,
+	0x14, 0x19, 0x30, 0xb6, 0xad, 0x0a, 0x43, 0x8b, 0xa5, 0x90, 0xa6, 0xfe, 0x23, 0x81, 0x99, 0xf8,
+	0xdb, 0x5d, 0x87, 0xdb, 0x2e, 0xa3, 0x2b, 0x30, 0xec, 0x8b, 0xdd, 0x1c, 0x29, 0x0c, 0x2d, 0x8c,
+	0x17, 0x35, 0x23, 0x29, 0x3a, 0x86, 0xd0, 0x3e, 0xf7, 0xf8, 0xcf, 0xb9, 0x4c, 0x49, 0xaa, 0xd0,
+	0x8d, 0x0e, 0x90, 0x59, 0x01, 0xf2, 0x5a, 0x4f, 0x90, 0xf2, 0xe2, 0x30, 0xca, 0x95, 0xd1, 0xcf,
+	0x1f, 0xcd, 0x65, 0xfe, 0x79, 0x34, 0x97, 0xd1, 0xb7, 0xe0, 0x9a, 0x80, 0xbb, 0xc1, 0xbc, 0x0d,
+	0x11, 0xa5, 0x4d, 0xfb, 0x96, 0xe3, 0x6c, 0xd7, 0x6b, 0xe5, 0x3d, 0xcb, 0x65, 0x5b, 0x7e, 0xb4,
+	0x14, 0x71, 0x57, 0xe0, 0x82, 0x92, 0xbf, 0xcb, 0xf7, 0x99, 0x8d, 0x04, 0x76, 0x0a, 0xf5, 0x4f,
+	0x61, 0xa1, 0xb7, 0x41, 0xe4, 0xe2, 0x6d, 0x18, 0x16, 0x02, 0x61, 0x69, 0xbc, 0x58, 0x4c, 0xe6,
+	0x22, 0xc9, 0x94, 0xe2, 0x47, 0x2c, 0xf4, 0x1f, 0x08, 0x14, 0x02, 0xf2, 0xef, 0xa8, 0xac, 0x72,
+	0x57, 0x1b, 0x3e, 0x7d, 0xca, 0x0d, 0x0d, 0xe0, 0x36, 0x26, 0xcc, 0xe6, 0x1a, 0xfa, 0x10, 0x92,
+	0xd0, 0x69, 0x18, 0xf1, 0x8f, 0x6f, 0xae, 0x09, 0x82, 0xc7, 0x4a, 0xb8, 0x3a, 0xab, 0x0c, 0x09,
+	0x71, 0xff, 0x5d, 0x16, 0x9e, 0x3f, 0x05, 0x2e, 0x92, 0xf4, 0x21, 0x4c, 0xdc, 0xe6, 0x87, 0xce,
+	0x01, 0xf3, 0xd8, 0x6e, 0xfb, 0x10, 0xa6, 0xcf, 0x7c, 0x32, 0x65, 0xc1, 0x59, 0xe4, 0x28, 0xce,
+	0x0a, 0x7d, 0x0f, 0x2e, 0x6e, 0x33, 0x7b, 0xb7, 0x6a, 0x57, 0x42, 0xa6, 0xb3, 0xfd, 0x9a, 0xee,
+	0xb6, 0x11, 0x49, 0xd5, 0xa1, 0x81, 0x53, 0x55, 0xff, 0x99, 0x80, 0x1e, 0x4b, 0x52, 0x49, 0x94,
+	0x82, 0xb4, 0x51, 0xcd, 0xc3, 0xa8, 0x54, 0x08, 0xe2, 0x1a, 0xac, 0xff, 0x87, 0xc8, 0x7e, 0x9f,
+	0x85, 0xf9, 0x53, 0x41, 0x3f, 0x8d, 0xad, 0x1f, 0xdb, 0xeb, 0x90, 0x53, 0xb5, 0x22, 0x30, 0xaf,
+	0x02, 0xfa, 0x0c, 0x64, 0x83, 0x40, 0x66, 0x37, 0xd7, 0xf4, 0x07, 0x04, 0x9e, 0x8b, 0x39, 0x8c,
+	0x44, 0x6e, 0xc0, 0x58, 0x20, 0xc4, 0x6a, 0xd2, 0x87, 0x8f, 0x6d, 0x5d, 0x3a, 0x03, 0x63, 0x01,
+	0x97, 0x22, 0x51, 0x46, 0x4b, 0x6d, 0x81, 0xfe, 0x05, 0x09, 0xbd, 0x58, 0x19, 0x4b, 0x77, 0xb5,
+	0xa1, 0xd2, 0x2c, 0x6d, 0x2e, 0xae, 0xc7, 0x94, 0xf1, 0x41, 0x7a, 0xcd, 0x4f, 0xe1, 0xa7, 0x11,
+	0x83, 0x06, 0xb9, 0x79, 0x13, 0xce, 0xe3, 0x26, 0x26, 0x56, 0x21, 0x99, 0x19, 0x79, 0x10, 0x69,
+	0x51, 0x6a, 0x67, 0xd6, 0x77, 0xf4, 0x3b, 0x30, 0xa1, 0x62, 0xd8, 0x4f, 0x49, 0x96, 0xb9, 0x30,
+	0x14, 0xe4, 0xc2, 0x36, 0x4c, 0x76, 0x9a, 0x41, 0x4f, 0x5f, 0x81, 0x73, 0xfe, 0x1a, 0x13, 0x20,
+	0x5d, 0x6b, 0x15, 0x1a, 0xfa, 0x06, 0x4c, 0x29, 0x8b, 0xfd, 0xd5, 0x15, 0x09, 0x2d, 0x1b, 0x40,
+	0x7b, 0x1f, 0xa6, 0xa3, 0x86, 0x10, 0xdc, 0x1b, 0x30, 0x22, 0x25, 0x08, 0x2f, 0x6d, 0x14, 0x50,
+	0x4b, 0xff, 0x2c, 0x1c, 0x6d, 0x85, 0xc0, 0x8f, 0x77, 0x8d, 0x59, 0x1e, 0x0f, 0xba, 0x74, 0x0e,
+	0xce, 0x97, 0xa5, 0x04, 0xd1, 0xaa, 0xe5, 0x99, 0x8d, 0x38, 0xbf, 0x90, 0x50, 0x71, 0x8b, 0x03,
+	0x82, 0x0e, 0xaf, 0xfb, 0x4f, 0x09, 0x77, 0x31, 0xf3, 0xf4, 0x64, 0x9f, 0xd5, 0x51, 0xf5, 0x24,
+	0x03, 0xd5, 0xb3, 0x2b, 0x37, 0x2f, 0xc0, 0x25, 0x15, 0x9b, 0xe8, 0x93, 0x8d, 0x56, 0x9b, 0x8f,
+	0xda, 0x95, 0xa9, 0xeb, 0x3d, 0xad, 0xc1, 0xa8, 0x92, 0x61, 0x28, 0xd3, 0xbb, 0x15, 0x68, 0x16,
+	0x9f, 0x5c, 0x80, 0x61, 0x71, 0x05, 0xfd, 0x96, 0xc0, 0xb3, 0x91, 0x69, 0x91, 0xde, 0x48, 0xb6,
+	0x78, 0xca, 0x6c, 0x9b, 0x7f, 0xb9, 0x5f, 0x35, 0xe9, 0x92, 0x3e, 0xfb, 0xe0, 0x8f, 0xbf, 0xbf,
+	0xca, 0x5e, 0xa2, 0x53, 0x66, 0x68, 0xf4, 0x76, 0xcd, 0xa6, 0x98, 0x8d, 0x5b, 0xf4, 0x77, 0x02,
+	0xb9, 0xa4, 0x09, 0x8c, 0xde, 0xea, 0x71, 0x67, 0xef, 0xc9, 0x32, 0xbf, 0xfa, 0x5f, 0x4c, 0xa0,
+	0x0b, 0xf3, 0xc2, 0x85, 0x59, 0x7a, 0x39, 0x70, 0xc1, 0x72, 0xcc, 0x66, 0xc7, 0x6c, 0x2a, 0x1c,
+	0x99, 0x8c, 0x1b, 0xb6, 0xe8, 0x4a, 0x0a, 0xe2, 0x12, 0x06, 0xca, 0xfc, 0x6b, 0x03, 0xe9, 0x22,
+	0xec, 0x1b, 0x02, 0xb6, 0x49, 0x17, 0xcd, 0xe8, 0xc7, 0x90, 0x0c, 0x82, 0xd9, 0x6c, 0x17, 0x9b,
+	0x96, 0xd9, 0x94, 0xb3, 0x68, 0x8b, 0x1e, 0x11, 0x98, 0x8e, 0x9f, 0x2d, 0xe8, 0xcd, 0x3e, 0xe1,
+	0x74, 0xd4, 0xbb, 0xfc, 0xeb, 0x03, 0x6a, 0xa3, 0x3b, 0xaf, 0x0a, 0x77, 0x96, 0xe9, 0x52, 0x8c,
+	0x3b, 0xf2, 0xdb, 0x2d, 0xe2, 0x90, 0x1a, 0xc2, 0x5a, 0xf4, 0x6b, 0x12, 0xea, 0xe1, 0xb4, 0xd8,
+	0x3b, 0x25, 0xa2, 0x23, 0x43, 0x7e, 0xb9, 0x2f, 0x1d, 0x44, 0xac, 0x09, 0xc4, 0x39, 0x3a, 0xdd,
+	0x85, 0xd8, 0x6c, 0xfa, 0xb0, 0x7e, 0x25, 0x30, 0x15, 0xdb, 0x5f, 0x69, 0x9a, 0xb8, 0x27, 0xcd,
+	0x08, 0xf9, 0x9b, 0x83, 0x29, 0x23, 0xe8, 0x2b, 0x02, 0xb4, 0x46, 0x67, 0xcc, 0x8e, 0xef, 0x62,
+	0xb7, 0x83, 0x5c, 0xfa, 0x25, 0x91, 0xfd, 0x90, 0x2e, 0xf6, 0x26, 0x26, 0x9c, 0xd0, 0x46, 0xda,
+	0xe3, 0x88, 0xe6, 0xaa, 0x40, 0x53, 0xa0, 0x5a, 0xb8, 0x7a, 0x44, 0x13, 0x77, 0xad, 0x45, 0xbf,
+	0x21, 0xaa, 0x05, 0x52, 0xb3, 0xf7, 0x15, 0x9d, 0x79, 0xf9, 0x52, 0x7a, 0x05, 0x44, 0xb5, 0x20,
+	0x50, 0xe9, 0xb4, 0xd0, 0xc9, 0x51, 0x0c, 0xae, 0xdf, 0xf0, 0x31, 0x75, 0xf7, 0xb2, 0x54, 0x8f,
+	0x29, 0xb1, 0x17, 0xa7, 0x7a, 0x4c, 0xc9, 0x0d, 0xb4, 0xbb, 0xa4, 0xa9, 0x7f, 0x74, 0xb8, 0x66,
+	0x13, 0x9b, 0x7a, 0x8b, 0x3e, 0x24, 0xed, 0x76, 0x44, 0x97, 0x7a, 0xb3, 0x14, 0x4d, 0xc4, 0x62,
+	0x3f, 0x2a, 0x49, 0xed, 0x42, 0x01, 0x13, 0x7c, 0xae, 0xae, 0x3f, 0x3e, 0xd6, 0xc8, 0xd1, 0xb1,
+	0x46, 0xfe, 0x3a, 0xd6, 0xc8, 0xc3, 0x13, 0x2d, 0x73, 0x74, 0xa2, 0x65, 0x9e, 0x9c, 0x68, 0x99,
+	0x0f, 0x5e, 0xac, 0x54, 0xbd, 0xbd, 0xfa, 0x8e, 0x51, 0xe6, 0x87, 0xa6, 0xbc, 0x76, 0xd1, 0xbf,
+	0x57, 0x99, 0xb9, 0xaf, 0x7e, 0x78, 0x0d, 0x87, 0xb9, 0x3b, 0x23, 0xe2, 0xff, 0x39, 0xcb, 0xff,
+	0x06, 0x00, 0x00, 0xff, 0xff, 0xac, 0x39, 0xe1, 0x90, 0xd5, 0x12, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1494,6 +1552,18 @@ func (m *QueryListItemByOwnerRequest) MarshalToSizedBuffer(dAtA []byte) (int, er
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
 		copy(dAtA[i:], m.Owner)
@@ -1524,6 +1594,18 @@ func (m *QueryListItemByOwnerResponse) MarshalToSizedBuffer(dAtA []byte) (int, e
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Items) > 0 {
 		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1624,6 +1706,18 @@ func (m *QueryListExecutionsByItemRequest) MarshalToSizedBuffer(dAtA []byte) (in
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.ItemID) > 0 {
 		i -= len(m.ItemID)
 		copy(dAtA[i:], m.ItemID)
@@ -1661,10 +1755,36 @@ func (m *QueryListExecutionsByItemResponse) MarshalToSizedBuffer(dAtA []byte) (i
 	_ = i
 	var l int
 	_ = l
-	if len(m.Executions) > 0 {
-		for iNdEx := len(m.Executions) - 1; iNdEx >= 0; iNdEx-- {
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.PendingExecutions) > 0 {
+		for iNdEx := len(m.PendingExecutions) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.Executions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.PendingExecutions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.CompletedExecutions) > 0 {
+		for iNdEx := len(m.CompletedExecutions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CompletedExecutions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1698,6 +1818,18 @@ func (m *QueryListExecutionsByRecipeRequest) MarshalToSizedBuffer(dAtA []byte) (
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.RecipeID) > 0 {
 		i -= len(m.RecipeID)
 		copy(dAtA[i:], m.RecipeID)
@@ -1735,10 +1867,36 @@ func (m *QueryListExecutionsByRecipeResponse) MarshalToSizedBuffer(dAtA []byte) 
 	_ = i
 	var l int
 	_ = l
-	if len(m.Executions) > 0 {
-		for iNdEx := len(m.Executions) - 1; iNdEx >= 0; iNdEx-- {
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.PendingExecutions) > 0 {
+		for iNdEx := len(m.PendingExecutions) - 1; iNdEx >= 0; iNdEx-- {
 			{
-				size, err := m.Executions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				size, err := m.PendingExecutions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.CompletedExecutions) > 0 {
+		for iNdEx := len(m.CompletedExecutions) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CompletedExecutions[iNdEx].MarshalToSizedBuffer(dAtA[:i])
 				if err != nil {
 					return 0, err
 				}
@@ -1845,6 +2003,18 @@ func (m *QueryListRecipesByCookbookRequest) MarshalToSizedBuffer(dAtA []byte) (i
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.CookbookID) > 0 {
 		i -= len(m.CookbookID)
 		copy(dAtA[i:], m.CookbookID)
@@ -1875,6 +2045,18 @@ func (m *QueryListRecipesByCookbookResponse) MarshalToSizedBuffer(dAtA []byte) (
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Recipes) > 0 {
 		for iNdEx := len(m.Recipes) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2052,6 +2234,18 @@ func (m *QueryListCookbooksByCreatorRequest) MarshalToSizedBuffer(dAtA []byte) (
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
 		copy(dAtA[i:], m.Creator)
@@ -2082,6 +2276,18 @@ func (m *QueryListCookbooksByCreatorResponse) MarshalToSizedBuffer(dAtA []byte) 
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
 	if len(m.Cookbooks) > 0 {
 		for iNdEx := len(m.Cookbooks) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -2183,6 +2389,10 @@ func (m *QueryListItemByOwnerRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -2197,6 +2407,10 @@ func (m *QueryListItemByOwnerResponse) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -2239,6 +2453,10 @@ func (m *QueryListExecutionsByItemRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -2248,11 +2466,21 @@ func (m *QueryListExecutionsByItemResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Executions) > 0 {
-		for _, e := range m.Executions {
+	if len(m.CompletedExecutions) > 0 {
+		for _, e := range m.CompletedExecutions {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
+	}
+	if len(m.PendingExecutions) > 0 {
+		for _, e := range m.PendingExecutions {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -2271,6 +2499,10 @@ func (m *QueryListExecutionsByRecipeRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -2280,11 +2512,21 @@ func (m *QueryListExecutionsByRecipeResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Executions) > 0 {
-		for _, e := range m.Executions {
+	if len(m.CompletedExecutions) > 0 {
+		for _, e := range m.CompletedExecutions {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
+	}
+	if len(m.PendingExecutions) > 0 {
+		for _, e := range m.PendingExecutions {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
+		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -2326,6 +2568,10 @@ func (m *QueryListRecipesByCookbookRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -2340,6 +2586,10 @@ func (m *QueryListRecipesByCookbookResponse) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -2410,6 +2660,10 @@ func (m *QueryListCookbooksByCreatorRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -2424,6 +2678,10 @@ func (m *QueryListCookbooksByCreatorResponse) Size() (n int) {
 			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
+	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
 }
@@ -2519,6 +2777,42 @@ func (m *QueryListItemByOwnerRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -2600,6 +2894,42 @@ func (m *QueryListItemByOwnerResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Items = append(m.Items, Item{})
 			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2882,6 +3212,42 @@ func (m *QueryListExecutionsByItemRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.ItemID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -2934,7 +3300,7 @@ func (m *QueryListExecutionsByItemResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Executions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CompletedExecutions", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2961,8 +3327,78 @@ func (m *QueryListExecutionsByItemResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Executions = append(m.Executions, Execution{})
-			if err := m.Executions[len(m.Executions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.CompletedExecutions = append(m.CompletedExecutions, Execution{})
+			if err := m.CompletedExecutions[len(m.CompletedExecutions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingExecutions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PendingExecutions = append(m.PendingExecutions, Execution{})
+			if err := m.PendingExecutions[len(m.PendingExecutions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3080,6 +3516,42 @@ func (m *QueryListExecutionsByRecipeRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.RecipeID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -3132,7 +3604,7 @@ func (m *QueryListExecutionsByRecipeResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Executions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CompletedExecutions", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3159,8 +3631,78 @@ func (m *QueryListExecutionsByRecipeResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Executions = append(m.Executions, Execution{})
-			if err := m.Executions[len(m.Executions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			m.CompletedExecutions = append(m.CompletedExecutions, Execution{})
+			if err := m.CompletedExecutions[len(m.CompletedExecutions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PendingExecutions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PendingExecutions = append(m.PendingExecutions, Execution{})
+			if err := m.PendingExecutions[len(m.PendingExecutions)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3431,6 +3973,42 @@ func (m *QueryListRecipesByCookbookRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.CookbookID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -3512,6 +4090,42 @@ func (m *QueryListRecipesByCookbookResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Recipes = append(m.Recipes, Recipe{})
 			if err := m.Recipes[len(m.Recipes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3991,6 +4605,42 @@ func (m *QueryListCookbooksByCreatorRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -4072,6 +4722,42 @@ func (m *QueryListCookbooksByCreatorResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Cookbooks = append(m.Cookbooks, Cookbook{})
 			if err := m.Cookbooks[len(m.Cookbooks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageResponse{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

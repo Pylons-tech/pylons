@@ -46,6 +46,10 @@ const (
 	ExecutionKey = "Execution-value-"
 	// ExecutionCountKey is a string key used as a prefix to the KVStore
 	ExecutionCountKey = "Execution-count-"
+	// RecipeExecutionKey is a string key used as a prefix to the KVStore
+	RecipeExecutionKey = "Recipe-execution-"
+	// ItemExecutionKey is a string key used as a prefix to the KVStore
+	ItemExecutionKey = "Item-execution-"
 	// PendingExecutionKey is a string key used as a prefix to the KVStore
 	PendingExecutionKey = "PendingExecution-value-"
 	// PendingExecutionCountKey is a string key used as a prefix to the KVStore
