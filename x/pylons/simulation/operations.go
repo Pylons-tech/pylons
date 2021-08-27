@@ -42,7 +42,7 @@ func WeightedOperations(
 	}
 }
 
-// SimulateOp needs to be finished
+// SimulateOp needs to be finished - TODO
 func SimulateOp(k keeper.Keeper) simtypes.Operation {
 	return func(
 		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,

@@ -318,8 +318,8 @@ func AddVariableFromItem(varDefs []*exprpb.Decl, variables map[string]interface{
 	variables[prefix+"owner"] = item.Owner
 	variables[prefix+"itemID"] = item.ID
 	variables[prefix+"lastUpdate"] = item.LastUpdate
-	// TODO fix when dealing with fees
-	variables[prefix+"transferFee"] = item.TransferFee
+	variables[prefix+"transferFee"] = item.TransferFee.Amount
+	variables[prefix+"transferFeeDenom"] = item.TransferFee.Denom
 
 	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))
