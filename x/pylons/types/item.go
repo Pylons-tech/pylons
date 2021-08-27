@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/binary"
-	"fmt"
 
 	"github.com/btcsuite/btcutil/base58"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -122,7 +121,7 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 		for idx, dbl := range dblKeyValues {
 			dblKey, ok := targetItem.FindDoubleKey(dbl.Key)
 			if !ok {
-				return sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("could not find double %s on item to be updated", dbl.Key))
+				return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "could not find double %s on item to be updated", dbl.Key)
 			}
 			if len(io.Doubles[idx].Program) == 0 { // NO PROGRAM
 				originValue := targetItem.Doubles[dblKey].Value
@@ -142,7 +141,7 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 		for idx, lng := range lngKeyValues {
 			lngKey, ok := targetItem.FindLongKey(lng.Key)
 			if !ok {
-				return sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("could not find long %s on item to be updated", lng.Key))
+				return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "could not find long %s on item to be updated", lng.Key)
 			}
 			if len(io.Longs[idx].Program) == 0 { // NO PROGRAM
 				targetItem.Longs[lngKey].Value += lng.Value
@@ -160,7 +159,7 @@ func (io ItemModifyOutput) Actualize(targetItem *Item, ctx sdk.Context, addr sdk
 		for _, str := range strKeyValues {
 			strKey, ok := targetItem.FindStringKey(str.Key)
 			if !ok {
-				return sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("could not find string %s on item to be updated", str.Key))
+				return sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "could not find string %s on item to be updated", str.Key)
 			}
 			targetItem.Strings[strKey].Value = str.Value
 		}

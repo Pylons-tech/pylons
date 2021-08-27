@@ -33,9 +33,9 @@ func (k Keeper) CoinIssuedDenomsList(ctx sdk.Context) (res []string) {
 	return
 }
 
-// GetBasicCoinDenoms returns the lis of the only valid basic coin denoms
-func (k Keeper) GetBasicCoinDenoms(ctx sdk.Context) (res []string) {
-	// TODO - add stripeUSD
+// GetAllNonCookbookCoinDenoms returns the lis of the only valid basic coin denoms
+func (k Keeper) GetAllNonCookbookCoinDenoms(ctx sdk.Context) (res []string) {
+	// TODO - add stripeUSD and IBC tokens
 	return append(k.CoinIssuedDenomsList(ctx), types.StakingCoinDenom)
 }
 

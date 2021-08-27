@@ -93,11 +93,7 @@ CoinIssuersLoop:
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 
 	amt := sdk.NewCoins(sdk.NewCoin(coinIssuer.CoinDenom, googleIapPackage.Amount))
-	err := k.bankKeeper.MintCoins(ctx, types.CoinsIssuerName, amt)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.CoinsIssuerName, addr, amt)
+	err := k.MintCoinsToAddr(ctx, addr, amt)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}

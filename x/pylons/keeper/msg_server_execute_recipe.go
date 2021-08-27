@@ -16,11 +16,11 @@ func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollec
 		for _, param := range itemInput.Doubles {
 			double, ok := item.FindDouble(param.Key)
 			if !ok {
-				return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s key is not available on the item: item_id=%s", param.Key, item.ID))
+				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
 			}
 
 			if !param.Has(double) {
-				return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s key range does not match: item_id=%s", param.Key, item.ID))
+				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.ID)
 			}
 		}
 	}
@@ -29,11 +29,11 @@ func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollec
 		for _, param := range itemInput.Longs {
 			long, ok := item.FindLong(param.Key)
 			if !ok {
-				return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s key is not available on the item: item_id=%s", param.Key, item.ID))
+				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
 			}
 
 			if !param.Has(long) {
-				return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s key range does not match: item_id=%s", param.Key, item.ID))
+				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.ID)
 			}
 		}
 	}
@@ -42,10 +42,10 @@ func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollec
 		for _, param := range itemInput.Strings {
 			str, ok := item.FindString(param.Key)
 			if !ok {
-				return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s key is not available on the item: item_id=%s", param.Key, item.ID))
+				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
 			}
 			if str != param.Value {
-				return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s key value does not match: item_id=%s", param.Key, item.ID))
+				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key value does not match: item_id=%s", param.Key, item.ID)
 			}
 		}
 	}
@@ -53,7 +53,7 @@ func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollec
 	for _, param := range itemInput.Conditions.Doubles {
 		double, err := ec.EvalFloat64(param.Key)
 		if err != nil {
-			return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err))
+			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
 		}
 
 		dec, err := sdk.NewDecFromStr(fmt.Sprintf("%v", double))
@@ -62,28 +62,28 @@ func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollec
 		}
 
 		if !param.Has(dec) {
-			return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s expression range does not match: item_id=%s", param.Key, item.ID))
+			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression range does not match: item_id=%s", param.Key, item.ID)
 		}
 	}
 
 	for _, param := range itemInput.Conditions.Longs {
 		long, err := ec.EvalInt64(param.Key)
 		if err != nil {
-			return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err))
+			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
 		}
 
 		if !param.Has(int(long)) {
-			return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s expression range does not match: item_id=%s", param.Key, item.ID))
+			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression range does not match: item_id=%s", param.Key, item.ID)
 		}
 	}
 
 	for _, param := range itemInput.Conditions.Strings {
 		str, err := ec.EvalString(param.Key)
 		if err != nil {
-			return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err))
+			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
 		}
 		if str != param.Value {
-			return sdkerrors.Wrap(types.ErrItemMatch, fmt.Sprintf("%s expression value does not match: item_id=%s", param.Key, item.ID))
+			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression value does not match: item_id=%s", param.Key, item.ID)
 		}
 	}
 	return nil
@@ -109,10 +109,10 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, creatorAddr string, inputIte
 			if !found {
 				inputItem, found = k.GetItem(ctx, recipe.CookbookID, id)
 				if !found {
-					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item with id %v not found", id))
+					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", id)
 				}
 				if inputItem.Owner != creatorAddr {
-					return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("item with id %s not owned by sender", inputItem.ID))
+					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.ID)
 				}
 			}
 			inputItemMap[id] = inputItem

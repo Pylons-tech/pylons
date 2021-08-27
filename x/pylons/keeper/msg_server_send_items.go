@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -25,7 +24,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 
 		// check if item is owned by msg.Creator if not ERROR
 		if item.Owner != msg.Creator {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("Item with ID %v not owned by account %v", itemID, msg.Creator))
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item with ID %v not owned by account %v", itemID, msg.Creator)
 		}
 
 		items[itemID] = item

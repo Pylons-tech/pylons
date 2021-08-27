@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"context"
-	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -24,7 +23,7 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 	// Check if the value already exists
 	_, isFound := k.GetCookbook(ctx, msg.ID)
 	if isFound {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, fmt.Sprintf("ID %v already set", msg.ID))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "ID %v already set", msg.ID)
 	}
 
 	var cookbook = types.Cookbook{
@@ -68,7 +67,7 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 	// Check if the value exists
 	origCookbook, isFound := k.GetCookbook(ctx, msg.ID)
 	if !isFound {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("ID %v not set", msg.ID))
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "ID %v not set", msg.ID)
 	}
 
 	// Check if the msg sender is the same as the current owner

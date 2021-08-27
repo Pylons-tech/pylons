@@ -28,6 +28,29 @@ func (k Keeper) GetDenomsByCookbook(ctx sdk.Context, cookbookID string) (list []
 	return
 }
 
+func (k Keeper) AddCookbookToDenom(ctx sdk.Context, denom, cookbookID string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CoinDenomCookbookKey))
+	byteKey := types.KeyPrefix(denom)
+	bz := []byte(cookbookID)
+	store.Set(byteKey, bz)
+}
+
+func (k Keeper) GetCookbookByDenom(ctx sdk.Context, denom string) (cookbookID string) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CoinDenomCookbookKey))
+	byteKey := types.KeyPrefix(denom)
+	bz := store.Get(byteKey)
+
+	// Count doesn't exist: no element
+	if bz == nil {
+		return ""
+	}
+
+	// Parse bytes
+	cookbookID = string(bz)
+
+	return
+}
+
 func (k Keeper) addCookbookToAddress(ctx sdk.Context, cookbookID string, addr sdk.AccAddress) {
 	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
 	store := prefix.NewStore(parentStore, addr.Bytes())

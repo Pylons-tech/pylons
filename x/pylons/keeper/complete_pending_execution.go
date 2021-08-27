@@ -76,7 +76,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 	mintedItems := make([]types.Item, 0)
 	for idx, itemOutput := range itemOutputs {
 		if itemOutput.Quantity != 0 && itemOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
-			return nil, nil, nil, sdkerrors.Wrap(types.ErrItemQuantityExceeded, fmt.Sprintf("quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted))
+			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemOutput.Quantity, itemOutput.AmountMinted)
 		}
 		item, err := itemOutput.Actualize(ctx, recipe.CookbookID, addr, ec)
 		if err != nil {
@@ -89,7 +89,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 	modifiedItems := make([]types.Item, len(itemModifyOutputs))
 	for idx, itemModifyOutput := range itemModifyOutputs {
 		if itemModifyOutput.Quantity != 0 && itemModifyOutput.Quantity <= recipe.Entries.ItemOutputs[idx].AmountMinted {
-			return nil, nil, nil, sdkerrors.Wrap(types.ErrItemQuantityExceeded, fmt.Sprintf("quantity: %d, already minted: %d", itemModifyOutput.Quantity, itemModifyOutput.AmountMinted))
+			return nil, nil, nil, sdkerrors.Wrapf(types.ErrItemQuantityExceeded, "quantity: %d, already minted: %d", itemModifyOutput.Quantity, itemModifyOutput.AmountMinted)
 		}
 		itemInputIdx := 0
 		for i, itemInput := range recipe.ItemInputs {
@@ -100,7 +100,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		}
 		item, found := k.GetItem(ctx, recipe.CookbookID, matchedItems[itemInputIdx].ID)
 		if !found {
-			return nil, nil, nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("item %s to modify not found", matchedItems[itemInputIdx].ID))
+			return nil, nil, nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "item %s to modify not found", matchedItems[itemInputIdx].ID)
 		}
 		err := itemModifyOutput.Actualize(&item, ctx, addr, ec)
 		if err != nil {
@@ -150,6 +150,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	}
 	for _, coin := range coins {
 		k.AddDenomToCookbook(ctx, recipe.CookbookID, coin.Denom)
+		k.AddCookbookToDenom(ctx, coin.Denom, recipe.CookbookID)
 	}
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ExecutionsLockerName, creator, coins)
 	if err != nil {
