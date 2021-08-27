@@ -72,11 +72,11 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// TODO should this event be more fleshed out?
 	err = ctx.EventManager().EmitTypedEvent(&types.EventSendItems{
-		Sender:   msg.Creator,
-		Receiver: msg.Receiver,
-		IDs:      msg.ItemIDs,
+		Sender:     msg.Creator,
+		Receiver:   msg.Receiver,
+		CookbookID: msg.CookbookID,
+		IDs:        msg.ItemIDs,
 	})
 
 	return &types.MsgSendItemsResponse{}, err

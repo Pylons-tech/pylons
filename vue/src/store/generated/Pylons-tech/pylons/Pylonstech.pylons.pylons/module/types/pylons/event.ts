@@ -1,4 +1,7 @@
 /* eslint-disable */
+import { Cookbook } from '../pylons/cookbook'
+import { Recipe } from '../pylons/recipe'
+import { StringKeyValue } from '../pylons/item'
 import { Writer, Reader } from 'protobufjs/minimal'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
@@ -12,9 +15,9 @@ export interface EventCreateCookbook {
   ID: string
 }
 
+/** EventUpdateCookbook contains a record of the cookbook pre-update.  The updated fields can be found by the message emitted by MsgUpdateCookbook */
 export interface EventUpdateCookbook {
-  creator: string
-  ID: string
+  originalCookbook: Cookbook | undefined
 }
 
 export interface EventTransferCookbook {
@@ -29,12 +32,12 @@ export interface EventCreateRecipe {
   ID: string
 }
 
+/** EventUpdateRecipe contains a record of the recipe pre-update.  The updated fields can be found by the message emitted by MsgUpdateRecipe */
 export interface EventUpdateRecipe {
-  creator: string
-  CookbookID: string
-  ID: string
+  originalRecipe: Recipe | undefined
 }
 
+/** EventCreateExecution contains the creator and ID of a created execution. Execution IDs are of the form {count-targetBlockHeight} */
 export interface EventCreateExecution {
   creator: string
   ID: string
@@ -61,6 +64,7 @@ export interface EventSetItemString {
   creator: string
   CookbookID: string
   ID: string
+  originalMutableStrings: StringKeyValue[]
 }
 
 export interface EventGooglePurchase {
@@ -203,15 +207,12 @@ export const EventCreateCookbook = {
   }
 }
 
-const baseEventUpdateCookbook: object = { creator: '', ID: '' }
+const baseEventUpdateCookbook: object = {}
 
 export const EventUpdateCookbook = {
   encode(message: EventUpdateCookbook, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== '') {
-      writer.uint32(10).string(message.creator)
-    }
-    if (message.ID !== '') {
-      writer.uint32(18).string(message.ID)
+    if (message.originalCookbook !== undefined) {
+      Cookbook.encode(message.originalCookbook, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
@@ -224,10 +225,7 @@ export const EventUpdateCookbook = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string()
-          break
-        case 2:
-          message.ID = reader.string()
+          message.originalCookbook = Cookbook.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -239,37 +237,26 @@ export const EventUpdateCookbook = {
 
   fromJSON(object: any): EventUpdateCookbook {
     const message = { ...baseEventUpdateCookbook } as EventUpdateCookbook
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator)
+    if (object.originalCookbook !== undefined && object.originalCookbook !== null) {
+      message.originalCookbook = Cookbook.fromJSON(object.originalCookbook)
     } else {
-      message.creator = ''
-    }
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = String(object.ID)
-    } else {
-      message.ID = ''
+      message.originalCookbook = undefined
     }
     return message
   },
 
   toJSON(message: EventUpdateCookbook): unknown {
     const obj: any = {}
-    message.creator !== undefined && (obj.creator = message.creator)
-    message.ID !== undefined && (obj.ID = message.ID)
+    message.originalCookbook !== undefined && (obj.originalCookbook = message.originalCookbook ? Cookbook.toJSON(message.originalCookbook) : undefined)
     return obj
   },
 
   fromPartial(object: DeepPartial<EventUpdateCookbook>): EventUpdateCookbook {
     const message = { ...baseEventUpdateCookbook } as EventUpdateCookbook
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator
+    if (object.originalCookbook !== undefined && object.originalCookbook !== null) {
+      message.originalCookbook = Cookbook.fromPartial(object.originalCookbook)
     } else {
-      message.creator = ''
-    }
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = object.ID
-    } else {
-      message.ID = ''
+      message.originalCookbook = undefined
     }
     return message
   }
@@ -453,18 +440,12 @@ export const EventCreateRecipe = {
   }
 }
 
-const baseEventUpdateRecipe: object = { creator: '', CookbookID: '', ID: '' }
+const baseEventUpdateRecipe: object = {}
 
 export const EventUpdateRecipe = {
   encode(message: EventUpdateRecipe, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== '') {
-      writer.uint32(10).string(message.creator)
-    }
-    if (message.CookbookID !== '') {
-      writer.uint32(18).string(message.CookbookID)
-    }
-    if (message.ID !== '') {
-      writer.uint32(26).string(message.ID)
+    if (message.originalRecipe !== undefined) {
+      Recipe.encode(message.originalRecipe, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
@@ -477,13 +458,7 @@ export const EventUpdateRecipe = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.creator = reader.string()
-          break
-        case 2:
-          message.CookbookID = reader.string()
-          break
-        case 3:
-          message.ID = reader.string()
+          message.originalRecipe = Recipe.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -495,48 +470,26 @@ export const EventUpdateRecipe = {
 
   fromJSON(object: any): EventUpdateRecipe {
     const message = { ...baseEventUpdateRecipe } as EventUpdateRecipe
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator)
+    if (object.originalRecipe !== undefined && object.originalRecipe !== null) {
+      message.originalRecipe = Recipe.fromJSON(object.originalRecipe)
     } else {
-      message.creator = ''
-    }
-    if (object.CookbookID !== undefined && object.CookbookID !== null) {
-      message.CookbookID = String(object.CookbookID)
-    } else {
-      message.CookbookID = ''
-    }
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = String(object.ID)
-    } else {
-      message.ID = ''
+      message.originalRecipe = undefined
     }
     return message
   },
 
   toJSON(message: EventUpdateRecipe): unknown {
     const obj: any = {}
-    message.creator !== undefined && (obj.creator = message.creator)
-    message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID)
-    message.ID !== undefined && (obj.ID = message.ID)
+    message.originalRecipe !== undefined && (obj.originalRecipe = message.originalRecipe ? Recipe.toJSON(message.originalRecipe) : undefined)
     return obj
   },
 
   fromPartial(object: DeepPartial<EventUpdateRecipe>): EventUpdateRecipe {
     const message = { ...baseEventUpdateRecipe } as EventUpdateRecipe
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator
+    if (object.originalRecipe !== undefined && object.originalRecipe !== null) {
+      message.originalRecipe = Recipe.fromPartial(object.originalRecipe)
     } else {
-      message.creator = ''
-    }
-    if (object.CookbookID !== undefined && object.CookbookID !== null) {
-      message.CookbookID = object.CookbookID
-    } else {
-      message.CookbookID = ''
-    }
-    if (object.ID !== undefined && object.ID !== null) {
-      message.ID = object.ID
-    } else {
-      message.ID = ''
+      message.originalRecipe = undefined
     }
     return message
   }
@@ -884,6 +837,9 @@ export const EventSetItemString = {
     if (message.ID !== '') {
       writer.uint32(26).string(message.ID)
     }
+    for (const v of message.originalMutableStrings) {
+      StringKeyValue.encode(v!, writer.uint32(34).fork()).ldelim()
+    }
     return writer
   },
 
@@ -891,6 +847,7 @@ export const EventSetItemString = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseEventSetItemString } as EventSetItemString
+    message.originalMutableStrings = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -903,6 +860,9 @@ export const EventSetItemString = {
         case 3:
           message.ID = reader.string()
           break
+        case 4:
+          message.originalMutableStrings.push(StringKeyValue.decode(reader, reader.uint32()))
+          break
         default:
           reader.skipType(tag & 7)
           break
@@ -913,6 +873,7 @@ export const EventSetItemString = {
 
   fromJSON(object: any): EventSetItemString {
     const message = { ...baseEventSetItemString } as EventSetItemString
+    message.originalMutableStrings = []
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
@@ -928,6 +889,11 @@ export const EventSetItemString = {
     } else {
       message.ID = ''
     }
+    if (object.originalMutableStrings !== undefined && object.originalMutableStrings !== null) {
+      for (const e of object.originalMutableStrings) {
+        message.originalMutableStrings.push(StringKeyValue.fromJSON(e))
+      }
+    }
     return message
   },
 
@@ -936,11 +902,17 @@ export const EventSetItemString = {
     message.creator !== undefined && (obj.creator = message.creator)
     message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID)
     message.ID !== undefined && (obj.ID = message.ID)
+    if (message.originalMutableStrings) {
+      obj.originalMutableStrings = message.originalMutableStrings.map((e) => (e ? StringKeyValue.toJSON(e) : undefined))
+    } else {
+      obj.originalMutableStrings = []
+    }
     return obj
   },
 
   fromPartial(object: DeepPartial<EventSetItemString>): EventSetItemString {
     const message = { ...baseEventSetItemString } as EventSetItemString
+    message.originalMutableStrings = []
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
@@ -955,6 +927,11 @@ export const EventSetItemString = {
       message.ID = object.ID
     } else {
       message.ID = ''
+    }
+    if (object.originalMutableStrings !== undefined && object.originalMutableStrings !== null) {
+      for (const e of object.originalMutableStrings) {
+        message.originalMutableStrings.push(StringKeyValue.fromPartial(e))
+      }
     }
     return message
   }

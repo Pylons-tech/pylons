@@ -35,7 +35,6 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 	pendingExecution.CoinInputs = pendingExecution.CoinInputs.Add(completeEarlyCoin)
 	id := k.UpdatePendingExecutionWithTargetBlockHeight(ctx, pendingExecution, ctx.BlockHeight())
 
-	// TODO should this event be more fleshed out?
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCompleteExecutionEarly{
 		Creator: cookbook.Creator,
 		ID:      cookbook.ID,

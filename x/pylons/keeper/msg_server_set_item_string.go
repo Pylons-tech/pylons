@@ -21,7 +21,10 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item with ID %v not owned by account %v", msg.ID, msg.Creator)
 	}
 
-	for i, kv := range item.MutableStrings {
+	originalMutableStrings := make([]types.StringKeyValue, len(item.MutableStrings))
+	copy(item.MutableStrings, originalMutableStrings)
+
+	for i, kv := range originalMutableStrings {
 		if msg.Field == kv.Key {
 			item.MutableStrings[i].Value = msg.Value
 			item.LastUpdate = ctx.BlockHeight()
@@ -41,11 +44,11 @@ func (k msgServer) SetItemString(goCtx context.Context, msg *types.MsgSetItemStr
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
-	// TODO should this event be more fleshed out?
 	err = ctx.EventManager().EmitTypedEvent(&types.EventSetItemString{
-		Creator:    msg.Creator,
-		CookbookID: msg.CookbookID,
-		ID:         msg.ID,
+		Creator:                msg.Creator,
+		CookbookID:             msg.CookbookID,
+		ID:                     msg.ID,
+		OriginalMutableStrings: originalMutableStrings,
 	})
 
 	return &types.MsgSetItemStringResponse{}, err

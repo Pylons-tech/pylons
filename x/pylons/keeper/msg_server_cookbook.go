@@ -44,7 +44,6 @@ func (k msgServer) CreateCookbook(goCtx context.Context, msg *types.MsgCreateCoo
 		cookbook,
 	)
 
-	// TODO should this event be more fleshed out?
 	err := ctx.EventManager().EmitTypedEvent(&types.EventCreateCookbook{
 		Creator: cookbook.Creator,
 		ID:      cookbook.ID,
@@ -96,10 +95,8 @@ func (k msgServer) UpdateCookbook(goCtx context.Context, msg *types.MsgUpdateCoo
 		k.SetCookbook(ctx, updatedCookbook)
 	}
 
-	// TODO should this event be more fleshed out?
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateCookbook{
-		Creator: updatedCookbook.Creator,
-		ID:      updatedCookbook.ID,
+		OriginalCookbook: origCookbook,
 	})
 
 	return &types.MsgUpdateCookbookResponse{}, err

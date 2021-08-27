@@ -190,6 +190,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 			pendingExec.BlockHeight = blockHeight
 			// unlock coins
 			addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
+			// TODO CompletePendingExecution could return an error
 			err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.CoinInputs)
 			if err != nil {
 				panic(err.Error())

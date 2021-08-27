@@ -26,7 +26,6 @@ func (k msgServer) TransferCookbook(goCtx context.Context, msg *types.MsgTransfe
 	cookbook.Creator = msg.Recipient
 	k.Keeper.SetCookbook(ctx, cookbook)
 
-	// TODO should this event be more fleshed out?
 	err := ctx.EventManager().EmitTypedEvent(&types.EventTransferCookbook{
 		Sender:   msg.Creator,
 		Receiver: cookbook.Creator,

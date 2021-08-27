@@ -5,6 +5,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
 
+import "pylons/google_iap_order.proto";
+import "pylons/execution.proto";
+import "pylons/item.proto";
+import "pylons/recipe.proto";
+import "pylons/cookbook.proto";
+
 message EventCreateAccount {
   string address = 1;
 }
@@ -14,9 +20,9 @@ message EventCreateCookbook {
   string ID = 2;
 }
 
+// EventUpdateCookbook contains a record of the cookbook pre-update.  The updated fields can be found by the message emitted by MsgUpdateCookbook
 message EventUpdateCookbook {
-  string creator = 1;
-  string ID = 2;
+  Cookbook originalCookbook = 1 [(gogoproto.nullable) = false];
 }
 
 message EventTransferCookbook {
@@ -31,12 +37,13 @@ message EventCreateRecipe {
   string ID = 3;
 }
 
+// EventUpdateRecipe contains a record of the recipe pre-update.  The updated fields can be found by the message emitted by MsgUpdateRecipe
 message EventUpdateRecipe {
-  string creator = 1;
-  string CookbookID = 2;
-  string ID = 3;
+  Recipe originalRecipe = 1 [(gogoproto.nullable) = false];
+
 }
 
+// EventCreateExecution contains the creator and ID of a created execution. Execution IDs are of the form {count-targetBlockHeight}
 message EventCreateExecution {
   string creator = 1;
   string ID = 2;
@@ -63,6 +70,7 @@ message EventSetItemString {
   string creator = 1;
   string CookbookID = 2;
   string ID = 3;
+  repeated StringKeyValue originalMutableStrings = 4 [(gogoproto.nullable) = false];
 }
 
 message EventGooglePurchase {

@@ -1,3 +1,6 @@
+import { Cookbook } from '../pylons/cookbook';
+import { Recipe } from '../pylons/recipe';
+import { StringKeyValue } from '../pylons/item';
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
@@ -7,9 +10,9 @@ export interface EventCreateCookbook {
     creator: string;
     ID: string;
 }
+/** EventUpdateCookbook contains a record of the cookbook pre-update.  The updated fields can be found by the message emitted by MsgUpdateCookbook */
 export interface EventUpdateCookbook {
-    creator: string;
-    ID: string;
+    originalCookbook: Cookbook | undefined;
 }
 export interface EventTransferCookbook {
     sender: string;
@@ -21,11 +24,11 @@ export interface EventCreateRecipe {
     CookbookID: string;
     ID: string;
 }
+/** EventUpdateRecipe contains a record of the recipe pre-update.  The updated fields can be found by the message emitted by MsgUpdateRecipe */
 export interface EventUpdateRecipe {
-    creator: string;
-    CookbookID: string;
-    ID: string;
+    originalRecipe: Recipe | undefined;
 }
+/** EventCreateExecution contains the creator and ID of a created execution. Execution IDs are of the form {count-targetBlockHeight} */
 export interface EventCreateExecution {
     creator: string;
     ID: string;
@@ -48,6 +51,7 @@ export interface EventSetItemString {
     creator: string;
     CookbookID: string;
     ID: string;
+    originalMutableStrings: StringKeyValue[];
 }
 export interface EventGooglePurchase {
     creator: string;
