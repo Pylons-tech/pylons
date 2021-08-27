@@ -3,7 +3,7 @@
 rm -rf alpha && mkdir alpha
 rm -rf beta && mkdir beta
 rm -rf gamma && mkdir gamma
-rm -rf ~/.pylonsd
+rm -rf ~/.pylons
 
 ALPHA_HOME=./alpha
 BETA_HOME=./beta
@@ -17,8 +17,8 @@ pylonsd init gamma --chain-id=pylonschain --home $GAMMA_HOME
 pylonsd init masternode --chain-id=pylonschain
 
 # Change the bond denom to the staking token (bedrock)
-sed -i 's/stake/bedrock/g' $HOME/.pylonsd/config/genesis.json
-#sed -i 's/"ed25519"/"secp256k1"/g' $HOME/.pylonsd/config/genesis.json
+sed -i 's/stake/bedrock/g' $HOME/.pylons/config/genesis.json
+#sed -i 's/"ed25519"/"secp256k1"/g' $HOME/.pylons/config/genesis.json
 
 # Create all accounts
 pylonsd keys add pylonsinc --keyring-backend=test  --recover <<< "achieve patch rabbit delay you stairs flag nation lady outside answer property olive man dwarf used chapter sunset bundle sniff between since review logic"
@@ -34,11 +34,11 @@ pylonsd add-genesis-account $(pylonsd keys show helder -a --keyring-backend=test
 pylonsd add-genesis-account $(pylonsd keys show jacob -a --keyring-backend=test) 1000000pylon,1000000bedrock
 pylonsd add-genesis-account $(pylonsd keys show jack -a --keyring-backend=test) 1000000pylon,1000000bedrock
 
-mkdir -p $HOME/.pylonsd/config/gentx/
+mkdir -p $HOME/.pylons/config/gentx/
 
-pylonsd gentx helder 1000000bedrock --ip alpha --node-id $(pylonsd tendermint show-node-id --home $ALPHA_HOME)   --moniker="alpha" --pubkey $(pylonsd tendermint show-validator --home $ALPHA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylonsd/config/gentx/alpha.json
-pylonsd gentx jacob  1000000bedrock --ip beta --node-id $(pylonsd tendermint show-node-id --home $BETA_HOME)    --moniker="beta" --pubkey $(pylonsd tendermint show-validator --home $BETA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylonsd/config/gentx/beta.json
-pylonsd gentx jack   1000000bedrock --ip gamma --node-id $(pylonsd tendermint show-node-id --home $GAMMA_HOME)   --moniker="gamma" --pubkey $(pylonsd tendermint show-validator --home $GAMMA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylonsd/config/gentx/gamma.json
+pylonsd gentx helder 1000000bedrock --ip alpha --node-id $(pylonsd tendermint show-node-id --home $ALPHA_HOME)   --moniker="alpha" --pubkey $(pylonsd tendermint show-validator --home $ALPHA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/alpha.json
+pylonsd gentx jacob  1000000bedrock --ip beta --node-id $(pylonsd tendermint show-node-id --home $BETA_HOME)    --moniker="beta" --pubkey $(pylonsd tendermint show-validator --home $BETA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/beta.json
+pylonsd gentx jack   1000000bedrock --ip gamma --node-id $(pylonsd tendermint show-node-id --home $GAMMA_HOME)   --moniker="gamma" --pubkey $(pylonsd tendermint show-validator --home $GAMMA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/gamma.json
 
 
 
@@ -50,8 +50,8 @@ for node in $nodes; do
   # Copy the genesis and gentx to each node
 
   mkdir -p $node/config/gentx/
-  cp $HOME/.pylonsd/config/genesis.json  $node/config/
-  cp $HOME/.pylonsd/config/gentx/*  $node/config/gentx/
+  cp $HOME/.pylons/config/genesis.json  $node/config/
+  cp $HOME/.pylons/config/gentx/*  $node/config/gentx/
 
 
 

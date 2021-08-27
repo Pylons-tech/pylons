@@ -16,7 +16,6 @@ build:
   binary: "pylonsd"
 
 init:
-  home: "$HOME/.pylonsd"
   config:
     api:
       swagger: true

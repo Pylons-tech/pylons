@@ -16,7 +16,7 @@ services:
       localnet:
         ipv4_address: 192.168.10.2
     volumes:
-      - ./alpha:/root/.pylonsd:Z
+      - ./alpha:/root/.pylons:Z
 
   beta:
     container_name: beta
@@ -33,7 +33,7 @@ services:
       localnet:
         ipv4_address: 192.168.10.3
     volumes:
-      - ./beta:/root/.pylonsd:Z
+      - ./beta:/root/.pylons:Z
 
   gamma:
     container_name: gamma
@@ -50,7 +50,7 @@ services:
       localnet:
         ipv4_address: 192.168.10.4
     volumes:
-      - ./gamma/:/root/.pylonsd:Z
+      - ./gamma/:/root/.pylons:Z
 
   mongo:
     image: mongo:latest
