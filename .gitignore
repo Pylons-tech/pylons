@@ -10,3 +10,15 @@
 vue/node_modules
 vue/dist
 release/
+
+
+**/.idea
+
+cmd/fixtures_test/nonce.json
+cmd/test/nonce.json
+build
+
+genesis/alpha
+genesis/beta
+genesis/gamma
+genesis/pylonsd
