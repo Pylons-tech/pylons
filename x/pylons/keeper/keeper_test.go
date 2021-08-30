@@ -32,8 +32,8 @@ const (
 
 var (
 	holderAcc     = authtypes.NewEmptyModuleAccount(holder)
-	burnerAcc     = authtypes.NewEmptyModuleAccount(authtypes.Burner, authtypes.Burner)
-	minterAcc     = authtypes.NewEmptyModuleAccount(authtypes.Minter, authtypes.Minter)
+	burnerAcc     = authtypes.NewEmptyModuleAccount(authtypes.Burner)
+	minterAcc     = authtypes.NewEmptyModuleAccount(authtypes.Minter)
 	multiPermAcc  = authtypes.NewEmptyModuleAccount(multiPerm, authtypes.Burner, authtypes.Minter, authtypes.Staking)
 	randomPermAcc = authtypes.NewEmptyModuleAccount(randomPerm, "random")
 
@@ -134,6 +134,8 @@ type IntegrationTestSuite struct {
 	app *app.App
 	ctx sdk.Context
 	k   keeper.Keeper
+	bankKeeper types.BankKeeper
+	accountKeeper types.AccountKeeper
 }
 
 func (suite *IntegrationTestSuite) SetupTest() {
@@ -154,6 +156,8 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.app = a
 	suite.ctx = ctx
 	suite.k = a.PylonsKeeper
+	suite.bankKeeper = a.BankKeeper
+	suite.accountKeeper = a.AccountKeeper
 }
 
 func TestKeeperTestSuite(t *testing.T) {

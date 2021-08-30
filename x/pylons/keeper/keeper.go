@@ -85,3 +85,7 @@ func (k Keeper) TradesLockerAddress() sdk.AccAddress {
 func (k Keeper) ExecutionsLockerAddress() sdk.AccAddress {
 	return k.accountKeeper.GetModuleAddress(types.ExecutionsLockerName)
 }
+
+func (k Keeper) CoinsIssuerAddress() sdk.AccAddress {
+	return k.accountKeeper.GetModuleAddress(types.CoinsIssuerName)
+}
