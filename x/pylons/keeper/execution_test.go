@@ -47,7 +47,7 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByRecipe() {
 	require.Equal(numExecs, len(execs))
 	for i, exec := range execs {
 		require.Equal(itemCookbookID, exec.CookbookID)
-		require.Equal( itemExecs[i].ID, exec.ID)
+		require.Equal(itemExecs[i].ID, exec.ID)
 	}
 }
 
