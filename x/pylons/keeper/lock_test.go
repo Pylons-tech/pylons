@@ -8,7 +8,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestPayFees() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -43,7 +42,6 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 }
 
 func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
-
 	//k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
