@@ -1,4 +1,5 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Item } from '../pylons/item';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
@@ -8,9 +9,13 @@ export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
 export interface QueryListItemByOwnerRequest {
     owner: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination: PageRequest | undefined;
 }
 export interface QueryListItemByOwnerResponse {
     Items: Item[];
+    /** pagination defines the pagination in the response. */
+    pagination: PageResponse | undefined;
 }
 export interface QueryGetGoogleInAppPurchaseOrderRequest {
     PurchaseToken: string;
@@ -21,16 +26,26 @@ export interface QueryGetGoogleInAppPurchaseOrderResponse {
 export interface QueryListExecutionsByItemRequest {
     CookbookID: string;
     ItemID: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination: PageRequest | undefined;
 }
 export interface QueryListExecutionsByItemResponse {
-    Executions: Execution[];
+    CompletedExecutions: Execution[];
+    PendingExecutions: Execution[];
+    /** pagination defines the pagination in the response. */
+    pagination: PageResponse | undefined;
 }
 export interface QueryListExecutionsByRecipeRequest {
     CookbookID: string;
     RecipeID: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination: PageRequest | undefined;
 }
 export interface QueryListExecutionsByRecipeResponse {
-    Executions: Execution[];
+    CompletedExecutions: Execution[];
+    PendingExecutions: Execution[];
+    /** pagination defines the pagination in the response. */
+    pagination: PageResponse | undefined;
 }
 export interface QueryGetExecutionRequest {
     ID: string;
@@ -41,9 +56,13 @@ export interface QueryGetExecutionResponse {
 }
 export interface QueryListRecipesByCookbookRequest {
     CookbookID: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination: PageRequest | undefined;
 }
 export interface QueryListRecipesByCookbookResponse {
     Recipes: Recipe[];
+    /** pagination defines the pagination in the response. */
+    pagination: PageResponse | undefined;
 }
 export interface QueryGetItemRequest {
     CookbookID: string;
@@ -61,9 +80,13 @@ export interface QueryGetRecipeResponse {
 }
 export interface QueryListCookbooksByCreatorRequest {
     creator: string;
+    /** pagination defines an optional pagination for the request. */
+    pagination: PageRequest | undefined;
 }
 export interface QueryListCookbooksByCreatorResponse {
     Cookbooks: Cookbook[];
+    /** pagination defines the pagination in the response. */
+    pagination: PageResponse | undefined;
 }
 export interface QueryGetCookbookRequest {
     ID: string;
