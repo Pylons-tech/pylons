@@ -158,9 +158,10 @@ export class Api extends HttpClient {
          * @summary Retrieves the list of cookbooks owned by an address
          * @request GET:/pylons/cookbooks/{creator}
          */
-        this.queryListCookbooksByCreator = (creator, params = {}) => this.request({
+        this.queryListCookbooksByCreator = (creator, query, params = {}) => this.request({
             path: `/pylons/cookbooks/${creator}`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });
@@ -186,9 +187,10 @@ export class Api extends HttpClient {
          * @summary Queries a list of listExecutionsByItem items.
          * @request GET:/pylons/executions/item/{CookbookID}/{ItemID}
          */
-        this.queryListExecutionsByItem = (CookbookID, ItemID, params = {}) => this.request({
+        this.queryListExecutionsByItem = (CookbookID, ItemID, query, params = {}) => this.request({
             path: `/pylons/executions/item/${CookbookID}/${ItemID}`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });
@@ -200,9 +202,10 @@ export class Api extends HttpClient {
          * @summary Queries a list of listExecutionsByRecipe items.
          * @request GET:/pylons/executions/recipe/{CookbookID}/{RecipeID}
          */
-        this.queryListExecutionsByRecipe = (CookbookID, RecipeID, params = {}) => this.request({
+        this.queryListExecutionsByRecipe = (CookbookID, RecipeID, query, params = {}) => this.request({
             path: `/pylons/executions/recipe/${CookbookID}/${RecipeID}`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });
@@ -242,9 +245,10 @@ export class Api extends HttpClient {
          * @summary Queries a list of listItemByOwner items.
          * @request GET:/pylons/items/{owner}
          */
-        this.queryListItemByOwner = (owner, params = {}) => this.request({
+        this.queryListItemByOwner = (owner, query, params = {}) => this.request({
             path: `/pylons/items/${owner}`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });
@@ -270,9 +274,10 @@ export class Api extends HttpClient {
          * @summary Queries a list of listRecipesByCookbook items.
          * @request GET:/pylons/recipes/{CookbookID}
          */
-        this.queryListRecipesByCookbook = (CookbookID, params = {}) => this.request({
+        this.queryListRecipesByCookbook = (CookbookID, query, params = {}) => this.request({
             path: `/pylons/recipes/${CookbookID}`,
             method: "GET",
+            query: query,
             format: "json",
             ...params,
         });
