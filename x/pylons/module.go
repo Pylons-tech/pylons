@@ -184,15 +184,15 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 	}()
 
 	for _, pendingExec := range pendingExecs {
-		finalizedExec, event, err := am.keeper.CompletePendingExecution(ctx, pendingExec)
+		finalizedExec, event, coinsUnlocked, err := am.keeper.CompletePendingExecution(ctx, pendingExec)
 		if err != nil {
 			// drop execution since it became invalid, user will have to resubmit
 			pendingExec.BlockHeight = blockHeight
-			// unlock coins
-			addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
-			// TODO CompletePendingExecution could return an error AFTER fees are already paid
-			// this could cause this panic to occur
-			err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.CoinInputs)
+			if !coinsUnlocked{
+				// unlock coins, but only if unlocked previously
+				addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
+				err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.CoinInputs)
+			}
 			if err != nil {
 				panic(err.Error())
 			}
