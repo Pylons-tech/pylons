@@ -6,10 +6,8 @@ import (
 	"testing"
 
 	"github.com/Pylons-tech/pylons/app"
-
-	"github.com/stretchr/testify/suite"
-
 	pylonsSimapp "github.com/Pylons-tech/pylons/testutil/simapp"
+	"github.com/stetchr/testify/suite"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
