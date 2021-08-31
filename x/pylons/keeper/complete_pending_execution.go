@@ -182,16 +182,16 @@ coinLoop:
 	for _, coin := range pendingExecution.CoinInputs {
 		for _, denom := range cookbookCoinDenoms {
 			if coin.Denom == denom {
-				burnCoins.Add(coin)
+				burnCoins = burnCoins.Add(coin)
 				continue coinLoop
 			}
 		}
-		payCoins.Add(coin)
+		payCoins = payCoins.Add(coin)
 		feeAmt := coin.Amount.ToDec().Mul(k.RecipeFeePercentage(ctx)).RoundInt()
 		coin.Amount = coin.Amount.Sub(feeAmt)
-		transferCoins.Add(coin)
+		transferCoins = transferCoins.Add(coin)
 		coin.Amount = feeAmt
-		feeCoins.Add(coin)
+		feeCoins = feeCoins.Add(coin)
 	}
 	// burn any cookbook coin and send payment for remaining
 	err = k.bankKeeper.BurnCoins(ctx, types.ExecutionsLockerName, burnCoins)

@@ -5,8 +5,6 @@ import (
 	"strconv"
 	"testing"
 
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-
 	"github.com/Pylons-tech/pylons/app"
 
 	"github.com/stretchr/testify/suite"
@@ -21,32 +19,23 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-const (
-	fooDenom     = "foo"
-	barDenom     = "bar"
-	initialPower = int64(100)
-	holder       = "holder"
-	multiPerm    = "multiple permissions account"
-	randomPerm   = "random permission"
-)
-
-var (
-	holderAcc     = authtypes.NewEmptyModuleAccount(holder)
-	burnerAcc     = authtypes.NewEmptyModuleAccount(authtypes.Burner, authtypes.Burner)
-	minterAcc     = authtypes.NewEmptyModuleAccount(authtypes.Minter, authtypes.Minter)
-	multiPermAcc  = authtypes.NewEmptyModuleAccount(multiPerm, authtypes.Burner, authtypes.Minter, authtypes.Staking)
-	randomPermAcc = authtypes.NewEmptyModuleAccount(randomPerm, "random")
-
-	// The default power validators are initialized to have within tests
-	initTokens = sdk.TokensFromConsensusPower(initialPower)
-	initCoins  = sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, initTokens))
-)
-
 func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
+		items[i].ID = fmt.Sprintf("%d", i)
+		items[i].CostPerBlock = sdk.NewCoin("test", sdk.NewInt(1))
+		k.SetCookbook(ctx, items[i])
+	}
+	return items
+}
+
+func createNCookbookSameCreator(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
+	items := make([]types.Cookbook, n)
+	creator := types.GenTestBech32FromString("any")
+	for i := range items {
+		items[i].Creator = creator
 		items[i].ID = fmt.Sprintf("%d", i)
 		items[i].CostPerBlock = sdk.NewCoin("test", sdk.NewInt(1))
 		k.SetCookbook(ctx, items[i])
@@ -131,9 +120,11 @@ func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) 
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app *app.App
-	ctx sdk.Context
-	k   keeper.Keeper
+	app           *app.App
+	ctx           sdk.Context
+	k             keeper.Keeper
+	bankKeeper    types.BankKeeper
+	accountKeeper types.AccountKeeper
 }
 
 func (suite *IntegrationTestSuite) SetupTest() {
@@ -154,6 +145,8 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	suite.app = a
 	suite.ctx = ctx
 	suite.k = a.PylonsKeeper
+	suite.bankKeeper = a.BankKeeper
+	suite.accountKeeper = a.AccountKeeper
 }
 
 func TestKeeperTestSuite(t *testing.T) {

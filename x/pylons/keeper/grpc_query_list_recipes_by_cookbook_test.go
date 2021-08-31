@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -17,6 +18,18 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 	cookbooks := createNCookbook(k, ctx, 1)
 	msgs := createNRecipe(&k, ctx, cookbooks[0], 10)
 
+	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string) *types.QueryListRecipesByCookbookRequest {
+		return &types.QueryListRecipesByCookbookRequest{
+			Pagination: &query.PageRequest{
+				Key:        next,
+				Offset:     offset,
+				Limit:      limit,
+				CountTotal: total,
+			},
+			CookbookID: cookbookID,
+		}
+	}
+
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryListRecipesByCookbookRequest
@@ -24,14 +37,19 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 		err      error
 	}{
 		{
-			desc:     "First",
-			request:  &types.QueryListRecipesByCookbookRequest{CookbookID: cookbooks[0].ID},
+			desc:     "ByOffset",
+			request:  requestFunc(nil, 0, 5, false, cookbooks[0].ID),
+			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs[:5]},
+		},
+		{
+			desc:     "All",
+			request:  requestFunc(nil, 0, 0, true, cookbooks[0].ID),
 			response: &types.QueryListRecipesByCookbookResponse{Recipes: msgs},
 		},
 		{
 			desc:     "NoRecipes",
-			request:  &types.QueryListRecipesByCookbookRequest{CookbookID: "missing"},
-			response: &types.QueryListRecipesByCookbookResponse{Recipes: []types.Recipe(nil)},
+			request:  requestFunc(nil, 0, 0, true, "missing"),
+			response: &types.QueryListRecipesByCookbookResponse{Recipes: []types.Recipe{}},
 		},
 		{
 			desc: "InvalidRequest",
@@ -44,7 +62,7 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
-				require.Equal(tc.response, response)
+				require.Equal(tc.response.Recipes, response.Recipes)
 			}
 		})
 	}

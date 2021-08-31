@@ -35,7 +35,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	for _, item := range items {
 		item.Owner = msg.Receiver
 		k.Keeper.SetItem(ctx, item)
-		transferFee.Add(item.TransferFee)
+		transferFee = transferFee.Add(item.TransferFee)
 	}
 
 	// Calculate fee and pay it to cookbook owner and module account
@@ -58,9 +58,9 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 		// separate fees to account for percentage to be retained by module account
 		modAccAmt := coin.Amount.ToDec().Mul(itemTransferFeePercentage).RoundInt()
 		coin.Amount = coin.Amount.Sub(modAccAmt)
-		cookbookOwnerFees.Add(coin)
+		cookbookOwnerFees = cookbookOwnerFees.Add(coin)
 		coin.Amount = modAccAmt
-		modAccFees.Add(coin)
+		modAccFees = modAccFees.Add(coin)
 	}
 
 	err := k.bankKeeper.SendCoins(ctx, senderAddr, cookbookOwnerAddr, cookbookOwnerFees)
