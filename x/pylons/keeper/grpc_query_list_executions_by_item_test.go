@@ -143,7 +143,6 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 	}
 }
 
-
 func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 	k := suite.k
 	ctx := suite.ctx
@@ -208,4 +207,3 @@ func (suite *IntegrationTestSuite) TestListAllExecutionByItem() {
 		})
 	}
 }
-

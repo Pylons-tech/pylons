@@ -5,8 +5,6 @@ import (
 	"strconv"
 	"testing"
 
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-
 	"github.com/Pylons-tech/pylons/app"
 
 	"github.com/stretchr/testify/suite"
@@ -196,9 +194,11 @@ func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) 
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app *app.App
-	ctx sdk.Context
-	k   keeper.Keeper
+	app           *app.App
+	ctx           sdk.Context
+	k             keeper.Keeper
+	bankKeeper    types.BankKeeper
+	accountKeeper types.AccountKeeper
 }
 
 func (suite *IntegrationTestSuite) SetupTest() {
