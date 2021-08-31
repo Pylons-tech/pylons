@@ -15,7 +15,7 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 	require := suite.Require()
 
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNItemSingleOwner(&k, ctx, 10)
+	msgs := createNItemSingleOwner(k, ctx, 10)
 
 	requestFunc := func(next []byte, offset, limit uint64, total bool, owner string) *types.QueryListItemByOwnerRequest {
 		return &types.QueryListItemByOwnerRequest{

@@ -2,6 +2,7 @@ import { Cookbook } from '../pylons/cookbook';
 import { Recipe } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { Item, StringKeyValue } from '../pylons/item';
+import { ItemRef } from '../pylons/tx';
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
@@ -56,8 +57,7 @@ export interface EventCompleteExecutionEarly {
 export interface EventSendItems {
     sender: string;
     receiver: string;
-    CookbookID: string;
-    IDs: string[];
+    items: ItemRef[];
 }
 export interface EventSetItemString {
     creator: string;

@@ -3,6 +3,7 @@ import { Cookbook } from '../pylons/cookbook';
 import { Recipe } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { Item, StringKeyValue } from '../pylons/item';
+import { ItemRef } from '../pylons/tx';
 import { Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
 const baseEventCreateAccount = { address: '' };
@@ -861,7 +862,7 @@ export const EventCompleteExecutionEarly = {
         return message;
     }
 };
-const baseEventSendItems = { sender: '', receiver: '', CookbookID: '', IDs: '' };
+const baseEventSendItems = { sender: '', receiver: '' };
 export const EventSendItems = {
     encode(message, writer = Writer.create()) {
         if (message.sender !== '') {
@@ -870,11 +871,8 @@ export const EventSendItems = {
         if (message.receiver !== '') {
             writer.uint32(18).string(message.receiver);
         }
-        if (message.CookbookID !== '') {
-            writer.uint32(26).string(message.CookbookID);
-        }
-        for (const v of message.IDs) {
-            writer.uint32(34).string(v);
+        for (const v of message.items) {
+            ItemRef.encode(v, writer.uint32(26).fork()).ldelim();
         }
         return writer;
     },
@@ -882,7 +880,7 @@ export const EventSendItems = {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = { ...baseEventSendItems };
-        message.IDs = [];
+        message.items = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -893,10 +891,7 @@ export const EventSendItems = {
                     message.receiver = reader.string();
                     break;
                 case 3:
-                    message.CookbookID = reader.string();
-                    break;
-                case 4:
-                    message.IDs.push(reader.string());
+                    message.items.push(ItemRef.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -907,7 +902,7 @@ export const EventSendItems = {
     },
     fromJSON(object) {
         const message = { ...baseEventSendItems };
-        message.IDs = [];
+        message.items = [];
         if (object.sender !== undefined && object.sender !== null) {
             message.sender = String(object.sender);
         }
@@ -920,15 +915,9 @@ export const EventSendItems = {
         else {
             message.receiver = '';
         }
-        if (object.CookbookID !== undefined && object.CookbookID !== null) {
-            message.CookbookID = String(object.CookbookID);
-        }
-        else {
-            message.CookbookID = '';
-        }
-        if (object.IDs !== undefined && object.IDs !== null) {
-            for (const e of object.IDs) {
-                message.IDs.push(String(e));
+        if (object.items !== undefined && object.items !== null) {
+            for (const e of object.items) {
+                message.items.push(ItemRef.fromJSON(e));
             }
         }
         return message;
@@ -937,18 +926,17 @@ export const EventSendItems = {
         const obj = {};
         message.sender !== undefined && (obj.sender = message.sender);
         message.receiver !== undefined && (obj.receiver = message.receiver);
-        message.CookbookID !== undefined && (obj.CookbookID = message.CookbookID);
-        if (message.IDs) {
-            obj.IDs = message.IDs.map((e) => e);
+        if (message.items) {
+            obj.items = message.items.map((e) => (e ? ItemRef.toJSON(e) : undefined));
         }
         else {
-            obj.IDs = [];
+            obj.items = [];
         }
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseEventSendItems };
-        message.IDs = [];
+        message.items = [];
         if (object.sender !== undefined && object.sender !== null) {
             message.sender = object.sender;
         }
@@ -961,15 +949,9 @@ export const EventSendItems = {
         else {
             message.receiver = '';
         }
-        if (object.CookbookID !== undefined && object.CookbookID !== null) {
-            message.CookbookID = object.CookbookID;
-        }
-        else {
-            message.CookbookID = '';
-        }
-        if (object.IDs !== undefined && object.IDs !== null) {
-            for (const e of object.IDs) {
-                message.IDs.push(e);
+        if (object.items !== undefined && object.items !== null) {
+            for (const e of object.items) {
+                message.items.push(ItemRef.fromPartial(e));
             }
         }
         return message;

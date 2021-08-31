@@ -18,7 +18,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	num_tests := 5
+	numTests := 5
 
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
@@ -26,7 +26,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	creator := types.GenTestBech32FromString("test")
 	updateFee := k.UpdateItemStringFee(ctx)
 	// need enough balance to update num_tests items
-	updateFee.Amount = updateFee.Amount.Mul(sdk.NewInt(int64(num_tests)))
+	updateFee.Amount = updateFee.Amount.Mul(sdk.NewInt(int64(numTests)))
 	coinsWithUpdateFee := sdk.NewCoins(updateFee)
 
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
@@ -39,7 +39,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	err = k.MintCoinsToAddr(ctx, creatorAddr, coinsWithUpdateFee)
 	require.NoError(err)
 
-	for i := 0; i < num_tests; i++ {
+	for i := 0; i < numTests; i++ {
 		expectedString := "test"
 		idx := fmt.Sprintf("%d", i)
 		cookbook := &types.MsgCreateCookbook{

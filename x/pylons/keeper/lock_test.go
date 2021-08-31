@@ -42,13 +42,12 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 }
 
 func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
-	//k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
 
-	//Create an initial supply
+	// Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.Coins{}
 	mintAmt = mintAmt.Add(coin)
@@ -56,11 +55,11 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	supply := bankTypes.NewSupply(mintAmt)
 	bk.SetSupply(ctx, supply)
 
-	//Create a test address
+	// Create a test address
 	addrString := types.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	//Transfer coins to our test address
+	// Transfer coins to our test address
 	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 	require.NoError(err)
 
@@ -71,20 +70,18 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	err = k.LockCoinsForExecution(ctx, addr, lockedCoins)
 	require.NoError(err)
 
-	//Check if the balance in the ExecutionsLockerAddress module account has changed
+	// Check if the balance in the ExecutionsLockerAddress module account has changed
 	balance := bk.SpendableCoins(ctx, k.ExecutionsLockerAddress())
 	require.True(balance.IsEqual(lockedCoins))
 }
 
 func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
-
-	//k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
 
-	//Create an initial supply
+	// Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.Coins{}
 	mintAmt = mintAmt.Add(coin)
@@ -92,11 +89,11 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	supply := bankTypes.NewSupply(mintAmt)
 	bk.SetSupply(ctx, supply)
 
-	//Create a test address
+	// Create a test address
 	addrString := types.GenTestBech32FromString("test")
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
-	//Transfer coins to our test address
+	// Transfer coins to our test address
 	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 	require.NoError(err)
 
@@ -113,13 +110,12 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 }
 
 func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
 
-	//Create an initial supply
+	// Create an initial supply
 	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 	coinsOfInitialSupply := sdk.Coins{}
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
@@ -163,7 +159,6 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 }
 
 func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx

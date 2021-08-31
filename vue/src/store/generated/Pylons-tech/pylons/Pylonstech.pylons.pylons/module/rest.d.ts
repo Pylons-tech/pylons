@@ -168,6 +168,10 @@ export interface PylonsItemRecord {
     longs?: PylonsLongKeyValue[];
     strings?: PylonsStringKeyValue[];
 }
+export interface PylonsItemRef {
+    cookbookID?: string;
+    ItemID?: string;
+}
 export interface PylonsLongInputParam {
     key?: string;
     /**

@@ -33251,6 +33251,13 @@ definitions:
             Value:
               type: string
           title: StringKeyValue describes string key/value set
+  Pylonstech.pylons.pylons.ItemRef:
+    type: object
+    properties:
+      cookbookID:
+        type: string
+      ItemID:
+        type: string
   Pylonstech.pylons.pylons.LongInputParam:
     type: object
     properties:

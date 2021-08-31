@@ -31,11 +31,14 @@ export interface MsgCreateAccount {
 }
 export interface MsgCreateAccountResponse {
 }
+export interface ItemRef {
+    cookbookID: string;
+    ItemID: string;
+}
 export interface MsgSendItems {
     creator: string;
     receiver: string;
-    cookbookID: string;
-    itemIDs: string[];
+    items: ItemRef[];
 }
 export interface MsgSendItemsResponse {
 }
@@ -172,6 +175,13 @@ export declare const MsgCreateAccountResponse: {
     fromJSON(_: any): MsgCreateAccountResponse;
     toJSON(_: MsgCreateAccountResponse): unknown;
     fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse;
+};
+export declare const ItemRef: {
+    encode(message: ItemRef, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): ItemRef;
+    fromJSON(object: any): ItemRef;
+    toJSON(message: ItemRef): unknown;
+    fromPartial(object: DeepPartial<ItemRef>): ItemRef;
 };
 export declare const MsgSendItems: {
     encode(message: MsgSendItems, writer?: Writer): Writer;

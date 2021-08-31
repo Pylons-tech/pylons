@@ -1,7 +1,6 @@
 package keeper_test
 
 func (suite *IntegrationTestSuite) TestGetEntityCount() {
-	//k, ctx := setupKeeper(t)
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -17,7 +16,6 @@ func (suite *IntegrationTestSuite) TestGetEntityCount() {
 }
 
 func (suite *IntegrationTestSuite) TestSetEntityCount() {
-	//k, ctx := setupKeeper(t)
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -29,7 +27,6 @@ func (suite *IntegrationTestSuite) TestSetEntityCount() {
 }
 
 func (suite *IntegrationTestSuite) TestIncrementEntityCount() {
-	//k, ctx := setupKeeper(t)
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -38,14 +35,11 @@ func (suite *IntegrationTestSuite) TestIncrementEntityCount() {
 	k.IncrementEntityCount(ctx)
 
 	value := k.GetEntityCount(ctx)
-
 	require.Equal(expected, value)
 
 	k.IncrementEntityCount(ctx)
-
 	value = k.GetEntityCount(ctx)
 
 	expected = 2
-
 	require.Equal(expected, value)
 }

@@ -30,7 +30,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 	wctx := sdk.WrapSDKContext(ctx)
 	srv := keeper.NewMsgServerImpl(k)
 
-	creator := "A"
+	creator := types.GenTestBech32FromString("A")
 	index := "any"
 
 	expected := &types.MsgCreateCookbook{
@@ -48,7 +48,7 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 	require.NoError(err)
 
 	// now we have a network with a cookbook
-	recipient := "B"
+	recipient := types.GenTestBech32FromString("B")
 
 	for _, tc := range []struct {
 		desc    string

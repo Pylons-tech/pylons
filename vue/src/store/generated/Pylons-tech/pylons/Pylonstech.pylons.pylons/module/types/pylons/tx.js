@@ -488,7 +488,77 @@ export const MsgCreateAccountResponse = {
         return message;
     }
 };
-const baseMsgSendItems = { creator: '', receiver: '', cookbookID: '', itemIDs: '' };
+const baseItemRef = { cookbookID: '', ItemID: '' };
+export const ItemRef = {
+    encode(message, writer = Writer.create()) {
+        if (message.cookbookID !== '') {
+            writer.uint32(10).string(message.cookbookID);
+        }
+        if (message.ItemID !== '') {
+            writer.uint32(18).string(message.ItemID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseItemRef };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.cookbookID = reader.string();
+                    break;
+                case 2:
+                    message.ItemID = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseItemRef };
+        if (object.cookbookID !== undefined && object.cookbookID !== null) {
+            message.cookbookID = String(object.cookbookID);
+        }
+        else {
+            message.cookbookID = '';
+        }
+        if (object.ItemID !== undefined && object.ItemID !== null) {
+            message.ItemID = String(object.ItemID);
+        }
+        else {
+            message.ItemID = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
+        message.ItemID !== undefined && (obj.ItemID = message.ItemID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseItemRef };
+        if (object.cookbookID !== undefined && object.cookbookID !== null) {
+            message.cookbookID = object.cookbookID;
+        }
+        else {
+            message.cookbookID = '';
+        }
+        if (object.ItemID !== undefined && object.ItemID !== null) {
+            message.ItemID = object.ItemID;
+        }
+        else {
+            message.ItemID = '';
+        }
+        return message;
+    }
+};
+const baseMsgSendItems = { creator: '', receiver: '' };
 export const MsgSendItems = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
@@ -497,11 +567,8 @@ export const MsgSendItems = {
         if (message.receiver !== '') {
             writer.uint32(18).string(message.receiver);
         }
-        if (message.cookbookID !== '') {
-            writer.uint32(26).string(message.cookbookID);
-        }
-        for (const v of message.itemIDs) {
-            writer.uint32(42).string(v);
+        for (const v of message.items) {
+            ItemRef.encode(v, writer.uint32(26).fork()).ldelim();
         }
         return writer;
     },
@@ -509,7 +576,7 @@ export const MsgSendItems = {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = { ...baseMsgSendItems };
-        message.itemIDs = [];
+        message.items = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -520,10 +587,7 @@ export const MsgSendItems = {
                     message.receiver = reader.string();
                     break;
                 case 3:
-                    message.cookbookID = reader.string();
-                    break;
-                case 5:
-                    message.itemIDs.push(reader.string());
+                    message.items.push(ItemRef.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -534,7 +598,7 @@ export const MsgSendItems = {
     },
     fromJSON(object) {
         const message = { ...baseMsgSendItems };
-        message.itemIDs = [];
+        message.items = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = String(object.creator);
         }
@@ -547,15 +611,9 @@ export const MsgSendItems = {
         else {
             message.receiver = '';
         }
-        if (object.cookbookID !== undefined && object.cookbookID !== null) {
-            message.cookbookID = String(object.cookbookID);
-        }
-        else {
-            message.cookbookID = '';
-        }
-        if (object.itemIDs !== undefined && object.itemIDs !== null) {
-            for (const e of object.itemIDs) {
-                message.itemIDs.push(String(e));
+        if (object.items !== undefined && object.items !== null) {
+            for (const e of object.items) {
+                message.items.push(ItemRef.fromJSON(e));
             }
         }
         return message;
@@ -564,18 +622,17 @@ export const MsgSendItems = {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
         message.receiver !== undefined && (obj.receiver = message.receiver);
-        message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID);
-        if (message.itemIDs) {
-            obj.itemIDs = message.itemIDs.map((e) => e);
+        if (message.items) {
+            obj.items = message.items.map((e) => (e ? ItemRef.toJSON(e) : undefined));
         }
         else {
-            obj.itemIDs = [];
+            obj.items = [];
         }
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseMsgSendItems };
-        message.itemIDs = [];
+        message.items = [];
         if (object.creator !== undefined && object.creator !== null) {
             message.creator = object.creator;
         }
@@ -588,15 +645,9 @@ export const MsgSendItems = {
         else {
             message.receiver = '';
         }
-        if (object.cookbookID !== undefined && object.cookbookID !== null) {
-            message.cookbookID = object.cookbookID;
-        }
-        else {
-            message.cookbookID = '';
-        }
-        if (object.itemIDs !== undefined && object.itemIDs !== null) {
-            for (const e of object.itemIDs) {
-                message.itemIDs.push(e);
+        if (object.items !== undefined && object.items !== null) {
+            for (const e of object.items) {
+                message.items.push(ItemRef.fromPartial(e));
             }
         }
         return message;

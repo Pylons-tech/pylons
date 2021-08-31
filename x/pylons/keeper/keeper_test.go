@@ -49,7 +49,6 @@ func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution
 	for i := range execs {
 		execs[i].Creator = creators[i]
 		execs[i].ID = strconv.Itoa(i)
-		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
 	}
 	return execs
@@ -63,7 +62,6 @@ func createNExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, co
 		execs[i].ID = strconv.Itoa(i)
 		execs[i].CookbookID = cookbookID
 		execs[i].RecipeID = recipeID
-		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
 	}
 	return execs
@@ -88,7 +86,6 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 		execs[i] = exec
 		execs[i].Creator = creators[i] // ok if different people ran executions
 		execs[i].ID = strconv.Itoa(i)
-		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
 
 	}
@@ -115,7 +112,6 @@ func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n in
 		execs[i] = exec
 		execs[i].Creator = creators[i] // ok if different people ran executions
 		execs[i].ID = strconv.Itoa(i)
-		//k.appendExecution(ctx, execs[i])
 		k.SetPendingExecution(ctx, execs[i])
 	}
 
@@ -176,7 +172,7 @@ func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n 
 		execs[i].RecipeVersion = recipe.Version
 		execs[i].ID = k.AppendPendingExecution(ctx, execs[i], recipe.BlockInterval)
 	}
-	return execsasd
+	return execs
 }
 
 func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
@@ -187,6 +183,9 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 		items[i].PurchaseToken = strconv.Itoa(int(i))
 		k.AppendGoogleIAPOrder(ctx, items[i])
 	}
+
+	return items
+}
 
 func createNItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
@@ -209,6 +208,20 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 	for i := range items {
 		items[i].Owner = owner
 		items[i].CookbookID = cookbookID
+		items[i].ID = types.EncodeItemID(uint64(i))
+		items[i].TransferFee = coin
+		k.SetItem(ctx, items[i])
+	}
+	return items
+}
+
+func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Item {
+	items := make([]types.Item, n)
+	owner := types.GenTestBech32List(1)
+	coin := sdk.NewCoin("test", sdk.NewInt(1))
+	for i := range items {
+		items[i].Owner = owner[0]
+		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
 		k.SetItem(ctx, items[i])
