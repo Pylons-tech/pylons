@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	"fmt"
+
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
