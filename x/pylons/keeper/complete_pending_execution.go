@@ -114,39 +114,39 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 }
 
 // CompletePendingExecution completes the execution
-func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution) (types.Execution, types.EventCompleteExecution, error) {
+func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types.Execution) (types.Execution, types.EventCompleteExecution, bool, error) {
 	recipe, _ := k.GetRecipe(ctx, pendingExecution.CookbookID, pendingExecution.RecipeID)
 	cookbook, _ := k.GetCookbook(ctx, pendingExecution.CookbookID)
 	cookbookOwnerAddr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
 	// check if recipe was updated after execution is submitted, and error out in such a case
 	if semver.Compare(recipe.Version, pendingExecution.RecipeVersion) != 0 {
-		return types.Execution{}, types.EventCompleteExecution{}, types.ErrInvalidPendingExecution
+		return types.Execution{}, types.EventCompleteExecution{}, false, types.ErrInvalidPendingExecution
 	}
 
 	celEnv, err := k.NewCelEnvCollectionFromRecipe(ctx, pendingExecution, recipe)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 
 	outputs, err := types.WeightedOutputsList(recipe.Outputs).Actualize(celEnv)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 
 	creator, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 
 	coins, mintItems, modifyItems, err := k.GenerateExecutionResult(ctx, creator, outputs, &recipe, celEnv, pendingExecution.ItemInputs)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 
 	// add coin outputs to accounts
 	err = k.MintCoins(ctx, types.ExecutionsLockerName, coins)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 	for _, coin := range coins {
 		k.AddDenomToCookbook(ctx, recipe.CookbookID, coin.Denom)
@@ -154,7 +154,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	}
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ExecutionsLockerName, creator, coins)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 	// add mint items to keeper
 	itemOutputIDs := make([]string, len(mintItems))
@@ -196,21 +196,21 @@ coinLoop:
 	// burn any cookbook coin and send payment for remaining
 	err = k.bankKeeper.BurnCoins(ctx, types.ExecutionsLockerName, burnCoins)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 	// perform payments
 	err = k.UnLockCoinsForExecution(ctx, creator, payCoins)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
 	err = k.bankKeeper.SendCoins(ctx, creator, cookbookOwnerAddr, transferCoins)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, true, err
 	}
 	// send fees
 	err = k.PayFees(ctx, creator, feeCoins)
 	if err != nil {
-		return types.Execution{}, types.EventCompleteExecution{}, err
+		return types.Execution{}, types.EventCompleteExecution{}, true, err
 	}
 
 	pendingExecution.CoinOutputs = coins
@@ -229,5 +229,5 @@ coinLoop:
 		ModifyItems:   modifyItems,
 	}
 
-	return pendingExecution, event, nil
+	return pendingExecution, event, true, nil
 }

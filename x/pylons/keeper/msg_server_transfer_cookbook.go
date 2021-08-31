@@ -24,9 +24,13 @@ func (k msgServer) TransferCookbook(goCtx context.Context, msg *types.MsgTransfe
 	}
 
 	cookbook.Creator = msg.Recipient
-	k.Keeper.SetCookbook(ctx, cookbook)
+	creatorAddr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid sender address")
+	}
+	k.Keeper.UpdateCookbook(ctx, cookbook, creatorAddr)
 
-	err := ctx.EventManager().EmitTypedEvent(&types.EventTransferCookbook{
+	err = ctx.EventManager().EmitTypedEvent(&types.EventTransferCookbook{
 		Sender:   msg.Creator,
 		Receiver: cookbook.Creator,
 		ID:       cookbook.ID,

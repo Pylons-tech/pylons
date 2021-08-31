@@ -17,7 +17,7 @@ func (suite *IntegrationTestSuite) TestGoogleIAPOrderQuerySingle() {
 	require := suite.Require()
 
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNGoogleIAPOrder(&k, ctx, 2)
+	msgs := createNGoogleIAPOrder(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetGoogleInAppPurchaseOrderRequest

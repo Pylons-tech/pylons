@@ -7,12 +7,11 @@ import (
 
 var _ sdk.Msg = &MsgSendItems{}
 
-func NewMsgSendItems(sender string, receiver string, cookbookID string, itemIDs []string) *MsgSendItems {
+func NewMsgSendItems(sender string, receiver string, items []ItemRef) *MsgSendItems {
 	return &MsgSendItems{
-		Creator:    sender,
-		Receiver:   receiver,
-		CookbookID: cookbookID,
-		ItemIDs:    itemIDs,
+		Creator:  sender,
+		Receiver: receiver,
+		Items:    items,
 	}
 }
 
@@ -49,12 +48,11 @@ func (msg *MsgSendItems) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid receiver address (%s)", err)
 	}
 
-	if err = ValidateID(msg.CookbookID); err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	for _, id := range msg.ItemIDs {
-		if err = ValidateNumber(id); err != nil {
+	for _, itemRef := range msg.Items {
+		if err = ValidateID(itemRef.CookbookID); err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+		if err = ValidateNumber(itemRef.ItemID); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}

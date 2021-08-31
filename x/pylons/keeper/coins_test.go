@@ -11,7 +11,6 @@ func (suite *IntegrationTestSuite) TestMintCoins() {
 	//k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
-	ak := suite.accountKeeper
 	ctx := suite.ctx
 	require := suite.Require()
 
@@ -27,7 +26,7 @@ func (suite *IntegrationTestSuite) TestMintCoins() {
 	err := k.MintCoins(ctx, types.CoinsIssuerName, mintAmt)
 	require.NoError(err)
 
-	addr := ak.GetModuleAddress(types.CoinsIssuerName)
+	addr := k.CoinsIssuerAddress()
 	balance := bk.SpendableCoins(ctx, addr)
 	require.True(balance.IsEqual(mintAmt))
 }

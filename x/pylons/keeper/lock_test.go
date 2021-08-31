@@ -8,7 +8,6 @@ import (
 )
 
 func (suite *IntegrationTestSuite) TestPayFees() {
-
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
@@ -43,7 +42,6 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 }
 
 func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
-
 	//k, ctx := setupKeeper(t)
 	k := suite.k
 	bk := suite.bankKeeper
@@ -219,7 +217,7 @@ func (suite *IntegrationTestSuite) TestLockItemForExecution() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	orig := createNItem(&k, ctx, 1)
+	orig := createNItem(k, ctx, 1)
 	k.LockItemForExecution(ctx, orig[0])
 	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
 	require.Equal(item.Owner, k.ExecutionsLockerAddress().String())
@@ -230,7 +228,7 @@ func (suite *IntegrationTestSuite) TestLockItemForTrade() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	orig := createNItem(&k, ctx, 1)
+	orig := createNItem(k, ctx, 1)
 	k.LockItemForTrade(ctx, orig[0])
 	item, _ := k.GetItem(ctx, orig[0].CookbookID, orig[0].ID)
 	require.Equal(item.Owner, k.TradesLockerAddress().String())

@@ -60,6 +60,13 @@ func (k Keeper) addCookbookToAddress(ctx sdk.Context, cookbookID string, addr sd
 	store.Set(byteKey, bz)
 }
 
+func (k Keeper) removeCookbookFromAddress(ctx sdk.Context, cookbookID string, addr sdk.AccAddress) {
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
+	store := prefix.NewStore(parentStore, addr.Bytes())
+	byteKey := types.KeyPrefix(cookbookID)
+	store.Delete(byteKey)
+}
+
 func (k Keeper) getCookbookIDsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list []string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
 	iterator := sdk.KVStorePrefixIterator(store, addr.Bytes())
@@ -84,6 +91,12 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
 
 	addr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
 	k.addCookbookToAddress(ctx, cookbook.ID, addr)
+}
+
+// UpdateCookbook updates a cookbook removing it from previous owner store
+func (k Keeper) UpdateCookbook(ctx sdk.Context, cookbook types.Cookbook, prevAddr sdk.AccAddress) {
+	k.removeCookbookFromAddress(ctx, cookbook.ID, prevAddr)
+	k.SetCookbook(ctx, cookbook)
 }
 
 // GetCookbook returns a cookbook from its ID
