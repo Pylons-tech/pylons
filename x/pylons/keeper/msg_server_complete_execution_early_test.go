@@ -1,10 +1,11 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
@@ -15,7 +16,7 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
-	
+
 	amountToPay := sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10)))
 	creator := types.GenTestBech32FromString("test")
 	cookbookMsg := &types.MsgCreateCookbook{

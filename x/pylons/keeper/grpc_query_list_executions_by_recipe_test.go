@@ -1,11 +1,12 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListExecutionsByRecipe() {

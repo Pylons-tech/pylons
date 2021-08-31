@@ -58,7 +58,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 			request: &types.MsgSendItems{
 				Creator:  types.GenTestBech32FromString("wrong_owner"),
 				Receiver: receiver,
-				Items: 	  itemsRequestList,
+				Items:    itemsRequestList,
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},
@@ -67,7 +67,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 			request: &types.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
-				Items: 	  itemsRequestList,
+				Items:    itemsRequestList,
 			},
 			err: nil,
 		},
@@ -76,7 +76,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 			request: &types.MsgSendItems{
 				Creator:  owner,
 				Receiver: receiver,
-				Items: 	  []types.ItemRef{{CookbookID: "not_found", ItemID: "not_found"}},
+				Items:    []types.ItemRef{{CookbookID: "not_found", ItemID: "not_found"}},
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},

@@ -11,7 +11,7 @@ func NewMsgSendItems(sender string, receiver string, items []ItemRef) *MsgSendIt
 	return &MsgSendItems{
 		Creator:  sender,
 		Receiver: receiver,
-		Items:  items,
+		Items:    items,
 	}
 }
 

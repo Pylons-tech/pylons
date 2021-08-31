@@ -94,7 +94,7 @@ func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
 }
 
 // UpdateCookbook updates a cookbook removing it from previous owner store
-func (k Keeper) UpdateCookbook(ctx sdk.Context, cookbook types.Cookbook, prevAddr sdk.AccAddress){
+func (k Keeper) UpdateCookbook(ctx sdk.Context, cookbook types.Cookbook, prevAddr sdk.AccAddress) {
 	k.removeCookbookFromAddress(ctx, cookbook.ID, prevAddr)
 	k.SetCookbook(ctx, cookbook)
 }

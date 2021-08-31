@@ -70,7 +70,7 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 }
 
 // UpdateItem updates an item removing it from previous owner store
-func (k Keeper) UpdateItem(ctx sdk.Context, item types.Item, prevAddr sdk.AccAddress){
+func (k Keeper) UpdateItem(ctx sdk.Context, item types.Item, prevAddr sdk.AccAddress) {
 	k.removeItemFromAddress(ctx, item.CookbookID, item.ID, prevAddr)
 	k.SetItem(ctx, item)
 }

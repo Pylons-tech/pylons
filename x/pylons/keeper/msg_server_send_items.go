@@ -33,7 +33,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	// Get item from keeper, change owner to receiver and re-set in store
 	transferFees := make(map[string]sdk.Coins)
 	for _, cookbookItems := range itemsByCookbook {
-		for _, item := range cookbookItems{
+		for _, item := range cookbookItems {
 			item.Owner = msg.Receiver
 			senderAddr, err := sdk.AccAddressFromBech32(msg.Creator)
 			if err != nil {
@@ -45,7 +45,7 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	}
 
 	// Calculate fee and pay it to cookbook owners and module account
-	for cookbookID, cookbookTransferFees := range transferFees{
+	for cookbookID, cookbookTransferFees := range transferFees {
 		var cookbookOwnerFees, modAccFees sdk.Coins
 		cookbook, _ := k.GetCookbook(ctx, cookbookID)
 		cookbookOwnerAddr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
@@ -81,9 +81,9 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 	}
 
 	err := ctx.EventManager().EmitTypedEvent(&types.EventSendItems{
-		Sender:     msg.Creator,
-		Receiver:   msg.Receiver,
-		Items:		msg.Items,
+		Sender:   msg.Creator,
+		Receiver: msg.Receiver,
+		Items:    msg.Items,
 	})
 
 	return &types.MsgSendItemsResponse{}, err
