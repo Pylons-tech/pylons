@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"testing"
 
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+
 	"github.com/Pylons-tech/pylons/app"
 
 	"github.com/stretchr/testify/suite"
@@ -76,6 +78,7 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 		execs[i].ID = strconv.Itoa(i)
 		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
+
 	}
 
 	return execs
@@ -193,11 +196,9 @@ func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) 
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app           *app.App
-	ctx           sdk.Context
-	k             keeper.Keeper
-	bankKeeper    types.BankKeeper
-	accountKeeper types.AccountKeeper
+	app *app.App
+	ctx sdk.Context
+	k   keeper.Keeper
 }
 
 func (suite *IntegrationTestSuite) SetupTest() {
