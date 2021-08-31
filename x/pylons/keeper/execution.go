@@ -95,7 +95,7 @@ func (k Keeper) GetAllExecutionByRecipe(ctx sdk.Context, cookbookID, recipeID st
 			execution := k.GetPendingExecution(ctx, id)
 			pendingExecutions = append(pendingExecutions, execution)
 		} else {
-			execution := k.GetPendingExecution(ctx, id)
+			execution := k.GetExecution(ctx, id)
 			completedExecutions = append(completedExecutions, execution)
 		}
 	}
@@ -183,7 +183,7 @@ func (k Keeper) GetAllExecutionByItem(ctx sdk.Context, cookbookID, itemID string
 			execution := k.GetPendingExecution(ctx, id)
 			pendingExecutions = append(pendingExecutions, execution)
 		} else {
-			execution := k.GetPendingExecution(ctx, id)
+			execution := k.GetExecution(ctx, id)
 			completedExecutions = append(completedExecutions, execution)
 		}
 	}

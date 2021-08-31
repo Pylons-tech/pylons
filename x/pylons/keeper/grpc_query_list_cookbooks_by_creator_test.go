@@ -2,6 +2,7 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -14,7 +15,19 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 	require := suite.Require()
 
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNCookbook(k, ctx, 2)
+	msgs := createNCookbookSameCreator(k, ctx, 10)
+
+	requestFunc := func(next []byte, offset, limit uint64, total bool, creator string) *types.QueryListCookbooksByCreatorRequest {
+		return &types.QueryListCookbooksByCreatorRequest{
+			Pagination: &query.PageRequest{
+				Key:        next,
+				Offset:     offset,
+				Limit:      limit,
+				CountTotal: total,
+			},
+			Creator: creator,
+		}
+	}
 
 	for _, tc := range []struct {
 		desc     string
@@ -23,19 +36,19 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 		err      error
 	}{
 		{
-			desc:     "First",
-			request:  &types.QueryListCookbooksByCreatorRequest{Creator: msgs[0].Creator},
-			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{msgs[0]}},
+			desc:     "ByOffset",
+			request:  requestFunc(nil, 0, 5, false, msgs[0].Creator),
+			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: msgs[:5]},
 		},
 		{
-			desc:     "Second",
-			request:  &types.QueryListCookbooksByCreatorRequest{Creator: msgs[1].Creator},
-			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{msgs[1]}},
+			desc:     "All",
+			request:  requestFunc(nil, 0, 0, true, msgs[0].Creator),
+			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: msgs},
 		},
 		{
 			desc:     "KeyNotFound",
-			request:  &types.QueryListCookbooksByCreatorRequest{Creator: types.GenTestBech32FromString("missing")},
-			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook(nil)},
+			request:  requestFunc(nil, 0, 0, true, types.GenTestBech32FromString("missing")),
+			response: &types.QueryListCookbooksByCreatorResponse{Cookbooks: []types.Cookbook{}},
 		},
 		{
 			desc:    "InvalidRequest1",
@@ -53,7 +66,7 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
-				require.Equal(tc.response, response)
+				require.Equal(tc.response.Cookbooks, response.Cookbooks)
 			}
 		})
 	}
