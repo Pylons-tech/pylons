@@ -87,7 +87,6 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 		execs[i].ID = strconv.Itoa(i)
 		//k.appendExecution(ctx, execs[i])
 		k.SetExecution(ctx, execs[i])
-
 	}
 
 	return execs
@@ -110,6 +109,20 @@ func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	coin := sdk.NewCoin("test", sdk.NewInt(1))
 	for i := range items {
 		items[i].Owner = owners[i]
+		items[i].CookbookID = fmt.Sprintf("%d", i)
+		items[i].ID = types.EncodeItemID(uint64(i))
+		items[i].TransferFee = coin
+		k.SetItem(ctx, items[i])
+	}
+	return items
+}
+
+func createNItemSingleOwner(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
+	items := make([]types.Item, n)
+	owner := types.GenTestBech32List(1)
+	coin := sdk.NewCoin("test", sdk.NewInt(1))
+	for i := range items {
+		items[i].Owner = owner[0]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
