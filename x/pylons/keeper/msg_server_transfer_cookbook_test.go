@@ -1,14 +1,14 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 // create a network w cookbook
-
 
 // TEST 1
 // we transfer cookbook ownership but we don't own
@@ -21,7 +21,6 @@ import (
 // TEST 3
 // we transfer cookbook ownership but the cookbook doesnt exist
 // check if error is proper
-
 
 func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 	k := suite.k
@@ -59,27 +58,27 @@ func (suite *IntegrationTestSuite) TestCookbookMsgServerTransfer() {
 		{
 			desc: "Cookbook not owned",
 			request: &types.MsgTransferCookbook{
-				Creator:      recipient,
-				ID:           index,
-				Recipient:    recipient,
+				Creator:   recipient,
+				ID:        index,
+				Recipient: recipient,
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},
 		{
 			desc: "Completed",
 			request: &types.MsgTransferCookbook{
-				Creator:      creator,
-				ID:           index,
-				Recipient:    recipient,
+				Creator:   creator,
+				ID:        index,
+				Recipient: recipient,
 			},
 			err: nil,
 		},
 		{
 			desc: "Invalid Cookbook ID",
 			request: &types.MsgTransferCookbook{
-				Creator:      creator,
-				ID:           "Invalid ID",
-				Recipient:    recipient,
+				Creator:   creator,
+				ID:        "Invalid ID",
+				Recipient: recipient,
 			},
 			err: sdkerrors.ErrInvalidRequest,
 		},

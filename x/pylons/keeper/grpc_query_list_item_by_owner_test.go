@@ -1,11 +1,12 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestListItemByOwner() {
@@ -17,7 +18,7 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 	msgs := createNItemSingleOwner(&k, ctx, 10)
 
 	requestFunc := func(next []byte, offset, limit uint64, total bool, owner string) *types.QueryListItemByOwnerRequest {
-		return &types.QueryListItemByOwnerRequest {
+		return &types.QueryListItemByOwnerRequest{
 			Pagination: &query.PageRequest{
 				Key:        next,
 				Offset:     offset,
@@ -25,7 +26,6 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 				CountTotal: total,
 			},
 			Owner: owner,
-
 		}
 	}
 
@@ -41,7 +41,7 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 			response: &types.QueryListItemByOwnerResponse{Items: msgs, Pagination: nil},
 		},
 		{
-			desc: "WithLimit",
+			desc:     "WithLimit",
 			request:  requestFunc(nil, 0, 5, false, msgs[0].Owner),
 			response: &types.QueryListItemByOwnerResponse{Items: msgs[:5], Pagination: nil},
 		},
@@ -49,7 +49,7 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 			desc:     "NoItemsInvalidOwnerID",
 			request:  requestFunc(nil, 0, 0, true, "missing"),
 			response: nil,
-			err:  status.Error(codes.InvalidArgument, "invalid address"),
+			err:      status.Error(codes.InvalidArgument, "invalid address"),
 		},
 	} {
 		tc := tc

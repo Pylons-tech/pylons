@@ -1,16 +1,17 @@
-
 package cli_test
 
 import (
 	"fmt"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"testing"
+
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestListItemByOwner(t *testing.T) {
@@ -22,30 +23,29 @@ func TestListItemByOwner(t *testing.T) {
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
 	for _, tc := range []struct {
-		desc string
-		ownerID   string
-		args []string
-		err  error
-		items []types.Item
-
+		desc    string
+		ownerID string
+		args    []string
+		err     error
+		items   []types.Item
 	}{
 		{
-			desc: "found1",
-			ownerID:   objs[0].Owner,
-			args: common,
-			items: objs,
+			desc:    "found1",
+			ownerID: objs[0].Owner,
+			args:    common,
+			items:   objs,
 		},
 		{
-			desc: "found2",
-			ownerID:   objs[0].Owner,
-			args: common,
-			items: objs,
+			desc:    "found2",
+			ownerID: objs[0].Owner,
+			args:    common,
+			items:   objs,
 		},
 		{
-			desc: "invalid",
-			ownerID:   "not_found",
-			args: common,
-			err:  status.Error(codes.InvalidArgument, "invalid address"),
+			desc:    "invalid",
+			ownerID: "not_found",
+			args:    common,
+			err:     status.Error(codes.InvalidArgument, "invalid address"),
 		},
 	} {
 		tc := tc
