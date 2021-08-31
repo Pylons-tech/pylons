@@ -11,6 +11,7 @@ func (suite *IntegrationTestSuite) TestExecutionGet() {
 	}
 }
 
+// TODO verify and add more test cases
 func (suite *IntegrationTestSuite) TestExecutionsGetByItem() {
 	numExecs := 10
 	k := suite.k
@@ -25,11 +26,12 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByItem() {
 	require.Equal(numExecs, len(itemExecs))
 	require.Equal(numExecs, len(execs))
 	for i, exec := range execs {
-		require.Equal(itemCookbookID, exec.CookbookID)
-		require.Equal(itemExecs[i].ID, exec.ID)
+		require.Equal(exec.CookbookID, itemCookbookID)
+		require.Equal(exec.ID, itemExecs[i].ID)
 	}
 }
 
+// TODO verify and add more test cases
 func (suite *IntegrationTestSuite) TestExecutionsGetByRecipe() {
 	numExecs := 10
 	k := suite.k

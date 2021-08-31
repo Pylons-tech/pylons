@@ -12,9 +12,9 @@ import (
 // Default parameter namespace
 const (
 	// DefaultMinNameFieldLength is the default minimum character length of a request's name field
-	DefaultMinNameFieldLength = 8
+	DefaultMinNameFieldLength uint64 = 8
 	// DefaultMinDescriptionFieldLength is the default minimum character length of a request's description field
-	DefaultMinDescriptionFieldLength = 20
+	DefaultMinDescriptionFieldLength uint64 = 20
 )
 
 var (

@@ -295,22 +295,39 @@ export interface PylonsQueryGetRecipeResponse {
 
 export interface PylonsQueryListCookbooksByCreatorResponse {
   Cookbooks?: PylonsCookbook[];
+
+  /** pagination defines the pagination in the response. */
+  pagination?: V1Beta1PageResponse;
 }
 
 export interface PylonsQueryListExecutionsByItemResponse {
-  Executions?: PylonsExecution[];
+  CompletedExecutions?: PylonsExecution[];
+  PendingExecutions?: PylonsExecution[];
+
+  /** pagination defines the pagination in the response. */
+  pagination?: V1Beta1PageResponse;
 }
 
 export interface PylonsQueryListExecutionsByRecipeResponse {
-  Executions?: PylonsExecution[];
+  CompletedExecutions?: PylonsExecution[];
+  PendingExecutions?: PylonsExecution[];
+
+  /** pagination defines the pagination in the response. */
+  pagination?: V1Beta1PageResponse;
 }
 
 export interface PylonsQueryListItemByOwnerResponse {
   Items?: PylonsItem[];
+
+  /** pagination defines the pagination in the response. */
+  pagination?: V1Beta1PageResponse;
 }
 
 export interface PylonsQueryListRecipesByCookbookResponse {
   Recipes?: PylonsRecipe[];
+
+  /** pagination defines the pagination in the response. */
+  pagination?: V1Beta1PageResponse;
 }
 
 export interface PylonsRecipe {
@@ -373,6 +390,62 @@ signatures required by gogoproto.
 export interface V1Beta1Coin {
   denom?: string;
   amount?: string;
+}
+
+/**
+* message SomeRequest {
+         Foo some_parameter = 1;
+         PageRequest pagination = 2;
+ }
+*/
+export interface V1Beta1PageRequest {
+  /**
+   * key is a value returned in PageResponse.next_key to begin
+   * querying the next page most efficiently. Only one of offset or key
+   * should be set.
+   * @format byte
+   */
+  key?: string;
+
+  /**
+   * offset is a numeric offset that can be used when key is unavailable.
+   * It is less efficient than using key. Only one of offset or key should
+   * be set.
+   * @format uint64
+   */
+  offset?: string;
+
+  /**
+   * limit is the total number of results to be returned in the result page.
+   * If left empty it will default to a value to be set by each app.
+   * @format uint64
+   */
+  limit?: string;
+
+  /**
+   * count_total is set to true  to indicate that the result set should include
+   * a count of the total number of items available for pagination in UIs.
+   * count_total is only respected when offset is used. It is ignored when key
+   * is set.
+   */
+  countTotal?: boolean;
+}
+
+/**
+* PageResponse is to be embedded in gRPC response messages where the
+corresponding request message has used PageRequest.
+
+ message SomeResponse {
+         repeated Bar results = 1;
+         PageResponse page = 2;
+ }
+*/
+export interface V1Beta1PageResponse {
+  /** @format byte */
+  nextKey?: string;
+
+  /** @format uint64 */
+  total?: string;
 }
 
 export type QueryParamsType = Record<string | number, any>;
@@ -595,10 +668,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary Retrieves the list of cookbooks owned by an address
    * @request GET:/pylons/cookbooks/{creator}
    */
-  queryListCookbooksByCreator = (creator: string, params: RequestParams = {}) =>
+  queryListCookbooksByCreator = (
+    creator: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<PylonsQueryListCookbooksByCreatorResponse, RpcStatus>({
       path: `/pylons/cookbooks/${creator}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });
@@ -627,10 +710,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary Queries a list of listExecutionsByItem items.
    * @request GET:/pylons/executions/item/{CookbookID}/{ItemID}
    */
-  queryListExecutionsByItem = (CookbookID: string, ItemID: string, params: RequestParams = {}) =>
+  queryListExecutionsByItem = (
+    CookbookID: string,
+    ItemID: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<PylonsQueryListExecutionsByItemResponse, RpcStatus>({
       path: `/pylons/executions/item/${CookbookID}/${ItemID}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });
@@ -643,10 +737,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary Queries a list of listExecutionsByRecipe items.
    * @request GET:/pylons/executions/recipe/{CookbookID}/{RecipeID}
    */
-  queryListExecutionsByRecipe = (CookbookID: string, RecipeID: string, params: RequestParams = {}) =>
+  queryListExecutionsByRecipe = (
+    CookbookID: string,
+    RecipeID: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<PylonsQueryListExecutionsByRecipeResponse, RpcStatus>({
       path: `/pylons/executions/recipe/${CookbookID}/${RecipeID}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });
@@ -691,10 +796,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary Queries a list of listItemByOwner items.
    * @request GET:/pylons/items/{owner}
    */
-  queryListItemByOwner = (owner: string, params: RequestParams = {}) =>
+  queryListItemByOwner = (
+    owner: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<PylonsQueryListItemByOwnerResponse, RpcStatus>({
       path: `/pylons/items/${owner}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });
@@ -723,10 +838,20 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @summary Queries a list of listRecipesByCookbook items.
    * @request GET:/pylons/recipes/{CookbookID}
    */
-  queryListRecipesByCookbook = (CookbookID: string, params: RequestParams = {}) =>
+  queryListRecipesByCookbook = (
+    CookbookID: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
     this.request<PylonsQueryListRecipesByCookbookResponse, RpcStatus>({
       path: `/pylons/recipes/${CookbookID}`,
       method: "GET",
+      query: query,
       format: "json",
       ...params,
     });
