@@ -120,10 +120,10 @@ func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) 
 type IntegrationTestSuite struct {
 	suite.Suite
 
-	app *app.App
-	ctx sdk.Context
-	k   keeper.Keeper
-	bankKeeper types.BankKeeper
+	app           *app.App
+	ctx           sdk.Context
+	k             keeper.Keeper
+	bankKeeper    types.BankKeeper
 	accountKeeper types.AccountKeeper
 }
 

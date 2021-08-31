@@ -16,7 +16,6 @@ func (suite *IntegrationTestSuite) TestGetEntityCount() {
 	require.Equal(expected, value)
 }
 
-
 func (suite *IntegrationTestSuite) TestSetEntityCount() {
 	//k, ctx := setupKeeper(t)
 	k := suite.k

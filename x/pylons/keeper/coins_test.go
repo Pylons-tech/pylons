@@ -1,11 +1,11 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-)
 
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+)
 
 func (suite *IntegrationTestSuite) TestMintCoins() {
 	//k, ctx := setupKeeper(t)
@@ -50,7 +50,7 @@ func (suite *IntegrationTestSuite) TestMintCoinsToAddr() {
 	supply := bankTypes.NewSupply(mintAmt)
 	bk.SetSupply(ctx, supply)
 
-	err := k.MintCoinsToAddr(ctx,addr, mintAmt)
+	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 
 	require.NoError(err)
 

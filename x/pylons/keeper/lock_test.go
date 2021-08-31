@@ -1,18 +1,18 @@
 package keeper_test
 
 import (
-	"github.com/Pylons-tech/pylons/x/pylons/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (suite *IntegrationTestSuite) TestPayFees(){
+func (suite *IntegrationTestSuite) TestPayFees() {
 
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
-
 
 	//Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
@@ -27,21 +27,20 @@ func (suite *IntegrationTestSuite) TestPayFees(){
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	//Transfer coins to our test address
-	err := k.MintCoinsToAddr(ctx,addr, mintAmt)
+	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 	require.NoError(err)
 
 	// Pay Fees
 	fee := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 	feeCoins := sdk.Coins{}
 	feeCoins = feeCoins.Add(fee)
-	err = k.PayFees(ctx,addr, feeCoins)
+	err = k.PayFees(ctx, addr, feeCoins)
 	require.NoError(err)
 
 	//Check if the balance in the FeeCollectorName module account has changed
 	balance := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
 	require.True(balance.IsEqual(feeCoins))
 }
-
 
 func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 
@@ -51,7 +50,6 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-
 	//Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.Coins{}
@@ -65,14 +63,14 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	//Transfer coins to our test address
-	err := k.MintCoinsToAddr(ctx,addr, mintAmt)
+	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 	require.NoError(err)
 
 	// Lock coins for execution
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.Coins{}
 	lockedCoins = lockedCoins.Add(lc)
-	err = k.LockCoinsForExecution(ctx,addr, lockedCoins)
+	err = k.LockCoinsForExecution(ctx, addr, lockedCoins)
 	require.NoError(err)
 
 	//Check if the balance in the ExecutionsLockerAddress module account has changed
@@ -88,7 +86,6 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-
 	//Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
 	mintAmt := sdk.Coins{}
@@ -102,14 +99,14 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	addr, _ := sdk.AccAddressFromBech32(addrString)
 
 	//Transfer coins to our test address
-	err := k.MintCoinsToAddr(ctx,addr, mintAmt)
+	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 	require.NoError(err)
 
 	// Lock coins for trade
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.Coins{}
 	lockedCoins = lockedCoins.Add(lc)
-	err = k.LockCoinsForTrade(ctx,addr, lockedCoins)
+	err = k.LockCoinsForTrade(ctx, addr, lockedCoins)
 	require.NoError(err)
 
 	//Check if the balance in the LockCoinsForTrade module account has changed
@@ -117,14 +114,12 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	require.True(balance.IsEqual(lockedCoins))
 }
 
-
 func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
-
 
 	//Create an initial supply
 	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
@@ -144,7 +139,6 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 
 	//Save the initial balance to use as validation test later
 	initialAddrBalance := bk.SpendableCoins(ctx, testAddr).AmountOf(types.PylonsCoinDenom)
-
 
 	// Lock coins for trade
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
@@ -159,7 +153,6 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 	testAddrBalance := balance.AmountOf(types.PylonsCoinDenom)
 	require.True(newBalance.Equal(testAddrBalance))
 
-
 	//Unlock the coins
 	err = k.UnLockCoinsForTrade(ctx, testAddr, lockedCoins)
 	require.NoError(err)
@@ -171,15 +164,12 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 
 }
 
-
-
 func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 
 	k := suite.k
 	bk := suite.bankKeeper
 	ctx := suite.ctx
 	require := suite.Require()
-
 
 	//Create an initial supply
 	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
@@ -200,7 +190,6 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	//Save the initial balance to use as validation test later
 	initialAddrBalance := bk.SpendableCoins(ctx, testAddr).AmountOf(types.PylonsCoinDenom)
 
-
 	// Lock coins for execution
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
 	lockedCoins := sdk.Coins{}
@@ -214,7 +203,6 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	testAddrBalance := balance.AmountOf(types.PylonsCoinDenom)
 	require.True(newBalance.Equal(testAddrBalance))
 
-
 	//Unlock the coins
 	err = k.UnLockCoinsForExecution(ctx, testAddr, lockedCoins)
 	require.NoError(err)
@@ -225,10 +213,6 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	require.True(initialAddrBalance.Equal(testAddrUnlockedBalance))
 
 }
-
-
-
-
 
 func (suite *IntegrationTestSuite) TestLockItemForExecution() {
 	k := suite.k
