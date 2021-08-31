@@ -16,7 +16,7 @@ func (suite *IntegrationTestSuite) TestListRecipesByCookbook() {
 
 	wctx := sdk.WrapSDKContext(ctx)
 	cookbooks := createNCookbook(k, ctx, 1)
-	msgs := createNRecipe(&k, ctx, cookbooks[0], 10)
+	msgs := createNRecipe(k, ctx, cookbooks[0], 10)
 
 	requestFunc := func(next []byte, offset, limit uint64, total bool, cookbookID string) *types.QueryListRecipesByCookbookRequest {
 		return &types.QueryListRecipesByCookbookRequest{

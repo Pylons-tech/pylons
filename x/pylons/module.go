@@ -188,7 +188,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 		if err != nil {
 			// drop execution since it became invalid, user will have to resubmit
 			pendingExec.BlockHeight = blockHeight
-			if !coinsUnlocked{
+			if !coinsUnlocked {
 				// unlock coins, but only if unlocked previously
 				addr, _ := sdk.AccAddressFromBech32(pendingExec.Creator)
 				err = am.keeper.UnLockCoinsForExecution(ctx, addr, pendingExec.CoinInputs)

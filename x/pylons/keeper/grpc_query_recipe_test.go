@@ -15,7 +15,7 @@ func (suite *IntegrationTestSuite) TestRecipeQuerySingle() {
 
 	wctx := sdk.WrapSDKContext(ctx)
 	cookbooks := createNCookbook(k, ctx, 1)
-	msgs := createNRecipe(&k, ctx, cookbooks[0], 2)
+	msgs := createNRecipe(k, ctx, cookbooks[0], 2)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetRecipeRequest

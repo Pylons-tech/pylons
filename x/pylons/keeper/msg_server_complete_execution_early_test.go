@@ -64,8 +64,14 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	resp, err := srv.CompleteExecutionEarly(wctx, completeEarly)
 	require.NoError(err)
 
-	// verify payment and execution completion
+	// manually trigger complete execution - simulate endBlocker
+	pendingExecution = k.GetPendingExecution(ctx, resp.ID)
+	execution, _, _, err := k.CompletePendingExecution(ctx, pendingExecution)
+	require.NoError(err)
+	k.ActualizeExecution(ctx, execution)
+
+	// verify execution completion and that requester has no balance left
 	require.True(k.HasExecution(ctx, resp.ID))
-	balance := bk.SpendableCoins(ctx, k.FeeCollectorAddress())
-	require.True(balance.IsEqual(amountToPay))
+	balance := bk.SpendableCoins(ctx, requesterAddr)
+	require.Nil(balance)
 }

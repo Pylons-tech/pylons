@@ -1,8 +1,9 @@
 package cli
 
 import (
+	"encoding/json"
+	"github.com/spf13/cast"
 	"strconv"
-	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -17,24 +18,28 @@ var _ = strconv.Itoa(0)
 
 func CmdSendItems() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "send-items [receiver] [cookbook-id] [item-ids]",
+		Use:   "send-items [receiver] [items]",
 		Short: "send items to receiver",
 		Args:  cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsReceiver := args[0]
 
-			argsCookbookID := args[1]
-
-			// convert "ID0 ID1 ID2" to [ID0, ID1, ID2]
-			argsItemIDsStr := args[2]
-			argsItemIDs := strings.Fields(argsItemIDsStr)
+			argsItems, err := cast.ToStringE(args[1])
+			if err != nil {
+				return err
+			}
+			jsonArgsItems := make([]types.ItemRef, 0)
+			err = json.Unmarshal([]byte(argsItems), &jsonArgsItems)
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgSendItems(clientCtx.GetFromAddress().String(), argsReceiver, argsCookbookID, argsItemIDs)
+			msg := types.NewMsgSendItems(clientCtx.GetFromAddress().String(), argsReceiver, jsonArgsItems)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

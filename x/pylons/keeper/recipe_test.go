@@ -6,7 +6,7 @@ func (suite *IntegrationTestSuite) TestRecipeGet() {
 	require := suite.Require()
 
 	cookbooks := createNCookbook(k, ctx, 1)
-	items := createNRecipe(&k, ctx, cookbooks[0], 10)
+	items := createNRecipe(k, ctx, cookbooks[0], 10)
 	for _, item := range items {
 		rst, found := k.GetRecipe(ctx, cookbooks[0].ID, item.ID)
 		require.True(found)
@@ -20,6 +20,6 @@ func (suite *IntegrationTestSuite) TestRecipeGetAll() {
 	require := suite.Require()
 
 	cookbooks := createNCookbook(k, ctx, 1)
-	items := createNRecipe(&k, ctx, cookbooks[0], 10)
+	items := createNRecipe(k, ctx, cookbooks[0], 10)
 	require.Equal(items, k.GetAllRecipe(ctx))
 }

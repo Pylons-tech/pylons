@@ -25,19 +25,19 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin("test", sdk.NewInt(1))
+		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
 }
 
-func createNCookbookSameCreator(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
+func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creator := types.GenTestBech32FromString("any")
 	for i := range items {
 		items[i].Creator = creator
 		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin("test", sdk.NewInt(1))
+		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -113,12 +113,13 @@ func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n 
 		execs[i].Creator = creators[i]
 		execs[i].CookbookID = recipe.CookbookID
 		execs[i].RecipeID = recipe.ID
+		execs[i].RecipeVersion = recipe.Version
 		execs[i].ID = k.AppendPendingExecution(ctx, execs[i], recipe.BlockInterval)
 	}
 	return execs
 }
 
-func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
+func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
 	items := make([]types.GoogleInAppPurchaseOrder, n)
 	creators := types.GenTestBech32List(n)
 	for i := range items {
@@ -129,10 +130,10 @@ func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.Goo
 	return items
 }
 
-func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
+func createNItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	items := make([]types.Item, n)
 	owners := types.GenTestBech32List(n)
-	coin := sdk.NewCoin("test", sdk.NewInt(1))
+	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
 	for i := range items {
 		items[i].Owner = owners[i]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
@@ -143,7 +144,21 @@ func createNItem(k *keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 	return items
 }
 
-func createNRecipe(k *keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
+func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, cookbookID string) []types.Item {
+	items := make([]types.Item, n)
+	owner := types.GenTestBech32FromString("test")
+	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	for i := range items {
+		items[i].Owner = owner
+		items[i].CookbookID = cookbookID
+		items[i].ID = types.EncodeItemID(uint64(i))
+		items[i].TransferFee = coin
+		k.SetItem(ctx, items[i])
+	}
+	return items
+}
+
+func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) []types.Recipe {
 	items := make([]types.Recipe, n)
 	for i := range items {
 		items[i].CookbookID = cb.ID

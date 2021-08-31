@@ -65,11 +65,15 @@ message MsgCreateAccount {
 message MsgCreateAccountResponse {
 }
 
+message ItemRef {
+  string cookbookID = 1;
+  string ItemID = 2;
+}
+
 message MsgSendItems {
   string creator = 1;
   string receiver = 2;
-  string cookbookID = 3;
-  repeated string itemIDs = 5 [(gogoproto.nullable) = false];
+  repeated ItemRef items = 3 [(gogoproto.nullable) = false];
 }
 
 message MsgSendItemsResponse {
