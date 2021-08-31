@@ -5,8 +5,6 @@ import (
 
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"

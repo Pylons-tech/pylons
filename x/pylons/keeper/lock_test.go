@@ -7,7 +7,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-
 func (suite *IntegrationTestSuite) TestPayFees() {
 	k := suite.k
 	bk := suite.bankKeeper
