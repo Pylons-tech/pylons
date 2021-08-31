@@ -10,6 +10,7 @@ import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
+import "pylons/tx.proto";
 
 message EventCreateAccount {
   string address = 1;
@@ -74,8 +75,7 @@ message EventCompleteExecutionEarly {
 message EventSendItems {
   string sender = 1;
   string receiver = 2;
-  string CookbookID = 3;
-  repeated string IDs = 4  [(gogoproto.nullable) = false];
+  repeated ItemRef items = 3 [(gogoproto.nullable) = false];
 }
 
 message EventSetItemString {

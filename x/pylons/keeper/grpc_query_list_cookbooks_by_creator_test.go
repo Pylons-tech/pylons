@@ -15,7 +15,7 @@ func (suite *IntegrationTestSuite) TestListCookbooksByCreator() {
 	require := suite.Require()
 
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNCookbookSameCreator(k, ctx, 10)
+	msgs := createNCookbookForSingleOwner(k, ctx, 10)
 
 	requestFunc := func(next []byte, offset, limit uint64, total bool, creator string) *types.QueryListCookbooksByCreatorRequest {
 		return &types.QueryListCookbooksByCreatorRequest{

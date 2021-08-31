@@ -69,6 +69,12 @@ func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 	k.IncrementEntityCount(ctx)
 }
 
+// UpdateItem updates an item removing it from previous owner store
+func (k Keeper) UpdateItem(ctx sdk.Context, item types.Item, prevAddr sdk.AccAddress) {
+	k.removeItemFromAddress(ctx, item.CookbookID, item.ID, prevAddr)
+	k.SetItem(ctx, item)
+}
+
 // GetItem returns an item from its index
 func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item, found bool) {
 	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
@@ -104,6 +110,14 @@ func (k Keeper) addItemToAddress(ctx sdk.Context, cookbookID, itemID string, add
 	byteKey := types.KeyPrefix(itemID)
 	bz := []byte(fmt.Sprintf("%v-%v", cookbookID, itemID))
 	store.Set(byteKey, bz)
+}
+
+func (k Keeper) removeItemFromAddress(ctx sdk.Context, cookbookID, itemID string, addr sdk.AccAddress) {
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
+	addrStore := prefix.NewStore(parentStore, addr.Bytes())
+	store := prefix.NewStore(addrStore, types.KeyPrefix(cookbookID))
+	byteKey := types.KeyPrefix(itemID)
+	store.Delete(byteKey)
 }
 
 func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list []types.Item) {

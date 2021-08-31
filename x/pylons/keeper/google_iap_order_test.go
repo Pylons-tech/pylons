@@ -5,7 +5,7 @@ func (suite *IntegrationTestSuite) TestGoogleIAPOrderGet() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := createNGoogleIAPOrder(&k, ctx, 10)
+	items := createNGoogleIAPOrder(k, ctx, 10)
 	for _, item := range items {
 		require.Equal(item, k.GetGoogleIAPOrder(ctx, item.PurchaseToken))
 	}
@@ -16,7 +16,7 @@ func (suite *IntegrationTestSuite) TestGoogleIAPOrderExist() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := createNGoogleIAPOrder(&k, ctx, 10)
+	items := createNGoogleIAPOrder(k, ctx, 10)
 	for _, item := range items {
 		require.True(k.HasGoogleIAPOrder(ctx, item.PurchaseToken))
 	}
@@ -27,7 +27,7 @@ func (suite *IntegrationTestSuite) TestGoogleIAPOrderGetAll() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := createNGoogleIAPOrder(&k, ctx, 10)
+	items := createNGoogleIAPOrder(k, ctx, 10)
 	require.Equal(items, k.GetAllGoogleIAPOrder(ctx))
 	require.Equal(items, k.GetAllGoogleIAPOrder(ctx))
 }
@@ -37,7 +37,7 @@ func (suite *IntegrationTestSuite) TestGoogleIAPOrderCount() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := createNGoogleIAPOrder(&k, ctx, 10)
+	items := createNGoogleIAPOrder(k, ctx, 10)
 	count := uint64(len(items))
 	require.Equal(count, k.GetGoogleIAPOrderCount(ctx))
 }
