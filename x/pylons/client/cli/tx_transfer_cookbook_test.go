@@ -1,17 +1,18 @@
 package cli_test
 
-
 import (
 	"fmt"
-	"github.com/Pylons-tech/pylons/testutil/network"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"testing"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
-	"testing"
+
+	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func TestTransferCookbook(t *testing.T) {
@@ -44,11 +45,11 @@ func TestTransferCookbook(t *testing.T) {
 	addrs := types.GenTestBech32List(1)
 	recipient := addrs[0]
 
-	valid := []string {
+	valid := []string{
 		recipient,
 	}
 
-	invalidAddr := []string {
+	invalidAddr := []string{
 		"invalid",
 	}
 
@@ -77,8 +78,8 @@ func TestTransferCookbook(t *testing.T) {
 			desc: "invalid recipient",
 			id:   id,
 			args: append(invalidAddr, common...),
-			err: sdkerrors.ErrInvalidAddress,
-			code:0,
+			err:  sdkerrors.ErrInvalidAddress,
+			code: 0,
 		},
 		{
 			desc: "key not found",

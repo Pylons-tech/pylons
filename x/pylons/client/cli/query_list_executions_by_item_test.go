@@ -2,18 +2,17 @@ package cli_test
 
 import (
 	"fmt"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"testing"
+
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	"github.com/stretchr/testify/require"
 	tmcli "github.com/tendermint/tendermint/libs/cli"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"testing"
+
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
-
-// TODO make tests
-
 
 func TestListExecutionsByItem(t *testing.T) {
 	net, objs := networkWithExecutionObjects(t, 10)
@@ -24,36 +23,36 @@ func TestListExecutionsByItem(t *testing.T) {
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
 	for _, tc := range []struct {
-		desc string
-		id   string
-		cookBookID string
-		args []string
-		err  error
-		execs []types.Execution
+		desc         string
+		id           string
+		cookBookID   string
+		args         []string
+		err          error
+		execs        []types.Execution
 		pendingExecs []types.Execution
 	}{
 		{
-			desc: "found1",
-			id:   objs[0].ItemOutputIDs[0],
-			cookBookID: objs[0].CookbookID,
-			args: common,
-			execs: objs,
+			desc:         "found1",
+			id:           objs[0].ItemOutputIDs[0],
+			cookBookID:   objs[0].CookbookID,
+			args:         common,
+			execs:        objs,
 			pendingExecs: []types.Execution{},
 		},
 		{
-			desc: "found2",
-			id:    objs[1].ItemOutputIDs[0],
-			cookBookID: objs[1].CookbookID,
-			args: common,
-			execs: objs,
+			desc:         "found2",
+			id:           objs[1].ItemOutputIDs[0],
+			cookBookID:   objs[1].CookbookID,
+			args:         common,
+			execs:        objs,
 			pendingExecs: []types.Execution{},
 		},
 		{
-			desc: "not found",
-			id:   types.GenTestBech32FromString("not_found"),
-			cookBookID: objs[0].CookbookID,
-			args: common,
-			execs: []types.Execution{},
+			desc:         "not found",
+			id:           types.GenTestBech32FromString("not_found"),
+			cookBookID:   objs[0].CookbookID,
+			args:         common,
+			execs:        []types.Execution{},
 			pendingExecs: []types.Execution{},
 		},
 		{

@@ -81,6 +81,66 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	return execs
 }
 
+func createNPendingExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
+	exec := types.Execution{
+		ItemInputs: []types.ItemRecord{
+			{
+				ID: "test1",
+			},
+		},
+		ItemOutputIDs: []string{"test1"},
+		RecipeID:      "testRecipeID",
+		CookbookID:    "testCookbookID",
+	}
+
+	execs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
+
+	for i := range execs {
+		execs[i] = exec
+		execs[i].Creator = creators[i] // ok if different people ran executions
+		execs[i].ID = strconv.Itoa(i)
+		//k.appendExecution(ctx, execs[i])
+		k.SetPendingExecution(ctx, execs[i])
+	}
+
+	return execs
+}
+
+// returns (pendingExecs, completedExecs)
+func createNMixedExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) ([]types.Execution, []types.Execution) {
+	exec := types.Execution{
+		ItemInputs: []types.ItemRecord{
+			{
+				ID: "test1",
+			},
+		},
+		ItemOutputIDs: []string{"test1"},
+		RecipeID:      "testRecipeID",
+		CookbookID:    "testCookbookID",
+	}
+
+	completedExecs := make([]types.Execution, n)
+	pendingExecs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
+
+	for i := range pendingExecs {
+		pendingExecs[i] = exec
+		pendingExecs[i].Creator = creators[i] // ok if different people ran executions
+		pendingExecs[i].ID = strconv.Itoa(i)
+		k.SetPendingExecution(ctx, pendingExecs[i])
+	}
+
+	for i := range completedExecs {
+		completedExecs[i] = exec
+		completedExecs[i].Creator = creators[i] // ok if different people ran executions
+		completedExecs[i].ID = strconv.Itoa(i + n)
+		k.SetExecution(ctx, completedExecs[i])
+	}
+
+	return pendingExecs, completedExecs
+}
+
 func createNGoogleIAPOrder(k *keeper.Keeper, ctx sdk.Context, n int) []types.GoogleInAppPurchaseOrder {
 	items := make([]types.GoogleInAppPurchaseOrder, n)
 	creators := types.GenTestBech32List(n)
