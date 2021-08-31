@@ -55,6 +55,20 @@ func createNExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution
 	return execs
 }
 
+func createNExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, cookbookID, recipeID string) []types.Execution {
+	execs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
+	for i := range execs {
+		execs[i].Creator = creators[i]
+		execs[i].ID = strconv.Itoa(i)
+		execs[i].CookbookID = cookbookID
+		execs[i].RecipeID = recipeID
+		//k.appendExecution(ctx, execs[i])
+		k.SetExecution(ctx, execs[i])
+	}
+	return execs
+}
+
 func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
 	exec := types.Execution{
 		ItemInputs: []types.ItemRecord{
@@ -79,6 +93,28 @@ func createNExecutionForSingleItem(k keeper.Keeper, ctx sdk.Context, n int) []ty
 
 	}
 
+	return execs
+}
+
+func createNPendingExecution(k keeper.Keeper, ctx sdk.Context, n int) []types.Execution {
+	execs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
+	for i := range execs {
+		execs[i].Creator = creators[i]
+		execs[i].ID = k.AppendPendingExecution(ctx, execs[i], 0)
+	}
+	return execs
+}
+
+func createNPendingExecutionForSingleRecipe(k keeper.Keeper, ctx sdk.Context, n int, recipe types.Recipe) []types.Execution {
+	execs := make([]types.Execution, n)
+	creators := types.GenTestBech32List(n)
+	for i := range execs {
+		execs[i].Creator = creators[i]
+		execs[i].CookbookID = recipe.CookbookID
+		execs[i].RecipeID = recipe.ID
+		execs[i].ID = k.AppendPendingExecution(ctx, execs[i], recipe.BlockInterval)
+	}
 	return execs
 }
 
