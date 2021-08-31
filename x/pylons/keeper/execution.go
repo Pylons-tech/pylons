@@ -136,7 +136,7 @@ func (k Keeper) getExecutionsByItemPaginated(ctx sdk.Context, cookbookID, itemID
 			execution := k.GetPendingExecution(ctx, id)
 			pendingExecutions = append(pendingExecutions, execution)
 		} else {
-			execution := k.GetPendingExecution(ctx, id)
+			execution := k.GetExecution(ctx, id)
 			completedExecutions = append(completedExecutions, execution)
 		}
 		return nil

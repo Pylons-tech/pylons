@@ -68,10 +68,10 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 					Amount: sdk.NewInt(1),
 				}},
 				ItemInputs:          make([]types.ItemRecord, 0),
-				ItemOutputIDs:       make([]string, 0),
+				ItemOutputIDs:       []string{"itemID1"},
 				ItemModifyOutputIDs: make([]string, 0),
-				RecipeID:            "",
-				CookbookID:          "",
+				RecipeID:            "RecipeID1",
+				CookbookID:          "CookbookID1",
 				CoinInputs:          sdk.Coins{},
 			})
 	}
@@ -108,6 +108,36 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 		state.ItemList = append(state.ItemList,
 			types.Item{
 				Owner:          addresses[i],
+				ID:             strconv.Itoa(i),
+				CookbookID:     "testCookbookID",
+				NodeVersion:    "0.0.1",
+				Doubles:        make([]types.DoubleKeyValue, 0),
+				Longs:          make([]types.LongKeyValue, 0),
+				Strings:        make([]types.StringKeyValue, 0),
+				MutableStrings: make([]types.StringKeyValue, 0),
+				Tradeable:      false,
+				LastUpdate:     0,
+				TransferFee:    sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
+			})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.ItemList
+}
+
+func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Item) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	addresses := types.GenTestBech32List(1)
+
+	for i := 0; i < n; i++ {
+		state.ItemList = append(state.ItemList,
+			types.Item{
+				Owner:          addresses[0],
 				ID:             strconv.Itoa(i),
 				CookbookID:     "testCookbookID",
 				NodeVersion:    "0.0.1",
