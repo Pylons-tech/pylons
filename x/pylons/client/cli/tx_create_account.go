@@ -16,17 +16,18 @@ var _ = strconv.Itoa(0)
 
 func CmdCreateAccount() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "create-account",
+		Use:   "create-account [username]",
 		Short: "initialize an account from an address",
-		Args:  cobra.ExactArgs(0),
+		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			username := args[0]
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String())
+			msg := types.NewMsgCreateAccount(clientCtx.GetFromAddress().String(), username)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

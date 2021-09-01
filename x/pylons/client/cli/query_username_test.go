@@ -14,49 +14,50 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func TestShowTrade(t *testing.T) {
-	net, objs := networkWithTradeObjects(t, 2)
+func TestShowUsername(t *testing.T) {
+	net, objs := networkWithUsernameObjects(t, 2)
 
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
 	for _, tc := range []struct {
-		desc string
-		id   string
-		args []string
-		err  error
-		obj  *types.Trade
+		desc    string
+		creator string
+		args    []string
+		err     error
+		obj     *types.Username
 	}{
 		{
-			desc: "found",
-			id:   fmt.Sprintf("%d", objs[0].ID),
-			args: common,
-			obj:  objs[0],
+			desc:    "found",
+			creator: objs[0].Creator,
+			args:    common,
+			obj:     objs[0],
 		},
 		{
-			desc: "not found",
-			id:   "not_found",
-			args: common,
-			err:  status.Error(codes.InvalidArgument, "not found"),
+			desc:    "not found",
+			creator: "not_found",
+			args:    common,
+			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.id}
+			args := []string{tc.creator}
 			args = append(args, tc.args...)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowTrade(), args)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowUsername(), args)
 			if tc.err != nil {
 				stat, ok := status.FromError(tc.err)
 				require.True(t, ok)
 				require.ErrorIs(t, stat.Err(), tc.err)
 			} else {
 				require.NoError(t, err)
-				var resp types.QueryGetTradeResponse
+				var resp types.QueryGetUsernameResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.NotNil(t, resp.Trade)
-				require.Equal(t, tc.obj, resp.Trade)
+				require.NotNil(t, resp.Username)
+				require.Equal(t, tc.obj, resp.Username)
 			}
 		})
 	}
 }
+

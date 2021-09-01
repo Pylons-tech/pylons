@@ -1,0 +1,11 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
+
+message Username {
+  string creator = 1;
+  string value = 2;
+}

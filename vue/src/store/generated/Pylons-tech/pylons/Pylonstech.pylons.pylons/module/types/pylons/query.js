@@ -1,14 +1,244 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal';
 import * as Long from 'long';
-import { Trade } from '../pylons/trade';
+import { Username } from '../pylons/username';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
+import { Trade } from '../pylons/trade';
 import { Item } from '../pylons/item';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
+const baseQueryGetUsernameRequest = { account: '' };
+export const QueryGetUsernameRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.account !== '') {
+            writer.uint32(10).string(message.account);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetUsernameRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.account = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetUsernameRequest };
+        if (object.account !== undefined && object.account !== null) {
+            message.account = String(object.account);
+        }
+        else {
+            message.account = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.account !== undefined && (obj.account = message.account);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetUsernameRequest };
+        if (object.account !== undefined && object.account !== null) {
+            message.account = object.account;
+        }
+        else {
+            message.account = '';
+        }
+        return message;
+    }
+};
+const baseQueryGetUsernameResponse = {};
+export const QueryGetUsernameResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.username !== undefined) {
+            Username.encode(message.username, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetUsernameResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.username = Username.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetUsernameResponse };
+        if (object.username !== undefined && object.username !== null) {
+            message.username = Username.fromJSON(object.username);
+        }
+        else {
+            message.username = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.username !== undefined && (obj.username = message.username ? Username.toJSON(message.username) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetUsernameResponse };
+        if (object.username !== undefined && object.username !== null) {
+            message.username = Username.fromPartial(object.username);
+        }
+        else {
+            message.username = undefined;
+        }
+        return message;
+    }
+};
+const baseQueryAllUsernameRequest = {};
+export const QueryAllUsernameRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.pagination !== undefined) {
+            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryAllUsernameRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.pagination = PageRequest.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryAllUsernameRequest };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryAllUsernameRequest };
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageRequest.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    }
+};
+const baseQueryAllUsernameResponse = {};
+export const QueryAllUsernameResponse = {
+    encode(message, writer = Writer.create()) {
+        for (const v of message.username) {
+            Username.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        if (message.pagination !== undefined) {
+            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryAllUsernameResponse };
+        message.username = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.username.push(Username.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.pagination = PageResponse.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryAllUsernameResponse };
+        message.username = [];
+        if (object.username !== undefined && object.username !== null) {
+            for (const e of object.username) {
+                message.username.push(Username.fromJSON(e));
+            }
+        }
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageResponse.fromJSON(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.username) {
+            obj.username = message.username.map((e) => (e ? Username.toJSON(e) : undefined));
+        }
+        else {
+            obj.username = [];
+        }
+        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryAllUsernameResponse };
+        message.username = [];
+        if (object.username !== undefined && object.username !== null) {
+            for (const e of object.username) {
+                message.username.push(Username.fromPartial(e));
+            }
+        }
+        if (object.pagination !== undefined && object.pagination !== null) {
+            message.pagination = PageResponse.fromPartial(object.pagination);
+        }
+        else {
+            message.pagination = undefined;
+        }
+        return message;
+    }
+};
 const baseQueryGetTradeRequest = { ID: 0 };
 export const QueryGetTradeRequest = {
     encode(message, writer = Writer.create()) {
@@ -1499,6 +1729,16 @@ export const QueryGetCookbookResponse = {
 export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
+    }
+    Username(request) {
+        const data = QueryGetUsernameRequest.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Username', data);
+        return promise.then((data) => QueryGetUsernameResponse.decode(new Reader(data)));
+    }
+    UsernameAll(request) {
+        const data = QueryAllUsernameRequest.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'UsernameAll', data);
+        return promise.then((data) => QueryAllUsernameResponse.decode(new Reader(data)));
     }
     Trade(request) {
         const data = QueryGetTradeRequest.encode(request).finish();

@@ -65,6 +65,7 @@ export interface MsgGoogleInAppPurchaseGetCoinsResponse {}
 
 export interface MsgCreateAccount {
   creator: string
+  value: string
 }
 
 export interface MsgCreateAccountResponse {}
@@ -1044,12 +1045,15 @@ export const MsgGoogleInAppPurchaseGetCoinsResponse = {
   }
 }
 
-const baseMsgCreateAccount: object = { creator: '' }
+const baseMsgCreateAccount: object = { creator: '', value: '' }
 
 export const MsgCreateAccount = {
   encode(message: MsgCreateAccount, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
+    }
+    if (message.value !== '') {
+      writer.uint32(18).string(message.value)
     }
     return writer
   },
@@ -1063,6 +1067,9 @@ export const MsgCreateAccount = {
       switch (tag >>> 3) {
         case 1:
           message.creator = reader.string()
+          break
+        case 2:
+          message.value = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -1079,12 +1086,18 @@ export const MsgCreateAccount = {
     } else {
       message.creator = ''
     }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = String(object.value)
+    } else {
+      message.value = ''
+    }
     return message
   },
 
   toJSON(message: MsgCreateAccount): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
+    message.value !== undefined && (obj.value = message.value)
     return obj
   },
 
@@ -1094,6 +1107,11 @@ export const MsgCreateAccount = {
       message.creator = object.creator
     } else {
       message.creator = ''
+    }
+    if (object.value !== undefined && object.value !== null) {
+      message.value = object.value
+    } else {
+      message.value = ''
     }
     return message
   }

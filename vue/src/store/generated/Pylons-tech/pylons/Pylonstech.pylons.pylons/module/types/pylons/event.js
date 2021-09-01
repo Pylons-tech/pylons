@@ -6,11 +6,14 @@ import { Item, StringKeyValue } from '../pylons/item';
 import { ItemRef } from '../pylons/trade';
 import { Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseEventCreateAccount = { address: '' };
+const baseEventCreateAccount = { address: '', username: '' };
 export const EventCreateAccount = {
     encode(message, writer = Writer.create()) {
         if (message.address !== '') {
             writer.uint32(10).string(message.address);
+        }
+        if (message.username !== '') {
+            writer.uint32(18).string(message.username);
         }
         return writer;
     },
@@ -23,6 +26,9 @@ export const EventCreateAccount = {
             switch (tag >>> 3) {
                 case 1:
                     message.address = reader.string();
+                    break;
+                case 2:
+                    message.username = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -39,11 +45,18 @@ export const EventCreateAccount = {
         else {
             message.address = '';
         }
+        if (object.username !== undefined && object.username !== null) {
+            message.username = String(object.username);
+        }
+        else {
+            message.username = '';
+        }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.address !== undefined && (obj.address = message.address);
+        message.username !== undefined && (obj.username = message.username);
         return obj;
     },
     fromPartial(object) {
@@ -53,6 +66,12 @@ export const EventCreateAccount = {
         }
         else {
             message.address = '';
+        }
+        if (object.username !== undefined && object.username !== null) {
+            message.username = object.username;
+        }
+        else {
+            message.username = '';
         }
         return message;
     }

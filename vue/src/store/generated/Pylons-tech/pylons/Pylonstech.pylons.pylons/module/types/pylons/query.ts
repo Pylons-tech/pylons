@@ -1,8 +1,9 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
-import { Trade } from '../pylons/trade'
+import { Username } from '../pylons/username'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
+import { Trade } from '../pylons/trade'
 import { Item } from '../pylons/item'
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
@@ -12,6 +13,23 @@ import { Cookbook } from '../pylons/cookbook'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetUsernameRequest {
+  account: string
+}
+
+export interface QueryGetUsernameResponse {
+  username: Username | undefined
+}
+
+export interface QueryAllUsernameRequest {
+  pagination: PageRequest | undefined
+}
+
+export interface QueryAllUsernameResponse {
+  username: Username[]
+  pagination: PageResponse | undefined
+}
+
 export interface QueryGetTradeRequest {
   ID: number
 }
@@ -125,6 +143,250 @@ export interface QueryGetCookbookRequest {
 
 export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
+}
+
+const baseQueryGetUsernameRequest: object = { account: '' }
+
+export const QueryGetUsernameRequest = {
+  encode(message: QueryGetUsernameRequest, writer: Writer = Writer.create()): Writer {
+    if (message.account !== '') {
+      writer.uint32(10).string(message.account)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetUsernameRequest } as QueryGetUsernameRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.account = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetUsernameRequest {
+    const message = { ...baseQueryGetUsernameRequest } as QueryGetUsernameRequest
+    if (object.account !== undefined && object.account !== null) {
+      message.account = String(object.account)
+    } else {
+      message.account = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetUsernameRequest): unknown {
+    const obj: any = {}
+    message.account !== undefined && (obj.account = message.account)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetUsernameRequest>): QueryGetUsernameRequest {
+    const message = { ...baseQueryGetUsernameRequest } as QueryGetUsernameRequest
+    if (object.account !== undefined && object.account !== null) {
+      message.account = object.account
+    } else {
+      message.account = ''
+    }
+    return message
+  }
+}
+
+const baseQueryGetUsernameResponse: object = {}
+
+export const QueryGetUsernameResponse = {
+  encode(message: QueryGetUsernameResponse, writer: Writer = Writer.create()): Writer {
+    if (message.username !== undefined) {
+      Username.encode(message.username, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetUsernameResponse } as QueryGetUsernameResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.username = Username.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetUsernameResponse {
+    const message = { ...baseQueryGetUsernameResponse } as QueryGetUsernameResponse
+    if (object.username !== undefined && object.username !== null) {
+      message.username = Username.fromJSON(object.username)
+    } else {
+      message.username = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetUsernameResponse): unknown {
+    const obj: any = {}
+    message.username !== undefined && (obj.username = message.username ? Username.toJSON(message.username) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetUsernameResponse>): QueryGetUsernameResponse {
+    const message = { ...baseQueryGetUsernameResponse } as QueryGetUsernameResponse
+    if (object.username !== undefined && object.username !== null) {
+      message.username = Username.fromPartial(object.username)
+    } else {
+      message.username = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryAllUsernameRequest: object = {}
+
+export const QueryAllUsernameRequest = {
+  encode(message: QueryAllUsernameRequest, writer: Writer = Writer.create()): Writer {
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryAllUsernameRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryAllUsernameRequest } as QueryAllUsernameRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.pagination = PageRequest.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryAllUsernameRequest {
+    const message = { ...baseQueryAllUsernameRequest } as QueryAllUsernameRequest
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryAllUsernameRequest): unknown {
+    const obj: any = {}
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryAllUsernameRequest>): QueryAllUsernameRequest {
+    const message = { ...baseQueryAllUsernameRequest } as QueryAllUsernameRequest
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryAllUsernameResponse: object = {}
+
+export const QueryAllUsernameResponse = {
+  encode(message: QueryAllUsernameResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.username) {
+      Username.encode(v!, writer.uint32(10).fork()).ldelim()
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryAllUsernameResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryAllUsernameResponse } as QueryAllUsernameResponse
+    message.username = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.username.push(Username.decode(reader, reader.uint32()))
+          break
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryAllUsernameResponse {
+    const message = { ...baseQueryAllUsernameResponse } as QueryAllUsernameResponse
+    message.username = []
+    if (object.username !== undefined && object.username !== null) {
+      for (const e of object.username) {
+        message.username.push(Username.fromJSON(e))
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryAllUsernameResponse): unknown {
+    const obj: any = {}
+    if (message.username) {
+      obj.username = message.username.map((e) => (e ? Username.toJSON(e) : undefined))
+    } else {
+      obj.username = []
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryAllUsernameResponse>): QueryAllUsernameResponse {
+    const message = { ...baseQueryAllUsernameResponse } as QueryAllUsernameResponse
+    message.username = []
+    if (object.username !== undefined && object.username !== null) {
+      for (const e of object.username) {
+        message.username.push(Username.fromPartial(e))
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  }
 }
 
 const baseQueryGetTradeRequest: object = { ID: 0 }
@@ -1677,6 +1939,10 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a username by account. */
+  Username(request: QueryGetUsernameRequest): Promise<QueryGetUsernameResponse>
+  /** Queries a list of username items. */
+  UsernameAll(request: QueryAllUsernameRequest): Promise<QueryAllUsernameResponse>
   /** Queries a trade by id. */
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>
   /** Queries a list of listItemByOwner items. */
@@ -1706,6 +1972,18 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  Username(request: QueryGetUsernameRequest): Promise<QueryGetUsernameResponse> {
+    const data = QueryGetUsernameRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Username', data)
+    return promise.then((data) => QueryGetUsernameResponse.decode(new Reader(data)))
+  }
+
+  UsernameAll(request: QueryAllUsernameRequest): Promise<QueryAllUsernameResponse> {
+    const data = QueryAllUsernameRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'UsernameAll', data)
+    return promise.then((data) => QueryAllUsernameResponse.decode(new Reader(data)))
+  }
+
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse> {
     const data = QueryGetTradeRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Trade', data)

@@ -12,6 +12,27 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
+func networkWithUsernameObjects(t *testing.T, n int) (*network.Network, []*types.Username) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	creators := types.GenTestBech32List(n)
+
+	for i := 0; i < n; i++ {
+		state.UsernameList = append(state.UsernameList,
+			&types.Username{
+				Creator: creators[i],
+				Value:   "user" + strconv.Itoa(i),
+			})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.UsernameList
+}
+
 func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []*types.Trade) {
 	t.Helper()
 	cfg := network.DefaultConfig()
@@ -28,7 +49,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []*types.Tr
 			ItemOutputs:      make([]types.ItemRef, 0),
 			ExtraInfo:        "extra info",
 			Receiver:         "receiver",
-			TradedItemInputs:  make([]types.ItemRef, 0),
+			TradedItemInputs: make([]types.ItemRef, 0),
 		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
