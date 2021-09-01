@@ -13,6 +13,7 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
+		UsernameList:                 []*Username{},
 		TradeList:                    []*Trade{},
 		GoogleInAppPurchaseOrderList: []GoogleInAppPurchaseOrder{},
 		PendingExecutionList:         []Execution{},
@@ -30,6 +31,15 @@ func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # ibc/genesistype/validate
 
 	// this line is used by starport scaffolding # genesis/types/validate
+	// Check for duplicated index in username
+	usernameIndexMap := make(map[string]bool)
+
+	for _, elem := range gs.UsernameList {
+		if _, ok := usernameIndexMap[elem.Creator]; ok {
+			return fmt.Errorf("duplicated creator for username")
+		}
+		usernameIndexMap[elem.Creator] = true
+	}
 	// Check for duplicated ID in trade
 	tradeIDMap := make(map[uint64]bool)
 

@@ -24,8 +24,17 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, addr))
 	}
 
+	// set the username in the store
+	username := types.Username{
+		Creator: msg.Creator,
+		Value:   msg.Value,
+	}
+
+	k.SetUsername(ctx, username)
+
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
-		Address: addr.String(),
+		Address:  addr.String(),
+		Username: msg.Value,
 	})
 
 	return &types.MsgCreateAccountResponse{}, err

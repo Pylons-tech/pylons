@@ -11,6 +11,11 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the username
+	for _, elem := range genState.UsernameList {
+		k.SetUsername(ctx, *elem)
+	}
+
 	// Set all the trade
 	for _, elem := range genState.TradeList {
 		k.SetTrade(ctx, *elem)
@@ -71,6 +76,13 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.EntityCount = k.GetEntityCount(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all username
+	usernameList := k.GetAllUsername(ctx)
+	for _, elem := range usernameList {
+		elem := elem
+		genesis.UsernameList = append(genesis.UsernameList, &elem)
+	}
+
 	// Get all trade
 	tradeList := k.GetAllTrade(ctx)
 	for _, elem := range tradeList {

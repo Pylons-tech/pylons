@@ -30,6 +30,17 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	return items
 }
 
+func createNUsername(k keeper.Keeper, ctx sdk.Context, n int) []types.Username {
+	items := make([]types.Username, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Creator = creators[i]
+		items[i].Value = "user" + strconv.Itoa(i)
+		k.SetUsername(ctx, items[i])
+	}
+	return items
+}
+
 func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creator := types.GenTestBech32FromString("any")

@@ -49,7 +49,7 @@ func SimulateOp(k keeper.Keeper) simtypes.Operation {
 		accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 
-		msg := types.NewMsgCreateAccount("TODO")
+		msg := types.NewMsgCreateAccount("TODO", "TODO")
 
 		return simtypes.NewOperationMsg(msg, true, "TODO"), nil, nil
 	}

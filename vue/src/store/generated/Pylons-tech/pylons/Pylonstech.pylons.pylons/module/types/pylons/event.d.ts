@@ -7,6 +7,7 @@ import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
     address: string;
+    username: string;
 }
 export interface EventCreateCookbook {
     creator: string;

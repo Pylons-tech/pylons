@@ -7,9 +7,10 @@ import (
 
 var _ sdk.Msg = &MsgCreateAccount{}
 
-func NewMsgCreateAccount(creator string) *MsgCreateAccount {
+func NewMsgCreateAccount(creator string, username string) *MsgCreateAccount {
 	return &MsgCreateAccount{
 		Creator: creator,
+		Value:   username,
 	}
 }
 
@@ -37,7 +38,12 @@ func (msg *MsgCreateAccount) GetSignBytes() []byte {
 func (msg *MsgCreateAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
+
+	if err = ValidateID(msg.Value); err != nil {
+		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+	}
+
 	return nil
 }
