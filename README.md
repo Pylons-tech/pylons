@@ -48,59 +48,18 @@ Built on [Cosmos](http://www.cosmos.network/), **Pylons** is a fast and interope
 This repository provides the `pylonsd` daemon, the program for running a node on the [Pylons](https://pylons.tech) blockchain.
 It connects to the other nodes in the network to form a consensus, and responds to API and CLI commands from clients, including the [Pylons SDK](https://github.com/Pylons-tech/pylons_sdk).
 
-## Get started
+## Documentation
 
-```
-starport chain serve
-```
+To learn how to use run a Pylons node, check out the [documentation pages](./docs/README.md).  To learn more about developing NFTs on Pylons, see the [Pylons SDK](https://github.com/Pylons-tech/pylons_sdk) project.
 
-`serve` command installs dependencies, builds, initializes, and starts your blockchain in development.
+## Talk to us!
 
-### Configure
+Pylons is maintained by [Tendermint](https://tendermint.com/) and [Pylons LLC](https://pylons.tech).  Follow us to see the latest updates or get involved.
 
-Your blockchain in development can be configured with `config.yml`. To learn more, see the [Starport docs](https://docs.starport.network).
+* [Discord](https://discord.gg/dZgUGy32j7)
+* [Twitter](https://twitter.com/pylonstech)
+* [Jobs](https://www.linkedin.com/company/pylons/jobs/)
 
-### Launch
+## Contributing
 
-To launch your blockchain live on multiple nodes, use `starport network` commands. Learn more about [Starport Network](https://github.com/tendermint/spn).
-
-### Web Frontend
-
-Starport has scaffolded a Vue.js-based web app in the `vue` directory. Run the following commands to install dependencies and start the app:
-
-```
-cd vue
-npm install
-npm run serve
-```
-
-The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Starport front-end development](https://github.com/tendermint/vue).
-
-## Release
-
-To release a new version of your blockchain, create and push a new tag with `v` prefix. A new draft release with the configured targets will be created.
-
-```
-git tag v0.1
-git push origin v0.1
-```
-
-After a draft release is created, make your final changes from the release page and publish it.
-
-### Install
-
-To install the latest version of your blockchain node's binary, execute the following command on your machine:
-
-```
-curl https://get.starport.network/Pylons-tech/pylons@latest! | sudo bash
-```
-
-`Pylons-tech/pylons` should match the `username` and `repo_name` of the Github repository to which the source code was pushed. Learn more about [the install process](https://github.com/allinbits/starport-installer).
-
-## Learn more
-
-- [Starport](https://github.com/tendermint/starport)
-- [Starport Docs](https://docs.starport.network)
-- [Cosmos SDK documentation](https://docs.cosmos.network)
-- [Cosmos SDK Tutorials](https://tutorials.cosmos.network)
-- [Discord](https://discord.gg/W8trcGV)
+We welcome contributions from everyone.  For more information about contributing, please review our [guidelines](CONTRIBUTING.md). Thank you to our Pylons contributors!
