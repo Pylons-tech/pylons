@@ -89,3 +89,7 @@ func (k Keeper) ExecutionsLockerAddress() sdk.AccAddress {
 func (k Keeper) CoinsIssuerAddress() sdk.AccAddress {
 	return k.accountKeeper.GetModuleAddress(types.CoinsIssuerName)
 }
+
+func (k Keeper) ValidateGoogleIAPSignature(m *types.MsgGoogleInAppPurchaseGetCoins, issuer types.CoinIssuer) error {
+	return ValidateGoogleIAPSignature(m, issuer)
+}
