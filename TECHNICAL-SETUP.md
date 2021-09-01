@@ -21,7 +21,9 @@ curl https://get.starport.network/starport! | bash
 
 ## Install Dev Tools
 
-### install pre-commit
+### pre-commit
+
+`pre-commit` runs hooks before any commit to the git repository.  These hooks verify that any commit passes basic formatting and linting checks.
 
 #### Homebrew
 
@@ -34,6 +36,16 @@ brew install pre-commit
 ```shell
 sudo apt install pre-commit
 ```
+
+#### Setting up precommit in the project
+
+After installing the binary, run the following command in the base directory of the `pylons` repository:
+
+```shell
+pre-commit install
+```
+
+Now, any time `git commit *` is run, the `pre-commit` hooks will run before the commit can be finalized.
 
 ### golangci-lint
 
