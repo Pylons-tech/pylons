@@ -1,8 +1,6 @@
 package keeper_test
 
 import (
-	"testing"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,7 +11,7 @@ import (
 
 // TODO fix these tests
 
-func (suite *IntegrationTestSuite) TestTradeMsgServerCreate(t *testing.T) {
+func (suite *IntegrationTestSuite) TestTradeMsgServerCreate() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -25,11 +23,11 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate(t *testing.T) {
 	for i := 0; i < 5; i++ {
 		resp, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{Creator: creator})
 		require.NoError(err)
-		require.Equal(i, int(resp.Id))
+		require.Equal(i, int(resp.ID))
 	}
 }
 
-func (suite *IntegrationTestSuite) TestTradeMsgServerDelete() {
+func (suite *IntegrationTestSuite) TestTradeMsgServerCancel() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -45,16 +43,16 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerDelete() {
 	}{
 		{
 			desc:    "Completed",
-			request: &types.MsgCancelTrade{Creator: creator},
+			request: &types.MsgCancelTrade{Creator: creator, ID: 0},
 		},
 		{
 			desc:    "Unauthorized",
-			request: &types.MsgCancelTrade{Creator: "B"},
+			request: &types.MsgCancelTrade{Creator: "B", ID: 1},
 			err:     sdkerrors.ErrUnauthorized,
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.MsgCancelTrade{Creator: creator, Id: 10},
+			request: &types.MsgCancelTrade{Creator: creator, ID: 10},
 			err:     sdkerrors.ErrKeyNotFound,
 		},
 	} {

@@ -6,7 +6,7 @@ func (suite *IntegrationTestSuite) TestTradeGet() {
 	require := suite.Require()
 	items := createNTrade(k, ctx, 10)
 	for _, item := range items {
-		require.Equal(item, k.GetTrade(ctx, item.Id))
+		require.Equal(item, k.GetTrade(ctx, item.ID))
 	}
 }
 
@@ -16,7 +16,7 @@ func (suite *IntegrationTestSuite) TestTradeExist() {
 	require := suite.Require()
 	items := createNTrade(k, ctx, 10)
 	for _, item := range items {
-		require.True(k.HasTrade(ctx, item.Id))
+		require.True(k.HasTrade(ctx, item.ID))
 	}
 }
 
@@ -26,8 +26,8 @@ func (suite *IntegrationTestSuite) TestTradeRemove() {
 	require := suite.Require()
 	items := createNTrade(k, ctx, 10)
 	for _, item := range items {
-		k.RemoveTrade(ctx, item.Id)
-		require.False(k.HasTrade(ctx, item.Id))
+		k.RemoveTrade(ctx, item.ID)
+		require.False(k.HasTrade(ctx, item.ID))
 	}
 }
 

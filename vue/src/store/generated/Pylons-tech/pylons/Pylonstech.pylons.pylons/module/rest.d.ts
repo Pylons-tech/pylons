@@ -208,7 +208,7 @@ export declare type PylonsMsgCreateCookbookResponse = object;
 export declare type PylonsMsgCreateRecipeResponse = object;
 export interface PylonsMsgCreateTradeResponse {
     /** @format uint64 */
-    id?: string;
+    ID?: string;
 }
 export interface PylonsMsgExecuteRecipeResponse {
     ID?: string;
@@ -300,7 +300,7 @@ export interface PylonsStringParam {
 export interface PylonsTrade {
     creator?: string;
     /** @format uint64 */
-    id?: string;
+    ID?: string;
     coinInputs?: V1Beta1Coin[];
     itemInputs?: PylonsItemInput[];
     coinOutputs?: V1Beta1Coin[];

@@ -21960,7 +21960,7 @@ paths:
                 properties:
                   creator:
                     type: string
-                  id:
+                  ID:
                     type: string
                     format: uint64
                   coinInputs:
@@ -33600,7 +33600,7 @@ definitions:
   Pylonstech.pylons.pylons.MsgCreateTradeResponse:
     type: object
     properties:
-      id:
+      ID:
         type: string
         format: uint64
   Pylonstech.pylons.pylons.MsgExecuteRecipeResponse:
@@ -34352,7 +34352,7 @@ definitions:
         properties:
           creator:
             type: string
-          id:
+          ID:
             type: string
             format: uint64
           coinInputs:
@@ -36161,7 +36161,7 @@ definitions:
     properties:
       creator:
         type: string
-      id:
+      ID:
         type: string
         format: uint64
       coinInputs:

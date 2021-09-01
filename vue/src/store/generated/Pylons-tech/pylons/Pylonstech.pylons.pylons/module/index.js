@@ -3,34 +3,34 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { Registry } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
 import { MsgSetItemString } from "./types/pylons/tx";
-import { MsgCreateAccount } from "./types/pylons/tx";
-import { MsgUpdateCookbook } from "./types/pylons/tx";
-import { MsgSendItems } from "./types/pylons/tx";
-import { MsgCreateCookbook } from "./types/pylons/tx";
-import { MsgCancelTrade } from "./types/pylons/tx";
-import { MsgCompleteExecutionEarly } from "./types/pylons/tx";
-import { MsgCreateRecipe } from "./types/pylons/tx";
-import { MsgGoogleInAppPurchaseGetCoins } from "./types/pylons/tx";
-import { MsgFulfillTrade } from "./types/pylons/tx";
 import { MsgUpdateRecipe } from "./types/pylons/tx";
-import { MsgTransferCookbook } from "./types/pylons/tx";
-import { MsgCreateTrade } from "./types/pylons/tx";
+import { MsgFulfillTrade } from "./types/pylons/tx";
 import { MsgExecuteRecipe } from "./types/pylons/tx";
+import { MsgGoogleInAppPurchaseGetCoins } from "./types/pylons/tx";
+import { MsgCancelTrade } from "./types/pylons/tx";
+import { MsgCreateCookbook } from "./types/pylons/tx";
+import { MsgCreateRecipe } from "./types/pylons/tx";
+import { MsgCreateAccount } from "./types/pylons/tx";
+import { MsgSendItems } from "./types/pylons/tx";
+import { MsgCreateTrade } from "./types/pylons/tx";
+import { MsgCompleteExecutionEarly } from "./types/pylons/tx";
+import { MsgUpdateCookbook } from "./types/pylons/tx";
+import { MsgTransferCookbook } from "./types/pylons/tx";
 const types = [
     ["/Pylonstech.pylons.pylons.MsgSetItemString", MsgSetItemString],
-    ["/Pylonstech.pylons.pylons.MsgCreateAccount", MsgCreateAccount],
-    ["/Pylonstech.pylons.pylons.MsgUpdateCookbook", MsgUpdateCookbook],
-    ["/Pylonstech.pylons.pylons.MsgSendItems", MsgSendItems],
-    ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
-    ["/Pylonstech.pylons.pylons.MsgCancelTrade", MsgCancelTrade],
-    ["/Pylonstech.pylons.pylons.MsgCompleteExecutionEarly", MsgCompleteExecutionEarly],
-    ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
-    ["/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetCoins", MsgGoogleInAppPurchaseGetCoins],
-    ["/Pylonstech.pylons.pylons.MsgFulfillTrade", MsgFulfillTrade],
     ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
-    ["/Pylonstech.pylons.pylons.MsgTransferCookbook", MsgTransferCookbook],
-    ["/Pylonstech.pylons.pylons.MsgCreateTrade", MsgCreateTrade],
+    ["/Pylonstech.pylons.pylons.MsgFulfillTrade", MsgFulfillTrade],
     ["/Pylonstech.pylons.pylons.MsgExecuteRecipe", MsgExecuteRecipe],
+    ["/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetCoins", MsgGoogleInAppPurchaseGetCoins],
+    ["/Pylonstech.pylons.pylons.MsgCancelTrade", MsgCancelTrade],
+    ["/Pylonstech.pylons.pylons.MsgCreateCookbook", MsgCreateCookbook],
+    ["/Pylonstech.pylons.pylons.MsgCreateRecipe", MsgCreateRecipe],
+    ["/Pylonstech.pylons.pylons.MsgCreateAccount", MsgCreateAccount],
+    ["/Pylonstech.pylons.pylons.MsgSendItems", MsgSendItems],
+    ["/Pylonstech.pylons.pylons.MsgCreateTrade", MsgCreateTrade],
+    ["/Pylonstech.pylons.pylons.MsgCompleteExecutionEarly", MsgCompleteExecutionEarly],
+    ["/Pylonstech.pylons.pylons.MsgUpdateCookbook", MsgUpdateCookbook],
+    ["/Pylonstech.pylons.pylons.MsgTransferCookbook", MsgTransferCookbook],
 ];
 export const MissingWalletError = new Error("wallet is required");
 const registry = new Registry(types);
@@ -46,19 +46,19 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
     return {
         signAndBroadcast: (msgs, { fee, memo } = { fee: defaultFee, memo: "" }) => client.signAndBroadcast(address, msgs, fee, memo),
         msgSetItemString: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSetItemString", value: data }),
-        msgCreateAccount: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateAccount", value: data }),
-        msgUpdateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateCookbook", value: data }),
-        msgSendItems: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSendItems", value: data }),
-        msgCreateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
-        msgCancelTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCancelTrade", value: data }),
-        msgCompleteExecutionEarly: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCompleteExecutionEarly", value: data }),
-        msgCreateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
-        msgGoogleInAppPurchaseGetCoins: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetCoins", value: data }),
-        msgFulfillTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgFulfillTrade", value: data }),
         msgUpdateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
-        msgTransferCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgTransferCookbook", value: data }),
-        msgCreateTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateTrade", value: data }),
+        msgFulfillTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgFulfillTrade", value: data }),
         msgExecuteRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgExecuteRecipe", value: data }),
+        msgGoogleInAppPurchaseGetCoins: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetCoins", value: data }),
+        msgCancelTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCancelTrade", value: data }),
+        msgCreateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateCookbook", value: data }),
+        msgCreateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateRecipe", value: data }),
+        msgCreateAccount: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateAccount", value: data }),
+        msgSendItems: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgSendItems", value: data }),
+        msgCreateTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateTrade", value: data }),
+        msgCompleteExecutionEarly: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCompleteExecutionEarly", value: data }),
+        msgUpdateCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateCookbook", value: data }),
+        msgTransferCookbook: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgTransferCookbook", value: data }),
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {

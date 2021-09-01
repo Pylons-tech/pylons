@@ -23,7 +23,7 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 	// create N items for each cookbook, all with same owner
 	items := make([]types.Item, 0)
 	for _, cookbook := range cookbooks {
-		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.ID)...)
+		items = append(items, createNItemSameOwnerAndCookbook(k, ctx, 5, cookbook.ID, true)...)
 	}
 
 	owner := items[0].Owner

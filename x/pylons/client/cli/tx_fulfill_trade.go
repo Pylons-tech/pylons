@@ -21,7 +21,7 @@ func CmdFulfillTrade() *cobra.Command {
 		Short: "fulfill an existing trade",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsId := args[0]
+			argsID := args[0]
 			argsItems := args[1]
 			jsonArgsItems := make([]types.ItemRef, 0)
 			err := json.Unmarshal([]byte(argsItems), &jsonArgsItems)
@@ -34,7 +34,7 @@ func CmdFulfillTrade() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsId, jsonArgsItems)
+			msg := types.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsID, jsonArgsItems)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

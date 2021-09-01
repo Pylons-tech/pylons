@@ -8,7 +8,7 @@ export interface ItemRef {
 }
 export interface Trade {
     creator: string;
-    id: number;
+    ID: number;
     coinInputs: Coin[];
     itemInputs: ItemInput[];
     coinOutputs: Coin[];

@@ -186,7 +186,7 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 	return items
 }
 
-func createNItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Item {
+func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owners := types.GenTestBech32List(n)
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
@@ -195,12 +195,13 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int) []types.Item {
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
+		items[i].Tradeable = tradeable
 		k.SetItem(ctx, items[i])
 	}
 	return items
 }
 
-func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, cookbookID string) []types.Item {
+func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, cookbookID string, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owner := types.GenTestBech32FromString("test")
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
@@ -209,12 +210,13 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 		items[i].CookbookID = cookbookID
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
+		items[i].Tradeable = tradeable
 		k.SetItem(ctx, items[i])
 	}
 	return items
 }
 
-func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Item {
+func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owner := types.GenTestBech32List(1)
 	coin := sdk.NewCoin("test", sdk.NewInt(1))
@@ -223,6 +225,7 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Ite
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
+		items[i].Tradeable = tradeable
 		k.SetItem(ctx, items[i])
 	}
 	return items
@@ -243,7 +246,7 @@ func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 	owners := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = owners[i]
-		items[i].Id = k.AppendTrade(ctx, items[i])
+		items[i].ID = k.AppendTrade(ctx, items[i])
 	}
 	return items
 }

@@ -1,17 +1,17 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
+import { ItemRef } from '../pylons/trade'
 import { Coin } from '../cosmos/base/v1beta1/coin'
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
-import { ItemRef } from '../pylons/trade'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgFulfillTrade {
   creator: string
-  id: string
-  items: string
+  ID: string
+  items: ItemRef[]
 }
 
 export interface MsgFulfillTradeResponse {}
@@ -26,12 +26,12 @@ export interface MsgCreateTrade {
 }
 
 export interface MsgCreateTradeResponse {
-  id: number
+  ID: number
 }
 
 export interface MsgCancelTrade {
   creator: string
-  id: number
+  ID: number
 }
 
 export interface MsgCancelTradeResponse {}
@@ -162,18 +162,18 @@ export interface MsgUpdateCookbook {
 
 export interface MsgUpdateCookbookResponse {}
 
-const baseMsgFulfillTrade: object = { creator: '', id: '', items: '' }
+const baseMsgFulfillTrade: object = { creator: '', ID: '' }
 
 export const MsgFulfillTrade = {
   encode(message: MsgFulfillTrade, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
-    if (message.id !== '') {
-      writer.uint32(18).string(message.id)
+    if (message.ID !== '') {
+      writer.uint32(18).string(message.ID)
     }
-    if (message.items !== '') {
-      writer.uint32(26).string(message.items)
+    for (const v of message.items) {
+      ItemRef.encode(v!, writer.uint32(26).fork()).ldelim()
     }
     return writer
   },
@@ -182,6 +182,7 @@ export const MsgFulfillTrade = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseMsgFulfillTrade } as MsgFulfillTrade
+    message.items = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -189,10 +190,10 @@ export const MsgFulfillTrade = {
           message.creator = reader.string()
           break
         case 2:
-          message.id = reader.string()
+          message.ID = reader.string()
           break
         case 3:
-          message.items = reader.string()
+          message.items.push(ItemRef.decode(reader, reader.uint32()))
           break
         default:
           reader.skipType(tag & 7)
@@ -204,20 +205,21 @@ export const MsgFulfillTrade = {
 
   fromJSON(object: any): MsgFulfillTrade {
     const message = { ...baseMsgFulfillTrade } as MsgFulfillTrade
+    message.items = []
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = String(object.creator)
     } else {
       message.creator = ''
     }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = String(object.id)
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = String(object.ID)
     } else {
-      message.id = ''
+      message.ID = ''
     }
     if (object.items !== undefined && object.items !== null) {
-      message.items = String(object.items)
-    } else {
-      message.items = ''
+      for (const e of object.items) {
+        message.items.push(ItemRef.fromJSON(e))
+      }
     }
     return message
   },
@@ -225,27 +227,32 @@ export const MsgFulfillTrade = {
   toJSON(message: MsgFulfillTrade): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
-    message.id !== undefined && (obj.id = message.id)
-    message.items !== undefined && (obj.items = message.items)
+    message.ID !== undefined && (obj.ID = message.ID)
+    if (message.items) {
+      obj.items = message.items.map((e) => (e ? ItemRef.toJSON(e) : undefined))
+    } else {
+      obj.items = []
+    }
     return obj
   },
 
   fromPartial(object: DeepPartial<MsgFulfillTrade>): MsgFulfillTrade {
     const message = { ...baseMsgFulfillTrade } as MsgFulfillTrade
+    message.items = []
     if (object.creator !== undefined && object.creator !== null) {
       message.creator = object.creator
     } else {
       message.creator = ''
     }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
     } else {
-      message.id = ''
+      message.ID = ''
     }
     if (object.items !== undefined && object.items !== null) {
-      message.items = object.items
-    } else {
-      message.items = ''
+      for (const e of object.items) {
+        message.items.push(ItemRef.fromPartial(e))
+      }
     }
     return message
   }
@@ -457,12 +464,12 @@ export const MsgCreateTrade = {
   }
 }
 
-const baseMsgCreateTradeResponse: object = { id: 0 }
+const baseMsgCreateTradeResponse: object = { ID: 0 }
 
 export const MsgCreateTradeResponse = {
   encode(message: MsgCreateTradeResponse, writer: Writer = Writer.create()): Writer {
-    if (message.id !== 0) {
-      writer.uint32(8).uint64(message.id)
+    if (message.ID !== 0) {
+      writer.uint32(8).uint64(message.ID)
     }
     return writer
   },
@@ -475,7 +482,7 @@ export const MsgCreateTradeResponse = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.id = longToNumber(reader.uint64() as Long)
+          message.ID = longToNumber(reader.uint64() as Long)
           break
         default:
           reader.skipType(tag & 7)
@@ -487,40 +494,40 @@ export const MsgCreateTradeResponse = {
 
   fromJSON(object: any): MsgCreateTradeResponse {
     const message = { ...baseMsgCreateTradeResponse } as MsgCreateTradeResponse
-    if (object.id !== undefined && object.id !== null) {
-      message.id = Number(object.id)
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID)
     } else {
-      message.id = 0
+      message.ID = 0
     }
     return message
   },
 
   toJSON(message: MsgCreateTradeResponse): unknown {
     const obj: any = {}
-    message.id !== undefined && (obj.id = message.id)
+    message.ID !== undefined && (obj.ID = message.ID)
     return obj
   },
 
   fromPartial(object: DeepPartial<MsgCreateTradeResponse>): MsgCreateTradeResponse {
     const message = { ...baseMsgCreateTradeResponse } as MsgCreateTradeResponse
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
     } else {
-      message.id = 0
+      message.ID = 0
     }
     return message
   }
 }
 
-const baseMsgCancelTrade: object = { creator: '', id: 0 }
+const baseMsgCancelTrade: object = { creator: '', ID: 0 }
 
 export const MsgCancelTrade = {
   encode(message: MsgCancelTrade, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
-    if (message.id !== 0) {
-      writer.uint32(16).uint64(message.id)
+    if (message.ID !== 0) {
+      writer.uint32(16).uint64(message.ID)
     }
     return writer
   },
@@ -536,7 +543,7 @@ export const MsgCancelTrade = {
           message.creator = reader.string()
           break
         case 2:
-          message.id = longToNumber(reader.uint64() as Long)
+          message.ID = longToNumber(reader.uint64() as Long)
           break
         default:
           reader.skipType(tag & 7)
@@ -553,10 +560,10 @@ export const MsgCancelTrade = {
     } else {
       message.creator = ''
     }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = Number(object.id)
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID)
     } else {
-      message.id = 0
+      message.ID = 0
     }
     return message
   },
@@ -564,7 +571,7 @@ export const MsgCancelTrade = {
   toJSON(message: MsgCancelTrade): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
-    message.id !== undefined && (obj.id = message.id)
+    message.ID !== undefined && (obj.ID = message.ID)
     return obj
   },
 
@@ -575,10 +582,10 @@ export const MsgCancelTrade = {
     } else {
       message.creator = ''
     }
-    if (object.id !== undefined && object.id !== null) {
-      message.id = object.id
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
     } else {
-      message.id = 0
+      message.ID = 0
     }
     return message
   }

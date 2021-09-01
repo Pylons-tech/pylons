@@ -48,11 +48,11 @@ func (k Keeper) AppendTrade(
 	count := k.GetTradeCount(ctx)
 
 	// Set the ID of the appended value
-	trade.Id = count
+	trade.ID = count
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
 	appendedValue := k.cdc.MustMarshalBinaryBare(&trade)
-	store.Set(GetTradeIDBytes(trade.Id), appendedValue)
+	store.Set(GetTradeIDBytes(trade.ID), appendedValue)
 
 	// Update trade count
 	k.SetTradeCount(ctx, count+1)
@@ -64,7 +64,7 @@ func (k Keeper) AppendTrade(
 func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
 	b := k.cdc.MustMarshalBinaryBare(&trade)
-	store.Set(GetTradeIDBytes(trade.Id), b)
+	store.Set(GetTradeIDBytes(trade.ID), b)
 }
 
 // GetTrade returns a trade from its id

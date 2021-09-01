@@ -77,7 +77,7 @@ var _ sdk.Msg = &MsgCancelTrade{}
 
 func NewMsgCancelTrade(creator string, id uint64) *MsgCancelTrade {
 	return &MsgCancelTrade{
-		Id:      id,
+		ID:      id,
 		Creator: creator,
 	}
 }

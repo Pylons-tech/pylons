@@ -31,15 +31,15 @@ func (gs GenesisState) Validate() error {
 
 	// this line is used by starport scaffolding # genesis/types/validate
 	// Check for duplicated ID in trade
-	tradeIdMap := make(map[uint64]bool)
+	tradeIDMap := make(map[uint64]bool)
 
 	for _, elem := range gs.TradeList {
-		if _, ok := tradeIdMap[elem.Id]; ok {
+		if _, ok := tradeIDMap[elem.ID]; ok {
 			return fmt.Errorf("duplicated id for trade")
 		}
-		tradeIdMap[elem.Id] = true
+		tradeIDMap[elem.ID] = true
 	}
-	// Check for duplicated ID in googlIAPOrder
+	// Check for duplicated ID in googleIAPOrder
 	googleIAPOrderIDMap := make(map[string]bool)
 
 	for _, elem := range gs.GoogleInAppPurchaseOrderList {

@@ -1,13 +1,13 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { ItemRef } from '../pylons/trade';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
-import { ItemRef } from '../pylons/trade';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgFulfillTrade {
     creator: string;
-    id: string;
-    items: string;
+    ID: string;
+    items: ItemRef[];
 }
 export interface MsgFulfillTradeResponse {
 }
@@ -20,11 +20,11 @@ export interface MsgCreateTrade {
     extraInfo: string;
 }
 export interface MsgCreateTradeResponse {
-    id: number;
+    ID: number;
 }
 export interface MsgCancelTrade {
     creator: string;
-    id: number;
+    ID: number;
 }
 export interface MsgCancelTradeResponse {
 }

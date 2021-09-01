@@ -10,25 +10,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []*types.Trade) {
-	t.Helper()
-	cfg := network.DefaultConfig()
-	state := types.GenesisState{}
-	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
-	for i := 0; i < n; i++ {
-		state.TradeList = append(state.TradeList, &types.Trade{Creator: "ANY", Id: uint64(i)})
-	}
-	buf, err := cfg.Codec.MarshalJSON(&state)
-	require.NoError(t, err)
-	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.TradeList
-}
 
 func TestShowTrade(t *testing.T) {
 	net, objs := networkWithTradeObjects(t, 2)
@@ -46,7 +32,7 @@ func TestShowTrade(t *testing.T) {
 	}{
 		{
 			desc: "found",
-			id:   fmt.Sprintf("%d", objs[0].Id),
+			id:   fmt.Sprintf("%d", objs[0].ID),
 			args: common,
 			obj:  objs[0],
 		},

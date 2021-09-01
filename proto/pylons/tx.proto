@@ -52,12 +52,12 @@ message MsgCreateTrade {
 }
 
 message MsgCreateTradeResponse {
-  uint64 id = 1;
+  uint64 ID = 1;
 }
 
 message MsgCancelTrade {
   string creator = 1;
-  uint64 id = 2;
+  uint64 ID = 2;
 }
 
 message MsgCancelTradeResponse { }

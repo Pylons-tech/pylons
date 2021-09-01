@@ -5,7 +5,7 @@ func (suite *IntegrationTestSuite) TestItemGet() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := createNItem(k, ctx, 10)
+	items := createNItem(k, ctx, 10, true)
 	for _, item := range items {
 		rst, found := k.GetItem(ctx, item.CookbookID, item.ID)
 		require.True(found)
@@ -18,6 +18,6 @@ func (suite *IntegrationTestSuite) TestItemGetAll() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	items := createNItem(k, ctx, 10)
+	items := createNItem(k, ctx, 10, true)
 	require.Equal(items, k.GetAllItem(ctx))
 }

@@ -60,9 +60,8 @@ const (
 	GoogleInAppPurchaseOrderCountKey = "GoogleInAppPurchaseOrder-count-"
 	// GlobalEntityCountKey is a string used as prefix to the KVStore
 	GlobalEntityCountKey = "GlobalEntity-count-"
-)
-
-const (
-	TradeKey      = "Trade-value-"
+	// TradeKey is a string used as prefix to the KVStore
+	TradeKey = "Trade-value-"
+	// TradeCountKey is a string used as prefix to the KVStore
 	TradeCountKey = "Trade-count-"
 )

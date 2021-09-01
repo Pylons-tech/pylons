@@ -74,14 +74,14 @@ export const ItemRef = {
         return message;
     }
 };
-const baseTrade = { creator: '', id: 0, extraInfo: '', receiver: '' };
+const baseTrade = { creator: '', ID: 0, extraInfo: '', receiver: '' };
 export const Trade = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.id !== 0) {
-            writer.uint32(16).uint64(message.id);
+        if (message.ID !== 0) {
+            writer.uint32(16).uint64(message.ID);
         }
         for (const v of message.coinInputs) {
             Coin.encode(v, writer.uint32(26).fork()).ldelim();
@@ -122,7 +122,7 @@ export const Trade = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.id = longToNumber(reader.uint64());
+                    message.ID = longToNumber(reader.uint64());
                     break;
                 case 3:
                     message.coinInputs.push(Coin.decode(reader, reader.uint32()));
@@ -165,11 +165,11 @@ export const Trade = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = Number(object.id);
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
         }
         else {
-            message.id = 0;
+            message.ID = 0;
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
@@ -213,7 +213,7 @@ export const Trade = {
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.id !== undefined && (obj.id = message.id);
+        message.ID !== undefined && (obj.ID = message.ID);
         if (message.coinInputs) {
             obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined));
         }
@@ -261,11 +261,11 @@ export const Trade = {
         else {
             message.creator = '';
         }
-        if (object.id !== undefined && object.id !== null) {
-            message.id = object.id;
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
         }
         else {
-            message.id = 0;
+            message.ID = 0;
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {

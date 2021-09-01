@@ -14,7 +14,7 @@ func (suite *IntegrationTestSuite) TestItemQuerySingle() {
 	require := suite.Require()
 
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNItem(k, ctx, 2)
+	msgs := createNItem(k, ctx, 2, true)
 	for _, tc := range []struct {
 		desc     string
 		request  *types.QueryGetItemRequest

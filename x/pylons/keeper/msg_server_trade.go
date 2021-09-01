@@ -58,21 +58,21 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	)
 
 	return &types.MsgCreateTradeResponse{
-		Id: id,
+		ID: id,
 	}, nil
 }
 
 func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade) (*types.MsgCancelTradeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if !k.HasTrade(ctx, msg.Id) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.Id))
+	if !k.HasTrade(ctx, msg.ID) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.ID))
 	}
-	if msg.Creator != k.GetTradeOwner(ctx, msg.Id) {
+	if msg.Creator != k.GetTradeOwner(ctx, msg.ID) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
 	}
 
-	k.RemoveTrade(ctx, msg.Id)
+	k.RemoveTrade(ctx, msg.ID)
 
 	return &types.MsgCancelTradeResponse{}, nil
 }

@@ -24,12 +24,12 @@ func (suite *IntegrationTestSuite) TestTradeQuerySingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetTradeRequest{ID: msgs[0].Id},
+			request:  &types.QueryGetTradeRequest{ID: msgs[0].ID},
 			response: &types.QueryGetTradeResponse{Trade: &msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetTradeRequest{ID: msgs[1].Id},
+			request:  &types.QueryGetTradeRequest{ID: msgs[1].ID},
 			response: &types.QueryGetTradeResponse{Trade: &msgs[1]},
 		},
 		{
