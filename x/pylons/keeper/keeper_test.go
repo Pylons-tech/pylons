@@ -238,6 +238,16 @@ func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) [
 	return items
 }
 
+func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
+	items := make([]types.Trade, n)
+	owners := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].Creator = owners[i]
+		items[i].Id = k.AppendTrade(ctx, items[i])
+	}
+	return items
+}
+
 type IntegrationTestSuite struct {
 	suite.Suite
 

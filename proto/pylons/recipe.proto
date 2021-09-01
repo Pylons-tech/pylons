@@ -108,10 +108,13 @@ message ItemOutput {
   // defines a list of mutable strings whose value can be customized by the user
   repeated StringKeyValue mutableStrings = 5 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
+  // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+  // This value is accounted for only when an item is sold by itself
+  string tradePercentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
-  uint64 quantity = 7;
-  uint64 amountMinted = 8;
-  bool tradeable = 9;
+  uint64 quantity = 8;
+  uint64 amountMinted = 9;
+  bool tradeable = 10;
 }
 
 // ItemModifyOutput describes what is modified from item input
@@ -124,9 +127,12 @@ message ItemModifyOutput {
   // defines a list of mutable strings whose value can be customized by the user
   repeated StringKeyValue mutableStrings = 6 [(gogoproto.nullable) = false];
   cosmos.base.v1beta1.Coin transferFee = 7 [(gogoproto.nullable) = false];
-  uint64 quantity = 8;
-  uint64 amountMinted = 9;
-  bool tradeable = 10;
+  // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+  // This value is accounted for only when an item is sold by itself
+  string tradePercentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  uint64 quantity = 9;
+  uint64 amountMinted = 10;
+  bool tradeable = 11;
 }
 
 // EntriesList is a struct to keep list of items and coins

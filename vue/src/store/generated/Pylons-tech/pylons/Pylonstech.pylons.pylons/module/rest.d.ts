@@ -137,6 +137,7 @@ export interface PylonsItemModifyOutput {
      * signatures required by gogoproto.
      */
     transferFee?: V1Beta1Coin;
+    tradePercentage?: string;
     /** @format uint64 */
     quantity?: string;
     /** @format uint64 */
@@ -156,6 +157,7 @@ export interface PylonsItemOutput {
      * signatures required by gogoproto.
      */
     transferFee?: V1Beta1Coin;
+    tradePercentage?: string;
     /** @format uint64 */
     quantity?: string;
     /** @format uint64 */
@@ -170,7 +172,7 @@ export interface PylonsItemRecord {
 }
 export interface PylonsItemRef {
     cookbookID?: string;
-    ItemID?: string;
+    itemID?: string;
 }
 export interface PylonsLongInputParam {
     key?: string;
@@ -197,15 +199,21 @@ export interface PylonsLongParam {
     weightRanges?: PylonsIntWeightRange[];
     program?: string;
 }
+export declare type PylonsMsgCancelTradeResponse = object;
 export interface PylonsMsgCompleteExecutionEarlyResponse {
     ID?: string;
 }
 export declare type PylonsMsgCreateAccountResponse = object;
 export declare type PylonsMsgCreateCookbookResponse = object;
 export declare type PylonsMsgCreateRecipeResponse = object;
+export interface PylonsMsgCreateTradeResponse {
+    /** @format uint64 */
+    id?: string;
+}
 export interface PylonsMsgExecuteRecipeResponse {
     ID?: string;
 }
+export declare type PylonsMsgFulfillTradeResponse = object;
 export declare type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 export declare type PylonsMsgSendItemsResponse = object;
 export declare type PylonsMsgSetItemStringResponse = object;
@@ -227,6 +235,9 @@ export interface PylonsQueryGetItemResponse {
 }
 export interface PylonsQueryGetRecipeResponse {
     Recipe?: PylonsRecipe;
+}
+export interface PylonsQueryGetTradeResponse {
+    Trade?: PylonsTrade;
 }
 export interface PylonsQueryListCookbooksByCreatorResponse {
     Cookbooks?: PylonsCookbook[];
@@ -285,6 +296,18 @@ export interface PylonsStringParam {
     rate?: string;
     value?: string;
     program?: string;
+}
+export interface PylonsTrade {
+    creator?: string;
+    /** @format uint64 */
+    id?: string;
+    coinInputs?: V1Beta1Coin[];
+    itemInputs?: PylonsItemInput[];
+    coinOutputs?: V1Beta1Coin[];
+    itemOutputs?: PylonsItemRef[];
+    extraInfo?: string;
+    receiver?: string;
+    tradedItemInputs?: PylonsItemRef[];
 }
 export interface PylonsWeightedOutputs {
     entryIDs?: string[];
@@ -530,5 +553,14 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
         "pagination.limit"?: string;
         "pagination.countTotal"?: boolean;
     }, params?: RequestParams) => Promise<HttpResponse<PylonsQueryListRecipesByCookbookResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryTrade
+     * @summary Queries a trade by id.
+     * @request GET:/pylons/trade/{ID}
+     */
+    queryTrade: (ID: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetTradeResponse, RpcStatus>>;
 }
 export {};

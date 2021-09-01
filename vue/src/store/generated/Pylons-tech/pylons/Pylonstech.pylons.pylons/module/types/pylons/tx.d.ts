@@ -1,8 +1,33 @@
 import { Reader, Writer } from 'protobufjs/minimal';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
+import { ItemRef } from '../pylons/trade';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgFulfillTrade {
+    creator: string;
+    id: string;
+    items: string;
+}
+export interface MsgFulfillTradeResponse {
+}
+export interface MsgCreateTrade {
+    creator: string;
+    coinInputs: Coin[];
+    itemInputs: ItemInput[];
+    coinOutputs: Coin[];
+    itemOutputs: ItemRef[];
+    extraInfo: string;
+}
+export interface MsgCreateTradeResponse {
+    id: number;
+}
+export interface MsgCancelTrade {
+    creator: string;
+    id: number;
+}
+export interface MsgCancelTradeResponse {
+}
 export interface MsgCompleteExecutionEarly {
     creator: string;
     ID: string;
@@ -30,10 +55,6 @@ export interface MsgCreateAccount {
     creator: string;
 }
 export interface MsgCreateAccountResponse {
-}
-export interface ItemRef {
-    cookbookID: string;
-    ItemID: string;
 }
 export interface MsgSendItems {
     creator: string;
@@ -120,6 +141,48 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
+export declare const MsgFulfillTrade: {
+    encode(message: MsgFulfillTrade, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgFulfillTrade;
+    fromJSON(object: any): MsgFulfillTrade;
+    toJSON(message: MsgFulfillTrade): unknown;
+    fromPartial(object: DeepPartial<MsgFulfillTrade>): MsgFulfillTrade;
+};
+export declare const MsgFulfillTradeResponse: {
+    encode(_: MsgFulfillTradeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgFulfillTradeResponse;
+    fromJSON(_: any): MsgFulfillTradeResponse;
+    toJSON(_: MsgFulfillTradeResponse): unknown;
+    fromPartial(_: DeepPartial<MsgFulfillTradeResponse>): MsgFulfillTradeResponse;
+};
+export declare const MsgCreateTrade: {
+    encode(message: MsgCreateTrade, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateTrade;
+    fromJSON(object: any): MsgCreateTrade;
+    toJSON(message: MsgCreateTrade): unknown;
+    fromPartial(object: DeepPartial<MsgCreateTrade>): MsgCreateTrade;
+};
+export declare const MsgCreateTradeResponse: {
+    encode(message: MsgCreateTradeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateTradeResponse;
+    fromJSON(object: any): MsgCreateTradeResponse;
+    toJSON(message: MsgCreateTradeResponse): unknown;
+    fromPartial(object: DeepPartial<MsgCreateTradeResponse>): MsgCreateTradeResponse;
+};
+export declare const MsgCancelTrade: {
+    encode(message: MsgCancelTrade, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCancelTrade;
+    fromJSON(object: any): MsgCancelTrade;
+    toJSON(message: MsgCancelTrade): unknown;
+    fromPartial(object: DeepPartial<MsgCancelTrade>): MsgCancelTrade;
+};
+export declare const MsgCancelTradeResponse: {
+    encode(_: MsgCancelTradeResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCancelTradeResponse;
+    fromJSON(_: any): MsgCancelTradeResponse;
+    toJSON(_: MsgCancelTradeResponse): unknown;
+    fromPartial(_: DeepPartial<MsgCancelTradeResponse>): MsgCancelTradeResponse;
+};
 export declare const MsgCompleteExecutionEarly: {
     encode(message: MsgCompleteExecutionEarly, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgCompleteExecutionEarly;
@@ -175,13 +238,6 @@ export declare const MsgCreateAccountResponse: {
     fromJSON(_: any): MsgCreateAccountResponse;
     toJSON(_: MsgCreateAccountResponse): unknown;
     fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse;
-};
-export declare const ItemRef: {
-    encode(message: ItemRef, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): ItemRef;
-    fromJSON(object: any): ItemRef;
-    toJSON(message: ItemRef): unknown;
-    fromPartial(object: DeepPartial<ItemRef>): ItemRef;
 };
 export declare const MsgSendItems: {
     encode(message: MsgSendItems, writer?: Writer): Writer;
@@ -284,6 +340,9 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
+    FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;
+    CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>;
+    CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse>;
     CompleteExecutionEarly(request: MsgCompleteExecutionEarly): Promise<MsgCompleteExecutionEarlyResponse>;
     TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>;
     GoogleInAppPurchaseGetCoins(request: MsgGoogleInAppPurchaseGetCoins): Promise<MsgGoogleInAppPurchaseGetCoinsResponse>;
@@ -299,6 +358,9 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
+    FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;
+    CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>;
+    CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse>;
     CompleteExecutionEarly(request: MsgCompleteExecutionEarly): Promise<MsgCompleteExecutionEarlyResponse>;
     TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>;
     GoogleInAppPurchaseGetCoins(request: MsgGoogleInAppPurchaseGetCoins): Promise<MsgGoogleInAppPurchaseGetCoinsResponse>;

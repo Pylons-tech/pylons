@@ -5,6 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
+import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
@@ -16,6 +17,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Query defines the gRPC querier service.
 service Query {
 	// this line is used by starport scaffolding # 2
+
+	// Queries a trade by id.
+	rpc Trade(QueryGetTradeRequest) returns (QueryGetTradeResponse) {
+		option (google.api.http).get = "/pylons/trade/{ID}";
+	}
+
 
 	// Queries a list of listItemByOwner items.
 	rpc ListItemByOwner(QueryListItemByOwnerRequest) returns (QueryListItemByOwnerResponse) {
@@ -79,6 +86,14 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetTradeRequest {
+	uint64 ID = 1;
+}
+
+message QueryGetTradeResponse {
+	Trade Trade = 1;
+}
+
 message QueryListItemByOwnerRequest {
   string owner = 1;
 

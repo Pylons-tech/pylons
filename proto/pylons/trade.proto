@@ -1,0 +1,25 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+import "pylons/recipe.proto";
+
+message ItemRef {
+  string cookbookID = 1;
+  string itemID = 2;
+}
+
+message Trade {
+  string creator = 1;
+  uint64 id = 2;
+  repeated cosmos.base.v1beta1.Coin coinInputs = 3 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemInput itemInputs = 4 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
+  string extraInfo = 7;
+  string receiver = 8;
+  repeated ItemRef tradedItemInputs = 9 [(gogoproto.nullable) = false];
+}

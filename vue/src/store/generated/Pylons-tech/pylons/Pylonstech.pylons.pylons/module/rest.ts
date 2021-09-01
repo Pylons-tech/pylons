@@ -175,6 +175,7 @@ export interface PylonsItemModifyOutput {
    * signatures required by gogoproto.
    */
   transferFee?: V1Beta1Coin;
+  tradePercentage?: string;
 
   /** @format uint64 */
   quantity?: string;
@@ -198,6 +199,7 @@ export interface PylonsItemOutput {
    * signatures required by gogoproto.
    */
   transferFee?: V1Beta1Coin;
+  tradePercentage?: string;
 
   /** @format uint64 */
   quantity?: string;
@@ -216,7 +218,7 @@ export interface PylonsItemRecord {
 
 export interface PylonsItemRef {
   cookbookID?: string;
-  ItemID?: string;
+  itemID?: string;
 }
 
 export interface PylonsLongInputParam {
@@ -251,6 +253,8 @@ export interface PylonsLongParam {
   program?: string;
 }
 
+export type PylonsMsgCancelTradeResponse = object;
+
 export interface PylonsMsgCompleteExecutionEarlyResponse {
   ID?: string;
 }
@@ -261,9 +265,16 @@ export type PylonsMsgCreateCookbookResponse = object;
 
 export type PylonsMsgCreateRecipeResponse = object;
 
+export interface PylonsMsgCreateTradeResponse {
+  /** @format uint64 */
+  id?: string;
+}
+
 export interface PylonsMsgExecuteRecipeResponse {
   ID?: string;
 }
+
+export type PylonsMsgFulfillTradeResponse = object;
 
 export type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 
@@ -296,6 +307,10 @@ export interface PylonsQueryGetItemResponse {
 
 export interface PylonsQueryGetRecipeResponse {
   Recipe?: PylonsRecipe;
+}
+
+export interface PylonsQueryGetTradeResponse {
+  Trade?: PylonsTrade;
 }
 
 export interface PylonsQueryListCookbooksByCreatorResponse {
@@ -370,6 +385,20 @@ export interface PylonsStringParam {
   rate?: string;
   value?: string;
   program?: string;
+}
+
+export interface PylonsTrade {
+  creator?: string;
+
+  /** @format uint64 */
+  id?: string;
+  coinInputs?: V1Beta1Coin[];
+  itemInputs?: PylonsItemInput[];
+  coinOutputs?: V1Beta1Coin[];
+  itemOutputs?: PylonsItemRef[];
+  extraInfo?: string;
+  receiver?: string;
+  tradedItemInputs?: PylonsItemRef[];
 }
 
 export interface PylonsWeightedOutputs {
@@ -857,6 +886,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       path: `/pylons/recipes/${CookbookID}`,
       method: "GET",
       query: query,
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryTrade
+   * @summary Queries a trade by id.
+   * @request GET:/pylons/trade/{ID}
+   */
+  queryTrade = (ID: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetTradeResponse, RpcStatus>({
+      path: `/pylons/trade/${ID}`,
+      method: "GET",
       format: "json",
       ...params,
     });

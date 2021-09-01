@@ -31,6 +31,12 @@ func GetTxCmd() *cobra.Command {
 	}
 
 	// this line is used by starport scaffolding # 1
+	cmd.AddCommand(CmdFulfillTrade())
+
+	cmd.AddCommand(CmdCreateTrade())
+	cmd.AddCommand(CmdUpdateTrade())
+	cmd.AddCommand(CmdDeleteTrade())
+
 	cmd.AddCommand(CmdCompleteExecutionEarly())
 
 	cmd.AddCommand(CmdTransferCookbook())

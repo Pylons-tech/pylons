@@ -61,3 +61,8 @@ const (
 	// GlobalEntityCountKey is a string used as prefix to the KVStore
 	GlobalEntityCountKey = "GlobalEntity-count-"
 )
+
+const (
+	TradeKey      = "Trade-value-"
+	TradeCountKey = "Trade-count-"
+)

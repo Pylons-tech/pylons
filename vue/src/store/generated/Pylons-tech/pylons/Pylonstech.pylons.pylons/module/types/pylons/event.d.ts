@@ -2,7 +2,7 @@ import { Cookbook } from '../pylons/cookbook';
 import { Recipe } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { Item, StringKeyValue } from '../pylons/item';
-import { ItemRef } from '../pylons/tx';
+import { ItemRef } from '../pylons/trade';
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {

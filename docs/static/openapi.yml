@@ -21094,6 +21094,14 @@ paths:
                                 implements the custom method
 
                                 signatures required by gogoproto.
+                            tradePercentage:
+                              type: string
+                              title: >-
+                                The percentage of a trade sale retained by the
+                                cookbook owner. In the range (0.0, 1.0).
+
+                                This value is accounted for only when an item is
+                                sold by itself
                             quantity:
                               type: string
                               format: uint64
@@ -21244,6 +21252,14 @@ paths:
                                 implements the custom method
 
                                 signatures required by gogoproto.
+                            tradePercentage:
+                              type: string
+                              title: >-
+                                The percentage of a trade sale retained by the
+                                cookbook owner. In the range (0.0, 1.0).
+
+                                This value is accounted for only when an item is
+                                sold by itself
                             quantity:
                               type: string
                               format: uint64
@@ -21636,6 +21652,14 @@ paths:
                                   implements the custom method
 
                                   signatures required by gogoproto.
+                              tradePercentage:
+                                type: string
+                                title: >-
+                                  The percentage of a trade sale retained by the
+                                  cookbook owner. In the range (0.0, 1.0).
+
+                                  This value is accounted for only when an item
+                                  is sold by itself
                               quantity:
                                 type: string
                                 format: uint64
@@ -21788,6 +21812,14 @@ paths:
                                   implements the custom method
 
                                   signatures required by gogoproto.
+                              tradePercentage:
+                                type: string
+                                title: >-
+                                  The percentage of a trade sale retained by the
+                                  cookbook owner. In the range (0.0, 1.0).
+
+                                  This value is accounted for only when an item
+                                  is sold by itself
                               quantity:
                                 type: string
                                 format: uint64
@@ -21911,6 +21943,216 @@ paths:
           in: query
           required: false
           type: boolean
+      tags:
+        - Query
+  '/pylons/trade/{ID}':
+    get:
+      summary: Queries a trade by id.
+      operationId: PylonstechPylonsPylonsTrade
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              Trade:
+                type: object
+                properties:
+                  creator:
+                    type: string
+                  id:
+                    type: string
+                    format: uint64
+                  coinInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                  itemInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ID:
+                          type: string
+                        doubles:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              minValue:
+                                type: string
+                                description: The minimum legal value of this parameter.
+                              maxValue:
+                                type: string
+                                description: The maximum legal value of this parameter.
+                            title: >-
+                              DoubleInputParam describes the bounds on an item
+                              input/output parameter of type float64
+                        longs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              minValue:
+                                type: string
+                                format: int64
+                                description: The minimum legal value of this parameter.
+                              maxValue:
+                                type: string
+                                format: int64
+                                description: The maximum legal value of this parameter.
+                            title: >-
+                              LongInputParam describes the bounds on an item
+                              input/output parameter of type int64
+                        strings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              key:
+                                type: string
+                              value:
+                                type: string
+                                title: The value of the parameter
+                            title: >-
+                              StringInputParam describes the bounds on an item
+                              input/output parameter of type string
+                        conditions:
+                          type: object
+                          properties:
+                            doubles:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  minValue:
+                                    type: string
+                                    description: The minimum legal value of this parameter.
+                                  maxValue:
+                                    type: string
+                                    description: The maximum legal value of this parameter.
+                                title: >-
+                                  DoubleInputParam describes the bounds on an
+                                  item input/output parameter of type float64
+                            longs:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  minValue:
+                                    type: string
+                                    format: int64
+                                    description: The minimum legal value of this parameter.
+                                  maxValue:
+                                    type: string
+                                    format: int64
+                                    description: The maximum legal value of this parameter.
+                                title: >-
+                                  LongInputParam describes the bounds on an item
+                                  input/output parameter of type int64
+                            strings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  key:
+                                    type: string
+                                  value:
+                                    type: string
+                                    title: The value of the parameter
+                                title: >-
+                                  StringInputParam describes the bounds on an
+                                  item input/output parameter of type string
+                          title: >-
+                            ConditionList is a struct for describing ItemInput
+                            expression conditions
+                      title: ItemInput is a struct for describing an input item
+                  coinOutputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                  itemOutputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cookbookID:
+                          type: string
+                        itemID:
+                          type: string
+                  extraInfo:
+                    type: string
+                  receiver:
+                    type: string
+                  tradedItemInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cookbookID:
+                          type: string
+                        itemID:
+                          type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: ID
+          in: path
+          required: true
+          type: string
+          format: uint64
       tags:
         - Query
 definitions:
@@ -32520,6 +32762,13 @@ definitions:
                 method
 
                 signatures required by gogoproto.
+            tradePercentage:
+              type: string
+              title: >-
+                The percentage of a trade sale retained by the cookbook owner.
+                In the range (0.0, 1.0).
+
+                This value is accounted for only when an item is sold by itself
             quantity:
               type: string
               format: uint64
@@ -32659,6 +32908,13 @@ definitions:
                 method
 
                 signatures required by gogoproto.
+            tradePercentage:
+              type: string
+              title: >-
+                The percentage of a trade sale retained by the cookbook owner.
+                In the range (0.0, 1.0).
+
+                This value is accounted for only when an item is sold by itself
             quantity:
               type: string
               format: uint64
@@ -33078,6 +33334,13 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+      tradePercentage:
+        type: string
+        title: >-
+          The percentage of a trade sale retained by the cookbook owner. In the
+          range (0.0, 1.0).
+
+          This value is accounted for only when an item is sold by itself
       quantity:
         type: string
         format: uint64
@@ -33201,6 +33464,13 @@ definitions:
 
           NOTE: The amount field is an Int which implements the custom method
           signatures required by gogoproto.
+      tradePercentage:
+        type: string
+        title: >-
+          The percentage of a trade sale retained by the cookbook owner. In the
+          range (0.0, 1.0).
+
+          This value is accounted for only when an item is sold by itself
       quantity:
         type: string
         format: uint64
@@ -33256,7 +33526,7 @@ definitions:
     properties:
       cookbookID:
         type: string
-      ItemID:
+      itemID:
         type: string
   Pylonstech.pylons.pylons.LongInputParam:
     type: object
@@ -33314,6 +33584,8 @@ definitions:
     title: >-
       LongParam describes the bounds on an item input/output parameter of type
       int64
+  Pylonstech.pylons.pylons.MsgCancelTradeResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgCompleteExecutionEarlyResponse:
     type: object
     properties:
@@ -33325,11 +33597,19 @@ definitions:
     type: object
   Pylonstech.pylons.pylons.MsgCreateRecipeResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgCreateTradeResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uint64
   Pylonstech.pylons.pylons.MsgExecuteRecipeResponse:
     type: object
     properties:
       ID:
         type: string
+  Pylonstech.pylons.pylons.MsgFulfillTradeResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgGoogleInAppPurchaseGetCoinsResponse:
     type: object
   Pylonstech.pylons.pylons.MsgSendItemsResponse:
@@ -33874,6 +34154,14 @@ definitions:
                         custom method
 
                         signatures required by gogoproto.
+                    tradePercentage:
+                      type: string
+                      title: >-
+                        The percentage of a trade sale retained by the cookbook
+                        owner. In the range (0.0, 1.0).
+
+                        This value is accounted for only when an item is sold by
+                        itself
                     quantity:
                       type: string
                       format: uint64
@@ -34016,6 +34304,14 @@ definitions:
                         custom method
 
                         signatures required by gogoproto.
+                    tradePercentage:
+                      type: string
+                      title: >-
+                        The percentage of a trade sale retained by the cookbook
+                        owner. In the range (0.0, 1.0).
+
+                        This value is accounted for only when an item is sold by
+                        itself
                     quantity:
                       type: string
                       format: uint64
@@ -34048,6 +34344,181 @@ definitions:
             type: boolean
           extraInfo:
             type: string
+  Pylonstech.pylons.pylons.QueryGetTradeResponse:
+    type: object
+    properties:
+      Trade:
+        type: object
+        properties:
+          creator:
+            type: string
+          id:
+            type: string
+            format: uint64
+          coinInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+          itemInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      DoubleInputParam describes the bounds on an item
+                      input/output parameter of type float64
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        format: int64
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        format: int64
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      LongInputParam describes the bounds on an item
+                      input/output parameter of type int64
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                        title: The value of the parameter
+                    title: >-
+                      StringInputParam describes the bounds on an item
+                      input/output parameter of type string
+                conditions:
+                  type: object
+                  properties:
+                    doubles:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          minValue:
+                            type: string
+                            description: The minimum legal value of this parameter.
+                          maxValue:
+                            type: string
+                            description: The maximum legal value of this parameter.
+                        title: >-
+                          DoubleInputParam describes the bounds on an item
+                          input/output parameter of type float64
+                    longs:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          minValue:
+                            type: string
+                            format: int64
+                            description: The minimum legal value of this parameter.
+                          maxValue:
+                            type: string
+                            format: int64
+                            description: The maximum legal value of this parameter.
+                        title: >-
+                          LongInputParam describes the bounds on an item
+                          input/output parameter of type int64
+                    strings:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          key:
+                            type: string
+                          value:
+                            type: string
+                            title: The value of the parameter
+                        title: >-
+                          StringInputParam describes the bounds on an item
+                          input/output parameter of type string
+                  title: >-
+                    ConditionList is a struct for describing ItemInput
+                    expression conditions
+              title: ItemInput is a struct for describing an input item
+          coinOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+          itemOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                cookbookID:
+                  type: string
+                itemID:
+                  type: string
+          extraInfo:
+            type: string
+          receiver:
+            type: string
+          tradedItemInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                cookbookID:
+                  type: string
+                itemID:
+                  type: string
   Pylonstech.pylons.pylons.QueryListCookbooksByCreatorResponse:
     type: object
     properties:
@@ -34951,6 +35422,14 @@ definitions:
                           custom method
 
                           signatures required by gogoproto.
+                      tradePercentage:
+                        type: string
+                        title: >-
+                          The percentage of a trade sale retained by the
+                          cookbook owner. In the range (0.0, 1.0).
+
+                          This value is accounted for only when an item is sold
+                          by itself
                       quantity:
                         type: string
                         format: uint64
@@ -35099,6 +35578,14 @@ definitions:
                           custom method
 
                           signatures required by gogoproto.
+                      tradePercentage:
+                        type: string
+                        title: >-
+                          The percentage of a trade sale retained by the
+                          cookbook owner. In the range (0.0, 1.0).
+
+                          This value is accounted for only when an item is sold
+                          by itself
                       quantity:
                         type: string
                         format: uint64
@@ -35444,6 +35931,14 @@ definitions:
                     method
 
                     signatures required by gogoproto.
+                tradePercentage:
+                  type: string
+                  title: >-
+                    The percentage of a trade sale retained by the cookbook
+                    owner. In the range (0.0, 1.0).
+
+                    This value is accounted for only when an item is sold by
+                    itself
                 quantity:
                   type: string
                   format: uint64
@@ -35586,6 +36081,14 @@ definitions:
                     method
 
                     signatures required by gogoproto.
+                tradePercentage:
+                  type: string
+                  title: >-
+                    The percentage of a trade sale retained by the cookbook
+                    owner. In the range (0.0, 1.0).
+
+                    This value is accounted for only when an item is sold by
+                    itself
                 quantity:
                   type: string
                   format: uint64
@@ -35653,6 +36156,172 @@ definitions:
         type: string
         title: 'When program is not empty, value is ignored'
     title: StringParam describes an item input/output parameter of type string
+  Pylonstech.pylons.pylons.Trade:
+    type: object
+    properties:
+      creator:
+        type: string
+      id:
+        type: string
+        format: uint64
+      coinInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+      itemInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            ID:
+              type: string
+            doubles:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  minValue:
+                    type: string
+                    description: The minimum legal value of this parameter.
+                  maxValue:
+                    type: string
+                    description: The maximum legal value of this parameter.
+                title: >-
+                  DoubleInputParam describes the bounds on an item input/output
+                  parameter of type float64
+            longs:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  minValue:
+                    type: string
+                    format: int64
+                    description: The minimum legal value of this parameter.
+                  maxValue:
+                    type: string
+                    format: int64
+                    description: The maximum legal value of this parameter.
+                title: >-
+                  LongInputParam describes the bounds on an item input/output
+                  parameter of type int64
+            strings:
+              type: array
+              items:
+                type: object
+                properties:
+                  key:
+                    type: string
+                  value:
+                    type: string
+                    title: The value of the parameter
+                title: >-
+                  StringInputParam describes the bounds on an item input/output
+                  parameter of type string
+            conditions:
+              type: object
+              properties:
+                doubles:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      DoubleInputParam describes the bounds on an item
+                      input/output parameter of type float64
+                longs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      minValue:
+                        type: string
+                        format: int64
+                        description: The minimum legal value of this parameter.
+                      maxValue:
+                        type: string
+                        format: int64
+                        description: The maximum legal value of this parameter.
+                    title: >-
+                      LongInputParam describes the bounds on an item
+                      input/output parameter of type int64
+                strings:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      key:
+                        type: string
+                      value:
+                        type: string
+                        title: The value of the parameter
+                    title: >-
+                      StringInputParam describes the bounds on an item
+                      input/output parameter of type string
+              title: >-
+                ConditionList is a struct for describing ItemInput expression
+                conditions
+          title: ItemInput is a struct for describing an input item
+      coinOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+      itemOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            cookbookID:
+              type: string
+            itemID:
+              type: string
+      extraInfo:
+        type: string
+      receiver:
+        type: string
+      tradedItemInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            cookbookID:
+              type: string
+            itemID:
+              type: string
   Pylonstech.pylons.pylons.WeightedOutputs:
     type: object
     properties:

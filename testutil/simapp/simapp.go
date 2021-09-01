@@ -25,14 +25,13 @@ func New(dir string) cosmoscmd.App {
 		simapp.EmptyAppOptions{})
 	// InitChain updates deliverState which is required when app.NewContext is called
 	a.InitChain(abci.RequestInitChain{
-		ConsensusParams: DefaultConsensusParams,
+		ConsensusParams: defaultConsensusParams,
 		AppStateBytes:   []byte("{}"),
 	})
-
 	return a
 }
 
-var DefaultConsensusParams = &abci.ConsensusParams{
+var defaultConsensusParams = &abci.ConsensusParams{
 	Block: &abci.BlockParams{
 		MaxBytes: 200000,
 		MaxGas:   2000000,

@@ -2,11 +2,13 @@ package keeper_test
 
 import (
 	"encoding/base64"
-	"github.com/Pylons-tech/pylons/x/pylons/keeper"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+
+	"github.com/Pylons-tech/pylons/x/pylons/keeper"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
 func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
@@ -102,6 +104,5 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 }
 
 func to64(data string) string {
-	return 	base64.StdEncoding.EncodeToString([]byte(data))
+	return base64.StdEncoding.EncodeToString([]byte(data))
 }
-

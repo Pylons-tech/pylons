@@ -92,6 +92,11 @@ export interface ItemOutput {
     /** defines a list of mutable strings whose value can be customized by the user */
     mutableStrings: StringKeyValue[];
     transferFee: Coin | undefined;
+    /**
+     * The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+     * This value is accounted for only when an item is sold by itself
+     */
+    tradePercentage: string;
     /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
     quantity: number;
     amountMinted: number;
@@ -107,6 +112,11 @@ export interface ItemModifyOutput {
     /** defines a list of mutable strings whose value can be customized by the user */
     mutableStrings: StringKeyValue[];
     transferFee: Coin | undefined;
+    /**
+     * The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
+     * This value is accounted for only when an item is sold by itself
+     */
+    tradePercentage: string;
     quantity: number;
     amountMinted: number;
     tradeable: boolean;

@@ -27,6 +27,10 @@ func (k msgServer) SendItems(goCtx context.Context, msg *types.MsgSendItems) (*t
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item in cookbook %v with ID %v not owned by sender", item.CookbookID, item.ID)
 		}
 
+		if !item.Tradeable {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "Item in cookbook %v with ID %v cannot be traded", item.CookbookID, item.ID)
+		}
+
 		itemsByCookbook[item.CookbookID] = append(itemsByCookbook[item.CookbookID], item)
 	}
 

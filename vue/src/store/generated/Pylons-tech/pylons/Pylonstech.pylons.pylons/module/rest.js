@@ -281,5 +281,19 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryTrade
+         * @summary Queries a trade by id.
+         * @request GET:/pylons/trade/{ID}
+         */
+        this.queryTrade = (ID, params = {}) => this.request({
+            path: `/pylons/trade/${ID}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
     }
 }

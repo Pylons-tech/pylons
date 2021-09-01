@@ -1107,7 +1107,7 @@ export const CoinOutput = {
         return message;
     }
 };
-const baseItemOutput = { ID: '', quantity: 0, amountMinted: 0, tradeable: false };
+const baseItemOutput = { ID: '', tradePercentage: '', quantity: 0, amountMinted: 0, tradeable: false };
 export const ItemOutput = {
     encode(message, writer = Writer.create()) {
         if (message.ID !== '') {
@@ -1128,14 +1128,17 @@ export const ItemOutput = {
         if (message.transferFee !== undefined) {
             Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim();
         }
+        if (message.tradePercentage !== '') {
+            writer.uint32(58).string(message.tradePercentage);
+        }
         if (message.quantity !== 0) {
-            writer.uint32(56).uint64(message.quantity);
+            writer.uint32(64).uint64(message.quantity);
         }
         if (message.amountMinted !== 0) {
-            writer.uint32(64).uint64(message.amountMinted);
+            writer.uint32(72).uint64(message.amountMinted);
         }
         if (message.tradeable === true) {
-            writer.uint32(72).bool(message.tradeable);
+            writer.uint32(80).bool(message.tradeable);
         }
         return writer;
     },
@@ -1169,12 +1172,15 @@ export const ItemOutput = {
                     message.transferFee = Coin.decode(reader, reader.uint32());
                     break;
                 case 7:
-                    message.quantity = longToNumber(reader.uint64());
+                    message.tradePercentage = reader.string();
                     break;
                 case 8:
-                    message.amountMinted = longToNumber(reader.uint64());
+                    message.quantity = longToNumber(reader.uint64());
                     break;
                 case 9:
+                    message.amountMinted = longToNumber(reader.uint64());
+                    break;
+                case 10:
                     message.tradeable = reader.bool();
                     break;
                 default:
@@ -1221,6 +1227,12 @@ export const ItemOutput = {
         }
         else {
             message.transferFee = undefined;
+        }
+        if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
+            message.tradePercentage = String(object.tradePercentage);
+        }
+        else {
+            message.tradePercentage = '';
         }
         if (object.quantity !== undefined && object.quantity !== null) {
             message.quantity = Number(object.quantity);
@@ -1270,6 +1282,7 @@ export const ItemOutput = {
             obj.mutableStrings = [];
         }
         message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined);
+        message.tradePercentage !== undefined && (obj.tradePercentage = message.tradePercentage);
         message.quantity !== undefined && (obj.quantity = message.quantity);
         message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted);
         message.tradeable !== undefined && (obj.tradeable = message.tradeable);
@@ -1313,6 +1326,12 @@ export const ItemOutput = {
         else {
             message.transferFee = undefined;
         }
+        if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
+            message.tradePercentage = object.tradePercentage;
+        }
+        else {
+            message.tradePercentage = '';
+        }
         if (object.quantity !== undefined && object.quantity !== null) {
             message.quantity = object.quantity;
         }
@@ -1334,7 +1353,7 @@ export const ItemOutput = {
         return message;
     }
 };
-const baseItemModifyOutput = { ID: '', itemInputRef: '', quantity: 0, amountMinted: 0, tradeable: false };
+const baseItemModifyOutput = { ID: '', itemInputRef: '', tradePercentage: '', quantity: 0, amountMinted: 0, tradeable: false };
 export const ItemModifyOutput = {
     encode(message, writer = Writer.create()) {
         if (message.ID !== '') {
@@ -1358,14 +1377,17 @@ export const ItemModifyOutput = {
         if (message.transferFee !== undefined) {
             Coin.encode(message.transferFee, writer.uint32(58).fork()).ldelim();
         }
+        if (message.tradePercentage !== '') {
+            writer.uint32(66).string(message.tradePercentage);
+        }
         if (message.quantity !== 0) {
-            writer.uint32(64).uint64(message.quantity);
+            writer.uint32(72).uint64(message.quantity);
         }
         if (message.amountMinted !== 0) {
-            writer.uint32(72).uint64(message.amountMinted);
+            writer.uint32(80).uint64(message.amountMinted);
         }
         if (message.tradeable === true) {
-            writer.uint32(80).bool(message.tradeable);
+            writer.uint32(88).bool(message.tradeable);
         }
         return writer;
     },
@@ -1402,12 +1424,15 @@ export const ItemModifyOutput = {
                     message.transferFee = Coin.decode(reader, reader.uint32());
                     break;
                 case 8:
-                    message.quantity = longToNumber(reader.uint64());
+                    message.tradePercentage = reader.string();
                     break;
                 case 9:
-                    message.amountMinted = longToNumber(reader.uint64());
+                    message.quantity = longToNumber(reader.uint64());
                     break;
                 case 10:
+                    message.amountMinted = longToNumber(reader.uint64());
+                    break;
+                case 11:
                     message.tradeable = reader.bool();
                     break;
                 default:
@@ -1461,6 +1486,12 @@ export const ItemModifyOutput = {
         else {
             message.transferFee = undefined;
         }
+        if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
+            message.tradePercentage = String(object.tradePercentage);
+        }
+        else {
+            message.tradePercentage = '';
+        }
         if (object.quantity !== undefined && object.quantity !== null) {
             message.quantity = Number(object.quantity);
         }
@@ -1510,6 +1541,7 @@ export const ItemModifyOutput = {
             obj.mutableStrings = [];
         }
         message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined);
+        message.tradePercentage !== undefined && (obj.tradePercentage = message.tradePercentage);
         message.quantity !== undefined && (obj.quantity = message.quantity);
         message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted);
         message.tradeable !== undefined && (obj.tradeable = message.tradeable);
@@ -1558,6 +1590,12 @@ export const ItemModifyOutput = {
         }
         else {
             message.transferFee = undefined;
+        }
+        if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
+            message.tradePercentage = object.tradePercentage;
+        }
+        else {
+            message.tradePercentage = '';
         }
         if (object.quantity !== undefined && object.quantity !== null) {
             message.quantity = object.quantity;

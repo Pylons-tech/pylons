@@ -1,4 +1,5 @@
 import { Writer, Reader } from 'protobufjs/minimal';
+import { Trade } from '../pylons/trade';
 import { Params } from '../pylons/params';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
@@ -9,7 +10,12 @@ export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
     /** this line is used by starport scaffolding # genesis/proto/state */
+    tradeList: Trade[];
+    /** this line is used by starport scaffolding # genesis/proto/stateField */
+    tradeCount: number;
+    /** this line is used by starport scaffolding # genesis/proto/stateField */
     entityCount: number;
+    /** this line is used by starport scaffolding # genesis/proto/stateField */
     params: Params | undefined;
     /** this line is used by starport scaffolding # genesis/proto/stateField */
     googleInAppPurchaseOrderList: GoogleInAppPurchaseOrder[];

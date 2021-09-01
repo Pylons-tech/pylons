@@ -11,6 +11,14 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the trade
+	for _, elem := range genState.TradeList {
+		k.SetTrade(ctx, *elem)
+	}
+
+	// Set trade count
+	k.SetTradeCount(ctx, genState.TradeCount)
+
 	// Set all the googlIAPOrder
 	for _, elem := range genState.GoogleInAppPurchaseOrderList {
 		k.SetGoogleIAPOrder(ctx, elem)
@@ -63,6 +71,16 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis.EntityCount = k.GetEntityCount(ctx)
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all trade
+	tradeList := k.GetAllTrade(ctx)
+	for _, elem := range tradeList {
+		elem := elem
+		genesis.TradeList = append(genesis.TradeList, &elem)
+	}
+
+	// Set the current count
+	genesis.TradeCount = k.GetTradeCount(ctx)
+
 	// Get all googlIAPOrder
 	googlIAPOrderList := k.GetAllGoogleIAPOrder(ctx)
 	for _, elem := range googlIAPOrderList {

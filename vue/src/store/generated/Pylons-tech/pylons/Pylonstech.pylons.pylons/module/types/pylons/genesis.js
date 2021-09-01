@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as Long from 'long';
 import { util, configure, Writer, Reader } from 'protobufjs/minimal';
+import { Trade } from '../pylons/trade';
 import { Params } from '../pylons/params';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
@@ -8,9 +9,15 @@ import { Item } from '../pylons/item';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseGenesisState = { entityCount: 0, googleIAPOrderCount: 0, executionCount: 0, pendingExecutionCount: 0 };
+const baseGenesisState = { tradeCount: 0, entityCount: 0, googleIAPOrderCount: 0, executionCount: 0, pendingExecutionCount: 0 };
 export const GenesisState = {
     encode(message, writer = Writer.create()) {
+        for (const v of message.tradeList) {
+            Trade.encode(v, writer.uint32(98).fork()).ldelim();
+        }
+        if (message.tradeCount !== 0) {
+            writer.uint32(104).uint64(message.tradeCount);
+        }
         if (message.entityCount !== 0) {
             writer.uint32(88).uint64(message.entityCount);
         }
@@ -50,6 +57,7 @@ export const GenesisState = {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = { ...baseGenesisState };
+        message.tradeList = [];
         message.googleInAppPurchaseOrderList = [];
         message.executionList = [];
         message.pendingExecutionList = [];
@@ -59,6 +67,12 @@ export const GenesisState = {
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
+                case 12:
+                    message.tradeList.push(Trade.decode(reader, reader.uint32()));
+                    break;
+                case 13:
+                    message.tradeCount = longToNumber(reader.uint64());
+                    break;
                 case 11:
                     message.entityCount = longToNumber(reader.uint64());
                     break;
@@ -101,12 +115,24 @@ export const GenesisState = {
     },
     fromJSON(object) {
         const message = { ...baseGenesisState };
+        message.tradeList = [];
         message.googleInAppPurchaseOrderList = [];
         message.executionList = [];
         message.pendingExecutionList = [];
         message.itemList = [];
         message.recipeList = [];
         message.cookbookList = [];
+        if (object.tradeList !== undefined && object.tradeList !== null) {
+            for (const e of object.tradeList) {
+                message.tradeList.push(Trade.fromJSON(e));
+            }
+        }
+        if (object.tradeCount !== undefined && object.tradeCount !== null) {
+            message.tradeCount = Number(object.tradeCount);
+        }
+        else {
+            message.tradeCount = 0;
+        }
         if (object.entityCount !== undefined && object.entityCount !== null) {
             message.entityCount = Number(object.entityCount);
         }
@@ -171,6 +197,13 @@ export const GenesisState = {
     },
     toJSON(message) {
         const obj = {};
+        if (message.tradeList) {
+            obj.tradeList = message.tradeList.map((e) => (e ? Trade.toJSON(e) : undefined));
+        }
+        else {
+            obj.tradeList = [];
+        }
+        message.tradeCount !== undefined && (obj.tradeCount = message.tradeCount);
         message.entityCount !== undefined && (obj.entityCount = message.entityCount);
         message.params !== undefined && (obj.params = message.params ? Params.toJSON(message.params) : undefined);
         if (message.googleInAppPurchaseOrderList) {
@@ -216,12 +249,24 @@ export const GenesisState = {
     },
     fromPartial(object) {
         const message = { ...baseGenesisState };
+        message.tradeList = [];
         message.googleInAppPurchaseOrderList = [];
         message.executionList = [];
         message.pendingExecutionList = [];
         message.itemList = [];
         message.recipeList = [];
         message.cookbookList = [];
+        if (object.tradeList !== undefined && object.tradeList !== null) {
+            for (const e of object.tradeList) {
+                message.tradeList.push(Trade.fromPartial(e));
+            }
+        }
+        if (object.tradeCount !== undefined && object.tradeCount !== null) {
+            message.tradeCount = object.tradeCount;
+        }
+        else {
+            message.tradeCount = 0;
+        }
         if (object.entityCount !== undefined && object.entityCount !== null) {
             message.entityCount = object.entityCount;
         }

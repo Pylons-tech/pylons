@@ -3,10 +3,39 @@ import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
 import { Coin } from '../cosmos/base/v1beta1/coin'
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
+import { ItemRef } from '../pylons/trade'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgFulfillTrade {
+  creator: string
+  id: string
+  items: string
+}
+
+export interface MsgFulfillTradeResponse {}
+
+export interface MsgCreateTrade {
+  creator: string
+  coinInputs: Coin[]
+  itemInputs: ItemInput[]
+  coinOutputs: Coin[]
+  itemOutputs: ItemRef[]
+  extraInfo: string
+}
+
+export interface MsgCreateTradeResponse {
+  id: number
+}
+
+export interface MsgCancelTrade {
+  creator: string
+  id: number
+}
+
+export interface MsgCancelTradeResponse {}
+
 export interface MsgCompleteExecutionEarly {
   creator: string
   ID: string
@@ -39,11 +68,6 @@ export interface MsgCreateAccount {
 }
 
 export interface MsgCreateAccountResponse {}
-
-export interface ItemRef {
-  cookbookID: string
-  ItemID: string
-}
 
 export interface MsgSendItems {
   creator: string
@@ -137,6 +161,466 @@ export interface MsgUpdateCookbook {
 }
 
 export interface MsgUpdateCookbookResponse {}
+
+const baseMsgFulfillTrade: object = { creator: '', id: '', items: '' }
+
+export const MsgFulfillTrade = {
+  encode(message: MsgFulfillTrade, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.id !== '') {
+      writer.uint32(18).string(message.id)
+    }
+    if (message.items !== '') {
+      writer.uint32(26).string(message.items)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgFulfillTrade {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgFulfillTrade } as MsgFulfillTrade
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.id = reader.string()
+          break
+        case 3:
+          message.items = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgFulfillTrade {
+    const message = { ...baseMsgFulfillTrade } as MsgFulfillTrade
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = String(object.id)
+    } else {
+      message.id = ''
+    }
+    if (object.items !== undefined && object.items !== null) {
+      message.items = String(object.items)
+    } else {
+      message.items = ''
+    }
+    return message
+  },
+
+  toJSON(message: MsgFulfillTrade): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.id !== undefined && (obj.id = message.id)
+    message.items !== undefined && (obj.items = message.items)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgFulfillTrade>): MsgFulfillTrade {
+    const message = { ...baseMsgFulfillTrade } as MsgFulfillTrade
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id
+    } else {
+      message.id = ''
+    }
+    if (object.items !== undefined && object.items !== null) {
+      message.items = object.items
+    } else {
+      message.items = ''
+    }
+    return message
+  }
+}
+
+const baseMsgFulfillTradeResponse: object = {}
+
+export const MsgFulfillTradeResponse = {
+  encode(_: MsgFulfillTradeResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgFulfillTradeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgFulfillTradeResponse } as MsgFulfillTradeResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgFulfillTradeResponse {
+    const message = { ...baseMsgFulfillTradeResponse } as MsgFulfillTradeResponse
+    return message
+  },
+
+  toJSON(_: MsgFulfillTradeResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgFulfillTradeResponse>): MsgFulfillTradeResponse {
+    const message = { ...baseMsgFulfillTradeResponse } as MsgFulfillTradeResponse
+    return message
+  }
+}
+
+const baseMsgCreateTrade: object = { creator: '', extraInfo: '' }
+
+export const MsgCreateTrade = {
+  encode(message: MsgCreateTrade, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    for (const v of message.coinInputs) {
+      Coin.encode(v!, writer.uint32(18).fork()).ldelim()
+    }
+    for (const v of message.itemInputs) {
+      ItemInput.encode(v!, writer.uint32(26).fork()).ldelim()
+    }
+    for (const v of message.coinOutputs) {
+      Coin.encode(v!, writer.uint32(34).fork()).ldelim()
+    }
+    for (const v of message.itemOutputs) {
+      ItemRef.encode(v!, writer.uint32(42).fork()).ldelim()
+    }
+    if (message.extraInfo !== '') {
+      writer.uint32(50).string(message.extraInfo)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateTrade {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgCreateTrade } as MsgCreateTrade
+    message.coinInputs = []
+    message.itemInputs = []
+    message.coinOutputs = []
+    message.itemOutputs = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.coinInputs.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 3:
+          message.itemInputs.push(ItemInput.decode(reader, reader.uint32()))
+          break
+        case 4:
+          message.coinOutputs.push(Coin.decode(reader, reader.uint32()))
+          break
+        case 5:
+          message.itemOutputs.push(ItemRef.decode(reader, reader.uint32()))
+          break
+        case 6:
+          message.extraInfo = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgCreateTrade {
+    const message = { ...baseMsgCreateTrade } as MsgCreateTrade
+    message.coinInputs = []
+    message.itemInputs = []
+    message.coinOutputs = []
+    message.itemOutputs = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.coinInputs !== undefined && object.coinInputs !== null) {
+      for (const e of object.coinInputs) {
+        message.coinInputs.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.itemInputs !== undefined && object.itemInputs !== null) {
+      for (const e of object.itemInputs) {
+        message.itemInputs.push(ItemInput.fromJSON(e))
+      }
+    }
+    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+      for (const e of object.coinOutputs) {
+        message.coinOutputs.push(Coin.fromJSON(e))
+      }
+    }
+    if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
+      for (const e of object.itemOutputs) {
+        message.itemOutputs.push(ItemRef.fromJSON(e))
+      }
+    }
+    if (object.extraInfo !== undefined && object.extraInfo !== null) {
+      message.extraInfo = String(object.extraInfo)
+    } else {
+      message.extraInfo = ''
+    }
+    return message
+  },
+
+  toJSON(message: MsgCreateTrade): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    if (message.coinInputs) {
+      obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.coinInputs = []
+    }
+    if (message.itemInputs) {
+      obj.itemInputs = message.itemInputs.map((e) => (e ? ItemInput.toJSON(e) : undefined))
+    } else {
+      obj.itemInputs = []
+    }
+    if (message.coinOutputs) {
+      obj.coinOutputs = message.coinOutputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.coinOutputs = []
+    }
+    if (message.itemOutputs) {
+      obj.itemOutputs = message.itemOutputs.map((e) => (e ? ItemRef.toJSON(e) : undefined))
+    } else {
+      obj.itemOutputs = []
+    }
+    message.extraInfo !== undefined && (obj.extraInfo = message.extraInfo)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgCreateTrade>): MsgCreateTrade {
+    const message = { ...baseMsgCreateTrade } as MsgCreateTrade
+    message.coinInputs = []
+    message.itemInputs = []
+    message.coinOutputs = []
+    message.itemOutputs = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.coinInputs !== undefined && object.coinInputs !== null) {
+      for (const e of object.coinInputs) {
+        message.coinInputs.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.itemInputs !== undefined && object.itemInputs !== null) {
+      for (const e of object.itemInputs) {
+        message.itemInputs.push(ItemInput.fromPartial(e))
+      }
+    }
+    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+      for (const e of object.coinOutputs) {
+        message.coinOutputs.push(Coin.fromPartial(e))
+      }
+    }
+    if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
+      for (const e of object.itemOutputs) {
+        message.itemOutputs.push(ItemRef.fromPartial(e))
+      }
+    }
+    if (object.extraInfo !== undefined && object.extraInfo !== null) {
+      message.extraInfo = object.extraInfo
+    } else {
+      message.extraInfo = ''
+    }
+    return message
+  }
+}
+
+const baseMsgCreateTradeResponse: object = { id: 0 }
+
+export const MsgCreateTradeResponse = {
+  encode(message: MsgCreateTradeResponse, writer: Writer = Writer.create()): Writer {
+    if (message.id !== 0) {
+      writer.uint32(8).uint64(message.id)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateTradeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgCreateTradeResponse } as MsgCreateTradeResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.id = longToNumber(reader.uint64() as Long)
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgCreateTradeResponse {
+    const message = { ...baseMsgCreateTradeResponse } as MsgCreateTradeResponse
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id)
+    } else {
+      message.id = 0
+    }
+    return message
+  },
+
+  toJSON(message: MsgCreateTradeResponse): unknown {
+    const obj: any = {}
+    message.id !== undefined && (obj.id = message.id)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgCreateTradeResponse>): MsgCreateTradeResponse {
+    const message = { ...baseMsgCreateTradeResponse } as MsgCreateTradeResponse
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id
+    } else {
+      message.id = 0
+    }
+    return message
+  }
+}
+
+const baseMsgCancelTrade: object = { creator: '', id: 0 }
+
+export const MsgCancelTrade = {
+  encode(message: MsgCancelTrade, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.id !== 0) {
+      writer.uint32(16).uint64(message.id)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCancelTrade {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgCancelTrade } as MsgCancelTrade
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.id = longToNumber(reader.uint64() as Long)
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgCancelTrade {
+    const message = { ...baseMsgCancelTrade } as MsgCancelTrade
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = Number(object.id)
+    } else {
+      message.id = 0
+    }
+    return message
+  },
+
+  toJSON(message: MsgCancelTrade): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.id !== undefined && (obj.id = message.id)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgCancelTrade>): MsgCancelTrade {
+    const message = { ...baseMsgCancelTrade } as MsgCancelTrade
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.id !== undefined && object.id !== null) {
+      message.id = object.id
+    } else {
+      message.id = 0
+    }
+    return message
+  }
+}
+
+const baseMsgCancelTradeResponse: object = {}
+
+export const MsgCancelTradeResponse = {
+  encode(_: MsgCancelTradeResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCancelTradeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgCancelTradeResponse } as MsgCancelTradeResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgCancelTradeResponse {
+    const message = { ...baseMsgCancelTradeResponse } as MsgCancelTradeResponse
+    return message
+  },
+
+  toJSON(_: MsgCancelTradeResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgCancelTradeResponse>): MsgCancelTradeResponse {
+    const message = { ...baseMsgCancelTradeResponse } as MsgCancelTradeResponse
+    return message
+  }
+}
 
 const baseMsgCompleteExecutionEarly: object = { creator: '', ID: '' }
 
@@ -642,78 +1126,6 @@ export const MsgCreateAccountResponse = {
 
   fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse {
     const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
-    return message
-  }
-}
-
-const baseItemRef: object = { cookbookID: '', ItemID: '' }
-
-export const ItemRef = {
-  encode(message: ItemRef, writer: Writer = Writer.create()): Writer {
-    if (message.cookbookID !== '') {
-      writer.uint32(10).string(message.cookbookID)
-    }
-    if (message.ItemID !== '') {
-      writer.uint32(18).string(message.ItemID)
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): ItemRef {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseItemRef } as ItemRef
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.cookbookID = reader.string()
-          break
-        case 2:
-          message.ItemID = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): ItemRef {
-    const message = { ...baseItemRef } as ItemRef
-    if (object.cookbookID !== undefined && object.cookbookID !== null) {
-      message.cookbookID = String(object.cookbookID)
-    } else {
-      message.cookbookID = ''
-    }
-    if (object.ItemID !== undefined && object.ItemID !== null) {
-      message.ItemID = String(object.ItemID)
-    } else {
-      message.ItemID = ''
-    }
-    return message
-  },
-
-  toJSON(message: ItemRef): unknown {
-    const obj: any = {}
-    message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
-    message.ItemID !== undefined && (obj.ItemID = message.ItemID)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<ItemRef>): ItemRef {
-    const message = { ...baseItemRef } as ItemRef
-    if (object.cookbookID !== undefined && object.cookbookID !== null) {
-      message.cookbookID = object.cookbookID
-    } else {
-      message.cookbookID = ''
-    }
-    if (object.ItemID !== undefined && object.ItemID !== null) {
-      message.ItemID = object.ItemID
-    } else {
-      message.ItemID = ''
-    }
     return message
   }
 }
@@ -2298,6 +2710,9 @@ export const MsgUpdateCookbookResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
+  FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>
+  CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>
+  CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse>
   CompleteExecutionEarly(request: MsgCompleteExecutionEarly): Promise<MsgCompleteExecutionEarlyResponse>
   TransferCookbook(request: MsgTransferCookbook): Promise<MsgTransferCookbookResponse>
   GoogleInAppPurchaseGetCoins(request: MsgGoogleInAppPurchaseGetCoins): Promise<MsgGoogleInAppPurchaseGetCoinsResponse>
@@ -2316,6 +2731,24 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse> {
+    const data = MsgFulfillTrade.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'FulfillTrade', data)
+    return promise.then((data) => MsgFulfillTradeResponse.decode(new Reader(data)))
+  }
+
+  CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse> {
+    const data = MsgCreateTrade.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'CreateTrade', data)
+    return promise.then((data) => MsgCreateTradeResponse.decode(new Reader(data)))
+  }
+
+  CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse> {
+    const data = MsgCancelTrade.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'CancelTrade', data)
+    return promise.then((data) => MsgCancelTradeResponse.decode(new Reader(data)))
+  }
+
   CompleteExecutionEarly(request: MsgCompleteExecutionEarly): Promise<MsgCompleteExecutionEarlyResponse> {
     const data = MsgCompleteExecutionEarly.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'CompleteExecutionEarly', data)

@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { Reader, Writer } from 'protobufjs/minimal';
+import { Reader, util, configure, Writer } from 'protobufjs/minimal';
+import * as Long from 'long';
+import { Trade } from '../pylons/trade';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Item } from '../pylons/item';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
@@ -7,6 +9,108 @@ import { Execution } from '../pylons/execution';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
+const baseQueryGetTradeRequest = { ID: 0 };
+export const QueryGetTradeRequest = {
+    encode(message, writer = Writer.create()) {
+        if (message.ID !== 0) {
+            writer.uint32(8).uint64(message.ID);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetTradeRequest };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.ID = longToNumber(reader.uint64());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetTradeRequest };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = Number(object.ID);
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.ID !== undefined && (obj.ID = message.ID);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetTradeRequest };
+        if (object.ID !== undefined && object.ID !== null) {
+            message.ID = object.ID;
+        }
+        else {
+            message.ID = 0;
+        }
+        return message;
+    }
+};
+const baseQueryGetTradeResponse = {};
+export const QueryGetTradeResponse = {
+    encode(message, writer = Writer.create()) {
+        if (message.Trade !== undefined) {
+            Trade.encode(message.Trade, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseQueryGetTradeResponse };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.Trade = Trade.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseQueryGetTradeResponse };
+        if (object.Trade !== undefined && object.Trade !== null) {
+            message.Trade = Trade.fromJSON(object.Trade);
+        }
+        else {
+            message.Trade = undefined;
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.Trade !== undefined && (obj.Trade = message.Trade ? Trade.toJSON(message.Trade) : undefined);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseQueryGetTradeResponse };
+        if (object.Trade !== undefined && object.Trade !== null) {
+            message.Trade = Trade.fromPartial(object.Trade);
+        }
+        else {
+            message.Trade = undefined;
+        }
+        return message;
+    }
+};
 const baseQueryListItemByOwnerRequest = { owner: '' };
 export const QueryListItemByOwnerRequest = {
     encode(message, writer = Writer.create()) {
@@ -1396,6 +1500,11 @@ export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
     }
+    Trade(request) {
+        const data = QueryGetTradeRequest.encode(request).finish();
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Trade', data);
+        return promise.then((data) => QueryGetTradeResponse.decode(new Reader(data)));
+    }
     ListItemByOwner(request) {
         const data = QueryListItemByOwnerRequest.encode(request).finish();
         const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListItemByOwner', data);
@@ -1446,4 +1555,25 @@ export class QueryClientImpl {
         const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Cookbook', data);
         return promise.then((data) => QueryGetCookbookResponse.decode(new Reader(data)));
     }
+}
+var globalThis = (() => {
+    if (typeof globalThis !== 'undefined')
+        return globalThis;
+    if (typeof self !== 'undefined')
+        return self;
+    if (typeof window !== 'undefined')
+        return window;
+    if (typeof global !== 'undefined')
+        return global;
+    throw 'Unable to locate global object';
+})();
+function longToNumber(long) {
+    if (long.gt(Number.MAX_SAFE_INTEGER)) {
+        throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+    }
+    return long.toNumber();
+}
+if (util.Long !== Long) {
+    util.Long = Long;
+    configure();
 }

@@ -1,5 +1,7 @@
 /* eslint-disable */
-import { Reader, Writer } from 'protobufjs/minimal'
+import { Reader, util, configure, Writer } from 'protobufjs/minimal'
+import * as Long from 'long'
+import { Trade } from '../pylons/trade'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Item } from '../pylons/item'
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order'
@@ -10,6 +12,14 @@ import { Cookbook } from '../pylons/cookbook'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetTradeRequest {
+  ID: number
+}
+
+export interface QueryGetTradeResponse {
+  Trade: Trade | undefined
+}
+
 export interface QueryListItemByOwnerRequest {
   owner: string
   /** pagination defines an optional pagination for the request. */
@@ -115,6 +125,116 @@ export interface QueryGetCookbookRequest {
 
 export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
+}
+
+const baseQueryGetTradeRequest: object = { ID: 0 }
+
+export const QueryGetTradeRequest = {
+  encode(message: QueryGetTradeRequest, writer: Writer = Writer.create()): Writer {
+    if (message.ID !== 0) {
+      writer.uint32(8).uint64(message.ID)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetTradeRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetTradeRequest } as QueryGetTradeRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.ID = longToNumber(reader.uint64() as Long)
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetTradeRequest {
+    const message = { ...baseQueryGetTradeRequest } as QueryGetTradeRequest
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = Number(object.ID)
+    } else {
+      message.ID = 0
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetTradeRequest): unknown {
+    const obj: any = {}
+    message.ID !== undefined && (obj.ID = message.ID)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetTradeRequest>): QueryGetTradeRequest {
+    const message = { ...baseQueryGetTradeRequest } as QueryGetTradeRequest
+    if (object.ID !== undefined && object.ID !== null) {
+      message.ID = object.ID
+    } else {
+      message.ID = 0
+    }
+    return message
+  }
+}
+
+const baseQueryGetTradeResponse: object = {}
+
+export const QueryGetTradeResponse = {
+  encode(message: QueryGetTradeResponse, writer: Writer = Writer.create()): Writer {
+    if (message.Trade !== undefined) {
+      Trade.encode(message.Trade, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetTradeResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetTradeResponse } as QueryGetTradeResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.Trade = Trade.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetTradeResponse {
+    const message = { ...baseQueryGetTradeResponse } as QueryGetTradeResponse
+    if (object.Trade !== undefined && object.Trade !== null) {
+      message.Trade = Trade.fromJSON(object.Trade)
+    } else {
+      message.Trade = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetTradeResponse): unknown {
+    const obj: any = {}
+    message.Trade !== undefined && (obj.Trade = message.Trade ? Trade.toJSON(message.Trade) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetTradeResponse>): QueryGetTradeResponse {
+    const message = { ...baseQueryGetTradeResponse } as QueryGetTradeResponse
+    if (object.Trade !== undefined && object.Trade !== null) {
+      message.Trade = Trade.fromPartial(object.Trade)
+    } else {
+      message.Trade = undefined
+    }
+    return message
+  }
 }
 
 const baseQueryListItemByOwnerRequest: object = { owner: '' }
@@ -1557,6 +1677,8 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a trade by id. */
+  Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>
   /** Queries a list of listItemByOwner items. */
   ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>
   /** Queries a googleIAPOrder by PurchaseToken. */
@@ -1584,6 +1706,12 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse> {
+    const data = QueryGetTradeRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Trade', data)
+    return promise.then((data) => QueryGetTradeResponse.decode(new Reader(data)))
+  }
+
   ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse> {
     const data = QueryListItemByOwnerRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListItemByOwner', data)
@@ -1649,6 +1777,16 @@ interface Rpc {
   request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>
 }
 
+declare var self: any | undefined
+declare var window: any | undefined
+var globalThis: any = (() => {
+  if (typeof globalThis !== 'undefined') return globalThis
+  if (typeof self !== 'undefined') return self
+  if (typeof window !== 'undefined') return window
+  if (typeof global !== 'undefined') return global
+  throw 'Unable to locate global object'
+})()
+
 type Builtin = Date | Function | Uint8Array | string | number | undefined
 export type DeepPartial<T> = T extends Builtin
   ? T
@@ -1659,3 +1797,15 @@ export type DeepPartial<T> = T extends Builtin
   : T extends {}
   ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER')
+  }
+  return long.toNumber()
+}
+
+if (util.Long !== Long) {
+  util.Long = Long as any
+  configure()
+}

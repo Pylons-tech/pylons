@@ -75,6 +75,13 @@ func (k Keeper) UpdateItem(ctx sdk.Context, item types.Item, prevAddr sdk.AccAdd
 	k.SetItem(ctx, item)
 }
 
+// HasItem checks if the item exists in the store
+func (k Keeper) HasItem(ctx sdk.Context, cookbookID, id string) bool {
+	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
+	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(cookbookID))
+	return cookbookItemsStore.Has(types.KeyPrefix(id))
+}
+
 // GetItem returns an item from its index
 func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item, found bool) {
 	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))

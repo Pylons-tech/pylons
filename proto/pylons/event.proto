@@ -10,7 +10,7 @@ import "pylons/execution.proto";
 import "pylons/item.proto";
 import "pylons/recipe.proto";
 import "pylons/cookbook.proto";
-import "pylons/tx.proto";
+import "pylons/trade.proto";
 
 message EventCreateAccount {
   string address = 1;

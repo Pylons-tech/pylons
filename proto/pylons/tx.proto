@@ -4,6 +4,7 @@ package Pylonstech.pylons.pylons;
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
 // this line is used by starport scaffolding # proto/tx/import
+import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
 import "pylons/item.proto";
@@ -15,6 +16,9 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
+  rpc CreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
+  rpc CancelTrade(MsgCancelTrade) returns (MsgCancelTradeResponse);
   rpc CompleteExecutionEarly(MsgCompleteExecutionEarly) returns (MsgCompleteExecutionEarlyResponse);
   rpc TransferCookbook(MsgTransferCookbook) returns (MsgTransferCookbookResponse);
   rpc GoogleInAppPurchaseGetCoins(MsgGoogleInAppPurchaseGetCoins) returns (MsgGoogleInAppPurchaseGetCoinsResponse);
@@ -29,6 +33,35 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgFulfillTrade {
+  string creator = 1;
+  string ID = 2;
+  repeated ItemRef items = 3 [(gogoproto.nullable) = false];
+}
+
+message MsgFulfillTradeResponse {
+}
+
+message MsgCreateTrade {
+  string creator = 1;
+  repeated cosmos.base.v1beta1.Coin coinInputs = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemInput itemInputs = 3 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemRef itemOutputs = 5 [(gogoproto.nullable) = false];
+  string extraInfo = 6;
+}
+
+message MsgCreateTradeResponse {
+  uint64 id = 1;
+}
+
+message MsgCancelTrade {
+  string creator = 1;
+  uint64 id = 2;
+}
+
+message MsgCancelTradeResponse { }
+
 message MsgCompleteExecutionEarly {
   string creator = 1;
   string ID = 2;
@@ -63,11 +96,6 @@ message MsgCreateAccount {
 }
 
 message MsgCreateAccountResponse {
-}
-
-message ItemRef {
-  string cookbookID = 1;
-  string ItemID = 2;
 }
 
 message MsgSendItems {
