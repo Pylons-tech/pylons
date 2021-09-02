@@ -63,12 +63,12 @@ test-unit:
 test-race:
 	@go test -mod=readonly -v -race $(PACKAGES) 
 
-COVERFILE := coverage.txt
-COVERHTMLFILE := cover.html
+COVER_FILE := coverage.txt
+COVER_HTML_FILE := cover.html
 
 test-cover:
-	@go test -mod=readonly -v -timeout 30m -coverprofile=$(COVERFILE) -covermode=atomic $(PACKAGES)
-	@go tool cover -html=$(COVERFILE) -o $(COVERHTMLFILE)
+	@go test -mod=readonly -v -timeout 30m -coverprofile=$(COVER_FILE) -covermode=atomic $(PACKAGES)
+	@go tool cover -html=$(COVER_FILE) -o $(COVER_HTML_FILE)
 
 bench:
 	@go test -mod=readonly -v -bench=. $(PACKAGES)
