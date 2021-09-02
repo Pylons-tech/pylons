@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
-import "pylons/username.proto";
+import "pylons/pylons_account.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
@@ -20,15 +20,9 @@ service Query {
 	// this line is used by starport scaffolding # 2
 
 	// Queries a username by account.
-	rpc Username(QueryGetUsernameRequest) returns (QueryGetUsernameResponse) {
-		option (google.api.http).get = "/pylons/username/{account}";
+	rpc Username(QueryGetAccountRequest) returns (QueryGetAccountResponse) {
+		option (google.api.http).get = "/pylons/account/{username}";
 	}
-
-	// Queries a list of username items.
-	rpc UsernameAll(QueryAllUsernameRequest) returns (QueryAllUsernameResponse) {
-		option (google.api.http).get = "/pylons/username";
-	}
-
 
 	// Queries a trade by id.
 	rpc Trade(QueryGetTradeRequest) returns (QueryGetTradeResponse) {
@@ -98,22 +92,14 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
-message QueryGetUsernameRequest {
-	string account = 1;
+message QueryGetAccountRequest {
+	string username = 1;
 }
 
-message QueryGetUsernameResponse {
-	Username username = 1;
+message QueryGetAccountResponse {
+	PylonsAccount pylonsAccount = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryAllUsernameRequest {
-	cosmos.base.query.v1beta1.PageRequest pagination = 1;
-}
-
-message QueryAllUsernameResponse {
-	repeated Username username = 1;
-	cosmos.base.query.v1beta1.PageResponse pagination = 2;
-}
 message QueryGetTradeRequest {
 	uint64 ID = 1;
 }

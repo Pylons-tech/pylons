@@ -856,14 +856,14 @@ export const MsgGoogleInAppPurchaseGetCoinsResponse = {
         return message;
     }
 };
-const baseMsgCreateAccount = { creator: '', value: '' };
+const baseMsgCreateAccount = { creator: '', username: '' };
 export const MsgCreateAccount = {
     encode(message, writer = Writer.create()) {
         if (message.creator !== '') {
             writer.uint32(10).string(message.creator);
         }
-        if (message.value !== '') {
-            writer.uint32(18).string(message.value);
+        if (message.username !== '') {
+            writer.uint32(18).string(message.username);
         }
         return writer;
     },
@@ -878,7 +878,7 @@ export const MsgCreateAccount = {
                     message.creator = reader.string();
                     break;
                 case 2:
-                    message.value = reader.string();
+                    message.username = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -895,18 +895,18 @@ export const MsgCreateAccount = {
         else {
             message.creator = '';
         }
-        if (object.value !== undefined && object.value !== null) {
-            message.value = String(object.value);
+        if (object.username !== undefined && object.username !== null) {
+            message.username = String(object.username);
         }
         else {
-            message.value = '';
+            message.username = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
         message.creator !== undefined && (obj.creator = message.creator);
-        message.value !== undefined && (obj.value = message.value);
+        message.username !== undefined && (obj.username = message.username);
         return obj;
     },
     fromPartial(object) {
@@ -917,11 +917,11 @@ export const MsgCreateAccount = {
         else {
             message.creator = '';
         }
-        if (object.value !== undefined && object.value !== null) {
-            message.value = object.value;
+        if (object.username !== undefined && object.username !== null) {
+            message.username = object.username;
         }
         else {
-            message.value = '';
+            message.username = '';
         }
         return message;
     }

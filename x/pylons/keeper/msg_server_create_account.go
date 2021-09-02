@@ -25,16 +25,21 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 
 	// set the username in the store
-	username := types.Username{
-		Creator: msg.Creator,
-		Value:   msg.Value,
+	pylonsAccount := types.PylonsAccount{
+		Account: msg.Creator,
+		Username:    msg.Username,
 	}
 
-	k.SetUsername(ctx, username)
+	_, found := k.GetPylonsAccount(ctx, msg.Username)
+	if found {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
+	}
+
+	k.SetPylonsAccount(ctx, pylonsAccount)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
 		Address:  addr.String(),
-		Username: msg.Value,
+		Username: msg.Username,
 	})
 
 	return &types.MsgCreateAccountResponse{}, err

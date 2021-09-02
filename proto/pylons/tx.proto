@@ -93,7 +93,7 @@ message MsgGoogleInAppPurchaseGetCoinsResponse {
 
 message MsgCreateAccount {
   string creator = 1;
-  string value = 2;
+  string username = 2;
 }
 
 message MsgCreateAccountResponse {

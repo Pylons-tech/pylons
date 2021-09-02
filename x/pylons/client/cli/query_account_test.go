@@ -22,42 +22,40 @@ func TestShowUsername(t *testing.T) {
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
 	for _, tc := range []struct {
-		desc    string
-		creator string
-		args    []string
-		err     error
-		obj     *types.Username
+		desc     string
+		username string
+		args     []string
+		err      error
+		obj      types.PylonsAccount
 	}{
 		{
-			desc:    "found",
-			creator: objs[0].Creator,
-			args:    common,
-			obj:     objs[0],
+			desc:     "found",
+			username: objs[0].Username,
+			args:     common,
+			obj:      objs[0],
 		},
 		{
-			desc:    "not found",
-			creator: "not_found",
-			args:    common,
-			err:     status.Error(codes.InvalidArgument, "not found"),
+			desc:     "not found",
+			username: "not_found",
+			args:     common,
+			err:      status.Error(codes.InvalidArgument, "not found"),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.creator}
+			args := []string{tc.username}
 			args = append(args, tc.args...)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowUsername(), args)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowAccount(), args)
 			if tc.err != nil {
 				stat, ok := status.FromError(tc.err)
 				require.True(t, ok)
 				require.ErrorIs(t, stat.Err(), tc.err)
 			} else {
 				require.NoError(t, err)
-				var resp types.QueryGetUsernameResponse
+				var resp types.QueryGetAccountResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.NotNil(t, resp.Username)
-				require.Equal(t, tc.obj, resp.Username)
+				require.Equal(t, tc.obj, resp.PylonsAccount)
 			}
 		})
 	}
 }
-

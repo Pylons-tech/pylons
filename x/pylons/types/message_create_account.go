@@ -9,8 +9,8 @@ var _ sdk.Msg = &MsgCreateAccount{}
 
 func NewMsgCreateAccount(creator string, username string) *MsgCreateAccount {
 	return &MsgCreateAccount{
-		Creator: creator,
-		Value:   username,
+		Creator:  creator,
+		Username: username,
 	}
 }
 
@@ -41,7 +41,7 @@ func (msg *MsgCreateAccount) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
-	if err = ValidateID(msg.Value); err != nil {
+	if err = ValidateID(msg.Username); err != nil {
 		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
 

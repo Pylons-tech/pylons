@@ -26,7 +26,7 @@ func TestShowTrade(t *testing.T) {
 		id   string
 		args []string
 		err  error
-		obj  *types.Trade
+		obj  types.Trade
 	}{
 		{
 			desc: "found",

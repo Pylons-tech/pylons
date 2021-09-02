@@ -17,7 +17,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	srv := keeper.NewMsgServerImpl(k)
 	wctx := sdk.WrapSDKContext(ctx)
 
-	addr := types.GenTestBech32List(1)[0]
+	addr := types.GenTestBech32List(2)
 
 	for _, tc := range []struct {
 		desc    string
@@ -26,11 +26,16 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 	}{
 		{
 			desc:    "Valid",
-			request: &types.MsgCreateAccount{Creator: addr},
+			request: &types.MsgCreateAccount{Creator: addr[0], Username: "testUser"},
 		},
 		{
-			desc:    "Invalid",
-			request: &types.MsgCreateAccount{Creator: "invalid"},
+			desc:    "InvalidCreator",
+			request: &types.MsgCreateAccount{Creator: "invalid", Username: "testUser"},
+			err:     sdkerrors.ErrInvalidRequest,
+		},
+		{
+			desc:    "DuplicateUsername",
+			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser"},
 			err:     sdkerrors.ErrInvalidRequest,
 		},
 	} {

@@ -65,7 +65,7 @@ export interface MsgGoogleInAppPurchaseGetCoinsResponse {}
 
 export interface MsgCreateAccount {
   creator: string
-  value: string
+  username: string
 }
 
 export interface MsgCreateAccountResponse {}
@@ -1045,15 +1045,15 @@ export const MsgGoogleInAppPurchaseGetCoinsResponse = {
   }
 }
 
-const baseMsgCreateAccount: object = { creator: '', value: '' }
+const baseMsgCreateAccount: object = { creator: '', username: '' }
 
 export const MsgCreateAccount = {
   encode(message: MsgCreateAccount, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
-    if (message.value !== '') {
-      writer.uint32(18).string(message.value)
+    if (message.username !== '') {
+      writer.uint32(18).string(message.username)
     }
     return writer
   },
@@ -1069,7 +1069,7 @@ export const MsgCreateAccount = {
           message.creator = reader.string()
           break
         case 2:
-          message.value = reader.string()
+          message.username = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -1086,10 +1086,10 @@ export const MsgCreateAccount = {
     } else {
       message.creator = ''
     }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = String(object.value)
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
     } else {
-      message.value = ''
+      message.username = ''
     }
     return message
   },
@@ -1097,7 +1097,7 @@ export const MsgCreateAccount = {
   toJSON(message: MsgCreateAccount): unknown {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
-    message.value !== undefined && (obj.value = message.value)
+    message.username !== undefined && (obj.username = message.username)
     return obj
   },
 
@@ -1108,10 +1108,10 @@ export const MsgCreateAccount = {
     } else {
       message.creator = ''
     }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
     } else {
-      message.value = ''
+      message.username = ''
     }
     return message
   }
