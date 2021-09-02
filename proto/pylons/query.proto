@@ -20,7 +20,7 @@ service Query {
 	// this line is used by starport scaffolding # 2
 
 	// Queries a username by account.
-	rpc Username(QueryGetAccountRequest) returns (QueryGetAccountResponse) {
+	rpc PylonsAccount(QueryGetAccountRequest) returns (QueryGetAccountResponse) {
 		option (google.api.http).get = "/pylons/account/{username}";
 	}
 

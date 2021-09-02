@@ -140,11 +140,11 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
-         * @name QueryUsername
+         * @name QueryPylonsAccount
          * @summary Queries a username by account.
          * @request GET:/pylons/account/{username}
          */
-        this.queryUsername = (username, params = {}) => this.request({
+        this.queryPylonsAccount = (username, params = {}) => this.request({
             path: `/pylons/account/${username}`,
             method: "GET",
             format: "json",

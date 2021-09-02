@@ -1603,9 +1603,9 @@ export class QueryClientImpl {
     constructor(rpc) {
         this.rpc = rpc;
     }
-    Username(request) {
+    PylonsAccount(request) {
         const data = QueryGetAccountRequest.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Username', data);
+        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'PylonsAccount', data);
         return promise.then((data) => QueryGetAccountResponse.decode(new Reader(data)));
     }
     Trade(request) {

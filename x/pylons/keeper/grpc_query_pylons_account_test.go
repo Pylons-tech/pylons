@@ -43,7 +43,7 @@ func (suite *IntegrationTestSuite) TestAccountQuerySingle() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-			response, err := k.Username(wctx, tc.request)
+			response, err := k.PylonsAccount(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {

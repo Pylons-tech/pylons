@@ -10,7 +10,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) Username(c context.Context, req *types.QueryGetAccountRequest) (*types.QueryGetAccountResponse, error) {
+func (k Keeper) PylonsAccount(c context.Context, req *types.QueryGetAccountRequest) (*types.QueryGetAccountResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}

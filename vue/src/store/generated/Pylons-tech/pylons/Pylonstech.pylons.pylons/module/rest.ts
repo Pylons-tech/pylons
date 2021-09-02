@@ -691,11 +691,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryUsername
+   * @name QueryPylonsAccount
    * @summary Queries a username by account.
    * @request GET:/pylons/account/{username}
    */
-  queryUsername = (username: string, params: RequestParams = {}) =>
+  queryPylonsAccount = (username: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetAccountResponse, RpcStatus>({
       path: `/pylons/account/${username}`,
       method: "GET",
