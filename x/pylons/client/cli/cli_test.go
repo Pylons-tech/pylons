@@ -12,7 +12,7 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
-func networkWithUsernameObjects(t *testing.T, n int) (*network.Network, []*types.Username) {
+func networkWithUsernameObjects(t *testing.T, n int) (*network.Network, []types.PylonsAccount) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
@@ -21,26 +21,26 @@ func networkWithUsernameObjects(t *testing.T, n int) (*network.Network, []*types
 	creators := types.GenTestBech32List(n)
 
 	for i := 0; i < n; i++ {
-		state.UsernameList = append(state.UsernameList,
-			&types.Username{
-				Creator: creators[i],
-				Value:   "user" + strconv.Itoa(i),
+		state.PylonsAccountList = append(state.PylonsAccountList,
+			types.PylonsAccount{
+				Account: creators[i],
+				Username:    "user" + strconv.Itoa(i),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.UsernameList
+	return network.New(t, cfg), state.PylonsAccountList
 }
 
-func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []*types.Trade) {
+func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.TradeList = append(state.TradeList, &types.Trade{
+		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          "creator",
 			ID:               uint64(i),
 			CoinInputs:       sdk.Coins{},

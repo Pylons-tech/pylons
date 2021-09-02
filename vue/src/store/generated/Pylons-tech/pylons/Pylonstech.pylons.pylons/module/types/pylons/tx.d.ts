@@ -53,7 +53,7 @@ export interface MsgGoogleInAppPurchaseGetCoinsResponse {
 }
 export interface MsgCreateAccount {
     creator: string;
-    value: string;
+    username: string;
 }
 export interface MsgCreateAccountResponse {
 }

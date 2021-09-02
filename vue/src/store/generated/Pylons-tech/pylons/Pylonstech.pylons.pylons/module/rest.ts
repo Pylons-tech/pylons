@@ -288,19 +288,13 @@ export type PylonsMsgUpdateCookbookResponse = object;
 
 export type PylonsMsgUpdateRecipeResponse = object;
 
-export interface PylonsQueryAllUsernameResponse {
-  username?: PylonsUsername[];
+export interface PylonsPylonsAccount {
+  account?: string;
+  username?: string;
+}
 
-  /**
-   * PageResponse is to be embedded in gRPC response messages where the
-   * corresponding request message has used PageRequest.
-   *
-   *  message SomeResponse {
-   *          repeated Bar results = 1;
-   *          PageResponse page = 2;
-   *  }
-   */
-  pagination?: V1Beta1PageResponse;
+export interface PylonsQueryGetAccountResponse {
+  pylonsAccount?: PylonsPylonsAccount;
 }
 
 export interface PylonsQueryGetCookbookResponse {
@@ -326,10 +320,6 @@ export interface PylonsQueryGetRecipeResponse {
 
 export interface PylonsQueryGetTradeResponse {
   Trade?: PylonsTrade;
-}
-
-export interface PylonsQueryGetUsernameResponse {
-  username?: PylonsUsername;
 }
 
 export interface PylonsQueryListCookbooksByCreatorResponse {
@@ -418,11 +408,6 @@ export interface PylonsTrade {
   extraInfo?: string;
   receiver?: string;
   tradedItemInputs?: PylonsItemRef[];
-}
-
-export interface PylonsUsername {
-  creator?: string;
-  value?: string;
 }
 
 export interface PylonsWeightedOutputs {
@@ -706,6 +691,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
+   * @name QueryUsername
+   * @summary Queries a username by account.
+   * @request GET:/pylons/account/{username}
+   */
+  queryUsername = (username: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetAccountResponse, RpcStatus>({
+      path: `/pylons/account/${username}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
    * @name QueryCookbook
    * @summary Retrieves a cookbook by ID.
    * @request GET:/pylons/cookbook/{ID}
@@ -925,47 +926,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryTrade = (ID: string, params: RequestParams = {}) =>
     this.request<PylonsQueryGetTradeResponse, RpcStatus>({
       path: `/pylons/trade/${ID}`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryUsernameAll
-   * @summary Queries a list of username items.
-   * @request GET:/pylons/username
-   */
-  queryUsernameAll = (
-    query?: {
-      "pagination.key"?: string;
-      "pagination.offset"?: string;
-      "pagination.limit"?: string;
-      "pagination.countTotal"?: boolean;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<PylonsQueryAllUsernameResponse, RpcStatus>({
-      path: `/pylons/username`,
-      method: "GET",
-      query: query,
-      format: "json",
-      ...params,
-    });
-
-  /**
-   * No description
-   *
-   * @tags Query
-   * @name QueryUsername
-   * @summary Queries a username by account.
-   * @request GET:/pylons/username/{account}
-   */
-  queryUsername = (account: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetUsernameResponse, RpcStatus>({
-      path: `/pylons/username/${account}`,
       method: "GET",
       format: "json",
       ...params,

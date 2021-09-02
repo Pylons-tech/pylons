@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"testing"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	keyringerrors "github.com/99designs/keyring"
@@ -40,6 +42,7 @@ func TestCreateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
 			err: nil,
+			code: 0,
 		},
 		{
 			desc:     "invalidAddress",
@@ -65,22 +68,32 @@ func TestCreateAccount(t *testing.T) {
 			},
 			err: types.ErrInvalidRequestField,
 		},
+		{
+			desc:     "duplicateUser",
+			username: "validUser",
+			address:  val.Address.String(),
+			flags: []string{
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+			},
+			err:  nil,
+			code: sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{tc.username}
 			args = append(args, tc.flags...)
-			_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
-			if err != nil {
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
 				require.NoError(t, err)
-				args = []string{tc.address}
-				out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdShowUsername(), args)
-				require.NoError(t, err)
-				var resp types.QueryGetUsernameResponse
+				var resp sdk.TxResponse
 				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
-				require.Equal(t, tc.username, resp.Username.Value)
+				require.Equal(t, tc.code, resp.Code)
 			}
 		})
 	}

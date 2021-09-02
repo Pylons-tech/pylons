@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
-import { Username } from '../pylons/username'
+import { PylonsAccount } from '../pylons/pylons_account'
 import { Trade } from '../pylons/trade'
 import { Params } from '../pylons/params'
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order'
@@ -15,7 +15,7 @@ export const protobufPackage = 'Pylonstech.pylons.pylons'
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
   /** this line is used by starport scaffolding # genesis/proto/state */
-  usernameList: Username[]
+  pylonsAccountList: PylonsAccount[]
   /** this line is used by starport scaffolding # genesis/proto/stateField */
   tradeList: Trade[]
   /** this line is used by starport scaffolding # genesis/proto/stateField */
@@ -48,8 +48,8 @@ const baseGenesisState: object = { tradeCount: 0, entityCount: 0, googleIAPOrder
 
 export const GenesisState = {
   encode(message: GenesisState, writer: Writer = Writer.create()): Writer {
-    for (const v of message.usernameList) {
-      Username.encode(v!, writer.uint32(114).fork()).ldelim()
+    for (const v of message.pylonsAccountList) {
+      PylonsAccount.encode(v!, writer.uint32(114).fork()).ldelim()
     }
     for (const v of message.tradeList) {
       Trade.encode(v!, writer.uint32(98).fork()).ldelim()
@@ -97,7 +97,7 @@ export const GenesisState = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseGenesisState } as GenesisState
-    message.usernameList = []
+    message.pylonsAccountList = []
     message.tradeList = []
     message.googleInAppPurchaseOrderList = []
     message.executionList = []
@@ -109,7 +109,7 @@ export const GenesisState = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 14:
-          message.usernameList.push(Username.decode(reader, reader.uint32()))
+          message.pylonsAccountList.push(PylonsAccount.decode(reader, reader.uint32()))
           break
         case 12:
           message.tradeList.push(Trade.decode(reader, reader.uint32()))
@@ -160,7 +160,7 @@ export const GenesisState = {
 
   fromJSON(object: any): GenesisState {
     const message = { ...baseGenesisState } as GenesisState
-    message.usernameList = []
+    message.pylonsAccountList = []
     message.tradeList = []
     message.googleInAppPurchaseOrderList = []
     message.executionList = []
@@ -168,9 +168,9 @@ export const GenesisState = {
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
-    if (object.usernameList !== undefined && object.usernameList !== null) {
-      for (const e of object.usernameList) {
-        message.usernameList.push(Username.fromJSON(e))
+    if (object.pylonsAccountList !== undefined && object.pylonsAccountList !== null) {
+      for (const e of object.pylonsAccountList) {
+        message.pylonsAccountList.push(PylonsAccount.fromJSON(e))
       }
     }
     if (object.tradeList !== undefined && object.tradeList !== null) {
@@ -243,10 +243,10 @@ export const GenesisState = {
 
   toJSON(message: GenesisState): unknown {
     const obj: any = {}
-    if (message.usernameList) {
-      obj.usernameList = message.usernameList.map((e) => (e ? Username.toJSON(e) : undefined))
+    if (message.pylonsAccountList) {
+      obj.pylonsAccountList = message.pylonsAccountList.map((e) => (e ? PylonsAccount.toJSON(e) : undefined))
     } else {
-      obj.usernameList = []
+      obj.pylonsAccountList = []
     }
     if (message.tradeList) {
       obj.tradeList = message.tradeList.map((e) => (e ? Trade.toJSON(e) : undefined))
@@ -294,7 +294,7 @@ export const GenesisState = {
 
   fromPartial(object: DeepPartial<GenesisState>): GenesisState {
     const message = { ...baseGenesisState } as GenesisState
-    message.usernameList = []
+    message.pylonsAccountList = []
     message.tradeList = []
     message.googleInAppPurchaseOrderList = []
     message.executionList = []
@@ -302,9 +302,9 @@ export const GenesisState = {
     message.itemList = []
     message.recipeList = []
     message.cookbookList = []
-    if (object.usernameList !== undefined && object.usernameList !== null) {
-      for (const e of object.usernameList) {
-        message.usernameList.push(Username.fromPartial(e))
+    if (object.pylonsAccountList !== undefined && object.pylonsAccountList !== null) {
+      for (const e of object.pylonsAccountList) {
+        message.pylonsAccountList.push(PylonsAccount.fromPartial(e))
       }
     }
     if (object.tradeList !== undefined && object.tradeList !== null) {

@@ -12,13 +12,13 @@ import (
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
 	// Set all the username
-	for _, elem := range genState.UsernameList {
-		k.SetUsername(ctx, *elem)
+	for _, elem := range genState.PylonsAccountList {
+		k.SetPylonsAccount(ctx, elem)
 	}
 
 	// Set all the trade
 	for _, elem := range genState.TradeList {
-		k.SetTrade(ctx, *elem)
+		k.SetTrade(ctx, elem)
 	}
 
 	// Set trade count
@@ -77,17 +77,17 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 
 	// this line is used by starport scaffolding # genesis/module/export
 	// Get all username
-	usernameList := k.GetAllUsername(ctx)
+	usernameList := k.GetAllPylonsAccount(ctx)
 	for _, elem := range usernameList {
 		elem := elem
-		genesis.UsernameList = append(genesis.UsernameList, &elem)
+		genesis.PylonsAccountList = append(genesis.PylonsAccountList, elem)
 	}
 
 	// Get all trade
 	tradeList := k.GetAllTrade(ctx)
 	for _, elem := range tradeList {
 		elem := elem
-		genesis.TradeList = append(genesis.TradeList, &elem)
+		genesis.TradeList = append(genesis.TradeList, elem)
 	}
 
 	// Set the current count

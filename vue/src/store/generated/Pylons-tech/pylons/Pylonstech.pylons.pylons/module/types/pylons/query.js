@@ -1,32 +1,32 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal';
 import * as Long from 'long';
-import { Username } from '../pylons/username';
-import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
+import { PylonsAccount } from '../pylons/pylons_account';
 import { Trade } from '../pylons/trade';
+import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Item } from '../pylons/item';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseQueryGetUsernameRequest = { account: '' };
-export const QueryGetUsernameRequest = {
+const baseQueryGetAccountRequest = { username: '' };
+export const QueryGetAccountRequest = {
     encode(message, writer = Writer.create()) {
-        if (message.account !== '') {
-            writer.uint32(10).string(message.account);
+        if (message.username !== '') {
+            writer.uint32(10).string(message.username);
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryGetUsernameRequest };
+        const message = { ...baseQueryGetAccountRequest };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.account = reader.string();
+                    message.username = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -36,48 +36,48 @@ export const QueryGetUsernameRequest = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryGetUsernameRequest };
-        if (object.account !== undefined && object.account !== null) {
-            message.account = String(object.account);
+        const message = { ...baseQueryGetAccountRequest };
+        if (object.username !== undefined && object.username !== null) {
+            message.username = String(object.username);
         }
         else {
-            message.account = '';
+            message.username = '';
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.account !== undefined && (obj.account = message.account);
+        message.username !== undefined && (obj.username = message.username);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryGetUsernameRequest };
-        if (object.account !== undefined && object.account !== null) {
-            message.account = object.account;
+        const message = { ...baseQueryGetAccountRequest };
+        if (object.username !== undefined && object.username !== null) {
+            message.username = object.username;
         }
         else {
-            message.account = '';
+            message.username = '';
         }
         return message;
     }
 };
-const baseQueryGetUsernameResponse = {};
-export const QueryGetUsernameResponse = {
+const baseQueryGetAccountResponse = {};
+export const QueryGetAccountResponse = {
     encode(message, writer = Writer.create()) {
-        if (message.username !== undefined) {
-            Username.encode(message.username, writer.uint32(10).fork()).ldelim();
+        if (message.pylonsAccount !== undefined) {
+            PylonsAccount.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim();
         }
         return writer;
     },
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryGetUsernameResponse };
+        const message = { ...baseQueryGetAccountResponse };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.username = Username.decode(reader, reader.uint32());
+                    message.pylonsAccount = PylonsAccount.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -87,154 +87,27 @@ export const QueryGetUsernameResponse = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...baseQueryGetUsernameResponse };
-        if (object.username !== undefined && object.username !== null) {
-            message.username = Username.fromJSON(object.username);
+        const message = { ...baseQueryGetAccountResponse };
+        if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
+            message.pylonsAccount = PylonsAccount.fromJSON(object.pylonsAccount);
         }
         else {
-            message.username = undefined;
+            message.pylonsAccount = undefined;
         }
         return message;
     },
     toJSON(message) {
         const obj = {};
-        message.username !== undefined && (obj.username = message.username ? Username.toJSON(message.username) : undefined);
+        message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? PylonsAccount.toJSON(message.pylonsAccount) : undefined);
         return obj;
     },
     fromPartial(object) {
-        const message = { ...baseQueryGetUsernameResponse };
-        if (object.username !== undefined && object.username !== null) {
-            message.username = Username.fromPartial(object.username);
+        const message = { ...baseQueryGetAccountResponse };
+        if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
+            message.pylonsAccount = PylonsAccount.fromPartial(object.pylonsAccount);
         }
         else {
-            message.username = undefined;
-        }
-        return message;
-    }
-};
-const baseQueryAllUsernameRequest = {};
-export const QueryAllUsernameRequest = {
-    encode(message, writer = Writer.create()) {
-        if (message.pagination !== undefined) {
-            PageRequest.encode(message.pagination, writer.uint32(10).fork()).ldelim();
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryAllUsernameRequest };
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.pagination = PageRequest.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseQueryAllUsernameRequest };
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageRequest.fromJSON(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseQueryAllUsernameRequest };
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageRequest.fromPartial(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
-        }
-        return message;
-    }
-};
-const baseQueryAllUsernameResponse = {};
-export const QueryAllUsernameResponse = {
-    encode(message, writer = Writer.create()) {
-        for (const v of message.username) {
-            Username.encode(v, writer.uint32(10).fork()).ldelim();
-        }
-        if (message.pagination !== undefined) {
-            PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim();
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseQueryAllUsernameResponse };
-        message.username = [];
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.username.push(Username.decode(reader, reader.uint32()));
-                    break;
-                case 2:
-                    message.pagination = PageResponse.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseQueryAllUsernameResponse };
-        message.username = [];
-        if (object.username !== undefined && object.username !== null) {
-            for (const e of object.username) {
-                message.username.push(Username.fromJSON(e));
-            }
-        }
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageResponse.fromJSON(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        if (message.username) {
-            obj.username = message.username.map((e) => (e ? Username.toJSON(e) : undefined));
-        }
-        else {
-            obj.username = [];
-        }
-        message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined);
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseQueryAllUsernameResponse };
-        message.username = [];
-        if (object.username !== undefined && object.username !== null) {
-            for (const e of object.username) {
-                message.username.push(Username.fromPartial(e));
-            }
-        }
-        if (object.pagination !== undefined && object.pagination !== null) {
-            message.pagination = PageResponse.fromPartial(object.pagination);
-        }
-        else {
-            message.pagination = undefined;
+            message.pylonsAccount = undefined;
         }
         return message;
     }
@@ -1731,14 +1604,9 @@ export class QueryClientImpl {
         this.rpc = rpc;
     }
     Username(request) {
-        const data = QueryGetUsernameRequest.encode(request).finish();
+        const data = QueryGetAccountRequest.encode(request).finish();
         const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Username', data);
-        return promise.then((data) => QueryGetUsernameResponse.decode(new Reader(data)));
-    }
-    UsernameAll(request) {
-        const data = QueryAllUsernameRequest.encode(request).finish();
-        const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'UsernameAll', data);
-        return promise.then((data) => QueryAllUsernameResponse.decode(new Reader(data)));
+        return promise.then((data) => QueryGetAccountResponse.decode(new Reader(data)));
     }
     Trade(request) {
         const data = QueryGetTradeRequest.encode(request).finish();

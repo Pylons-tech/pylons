@@ -30,13 +30,13 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	return items
 }
 
-func createNUsername(k keeper.Keeper, ctx sdk.Context, n int) []types.Username {
-	items := make([]types.Username, n)
+func createNPylonsAccount(k keeper.Keeper, ctx sdk.Context, n int) []types.PylonsAccount {
+	items := make([]types.PylonsAccount, n)
 	creators := types.GenTestBech32List(n)
 	for i := range items {
-		items[i].Creator = creators[i]
-		items[i].Value = "user" + strconv.Itoa(i)
-		k.SetUsername(ctx, items[i])
+		items[i].Account = creators[i]
+		items[i].Username = "user" + strconv.Itoa(i)
+		k.SetPylonsAccount(ctx, items[i])
 	}
 	return items
 }

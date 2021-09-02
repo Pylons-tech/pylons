@@ -7,18 +7,18 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// SetUsername set a specific username in the store from its index
-func (k Keeper) SetUsername(ctx sdk.Context, username types.Username) {
+// SetPylonsAccount set a specific pylons account in the store from its index
+func (k Keeper) SetPylonsAccount(ctx sdk.Context, username types.PylonsAccount) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	b := k.cdc.MustMarshalBinaryBare(&username)
-	store.Set(types.KeyPrefix(username.Creator), b)
+	store.Set(types.KeyPrefix(username.Username), b)
 }
 
-// GetUsername returns a username from its index
-func (k Keeper) GetUsername(ctx sdk.Context, account string) (val types.Username, found bool) {
+// GetPylonsAccount returns a pylons account from its index
+func (k Keeper) GetPylonsAccount(ctx sdk.Context, username string) (val types.PylonsAccount, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 
-	b := store.Get(types.KeyPrefix(account))
+	b := store.Get(types.KeyPrefix(username))
 	if b == nil {
 		return val, false
 	}
@@ -27,21 +27,21 @@ func (k Keeper) GetUsername(ctx sdk.Context, account string) (val types.Username
 	return val, true
 }
 
-// RemoveUsername removes a username from the store
-func (k Keeper) RemoveUsername(ctx sdk.Context, index string) {
+// RemovePylonsAccount removes a pylons account from the store
+func (k Keeper) RemovePylonsAccount(ctx sdk.Context, username string) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
-	store.Delete(types.KeyPrefix(index))
+	store.Delete(types.KeyPrefix(username))
 }
 
-// GetAllUsername returns all username
-func (k Keeper) GetAllUsername(ctx sdk.Context) (list []types.Username) {
+// GetAllPylonsAccount returns all username
+func (k Keeper) GetAllPylonsAccount(ctx sdk.Context) (list []types.PylonsAccount) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 	iterator := sdk.KVStorePrefixIterator(store, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.Username
+		var val types.PylonsAccount
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
 		list = append(list, val)
 	}

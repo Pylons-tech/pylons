@@ -5,11 +5,11 @@ func (suite *IntegrationTestSuite) TestUsernameGet() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	usernames := createNUsername(k, ctx, 10)
-	for _, username := range usernames {
-		rst, found := k.GetUsername(ctx, username.Creator)
+	accounts := createNPylonsAccount(k, ctx, 10)
+	for _, account := range accounts {
+		rst, found := k.GetPylonsAccount(ctx, account.Username)
 		require.True(found)
-		require.Equal(username, rst)
+		require.Equal(account, rst)
 	}
 }
 func (suite *IntegrationTestSuite) TestUsernameRemove() {
@@ -17,10 +17,10 @@ func (suite *IntegrationTestSuite) TestUsernameRemove() {
 	ctx := suite.ctx
 	require := suite.Require()
 
-	usernames := createNUsername(k, ctx, 10)
-	for _, username := range usernames {
-		k.RemoveUsername(ctx, username.Creator)
-		_, found := k.GetUsername(ctx, username.Creator)
+	accounts := createNPylonsAccount(k, ctx, 10)
+	for _, account := range accounts {
+		k.RemovePylonsAccount(ctx, account.Username)
+		_, found := k.GetPylonsAccount(ctx, account.Username)
 		require.False(found)
 	}
 }

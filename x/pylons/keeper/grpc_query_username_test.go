@@ -8,32 +8,32 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (suite *IntegrationTestSuite) TestUsernameQuerySingle() {
+func (suite *IntegrationTestSuite) TestAccountQuerySingle() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
 
 	wctx := sdk.WrapSDKContext(ctx)
-	msgs := createNUsername(k, ctx, 2)
+	msgs := createNPylonsAccount(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetUsernameRequest
-		response *types.QueryGetUsernameResponse
+		request  *types.QueryGetAccountRequest
+		response *types.QueryGetAccountResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetUsernameRequest{Account: msgs[0].Creator},
-			response: &types.QueryGetUsernameResponse{Username: &msgs[0]},
+			request:  &types.QueryGetAccountRequest{Username: msgs[0].Username},
+			response: &types.QueryGetAccountResponse{PylonsAccount: msgs[0]},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetUsernameRequest{Account: msgs[1].Creator},
-			response: &types.QueryGetUsernameResponse{Username: &msgs[1]},
+			request:  &types.QueryGetAccountRequest{Username: msgs[1].Username},
+			response: &types.QueryGetAccountResponse{PylonsAccount: msgs[1]},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetUsernameRequest{Account: "missing"},
+			request: &types.QueryGetAccountRequest{Username: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
@@ -52,4 +52,3 @@ func (suite *IntegrationTestSuite) TestUsernameQuerySingle() {
 		})
 	}
 }
-

@@ -140,6 +140,20 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
+         * @name QueryUsername
+         * @summary Queries a username by account.
+         * @request GET:/pylons/account/{username}
+         */
+        this.queryUsername = (username, params = {}) => this.request({
+            path: `/pylons/account/${username}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
          * @name QueryCookbook
          * @summary Retrieves a cookbook by ID.
          * @request GET:/pylons/cookbook/{ID}
@@ -291,35 +305,6 @@ export class Api extends HttpClient {
          */
         this.queryTrade = (ID, params = {}) => this.request({
             path: `/pylons/trade/${ID}`,
-            method: "GET",
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryUsernameAll
-         * @summary Queries a list of username items.
-         * @request GET:/pylons/username
-         */
-        this.queryUsernameAll = (query, params = {}) => this.request({
-            path: `/pylons/username`,
-            method: "GET",
-            query: query,
-            format: "json",
-            ...params,
-        });
-        /**
-         * No description
-         *
-         * @tags Query
-         * @name QueryUsername
-         * @summary Queries a username by account.
-         * @request GET:/pylons/username/{account}
-         */
-        this.queryUsername = (account, params = {}) => this.request({
-            path: `/pylons/username/${account}`,
             method: "GET",
             format: "json",
             ...params,
