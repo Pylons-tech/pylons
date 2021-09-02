@@ -76,7 +76,7 @@ func (m *Username) GetName() string {
 }
 
 func init() {
-	proto.RegisterType((*Username)(nil), "Pylonstech.pylons.pylons.Username")
+	proto.RegisterType((*Username)(nil), "Pylonstech.pylons.pylons.PylonsAccount")
 }
 
 func init() { proto.RegisterFile("pylons/pylons_account.proto", fileDescriptor_8f5fca4f59fad57f) }
@@ -190,10 +190,10 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Username: wiretype end group for non-group")
+			return fmt.Errorf("proto: PylonsAccount: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Username: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: PylonsAccount: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

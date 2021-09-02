@@ -23,8 +23,8 @@ func networkWithUsernameObjects(t *testing.T, n int) (*network.Network, []types.
 	for i := 0; i < n; i++ {
 		state.PylonsAccountList = append(state.PylonsAccountList,
 			types.PylonsAccount{
-				Account: creators[i],
-				Username:    "user" + strconv.Itoa(i),
+				Account:  creators[i],
+				Username: "user" + strconv.Itoa(i),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

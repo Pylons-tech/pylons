@@ -1797,7 +1797,7 @@ export const QueryGetCookbookResponse = {
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Queries a username by account. */
-  Username(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>
+  PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>
   /** Queries a trade by id. */
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>
   /** Queries a list of listItemByOwner items. */
@@ -1827,9 +1827,9 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
-  Username(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse> {
+  PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse> {
     const data = QueryGetAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Username', data)
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'PylonsAccount', data)
     return promise.then((data) => QueryGetAccountResponse.decode(new Reader(data)))
   }
 

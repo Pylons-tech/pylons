@@ -279,7 +279,7 @@ export declare const QueryGetCookbookResponse: {
 /** Query defines the gRPC querier service. */
 export interface Query {
     /** Queries a username by account. */
-    Username(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
+    PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
     /** Queries a trade by id. */
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;
     /** Queries a list of listItemByOwner items. */
@@ -306,7 +306,7 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
-    Username(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
+    PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;
     ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>;
     GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>;

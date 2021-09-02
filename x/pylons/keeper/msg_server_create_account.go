@@ -26,8 +26,8 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 
 	// set the username in the store
 	pylonsAccount := types.PylonsAccount{
-		Account: msg.Creator,
-		Username:    msg.Username,
+		Account:  msg.Creator,
+		Username: msg.Username,
 	}
 
 	_, found := k.GetPylonsAccount(ctx, msg.Username)

@@ -19478,7 +19478,7 @@ paths:
   '/pylons/account/{username}':
     get:
       summary: Queries a username by account.
-      operationId: PylonstechPylonsPylonsUsername
+      operationId: PylonstechPylonsPylonsPylonsAccount
       responses:
         '200':
           description: A successful response.

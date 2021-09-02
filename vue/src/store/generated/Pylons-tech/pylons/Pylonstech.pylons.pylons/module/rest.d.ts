@@ -449,11 +449,11 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
-     * @name QueryUsername
+     * @name QueryPylonsAccount
      * @summary Queries a username by account.
      * @request GET:/pylons/account/{username}
      */
-    queryUsername: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountResponse, RpcStatus>>;
+    queryPylonsAccount: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountResponse, RpcStatus>>;
     /**
      * No description
      *

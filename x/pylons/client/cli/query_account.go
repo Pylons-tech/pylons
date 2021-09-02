@@ -24,7 +24,7 @@ func CmdShowAccount() *cobra.Command {
 				Username: args[0],
 			}
 
-			res, err := queryClient.Username(context.Background(), params)
+			res, err := queryClient.PylonsAccount(context.Background(), params)
 			if err != nil {
 				return err
 			}
