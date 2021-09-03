@@ -3,11 +3,7 @@ package simapp
 import (
 	"encoding/json"
 
-	"github.com/Pylons-tech/pylons/x/pylons/types"
-
 	"time"
-
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
 	"github.com/tendermint/spm/cosmoscmd"
@@ -38,12 +34,7 @@ func New(dir string) cosmoscmd.App {
 		panic("imported simApp incorrectly")
 	}
 
-	genesisState := simapp.GenesisState{}
-	bankGenesis := banktypes.DefaultGenesisState()
-	genesisState[banktypes.ModuleName] = a.AppCodec().MustMarshalJSON(bankGenesis)
-	pylonsGenesis := types.DefaultGenesis()
-	genesisState[types.ModuleName] = a.AppCodec().MustMarshalJSON(pylonsGenesis)
-
+	genesisState := app.ModuleBasics.DefaultGenesis(encoding.Marshaler)
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
 	if err != nil {
 		panic(err)
