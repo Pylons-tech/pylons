@@ -130,8 +130,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		outputItemWeights[i] = weight
 	}
 
-	// calculate the actual payment for that item as coin / weight
-	// get the residual to transfer to cookbook owner of that item from this actual payment
+	// use the determined weights to calculate fees to be paid to cookbook owners and the network
+	// item.TradePercentage is used to calculate the residual fee from the item sale
+	// This fee gets clamped between minTransferFee and maxTransferFee
+	maxTransferFee := k.MaxTransferFee(ctx)
 	inputChainTotAmt := sdk.NewCoins()
 	inputTransferTotAmt := sdk.NewCoins()
 	inputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
@@ -139,6 +141,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		baseItemTransferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
 		itemTransferFeeAmt := trade.CoinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
 		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
+		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
+			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
+			tmpCookbookAmt.Amount = maxTransferFee
+		}
 		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.ToDec().Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
@@ -146,7 +152,6 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		inputTransferTotAmt = inputTransferTotAmt.Add(transferAmt)
 		inputCookbookOwnersTotAmtMap[item.CookbookID] = inputCookbookOwnersTotAmtMap[item.CookbookID].Add(cookbookAmt)
 	}
-	maxTransferFee := k.MaxTransferFee(ctx)
 	outputChainTotAmt := sdk.NewCoins()
 	outputTransferTotAmt := sdk.NewCoins()
 	outputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
