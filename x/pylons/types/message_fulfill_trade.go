@@ -9,10 +9,10 @@ var _ sdk.Msg = &MsgFulfillTrade{}
 
 func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []ItemRef) *MsgFulfillTrade {
 	return &MsgFulfillTrade{
-		Creator:        creator,
-		ID:             id,
+		Creator:         creator,
+		ID:              id,
 		CoinInputsIndex: coinInputsIndex,
-		Items:          items,
+		Items:           items,
 	}
 }
 

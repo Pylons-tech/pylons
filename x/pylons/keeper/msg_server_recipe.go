@@ -36,7 +36,7 @@ func (k msgServer) CreateRecipe(goCtx context.Context, msg *types.MsgCreateRecip
 
 	// check if coin inputs contains any cookbook coin from another cookbook
 	for _, inCoin := range msg.CoinInputs {
-		for _, coin := range inCoin.Coins{
+		for _, coin := range inCoin.Coins {
 			denomCookbookID := k.GetCookbookByDenom(ctx, coin.Denom)
 			if denomCookbookID != "" && denomCookbookID != msg.CookbookID {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coin %v belongs to a different cookbook with ID %v", coin.Denom, denomCookbookID)
@@ -131,7 +131,7 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 
 	// check if coin inputs contains any cookbook coin from another cookbook
 	for _, inCoin := range msg.CoinInputs {
-		for _, coin := range inCoin.Coins{
+		for _, coin := range inCoin.Coins {
 			denomCookbookID := k.GetCookbookByDenom(ctx, coin.Denom)
 			if denomCookbookID != "" && denomCookbookID != msg.CookbookID {
 				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coin %v belongs to a different cookbook with ID %v", coin.Denom, denomCookbookID)
