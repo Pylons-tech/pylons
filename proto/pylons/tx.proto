@@ -36,7 +36,8 @@ service Msg {
 message MsgFulfillTrade {
   string creator = 1;
   uint64 ID = 2;
-  repeated ItemRef items = 3 [(gogoproto.nullable) = false];
+  uint64 coinIputsIndex = 3;
+  repeated ItemRef items = 4 [(gogoproto.nullable) = false];
 }
 
 message MsgFulfillTradeResponse {
@@ -44,7 +45,7 @@ message MsgFulfillTradeResponse {
 
 message MsgCreateTrade {
   string creator = 1;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 2 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated CoinInput coinInputs = 2 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 3 [(gogoproto.nullable) = false];
   repeated cosmos.base.v1beta1.Coin coinOutputs = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
   repeated ItemRef itemOutputs = 5 [(gogoproto.nullable) = false];

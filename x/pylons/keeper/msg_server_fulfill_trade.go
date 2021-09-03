@@ -66,6 +66,11 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
 	}
 	trade := k.GetTrade(ctx, msg.ID)
+	coinInputsIndex := int(msg.CoinIputsIndex)
+	if coinInputsIndex >= len(trade.CoinInputs) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+	}
+	coinInputs := trade.CoinInputs[coinInputsIndex].Coins
 
 	// match msg items to trade itemInputs
 	matchedInputItems, err := k.MatchItemInputsForTrade(ctx, msg.Creator, msg.Items, trade)
@@ -92,7 +97,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	// check that sender has enough balance to pay coinInputs
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	balance := k.bankKeeper.SpendableCoins(ctx, addr)
-	if !balance.IsAllGTE(trade.CoinInputs) {
+	if !balance.IsAllGTE(coinInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "not enough balance to pay for trade coinInputs")
 	}
 
@@ -103,7 +108,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	minItemOutputsTransferFees := sdk.NewCoins()
-	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, trade.CoinInputs)
+	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, coinInputs)
 	if err != nil {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "balance not sufficient to pay coinInputs")
 	}
@@ -141,13 +146,18 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		inputTransferTotAmt = inputTransferTotAmt.Add(transferAmt)
 		inputCookbookOwnersTotAmtMap[item.CookbookID] = inputCookbookOwnersTotAmtMap[item.CookbookID].Add(cookbookAmt)
 	}
+	maxTransferFee := k.MaxTransferFee(ctx)
 	outputChainTotAmt := sdk.NewCoins()
 	outputTransferTotAmt := sdk.NewCoins()
 	outputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
 	for i, item := range outputItems {
 		baseItemTransferFee := item.TransferFee[itemOutputsTransferFeePermutation[i]]
-		itemTransferFeeAmt := trade.CoinInputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(outputItemWeights[i]).RoundInt()
+		itemTransferFeeAmt := coinInputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(outputItemWeights[i]).RoundInt()
 		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
+		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
+			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
+			tmpCookbookAmt.Amount = maxTransferFee
+		}
 		chainAmt := sdk.NewCoin(baseItemTransferFee.Denom, tmpCookbookAmt.Amount.ToDec().Mul(k.ItemTransferFeePercentage(ctx)).RoundInt())
 		cookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(chainAmt.Amount))
 		transferAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.Sub(cookbookAmt.Amount).Sub(chainAmt.Amount))
@@ -170,25 +180,52 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	// send payments
 	err = k.PayFees(ctx, tradeFulfillerAddr, inputChainTotAmt)
+	if err != nil {
+		return nil, err
+	}
 	err = k.bankKeeper.SendCoins(ctx, tradeFulfillerAddr, tradeCreatorAddr, inputTransferTotAmt)
-	// TODO cb pay
+	if err != nil {
+		return nil, err
+	}
+	for cookbookID, amt := range inputCookbookOwnersTotAmtMap {
+		cookbook, _ := k.GetCookbook(ctx, cookbookID)
+		addr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
+		err = k.bankKeeper.SendCoins(ctx, tradeFulfillerAddr, addr, amt)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	err = k.PayFees(ctx, tradeCreatorAddr, outputChainTotAmt)
+	if err != nil {
+		return nil, err
+	}
 	err = k.bankKeeper.SendCoins(ctx, tradeCreatorAddr, tradeFulfillerAddr, outputTransferTotAmt)
-	// TODO cb pay
-
-	// TODO - handle accepting multiple choices of CoinInputs, not just a static one - which one to select is decided as input to the msg
-
-	// TODO - add this clamping
-	/*
-		if coin.Amount.LT(minTransferFee) {
-			coin.Amount = minTransferFee
-		} else if coin.Amount.GT(maxTransferFee) {
-			coin.Amount = maxTransferFee
+	if err != nil {
+		return nil, err
+	}
+	for cookbookID, amt := range outputCookbookOwnersTotAmtMap {
+		cookbook, _ := k.GetCookbook(ctx, cookbookID)
+		addr, _ := sdk.AccAddressFromBech32(cookbook.Creator)
+		err = k.bankKeeper.SendCoins(ctx, tradeCreatorAddr, addr, amt)
+		if err != nil {
+			return nil, err
 		}
-	*/
+	}
 
-	// TODO EMIT EVENT
+	itemInputsRefs := make([]types.ItemRef, len(matchedInputItems))
+	for i, item := range matchedInputItems {
+		itemInputsRefs[i] = types.ItemRef{CookbookID: item.CookbookID, ItemID: item.ID}
+	}
+	err = ctx.EventManager().EmitTypedEvent(&types.EventFulfillTrade{
+		ID:          trade.ID,
+		Creator:     trade.Creator,
+		Fulfiller:   msg.Creator,
+		ItemInputs:  itemInputsRefs,
+		CoinInputs:  coinInputs,
+		ItemOutputs: trade.ItemOutputs,
+		CoinOutputs: trade.CoinOutputs,
+	})
 
-	return &types.MsgFulfillTradeResponse{}, nil
+	return &types.MsgFulfillTradeResponse{}, err
 }

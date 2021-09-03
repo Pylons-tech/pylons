@@ -14,7 +14,6 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	minPayment := sdk.NewCoins()
 	items := make([]types.Item, 0)
 
 	// check that each item provided for trade is owned by sender, and lock it
@@ -32,20 +31,17 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		k.LockItemForTrade(ctx, item)
 		items = append(items, item)
 	}
-	_, err := types.FindValidPaymentsPermutation(items, msg.CoinInputs)
-	if err != nil {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs cannot satisfy itemOutputs transferFees requirements")
+	for _, coinInputs := range msg.CoinInputs {
+		_, err := types.FindValidPaymentsPermutation(items, coinInputs.Coins)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs cannot satisfy itemOutputs transferFees requirements")
+		}
 	}
 
 	// lock coins for trade
-	err = k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
+	err := k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
-	}
-
-	// check that coinInputs are at least equal to the sum of all ItemOuputs transferFee
-	if !msg.CoinInputs.IsAllGTE(minPayment) {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "coinInputs require minimum amount of %v to create this trade", minPayment.String())
 	}
 
 	var trade = types.Trade{

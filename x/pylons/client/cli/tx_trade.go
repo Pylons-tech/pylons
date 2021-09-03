@@ -27,7 +27,7 @@ func CmdCreateTrade() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs := sdk.NewCoins()
+			jsonArgsCoinInputs := make([]types.CoinInput, 0)
 			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err

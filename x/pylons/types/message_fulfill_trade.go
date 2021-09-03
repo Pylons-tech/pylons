@@ -7,11 +7,12 @@ import (
 
 var _ sdk.Msg = &MsgFulfillTrade{}
 
-func NewMsgFulfillTrade(creator string, id uint64, items []ItemRef) *MsgFulfillTrade {
+func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []ItemRef) *MsgFulfillTrade {
 	return &MsgFulfillTrade{
-		Creator: creator,
-		ID:      id,
-		Items:   items,
+		Creator:        creator,
+		ID:             id,
+		CoinIputsIndex: coinInputsIndex,
+		Items:          items,
 	}
 }
 

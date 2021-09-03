@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgCreateTrade{}
 
-func NewMsgCreateTrade(creator string, coinInputs sdk.Coins, itemInputs []ItemInput, coinOutputs sdk.Coins, itemOutputs []ItemRef, extraInfo string) *MsgCreateTrade {
+func NewMsgCreateTrade(creator string, coinInputs []CoinInput, itemInputs []ItemInput, coinOutputs sdk.Coins, itemOutputs []ItemRef, extraInfo string) *MsgCreateTrade {
 	return &MsgCreateTrade{
 		Creator:     creator,
 		CoinInputs:  coinInputs,
@@ -45,8 +45,10 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	if !msg.CoinInputs.Empty() && !msg.CoinInputs.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinInputs")
+	for i, coinInput := range msg.CoinInputs {
+		if !coinInput.Coins.IsValid() {
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+		}
 	}
 
 	if !msg.CoinOutputs.Empty() && !msg.CoinOutputs.IsValid() {
