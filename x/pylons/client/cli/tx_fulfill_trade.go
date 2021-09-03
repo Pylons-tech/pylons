@@ -2,6 +2,7 @@ package cli
 
 import (
 	"encoding/json"
+	"github.com/spf13/cast"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -21,10 +22,13 @@ func CmdFulfillTrade() *cobra.Command {
 		Short: "fulfill an existing trade",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsID := args[0]
+			argsID, err := cast.ToUint64E(args[0])
+			if err != nil {
+				return err
+			}
 			argsItems := args[1]
 			jsonArgsItems := make([]types.ItemRef, 0)
-			err := json.Unmarshal([]byte(argsItems), &jsonArgsItems)
+			err = json.Unmarshal([]byte(argsItems), &jsonArgsItems)
 			if err != nil {
 				return err
 			}

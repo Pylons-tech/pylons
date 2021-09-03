@@ -70,7 +70,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 					},
 				},
 				MutableStrings: nil,
-				TransferFee:    sdk.NewCoin("pylons", sdk.NewInt(1)),
+				TransferFee:    []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
 				Quantity:       0,
 				AmountMinted:   0,
 			},
@@ -226,7 +226,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
+				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
 				Quantity:     1, // Set quantity so it can only be executed once
 				AmountMinted: 0,
 			},
@@ -414,7 +414,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
+				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
 				Quantity:     0, // Set quantity so it can only be executed once
 				AmountMinted: 0,
 			},
@@ -581,7 +581,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  sdk.NewCoin("pylons", sdk.NewInt(1)),
+				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
 				Quantity:     0, // Set quantity so it can only be executed once
 				AmountMinted: 0,
 			},

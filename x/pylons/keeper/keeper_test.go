@@ -179,7 +179,7 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 	creators := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = creators[i]
-		items[i].PurchaseToken = strconv.Itoa(int(i))
+		items[i].PurchaseToken = strconv.Itoa(i)
 		k.AppendGoogleIAPOrder(ctx, items[i])
 	}
 
@@ -189,7 +189,7 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owners := types.GenTestBech32List(n)
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
+	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))}
 	for i := range items {
 		items[i].Owner = owners[i]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
@@ -204,7 +204,7 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []type
 func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, cookbookID string, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owner := types.GenTestBech32FromString("test")
-	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
+	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))}
 	for i := range items {
 		items[i].Owner = owner
 		items[i].CookbookID = cookbookID
@@ -219,7 +219,7 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owner := types.GenTestBech32List(1)
-	coin := sdk.NewCoin("test", sdk.NewInt(1))
+	coin := []sdk.Coin{sdk.NewCoin("test", sdk.NewInt(1))}
 	for i := range items {
 		items[i].Owner = owner[0]
 		items[i].CookbookID = fmt.Sprintf("%d", i)

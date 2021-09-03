@@ -1,9 +1,9 @@
+import { Writer, Reader } from 'protobufjs/minimal';
 import { Cookbook } from '../pylons/cookbook';
 import { Recipe } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 import { Item, StringKeyValue } from '../pylons/item';
 import { ItemRef } from '../pylons/trade';
-import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface EventCreateAccount {
     address: string;
@@ -64,6 +64,23 @@ export interface EventSetItemString {
     CookbookID: string;
     ID: string;
     originalMutableStrings: StringKeyValue[];
+}
+export interface EventCreateTrade {
+    creator: string;
+    ID: number;
+}
+export interface EventCancelTrade {
+    creator: string;
+    ID: number;
+}
+export interface EventFulfillTrade {
+    ID: number;
+    creator: string;
+    fulfiller: string;
+    itemInputs: ItemRef[];
+    coinInputs: Coin[];
+    itemOutputs: ItemRef[];
+    coinOutputs: Coin[];
 }
 export interface EventGooglePurchase {
     creator: string;
@@ -159,6 +176,27 @@ export declare const EventSetItemString: {
     fromJSON(object: any): EventSetItemString;
     toJSON(message: EventSetItemString): unknown;
     fromPartial(object: DeepPartial<EventSetItemString>): EventSetItemString;
+};
+export declare const EventCreateTrade: {
+    encode(message: EventCreateTrade, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventCreateTrade;
+    fromJSON(object: any): EventCreateTrade;
+    toJSON(message: EventCreateTrade): unknown;
+    fromPartial(object: DeepPartial<EventCreateTrade>): EventCreateTrade;
+};
+export declare const EventCancelTrade: {
+    encode(message: EventCancelTrade, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventCancelTrade;
+    fromJSON(object: any): EventCancelTrade;
+    toJSON(message: EventCancelTrade): unknown;
+    fromPartial(object: DeepPartial<EventCancelTrade>): EventCancelTrade;
+};
+export declare const EventFulfillTrade: {
+    encode(message: EventFulfillTrade, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventFulfillTrade;
+    fromJSON(object: any): EventFulfillTrade;
+    toJSON(message: EventFulfillTrade): unknown;
+    fromPartial(object: DeepPartial<EventFulfillTrade>): EventFulfillTrade;
 };
 export declare const EventGooglePurchase: {
     encode(message: EventGooglePurchase, writer?: Writer): Writer;

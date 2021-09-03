@@ -6,7 +6,7 @@ export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgFulfillTrade {
     creator: string;
-    ID: string;
+    ID: number;
     items: ItemRef[];
 }
 export interface MsgFulfillTradeResponse {

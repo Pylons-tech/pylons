@@ -15,6 +15,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	minPayment := sdk.Coins{}
+	items := make([]types.Item, 0)
 
 	// check that each item provided for trade is owned by sender, and lock it
 	for _, itemRef := range msg.ItemOutputs {
@@ -29,11 +30,15 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v and cookbook id %v cannot be traded", itemRef.ItemID, itemRef.CookbookID)
 		}
 		k.LockItemForTrade(ctx, item)
-		minPayment = minPayment.Add(item.TransferFee)
+		items = append(items, item)
+	}
+	_, err := types.FindValidPaymentsPermutation(items, msg.CoinInputs)
+	if err != nil {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs cannot satisfy itemOutputs transferFees requirements")
 	}
 
 	// lock coins for trade
-	err := k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
+	err = k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
@@ -57,9 +62,14 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		trade,
 	)
 
+	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateTrade{
+		Creator:   msg.Creator,
+		ID:        id,
+	})
+
 	return &types.MsgCreateTradeResponse{
 		ID: id,
-	}, nil
+	}, err
 }
 
 func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade) (*types.MsgCancelTradeResponse, error) {
@@ -68,11 +78,32 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 	if !k.HasTrade(ctx, msg.ID) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrKeyNotFound, fmt.Sprintf("key %d doesn't exist", msg.ID))
 	}
-	if msg.Creator != k.GetTradeOwner(ctx, msg.ID) {
+	trade := k.GetTrade(ctx, msg.ID)
+	if msg.Creator != trade.Creator {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "incorrect owner")
+	}
+
+	// unlock locked items
+	for _, itemRef := range trade.ItemOutputs {
+		// checks where passed at trade creation, we just need to unlock
+		item, _ := k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
+		k.UnlockItemForTrade(ctx, item, msg.Creator)
+	}
+
+	// unlock locked coins
+	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
+	err := k.UnLockCoinsForTrade(ctx, addr, trade.CoinOutputs)
+	if err != nil {
+		// this should never happen, it means the module account has been drained of funds illegitimately
+		panic(err)
 	}
 
 	k.RemoveTrade(ctx, msg.ID)
 
-	return &types.MsgCancelTradeResponse{}, nil
+	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
+		Creator:   msg.Creator,
+		ID:        msg.ID,
+	})
+
+	return &types.MsgCancelTradeResponse{}, err
 }

@@ -142,14 +142,10 @@ export interface PylonsItem {
 
   /** @format int64 */
   lastUpdate?: string;
+  transferFee?: V1Beta1Coin[];
 
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  transferFee?: V1Beta1Coin;
+  /** The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0). */
+  tradePercentage?: string;
 }
 
 export interface PylonsItemInput {
@@ -167,14 +163,9 @@ export interface PylonsItemModifyOutput {
   longs?: PylonsLongParam[];
   strings?: PylonsStringParam[];
   mutableStrings?: PylonsStringKeyValue[];
+  transferFee?: V1Beta1Coin[];
 
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  transferFee?: V1Beta1Coin;
+  /** The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0). */
   tradePercentage?: string;
 
   /** @format uint64 */
@@ -191,14 +182,9 @@ export interface PylonsItemOutput {
   longs?: PylonsLongParam[];
   strings?: PylonsStringParam[];
   mutableStrings?: PylonsStringKeyValue[];
+  transferFee?: V1Beta1Coin[];
 
-  /**
-   * Coin defines a token with a denomination and an amount.
-   *
-   * NOTE: The amount field is an Int which implements the custom method
-   * signatures required by gogoproto.
-   */
-  transferFee?: V1Beta1Coin;
+  /** The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0). */
   tradePercentage?: string;
 
   /** @format uint64 */

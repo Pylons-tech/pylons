@@ -20560,20 +20560,27 @@ paths:
                     type: string
                     format: int64
                   transferFee:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
+
+
+                        NOTE: The amount field is an Int which implements the
+                        custom method
+
+                        signatures required by gogoproto.
+                  tradePercentage:
+                    type: string
                     description: >-
-                      Coin defines a token with a denomination and an amount.
-
-
-                      NOTE: The amount field is an Int which implements the
-                      custom method
-
-                      signatures required by gogoproto.
+                      The percentage of a trade sale retained by the cookbook
+                      owner. In the range (0.0, 1.0).
         default:
           description: An unexpected error response.
           schema:
@@ -20675,20 +20682,28 @@ paths:
                       type: string
                       format: int64
                     transferFee:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
+
+
+                          NOTE: The amount field is an Int which implements the
+                          custom method
+
+                          signatures required by gogoproto.
+                    tradePercentage:
+                      type: string
                       description: >-
-                        Coin defines a token with a denomination and an amount.
-
-
-                        NOTE: The amount field is an Int which implements the
-                        custom method
-
-                        signatures required by gogoproto.
+                        The percentage of a trade sale retained by the cookbook
+                        owner. In the range (0.0, 1.0).
               pagination:
                 description: pagination defines the pagination in the response.
                 type: object
@@ -21079,29 +21094,28 @@ paths:
                                 defines a list of mutable strings whose value
                                 can be customized by the user
                             transferFee:
-                              type: object
-                              properties:
-                                denom:
-                                  type: string
-                                amount:
-                                  type: string
-                              description: >-
-                                Coin defines a token with a denomination and an
-                                amount.
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  denom:
+                                    type: string
+                                  amount:
+                                    type: string
+                                description: >-
+                                  Coin defines a token with a denomination and
+                                  an amount.
 
 
-                                NOTE: The amount field is an Int which
-                                implements the custom method
+                                  NOTE: The amount field is an Int which
+                                  implements the custom method
 
-                                signatures required by gogoproto.
+                                  signatures required by gogoproto.
                             tradePercentage:
                               type: string
-                              title: >-
+                              description: >-
                                 The percentage of a trade sale retained by the
                                 cookbook owner. In the range (0.0, 1.0).
-
-                                This value is accounted for only when an item is
-                                sold by itself
                             quantity:
                               type: string
                               format: uint64
@@ -21237,32 +21251,35 @@ paths:
                                 defines a list of mutable strings whose value
                                 can be customized by the user
                             transferFee:
-                              type: object
-                              properties:
-                                denom:
-                                  type: string
-                                amount:
-                                  type: string
-                              description: >-
-                                Coin defines a token with a denomination and an
-                                amount.
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  denom:
+                                    type: string
+                                  amount:
+                                    type: string
+                                description: >-
+                                  Coin defines a token with a denomination and
+                                  an amount.
 
 
-                                NOTE: The amount field is an Int which
-                                implements the custom method
+                                  NOTE: The amount field is an Int which
+                                  implements the custom method
 
-                                signatures required by gogoproto.
+                                  signatures required by gogoproto.
                             tradePercentage:
                               type: string
-                              title: >-
+                              description: >-
                                 The percentage of a trade sale retained by the
                                 cookbook owner. In the range (0.0, 1.0).
-
-                                This value is accounted for only when an item is
-                                sold by itself
                             quantity:
                               type: string
                               format: uint64
+                              title: >-
+                                quantity defines the maximum amount of these
+                                items that can be created. A 0 value indicates
+                                an infinite supply
                             amountMinted:
                               type: string
                               format: uint64
@@ -21637,29 +21654,28 @@ paths:
                                   defines a list of mutable strings whose value
                                   can be customized by the user
                               transferFee:
-                                type: object
-                                properties:
-                                  denom:
-                                    type: string
-                                  amount:
-                                    type: string
-                                description: >-
-                                  Coin defines a token with a denomination and
-                                  an amount.
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    denom:
+                                      type: string
+                                    amount:
+                                      type: string
+                                  description: >-
+                                    Coin defines a token with a denomination and
+                                    an amount.
 
 
-                                  NOTE: The amount field is an Int which
-                                  implements the custom method
+                                    NOTE: The amount field is an Int which
+                                    implements the custom method
 
-                                  signatures required by gogoproto.
+                                    signatures required by gogoproto.
                               tradePercentage:
                                 type: string
-                                title: >-
+                                description: >-
                                   The percentage of a trade sale retained by the
                                   cookbook owner. In the range (0.0, 1.0).
-
-                                  This value is accounted for only when an item
-                                  is sold by itself
                               quantity:
                                 type: string
                                 format: uint64
@@ -21797,32 +21813,35 @@ paths:
                                   defines a list of mutable strings whose value
                                   can be customized by the user
                               transferFee:
-                                type: object
-                                properties:
-                                  denom:
-                                    type: string
-                                  amount:
-                                    type: string
-                                description: >-
-                                  Coin defines a token with a denomination and
-                                  an amount.
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    denom:
+                                      type: string
+                                    amount:
+                                      type: string
+                                  description: >-
+                                    Coin defines a token with a denomination and
+                                    an amount.
 
 
-                                  NOTE: The amount field is an Int which
-                                  implements the custom method
+                                    NOTE: The amount field is an Int which
+                                    implements the custom method
 
-                                  signatures required by gogoproto.
+                                    signatures required by gogoproto.
                               tradePercentage:
                                 type: string
-                                title: >-
+                                description: >-
                                   The percentage of a trade sale retained by the
                                   cookbook owner. In the range (0.0, 1.0).
-
-                                  This value is accounted for only when an item
-                                  is sold by itself
                               quantity:
                                 type: string
                                 format: uint64
+                                title: >-
+                                  quantity defines the maximum amount of these
+                                  items that can be created. A 0 value indicates
+                                  an infinite supply
                               amountMinted:
                                 type: string
                                 format: uint64
@@ -32748,27 +32767,27 @@ definitions:
                 defines a list of mutable strings whose value can be customized
                 by the user
             transferFee:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
 
 
-                NOTE: The amount field is an Int which implements the custom
-                method
+                  NOTE: The amount field is an Int which implements the custom
+                  method
 
-                signatures required by gogoproto.
+                  signatures required by gogoproto.
             tradePercentage:
               type: string
-              title: >-
+              description: >-
                 The percentage of a trade sale retained by the cookbook owner.
                 In the range (0.0, 1.0).
-
-                This value is accounted for only when an item is sold by itself
             quantity:
               type: string
               format: uint64
@@ -32894,30 +32913,33 @@ definitions:
                 defines a list of mutable strings whose value can be customized
                 by the user
             transferFee:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
 
 
-                NOTE: The amount field is an Int which implements the custom
-                method
+                  NOTE: The amount field is an Int which implements the custom
+                  method
 
-                signatures required by gogoproto.
+                  signatures required by gogoproto.
             tradePercentage:
               type: string
-              title: >-
+              description: >-
                 The percentage of a trade sale retained by the cookbook owner.
                 In the range (0.0, 1.0).
-
-                This value is accounted for only when an item is sold by itself
             quantity:
               type: string
               format: uint64
+              title: >-
+                quantity defines the maximum amount of these items that can be
+                created. A 0 value indicates an infinite supply
             amountMinted:
               type: string
               format: uint64
@@ -33101,17 +33123,24 @@ definitions:
         type: string
         format: int64
       transferFee:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
 
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
+      tradePercentage:
+        type: string
+        description: >-
+          The percentage of a trade sale retained by the cookbook owner. In the
+          range (0.0, 1.0).
   Pylonstech.pylons.pylons.ItemInput:
     type: object
     properties:
@@ -33323,27 +33352,30 @@ definitions:
           defines a list of mutable strings whose value can be customized by the
           user
       transferFee:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
 
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
       tradePercentage:
         type: string
-        title: >-
+        description: >-
           The percentage of a trade sale retained by the cookbook owner. In the
           range (0.0, 1.0).
-
-          This value is accounted for only when an item is sold by itself
       quantity:
         type: string
         format: uint64
+        title: >-
+          quantity defines the maximum amount of these items that can be
+          created. A 0 value indicates an infinite supply
       amountMinted:
         type: string
         format: uint64
@@ -33453,24 +33485,24 @@ definitions:
           defines a list of mutable strings whose value can be customized by the
           user
       transferFee:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
 
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
       tradePercentage:
         type: string
-        title: >-
+        description: >-
           The percentage of a trade sale retained by the cookbook owner. In the
           range (0.0, 1.0).
-
-          This value is accounted for only when an item is sold by itself
       quantity:
         type: string
         format: uint64
@@ -33841,20 +33873,27 @@ definitions:
             type: string
             format: int64
           transferFee:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
+
+
+                NOTE: The amount field is an Int which implements the custom
+                method
+
+                signatures required by gogoproto.
+          tradePercentage:
+            type: string
             description: >-
-              Coin defines a token with a denomination and an amount.
-
-
-              NOTE: The amount field is an Int which implements the custom
-              method
-
-              signatures required by gogoproto.
+              The percentage of a trade sale retained by the cookbook owner. In
+              the range (0.0, 1.0).
   Pylonstech.pylons.pylons.QueryGetRecipeResponse:
     type: object
     properties:
@@ -34140,28 +34179,28 @@ definitions:
                         defines a list of mutable strings whose value can be
                         customized by the user
                     transferFee:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
 
 
-                        NOTE: The amount field is an Int which implements the
-                        custom method
+                          NOTE: The amount field is an Int which implements the
+                          custom method
 
-                        signatures required by gogoproto.
+                          signatures required by gogoproto.
                     tradePercentage:
                       type: string
-                      title: >-
+                      description: >-
                         The percentage of a trade sale retained by the cookbook
                         owner. In the range (0.0, 1.0).
-
-                        This value is accounted for only when an item is sold by
-                        itself
                     quantity:
                       type: string
                       format: uint64
@@ -34290,31 +34329,34 @@ definitions:
                         defines a list of mutable strings whose value can be
                         customized by the user
                     transferFee:
-                      type: object
-                      properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          denom:
+                            type: string
+                          amount:
+                            type: string
+                        description: >-
+                          Coin defines a token with a denomination and an
+                          amount.
 
 
-                        NOTE: The amount field is an Int which implements the
-                        custom method
+                          NOTE: The amount field is an Int which implements the
+                          custom method
 
-                        signatures required by gogoproto.
+                          signatures required by gogoproto.
                     tradePercentage:
                       type: string
-                      title: >-
+                      description: >-
                         The percentage of a trade sale retained by the cookbook
                         owner. In the range (0.0, 1.0).
-
-                        This value is accounted for only when an item is sold by
-                        itself
                     quantity:
                       type: string
                       format: uint64
+                      title: >-
+                        quantity defines the maximum amount of these items that
+                        can be created. A 0 value indicates an infinite supply
                     amountMinted:
                       type: string
                       format: uint64
@@ -35083,20 +35125,27 @@ definitions:
               type: string
               format: int64
             transferFee:
-              type: object
-              properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
+
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
+            tradePercentage:
+              type: string
               description: >-
-                Coin defines a token with a denomination and an amount.
-
-
-                NOTE: The amount field is an Int which implements the custom
-                method
-
-                signatures required by gogoproto.
+                The percentage of a trade sale retained by the cookbook owner.
+                In the range (0.0, 1.0).
       pagination:
         description: pagination defines the pagination in the response.
         type: object
@@ -35407,29 +35456,28 @@ definitions:
                           defines a list of mutable strings whose value can be
                           customized by the user
                       transferFee:
-                        type: object
-                        properties:
-                          denom:
-                            type: string
-                          amount:
-                            type: string
-                        description: >-
-                          Coin defines a token with a denomination and an
-                          amount.
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            denom:
+                              type: string
+                            amount:
+                              type: string
+                          description: >-
+                            Coin defines a token with a denomination and an
+                            amount.
 
 
-                          NOTE: The amount field is an Int which implements the
-                          custom method
+                            NOTE: The amount field is an Int which implements
+                            the custom method
 
-                          signatures required by gogoproto.
+                            signatures required by gogoproto.
                       tradePercentage:
                         type: string
-                        title: >-
+                        description: >-
                           The percentage of a trade sale retained by the
                           cookbook owner. In the range (0.0, 1.0).
-
-                          This value is accounted for only when an item is sold
-                          by itself
                       quantity:
                         type: string
                         format: uint64
@@ -35563,32 +35611,35 @@ definitions:
                           defines a list of mutable strings whose value can be
                           customized by the user
                       transferFee:
-                        type: object
-                        properties:
-                          denom:
-                            type: string
-                          amount:
-                            type: string
-                        description: >-
-                          Coin defines a token with a denomination and an
-                          amount.
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            denom:
+                              type: string
+                            amount:
+                              type: string
+                          description: >-
+                            Coin defines a token with a denomination and an
+                            amount.
 
 
-                          NOTE: The amount field is an Int which implements the
-                          custom method
+                            NOTE: The amount field is an Int which implements
+                            the custom method
 
-                          signatures required by gogoproto.
+                            signatures required by gogoproto.
                       tradePercentage:
                         type: string
-                        title: >-
+                        description: >-
                           The percentage of a trade sale retained by the
                           cookbook owner. In the range (0.0, 1.0).
-
-                          This value is accounted for only when an item is sold
-                          by itself
                       quantity:
                         type: string
                         format: uint64
+                        title: >-
+                          quantity defines the maximum amount of these items
+                          that can be created. A 0 value indicates an infinite
+                          supply
                       amountMinted:
                         type: string
                         format: uint64
@@ -35917,28 +35968,27 @@ definitions:
                     defines a list of mutable strings whose value can be
                     customized by the user
                 transferFee:
-                  type: object
-                  properties:
-                    denom:
-                      type: string
-                    amount:
-                      type: string
-                  description: >-
-                    Coin defines a token with a denomination and an amount.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-                    NOTE: The amount field is an Int which implements the custom
-                    method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-                    signatures required by gogoproto.
+                      signatures required by gogoproto.
                 tradePercentage:
                   type: string
-                  title: >-
+                  description: >-
                     The percentage of a trade sale retained by the cookbook
                     owner. In the range (0.0, 1.0).
-
-                    This value is accounted for only when an item is sold by
-                    itself
                 quantity:
                   type: string
                   format: uint64
@@ -36067,31 +36117,33 @@ definitions:
                     defines a list of mutable strings whose value can be
                     customized by the user
                 transferFee:
-                  type: object
-                  properties:
-                    denom:
-                      type: string
-                    amount:
-                      type: string
-                  description: >-
-                    Coin defines a token with a denomination and an amount.
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-                    NOTE: The amount field is an Int which implements the custom
-                    method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-                    signatures required by gogoproto.
+                      signatures required by gogoproto.
                 tradePercentage:
                   type: string
-                  title: >-
+                  description: >-
                     The percentage of a trade sale retained by the cookbook
                     owner. In the range (0.0, 1.0).
-
-                    This value is accounted for only when an item is sold by
-                    itself
                 quantity:
                   type: string
                   format: uint64
+                  title: >-
+                    quantity defines the maximum amount of these items that can
+                    be created. A 0 value indicates an infinite supply
                 amountMinted:
                   type: string
                   format: uint64

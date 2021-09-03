@@ -142,7 +142,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
+				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.NewInt(1)}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -172,7 +172,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
+				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.NewInt(1)}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

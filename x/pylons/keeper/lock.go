@@ -52,14 +52,29 @@ func (k Keeper) UnLockCoinsForTrade(ctx sdk.Context, revcAddr sdk.AccAddress, am
 func (k Keeper) lockItem(ctx sdk.Context, item types.Item, modAccName string) {
 	// lock item by transferring ownership to module account
 	modAcc := k.accountKeeper.GetModuleAddress(modAccName)
+	prevAddr, _ := sdk.AccAddressFromBech32(item.Owner)
 	item.Owner = modAcc.String()
-	k.SetItem(ctx, item)
+	k.UpdateItem(ctx, item, prevAddr)
+}
+
+func (k Keeper) unlockItem(ctx sdk.Context, item types.Item, modAccName string, addr string) {
+	modAcc := k.accountKeeper.GetModuleAddress(modAccName)
+	item.Owner = addr
+	k.UpdateItem(ctx, item, modAcc)
 }
 
 func (k Keeper) LockItemForExecution(ctx sdk.Context, item types.Item) {
 	k.lockItem(ctx, item, types.ExecutionsLockerName)
 }
 
+func (k Keeper) UnlockItemForExecution(ctx sdk.Context, item types.Item, addr string) {
+	k.unlockItem(ctx, item, types.ExecutionsLockerName, addr)
+}
+
 func (k Keeper) LockItemForTrade(ctx sdk.Context, item types.Item) {
 	k.lockItem(ctx, item, types.TradesLockerName)
+}
+
+func (k Keeper) UnlockItemForTrade(ctx sdk.Context, item types.Item, addr string) {
+	k.unlockItem(ctx, item, types.TradesLockerName, addr)
 }

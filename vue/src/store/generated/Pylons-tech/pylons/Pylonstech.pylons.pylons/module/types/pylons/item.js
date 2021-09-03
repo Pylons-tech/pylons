@@ -213,7 +213,7 @@ export const StringKeyValue = {
         return message;
     }
 };
-const baseItem = { owner: '', cookbookID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0 };
+const baseItem = { owner: '', cookbookID: '', ID: '', nodeVersion: '', tradeable: false, lastUpdate: 0, tradePercentage: '' };
 export const Item = {
     encode(message, writer = Writer.create()) {
         if (message.owner !== '') {
@@ -246,8 +246,11 @@ export const Item = {
         if (message.lastUpdate !== 0) {
             writer.uint32(80).int64(message.lastUpdate);
         }
-        if (message.transferFee !== undefined) {
-            Coin.encode(message.transferFee, writer.uint32(90).fork()).ldelim();
+        for (const v of message.transferFee) {
+            Coin.encode(v, writer.uint32(90).fork()).ldelim();
+        }
+        if (message.tradePercentage !== '') {
+            writer.uint32(98).string(message.tradePercentage);
         }
         return writer;
     },
@@ -259,6 +262,7 @@ export const Item = {
         message.longs = [];
         message.strings = [];
         message.mutableStrings = [];
+        message.transferFee = [];
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -293,7 +297,10 @@ export const Item = {
                     message.lastUpdate = longToNumber(reader.int64());
                     break;
                 case 11:
-                    message.transferFee = Coin.decode(reader, reader.uint32());
+                    message.transferFee.push(Coin.decode(reader, reader.uint32()));
+                    break;
+                case 12:
+                    message.tradePercentage = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -308,6 +315,7 @@ export const Item = {
         message.longs = [];
         message.strings = [];
         message.mutableStrings = [];
+        message.transferFee = [];
         if (object.owner !== undefined && object.owner !== null) {
             message.owner = String(object.owner);
         }
@@ -365,10 +373,15 @@ export const Item = {
             message.lastUpdate = 0;
         }
         if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = Coin.fromJSON(object.transferFee);
+            for (const e of object.transferFee) {
+                message.transferFee.push(Coin.fromJSON(e));
+            }
+        }
+        if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
+            message.tradePercentage = String(object.tradePercentage);
         }
         else {
-            message.transferFee = undefined;
+            message.tradePercentage = '';
         }
         return message;
     },
@@ -404,7 +417,13 @@ export const Item = {
         }
         message.tradeable !== undefined && (obj.tradeable = message.tradeable);
         message.lastUpdate !== undefined && (obj.lastUpdate = message.lastUpdate);
-        message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined);
+        if (message.transferFee) {
+            obj.transferFee = message.transferFee.map((e) => (e ? Coin.toJSON(e) : undefined));
+        }
+        else {
+            obj.transferFee = [];
+        }
+        message.tradePercentage !== undefined && (obj.tradePercentage = message.tradePercentage);
         return obj;
     },
     fromPartial(object) {
@@ -413,6 +432,7 @@ export const Item = {
         message.longs = [];
         message.strings = [];
         message.mutableStrings = [];
+        message.transferFee = [];
         if (object.owner !== undefined && object.owner !== null) {
             message.owner = object.owner;
         }
@@ -470,10 +490,15 @@ export const Item = {
             message.lastUpdate = 0;
         }
         if (object.transferFee !== undefined && object.transferFee !== null) {
-            message.transferFee = Coin.fromPartial(object.transferFee);
+            for (const e of object.transferFee) {
+                message.transferFee.push(Coin.fromPartial(e));
+            }
+        }
+        if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
+            message.tradePercentage = object.tradePercentage;
         }
         else {
-            message.transferFee = undefined;
+            message.tradePercentage = '';
         }
         return message;
     }

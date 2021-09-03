@@ -165,7 +165,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	// update modify items in keeper
 	itemModifyOutputIDs := make([]string, len(mintItems))
 	for i, item := range modifyItems {
-		k.SetItem(ctx, item)
+		k.UnlockItemForExecution(ctx, item, pendingExecution.Creator)
 		itemModifyOutputIDs[i] = item.ID
 	}
 	// update recipe in keeper to keep track of mintedAmounts

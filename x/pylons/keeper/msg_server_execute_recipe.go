@@ -2,94 +2,13 @@ package keeper
 
 import (
 	"context"
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// MatchItem checks if all the constraint match the given item
-func MatchItem(item types.Item, itemInput types.ItemInput, ec types.CelEnvCollection) error {
-	if itemInput.Doubles != nil {
-		for _, param := range itemInput.Doubles {
-			double, ok := item.FindDouble(param.Key)
-			if !ok {
-				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
-			}
-
-			if !param.Has(double) {
-				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.ID)
-			}
-		}
-	}
-
-	if itemInput.Longs != nil {
-		for _, param := range itemInput.Longs {
-			long, ok := item.FindLong(param.Key)
-			if !ok {
-				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
-			}
-
-			if !param.Has(long) {
-				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key range does not match: item_id=%s", param.Key, item.ID)
-			}
-		}
-	}
-
-	if itemInput.Strings != nil {
-		for _, param := range itemInput.Strings {
-			str, ok := item.FindString(param.Key)
-			if !ok {
-				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key is not available on the item: item_id=%s", param.Key, item.ID)
-			}
-			if str != param.Value {
-				return sdkerrors.Wrapf(types.ErrItemMatch, "%s key value does not match: item_id=%s", param.Key, item.ID)
-			}
-		}
-	}
-
-	for _, param := range itemInput.Conditions.Doubles {
-		double, err := ec.EvalFloat64(param.Key)
-		if err != nil {
-			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
-		}
-
-		dec, err := sdk.NewDecFromStr(fmt.Sprintf("%v", double))
-		if err != nil {
-			return err
-		}
-
-		if !param.Has(dec) {
-			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression range does not match: item_id=%s", param.Key, item.ID)
-		}
-	}
-
-	for _, param := range itemInput.Conditions.Longs {
-		long, err := ec.EvalInt64(param.Key)
-		if err != nil {
-			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
-		}
-
-		if !param.Has(int(long)) {
-			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression range does not match: item_id=%s", param.Key, item.ID)
-		}
-	}
-
-	for _, param := range itemInput.Conditions.Strings {
-		str, err := ec.EvalString(param.Key)
-		if err != nil {
-			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression is invalid: item_id=%s, %+v", param.Key, item.ID, err.Error())
-		}
-		if str != param.Value {
-			return sdkerrors.Wrapf(types.ErrItemMatch, "%s expression value does not match: item_id=%s", param.Key, item.ID)
-		}
-	}
-	return nil
-}
-
-func (k msgServer) MatchItemInputs(ctx sdk.Context, creatorAddr string, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
+func (k msgServer) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr string, inputItemsIDs []string, recipe types.Recipe) ([]types.Item, error) {
 	if len(inputItemsIDs) != len(recipe.ItemInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "size mismatch between provided input items and items required by recipe")
 	}
@@ -122,7 +41,7 @@ func (k msgServer) MatchItemInputs(ctx sdk.Context, creatorAddr string, inputIte
 			if err != nil {
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
-			err = MatchItem(inputItem, recipeItemInput, ec)
+			err = recipeItemInput.MatchItem(inputItem, ec)
 			if err != nil {
 				matchedItems[i] = inputItem
 				checkedInputItems[j] = true
@@ -153,7 +72,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "this recipe or its parent cookbook are disabled")
 	}
 
-	matchedItems, err := k.MatchItemInputs(ctx, msg.Creator, msg.ItemIDs, recipe)
+	matchedItems, err := k.MatchItemInputsForExecution(ctx, msg.Creator, msg.ItemIDs, recipe)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}

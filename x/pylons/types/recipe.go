@@ -186,8 +186,13 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				return false, nil
 			}
 
-			if !originalItem.TransferFee.Equal(updatedItem.TransferFee) {
+			if len(originalItem.TransferFee) != len(updatedItem.TransferFee) {
 				return false, nil
+			}
+			for i := range originalItem.TransferFee {
+				if originalItem.TransferFee[i] != updatedItem.TransferFee[i] {
+					return false, nil
+				}
 			}
 
 			if len(originalItem.Doubles) == len(updatedItem.Doubles) {
@@ -341,8 +346,13 @@ func EntriesListEqual(original, updated EntriesList) (bool, error) {
 				return false, nil
 			}
 
-			if !originalItem.TransferFee.Equal(updatedItem.TransferFee) {
+			if len(originalItem.TransferFee) != len(updatedItem.TransferFee) {
 				return false, nil
+			}
+			for i := range originalItem.TransferFee {
+				if originalItem.TransferFee[i] != updatedItem.TransferFee[i] {
+					return false, nil
+				}
 			}
 
 			if len(originalItem.Doubles) == len(updatedItem.Doubles) {
@@ -741,8 +751,15 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 			return err
 		}
 
-		if !item.TransferFee.IsValid() {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
+		// item.TradePercentage must be in (0, 1)
+		if item.TradePercentage.LTE(sdk.ZeroDec()) ||item.TradePercentage.GTE(sdk.OneDec()) {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
+		}
+
+		for _, tf := range item.TransferFee {
+			if !tf.IsValid(){
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
+			}
 		}
 	}
 	return nil
@@ -756,7 +773,7 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 		}
 
 		if _, ok := idMap[item.ID]; ok {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemOutput list", item.ID)
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "id %s repeated in itemModifyOutput list", item.ID)
 		}
 		idMap[item.ID] = true
 
@@ -780,8 +797,15 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 			return err
 		}
 
-		if !item.TransferFee.IsValid() {
-			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
+		// item.TradePercentage must be in (0, 1)
+		if item.TradePercentage.LTE(sdk.ZeroDec()) ||item.TradePercentage.GTE(sdk.OneDec()) {
+			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.ID)
+		}
+
+		for _, tf := range item.TransferFee {
+			if !tf.IsValid(){
+				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
+			}
 		}
 	}
 

@@ -27,7 +27,9 @@ export interface Item {
     mutableStrings: StringKeyValue[];
     tradeable: boolean;
     lastUpdate: number;
-    transferFee: Coin | undefined;
+    transferFee: Coin[];
+    /** The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0). */
+    tradePercentage: string;
 }
 export declare const DoubleKeyValue: {
     encode(message: DoubleKeyValue, writer?: Writer): Writer;

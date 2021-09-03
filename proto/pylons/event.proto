@@ -85,6 +85,26 @@ message EventSetItemString {
   repeated StringKeyValue originalMutableStrings = 4 [(gogoproto.nullable) = false];
 }
 
+message EventCreateTrade {
+  string creator = 1;
+  uint64 ID = 2;
+}
+
+message EventCancelTrade {
+  string creator = 1;
+  uint64 ID = 2;
+}
+
+message EventFulfillTrade {
+  uint64 ID = 1;
+  string creator = 2;
+  string fulfiller = 3;
+  repeated ItemRef itemInputs = 4 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinInputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
 message EventGooglePurchase {
   string creator = 1;
   string productID = 2;
