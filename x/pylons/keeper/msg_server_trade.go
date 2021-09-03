@@ -31,10 +31,10 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		k.LockItemForTrade(ctx, item)
 		items = append(items, item)
 	}
-	for _, coinInputs := range msg.CoinInputs {
+	for i, coinInputs := range msg.CoinInputs {
 		_, err := types.FindValidPaymentsPermutation(items, coinInputs.Coins)
 		if err != nil {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs cannot satisfy itemOutputs transferFees requirements")
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs at index %d cannot satisfy itemOutputs transferFees requirements", i)
 		}
 	}
 
