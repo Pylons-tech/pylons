@@ -21,8 +21,14 @@ func RecipeModified(original, updated Recipe) (bool, error) {
 		modified = true
 	}
 
-	if original.CoinInputs.IsEqual(updated.CoinInputs) {
+	if len(original.CoinInputs) != len(updated.CoinInputs) {
 		modified = true
+	} else {
+		for i := range original.CoinInputs {
+			if !original.CoinInputs[i].Coins.IsEqual(updated.CoinInputs[i].Coins) {
+				modified = true
+			}
+		}
 	}
 
 	if original.BlockInterval != updated.BlockInterval {

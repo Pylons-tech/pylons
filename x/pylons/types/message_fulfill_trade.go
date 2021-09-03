@@ -11,7 +11,7 @@ func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []Item
 	return &MsgFulfillTrade{
 		Creator:        creator,
 		ID:             id,
-		CoinIputsIndex: coinInputsIndex,
+		CoinInputsIndex: coinInputsIndex,
 		Items:          items,
 	}
 }

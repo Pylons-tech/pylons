@@ -147,6 +147,10 @@ message  WeightedOutputs {
   uint64 weight = 2;
 }
 
+message CoinInput{
+  repeated cosmos.base.v1beta1.Coin coins = 1 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
 message Recipe {
   string cookbookID = 1;
   string ID = 2;
@@ -154,7 +158,7 @@ message Recipe {
   string name = 4;
   string description = 5;
   string version = 6;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];

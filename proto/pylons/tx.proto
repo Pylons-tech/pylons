@@ -36,7 +36,7 @@ service Msg {
 message MsgFulfillTrade {
   string creator = 1;
   uint64 ID = 2;
-  uint64 coinIputsIndex = 3;
+  uint64 coinInputsIndex = 3;
   repeated ItemRef items = 4 [(gogoproto.nullable) = false];
 }
 
@@ -112,7 +112,8 @@ message MsgExecuteRecipe {
   string creator = 1;
   string cookbookID = 2;
   string recipeID = 3;
-  repeated string itemIDs = 4 [(gogoproto.nullable) = false];
+  uint64 coinInputsIndex = 4;
+  repeated string itemIDs = 5 [(gogoproto.nullable) = false];
 }
 
 message MsgExecuteRecipeResponse {
@@ -138,7 +139,7 @@ message MsgCreateRecipe {
   string name = 4;
   string description = 5;
   string version = 6;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];
@@ -155,7 +156,7 @@ message MsgUpdateRecipe {
   string name = 4;
   string description = 5;
   string version = 6;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];

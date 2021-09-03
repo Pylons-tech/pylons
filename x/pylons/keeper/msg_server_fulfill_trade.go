@@ -66,7 +66,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
 	}
 	trade := k.GetTrade(ctx, msg.ID)
-	coinInputsIndex := int(msg.CoinIputsIndex)
+	coinInputsIndex := int(msg.CoinInputsIndex)
 	if coinInputsIndex >= len(trade.CoinInputs) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
 	}

@@ -197,7 +197,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 				Name:          "",
 				Description:   "",
 				Version:       "",
-				CoinInputs:    sdk.NewCoins(),
+				CoinInputs:    []types.CoinInput{{Coins: sdk.NewCoins()}},
 				ItemInputs:    make([]types.ItemInput, 0),
 				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
 				Outputs:       make([]types.WeightedOutputs, 0),

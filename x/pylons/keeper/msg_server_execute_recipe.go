@@ -78,8 +78,14 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
+	coinInputsIndex := int(msg.CoinInputsIndex)
+	if coinInputsIndex >= len(recipe.CoinInputs) {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+	}
+	coinInputs := recipe.CoinInputs[coinInputsIndex].Coins
+
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	err = k.LockCoinsForExecution(ctx, addr, recipe.CoinInputs)
+	err = k.LockCoinsForExecution(ctx, addr, coinInputs)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +114,7 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 		RecipeID:      recipe.ID,
 		CookbookID:    recipe.CookbookID,
 		RecipeVersion: recipe.Version,
-		CoinInputs:    recipe.CoinInputs,
+		CoinInputs:    coinInputs,
 	}
 
 	id := k.AppendPendingExecution(ctx, execution, recipe.BlockInterval)
