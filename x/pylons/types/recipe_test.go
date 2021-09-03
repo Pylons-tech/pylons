@@ -11,6 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TODO Add tests for RecipeModified, ItemInputsEqual, EntriesListEqual, OutputsEqual from recipe.go
+
 func TestValidateInputDoubles(t *testing.T) {
 	valGTone, _ := sdk.NewDecFromStr("1.01")
 	valLTone, _ := sdk.NewDecFromStr("0.99")
