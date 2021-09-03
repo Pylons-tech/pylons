@@ -42,7 +42,7 @@ func CmdCreateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs := sdk.Coins{}
+			jsonArgsCoinInputs := sdk.NewCoins()
 			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err
@@ -132,7 +132,7 @@ func CmdUpdateRecipe() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInputs := sdk.Coins{}
+			jsonArgsCoinInputs := sdk.NewCoins()
 			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err

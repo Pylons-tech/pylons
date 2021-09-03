@@ -49,7 +49,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.NewDec(1),
+						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -64,13 +64,13 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.NewDec(1),
+						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
 				},
 				MutableStrings: nil,
-				TransferFee:    []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
+				TransferFee:    []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				Quantity:       0,
 				AmountMinted:   0,
 			},
@@ -200,7 +200,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.NewDec(1),
+						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -215,7 +215,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.NewDec(1),
+						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -226,7 +226,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
+				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				Quantity:     1, // Set quantity so it can only be executed once
 				AmountMinted: 0,
 			},
@@ -388,7 +388,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.NewDec(1),
+						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -403,7 +403,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.NewDec(1),
+						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -414,7 +414,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
+				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				Quantity:     0, // Set quantity so it can only be executed once
 				AmountMinted: 0,
 			},
@@ -555,7 +555,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				Doubles: []types.DoubleParam{
 					{
 						Key:  "Mass",
-						Rate: sdk.NewDec(1),
+						Rate: sdk.OneDec(),
 						WeightRanges: []types.DoubleWeightRange{
 							{
 								Lower:  sdk.NewDec(50),
@@ -570,7 +570,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 				Strings: []types.StringParam{
 					{
 						Key:     "testKey",
-						Rate:    sdk.NewDec(1),
+						Rate:    sdk.OneDec(),
 						Value:   "testValue",
 						Program: "",
 					},
@@ -581,7 +581,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.NewInt(1))},
+				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				Quantity:     0, // Set quantity so it can only be executed once
 				AmountMinted: 0,
 			},

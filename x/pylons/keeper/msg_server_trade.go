@@ -14,7 +14,7 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	minPayment := sdk.Coins{}
+	minPayment := sdk.NewCoins()
 	items := make([]types.Item, 0)
 
 	// check that each item provided for trade is owned by sender, and lock it
@@ -63,8 +63,8 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 	)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateTrade{
-		Creator:   msg.Creator,
-		ID:        id,
+		Creator: msg.Creator,
+		ID:      id,
 	})
 
 	return &types.MsgCreateTradeResponse{
@@ -101,8 +101,8 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 	k.RemoveTrade(ctx, msg.ID)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
-		Creator:   msg.Creator,
-		ID:        msg.ID,
+		Creator: msg.Creator,
+		ID:      msg.ID,
 	})
 
 	return &types.MsgCancelTradeResponse{}, err

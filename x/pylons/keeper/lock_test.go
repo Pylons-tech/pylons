@@ -2,7 +2,6 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -15,11 +14,8 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 
 	//Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-	mintAmt := sdk.Coins{}
+	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
-	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
 
 	//Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -31,7 +27,7 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 
 	// Pay Fees
 	fee := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-	feeCoins := sdk.Coins{}
+	feeCoins := sdk.NewCoins()
 	feeCoins = feeCoins.Add(fee)
 	err = k.PayFees(ctx, addr, feeCoins)
 	require.NoError(err)
@@ -49,11 +45,8 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 
 	// Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-	mintAmt := sdk.Coins{}
+	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
-	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
 
 	// Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -65,7 +58,7 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 
 	// Lock coins for execution
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
-	lockedCoins := sdk.Coins{}
+	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForExecution(ctx, addr, lockedCoins)
 	require.NoError(err)
@@ -83,11 +76,8 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 
 	// Create an initial supply
 	coin := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-	mintAmt := sdk.Coins{}
+	mintAmt := sdk.NewCoins()
 	mintAmt = mintAmt.Add(coin)
-	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
 
 	// Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -99,7 +89,7 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 
 	// Lock coins for trade
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
-	lockedCoins := sdk.Coins{}
+	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForTrade(ctx, addr, lockedCoins)
 	require.NoError(err)
@@ -117,11 +107,8 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 
 	// Create an initial supply
 	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-	coinsOfInitialSupply := sdk.Coins{}
+	coinsOfInitialSupply := sdk.NewCoins()
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
-	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(coinsOfInitialSupply)
-	bk.SetSupply(ctx, supply)
 
 	//Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -136,7 +123,7 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 
 	// Lock coins for trade
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
-	lockedCoins := sdk.Coins{}
+	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForTrade(ctx, testAddr, lockedCoins)
 	require.NoError(err)
@@ -166,11 +153,8 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 
 	//Create an initial supply
 	initialSupply := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))
-	coinsOfInitialSupply := sdk.Coins{}
+	coinsOfInitialSupply := sdk.NewCoins()
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
-	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(coinsOfInitialSupply)
-	bk.SetSupply(ctx, supply)
 
 	//Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -185,7 +169,7 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 
 	// Lock coins for execution
 	lc := sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(10))
-	lockedCoins := sdk.Coins{}
+	lockedCoins := sdk.NewCoins()
 	lockedCoins = lockedCoins.Add(lc)
 	err = k.LockCoinsForExecution(ctx, testAddr, lockedCoins)
 	require.NoError(err)

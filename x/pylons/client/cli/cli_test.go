@@ -22,13 +22,13 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []*types.Tr
 		state.TradeList = append(state.TradeList, &types.Trade{
 			Creator:          "creator",
 			ID:               uint64(i),
-			CoinInputs:       sdk.Coins{},
+			CoinInputs:       sdk.NewCoins(),
 			ItemInputs:       make([]types.ItemInput, 0),
-			CoinOutputs:      sdk.Coins{},
+			CoinOutputs:      sdk.NewCoins(),
 			ItemOutputs:      make([]types.ItemRef, 0),
 			ExtraInfo:        "extra info",
 			Receiver:         "receiver",
-			TradedItemInputs:  make([]types.ItemRef, 0),
+			TradedItemInputs: make([]types.ItemRef, 0),
 		})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -59,7 +59,7 @@ func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.
 			SupportEmail: "test@email.com",
 			CostPerBlock: sdk.Coin{
 				Denom:  "testDenom" + strconv.Itoa(i),
-				Amount: sdk.NewInt(1),
+				Amount: sdk.OneInt(),
 			},
 			Enabled: false,
 		})
@@ -88,16 +88,16 @@ func networkWithExecutionObjects(t *testing.T, n int) (*network.Network, []types
 				Creator:     addresses[i],
 				ID:          strconv.Itoa(i),
 				NodeVersion: "v1.0.0",
-				CoinOutputs: sdk.Coins{sdk.Coin{
-					Denom:  "testDenom" + strconv.Itoa(i),
-					Amount: sdk.NewInt(1),
-				}},
+				CoinOutputs: sdk.NewCoins(sdk.NewCoin(
+					"testDenom"+strconv.Itoa(i),
+					sdk.OneInt(),
+				)),
 				ItemInputs:          make([]types.ItemRecord, 0),
 				ItemOutputIDs:       []string{"itemID1"},
 				ItemModifyOutputIDs: make([]string, 0),
 				RecipeID:            "RecipeID1",
 				CookbookID:          "CookbookID1",
-				CoinInputs:          sdk.Coins{},
+				CoinInputs:          sdk.NewCoins(),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -142,7 +142,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.NewInt(1)}},
+				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -172,7 +172,7 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
-				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.NewInt(1)}},
+				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -197,7 +197,7 @@ func networkWithRecipeObjects(t *testing.T, n int) (*network.Network, []types.Re
 				Name:          "",
 				Description:   "",
 				Version:       "",
-				CoinInputs:    sdk.Coins{},
+				CoinInputs:    sdk.NewCoins(),
 				ItemInputs:    make([]types.ItemInput, 0),
 				Entries:       types.EntriesList{CoinOutputs: []types.CoinOutput{}, ItemOutputs: []types.ItemOutput{}, ItemModifyOutputs: []types.ItemModifyOutput{}},
 				Outputs:       make([]types.WeightedOutputs, 0),

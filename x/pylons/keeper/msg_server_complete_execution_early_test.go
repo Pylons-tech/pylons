@@ -2,7 +2,6 @@ package keeper_test
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -26,7 +25,7 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 		Description:  "descdescdescdescdescdesc",
 		Version:      "v0.0.1",
 		SupportEmail: "test@email.com",
-		CostPerBlock: sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.NewInt(1)},
+		CostPerBlock: sdk.Coin{Denom: types.PylonsCoinDenom, Amount: sdk.OneInt()},
 		Enabled:      true,
 	}
 	_, err := srv.CreateCookbook(wctx, cookbookMsg)
@@ -48,9 +47,6 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	// create only one pendingExecution
 	pendingExecution := createNPendingExecutionForSingleRecipe(k, ctx, 1, recipe)[0]
 
-	// set initial supply to be not nil, any value will do
-	supply := bankTypes.NewSupply(amountToPay)
-	bk.SetSupply(ctx, supply)
 	// give coins to requester
 	requesterAddr, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
 	require.NoError(err)

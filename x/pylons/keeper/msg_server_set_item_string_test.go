@@ -3,8 +3,6 @@ package keeper_test
 import (
 	"fmt"
 
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -32,10 +30,6 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 	creatorAddr, err := sdk.AccAddressFromBech32(creator)
 	require.NoError(err)
 
-	// set initial supply to be not nil - we use already available updateFee since any arbitrary value will do
-	supply := bankTypes.NewSupply(coinsWithUpdateFee)
-	bk.SetSupply(ctx, supply)
-
 	err = k.MintCoinsToAddr(ctx, creatorAddr, coinsWithUpdateFee)
 	require.NoError(err)
 
@@ -50,7 +44,7 @@ func (suite *IntegrationTestSuite) TestItemMsgServerSetStringField() {
 			Developer:    "",
 			Version:      "v0.0.1",
 			SupportEmail: "test@email.com",
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
+			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:      false,
 		}
 		// setting cookbook required to provide a valid "scope" for items

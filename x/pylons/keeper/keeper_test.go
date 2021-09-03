@@ -24,7 +24,7 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	for i := range items {
 		items[i].Creator = creators[i]
 		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
+		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -36,7 +36,7 @@ func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []ty
 	for i := range items {
 		items[i].Creator = creator
 		items[i].ID = fmt.Sprintf("%d", i)
-		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))
+		items[i].CostPerBlock = sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())
 		k.SetCookbook(ctx, items[i])
 	}
 	return items
@@ -189,13 +189,14 @@ func createNGoogleIAPOrder(k keeper.Keeper, ctx sdk.Context, n int) []types.Goog
 func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owners := types.GenTestBech32List(n)
-	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))}
+	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.OneInt())}
 	for i := range items {
 		items[i].Owner = owners[i]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
+		items[i].TradePercentage = sdk.ZeroDec()
 		k.SetItem(ctx, items[i])
 	}
 	return items
@@ -219,13 +220,14 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owner := types.GenTestBech32List(1)
-	coin := []sdk.Coin{sdk.NewCoin("test", sdk.NewInt(1))}
+	coin := []sdk.Coin{sdk.NewCoin("test", sdk.OneInt())}
 	for i := range items {
 		items[i].Owner = owner[0]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
 		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
+		items[i].TradePercentage = sdk.ZeroDec()
 		k.SetItem(ctx, items[i])
 	}
 	return items
@@ -264,7 +266,6 @@ type IntegrationTestSuite struct {
 func (suite *IntegrationTestSuite) SetupTest() {
 	cmdApp := pylonsSimapp.New("./")
 
-	// cast to pylons app
 	var a *app.App
 	switch cmdApp.(type) {
 	case *app.App:
@@ -274,7 +275,6 @@ func (suite *IntegrationTestSuite) SetupTest() {
 	}
 
 	ctx := a.BaseApp.NewContext(false, tmproto.Header{})
-	a.PylonsKeeper.SetParams(ctx, types.DefaultParams())
 
 	suite.app = a
 	suite.ctx = ctx

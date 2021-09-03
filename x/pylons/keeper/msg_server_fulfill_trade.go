@@ -2,8 +2,9 @@ package keeper
 
 import (
 	"context"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"strconv"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -28,7 +29,7 @@ func (k msgServer) MatchItemInputsForTrade(ctx sdk.Context, creatorAddr string, 
 			}
 			inputItem, found := inputItemMap[itemRef]
 			if !found {
-				inputItem, found = k.GetItem(ctx, itemRef.CookbookID , itemRef.ItemID)
+				inputItem, found = k.GetItem(ctx, itemRef.CookbookID, itemRef.ItemID)
 				if !found {
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", itemRef.ItemID)
 				}
@@ -61,7 +62,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	// get the trade from keeper
-	if !k.HasTrade(ctx, msg.ID){
+	if !k.HasTrade(ctx, msg.ID) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
 	}
 	trade := k.GetTrade(ctx, msg.ID)
@@ -79,7 +80,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		}
 	}
 
-	minItemInputsTransferFees := sdk.Coins{}
+	minItemInputsTransferFees := sdk.NewCoins()
 	itemInputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(matchedInputItems, trade.CoinOutputs)
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot use coinOutputs to pay for the items provided")
@@ -101,7 +102,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		outputItems[i] = item
 	}
 
-	minItemOutputsTransferFees := sdk.Coins{}
+	minItemOutputsTransferFees := sdk.NewCoins()
 	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, trade.CoinInputs)
 	if err != nil {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "balance not sufficient to pay coinInputs")
@@ -126,8 +127,8 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	// calculate the actual payment for that item as coin / weight
 	// get the residual to transfer to cookbook owner of that item from this actual payment
-	inputChainTotAmt := sdk.Coins{}
-	inputTransferTotAmt := sdk.Coins{}
+	inputChainTotAmt := sdk.NewCoins()
+	inputTransferTotAmt := sdk.NewCoins()
 	inputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
 	for i, item := range matchedInputItems {
 		baseItemTransferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
@@ -140,8 +141,8 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		inputTransferTotAmt = inputTransferTotAmt.Add(transferAmt)
 		inputCookbookOwnersTotAmtMap[item.CookbookID] = inputCookbookOwnersTotAmtMap[item.CookbookID].Add(cookbookAmt)
 	}
-	outputChainTotAmt := sdk.Coins{}
-	outputTransferTotAmt := sdk.Coins{}
+	outputChainTotAmt := sdk.NewCoins()
+	outputTransferTotAmt := sdk.NewCoins()
 	outputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
 	for i, item := range outputItems {
 		baseItemTransferFee := item.TransferFee[itemOutputsTransferFeePermutation[i]]
@@ -180,17 +181,14 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 
 	// TODO - add this clamping
 	/*
-	if coin.Amount.LT(minTransferFee) {
-		coin.Amount = minTransferFee
-	} else if coin.Amount.GT(maxTransferFee) {
-		coin.Amount = maxTransferFee
-	}
+		if coin.Amount.LT(minTransferFee) {
+			coin.Amount = minTransferFee
+		} else if coin.Amount.GT(maxTransferFee) {
+			coin.Amount = maxTransferFee
+		}
 	*/
 
-
 	// TODO EMIT EVENT
-
-
 
 	return &types.MsgFulfillTradeResponse{}, nil
 }

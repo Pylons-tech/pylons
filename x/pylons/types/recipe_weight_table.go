@@ -25,7 +25,7 @@ func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 		weights[i] = lastWeight
 	}
 	if lastWeight == 0 {
-		return sdk.NewDec(0), errors.New("total weight of DoubleWeightTable shouldn't be zero")
+		return sdk.ZeroDec(), errors.New("total weight of DoubleWeightTable shouldn't be zero")
 	}
 	randWeight := rand.Int63n(lastWeight)
 
@@ -40,7 +40,7 @@ func (wt DoubleWeightTable) Generate() (sdk.Dec, error) {
 	}
 
 	if chosenIndex < 0 || chosenIndex >= len(wt) {
-		return sdk.NewDec(0), errors.New("something went wrong generating random double value")
+		return sdk.ZeroDec(), errors.New("something went wrong generating random double value")
 	}
 
 	selectedWeightRange := wt[chosenIndex]

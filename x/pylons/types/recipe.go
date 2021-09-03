@@ -631,7 +631,7 @@ func ValidateDoubles(dp []DoubleParam) error {
 		keyMap[param.Key] = true
 
 		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.NewDec(0)) || param.Rate.GT(sdk.NewDec(1)) {
+		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on double param %s", param.Key)
 		}
 
@@ -663,7 +663,7 @@ func ValidateLongs(lp []LongParam) error {
 		keyMap[param.Key] = true
 
 		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.NewDec(0)) || param.Rate.GT(sdk.NewDec(1)) {
+		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on long param %s", param.Key)
 		}
 
@@ -694,7 +694,7 @@ func ValidateStrings(sp []StringParam) error {
 		keyMap[param.Key] = true
 
 		// rate must be in (0, 1]
-		if param.Rate.LTE(sdk.NewDec(0)) || param.Rate.GT(sdk.NewDec(1)) {
+		if param.Rate.LTE(sdk.ZeroDec()) || param.Rate.GT(sdk.OneDec()) {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid rate on string param %s", param.Key)
 		}
 	}
@@ -752,12 +752,12 @@ func ValidateItemOutputs(io []ItemOutput, idMap map[string]bool) error {
 		}
 
 		// item.TradePercentage must be in (0, 1)
-		if item.TradePercentage.LTE(sdk.ZeroDec()) ||item.TradePercentage.GTE(sdk.OneDec()) {
+		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemOutput %s", item.ID)
 		}
 
 		for _, tf := range item.TransferFee {
-			if !tf.IsValid(){
+			if !tf.IsValid() {
 				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
 			}
 		}
@@ -798,12 +798,12 @@ func ValidateItemModifyOutputs(imo []ItemModifyOutput, idMap map[string]bool) er
 		}
 
 		// item.TradePercentage must be in (0, 1)
-		if item.TradePercentage.LTE(sdk.ZeroDec()) ||item.TradePercentage.GTE(sdk.OneDec()) {
+		if item.TradePercentage.LTE(sdk.ZeroDec()) || item.TradePercentage.GTE(sdk.OneDec()) {
 			return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid trade percentage on itemModifyOutput %s", item.ID)
 		}
 
 		for _, tf := range item.TransferFee {
-			if !tf.IsValid(){
+			if !tf.IsValid() {
 				return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid transferFee on ItemOutput %s", item.ID)
 			}
 		}

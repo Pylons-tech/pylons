@@ -30,7 +30,7 @@ func (it Item) FindDouble(key string) (sdk.Dec, bool) {
 			return v.Value, true
 		}
 	}
-	return sdk.NewDec(0), false
+	return sdk.ZeroDec(), false
 }
 
 // FindDoubleKey is a function get double key index
@@ -100,16 +100,16 @@ func (io ItemOutput) Actualize(ctx sdk.Context, cookbookID string, addr sdk.AccA
 
 	return Item{
 		// ID not set - it's handled internally
-		Owner:          addr.String(),
-		CookbookID:     cookbookID,
-		NodeVersion:    GetNodeVersionString(),
-		Doubles:        dblActualize,
-		Longs:          longActualize,
-		Strings:        stringActualize,
-		MutableStrings: io.MutableStrings,
-		Tradeable:      io.Tradeable,
-		LastUpdate:     ctx.BlockHeight(),
-		TransferFee:    io.TransferFee,
+		Owner:           addr.String(),
+		CookbookID:      cookbookID,
+		NodeVersion:     GetNodeVersionString(),
+		Doubles:         dblActualize,
+		Longs:           longActualize,
+		Strings:         stringActualize,
+		MutableStrings:  io.MutableStrings,
+		Tradeable:       io.Tradeable,
+		LastUpdate:      ctx.BlockHeight(),
+		TransferFee:     io.TransferFee,
 		TradePercentage: io.TradePercentage,
 	}, nil
 }
@@ -268,7 +268,7 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 	return nil
 }
 
-func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error){
+func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error) {
 	// initialize permutation to start from all 0s
 	permutation := make([]int, len(items))
 	// the current index
@@ -277,7 +277,7 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 	maxedOutIndex := -1
 	for {
 		// create transferFees using the current permutation
-		totalAmt := sdk.Coins{}
+		totalAmt := sdk.NewCoins()
 		for i, transferFeeIdx := range permutation {
 			totalAmt = totalAmt.Add(items[i].TransferFee[transferFeeIdx])
 		}
@@ -294,7 +294,7 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 			permutation[index] = incrTransferFeeIdx
 		}
 		incrMaxedOutIndex := maxedOutIndex + 1
-		if permutation[index] == len(items[index].TransferFee) && index <= incrMaxedOutIndex{
+		if permutation[index] == len(items[index].TransferFee) && index <= incrMaxedOutIndex {
 			maxedOutIndex = incrMaxedOutIndex
 			for i := maxedOutIndex + 1; i < len(permutation); i++ {
 				// reset all successive items' transferFeeIdx
