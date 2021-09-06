@@ -6,6 +6,8 @@ import (
 )
 
 var _ sdk.Msg = &MsgCreateAccount{}
+var _ sdk.Msg = &MsgUpdateAccount{}
+
 
 func NewMsgCreateAccount(creator string, username string) *MsgCreateAccount {
 	return &MsgCreateAccount{
@@ -41,9 +43,52 @@ func (msg *MsgCreateAccount) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address: %s", err)
 	}
 
-	if err = ValidateID(msg.Username); err != nil {
+	if err = ValidateUsername(msg.Username); err != nil {
 		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
+
+	return nil
+}
+
+
+func NewMsgUpdateAccount(creator string, username string) *MsgUpdateAccount {
+	return &MsgUpdateAccount{
+		Creator:  creator,
+		Username: username,
+	}
+}
+
+func (msg *MsgUpdateAccount) Route() string {
+	return RouterKey
+}
+
+func (msg *MsgUpdateAccount) Type() string {
+	return "UpdateAccount"
+}
+
+func (msg *MsgUpdateAccount) GetSigners() []sdk.AccAddress {
+	creator, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{creator}
+}
+
+func (msg *MsgUpdateAccount) GetSignBytes() []byte {
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
+}
+
+func (msg *MsgUpdateAccount) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
+	}
+
+	if err = ValidateUsername(msg.Username); err != nil {
+		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
+	}
+
 
 	return nil
 }

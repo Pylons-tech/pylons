@@ -284,6 +284,8 @@ export type PylonsMsgSetItemStringResponse = object;
 
 export type PylonsMsgTransferCookbookResponse = object;
 
+export type PylonsMsgUpdateAccountResponse = object;
+
 export type PylonsMsgUpdateCookbookResponse = object;
 
 export type PylonsMsgUpdateRecipeResponse = object;
@@ -293,7 +295,11 @@ export interface PylonsPylonsAccount {
   username?: string;
 }
 
-export interface PylonsQueryGetAccountResponse {
+export interface PylonsQueryGetAccountByAddressResponse {
+  pylonsAccount?: PylonsPylonsAccount;
+}
+
+export interface PylonsQueryGetAccountByUsernameResponse {
   pylonsAccount?: PylonsPylonsAccount;
 }
 
@@ -691,13 +697,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryPylonsAccount
-   * @summary Queries a username by account.
-   * @request GET:/pylons/account/{username}
+   * @name QueryPylonsAccountByAddress
+   * @summary Queries a list of getAccountByAddress items.
+   * @request GET:/pylons/account/address/{address}
    */
-  queryPylonsAccount = (username: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetAccountResponse, RpcStatus>({
-      path: `/pylons/account/${username}`,
+  queryPylonsAccountByAddress = (address: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetAccountByAddressResponse, RpcStatus>({
+      path: `/pylons/account/address/${address}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryPylonsAccountByUsername
+   * @summary Queries a username by account.
+   * @request GET:/pylons/account/username/{username}
+   */
+  queryPylonsAccountByUsername = (username: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetAccountByUsernameResponse, RpcStatus>({
+      path: `/pylons/account/username/${username}`,
       method: "GET",
       format: "json",
       ...params,

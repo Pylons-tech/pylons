@@ -6,6 +6,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+//  TODO create remaining tests
+
 func TestValidateEmail(t *testing.T) {
 	for _, tc := range []struct {
 		desc  string

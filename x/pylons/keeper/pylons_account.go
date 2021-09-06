@@ -8,17 +8,44 @@ import (
 )
 
 // SetPylonsAccount set a specific pylons account in the store from its index
-func (k Keeper) SetPylonsAccount(ctx sdk.Context, username types.PylonsAccount) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
-	b := k.cdc.MustMarshalBinaryBare(&username)
-	store.Set(types.KeyPrefix(username.Username), b)
+// this function sets two symmetric KVStores with address -> username
+// and username -> address mappings
+func (k Keeper) SetPylonsAccount(ctx sdk.Context, account types.PylonsAccount) {
+	b := k.cdc.MustMarshalBinaryBare(&account)
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+
+	prefixStore.Set(types.KeyPrefix(account.Username), b)
+	prefixStore.Set(types.KeyPrefix(account.Account), b)
 }
 
-// GetPylonsAccount returns a pylons account from its index
-func (k Keeper) GetPylonsAccount(ctx sdk.Context, username string) (val types.PylonsAccount, found bool) {
+// HasPylonsAccount checks if the account exists in the store for either of the symmetric mappings
+func (k Keeper) HasPylonsAccount(ctx sdk.Context, account types.PylonsAccount) bool {
+	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+
+	has := prefixStore.Has(types.KeyPrefix(account.Username))
+	has = has || prefixStore.Has(types.KeyPrefix(account.Account))
+
+	return has
+}
+
+// GetPylonsAccountByUsername returns a pylons account from using its username
+func (k Keeper) GetPylonsAccountByUsername(ctx sdk.Context, username string) (val types.PylonsAccount, found bool) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 
 	b := store.Get(types.KeyPrefix(username))
+	if b == nil {
+		return val, false
+	}
+
+	k.cdc.MustUnmarshalBinaryBare(b, &val)
+	return val, true
+}
+
+// GetPylonsAccountByAddress returns a pylons account from using its cosmos address
+func (k Keeper) GetPylonsAccountByAddress(ctx sdk.Context, address string) (val types.PylonsAccount, found bool) {
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+
+	b := store.Get(types.KeyPrefix(address))
 	if b == nil {
 		return val, false
 	}

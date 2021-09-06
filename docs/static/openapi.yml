@@ -19475,10 +19475,54 @@ paths:
           format: uint64
       tags:
         - Query
-  '/pylons/account/{username}':
+  '/pylons/account/address/{address}':
+    get:
+      summary: Queries a list of getAccountByAddress items.
+      operationId: PylonstechPylonsPylonsPylonsAccountByAddress
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              pylonsAccount:
+                type: object
+                properties:
+                  account:
+                    type: string
+                  username:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    typeUrl:
+                      type: string
+                    value:
+                      type: string
+                      format: byte
+      parameters:
+        - name: address
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
+  '/pylons/account/username/{username}':
     get:
       summary: Queries a username by account.
-      operationId: PylonstechPylonsPylonsPylonsAccount
+      operationId: PylonstechPylonsPylonsPylonsAccountByUsername
       responses:
         '200':
           description: A successful response.
@@ -33662,6 +33706,8 @@ definitions:
     type: object
   Pylonstech.pylons.pylons.MsgTransferCookbookResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgUpdateAccountResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgUpdateCookbookResponse:
     type: object
   Pylonstech.pylons.pylons.MsgUpdateRecipeResponse:
@@ -33673,7 +33719,17 @@ definitions:
         type: string
       username:
         type: string
-  Pylonstech.pylons.pylons.QueryGetAccountResponse:
+  Pylonstech.pylons.pylons.QueryGetAccountByAddressResponse:
+    type: object
+    properties:
+      pylonsAccount:
+        type: object
+        properties:
+          account:
+            type: string
+          username:
+            type: string
+  Pylonstech.pylons.pylons.QueryGetAccountByUsernameResponse:
     type: object
     properties:
       pylonsAccount:

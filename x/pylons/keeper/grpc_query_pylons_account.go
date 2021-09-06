@@ -10,16 +10,30 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) PylonsAccount(c context.Context, req *types.QueryGetAccountRequest) (*types.QueryGetAccountResponse, error) {
+func (k Keeper) PylonsAccountByUsername(goCtx context.Context, req *types.QueryGetAccountByUsernameRequest) (*types.QueryGetAccountByUsernameResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
-	ctx := sdk.UnwrapSDKContext(c)
+	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	val, found := k.GetPylonsAccount(ctx, req.Username)
+	val, found := k.GetPylonsAccountByUsername(ctx, req.Username)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetAccountResponse{PylonsAccount: val}, nil
+	return &types.QueryGetAccountByUsernameResponse{PylonsAccount: val}, nil
+}
+
+func (k Keeper) PylonsAccountByAddress(goCtx context.Context, req *types.QueryGetAccountByAddressRequest) (*types.QueryGetAccountByAddressResponse, error) {
+	if req == nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid request")
+	}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	val, found := k.GetPylonsAccountByUsername(ctx, req.Address)
+	if !found {
+		return nil, status.Error(codes.InvalidArgument, "not found")
+	}
+
+	return &types.QueryGetAccountByAddressResponse{PylonsAccount: val}, nil
 }

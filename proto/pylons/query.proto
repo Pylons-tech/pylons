@@ -19,9 +19,15 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 service Query {
 	// this line is used by starport scaffolding # 2
 
+	// Queries a list of getAccountByAddress items.
+	rpc PylonsAccountByAddress(QueryGetAccountByAddressRequest) returns (QueryGetAccountByAddressResponse) {
+		option (google.api.http).get = "/pylons/account/address/{address}";
+	}
+
+
 	// Queries a username by account.
-	rpc PylonsAccount(QueryGetAccountRequest) returns (QueryGetAccountResponse) {
-		option (google.api.http).get = "/pylons/account/{username}";
+	rpc PylonsAccountByUsername(QueryGetAccountByUsernameRequest) returns (QueryGetAccountByUsernameResponse) {
+		option (google.api.http).get = "/pylons/account/username/{username}";
 	}
 
 	// Queries a trade by id.
@@ -92,13 +98,22 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
-message QueryGetAccountRequest {
+message QueryGetAccountByAddressRequest {
+  string address = 1;
+}
+
+message QueryGetAccountByUsernameRequest {
 	string username = 1;
 }
 
-message QueryGetAccountResponse {
+message QueryGetAccountByAddressResponse {
 	PylonsAccount pylonsAccount = 1 [(gogoproto.nullable) = false];
 }
+
+message QueryGetAccountByUsernameResponse {
+	PylonsAccount pylonsAccount = 1 [(gogoproto.nullable) = false];
+}
+
 
 message QueryGetTradeRequest {
 	uint64 ID = 1;

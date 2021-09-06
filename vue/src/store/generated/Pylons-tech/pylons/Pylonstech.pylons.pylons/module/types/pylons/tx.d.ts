@@ -4,6 +4,18 @@ import { Coin } from '../cosmos/base/v1beta1/coin';
 import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgUpdateAccount {
+    creator: string;
+    username: string;
+}
+export interface MsgUpdateAccountResponse {
+}
+export interface MsgCreateAccount {
+    creator: string;
+    username: string;
+}
+export interface MsgCreateAccountResponse {
+}
 export interface MsgFulfillTrade {
     creator: string;
     ID: string;
@@ -50,12 +62,6 @@ export interface MsgGoogleInAppPurchaseGetCoins {
     signature: string;
 }
 export interface MsgGoogleInAppPurchaseGetCoinsResponse {
-}
-export interface MsgCreateAccount {
-    creator: string;
-    username: string;
-}
-export interface MsgCreateAccountResponse {
 }
 export interface MsgSendItems {
     creator: string;
@@ -142,6 +148,34 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
+export declare const MsgUpdateAccount: {
+    encode(message: MsgUpdateAccount, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateAccount;
+    fromJSON(object: any): MsgUpdateAccount;
+    toJSON(message: MsgUpdateAccount): unknown;
+    fromPartial(object: DeepPartial<MsgUpdateAccount>): MsgUpdateAccount;
+};
+export declare const MsgUpdateAccountResponse: {
+    encode(_: MsgUpdateAccountResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgUpdateAccountResponse;
+    fromJSON(_: any): MsgUpdateAccountResponse;
+    toJSON(_: MsgUpdateAccountResponse): unknown;
+    fromPartial(_: DeepPartial<MsgUpdateAccountResponse>): MsgUpdateAccountResponse;
+};
+export declare const MsgCreateAccount: {
+    encode(message: MsgCreateAccount, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateAccount;
+    fromJSON(object: any): MsgCreateAccount;
+    toJSON(message: MsgCreateAccount): unknown;
+    fromPartial(object: DeepPartial<MsgCreateAccount>): MsgCreateAccount;
+};
+export declare const MsgCreateAccountResponse: {
+    encode(_: MsgCreateAccountResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): MsgCreateAccountResponse;
+    fromJSON(_: any): MsgCreateAccountResponse;
+    toJSON(_: MsgCreateAccountResponse): unknown;
+    fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse;
+};
 export declare const MsgFulfillTrade: {
     encode(message: MsgFulfillTrade, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgFulfillTrade;
@@ -225,20 +259,6 @@ export declare const MsgGoogleInAppPurchaseGetCoinsResponse: {
     fromJSON(_: any): MsgGoogleInAppPurchaseGetCoinsResponse;
     toJSON(_: MsgGoogleInAppPurchaseGetCoinsResponse): unknown;
     fromPartial(_: DeepPartial<MsgGoogleInAppPurchaseGetCoinsResponse>): MsgGoogleInAppPurchaseGetCoinsResponse;
-};
-export declare const MsgCreateAccount: {
-    encode(message: MsgCreateAccount, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgCreateAccount;
-    fromJSON(object: any): MsgCreateAccount;
-    toJSON(message: MsgCreateAccount): unknown;
-    fromPartial(object: DeepPartial<MsgCreateAccount>): MsgCreateAccount;
-};
-export declare const MsgCreateAccountResponse: {
-    encode(_: MsgCreateAccountResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgCreateAccountResponse;
-    fromJSON(_: any): MsgCreateAccountResponse;
-    toJSON(_: MsgCreateAccountResponse): unknown;
-    fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse;
 };
 export declare const MsgSendItems: {
     encode(message: MsgSendItems, writer?: Writer): Writer;
@@ -341,6 +361,7 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
+    UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
     FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;
     CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>;
     CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse>;
@@ -359,6 +380,7 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
+    UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
     FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;
     CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>;
     CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse>;

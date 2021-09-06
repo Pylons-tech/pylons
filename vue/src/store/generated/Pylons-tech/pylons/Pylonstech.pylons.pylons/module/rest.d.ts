@@ -218,13 +218,17 @@ export declare type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 export declare type PylonsMsgSendItemsResponse = object;
 export declare type PylonsMsgSetItemStringResponse = object;
 export declare type PylonsMsgTransferCookbookResponse = object;
+export declare type PylonsMsgUpdateAccountResponse = object;
 export declare type PylonsMsgUpdateCookbookResponse = object;
 export declare type PylonsMsgUpdateRecipeResponse = object;
 export interface PylonsPylonsAccount {
     account?: string;
     username?: string;
 }
-export interface PylonsQueryGetAccountResponse {
+export interface PylonsQueryGetAccountByAddressResponse {
+    pylonsAccount?: PylonsPylonsAccount;
+}
+export interface PylonsQueryGetAccountByUsernameResponse {
     pylonsAccount?: PylonsPylonsAccount;
 }
 export interface PylonsQueryGetCookbookResponse {
@@ -449,11 +453,20 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
-     * @name QueryPylonsAccount
-     * @summary Queries a username by account.
-     * @request GET:/pylons/account/{username}
+     * @name QueryPylonsAccountByAddress
+     * @summary Queries a list of getAccountByAddress items.
+     * @request GET:/pylons/account/address/{address}
      */
-    queryPylonsAccount: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountResponse, RpcStatus>>;
+    queryPylonsAccountByAddress: (address: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountByAddressResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryPylonsAccountByUsername
+     * @summary Queries a username by account.
+     * @request GET:/pylons/account/username/{username}
+     */
+    queryPylonsAccountByUsername: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountByUsernameResponse, RpcStatus>>;
     /**
      * No description
      *

@@ -8,6 +8,20 @@ import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgUpdateAccount {
+  creator: string
+  username: string
+}
+
+export interface MsgUpdateAccountResponse {}
+
+export interface MsgCreateAccount {
+  creator: string
+  username: string
+}
+
+export interface MsgCreateAccountResponse {}
+
 export interface MsgFulfillTrade {
   creator: string
   ID: string
@@ -62,13 +76,6 @@ export interface MsgGoogleInAppPurchaseGetCoins {
 }
 
 export interface MsgGoogleInAppPurchaseGetCoinsResponse {}
-
-export interface MsgCreateAccount {
-  creator: string
-  username: string
-}
-
-export interface MsgCreateAccountResponse {}
 
 export interface MsgSendItems {
   creator: string
@@ -162,6 +169,226 @@ export interface MsgUpdateCookbook {
 }
 
 export interface MsgUpdateCookbookResponse {}
+
+const baseMsgUpdateAccount: object = { creator: '', username: '' }
+
+export const MsgUpdateAccount = {
+  encode(message: MsgUpdateAccount, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.username !== '') {
+      writer.uint32(18).string(message.username)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateAccount {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgUpdateAccount } as MsgUpdateAccount
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.username = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgUpdateAccount {
+    const message = { ...baseMsgUpdateAccount } as MsgUpdateAccount
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
+    } else {
+      message.username = ''
+    }
+    return message
+  },
+
+  toJSON(message: MsgUpdateAccount): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.username !== undefined && (obj.username = message.username)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgUpdateAccount>): MsgUpdateAccount {
+    const message = { ...baseMsgUpdateAccount } as MsgUpdateAccount
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
+    } else {
+      message.username = ''
+    }
+    return message
+  }
+}
+
+const baseMsgUpdateAccountResponse: object = {}
+
+export const MsgUpdateAccountResponse = {
+  encode(_: MsgUpdateAccountResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgUpdateAccountResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgUpdateAccountResponse } as MsgUpdateAccountResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgUpdateAccountResponse {
+    const message = { ...baseMsgUpdateAccountResponse } as MsgUpdateAccountResponse
+    return message
+  },
+
+  toJSON(_: MsgUpdateAccountResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgUpdateAccountResponse>): MsgUpdateAccountResponse {
+    const message = { ...baseMsgUpdateAccountResponse } as MsgUpdateAccountResponse
+    return message
+  }
+}
+
+const baseMsgCreateAccount: object = { creator: '', username: '' }
+
+export const MsgCreateAccount = {
+  encode(message: MsgCreateAccount, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.username !== '') {
+      writer.uint32(18).string(message.username)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateAccount {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgCreateAccount } as MsgCreateAccount
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.username = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgCreateAccount {
+    const message = { ...baseMsgCreateAccount } as MsgCreateAccount
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
+    } else {
+      message.username = ''
+    }
+    return message
+  },
+
+  toJSON(message: MsgCreateAccount): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.username !== undefined && (obj.username = message.username)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgCreateAccount>): MsgCreateAccount {
+    const message = { ...baseMsgCreateAccount } as MsgCreateAccount
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
+    } else {
+      message.username = ''
+    }
+    return message
+  }
+}
+
+const baseMsgCreateAccountResponse: object = {}
+
+export const MsgCreateAccountResponse = {
+  encode(_: MsgCreateAccountResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgCreateAccountResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgCreateAccountResponse {
+    const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
+    return message
+  },
+
+  toJSON(_: MsgCreateAccountResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse {
+    const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
+    return message
+  }
+}
 
 const baseMsgFulfillTrade: object = { creator: '', ID: '' }
 
@@ -1041,116 +1268,6 @@ export const MsgGoogleInAppPurchaseGetCoinsResponse = {
 
   fromPartial(_: DeepPartial<MsgGoogleInAppPurchaseGetCoinsResponse>): MsgGoogleInAppPurchaseGetCoinsResponse {
     const message = { ...baseMsgGoogleInAppPurchaseGetCoinsResponse } as MsgGoogleInAppPurchaseGetCoinsResponse
-    return message
-  }
-}
-
-const baseMsgCreateAccount: object = { creator: '', username: '' }
-
-export const MsgCreateAccount = {
-  encode(message: MsgCreateAccount, writer: Writer = Writer.create()): Writer {
-    if (message.creator !== '') {
-      writer.uint32(10).string(message.creator)
-    }
-    if (message.username !== '') {
-      writer.uint32(18).string(message.username)
-    }
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): MsgCreateAccount {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgCreateAccount } as MsgCreateAccount
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.creator = reader.string()
-          break
-        case 2:
-          message.username = reader.string()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(object: any): MsgCreateAccount {
-    const message = { ...baseMsgCreateAccount } as MsgCreateAccount
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = String(object.creator)
-    } else {
-      message.creator = ''
-    }
-    if (object.username !== undefined && object.username !== null) {
-      message.username = String(object.username)
-    } else {
-      message.username = ''
-    }
-    return message
-  },
-
-  toJSON(message: MsgCreateAccount): unknown {
-    const obj: any = {}
-    message.creator !== undefined && (obj.creator = message.creator)
-    message.username !== undefined && (obj.username = message.username)
-    return obj
-  },
-
-  fromPartial(object: DeepPartial<MsgCreateAccount>): MsgCreateAccount {
-    const message = { ...baseMsgCreateAccount } as MsgCreateAccount
-    if (object.creator !== undefined && object.creator !== null) {
-      message.creator = object.creator
-    } else {
-      message.creator = ''
-    }
-    if (object.username !== undefined && object.username !== null) {
-      message.username = object.username
-    } else {
-      message.username = ''
-    }
-    return message
-  }
-}
-
-const baseMsgCreateAccountResponse: object = {}
-
-export const MsgCreateAccountResponse = {
-  encode(_: MsgCreateAccountResponse, writer: Writer = Writer.create()): Writer {
-    return writer
-  },
-
-  decode(input: Reader | Uint8Array, length?: number): MsgCreateAccountResponse {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
-
-  fromJSON(_: any): MsgCreateAccountResponse {
-    const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
-    return message
-  },
-
-  toJSON(_: MsgCreateAccountResponse): unknown {
-    const obj: any = {}
-    return obj
-  },
-
-  fromPartial(_: DeepPartial<MsgCreateAccountResponse>): MsgCreateAccountResponse {
-    const message = { ...baseMsgCreateAccountResponse } as MsgCreateAccountResponse
     return message
   }
 }
@@ -2735,6 +2852,7 @@ export const MsgUpdateCookbookResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
+  UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>
   FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>
   CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>
   CancelTrade(request: MsgCancelTrade): Promise<MsgCancelTradeResponse>
@@ -2756,6 +2874,12 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse> {
+    const data = MsgUpdateAccount.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'UpdateAccount', data)
+    return promise.then((data) => MsgUpdateAccountResponse.decode(new Reader(data)))
+  }
+
   FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse> {
     const data = MsgFulfillTrade.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'FulfillTrade', data)

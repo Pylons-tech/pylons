@@ -9,6 +9,10 @@ export interface EventCreateAccount {
     address: string;
     username: string;
 }
+export interface EventUpdateAccount {
+    address: string;
+    username: string;
+}
 export interface EventCreateCookbook {
     creator: string;
     ID: string;
@@ -83,6 +87,13 @@ export declare const EventCreateAccount: {
     fromJSON(object: any): EventCreateAccount;
     toJSON(message: EventCreateAccount): unknown;
     fromPartial(object: DeepPartial<EventCreateAccount>): EventCreateAccount;
+};
+export declare const EventUpdateAccount: {
+    encode(message: EventUpdateAccount, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): EventUpdateAccount;
+    fromJSON(object: any): EventUpdateAccount;
+    toJSON(message: EventUpdateAccount): unknown;
+    fromPartial(object: DeepPartial<EventUpdateAccount>): EventUpdateAccount;
 };
 export declare const EventCreateCookbook: {
     encode(message: EventCreateCookbook, writer?: Writer): Writer;

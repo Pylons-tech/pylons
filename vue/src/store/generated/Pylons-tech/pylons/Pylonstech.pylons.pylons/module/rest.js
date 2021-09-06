@@ -140,12 +140,26 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
-         * @name QueryPylonsAccount
-         * @summary Queries a username by account.
-         * @request GET:/pylons/account/{username}
+         * @name QueryPylonsAccountByAddress
+         * @summary Queries a list of getAccountByAddress items.
+         * @request GET:/pylons/account/address/{address}
          */
-        this.queryPylonsAccount = (username, params = {}) => this.request({
-            path: `/pylons/account/${username}`,
+        this.queryPylonsAccountByAddress = (address, params = {}) => this.request({
+            path: `/pylons/account/address/${address}`,
+            method: "GET",
+            format: "json",
+            ...params,
+        });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryPylonsAccountByUsername
+         * @summary Queries a username by account.
+         * @request GET:/pylons/account/username/{username}
+         */
+        this.queryPylonsAccountByUsername = (username, params = {}) => this.request({
+            path: `/pylons/account/username/${username}`,
             method: "GET",
             format: "json",
             ...params,

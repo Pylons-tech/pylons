@@ -9,10 +9,16 @@ import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
-export interface QueryGetAccountRequest {
+export interface QueryGetAccountByAddressRequest {
+    address: string;
+}
+export interface QueryGetAccountByUsernameRequest {
     username: string;
 }
-export interface QueryGetAccountResponse {
+export interface QueryGetAccountByAddressResponse {
+    pylonsAccount: PylonsAccount | undefined;
+}
+export interface QueryGetAccountByUsernameResponse {
     pylonsAccount: PylonsAccount | undefined;
 }
 export interface QueryGetTradeRequest {
@@ -108,19 +114,33 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
-export declare const QueryGetAccountRequest: {
-    encode(message: QueryGetAccountRequest, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): QueryGetAccountRequest;
-    fromJSON(object: any): QueryGetAccountRequest;
-    toJSON(message: QueryGetAccountRequest): unknown;
-    fromPartial(object: DeepPartial<QueryGetAccountRequest>): QueryGetAccountRequest;
+export declare const QueryGetAccountByAddressRequest: {
+    encode(message: QueryGetAccountByAddressRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByAddressRequest;
+    fromJSON(object: any): QueryGetAccountByAddressRequest;
+    toJSON(message: QueryGetAccountByAddressRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetAccountByAddressRequest>): QueryGetAccountByAddressRequest;
 };
-export declare const QueryGetAccountResponse: {
-    encode(message: QueryGetAccountResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): QueryGetAccountResponse;
-    fromJSON(object: any): QueryGetAccountResponse;
-    toJSON(message: QueryGetAccountResponse): unknown;
-    fromPartial(object: DeepPartial<QueryGetAccountResponse>): QueryGetAccountResponse;
+export declare const QueryGetAccountByUsernameRequest: {
+    encode(message: QueryGetAccountByUsernameRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByUsernameRequest;
+    fromJSON(object: any): QueryGetAccountByUsernameRequest;
+    toJSON(message: QueryGetAccountByUsernameRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetAccountByUsernameRequest>): QueryGetAccountByUsernameRequest;
+};
+export declare const QueryGetAccountByAddressResponse: {
+    encode(message: QueryGetAccountByAddressResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByAddressResponse;
+    fromJSON(object: any): QueryGetAccountByAddressResponse;
+    toJSON(message: QueryGetAccountByAddressResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetAccountByAddressResponse>): QueryGetAccountByAddressResponse;
+};
+export declare const QueryGetAccountByUsernameResponse: {
+    encode(message: QueryGetAccountByUsernameResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByUsernameResponse;
+    fromJSON(object: any): QueryGetAccountByUsernameResponse;
+    toJSON(message: QueryGetAccountByUsernameResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetAccountByUsernameResponse>): QueryGetAccountByUsernameResponse;
 };
 export declare const QueryGetTradeRequest: {
     encode(message: QueryGetTradeRequest, writer?: Writer): Writer;
@@ -278,8 +298,10 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a list of getAccountByAddress items. */
+    PylonsAccountByAddress(request: QueryGetAccountByAddressRequest): Promise<QueryGetAccountByAddressResponse>;
     /** Queries a username by account. */
-    PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
+    PylonsAccountByUsername(request: QueryGetAccountByUsernameRequest): Promise<QueryGetAccountByUsernameResponse>;
     /** Queries a trade by id. */
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;
     /** Queries a list of listItemByOwner items. */
@@ -306,7 +328,8 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
-    PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>;
+    PylonsAccountByAddress(request: QueryGetAccountByAddressRequest): Promise<QueryGetAccountByAddressResponse>;
+    PylonsAccountByUsername(request: QueryGetAccountByUsernameRequest): Promise<QueryGetAccountByUsernameResponse>;
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;
     ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>;
     GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>;

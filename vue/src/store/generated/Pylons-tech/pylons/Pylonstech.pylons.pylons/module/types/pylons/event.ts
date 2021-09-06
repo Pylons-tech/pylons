@@ -13,6 +13,11 @@ export interface EventCreateAccount {
   username: string
 }
 
+export interface EventUpdateAccount {
+  address: string
+  username: string
+}
+
 export interface EventCreateCookbook {
   creator: string
   ID: string
@@ -152,6 +157,78 @@ export const EventCreateAccount = {
 
   fromPartial(object: DeepPartial<EventCreateAccount>): EventCreateAccount {
     const message = { ...baseEventCreateAccount } as EventCreateAccount
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address
+    } else {
+      message.address = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
+    } else {
+      message.username = ''
+    }
+    return message
+  }
+}
+
+const baseEventUpdateAccount: object = { address: '', username: '' }
+
+export const EventUpdateAccount = {
+  encode(message: EventUpdateAccount, writer: Writer = Writer.create()): Writer {
+    if (message.address !== '') {
+      writer.uint32(10).string(message.address)
+    }
+    if (message.username !== '') {
+      writer.uint32(18).string(message.username)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): EventUpdateAccount {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseEventUpdateAccount } as EventUpdateAccount
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string()
+          break
+        case 2:
+          message.username = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): EventUpdateAccount {
+    const message = { ...baseEventUpdateAccount } as EventUpdateAccount
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address)
+    } else {
+      message.address = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
+    } else {
+      message.username = ''
+    }
+    return message
+  },
+
+  toJSON(message: EventUpdateAccount): unknown {
+    const obj: any = {}
+    message.address !== undefined && (obj.address = message.address)
+    message.username !== undefined && (obj.username = message.username)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<EventUpdateAccount>): EventUpdateAccount {
+    const message = { ...baseEventUpdateAccount } as EventUpdateAccount
     if (object.address !== undefined && object.address !== null) {
       message.address = object.address
     } else {

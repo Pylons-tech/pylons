@@ -13,11 +13,19 @@ import { Cookbook } from '../pylons/cookbook'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
-export interface QueryGetAccountRequest {
+export interface QueryGetAccountByAddressRequest {
+  address: string
+}
+
+export interface QueryGetAccountByUsernameRequest {
   username: string
 }
 
-export interface QueryGetAccountResponse {
+export interface QueryGetAccountByAddressResponse {
+  pylonsAccount: PylonsAccount | undefined
+}
+
+export interface QueryGetAccountByUsernameResponse {
   pylonsAccount: PylonsAccount | undefined
 }
 
@@ -136,20 +144,75 @@ export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
 }
 
-const baseQueryGetAccountRequest: object = { username: '' }
+const baseQueryGetAccountByAddressRequest: object = { address: '' }
 
-export const QueryGetAccountRequest = {
-  encode(message: QueryGetAccountRequest, writer: Writer = Writer.create()): Writer {
+export const QueryGetAccountByAddressRequest = {
+  encode(message: QueryGetAccountByAddressRequest, writer: Writer = Writer.create()): Writer {
+    if (message.address !== '') {
+      writer.uint32(10).string(message.address)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByAddressRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetAccountByAddressRequest } as QueryGetAccountByAddressRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetAccountByAddressRequest {
+    const message = { ...baseQueryGetAccountByAddressRequest } as QueryGetAccountByAddressRequest
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address)
+    } else {
+      message.address = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetAccountByAddressRequest): unknown {
+    const obj: any = {}
+    message.address !== undefined && (obj.address = message.address)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetAccountByAddressRequest>): QueryGetAccountByAddressRequest {
+    const message = { ...baseQueryGetAccountByAddressRequest } as QueryGetAccountByAddressRequest
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address
+    } else {
+      message.address = ''
+    }
+    return message
+  }
+}
+
+const baseQueryGetAccountByUsernameRequest: object = { username: '' }
+
+export const QueryGetAccountByUsernameRequest = {
+  encode(message: QueryGetAccountByUsernameRequest, writer: Writer = Writer.create()): Writer {
     if (message.username !== '') {
       writer.uint32(10).string(message.username)
     }
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountRequest {
+  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByUsernameRequest {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetAccountRequest } as QueryGetAccountRequest
+    const message = { ...baseQueryGetAccountByUsernameRequest } as QueryGetAccountByUsernameRequest
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -164,8 +227,8 @@ export const QueryGetAccountRequest = {
     return message
   },
 
-  fromJSON(object: any): QueryGetAccountRequest {
-    const message = { ...baseQueryGetAccountRequest } as QueryGetAccountRequest
+  fromJSON(object: any): QueryGetAccountByUsernameRequest {
+    const message = { ...baseQueryGetAccountByUsernameRequest } as QueryGetAccountByUsernameRequest
     if (object.username !== undefined && object.username !== null) {
       message.username = String(object.username)
     } else {
@@ -174,14 +237,14 @@ export const QueryGetAccountRequest = {
     return message
   },
 
-  toJSON(message: QueryGetAccountRequest): unknown {
+  toJSON(message: QueryGetAccountByUsernameRequest): unknown {
     const obj: any = {}
     message.username !== undefined && (obj.username = message.username)
     return obj
   },
 
-  fromPartial(object: DeepPartial<QueryGetAccountRequest>): QueryGetAccountRequest {
-    const message = { ...baseQueryGetAccountRequest } as QueryGetAccountRequest
+  fromPartial(object: DeepPartial<QueryGetAccountByUsernameRequest>): QueryGetAccountByUsernameRequest {
+    const message = { ...baseQueryGetAccountByUsernameRequest } as QueryGetAccountByUsernameRequest
     if (object.username !== undefined && object.username !== null) {
       message.username = object.username
     } else {
@@ -191,20 +254,20 @@ export const QueryGetAccountRequest = {
   }
 }
 
-const baseQueryGetAccountResponse: object = {}
+const baseQueryGetAccountByAddressResponse: object = {}
 
-export const QueryGetAccountResponse = {
-  encode(message: QueryGetAccountResponse, writer: Writer = Writer.create()): Writer {
+export const QueryGetAccountByAddressResponse = {
+  encode(message: QueryGetAccountByAddressResponse, writer: Writer = Writer.create()): Writer {
     if (message.pylonsAccount !== undefined) {
       PylonsAccount.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountResponse {
+  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByAddressResponse {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseQueryGetAccountResponse } as QueryGetAccountResponse
+    const message = { ...baseQueryGetAccountByAddressResponse } as QueryGetAccountByAddressResponse
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -219,8 +282,8 @@ export const QueryGetAccountResponse = {
     return message
   },
 
-  fromJSON(object: any): QueryGetAccountResponse {
-    const message = { ...baseQueryGetAccountResponse } as QueryGetAccountResponse
+  fromJSON(object: any): QueryGetAccountByAddressResponse {
+    const message = { ...baseQueryGetAccountByAddressResponse } as QueryGetAccountByAddressResponse
     if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
       message.pylonsAccount = PylonsAccount.fromJSON(object.pylonsAccount)
     } else {
@@ -229,14 +292,69 @@ export const QueryGetAccountResponse = {
     return message
   },
 
-  toJSON(message: QueryGetAccountResponse): unknown {
+  toJSON(message: QueryGetAccountByAddressResponse): unknown {
     const obj: any = {}
     message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? PylonsAccount.toJSON(message.pylonsAccount) : undefined)
     return obj
   },
 
-  fromPartial(object: DeepPartial<QueryGetAccountResponse>): QueryGetAccountResponse {
-    const message = { ...baseQueryGetAccountResponse } as QueryGetAccountResponse
+  fromPartial(object: DeepPartial<QueryGetAccountByAddressResponse>): QueryGetAccountByAddressResponse {
+    const message = { ...baseQueryGetAccountByAddressResponse } as QueryGetAccountByAddressResponse
+    if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
+      message.pylonsAccount = PylonsAccount.fromPartial(object.pylonsAccount)
+    } else {
+      message.pylonsAccount = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryGetAccountByUsernameResponse: object = {}
+
+export const QueryGetAccountByUsernameResponse = {
+  encode(message: QueryGetAccountByUsernameResponse, writer: Writer = Writer.create()): Writer {
+    if (message.pylonsAccount !== undefined) {
+      PylonsAccount.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetAccountByUsernameResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetAccountByUsernameResponse } as QueryGetAccountByUsernameResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.pylonsAccount = PylonsAccount.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetAccountByUsernameResponse {
+    const message = { ...baseQueryGetAccountByUsernameResponse } as QueryGetAccountByUsernameResponse
+    if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
+      message.pylonsAccount = PylonsAccount.fromJSON(object.pylonsAccount)
+    } else {
+      message.pylonsAccount = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetAccountByUsernameResponse): unknown {
+    const obj: any = {}
+    message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? PylonsAccount.toJSON(message.pylonsAccount) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetAccountByUsernameResponse>): QueryGetAccountByUsernameResponse {
+    const message = { ...baseQueryGetAccountByUsernameResponse } as QueryGetAccountByUsernameResponse
     if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
       message.pylonsAccount = PylonsAccount.fromPartial(object.pylonsAccount)
     } else {
@@ -1796,8 +1914,10 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a list of getAccountByAddress items. */
+  PylonsAccountByAddress(request: QueryGetAccountByAddressRequest): Promise<QueryGetAccountByAddressResponse>
   /** Queries a username by account. */
-  PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse>
+  PylonsAccountByUsername(request: QueryGetAccountByUsernameRequest): Promise<QueryGetAccountByUsernameResponse>
   /** Queries a trade by id. */
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>
   /** Queries a list of listItemByOwner items. */
@@ -1827,10 +1947,16 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
-  PylonsAccount(request: QueryGetAccountRequest): Promise<QueryGetAccountResponse> {
-    const data = QueryGetAccountRequest.encode(request).finish()
-    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'PylonsAccount', data)
-    return promise.then((data) => QueryGetAccountResponse.decode(new Reader(data)))
+  PylonsAccountByAddress(request: QueryGetAccountByAddressRequest): Promise<QueryGetAccountByAddressResponse> {
+    const data = QueryGetAccountByAddressRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'PylonsAccountByAddress', data)
+    return promise.then((data) => QueryGetAccountByAddressResponse.decode(new Reader(data)))
+  }
+
+  PylonsAccountByUsername(request: QueryGetAccountByUsernameRequest): Promise<QueryGetAccountByUsernameResponse> {
+    const data = QueryGetAccountByUsernameRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'PylonsAccountByUsername', data)
+    return promise.then((data) => QueryGetAccountByUsernameResponse.decode(new Reader(data)))
   }
 
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse> {

@@ -12,7 +12,7 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
-func networkWithUsernameObjects(t *testing.T, n int) (*network.Network, []types.PylonsAccount) {
+func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.PylonsAccount) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}

@@ -76,6 +76,76 @@ export const EventCreateAccount = {
         return message;
     }
 };
+const baseEventUpdateAccount = { address: '', username: '' };
+export const EventUpdateAccount = {
+    encode(message, writer = Writer.create()) {
+        if (message.address !== '') {
+            writer.uint32(10).string(message.address);
+        }
+        if (message.username !== '') {
+            writer.uint32(18).string(message.username);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseEventUpdateAccount };
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.address = reader.string();
+                    break;
+                case 2:
+                    message.username = reader.string();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseEventUpdateAccount };
+        if (object.address !== undefined && object.address !== null) {
+            message.address = String(object.address);
+        }
+        else {
+            message.address = '';
+        }
+        if (object.username !== undefined && object.username !== null) {
+            message.username = String(object.username);
+        }
+        else {
+            message.username = '';
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        message.address !== undefined && (obj.address = message.address);
+        message.username !== undefined && (obj.username = message.username);
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseEventUpdateAccount };
+        if (object.address !== undefined && object.address !== null) {
+            message.address = object.address;
+        }
+        else {
+            message.address = '';
+        }
+        if (object.username !== undefined && object.username !== null) {
+            message.username = object.username;
+        }
+        else {
+            message.username = '';
+        }
+        return message;
+    }
+};
 const baseEventCreateCookbook = { creator: '', ID: '' };
 export const EventCreateCookbook = {
     encode(message, writer = Writer.create()) {
