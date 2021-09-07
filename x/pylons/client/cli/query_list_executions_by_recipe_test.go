@@ -19,7 +19,7 @@ import (
 )
 
 func TestCmdListExecutionsByRecipe(t *testing.T) {
-	net, recipes, _ := networkWithRecipeObjects(t,2)
+	net, executions := networkWithExecutionObjects(t,2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
@@ -34,15 +34,14 @@ func TestCmdListExecutionsByRecipe(t *testing.T) {
 	}{
 		{
 			desc:        "found1",
-			recipeId:    recipes[0].ID,
-			cookbookId : recipes[0].CookbookID,
+			recipeId:    executions[0].RecipeID,
 			args:        common,
 			obj:         types.QueryListExecutionsByRecipeResponse{},
 		},
 		{
 			desc:        "found2",
-			recipeId:    recipes[1].ID,
-			cookbookId : recipes[1].CookbookID,
+			recipeId:    executions[1].ID,
+			cookbookId : executions[1].CookbookID,
 			args:        common,
 			obj:         types.QueryListExecutionsByRecipeResponse{},
 		},
