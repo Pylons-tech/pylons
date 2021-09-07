@@ -42,11 +42,11 @@ import { ItemOutput } from "./module/types/pylons/recipe";
 import { ItemModifyOutput } from "./module/types/pylons/recipe";
 import { EntriesList } from "./module/types/pylons/recipe";
 import { WeightedOutputs } from "./module/types/pylons/recipe";
+import { CoinInput } from "./module/types/pylons/recipe";
 import { Recipe } from "./module/types/pylons/recipe";
 import { ItemRef } from "./module/types/pylons/trade";
 import { Trade } from "./module/types/pylons/trade";
 import { UserMap } from "./module/types/pylons/user_map";
-export { Cookbook, EventCreateAccount, EventUpdateAccount, EventCreateCookbook, EventUpdateCookbook, EventTransferCookbook, EventCreateRecipe, EventUpdateRecipe, EventCreateExecution, EventCompleteExecution, EventDropExecution, EventCompleteExecutionEarly, EventSendItems, EventSetItemString, EventGooglePurchase, EventStripePurchase, ItemRecord, Execution, GoogleInAppPurchaseOrder, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, GoogleInAppPurchasePackage, CoinIssuer, Params, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, Recipe, ItemRef, Trade, UserMap };
-
+export { Cookbook, EventCreateAccount, EventUpdateAccount, EventCreateCookbook, EventUpdateCookbook, EventTransferCookbook, EventCreateRecipe, EventUpdateRecipe, EventCreateExecution, EventCompleteExecution, EventDropExecution, EventCompleteExecutionEarly, EventSendItems, EventSetItemString, EventCreateTrade, EventCancelTrade, EventFulfillTrade, EventGooglePurchase, EventStripePurchase, ItemRecord, Execution, GoogleInAppPurchaseOrder, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, GoogleInAppPurchasePackage, CoinIssuer, Params, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, CoinInput, Recipe, ItemRef, Trade, UserMap };
 declare const _default;
 export default _default;

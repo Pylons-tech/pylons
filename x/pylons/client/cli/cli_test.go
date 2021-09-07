@@ -163,6 +163,7 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 				MutableStrings: make([]types.StringKeyValue, 0),
 				Tradeable:      false,
 				LastUpdate:     0,
+				TradePercentage: sdk.NewDec(0),
 				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
@@ -183,17 +184,18 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
 			types.Item{
-				Owner:          addresses[0],
-				ID:             strconv.Itoa(i),
-				CookbookID:     "testCookbookID",
-				NodeVersion:    "0.0.1",
-				Doubles:        make([]types.DoubleKeyValue, 0),
-				Longs:          make([]types.LongKeyValue, 0),
-				Strings:        make([]types.StringKeyValue, 0),
-				MutableStrings: make([]types.StringKeyValue, 0),
-				Tradeable:      false,
-				LastUpdate:     0,
-				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
+				Owner:           addresses[0],
+				ID:              strconv.Itoa(i),
+				CookbookID:      "testCookbookID",
+				NodeVersion:     "0.0.1",
+				Doubles:         make([]types.DoubleKeyValue, 0),
+				Longs:           make([]types.LongKeyValue, 0),
+				Strings:         make([]types.StringKeyValue, 0),
+				MutableStrings:  make([]types.StringKeyValue, 0),
+				Tradeable:       false,
+				LastUpdate:      0,
+				TradePercentage: sdk.NewDec(0),
+				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

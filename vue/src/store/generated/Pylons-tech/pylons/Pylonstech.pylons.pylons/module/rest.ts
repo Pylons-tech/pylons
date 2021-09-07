@@ -16,6 +16,10 @@ export interface ProtobufAny {
   value?: string;
 }
 
+export interface PylonsCoinInput {
+  coins?: V1Beta1Coin[];
+}
+
 export interface PylonsCoinOutput {
   ID?: string;
 
@@ -353,7 +357,7 @@ export interface PylonsRecipe {
   name?: string;
   description?: string;
   version?: string;
-  coinInputs?: V1Beta1Coin[];
+  coinInputs?: PylonsCoinInput[];
   itemInputs?: PylonsItemInput[];
   entries?: PylonsEntriesList;
   outputs?: PylonsWeightedOutputs[];
@@ -388,7 +392,7 @@ export interface PylonsTrade {
 
   /** @format uint64 */
   ID?: string;
-  coinInputs?: V1Beta1Coin[];
+  coinInputs?: PylonsCoinInput[];
   itemInputs?: PylonsItemInput[];
   coinOutputs?: V1Beta1Coin[];
   itemOutputs?: PylonsItemRef[];

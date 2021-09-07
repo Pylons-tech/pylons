@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"github.com/rogpeppe/go-internal/semver"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -96,6 +97,10 @@ func (k msgServer) UpdateRecipe(goCtx context.Context, msg *types.MsgUpdateRecip
 	origRecipe, isFound := k.GetRecipe(ctx, msg.CookbookID, msg.ID)
 	if !isFound {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrKeyNotFound, "recipe with ID %v in cookbook with ID %v not set", msg.ID, msg.CookbookID)
+	}
+
+	if semver.Compare(origRecipe.Version, msg.Version) != -1 {
+		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "updated recipe version %s is not newer than current version %s", msg.Version, origRecipe.Version)
 	}
 
 	// Check if the the msg sender is also the cookbook owner

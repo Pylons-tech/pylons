@@ -2,8 +2,8 @@
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
 import { ItemRef } from '../pylons/trade'
+import { CoinInput, ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
 import { Coin } from '../cosmos/base/v1beta1/coin'
-import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
@@ -25,6 +25,7 @@ export interface MsgCreateAccountResponse {}
 export interface MsgFulfillTrade {
   creator: string
   ID: number
+  coinInputsIndex: number
   items: ItemRef[]
 }
 
@@ -32,7 +33,7 @@ export interface MsgFulfillTradeResponse {}
 
 export interface MsgCreateTrade {
   creator: string
-  coinInputs: Coin[]
+  coinInputs: CoinInput[]
   itemInputs: ItemInput[]
   coinOutputs: Coin[]
   itemOutputs: ItemRef[]
@@ -89,6 +90,7 @@ export interface MsgExecuteRecipe {
   creator: string
   cookbookID: string
   recipeID: string
+  coinInputsIndex: number
   itemIDs: string[]
 }
 
@@ -113,7 +115,7 @@ export interface MsgCreateRecipe {
   name: string
   description: string
   version: string
-  coinInputs: Coin[]
+  coinInputs: CoinInput[]
   itemInputs: ItemInput[]
   entries: EntriesList | undefined
   outputs: WeightedOutputs[]
@@ -131,7 +133,7 @@ export interface MsgUpdateRecipe {
   name: string
   description: string
   version: string
-  coinInputs: Coin[]
+  coinInputs: CoinInput[]
   itemInputs: ItemInput[]
   entries: EntriesList | undefined
   outputs: WeightedOutputs[]
@@ -390,8 +392,7 @@ export const MsgCreateAccountResponse = {
   }
 }
 
-const baseMsgFulfillTrade: object = { creator: '', ID: '' }
-
+const baseMsgFulfillTrade: object = { creator: '', ID: 0, coinInputsIndex: 0 }
 
 export const MsgFulfillTrade = {
   encode(message: MsgFulfillTrade, writer: Writer = Writer.create()): Writer {
@@ -401,8 +402,11 @@ export const MsgFulfillTrade = {
     if (message.ID !== 0) {
       writer.uint32(16).uint64(message.ID)
     }
+    if (message.coinInputsIndex !== 0) {
+      writer.uint32(24).uint64(message.coinInputsIndex)
+    }
     for (const v of message.items) {
-      ItemRef.encode(v!, writer.uint32(26).fork()).ldelim()
+      ItemRef.encode(v!, writer.uint32(34).fork()).ldelim()
     }
     return writer
   },
@@ -422,6 +426,9 @@ export const MsgFulfillTrade = {
           message.ID = longToNumber(reader.uint64() as Long)
           break
         case 3:
+          message.coinInputsIndex = longToNumber(reader.uint64() as Long)
+          break
+        case 4:
           message.items.push(ItemRef.decode(reader, reader.uint32()))
           break
         default:
@@ -445,6 +452,11 @@ export const MsgFulfillTrade = {
     } else {
       message.ID = 0
     }
+    if (object.coinInputsIndex !== undefined && object.coinInputsIndex !== null) {
+      message.coinInputsIndex = Number(object.coinInputsIndex)
+    } else {
+      message.coinInputsIndex = 0
+    }
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
         message.items.push(ItemRef.fromJSON(e))
@@ -457,6 +469,7 @@ export const MsgFulfillTrade = {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     message.ID !== undefined && (obj.ID = message.ID)
+    message.coinInputsIndex !== undefined && (obj.coinInputsIndex = message.coinInputsIndex)
     if (message.items) {
       obj.items = message.items.map((e) => (e ? ItemRef.toJSON(e) : undefined))
     } else {
@@ -477,6 +490,11 @@ export const MsgFulfillTrade = {
       message.ID = object.ID
     } else {
       message.ID = 0
+    }
+    if (object.coinInputsIndex !== undefined && object.coinInputsIndex !== null) {
+      message.coinInputsIndex = object.coinInputsIndex
+    } else {
+      message.coinInputsIndex = 0
     }
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -533,7 +551,7 @@ export const MsgCreateTrade = {
       writer.uint32(10).string(message.creator)
     }
     for (const v of message.coinInputs) {
-      Coin.encode(v!, writer.uint32(18).fork()).ldelim()
+      CoinInput.encode(v!, writer.uint32(18).fork()).ldelim()
     }
     for (const v of message.itemInputs) {
       ItemInput.encode(v!, writer.uint32(26).fork()).ldelim()
@@ -565,7 +583,7 @@ export const MsgCreateTrade = {
           message.creator = reader.string()
           break
         case 2:
-          message.coinInputs.push(Coin.decode(reader, reader.uint32()))
+          message.coinInputs.push(CoinInput.decode(reader, reader.uint32()))
           break
         case 3:
           message.itemInputs.push(ItemInput.decode(reader, reader.uint32()))
@@ -600,7 +618,7 @@ export const MsgCreateTrade = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromJSON(e))
+        message.coinInputs.push(CoinInput.fromJSON(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -630,7 +648,7 @@ export const MsgCreateTrade = {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     if (message.coinInputs) {
-      obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+      obj.coinInputs = message.coinInputs.map((e) => (e ? CoinInput.toJSON(e) : undefined))
     } else {
       obj.coinInputs = []
     }
@@ -666,7 +684,7 @@ export const MsgCreateTrade = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromPartial(e))
+        message.coinInputs.push(CoinInput.fromPartial(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -1407,7 +1425,7 @@ export const MsgSendItemsResponse = {
   }
 }
 
-const baseMsgExecuteRecipe: object = { creator: '', cookbookID: '', recipeID: '', itemIDs: '' }
+const baseMsgExecuteRecipe: object = { creator: '', cookbookID: '', recipeID: '', coinInputsIndex: 0, itemIDs: '' }
 
 export const MsgExecuteRecipe = {
   encode(message: MsgExecuteRecipe, writer: Writer = Writer.create()): Writer {
@@ -1420,8 +1438,11 @@ export const MsgExecuteRecipe = {
     if (message.recipeID !== '') {
       writer.uint32(26).string(message.recipeID)
     }
+    if (message.coinInputsIndex !== 0) {
+      writer.uint32(32).uint64(message.coinInputsIndex)
+    }
     for (const v of message.itemIDs) {
-      writer.uint32(34).string(v!)
+      writer.uint32(42).string(v!)
     }
     return writer
   },
@@ -1444,6 +1465,9 @@ export const MsgExecuteRecipe = {
           message.recipeID = reader.string()
           break
         case 4:
+          message.coinInputsIndex = longToNumber(reader.uint64() as Long)
+          break
+        case 5:
           message.itemIDs.push(reader.string())
           break
         default:
@@ -1472,6 +1496,11 @@ export const MsgExecuteRecipe = {
     } else {
       message.recipeID = ''
     }
+    if (object.coinInputsIndex !== undefined && object.coinInputsIndex !== null) {
+      message.coinInputsIndex = Number(object.coinInputsIndex)
+    } else {
+      message.coinInputsIndex = 0
+    }
     if (object.itemIDs !== undefined && object.itemIDs !== null) {
       for (const e of object.itemIDs) {
         message.itemIDs.push(String(e))
@@ -1485,6 +1514,7 @@ export const MsgExecuteRecipe = {
     message.creator !== undefined && (obj.creator = message.creator)
     message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
     message.recipeID !== undefined && (obj.recipeID = message.recipeID)
+    message.coinInputsIndex !== undefined && (obj.coinInputsIndex = message.coinInputsIndex)
     if (message.itemIDs) {
       obj.itemIDs = message.itemIDs.map((e) => e)
     } else {
@@ -1510,6 +1540,11 @@ export const MsgExecuteRecipe = {
       message.recipeID = object.recipeID
     } else {
       message.recipeID = ''
+    }
+    if (object.coinInputsIndex !== undefined && object.coinInputsIndex !== null) {
+      message.coinInputsIndex = object.coinInputsIndex
+    } else {
+      message.coinInputsIndex = 0
     }
     if (object.itemIDs !== undefined && object.itemIDs !== null) {
       for (const e of object.itemIDs) {
@@ -1769,7 +1804,7 @@ export const MsgCreateRecipe = {
       writer.uint32(50).string(message.version)
     }
     for (const v of message.coinInputs) {
-      Coin.encode(v!, writer.uint32(58).fork()).ldelim()
+      CoinInput.encode(v!, writer.uint32(58).fork()).ldelim()
     }
     for (const v of message.itemInputs) {
       ItemInput.encode(v!, writer.uint32(66).fork()).ldelim()
@@ -1821,7 +1856,7 @@ export const MsgCreateRecipe = {
           message.version = reader.string()
           break
         case 7:
-          message.coinInputs.push(Coin.decode(reader, reader.uint32()))
+          message.coinInputs.push(CoinInput.decode(reader, reader.uint32()))
           break
         case 8:
           message.itemInputs.push(ItemInput.decode(reader, reader.uint32()))
@@ -1886,7 +1921,7 @@ export const MsgCreateRecipe = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromJSON(e))
+        message.coinInputs.push(CoinInput.fromJSON(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -1931,7 +1966,7 @@ export const MsgCreateRecipe = {
     message.description !== undefined && (obj.description = message.description)
     message.version !== undefined && (obj.version = message.version)
     if (message.coinInputs) {
-      obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+      obj.coinInputs = message.coinInputs.map((e) => (e ? CoinInput.toJSON(e) : undefined))
     } else {
       obj.coinInputs = []
     }
@@ -1989,7 +2024,7 @@ export const MsgCreateRecipe = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromPartial(e))
+        message.coinInputs.push(CoinInput.fromPartial(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -2097,7 +2132,7 @@ export const MsgUpdateRecipe = {
       writer.uint32(50).string(message.version)
     }
     for (const v of message.coinInputs) {
-      Coin.encode(v!, writer.uint32(58).fork()).ldelim()
+      CoinInput.encode(v!, writer.uint32(58).fork()).ldelim()
     }
     for (const v of message.itemInputs) {
       ItemInput.encode(v!, writer.uint32(66).fork()).ldelim()
@@ -2149,7 +2184,7 @@ export const MsgUpdateRecipe = {
           message.version = reader.string()
           break
         case 7:
-          message.coinInputs.push(Coin.decode(reader, reader.uint32()))
+          message.coinInputs.push(CoinInput.decode(reader, reader.uint32()))
           break
         case 8:
           message.itemInputs.push(ItemInput.decode(reader, reader.uint32()))
@@ -2214,7 +2249,7 @@ export const MsgUpdateRecipe = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromJSON(e))
+        message.coinInputs.push(CoinInput.fromJSON(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -2259,7 +2294,7 @@ export const MsgUpdateRecipe = {
     message.description !== undefined && (obj.description = message.description)
     message.version !== undefined && (obj.version = message.version)
     if (message.coinInputs) {
-      obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+      obj.coinInputs = message.coinInputs.map((e) => (e ? CoinInput.toJSON(e) : undefined))
     } else {
       obj.coinInputs = []
     }
@@ -2317,7 +2352,7 @@ export const MsgUpdateRecipe = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromPartial(e))
+        message.coinInputs.push(CoinInput.fromPartial(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {

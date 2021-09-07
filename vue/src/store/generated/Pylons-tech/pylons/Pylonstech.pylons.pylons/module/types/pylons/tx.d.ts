@@ -1,7 +1,7 @@
 import { Reader, Writer } from 'protobufjs/minimal';
 import { ItemRef } from '../pylons/trade';
+import { CoinInput, ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
-import { ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
 export interface MsgUpdateAccount {
@@ -19,13 +19,14 @@ export interface MsgCreateAccountResponse {
 export interface MsgFulfillTrade {
     creator: string;
     ID: number;
+    coinInputsIndex: number;
     items: ItemRef[];
 }
 export interface MsgFulfillTradeResponse {
 }
 export interface MsgCreateTrade {
     creator: string;
-    coinInputs: Coin[];
+    coinInputs: CoinInput[];
     itemInputs: ItemInput[];
     coinOutputs: Coin[];
     itemOutputs: ItemRef[];
@@ -74,6 +75,7 @@ export interface MsgExecuteRecipe {
     creator: string;
     cookbookID: string;
     recipeID: string;
+    coinInputsIndex: number;
     itemIDs: string[];
 }
 export interface MsgExecuteRecipeResponse {
@@ -95,7 +97,7 @@ export interface MsgCreateRecipe {
     name: string;
     description: string;
     version: string;
-    coinInputs: Coin[];
+    coinInputs: CoinInput[];
     itemInputs: ItemInput[];
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];
@@ -112,7 +114,7 @@ export interface MsgUpdateRecipe {
     name: string;
     description: string;
     version: string;
-    coinInputs: Coin[];
+    coinInputs: CoinInput[];
     itemInputs: ItemInput[];
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];

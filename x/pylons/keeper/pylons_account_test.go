@@ -25,4 +25,3 @@ func (suite *IntegrationTestSuite) TestAccountGet() {
 		require.Equal(account, rst)
 	}
 }
-

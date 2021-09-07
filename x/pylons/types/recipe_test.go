@@ -319,10 +319,10 @@ func TestValidateItemModifyOutputs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidEmpty", obj: "[]"},
-		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]"},
-		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]"},
-		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [], \"transferFee\": {\"denom\": \"\", \"amount\": \"0.01\"}}]", err: ErrInvalidRequestField},
-		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}], \"transferFee\": {\"denom\": \"\", \"amount\": \"0.01\"}}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [], \"transferFee\": {\"denom\": \"pylons\", \"amount\": \"0.01\"}}]", err: ErrInvalidRequestField},
+		{desc: "ValidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "ValidMultiple", obj: "[{\"ID\": \"test1\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test1\", \"rate\": \"0.1\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}, {\"ID\": \"test2\", \"doubles\": [], \"longs\": [{\"key\": \"test2\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]"},
+		{desc: "InvalidSingle", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
+		{desc: "InValidMultiple", obj: "[{\"ID\": \"test\", \"doubles\": [], \"longs\": [], \"strings\": [{\"key\": \"test\", \"rate\": \"0.1\"}],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"\", \"amount\": \"0.01\"}]}, {\"ID\": \"test\", \"doubles\": [], \"longs\": [{\"key\": \"test\", \"rate\": \"0.1\", \"lower\": 1, \"upper\": 2}], \"strings\": [],\"tradePercentage\": \"0.01\",  \"transferFee\": [{\"denom\": \"pylons\", \"amount\": \"0.01\"}]}]", err: ErrInvalidRequestField},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {

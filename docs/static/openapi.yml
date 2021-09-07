@@ -20913,18 +20913,24 @@ paths:
                     items:
                       type: object
                       properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
+                        coins:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              denom:
+                                type: string
+                              amount:
+                                type: string
+                            description: >-
+                              Coin defines a token with a denomination and an
+                              amount.
 
 
-                        NOTE: The amount field is an Int which implements the
-                        custom method
+                              NOTE: The amount field is an Int which implements
+                              the custom method
 
-                        signatures required by gogoproto.
+                              signatures required by gogoproto.
                   itemInputs:
                     type: array
                     items:
@@ -21462,19 +21468,24 @@ paths:
                       items:
                         type: object
                         properties:
-                          denom:
-                            type: string
-                          amount:
-                            type: string
-                        description: >-
-                          Coin defines a token with a denomination and an
-                          amount.
+                          coins:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                denom:
+                                  type: string
+                                amount:
+                                  type: string
+                              description: >-
+                                Coin defines a token with a denomination and an
+                                amount.
 
 
-                          NOTE: The amount field is an Int which implements the
-                          custom method
+                                NOTE: The amount field is an Int which
+                                implements the custom method
 
-                          signatures required by gogoproto.
+                                signatures required by gogoproto.
                     itemInputs:
                       type: array
                       items:
@@ -22075,18 +22086,24 @@ paths:
                     items:
                       type: object
                       properties:
-                        denom:
-                          type: string
-                        amount:
-                          type: string
-                      description: >-
-                        Coin defines a token with a denomination and an amount.
+                        coins:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              denom:
+                                type: string
+                              amount:
+                                type: string
+                            description: >-
+                              Coin defines a token with a denomination and an
+                              amount.
 
 
-                        NOTE: The amount field is an Int which implements the
-                        custom method
+                              NOTE: The amount field is an Int which implements
+                              the custom method
 
-                        signatures required by gogoproto.
+                              signatures required by gogoproto.
                   itemInputs:
                     type: array
                     items:
@@ -32548,6 +32565,23 @@ definitions:
     description: |-
       Version defines the versioning scheme used to negotiate the IBC verison in
       the connection handshake.
+  Pylonstech.pylons.pylons.CoinInput:
+    type: object
+    properties:
+      coins:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
+
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
   Pylonstech.pylons.pylons.CoinOutput:
     type: object
     properties:
@@ -34027,18 +34061,23 @@ definitions:
             items:
               type: object
               properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
+                coins:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-                NOTE: The amount field is an Int which implements the custom
-                method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-                signatures required by gogoproto.
+                      signatures required by gogoproto.
           itemInputs:
             type: array
             items:
@@ -34512,18 +34551,23 @@ definitions:
             items:
               type: object
               properties:
-                denom:
-                  type: string
-                amount:
-                  type: string
-              description: >-
-                Coin defines a token with a denomination and an amount.
+                coins:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-                NOTE: The amount field is an Int which implements the custom
-                method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-                signatures required by gogoproto.
+                      signatures required by gogoproto.
           itemInputs:
             type: array
             items:
@@ -35299,18 +35343,23 @@ definitions:
               items:
                 type: object
                 properties:
-                  denom:
-                    type: string
-                  amount:
-                    type: string
-                description: >-
-                  Coin defines a token with a denomination and an amount.
+                  coins:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
 
 
-                  NOTE: The amount field is an Int which implements the custom
-                  method
+                        NOTE: The amount field is an Int which implements the
+                        custom method
 
-                  signatures required by gogoproto.
+                        signatures required by gogoproto.
             itemInputs:
               type: array
               items:
@@ -35819,15 +35868,23 @@ definitions:
         items:
           type: object
           properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
+            coins:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
 
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
       itemInputs:
         type: array
         items:
@@ -36331,15 +36388,23 @@ definitions:
         items:
           type: object
           properties:
-            denom:
-              type: string
-            amount:
-              type: string
-          description: |-
-            Coin defines a token with a denomination and an amount.
+            coins:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
 
-            NOTE: The amount field is an Int which implements the custom method
-            signatures required by gogoproto.
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
       itemInputs:
         type: array
         items:
