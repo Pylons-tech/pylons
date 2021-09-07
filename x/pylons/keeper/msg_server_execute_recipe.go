@@ -80,12 +80,12 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 
 	coinInputsIndex := int(msg.CoinInputsIndex)
 	var coinInputs sdk.Coins
-	if len(recipe.CoinInputs) == 0 {
-		// lock 0 coins if the recipe takes no coin inputs
+	switch {
+	case len(recipe.CoinInputs) == 0:
 		coinInputs = sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))
-	} else if coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0 {
+	case coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
-	} else {
+	default:
 		coinInputs = recipe.CoinInputs[coinInputsIndex].Coins
 	}
 

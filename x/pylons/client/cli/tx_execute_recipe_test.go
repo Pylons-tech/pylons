@@ -233,10 +233,10 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:     1, // Set quantity so it can only be executed once
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				Quantity:        1, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
-				AmountMinted: 0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -425,10 +425,10 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:     0, // Set quantity so it can only be executed once
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				Quantity:        0, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
-				AmountMinted: 0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -596,10 +596,10 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:     0, // Set quantity so it can only be executed once
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				Quantity:        0, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
-				AmountMinted: 0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
