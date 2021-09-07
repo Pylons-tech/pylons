@@ -120,7 +120,7 @@ message QueryGetTradeRequest {
 }
 
 message QueryGetTradeResponse {
-	Trade Trade = 1;
+	Trade Trade = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryListItemByOwnerRequest {
