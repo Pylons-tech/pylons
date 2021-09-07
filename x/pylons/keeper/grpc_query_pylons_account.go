@@ -30,7 +30,12 @@ func (k Keeper) PylonsAccountByAddress(goCtx context.Context, req *types.QueryGe
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	val, found := k.GetPylonsAccountByUsername(ctx, req.Address)
+	_, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "invalid address")
+	}
+
+	val, found := k.GetPylonsAccountByAddress(ctx, req.Address)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}

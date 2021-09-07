@@ -54,12 +54,6 @@ func (k Keeper) GetPylonsAccountByAddress(ctx sdk.Context, address string) (val 
 	return val, true
 }
 
-// RemovePylonsAccount removes a pylons account from the store
-func (k Keeper) RemovePylonsAccount(ctx sdk.Context, username string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
-	store.Delete(types.KeyPrefix(username))
-}
-
 // GetAllPylonsAccount returns all username
 func (k Keeper) GetAllPylonsAccount(ctx sdk.Context) (list []types.UserMap) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))

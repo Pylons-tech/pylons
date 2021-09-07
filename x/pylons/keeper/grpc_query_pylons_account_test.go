@@ -79,7 +79,7 @@ func (suite *IntegrationTestSuite) TestAccountQueryByAddressSingle() {
 		{
 			desc:    "KeyNotFound",
 			request: &types.QueryGetAccountByAddressRequest{Address: "missing"},
-			err:     status.Error(codes.InvalidArgument, "not found"),
+			err:     status.Error(codes.InvalidArgument, "invalid address"),
 		},
 		{
 			desc: "InvalidRequest",
