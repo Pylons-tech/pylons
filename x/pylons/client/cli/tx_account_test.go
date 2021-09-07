@@ -111,6 +111,7 @@ func TestCreateAccount(t *testing.T) {
 	}
 }
 
+// TODO finish
 /*
 func TestUpdateAccount(t *testing.T) {
 	net, accs := networkWithAccountObjects(t, 1)
