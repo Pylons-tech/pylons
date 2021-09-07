@@ -25,7 +25,7 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 
 	// set the username in the store
-	pylonsAccount := types.PylonsAccount{
+	pylonsAccount := types.UserMap{
 		Account:  msg.Creator,
 		Username: msg.Username,
 	}
@@ -58,7 +58,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 	}
 
 	// set the username in the store
-	pylonsAccount := types.PylonsAccount{
+	pylonsAccount := types.UserMap{
 		Account:  msg.Creator,
 		Username: msg.Username,
 	}

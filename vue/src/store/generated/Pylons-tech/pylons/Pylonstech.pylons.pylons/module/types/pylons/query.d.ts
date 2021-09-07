@@ -1,5 +1,5 @@
 import { Reader, Writer } from 'protobufjs/minimal';
-import { PylonsAccount } from '../pylons/pylons_account';
+import { UserMap } from '../pylons/user_map';
 import { Trade } from '../pylons/trade';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Item } from '../pylons/item';
@@ -16,10 +16,10 @@ export interface QueryGetAccountByUsernameRequest {
     username: string;
 }
 export interface QueryGetAccountByAddressResponse {
-    pylonsAccount: PylonsAccount | undefined;
+    pylonsAccount: UserMap | undefined;
 }
 export interface QueryGetAccountByUsernameResponse {
-    pylonsAccount: PylonsAccount | undefined;
+    pylonsAccount: UserMap | undefined;
 }
 export interface QueryGetTradeRequest {
     ID: number;

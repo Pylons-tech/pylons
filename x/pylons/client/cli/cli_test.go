@@ -12,7 +12,7 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
-func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.PylonsAccount) {
+func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
@@ -22,7 +22,7 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.P
 
 	for i := 0; i < n; i++ {
 		state.PylonsAccountList = append(state.PylonsAccountList,
-			types.PylonsAccount{
+			types.UserMap{
 				Account:  creators[i],
 				Username: "user" + strconv.Itoa(i),
 			})

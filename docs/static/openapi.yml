@@ -33712,13 +33712,6 @@ definitions:
     type: object
   Pylonstech.pylons.pylons.MsgUpdateRecipeResponse:
     type: object
-  Pylonstech.pylons.pylons.PylonsAccount:
-    type: object
-    properties:
-      account:
-        type: string
-      username:
-        type: string
   Pylonstech.pylons.pylons.QueryGetAccountByAddressResponse:
     type: object
     properties:
@@ -36439,6 +36432,13 @@ definitions:
               type: string
             itemID:
               type: string
+  Pylonstech.pylons.pylons.UserMap:
+    type: object
+    properties:
+      account:
+        type: string
+      username:
+        type: string
   Pylonstech.pylons.pylons.WeightedOutputs:
     type: object
     properties:

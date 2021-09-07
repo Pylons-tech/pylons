@@ -1,8 +1,8 @@
 /* eslint-disable */
 import { Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const basePylonsAccount = { account: '', username: '' };
-export const PylonsAccount = {
+const baseUserMap = { account: '', username: '' };
+export const UserMap = {
     encode(message, writer = Writer.create()) {
         if (message.account !== '') {
             writer.uint32(10).string(message.account);
@@ -15,7 +15,7 @@ export const PylonsAccount = {
     decode(input, length) {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...basePylonsAccount };
+        const message = { ...baseUserMap };
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
@@ -33,7 +33,7 @@ export const PylonsAccount = {
         return message;
     },
     fromJSON(object) {
-        const message = { ...basePylonsAccount };
+        const message = { ...baseUserMap };
         if (object.account !== undefined && object.account !== null) {
             message.account = String(object.account);
         }
@@ -55,7 +55,7 @@ export const PylonsAccount = {
         return obj;
     },
     fromPartial(object) {
-        const message = { ...basePylonsAccount };
+        const message = { ...baseUserMap };
         if (object.account !== undefined && object.account !== null) {
             message.account = object.account;
         }

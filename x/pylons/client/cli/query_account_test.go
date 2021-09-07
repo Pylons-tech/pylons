@@ -26,7 +26,7 @@ func TestShowAccountByUsername(t *testing.T) {
 		username string
 		args     []string
 		err      error
-		obj      types.PylonsAccount
+		obj      types.UserMap
 	}{
 		{
 			desc:     "found",
@@ -72,7 +72,7 @@ func TestShowAccountByAccount(t *testing.T) {
 		username string
 		args     []string
 		err      error
-		obj      types.PylonsAccount
+		obj      types.UserMap
 	}{
 		{
 			desc:     "found",

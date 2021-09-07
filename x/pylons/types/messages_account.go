@@ -8,7 +8,6 @@ import (
 var _ sdk.Msg = &MsgCreateAccount{}
 var _ sdk.Msg = &MsgUpdateAccount{}
 
-
 func NewMsgCreateAccount(creator string, username string) *MsgCreateAccount {
 	return &MsgCreateAccount{
 		Creator:  creator,
@@ -50,7 +49,6 @@ func (msg *MsgCreateAccount) ValidateBasic() error {
 	return nil
 }
 
-
 func NewMsgUpdateAccount(creator string, username string) *MsgUpdateAccount {
 	return &MsgUpdateAccount{
 		Creator:  creator,
@@ -88,7 +86,6 @@ func (msg *MsgUpdateAccount) ValidateBasic() error {
 	if err = ValidateUsername(msg.Username); err != nil {
 		return sdkerrors.Wrapf(ErrInvalidRequestField, "invalid username field: %s", err)
 	}
-
 
 	return nil
 }

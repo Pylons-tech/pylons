@@ -290,17 +290,12 @@ export type PylonsMsgUpdateCookbookResponse = object;
 
 export type PylonsMsgUpdateRecipeResponse = object;
 
-export interface PylonsPylonsAccount {
-  account?: string;
-  username?: string;
-}
-
 export interface PylonsQueryGetAccountByAddressResponse {
-  pylonsAccount?: PylonsPylonsAccount;
+  pylonsAccount?: PylonsUserMap;
 }
 
 export interface PylonsQueryGetAccountByUsernameResponse {
-  pylonsAccount?: PylonsPylonsAccount;
+  pylonsAccount?: PylonsUserMap;
 }
 
 export interface PylonsQueryGetCookbookResponse {
@@ -414,6 +409,11 @@ export interface PylonsTrade {
   extraInfo?: string;
   receiver?: string;
   tradedItemInputs?: PylonsItemRef[];
+}
+
+export interface PylonsUserMap {
+  account?: string;
+  username?: string;
 }
 
 export interface PylonsWeightedOutputs {

@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
-import "pylons/pylons_account.proto";
+import "pylons/user_map.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
@@ -107,11 +107,11 @@ message QueryGetAccountByUsernameRequest {
 }
 
 message QueryGetAccountByAddressResponse {
-	PylonsAccount pylonsAccount = 1 [(gogoproto.nullable) = false];
+	UserMap pylonsAccount = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryGetAccountByUsernameResponse {
-	PylonsAccount pylonsAccount = 1 [(gogoproto.nullable) = false];
+	UserMap pylonsAccount = 1 [(gogoproto.nullable) = false];
 }
 
 

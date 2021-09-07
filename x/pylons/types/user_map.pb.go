@@ -23,23 +23,23 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type Username struct {
-	Account string `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
-	Name    string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+type UserMap struct {
+	Account  string `protobuf:"bytes,1,opt,name=account,proto3" json:"account,omitempty"`
+	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 }
 
-func (m *Username) Reset()         { *m = Username{} }
-func (m *Username) String() string { return proto.CompactTextString(m) }
-func (*Username) ProtoMessage()    {}
-func (*Username) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8f5fca4f59fad57f, []int{0}
+func (m *UserMap) Reset()         { *m = UserMap{} }
+func (m *UserMap) String() string { return proto.CompactTextString(m) }
+func (*UserMap) ProtoMessage()    {}
+func (*UserMap) Descriptor() ([]byte, []int) {
+	return fileDescriptor_57c40c6fa5e2825b, []int{0}
 }
-func (m *Username) XXX_Unmarshal(b []byte) error {
+func (m *UserMap) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Username) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *UserMap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Username.Marshal(b, m, deterministic)
+		return xxx_messageInfo_UserMap.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -49,54 +49,55 @@ func (m *Username) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *Username) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Username.Merge(m, src)
+func (m *UserMap) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserMap.Merge(m, src)
 }
-func (m *Username) XXX_Size() int {
+func (m *UserMap) XXX_Size() int {
 	return m.Size()
 }
-func (m *Username) XXX_DiscardUnknown() {
-	xxx_messageInfo_Username.DiscardUnknown(m)
+func (m *UserMap) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserMap.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Username proto.InternalMessageInfo
+var xxx_messageInfo_UserMap proto.InternalMessageInfo
 
-func (m *Username) GetAccount() string {
+func (m *UserMap) GetAccount() string {
 	if m != nil {
 		return m.Account
 	}
 	return ""
 }
 
-func (m *Username) GetName() string {
+func (m *UserMap) GetUsername() string {
 	if m != nil {
-		return m.Name
+		return m.Username
 	}
 	return ""
 }
 
 func init() {
-	proto.RegisterType((*Username)(nil), "Pylonstech.pylons.pylons.PylonsAccount")
+	proto.RegisterType((*UserMap)(nil), "Pylonstech.pylons.pylons.UserMap")
 }
 
-func init() { proto.RegisterFile("pylons/user_map.proto", fileDescriptor_8f5fca4f59fad57f) }
+func init() { proto.RegisterFile("pylons/user_map.proto", fileDescriptor_57c40c6fa5e2825b) }
 
-var fileDescriptor_8f5fca4f59fad57f = []byte{
-	// 174 bytes of a gzipped FileDescriptorProto
+var fileDescriptor_57c40c6fa5e2825b = []byte{
+	// 182 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x2d, 0xa8, 0xcc, 0xc9,
-	0xcf, 0x2b, 0xd6, 0x2f, 0x2d, 0x4e, 0x2d, 0xca, 0x4b, 0xcc, 0x4d, 0xd5, 0x2b, 0x28, 0xca, 0x2f,
+	0xcf, 0x2b, 0xd6, 0x2f, 0x2d, 0x4e, 0x2d, 0x8a, 0xcf, 0x4d, 0x2c, 0xd0, 0x2b, 0x28, 0xca, 0x2f,
 	0xc9, 0x17, 0x92, 0x08, 0x00, 0x0b, 0x97, 0xa4, 0x26, 0x67, 0xe8, 0x41, 0x54, 0x40, 0x29, 0x29,
-	0x91, 0xf4, 0xfc, 0xf4, 0x7c, 0xb0, 0x22, 0x7d, 0x10, 0x0b, 0xa2, 0x5e, 0xc9, 0x82, 0x8b, 0x23,
-	0x14, 0x6a, 0x82, 0x90, 0x04, 0x17, 0x7b, 0x62, 0x72, 0x72, 0x7e, 0x69, 0x5e, 0x89, 0x04, 0xa3,
-	0x02, 0xa3, 0x06, 0x67, 0x10, 0x8c, 0x2b, 0x24, 0xc4, 0xc5, 0x02, 0x52, 0x21, 0xc1, 0x04, 0x16,
-	0x06, 0xb3, 0x9d, 0xdc, 0x4e, 0x3c, 0x92, 0x63, 0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39,
-	0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96, 0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0x4a, 0x27,
-	0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49, 0x2f, 0x39, 0x3f, 0x57, 0x1f, 0xe2, 0x1c, 0x5d, 0x90, 0x7b,
-	0xf4, 0xa1, 0x2e, 0xae, 0x80, 0x31, 0x4a, 0x2a, 0x0b, 0x52, 0x8b, 0x93, 0xd8, 0xc0, 0x0e, 0x31,
-	0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x0a, 0xab, 0xcd, 0x61, 0xd1, 0x00, 0x00, 0x00,
+	0x91, 0xf4, 0xfc, 0xf4, 0x7c, 0xb0, 0x22, 0x7d, 0x10, 0x0b, 0xa2, 0x5e, 0xc9, 0x9e, 0x8b, 0x3d,
+	0xb4, 0x38, 0xb5, 0xc8, 0x37, 0xb1, 0x40, 0x48, 0x82, 0x8b, 0x3d, 0x31, 0x39, 0x39, 0xbf, 0x34,
+	0xaf, 0x44, 0x82, 0x51, 0x81, 0x51, 0x83, 0x33, 0x08, 0xc6, 0x15, 0x92, 0xe2, 0xe2, 0x00, 0x59,
+	0x93, 0x97, 0x98, 0x9b, 0x2a, 0xc1, 0x04, 0x96, 0x82, 0xf3, 0x9d, 0xdc, 0x4e, 0x3c, 0x92, 0x63,
+	0xbc, 0xf0, 0x48, 0x8e, 0xf1, 0xc1, 0x23, 0x39, 0xc6, 0x09, 0x8f, 0xe5, 0x18, 0x2e, 0x3c, 0x96,
+	0x63, 0xb8, 0xf1, 0x58, 0x8e, 0x21, 0x4a, 0x27, 0x3d, 0xb3, 0x24, 0xa3, 0x34, 0x49, 0x2f, 0x39,
+	0x3f, 0x57, 0x1f, 0xe2, 0x2a, 0x5d, 0x90, 0xb3, 0xf4, 0xa1, 0x0e, 0xaf, 0x80, 0x31, 0x4a, 0x2a,
+	0x0b, 0x52, 0x8b, 0x93, 0xd8, 0xc0, 0xee, 0x31, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0x85, 0x71,
+	0x6b, 0x51, 0xd8, 0x00, 0x00, 0x00,
 }
 
-func (m *Username) Marshal() (dAtA []byte, err error) {
+func (m *UserMap) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -106,35 +107,35 @@ func (m *Username) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Username) MarshalTo(dAtA []byte) (int, error) {
+func (m *UserMap) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *Username) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *UserMap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintUsername(dAtA, i, uint64(len(m.Name)))
+	if len(m.Username) > 0 {
+		i -= len(m.Username)
+		copy(dAtA[i:], m.Username)
+		i = encodeVarintUserMap(dAtA, i, uint64(len(m.Username)))
 		i--
 		dAtA[i] = 0x12
 	}
 	if len(m.Account) > 0 {
 		i -= len(m.Account)
 		copy(dAtA[i:], m.Account)
-		i = encodeVarintUsername(dAtA, i, uint64(len(m.Account)))
+		i = encodeVarintUserMap(dAtA, i, uint64(len(m.Account)))
 		i--
 		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func encodeVarintUsername(dAtA []byte, offset int, v uint64) int {
-	offset -= sovUsername(v)
+func encodeVarintUserMap(dAtA []byte, offset int, v uint64) int {
+	offset -= sovUserMap(v)
 	base := offset
 	for v >= 1<<7 {
 		dAtA[offset] = uint8(v&0x7f | 0x80)
@@ -144,7 +145,7 @@ func encodeVarintUsername(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *Username) Size() (n int) {
+func (m *UserMap) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -152,22 +153,22 @@ func (m *Username) Size() (n int) {
 	_ = l
 	l = len(m.Account)
 	if l > 0 {
-		n += 1 + l + sovUsername(uint64(l))
+		n += 1 + l + sovUserMap(uint64(l))
 	}
-	l = len(m.Name)
+	l = len(m.Username)
 	if l > 0 {
-		n += 1 + l + sovUsername(uint64(l))
+		n += 1 + l + sovUserMap(uint64(l))
 	}
 	return n
 }
 
-func sovUsername(x uint64) (n int) {
+func sovUserMap(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
-func sozUsername(x uint64) (n int) {
-	return sovUsername(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+func sozUserMap(x uint64) (n int) {
+	return sovUserMap(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *Username) Unmarshal(dAtA []byte) error {
+func (m *UserMap) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -175,7 +176,7 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return ErrIntOverflowUsername
+				return ErrIntOverflowUserMap
 			}
 			if iNdEx >= l {
 				return io.ErrUnexpectedEOF
@@ -190,10 +191,10 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: PylonsAccount: wiretype end group for non-group")
+			return fmt.Errorf("proto: UserMap: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PylonsAccount: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: UserMap: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -203,7 +204,7 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowUsername
+					return ErrIntOverflowUserMap
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -217,11 +218,11 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthUsername
+				return ErrInvalidLengthUserMap
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthUsername
+				return ErrInvalidLengthUserMap
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
@@ -230,12 +231,12 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Username", wireType)
 			}
 			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return ErrIntOverflowUsername
+					return ErrIntOverflowUserMap
 				}
 				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
@@ -249,25 +250,25 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 			}
 			intStringLen := int(stringLen)
 			if intStringLen < 0 {
-				return ErrInvalidLengthUsername
+				return ErrInvalidLengthUserMap
 			}
 			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
-				return ErrInvalidLengthUsername
+				return ErrInvalidLengthUserMap
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Name = string(dAtA[iNdEx:postIndex])
+			m.Username = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
-			skippy, err := skipUsername(dAtA[iNdEx:])
+			skippy, err := skipUserMap(dAtA[iNdEx:])
 			if err != nil {
 				return err
 			}
 			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthUsername
+				return ErrInvalidLengthUserMap
 			}
 			if (iNdEx + skippy) > l {
 				return io.ErrUnexpectedEOF
@@ -281,7 +282,7 @@ func (m *Username) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func skipUsername(dAtA []byte) (n int, err error) {
+func skipUserMap(dAtA []byte) (n int, err error) {
 	l := len(dAtA)
 	iNdEx := 0
 	depth := 0
@@ -289,7 +290,7 @@ func skipUsername(dAtA []byte) (n int, err error) {
 		var wire uint64
 		for shift := uint(0); ; shift += 7 {
 			if shift >= 64 {
-				return 0, ErrIntOverflowUsername
+				return 0, ErrIntOverflowUserMap
 			}
 			if iNdEx >= l {
 				return 0, io.ErrUnexpectedEOF
@@ -306,7 +307,7 @@ func skipUsername(dAtA []byte) (n int, err error) {
 		case 0:
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return 0, ErrIntOverflowUsername
+					return 0, ErrIntOverflowUserMap
 				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
@@ -322,7 +323,7 @@ func skipUsername(dAtA []byte) (n int, err error) {
 			var length int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
-					return 0, ErrIntOverflowUsername
+					return 0, ErrIntOverflowUserMap
 				}
 				if iNdEx >= l {
 					return 0, io.ErrUnexpectedEOF
@@ -335,14 +336,14 @@ func skipUsername(dAtA []byte) (n int, err error) {
 				}
 			}
 			if length < 0 {
-				return 0, ErrInvalidLengthUsername
+				return 0, ErrInvalidLengthUserMap
 			}
 			iNdEx += length
 		case 3:
 			depth++
 		case 4:
 			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupUsername
+				return 0, ErrUnexpectedEndOfGroupUserMap
 			}
 			depth--
 		case 5:
@@ -351,7 +352,7 @@ func skipUsername(dAtA []byte) (n int, err error) {
 			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
 		}
 		if iNdEx < 0 {
-			return 0, ErrInvalidLengthUsername
+			return 0, ErrInvalidLengthUserMap
 		}
 		if depth == 0 {
 			return iNdEx, nil
@@ -361,7 +362,7 @@ func skipUsername(dAtA []byte) (n int, err error) {
 }
 
 var (
-	ErrInvalidLengthUsername        = fmt.Errorf("proto: negative length found during unmarshaling")
-	ErrIntOverflowUsername          = fmt.Errorf("proto: integer overflow")
-	ErrUnexpectedEndOfGroupUsername = fmt.Errorf("proto: unexpected end of group")
+	ErrInvalidLengthUserMap        = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowUserMap          = fmt.Errorf("proto: integer overflow")
+	ErrUnexpectedEndOfGroupUserMap = fmt.Errorf("proto: unexpected end of group")
 )

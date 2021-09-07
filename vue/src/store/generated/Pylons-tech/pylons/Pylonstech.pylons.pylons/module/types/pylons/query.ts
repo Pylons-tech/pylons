@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
-import { PylonsAccount } from '../pylons/pylons_account'
+import { UserMap } from '../pylons/user_map'
 import { Trade } from '../pylons/trade'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Item } from '../pylons/item'
@@ -22,11 +22,11 @@ export interface QueryGetAccountByUsernameRequest {
 }
 
 export interface QueryGetAccountByAddressResponse {
-  pylonsAccount: PylonsAccount | undefined
+  pylonsAccount: UserMap | undefined
 }
 
 export interface QueryGetAccountByUsernameResponse {
-  pylonsAccount: PylonsAccount | undefined
+  pylonsAccount: UserMap | undefined
 }
 
 export interface QueryGetTradeRequest {
@@ -259,7 +259,7 @@ const baseQueryGetAccountByAddressResponse: object = {}
 export const QueryGetAccountByAddressResponse = {
   encode(message: QueryGetAccountByAddressResponse, writer: Writer = Writer.create()): Writer {
     if (message.pylonsAccount !== undefined) {
-      PylonsAccount.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim()
+      UserMap.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
@@ -272,7 +272,7 @@ export const QueryGetAccountByAddressResponse = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.pylonsAccount = PylonsAccount.decode(reader, reader.uint32())
+          message.pylonsAccount = UserMap.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -285,7 +285,7 @@ export const QueryGetAccountByAddressResponse = {
   fromJSON(object: any): QueryGetAccountByAddressResponse {
     const message = { ...baseQueryGetAccountByAddressResponse } as QueryGetAccountByAddressResponse
     if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
-      message.pylonsAccount = PylonsAccount.fromJSON(object.pylonsAccount)
+      message.pylonsAccount = UserMap.fromJSON(object.pylonsAccount)
     } else {
       message.pylonsAccount = undefined
     }
@@ -294,14 +294,14 @@ export const QueryGetAccountByAddressResponse = {
 
   toJSON(message: QueryGetAccountByAddressResponse): unknown {
     const obj: any = {}
-    message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? PylonsAccount.toJSON(message.pylonsAccount) : undefined)
+    message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? UserMap.toJSON(message.pylonsAccount) : undefined)
     return obj
   },
 
   fromPartial(object: DeepPartial<QueryGetAccountByAddressResponse>): QueryGetAccountByAddressResponse {
     const message = { ...baseQueryGetAccountByAddressResponse } as QueryGetAccountByAddressResponse
     if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
-      message.pylonsAccount = PylonsAccount.fromPartial(object.pylonsAccount)
+      message.pylonsAccount = UserMap.fromPartial(object.pylonsAccount)
     } else {
       message.pylonsAccount = undefined
     }
@@ -314,7 +314,7 @@ const baseQueryGetAccountByUsernameResponse: object = {}
 export const QueryGetAccountByUsernameResponse = {
   encode(message: QueryGetAccountByUsernameResponse, writer: Writer = Writer.create()): Writer {
     if (message.pylonsAccount !== undefined) {
-      PylonsAccount.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim()
+      UserMap.encode(message.pylonsAccount, writer.uint32(10).fork()).ldelim()
     }
     return writer
   },
@@ -327,7 +327,7 @@ export const QueryGetAccountByUsernameResponse = {
       const tag = reader.uint32()
       switch (tag >>> 3) {
         case 1:
-          message.pylonsAccount = PylonsAccount.decode(reader, reader.uint32())
+          message.pylonsAccount = UserMap.decode(reader, reader.uint32())
           break
         default:
           reader.skipType(tag & 7)
@@ -340,7 +340,7 @@ export const QueryGetAccountByUsernameResponse = {
   fromJSON(object: any): QueryGetAccountByUsernameResponse {
     const message = { ...baseQueryGetAccountByUsernameResponse } as QueryGetAccountByUsernameResponse
     if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
-      message.pylonsAccount = PylonsAccount.fromJSON(object.pylonsAccount)
+      message.pylonsAccount = UserMap.fromJSON(object.pylonsAccount)
     } else {
       message.pylonsAccount = undefined
     }
@@ -349,14 +349,14 @@ export const QueryGetAccountByUsernameResponse = {
 
   toJSON(message: QueryGetAccountByUsernameResponse): unknown {
     const obj: any = {}
-    message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? PylonsAccount.toJSON(message.pylonsAccount) : undefined)
+    message.pylonsAccount !== undefined && (obj.pylonsAccount = message.pylonsAccount ? UserMap.toJSON(message.pylonsAccount) : undefined)
     return obj
   },
 
   fromPartial(object: DeepPartial<QueryGetAccountByUsernameResponse>): QueryGetAccountByUsernameResponse {
     const message = { ...baseQueryGetAccountByUsernameResponse } as QueryGetAccountByUsernameResponse
     if (object.pylonsAccount !== undefined && object.pylonsAccount !== null) {
-      message.pylonsAccount = PylonsAccount.fromPartial(object.pylonsAccount)
+      message.pylonsAccount = UserMap.fromPartial(object.pylonsAccount)
     } else {
       message.pylonsAccount = undefined
     }

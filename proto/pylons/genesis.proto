@@ -2,7 +2,7 @@ syntax = "proto3";
 package Pylonstech.pylons.pylons;
 
 // this line is used by starport scaffolding # genesis/proto/import
-import "pylons/pylons_account.proto";
+import "pylons/user_map.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
@@ -18,7 +18,7 @@ import "gogoproto/gogo.proto";
 // GenesisState defines the pylons module's genesis state.
 message GenesisState {
     // this line is used by starport scaffolding # genesis/proto/state
-		repeated PylonsAccount pylonsAccountList = 14 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
+		repeated UserMap pylonsAccountList = 14 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
 		repeated Trade tradeList = 12 [(gogoproto.nullable) = false];  // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 tradeCount = 13; // this line is used by starport scaffolding # genesis/proto/stateField
 		uint64 entityCount = 11; // this line is used by starport scaffolding # genesis/proto/stateField

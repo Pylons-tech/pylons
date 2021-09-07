@@ -5,7 +5,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 import "gogoproto/gogo.proto";
 
-message PylonsAccount {
+message UserMap {
   string account = 1;
   string username = 2;
 }

@@ -3,15 +3,15 @@ import { Writer, Reader } from 'protobufjs/minimal'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
-export interface PylonsAccount {
+export interface UserMap {
   account: string
   username: string
 }
 
-const basePylonsAccount: object = { account: '', username: '' }
+const baseUserMap: object = { account: '', username: '' }
 
-export const PylonsAccount = {
-  encode(message: PylonsAccount, writer: Writer = Writer.create()): Writer {
+export const UserMap = {
+  encode(message: UserMap, writer: Writer = Writer.create()): Writer {
     if (message.account !== '') {
       writer.uint32(10).string(message.account)
     }
@@ -21,10 +21,10 @@ export const PylonsAccount = {
     return writer
   },
 
-  decode(input: Reader | Uint8Array, length?: number): PylonsAccount {
+  decode(input: Reader | Uint8Array, length?: number): UserMap {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...basePylonsAccount } as PylonsAccount
+    const message = { ...baseUserMap } as UserMap
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -42,8 +42,8 @@ export const PylonsAccount = {
     return message
   },
 
-  fromJSON(object: any): PylonsAccount {
-    const message = { ...basePylonsAccount } as PylonsAccount
+  fromJSON(object: any): UserMap {
+    const message = { ...baseUserMap } as UserMap
     if (object.account !== undefined && object.account !== null) {
       message.account = String(object.account)
     } else {
@@ -57,15 +57,15 @@ export const PylonsAccount = {
     return message
   },
 
-  toJSON(message: PylonsAccount): unknown {
+  toJSON(message: UserMap): unknown {
     const obj: any = {}
     message.account !== undefined && (obj.account = message.account)
     message.username !== undefined && (obj.username = message.username)
     return obj
   },
 
-  fromPartial(object: DeepPartial<PylonsAccount>): PylonsAccount {
-    const message = { ...basePylonsAccount } as PylonsAccount
+  fromPartial(object: DeepPartial<UserMap>): UserMap {
+    const message = { ...baseUserMap } as UserMap
     if (object.account !== undefined && object.account !== null) {
       message.account = object.account
     } else {

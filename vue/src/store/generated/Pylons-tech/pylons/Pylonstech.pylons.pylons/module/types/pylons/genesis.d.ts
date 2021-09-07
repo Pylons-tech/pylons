@@ -1,5 +1,5 @@
 import { Writer, Reader } from 'protobufjs/minimal';
-import { PylonsAccount } from '../pylons/pylons_account';
+import { UserMap } from '../pylons/user_map';
 import { Trade } from '../pylons/trade';
 import { Params } from '../pylons/params';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
@@ -11,7 +11,7 @@ export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** GenesisState defines the pylons module's genesis state. */
 export interface GenesisState {
     /** this line is used by starport scaffolding # genesis/proto/state */
-    pylonsAccountList: PylonsAccount[];
+    pylonsAccountList: UserMap[];
     /** this line is used by starport scaffolding # genesis/proto/stateField */
     tradeList: Trade[];
     /** this line is used by starport scaffolding # genesis/proto/stateField */
