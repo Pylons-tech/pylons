@@ -51,7 +51,7 @@ func (k Keeper) AppendTrade(
 	trade.ID = count
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	appendedValue := k.cdc.MustMarshalBinaryBare(&trade)
+	appendedValue := k.cdc.MustMarshal(&trade)
 	store.Set(GetTradeIDBytes(trade.ID), appendedValue)
 
 	// Update trade count
@@ -63,7 +63,7 @@ func (k Keeper) AppendTrade(
 // SetTrade set a specific trade in the store
 func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	b := k.cdc.MustMarshalBinaryBare(&trade)
+	b := k.cdc.MustMarshal(&trade)
 	store.Set(GetTradeIDBytes(trade.ID), b)
 }
 
@@ -71,7 +71,7 @@ func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 func (k Keeper) GetTrade(ctx sdk.Context, id uint64) types.Trade {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
 	var trade types.Trade
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetTradeIDBytes(id)), &trade)
+	k.cdc.MustUnmarshal(store.Get(GetTradeIDBytes(id)), &trade)
 	return trade
 }
 
@@ -101,7 +101,7 @@ func (k Keeper) GetAllTrade(ctx sdk.Context) (list []types.Trade) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Trade
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 

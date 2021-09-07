@@ -24,7 +24,7 @@ const (
 
 // WeightedOperations returns all the operations from the module with their respective weights
 func WeightedOperations(
-	appParams simtypes.AppParams, cdc codec.JSONMarshaler, k keeper.Keeper,
+	appParams simtypes.AppParams, cdc codec.JSONCodec, k keeper.Keeper,
 ) simulation.WeightedOperations {
 
 	var weightMsgSend int
@@ -51,6 +51,7 @@ func SimulateOp(k keeper.Keeper) simtypes.Operation {
 
 		msg := types.NewMsgCreateAccount("TODO", "TODO")
 
-		return simtypes.NewOperationMsg(msg, true, "TODO"), nil, nil
+
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
 }

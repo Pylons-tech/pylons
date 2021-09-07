@@ -60,7 +60,7 @@ func (k Keeper) AppendItem(ctx sdk.Context, item types.Item) string {
 func (k Keeper) SetItem(ctx sdk.Context, item types.Item) {
 	itemsStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ItemKey))
 	cookbookItemsStore := prefix.NewStore(itemsStore, types.KeyPrefix(item.CookbookID))
-	b := k.cdc.MustMarshalBinaryBare(&item)
+	b := k.cdc.MustMarshal(&item)
 	cookbookItemsStore.Set(types.KeyPrefix(item.ID), b)
 
 	addr, _ := sdk.AccAddressFromBech32(item.Owner)
@@ -90,7 +90,7 @@ func (k Keeper) GetItem(ctx sdk.Context, cookbookID, id string) (val types.Item,
 	if b == nil {
 		return val, false
 	}
-	k.cdc.MustUnmarshalBinaryBare(b, &val)
+	k.cdc.MustUnmarshal(b, &val)
 	return val, true
 }
 
@@ -103,7 +103,7 @@ func (k Keeper) GetAllItem(ctx sdk.Context) (list []types.Item) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Item
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 

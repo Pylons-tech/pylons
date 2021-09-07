@@ -11,7 +11,7 @@ import (
 // this function sets two symmetric KVStores with address -> username
 // and username -> address mappings
 func (k Keeper) SetPylonsAccount(ctx sdk.Context, account types.UserMap) {
-	b := k.cdc.MustMarshalBinaryBare(&account)
+	b := k.cdc.MustMarshal(&account)
 	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 
 	prefixStore.Set(types.KeyPrefix(account.Username), b)
@@ -37,7 +37,7 @@ func (k Keeper) GetPylonsAccountByUsername(ctx sdk.Context, username string) (va
 		return val, false
 	}
 
-	k.cdc.MustUnmarshalBinaryBare(b, &val)
+	k.cdc.MustUnmarshal(b, &val)
 	return val, true
 }
 
@@ -50,7 +50,7 @@ func (k Keeper) GetPylonsAccountByAddress(ctx sdk.Context, address string) (val 
 		return val, false
 	}
 
-	k.cdc.MustUnmarshalBinaryBare(b, &val)
+	k.cdc.MustUnmarshal(b, &val)
 	return val, true
 }
 
@@ -63,7 +63,7 @@ func (k Keeper) GetAllPylonsAccount(ctx sdk.Context) (list []types.UserMap) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.UserMap
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 

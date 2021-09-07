@@ -159,7 +159,7 @@ func (k Keeper) getCompletedExecutionsByItem(ctx sdk.Context, cookbookID, itemID
 	res := make([]types.Execution, 0)
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Execution
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		res = append(res, val)
 	}
 
@@ -201,7 +201,7 @@ func (k Keeper) ActualizeExecution(ctx sdk.Context, execution types.Execution) {
 func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution) {
 	// Create the execution
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
-	appendedValue := k.cdc.MustMarshalBinaryBare(&execution)
+	appendedValue := k.cdc.MustMarshal(&execution)
 	store.Set(types.KeyPrefix(execution.ID), appendedValue)
 
 	// Update execution count
@@ -213,14 +213,14 @@ func (k Keeper) appendExecution(ctx sdk.Context, execution types.Execution) {
 func (k Keeper) GetExecution(ctx sdk.Context, id string) types.Execution {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
 	var execution types.Execution
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(id)), &execution)
+	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(id)), &execution)
 	return execution
 }
 
 // SetExecution sets an execution in the store
 func (k Keeper) SetExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.ExecutionKey))
-	value := k.cdc.MustMarshalBinaryBare(&execution)
+	value := k.cdc.MustMarshal(&execution)
 	store.Set(types.KeyPrefix(execution.ID), value)
 
 	// add execution to recipe mapping
@@ -247,7 +247,7 @@ func (k Keeper) GetAllExecution(ctx sdk.Context) (list []types.Execution) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Execution
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
