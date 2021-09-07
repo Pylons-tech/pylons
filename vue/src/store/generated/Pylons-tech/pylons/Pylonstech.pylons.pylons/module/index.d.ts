@@ -16,6 +16,7 @@ import { MsgSetItemString } from "./types/pylons/tx";
 import { MsgCreateTrade } from "./types/pylons/tx";
 import { MsgUpdateAccount } from "./types/pylons/tx";
 import { MsgUpdateRecipe } from "./types/pylons/tx";
+
 export declare const MissingWalletError: Error;
 interface TxClientOptions {
     addr: string;
@@ -41,6 +42,7 @@ declare const txClient: (wallet: OfflineSigner, { addr: addr }?: TxClientOptions
     msgCreateTrade: (data: MsgCreateTrade) => EncodeObject;
     msgUpdateAccount: (data: MsgUpdateAccount) => EncodeObject;
     msgUpdateRecipe: (data: MsgUpdateRecipe) => EncodeObject;
+
 }>;
 interface QueryClientOptions {
     addr: string;

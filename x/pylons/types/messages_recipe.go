@@ -7,7 +7,7 @@ import (
 
 var _ sdk.Msg = &MsgCreateRecipe{}
 
-func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgCreateRecipe {
+func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
 		Creator:       creator,
 		CookbookID:    cookbookID,
@@ -68,14 +68,17 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot provide negative blockInterval")
 	}
 
-	if !msg.CoinInputs.Empty() {
-		// Validate sdk coins
-		if !msg.CoinInputs.IsValid() {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
-		}
+	for i, coinInputs := range msg.CoinInputs {
+		coins := coinInputs.Coins
+		if !coins.Empty() {
+			// Validate sdk coins
+			if !coins.IsValid() {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+			}
 
-		if !msg.CoinInputs.IsAllPositive() {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+			if !coins.IsAllPositive() {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+			}
 		}
 	}
 
@@ -101,7 +104,7 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 
 var _ sdk.Msg = &MsgUpdateRecipe{}
 
-func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput sdk.Coins, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgUpdateRecipe {
+func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
 		Creator:       creator,
 		CookbookID:    cookbookID,
@@ -162,14 +165,17 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot provide negative blockInterval")
 	}
 
-	if !msg.CoinInputs.Empty() {
-		// Validate sdk coins
-		if !msg.CoinInputs.IsValid() {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
-		}
+	for i, coinInputs := range msg.CoinInputs {
+		coins := coinInputs.Coins
+		if !coins.Empty() {
+			// Validate sdk coins
+			if !coins.IsValid() {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+			}
 
-		if !msg.CoinInputs.IsAllPositive() {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.CoinInputs.String())
+			if !coins.IsAllPositive() {
+				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
+			}
 		}
 	}
 

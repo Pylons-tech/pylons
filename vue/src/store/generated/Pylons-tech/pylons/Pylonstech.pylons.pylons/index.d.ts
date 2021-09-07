@@ -12,6 +12,9 @@ import { EventDropExecution } from "./module/types/pylons/event";
 import { EventCompleteExecutionEarly } from "./module/types/pylons/event";
 import { EventSendItems } from "./module/types/pylons/event";
 import { EventSetItemString } from "./module/types/pylons/event";
+import { EventCreateTrade } from "./module/types/pylons/event";
+import { EventCancelTrade } from "./module/types/pylons/event";
+import { EventFulfillTrade } from "./module/types/pylons/event";
 import { EventGooglePurchase } from "./module/types/pylons/event";
 import { EventStripePurchase } from "./module/types/pylons/event";
 import { ItemRecord } from "./module/types/pylons/execution";
@@ -44,5 +47,6 @@ import { ItemRef } from "./module/types/pylons/trade";
 import { Trade } from "./module/types/pylons/trade";
 import { UserMap } from "./module/types/pylons/user_map";
 export { Cookbook, EventCreateAccount, EventUpdateAccount, EventCreateCookbook, EventUpdateCookbook, EventTransferCookbook, EventCreateRecipe, EventUpdateRecipe, EventCreateExecution, EventCompleteExecution, EventDropExecution, EventCompleteExecutionEarly, EventSendItems, EventSetItemString, EventGooglePurchase, EventStripePurchase, ItemRecord, Execution, GoogleInAppPurchaseOrder, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, GoogleInAppPurchasePackage, CoinIssuer, Params, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, Recipe, ItemRef, Trade, UserMap };
+
 declare const _default;
 export default _default;

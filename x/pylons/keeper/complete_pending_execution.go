@@ -165,7 +165,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	// update modify items in keeper
 	itemModifyOutputIDs := make([]string, len(mintItems))
 	for i, item := range modifyItems {
-		k.SetItem(ctx, item)
+		k.UnlockItemForExecution(ctx, item, pendingExecution.Creator)
 		itemModifyOutputIDs[i] = item.ID
 	}
 	// update recipe in keeper to keep track of mintedAmounts
@@ -174,10 +174,10 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	// unlock the locked coins and perform payment(s)
 	// separate cookbook coins so they can be burned
 	cookbookCoinDenoms := k.GetDenomsByCookbook(ctx, recipe.CookbookID)
-	burnCoins := sdk.Coins{}
-	payCoins := sdk.Coins{}
-	transferCoins := sdk.Coins{}
-	feeCoins := sdk.Coins{}
+	burnCoins := sdk.NewCoins()
+	payCoins := sdk.NewCoins()
+	transferCoins := sdk.NewCoins()
+	feeCoins := sdk.NewCoins()
 coinLoop:
 	for _, coin := range pendingExecution.CoinInputs {
 		for _, denom := range cookbookCoinDenoms {

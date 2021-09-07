@@ -7,11 +7,12 @@ import (
 
 var _ sdk.Msg = &MsgFulfillTrade{}
 
-func NewMsgFulfillTrade(creator string, id string, items []ItemRef) *MsgFulfillTrade {
+func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []ItemRef) *MsgFulfillTrade {
 	return &MsgFulfillTrade{
-		Creator: creator,
-		ID:      id,
-		Items:   items,
+		Creator:         creator,
+		ID:              id,
+		CoinInputsIndex: coinInputsIndex,
+		Items:           items,
 	}
 }
 
@@ -41,5 +42,17 @@ func (msg *MsgFulfillTrade) ValidateBasic() error {
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
+
+	for _, item := range msg.Items {
+		err = ValidateID(item.ItemID)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+		err = ValidateID(item.CookbookID)
+		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
 	return nil
 }

@@ -107,9 +107,8 @@ message ItemOutput {
   repeated StringParam strings = 4 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
   repeated StringKeyValue mutableStrings = 5 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin transferFee = 6 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  // This value is accounted for only when an item is sold by itself
   string tradePercentage = 7 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
   // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 8;
@@ -126,10 +125,10 @@ message ItemModifyOutput {
   repeated StringParam strings = 5 [(gogoproto.nullable) = false];
   // defines a list of mutable strings whose value can be customized by the user
   repeated StringKeyValue mutableStrings = 6 [(gogoproto.nullable) = false];
-  cosmos.base.v1beta1.Coin transferFee = 7 [(gogoproto.nullable) = false];
+  repeated cosmos.base.v1beta1.Coin transferFee = 7 [(gogoproto.nullable) = false];
   // The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-  // This value is accounted for only when an item is sold by itself
   string tradePercentage = 8 [(gogoproto.nullable) = false,(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Dec"];
+  // quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply
   uint64 quantity = 9;
   uint64 amountMinted = 10;
   bool tradeable = 11;
@@ -148,6 +147,10 @@ message  WeightedOutputs {
   uint64 weight = 2;
 }
 
+message CoinInput{
+  repeated cosmos.base.v1beta1.Coin coins = 1 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+}
+
 message Recipe {
   string cookbookID = 1;
   string ID = 2;
@@ -155,7 +158,7 @@ message Recipe {
   string name = 4;
   string description = 5;
   string version = 6;
-  repeated cosmos.base.v1beta1.Coin coinInputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  repeated CoinInput coinInputs = 7 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 8 [(gogoproto.nullable) = false];
   EntriesList entries = 9 [(gogoproto.nullable) = false];
   repeated WeightedOutputs outputs = 10 [(gogoproto.nullable) = false];

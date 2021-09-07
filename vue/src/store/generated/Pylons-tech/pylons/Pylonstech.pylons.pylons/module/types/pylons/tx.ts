@@ -24,7 +24,7 @@ export interface MsgCreateAccountResponse {}
 
 export interface MsgFulfillTrade {
   creator: string
-  ID: string
+  ID: number
   items: ItemRef[]
 }
 
@@ -392,13 +392,14 @@ export const MsgCreateAccountResponse = {
 
 const baseMsgFulfillTrade: object = { creator: '', ID: '' }
 
+
 export const MsgFulfillTrade = {
   encode(message: MsgFulfillTrade, writer: Writer = Writer.create()): Writer {
     if (message.creator !== '') {
       writer.uint32(10).string(message.creator)
     }
-    if (message.ID !== '') {
-      writer.uint32(18).string(message.ID)
+    if (message.ID !== 0) {
+      writer.uint32(16).uint64(message.ID)
     }
     for (const v of message.items) {
       ItemRef.encode(v!, writer.uint32(26).fork()).ldelim()
@@ -418,7 +419,7 @@ export const MsgFulfillTrade = {
           message.creator = reader.string()
           break
         case 2:
-          message.ID = reader.string()
+          message.ID = longToNumber(reader.uint64() as Long)
           break
         case 3:
           message.items.push(ItemRef.decode(reader, reader.uint32()))
@@ -440,9 +441,9 @@ export const MsgFulfillTrade = {
       message.creator = ''
     }
     if (object.ID !== undefined && object.ID !== null) {
-      message.ID = String(object.ID)
+      message.ID = Number(object.ID)
     } else {
-      message.ID = ''
+      message.ID = 0
     }
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {
@@ -475,7 +476,7 @@ export const MsgFulfillTrade = {
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
-      message.ID = ''
+      message.ID = 0
     }
     if (object.items !== undefined && object.items !== null) {
       for (const e of object.items) {

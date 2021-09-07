@@ -203,7 +203,7 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 					panic(fmt.Errorf("item with ID %v in cookbook with ID %v not found", itemRecord.ID, pendingExec.CookbookID))
 				}
 				item.Owner = pendingExec.Creator
-				am.keeper.SetItem(ctx, item)
+				am.keeper.UnlockItemForExecution(ctx, item, pendingExec.Creator)
 			}
 
 			am.keeper.ActualizeExecution(ctx, pendingExec)

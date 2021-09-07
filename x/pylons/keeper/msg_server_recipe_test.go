@@ -30,7 +30,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerCreate() {
 			Developer:    "",
 			Version:      "v0.0.1",
 			SupportEmail: "test@email.com",
-			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
+			CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 			Enabled:      false,
 		}
 		_, err := srv.CreateCookbook(wctx, cookbook)
@@ -77,7 +77,7 @@ func (suite *IntegrationTestSuite) TestRecipeMsgServerUpdate() {
 		Developer:    "",
 		Version:      "v0.0.1",
 		SupportEmail: "test@email.com",
-		CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
+		CostPerBlock: sdk.Coin{Denom: "test", Amount: sdk.ZeroInt()},
 		Enabled:      false,
 	}
 	_, err := srv.CreateCookbook(wctx, cookbook)

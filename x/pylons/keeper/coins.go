@@ -26,6 +26,7 @@ func (k Keeper) MintCoinsToAddr(ctx sdk.Context, addr sdk.AccAddress, amounts sd
 }
 
 func (k Keeper) MintCoins(ctx sdk.Context, minterName string, amounts sdk.Coins) error {
+
 	err := k.bankKeeper.MintCoins(ctx, minterName, amounts)
 	if err != nil {
 		return sdkerrors.Wrap(err, "unable to mint coins")

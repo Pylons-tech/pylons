@@ -106,11 +106,8 @@ export interface ItemOutput {
   strings: StringParam[]
   /** defines a list of mutable strings whose value can be customized by the user */
   mutableStrings: StringKeyValue[]
-  transferFee: Coin | undefined
-  /**
-   * The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-   * This value is accounted for only when an item is sold by itself
-   */
+  transferFee: Coin[]
+  /** The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0). */
   tradePercentage: string
   /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
   quantity: number
@@ -127,12 +124,10 @@ export interface ItemModifyOutput {
   strings: StringParam[]
   /** defines a list of mutable strings whose value can be customized by the user */
   mutableStrings: StringKeyValue[]
-  transferFee: Coin | undefined
-  /**
-   * The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0).
-   * This value is accounted for only when an item is sold by itself
-   */
+  transferFee: Coin[]
+  /** The percentage of a trade sale retained by the cookbook owner. In the range (0.0, 1.0). */
   tradePercentage: string
+  /** quantity defines the maximum amount of these items that can be created. A 0 value indicates an infinite supply */
   quantity: number
   amountMinted: number
   tradeable: boolean
@@ -1289,8 +1284,8 @@ export const ItemOutput = {
     for (const v of message.mutableStrings) {
       StringKeyValue.encode(v!, writer.uint32(42).fork()).ldelim()
     }
-    if (message.transferFee !== undefined) {
-      Coin.encode(message.transferFee, writer.uint32(50).fork()).ldelim()
+    for (const v of message.transferFee) {
+      Coin.encode(v!, writer.uint32(50).fork()).ldelim()
     }
     if (message.tradePercentage !== '') {
       writer.uint32(58).string(message.tradePercentage)
@@ -1315,6 +1310,7 @@ export const ItemOutput = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
+    message.transferFee = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -1334,7 +1330,7 @@ export const ItemOutput = {
           message.mutableStrings.push(StringKeyValue.decode(reader, reader.uint32()))
           break
         case 6:
-          message.transferFee = Coin.decode(reader, reader.uint32())
+          message.transferFee.push(Coin.decode(reader, reader.uint32()))
           break
         case 7:
           message.tradePercentage = reader.string()
@@ -1362,6 +1358,7 @@ export const ItemOutput = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
+    message.transferFee = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = String(object.ID)
     } else {
@@ -1388,9 +1385,9 @@ export const ItemOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = Coin.fromJSON(object.transferFee)
-    } else {
-      message.transferFee = undefined
+      for (const e of object.transferFee) {
+        message.transferFee.push(Coin.fromJSON(e))
+      }
     }
     if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
       message.tradePercentage = String(object.tradePercentage)
@@ -1438,7 +1435,11 @@ export const ItemOutput = {
     } else {
       obj.mutableStrings = []
     }
-    message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
+    if (message.transferFee) {
+      obj.transferFee = message.transferFee.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.transferFee = []
+    }
     message.tradePercentage !== undefined && (obj.tradePercentage = message.tradePercentage)
     message.quantity !== undefined && (obj.quantity = message.quantity)
     message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
@@ -1452,6 +1453,7 @@ export const ItemOutput = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
+    message.transferFee = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
@@ -1478,9 +1480,9 @@ export const ItemOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = Coin.fromPartial(object.transferFee)
-    } else {
-      message.transferFee = undefined
+      for (const e of object.transferFee) {
+        message.transferFee.push(Coin.fromPartial(e))
+      }
     }
     if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
       message.tradePercentage = object.tradePercentage
@@ -1528,8 +1530,8 @@ export const ItemModifyOutput = {
     for (const v of message.mutableStrings) {
       StringKeyValue.encode(v!, writer.uint32(50).fork()).ldelim()
     }
-    if (message.transferFee !== undefined) {
-      Coin.encode(message.transferFee, writer.uint32(58).fork()).ldelim()
+    for (const v of message.transferFee) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim()
     }
     if (message.tradePercentage !== '') {
       writer.uint32(66).string(message.tradePercentage)
@@ -1554,6 +1556,7 @@ export const ItemModifyOutput = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
+    message.transferFee = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -1576,7 +1579,7 @@ export const ItemModifyOutput = {
           message.mutableStrings.push(StringKeyValue.decode(reader, reader.uint32()))
           break
         case 7:
-          message.transferFee = Coin.decode(reader, reader.uint32())
+          message.transferFee.push(Coin.decode(reader, reader.uint32()))
           break
         case 8:
           message.tradePercentage = reader.string()
@@ -1604,6 +1607,7 @@ export const ItemModifyOutput = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
+    message.transferFee = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = String(object.ID)
     } else {
@@ -1635,9 +1639,9 @@ export const ItemModifyOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = Coin.fromJSON(object.transferFee)
-    } else {
-      message.transferFee = undefined
+      for (const e of object.transferFee) {
+        message.transferFee.push(Coin.fromJSON(e))
+      }
     }
     if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
       message.tradePercentage = String(object.tradePercentage)
@@ -1686,7 +1690,11 @@ export const ItemModifyOutput = {
     } else {
       obj.mutableStrings = []
     }
-    message.transferFee !== undefined && (obj.transferFee = message.transferFee ? Coin.toJSON(message.transferFee) : undefined)
+    if (message.transferFee) {
+      obj.transferFee = message.transferFee.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.transferFee = []
+    }
     message.tradePercentage !== undefined && (obj.tradePercentage = message.tradePercentage)
     message.quantity !== undefined && (obj.quantity = message.quantity)
     message.amountMinted !== undefined && (obj.amountMinted = message.amountMinted)
@@ -1700,6 +1708,7 @@ export const ItemModifyOutput = {
     message.longs = []
     message.strings = []
     message.mutableStrings = []
+    message.transferFee = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
@@ -1731,9 +1740,9 @@ export const ItemModifyOutput = {
       }
     }
     if (object.transferFee !== undefined && object.transferFee !== null) {
-      message.transferFee = Coin.fromPartial(object.transferFee)
-    } else {
-      message.transferFee = undefined
+      for (const e of object.transferFee) {
+        message.transferFee.push(Coin.fromPartial(e))
+      }
     }
     if (object.tradePercentage !== undefined && object.tradePercentage !== null) {
       message.tradePercentage = object.tradePercentage

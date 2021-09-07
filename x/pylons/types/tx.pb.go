@@ -208,9 +208,10 @@ func (m *MsgCreateAccountResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgCreateAccountResponse proto.InternalMessageInfo
 
 type MsgFulfillTrade struct {
-	Creator string    `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	ID      string    `protobuf:"bytes,2,opt,name=ID,proto3" json:"ID,omitempty"`
-	Items   []ItemRef `protobuf:"bytes,3,rep,name=items,proto3" json:"items"`
+	Creator         string    `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	ID              uint64    `protobuf:"varint,2,opt,name=ID,proto3" json:"ID,omitempty"`
+	CoinInputsIndex uint64    `protobuf:"varint,3,opt,name=coinInputsIndex,proto3" json:"coinInputsIndex,omitempty"`
+	Items           []ItemRef `protobuf:"bytes,4,rep,name=items,proto3" json:"items"`
 }
 
 func (m *MsgFulfillTrade) Reset()         { *m = MsgFulfillTrade{} }
@@ -253,11 +254,18 @@ func (m *MsgFulfillTrade) GetCreator() string {
 	return ""
 }
 
-func (m *MsgFulfillTrade) GetID() string {
+func (m *MsgFulfillTrade) GetID() uint64 {
 	if m != nil {
 		return m.ID
 	}
-	return ""
+	return 0
+}
+
+func (m *MsgFulfillTrade) GetCoinInputsIndex() uint64 {
+	if m != nil {
+		return m.CoinInputsIndex
+	}
+	return 0
 }
 
 func (m *MsgFulfillTrade) GetItems() []ItemRef {
@@ -305,7 +313,7 @@ var xxx_messageInfo_MsgFulfillTradeResponse proto.InternalMessageInfo
 
 type MsgCreateTrade struct {
 	Creator     string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	CoinInputs  github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,2,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
+	CoinInputs  []CoinInput                              `protobuf:"bytes,2,rep,name=coinInputs,proto3" json:"coinInputs"`
 	ItemInputs  []ItemInput                              `protobuf:"bytes,3,rep,name=itemInputs,proto3" json:"itemInputs"`
 	CoinOutputs github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,4,rep,name=coinOutputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinOutputs"`
 	ItemOutputs []ItemRef                                `protobuf:"bytes,5,rep,name=itemOutputs,proto3" json:"itemOutputs"`
@@ -352,7 +360,7 @@ func (m *MsgCreateTrade) GetCreator() string {
 	return ""
 }
 
-func (m *MsgCreateTrade) GetCoinInputs() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *MsgCreateTrade) GetCoinInputs() []CoinInput {
 	if m != nil {
 		return m.CoinInputs
 	}
@@ -922,10 +930,11 @@ func (m *MsgSendItemsResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgSendItemsResponse proto.InternalMessageInfo
 
 type MsgExecuteRecipe struct {
-	Creator    string   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	CookbookID string   `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	RecipeID   string   `protobuf:"bytes,3,opt,name=recipeID,proto3" json:"recipeID,omitempty"`
-	ItemIDs    []string `protobuf:"bytes,4,rep,name=itemIDs,proto3" json:"itemIDs,omitempty"`
+	Creator         string   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	CookbookID      string   `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	RecipeID        string   `protobuf:"bytes,3,opt,name=recipeID,proto3" json:"recipeID,omitempty"`
+	CoinInputsIndex uint64   `protobuf:"varint,4,opt,name=coinInputsIndex,proto3" json:"coinInputsIndex,omitempty"`
+	ItemIDs         []string `protobuf:"bytes,5,rep,name=itemIDs,proto3" json:"itemIDs,omitempty"`
 }
 
 func (m *MsgExecuteRecipe) Reset()         { *m = MsgExecuteRecipe{} }
@@ -980,6 +989,13 @@ func (m *MsgExecuteRecipe) GetRecipeID() string {
 		return m.RecipeID
 	}
 	return ""
+}
+
+func (m *MsgExecuteRecipe) GetCoinInputsIndex() uint64 {
+	if m != nil {
+		return m.CoinInputsIndex
+	}
+	return 0
 }
 
 func (m *MsgExecuteRecipe) GetItemIDs() []string {
@@ -1146,19 +1162,19 @@ func (m *MsgSetItemStringResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgSetItemStringResponse proto.InternalMessageInfo
 
 type MsgCreateRecipe struct {
-	Creator       string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	CookbookID    string                                   `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	ID            string                                   `protobuf:"bytes,3,opt,name=ID,proto3" json:"ID,omitempty"`
-	Name          string                                   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                                   `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Version       string                                   `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
-	CoinInputs    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,7,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
-	ItemInputs    []ItemInput                              `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
-	Entries       EntriesList                              `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
-	Outputs       []WeightedOutputs                        `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
-	BlockInterval int64                                    `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
-	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+	Creator       string            `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	CookbookID    string            `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	ID            string            `protobuf:"bytes,3,opt,name=ID,proto3" json:"ID,omitempty"`
+	Name          string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Version       string            `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
+	CoinInputs    []CoinInput       `protobuf:"bytes,7,rep,name=coinInputs,proto3" json:"coinInputs"`
+	ItemInputs    []ItemInput       `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
+	Entries       EntriesList       `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
+	Outputs       []WeightedOutputs `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
+	BlockInterval int64             `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	Enabled       bool              `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExtraInfo     string            `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
 }
 
 func (m *MsgCreateRecipe) Reset()         { *m = MsgCreateRecipe{} }
@@ -1236,7 +1252,7 @@ func (m *MsgCreateRecipe) GetVersion() string {
 	return ""
 }
 
-func (m *MsgCreateRecipe) GetCoinInputs() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *MsgCreateRecipe) GetCoinInputs() []CoinInput {
 	if m != nil {
 		return m.CoinInputs
 	}
@@ -1322,19 +1338,19 @@ func (m *MsgCreateRecipeResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgCreateRecipeResponse proto.InternalMessageInfo
 
 type MsgUpdateRecipe struct {
-	Creator       string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
-	CookbookID    string                                   `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
-	ID            string                                   `protobuf:"bytes,3,opt,name=ID,proto3" json:"ID,omitempty"`
-	Name          string                                   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                                   `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Version       string                                   `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
-	CoinInputs    github_com_cosmos_cosmos_sdk_types.Coins `protobuf:"bytes,7,rep,name=coinInputs,proto3,castrepeated=github.com/cosmos/cosmos-sdk/types.Coins" json:"coinInputs"`
-	ItemInputs    []ItemInput                              `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
-	Entries       EntriesList                              `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
-	Outputs       []WeightedOutputs                        `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
-	BlockInterval int64                                    `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
-	Enabled       bool                                     `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	ExtraInfo     string                                   `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
+	Creator       string            `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
+	CookbookID    string            `protobuf:"bytes,2,opt,name=cookbookID,proto3" json:"cookbookID,omitempty"`
+	ID            string            `protobuf:"bytes,3,opt,name=ID,proto3" json:"ID,omitempty"`
+	Name          string            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Description   string            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Version       string            `protobuf:"bytes,6,opt,name=version,proto3" json:"version,omitempty"`
+	CoinInputs    []CoinInput       `protobuf:"bytes,7,rep,name=coinInputs,proto3" json:"coinInputs"`
+	ItemInputs    []ItemInput       `protobuf:"bytes,8,rep,name=itemInputs,proto3" json:"itemInputs"`
+	Entries       EntriesList       `protobuf:"bytes,9,opt,name=entries,proto3" json:"entries"`
+	Outputs       []WeightedOutputs `protobuf:"bytes,10,rep,name=outputs,proto3" json:"outputs"`
+	BlockInterval int64             `protobuf:"varint,11,opt,name=blockInterval,proto3" json:"blockInterval,omitempty"`
+	Enabled       bool              `protobuf:"varint,12,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExtraInfo     string            `protobuf:"bytes,13,opt,name=extraInfo,proto3" json:"extraInfo,omitempty"`
 }
 
 func (m *MsgUpdateRecipe) Reset()         { *m = MsgUpdateRecipe{} }
@@ -1412,7 +1428,7 @@ func (m *MsgUpdateRecipe) GetVersion() string {
 	return ""
 }
 
-func (m *MsgUpdateRecipe) GetCoinInputs() github_com_cosmos_cosmos_sdk_types.Coins {
+func (m *MsgUpdateRecipe) GetCoinInputs() []CoinInput {
 	if m != nil {
 		return m.CoinInputs
 	}
@@ -1908,6 +1924,7 @@ var fileDescriptor_d4a7b7e7ad73d5a4 = []byte{
 	0x5f, 0xd5, 0x26, 0xbe, 0xb9, 0x93, 0xb8, 0x1d, 0x2b, 0xc3, 0x77, 0x85, 0xe5, 0x96, 0xfe, 0x5c,
 	0x7c, 0x10, 0xff, 0x91, 0xf7, 0xe4, 0xee, 0x39, 0xf9, 0xd5, 0x78, 0xed, 0xbf, 0x00, 0x00, 0x00,
 	0xff, 0xff, 0xb0, 0x05, 0xe6, 0xcf, 0x22, 0x17, 0x00, 0x00,
+
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -2647,15 +2664,18 @@ func (m *MsgFulfillTrade) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintTx(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 		}
 	}
-	if len(m.ID) > 0 {
-		i -= len(m.ID)
-		copy(dAtA[i:], m.ID)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ID)))
+	if m.CoinInputsIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.CoinInputsIndex))
 		i--
-		dAtA[i] = 0x12
+		dAtA[i] = 0x18
+	}
+	if m.ID != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.ID))
+		i--
+		dAtA[i] = 0x10
 	}
 	if len(m.Creator) > 0 {
 		i -= len(m.Creator)
@@ -3184,8 +3204,13 @@ func (m *MsgExecuteRecipe) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			copy(dAtA[i:], m.ItemIDs[iNdEx])
 			i = encodeVarintTx(dAtA, i, uint64(len(m.ItemIDs[iNdEx])))
 			i--
-			dAtA[i] = 0x22
+			dAtA[i] = 0x2a
 		}
+	}
+	if m.CoinInputsIndex != 0 {
+		i = encodeVarintTx(dAtA, i, uint64(m.CoinInputsIndex))
+		i--
+		dAtA[i] = 0x20
 	}
 	if len(m.RecipeID) > 0 {
 		i -= len(m.RecipeID)
@@ -3949,9 +3974,11 @@ func (m *MsgFulfillTrade) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
 	}
-	l = len(m.ID)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
+	if m.ID != 0 {
+		n += 1 + sovTx(uint64(m.ID))
+	}
+	if m.CoinInputsIndex != 0 {
+		n += 1 + sovTx(uint64(m.CoinInputsIndex))
 	}
 	if len(m.Items) > 0 {
 		for _, e := range m.Items {
@@ -4196,6 +4223,9 @@ func (m *MsgExecuteRecipe) Size() (n int) {
 	l = len(m.RecipeID)
 	if l > 0 {
 		n += 1 + l + sovTx(uint64(l))
+	}
+	if m.CoinInputsIndex != 0 {
+		n += 1 + sovTx(uint64(m.CoinInputsIndex))
 	}
 	if len(m.ItemIDs) > 0 {
 		for _, s := range m.ItemIDs {
@@ -4899,10 +4929,10 @@ func (m *MsgFulfillTrade) Unmarshal(dAtA []byte) error {
 			m.Creator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
+			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ID", wireType)
 			}
-			var stringLen uint64
+			m.ID = 0
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowTx
@@ -4912,25 +4942,31 @@ func (m *MsgFulfillTrade) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				m.ID |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ID = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
 		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputsIndex", wireType)
+			}
+			m.CoinInputsIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CoinInputsIndex |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
 			}
@@ -5125,7 +5161,7 @@ func (m *MsgCreateTrade) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CoinInputs = append(m.CoinInputs, types.Coin{})
+			m.CoinInputs = append(m.CoinInputs, CoinInput{})
 			if err := m.CoinInputs[len(m.CoinInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -6481,6 +6517,25 @@ func (m *MsgExecuteRecipe) Unmarshal(dAtA []byte) error {
 			m.RecipeID = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CoinInputsIndex", wireType)
+			}
+			m.CoinInputsIndex = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTx
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.CoinInputsIndex |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ItemIDs", wireType)
 			}
@@ -7125,7 +7180,7 @@ func (m *MsgCreateRecipe) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CoinInputs = append(m.CoinInputs, types.Coin{})
+			m.CoinInputs = append(m.CoinInputs, CoinInput{})
 			if err := m.CoinInputs[len(m.CoinInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -7623,7 +7678,7 @@ func (m *MsgUpdateRecipe) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.CoinInputs = append(m.CoinInputs, types.Coin{})
+			m.CoinInputs = append(m.CoinInputs, CoinInput{})
 			if err := m.CoinInputs[len(m.CoinInputs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}

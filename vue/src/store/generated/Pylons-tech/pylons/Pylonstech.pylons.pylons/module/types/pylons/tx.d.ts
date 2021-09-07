@@ -18,7 +18,7 @@ export interface MsgCreateAccountResponse {
 }
 export interface MsgFulfillTrade {
     creator: string;
-    ID: string;
+    ID: number;
     items: ItemRef[];
 }
 export interface MsgFulfillTradeResponse {

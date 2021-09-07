@@ -260,7 +260,7 @@ var ExecutedByCountDecls = decls.NewFunction("executed_by_count",
 
 // BasicVarDefs collect basic variable definitions
 func BasicVarDefs() []*exprpb.Decl {
-	varDefs := []*exprpb.Decl{}
+	varDefs := make([]*exprpb.Decl, 0)
 
 	varDefs = append(varDefs,
 		decls.NewVar("lastBlockHeight", decls.Int),
@@ -318,8 +318,10 @@ func AddVariableFromItem(varDefs []*exprpb.Decl, variables map[string]interface{
 	variables[prefix+"owner"] = item.Owner
 	variables[prefix+"itemID"] = item.ID
 	variables[prefix+"lastUpdate"] = item.LastUpdate
-	variables[prefix+"transferFee"] = item.TransferFee.Amount
-	variables[prefix+"transferFeeDenom"] = item.TransferFee.Denom
+	// due to how transferFee was changed to support multiple alternatives,
+	// transferFee has been removed from the cel vars
+	// variables[prefix+"transferFee"] = item.TransferFee.Amount
+	// variables[prefix+"transferFeeDenom"] = item.TransferFee.Denom
 
 	for _, dbli := range item.Doubles {
 		varDefs = append(varDefs, decls.NewVar(prefix+dbli.Key, decls.Double))

@@ -47,7 +47,7 @@ func Test_validateCoinFee(t *testing.T) {
 	}{
 		{name: "invalid type sdk coins negative", args: args{sdk.Coin{Denom: "fail", Amount: sdk.NewInt(-1)}}, wantErr: true},
 
-		{name: "valid sdk coins", args: args{sdk.Coin{Denom: "pass", Amount: sdk.NewInt(1)}}, wantErr: false},
+		{name: "valid sdk coins", args: args{sdk.Coin{Denom: "pass", Amount: sdk.OneInt()}}, wantErr: false},
 	}
 
 	for _, tt := range tests {
@@ -78,7 +78,7 @@ func Test_validateCoinIssuers(t *testing.T) {
 	validPackage := GoogleInAppPurchasePackage{
 		PackageName: "package",
 		ProductID:   "product",
-		Amount:      sdk.NewInt(1),
+		Amount:      sdk.OneInt(),
 	}
 
 	validPackages = append(validPackages, validPackage)

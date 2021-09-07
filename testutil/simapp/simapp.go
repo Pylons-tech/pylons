@@ -1,6 +1,8 @@
 package simapp
 
 import (
+	"encoding/json"
+
 	"time"
 
 	"github.com/cosmos/cosmos-sdk/simapp"
@@ -21,12 +23,27 @@ func New(dir string) cosmoscmd.App {
 
 	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
 
-	a := app.New(logger, db, nil, true, map[int64]bool{}, dir, 0, encoding,
+	cmdApp := app.New(logger, db, nil, true, map[int64]bool{}, dir, 0, encoding,
 		simapp.EmptyAppOptions{})
+
+	var a *app.App
+	switch cmdApp := cmdApp.(type) {
+	case *app.App:
+		a = cmdApp
+	default:
+		panic("imported simApp incorrectly")
+	}
+
+	genesisState := app.ModuleBasics.DefaultGenesis(encoding.Marshaler)
+	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
+	if err != nil {
+		panic(err)
+	}
+
 	// InitChain updates deliverState which is required when app.NewContext is called
 	a.InitChain(abci.RequestInitChain{
 		ConsensusParams: defaultConsensusParams,
-		AppStateBytes:   []byte("{}"),
+		AppStateBytes:   stateBytes,
 	})
 	return a
 }

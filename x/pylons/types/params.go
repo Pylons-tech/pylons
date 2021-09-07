@@ -3,7 +3,7 @@ package types
 import (
 	"fmt"
 
-	yaml "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -32,7 +32,7 @@ var (
 	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
 	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("0.10")
 	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
-	DefaultMinTransferFee               = sdk.NewInt(1)
+	DefaultMinTransferFee               = sdk.OneInt()
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 )
 
@@ -120,11 +120,11 @@ func (p Params) ValidateBasic() error {
 		return fmt.Errorf("MinDescriptionFieldLength must at least be 1")
 	}
 
-	if !(p.RecipeFeePercentage.GTE(sdk.ZeroDec()) && p.RecipeFeePercentage.LT(sdk.NewDec(1))) {
+	if !(p.RecipeFeePercentage.GTE(sdk.ZeroDec()) && p.RecipeFeePercentage.LT(sdk.OneDec())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 
-	if !(p.ItemTransferFeePercentage.GTE(sdk.ZeroDec()) && p.ItemTransferFeePercentage.LT(sdk.NewDec(1))) {
+	if !(p.ItemTransferFeePercentage.GTE(sdk.ZeroDec()) && p.ItemTransferFeePercentage.LT(sdk.OneDec())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 
@@ -145,7 +145,7 @@ func (p Params) ValidateBasic() error {
 	}
 
 	for _, ci := range p.CoinIssuers {
-		if !sdk.NewCoin(ci.CoinDenom, sdk.NewInt(1)).IsValid() {
+		if !sdk.NewCoin(ci.CoinDenom, sdk.OneInt()).IsValid() {
 			return fmt.Errorf("invalid denom")
 		}
 		for _, iapPackage := range ci.Packages {
@@ -186,7 +186,7 @@ func validateDecPercentage(i interface{}) error {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
 
-	if !(v.GTE(sdk.ZeroDec()) && v.LT(sdk.NewDec(1))) {
+	if !(v.GTE(sdk.ZeroDec()) && v.LT(sdk.OneDec())) {
 		return fmt.Errorf("percentage parameter should be in the range [0,1)")
 	}
 	return nil
@@ -223,7 +223,7 @@ func validateCoinIssuers(i interface{}) error {
 	}
 
 	for _, ci := range v {
-		coin := sdk.Coin{Denom: ci.CoinDenom, Amount: sdk.NewInt(1)}
+		coin := sdk.Coin{Denom: ci.CoinDenom, Amount: sdk.OneInt()}
 		if !coin.IsValid() {
 			return fmt.Errorf("invalid denom")
 		}

@@ -40,7 +40,7 @@ func TestCreateTrade(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{}
+			args := make([]string, 0)
 			args = append(args, fields...)
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateTrade(), args)
@@ -69,7 +69,7 @@ func TestCancelTrade(t *testing.T) {
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
-	args := []string{}
+	args := make([]string, 0)
 	args = append(args, fields...)
 	args = append(args, common...)
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateTrade(), args)

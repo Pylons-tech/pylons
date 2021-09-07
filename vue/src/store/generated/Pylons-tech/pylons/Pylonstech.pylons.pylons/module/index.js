@@ -33,6 +33,7 @@ const types = [
     ["/Pylonstech.pylons.pylons.MsgCreateTrade", MsgCreateTrade],
     ["/Pylonstech.pylons.pylons.MsgUpdateAccount", MsgUpdateAccount],
     ["/Pylonstech.pylons.pylons.MsgUpdateRecipe", MsgUpdateRecipe],
+
 ];
 export const MissingWalletError = new Error("wallet is required");
 const registry = new Registry(types);
@@ -62,6 +63,7 @@ const txClient = async (wallet, { addr: addr } = { addr: "http://localhost:26657
         msgCreateTrade: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgCreateTrade", value: data }),
         msgUpdateAccount: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateAccount", value: data }),
         msgUpdateRecipe: (data) => ({ typeUrl: "/Pylonstech.pylons.pylons.MsgUpdateRecipe", value: data }),
+
     };
 };
 const queryClient = async ({ addr: addr } = { addr: "http://localhost:1317" }) => {

@@ -27,7 +27,7 @@ func (k msgServer) CompleteExecutionEarly(goCtx context.Context, msg *types.MsgC
 	completeEarlyCoin := sdk.NewCoin(cookbook.CostPerBlock.Denom, completeEarlyAmt)
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	err := k.LockCoinsForExecution(ctx, addr, sdk.Coins{completeEarlyCoin})
+	err := k.LockCoinsForExecution(ctx, addr, sdk.NewCoins(completeEarlyCoin))
 	if err != nil {
 		return nil, err
 	}

@@ -11,6 +11,8 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TODO Add tests for RecipeModified, ItemInputsEqual, EntriesListEqual, OutputsEqual from recipe.go
+
 func TestValidateInputDoubles(t *testing.T) {
 	valGTone, _ := sdk.NewDecFromStr("1.01")
 	valLTone, _ := sdk.NewDecFromStr("0.99")
@@ -20,18 +22,18 @@ func TestValidateInputDoubles(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []DoubleInputParam{
-			{Key: "test", MinValue: sdk.NewDec(1), MaxValue: valGTone},
+			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valGTone},
 		}},
 		{desc: "ValidMultiple", obj: []DoubleInputParam{
-			{Key: "test1", MinValue: sdk.NewDec(1), MaxValue: valGTone},
-			{Key: "test2", MinValue: sdk.NewDec(1), MaxValue: valGTone},
+			{Key: "test1", MinValue: sdk.OneDec(), MaxValue: valGTone},
+			{Key: "test2", MinValue: sdk.OneDec(), MaxValue: valGTone},
 		}},
 		{desc: "InvalidSingle", obj: []DoubleInputParam{
-			{Key: "test", MinValue: sdk.NewDec(1), MaxValue: valLTone},
+			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valLTone},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []DoubleInputParam{
-			{Key: "test", MinValue: sdk.NewDec(1), MaxValue: valGTone},
-			{Key: "test", MinValue: sdk.NewDec(1), MaxValue: valGTone},
+			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valGTone},
+			{Key: "test", MinValue: sdk.OneDec(), MaxValue: valGTone},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -146,7 +148,7 @@ func TestValidateCoinOutput(t *testing.T) {
 		err  error
 	}{
 		{desc: "Valid", obj: CoinOutput{
-			ID: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.NewInt(1)},
+			ID: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.OneInt()},
 		}},
 		{desc: "Invalid1", obj: CoinOutput{
 			ID: "test", Coin: sdk.Coin{Denom: "test", Amount: sdk.NewInt(-1)},
@@ -176,11 +178,11 @@ func TestValidateDoubles(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.NewDec(1)},
+			{Key: "test", Rate: sdk.OneDec()},
 		}},
 		{desc: "ValidMultiple", obj: []DoubleParam{
-			{Key: "test1", Rate: sdk.NewDec(1), WeightRanges: []DoubleWeightRange{{Lower: sdk.NewDec(1), Upper: valGTone}}},
-			{Key: "test2", Rate: sdk.NewDec(1), WeightRanges: []DoubleWeightRange{{Lower: sdk.NewDec(1), Upper: valGTone}}},
+			{Key: "test1", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test2", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 		}},
 		{desc: "InvalidSingle1", obj: []DoubleParam{
 			{Key: "test", Rate: valGTone},
@@ -189,11 +191,11 @@ func TestValidateDoubles(t *testing.T) {
 			{Key: "test", Rate: sdk.ZeroDec()},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle3", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.NewDec(1), WeightRanges: []DoubleWeightRange{{Lower: sdk.NewDec(1), Upper: valLTone}}},
+			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valLTone}}},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []DoubleParam{
-			{Key: "test", Rate: sdk.NewDec(1), WeightRanges: []DoubleWeightRange{{Lower: sdk.NewDec(1), Upper: valGTone}}},
-			{Key: "test", Rate: sdk.NewDec(1), WeightRanges: []DoubleWeightRange{{Lower: sdk.NewDec(1), Upper: valGTone}}},
+			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
+			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []DoubleWeightRange{{Lower: sdk.OneDec(), Upper: valGTone}}},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -215,11 +217,11 @@ func TestValidateLongs(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []LongParam{
-			{Key: "test", Rate: sdk.NewDec(1)},
+			{Key: "test", Rate: sdk.OneDec()},
 		}},
 		{desc: "ValidMultiple", obj: []LongParam{
-			{Key: "test1", Rate: sdk.NewDec(1), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
-			{Key: "test2", Rate: sdk.NewDec(1), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test1", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test2", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
 		}},
 		{desc: "InvalidSingle1", obj: []LongParam{
 			{Key: "test", Rate: sdk.NewDec(2)},
@@ -228,11 +230,11 @@ func TestValidateLongs(t *testing.T) {
 			{Key: "test", Rate: sdk.ZeroDec()},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidSingle3", obj: []LongParam{
-			{Key: "test", Rate: sdk.NewDec(1), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 0}}},
+			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 0}}},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []LongParam{
-			{Key: "test", Rate: sdk.NewDec(1), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
-			{Key: "test", Rate: sdk.NewDec(1), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
+			{Key: "test", Rate: sdk.OneDec(), WeightRanges: []IntWeightRange{{Lower: 1, Upper: 2}}},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
@@ -254,11 +256,11 @@ func TestValidateStrings(t *testing.T) {
 		err  error
 	}{
 		{desc: "ValidSingle", obj: []StringParam{
-			{Key: "test", Rate: sdk.NewDec(1)},
+			{Key: "test", Rate: sdk.OneDec()},
 		}},
 		{desc: "ValidMultiple", obj: []StringParam{
-			{Key: "test1", Rate: sdk.NewDec(1)},
-			{Key: "test2", Rate: sdk.NewDec(1)},
+			{Key: "test1", Rate: sdk.OneDec()},
+			{Key: "test2", Rate: sdk.OneDec()},
 		}},
 		{desc: "InvalidSingle1", obj: []StringParam{
 			{Key: "test", Rate: sdk.NewDec(2)},
@@ -267,8 +269,8 @@ func TestValidateStrings(t *testing.T) {
 			{Key: "test", Rate: sdk.ZeroDec()},
 		}, err: ErrInvalidRequestField},
 		{desc: "InvalidMultiple", obj: []StringParam{
-			{Key: "test", Rate: sdk.NewDec(1)},
-			{Key: "test", Rate: sdk.NewDec(1)},
+			{Key: "test", Rate: sdk.OneDec()},
+			{Key: "test", Rate: sdk.OneDec()},
 		}, err: ErrInvalidRequestField},
 	} {
 		tc := tc
