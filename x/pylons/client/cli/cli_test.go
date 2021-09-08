@@ -23,8 +23,8 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.U
 	for i := 0; i < n; i++ {
 		state.AccountList = append(state.AccountList,
 			types.UserMap{
-				Account:  creators[i],
-				Username: "user" + strconv.Itoa(i),
+				AccountAddr: creators[i],
+				Username:    "user" + strconv.Itoa(i),
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

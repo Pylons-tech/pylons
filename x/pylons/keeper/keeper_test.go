@@ -34,9 +34,9 @@ func createNPylonsAccount(k keeper.Keeper, ctx sdk.Context, n int) []types.UserM
 	items := make([]types.UserMap, n)
 	creators := types.GenTestBech32List(n)
 	for i := range items {
-		items[i].Account = creators[i]
+		items[i].AccountAddr = creators[i]
 		items[i].Username = "user" + strconv.Itoa(i)
-		k.SetPylonsAccount(ctx, types.AccountAddr{Value: items[i].Account}, types.Username{Value: items[i].Username})
+		k.SetPylonsAccount(ctx, types.AccountAddr{Value: items[i].AccountAddr}, types.Username{Value: items[i].Username})
 	}
 	return items
 }

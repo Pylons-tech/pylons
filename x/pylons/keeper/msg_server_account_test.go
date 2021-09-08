@@ -65,6 +65,16 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 	_, err := srv.CreateAccount(wctx, request)
 	require.NoError(err)
 
+	updateFee := k.UpdateUsernameFee(ctx)
+	// need enough balance to update num_tests items
+	updateFee.Amount = updateFee.Amount.Mul(sdk.NewInt(int64(1)))
+	coinsWithUpdateFee := sdk.NewCoins(updateFee)
+
+	creatorAddr, err := sdk.AccAddressFromBech32(addr[0])
+	require.NoError(err)
+	err = k.MintCoinsToAddr(ctx, creatorAddr, coinsWithUpdateFee)
+	require.NoError(err)
+
 	for _, tc := range []struct {
 		desc    string
 		request *types.MsgUpdateAccount

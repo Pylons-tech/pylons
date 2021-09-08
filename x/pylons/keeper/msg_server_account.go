@@ -62,9 +62,14 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
 	}
 
-	// TODO fee for updating account
-
 	k.SetPylonsAccount(ctx, accountAddr, username)
+
+	// perform payment after update
+	updateFee := k.Keeper.UpdateUsernameFee(ctx)
+	err = k.PayFees(ctx, addr, sdk.NewCoins(updateFee))
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+	}
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateAccount{
 		Address:  msg.Creator,

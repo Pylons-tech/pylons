@@ -9,7 +9,7 @@ func (suite *IntegrationTestSuite) TestUsernameGet() {
 	for _, account := range accounts {
 		rst, found := k.GetAddressByUsername(ctx, account.Username)
 		require.True(found)
-		require.Equal(account.Account, rst.Value)
+		require.Equal(account.AccountAddr, rst.Value)
 	}
 }
 
@@ -20,7 +20,7 @@ func (suite *IntegrationTestSuite) TestAccountGet() {
 
 	accounts := createNPylonsAccount(k, ctx, 10)
 	for _, account := range accounts {
-		rst, found := k.GetUsernameByAddress(ctx, account.Account)
+		rst, found := k.GetUsernameByAddress(ctx, account.AccountAddr)
 		require.True(found)
 		require.Equal(account.Username, rst.Value)
 	}

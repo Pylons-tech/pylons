@@ -24,12 +24,12 @@ func (suite *IntegrationTestSuite) TestAddressQueryByUsernameSingle() {
 		{
 			desc:     "First",
 			request:  &types.QueryGetAddressByUsernameRequest{Username: msgs[0].Username},
-			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[0].Account}},
+			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[0].AccountAddr}},
 		},
 		{
 			desc:     "Second",
 			request:  &types.QueryGetAddressByUsernameRequest{Username: msgs[1].Username},
-			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[1].Account}},
+			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[1].AccountAddr}},
 		},
 		{
 			desc:    "KeyNotFound",
@@ -68,12 +68,12 @@ func (suite *IntegrationTestSuite) TestUsernameQueryByAddressSingle() {
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[0].Account},
+			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[0].AccountAddr},
 			response: &types.QueryGetUsernameByAddressResponse{Username: types.Username{Value: msgs[0].Username}},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[1].Account},
+			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[1].AccountAddr},
 			response: &types.QueryGetUsernameByAddressResponse{Username: types.Username{Value: msgs[1].Username}},
 		},
 		{

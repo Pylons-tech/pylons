@@ -54,7 +54,7 @@ func TestShowAccountByUsername(t *testing.T) {
 				require.NoError(t, err)
 				var resp types.QueryGetAddressByUsernameResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.Equal(t, tc.obj.Account, resp.Address.Value)
+				require.Equal(t, tc.obj.AccountAddr, resp.Address.Value)
 			}
 		})
 	}
@@ -76,7 +76,7 @@ func TestShowUsernameByAccount(t *testing.T) {
 	}{
 		{
 			desc:    "found",
-			account: accs[0].Account,
+			account: accs[0].AccountAddr,
 			args:    common,
 			obj:     accs[0],
 		},
