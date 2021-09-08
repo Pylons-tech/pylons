@@ -45,7 +45,7 @@ func TestShowAccountByUsername(t *testing.T) {
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{tc.username}
 			args = append(args, tc.args...)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdGetAccountByUsername(), args)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdGetAddressByUsername(), args)
 			if tc.err != nil {
 				stat, ok := status.FromError(tc.err)
 				require.True(t, ok)
@@ -60,7 +60,7 @@ func TestShowAccountByUsername(t *testing.T) {
 	}
 }
 
-func TestShowAccountByAccount(t *testing.T) {
+func TestShowUsernameByAccount(t *testing.T) {
 	net, accs := networkWithAccountObjects(t, 2)
 
 	ctx := net.Validators[0].ClientCtx
@@ -68,30 +68,30 @@ func TestShowAccountByAccount(t *testing.T) {
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
 	for _, tc := range []struct {
-		desc     string
-		username string
-		args     []string
-		err      error
-		obj      types.UserMap
+		desc    string
+		account string
+		args    []string
+		err     error
+		obj     types.UserMap
 	}{
 		{
-			desc:     "found",
-			username: accs[0].Account,
-			args:     common,
-			obj:      accs[0],
+			desc:    "found",
+			account: accs[0].Account,
+			args:    common,
+			obj:     accs[0],
 		},
 		{
-			desc:     "not found",
-			username: "not_found",
-			args:     common,
-			err:      status.Error(codes.InvalidArgument, "not found"),
+			desc:    "not found",
+			account: "not_found",
+			args:    common,
+			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.username}
+			args := []string{tc.account}
 			args = append(args, tc.args...)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdGetAccountByAddress(), args)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdGetUsernameByAddress(), args)
 			if tc.err != nil {
 				stat, ok := status.FromError(tc.err)
 				require.True(t, ok)
