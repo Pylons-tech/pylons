@@ -62,6 +62,8 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
 	}
 
+	// TODO fee for updating account
+
 	k.SetPylonsAccount(ctx, accountAddr, username)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateAccount{
