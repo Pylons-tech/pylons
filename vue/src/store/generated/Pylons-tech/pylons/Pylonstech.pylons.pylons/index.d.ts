@@ -1,3 +1,6 @@
+import { UserMap } from "./module/types/pylons/accounts";
+import { Username } from "./module/types/pylons/accounts";
+import { AccountAddr } from "./module/types/pylons/accounts";
 import { Cookbook } from "./module/types/pylons/cookbook";
 import { EventCreateAccount } from "./module/types/pylons/event";
 import { EventUpdateAccount } from "./module/types/pylons/event";
@@ -46,7 +49,6 @@ import { CoinInput } from "./module/types/pylons/recipe";
 import { Recipe } from "./module/types/pylons/recipe";
 import { ItemRef } from "./module/types/pylons/trade";
 import { Trade } from "./module/types/pylons/trade";
-import { UserMap } from "./module/types/pylons/user_map";
-export { Cookbook, EventCreateAccount, EventUpdateAccount, EventCreateCookbook, EventUpdateCookbook, EventTransferCookbook, EventCreateRecipe, EventUpdateRecipe, EventCreateExecution, EventCompleteExecution, EventDropExecution, EventCompleteExecutionEarly, EventSendItems, EventSetItemString, EventCreateTrade, EventCancelTrade, EventFulfillTrade, EventGooglePurchase, EventStripePurchase, ItemRecord, Execution, GoogleInAppPurchaseOrder, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, GoogleInAppPurchasePackage, CoinIssuer, Params, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, CoinInput, Recipe, ItemRef, Trade, UserMap };
+export { UserMap, Username, AccountAddr, Cookbook, EventCreateAccount, EventUpdateAccount, EventCreateCookbook, EventUpdateCookbook, EventTransferCookbook, EventCreateRecipe, EventUpdateRecipe, EventCreateExecution, EventCompleteExecution, EventDropExecution, EventCompleteExecutionEarly, EventSendItems, EventSetItemString, EventCreateTrade, EventCancelTrade, EventFulfillTrade, EventGooglePurchase, EventStripePurchase, ItemRecord, Execution, GoogleInAppPurchaseOrder, DoubleKeyValue, LongKeyValue, StringKeyValue, Item, GoogleInAppPurchasePackage, CoinIssuer, Params, DoubleInputParam, LongInputParam, StringInputParam, ConditionList, ItemInput, DoubleWeightRange, DoubleParam, IntWeightRange, LongParam, StringParam, CoinOutput, ItemOutput, ItemModifyOutput, EntriesList, WeightedOutputs, CoinInput, Recipe, ItemRef, Trade };
 declare const _default;
 export default _default;

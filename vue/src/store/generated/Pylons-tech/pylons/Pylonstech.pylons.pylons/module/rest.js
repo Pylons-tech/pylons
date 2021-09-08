@@ -130,7 +130,7 @@ export class HttpClient {
     }
 }
 /**
- * @title pylons/cookbook.proto
+ * @title pylons/accounts.proto
  * @version version not set
  */
 export class Api extends HttpClient {
@@ -140,11 +140,11 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
-         * @name QueryPylonsAccountByAddress
+         * @name QueryUsernameByAddress
          * @summary Queries a list of getAccountByAddress items.
          * @request GET:/pylons/account/address/{address}
          */
-        this.queryPylonsAccountByAddress = (address, params = {}) => this.request({
+        this.queryUsernameByAddress = (address, params = {}) => this.request({
             path: `/pylons/account/address/${address}`,
             method: "GET",
             format: "json",
@@ -154,11 +154,11 @@ export class Api extends HttpClient {
          * No description
          *
          * @tags Query
-         * @name QueryPylonsAccountByUsername
+         * @name QueryAddressByUsername
          * @summary Queries a username by account.
          * @request GET:/pylons/account/username/{username}
          */
-        this.queryPylonsAccountByUsername = (username, params = {}) => this.request({
+        this.queryAddressByUsername = (username, params = {}) => this.request({
             path: `/pylons/account/username/${username}`,
             method: "GET",
             format: "json",

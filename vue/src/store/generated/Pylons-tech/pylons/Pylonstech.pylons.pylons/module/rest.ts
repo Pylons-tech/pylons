@@ -10,9 +10,10 @@
  */
 
 export interface ProtobufAny {
-  typeUrl?: string;
+  "@type"?: string;
+}
 
-  /** @format byte */
+export interface PylonsAccountAddr {
   value?: string;
 }
 
@@ -280,12 +281,8 @@ export type PylonsMsgUpdateCookbookResponse = object;
 
 export type PylonsMsgUpdateRecipeResponse = object;
 
-export interface PylonsQueryGetAccountByAddressResponse {
-  pylonsAccount?: PylonsUserMap;
-}
-
-export interface PylonsQueryGetAccountByUsernameResponse {
-  pylonsAccount?: PylonsUserMap;
+export interface PylonsQueryGetAddressByUsernameResponse {
+  address?: PylonsAccountAddr;
 }
 
 export interface PylonsQueryGetCookbookResponse {
@@ -311,6 +308,10 @@ export interface PylonsQueryGetRecipeResponse {
 
 export interface PylonsQueryGetTradeResponse {
   Trade?: PylonsTrade;
+}
+
+export interface PylonsQueryGetUsernameByAddressResponse {
+  username?: PylonsUsername;
 }
 
 export interface PylonsQueryListCookbooksByCreatorResponse {
@@ -401,9 +402,8 @@ export interface PylonsTrade {
   tradedItemInputs?: PylonsItemRef[];
 }
 
-export interface PylonsUserMap {
-  account?: string;
-  username?: string;
+export interface PylonsUsername {
+  value?: string;
 }
 
 export interface PylonsWeightedOutputs {
@@ -679,7 +679,7 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title pylons/cookbook.proto
+ * @title pylons/accounts.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -687,12 +687,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryPylonsAccountByAddress
+   * @name QueryUsernameByAddress
    * @summary Queries a list of getAccountByAddress items.
    * @request GET:/pylons/account/address/{address}
    */
-  queryPylonsAccountByAddress = (address: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetAccountByAddressResponse, RpcStatus>({
+  queryUsernameByAddress = (address: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetUsernameByAddressResponse, RpcStatus>({
       path: `/pylons/account/address/${address}`,
       method: "GET",
       format: "json",
@@ -703,12 +703,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * No description
    *
    * @tags Query
-   * @name QueryPylonsAccountByUsername
+   * @name QueryAddressByUsername
    * @summary Queries a username by account.
    * @request GET:/pylons/account/username/{username}
    */
-  queryPylonsAccountByUsername = (username: string, params: RequestParams = {}) =>
-    this.request<PylonsQueryGetAccountByUsernameResponse, RpcStatus>({
+  queryAddressByUsername = (username: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetAddressByUsernameResponse, RpcStatus>({
       path: `/pylons/account/username/${username}`,
       method: "GET",
       format: "json",

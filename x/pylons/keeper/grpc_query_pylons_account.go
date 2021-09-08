@@ -10,21 +10,21 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) PylonsAccountByUsername(goCtx context.Context, req *types.QueryGetAccountByUsernameRequest) (*types.QueryGetAccountByUsernameResponse, error) {
+func (k Keeper) AddressByUsername(goCtx context.Context, req *types.QueryGetAddressByUsernameRequest) (*types.QueryGetAddressByUsernameResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	val, found := k.GetPylonsAccountByUsername(ctx, req.Username)
+	val, found := k.GetAddressByUsername(ctx, req.Username)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetAccountByUsernameResponse{PylonsAccount: val}, nil
+	return &types.QueryGetAddressByUsernameResponse{Address: val}, nil
 }
 
-func (k Keeper) PylonsAccountByAddress(goCtx context.Context, req *types.QueryGetAccountByAddressRequest) (*types.QueryGetAccountByAddressResponse, error) {
+func (k Keeper) UsernameByAddress(goCtx context.Context, req *types.QueryGetUsernameByAddressRequest) (*types.QueryGetUsernameByAddressResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
@@ -35,10 +35,10 @@ func (k Keeper) PylonsAccountByAddress(goCtx context.Context, req *types.QueryGe
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
 	}
 
-	val, found := k.GetPylonsAccountByAddress(ctx, req.Address)
+	val, found := k.GetUsernameByAddress(ctx, req.Address)
 	if !found {
 		return nil, status.Error(codes.InvalidArgument, "not found")
 	}
 
-	return &types.QueryGetAccountByAddressResponse{PylonsAccount: val}, nil
+	return &types.QueryGetUsernameByAddressResponse{Username: val}, nil
 }

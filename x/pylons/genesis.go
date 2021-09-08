@@ -11,9 +11,11 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
-	// Set all the username
-	for _, elem := range genState.PylonsAccountList {
-		k.SetPylonsAccount(ctx, elem)
+	// Set all the account mappings
+	for _, elem := range genState.AccountList {
+		username := types.Username{Value: elem.Username}
+		accountAddr := types.AccountAddr{Value: elem.Account}
+		k.SetPylonsAccount(ctx, accountAddr, username)
 	}
 
 	// Set all the trade
@@ -80,7 +82,7 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	usernameList := k.GetAllPylonsAccount(ctx)
 	for _, elem := range usernameList {
 		elem := elem
-		genesis.PylonsAccountList = append(genesis.PylonsAccountList, elem)
+		genesis.AccountList = append(genesis.AccountList, elem)
 	}
 
 	// Get all trade

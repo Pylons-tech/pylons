@@ -24,18 +24,15 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, addr))
 	}
 
-	// set the username in the store
-	pylonsAccount := types.UserMap{
-		Account:  msg.Creator,
-		Username: msg.Username,
-	}
+	username := types.Username{Value: msg.Username}
+	accountAddr := types.AccountAddr{Value: msg.Creator}
 
-	found := k.HasPylonsAccount(ctx, pylonsAccount)
+	found := k.HasUsername(ctx, username) || k.HasAccountAddr(ctx, accountAddr)
 	if found {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
 	}
 
-	k.SetPylonsAccount(ctx, pylonsAccount)
+	k.SetPylonsAccount(ctx, accountAddr, username)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCreateAccount{
 		Address:  msg.Creator,
@@ -57,18 +54,15 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
 	}
 
-	// set the username in the store
-	pylonsAccount := types.UserMap{
-		Account:  msg.Creator,
-		Username: msg.Username,
+	username := types.Username{Value: msg.Username}
+	accountAddr := types.AccountAddr{Value: msg.Creator}
+
+	found := k.HasUsername(ctx, username)
+	if found {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
 	}
 
-	found := k.HasPylonsAccount(ctx, pylonsAccount)
-	if !found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account not created")
-	}
-
-	k.SetPylonsAccount(ctx, pylonsAccount)
+	k.SetPylonsAccount(ctx, accountAddr, username)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventUpdateAccount{
 		Address:  msg.Creator,

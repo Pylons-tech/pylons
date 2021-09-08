@@ -1,6 +1,7 @@
 export interface ProtobufAny {
-    typeUrl?: string;
-    /** @format byte */
+    "@type"?: string;
+}
+export interface PylonsAccountAddr {
     value?: string;
 }
 export interface PylonsCoinInput {
@@ -210,11 +211,8 @@ export declare type PylonsMsgTransferCookbookResponse = object;
 export declare type PylonsMsgUpdateAccountResponse = object;
 export declare type PylonsMsgUpdateCookbookResponse = object;
 export declare type PylonsMsgUpdateRecipeResponse = object;
-export interface PylonsQueryGetAccountByAddressResponse {
-    pylonsAccount?: PylonsUserMap;
-}
-export interface PylonsQueryGetAccountByUsernameResponse {
-    pylonsAccount?: PylonsUserMap;
+export interface PylonsQueryGetAddressByUsernameResponse {
+    address?: PylonsAccountAddr;
 }
 export interface PylonsQueryGetCookbookResponse {
     Cookbook?: PylonsCookbook;
@@ -234,6 +232,9 @@ export interface PylonsQueryGetRecipeResponse {
 }
 export interface PylonsQueryGetTradeResponse {
     Trade?: PylonsTrade;
+}
+export interface PylonsQueryGetUsernameByAddressResponse {
+    username?: PylonsUsername;
 }
 export interface PylonsQueryListCookbooksByCreatorResponse {
     Cookbooks?: PylonsCookbook[];
@@ -305,9 +306,8 @@ export interface PylonsTrade {
     receiver?: string;
     tradedItemInputs?: PylonsItemRef[];
 }
-export interface PylonsUserMap {
-    account?: string;
-    username?: string;
+export interface PylonsUsername {
+    value?: string;
 }
 export interface PylonsWeightedOutputs {
     entryIDs?: string[];
@@ -434,7 +434,7 @@ export declare class HttpClient<SecurityDataType = unknown> {
     request: <T = any, E = any>({ body, secure, path, type, query, format, baseUrl, cancelToken, ...params }: FullRequestParams) => Promise<HttpResponse<T, E>>;
 }
 /**
- * @title pylons/cookbook.proto
+ * @title pylons/accounts.proto
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
@@ -442,20 +442,20 @@ export declare class Api<SecurityDataType extends unknown> extends HttpClient<Se
      * No description
      *
      * @tags Query
-     * @name QueryPylonsAccountByAddress
+     * @name QueryUsernameByAddress
      * @summary Queries a list of getAccountByAddress items.
      * @request GET:/pylons/account/address/{address}
      */
-    queryPylonsAccountByAddress: (address: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountByAddressResponse, RpcStatus>>;
+    queryUsernameByAddress: (address: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetUsernameByAddressResponse, RpcStatus>>;
     /**
      * No description
      *
      * @tags Query
-     * @name QueryPylonsAccountByUsername
+     * @name QueryAddressByUsername
      * @summary Queries a username by account.
      * @request GET:/pylons/account/username/{username}
      */
-    queryPylonsAccountByUsername: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAccountByUsernameResponse, RpcStatus>>;
+    queryAddressByUsername: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAddressByUsernameResponse, RpcStatus>>;
     /**
      * No description
      *

@@ -52,9 +52,9 @@ func TestShowAccountByUsername(t *testing.T) {
 				require.ErrorIs(t, stat.Err(), tc.err)
 			} else {
 				require.NoError(t, err)
-				var resp types.QueryGetAccountByUsernameResponse
+				var resp types.QueryGetAddressByUsernameResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.Equal(t, tc.obj, resp.PylonsAccount)
+				require.Equal(t, tc.obj.Account, resp.Address.Value)
 			}
 		})
 	}
@@ -98,9 +98,9 @@ func TestShowAccountByAccount(t *testing.T) {
 				require.ErrorIs(t, stat.Err(), tc.err)
 			} else {
 				require.NoError(t, err)
-				var resp types.QueryGetAccountByAddressResponse
+				var resp types.QueryGetUsernameByAddressResponse
 				require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
-				require.Equal(t, tc.obj, resp.PylonsAccount)
+				require.Equal(t, tc.obj.Username, resp.Username.Value)
 			}
 		})
 	}

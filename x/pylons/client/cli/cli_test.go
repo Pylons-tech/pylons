@@ -21,7 +21,7 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.U
 	creators := types.GenTestBech32List(n)
 
 	for i := 0; i < n; i++ {
-		state.PylonsAccountList = append(state.PylonsAccountList,
+		state.AccountList = append(state.AccountList,
 			types.UserMap{
 				Account:  creators[i],
 				Username: "user" + strconv.Itoa(i),
@@ -30,7 +30,7 @@ func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.U
 	buf, err := cfg.Codec.MarshalJSON(&state)
 	require.NoError(t, err)
 	cfg.GenesisState[types.ModuleName] = buf
-	return network.New(t, cfg), state.PylonsAccountList
+	return network.New(t, cfg), state.AccountList
 }
 
 func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {

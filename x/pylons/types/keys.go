@@ -65,5 +65,7 @@ const (
 	// TradeCountKey is a string used as prefix to the KVStore
 	TradeCountKey = "Trade-count-"
 	// UsernameKey is a string used as prefix to the KVStore
-	UsernameKey = "PylonsAccount-value-"
+	UsernameKey = "Username-value-"
+	// AccountKey is a string used as prefix to the KVStore
+	AccountKey = "PylonsAccount-value-"
 )

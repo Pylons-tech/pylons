@@ -9,3 +9,11 @@ message UserMap {
   string account = 1;
   string username = 2;
 }
+
+message Username {
+  string value = 1;
+}
+
+message AccountAddr {
+  string value = 2;
+}

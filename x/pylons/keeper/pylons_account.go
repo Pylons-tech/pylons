@@ -10,29 +10,39 @@ import (
 // SetPylonsAccount set a specific pylons account in the store from its index
 // this function sets two symmetric KVStores with address -> username
 // and username -> address mappings
-func (k Keeper) SetPylonsAccount(ctx sdk.Context, account types.UserMap) {
-	b := k.cdc.MustMarshalBinaryBare(&account)
-	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+func (k Keeper) SetPylonsAccount(ctx sdk.Context, accountAddr types.AccountAddr, username types.Username) {
+	binaryAddr := k.cdc.MustMarshalBinaryBare(&accountAddr)
+	binaryUsername := k.cdc.MustMarshalBinaryBare(&username)
+	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
 
-	prefixStore.Set(types.KeyPrefix(account.Username), b)
-	prefixStore.Set(types.KeyPrefix(account.Account), b)
+	usernamePrefixStore.Set(types.KeyPrefix(username.Value), binaryAddr)
+	accountPrefixStore.Set(types.KeyPrefix(accountAddr.Value), binaryUsername)
 }
 
-// HasPylonsAccount checks if the account exists in the store for either of the symmetric mappings
-func (k Keeper) HasPylonsAccount(ctx sdk.Context, account types.UserMap) bool {
-	prefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+// HasUsername checks if the username exists in the store
+func (k Keeper) HasUsername(ctx sdk.Context, username types.Username) bool {
+	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
 
-	has := prefixStore.Has(types.KeyPrefix(account.Username))
-	has = has || prefixStore.Has(types.KeyPrefix(account.Account))
+	has := usernamePrefixStore.Has(types.KeyPrefix(username.Value))
 
 	return has
 }
 
-// GetPylonsAccountByUsername returns a pylons account from using its username
-func (k Keeper) GetPylonsAccountByUsername(ctx sdk.Context, username string) (val types.UserMap, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+// HasAccountAddr checks if the accountAddr exists in the store
+func (k Keeper) HasAccountAddr(ctx sdk.Context, accountAddr types.AccountAddr) bool {
+	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
 
-	b := store.Get(types.KeyPrefix(username))
+	has := accountPrefixStore.Has(types.KeyPrefix(accountAddr.Value))
+
+	return has
+}
+
+// GetAddressByUsername returns an address corresponding to its username
+func (k Keeper) GetAddressByUsername(ctx sdk.Context, username string) (val types.AccountAddr, found bool) {
+	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+
+	b := usernamePrefixStore.Get(types.KeyPrefix(username))
 	if b == nil {
 		return val, false
 	}
@@ -41,11 +51,11 @@ func (k Keeper) GetPylonsAccountByUsername(ctx sdk.Context, username string) (va
 	return val, true
 }
 
-// GetPylonsAccountByAddress returns a pylons account from using its cosmos address
-func (k Keeper) GetPylonsAccountByAddress(ctx sdk.Context, address string) (val types.UserMap, found bool) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+// GetUsernameByAddress returns a username corresponding to its address
+func (k Keeper) GetUsernameByAddress(ctx sdk.Context, address string) (val types.Username, found bool) {
+	accountPrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AccountKey))
 
-	b := store.Get(types.KeyPrefix(address))
+	b := accountPrefixStore.Get(types.KeyPrefix(address))
 	if b == nil {
 		return val, false
 	}
@@ -54,17 +64,21 @@ func (k Keeper) GetPylonsAccountByAddress(ctx sdk.Context, address string) (val 
 	return val, true
 }
 
-// GetAllPylonsAccount returns all username
+// GetAllPylonsAccount returns symmetric username mappings
 func (k Keeper) GetAllPylonsAccount(ctx sdk.Context) (list []types.UserMap) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
-	iterator := sdk.KVStorePrefixIterator(store, []byte{})
+	usernamePrefixStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.UsernameKey))
+	iterator := sdk.KVStorePrefixIterator(usernamePrefixStore, []byte{})
 
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		var val types.UserMap
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
-		list = append(list, val)
+		var account types.AccountAddr
+		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &account)
+		username, found := k.GetUsernameByAddress(ctx, account.Value)
+		if found {
+			list = append(list, types.UserMap{Account: account.Value, Username: username.Value})
+		}
+
 	}
 
 	return

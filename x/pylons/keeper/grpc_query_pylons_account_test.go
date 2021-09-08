@@ -8,7 +8,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (suite *IntegrationTestSuite) TestAccountQueryByUsernameSingle() {
+func (suite *IntegrationTestSuite) TestAddressQueryByUsernameSingle() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -17,23 +17,23 @@ func (suite *IntegrationTestSuite) TestAccountQueryByUsernameSingle() {
 	msgs := createNPylonsAccount(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetAccountByUsernameRequest
-		response *types.QueryGetAccountByUsernameResponse
+		request  *types.QueryGetAddressByUsernameRequest
+		response *types.QueryGetAddressByUsernameResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetAccountByUsernameRequest{Username: msgs[0].Username},
-			response: &types.QueryGetAccountByUsernameResponse{PylonsAccount: msgs[0]},
+			request:  &types.QueryGetAddressByUsernameRequest{Username: msgs[0].Username},
+			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[0].Account}},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetAccountByUsernameRequest{Username: msgs[1].Username},
-			response: &types.QueryGetAccountByUsernameResponse{PylonsAccount: msgs[1]},
+			request:  &types.QueryGetAddressByUsernameRequest{Username: msgs[1].Username},
+			response: &types.QueryGetAddressByUsernameResponse{Address: types.AccountAddr{Value: msgs[1].Account}},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetAccountByUsernameRequest{Username: "missing"},
+			request: &types.QueryGetAddressByUsernameRequest{Username: "missing"},
 			err:     status.Error(codes.InvalidArgument, "not found"),
 		},
 		{
@@ -43,7 +43,7 @@ func (suite *IntegrationTestSuite) TestAccountQueryByUsernameSingle() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-			response, err := k.PylonsAccountByUsername(wctx, tc.request)
+			response, err := k.AddressByUsername(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {
@@ -53,7 +53,7 @@ func (suite *IntegrationTestSuite) TestAccountQueryByUsernameSingle() {
 	}
 }
 
-func (suite *IntegrationTestSuite) TestAccountQueryByAddressSingle() {
+func (suite *IntegrationTestSuite) TestUsernameQueryByAddressSingle() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -62,23 +62,23 @@ func (suite *IntegrationTestSuite) TestAccountQueryByAddressSingle() {
 	msgs := createNPylonsAccount(k, ctx, 2)
 	for _, tc := range []struct {
 		desc     string
-		request  *types.QueryGetAccountByAddressRequest
-		response *types.QueryGetAccountByAddressResponse
+		request  *types.QueryGetUsernameByAddressRequest
+		response *types.QueryGetUsernameByAddressResponse
 		err      error
 	}{
 		{
 			desc:     "First",
-			request:  &types.QueryGetAccountByAddressRequest{Address: msgs[0].Account},
-			response: &types.QueryGetAccountByAddressResponse{PylonsAccount: msgs[0]},
+			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[0].Account},
+			response: &types.QueryGetUsernameByAddressResponse{Username: types.Username{Value: msgs[0].Username}},
 		},
 		{
 			desc:     "Second",
-			request:  &types.QueryGetAccountByAddressRequest{Address: msgs[1].Account},
-			response: &types.QueryGetAccountByAddressResponse{PylonsAccount: msgs[1]},
+			request:  &types.QueryGetUsernameByAddressRequest{Address: msgs[1].Account},
+			response: &types.QueryGetUsernameByAddressResponse{Username: types.Username{Value: msgs[1].Username}},
 		},
 		{
 			desc:    "KeyNotFound",
-			request: &types.QueryGetAccountByAddressRequest{Address: "missing"},
+			request: &types.QueryGetUsernameByAddressRequest{Address: "missing"},
 			err:     status.Error(codes.InvalidArgument, "invalid address"),
 		},
 		{
@@ -88,7 +88,7 @@ func (suite *IntegrationTestSuite) TestAccountQueryByAddressSingle() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-			response, err := k.PylonsAccountByAddress(wctx, tc.request)
+			response, err := k.UsernameByAddress(wctx, tc.request)
 			if tc.err != nil {
 				require.ErrorIs(err, tc.err)
 			} else {

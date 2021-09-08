@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
-import "pylons/user_map.proto";
+import "pylons/accounts.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
@@ -20,13 +20,13 @@ service Query {
 	// this line is used by starport scaffolding # 2
 
 	// Queries a list of getAccountByAddress items.
-	rpc PylonsAccountByAddress(QueryGetAccountByAddressRequest) returns (QueryGetAccountByAddressResponse) {
+	rpc UsernameByAddress(QueryGetUsernameByAddressRequest) returns (QueryGetUsernameByAddressResponse) {
 		option (google.api.http).get = "/pylons/account/address/{address}";
 	}
 
 
 	// Queries a username by account.
-	rpc PylonsAccountByUsername(QueryGetAccountByUsernameRequest) returns (QueryGetAccountByUsernameResponse) {
+	rpc AddressByUsername(QueryGetAddressByUsernameRequest) returns (QueryGetAddressByUsernameResponse) {
 		option (google.api.http).get = "/pylons/account/username/{username}";
 	}
 
@@ -98,20 +98,20 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
-message QueryGetAccountByAddressRequest {
+message QueryGetUsernameByAddressRequest {
   string address = 1;
 }
 
-message QueryGetAccountByUsernameRequest {
+message QueryGetAddressByUsernameRequest {
 	string username = 1;
 }
 
-message QueryGetAccountByAddressResponse {
-	UserMap pylonsAccount = 1 [(gogoproto.nullable) = false];
+message QueryGetUsernameByAddressResponse {
+	Username username = 1 [(gogoproto.nullable) = false];
 }
 
-message QueryGetAccountByUsernameResponse {
-	UserMap pylonsAccount = 1 [(gogoproto.nullable) = false];
+message QueryGetAddressByUsernameResponse {
+	AccountAddr address = 1 [(gogoproto.nullable) = false];
 }
 
 
