@@ -30,4 +30,5 @@ message Params {
   cosmos.base.v1beta1.Coin UpdateItemStringFee = 6 [(gogoproto.moretags) = "yaml:\"update_item_string_fee\"", (gogoproto.nullable) = false];
   string minTransferFee = 7 [(gogoproto.moretags) = "yaml:\"min_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
   string maxTransferFee = 8 [(gogoproto.moretags) = "yaml:\"max_transfer_fee\"", (gogoproto.nullable) = false, (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
+  cosmos.base.v1beta1.Coin UpdateUsernameFee = 9 [(gogoproto.moretags) = "yaml:\"update_username_fee\"", (gogoproto.nullable) = false];
 }

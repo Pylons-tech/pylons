@@ -221,6 +221,9 @@ export const Params = {
         if (message.maxTransferFee !== '') {
             writer.uint32(66).string(message.maxTransferFee);
         }
+        if (message.UpdateUsernameFee !== undefined) {
+            Coin.encode(message.UpdateUsernameFee, writer.uint32(74).fork()).ldelim();
+        }
         return writer;
     },
     decode(input, length) {
@@ -254,6 +257,9 @@ export const Params = {
                     break;
                 case 8:
                     message.maxTransferFee = reader.string();
+                    break;
+                case 9:
+                    message.UpdateUsernameFee = Coin.decode(reader, reader.uint32());
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -312,6 +318,12 @@ export const Params = {
         else {
             message.maxTransferFee = '';
         }
+        if (object.UpdateUsernameFee !== undefined && object.UpdateUsernameFee !== null) {
+            message.UpdateUsernameFee = Coin.fromJSON(object.UpdateUsernameFee);
+        }
+        else {
+            message.UpdateUsernameFee = undefined;
+        }
         return message;
     },
     toJSON(message) {
@@ -329,6 +341,7 @@ export const Params = {
         message.UpdateItemStringFee !== undefined && (obj.UpdateItemStringFee = message.UpdateItemStringFee ? Coin.toJSON(message.UpdateItemStringFee) : undefined);
         message.minTransferFee !== undefined && (obj.minTransferFee = message.minTransferFee);
         message.maxTransferFee !== undefined && (obj.maxTransferFee = message.maxTransferFee);
+        message.UpdateUsernameFee !== undefined && (obj.UpdateUsernameFee = message.UpdateUsernameFee ? Coin.toJSON(message.UpdateUsernameFee) : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -380,6 +393,12 @@ export const Params = {
         }
         else {
             message.maxTransferFee = '';
+        }
+        if (object.UpdateUsernameFee !== undefined && object.UpdateUsernameFee !== null) {
+            message.UpdateUsernameFee = Coin.fromPartial(object.UpdateUsernameFee);
+        }
+        else {
+            message.UpdateUsernameFee = undefined;
         }
         return message;
     }

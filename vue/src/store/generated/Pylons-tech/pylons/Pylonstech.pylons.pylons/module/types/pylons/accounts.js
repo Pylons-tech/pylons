@@ -1,11 +1,11 @@
 /* eslint-disable */
 import { Writer, Reader } from 'protobufjs/minimal';
 export const protobufPackage = 'Pylonstech.pylons.pylons';
-const baseUserMap = { account: '', username: '' };
+const baseUserMap = { accountAddr: '', username: '' };
 export const UserMap = {
     encode(message, writer = Writer.create()) {
-        if (message.account !== '') {
-            writer.uint32(10).string(message.account);
+        if (message.accountAddr !== '') {
+            writer.uint32(10).string(message.accountAddr);
         }
         if (message.username !== '') {
             writer.uint32(18).string(message.username);
@@ -20,7 +20,7 @@ export const UserMap = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.account = reader.string();
+                    message.accountAddr = reader.string();
                     break;
                 case 2:
                     message.username = reader.string();
@@ -34,11 +34,11 @@ export const UserMap = {
     },
     fromJSON(object) {
         const message = { ...baseUserMap };
-        if (object.account !== undefined && object.account !== null) {
-            message.account = String(object.account);
+        if (object.accountAddr !== undefined && object.accountAddr !== null) {
+            message.accountAddr = String(object.accountAddr);
         }
         else {
-            message.account = '';
+            message.accountAddr = '';
         }
         if (object.username !== undefined && object.username !== null) {
             message.username = String(object.username);
@@ -50,17 +50,17 @@ export const UserMap = {
     },
     toJSON(message) {
         const obj = {};
-        message.account !== undefined && (obj.account = message.account);
+        message.accountAddr !== undefined && (obj.accountAddr = message.accountAddr);
         message.username !== undefined && (obj.username = message.username);
         return obj;
     },
     fromPartial(object) {
         const message = { ...baseUserMap };
-        if (object.account !== undefined && object.account !== null) {
-            message.account = object.account;
+        if (object.accountAddr !== undefined && object.accountAddr !== null) {
+            message.accountAddr = object.accountAddr;
         }
         else {
-            message.account = '';
+            message.accountAddr = '';
         }
         if (object.username !== undefined && object.username !== null) {
             message.username = object.username;

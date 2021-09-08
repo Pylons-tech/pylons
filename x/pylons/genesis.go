@@ -14,7 +14,7 @@ func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) 
 	// Set all the account mappings
 	for _, elem := range genState.AccountList {
 		username := types.Username{Value: elem.Username}
-		accountAddr := types.AccountAddr{Value: elem.Account}
+		accountAddr := types.AccountAddr{Value: elem.AccountAddr}
 		k.SetPylonsAccount(ctx, accountAddr, username)
 	}
 
@@ -80,71 +80,47 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	// this line is used by starport scaffolding # genesis/module/export
 	// Get all username
 	usernameList := k.GetAllPylonsAccount(ctx)
-	for _, elem := range usernameList {
-		elem := elem
-		genesis.AccountList = append(genesis.AccountList, elem)
-	}
+	genesis.AccountList = append(genesis.AccountList, usernameList...)
 
 	// Get all trade
 	tradeList := k.GetAllTrade(ctx)
-	for _, elem := range tradeList {
-		elem := elem
-		genesis.TradeList = append(genesis.TradeList, elem)
-	}
+	genesis.TradeList = append(genesis.TradeList, tradeList...)
 
 	// Set the current count
 	genesis.TradeCount = k.GetTradeCount(ctx)
 
 	// Get all googlIAPOrder
 	googlIAPOrderList := k.GetAllGoogleIAPOrder(ctx)
-	for _, elem := range googlIAPOrderList {
-		elem := elem
-		genesis.GoogleInAppPurchaseOrderList = append(genesis.GoogleInAppPurchaseOrderList, elem)
-	}
+	genesis.GoogleInAppPurchaseOrderList = append(genesis.GoogleInAppPurchaseOrderList, googlIAPOrderList...)
 
 	// Set the current count
 	genesis.GoogleIAPOrderCount = k.GetGoogleIAPOrderCount(ctx)
 
 	// Get all pending execution
 	pendingExecutionList := k.GetAllPendingExecution(ctx)
-	for _, elem := range pendingExecutionList {
-		elem := elem
-		genesis.PendingExecutionList = append(genesis.PendingExecutionList, elem)
-	}
+	genesis.PendingExecutionList = append(genesis.PendingExecutionList, pendingExecutionList...)
 
 	// Set the current count
 	genesis.PendingExecutionCount = k.GetPendingExecutionCount(ctx)
 
 	// Get all execution
 	executionList := k.GetAllExecution(ctx)
-	for _, elem := range executionList {
-		elem := elem
-		genesis.ExecutionList = append(genesis.ExecutionList, elem)
-	}
+	genesis.ExecutionList = append(genesis.ExecutionList, executionList...)
 
 	// Set the current count
 	genesis.ExecutionCount = k.GetExecutionCount(ctx)
 
 	// Get all item
 	itemList := k.GetAllItem(ctx)
-	for _, elem := range itemList {
-		elem := elem
-		genesis.ItemList = append(genesis.ItemList, elem)
-	}
+	genesis.ItemList = append(genesis.ItemList, itemList...)
 
 	// Get all recipe
 	recipeList := k.GetAllRecipe(ctx)
-	for _, elem := range recipeList {
-		elem := elem
-		genesis.RecipeList = append(genesis.RecipeList, elem)
-	}
+	genesis.RecipeList = append(genesis.RecipeList, recipeList...)
 
 	// Get all cookbook
 	cookbookList := k.GetAllCookbook(ctx)
-	for _, elem := range cookbookList {
-		elem := elem
-		genesis.CookbookList = append(genesis.CookbookList, elem)
-	}
+	genesis.CookbookList = append(genesis.CookbookList, cookbookList...)
 
 	params := k.GetParams(ctx)
 	genesis.Params = params

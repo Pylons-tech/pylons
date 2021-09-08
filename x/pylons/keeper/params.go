@@ -57,6 +57,12 @@ func (k Keeper) UpdateItemStringFee(ctx sdk.Context) (res sdk.Coin) {
 	return
 }
 
+// UpdateUsernameFee returns the UpdateUsernameFee param
+func (k Keeper) UpdateUsernameFee(ctx sdk.Context) (res sdk.Coin) {
+	k.paramSpace.Get(ctx, types.ParamStoreKeyUpdateUsernameFee, &res)
+	return
+}
+
 // MinTransferFee returns the MinTransferFee param
 func (k Keeper) MinTransferFee(ctx sdk.Context) (res sdk.Int) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyMinTransferFee, &res)

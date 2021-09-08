@@ -21,6 +21,7 @@ export interface Params {
     UpdateItemStringFee: Coin | undefined;
     minTransferFee: string;
     maxTransferFee: string;
+    UpdateUsernameFee: Coin | undefined;
 }
 export declare const GoogleInAppPurchasePackage: {
     encode(message: GoogleInAppPurchasePackage, writer?: Writer): Writer;

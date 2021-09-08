@@ -1,7 +1,7 @@
 import { Writer, Reader } from 'protobufjs/minimal';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface UserMap {
-    account: string;
+    accountAddr: string;
     username: string;
 }
 export interface Username {

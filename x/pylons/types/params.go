@@ -32,6 +32,7 @@ var (
 	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
 	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("0.10")
 	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
+	DefaultUpdateUsernameFee            = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
 	DefaultMinTransferFee               = sdk.OneInt()
 	DefaultMaxTransferFee               = sdk.NewInt(10000)
 )
@@ -46,6 +47,7 @@ var (
 	ParamStoreKeyUpdateItemStringFee       = []byte("UpdateItemStringFee")
 	ParamStoreKeyMinTransferFee            = []byte("MinTransferFee")
 	ParamStoreKeyMaxTransferFee            = []byte("MaxTransferFee")
+	ParamStoreKeyUpdateUsernameFee         = []byte("UpdateUsernameFee")
 )
 
 // NewParams creates a new Params object
@@ -58,6 +60,7 @@ func NewParams(
 	updateItemStringFee sdk.Coin,
 	minTransferFee sdk.Int,
 	maxTransferFee sdk.Int,
+	updateUsernameFee sdk.Coin,
 ) Params {
 	return Params{
 		MinNameFieldLength:        minNameFieldLength,
@@ -68,6 +71,7 @@ func NewParams(
 		UpdateItemStringFee:       updateItemStringFee,
 		MinTransferFee:            minTransferFee,
 		MaxTransferFee:            maxTransferFee,
+		UpdateUsernameFee:         updateUsernameFee,
 	}
 }
 
@@ -82,6 +86,7 @@ func DefaultParams() Params {
 		DefaultUpdateItemStringFee,
 		DefaultMinTransferFee,
 		DefaultMaxTransferFee,
+		DefaultUpdateUsernameFee,
 	)
 }
 
@@ -107,6 +112,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyRecipeFeePercentage, &p.RecipeFeePercentage, validateDecPercentage),
 		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
+		paramtypes.NewParamSetPair(ParamStoreKeyUpdateUsernameFee, &p.UpdateUsernameFee, validateCoinFee),
 	}
 }
 

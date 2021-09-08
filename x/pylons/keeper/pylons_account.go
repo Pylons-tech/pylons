@@ -76,7 +76,7 @@ func (k Keeper) GetAllPylonsAccount(ctx sdk.Context) (list []types.UserMap) {
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &account)
 		username, found := k.GetUsernameByAddress(ctx, account.Value)
 		if found {
-			list = append(list, types.UserMap{Account: account.Value, Username: username.Value})
+			list = append(list, types.UserMap{AccountAddr: account.Value, Username: username.Value})
 		}
 
 	}

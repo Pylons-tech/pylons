@@ -36,10 +36,10 @@ func (gs GenesisState) Validate() error {
 	usernameIndexMap := make(map[string]bool)
 
 	for _, elem := range gs.AccountList {
-		if _, ok := accountAddrIndexMap[elem.Account]; ok {
+		if _, ok := accountAddrIndexMap[elem.AccountAddr]; ok {
 			return fmt.Errorf("duplicated account")
 		}
-		accountAddrIndexMap[elem.Account] = true
+		accountAddrIndexMap[elem.AccountAddr] = true
 
 		if _, ok := usernameIndexMap[elem.Username]; ok {
 			return fmt.Errorf("duplicated username" +
