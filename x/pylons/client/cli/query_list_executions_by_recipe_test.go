@@ -1,7 +1,5 @@
 package cli_test
 
-
-
 import (
 	"fmt"
 	"reflect"
@@ -19,31 +17,31 @@ import (
 )
 
 func TestCmdListExecutionsByRecipe(t *testing.T) {
-	net, executions := networkWithExecutionObjects(t,2)
+	net, executions := networkWithExecutionObjects(t, 2)
 	ctx := net.Validators[0].ClientCtx
 	common := []string{
 		fmt.Sprintf("--%s=json", tmcli.OutputFlag),
 	}
-	for _, tc := range [] struct {
+	for _, tc := range []struct {
 		desc       string
 		recipeId   string
 		cookbookId string
-		args []string
-		err  error
-		obj  types.QueryListExecutionsByRecipeResponse
+		args       []string
+		err        error
+		obj        types.QueryListExecutionsByRecipeResponse
 	}{
 		{
-			desc:        "found1",
-			recipeId:    executions[0].RecipeID,
-			args:        common,
-			obj:         types.QueryListExecutionsByRecipeResponse{},
+			desc:     "found1",
+			recipeId: executions[0].RecipeID,
+			args:     common,
+			obj:      types.QueryListExecutionsByRecipeResponse{},
 		},
 		{
-			desc:        "found2",
-			recipeId:    executions[1].ID,
-			cookbookId : executions[1].CookbookID,
-			args:        common,
-			obj:         types.QueryListExecutionsByRecipeResponse{},
+			desc:       "found2",
+			recipeId:   executions[1].ID,
+			cookbookId: executions[1].CookbookID,
+			args:       common,
+			obj:        types.QueryListExecutionsByRecipeResponse{},
 		},
 		{
 			desc:       "not found",
@@ -62,7 +60,7 @@ func TestCmdListExecutionsByRecipe(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
-			args := []string{tc.cookbookId,tc.recipeId}
+			args := []string{tc.cookbookId, tc.recipeId}
 			args = append(args, tc.args...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdListExecutionsByRecipe(), args)
 			if tc.err != nil {

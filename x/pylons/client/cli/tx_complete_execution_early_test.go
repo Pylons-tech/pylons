@@ -3,11 +3,14 @@ package cli_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Pylons-tech/pylons/testutil/network"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
 	"testing"
+	"time"
+
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/Pylons-tech/pylons/testutil/network"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
@@ -50,12 +53,11 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 
-
-	coinInputsJson, _ := json.Marshal([] types.CoinInput{
-		types.CoinInput{
+	coinInputsJson, _ := json.Marshal([]types.CoinInput{
+		{
 			Coins: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1))),
 		},
-		types.CoinInput{
+		{
 			Coins: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1))),
 		},
 	},
@@ -82,7 +84,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	args = []string{cookbookID, recipeID,"1", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "1", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err2 := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err2)
@@ -91,8 +93,8 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	var executionsResponse types.QueryListExecutionsByRecipeResponse
-	args = []string{cookbookID, recipeID, "--output=json"} // empty list for item-ids since there is no item input
-	out,err = clitestutil.ExecTestCLICmd(ctx,cli.CmdListExecutionsByRecipe(),args)
+	args = []string{cookbookID, recipeID, "--output=json"}
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListExecutionsByRecipe(), args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
 	require.NotEmpty(t, executionsResponse.PendingExecutions)
@@ -103,19 +105,28 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 
 		testedExecutionId := testedExecution.ID
 		args = []string{testedExecutionId}
-		args = append(args,common...)
+		args = append(args, common...)
+
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCompleteExecutionEarly(), args)
 		require.NoError(t, err)
-		height, _:= net.LatestHeight()
-		execID := strconv.Itoa(int(height)) + "-" + "0"
+
+		// simulate a wait
+		height, err := net.LatestHeight()
+		targetHeight := height + 1
+		// build execID from the execution height
+		completedExecID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(0)
+		require.NoError(t, err)
+		_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+		require.NoError(t, err)
+
 		var resp sdk.TxResponse
 		require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
 
 		// Check whether the execution has the completed state or not
 		var executionsResponse types.QueryGetExecutionResponse
-		args = []string{execID, "--output=json"} // empty list for item-ids since there is no item input
-		out,err = clitestutil.ExecTestCLICmd(ctx,cli.CmdShowExecution(),args)
+		args = []string{completedExecID, "--output=json"}
+		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 		require.NoError(t, err)
 		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
 		require.True(t, executionsResponse.Completed)
