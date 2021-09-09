@@ -1,24 +1,22 @@
 package cli_test
 
-// TODO address coin initialization for testing
-
-/*
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Pylons-tech/pylons/testutil/network"
-	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
-	"github.com/Pylons-tech/pylons/x/pylons/types"
+	"strconv"
+	"testing"
+	"time"
+
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cast"
 	"github.com/stretchr/testify/require"
-	"strconv"
-	"testing"
-	"time"
-)
 
+	"github.com/Pylons-tech/pylons/testutil/network"
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+	"github.com/Pylons-tech/pylons/x/pylons/types"
+)
 
 func TestSetItemString(t *testing.T) {
 	net := network.New(t)
@@ -79,7 +77,7 @@ func TestSetItemString(t *testing.T) {
 				},
 				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
 				TradePercentage: tradePercentage,
-				AmountMinted: 0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -243,4 +241,3 @@ func TestSetItemString(t *testing.T) {
 		})
 	}
 }
-*/

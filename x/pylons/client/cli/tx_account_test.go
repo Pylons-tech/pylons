@@ -111,12 +111,28 @@ func TestCreateAccount(t *testing.T) {
 	}
 }
 
-// TODO finish
-/*
 func TestUpdateAccount(t *testing.T) {
-	net, accs := networkWithAccountObjects(t, 1)
+	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	username := "user"
+
+	// create account
+	args := []string{username}
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
 
 	for _, tc := range []struct {
 		desc     string
@@ -128,7 +144,7 @@ func TestUpdateAccount(t *testing.T) {
 	}{
 		{
 			desc:     "valid",
-			username: "validUser",
+			username: "validUpdatedUser",
 			address:  val.Address.String(),
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
@@ -175,25 +191,12 @@ func TestUpdateAccount(t *testing.T) {
 			},
 			err: types.ErrInvalidRequestField,
 		},
-		{
-			desc:     "duplicateUser",
-			username: "validUser",
-			address:  val.Address.String(),
-			flags: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
-				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
-				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
-				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
-			},
-			err:  nil,
-			code: sdkerrors.ErrInvalidRequest.ABCICode(),
-		},
 	} {
 		tc := tc
 		t.Run(tc.desc, func(t *testing.T) {
 			args := []string{tc.username}
 			args = append(args, tc.flags...)
-			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateAccount(), args)
 			if tc.err != nil {
 				require.ErrorIs(t, err, tc.err)
 			} else {
@@ -205,4 +208,3 @@ func TestUpdateAccount(t *testing.T) {
 		})
 	}
 }
-*/

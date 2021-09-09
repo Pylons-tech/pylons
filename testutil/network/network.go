@@ -1,9 +1,14 @@
 package network
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
+
+	"github.com/cosmos/cosmos-sdk/codec"
+
+	"github.com/Pylons-tech/pylons/x/pylons/types"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/crypto/hd"
@@ -47,6 +52,10 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 // genesis and single validator. All other parameters are inherited from cosmos-sdk/testutil/network.DefaultConfig
 func DefaultConfig() network.Config {
 	encoding := cosmoscmd.MakeEncodingConfig(app.ModuleBasics)
+
+	genState := app.ModuleBasics.DefaultGenesis(encoding.Marshaler)
+	genState["pylons"] = CustomGenesisHelper(encoding.Marshaler)
+
 	return network.Config{
 		Codec:             encoding.Marshaler,
 		TxConfig:          encoding.TxConfig,
@@ -62,18 +71,23 @@ func DefaultConfig() network.Config {
 				baseapp.SetMinGasPrices(val.AppConfig.MinGasPrices),
 			)
 		},
-		GenesisState:    app.ModuleBasics.DefaultGenesis(encoding.Marshaler),
+		GenesisState:    genState,
 		TimeoutCommit:   2 * time.Second,
 		ChainID:         "chain-" + tmrand.NewRand().Str(6),
 		NumValidators:   1,
 		BondDenom:       sdk.DefaultBondDenom,
 		MinGasPrices:    fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 		AccountTokens:   sdk.TokensFromConsensusPower(1000),
-		StakingTokens:   sdk.TokensFromConsensusPower(500),
-		BondedTokens:    sdk.TokensFromConsensusPower(100),
+		StakingTokens:   sdk.TokensFromConsensusPower(10000),
+		BondedTokens:    sdk.TokensFromConsensusPower(10000),
 		PruningStrategy: storetypes.PruningOptionNothing,
 		CleanupDir:      true,
 		SigningAlgo:     string(hd.Secp256k1Type),
 		KeyringOptions:  []keyring.Option{},
 	}
+}
+
+// CustomGenesisHelper returns the pylons module's custom genesis state.
+func CustomGenesisHelper(cdc codec.JSONMarshaler) json.RawMessage {
+	return cdc.MustMarshalJSON(types.NetworkTestGenesis())
 }

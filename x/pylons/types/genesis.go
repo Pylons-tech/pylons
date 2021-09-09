@@ -25,6 +25,23 @@ func DefaultGenesis() *GenesisState {
 	}
 }
 
+// NetworkTestGenesis returns the network test Pylons genesis state
+func NetworkTestGenesis() *GenesisState {
+	return &GenesisState{
+		// this line is used by starport scaffolding # ibc/genesistype/default
+		// this line is used by starport scaffolding # genesis/types/default
+		AccountList:                  []UserMap{},
+		TradeList:                    []Trade{},
+		GoogleInAppPurchaseOrderList: []GoogleInAppPurchaseOrder{},
+		PendingExecutionList:         []Execution{},
+		ExecutionList:                []Execution{},
+		ItemList:                     []Item{},
+		RecipeList:                   []Recipe{},
+		CookbookList:                 []Cookbook{},
+		Params:                       NetworkTestParams(),
+	}
+}
+
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {

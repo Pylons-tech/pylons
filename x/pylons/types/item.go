@@ -269,6 +269,9 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 }
 
 func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error) {
+	if balance.IsZero() {
+		return nil, errors.New("balance not sufficient")
+	}
 	// initialize permutation to start from all 0s
 	permutation := make([]int, len(items))
 	// the current index

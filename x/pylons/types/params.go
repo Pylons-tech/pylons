@@ -90,6 +90,21 @@ func DefaultParams() Params {
 	)
 }
 
+// NetworkTestParams returns default pylons Params
+func NetworkTestParams() Params {
+	return NewParams(
+		DefaultMinNameFieldLength,
+		DefaultMinDescriptionFieldLength,
+		DefaultCoinIssuers,
+		DefaultRecipeFeePercentage,
+		DefaultItemTransferFeePercentage,
+		sdk.NewCoin("node0token", sdk.NewInt(10)),
+		DefaultMinTransferFee,
+		DefaultMaxTransferFee,
+		sdk.NewCoin("node0token", sdk.NewInt(10)),
+	)
+}
+
 // String implements stringer interface
 func (p Params) String() string {
 	out, _ := yaml.Marshal(p)
