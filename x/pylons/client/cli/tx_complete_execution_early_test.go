@@ -32,7 +32,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		"testDeveloper",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"node0token\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -94,16 +94,27 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	out,err = clitestutil.ExecTestCLICmd(ctx,cli.CmdListExecutionsByRecipe(),args)
 	require.NoError(t, err)
 	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
+	require.NotEmpty(t, executionsResponse.PendingExecutions)
 
-	theExec := executionsResponse.CompletedExecutions[0]
-
-	//TODO see the blocks simulation thing (there is a delay that must be done)
 	t.Run("Test Complete Execution Early, existing cookbook", func(t *testing.T) {
-		args = []string{theExec.ID}
+
+		args = []string{executionsResponse.PendingExecutions[0].ID}
+		args = append(args,common...)
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCompleteExecutionEarly(), args)
 		require.NoError(t, err)
-		var resp types.MsgCompleteExecutionEarlyResponse
+		var resp sdk.TxResponse
 		require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
+		require.Equal(t, uint32(0), resp.Code)
+
+
+		// Once more, get the pending executions. It should have no remaining ones.
+		var executionsResponse types.QueryListExecutionsByRecipeResponse
+		args = []string{cookbookID, recipeID, "--output=json"} // empty list for item-ids since there is no item input
+		out,err = clitestutil.ExecTestCLICmd(ctx,cli.CmdListExecutionsByRecipe(),args)
+		require.NoError(t, err)
+		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
+		require.Empty(t, executionsResponse.PendingExecutions)
+
 	})
 
 }
