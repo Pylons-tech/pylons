@@ -272,6 +272,21 @@ func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error
 	if balance.IsZero() {
 		return nil, errors.New("balance not sufficient")
 	}
+
+	// if the balance will not cover an item transfer fees because of no matching denoms, error
+	for _, item := range items {
+		noMatchingDenoms := true
+		for _, coin := range item.TransferFee {
+			amt := balance.AmountOf(coin.Denom)
+			if !amt.IsZero() {
+				noMatchingDenoms = false
+			}
+		}
+		if noMatchingDenoms {
+			return nil, errors.New("balance specified in coin inputs invalid")
+		}
+	}
+
 	// initialize permutation to start from all 0s
 	permutation := make([]int, len(items))
 	// the current index
