@@ -6,6 +6,7 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"strconv"
 	"testing"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -96,27 +97,28 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
 	require.NotEmpty(t, executionsResponse.PendingExecutions)
 
+	var testedExecution = executionsResponse.PendingExecutions[0]
+
 	t.Run("Test Complete Execution Early, existing cookbook", func(t *testing.T) {
 
-		testedExecutionId := executionsResponse.PendingExecutions[0].ID
+		testedExecutionId := testedExecution.ID
 		args = []string{testedExecutionId}
 		args = append(args,common...)
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCompleteExecutionEarly(), args)
 		require.NoError(t, err)
+		height, _:= net.LatestHeight()
+		execID := strconv.Itoa(int(height)) + "-" + "0"
 		var resp sdk.TxResponse
 		require.NoError(t, net.Config.Codec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
 
-
-		// Once more, get the pending executions. It should have no remaining ones.
-		var executionsResponse types.QueryListExecutionsByRecipeResponse
-		args = []string{cookbookID, recipeID, "--output=json"} // empty list for item-ids since there is no item input
-		out,err = clitestutil.ExecTestCLICmd(ctx,cli.CmdListExecutionsByRecipe(),args)
+		// Check whether the execution has the completed state or not
+		var executionsResponse types.QueryGetExecutionResponse
+		args = []string{execID, "--output=json"} // empty list for item-ids since there is no item input
+		out,err = clitestutil.ExecTestCLICmd(ctx,cli.CmdShowExecution(),args)
 		require.NoError(t, err)
 		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
-		require.Empty(t, executionsResponse.PendingExecutions)
-		require.NotEmpty(t, executionsResponse.CompletedExecutions)
-		require.Equal(t, executionsResponse.CompletedExecutions[0].ID, testedExecutionId)
+		require.True(t, executionsResponse.Completed)
 
 	})
 
