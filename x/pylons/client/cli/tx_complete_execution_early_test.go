@@ -69,7 +69,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		"[]",
 		"{}",
 		"[]",
-		"1",
+		"100",
 		"true",
 		"extraInfo",
 	}
@@ -98,7 +98,8 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 
 	t.Run("Test Complete Execution Early, existing cookbook", func(t *testing.T) {
 
-		args = []string{executionsResponse.PendingExecutions[0].ID}
+		testedExecutionId := executionsResponse.PendingExecutions[0].ID
+		args = []string{testedExecutionId}
 		args = append(args,common...)
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCompleteExecutionEarly(), args)
 		require.NoError(t, err)
@@ -114,6 +115,8 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		require.NoError(t, err)
 		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
 		require.Empty(t, executionsResponse.PendingExecutions)
+		require.NotEmpty(t, executionsResponse.CompletedExecutions)
+		require.Equal(t, executionsResponse.CompletedExecutions[0].ID, testedExecutionId)
 
 	})
 
