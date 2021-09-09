@@ -90,7 +90,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 	require.NoError(t, err2)
 	var resp sdk.TxResponse
 	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
-	require.Equal(t, uint32(0), resp.Code)
+	require.Equal(t, uint32(0), resp.Code, resp.RawLog)
 
 	var executionsResponse types.QueryListExecutionsByRecipeResponse
 	args = []string{cookbookID, recipeID, "--output=json"}
@@ -127,6 +127,7 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 		var executionsResponse types.QueryGetExecutionResponse
 		args = []string{completedExecID, "--output=json"}
 		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+
 		require.NoError(t, err)
 		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &executionsResponse))
 		require.True(t, executionsResponse.Completed)
