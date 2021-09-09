@@ -55,10 +55,10 @@ func TestCmdCompleteExecutionEarly(t *testing.T) {
 
 	coinInputsJson, _ := json.Marshal([]types.CoinInput{
 		{
-			Coins: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1))),
+			Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 		},
 		{
-			Coins: sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1))),
+			Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
 		},
 	},
 	)
