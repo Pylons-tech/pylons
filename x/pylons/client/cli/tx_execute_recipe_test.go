@@ -41,6 +41,9 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"true",
 	}
 
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
+
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
@@ -69,10 +72,11 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 						Program: "",
 					},
 				},
-				MutableStrings: nil,
-				TransferFee:    []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:       0,
-				AmountMinted:   0,
+				MutableStrings:  nil,
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				TradePercentage: tradePercentage,
+				Quantity:        0,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -137,7 +141,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	// run it 10x in a loop
 	for i := 0; i < 10; i++ {
 		// create execution
-		args = []string{cookbookID, recipeID, "[]"} // empty list for item-ids since there is no item input
+		args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
 		args = append(args, common...)
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
@@ -192,6 +196,9 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"true",
 	}
 
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
+
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
@@ -226,9 +233,10 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:     1, // Set quantity so it can only be executed once
-				AmountMinted: 0,
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				Quantity:        1, // Set quantity so it can only be executed once
+				TradePercentage: tradePercentage,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -283,7 +291,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	args = []string{cookbookID, recipeID, "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -329,7 +337,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 
 	// try to execute again
 	// the response will be ok
-	args = []string{cookbookID, recipeID, "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -380,6 +388,9 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"true",
 	}
 
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
+
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
@@ -414,9 +425,10 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:     0, // Set quantity so it can only be executed once
-				AmountMinted: 0,
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				Quantity:        0, // Set quantity so it can only be executed once
+				TradePercentage: tradePercentage,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -471,7 +483,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	args = []string{cookbookID, recipeID, "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -547,6 +559,9 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"true",
 	}
 
+	tradePercentage, err := sdk.NewDecFromStr("0.01")
+	require.NoError(t, err)
+
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{
@@ -581,9 +596,10 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:  []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
-				Quantity:     0, // Set quantity so it can only be executed once
-				AmountMinted: 0,
+				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				Quantity:        0, // Set quantity so it can only be executed once
+				TradePercentage: tradePercentage,
+				AmountMinted:    0,
 			},
 		},
 		ItemModifyOutputs: nil,
@@ -639,7 +655,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
-	args = []string{cookbookID, recipeID, "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as Long from 'long';
 import { util, configure, Writer, Reader } from 'protobufjs/minimal';
+import { UserMap } from '../pylons/accounts';
 import { Trade } from '../pylons/trade';
 import { Params } from '../pylons/params';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
@@ -12,11 +13,14 @@ export const protobufPackage = 'Pylonstech.pylons.pylons';
 const baseGenesisState = { tradeCount: 0, entityCount: 0, googleIAPOrderCount: 0, executionCount: 0, pendingExecutionCount: 0 };
 export const GenesisState = {
     encode(message, writer = Writer.create()) {
+        for (const v of message.accountList) {
+            UserMap.encode(v, writer.uint32(114).fork()).ldelim();
+        }
         for (const v of message.tradeList) {
-            Trade.encode(v, writer.uint32(98).fork()).ldelim();
+            Trade.encode(v, writer.uint32(106).fork()).ldelim();
         }
         if (message.tradeCount !== 0) {
-            writer.uint32(104).uint64(message.tradeCount);
+            writer.uint32(96).uint64(message.tradeCount);
         }
         if (message.entityCount !== 0) {
             writer.uint32(88).uint64(message.entityCount);
@@ -57,6 +61,7 @@ export const GenesisState = {
         const reader = input instanceof Uint8Array ? new Reader(input) : input;
         let end = length === undefined ? reader.len : reader.pos + length;
         const message = { ...baseGenesisState };
+        message.accountList = [];
         message.tradeList = [];
         message.googleInAppPurchaseOrderList = [];
         message.executionList = [];
@@ -67,10 +72,13 @@ export const GenesisState = {
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
-                case 12:
-                    message.tradeList.push(Trade.decode(reader, reader.uint32()));
+                case 14:
+                    message.accountList.push(UserMap.decode(reader, reader.uint32()));
                     break;
                 case 13:
+                    message.tradeList.push(Trade.decode(reader, reader.uint32()));
+                    break;
+                case 12:
                     message.tradeCount = longToNumber(reader.uint64());
                     break;
                 case 11:
@@ -115,6 +123,7 @@ export const GenesisState = {
     },
     fromJSON(object) {
         const message = { ...baseGenesisState };
+        message.accountList = [];
         message.tradeList = [];
         message.googleInAppPurchaseOrderList = [];
         message.executionList = [];
@@ -122,6 +131,11 @@ export const GenesisState = {
         message.itemList = [];
         message.recipeList = [];
         message.cookbookList = [];
+        if (object.accountList !== undefined && object.accountList !== null) {
+            for (const e of object.accountList) {
+                message.accountList.push(UserMap.fromJSON(e));
+            }
+        }
         if (object.tradeList !== undefined && object.tradeList !== null) {
             for (const e of object.tradeList) {
                 message.tradeList.push(Trade.fromJSON(e));
@@ -197,6 +211,12 @@ export const GenesisState = {
     },
     toJSON(message) {
         const obj = {};
+        if (message.accountList) {
+            obj.accountList = message.accountList.map((e) => (e ? UserMap.toJSON(e) : undefined));
+        }
+        else {
+            obj.accountList = [];
+        }
         if (message.tradeList) {
             obj.tradeList = message.tradeList.map((e) => (e ? Trade.toJSON(e) : undefined));
         }
@@ -249,6 +269,7 @@ export const GenesisState = {
     },
     fromPartial(object) {
         const message = { ...baseGenesisState };
+        message.accountList = [];
         message.tradeList = [];
         message.googleInAppPurchaseOrderList = [];
         message.executionList = [];
@@ -256,6 +277,11 @@ export const GenesisState = {
         message.itemList = [];
         message.recipeList = [];
         message.cookbookList = [];
+        if (object.accountList !== undefined && object.accountList !== null) {
+            for (const e of object.accountList) {
+                message.accountList.push(UserMap.fromPartial(e));
+            }
+        }
         if (object.tradeList !== undefined && object.tradeList !== null) {
             for (const e of object.tradeList) {
                 message.tradeList.push(Trade.fromPartial(e));

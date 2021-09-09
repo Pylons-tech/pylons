@@ -12,14 +12,35 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
-func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []*types.Trade) {
+func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	creators := types.GenTestBech32List(n)
+
+	for i := 0; i < n; i++ {
+		state.AccountList = append(state.AccountList,
+			types.UserMap{
+				AccountAddr: creators[i],
+				Username:    "user" + strconv.Itoa(i),
+			})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.AccountList
+}
+
+func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Trade) {
 	t.Helper()
 	cfg := network.DefaultConfig()
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
 	for i := 0; i < n; i++ {
-		state.TradeList = append(state.TradeList, &types.Trade{
+		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          "creator",
 			ID:               uint64(i),
 			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
@@ -132,17 +153,18 @@ func networkWithItemObjects(t *testing.T, n int) (*network.Network, []types.Item
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
 			types.Item{
-				Owner:          addresses[i],
-				ID:             strconv.Itoa(i),
-				CookbookID:     "testCookbookID",
-				NodeVersion:    "0.0.1",
-				Doubles:        make([]types.DoubleKeyValue, 0),
-				Longs:          make([]types.LongKeyValue, 0),
-				Strings:        make([]types.StringKeyValue, 0),
-				MutableStrings: make([]types.StringKeyValue, 0),
-				Tradeable:      false,
-				LastUpdate:     0,
-				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
+				Owner:           addresses[i],
+				ID:              strconv.Itoa(i),
+				CookbookID:      "testCookbookID",
+				NodeVersion:     "0.0.1",
+				Doubles:         make([]types.DoubleKeyValue, 0),
+				Longs:           make([]types.LongKeyValue, 0),
+				Strings:         make([]types.StringKeyValue, 0),
+				MutableStrings:  make([]types.StringKeyValue, 0),
+				Tradeable:       false,
+				LastUpdate:      0,
+				TradePercentage: sdk.NewDec(0),
+				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)
@@ -162,17 +184,18 @@ func networkWithItemObjectsSingleOwner(t *testing.T, n int) (*network.Network, [
 	for i := 0; i < n; i++ {
 		state.ItemList = append(state.ItemList,
 			types.Item{
-				Owner:          addresses[0],
-				ID:             strconv.Itoa(i),
-				CookbookID:     "testCookbookID",
-				NodeVersion:    "0.0.1",
-				Doubles:        make([]types.DoubleKeyValue, 0),
-				Longs:          make([]types.LongKeyValue, 0),
-				Strings:        make([]types.StringKeyValue, 0),
-				MutableStrings: make([]types.StringKeyValue, 0),
-				Tradeable:      false,
-				LastUpdate:     0,
-				TransferFee:    []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
+				Owner:           addresses[0],
+				ID:              strconv.Itoa(i),
+				CookbookID:      "testCookbookID",
+				NodeVersion:     "0.0.1",
+				Doubles:         make([]types.DoubleKeyValue, 0),
+				Longs:           make([]types.LongKeyValue, 0),
+				Strings:         make([]types.StringKeyValue, 0),
+				MutableStrings:  make([]types.StringKeyValue, 0),
+				Tradeable:       false,
+				LastUpdate:      0,
+				TradePercentage: sdk.NewDec(0),
+				TransferFee:     []sdk.Coin{{Denom: "test", Amount: sdk.OneInt()}},
 			})
 	}
 	buf, err := cfg.Codec.MarshalJSON(&state)

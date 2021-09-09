@@ -1813,6 +1813,63 @@ export const WeightedOutputs = {
         return message;
     }
 };
+const baseCoinInput = {};
+export const CoinInput = {
+    encode(message, writer = Writer.create()) {
+        for (const v of message.coins) {
+            Coin.encode(v, writer.uint32(10).fork()).ldelim();
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseCoinInput };
+        message.coins = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.coins.push(Coin.decode(reader, reader.uint32()));
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseCoinInput };
+        message.coins = [];
+        if (object.coins !== undefined && object.coins !== null) {
+            for (const e of object.coins) {
+                message.coins.push(Coin.fromJSON(e));
+            }
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.coins) {
+            obj.coins = message.coins.map((e) => (e ? Coin.toJSON(e) : undefined));
+        }
+        else {
+            obj.coins = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseCoinInput };
+        message.coins = [];
+        if (object.coins !== undefined && object.coins !== null) {
+            for (const e of object.coins) {
+                message.coins.push(Coin.fromPartial(e));
+            }
+        }
+        return message;
+    }
+};
 const baseRecipe = { cookbookID: '', ID: '', nodeVersion: '', name: '', description: '', version: '', blockInterval: 0, enabled: false, extraInfo: '' };
 export const Recipe = {
     encode(message, writer = Writer.create()) {
@@ -1835,7 +1892,7 @@ export const Recipe = {
             writer.uint32(50).string(message.version);
         }
         for (const v of message.coinInputs) {
-            Coin.encode(v, writer.uint32(58).fork()).ldelim();
+            CoinInput.encode(v, writer.uint32(58).fork()).ldelim();
         }
         for (const v of message.itemInputs) {
             ItemInput.encode(v, writer.uint32(66).fork()).ldelim();
@@ -1886,7 +1943,7 @@ export const Recipe = {
                     message.version = reader.string();
                     break;
                 case 7:
-                    message.coinInputs.push(Coin.decode(reader, reader.uint32()));
+                    message.coinInputs.push(CoinInput.decode(reader, reader.uint32()));
                     break;
                 case 8:
                     message.itemInputs.push(ItemInput.decode(reader, reader.uint32()));
@@ -1956,7 +2013,7 @@ export const Recipe = {
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
-                message.coinInputs.push(Coin.fromJSON(e));
+                message.coinInputs.push(CoinInput.fromJSON(e));
             }
         }
         if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -2004,7 +2061,7 @@ export const Recipe = {
         message.description !== undefined && (obj.description = message.description);
         message.version !== undefined && (obj.version = message.version);
         if (message.coinInputs) {
-            obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined));
+            obj.coinInputs = message.coinInputs.map((e) => (e ? CoinInput.toJSON(e) : undefined));
         }
         else {
             obj.coinInputs = [];
@@ -2070,7 +2127,7 @@ export const Recipe = {
         }
         if (object.coinInputs !== undefined && object.coinInputs !== null) {
             for (const e of object.coinInputs) {
-                message.coinInputs.push(Coin.fromPartial(e));
+                message.coinInputs.push(CoinInput.fromPartial(e));
             }
         }
         if (object.itemInputs !== undefined && object.itemInputs !== null) {

@@ -13,7 +13,8 @@ func DefaultGenesis() *GenesisState {
 	return &GenesisState{
 		// this line is used by starport scaffolding # ibc/genesistype/default
 		// this line is used by starport scaffolding # genesis/types/default
-		TradeList:                    []*Trade{},
+		AccountList:                  []UserMap{},
+		TradeList:                    []Trade{},
 		GoogleInAppPurchaseOrderList: []GoogleInAppPurchaseOrder{},
 		PendingExecutionList:         []Execution{},
 		ExecutionList:                []Execution{},
@@ -24,12 +25,46 @@ func DefaultGenesis() *GenesisState {
 	}
 }
 
+// NetworkTestGenesis returns the network test Pylons genesis state
+func NetworkTestGenesis() *GenesisState {
+	return &GenesisState{
+		// this line is used by starport scaffolding # ibc/genesistype/default
+		// this line is used by starport scaffolding # genesis/types/default
+		AccountList:                  []UserMap{},
+		TradeList:                    []Trade{},
+		GoogleInAppPurchaseOrderList: []GoogleInAppPurchaseOrder{},
+		PendingExecutionList:         []Execution{},
+		ExecutionList:                []Execution{},
+		ItemList:                     []Item{},
+		RecipeList:                   []Recipe{},
+		CookbookList:                 []Cookbook{},
+		Params:                       NetworkTestParams(),
+	}
+}
+
 // Validate performs basic genesis state validation returning an error upon any
 // failure.
 func (gs GenesisState) Validate() error {
 	// this line is used by starport scaffolding # ibc/genesistype/validate
 
 	// this line is used by starport scaffolding # genesis/types/validate
+	// Check for duplicated index in username
+	accountAddrIndexMap := make(map[string]bool)
+	usernameIndexMap := make(map[string]bool)
+
+	for _, elem := range gs.AccountList {
+		if _, ok := accountAddrIndexMap[elem.AccountAddr]; ok {
+			return fmt.Errorf("duplicated account")
+		}
+		accountAddrIndexMap[elem.AccountAddr] = true
+
+		if _, ok := usernameIndexMap[elem.Username]; ok {
+			return fmt.Errorf("duplicated username" +
+				"")
+		}
+		usernameIndexMap[elem.Username] = true
+	}
+
 	// Check for duplicated ID in trade
 	tradeIDMap := make(map[uint64]bool)
 

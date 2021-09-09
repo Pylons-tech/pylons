@@ -5,6 +5,7 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
+import "pylons/accounts.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
 import "pylons/execution.proto";
@@ -17,6 +18,17 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Query defines the gRPC querier service.
 service Query {
 	// this line is used by starport scaffolding # 2
+
+	// Queries a list of getAccountByAddress items.
+	rpc UsernameByAddress(QueryGetUsernameByAddressRequest) returns (QueryGetUsernameByAddressResponse) {
+		option (google.api.http).get = "/pylons/account/address/{address}";
+	}
+
+
+	// Queries a username by account.
+	rpc AddressByUsername(QueryGetAddressByUsernameRequest) returns (QueryGetAddressByUsernameResponse) {
+		option (google.api.http).get = "/pylons/account/username/{username}";
+	}
 
 	// Queries a trade by id.
 	rpc Trade(QueryGetTradeRequest) returns (QueryGetTradeResponse) {
@@ -86,12 +98,29 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetUsernameByAddressRequest {
+  string address = 1;
+}
+
+message QueryGetAddressByUsernameRequest {
+	string username = 1;
+}
+
+message QueryGetUsernameByAddressResponse {
+	Username username = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetAddressByUsernameResponse {
+	AccountAddr address = 1 [(gogoproto.nullable) = false];
+}
+
+
 message QueryGetTradeRequest {
 	uint64 ID = 1;
 }
 
 message QueryGetTradeResponse {
-	Trade Trade = 1;
+	Trade Trade = 1 [(gogoproto.nullable) = false];
 }
 
 message QueryListItemByOwnerRequest {

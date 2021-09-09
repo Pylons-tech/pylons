@@ -21,7 +21,7 @@ func CmdSendItems() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "send-items [receiver] [items]",
 		Short: "send items to receiver",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsReceiver := args[0]
 

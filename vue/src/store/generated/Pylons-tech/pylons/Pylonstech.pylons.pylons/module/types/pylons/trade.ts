@@ -1,8 +1,8 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
+import { CoinInput, ItemInput } from '../pylons/recipe'
 import { Coin } from '../cosmos/base/v1beta1/coin'
-import { ItemInput } from '../pylons/recipe'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
@@ -14,7 +14,7 @@ export interface ItemRef {
 export interface Trade {
   creator: string
   ID: number
-  coinInputs: Coin[]
+  coinInputs: CoinInput[]
   itemInputs: ItemInput[]
   coinOutputs: Coin[]
   itemOutputs: ItemRef[]
@@ -106,7 +106,7 @@ export const Trade = {
       writer.uint32(16).uint64(message.ID)
     }
     for (const v of message.coinInputs) {
-      Coin.encode(v!, writer.uint32(26).fork()).ldelim()
+      CoinInput.encode(v!, writer.uint32(26).fork()).ldelim()
     }
     for (const v of message.itemInputs) {
       ItemInput.encode(v!, writer.uint32(34).fork()).ldelim()
@@ -148,7 +148,7 @@ export const Trade = {
           message.ID = longToNumber(reader.uint64() as Long)
           break
         case 3:
-          message.coinInputs.push(Coin.decode(reader, reader.uint32()))
+          message.coinInputs.push(CoinInput.decode(reader, reader.uint32()))
           break
         case 4:
           message.itemInputs.push(ItemInput.decode(reader, reader.uint32()))
@@ -195,7 +195,7 @@ export const Trade = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromJSON(e))
+        message.coinInputs.push(CoinInput.fromJSON(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
@@ -236,7 +236,7 @@ export const Trade = {
     message.creator !== undefined && (obj.creator = message.creator)
     message.ID !== undefined && (obj.ID = message.ID)
     if (message.coinInputs) {
-      obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+      obj.coinInputs = message.coinInputs.map((e) => (e ? CoinInput.toJSON(e) : undefined))
     } else {
       obj.coinInputs = []
     }
@@ -284,7 +284,7 @@ export const Trade = {
     }
     if (object.coinInputs !== undefined && object.coinInputs !== null) {
       for (const e of object.coinInputs) {
-        message.coinInputs.push(Coin.fromPartial(e))
+        message.coinInputs.push(CoinInput.fromPartial(e))
       }
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {

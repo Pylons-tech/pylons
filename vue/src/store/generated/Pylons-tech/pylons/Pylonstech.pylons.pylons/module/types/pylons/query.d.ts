@@ -1,4 +1,5 @@
 import { Reader, Writer } from 'protobufjs/minimal';
+import { Username, AccountAddr } from '../pylons/accounts';
 import { Trade } from '../pylons/trade';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
 import { Item } from '../pylons/item';
@@ -8,6 +9,18 @@ import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetUsernameByAddressRequest {
+    address: string;
+}
+export interface QueryGetAddressByUsernameRequest {
+    username: string;
+}
+export interface QueryGetUsernameByAddressResponse {
+    username: Username | undefined;
+}
+export interface QueryGetAddressByUsernameResponse {
+    address: AccountAddr | undefined;
+}
 export interface QueryGetTradeRequest {
     ID: number;
 }
@@ -101,6 +114,34 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryGetUsernameByAddressRequest: {
+    encode(message: QueryGetUsernameByAddressRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameByAddressRequest;
+    fromJSON(object: any): QueryGetUsernameByAddressRequest;
+    toJSON(message: QueryGetUsernameByAddressRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetUsernameByAddressRequest>): QueryGetUsernameByAddressRequest;
+};
+export declare const QueryGetAddressByUsernameRequest: {
+    encode(message: QueryGetAddressByUsernameRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetAddressByUsernameRequest;
+    fromJSON(object: any): QueryGetAddressByUsernameRequest;
+    toJSON(message: QueryGetAddressByUsernameRequest): unknown;
+    fromPartial(object: DeepPartial<QueryGetAddressByUsernameRequest>): QueryGetAddressByUsernameRequest;
+};
+export declare const QueryGetUsernameByAddressResponse: {
+    encode(message: QueryGetUsernameByAddressResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameByAddressResponse;
+    fromJSON(object: any): QueryGetUsernameByAddressResponse;
+    toJSON(message: QueryGetUsernameByAddressResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetUsernameByAddressResponse>): QueryGetUsernameByAddressResponse;
+};
+export declare const QueryGetAddressByUsernameResponse: {
+    encode(message: QueryGetAddressByUsernameResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryGetAddressByUsernameResponse;
+    fromJSON(object: any): QueryGetAddressByUsernameResponse;
+    toJSON(message: QueryGetAddressByUsernameResponse): unknown;
+    fromPartial(object: DeepPartial<QueryGetAddressByUsernameResponse>): QueryGetAddressByUsernameResponse;
+};
 export declare const QueryGetTradeRequest: {
     encode(message: QueryGetTradeRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetTradeRequest;
@@ -257,6 +298,10 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a list of getAccountByAddress items. */
+    UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse>;
+    /** Queries a username by account. */
+    AddressByUsername(request: QueryGetAddressByUsernameRequest): Promise<QueryGetAddressByUsernameResponse>;
     /** Queries a trade by id. */
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;
     /** Queries a list of listItemByOwner items. */
@@ -283,6 +328,8 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse>;
+    AddressByUsername(request: QueryGetAddressByUsernameRequest): Promise<QueryGetAddressByUsernameResponse>;
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;
     ListItemByOwner(request: QueryListItemByOwnerRequest): Promise<QueryListItemByOwnerResponse>;
     GoogleInAppPurchaseOrder(request: QueryGetGoogleInAppPurchaseOrderRequest): Promise<QueryGetGoogleInAppPurchaseOrderResponse>;

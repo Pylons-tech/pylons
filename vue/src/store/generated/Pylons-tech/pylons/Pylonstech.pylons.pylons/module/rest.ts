@@ -10,10 +10,15 @@
  */
 
 export interface ProtobufAny {
-  typeUrl?: string;
+  "@type"?: string;
+}
 
-  /** @format byte */
+export interface PylonsAccountAddr {
   value?: string;
+}
+
+export interface PylonsCoinInput {
+  coins?: V1Beta1Coin[];
 }
 
 export interface PylonsCoinOutput {
@@ -270,9 +275,15 @@ export type PylonsMsgSetItemStringResponse = object;
 
 export type PylonsMsgTransferCookbookResponse = object;
 
+export type PylonsMsgUpdateAccountResponse = object;
+
 export type PylonsMsgUpdateCookbookResponse = object;
 
 export type PylonsMsgUpdateRecipeResponse = object;
+
+export interface PylonsQueryGetAddressByUsernameResponse {
+  address?: PylonsAccountAddr;
+}
 
 export interface PylonsQueryGetCookbookResponse {
   Cookbook?: PylonsCookbook;
@@ -297,6 +308,10 @@ export interface PylonsQueryGetRecipeResponse {
 
 export interface PylonsQueryGetTradeResponse {
   Trade?: PylonsTrade;
+}
+
+export interface PylonsQueryGetUsernameByAddressResponse {
+  username?: PylonsUsername;
 }
 
 export interface PylonsQueryListCookbooksByCreatorResponse {
@@ -343,7 +358,7 @@ export interface PylonsRecipe {
   name?: string;
   description?: string;
   version?: string;
-  coinInputs?: V1Beta1Coin[];
+  coinInputs?: PylonsCoinInput[];
   itemInputs?: PylonsItemInput[];
   entries?: PylonsEntriesList;
   outputs?: PylonsWeightedOutputs[];
@@ -378,13 +393,17 @@ export interface PylonsTrade {
 
   /** @format uint64 */
   ID?: string;
-  coinInputs?: V1Beta1Coin[];
+  coinInputs?: PylonsCoinInput[];
   itemInputs?: PylonsItemInput[];
   coinOutputs?: V1Beta1Coin[];
   itemOutputs?: PylonsItemRef[];
   extraInfo?: string;
   receiver?: string;
   tradedItemInputs?: PylonsItemRef[];
+}
+
+export interface PylonsUsername {
+  value?: string;
 }
 
 export interface PylonsWeightedOutputs {
@@ -660,10 +679,42 @@ export class HttpClient<SecurityDataType = unknown> {
 }
 
 /**
- * @title pylons/cookbook.proto
+ * @title pylons/accounts.proto
  * @version version not set
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryUsernameByAddress
+   * @summary Queries a list of getAccountByAddress items.
+   * @request GET:/pylons/account/address/{address}
+   */
+  queryUsernameByAddress = (address: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetUsernameByAddressResponse, RpcStatus>({
+      path: `/pylons/account/address/${address}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryAddressByUsername
+   * @summary Queries a username by account.
+   * @request GET:/pylons/account/username/{username}
+   */
+  queryAddressByUsername = (username: string, params: RequestParams = {}) =>
+    this.request<PylonsQueryGetAddressByUsernameResponse, RpcStatus>({
+      path: `/pylons/account/username/${username}`,
+      method: "GET",
+      format: "json",
+      ...params,
+    });
+
   /**
    * No description
    *

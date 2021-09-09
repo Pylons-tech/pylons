@@ -16,6 +16,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
   rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
   rpc CreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
   rpc CancelTrade(MsgCancelTrade) returns (MsgCancelTradeResponse);
@@ -33,6 +34,22 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgUpdateAccount {
+  string creator = 1;
+  string username = 2;
+}
+
+message MsgUpdateAccountResponse {
+}
+
+message MsgCreateAccount {
+  string creator = 1;
+  string username = 2;
+}
+
+message MsgCreateAccountResponse {
+}
+
 message MsgFulfillTrade {
   string creator = 1;
   uint64 ID = 2;
@@ -92,12 +109,7 @@ message MsgGoogleInAppPurchaseGetCoins {
 message MsgGoogleInAppPurchaseGetCoinsResponse {
 }
 
-message MsgCreateAccount {
-  string creator = 1;
-}
 
-message MsgCreateAccountResponse {
-}
 
 message MsgSendItems {
   string creator = 1;

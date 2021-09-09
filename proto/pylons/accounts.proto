@@ -1,0 +1,19 @@
+syntax = "proto3";
+package Pylonstech.pylons.pylons;
+
+option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
+
+import "gogoproto/gogo.proto";
+
+message UserMap {
+  string accountAddr = 1;
+  string username = 2;
+}
+
+message Username {
+  string value = 1;
+}
+
+message AccountAddr {
+  string value = 2;
+}

@@ -127,6 +127,9 @@ export interface WeightedOutputs {
     entryIDs: string[];
     weight: number;
 }
+export interface CoinInput {
+    coins: Coin[];
+}
 export interface Recipe {
     cookbookID: string;
     ID: string;
@@ -134,7 +137,7 @@ export interface Recipe {
     name: string;
     description: string;
     version: string;
-    coinInputs: Coin[];
+    coinInputs: CoinInput[];
     itemInputs: ItemInput[];
     entries: EntriesList | undefined;
     outputs: WeightedOutputs[];
@@ -246,6 +249,13 @@ export declare const WeightedOutputs: {
     fromJSON(object: any): WeightedOutputs;
     toJSON(message: WeightedOutputs): unknown;
     fromPartial(object: DeepPartial<WeightedOutputs>): WeightedOutputs;
+};
+export declare const CoinInput: {
+    encode(message: CoinInput, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): CoinInput;
+    fromJSON(object: any): CoinInput;
+    toJSON(message: CoinInput): unknown;
+    fromPartial(object: DeepPartial<CoinInput>): CoinInput;
 };
 export declare const Recipe: {
     encode(message: Recipe, writer?: Writer): Writer;

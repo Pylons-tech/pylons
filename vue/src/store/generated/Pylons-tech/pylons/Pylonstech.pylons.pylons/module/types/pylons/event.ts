@@ -11,6 +11,12 @@ export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 export interface EventCreateAccount {
   address: string
+  username: string
+}
+
+export interface EventUpdateAccount {
+  address: string
+  username: string
 }
 
 export interface EventCreateCookbook {
@@ -114,12 +120,15 @@ export interface EventStripePurchase {
   ID: string
 }
 
-const baseEventCreateAccount: object = { address: '' }
+const baseEventCreateAccount: object = { address: '', username: '' }
 
 export const EventCreateAccount = {
   encode(message: EventCreateAccount, writer: Writer = Writer.create()): Writer {
     if (message.address !== '') {
       writer.uint32(10).string(message.address)
+    }
+    if (message.username !== '') {
+      writer.uint32(18).string(message.username)
     }
     return writer
   },
@@ -133,6 +142,9 @@ export const EventCreateAccount = {
       switch (tag >>> 3) {
         case 1:
           message.address = reader.string()
+          break
+        case 2:
+          message.username = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -149,12 +161,18 @@ export const EventCreateAccount = {
     } else {
       message.address = ''
     }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
+    } else {
+      message.username = ''
+    }
     return message
   },
 
   toJSON(message: EventCreateAccount): unknown {
     const obj: any = {}
     message.address !== undefined && (obj.address = message.address)
+    message.username !== undefined && (obj.username = message.username)
     return obj
   },
 
@@ -164,6 +182,83 @@ export const EventCreateAccount = {
       message.address = object.address
     } else {
       message.address = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
+    } else {
+      message.username = ''
+    }
+    return message
+  }
+}
+
+const baseEventUpdateAccount: object = { address: '', username: '' }
+
+export const EventUpdateAccount = {
+  encode(message: EventUpdateAccount, writer: Writer = Writer.create()): Writer {
+    if (message.address !== '') {
+      writer.uint32(10).string(message.address)
+    }
+    if (message.username !== '') {
+      writer.uint32(18).string(message.username)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): EventUpdateAccount {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseEventUpdateAccount } as EventUpdateAccount
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string()
+          break
+        case 2:
+          message.username = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): EventUpdateAccount {
+    const message = { ...baseEventUpdateAccount } as EventUpdateAccount
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address)
+    } else {
+      message.address = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
+    } else {
+      message.username = ''
+    }
+    return message
+  },
+
+  toJSON(message: EventUpdateAccount): unknown {
+    const obj: any = {}
+    message.address !== undefined && (obj.address = message.address)
+    message.username !== undefined && (obj.username = message.username)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<EventUpdateAccount>): EventUpdateAccount {
+    const message = { ...baseEventUpdateAccount } as EventUpdateAccount
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address
+    } else {
+      message.address = ''
+    }
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
+    } else {
+      message.username = ''
     }
     return message
   }

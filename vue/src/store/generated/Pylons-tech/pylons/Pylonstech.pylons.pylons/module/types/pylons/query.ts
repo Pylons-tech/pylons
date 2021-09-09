@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
+import { Username, AccountAddr } from '../pylons/accounts'
 import { Trade } from '../pylons/trade'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
 import { Item } from '../pylons/item'
@@ -12,6 +13,22 @@ import { Cookbook } from '../pylons/cookbook'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # 3 */
+export interface QueryGetUsernameByAddressRequest {
+  address: string
+}
+
+export interface QueryGetAddressByUsernameRequest {
+  username: string
+}
+
+export interface QueryGetUsernameByAddressResponse {
+  username: Username | undefined
+}
+
+export interface QueryGetAddressByUsernameResponse {
+  address: AccountAddr | undefined
+}
+
 export interface QueryGetTradeRequest {
   ID: number
 }
@@ -125,6 +142,226 @@ export interface QueryGetCookbookRequest {
 
 export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
+}
+
+const baseQueryGetUsernameByAddressRequest: object = { address: '' }
+
+export const QueryGetUsernameByAddressRequest = {
+  encode(message: QueryGetUsernameByAddressRequest, writer: Writer = Writer.create()): Writer {
+    if (message.address !== '') {
+      writer.uint32(10).string(message.address)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameByAddressRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetUsernameByAddressRequest } as QueryGetUsernameByAddressRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.address = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetUsernameByAddressRequest {
+    const message = { ...baseQueryGetUsernameByAddressRequest } as QueryGetUsernameByAddressRequest
+    if (object.address !== undefined && object.address !== null) {
+      message.address = String(object.address)
+    } else {
+      message.address = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetUsernameByAddressRequest): unknown {
+    const obj: any = {}
+    message.address !== undefined && (obj.address = message.address)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetUsernameByAddressRequest>): QueryGetUsernameByAddressRequest {
+    const message = { ...baseQueryGetUsernameByAddressRequest } as QueryGetUsernameByAddressRequest
+    if (object.address !== undefined && object.address !== null) {
+      message.address = object.address
+    } else {
+      message.address = ''
+    }
+    return message
+  }
+}
+
+const baseQueryGetAddressByUsernameRequest: object = { username: '' }
+
+export const QueryGetAddressByUsernameRequest = {
+  encode(message: QueryGetAddressByUsernameRequest, writer: Writer = Writer.create()): Writer {
+    if (message.username !== '') {
+      writer.uint32(10).string(message.username)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetAddressByUsernameRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetAddressByUsernameRequest } as QueryGetAddressByUsernameRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.username = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetAddressByUsernameRequest {
+    const message = { ...baseQueryGetAddressByUsernameRequest } as QueryGetAddressByUsernameRequest
+    if (object.username !== undefined && object.username !== null) {
+      message.username = String(object.username)
+    } else {
+      message.username = ''
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetAddressByUsernameRequest): unknown {
+    const obj: any = {}
+    message.username !== undefined && (obj.username = message.username)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetAddressByUsernameRequest>): QueryGetAddressByUsernameRequest {
+    const message = { ...baseQueryGetAddressByUsernameRequest } as QueryGetAddressByUsernameRequest
+    if (object.username !== undefined && object.username !== null) {
+      message.username = object.username
+    } else {
+      message.username = ''
+    }
+    return message
+  }
+}
+
+const baseQueryGetUsernameByAddressResponse: object = {}
+
+export const QueryGetUsernameByAddressResponse = {
+  encode(message: QueryGetUsernameByAddressResponse, writer: Writer = Writer.create()): Writer {
+    if (message.username !== undefined) {
+      Username.encode(message.username, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameByAddressResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetUsernameByAddressResponse } as QueryGetUsernameByAddressResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.username = Username.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetUsernameByAddressResponse {
+    const message = { ...baseQueryGetUsernameByAddressResponse } as QueryGetUsernameByAddressResponse
+    if (object.username !== undefined && object.username !== null) {
+      message.username = Username.fromJSON(object.username)
+    } else {
+      message.username = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetUsernameByAddressResponse): unknown {
+    const obj: any = {}
+    message.username !== undefined && (obj.username = message.username ? Username.toJSON(message.username) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetUsernameByAddressResponse>): QueryGetUsernameByAddressResponse {
+    const message = { ...baseQueryGetUsernameByAddressResponse } as QueryGetUsernameByAddressResponse
+    if (object.username !== undefined && object.username !== null) {
+      message.username = Username.fromPartial(object.username)
+    } else {
+      message.username = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryGetAddressByUsernameResponse: object = {}
+
+export const QueryGetAddressByUsernameResponse = {
+  encode(message: QueryGetAddressByUsernameResponse, writer: Writer = Writer.create()): Writer {
+    if (message.address !== undefined) {
+      AccountAddr.encode(message.address, writer.uint32(10).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryGetAddressByUsernameResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryGetAddressByUsernameResponse } as QueryGetAddressByUsernameResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.address = AccountAddr.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryGetAddressByUsernameResponse {
+    const message = { ...baseQueryGetAddressByUsernameResponse } as QueryGetAddressByUsernameResponse
+    if (object.address !== undefined && object.address !== null) {
+      message.address = AccountAddr.fromJSON(object.address)
+    } else {
+      message.address = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryGetAddressByUsernameResponse): unknown {
+    const obj: any = {}
+    message.address !== undefined && (obj.address = message.address ? AccountAddr.toJSON(message.address) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryGetAddressByUsernameResponse>): QueryGetAddressByUsernameResponse {
+    const message = { ...baseQueryGetAddressByUsernameResponse } as QueryGetAddressByUsernameResponse
+    if (object.address !== undefined && object.address !== null) {
+      message.address = AccountAddr.fromPartial(object.address)
+    } else {
+      message.address = undefined
+    }
+    return message
+  }
 }
 
 const baseQueryGetTradeRequest: object = { ID: 0 }
@@ -1677,6 +1914,10 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a list of getAccountByAddress items. */
+  UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse>
+  /** Queries a username by account. */
+  AddressByUsername(request: QueryGetAddressByUsernameRequest): Promise<QueryGetAddressByUsernameResponse>
   /** Queries a trade by id. */
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>
   /** Queries a list of listItemByOwner items. */
@@ -1706,6 +1947,18 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse> {
+    const data = QueryGetUsernameByAddressRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'UsernameByAddress', data)
+    return promise.then((data) => QueryGetUsernameByAddressResponse.decode(new Reader(data)))
+  }
+
+  AddressByUsername(request: QueryGetAddressByUsernameRequest): Promise<QueryGetAddressByUsernameResponse> {
+    const data = QueryGetAddressByUsernameRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'AddressByUsername', data)
+    return promise.then((data) => QueryGetAddressByUsernameResponse.decode(new Reader(data)))
+  }
+
   Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse> {
     const data = QueryGetTradeRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'Trade', data)

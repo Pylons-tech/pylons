@@ -9,8 +9,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// TODO fix these tests
-
 func (suite *IntegrationTestSuite) TestTradeMsgServerCreate() {
 	k := suite.k
 	ctx := suite.ctx

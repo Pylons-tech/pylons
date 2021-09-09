@@ -14,6 +14,12 @@ import "pylons/trade.proto";
 
 message EventCreateAccount {
   string address = 1;
+  string username = 2;
+}
+
+message EventUpdateAccount {
+  string address = 1;
+  string username = 2;
 }
 
 message EventCreateCookbook {

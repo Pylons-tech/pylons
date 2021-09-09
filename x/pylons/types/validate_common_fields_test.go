@@ -75,6 +75,41 @@ func TestValidateID(t *testing.T) {
 	}
 }
 
+func TestValidateUsername(t *testing.T) {
+	cosmosAddr := GenTestBech32List(1)[0]
+
+	for _, tc := range []struct {
+		desc     string
+		username string
+		err      error
+	}{
+		{desc: "ValidUsername1", username: "UserName", err: nil},
+		{desc: "ValidUsername2", username: "U_s_e_r_N_a_m_e", err: nil},
+		{desc: "ValidUsername3", username: "A-B-C-D-E", err: nil},
+		{desc: "ValidUsername4", username: "A-B_C-D_E", err: nil},
+		{desc: "InvalidCosmosAddr", username: cosmosAddr, err: ErrInvalidRequestField},
+		{desc: "InvalidHypens1", username: "__A", err: ErrInvalidRequestField},
+		{desc: "InvalidHypens2", username: "A__", err: ErrInvalidRequestField},
+		{desc: "InvalidHypens3", username: "a__b", err: ErrInvalidRequestField},
+		{desc: "InvalidDash1", username: "--A", err: ErrInvalidRequestField},
+		{desc: "InvalidDash2", username: "A--", err: ErrInvalidRequestField},
+		{desc: "InvalidDash3", username: "a--b", err: ErrInvalidRequestField},
+		{desc: "InvalidMixed1", username: "-_-A", err: ErrInvalidRequestField},
+		{desc: "InvalidMixed2", username: "A-_", err: ErrInvalidRequestField},
+		{desc: "InvalidMixed3", username: "a-_b", err: ErrInvalidRequestField},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			err := ValidateUsername(tc.username)
+			if tc.err != nil {
+				require.ErrorIs(t, err, tc.err)
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
+}
+
 func TestValidateNumber(t *testing.T) {
 	for _, tc := range []struct {
 		desc string

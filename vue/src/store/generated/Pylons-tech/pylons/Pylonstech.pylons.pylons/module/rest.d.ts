@@ -1,7 +1,11 @@
 export interface ProtobufAny {
-    typeUrl?: string;
-    /** @format byte */
+    "@type"?: string;
+}
+export interface PylonsAccountAddr {
     value?: string;
+}
+export interface PylonsCoinInput {
+    coins?: V1Beta1Coin[];
 }
 export interface PylonsCoinOutput {
     ID?: string;
@@ -204,8 +208,12 @@ export declare type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 export declare type PylonsMsgSendItemsResponse = object;
 export declare type PylonsMsgSetItemStringResponse = object;
 export declare type PylonsMsgTransferCookbookResponse = object;
+export declare type PylonsMsgUpdateAccountResponse = object;
 export declare type PylonsMsgUpdateCookbookResponse = object;
 export declare type PylonsMsgUpdateRecipeResponse = object;
+export interface PylonsQueryGetAddressByUsernameResponse {
+    address?: PylonsAccountAddr;
+}
 export interface PylonsQueryGetCookbookResponse {
     Cookbook?: PylonsCookbook;
 }
@@ -224,6 +232,9 @@ export interface PylonsQueryGetRecipeResponse {
 }
 export interface PylonsQueryGetTradeResponse {
     Trade?: PylonsTrade;
+}
+export interface PylonsQueryGetUsernameByAddressResponse {
+    username?: PylonsUsername;
 }
 export interface PylonsQueryListCookbooksByCreatorResponse {
     Cookbooks?: PylonsCookbook[];
@@ -259,7 +270,7 @@ export interface PylonsRecipe {
     name?: string;
     description?: string;
     version?: string;
-    coinInputs?: V1Beta1Coin[];
+    coinInputs?: PylonsCoinInput[];
     itemInputs?: PylonsItemInput[];
     entries?: PylonsEntriesList;
     outputs?: PylonsWeightedOutputs[];
@@ -287,13 +298,16 @@ export interface PylonsTrade {
     creator?: string;
     /** @format uint64 */
     ID?: string;
-    coinInputs?: V1Beta1Coin[];
+    coinInputs?: PylonsCoinInput[];
     itemInputs?: PylonsItemInput[];
     coinOutputs?: V1Beta1Coin[];
     itemOutputs?: PylonsItemRef[];
     extraInfo?: string;
     receiver?: string;
     tradedItemInputs?: PylonsItemRef[];
+}
+export interface PylonsUsername {
+    value?: string;
 }
 export interface PylonsWeightedOutputs {
     entryIDs?: string[];
@@ -420,10 +434,28 @@ export declare class HttpClient<SecurityDataType = unknown> {
     request: <T = any, E = any>({ body, secure, path, type, query, format, baseUrl, cancelToken, ...params }: FullRequestParams) => Promise<HttpResponse<T, E>>;
 }
 /**
- * @title pylons/cookbook.proto
+ * @title pylons/accounts.proto
  * @version version not set
  */
 export declare class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryUsernameByAddress
+     * @summary Queries a list of getAccountByAddress items.
+     * @request GET:/pylons/account/address/{address}
+     */
+    queryUsernameByAddress: (address: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetUsernameByAddressResponse, RpcStatus>>;
+    /**
+     * No description
+     *
+     * @tags Query
+     * @name QueryAddressByUsername
+     * @summary Queries a username by account.
+     * @request GET:/pylons/account/username/{username}
+     */
+    queryAddressByUsername: (username: string, params?: RequestParams) => Promise<HttpResponse<PylonsQueryGetAddressByUsernameResponse, RpcStatus>>;
     /**
      * No description
      *

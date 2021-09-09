@@ -79,10 +79,15 @@ func (k msgServer) ExecuteRecipe(goCtx context.Context, msg *types.MsgExecuteRec
 	}
 
 	coinInputsIndex := int(msg.CoinInputsIndex)
-	if coinInputsIndex >= len(recipe.CoinInputs) {
+	var coinInputs sdk.Coins
+	switch {
+	case len(recipe.CoinInputs) == 0:
+		coinInputs = sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.ZeroInt()))
+	case coinInputsIndex >= len(recipe.CoinInputs) && len(recipe.CoinInputs) != 0:
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+	default:
+		coinInputs = recipe.CoinInputs[coinInputsIndex].Coins
 	}
-	coinInputs := recipe.CoinInputs[coinInputsIndex].Coins
 
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	err = k.LockCoinsForExecution(ctx, addr, coinInputs)

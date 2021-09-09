@@ -30,6 +30,17 @@ func createNCookbook(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	return items
 }
 
+func createNPylonsAccount(k keeper.Keeper, ctx sdk.Context, n int) []types.UserMap {
+	items := make([]types.UserMap, n)
+	creators := types.GenTestBech32List(n)
+	for i := range items {
+		items[i].AccountAddr = creators[i]
+		items[i].Username = "user" + strconv.Itoa(i)
+		k.SetPylonsAccount(ctx, types.AccountAddr{Value: items[i].AccountAddr}, types.Username{Value: items[i].Username})
+	}
+	return items
+}
+
 func createNCookbookForSingleOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Cookbook {
 	items := make([]types.Cookbook, n)
 	creator := types.GenTestBech32FromString("any")

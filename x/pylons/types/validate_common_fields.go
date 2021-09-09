@@ -3,6 +3,8 @@ package types
 import (
 	"regexp"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/rogpeppe/go-internal/semver"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -36,6 +38,28 @@ func ValidateID(s string) error {
 	}
 
 	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid ID")
+}
+
+// ValidateUsername validates Usernames
+// A valid username follows:
+// 		Usernames can consist of lowercase and capitals
+//		Usernames can consist of alphanumeric characters
+//		Usernames can consist of underscore and hyphens and spaces
+//		Cannot be two underscores, two hypens or two spaces in a row
+//		Cannot have a underscore, hypen or space at the start or end
+//		Cannot be a valid cosmos SDK address
+func ValidateUsername(s string) error {
+	regex := regexp.MustCompile(`^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$`)
+	if regex.MatchString(s) {
+		_, err := sdk.AccAddressFromBech32(s) // if valid SDK address, return error
+		if err == nil {
+			return sdkerrors.Wrap(ErrInvalidRequestField, "invalid username")
+		}
+
+		return nil
+	}
+
+	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid username")
 }
 
 // ValidateNumber validates numbers
