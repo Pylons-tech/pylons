@@ -56,7 +56,7 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 	}
 
 	for _, item := range msg.ItemOutputs {
-		err := ValidateID(item.ItemID)
+		err := ValidateNumber(item.ItemID)
 		if err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}

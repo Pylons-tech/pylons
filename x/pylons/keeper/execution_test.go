@@ -30,7 +30,6 @@ func (suite *IntegrationTestSuite) TestExecutionsGetByItem() {
 	}
 }
 
-// TODO verify and add more test cases
 func (suite *IntegrationTestSuite) TestExecutionsGetByRecipe() {
 	numExecs := 10
 	k := suite.k
