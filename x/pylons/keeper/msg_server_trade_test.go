@@ -9,7 +9,7 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (suite *IntegrationTestSuite) TestTradeMsgServerCreate() {
+func (suite *IntegrationTestSuite) TestTradeMsgServerCreateSimple() {
 	k := suite.k
 	ctx := suite.ctx
 	require := suite.Require()
@@ -22,6 +22,30 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreate() {
 		resp, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{Creator: creator})
 		require.NoError(err)
 		require.Equal(i, int(resp.ID))
+	}
+}
+
+func (suite *IntegrationTestSuite) TestTradeMsgServerCreateInvalidCoinInputs() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	wctx := sdk.WrapSDKContext(ctx)
+	srv := keeper.NewMsgServerImpl(k)
+
+	numTests := 5
+	items := createNItem(k, ctx, numTests, true)
+
+	for i := 0; i < 5; i++ {
+		_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
+			Creator:     items[i].Owner,
+			CoinInputs:  []types.CoinInput{{Coins: sdk.NewCoins(sdk.NewCoin("test", sdk.NewInt(1)))}},
+			ItemInputs:  nil,
+			CoinOutputs: nil,
+			ItemOutputs: []types.ItemRef{{CookbookID: items[i].CookbookID, ItemID: items[i].ID}},
+			ExtraInfo:   "extraInfo",
+		})
+		require.ErrorIs(err, sdkerrors.ErrInvalidCoins)
 	}
 }
 

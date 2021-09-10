@@ -51,6 +51,10 @@ func (suite *IntegrationTestSuite) TestListItemByOwner() {
 			response: nil,
 			err:      status.Error(codes.InvalidArgument, "invalid address"),
 		},
+		{
+			desc: "InvalidRequest2",
+			err:  status.Error(codes.InvalidArgument, "invalid request"),
+		},
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {

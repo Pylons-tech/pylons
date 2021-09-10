@@ -3,6 +3,8 @@ package keeper_test
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -59,6 +61,12 @@ func (suite *IntegrationTestSuite) TestListCompletedExecutionByItem() {
 			desc:     "InvalidRequest",
 			request:  requestFunc(nil, 0, 0, true, "missing", "missing"),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+		},
+		{
+			desc:     "NilRequest",
+			request:  nil,
+			response: nil,
+			err:      status.Error(codes.InvalidArgument, "invalid request"),
 		},
 	} {
 		tc := tc
@@ -127,6 +135,10 @@ func (suite *IntegrationTestSuite) TestListPendingExecutionByItem() {
 			desc:     "InvalidRequest",
 			request:  requestFunc(nil, 0, 0, true, "missing", "missing"),
 			response: &types.QueryListExecutionsByItemResponse{CompletedExecutions: []types.Execution{}, PendingExecutions: []types.Execution{}, Pagination: nil},
+		},
+		{
+			desc: "InvalidRequest2",
+			err:  status.Error(codes.InvalidArgument, "invalid request"),
 		},
 	} {
 		tc := tc

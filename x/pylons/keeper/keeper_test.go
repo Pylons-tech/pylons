@@ -209,6 +209,7 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []type
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
 		k.SetItem(ctx, items[i])
+		k.SetItemCount(ctx, uint64(i)+1)
 	}
 	return items
 }
@@ -296,4 +297,23 @@ func (suite *IntegrationTestSuite) SetupTest() {
 
 func TestKeeperTestSuite(t *testing.T) {
 	suite.Run(t, new(IntegrationTestSuite))
+}
+
+func (suite *IntegrationTestSuite) TestKeeperFuncs() {
+	k := suite.k
+	ctx := suite.ctx
+
+	log := k.Logger(ctx)
+
+	addr := k.FeeCollectorAddress()
+	log.Info(addr.String())
+
+	addr = k.TradesLockerAddress()
+	log.Info(addr.String())
+
+	addr = k.ExecutionsLockerAddress()
+	log.Info(addr.String())
+
+	addr = k.CoinsIssuerAddress()
+	log.Info(addr.String())
 }
