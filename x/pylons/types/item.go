@@ -268,12 +268,17 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 	return nil
 }
 
+// FindValidPaymentsPermutation searches through the transferFees of a []Item to find a permutation
+// of payments from a balance of sdk.Coins.  The permutation is a valid set of sdk.Coins from
+// balance that can cover all transferFees in the set of []Item simultaneously.
 func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error) {
 	if balance.IsZero() {
 		return nil, errors.New("balance not sufficient")
 	}
 
-	// if the balance will not cover an item transfer fees because of no matching denoms, error
+	// check if there is any item in the set of Items where the set of coin denoms of its transferFee
+	// is disjoint with the set of denoms in balance.  If this is the case, a valid permutation can
+	// never be found -> return error.
 	for _, item := range items {
 		noMatchingDenoms := true
 		for _, coin := range item.TransferFee {
