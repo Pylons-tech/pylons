@@ -21,3 +21,16 @@ func (suite *IntegrationTestSuite) TestItemGetAll() {
 	items := createNItem(k, ctx, 10, true)
 	require.Equal(items, k.GetAllItem(ctx))
 }
+
+func (suite *IntegrationTestSuite) TestItemCountGet() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	expectedCount := 10
+	createNItem(k, ctx, expectedCount, true)
+	for i := 0; i < expectedCount; i++ {
+		count := k.GetItemCount(ctx)
+		require.Equal(uint64(expectedCount), count)
+	}
+}
