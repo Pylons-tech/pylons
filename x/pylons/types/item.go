@@ -313,6 +313,10 @@ func newPaymentsPermutation(permutation []int, val, maxIndex int) ([]int, int) {
 // When exploring the solution space the algorithm prioritizes the permutation where the max(permutation) is minimized.
 // For example, for a set of 3 items the permutation [1,0,2] is preferred to [3,0,0] if both are valid.
 func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error) {
+	if len(items) == 0 {
+		return nil, errors.New("invalid set of Items provided")
+	}
+
 	if balance.Empty() || !balance.IsValid() {
 		return nil, errors.New("invalid balance provided")
 	}

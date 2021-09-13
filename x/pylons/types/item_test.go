@@ -100,7 +100,7 @@ func TestFindValidPaymentsPermutation(t *testing.T) {
 			desc: "Invalid1",
 			// {"coin0", 10}
 			balance: sdk.Coins{sdk.NewCoin("coin0", sdk.NewInt(10))},
-			err:     errors.New(fmt.Sprintf("insufficient balance to transfer item wiht ID %v in cookbook with ID %v", items[1].ID, items[1].CookbookID)),
+			err:     fmt.Errorf("insufficient balance to transfer item with ID %v in cookbook with ID %v", items[1].ID, items[1].CookbookID),
 		},
 		{
 			desc: "Invalid2",
