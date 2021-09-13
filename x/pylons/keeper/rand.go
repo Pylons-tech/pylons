@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -16,6 +14,5 @@ func (k Keeper) RandomSeed(ctx sdk.Context) int64 {
 		intv := int(bytv)
 		seedValue += (i*i + 1) * intv
 	}
-	fmt.Println("RandomSeed entityCount:", entityCount, "BlockHeight:", header.Height)
 	return int64(seedValue) + int64(entityCount)
 }

@@ -25,3 +25,13 @@ func (suite *IntegrationTestSuite) TestAccountGet() {
 		require.Equal(account.Username, rst.Value)
 	}
 }
+
+func (suite *IntegrationTestSuite) TestAccountGetAll() {
+	k := suite.k
+	ctx := suite.ctx
+	require := suite.Require()
+
+	accounts := createNPylonsAccount(k, ctx, 10)
+	list := k.GetAllPylonsAccount(ctx)
+	require.Equal(accounts, list)
+}
