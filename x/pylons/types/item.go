@@ -268,72 +268,113 @@ func (itemInput ItemInput) MatchItem(item Item, ec CelEnvCollection) error {
 	return nil
 }
 
-// FindValidPaymentsPermutation searches through the transferFees of a []Item to find a permutation
-// of payments from a balance of sdk.Coins.  The permutation is a valid set of sdk.Coins from
-// balance that can cover all transferFees in the set of []Item simultaneously.
-func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error) {
-	if balance.IsZero() {
-		return nil, errors.New("balance not sufficient")
+// checkPaymentsPermutation is a helper function that checks if a permutation of transferFee indexes on items can be
+// covered by balance
+func checkPaymentsPermutation(items []Item, balance sdk.Coins, permutation []int) bool {
+	// create sdk.Coins adding all selections of current permutation
+	permTotalAmt := sdk.NewCoins()
+	for i, transferFeeIdx := range permutation {
+		// if transferFeeIdx >= len(items[i].TransferFee) this permutation is invalid
+		if transferFeeIdx >= len(items[i].TransferFee) {
+			return false
+		}
+		permTotalAmt = permTotalAmt.Add(items[i].TransferFee[transferFeeIdx])
 	}
 
-	// check if there is any item in the set of Items where the set of coin denoms of its transferFee
-	// is disjoint with the set of denoms in balance.  If this is the case, a valid permutation can
-	// never be found -> return error.
+	return balance.IsAllGTE(permTotalAmt)
+}
+
+// newPaymentsPermutation increments by 1 permutation (as if it is a big-endian number in base val) starting from the
+// lower index. Carry over the increment to the next position when value at current position exceeds val.
+// A carry increases next element by val, instead of 1, when the carry happens at a position >= maxIndex.
+// This is done to avoid checking the same permutation multiple times in FindValidPaymentsPermutation.
+func newPaymentsPermutation(permutation []int, val, maxIndex int) ([]int, int) {
+	for i := range permutation {
+		permutation[i]++
+		if permutation[i] <= val {
+			// increment at this position was possible
+			return permutation, i
+		}
+		// carry
+		permutation[i] = 0
+		if i > maxIndex && i < len(permutation)-1 {
+			permutation[i+1] += val - 1
+		}
+	}
+	// permutation is all 0s if we reach this point - an "overflow"
+	return permutation, len(permutation)
+}
+
+// FindValidPaymentsPermutation searches through the transferFees of a slice []Item to find the first valid selection of
+// transferFees that can be covered by the input balance of sdk.Coins. An item.transferFee is an ordered (by priority)
+// []sdk.Coin that provides a set of choices to select from that are accepted as valid transferFee for the item.
+// Returns a []int where each element at any given position represents the index used to select the relative
+// transferFee for the item at the same position in the input []Item.
+// When exploring the solution space the algorithm prioritizes the permutation where the max(permutation) is minimized.
+// For example, for a set of 3 items the permutation [1,0,2] is preferred to [3,0,0] if both are valid.
+func FindValidPaymentsPermutation(items []Item, balance sdk.Coins) ([]int, error) {
+	if len(items) == 0 {
+		return nil, errors.New("invalid set of Items provided")
+	}
+
+	if balance.Empty() || !balance.IsValid() {
+		return nil, errors.New("invalid balance provided")
+	}
+
+	// represents the max(len(item.TransferFee)) for all items
+	maxValue := 0
+
+	// check if there is any item where none of the possible sdk.Coin in item.transferFee can be found in balance.
+	// If this is the case, a valid permutation can never be found, hence return error.
+	// The sdk.Coins.DenomsSubsetOf() function cannot be used here since elements of item.TransferFee get selected in a
+	// mutually exclusive manner therefore need to be checked independently (a single match is sufficient)
 	for _, item := range items {
 		noMatchingDenoms := true
+		if len(item.TransferFee) > maxValue {
+			maxValue = len(item.TransferFee)
+		}
 		for _, coin := range item.TransferFee {
-			amt := balance.AmountOf(coin.Denom)
-			if !amt.IsZero() {
+			if balance.AmountOf(coin.Denom).GTE(coin.Amount) {
 				noMatchingDenoms = false
+				break
 			}
 		}
 		if noMatchingDenoms {
-			return nil, errors.New("balance specified in coin inputs invalid")
+			return nil, fmt.Errorf("insufficient balance to transfer item with ID %v in cookbook with ID %v", item.ID, item.CookbookID)
 		}
 	}
 
-	// initialize permutation to start from all 0s
+	// initialize permutation to start from all 0-indexes on item.TransferFee (the lower the index the higher the priority)
 	permutation := make([]int, len(items))
-	// the current index
-	index := 0
-	// the last index in permutation that has maxed out
-	maxedOutIndex := -1
-	for {
-		// create transferFees using the current permutation
-		totalAmt := sdk.NewCoins()
-		for i, transferFeeIdx := range permutation {
-			totalAmt = totalAmt.Add(items[i].TransferFee[transferFeeIdx])
-		}
-		if balance.IsAllGTE(totalAmt) {
-			// found a valid items transferFee permutation
+	// start by allowing 1 as max values to produce new permutations
+	curMaxValue := 1
+	// tracks the higher index when an increment of value has happened when producing a new permutation
+	maxIndex := -1
+	// loop until curMaxValue can be incremented and new permutations can be produced
+	for curMaxValue <= maxValue {
+		// check if current permutation is valid
+		// ok to check invalid permutations (where a value at position I would be greater than len(items[I].TransferFee))
+		// invalid permutations are going to be produced as a result of how the algorithm works - we include and check
+		// invalid permutations to keep the algorithm simple
+		if checkPaymentsPermutation(items, balance, permutation) {
 			return permutation, nil
 		}
-
-		// create new permutation
-		incrTransferFeeIdx := permutation[index] + 1
-		if incrTransferFeeIdx > len(items[index].TransferFee) {
-			permutation[index] = 0
-		} else {
-			permutation[index] = incrTransferFeeIdx
-		}
-		incrMaxedOutIndex := maxedOutIndex + 1
-		if permutation[index] == len(items[index].TransferFee) && index <= incrMaxedOutIndex {
-			maxedOutIndex = incrMaxedOutIndex
-			for i := maxedOutIndex + 1; i < len(permutation); i++ {
-				// reset all successive items' transferFeeIdx
-				permutation[index] = 0
+		// create a new permutation but clamp values to curMaxValue
+		// by setting curMaxValue as max value to assign in newPaymentsPermutation(), we direct the search
+		// of the solution space to prioritize permutations where max(permutation) is minimized
+		permutation, maxIndex = newPaymentsPermutation(permutation, curMaxValue, maxIndex)
+		if maxIndex >= len(items) {
+			maxIndex = -1
+			curMaxValue++
+			// find the first item for which new curMaxValue would be valid and create new permutation with all 0s except
+			// the value at that position
+			for i := range permutation {
+				if len(items[i].TransferFee) >= curMaxValue {
+					permutation[i] = curMaxValue
+					break
+				}
 			}
 		}
-
-		if maxedOutIndex >= len(permutation) {
-			// all items' transferFeeIdx maxed out, no new permutations available to test
-			return nil, errors.New("balance not sufficient")
-		}
-		incrIndex := index + 1
-		if incrIndex > len(items) {
-			index = 0
-		} else {
-			index = incrIndex
-		}
 	}
+	return nil, errors.New("no valid set of items' transferFees exists that can be covered by the provided balance")
 }
