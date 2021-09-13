@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 	"testing"
 	"time"
 
@@ -661,4 +662,46 @@ func TestExecuteDisableRecipe(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, sdkerrors.ErrInvalidRequest.ABCICode(), resp.Code)
+}
+
+func TestExecuteRecipeNoInputOutputInvalidArgs(t *testing.T) {
+	net := network.New(t)
+	val := net.Validators[0]
+	ctx := val.ClientCtx
+	cookbookID := "testCookbookID"
+	recipeID := "testRecipeID"
+
+
+
+	common := []string{
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+	}
+
+	// invalid coininputs index
+	args := []string{cookbookID, recipeID, "invalid", "[]"} // empty list for item-ids since there is no item input
+	args = append(args, common...)
+	_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	require.Error(t, err)
+	require.True(t, strings.Contains(err.Error() ,strconv.ErrSyntax.Error()))
+
+	// invalid item IDs
+	args = []string{cookbookID, recipeID, "0", ""} // empty list for item-ids since there is no item input
+	args = append(args, common...)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	require.True(t, strings.Contains(err.Error() , "unexpected end of JSON input"))
+
+	// invalid cookbookID
+	args = []string{"1", recipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = append(args, common...)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	require.ErrorIs(t, err, sdkerrors.ErrInvalidRequest)
+
+	// invalid recipeID
+	args = []string{cookbookID, "1", "0", "[]"} // empty list for item-ids since there is no item input
+	args = append(args, common...)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	require.ErrorIs(t, err, sdkerrors.ErrInvalidRequest)
 }

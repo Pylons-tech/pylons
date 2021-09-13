@@ -869,7 +869,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
 			err:  nil,
-			code: sdkerrors.ErrInvalidRequest.ABCICode(),
+			code: sdkerrors.ErrInvalidCoins.ABCICode(),
 		},
 	} {
 		tc := tc
