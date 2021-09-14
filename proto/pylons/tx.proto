@@ -109,8 +109,6 @@ message MsgGoogleInAppPurchaseGetCoins {
 message MsgGoogleInAppPurchaseGetCoinsResponse {
 }
 
-
-
 message MsgSendItems {
   string creator = 1;
   string receiver = 2;
@@ -143,7 +141,6 @@ message MsgSetItemString {
 message MsgSetItemStringResponse {
 }
 
-
 message MsgCreateRecipe {
   string creator = 1;
   string cookbookID = 2;
@@ -159,7 +156,9 @@ message MsgCreateRecipe {
   bool enabled = 12;
   string extraInfo = 13;
 }
-message MsgCreateRecipeResponse { }
+
+message MsgCreateRecipeResponse {
+}
 
 message MsgUpdateRecipe {
   string creator = 1;
@@ -176,7 +175,9 @@ message MsgUpdateRecipe {
   bool enabled = 12;
   string extraInfo = 13;
 }
-message MsgUpdateRecipeResponse { }
+
+message MsgUpdateRecipeResponse {
+}
 
 message MsgCreateCookbook {
   string creator = 1;
@@ -189,7 +190,9 @@ message MsgCreateCookbook {
   cosmos.base.v1beta1.Coin costPerBlock = 8 [(gogoproto.nullable) = false];
   bool enabled = 9;
 }
-message MsgCreateCookbookResponse { }
+
+message MsgCreateCookbookResponse {
+}
 
 message MsgUpdateCookbook {
   string creator = 1;
@@ -202,4 +205,6 @@ message MsgUpdateCookbook {
   cosmos.base.v1beta1.Coin costPerBlock = 8 [(gogoproto.nullable) = false];
   bool enabled = 9;
 }
-message MsgUpdateCookbookResponse { }
+
+message MsgUpdateCookbookResponse {
+}
