@@ -1,10 +1,8 @@
 package keeper_test
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (suite *IntegrationTestSuite) TestPayFees() {
@@ -18,8 +16,8 @@ func (suite *IntegrationTestSuite) TestPayFees() {
 	mintAmt := sdk.Coins{}
 	mintAmt = mintAmt.Add(coin)
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(mintAmt)
+	// bk.SetSupply(ctx, supply)
 
 	//Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -52,8 +50,8 @@ func (suite *IntegrationTestSuite) TestLockCoinsForExecution() {
 	mintAmt := sdk.Coins{}
 	mintAmt = mintAmt.Add(coin)
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(mintAmt)
+	// bk.SetSupply(ctx, supply)
 
 	// Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -86,8 +84,8 @@ func (suite *IntegrationTestSuite) TestLockCoinsForTrade() {
 	mintAmt := sdk.Coins{}
 	mintAmt = mintAmt.Add(coin)
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(mintAmt)
+	// bk.SetSupply(ctx, supply)
 
 	// Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -120,8 +118,8 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForTrade() {
 	coinsOfInitialSupply := sdk.Coins{}
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(coinsOfInitialSupply)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(coinsOfInitialSupply)
+	// bk.SetSupply(ctx, supply)
 
 	//Create a test address
 	addrString := types.GenTestBech32FromString("test")
@@ -169,8 +167,8 @@ func (suite *IntegrationTestSuite) TestUnlockCoinsForExecution() {
 	coinsOfInitialSupply := sdk.Coins{}
 	coinsOfInitialSupply = coinsOfInitialSupply.Add(initialSupply)
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(coinsOfInitialSupply)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(coinsOfInitialSupply)
+	// bk.SetSupply(ctx, supply)
 
 	//Create a test address
 	addrString := types.GenTestBech32FromString("test")

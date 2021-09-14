@@ -1,11 +1,9 @@
 package keeper_test
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
@@ -49,8 +47,8 @@ func (suite *IntegrationTestSuite) TestCompleteExecutionEarly() {
 	pendingExecution := createNPendingExecutionForSingleRecipe(k, ctx, 1, recipe)[0]
 
 	// set initial supply to be not nil, any value will do
-	supply := bankTypes.NewSupply(amountToPay)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(amountToPay)
+	// bk.SetSupply(ctx, supply)
 	// give coins to requester
 	requesterAddr, err := sdk.AccAddressFromBech32(pendingExecution.Creator)
 	require.NoError(err)

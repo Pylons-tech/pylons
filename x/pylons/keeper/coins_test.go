@@ -1,10 +1,8 @@
 package keeper_test
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 func (suite *IntegrationTestSuite) TestMintCoins() {
@@ -19,8 +17,8 @@ func (suite *IntegrationTestSuite) TestMintCoins() {
 	mintAmt = mintAmt.Add(coin)
 
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(mintAmt)
+	// bk.SetSupply(ctx, supply)
 
 	// CoinsIssuer module account has minter permissions
 	err := k.MintCoins(ctx, types.CoinsIssuerName, mintAmt)
@@ -46,8 +44,8 @@ func (suite *IntegrationTestSuite) TestMintCoinsToAddr() {
 	mintAmt = mintAmt.Add(coin)
 
 	// set arbitrary initial supply to 100 pylons
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(mintAmt)
+	// bk.SetSupply(ctx, supply)
 
 	err := k.MintCoinsToAddr(ctx, addr, mintAmt)
 

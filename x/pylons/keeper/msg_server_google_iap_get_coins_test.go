@@ -3,12 +3,10 @@ package keeper_test
 import (
 	"encoding/base64"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
@@ -21,8 +19,8 @@ func (suite *IntegrationTestSuite) TestMsgServerGoogleInAppPurchaseGetCoins() {
 	wctx := sdk.WrapSDKContext(ctx)
 
 	// since we are testing pylons GoogleIAPs, we need to set the pylons supply to be not nil
-	supply := bankTypes.NewSupply(sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))))
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(sdk.NewCoins(sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(1))))
+	// bk.SetSupply(ctx, supply)
 
 	for _, tc := range []struct {
 		desc    string

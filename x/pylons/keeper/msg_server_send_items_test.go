@@ -1,12 +1,10 @@
 package keeper_test
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-
 	"github.com/Pylons-tech/pylons/x/pylons/keeper"
 	"github.com/Pylons-tech/pylons/x/pylons/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
@@ -36,8 +34,8 @@ func (suite *IntegrationTestSuite) TestMsgServerSendItems() {
 	mintAmt := sdk.Coins{}
 	mintAmt = mintAmt.Add(coin)
 	// set arbitrary initial supply - can use same value as mintAmt
-	supply := bankTypes.NewSupply(mintAmt)
-	bk.SetSupply(ctx, supply)
+	// supply := bankTypes.NewSupply(mintAmt)
+	// bk.SetSupply(ctx, supply)
 	ownerAddr, _ := sdk.AccAddressFromBech32(owner)
 	// transfer coins to our test address
 	err := k.MintCoinsToAddr(ctx, ownerAddr, mintAmt)

@@ -51,7 +51,6 @@ func SimulateOp(k keeper.Keeper) simtypes.Operation {
 
 		msg := types.NewMsgCreateAccount("TODO", "TODO")
 
-
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
 }

@@ -255,4 +255,3 @@ func (am AppModule) WeightedOperations(simState module.SimulationState) []simtyp
 		simState.AppParams, simState.Cdc, am.keeper,
 	)
 }
-

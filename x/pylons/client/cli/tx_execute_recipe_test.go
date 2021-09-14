@@ -142,7 +142,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
 		var resp sdk.TxResponse
-		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
 
 		// simulate waiting for later block heights
@@ -159,7 +159,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 		require.NoError(t, err)
 		var execResp types.QueryGetExecutionResponse
-		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 		// verify completed
 		require.Equal(t, true, execResp.Completed)
 
@@ -169,7 +169,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
 		var itemResp types.QueryGetItemResponse
-		require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
+		require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 		require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 		require.Equal(t, height, itemResp.Item.LastUpdate)
 	}
@@ -270,7 +270,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create recipe
@@ -279,7 +279,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
@@ -287,7 +287,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -304,7 +304,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -314,7 +314,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
@@ -324,7 +324,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowRecipe(), args)
 	require.NoError(t, err)
 	var recipeResp types.QueryGetRecipeResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &recipeResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &recipeResp))
 	require.Equal(t, expectedAmountMinted, recipeResp.Recipe.Entries.ItemOutputs[0].AmountMinted)
 
 	// try to execute again
@@ -333,7 +333,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// checking
@@ -349,7 +349,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 	args = []string{execID}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -458,7 +458,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create recipe
@@ -467,7 +467,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
@@ -475,7 +475,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -505,7 +505,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	_, err = net.WaitForHeightWithTimeout(height+10, 60*time.Second)
@@ -516,7 +516,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -626,7 +626,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create recipe
@@ -635,7 +635,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// create execution
@@ -643,6 +643,6 @@ func TestExecuteDisableRecipe(t *testing.T) {
 	args = append(args, common...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.Codec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, sdkerrors.ErrInvalidRequest.ABCICode(), resp.Code)
 }
