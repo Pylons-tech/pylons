@@ -47,7 +47,6 @@ message EventCreateRecipe {
 // EventUpdateRecipe contains a record of the recipe pre-update.  The updated fields can be found by the message emitted by MsgUpdateRecipe
 message EventUpdateRecipe {
   Recipe originalRecipe = 1 [(gogoproto.nullable) = false];
-
 }
 
 // EventCreateExecution contains the creator and ID of a created execution. Execution IDs are of the form {count-targetBlockHeight}

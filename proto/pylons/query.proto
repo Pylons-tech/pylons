@@ -24,7 +24,6 @@ service Query {
 		option (google.api.http).get = "/pylons/account/address/{address}";
 	}
 
-
 	// Queries a username by account.
 	rpc AddressByUsername(QueryGetAddressByUsernameRequest) returns (QueryGetAddressByUsernameResponse) {
 		option (google.api.http).get = "/pylons/account/username/{username}";
@@ -35,66 +34,55 @@ service Query {
 		option (google.api.http).get = "/pylons/trade/{ID}";
 	}
 
-
 	// Queries a list of listItemByOwner items.
 	rpc ListItemByOwner(QueryListItemByOwnerRequest) returns (QueryListItemByOwnerResponse) {
 		option (google.api.http).get = "/pylons/items/{owner}";
 	}
-
 
 	// Queries a googleIAPOrder by PurchaseToken.
 	rpc GoogleInAppPurchaseOrder(QueryGetGoogleInAppPurchaseOrderRequest) returns (QueryGetGoogleInAppPurchaseOrderResponse) {
 		option (google.api.http).get = "/pylons/iap/{PurchaseToken}";
 	}
 
-
 	// Queries a list of listExecutionsByItem items.
 	rpc ListExecutionsByItem(QueryListExecutionsByItemRequest) returns (QueryListExecutionsByItemResponse) {
 		option (google.api.http).get = "/pylons/executions/item/{CookbookID}/{ItemID}";
 	}
-
 
 	// Queries a list of listExecutionsByRecipe items.
 	rpc ListExecutionsByRecipe(QueryListExecutionsByRecipeRequest) returns (QueryListExecutionsByRecipeResponse) {
 		option (google.api.http).get = "/pylons/executions/recipe/{CookbookID}/{RecipeID}";
 	}
 
-
 	// Queries a execution by id.
 	rpc Execution(QueryGetExecutionRequest) returns (QueryGetExecutionResponse) {
 		option (google.api.http).get = "/pylons/execution/{ID}";
 	}
-
 
 	// Queries a list of listRecipesByCookbook items.
 	rpc ListRecipesByCookbook(QueryListRecipesByCookbookRequest) returns (QueryListRecipesByCookbookResponse) {
 		option (google.api.http).get = "/pylons/recipes/{CookbookID}";
 	}
 
-
 	// Queries a item by ID.
 	rpc Item(QueryGetItemRequest) returns (QueryGetItemResponse) {
 		option (google.api.http).get = "/pylons/item/{CookbookID}/{ID}";
 	}
-
 
 	// Retrieves a recipe by ID.
 	rpc Recipe(QueryGetRecipeRequest) returns (QueryGetRecipeResponse) {
 		option (google.api.http).get = "/pylons/recipe/{CookbookID}/{ID}";
 	}
 
-
 	// Retrieves the list of cookbooks owned by an address
 	rpc ListCookbooksByCreator(QueryListCookbooksByCreatorRequest) returns (QueryListCookbooksByCreatorResponse) {
 		option (google.api.http).get = "/pylons/cookbooks/{creator}";
 	}
 
-
 	// Retrieves a cookbook by ID.
 	rpc Cookbook(QueryGetCookbookRequest) returns (QueryGetCookbookResponse) {
 		option (google.api.http).get = "/pylons/cookbook/{ID}";
 	}
-
 }
 
 // this line is used by starport scaffolding # 3
@@ -113,7 +101,6 @@ message QueryGetUsernameByAddressResponse {
 message QueryGetAddressByUsernameResponse {
 	AccountAddr address = 1 [(gogoproto.nullable) = false];
 }
-
 
 message QueryGetTradeRequest {
 	uint64 ID = 1;
