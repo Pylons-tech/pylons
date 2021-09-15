@@ -25,7 +25,7 @@ func (k Keeper) Trade(c context.Context, req *types.QueryGetTradeRequest) (*type
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetTradeIDBytes(req.ID)), &trade)
+	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(req.ID)), &trade)
 
 	return &types.QueryGetTradeResponse{Trade: trade}, nil
 }

@@ -57,7 +57,7 @@ func (k Keeper) AppendGoogleIAPOrder(
 // SetGoogleIAPOrder set a specific googleIAPOrder in the store
 func (k Keeper) SetGoogleIAPOrder(ctx sdk.Context, googleIAPOrder types.GoogleInAppPurchaseOrder) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
-	b := k.cdc.MustMarshalBinaryBare(&googleIAPOrder)
+	b := k.cdc.MustMarshal(&googleIAPOrder)
 	store.Set(types.KeyPrefix(googleIAPOrder.PurchaseToken), b)
 
 	// required for random seed init given how it's handled rn
@@ -68,7 +68,7 @@ func (k Keeper) SetGoogleIAPOrder(ctx sdk.Context, googleIAPOrder types.GoogleIn
 func (k Keeper) GetGoogleIAPOrder(ctx sdk.Context, purchaseToken string) types.GoogleInAppPurchaseOrder {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
 	var googleIAPOrder types.GoogleInAppPurchaseOrder
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(purchaseToken)), &googleIAPOrder)
+	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(purchaseToken)), &googleIAPOrder)
 	return googleIAPOrder
 }
 
@@ -92,7 +92,7 @@ func (k Keeper) GetAllGoogleIAPOrder(ctx sdk.Context) (list []types.GoogleInAppP
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.GoogleInAppPurchaseOrder
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
