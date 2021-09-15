@@ -8,7 +8,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	keyringerrors "github.com/99designs/keyring"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -54,7 +53,7 @@ func TestCreateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: keyringerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc:     "invalidUsername1",
@@ -165,7 +164,7 @@ func TestUpdateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: keyringerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc:     "invalidUsername1",
