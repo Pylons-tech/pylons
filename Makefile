@@ -58,10 +58,10 @@ proto-gen:
 test: test-unit
 
 test-unit:
-	@go test -mod=readonly -v $(PACKAGES)
+	@go test -mod=readonly -v -timeout 30m $(PACKAGES)
 
 test-race:
-	@go test -mod=readonly -v -race $(PACKAGES) 
+	@go test -mod=readonly -v -race -timeout 30m  $(PACKAGES)
 
 COVER_FILE := coverage.txt
 COVER_HTML_FILE := cover.html
@@ -71,7 +71,7 @@ test-cover:
 	@go tool cover -html=$(COVER_FILE) -o $(COVER_HTML_FILE)
 
 bench:
-	@go test -mod=readonly -v -bench=. $(PACKAGES)
+	@go test -mod=readonly -v -timeout 30m -bench=. $(PACKAGES)
 
 
 .PHONY: test test-unit test-race test-cover bench

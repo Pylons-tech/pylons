@@ -338,6 +338,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	}
 }
 
+
 func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
