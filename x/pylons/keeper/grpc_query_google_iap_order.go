@@ -25,7 +25,7 @@ func (k Keeper) GoogleInAppPurchaseOrder(c context.Context, req *types.QueryGetG
 	}
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.GoogleInAppPurchaseOrderKey))
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(req.PurchaseToken)), &googleIAPOrder)
+	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(req.PurchaseToken)), &googleIAPOrder)
 
 	return &types.QueryGetGoogleInAppPurchaseOrderResponse{Order: googleIAPOrder}, nil
 }

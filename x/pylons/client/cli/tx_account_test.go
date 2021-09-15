@@ -8,7 +8,6 @@ import (
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 
-	keyringerrors "github.com/99designs/keyring"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -54,7 +53,7 @@ func TestCreateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: keyringerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc:     "invalidUsername1",
@@ -104,7 +103,7 @@ func TestCreateAccount(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -131,7 +130,7 @@ func TestUpdateAccount(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	for _, tc := range []struct {
@@ -165,7 +164,7 @@ func TestUpdateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err: keyringerrors.ErrKeyNotFound,
+			err: sdkerrors.ErrKeyNotFound,
 		},
 		{
 			desc:     "invalidUsername1",
@@ -202,7 +201,7 @@ func TestUpdateAccount(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})

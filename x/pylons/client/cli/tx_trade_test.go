@@ -96,7 +96,7 @@ func TestCreateTradeNoItemOutput(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -225,7 +225,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -242,7 +242,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -252,7 +252,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
@@ -331,12 +331,13 @@ func TestCreateTradeItemOutput(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
 	}
 }
+
 
 func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	net := network.New(t)
@@ -460,7 +461,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -477,7 +478,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -487,7 +488,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
@@ -566,7 +567,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -694,7 +695,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
@@ -711,7 +712,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
@@ -721,7 +722,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
@@ -800,7 +801,7 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -883,7 +884,7 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -971,7 +972,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})
@@ -1060,7 +1061,7 @@ func TestCancelTrade(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse
-				require.NoError(t, ctx.JSONMarshaler.UnmarshalJSON(out.Bytes(), &resp))
+				require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 				require.Equal(t, tc.code, resp.Code)
 			}
 		})

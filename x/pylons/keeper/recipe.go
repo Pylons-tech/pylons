@@ -12,7 +12,7 @@ import (
 func (k Keeper) SetRecipe(ctx sdk.Context, recipe types.Recipe) {
 	recipesStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.RecipeKey))
 	cookbookRecipesStore := prefix.NewStore(recipesStore, types.KeyPrefix(recipe.CookbookID))
-	b := k.cdc.MustMarshalBinaryBare(&recipe)
+	b := k.cdc.MustMarshal(&recipe)
 	cookbookRecipesStore.Set(types.KeyPrefix(recipe.ID), b)
 
 	// required for random seed init given how it's handled rn
@@ -29,7 +29,7 @@ func (k Keeper) GetRecipe(ctx sdk.Context, cookbookID string, id string) (val ty
 		return val, false
 	}
 
-	k.cdc.MustUnmarshalBinaryBare(b, &val)
+	k.cdc.MustUnmarshal(b, &val)
 	return val, true
 }
 
@@ -42,7 +42,7 @@ func (k Keeper) GetAllRecipe(ctx sdk.Context) (list []types.Recipe) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Recipe
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
@@ -58,7 +58,7 @@ func (k Keeper) GetAllRecipesByCookbook(ctx sdk.Context, cookbookID string) (lis
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Recipe
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
@@ -73,7 +73,7 @@ func (k Keeper) getRecipesByCookbookPaginated(ctx sdk.Context, cookbookID string
 
 	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
 		var val types.Recipe
-		k.cdc.MustUnmarshalBinaryBare(value, &val)
+		k.cdc.MustUnmarshal(value, &val)
 		recipes = append(recipes, val)
 		return nil
 	})

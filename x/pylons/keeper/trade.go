@@ -51,8 +51,8 @@ func (k Keeper) AppendTrade(
 	trade.ID = count
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	appendedValue := k.cdc.MustMarshalBinaryBare(&trade)
-	store.Set(GetTradeIDBytes(trade.ID), appendedValue)
+	appendedValue := k.cdc.MustMarshal(&trade)
+	store.Set(getTradeIDBytes(trade.ID), appendedValue)
 
 	// Update trade count
 	k.SetTradeCount(ctx, count+1)
@@ -63,22 +63,22 @@ func (k Keeper) AppendTrade(
 // SetTrade set a specific trade in the store
 func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	b := k.cdc.MustMarshalBinaryBare(&trade)
-	store.Set(GetTradeIDBytes(trade.ID), b)
+	b := k.cdc.MustMarshal(&trade)
+	store.Set(getTradeIDBytes(trade.ID), b)
 }
 
 // GetTrade returns a trade from its id
 func (k Keeper) GetTrade(ctx sdk.Context, id uint64) types.Trade {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
 	var trade types.Trade
-	k.cdc.MustUnmarshalBinaryBare(store.Get(GetTradeIDBytes(id)), &trade)
+	k.cdc.MustUnmarshal(store.Get(getTradeIDBytes(id)), &trade)
 	return trade
 }
 
 // HasTrade checks if the trade exists in the store
 func (k Keeper) HasTrade(ctx sdk.Context, id uint64) bool {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	return store.Has(GetTradeIDBytes(id))
+	return store.Has(getTradeIDBytes(id))
 }
 
 // GetTradeOwner returns the creator of the
@@ -89,7 +89,7 @@ func (k Keeper) GetTradeOwner(ctx sdk.Context, id uint64) string {
 // RemoveTrade removes a trade from the store
 func (k Keeper) RemoveTrade(ctx sdk.Context, id uint64) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	store.Delete(GetTradeIDBytes(id))
+	store.Delete(getTradeIDBytes(id))
 }
 
 // GetAllTrade returns all trade
@@ -101,21 +101,15 @@ func (k Keeper) GetAllTrade(ctx sdk.Context) (list []types.Trade) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Trade
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
 	return
 }
 
-// GetTradeIDBytes returns the byte representation of the ID
-func GetTradeIDBytes(id uint64) []byte {
+func getTradeIDBytes(id uint64) []byte {
 	bz := make([]byte, 8)
 	binary.BigEndian.PutUint64(bz, id)
 	return bz
-}
-
-// GetTradeIDFromBytes returns ID in uint64 format from a byte array
-func GetTradeIDFromBytes(bz []byte) uint64 {
-	return binary.BigEndian.Uint64(bz)
 }

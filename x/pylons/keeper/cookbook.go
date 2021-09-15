@@ -83,7 +83,7 @@ func (k Keeper) getCookbookIDsByAddr(ctx sdk.Context, addr sdk.AccAddress) (list
 // SetCookbook set a specific cookbook in the store from its ID
 func (k Keeper) SetCookbook(ctx sdk.Context, cookbook types.Cookbook) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookKey))
-	b := k.cdc.MustMarshalBinaryBare(&cookbook)
+	b := k.cdc.MustMarshal(&cookbook)
 	store.Set(types.KeyPrefix(cookbook.ID), b)
 
 	// required for random seed init given how it's handled rn
@@ -108,7 +108,7 @@ func (k Keeper) GetCookbook(ctx sdk.Context, id string) (val types.Cookbook, fou
 		return val, false
 	}
 
-	k.cdc.MustUnmarshalBinaryBare(b, &val)
+	k.cdc.MustUnmarshal(b, &val)
 	return val, true
 }
 
@@ -121,7 +121,7 @@ func (k Keeper) GetAllCookbook(ctx sdk.Context) (list []types.Cookbook) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Cookbook
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 

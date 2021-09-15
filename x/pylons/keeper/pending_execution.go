@@ -64,14 +64,14 @@ func (k Keeper) AppendPendingExecution(ctx sdk.Context, execution types.Executio
 func (k Keeper) GetPendingExecution(ctx sdk.Context, id string) types.Execution {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
 	var execution types.Execution
-	k.cdc.MustUnmarshalBinaryBare(store.Get(types.KeyPrefix(id)), &execution)
+	k.cdc.MustUnmarshal(store.Get(types.KeyPrefix(id)), &execution)
 	return execution
 }
 
 // SetPendingExecution sets a pending execution in the store
 func (k Keeper) SetPendingExecution(ctx sdk.Context, execution types.Execution) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.PendingExecutionKey))
-	value := k.cdc.MustMarshalBinaryBare(&execution)
+	value := k.cdc.MustMarshal(&execution)
 	store.Set(types.KeyPrefix(execution.ID), value)
 
 	// add execution to recipe mapping
@@ -120,7 +120,7 @@ func (k Keeper) GetAllPendingExecution(ctx sdk.Context) (list []types.Execution)
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Execution
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
@@ -136,7 +136,7 @@ func (k Keeper) GetAllPendingExecutionAtBlockHeight(ctx sdk.Context, blockHeight
 
 	for ; iterator.Valid(); iterator.Next() {
 		var val types.Execution
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &val)
+		k.cdc.MustUnmarshal(iterator.Value(), &val)
 		list = append(list, val)
 	}
 
