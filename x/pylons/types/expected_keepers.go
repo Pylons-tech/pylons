@@ -27,3 +27,8 @@ type AccountKeeper interface {
 	GetModuleAddress(moduleName string) sdk.AccAddress
 	NewAccountWithAddress(ctx sdk.Context, addr sdk.AccAddress) types.AccountI
 }
+
+// IBCTransferKeeper defines the contract needed for IBCTransferKeeper related APIs.
+type IBCTransferKeeper interface {
+	DenomPathFromHash(ctx sdk.Context, denom string) (string, error)
+}

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
+import { DenomUnit } from '../cosmos/bank/v1beta1/bank'
 import { ItemRef } from '../pylons/trade'
 import { CoinInput, ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe'
 import { Coin } from '../cosmos/base/v1beta1/coin'
@@ -8,6 +9,18 @@ import { Coin } from '../cosmos/base/v1beta1/coin'
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
 /** this line is used by starport scaffolding # proto/tx/message */
+export interface MsgSetCookbookDenomMetadata {
+  creator: string
+  cookbookID: string
+  denom: string
+  description: string
+  denomUnits: DenomUnit[]
+  base: string
+  display: string
+}
+
+export interface MsgSetCookbookDenomMetadataResponse {}
+
 export interface MsgUpdateAccount {
   creator: string
   username: string
@@ -171,6 +184,208 @@ export interface MsgUpdateCookbook {
 }
 
 export interface MsgUpdateCookbookResponse {}
+
+const baseMsgSetCookbookDenomMetadata: object = { creator: '', cookbookID: '', denom: '', description: '', base: '', display: '' }
+
+export const MsgSetCookbookDenomMetadata = {
+  encode(message: MsgSetCookbookDenomMetadata, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.cookbookID !== '') {
+      writer.uint32(18).string(message.cookbookID)
+    }
+    if (message.denom !== '') {
+      writer.uint32(26).string(message.denom)
+    }
+    if (message.description !== '') {
+      writer.uint32(34).string(message.description)
+    }
+    for (const v of message.denomUnits) {
+      DenomUnit.encode(v!, writer.uint32(42).fork()).ldelim()
+    }
+    if (message.base !== '') {
+      writer.uint32(50).string(message.base)
+    }
+    if (message.display !== '') {
+      writer.uint32(58).string(message.display)
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetCookbookDenomMetadata {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgSetCookbookDenomMetadata } as MsgSetCookbookDenomMetadata
+    message.denomUnits = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.cookbookID = reader.string()
+          break
+        case 3:
+          message.denom = reader.string()
+          break
+        case 4:
+          message.description = reader.string()
+          break
+        case 5:
+          message.denomUnits.push(DenomUnit.decode(reader, reader.uint32()))
+          break
+        case 6:
+          message.base = reader.string()
+          break
+        case 7:
+          message.display = reader.string()
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): MsgSetCookbookDenomMetadata {
+    const message = { ...baseMsgSetCookbookDenomMetadata } as MsgSetCookbookDenomMetadata
+    message.denomUnits = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.cookbookID !== undefined && object.cookbookID !== null) {
+      message.cookbookID = String(object.cookbookID)
+    } else {
+      message.cookbookID = ''
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = String(object.denom)
+    } else {
+      message.denom = ''
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = String(object.description)
+    } else {
+      message.description = ''
+    }
+    if (object.denomUnits !== undefined && object.denomUnits !== null) {
+      for (const e of object.denomUnits) {
+        message.denomUnits.push(DenomUnit.fromJSON(e))
+      }
+    }
+    if (object.base !== undefined && object.base !== null) {
+      message.base = String(object.base)
+    } else {
+      message.base = ''
+    }
+    if (object.display !== undefined && object.display !== null) {
+      message.display = String(object.display)
+    } else {
+      message.display = ''
+    }
+    return message
+  },
+
+  toJSON(message: MsgSetCookbookDenomMetadata): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.cookbookID !== undefined && (obj.cookbookID = message.cookbookID)
+    message.denom !== undefined && (obj.denom = message.denom)
+    message.description !== undefined && (obj.description = message.description)
+    if (message.denomUnits) {
+      obj.denomUnits = message.denomUnits.map((e) => (e ? DenomUnit.toJSON(e) : undefined))
+    } else {
+      obj.denomUnits = []
+    }
+    message.base !== undefined && (obj.base = message.base)
+    message.display !== undefined && (obj.display = message.display)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<MsgSetCookbookDenomMetadata>): MsgSetCookbookDenomMetadata {
+    const message = { ...baseMsgSetCookbookDenomMetadata } as MsgSetCookbookDenomMetadata
+    message.denomUnits = []
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.cookbookID !== undefined && object.cookbookID !== null) {
+      message.cookbookID = object.cookbookID
+    } else {
+      message.cookbookID = ''
+    }
+    if (object.denom !== undefined && object.denom !== null) {
+      message.denom = object.denom
+    } else {
+      message.denom = ''
+    }
+    if (object.description !== undefined && object.description !== null) {
+      message.description = object.description
+    } else {
+      message.description = ''
+    }
+    if (object.denomUnits !== undefined && object.denomUnits !== null) {
+      for (const e of object.denomUnits) {
+        message.denomUnits.push(DenomUnit.fromPartial(e))
+      }
+    }
+    if (object.base !== undefined && object.base !== null) {
+      message.base = object.base
+    } else {
+      message.base = ''
+    }
+    if (object.display !== undefined && object.display !== null) {
+      message.display = object.display
+    } else {
+      message.display = ''
+    }
+    return message
+  }
+}
+
+const baseMsgSetCookbookDenomMetadataResponse: object = {}
+
+export const MsgSetCookbookDenomMetadataResponse = {
+  encode(_: MsgSetCookbookDenomMetadataResponse, writer: Writer = Writer.create()): Writer {
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): MsgSetCookbookDenomMetadataResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseMsgSetCookbookDenomMetadataResponse } as MsgSetCookbookDenomMetadataResponse
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(_: any): MsgSetCookbookDenomMetadataResponse {
+    const message = { ...baseMsgSetCookbookDenomMetadataResponse } as MsgSetCookbookDenomMetadataResponse
+    return message
+  },
+
+  toJSON(_: MsgSetCookbookDenomMetadataResponse): unknown {
+    const obj: any = {}
+    return obj
+  },
+
+  fromPartial(_: DeepPartial<MsgSetCookbookDenomMetadataResponse>): MsgSetCookbookDenomMetadataResponse {
+    const message = { ...baseMsgSetCookbookDenomMetadataResponse } as MsgSetCookbookDenomMetadataResponse
+    return message
+  }
+}
 
 const baseMsgUpdateAccount: object = { creator: '', username: '' }
 
@@ -2888,6 +3103,7 @@ export const MsgUpdateCookbookResponse = {
 /** Msg defines the Msg service. */
 export interface Msg {
   /** this line is used by starport scaffolding # proto/tx/rpc */
+  SetCookbookDenomMetadata(request: MsgSetCookbookDenomMetadata): Promise<MsgSetCookbookDenomMetadataResponse>
   UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>
   FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>
   CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>
@@ -2910,6 +3126,12 @@ export class MsgClientImpl implements Msg {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  SetCookbookDenomMetadata(request: MsgSetCookbookDenomMetadata): Promise<MsgSetCookbookDenomMetadataResponse> {
+    const data = MsgSetCookbookDenomMetadata.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'SetCookbookDenomMetadata', data)
+    return promise.then((data) => MsgSetCookbookDenomMetadataResponse.decode(new Reader(data)))
+  }
+
   UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse> {
     const data = MsgUpdateAccount.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Msg', 'UpdateAccount', data)

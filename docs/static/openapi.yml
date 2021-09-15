@@ -23832,6 +23832,8 @@ definitions:
     type: object
   Pylonstech.pylons.pylons.MsgSendItemsResponse:
     type: object
+  Pylonstech.pylons.pylons.MsgSetCookbookDenomMetadataResponse:
+    type: object
   Pylonstech.pylons.pylons.MsgSetItemStringResponse:
     type: object
   Pylonstech.pylons.pylons.MsgTransferCookbookResponse:

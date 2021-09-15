@@ -14,6 +14,8 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
 )
 
+// TODO add tests for coinInput/coinOutput validation
+
 func TestCreateRecipe(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]

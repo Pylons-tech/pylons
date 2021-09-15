@@ -206,6 +206,7 @@ export interface PylonsMsgExecuteRecipeResponse {
 export declare type PylonsMsgFulfillTradeResponse = object;
 export declare type PylonsMsgGoogleInAppPurchaseGetCoinsResponse = object;
 export declare type PylonsMsgSendItemsResponse = object;
+export declare type PylonsMsgSetCookbookDenomMetadataResponse = object;
 export declare type PylonsMsgSetItemStringResponse = object;
 export declare type PylonsMsgTransferCookbookResponse = object;
 export declare type PylonsMsgUpdateAccountResponse = object;
@@ -329,6 +330,24 @@ signatures required by gogoproto.
 export interface V1Beta1Coin {
     denom?: string;
     amount?: string;
+}
+/**
+* DenomUnit represents a struct that describes a given
+denomination unit of the basic token.
+*/
+export interface V1Beta1DenomUnit {
+    /** denom represents the string name of the given denom unit (e.g uatom). */
+    denom?: string;
+    /**
+     * exponent represents power of 10 exponent that one must
+     * raise the base_denom to in order to equal the given DenomUnit's denom
+     * 1 denom = 1^exponent base_denom
+     * (e.g. with a base_denom of uatom, one can create a DenomUnit of 'atom' with
+     * exponent = 6, thus: 1 atom = 10^6 uatom).
+     * @format int64
+     */
+    exponent?: number;
+    aliases?: string[];
 }
 /**
 * message SomeRequest {

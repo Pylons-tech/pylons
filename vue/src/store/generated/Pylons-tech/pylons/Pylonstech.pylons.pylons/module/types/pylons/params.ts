@@ -11,10 +11,12 @@ export interface GoogleInAppPurchasePackage {
   Amount: string
 }
 
+/** CoinIssuer represents an entity or external blockchain */
 export interface CoinIssuer {
   CoinDenom: string
   Packages: GoogleInAppPurchasePackage[]
   GoogleInAppPurchasePubKey: string
+  EntityName: string
 }
 
 /** Params represent the parameters used by the pylons module */
@@ -119,7 +121,7 @@ export const GoogleInAppPurchasePackage = {
   }
 }
 
-const baseCoinIssuer: object = { CoinDenom: '', GoogleInAppPurchasePubKey: '' }
+const baseCoinIssuer: object = { CoinDenom: '', GoogleInAppPurchasePubKey: '', EntityName: '' }
 
 export const CoinIssuer = {
   encode(message: CoinIssuer, writer: Writer = Writer.create()): Writer {
@@ -131,6 +133,9 @@ export const CoinIssuer = {
     }
     if (message.GoogleInAppPurchasePubKey !== '') {
       writer.uint32(26).string(message.GoogleInAppPurchasePubKey)
+    }
+    if (message.EntityName !== '') {
+      writer.uint32(34).string(message.EntityName)
     }
     return writer
   },
@@ -151,6 +156,9 @@ export const CoinIssuer = {
           break
         case 3:
           message.GoogleInAppPurchasePubKey = reader.string()
+          break
+        case 4:
+          message.EntityName = reader.string()
           break
         default:
           reader.skipType(tag & 7)
@@ -178,6 +186,11 @@ export const CoinIssuer = {
     } else {
       message.GoogleInAppPurchasePubKey = ''
     }
+    if (object.EntityName !== undefined && object.EntityName !== null) {
+      message.EntityName = String(object.EntityName)
+    } else {
+      message.EntityName = ''
+    }
     return message
   },
 
@@ -190,6 +203,7 @@ export const CoinIssuer = {
       obj.Packages = []
     }
     message.GoogleInAppPurchasePubKey !== undefined && (obj.GoogleInAppPurchasePubKey = message.GoogleInAppPurchasePubKey)
+    message.EntityName !== undefined && (obj.EntityName = message.EntityName)
     return obj
   },
 
@@ -210,6 +224,11 @@ export const CoinIssuer = {
       message.GoogleInAppPurchasePubKey = object.GoogleInAppPurchasePubKey
     } else {
       message.GoogleInAppPurchasePubKey = ''
+    }
+    if (object.EntityName !== undefined && object.EntityName !== null) {
+      message.EntityName = object.EntityName
+    } else {
+      message.EntityName = ''
     }
     return message
   }

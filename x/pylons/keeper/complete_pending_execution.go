@@ -148,10 +148,6 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 	if err != nil {
 		return types.Execution{}, types.EventCompleteExecution{}, false, err
 	}
-	for _, coin := range coins {
-		k.AddDenomToCookbook(ctx, recipe.CookbookID, coin.Denom)
-		k.AddCookbookToDenom(ctx, coin.Denom, recipe.CookbookID)
-	}
 	err = k.bankKeeper.SendCoinsFromModuleToAccount(ctx, types.ExecutionsLockerName, creator, coins)
 	if err != nil {
 		return types.Execution{}, types.EventCompleteExecution{}, false, err

@@ -3,6 +3,7 @@ package Pylonstech.pylons.pylons;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
+import "cosmos/bank/v1beta1/bank.proto";
 // this line is used by starport scaffolding # proto/tx/import
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
@@ -16,6 +17,7 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 // Msg defines the Msg service.
 service Msg {
   // this line is used by starport scaffolding # proto/tx/rpc
+  rpc SetCookbookDenomMetadata(MsgSetCookbookDenomMetadata) returns (MsgSetCookbookDenomMetadataResponse);
   rpc UpdateAccount(MsgUpdateAccount) returns (MsgUpdateAccountResponse);
   rpc FulfillTrade(MsgFulfillTrade) returns (MsgFulfillTradeResponse);
   rpc CreateTrade(MsgCreateTrade) returns (MsgCreateTradeResponse);
@@ -34,6 +36,19 @@ service Msg {
 }
 
 // this line is used by starport scaffolding # proto/tx/message
+message MsgSetCookbookDenomMetadata {
+  string creator = 1;
+  string cookbookID = 2;
+  string denom = 3;
+  string description = 4;
+  repeated cosmos.bank.v1beta1.DenomUnit denomUnits = 5 [(gogoproto.nullable) = false];
+  string base = 6;
+  string display = 7;
+}
+
+message MsgSetCookbookDenomMetadataResponse {
+}
+
 message MsgUpdateAccount {
   string creator = 1;
   string username = 2;
