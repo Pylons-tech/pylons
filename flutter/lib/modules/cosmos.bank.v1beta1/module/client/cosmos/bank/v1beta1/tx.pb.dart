@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../base/v1beta1/coin.pb.dart' as $2;
-import 'bank.pb.dart' as $3;
+import 'package:pylons_wallet/modules/cosmos.bank.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.bank.v1beta1/module/client/cosmos/bank/v1beta1/bank.pb.dart' as $3;
 
 class MsgSend extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgSend', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.bank.v1beta1'), createEmptyInstance: create)

@@ -10,11 +10,11 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/any.pb.dart' as $3;
-import '../../base/v1beta1/coin.pb.dart' as $2;
-import 'gov.pb.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/google/protobuf/any.pb.dart' as $3;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/gov/v1beta1/gov.pb.dart' as $6;
 
-import 'gov.pbenum.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/gov/v1beta1/gov.pbenum.dart' as $6;
 
 class MsgSubmitProposal extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgSubmitProposal', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.gov.v1beta1'), createEmptyInstance: create)

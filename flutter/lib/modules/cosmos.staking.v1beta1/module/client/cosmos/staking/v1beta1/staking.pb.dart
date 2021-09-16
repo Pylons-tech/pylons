@@ -10,13 +10,13 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../tendermint/types/types.pb.dart' as $8;
-import '../../../google/protobuf/timestamp.pb.dart' as $6;
-import '../../../google/protobuf/any.pb.dart' as $9;
-import '../../../google/protobuf/duration.pb.dart' as $10;
-import '../../base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/tendermint/types/types.pb.dart' as $8;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/google/protobuf/timestamp.pb.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/google/protobuf/any.pb.dart' as $9;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/google/protobuf/duration.pb.dart' as $10;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
 
-import 'staking.pbenum.dart';
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/staking/v1beta1/staking.pbenum.dart';
 
 export 'staking.pbenum.dart';
 

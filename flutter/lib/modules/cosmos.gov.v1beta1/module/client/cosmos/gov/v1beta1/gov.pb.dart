@@ -10,12 +10,12 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../base/v1beta1/coin.pb.dart' as $2;
-import '../../../google/protobuf/any.pb.dart' as $3;
-import '../../../google/protobuf/timestamp.pb.dart' as $4;
-import '../../../google/protobuf/duration.pb.dart' as $5;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/google/protobuf/any.pb.dart' as $3;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/google/protobuf/timestamp.pb.dart' as $4;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/google/protobuf/duration.pb.dart' as $5;
 
-import 'gov.pbenum.dart';
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/gov/v1beta1/gov.pbenum.dart';
 
 export 'gov.pbenum.dart';
 

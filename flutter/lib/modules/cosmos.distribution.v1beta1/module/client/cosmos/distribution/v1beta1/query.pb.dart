@@ -10,9 +10,9 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'distribution.pb.dart' as $3;
-import '../../base/query/v1beta1/pagination.pb.dart' as $5;
-import '../../base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.distribution.v1beta1/module/client/cosmos/distribution/v1beta1/distribution.pb.dart' as $3;
+import 'package:pylons_wallet/modules/cosmos.distribution.v1beta1/module/client/cosmos/base/query/v1beta1/pagination.pb.dart' as $5;
+import 'package:pylons_wallet/modules/cosmos.distribution.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
 
 class QueryParamsRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryParamsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.distribution.v1beta1'), createEmptyInstance: create)

@@ -9,7 +9,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'http.pb.dart' as $5;
+import 'package:pylons_wallet/modules/cosmos.slashing.v1beta1/module/client/google/api/http.pb.dart' as $5;
 
 class Annotations {
   static final http = $pb.Extension<$5.HttpRule>(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'google.protobuf.MethodOptions', const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'http', 72295728, $pb.PbFieldType.OM, defaultOrMaker: $5.HttpRule.getDefault, subBuilder: $5.HttpRule.create);

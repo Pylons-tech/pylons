@@ -10,7 +10,7 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'query.pb.dart' as $0;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/gov/v1beta1/query.pb.dart' as $0;
 export 'query.pb.dart';
 
 class QueryClient extends $grpc.Client {

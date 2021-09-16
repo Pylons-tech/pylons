@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../google/protobuf/any.pb.dart' as $3;
-import '../../base/query/v1beta1/pagination.pb.dart' as $5;
+import 'package:pylons_wallet/modules/cosmos.evidence.v1beta1/module/client/google/protobuf/any.pb.dart' as $3;
+import 'package:pylons_wallet/modules/cosmos.evidence.v1beta1/module/client/cosmos/base/query/v1beta1/pagination.pb.dart' as $5;
 
 class QueryEvidenceRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryEvidenceRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.evidence.v1beta1'), createEmptyInstance: create)

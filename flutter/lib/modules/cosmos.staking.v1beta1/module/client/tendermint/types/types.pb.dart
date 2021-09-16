@@ -10,12 +10,12 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../crypto/proof.pb.dart' as $4;
-import '../version/types.pb.dart' as $5;
-import '../../google/protobuf/timestamp.pb.dart' as $6;
-import 'validator.pb.dart' as $7;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/tendermint/crypto/proof.pb.dart' as $4;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/tendermint/version/types.pb.dart' as $5;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/google/protobuf/timestamp.pb.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/tendermint/types/validator.pb.dart' as $7;
 
-import 'types.pbenum.dart';
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/tendermint/types/types.pbenum.dart';
 
 export 'types.pbenum.dart';
 

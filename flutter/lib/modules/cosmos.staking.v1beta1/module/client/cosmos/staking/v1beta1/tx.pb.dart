@@ -9,10 +9,10 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'staking.pb.dart' as $11;
-import '../../../google/protobuf/any.pb.dart' as $9;
-import '../../base/v1beta1/coin.pb.dart' as $2;
-import '../../../google/protobuf/timestamp.pb.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/staking/v1beta1/staking.pb.dart' as $11;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/google/protobuf/any.pb.dart' as $9;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/google/protobuf/timestamp.pb.dart' as $6;
 
 class MsgCreateValidator extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgCreateValidator', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.staking.v1beta1'), createEmptyInstance: create)

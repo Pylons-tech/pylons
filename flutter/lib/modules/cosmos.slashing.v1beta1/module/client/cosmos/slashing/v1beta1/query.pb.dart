@@ -9,8 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'slashing.pb.dart' as $4;
-import '../../base/query/v1beta1/pagination.pb.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.slashing.v1beta1/module/client/cosmos/slashing/v1beta1/slashing.pb.dart' as $4;
+import 'package:pylons_wallet/modules/cosmos.slashing.v1beta1/module/client/cosmos/base/query/v1beta1/pagination.pb.dart' as $6;
 
 class QueryParamsRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryParamsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.slashing.v1beta1'), createEmptyInstance: create)

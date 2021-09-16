@@ -10,10 +10,10 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'gov.pb.dart' as $6;
-import '../../base/query/v1beta1/pagination.pb.dart' as $8;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/gov/v1beta1/gov.pb.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/base/query/v1beta1/pagination.pb.dart' as $8;
 
-import 'gov.pbenum.dart' as $6;
+import 'package:pylons_wallet/modules/cosmos.gov.v1beta1/module/client/cosmos/gov/v1beta1/gov.pbenum.dart' as $6;
 
 class QueryProposalRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryProposalRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.gov.v1beta1'), createEmptyInstance: create)

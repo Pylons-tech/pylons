@@ -10,8 +10,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../base/query/v1beta1/pagination.pb.dart' as $13;
-import 'staking.pb.dart' as $11;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/base/query/v1beta1/pagination.pb.dart' as $13;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/staking/v1beta1/staking.pb.dart' as $11;
 
 class QueryValidatorsRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'QueryValidatorsRequest', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'cosmos.staking.v1beta1'), createEmptyInstance: create)

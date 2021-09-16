@@ -10,7 +10,7 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'tx.pb.dart' as $0;
+import 'package:pylons_wallet/modules/cosmos.crisis.v1beta1/module/client/cosmos/crisis/v1beta1/tx.pb.dart' as $0;
 export 'tx.pb.dart';
 
 class MsgClient extends $grpc.Client {

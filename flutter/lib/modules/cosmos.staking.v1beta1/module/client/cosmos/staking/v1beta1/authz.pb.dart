@@ -9,9 +9,9 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
 
-import 'authz.pbenum.dart';
+import 'package:pylons_wallet/modules/cosmos.staking.v1beta1/module/client/cosmos/staking/v1beta1/authz.pbenum.dart';
 
 export 'authz.pbenum.dart';
 

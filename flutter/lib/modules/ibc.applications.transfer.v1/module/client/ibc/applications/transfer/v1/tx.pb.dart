@@ -10,8 +10,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../../cosmos/base/v1beta1/coin.pb.dart' as $8;
-import '../../../core/client/v1/client.pb.dart' as $9;
+import 'package:pylons_wallet/modules/ibc.applications.transfer.v1/module/client/cosmos/base/v1beta1/coin.pb.dart' as $8;
+import 'package:pylons_wallet/modules/ibc.applications.transfer.v1/module/client/ibc/core/client/v1/client.pb.dart' as $9;
 
 class MsgTransfer extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'MsgTransfer', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ibc.applications.transfer.v1'), createEmptyInstance: create)
