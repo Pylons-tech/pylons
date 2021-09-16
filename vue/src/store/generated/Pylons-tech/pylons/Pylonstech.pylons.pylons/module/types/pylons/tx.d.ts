@@ -1,21 +1,9 @@
 import { Reader, Writer } from 'protobufjs/minimal';
-import { DenomUnit } from '../cosmos/bank/v1beta1/bank';
 import { ItemRef } from '../pylons/trade';
 import { CoinInput, ItemInput, EntriesList, WeightedOutputs } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 /** this line is used by starport scaffolding # proto/tx/message */
-export interface MsgSetCookbookDenomMetadata {
-    creator: string;
-    cookbookID: string;
-    denom: string;
-    description: string;
-    denomUnits: DenomUnit[];
-    base: string;
-    display: string;
-}
-export interface MsgSetCookbookDenomMetadataResponse {
-}
 export interface MsgUpdateAccount {
     creator: string;
     username: string;
@@ -162,20 +150,6 @@ export interface MsgUpdateCookbook {
 }
 export interface MsgUpdateCookbookResponse {
 }
-export declare const MsgSetCookbookDenomMetadata: {
-    encode(message: MsgSetCookbookDenomMetadata, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgSetCookbookDenomMetadata;
-    fromJSON(object: any): MsgSetCookbookDenomMetadata;
-    toJSON(message: MsgSetCookbookDenomMetadata): unknown;
-    fromPartial(object: DeepPartial<MsgSetCookbookDenomMetadata>): MsgSetCookbookDenomMetadata;
-};
-export declare const MsgSetCookbookDenomMetadataResponse: {
-    encode(_: MsgSetCookbookDenomMetadataResponse, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): MsgSetCookbookDenomMetadataResponse;
-    fromJSON(_: any): MsgSetCookbookDenomMetadataResponse;
-    toJSON(_: MsgSetCookbookDenomMetadataResponse): unknown;
-    fromPartial(_: DeepPartial<MsgSetCookbookDenomMetadataResponse>): MsgSetCookbookDenomMetadataResponse;
-};
 export declare const MsgUpdateAccount: {
     encode(message: MsgUpdateAccount, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): MsgUpdateAccount;
@@ -389,7 +363,6 @@ export declare const MsgUpdateCookbookResponse: {
 /** Msg defines the Msg service. */
 export interface Msg {
     /** this line is used by starport scaffolding # proto/tx/rpc */
-    SetCookbookDenomMetadata(request: MsgSetCookbookDenomMetadata): Promise<MsgSetCookbookDenomMetadataResponse>;
     UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
     FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;
     CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>;
@@ -409,7 +382,6 @@ export interface Msg {
 export declare class MsgClientImpl implements Msg {
     private readonly rpc;
     constructor(rpc: Rpc);
-    SetCookbookDenomMetadata(request: MsgSetCookbookDenomMetadata): Promise<MsgSetCookbookDenomMetadataResponse>;
     UpdateAccount(request: MsgUpdateAccount): Promise<MsgUpdateAccountResponse>;
     FulfillTrade(request: MsgFulfillTrade): Promise<MsgFulfillTradeResponse>;
     CreateTrade(request: MsgCreateTrade): Promise<MsgCreateTradeResponse>;
