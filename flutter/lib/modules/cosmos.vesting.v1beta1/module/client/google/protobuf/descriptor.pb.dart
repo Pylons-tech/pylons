@@ -10,7 +10,7 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:pylons_wallet/modules/cosmos.vesting.v1beta1/module/client/google/protobuf/descriptor.pbenum.dart';
+import 'descriptor.pbenum.dart';
 
 export 'descriptor.pbenum.dart';
 
