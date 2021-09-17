@@ -3,6 +3,10 @@ package types
 import (
 	"testing"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	ibctypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
 
 	"github.com/stretchr/testify/require"
@@ -56,4 +60,51 @@ func TestIBCDenom(t *testing.T) {
 	}
 }
 
-// TODO add TestCreateValidCoinOutputsList
+func TestCreateValidCoinOutputsList(t *testing.T) {
+	validCookbookID := "cookbookID"
+	invalidCookbookID := "invalid"
+
+	valid := []CoinOutput{
+		{
+			ID:      "test1",
+			Coin:    sdk.Coin{Denom: validCookbookID + denomDivider + "denom1", Amount: sdk.OneInt()},
+			Program: "",
+		},
+		{
+			ID:      "test1",
+			Coin:    sdk.Coin{Denom: validCookbookID + denomDivider + "denom2", Amount: sdk.OneInt()},
+			Program: "",
+		},
+	}
+
+	invalid := []CoinOutput{
+		{
+			ID:      "test1",
+			Coin:    sdk.Coin{Denom: validCookbookID + denomDivider + "denom1", Amount: sdk.OneInt()},
+			Program: "",
+		},
+		{
+			ID:      "test1",
+			Coin:    sdk.Coin{Denom: invalidCookbookID + denomDivider + "denom2", Amount: sdk.OneInt()},
+			Program: "",
+		},
+	}
+
+	for _, tc := range []struct {
+		desc        string
+		cookbookID  string
+		coinOutputs []CoinOutput
+		err         error
+	}{
+		{desc: "valid1", cookbookID: validCookbookID, coinOutputs: valid, err: nil},
+		{desc: "invalid1", cookbookID: invalidCookbookID, coinOutputs: valid, err: sdkerrors.ErrInvalidRequest},
+		{desc: "invalid2", cookbookID: validCookbookID, coinOutputs: invalid, err: sdkerrors.ErrInvalidRequest},
+		{desc: "invalid3", cookbookID: invalidCookbookID, coinOutputs: invalid, err: sdkerrors.ErrInvalidRequest},
+	} {
+		tc := tc
+		t.Run(tc.desc, func(t *testing.T) {
+			_, err := CreateValidCoinOutputsList(tc.cookbookID, tc.coinOutputs)
+			require.ErrorIs(t, err, tc.err)
+		})
+	}
+}

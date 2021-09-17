@@ -71,12 +71,12 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 	validCoinOutputs := make([]CoinOutput, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
 		// recipes can only mint Cookbook denoms (form "cookbookID/denom")
-		cookbookDenom, err := CookbookDenom(cookbookID, coinOutput.Coin.Denom)
-		if err != nil {
-			return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot convert denom to cookbookDenom")
-		}
-
 		if !IsCookbookDenom(coinOutput.Coin.Denom) {
+			cookbookDenom, err := CookbookDenom(cookbookID, coinOutput.Coin.Denom)
+			if err != nil {
+				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot convert denom to cookbookDenom")
+			}
+
 			validCoinOutputs[i] = CoinOutput{
 				ID:      coinOutput.ID,
 				Coin:    sdk.NewCoin(cookbookDenom, coinOutput.Coin.Amount),
@@ -88,7 +88,7 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 		// make sure that the cookbookPrefix is the properly provided one
 		split := strings.Split(coinOutput.Coin.Denom, denomDivider)
 		if split[0] != cookbookID {
-			return nil, fmt.Errorf("coin Output cookbook prefix %s does not match cookbook prefix %s", split[0], cookbookID)
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "coin Output cookbook prefix %s does not match cookbook prefix %s", split[0], cookbookID)
 		}
 
 		validCoinOutputs[i] = coinOutput
