@@ -3,7 +3,6 @@ package Pylonstech.pylons.pylons;
 
 import "gogoproto/gogo.proto";
 import "cosmos/base/v1beta1/coin.proto";
-import "cosmos/bank/v1beta1/bank.proto";
 // this line is used by starport scaffolding # proto/tx/import
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
