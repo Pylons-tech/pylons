@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
+import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 
 // Define a custom Form widget.
 class NewUserForm extends StatefulWidget {
@@ -12,7 +14,7 @@ class NewUserForm extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  NewUserFormState createState() => NewUserFormState(onValidate: this.onValidate);
+  NewUserFormState createState() => NewUserFormState();
 
 }
 
@@ -20,9 +22,9 @@ class NewUserFormState extends State<NewUserForm> {
 
   final _formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
-  final Function(String) onValidate;
+  // final Function(String) onValidate;
 
-  NewUserFormState({required this.onValidate});
+  // NewUserFormState({required this.onValidate});
 
 
   @override
@@ -54,27 +56,12 @@ class NewUserFormState extends State<NewUserForm> {
                   Container(
                     height: 100,
                   ),
-                  TextFormField(
-                    controller: usernameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        filled: true,
-                        labelText: "Username",
-                        hintStyle: TextStyle(color: Colors.grey[800]),
-                        fillColor: Colors.white70),
-                    ),
-                 Container(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 100,
-                  ),
+                  PylonsTextInput(controller: usernameController, label: "User Name"),
+                 const VerticalSpace(50),
                   PylonsBlueButton(
-                      onTap : () => onValidate(usernameController.value.text)
-                      ,text: "Start Pylons")
+                      onTap : () => widget.onValidate(usernameController.value.text),
+                      text: "Start Pylons"),
+                  const VerticalSpace(30)
                 ],
               )
           )// Add TextFormFields and ElevatedButton here.

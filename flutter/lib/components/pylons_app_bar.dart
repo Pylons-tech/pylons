@@ -92,7 +92,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
                       style: TextStyle(color: kIconBGColor, fontSize: 14),
                       onChanged: (String? data) {
                         setState(() {
-                          dropdownValue = data!!;
+                          dropdownValue = data!;
                         });
                         widget.onPageSelected(dropdownValue);
                       },

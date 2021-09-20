@@ -6,6 +6,7 @@ import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.
 import 'package:transaction_signing_gateway/model/wallet_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 
+
 class TokenSender {
   TransactionSigningGateway transactionSigningGateway;
 
@@ -16,6 +17,8 @@ class TokenSender {
       Balance balance,
       String toAddress,
       ) async {
+
+
     final message = bank.MsgSend.create()
       ..fromAddress = info.publicAddress
       ..toAddress = toAddress;

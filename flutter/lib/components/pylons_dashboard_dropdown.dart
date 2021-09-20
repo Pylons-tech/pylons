@@ -32,7 +32,7 @@ class DropDownWidget extends State {
       style: TextStyle(color: kIconBGColor, fontSize: 14),
       onChanged: (String? data) {
         setState(() {
-          dropdownValue = data!!;
+          dropdownValue = data!;
         });
       },
       items: spinnerItems.map<DropdownMenuItem<String>>((String value) {

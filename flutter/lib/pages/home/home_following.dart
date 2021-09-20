@@ -51,7 +51,9 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                         ),
                       ),
 
-                      MoreButton(onTap: (){
+                      MoreButton(
+                        showText: false,
+                          onTap: (){
                       })
                     ]
                 ),
@@ -159,7 +161,9 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                         ),
                       ),
 
-                      MoreButton(onTap: (){
+                      MoreButton(
+                        showText: false,
+                          onTap: (){
                       })
                     ]
                 ),
@@ -231,10 +235,10 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                           title: RichText(
                             text: TextSpan(
                               style: DefaultTextStyle.of(context).style,
-                              children: <TextSpan>[
+                              children: const <TextSpan>[
                                 TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(text: ' created'),
-                                TextSpan(text: ' \'Photography\'', style: TextStyle(fontWeight: FontWeight.bold)),
+                                TextSpan(text: " 'Photography'", style: TextStyle(fontWeight: FontWeight.bold)),
                                 TextSpan(text: ' collection')
                               ],
                             ),
@@ -243,7 +247,8 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                       ),
 
                       MoreButton(onTap: (){
-                      })
+                      },
+                      showText: false,)
                     ]
                 ),
                 Container(

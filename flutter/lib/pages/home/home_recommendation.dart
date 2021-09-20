@@ -6,6 +6,7 @@ import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/pylons_trending_card.dart';
 import 'package:pylons_wallet/components/pylons_trending_col_card.dart';
 import 'package:pylons_wallet/components/pylons_trending_new_card.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/pages/home/items_new_screen.dart';
 
 class HomeRecommendationWidget extends StatefulWidget {
@@ -29,9 +30,10 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Trending', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                    Spacer(),
+                    // Spacer(),
                     MoreButton(onTap: (){
                     })
                   ]
@@ -56,19 +58,22 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
           child: Column(
             children: [
               Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Trending Collection', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                  Spacer(),
-                  AddFriendButton(onTap: (){
-                  })
+                  const Text('Trending Collections', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  // Spacer(),
+                  // AddFriendButton(onTap: (){
+                  // })
                 ]
               ),
-              Container(
-                height: 400,
+              const VerticalSpace(10),
+              SizedBox(
+                height: 300,
                 child: ListView.builder(
+                  shrinkWrap: true,
                   itemCount: 15,
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index)=>PylonsTrendingColCard()
+                  itemBuilder: (context, index)=> PylonsTrendingColCard()
                 )
               )
             ],

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_white_button.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/forms/import_from_google_form.dart';
 import 'package:pylons_wallet/forms/new_user_form.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -32,7 +33,7 @@ class PresentingOnboardPage extends StatelessWidget {
                 child: SmoothPageIndicator(
                   controller: _controller, // PageController
                   count: 3,
-                  effect: WormEffect(), // your preferred effect
+                  // effect: const WormEffect(), // your preferred effect
                 ),
               ),
               SizedBox(
@@ -57,31 +58,34 @@ class PresentingOnboardPage extends StatelessWidget {
                 },
                 text: "Import an account",
               ),
+              const VerticalSpace(10),
               PylonsBlueButton(
                 onTap: () {
                   showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(30.0),
-                          topRight: const Radius.circular(30.0),
+                          topLeft:  Radius.circular(30.0),
+                          topRight:  Radius.circular(30.0),
                         ),
                       ),
-                      builder: (context) => new Wrap(
+                      builder: (context) =>  Wrap(
                         children: [NewUserForm(onValidate: (userName) => _registerNewUser(userName,context))]
                       )
                   );
                 },
                 text: "Create an account",
               ),
+              const VerticalSpace(10),
               GestureDetector(
                 onTap: () {
                   // TODO : implement hyperlink action
                 },
                 child: const Text("Terms of service",
                     style: TextStyle(
-                        decoration: TextDecoration.underline, color: Colors.blue)),
+                        // decoration: TextDecoration.underline,
+                        color: Color(0xff1212C4))),
               )
             ]),
         )),
@@ -116,7 +120,7 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
   @override
   void initState() {
     super.initState();
-    const interval = const Duration(seconds: 5);
+    const interval =  Duration(seconds: 5);
     Timer.periodic(interval, (Timer timer) {
       if (_currentPage <= 2) {
         _currentPage++;
@@ -125,7 +129,7 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
       }
       _controller.animateToPage(
         _currentPage,
-        duration: Duration(milliseconds: 1000),
+        duration: const Duration(milliseconds: 1000),
         curve: Curves.easeIn,
       );
     });

@@ -47,7 +47,7 @@ void dispose(){
 void _onItemTapped(int index) {
   setState(() {
     _selectedIndex = index;
-    _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.ease);
   });
 }
 
@@ -92,28 +92,28 @@ static const TextStyle optionStyle = TextStyle(fontSize: 12, color: Colors.indig
         items: [
           BottomNavigationBarItem(
               icon: const ImageIcon(
-                AssetImage('assets/images/icon/home.png'),
+                AssetImage('assets/icons/home.png'),
                 size: 24,
               ),
               label: 'Home'
           ),
           BottomNavigationBarItem(
               icon: const ImageIcon(
-                AssetImage('assets/images/icon/discover.png'),
+                AssetImage('assets/icons/discover.png'),
                 size: 24,
               ),
               label: 'Discover'
           ),
           BottomNavigationBarItem(
               icon: const ImageIcon(
-                AssetImage('assets/images/icon/marketplace.png'),
+                AssetImage('assets/icons/market.png'),
                 size: 24,
               ),
               label: 'MarketPlace'
           ),
           BottomNavigationBarItem(
               icon: const ImageIcon(
-                AssetImage('assets/images/icon/gallery.png'),
+                AssetImage('assets/icons/gallery.png'),
                 size: 24,
               ),
               label: 'Gallery'
