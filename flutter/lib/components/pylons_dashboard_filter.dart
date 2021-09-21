@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/pylons_blue_button.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 
 class PylonsDashboardFilterBox extends StatefulWidget {
 
@@ -27,75 +29,101 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
       child: contentBox(context),
     );
   }
-  Stack contentBox(BuildContext context){
-    return Stack(
-      children: <Widget>[
-        Container(
-
-          padding: EdgeInsets.only(
-              left: 16,
-              top: 16,
-              right: 16,
-              bottom: 16
-          ),
-
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                children: [
-                  ImageIcon(
-                      AssetImage('assets/images/icon/Filter.png'),
-                      size: 24,
-                      color: Color(0xFF616161)
-                  ),
-                  Text('Filter'),
-                  Spacer(),
-                  FlatButton(
-                    onPressed: (){},
-                    child: Text('Reset')
-                  )
-                ],
+  Widget contentBox(BuildContext context){
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Row(
+            children: [
+              const ImageIcon(
+                  AssetImage('assets/images/icon/Filter.png'),
+                  size: 24,
+                  color: Color(0xFF616161)
               ),
-              for (var i = 0; i < filter_strings.length; i += 1)
-                  Row(
-                    children: [
-                      Checkbox(
-                        onChanged: (value) {
-                          setState((){
-                            filter_strings[i]['checked']=value!;
-                          });
-                        },
-                        tristate: i == 1,
-                        value: filter_strings[i]['checked'] == true,
-                        activeColor: Color(0xFF6200EE),
-                      ),
-                      Text(
-                        filter_strings[i]['name'].toString()
-                      ),
-                    ],
-                    mainAxisAlignment: MainAxisAlignment.start,
-                  ),
-              ButtonBar(
-                children:[
-                  FlatButton(onPressed: (){
-                    Navigator.of(context).pop();
-                  },
-                    child: Text('Cancel'),
-                  ),
-                  FlatButton(onPressed: (){
-                    Navigator.of(context).pop();
-                  },
-                    child: Text('Apply'),
-                  )
-
-                ]
+              const Text('Filter'),
+              Spacer(),
+              FlatButton(
+                onPressed: (){},
+                child: Text('Reset')
               )
             ],
           ),
-        ),
+          for (var i = 0; i < filter_strings.length; i += 1)
+            Row(
+                children: [
+                  Checkbox(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    onChanged: (value) {
+                      setState((){
+                        filter_strings[i]['checked']=value!;
+                      });
+                    },
+                    tristate: i == 1,
+                    value: filter_strings[i]['checked'] == true,
+                    activeColor: Color(0xFF6200EE),
+                  ),
+                  Text(
+                    filter_strings[i]['name'].toString(),
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.start,
+              ),
+          const VerticalSpace(10),
+          Row(
+            children:[
+              Expanded(
+                child: SizedBox(
+                height: 35,
+                child: _PylonsGreyButton(onTap: (){}, text: "Cancel",),
+              ),),
+             const HorizontalSpace(20),
+             Expanded(
+               flex: 2,
+               child: SizedBox(
+                 height: 35,
+                   child: PylonsBlueButton(onTap: (){}, text: "Apply",)),
+             ),
 
-      ],
+            ]
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _PylonsGreyButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final String text;
+
+  const _PylonsGreyButton({
+    Key? key,
+    required this.onTap,
+    this.text = "",
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        primary: const Color(0xFFC4C4C4),
+      ),
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                text,
+                style: const TextStyle(fontSize: 15, color: Colors.white)),
+          ],
+        ),
+      ),
     );
   }
 }
