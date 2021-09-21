@@ -36,6 +36,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdFulfillTrade())
 
 	cmd.AddCommand(CmdCreateTrade())
+
 	cmd.AddCommand(CmdCancelTrade())
 
 	cmd.AddCommand(CmdCompleteExecutionEarly())

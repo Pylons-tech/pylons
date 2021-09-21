@@ -351,6 +351,14 @@ func New(
 		&stakingKeeper, govRouter,
 	)
 
+	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+
+	// Create static IBC router, add transfer route, then set and seal it
+	ibcRouter := porttypes.NewRouter()
+	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
+	// this line is used by starport scaffolding # ibc/app/router
+	app.IBCKeeper.SetRouter(ibcRouter)
+
 	app.PylonsKeeper = pylonsmodulekeeper.NewKeeper(
 		appCodec,
 		keys[pylonsmoduletypes.StoreKey],
@@ -363,14 +371,6 @@ func New(
 	// Set node version from build configuration
 	pylonsmoduletypes.SetNodeVersionString(version.Version)
 	pylonsModule := pylonsmodule.NewAppModule(appCodec, app.PylonsKeeper, app.BankKeeper)
-
-	// this line is used by starport scaffolding # stargate/app/keeperDefinition
-
-	// Create static IBC router, add transfer route, then set and seal it
-	ibcRouter := porttypes.NewRouter()
-	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
-	// this line is used by starport scaffolding # ibc/app/router
-	app.IBCKeeper.SetRouter(ibcRouter)
 
 	/****  Module Options ****/
 

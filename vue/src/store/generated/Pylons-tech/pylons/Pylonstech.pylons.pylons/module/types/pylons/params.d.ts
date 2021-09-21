@@ -6,10 +6,12 @@ export interface GoogleInAppPurchasePackage {
     ProductID: string;
     Amount: string;
 }
+/** CoinIssuer represents an entity or external blockchain */
 export interface CoinIssuer {
     CoinDenom: string;
     Packages: GoogleInAppPurchasePackage[];
     GoogleInAppPurchasePubKey: string;
+    EntityName: string;
 }
 /** Params represent the parameters used by the pylons module */
 export interface Params {

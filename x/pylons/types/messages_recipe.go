@@ -1,11 +1,14 @@
 package types
 
 import (
+	"strings"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 var _ sdk.Msg = &MsgCreateRecipe{}
+var _ sdk.Msg = &MsgUpdateRecipe{}
 
 func NewMsgCreateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgCreateRecipe {
 	return &MsgCreateRecipe{
@@ -79,6 +82,19 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 			if !coins.IsAllPositive() {
 				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 			}
+
+			for _, coin := range coins {
+				if IsCookbookDenom(coin.Denom) {
+					split := strings.Split(coin.Denom, denomDivider)
+					if split[0] != msg.CookbookID {
+						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookID)
+					}
+
+					if IsIBCDenomRepresentation(coin.Denom) {
+						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
+					}
+				}
+			}
 		}
 	}
 
@@ -99,10 +115,18 @@ func (msg *MsgCreateRecipe) ValidateBasic() error {
 		}
 	}
 
+	// check if denoms are valid in coinOutputs
+	// 3 types
+	// global local denoms "denom"  INVALID
+	// cookbook denoms "cookbookID/denom" VALID if cookbookID == msg.cookbookID
+	// external ibc denoms "ibc/{hash}" INVALID
+	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookID, msg.Entries.CoinOutputs)
+	if err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
+	}
+
 	return nil
 }
-
-var _ sdk.Msg = &MsgUpdateRecipe{}
 
 func NewMsgUpdateRecipe(creator string, cookbookID string, id string, name string, description string, version string, coinInput []CoinInput, itemInput []ItemInput, entries EntriesList, weightedOutputs []WeightedOutputs, blockInterval int64, enabled bool, extraInfo string) *MsgUpdateRecipe {
 	return &MsgUpdateRecipe{
@@ -176,6 +200,19 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 			if !coins.IsAllPositive() {
 				return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
 			}
+
+			for _, coin := range coins {
+				if IsCookbookDenom(coin.Denom) {
+					split := strings.Split(coin.Denom, denomDivider)
+					if split[0] != msg.CookbookID {
+						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s must be from the recipe-owning cookbook ID %s", coin.Denom, msg.CookbookID)
+					}
+
+					if IsIBCDenomRepresentation(coin.Denom) {
+						return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "cookbookDenom %s is of same form as ibc/{hash}", coin.Denom)
+					}
+				}
+			}
 		}
 	}
 
@@ -194,6 +231,16 @@ func (msg *MsgUpdateRecipe) ValidateBasic() error {
 		if err = ValidateOutputs(o, idMap); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
+	}
+
+	// check if denoms are valid in coinOutputs
+	// 3 types
+	// global local denoms "denom"  INVALID
+	// cookbook denoms "cookbookID/denom" VALID if cookbookID == msg.cookbookID
+	// external ibc denoms "ibc/{hash}" INVALID
+	msg.Entries.CoinOutputs, err = CreateValidCoinOutputsList(msg.CookbookID, msg.Entries.CoinOutputs)
+	if err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "unable to build valid coin outputs list")
 	}
 
 	return nil
