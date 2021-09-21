@@ -459,7 +459,7 @@ func New(
 		//	app.AccountKeeper, app.BankKeeper, ante.DefaultSigVerificationGasConsumer,
 		//	encodingConfig.TxConfig.SignModeHandler(),
 		// ),
-		pylonsmodulekeeper.NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler()),
+		NewAnteHandler(app.AccountKeeper, encodingConfig.TxConfig.SignModeHandler()),
 	)
 	app.SetEndBlocker(app.EndBlocker)
 

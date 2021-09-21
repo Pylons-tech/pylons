@@ -92,7 +92,7 @@ export const GoogleInAppPurchasePackage = {
         return message;
     }
 };
-const baseCoinIssuer = { CoinDenom: '', GoogleInAppPurchasePubKey: '', EntityName: '' };
+const baseCoinIssuer = { CoinDenom: '', GoogleInAppPurchasePubKey: '' };
 export const CoinIssuer = {
     encode(message, writer = Writer.create()) {
         if (message.CoinDenom !== '') {
@@ -103,9 +103,6 @@ export const CoinIssuer = {
         }
         if (message.GoogleInAppPurchasePubKey !== '') {
             writer.uint32(26).string(message.GoogleInAppPurchasePubKey);
-        }
-        if (message.EntityName !== '') {
-            writer.uint32(34).string(message.EntityName);
         }
         return writer;
     },
@@ -125,9 +122,6 @@ export const CoinIssuer = {
                     break;
                 case 3:
                     message.GoogleInAppPurchasePubKey = reader.string();
-                    break;
-                case 4:
-                    message.EntityName = reader.string();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -156,12 +150,6 @@ export const CoinIssuer = {
         else {
             message.GoogleInAppPurchasePubKey = '';
         }
-        if (object.EntityName !== undefined && object.EntityName !== null) {
-            message.EntityName = String(object.EntityName);
-        }
-        else {
-            message.EntityName = '';
-        }
         return message;
     },
     toJSON(message) {
@@ -174,7 +162,6 @@ export const CoinIssuer = {
             obj.Packages = [];
         }
         message.GoogleInAppPurchasePubKey !== undefined && (obj.GoogleInAppPurchasePubKey = message.GoogleInAppPurchasePubKey);
-        message.EntityName !== undefined && (obj.EntityName = message.EntityName);
         return obj;
     },
     fromPartial(object) {
@@ -196,12 +183,6 @@ export const CoinIssuer = {
         }
         else {
             message.GoogleInAppPurchasePubKey = '';
-        }
-        if (object.EntityName !== undefined && object.EntityName !== null) {
-            message.EntityName = object.EntityName;
-        }
-        else {
-            message.EntityName = '';
         }
         return message;
     }
