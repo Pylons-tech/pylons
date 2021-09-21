@@ -139,7 +139,7 @@ class CardInfoFormState extends State<CardInfoForm> {
                       style: TextStyle(color: kIconBGColor, fontSize: 14),
                       onChanged: (String? data) {
                         setState(() {
-                          dropdownValue = data!!;
+                          dropdownValue = data!;
                         });
                       },
                       items: countries.map<DropdownMenuItem<String>>((String value) {

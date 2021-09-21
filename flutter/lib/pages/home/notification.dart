@@ -16,36 +16,45 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: const Text('Notification', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: kTextBlackColor, fontFamily: 'Roboto', )),
+        centerTitle: true,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
         body: CustomScrollView(
             primary: false,
             slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                snap: true,
-                floating: true,
-                forceElevated: true,
-                toolbarHeight: kAppBarNormalSize,
-                collapsedHeight: kAppBarNormalSize,
-                backgroundColor: Colors.transparent,
-                centerTitle: true,
-                leading: IconButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    icon: const ImageIcon(
-                        AssetImage('assets/images/icon/before.png'),
-                        size: kIconSize,
-                        color: kIconBGColor
-                    )
-                ),
-                title: Text('Notification', style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: kTextBlackColor, fontFamily: 'Roboto', )),
-              ),
+              // SliverAppBar(
+              //   pinned: true,
+              //   snap: true,
+              //   floating: true,
+              //   forceElevated: false,
+              //   toolbarHeight: kAppBarNormalSize,
+              //   collapsedHeight: kAppBarNormalSize,
+              //   backgroundColor: Colors.transparent,
+              //   automaticallyImplyLeading: true,
+              //   centerTitle: true,
+              //   // leading: IconButton(
+              //   //     onPressed: (){
+              //   //       Navigator.pop(context);
+              //   //     },
+              //   //     icon: const ImageIcon(
+              //   //         AssetImage('assets/images/icon/before.png'),
+              //   //         size: kIconSize,
+              //   //         color: kIconBGColor
+              //   //     )
+              //   // ),
+              //   title: Text('Notification', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: kTextBlackColor, fontFamily: 'Roboto', )),
+              // ),
 
               //this Week
               SliverStickyHeader(
                 header: Container(
                   height: 60,
-                  color: Colors.transparent,
+                  color: Colors.white,
                   padding: EdgeInsets.symmetric(horizontal: 16.0),
                   alignment: Alignment.centerLeft,
                   child: Text('This Week',
@@ -81,7 +90,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
                         (context, i) => NotificationItem(),
-                    childCount: 2,
+                    childCount: 10,
                   ),
                 ),
               ),

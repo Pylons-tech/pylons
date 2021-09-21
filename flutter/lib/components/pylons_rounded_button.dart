@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 
 class PylonsRoundedButton extends StatelessWidget {
   final VoidCallback onTap;
@@ -19,14 +20,18 @@ class PylonsRoundedButton extends StatelessWidget {
       style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                  side: BorderSide(color: Colors.blue)
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(color: Colors.grey)
               )
           )
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: buildChildren(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: buildChildren(),
+        ),
       ),
     );
   }
@@ -36,9 +41,10 @@ class PylonsRoundedButton extends StatelessWidget {
       if (glyph != null) {
         return [
           Image(image: glyph),
+          const HorizontalSpace(10),
           Text(
               text,
-              style: const TextStyle(color: Colors.black)),
+              style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
         ];
       } else {
         return [

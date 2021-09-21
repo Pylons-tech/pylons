@@ -23,7 +23,7 @@ class PylonsTrendingCard extends StatelessWidget {
                       child:ListTile(
                         contentPadding: EdgeInsets.only(left: 0, right: 0),
                           leading: CircleAvatar(
-                            child: FlutterLogo(size: 20.0),
+                            child: FlutterLogo(size: 18.0),
                           ),
                           title: Text('Linda'),
                         trailing: IconButton(

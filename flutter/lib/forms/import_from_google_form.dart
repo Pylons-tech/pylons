@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
+import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_rounded_button.dart';
+import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 
 // Define a custom Form widget.
 class ImportFromGoogleForm extends StatefulWidget {
@@ -31,46 +34,22 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
               child: Column(
                 children: [
                   const Image(
-                    image: const AssetImage('assets/images/pylons_logo.png'),
+                    image:  AssetImage('assets/images/pylons_logo.png'),
                     alignment: Alignment.bottomCenter,
                   ),
-                  Container(
-                    height: 20,
-                  ),
+                 const  VerticalSpace(30),
                   PylonsRoundedButton(
                       glyph: const AssetImage('assets/images/gcloud.png'),
                       text: "Import from google cloud",
                       onTap: (){}
                   ),
-                  Container(
-                    height: 20,
-                  ),
-                  TextField(
-                    decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(40.0),
-                    ),
-                    contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    filled: true,
-                    labelText: "User Name",
-                    hintStyle: TextStyle(color: Colors.grey[800]),
-                    fillColor: Colors.white70)),
-                  Container(
-                    height: 20,
-                  ),
-                  TextField(
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(40.0),
-                          ),
-                          contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                          filled: true,
-                          labelText: "Code Number",
-                          hintStyle: TextStyle(color: Colors.grey[800]),
-                          fillColor: Colors.white70)),
-                  Container(
-                    height: 20,
-                  )
+                  const VerticalSpace(20),
+                  PylonsTextInput(controller: TextEditingController(), label: "User Name"),
+                  const VerticalSpace(20),
+                  PylonsTextInput(controller: TextEditingController(), label: "User ID"),
+                  const VerticalSpace(30),
+                  PylonsBlueButton(onTap: (){}, text: "Start Pylons",),
+                  const VerticalSpace(20),
                 ],
               )
           )// Add TextFormFields and ElevatedButton here.

@@ -18,13 +18,16 @@ class PylonsBlueButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         primary: const Color(0xFF1212C4),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-              text,
-              style: TextStyle(color: Colors.white)),
-        ],
+      child: SizedBox(
+        height: 50,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+                text,
+                style: const TextStyle(fontSize: 15, color: Colors.white)),
+          ],
+        ),
       ),
     );
   }

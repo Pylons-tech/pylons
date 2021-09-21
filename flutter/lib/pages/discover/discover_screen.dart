@@ -23,7 +23,7 @@ class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
   String dropdownValue = 'My activity';
 
   List <String> spinnerItems = [
-    'My activity',
+    'My Activity',
     'Recommended',
     'Following',
   ];
@@ -116,7 +116,7 @@ class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
                       spacing: 10,
                       runSpacing: 5,
                       children: chips.map((tag) =>
-                          new Chip(
+                           Chip(
                             backgroundColor: Color(0xFFED8864),
                             label: new Text(tag.toString()),
                           )

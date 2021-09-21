@@ -1,95 +1,83 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 
 class PylonsMarketplaceCard extends StatelessWidget {
-
   const PylonsMarketplaceCard({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child:ListTile(
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Row(children: const [
+           Expanded(
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                  minVerticalPadding: 0,
                   leading: CircleAvatar(
-                    child: FlutterLogo(size: 28.0),
+                    radius: 18,
+                    child: FlutterLogo(size: 20.0),
                   ),
-                  title: Text('Linda')
-                )
+                  title: Text(
+                    'Linda',
+                    style: TextStyle(fontWeight: FontWeight.w500),
+                  ),),),
+          Text('10 min',
+              style: TextStyle(fontSize: 12, color: Color(0xFF201D1D)))
+        ]),
+        Card(
+          margin: EdgeInsets.zero,
+            child: Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+              Image.asset(
+                'assets/images/Rectangle 312.png',
+                width: MediaQuery.of(context).size.width,
+                height: 200,
+                fit: BoxFit.fill,
               ),
-              Padding(padding: EdgeInsets.only(right: 20),
-              child: Text(
-                      '10 min',
-                      style:TextStyle(
-                          fontSize: 12,
-                          color: Color(0xFF201D1D)
-                      )
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 20, top: 10),
+                  child: Text('Title of Artwork',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: Color(0xFF201D1D))),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20.0, 10, 20, 10),
+                child: Row(children: [
+                  GestureDetector(
+                      child: ImageIcon(
+                          AssetImage('assets/images/icon/union.png'),
+                          size: 24,
+                          color: Color(0xFF616161)),
+                      onTap: () {}),
+                  Text('40'),
+                  const HorizontalSpace(10),
+                  GestureDetector(
+                      child: ImageIcon(
+                          AssetImage('assets/images/icon/favorite_border.png'),
+                          size: 24,
+                          color: Color(0xFF616161)),
+                      onTap: () {}),
+                  Text('142'),
+                  Spacer(),
+                  Text(
+                    '\$ 12.00',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                   )
+                ]),
               )
-            ]
-          ),
-          Card(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 200.0,
-                      child: Ink.image(
-                        image: AssetImage('assets/images/Rectangle279.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Row(
-                      children:[
-                        Padding(padding: EdgeInsets.only(left: 20),
-                          child:Text('Title of Artwork',
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                  color: Color(0xFF201D1D)
-                              )
-                          ),
-                        )
-
-                        ],
-                    ),
-                    Row(
-                        children:[
-                          IconButton(
-                              icon: ImageIcon(
-                                  AssetImage('assets/images/icon/union.png'),
-                                  size: 24,
-                                  color: Color(0xFF616161)
-                              ),
-                              onPressed: () {}
-                          ),
-                          Text('40'),
-                          IconButton(
-                              icon: ImageIcon(
-                                  AssetImage('assets/images/icon/favorite_border.png'),
-                                  size: 24,
-                                  color: Color(0xFF616161)
-                              ),
-                              onPressed: () {}
-                          ),
-                          Text('142'),
-                          Spacer(),
-                          Padding(padding: EdgeInsets.only(right: 20),
-                          child: Text('\$ 12.00'),
-                          )
-                        ]
-                    )
-                  ]
-              )
-          ),
-
-        ]
+            ])),
+      ]),
     );
   }
 }

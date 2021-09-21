@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/NotificationItem.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/forms/card_info_form.dart';
 import 'package:pylons_wallet/forms/create_trade_form.dart';
@@ -28,10 +29,22 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
   int tabIndex = 0;
   late TabController _tabController;
 
-  final List<Tab> myTabs = <Tab>[
-    new Tab(text: 'Work'),
-    new Tab(text: 'Info'),
-    new Tab(text: 'History')
+  final List<Widget> myTabs =const  <Widget>[
+    Padding(
+      padding:  EdgeInsets.all(4.0),
+      child:  Text('Work'),
+    ),
+
+    Padding(
+      padding:  EdgeInsets.all(4.0),
+      child:  Text('Info'),
+    ),
+
+    Padding(
+      padding:  EdgeInsets.all(4.0),
+      child:  Text('History'),
+    ),
+
   ];
 
   static const List<Widget> _pages = <Widget>[
@@ -126,56 +139,49 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(
-            primary: false,
-            slivers: <Widget>[
-              SliverAppBar(
-                pinned: true,
-                snap: true,
-                floating: true,
-                forceElevated: true,
-                toolbarHeight: kAppBarNormalSize,
-                collapsedHeight: kAppBarNormalSize,
-                backgroundColor: Colors.transparent,
-                centerTitle: true,
-                leading: IconButton(
-                    onPressed: (){
-                      Navigator.pop(context);
-                    },
-                    icon: const ImageIcon(
-                        AssetImage('assets/images/icon/before.png'),
-                        size: kIconSize,
-                        color: kIconBGColor
-                    )
-                ),
-              ),
-              SliverList(delegate: SliverChildListDelegate([
-                //nft image
-                Container(
-                  child: Image(
-                    image: AssetImage('assets/images/Rectangle 156.png')
-                  )
-                ),
-                //tab bar
-                Container(
-                  height: 70,
-                    color: Colors.white,
-                    child: TabBar(
-                      isScrollable: true,
-                      controller: _tabController,
-                      labelColor: Colors.grey[700],
-                      indicatorSize: TabBarIndicatorSize.label,
-                      indicatorColor: Color(0xFF1212C4),
-                      tabs: myTabs,
-                      labelPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    )
-                ),
-                Container(
-                  child: _pages[tabIndex]
-                )
-                ]))
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        actions: [
+          GestureDetector(
+            onTap: (){},
+            child: const SizedBox(
+            width: 40,
+            height: 40,
+              child: Icon(Icons.more_vert, color: Colors.white,),
+        ),
+          )],
+      ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Image.asset('assets/images/Rectangle 156.png',
+                width: double.infinity,
+                fit: BoxFit.cover,
 
-            ]
+              ),
+              const VerticalSpace(10),
+              //tab bar
+              Container(
+                alignment: Alignment.centerLeft,
+                height: 30,
+                  color: Colors.white,
+                  child: TabBar(
+                    isScrollable: true,
+                    controller: _tabController,
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.grey[700],
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorColor: Color(0xFFED8864),
+                    tabs: myTabs,
+                    labelPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  )
+              ),
+              Container(
+                  child: _pages[tabIndex]
+              )
+            ],
+          ),
         ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Container(

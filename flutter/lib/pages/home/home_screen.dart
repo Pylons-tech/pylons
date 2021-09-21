@@ -18,16 +18,16 @@ class HomeScreenWidget extends StatefulWidget {
 
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
 
-  String dropdownValue = 'My activity';
+  String dropdownValue = 'My Activity';
 
   List <String> spinnerItems = [
-    'My activity',
+    'My Activity',
     'Recommended',
     'Following',
   ];
 
   static const Map<String, Widget> _pages = {
-    'My activity': HomeActivityWidget(),
+    'My Activity': HomeActivityWidget(),
     'Recommended': HomeRecommendationWidget(),
     'Following': HomeFollowingWidget()
   };
@@ -65,7 +65,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           leading: IconButton(
               onPressed: (){},
               icon: const ImageIcon(
-                  AssetImage('assets/images/icon/drawer.png'),
+                  AssetImage('assets/icons/hamburger.png'),
                   size: kIconSize,
                   color: kIconBGColor
               )
@@ -102,7 +102,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                         style: TextStyle(color: kIconBGColor, fontSize: 14),
                         onChanged: (String? data) {
                           setState(() {
-                            dropdownValue = data!!;
+                            dropdownValue = data!;
                           });
                         },
                         items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
@@ -114,8 +114,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                       ),
                       Spacer(),
                       IconButton(
-                          icon: const ImageIcon(
-                              AssetImage('assets/images/icon/callendar.png'),
+                          icon: const Icon(
+                              Icons.calendar_today_rounded,
                               size: kIconSize,
                               color:kIconBGColor
                           ),
@@ -123,7 +123,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
                       ),
                       IconButton(
                         icon: const ImageIcon(
-                          AssetImage('assets/images/icon/Filter.png'),
+                          AssetImage('assets/icons/filter.png'),
                           size:kIconSize,
                           color: kIconBGColor,
                         ),
@@ -140,7 +140,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
               )
           ),
         ),
-          _pages[dropdownValue]!!
+          _pages[dropdownValue]!
         ],
       ),
     );

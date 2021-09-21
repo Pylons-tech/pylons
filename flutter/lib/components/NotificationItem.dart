@@ -29,6 +29,7 @@ class NotificationItem extends StatelessWidget {
                               TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
                               TextSpan(text: ' purchased'),
                               TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: '  10min', style: TextStyle(color: Colors.grey, fontSize: 13)),
                             ],
                           ),
                         ),

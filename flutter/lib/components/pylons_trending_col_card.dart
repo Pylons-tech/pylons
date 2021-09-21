@@ -12,14 +12,16 @@ class PylonsTrendingColCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
-        padding: EdgeInsets.only(right: 6),
+        padding: EdgeInsets.zero,
         width: 320,
         child:Column(
+
             children: [
               Row(
                   children: [
                     Expanded(
                         child:ListTile(
+                          contentPadding: EdgeInsets.zero,
                             leading: CircleAvatar(
                               child: FlutterLogo(size: 20.0),
                             ),
@@ -37,58 +39,58 @@ class PylonsTrendingColCard extends StatelessWidget {
                     )
                   ]
               ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: Card(
-                    color: Colors.white,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Column(
-                    children: [
-                      Container(
-                        child: Row(
+              Card(
+                  color: Colors.white,
+                  elevation: 1,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+
+                      children: [
+                        //1x2 image
+                        Image(
+                          image: AssetImage('assets/images/Rectangle 312.png'),
+                          width: 200.0,
+                          height: 200.0,
+                          fit: BoxFit.cover
+                        ),
+                        SizedBox(
+                          width: 2.0
+                        ),
+                        Column(
                           children: [
-                            //1x2 image
                             Image(
                               image: AssetImage('assets/images/Rectangle 312.png'),
-                              width: 200.0,
-                              height: 200.0,
+                              width: 110.0,
+                              height: 100.0,
                               fit: BoxFit.cover
                             ),
                             SizedBox(
-                              width: 2.0
+                                height: 2.0
                             ),
-                            Column(
-                              children: [
-                                Image(
-                                  image: AssetImage('assets/images/Rectangle 312.png'),
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.cover
-                                ),
-                                SizedBox(
-                                    height: 2.0
-                                ),
-                                Image(
-                                    image: AssetImage('assets/images/Rectangle 312.png'),
-                                    width: 100.0,
-                                    height: 100.0,
-                                    fit: BoxFit.cover
-                                )
-                              ]
+                            Image(
+                                image: AssetImage('assets/images/Rectangle 312.png'),
+                                width: 110.0,
+                                height: 100.0,
+                                fit: BoxFit.cover
                             )
-                          ],
+                          ]
                         )
-                      )
-                    ],
-                  )
+                      ],
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Collection Title'),
+                    )
+                  ],
                 )
               ),
-              Container(
-                child: Text('Collection Title'),
-              )
+
             ]
         )
     );
