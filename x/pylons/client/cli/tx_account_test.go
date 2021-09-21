@@ -4,6 +4,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/crypto/hd"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -22,10 +25,13 @@ func TestCreateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
+	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewUser", keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+	require.NoError(t, err)
+	addr := info.GetAddress()
+
 	for _, tc := range []struct {
 		desc     string
 		username string
-		address  string
 		flags    []string
 		err      error
 		code     uint32
@@ -33,7 +39,6 @@ func TestCreateAccount(t *testing.T) {
 		{
 			desc:     "valid",
 			username: "validUser",
-			address:  val.Address.String(),
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -46,7 +51,6 @@ func TestCreateAccount(t *testing.T) {
 		{
 			desc:     "invalidAddress",
 			username: "validUser",
-			address:  "invalidAddress",
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, "invalidAddress"),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -58,7 +62,6 @@ func TestCreateAccount(t *testing.T) {
 		{
 			desc:     "invalidUsername1",
 			username: "",
-			address:  val.Address.String(),
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -70,7 +73,6 @@ func TestCreateAccount(t *testing.T) {
 		{
 			desc:     "invalidUsername2",
 			username: val.Address.String(),
-			address:  val.Address.String(),
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -82,7 +84,6 @@ func TestCreateAccount(t *testing.T) {
 		{
 			desc:     "duplicateUser",
 			username: "validUser",
-			address:  val.Address.String(),
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -91,6 +92,18 @@ func TestCreateAccount(t *testing.T) {
 			},
 			err:  nil,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
+		},
+		{
+			desc:     "no coins addr",
+			username: "nocoins",
+			flags: []string{
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, addr.String()),
+				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+			},
+			err:  nil,
+			code: 0,
 		},
 	} {
 		tc := tc
