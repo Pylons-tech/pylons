@@ -16,8 +16,8 @@ pylonsd init gamma --chain-id=pylonschain --home $GAMMA_HOME
 # I am going to generate the first genesis in the default dir
 pylonsd init masternode --chain-id=pylonschain
 
-# Change the bond denom to the staking token (bedrock)
-sed -i 's/stake/bedrock/g' $HOME/.pylons/config/genesis.json
+# Change the bond denom to the staking token (ubedrock)
+sed -i 's/stake/ubedrock/g' $HOME/.pylons/config/genesis.json
 #sed -i 's/"ed25519"/"secp256k1"/g' $HOME/.pylons/config/genesis.json
 
 # Create all accounts
@@ -27,18 +27,18 @@ pylonsd keys add helder --keyring-backend=test  --recover <<< "stick tennis pupp
 pylonsd keys add jacob --keyring-backend=test  --recover <<< "fox smart obtain similar west hub long envelope swallow pitch call joke cradle balcony general hint surprise segment total small body park pottery elite"
 pylonsd keys add jack --keyring-backend=test  --recover <<< "please hurt play boost stadium pitch someone purity extra victory one story head setup learn trick feed infant monkey ring anxiety now upon piece"
 
-pylonsd add-genesis-account $(pylonsd keys show pylonsinc -a --keyring-backend=test) 9000000000pylon,900000000bedrock
-pylonsd add-genesis-account $(pylonsd keys show tendermint -a --keyring-backend=test) 1000000000pylon,100000000bedrock
+pylonsd add-genesis-account $(pylonsd keys show pylonsinc -a --keyring-backend=test) 9000000000upylon,900000000ubedrock
+pylonsd add-genesis-account $(pylonsd keys show tendermint -a --keyring-backend=test) 1000000000upylon,100000000ubedrock
 
-pylonsd add-genesis-account $(pylonsd keys show helder -a --keyring-backend=test) 1000000pylon,1000000bedrock
-pylonsd add-genesis-account $(pylonsd keys show jacob -a --keyring-backend=test) 1000000pylon,1000000bedrock
-pylonsd add-genesis-account $(pylonsd keys show jack -a --keyring-backend=test) 1000000pylon,1000000bedrock
+pylonsd add-genesis-account $(pylonsd keys show helder -a --keyring-backend=test) 1000000upylon,1000000ubedrock
+pylonsd add-genesis-account $(pylonsd keys show jacob -a --keyring-backend=test) 1000000upylon,1000000ubedrock
+pylonsd add-genesis-account $(pylonsd keys show jack -a --keyring-backend=test) 1000000upylon,1000000ubedrock
 
 mkdir -p $HOME/.pylons/config/gentx/
 
-pylonsd gentx helder 1000000bedrock --ip alpha --node-id $(pylonsd tendermint show-node-id --home $ALPHA_HOME)   --moniker="alpha" --pubkey $(pylonsd tendermint show-validator --home $ALPHA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/alpha.json
-pylonsd gentx jacob  1000000bedrock --ip beta --node-id $(pylonsd tendermint show-node-id --home $BETA_HOME)    --moniker="beta" --pubkey $(pylonsd tendermint show-validator --home $BETA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/beta.json
-pylonsd gentx jack   1000000bedrock --ip gamma --node-id $(pylonsd tendermint show-node-id --home $GAMMA_HOME)   --moniker="gamma" --pubkey $(pylonsd tendermint show-validator --home $GAMMA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/gamma.json
+pylonsd gentx helder 1000000ubedrock --ip alpha --node-id $(pylonsd tendermint show-node-id --home $ALPHA_HOME)   --moniker="alpha" --pubkey $(pylonsd tendermint show-validator --home $ALPHA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/alpha.json
+pylonsd gentx jacob  1000000ubedrock --ip beta --node-id $(pylonsd tendermint show-node-id --home $BETA_HOME)    --moniker="beta" --pubkey $(pylonsd tendermint show-validator --home $BETA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/beta.json
+pylonsd gentx jack   1000000ubedrock --ip gamma --node-id $(pylonsd tendermint show-node-id --home $GAMMA_HOME)   --moniker="gamma" --pubkey $(pylonsd tendermint show-validator --home $GAMMA_HOME) --keyring-backend=test --chain-id=pylonschain --output-document $HOME/.pylons/config/gentx/gamma.json
 
 
 
@@ -67,6 +67,8 @@ for node in $nodes; do
   dasel put bool -p toml -f $node/config/app.toml ".api.enable"                  true
   dasel put bool -p toml -f $node/config/app.toml ".api.enabled-unsafe-cors"     true
   dasel put bool -p toml -f $node/config/app.toml ".api.swagger"                 true
+  dasel put string -p toml -f $node/config/app.toml "minimum-gas-prices"                 "0.025ubedrock"
+
   dasel put string -p toml -f $node/config/app.toml -s ".rpc.cors_allowed_origins.[]" "*"
 
 
