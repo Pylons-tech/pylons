@@ -4,9 +4,6 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -25,9 +22,7 @@ func TestCreateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	info, _, err := val.ClientCtx.Keyring.NewMnemonic("NewUser", keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
-	require.NoError(t, err)
-	addr := info.GetAddress()
+	accs := generateAddressesInKeyring(val.ClientCtx.Keyring, 2)
 
 	for _, tc := range []struct {
 		desc     string
@@ -37,7 +32,7 @@ func TestCreateAccount(t *testing.T) {
 		code     uint32
 	}{
 		{
-			desc:     "valid",
+			desc:     "account exists 1",
 			username: "validUser",
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
@@ -45,8 +40,8 @@ func TestCreateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err:  nil,
-			code: 0,
+			err:  sdkerrors.ErrInvalidRequest,
+			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
 		{
 			desc:     "invalidAddress",
@@ -82,7 +77,7 @@ func TestCreateAccount(t *testing.T) {
 			err: types.ErrInvalidRequestField,
 		},
 		{
-			desc:     "duplicateUser",
+			desc:     "account exists 2",
 			username: "validUser",
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
@@ -90,20 +85,32 @@ func TestCreateAccount(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
-			err:  nil,
+			err:  sdkerrors.ErrInvalidRequest,
 			code: sdkerrors.ErrInvalidRequest.ABCICode(),
 		},
 		{
-			desc:     "no coins addr",
+			desc:     "no coins addr 1",
 			username: "nocoins",
 			flags: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, addr.String()),
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
 			err:  nil,
 			code: 0,
+		},
+		{
+			desc:     "no coins addr dup username",
+			username: "nocoins",
+			flags: []string{
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[1].String()),
+				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+			},
+			err:  nil,
+			code: types.ErrDuplicateUsername.ABCICode(),
 		},
 	} {
 		tc := tc
@@ -128,8 +135,9 @@ func TestUpdateAccount(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
+	accs := generateAddressesInKeyring(val.ClientCtx.Keyring, 2)
 	common := []string{
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+		fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
@@ -149,7 +157,6 @@ func TestUpdateAccount(t *testing.T) {
 	for _, tc := range []struct {
 		desc     string
 		username string
-		address  string
 		flags    []string
 		err      error
 		code     uint32
@@ -157,7 +164,6 @@ func TestUpdateAccount(t *testing.T) {
 		{
 			desc:     "valid",
 			username: "validUpdatedUser",
-			address:  val.Address.String(),
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -170,7 +176,6 @@ func TestUpdateAccount(t *testing.T) {
 		{
 			desc:     "invalidAddress",
 			username: "validUser",
-			address:  "invalidAddress",
 			flags: []string{
 				fmt.Sprintf("--%s=%s", flags.FlagFrom, "invalidAddress"),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
@@ -182,9 +187,8 @@ func TestUpdateAccount(t *testing.T) {
 		{
 			desc:     "invalidUsername1",
 			username: "",
-			address:  val.Address.String(),
 			flags: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
@@ -194,14 +198,24 @@ func TestUpdateAccount(t *testing.T) {
 		{
 			desc:     "invalidUsername2",
 			username: val.Address.String(),
-			address:  val.Address.String(),
 			flags: []string{
-				fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[0].String()),
 				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
 			err: types.ErrInvalidRequestField,
+		},
+		{
+			desc:     "account not created",
+			username: "username1234235409",
+			flags: []string{
+				fmt.Sprintf("--%s=%s", flags.FlagFrom, accs[1].String()),
+				fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+				fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+			},
+			err: fmt.Errorf("not found: key not found"),
 		},
 	} {
 		tc := tc
@@ -210,7 +224,8 @@ func TestUpdateAccount(t *testing.T) {
 			args = append(args, tc.flags...)
 			out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdUpdateAccount(), args)
 			if tc.err != nil {
-				require.ErrorIs(t, err, tc.err)
+				// require.ErrorIs(t, err, tc.err)
+				require.Contains(t, err.Error(), tc.err.Error())
 			} else {
 				require.NoError(t, err)
 				var resp sdk.TxResponse

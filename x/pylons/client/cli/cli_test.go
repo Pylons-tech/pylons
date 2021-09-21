@@ -4,6 +4,9 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/crypto/hd"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
@@ -11,6 +14,15 @@ import (
 
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
+
+func generateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
+	addrs := make([]sdk.AccAddress, n)
+	for i := 0; i < n; i++ {
+		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		addrs[i] = info.GetAddress()
+	}
+	return addrs
+}
 
 func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
