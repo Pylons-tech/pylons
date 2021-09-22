@@ -56,18 +56,20 @@ class PylonsMarketplaceCard extends StatelessWidget {
                 child: Row(children: [
                   GestureDetector(
                       child: ImageIcon(
-                          AssetImage('assets/images/icon/union.png'),
-                          size: 24,
+                          AssetImage('assets/icons/comment.png'),
+                          size: 16,
                           color: Color(0xFF616161)),
                       onTap: () {}),
+                  const HorizontalSpace(4),
                   Text('40'),
                   const HorizontalSpace(10),
                   GestureDetector(
                       child: ImageIcon(
-                          AssetImage('assets/images/icon/favorite_border.png'),
-                          size: 24,
+                          AssetImage('assets/icons/like.png'),
+                          size: 16,
                           color: Color(0xFF616161)),
                       onTap: () {}),
+                  const HorizontalSpace(4),
                   Text('142'),
                   Spacer(),
                   Text(

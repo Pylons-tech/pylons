@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 
@@ -38,15 +39,15 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
           Row(
             children: [
               const ImageIcon(
-                  AssetImage('assets/images/icon/Filter.png'),
-                  size: 24,
+                  AssetImage('assets/icons/filter.png'),
+                  size: 20,
                   color: Color(0xFF616161)
               ),
-              const Text('Filter'),
+              const Text('Filter', style: TextStyle(fontWeight: FontWeight.w500),),
               Spacer(),
               FlatButton(
                 onPressed: (){},
-                child: Text('Reset')
+                child: Text('Reset', style: PylonsAppTheme.HOME_LABEL,)
               )
             ],
           ),

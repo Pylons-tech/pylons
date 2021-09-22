@@ -136,7 +136,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
   }
 
 
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -171,7 +171,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
                     controller: _tabController,
                     labelColor: Colors.black,
                     unselectedLabelColor: Colors.grey[700],
-                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicatorSize: TabBarIndicatorSize.label,
                     indicatorColor: Color(0xFFED8864),
                     tabs: myTabs,
                     labelPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
@@ -229,4 +229,6 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
         ),
     );
   }
+
+
 }

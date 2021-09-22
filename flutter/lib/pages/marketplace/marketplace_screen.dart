@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:pylons_wallet/components/pylons_app_bar.dart';
@@ -70,15 +72,15 @@ class _MarketplaceScreenWidgetState extends State<MarketplaceScreenWidget> {
                       child: Row(
                         children: [
                           ImageIcon(
-                            AssetImage('assets/images/icon/sort.png'),
+                            AssetImage('assets/icons/sort.png'),
                             size: 24,
                           ),
                           Padding(
                               padding: EdgeInsets.only(right: 10, left: 10),
                               child: Text('SORT BY')
                           ),
-                          ImageIcon(
-                            AssetImage('assets/images/icon/chevron-down.png'),
+                          Icon(
+                           Icons.keyboard_arrow_down,
                             size: 24,
                           ),
                         ],
@@ -90,16 +92,19 @@ class _MarketplaceScreenWidgetState extends State<MarketplaceScreenWidget> {
                       onTap: () { print("Container was tapped"); },
                       child:    Row(
                         children: [
-                          ImageIcon(
-                            AssetImage('assets/images/icon/filter_portrait.png'),
-                            size: 24,
+                          Transform.rotate(
+                            angle: -pi * 0.5,
+                            child: ImageIcon(
+                              AssetImage('assets/icons/filter.png'),
+                              size: 24,
+                            ),
                           ),
                           Padding(
-                              padding: EdgeInsets.only(right: 10, left: 10),
+                              padding: EdgeInsets.only(right: 10, left: 5),
                               child: Text('FILTER BY')
                           ),
-                          ImageIcon(
-                            AssetImage('assets/images/icon/chevron-down.png'),
+                          Icon(
+                            Icons.keyboard_arrow_down,
                             size: 24,
                           ),
                         ],

@@ -40,34 +40,32 @@ class _DashboardAssetsState extends State<DashboardAssets> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: const <Widget>[
-                Text("Total Assets",
-                    style: TextStyle(color: Colors.black, fontSize: 18)),
-              ],
-            ),
-            Row(children: <Widget>[
-              Text("$_balance",
-                  style: TextStyle(color: Colors.black, fontSize: 36)),
-              const Text("  PYLONS",
-                  style: TextStyle(color: Colors.indigo, fontSize: 36)),
-            ]),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    PylonsBlueButton(onTap: _buypylons, text: "Buy Pylons"),
-                    PylonsWhiteButton(onTap: () {}, text: "Send Pylons")
-                  ],
-                )),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: const <Widget>[
+              Text("Total Assets",
+                  style: TextStyle(color: Colors.black, fontSize: 18)),
+            ],
+          ),
+          Row(children: <Widget>[
+            Text("$_balance",
+                style: TextStyle(color: Colors.black, fontSize: 36)),
+            const Text("  PYLONS",
+                style: TextStyle(color: Colors.indigo, fontSize: 36)),
+          ]),
+          Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  PylonsBlueButton(onTap: _buypylons, text: "Buy Pylons"),
+                  PylonsWhiteButton(onTap: () {}, text: "Send Pylons")
+                ],
+              )),
+        ],
       ),
     );
   }

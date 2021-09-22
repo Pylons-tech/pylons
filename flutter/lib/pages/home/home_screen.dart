@@ -65,7 +65,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           leading: IconButton(
               onPressed: (){},
               icon: const ImageIcon(
-                  AssetImage('assets/icons/hamburger.png'),
+                  AssetImage('assets/icons/sort.png'),
                   size: kIconSize,
                   color: kIconBGColor
               )
@@ -73,8 +73,8 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
           actions: [
             IconButton(
                 icon: const ImageIcon(
-                  AssetImage('assets/images/icon/alert.png'),
-                  size: kIconSize,
+                  AssetImage('assets/icons/bell.png'),
+                  size: 20,
                   color: kIconBGColor,
                 ),
                 onPressed: () {
