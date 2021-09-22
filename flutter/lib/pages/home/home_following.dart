@@ -8,6 +8,8 @@ import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_history_card.dart';
 import 'package:pylons_wallet/components/pylons_trending_col_card.dart';
 import 'package:pylons_wallet/constants/constants.dart';
+import 'package:pylons_wallet/pages/detail/detail_screen.dart';
+import 'package:pylons_wallet/pages/gallery/collections.dart';
 
 class HomeFollowingWidget extends StatefulWidget {
   const HomeFollowingWidget({Key? key}) : super(key: key);
@@ -54,7 +56,8 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                       MoreButton(
                         showText: false,
                           onTap: (){
-                      })
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
+                          })
                     ]
                 ),
               Container(
@@ -63,7 +66,8 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                         borderRadius: BorderRadius.circular(8.0),
                         child: Column(
                         children: [
-                          Container(
+                          InkWell(
+                            child: Container(
                               child: Row(
                                 children: [
                                   Image(
@@ -92,6 +96,10 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                                   )
                                 ]
                               )
+                            ),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
+                            }
                           ),
                           Row(
                               children:[
@@ -163,22 +171,29 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
 
                       MoreButton(
                         showText: false,
-                          onTap: (){
-                      })
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
+                        },
+                      )
                     ]
                 ),
                 Container(
                   child:  Card(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
-                      child: Column(
+                        child: Column(
                           children: [
-                            Image(
+                           InkWell(
+                            child:Image(
                                 image: AssetImage('assets/images/Rectangle 312.png'),
                                 width: MediaQuery. of(context). size. width - 20,
                                 height: tileWidth,
                                 fit: BoxFit.fitWidth
                             ),
+                             onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
+                              },
+                           ),
                             Row(
                                 children:[
                                   IconButton(
@@ -210,7 +225,7 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                                   ),
                                 ]
                             )
-                          ]
+                          ],
                       )
                     )
                   ),
@@ -247,6 +262,7 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                       ),
 
                       MoreButton(onTap: (){
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
                       },
                       showText: false,)
                     ]
@@ -257,11 +273,16 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
                           borderRadius: BorderRadius.circular(8.0),
                           child: Column(
                               children: [
-                                Image(
+                                InkWell(
+                                  child:Image(
                                     image: AssetImage('assets/images/Rectangle 312.png'),
                                     width: MediaQuery. of(context). size. width - 20,
                                     height: tileWidth,
                                     fit: BoxFit.fitWidth
+                                ),
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
+                                  },
                                 ),
                                 Row(
                                     children:[

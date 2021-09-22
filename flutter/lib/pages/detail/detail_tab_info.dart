@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
+import 'package:pylons_wallet/components/pylons_blue_button.dart';
 
 class DetailTabInfoWidget extends StatelessWidget {
 
@@ -41,10 +42,14 @@ class DetailTabInfoWidget extends StatelessWidget {
                     child: FlutterLogo(),
                   ),
                   title: Text('Jimin',style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
-                  trailing: ElevatedButton(
-                    onPressed: (){},
-                    child: Text('Following')
-                  ),
+                  trailing: SizedBox(
+                    width: 100,
+                    height: 35,
+                    child: PylonsBlueButton(
+                      onTap: (){},
+                      text :'Following'
+                    ),
+                  )
                 ),
                 Divider()
               ],
@@ -61,20 +66,28 @@ class DetailTabInfoWidget extends StatelessWidget {
                     child: FlutterLogo(),
                   ),
                   title: Text('Linda',style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
-                  trailing: ElevatedButton(
-                      onPressed: (){},
-                      child: Text('Following')
-                  ),
+                    trailing: SizedBox(
+                      width: 100,
+                      height: 35,
+                      child: PylonsBlueButton(
+                          onTap: (){},
+                          text :'Following'
+                      ),
+                    )
                 ),
                 ListTile(
                   leading: CircleAvatar(
                     child: FlutterLogo(),
                   ),
                   title: Text('Yuri',style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
-                  trailing: ElevatedButton(
-                      onPressed: (){},
-                      child: Text('Following')
-                  ),
+                    trailing: SizedBox(
+                      width: 100,
+                      height: 35,
+                      child: PylonsBlueButton(
+                          onTap: (){},
+                          text :'Following'
+                      ),
+                    )
                 ),
               ],
             )

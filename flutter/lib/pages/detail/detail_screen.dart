@@ -136,6 +136,12 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, ),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
         actions: [
           GestureDetector(
             onTap: () {},

@@ -92,28 +92,6 @@ class _MarketplaceScreenWidgetState extends State<MarketplaceScreenWidget> {
                         );
                       }).toList(),
                     ),
-                    /*
-                    GestureDetector(
-                      onTap: () { print("Container was tapped"); },
-                      child: Row(
-                        children: [
-                          ImageIcon(
-                            AssetImage('assets/icons/sort.png'),
-                            size: 24,
-                          ),
-                          Padding(
-                              padding: EdgeInsets.only(right: 10, left: 10),
-                              child: Text('SORT BY')
-                          ),
-                          Icon(
-                           Icons.keyboard_arrow_down,
-                            size: 24,
-                          ),
-                        ],
-                      ),
-                    ),
-                     */
-
                     Spacer(),
                     GestureDetector(
                       onTap: () {

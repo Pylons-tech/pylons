@@ -30,34 +30,39 @@ class GalleryTabCollectionWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
                 child:Column(
                     children: [
-                      Row(
-                        children: [
-                          Image(
-                            image: AssetImage('assets/images/Rectangle 312.png'),
-                            width: tileWidth * 2,
-                            height: tileWidth * 2 + 2,
-                            fit: BoxFit.cover
-                          ),
-                          SizedBox(width: 2),
-                          Column(
-                            children: [
-                              Image(
-                                image: AssetImage('assets/images/Rectangle 312.png'),
-                                width: tileWidth,
-                                height: tileWidth,
-                                fit: BoxFit.cover
-                              ),
-                              SizedBox(height: 2),
-                              Image(
-                                image: AssetImage('assets/images/Rectangle 312.png'),
+                      InkWell(
+                          child: Row(
+                          children: [
+                            Image(
+                              image: AssetImage('assets/images/Rectangle 312.png'),
+                              width: tileWidth * 2,
+                              height: tileWidth * 2 + 2,
+                              fit: BoxFit.cover
+                            ),
+                            SizedBox(width: 2),
+                            Column(
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/images/Rectangle 312.png'),
                                   width: tileWidth,
                                   height: tileWidth,
                                   fit: BoxFit.cover
-                              ),
+                                ),
+                                SizedBox(height: 2),
+                                Image(
+                                  image: AssetImage('assets/images/Rectangle 312.png'),
+                                    width: tileWidth,
+                                    height: tileWidth,
+                                    fit: BoxFit.cover
+                                ),
 
-                            ]
-                          )
-                        ],
+                              ]
+                            )
+                          ],
+                        ),
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
+                        }
                       ),
                       Row(
                           children:[
@@ -84,34 +89,39 @@ class GalleryTabCollectionWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                   child:Column(
                     children: [
-                      Row(
-                        children: [
-                          Image(
-                              image: AssetImage('assets/images/Rectangle 312.png'),
-                              width: tileWidth * 2,
-                              height: tileWidth * 2 + 2,
-                              fit: BoxFit.cover
-                          ),
-                          SizedBox(width: 2),
-                          Column(
-                              children: [
-                                Image(
-                                    image: AssetImage('assets/images/Rectangle 312.png'),
-                                    width: tileWidth,
-                                    height: tileWidth,
-                                    fit: BoxFit.cover
-                                ),
-                                SizedBox(height: 2),
-                                Image(
-                                    image: AssetImage('assets/images/Rectangle 312.png'),
-                                    width: tileWidth,
-                                    height: tileWidth,
-                                    fit: BoxFit.cover
-                                ),
+                      InkWell(
+                          child: Row(
+                            children: [
+                              Image(
+                                  image: AssetImage('assets/images/Rectangle 312.png'),
+                                  width: tileWidth * 2,
+                                  height: tileWidth * 2 + 2,
+                                  fit: BoxFit.cover
+                              ),
+                              SizedBox(width: 2),
+                              Column(
+                                  children: [
+                                    Image(
+                                        image: AssetImage('assets/images/Rectangle 312.png'),
+                                        width: tileWidth,
+                                        height: tileWidth,
+                                        fit: BoxFit.cover
+                                    ),
+                                    SizedBox(height: 2),
+                                    Image(
+                                        image: AssetImage('assets/images/Rectangle 312.png'),
+                                        width: tileWidth,
+                                        height: tileWidth,
+                                        fit: BoxFit.cover
+                                    ),
 
-                              ]
-                          )
-                        ],
+                                  ]
+                              )
+                            ],
+                          ),
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
+                          }
                       ),
                       Row(
                           children:[

@@ -5,6 +5,7 @@ import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_dashboard_filter.dart';
 import 'package:pylons_wallet/components/pylons_history_card.dart';
 import 'package:pylons_wallet/constants/constants.dart';
+import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 import 'package:pylons_wallet/pages/home/home_following.dart';
 import 'package:pylons_wallet/pages/home/home_recommendation.dart';
 import 'package:pylons_wallet/pages/home/home_activity.dart';
@@ -144,10 +145,16 @@ class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
-                    child: Image(
+                    child: InkWell(
+                      child: Image(
                         image: AssetImage('assets/images/Rectangle 312.png'),
                         fit: BoxFit.cover
-                    ),
+                      ),
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: false)));
+
+                      },
+                    )
                   )
               );
             },

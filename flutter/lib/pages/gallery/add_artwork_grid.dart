@@ -48,8 +48,8 @@ class _AddArtworkGridWidgetState extends State<AddArtworkGridWidget> with Single
     'a',
   ];
   var listTitlestatus = [
-    true,
-    true,
+    false,
+    false,
     false,
     false,
     false,
@@ -78,7 +78,7 @@ class _AddArtworkGridWidgetState extends State<AddArtworkGridWidget> with Single
 
   @override
   Widget build(BuildContext context) {
-    var totalNum = 10;
+    var totalNum = 0;
     double tileWidth = (MediaQuery. of(context). size. width - 32 - 32) /3;
 
     return Scaffold(
@@ -158,15 +158,21 @@ class _AddArtworkGridWidgetState extends State<AddArtworkGridWidget> with Single
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(5),
                                 child: Container(
-                                    color: Color(0xFFC4C4C4),
+                                    decoration: BoxDecoration(
+                                        border: listTitlestatus[indx] ? ( Border.all(color: Color(0xFF1212C4), width: 3)) : (null)
+                                    ),
                                     width: tileWidth,
                                     height: tileWidth,
                                     child: InkWell(
                                       onTap: (){
-                                        setState(){
-                                          totalNum = totalNum + 1;
+                                        setState((){
+                                          if(listTitlestatus[indx]){
+                                            totalNum = totalNum - 1;
+                                          }else{
+                                            totalNum = totalNum + 1;
+                                          }
                                           listTitlestatus[indx] = !listTitlestatus[indx];
-                                        }
+                                        });
                                       },
                                       child: Image(
                                           image: AssetImage('assets/images/Rectangle 312.png'),
@@ -179,13 +185,22 @@ class _AddArtworkGridWidgetState extends State<AddArtworkGridWidget> with Single
                         Positioned( // will be positioned in the top right of the container
                             top: 10,
                             right: 20,
-                            child: CircleAvatar(
-                              radius: 10,
-                              backgroundColor: Color(0x80000000),
-                              child: Text(listTitlestatus[indx] ? (indx.toString()) : '', style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 10))
-                              /*
-                              child:Text(indx.toString(), style: TextStyle()),
-                               */
+                            child: Container(
+                              child:CircleAvatar(
+                                radius: 10,
+                                backgroundColor:listTitlestatus[indx] ?( Color(0x801212C4)) : (Color(0x80000000)),
+                                child: Text(listTitlestatus[indx] ? (indx.toString()) : '', style: TextStyle(color: Color(0xFFFFFFFF), fontSize: 10))
+                                /*
+                                child:Text(indx.toString(), style: TextStyle()),
+                                 */
+                              ),
+                              decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: new Border.all(
+                                  color: listTitlestatus[indx] ? Color(0xFFC4C4C4) : Color(0x80201D1D),
+                                  width: 2.0,
+                                ),
+                              ),
                             )
                         )
                       ]

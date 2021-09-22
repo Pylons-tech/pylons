@@ -1,6 +1,7 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
 class PylonsMarketplaceCard extends StatelessWidget {
   const PylonsMarketplaceCard({
@@ -34,11 +35,16 @@ class PylonsMarketplaceCard extends StatelessWidget {
             child: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-              Image.asset(
-                'assets/images/Rectangle 312.png',
-                width: MediaQuery.of(context).size.width,
-                height: 200,
-                fit: BoxFit.fill,
+              InkWell(
+                child:Image.asset(
+                  'assets/images/Rectangle 312.png',
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  fit: BoxFit.fill,
+                ),
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: false,)));
+                }
               ),
               const Align(
                 alignment: Alignment.centerLeft,
