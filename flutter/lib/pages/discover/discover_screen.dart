@@ -70,7 +70,7 @@ class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
       child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            pinned: false,
+            pinned: true,
             snap: false,
             floating: false,
             forceElevated: false,

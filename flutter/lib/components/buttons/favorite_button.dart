@@ -18,9 +18,9 @@ class FavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: this.onTap,
-      icon: const ImageIcon(
-        AssetImage('assets/images/icon/favorite_border.png'),
-        size: kIconSize,
+      icon: const Icon(
+        Icons.favorite_outline,
+        size: 20,
         color: kIconBGColor,
       ),
     );

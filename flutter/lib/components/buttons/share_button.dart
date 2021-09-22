@@ -17,9 +17,9 @@ class ShareButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: this.onTap,
-        icon: ImageIcon(
-          AssetImage('assets/images/icon/share.png'),
-          size: kIconSize,
+        icon: Icon(
+          Icons.share_outlined,
+          size: 20,
           color: kIconBGColor,
         ),
     );

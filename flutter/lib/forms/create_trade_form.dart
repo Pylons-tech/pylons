@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/payment/payment_result_screen.dart';
 
@@ -17,11 +18,11 @@ class CreateTradeForm extends StatefulWidget {
 class CreateTradeFormState extends State<CreateTradeForm> {
 
   final _formKey = GlobalKey<FormState>();
-  final usernameController = TextEditingController();
+  final nameController = TextEditingController();
   final PriceController = TextEditingController();
   final descController = TextEditingController();
-  final cvcController = TextEditingController();
-  final zipController = TextEditingController();
+  // final cvcController = TextEditingController();
+  // final zipController = TextEditingController();
 
   String dropdownValue = 'USD';
 
@@ -48,16 +49,15 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child:Column(
               children: [
-                Align(
-                  alignment: Alignment.center,
+                const Align(
                   child: Text('Create Trade', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
-                SizedBox(height: 24),
+                const VerticalSpace(24),
                 Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Column(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Price'),
                         ),
@@ -66,11 +66,34 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                             Expanded(child:TextFormField(
                               controller: PriceController,
                               decoration: InputDecoration(
-                                  border: OutlineInputBorder(
+                                  border: const UnderlineInputBorder(
                                     borderRadius: BorderRadius.zero,
                                   ),
+                                  suffix:  DropdownButton<String>(
+                                    value: dropdownValue,
+                                    icon: const Icon(
+                                        Icons.keyboard_arrow_down,
+                                        size: 16,
+                                        color: kIconBGColor
+                                    ),
 
-                                  contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                                    elevation: 16,
+                                    underline: const SizedBox(),
+                                    focusColor: const Color(0xFF1212C4),
+                                    style: const TextStyle(color: Color(0xFF1212C4), fontSize: 14, fontWeight: FontWeight.w500),
+                                    onChanged: (String? data) {
+                                      setState(() {
+                                        dropdownValue = data!;
+                                      });
+                                    },
+                                    items: currencies.map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, -10),
                                   filled: true,
                                   hintText: 'Expecting Price',
                                   hintStyle: TextStyle(color: Colors.grey[800]),
@@ -79,112 +102,95 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                             ),
                             ),
 
-                            DropdownButton<String>(
-                              value: dropdownValue,
-                              icon: ImageIcon(
-                                  AssetImage('assets/images/icon/chevron-down.png'),
-                                  size: 24,
-                                  color: kIconBGColor
-                              ),
-                              iconSize: 24,
-                              elevation: 16,
-                              underline: SizedBox(),
-                              focusColor: Color(0xFF1212C4),
-                              style: TextStyle(color: kIconBGColor, fontSize: 14),
-                              onChanged: (String? data) {
-                                setState(() {
-                                  dropdownValue = data!;
-                                });
-                              },
-                              items: currencies.map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value),
-                                );
-                              }).toList(),
-                            ),
+
 
                           ],),
-                        SizedBox(height: 20),
-                        Align(
+                        const VerticalSpace(20),
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Name'),
                         ),
+                        const VerticalSpace(6),
                         TextFormField(
-                          controller: descController,
+                          controller: nameController,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(
+                            enabledBorder: const OutlineInputBorder(
+                              borderRadius: BorderRadius.zero,
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                              focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
+                              // border: OutlineInputBorder(
+                              //   borderRadius: BorderRadius.zero,
+                              //   borderSide: BorderSide(color: Colors.transparent),
+                              // ),
 
-                              contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               filled: true,
                               hintText: 'Title of Artwork',
-                              hintStyle: TextStyle(color: Colors.grey[800]),
-                              fillColor: Colors.white70
+                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
+                              fillColor: const Color(0xffF1F1F2)
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Align(
+                        const VerticalSpace(20),
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Description'),
                         ),
+                        const VerticalSpace(6),
                         TextFormField(
                           minLines: 4,
                           maxLines: 4,
                           controller: descController,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
 
-                              contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'Description about the artwork',
-                              hintStyle: TextStyle(color: Colors.grey[800]),
-                              fillColor: Colors.white70
+                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
+                              fillColor: Color(0xffF1F1F2)
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Align(
+                        const VerticalSpace(20),
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Item ID'),
                         ),
+                        const VerticalSpace(6),
                         TextFormField(
                           controller: descController,
                           minLines: 4,
                           maxLines: 4,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(
+                              enabledBorder:const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.transparent),
+                              ),
+                              focusedBorder:const OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
 
-                              contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'cosmosxxx',
-                              hintStyle: TextStyle(color: Colors.grey[800]),
-                              fillColor: Colors.white70
+                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
+                              fillColor: const Color(0xffF1F1F2)
                           ),
                         ),
-                        SizedBox(height: 20),
-                        Container(
-                            padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                            alignment: Alignment.center,
-                            height: 60,
-                            color: Colors.white,
-                            width: MediaQuery.of(context).size.width,
-                            child: ElevatedButton(
-                                onPressed: (){
-
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: const Color(0xFF1212C4),
-                                  padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                                  minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
-                                ),
-                                child: Text('Resell', style: TextStyle(color: Colors.white))
-                            )
-                        )
+                        const VerticalSpace(40),
+                        PylonsBlueButton(onTap: (){}, text: "Resell",),
+                        const VerticalSpace(20),
                       ],
                     )
                 ),

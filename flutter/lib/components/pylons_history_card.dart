@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
 class PylonsHistoryCard extends StatelessWidget {
@@ -34,9 +35,9 @@ class PylonsHistoryCard extends StatelessWidget {
                     ))
                   ]
                 )),
-                trailing: ImageIcon(
-                    AssetImage('assets/images/icon/more.png'),
-                    size: 24,
+                trailing: Icon(
+                    Icons.arrow_forward_ios_sharp,
+                    size: 16,
                     color: Color(0xFF616161)
                 ),
                 onTap: () {
@@ -58,29 +59,35 @@ class PylonsHistoryCard extends StatelessWidget {
                         ),
                         Row(
                             children:[
-                              IconButton(
-                                  icon: ImageIcon(
-                                      AssetImage('assets/images/icon/union.png'),
-                                      size: 24,
-                                      color: Color(0xFF616161)
-                                  ),
-                                  onPressed: () {}
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4, left: 10),
+                                child: GestureDetector(
+                                    child: Image.asset('assets/icons/comment.png',
+                                        width: 18,
+                                        fit: BoxFit.fill,
+                                        color: Color(0xFF616161)
+                                    ),
+                                    onTap: () {}
+                                ),
                               ),
                               Text('40'),
-                              IconButton(
-                                  icon: ImageIcon(
-                                      AssetImage('assets/images/icon/favorite_border.png'),
-                                      size: 24,
-                                      color: Color(0xFF616161)
-                                  ),
-                                  onPressed: () {}
+                              const HorizontalSpace(10),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: GestureDetector(
+                                    child: Image.asset('assets/icons/like.png',
+                                        width: 18,
+                                        color: Color(0xFF616161)
+                                    ),
+                                    onTap: () {}
+                                ),
                               ),
                               Text('142'),
                               Spacer(),
                               IconButton(
-                                  icon: ImageIcon(
-                                      AssetImage('assets/images/icon/dots.png'),
-                                      size: 24,
+                                  icon: Icon(
+                                      Icons.more_vert,
+                                      size: 18,
                                       color: Color(0xFF616161)
                                   ),
                                   onPressed: () {}

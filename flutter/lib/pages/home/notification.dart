@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:pylons_wallet/components/NotificationItem.dart';
+import 'package:pylons_wallet/components/notification_item.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
 class NotificationWidget extends StatefulWidget {

@@ -1,6 +1,4 @@
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/constants/constants.dart';
 
 class NotificationItem extends StatelessWidget {
 
@@ -12,7 +10,7 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
-        padding: EdgeInsets.only(right: 6, left: 6),
+        padding: const EdgeInsets.only(right: 6, left: 6),
         child:Column(
             children: [
               Row(
@@ -35,7 +33,7 @@ class NotificationItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
+                     Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: ClipRect(
                           child: Image(

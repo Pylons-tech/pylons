@@ -29,10 +29,10 @@ class PylonsSortByDropDownWidget extends State {
       iconSize: 24,
       elevation: 16,
       underline: SizedBox(),
-      style: TextStyle(color: Color(0xFF616161), fontSize: 14),
+      style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
       onChanged: (String? data) {
         setState(() {
-          dropdownValue = data!!;
+          dropdownValue = data!;
         });
       },
       items: spinnerItems.map<DropdownMenuItem<String>>((String value) {

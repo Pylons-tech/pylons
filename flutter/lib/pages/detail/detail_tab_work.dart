@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 
 class DetailTabWorkWidget extends StatelessWidget {
 
@@ -24,77 +25,73 @@ class DetailTabWorkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 100),
-      //margin: const EdgeInsets.only(bottom: 100.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Text('Title of Artwork',
-                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Color(0xFF080830))),
-              Spacer(),
-              FavoriteButton(onTap: (){}),
-              ShareButton(onTap: (){})
-            ],
-          ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: Wrap(
-                spacing: 10,
-                runSpacing: 5,
-                children: tags.map((tag) =>
-                  new Chip(
-                    backgroundColor: Color(0xFFED8864),
-                    label: new Text(tag),
-                  )
-                  ).toList()
-              )
-          ),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 100, top: 10, left: 20, right: 20),
+        //margin: const EdgeInsets.only(bottom: 100.0),
+        child: Column(
 
-          //Description
-          Align(
-            alignment: Alignment.topLeft,
-            child: Text('Description about the artwork', )
-          ),
+          children: [
+            Row(
+              children: [
+                Text('Title of Artwork',
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Color(0xFF080830))),
+                Spacer(),
+                FavoriteButton(onTap: (){}),
+                ShareButton(onTap: (){})
+              ],
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Wrap(
+                  spacing: 10,
+                  runSpacing: 5,
+                  children: tags.map((tag) =>
+                    new Chip(
+                      backgroundColor: Color(0xFFED8864),
+                      label: new Text(tag),
+                    )
+                    ).toList()
+                )
+            ),
 
-          //comments
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              ListTile(
-                leading: CircleAvatar(
-                  child: FlutterLogo(size: 20.0),
+            const VerticalSpace(10),
+            //Description
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text('Description about the artwork', )
+            ),
+
+            ListView.separated(
+              physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+                itemBuilder: (_, index) =>  ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: CircleAvatar(
+                child: FlutterLogo(size: 20.0),
+              ),
+              title: Text('jimin', style:TextStyle(color: Colors.black,fontSize: 16, fontWeight: FontWeight.w600),),
+              subtitle: Text('Really Love the artwork!', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
+              trailing: Text('10 min', style: TextStyle(color: Color(0xFFC4C4C4), fontSize:16, fontWeight: FontWeight.w400)),
+            ),
+                separatorBuilder: (_, index) => const Divider(), itemCount: 5),
+
+
+                Row(
+                  children: [
+                    Text('Related Items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF242423))),
+                    Spacer(),
+                    MoreButton(onTap: (){})
+                  ],
                 ),
-                title: Text('jimin', style:TextStyle(color: Colors.black,fontSize: 16, fontWeight: FontWeight.w600),),
-                subtitle: Text('Really Love the artwork!', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
-                trailing: Text('10 min', style: TextStyle(color: Color(0xFFC4C4C4), fontSize:16, fontWeight: FontWeight.w400)),
-              ),
-              Divider(),
-              ListTile(
-                leading: CircleAvatar(
-                  child: FlutterLogo(size: 20.0),
-                ),
-                title: Text('jimin', style:TextStyle(color: Colors.black,fontSize: 16, fontWeight: FontWeight.w600),),
-                subtitle: Text('Really Love the artwork!', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
-                trailing: Text('10 min', style: TextStyle(color: Color(0xFFC4C4C4), fontSize:16, fontWeight: FontWeight.w400)),
-              ),
-              Divider()
-            ],
-          ),
-          Column(
-            children: [
-              Row(
-                children: [
-                  Text('Related Items', style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF242423))),
-                  Spacer(),
-                  MoreButton(onTap: (){})
-                ],
-              ),
-              Container(
-                height: 400,
-                child: GridView.count(
-                  shrinkWrap: false,
+                GridView.count(
+                  physics:const  NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  padding: EdgeInsets.all(10),
+                  crossAxisSpacing: 20,
+                  mainAxisSpacing: 20,
+                  childAspectRatio: 3.5/4,
                   children:
                     nfts.map((nft) =>
                     new ClipRRect(
@@ -106,18 +103,12 @@ class DetailTabWorkWidget extends StatelessWidget {
                        )
                     )
                   ).toList(),
-                  crossAxisCount: 2,
-                  padding: EdgeInsets.all(10),
-                  crossAxisSpacing: 20,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 3.5/4,
                 )
-              )
-            ],
-          )
 
-        ],
-      )
+
+          ],
+        )
+      ),
     );
   }
 }
