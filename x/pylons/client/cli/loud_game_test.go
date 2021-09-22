@@ -618,7 +618,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 	require.NoError(t, err)
 
 	// Farm this wolf fight
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 10; i++ {
 		// execute recipe for character
 		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
 		args = append(args, common...)
@@ -627,6 +627,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 		var resp sdk.TxResponse
 		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
+		fmt.Println(resp.RawLog)
 
 		// simulate waiting for later block heights
 		height, err := net.LatestHeight()

@@ -32,6 +32,10 @@ func (k msgServer) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr stri
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", id)
 				}
 				if inputItem.Owner != creatorAddr {
+					modAcc := k.accountKeeper.GetModuleAddress(types.ExecutionsLockerName)
+					if inputItem.Owner == modAcc.String() {
+						return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s still locked for execution", inputItem.ID)
+					}
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.ID)
 				}
 			}
