@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/rogpeppe/go-internal/semver"
 
@@ -55,10 +54,10 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		return nil, nil, nil, err
 	}
 
-	coinPrefix := strings.ReplaceAll(recipe.CookbookID, "_", "")
+	// coinPrefix := strings.ReplaceAll(recipe.CookbookID, "_", "")
 	coins := make([]sdk.Coin, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
-		coins[i].Denom = coinPrefix + "/" + coinOutput.Coin.Denom
+		coins[i].Denom = coinOutput.Coin.Denom
 		if coinOutput.Program != "" {
 			val, err := ec.EvalInt64(coinOutput.Program)
 			if err != nil {
