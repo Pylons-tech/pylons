@@ -49,16 +49,15 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child:Column(
               children: [
-                Align(
-                  alignment: Alignment.center,
+                const Align(
                   child: Text('Create Trade', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
-                SizedBox(height: 24),
+                const VerticalSpace(24),
                 Padding(
-                    padding: EdgeInsets.only(left: 16, right: 16),
+                    padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Column(
                       children: [
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Price'),
                         ),
@@ -67,21 +66,21 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                             Expanded(child:TextFormField(
                               controller: PriceController,
                               decoration: InputDecoration(
-                                  border: UnderlineInputBorder(
+                                  border: const UnderlineInputBorder(
                                     borderRadius: BorderRadius.zero,
                                   ),
                                   suffix:  DropdownButton<String>(
                                     value: dropdownValue,
-                                    icon: Icon(
+                                    icon: const Icon(
                                         Icons.keyboard_arrow_down,
                                         size: 16,
                                         color: kIconBGColor
                                     ),
-                                    iconSize: 24,
+
                                     elevation: 16,
-                                    underline: SizedBox(),
-                                    focusColor: Color(0xFF1212C4),
-                                    style: TextStyle(color: Color(0xFF1212C4), fontSize: 14, fontWeight: FontWeight.w500),
+                                    underline: const SizedBox(),
+                                    focusColor: const Color(0xFF1212C4),
+                                    style: const TextStyle(color: Color(0xFF1212C4), fontSize: 14, fontWeight: FontWeight.w500),
                                     onChanged: (String? data) {
                                       setState(() {
                                         dropdownValue = data!;
@@ -94,7 +93,7 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                                       );
                                     }).toList(),
                                   ),
-                                  contentPadding: EdgeInsets.fromLTRB(16, 0, 16, -10),
+                                  contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, -10),
                                   filled: true,
                                   hintText: 'Expecting Price',
                                   hintStyle: TextStyle(color: Colors.grey[800]),
@@ -107,7 +106,7 @@ class CreateTradeFormState extends State<CreateTradeForm> {
 
                           ],),
                         const VerticalSpace(20),
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Name'),
                         ),
@@ -115,11 +114,11 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                         TextFormField(
                           controller: nameController,
                           decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
+                            enabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.zero,
                               borderSide: BorderSide(color: Colors.transparent),
                             ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
                                 borderSide: BorderSide(color: Colors.transparent),
                               ),
@@ -128,15 +127,15 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                               //   borderSide: BorderSide(color: Colors.transparent),
                               // ),
 
-                              contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               filled: true,
                               hintText: 'Title of Artwork',
                               hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
-                              fillColor: Color(0xffF1F1F2)
+                              fillColor: const Color(0xffF1F1F2)
                           ),
                         ),
                         const VerticalSpace(20),
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Description'),
                         ),
@@ -146,16 +145,16 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           maxLines: 4,
                           controller: descController,
                           decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
                                 borderSide: BorderSide(color: Colors.transparent),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
                                 borderSide: BorderSide(color: Colors.transparent),
                               ),
 
-                              contentPadding: EdgeInsets.all(16),
+                              contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'Description about the artwork',
                               hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
@@ -163,7 +162,7 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           ),
                         ),
                         const VerticalSpace(20),
-                        Align(
+                        const Align(
                           alignment: Alignment.topLeft,
                           child: Text('Item ID'),
                         ),
@@ -173,20 +172,20 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           minLines: 4,
                           maxLines: 4,
                           decoration: InputDecoration(
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder:const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
                                 borderSide: BorderSide(color: Colors.transparent),
                               ),
-                              focusedBorder: OutlineInputBorder(
+                              focusedBorder:const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
                                 borderSide: BorderSide(color: Colors.transparent),
                               ),
 
-                              contentPadding: EdgeInsets.all(16),
+                              contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'cosmosxxx',
                               hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
-                              fillColor: Color(0xffF1F1F2)
+                              fillColor: const Color(0xffF1F1F2)
                           ),
                         ),
                         const VerticalSpace(40),
