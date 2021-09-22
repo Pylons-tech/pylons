@@ -43,7 +43,7 @@ func (k msgServer) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr stri
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			err = recipeItemInput.MatchItem(inputItem, ec)
-			if err != nil {
+			if err == nil {
 				matchedItems[i] = inputItem
 				checkedInputItems[j] = true
 				break

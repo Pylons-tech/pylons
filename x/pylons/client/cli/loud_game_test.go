@@ -30,6 +30,8 @@ var (
 	common               []string
 	execCount            int = 0
 	itemCount            int = 0
+	characterID          string
+	swordID              string
 )
 
 func TestLOUDBasic(t *testing.T) {
@@ -51,6 +53,7 @@ func TestLOUDBasic(t *testing.T) {
 	createCharacter(t, net, ctx)
 	getLOUDCoin(t, net, ctx)
 	buyCopperSword(t, net, ctx)
+	fightWolfWithSword(t, net, ctx)
 }
 
 func createCookbook(t *testing.T, net *network.Network, ctx client.Context) {
@@ -86,37 +89,43 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 				Program:      "1",
 			}},
 			Longs: []types.LongParam{{
-				Key:          "Level",
+				Key:          "level",
 				Rate:         sdk.NewDec(1),
 				WeightRanges: nil,
 				Program:      "1",
 			}, {
-				Key:          "GiantKills",
+				Key:          "giantKills",
 				Rate:         sdk.NewDec(1),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
-				Key:          "Special",
+				Key:          "special",
 				Rate:         sdk.NewDec(1),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
-				Key:          "SpecialDragonKill",
+				Key:          "specialDragonKill",
 				Rate:         sdk.NewDec(1),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
-				Key:          "UndeadDragonKill",
+				Key:          "undeadDragonKill",
 				Rate:         sdk.NewDec(1),
 				WeightRanges: nil,
 				Program:      "0",
 			}},
 			Strings: []types.StringParam{{
-				Key:     "Description",
+				Key:     "description",
 				Rate:    sdk.NewDec(1),
 				Value:   "Basic Character",
 				Program: "",
-			}},
+			},
+				{
+					Key:     "type",
+					Rate:    sdk.NewDec(1),
+					Value:   "character",
+					Program: "",
+				}},
 			MutableStrings:  nil,
 			TransferFee:     nil,
 			TradePercentage: basicTradePercentage,
@@ -184,9 +193,9 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 	require.Equal(t, true, execResp.Completed)
 
 	// check the item, itemID is i
-	itemID := types.EncodeItemID(uint64(itemCount))
+	characterID = types.EncodeItemID(uint64(itemCount))
 	itemCount++
-	args = []string{cookbookID, itemID}
+	args = []string{cookbookID, characterID}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
@@ -322,10 +331,10 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	})
 
 	// Get Character Recipe
-	buyCopperSwordRecipeID := "LOUDGetCharacter123125"
+	buyCopperSwordRecipeID := "LOUDbuyCopperSword123125"
 	buyCopperSwordRecipe := []string{
-		"LOUD-Get-Character-Recipe",
-		"Creates a basic character in LOUD",
+		"LOUD-Buy-Copper-Sword",
+		"Purchases a copper sword for loudCoin",
 		"v0.0.1",
 		string(coinInputs),
 		"[]",
@@ -372,9 +381,9 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	require.Equal(t, true, execResp.Completed)
 
 	// check the item, itemID is i
-	itemID := types.EncodeItemID(uint64(itemCount))
+	swordID = types.EncodeItemID(uint64(itemCount))
 	itemCount++
-	args = []string{cookbookID, itemID}
+	args = []string{cookbookID, swordID}
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
@@ -382,4 +391,252 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 	fmt.Println(itemResp.Item)
+}
+
+func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) {
+	itemInputs, err := json.Marshal([]types.ItemInput{
+		{
+			ID: "character",
+			Doubles: []types.DoubleInputParam{
+				{
+					Key:      "XP",
+					MinValue: sdk.NewDec(1),
+					MaxValue: sdk.NewDec(10000000),
+				},
+			},
+			Longs: []types.LongInputParam{
+				{
+					Key:      "level",
+					MinValue: 1,
+					MaxValue: 10000000,
+				},
+			},
+			Strings: []types.StringInputParam{
+				{
+					Key:   "type",
+					Value: "character",
+				},
+			},
+			Conditions: types.ConditionList{},
+		},
+		{
+			ID: "sword",
+			Doubles: []types.DoubleInputParam{
+				{
+					Key:      "attack",
+					MinValue: sdk.NewDec(1),
+					MaxValue: sdk.NewDec(10000000),
+				},
+			},
+			Longs: []types.LongInputParam{
+				{
+					Key:      "level",
+					MinValue: 1,
+					MaxValue: 10000000,
+				},
+			},
+			Strings:    nil,
+			Conditions: types.ConditionList{},
+		},
+	})
+
+	entries, err := json.Marshal(types.EntriesList{
+		CoinOutputs: []types.CoinOutput{
+			{
+				ID:      "coin_reward",
+				Coin:    sdk.Coin{Denom: "loudCoin", Amount: sdk.NewInt(10)},
+				Program: "",
+			},
+		},
+		ItemOutputs: []types.ItemOutput{
+			{
+				ID: "wolf_tail",
+				Doubles: []types.DoubleParam{
+					{
+						Key:          "attack",
+						Rate:         sdk.NewDec(1),
+						WeightRanges: nil,
+						Program:      "0.0",
+					},
+				},
+				Longs: []types.LongParam{
+					{
+						Key:          "level",
+						Rate:         sdk.NewDec(1),
+						WeightRanges: nil,
+						Program:      "1",
+					},
+					{
+						Key:          "value",
+						Rate:         sdk.NewDec(1),
+						WeightRanges: nil,
+						Program:      "140",
+					},
+				},
+				Strings: []types.StringParam{
+					{
+						Key:     "Name",
+						Rate:    sdk.NewDec(1),
+						Value:   "Wolf Tail",
+						Program: "",
+					},
+				},
+				MutableStrings:  nil,
+				TransferFee:     nil,
+				TradePercentage: basicTradePercentage,
+				Quantity:        0,
+				AmountMinted:    0,
+				Tradeable:       true,
+			},
+			{
+				ID: "wolf_fur",
+				Doubles: []types.DoubleParam{
+					{
+						Key:          "attack",
+						Rate:         sdk.NewDec(1),
+						WeightRanges: nil,
+						Program:      "0.0",
+					},
+				},
+				Longs: []types.LongParam{
+					{
+						Key:          "level",
+						Rate:         sdk.NewDec(1),
+						WeightRanges: nil,
+						Program:      "1",
+					},
+					{
+						Key:          "value",
+						Rate:         sdk.NewDec(1),
+						WeightRanges: nil,
+						Program:      "140",
+					},
+				},
+				Strings: []types.StringParam{
+					{
+						Key:     "Name",
+						Rate:    sdk.NewDec(1),
+						Value:   "Wolf Fur",
+						Program: "",
+					},
+				},
+				MutableStrings:  nil,
+				TransferFee:     nil,
+				TradePercentage: basicTradePercentage,
+				Quantity:        0,
+				AmountMinted:    0,
+				Tradeable:       true,
+			},
+		},
+		ItemModifyOutputs: []types.ItemModifyOutput{
+			{
+				ID:              "modified_character",
+				ItemInputRef:    "character",
+				Doubles:         nil,
+				Longs:           nil,
+				Strings:         nil,
+				MutableStrings:  nil,
+				TransferFee:     nil,
+				TradePercentage: basicTradePercentage,
+				Quantity:        0,
+				AmountMinted:    0,
+				Tradeable:       true,
+			},
+			{
+				ID:              "sword",
+				ItemInputRef:    "sword",
+				Doubles:         nil,
+				Longs:           nil,
+				Strings:         nil,
+				MutableStrings:  nil,
+				TransferFee:     nil,
+				TradePercentage: basicTradePercentage,
+				Quantity:        0,
+				AmountMinted:    0,
+				Tradeable:       true,
+			},
+		},
+	})
+	require.NoError(t, err)
+
+	outputs, err := json.Marshal([]types.WeightedOutputs{
+		{
+			EntryIDs: []string{},
+			Weight:   3,
+		},
+		{
+			EntryIDs: []string{"coin_reward", "modified_character"},
+			Weight:   3,
+		},
+		{
+			EntryIDs: []string{"coin_reward", "modified_character", "sword"},
+			Weight:   24,
+		},
+		{
+			EntryIDs: []string{"coin_reward", "modified_character", "sword", "wolf_tail"},
+			Weight:   40,
+		},
+		{
+			EntryIDs: []string{"coin_reward", "modified_character", "sword", "wolf_fur"},
+			Weight:   30,
+		},
+	})
+
+	// Get Character Recipe
+	fightWolfWithSwordRecipeID := "LOUDFightWolfWithSword123125"
+	fightWolfWithSwordRecipe := []string{
+		"LOUD-Fight-Wolf-With-Sword-Recipe",
+		"creates a fight instance with a wolf requiring a character and a sword",
+		"v0.0.1",
+		"[]",
+		string(itemInputs),
+		string(entries),
+		string(outputs),
+		"0",
+		"true",
+		"extraInfo",
+	}
+
+	// create recipe
+	args := []string{cookbookID, fightWolfWithSwordRecipeID}
+	args = append(args, fightWolfWithSwordRecipe...)
+	args = append(args, common...)
+	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+	require.NoError(t, err)
+
+	// get sword and character IDs
+	itemInputIDs, err := json.Marshal([]string{characterID, swordID})
+	require.NoError(t, err)
+
+	// execute recipe for character
+	args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
+	args = append(args, common...)
+	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	require.NoError(t, err)
+	var resp sdk.TxResponse
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.Equal(t, uint32(0), resp.Code)
+
+	// simulate waiting for later block heights
+	height, err := net.LatestHeight()
+	targetHeight := height + 1
+	// build execID from the execution height
+	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
+	execCount++
+	require.NoError(t, err)
+	_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+	require.NoError(t, err)
+
+	// check the execution
+	args = []string{execID}
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+	require.NoError(t, err)
+	var execResp types.QueryGetExecutionResponse
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	// verify completed
+	require.Equal(t, true, execResp.Completed)
+
+	// TODO
+	// new item may or may not exist
+	// we need to verify that the exec did something though
 }
