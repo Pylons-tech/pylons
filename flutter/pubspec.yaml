@@ -26,6 +26,7 @@ dependencies:
   flutter_sticky_header: ^0.6.0
   expandable: ^5.0.1
   getwidget: ^2.0.3
+  parent_child_checkbox: ^0.0.3
 
 
   cosmos_ui_components:

@@ -4,6 +4,9 @@ import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/next_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+import 'collections.dart';
 
 class GalleryTabCollectionWidget extends StatelessWidget {
 
@@ -13,69 +16,123 @@ class GalleryTabCollectionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    double tileWidth = (MediaQuery. of(context). size. width - 30) / 3;
+
     return Padding(
-        padding: EdgeInsets.only(bottom: 100),
+        padding: EdgeInsets.only(bottom: 100, left: 10, right: 10),
         //margin: const EdgeInsets.only(bottom: 100.0),
         child: Column(
             children: [
               //Creator
               Card(
-                child: Column(
-                  children: [
+                child: ClipRRect(
+                borderRadius: BorderRadius.circular(5),
+                child:Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image(
+                            image: AssetImage('assets/images/Rectangle 312.png'),
+                            width: tileWidth * 2,
+                            height: tileWidth * 2 + 2,
+                            fit: BoxFit.cover
+                          ),
+                          SizedBox(width: 2),
+                          Column(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/images/Rectangle 312.png'),
+                                width: tileWidth,
+                                height: tileWidth,
+                                fit: BoxFit.cover
+                              ),
+                              SizedBox(height: 2),
+                              Image(
+                                image: AssetImage('assets/images/Rectangle 312.png'),
+                                  width: tileWidth,
+                                  height: tileWidth,
+                                  fit: BoxFit.cover
+                              ),
 
-                  ],
-                )
-              ),
-              Container(
-                  margin: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Color(0xFFF1F1F2),  // red as border color
-                    ),
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      child: FlutterLogo(),
-                    ),
-                    title:RichText(
-                      text: TextSpan(
-                        style: DefaultTextStyle.of(context).style,
-                        children: <TextSpan>[
-                          TextSpan(text: 'Linda', style: TextStyle(fontWeight: FontWeight.bold)),
-                          TextSpan(text: ' purchased'),
-                          TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
+                            ]
+                          )
                         ],
                       ),
-                    ),
-                    subtitle: Text('28 Dec, 2021',style: TextStyle(color: Color(0xFFC4C4C4))),
-                    trailing: NextButton(onTap: (){}),
-                  )
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(16, 5, 16, 5),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color(0xFFF1F1F2),  // red as border color
-                  ),
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: FlutterLogo(),
-                  ),
-                  title:RichText(
-                    text: TextSpan(
-                      style: DefaultTextStyle.of(context).style,
-                      children: <TextSpan>[
-                        TextSpan(text: 'Linda', style: TextStyle(fontWeight: FontWeight.bold)),
-                        TextSpan(text: ' purchased'),
-                        TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
+                      Row(
+                          children:[
+                            Text('Photo Collection'),
+                            Spacer(),
+                            IconButton(
+                                icon: ImageIcon(
+                                  AssetImage('assets/images/icon/dots.png'),
+                                  size: 24,
+                                  color: Color(0xFF616161)
+                                ),
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
+                                }
+                            ),
+                          ]
+                        )
                       ],
                     ),
                   ),
-                  subtitle: Text('28 Dec, 2021',style: TextStyle(color: Color(0xFFC4C4C4))),
-                  trailing: NextButton(onTap: (){}),
                 ),
-              )
+              Card(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child:Column(
+                    children: [
+                      Row(
+                        children: [
+                          Image(
+                              image: AssetImage('assets/images/Rectangle 312.png'),
+                              width: tileWidth * 2,
+                              height: tileWidth * 2 + 2,
+                              fit: BoxFit.cover
+                          ),
+                          SizedBox(width: 2),
+                          Column(
+                              children: [
+                                Image(
+                                    image: AssetImage('assets/images/Rectangle 312.png'),
+                                    width: tileWidth,
+                                    height: tileWidth,
+                                    fit: BoxFit.cover
+                                ),
+                                SizedBox(height: 2),
+                                Image(
+                                    image: AssetImage('assets/images/Rectangle 312.png'),
+                                    width: tileWidth,
+                                    height: tileWidth,
+                                    fit: BoxFit.cover
+                                ),
+
+                              ]
+                          )
+                        ],
+                      ),
+                      Row(
+                          children:[
+                            Text('Photo Collection'),
+                            Spacer(),
+                            IconButton(
+                                icon: ImageIcon(
+                                    AssetImage('assets/images/icon/dots.png'),
+                                    size: 24,
+                                    color: Color(0xFF616161)
+                                ),
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
+                                }
+                            ),
+                          ]
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ]
         )
     );

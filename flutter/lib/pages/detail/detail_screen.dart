@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:pylons_wallet/components/nft_view.dart';
 import 'package:pylons_wallet/components/notification_item.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
@@ -16,35 +17,34 @@ import 'package:pylons_wallet/pages/payment/payment_info_screen.dart';
 class DetailScreenWidget extends StatefulWidget {
   final bool isOwner;
   const DetailScreenWidget({
-    Key? key, required this.isOwner,
+    Key? key,
+    required this.isOwner,
   }) : super(key: key);
 
   @override
   State<DetailScreenWidget> createState() => _DetailScreenWidgetState();
 }
 
-class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTickerProviderStateMixin {
+class _DetailScreenWidgetState extends State<DetailScreenWidget>
+    with SingleTickerProviderStateMixin {
   bool isInResellMode = false;
   bool isInTrade = false;
   int tabIndex = 0;
   late TabController _tabController;
 
-  final List<Widget> myTabs =const  <Widget>[
+  final List<Widget> myTabs = const <Widget>[
     Padding(
-      padding:  EdgeInsets.all(4.0),
-      child:  Text('Work'),
+      padding: EdgeInsets.all(4.0),
+      child: Text('Work'),
     ),
-
     Padding(
-      padding:  EdgeInsets.all(4.0),
-      child:  Text('Info'),
+      padding: EdgeInsets.all(4.0),
+      child: Text('Info'),
     ),
-
     Padding(
-      padding:  EdgeInsets.all(4.0),
-      child:  Text('History'),
+      padding: EdgeInsets.all(4.0),
+      child: Text('History'),
     ),
-
   ];
 
   static const List<Widget> _pages = <Widget>[
@@ -66,7 +66,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
     });
   }
 
-  void onPressPurchaseModal(){
+  void onPressPurchaseModal() {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -76,17 +76,15 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
             topRight: const Radius.circular(30.0),
           ),
         ),
-        builder: (context) => new Wrap(
-            children: [const CardInfoForm()]
-        )
-    );
+        builder: (context) => new Wrap(children: [const CardInfoForm()]));
   }
 
   void onPressPurchase() {
-    if(!widget.isOwner)
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentInfoScreenWidget()));
-    else{
-      if(!isInResellMode){
+    if (!widget.isOwner)
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => PaymentInfoScreenWidget()));
+    else {
+      if (!isInResellMode) {
         //setState(() {
         //  isInResellMode = !isInResellMode;
         //});
@@ -95,7 +93,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
     }
   }
 
-  void onDeleteTrade(){
+  void onDeleteTrade() {
     /*
     showDialog(
         context: context,
@@ -119,7 +117,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
      */
   }
 
-  void onResellNft(){
+  void onResellNft() {
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -129,14 +127,10 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
             topRight: const Radius.circular(30.0),
           ),
         ),
-        builder: (context) => new Wrap(
-            children: [const CreateTradeForm()]
-        )
-    );
+        builder: (context) => new Wrap(children: [const CreateTradeForm()]));
   }
 
-
-@override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -144,70 +138,79 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
         backgroundColor: Colors.transparent,
         actions: [
           GestureDetector(
-            onTap: (){},
+            onTap: () {},
             child: const SizedBox(
-            width: 40,
-            height: 40,
-              child: Icon(Icons.more_vert, color: Colors.white,),
-        ),
-          )],
-      ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Image.asset('assets/images/Rectangle 156.png',
-                width: double.infinity,
-                fit: BoxFit.cover,
-
+              width: 40,
+              height: 40,
+              child: Icon(
+                Icons.more_vert,
+                color: Colors.white,
               ),
-              const VerticalSpace(10),
-              //tab bar
-              Container(
+            ),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            InkWell(
+                child: Image.asset(
+                  'assets/images/Rectangle 156.png',
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const NFTViewWidget()));
+                }),
+            const VerticalSpace(10),
+            //tab bar
+            Container(
                 alignment: Alignment.centerLeft,
                 height: 30,
-                  color: Colors.white,
-                  child: TabBar(
-                    isScrollable: true,
-                    controller: _tabController,
-                    labelColor: Colors.black,
-                    unselectedLabelColor: Colors.grey[700],
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: Color(0xFFED8864),
-                    tabs: myTabs,
-                    labelPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  )
-              ),
-              Container(
-                  child: _pages[tabIndex]
-              )
-            ],
-          ),
+                color: Colors.white,
+                child: TabBar(
+                  isScrollable: true,
+                  controller: _tabController,
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey[700],
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicatorColor: Color(0xFFED8864),
+                  tabs: myTabs,
+                  labelPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                )),
+            Container(child: _pages[tabIndex])
+          ],
         ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: Container(
+      floatingActionButton: Container(
           padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
           alignment: Alignment.center,
-          height: 120,
+          height: 72,
           color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              Row(
-                  children: [
-                    Text('\$ 82.00', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF201D1D), fontFamily: 'Inter')),
-                    Spacer(),
-                    ElevatedButton(
-                        onPressed: (){
-                          onPressPurchase();
-                        },
-                        style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFF1212C4),
-                            padding: EdgeInsets.fromLTRB(50, 0, 50, 0)
-                        ),
-                        child: Text(!widget.isOwner?  'Purchase' : 'Resell NFT' , style: TextStyle(color: Colors.white))
-                    )
-                  ]
-              ),
+              Row(children: [
+                Text('\$ 82.00',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: Color(0xFF201D1D),
+                        fontFamily: 'Inter')),
+                Spacer(),
+                ElevatedButton(
+                    onPressed: () {
+                      onPressPurchase();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: const Color(0xFF1212C4),
+                        padding: EdgeInsets.fromLTRB(50, 0, 50, 0)),
+                    child: Text(!widget.isOwner ? 'Purchase' : 'Resell NFT',
+                        style: TextStyle(color: Colors.white)))
+              ]),
+              /*
               Row(
                   children: [
                     Text('\$ 82.00', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF201D1D), fontFamily: 'Inter')),
@@ -224,11 +227,9 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTick
                     )
                   ]
               )
+               */
             ],
-          )
-        ),
+          )),
     );
   }
-
-
 }

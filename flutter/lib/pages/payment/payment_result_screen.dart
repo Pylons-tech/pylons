@@ -56,10 +56,10 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('assets/images/purchase_done.png'),
-                      fit: BoxFit.cover
-                    )
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/purchase_done.png'),
+                          fit: BoxFit.cover
+                      )
                   ),
                   child: new Stack(
                     alignment: Alignment.center,
@@ -82,33 +82,33 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                               child: Column(
                                   children:[
                                     Padding(
-                                        padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-                                        child: ExpandablePanel(
-                                          theme: ExpandableThemeData(),
-                                          header: Padding(
+                                      padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                                      child: ExpandablePanel(
+                                        theme: ExpandableThemeData(),
+                                        header: Padding(
                                             padding: EdgeInsets.only(left: 10, top: 10, bottom: 10),
                                             child:Row(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Text('Product Name', style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
-                                                Spacer(),
-                                                Text('Title of Artwork', style:TextStyle(color: Color(0xFF201D1D), fontSize: 16, fontWeight: FontWeight.w500))
-                                              ]
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Text('Product Name', style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
+                                                  Spacer(),
+                                                  Text('Title of Artwork', style:TextStyle(color: Color(0xFF201D1D), fontSize: 16, fontWeight: FontWeight.w500))
+                                                ]
                                             )
-                                          ),
-                                          expanded: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Image(
+                                        ),
+                                        expanded: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image(
                                                 image: AssetImage('assets/images/Rectangle 312.png'),
                                                 width: MediaQuery.of(context).size.width * 0.8,
                                                 height: 300,
                                                 fit: BoxFit.cover
-                                              ),
-                                              Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Wrap(
+                                            ),
+                                            Align(
+                                              alignment: Alignment.topLeft,
+                                              child: Wrap(
                                                   alignment: WrapAlignment.start,
                                                   crossAxisAlignment: WrapCrossAlignment.start,
                                                   spacing: 10,
@@ -119,18 +119,18 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                     label: new Text(tag),
                                                   )
                                                   ).toList()
-                                                ),
                                               ),
-                                              Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Container(
+                                            ),
+                                            Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Container(
                                                     constraints: BoxConstraints(
                                                       minHeight: 80,
                                                     ),
                                                     child: Text('Description about the artwork', )
-                                                  )
-                                              ),
-                                              Column(
+                                                )
+                                            ),
+                                            Column(
                                                 children:[
                                                   Divider(),
                                                   Padding(
@@ -144,10 +144,10 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                       )
                                                   )
                                                 ]
-                                              )
-                                            ],
-                                          ),
-                                          collapsed: Column(
+                                            )
+                                          ],
+                                        ),
+                                        collapsed: Column(
                                             children:[
                                               Divider(),
                                               Padding(
@@ -161,8 +161,8 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                   )
                                               )
                                             ]
-                                          ),
                                         ),
+                                      ),
                                     ),
 
                                   ]
@@ -187,15 +187,15 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
           color: Colors.white,
           width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
-            onPressed: (){
+              onPressed: (){
 
-            },
-            style: ElevatedButton.styleFrom(
-              primary: const Color(0xFF1212C4),
-              padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-              minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
-            ),
-            child: Text('Continue', style: TextStyle(color: Colors.white))
+              },
+              style: ElevatedButton.styleFrom(
+                primary: const Color(0xFF1212C4),
+                padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
+                minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
+              ),
+              child: Text('Continue', style: TextStyle(color: Colors.white))
           )
       ),
     );

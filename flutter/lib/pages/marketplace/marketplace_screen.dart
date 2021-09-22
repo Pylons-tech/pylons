@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_marketplace_card.dart';
+import 'package:pylons_wallet/components/pylons_marketplace_filter.dart';
 
 class MarketplaceScreenWidget extends StatefulWidget {
   const MarketplaceScreenWidget({Key? key}) : super(key: key);
@@ -13,11 +14,13 @@ class MarketplaceScreenWidget extends StatefulWidget {
 }
 
 class _MarketplaceScreenWidgetState extends State<MarketplaceScreenWidget> {
-
+  String _sortValue = "Recommended";
   List list = [
-    "asdf",
-    "asdf",
-    "aaaa"
+    "Recommended",
+    "What's New",
+    "Trending",
+    "Price : Low to High",
+    "Price : High to Low"
   ];
 
   @override
@@ -67,6 +70,29 @@ class _MarketplaceScreenWidgetState extends State<MarketplaceScreenWidget> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
+                    DropdownButton<String>(
+                      value: _sortValue,
+                      icon: Icon(Icons.keyboard_arrow_down),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: TextStyle(color: Colors.red, fontSize: 18),
+                      underline: Container(
+                        height: 0,
+                        color: Colors.deepPurpleAccent,
+                      ),
+                      onChanged: (data) {
+                        setState(() {
+                          _sortValue = data!;
+                        });
+                      },
+                      items: list.map<DropdownMenuItem<String>>((value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value, style: TextStyle(color: Color(0xFF616161))),
+                        );
+                      }).toList(),
+                    ),
+                    /*
                     GestureDetector(
                       onTap: () { print("Container was tapped"); },
                       child: Row(
@@ -86,10 +112,17 @@ class _MarketplaceScreenWidgetState extends State<MarketplaceScreenWidget> {
                         ],
                       ),
                     ),
+                     */
 
                     Spacer(),
                     GestureDetector(
-                      onTap: () { print("Container was tapped"); },
+                      onTap: () {
+                        showDialog(context: context,
+                            builder: (BuildContext context){
+                              return PylonsMarketplaceFilterBox();
+                            }
+                        );
+                      },
                       child:    Row(
                         children: [
                           Transform.rotate(
