@@ -105,7 +105,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		modifiedItems = append(modifiedItems, item)
+		modifiedItems[idx] = item
 		recipe.Entries.ItemOutputs[idx].AmountMinted++
 	}
 
@@ -158,7 +158,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		itemOutputIDs[i] = id
 	}
 	// update modify items in keeper
-	itemModifyOutputIDs := make([]string, len(mintItems))
+	itemModifyOutputIDs := make([]string, len(modifyItems))
 	for i, item := range modifyItems {
 		k.UnlockItemForExecution(ctx, item, pendingExecution.Creator)
 		itemModifyOutputIDs[i] = item.ID

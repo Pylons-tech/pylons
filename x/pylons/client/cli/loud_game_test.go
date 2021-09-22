@@ -84,45 +84,40 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 			ID: "basic_character_lv1",
 			Doubles: []types.DoubleParam{{
 				Key:          "XP",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "1",
 			}},
 			Longs: []types.LongParam{{
 				Key:          "level",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "1",
 			}, {
 				Key:          "giantKills",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
 				Key:          "special",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
 				Key:          "specialDragonKill",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}, {
 				Key:          "undeadDragonKill",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "0",
 			}},
-			Strings: []types.StringParam{{
-				Key:     "description",
-				Rate:    sdk.NewDec(1),
-				Value:   "Basic Character",
-				Program: "",
-			},
+			Strings: []types.StringParam{
 				{
-					Key:     "type",
-					Rate:    sdk.NewDec(1),
+					Key:     "entityType",
+					Rate:    sdk.OneDec(),
 					Value:   "character",
 					Program: "",
 				}},
@@ -293,24 +288,24 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 			ID: "copper_sword_lv1",
 			Doubles: []types.DoubleParam{{
 				Key:          "attack",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "10.0",
 			}},
 			Longs: []types.LongParam{{
 				Key:          "level",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "1",
 			}, {
 				Key:          "value",
-				Rate:         sdk.NewDec(1),
+				Rate:         sdk.OneDec(),
 				WeightRanges: nil,
 				Program:      "250",
 			}},
 			Strings: []types.StringParam{{
-				Key:     "Name",
-				Rate:    sdk.NewDec(1),
+				Key:     "name",
+				Rate:    sdk.OneDec(),
 				Value:   "Copper Sword",
 				Program: "",
 			}},
@@ -413,7 +408,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 			},
 			Strings: []types.StringInputParam{
 				{
-					Key:   "type",
+					Key:   "entityType",
 					Value: "character",
 				},
 			},
@@ -475,7 +470,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				},
 				Strings: []types.StringParam{
 					{
-						Key:     "Name",
+						Key:     "name",
 						Rate:    sdk.NewDec(1),
 						Value:   "Wolf Tail",
 						Program: "",
@@ -530,10 +525,24 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 		},
 		ItemModifyOutputs: []types.ItemModifyOutput{
 			{
-				ID:              "modified_character",
-				ItemInputRef:    "character",
-				Doubles:         nil,
-				Longs:           nil,
+				ID:           "modified_character",
+				ItemInputRef: "character",
+				Doubles: []types.DoubleParam{
+					{
+						Key:          "XP",
+						Rate:         sdk.OneDec(),
+						WeightRanges: nil,
+						Program:      "XP + double(15 * 3)",
+					},
+				},
+				Longs: []types.LongParam{
+					{
+						Key:          "level",
+						Rate:         sdk.OneDec(),
+						WeightRanges: nil,
+						Program:      "level + int(XP / double(level * level * level + 5))",
+					},
+				},
 				Strings:         nil,
 				MutableStrings:  nil,
 				TransferFee:     nil,
@@ -608,35 +617,46 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 	itemInputIDs, err := json.Marshal([]string{characterID, swordID})
 	require.NoError(t, err)
 
-	// execute recipe for character
-	args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
-	require.NoError(t, err)
-	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
-	require.Equal(t, uint32(0), resp.Code)
+	// Farm this wolf fight
+	for i := 0; i < 4; i++ {
+		// execute recipe for character
+		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
+		args = append(args, common...)
+		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+		require.NoError(t, err)
+		var resp sdk.TxResponse
+		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+		require.Equal(t, uint32(0), resp.Code)
 
-	// simulate waiting for later block heights
-	height, err := net.LatestHeight()
-	targetHeight := height + 1
-	// build execID from the execution height
-	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
-	execCount++
-	require.NoError(t, err)
-	_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
-	require.NoError(t, err)
+		// simulate waiting for later block heights
+		height, err := net.LatestHeight()
+		targetHeight := height + 1
+		// build execID from the execution height
+		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
+		execCount++
+		require.NoError(t, err)
+		_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+		require.NoError(t, err)
 
-	// check the execution
-	args = []string{execID}
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
-	require.NoError(t, err)
-	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
-	// verify completed
-	require.Equal(t, true, execResp.Completed)
+		// check the execution
+		args = []string{execID}
+		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+		require.NoError(t, err)
+		var execResp types.QueryGetExecutionResponse
+		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+		// verify completed
+		require.Equal(t, true, execResp.Completed)
 
-	// TODO
-	// new item may or may not exist
-	// we need to verify that the exec did something though
+		// TODO
+		// new item may or may not exist
+		// we need to verify that the exec did something though
+		// check the execution
+		args = []string{cookbookID, characterID}
+		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+		require.NoError(t, err)
+		var itemResp types.QueryGetItemResponse
+		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+		// verify completed
+		fmt.Println(itemResp.Item)
+	}
 }
