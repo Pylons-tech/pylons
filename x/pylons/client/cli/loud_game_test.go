@@ -24,43 +24,62 @@ const (
 	cookbookID = "cookbookLOUD"
 )
 
-var (
+type loudBasicSim struct {
+	net                    *network.Network
+	ctx                    client.Context
 	basicTradePercentage   sdk.Dec
 	err                    error
 	common                 []string
-	execCount              int = 0
-	itemCount              int = 0
+	execCount              int
+	itemCount              int
 	characterID            string
 	swordID                string
 	getCharacterRecipeID   string
 	buyCopperSwordRecipeID string
-)
+}
 
 func TestLOUDBasic(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
+	var err error
 
-	basicTradePercentage, err = sdk.NewDecFromStr("0.10")
+	simInfo := &loudBasicSim{
+		net:                    net,
+		ctx:                    ctx,
+		basicTradePercentage:   sdk.Dec{},
+		err:                    nil,
+		common:                 nil,
+		execCount:              0,
+		itemCount:              0,
+		characterID:            "",
+		swordID:                "",
+		getCharacterRecipeID:   "",
+		buyCopperSwordRecipeID: "",
+	}
+
+	simInfo.basicTradePercentage, err = sdk.NewDecFromStr("0.10")
 	require.NoError(t, err)
 
-	common = []string{
+	simInfo.common = []string{
+
 		fmt.Sprintf("--%s=%s", flags.FlagFrom, val.Address.String()),
 		fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
 		fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
 		fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 	}
 
-	createCookbook(t, net, ctx)
-	createCharacterRecipe(t, net, ctx)
-	createCharacter(t, net, ctx)
-	getLOUDCoin(t, net, ctx)
-	createBuyCopperSwordRecipe(t, net, ctx)
-	buyCopperSword(t, net, ctx)
-	fightWolfWithSword(t, net, ctx)
+	createCookbook(t, simInfo)
+	createCharacterRecipe(t, simInfo)
+	createCharacter(t, simInfo)
+	getLOUDCoin(t, simInfo)
+	createBuyCopperSwordRecipe(t, simInfo)
+	buyCopperSword(t, simInfo)
+	fightWolfWithSword(t, simInfo)
 }
 
-func createCookbook(t *testing.T, net *network.Network, ctx client.Context) {
+func createCookbook(t *testing.T, simInfo *loudBasicSim) {
+
 	cbFields := []string{
 		"Legend of the Undead Dragon",
 		"Cookbook for running pylons recreation of LOUD",
@@ -74,12 +93,12 @@ func createCookbook(t *testing.T, net *network.Network, ctx client.Context) {
 	// create LOUD cookbook
 	args := []string{cookbookID}
 	args = append(args, cbFields...)
-	args = append(args, common...)
-	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
+	args = append(args, simInfo.common...)
+	_, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
 }
 
-func createCharacterRecipe(t *testing.T, net *network.Network, ctx client.Context) {
+func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
@@ -125,7 +144,7 @@ func createCharacterRecipe(t *testing.T, net *network.Network, ctx client.Contex
 				}},
 			MutableStrings:  nil,
 			TransferFee:     nil,
-			TradePercentage: basicTradePercentage,
+			TradePercentage: simInfo.basicTradePercentage,
 			Tradeable:       true,
 		}},
 		ItemModifyOutputs: nil,
@@ -140,7 +159,7 @@ func createCharacterRecipe(t *testing.T, net *network.Network, ctx client.Contex
 	})
 
 	// Get Character Recipe
-	getCharacterRecipeID = "LOUDGetCharacter123125"
+	simInfo.getCharacterRecipeID = "LOUDGetCharacter123125"
 	getCharacterRecipe := []string{
 		"LOUD-Get-Character-Recipe",
 		"Creates a basic character in LOUD",
@@ -155,54 +174,55 @@ func createCharacterRecipe(t *testing.T, net *network.Network, ctx client.Contex
 	}
 
 	// create recipe
-	args := []string{cookbookID, getCharacterRecipeID}
+	args := []string{cookbookID, simInfo.getCharacterRecipeID}
 	args = append(args, getCharacterRecipe...)
-	args = append(args, common...)
-	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+	fmt.Println(args)
+	args = append(args, simInfo.common...)
+	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 }
 
-func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
+func createCharacter(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
-	args := []string{cookbookID, getCharacterRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	args := []string{cookbookID, simInfo.getCharacterRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = append(args, simInfo.common...)
+	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
-	height, err := net.LatestHeight()
+	height, err := simInfo.net.LatestHeight()
 	targetHeight := height + 1
 	// build execID from the execution height
-	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
-	execCount++
+	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
+	simInfo.execCount++
 	require.NoError(t, err)
-	_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
 	args = []string{execID}
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
 	// check the item, itemID is i
-	characterID = types.EncodeItemID(uint64(itemCount))
-	itemCount++
-	args = []string{cookbookID, characterID}
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+	simInfo.characterID = types.EncodeItemID(uint64(simInfo.itemCount))
+	simInfo.itemCount++
+	args = []string{cookbookID, simInfo.characterID}
+	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 }
 
-func getLOUDCoin(t *testing.T, net *network.Network, ctx client.Context) {
+func getLOUDCoin(t *testing.T, simInfo *loudBasicSim) {
 	denom := "loudCoin"
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{{
@@ -239,42 +259,42 @@ func getLOUDCoin(t *testing.T, net *network.Network, ctx client.Context) {
 	// create recipe
 	args := []string{cookbookID, getLoudCoinRecipeID}
 	args = append(args, getLoudCoinRecipe...)
-	args = append(args, common...)
-	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+	args = append(args, simInfo.common...)
+	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
 	// execute recipe for character
 	args = []string{cookbookID, getLoudCoinRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	args = append(args, simInfo.common...)
+	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
-	height, err := net.LatestHeight()
+	height, err := simInfo.net.LatestHeight()
 	targetHeight := height + 1
 	// build execID from the execution height
-	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
-	execCount++
+	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
+	simInfo.execCount++
 	require.NoError(t, err)
-	_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
 	args = []string{execID}
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
 	// TODO check balance?
 }
 
-func createBuyCopperSwordRecipe(t *testing.T, net *network.Network, ctx client.Context) {
+func createBuyCopperSwordRecipe(t *testing.T, simInfo *loudBasicSim) {
 	denom, err := types.CookbookDenom(cookbookID, "loudCoin")
 	require.NoError(t, err)
 
@@ -312,7 +332,7 @@ func createBuyCopperSwordRecipe(t *testing.T, net *network.Network, ctx client.C
 			}},
 			MutableStrings:  nil,
 			TransferFee:     nil,
-			TradePercentage: basicTradePercentage,
+			TradePercentage: simInfo.basicTradePercentage,
 			Tradeable:       true,
 		}},
 		ItemModifyOutputs: nil,
@@ -327,7 +347,7 @@ func createBuyCopperSwordRecipe(t *testing.T, net *network.Network, ctx client.C
 	})
 
 	// Get Character Recipe
-	buyCopperSwordRecipeID = "LOUDbuyCopperSword123125"
+	simInfo.buyCopperSwordRecipeID = "LOUDbuyCopperSword123125"
 	buyCopperSwordRecipe := []string{
 		"LOUD-Buy-Copper-Sword",
 		"Purchases a copper sword for loudCoin",
@@ -342,54 +362,54 @@ func createBuyCopperSwordRecipe(t *testing.T, net *network.Network, ctx client.C
 	}
 
 	// create recipe
-	args := []string{cookbookID, buyCopperSwordRecipeID}
+	args := []string{cookbookID, simInfo.buyCopperSwordRecipeID}
 	args = append(args, buyCopperSwordRecipe...)
-	args = append(args, common...)
-	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+	args = append(args, simInfo.common...)
+	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 }
 
-func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
+func buyCopperSword(t *testing.T, simInfo *loudBasicSim) {
 	// execute recipe for character
-	args := []string{cookbookID, buyCopperSwordRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
-	args = append(args, common...)
-	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+	args := []string{cookbookID, simInfo.buyCopperSwordRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = append(args, simInfo.common...)
+	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
 	var resp sdk.TxResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
 
 	// simulate waiting for later block heights
-	height, err := net.LatestHeight()
+	height, err := simInfo.net.LatestHeight()
 	targetHeight := height + 1
 	// build execID from the execution height
-	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
-	execCount++
+	execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
+	simInfo.execCount++
 	require.NoError(t, err)
-	_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+	_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 	require.NoError(t, err)
 
 	// check the execution
 	args = []string{execID}
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 	require.NoError(t, err)
 	var execResp types.QueryGetExecutionResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
 
 	// check the item, itemID is i
-	swordID = types.EncodeItemID(uint64(itemCount))
-	itemCount++
-	args = []string{cookbookID, swordID}
-	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+	simInfo.swordID = types.EncodeItemID(uint64(simInfo.itemCount))
+	simInfo.itemCount++
+	args = []string{cookbookID, simInfo.swordID}
+	out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 	require.NoError(t, err)
 	var itemResp types.QueryGetItemResponse
-	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 }
 
-func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) {
+func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	itemInputs, err := json.Marshal([]types.ItemInput{
 		{
 			ID: "character",
@@ -479,7 +499,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				},
 				MutableStrings:  nil,
 				TransferFee:     nil,
-				TradePercentage: basicTradePercentage,
+				TradePercentage: simInfo.basicTradePercentage,
 				Quantity:        0,
 				AmountMinted:    0,
 				Tradeable:       true,
@@ -518,7 +538,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				},
 				MutableStrings:  nil,
 				TransferFee:     nil,
-				TradePercentage: basicTradePercentage,
+				TradePercentage: simInfo.basicTradePercentage,
 				Quantity:        0,
 				AmountMinted:    0,
 				Tradeable:       true,
@@ -547,7 +567,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				Strings:         nil,
 				MutableStrings:  nil,
 				TransferFee:     nil,
-				TradePercentage: basicTradePercentage,
+				TradePercentage: simInfo.basicTradePercentage,
 				Tradeable:       true,
 			},
 			{
@@ -558,7 +578,7 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				Strings:         nil,
 				MutableStrings:  nil,
 				TransferFee:     nil,
-				TradePercentage: basicTradePercentage,
+				TradePercentage: simInfo.basicTradePercentage,
 				Tradeable:       true,
 			},
 		},
@@ -606,68 +626,68 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 	// create recipe
 	args := []string{cookbookID, fightWolfWithSwordRecipeID}
 	args = append(args, fightWolfWithSwordRecipe...)
-	args = append(args, common...)
-	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
+	args = append(args, simInfo.common...)
+	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
-	// Farm this wolf fight until the character or sword are lost / dead
-	for i := 0; i < 50; i++ {
+	// Farm this wolf fight
+	for i := 0; i < 30; i++ {
 		// get sword and character IDs
-		itemInputIDs, err := json.Marshal([]string{characterID, swordID})
+		itemInputIDs, err := json.Marshal([]string{simInfo.characterID, simInfo.swordID})
 		require.NoError(t, err)
 
 		// execute recipe for character
 		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
-		args = append(args, common...)
-		out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
+		args = append(args, simInfo.common...)
+		out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 		require.NoError(t, err)
 		var resp sdk.TxResponse
-		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
 
 		// simulate waiting for later block heights
-		height, err := net.LatestHeight()
+		height, err := simInfo.net.LatestHeight()
 		targetHeight := height + 1
 		// build execID from the execution height
-		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(execCount)
-		execCount++
+		execID := strconv.Itoa(int(height+0)) + "-" + strconv.Itoa(simInfo.execCount)
+		simInfo.execCount++
 		require.NoError(t, err)
-		_, err = net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
+		_, err = simInfo.net.WaitForHeightWithTimeout(targetHeight, 60*time.Second)
 		require.NoError(t, err)
 
 		// check the execution
 		args = []string{execID}
-		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowExecution(), args)
+		out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowExecution(), args)
 		require.NoError(t, err)
 		var execResp types.QueryGetExecutionResponse
-		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
+		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 		// verify completed
 		require.Equal(t, true, execResp.Completed)
 
 		// some items could have been minted from this execution
 		// increase itemCount accordingly
-		itemCount += len(execResp.Execution.ItemOutputIDs)
+		simInfo.itemCount += len(execResp.Execution.ItemOutputIDs)
 
 		// if the character died or their sword was broken, get a new one!
 		var itemResp types.QueryGetItemResponse
-		args = []string{cookbookID, characterID}
-		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+		args = []string{cookbookID, simInfo.characterID}
+		out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
-		if itemResp.Item.Owner != net.Validators[0].Address.String() {
+		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// PLAYER DIED
-			createCharacter(t, net, ctx)
-			buyCopperSword(t, net, ctx)
+			createCharacter(t, simInfo)
+			buyCopperSword(t, simInfo)
 			continue
 		}
 
-		args = []string{cookbookID, swordID}
-		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+		args = []string{cookbookID, simInfo.swordID}
+		out, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
-		if itemResp.Item.Owner != net.Validators[0].Address.String() {
+		require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+		if itemResp.Item.Owner != simInfo.net.Validators[0].Address.String() {
 			// LOST SWORD
-			buyCopperSword(t, net, ctx)
+			buyCopperSword(t, simInfo)
 			continue
 		}
 	}

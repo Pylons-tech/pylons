@@ -95,6 +95,8 @@ func (svd AccountCreationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simul
 			}
 			svd.ak.SetAccount(ctx, acc)
 			defer telemetry.IncrCounter(1, "new", "account")
+		} else {
+			return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account already exists")
 		}
 	}
 	return next(ctx, tx, simulate)
@@ -161,10 +163,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 		return ctx, err
 	}
 
-	// stdSigs contains the sequence number, account number, and signatures.
-	// When simulating, this would just be a 0-length slice.
 	signerAddrs := sigTx.GetSigners()
-	// signerAccs := make([]authtypes.AccountI, len(signerAddrs))
 
 	// check that signer length and signature length are the same
 	if len(sigs) != len(signerAddrs) {
@@ -218,7 +217,7 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 
 			err = authsigning.VerifySignature(pubKey, signerData, sig.Data, svd.signModeHandler, tx)
 			if !simulate && err != nil {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id")
+				return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "create_account signature verification failed; verify correct account sequence and chain-id: %s", err.Error())
 			}
 			continue
 		}
@@ -236,7 +235,6 @@ func (svd CustomSigVerificationDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx,
 					errMsg = fmt.Sprintf("signature verification failed; please verify account number (%d) and chain-id (%s)", accNum, chainID)
 				}
 				return ctx, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, errMsg)
-
 			}
 		}
 	}
