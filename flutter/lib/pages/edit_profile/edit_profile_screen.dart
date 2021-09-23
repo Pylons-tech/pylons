@@ -57,7 +57,14 @@ class EditProfileScreen extends StatelessWidget {
                 children: [
                   _ProfileImageWidget(
                     onEditTap: (){
-                      
+                      showModalBottomSheet(context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(40),
+                            topRight: Radius.circular(40),),
+                          ),
+                          isDismissible: true,
+                          builder: (_) => ImageSourceBottomSheet()
+                      );
                     },
                   ),
                   const VerticalSpace(20),
