@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_rounded_button.dart';
@@ -40,15 +41,15 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
                  const  VerticalSpace(30),
                   PylonsRoundedButton(
                       glyph: const AssetImage('assets/images/gcloud.png'),
-                      text: "Import from google cloud",
+                      text: "import_from_google_cloud".tr(),
                       onTap: (){}
                   ),
                   const VerticalSpace(20),
-                  PylonsTextInput(controller: TextEditingController(), label: "User Name"),
+                  PylonsTextInput(controller: TextEditingController(), label: "user_name".tr()),
                   const VerticalSpace(20),
-                  PylonsTextInput(controller: TextEditingController(), label: "User ID"),
+                  PylonsTextInput(controller: TextEditingController(), label: "user_id".tr()),
                   const VerticalSpace(30),
-                  PylonsBlueButton(onTap: (){}, text: "Start Pylons",),
+                  PylonsBlueButton(onTap: (){}, text: "start_pylons".tr(),),
                   const VerticalSpace(20),
                 ],
               )

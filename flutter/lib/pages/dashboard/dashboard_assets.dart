@@ -1,4 +1,5 @@
 import 'package:decimal/decimal.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_white_button.dart';
@@ -45,14 +46,14 @@ class _DashboardAssetsState extends State<DashboardAssets> {
       child: Column(
         children: <Widget>[
           Row(
-            children: const <Widget>[
-              Text("Total Assets",
-                  style: TextStyle(color: Colors.black, fontSize: 18)),
+            children: <Widget>[
+              Text("total_assets".tr(),
+                  style: const TextStyle(color: Colors.black, fontSize: 18)),
             ],
           ),
           Row(children: <Widget>[
             Text("$_balance",
-                style: TextStyle(color: Colors.black, fontSize: 36)),
+                style: const TextStyle(color: Colors.black, fontSize: 36)),
             const Text("  PYLONS",
                 style: TextStyle(color: Colors.indigo, fontSize: 36)),
           ]),
@@ -61,8 +62,8 @@ class _DashboardAssetsState extends State<DashboardAssets> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  PylonsBlueButton(onTap: _buypylons, text: "Buy Pylons"),
-                  PylonsWhiteButton(onTap: () {}, text: "Send Pylons")
+                  PylonsBlueButton(onTap: _buypylons, text: "${'buy'.tr()} Pylons"),
+                  PylonsWhiteButton(onTap: () {}, text: "${'send'.tr()} Pylons")
                 ],
               )),
         ],

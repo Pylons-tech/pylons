@@ -49,8 +49,8 @@ class _RoutingPageState extends State<RoutingPage> {
         isLoading: PylonsApp.walletsStore.areWalletsLoading.value,
         isError: PylonsApp.walletsStore.loadWalletsFailure.value != null,
         errorChild: CosmosErrorView(
-          title: "somethingWrong".tr(),
-          message: "walletRetrievingErrMsg".tr(),
+          title: "something_wrong".tr(),
+          message: "wallet_retrieving_err_msg".tr(),
         ),
         contentChild: const SizedBox(),
       ),

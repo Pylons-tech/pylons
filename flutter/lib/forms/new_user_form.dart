@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
@@ -56,11 +57,11 @@ class NewUserFormState extends State<NewUserForm> {
                   Container(
                     height: 100,
                   ),
-                  PylonsTextInput(controller: usernameController, label: "User Name"),
+                  PylonsTextInput(controller: usernameController, label: "user_name".tr()),
                  const VerticalSpace(50),
                   PylonsBlueButton(
                       onTap : () => widget.onValidate(usernameController.value.text),
-                      text: "Start Pylons"),
+                      text: "start_pylons".tr()),
                   const VerticalSpace(30)
                 ],
               )

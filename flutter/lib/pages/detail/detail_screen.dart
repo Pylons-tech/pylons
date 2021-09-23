@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/nft_view.dart';
@@ -32,18 +33,18 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
   int tabIndex = 0;
   late TabController _tabController;
 
-  final List<Widget> myTabs = const <Widget>[
+  final List<Widget> myTabs = <Widget>[
     Padding(
-      padding: EdgeInsets.all(4.0),
-      child: Text('Work'),
+      padding: const EdgeInsets.all(4.0),
+      child: Text('work'.tr()),
     ),
     Padding(
-      padding: EdgeInsets.all(4.0),
-      child: Text('Info'),
+      padding: const EdgeInsets.all(4.0),
+      child: Text('info'.tr()),
     ),
     Padding(
-      padding: EdgeInsets.all(4.0),
-      child: Text('History'),
+      padding: const EdgeInsets.all(4.0),
+      child: Text('history'.tr()),
     ),
   ];
 
@@ -70,20 +71,20 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(30.0),
-            topRight: const Radius.circular(30.0),
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
           ),
         ),
-        builder: (context) => new Wrap(children: [const CardInfoForm()]));
+        builder: (context) => Wrap(children: const [CardInfoForm()]));
   }
 
   void onPressPurchase() {
-    if (!widget.isOwner)
+    if (!widget.isOwner) {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => PaymentInfoScreenWidget()));
-    else {
+          MaterialPageRoute(builder: (context) => const PaymentInfoScreenWidget()));
+    } else {
       if (!isInResellMode) {
         //setState(() {
         //  isInResellMode = !isInResellMode;
@@ -121,13 +122,13 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft: const Radius.circular(30.0),
-            topRight: const Radius.circular(30.0),
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
           ),
         ),
-        builder: (context) => new Wrap(children: [const CreateTradeForm()]));
+        builder: (context) => Wrap(children: const [CreateTradeForm()]));
   }
 
   @override
@@ -137,7 +138,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.chevron_left, ),
+          icon: const Icon(Icons.chevron_left, ),
           onPressed: (){
             Navigator.pop(context);
           },
@@ -181,9 +182,9 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.grey[700],
                   indicatorSize: TabBarIndicatorSize.label,
-                  indicatorColor: Color(0xFFED8864),
+                  indicatorColor: const Color(0xFFED8864),
                   tabs: myTabs,
-                  labelPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  labelPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 )),
             Container(child: _pages[tabIndex])
           ],
@@ -191,7 +192,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
-          padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
           alignment: Alignment.center,
           height: 72,
           color: Colors.white,
@@ -199,21 +200,21 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
           child: Column(
             children: [
               Row(children: [
-                Text('\$ 82.00',
+                const Text('\$ 82.00',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,
                         color: Color(0xFF201D1D),
                         fontFamily: 'Inter')),
-                Spacer(),
+                const Spacer(),
                 ElevatedButton(
                     onPressed: () {
                       onPressPurchase();
                     },
                     style: ElevatedButton.styleFrom(
                         primary: const Color(0xFF1212C4),
-                        padding: EdgeInsets.fromLTRB(50, 0, 50, 0)),
-                    child: Text(!widget.isOwner ? 'Purchase' : 'Resell NFT',
+                        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0)),
+                    child: Text(!widget.isOwner ? 'purchase'.tr() : 'resell_nft'.tr(),
                         style: TextStyle(color: Colors.white)))
               ]),
               /*

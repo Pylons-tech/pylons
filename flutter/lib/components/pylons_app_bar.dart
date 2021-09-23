@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_dashboard_dropdown.dart';
 import 'package:pylons_wallet/components/pylons_dashboard_filter.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -29,7 +30,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
         initialDate: _date,
         firstDate: DateTime(2017, 1),
         lastDate: DateTime(2022, 7),
-        helpText: 'Select a date',
+        helpText: 'select_a_date'.tr(),
       );
       if (newDate != null) {
         setState(() {
@@ -38,13 +39,13 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
       }
     }
 
-    String dropdownValue = 'My activity';
+    String dropdownValue = 'my_activity'.tr();
 
-    List <String> spinnerItems = [
-      'My activity',
-      'Recommended',
-      'Following',
-    ] ;
+    List<String> spinnerItems = [
+      'my_activity'.tr(),
+      'recommended'.tr(),
+      'following'.tr(),
+    ];
 
     @override
   Widget build(BuildContext context) {

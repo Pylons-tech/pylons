@@ -8,13 +8,13 @@ import 'package:pylons_wallet/pages/marketplace/marketplace_screen.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
-  static const String _title = 'Pylons Home';
+  static String _title = 'pylons_home'.tr();
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: _title,
-      home: DashboardWidget(),
+      home: const DashboardWidget(),
     );
   }
 }

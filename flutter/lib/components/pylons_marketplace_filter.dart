@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:parent_child_checkbox/parent_child_checkbox.dart';
@@ -48,7 +49,7 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
                 trailing: Icon(Icons.search, color: Color(0xFFC4C4C4), size: 20),
                 title: TextField(
                     decoration: InputDecoration(
-                        hintText: 'Search',
+                        hintText: 'search'.tr(),
                         hintStyle: TextStyle(
                           color: Color(0xFFC4C4C4),
                           fontSize: 18,
@@ -58,7 +59,7 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
               ),
 
               ParentChildCheckbox(
-                parent: Text('Art'),
+                parent: Text('art'.tr()),
                 children: [
                   Text('Animated GIF'),
                   Text('Animated GIF'),
@@ -66,7 +67,7 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
                 ],
               ),
               ParentChildCheckbox(
-                  parent: Text('Sound'),
+                  parent: Text('sound'.tr()),
                   children: [
                     Text('Music'),
                     Text('Sound Effect')

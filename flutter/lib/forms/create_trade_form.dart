@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -12,25 +13,20 @@ class CreateTradeForm extends StatefulWidget {
 
   @override
   CreateTradeFormState createState() => CreateTradeFormState();
-
 }
 
 class CreateTradeFormState extends State<CreateTradeForm> {
-
   final _formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final PriceController = TextEditingController();
   final descController = TextEditingController();
+
   // final cvcController = TextEditingController();
   // final zipController = TextEditingController();
 
   String dropdownValue = 'USD';
 
-  List <String> currencies = [
-    'USD',
-    'Pylons'
-  ];
-
+  List<String> currencies = ['USD', 'Pylons'];
 
   @override
   void initState() {
@@ -47,97 +43,106 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                 right: 16,
                 top: 40,
                 bottom: MediaQuery.of(context).viewInsets.bottom),
-            child:Column(
+            child: Column(
               children: [
-                const Align(
-                  child: Text('Create Trade', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                Align(
+                  child: Text('create_trade'.tr(),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
                 const VerticalSpace(24),
                 Padding(
                     padding: const EdgeInsets.only(left: 16, right: 16),
                     child: Column(
                       children: [
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
-                          child: Text('Price'),
+                          child: Text('price'.tr()),
                         ),
                         Row(
                           children: [
-                            Expanded(child:TextFormField(
-                              controller: PriceController,
-                              decoration: InputDecoration(
-                                  border: const UnderlineInputBorder(
-                                    borderRadius: BorderRadius.zero,
-                                  ),
-                                  suffix:  DropdownButton<String>(
-                                    value: dropdownValue,
-                                    icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 16,
-                                        color: kIconBGColor
+                            Expanded(
+                              child: TextFormField(
+                                controller: PriceController,
+                                decoration: InputDecoration(
+                                    border: const UnderlineInputBorder(
+                                      borderRadius: BorderRadius.zero,
                                     ),
-
-                                    elevation: 16,
-                                    underline: const SizedBox(),
-                                    focusColor: const Color(0xFF1212C4),
-                                    style: const TextStyle(color: Color(0xFF1212C4), fontSize: 14, fontWeight: FontWeight.w500),
-                                    onChanged: (String? data) {
-                                      setState(() {
-                                        dropdownValue = data!;
-                                      });
-                                    },
-                                    items: currencies.map<DropdownMenuItem<String>>((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                  ),
-                                  contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, -10),
-                                  filled: true,
-                                  hintText: 'Expecting Price',
-                                  hintStyle: TextStyle(color: Colors.grey[800]),
-                                  fillColor: Colors.white70
+                                    suffix: DropdownButton<String>(
+                                      value: dropdownValue,
+                                      icon: const Icon(
+                                          Icons.keyboard_arrow_down,
+                                          size: 16,
+                                          color: kIconBGColor),
+                                      elevation: 16,
+                                      underline: const SizedBox(),
+                                      focusColor: const Color(0xFF1212C4),
+                                      style: const TextStyle(
+                                          color: Color(0xFF1212C4),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500),
+                                      onChanged: (String? data) {
+                                        setState(() {
+                                          dropdownValue = data!;
+                                        });
+                                      },
+                                      items: currencies
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                    contentPadding: const EdgeInsets.fromLTRB(
+                                        16, 0, 16, -10),
+                                    filled: true,
+                                    hintText: 'expecting_price'.tr(),
+                                    hintStyle:
+                                        TextStyle(color: Colors.grey[800]),
+                                    fillColor: Colors.white70),
                               ),
                             ),
-                            ),
-
-
-
-                          ],),
+                          ],
+                        ),
                         const VerticalSpace(20),
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
-                          child: Text('Name'),
+                          child: Text('name'.tr()),
                         ),
                         const VerticalSpace(6),
                         TextFormField(
                           controller: nameController,
                           decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.zero,
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
+                              ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
                               ),
                               // border: OutlineInputBorder(
                               //   borderRadius: BorderRadius.zero,
                               //   borderSide: BorderSide(color: Colors.transparent),
                               // ),
 
-                              contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              contentPadding:
+                                  const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               filled: true,
-                              hintText: 'Title of Artwork',
-                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
-                              fillColor: const Color(0xffF1F1F2)
-                          ),
+                              hintText: 'title_of_artwork'.tr(),
+                              hintStyle: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.bold),
+                              fillColor: const Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(20),
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
-                          child: Text('Description'),
+                          child: Text('description'.tr()),
                         ),
                         const VerticalSpace(6),
                         TextFormField(
@@ -147,24 +152,26 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
                               ),
-
                               contentPadding: const EdgeInsets.all(16),
                               filled: true,
-                              hintText: 'Description about the artwork',
-                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
-                              fillColor: Color(0xffF1F1F2)
-                          ),
+                              hintText: 'artwork_description'.tr(),
+                              hintStyle: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.bold),
+                              fillColor: Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(20),
-                        const Align(
+                        Align(
                           alignment: Alignment.topLeft,
-                          child: Text('Item ID'),
+                          child: Text('item_id'.tr()),
                         ),
                         const VerticalSpace(6),
                         TextFormField(
@@ -172,31 +179,33 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           minLines: 4,
                           maxLines: 4,
                           decoration: InputDecoration(
-                              enabledBorder:const OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
                               ),
-                              focusedBorder:const OutlineInputBorder(
+                              focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide: BorderSide(color: Colors.transparent),
+                                borderSide:
+                                    BorderSide(color: Colors.transparent),
                               ),
-
                               contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'cosmosxxx',
-                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
-                              fillColor: const Color(0xffF1F1F2)
-                          ),
+                              hintStyle: TextStyle(
+                                  color: Colors.grey[800],
+                                  fontWeight: FontWeight.bold),
+                              fillColor: const Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(40),
-                        PylonsBlueButton(onTap: (){}, text: "Resell",),
+                        PylonsBlueButton(
+                          onTap: () {},
+                          text: "resell".tr(),
+                        ),
                         const VerticalSpace(20),
                       ],
-                    )
-                ),
+                    )),
               ],
-            )
-        )
-    );
+            )));
   }
 }

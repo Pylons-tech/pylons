@@ -1,5 +1,6 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
 class PylonsTrendingColCard extends StatelessWidget {
@@ -85,7 +86,7 @@ class PylonsTrendingColCard extends StatelessWidget {
 
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('Collection Title'),
+                      child: Text('collection_title'.tr()),
                     )
                   ],
                 )

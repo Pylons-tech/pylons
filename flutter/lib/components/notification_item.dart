@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NotificationItem extends StatelessWidget {
 
@@ -25,7 +26,7 @@ class NotificationItem extends StatelessWidget {
                             style: DefaultTextStyle.of(context).style,
                             children: <TextSpan>[
                               TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text: ' purchased'),
+                              TextSpan(text: ' ${'purchased'.tr()}'),
                               TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
                               TextSpan(text: '  10min', style: TextStyle(color: Colors.grey, fontSize: 13)),
                             ],

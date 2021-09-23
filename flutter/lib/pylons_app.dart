@@ -22,7 +22,7 @@ class PylonsApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      title: "appTitle".tr(),
+      title: "app_title".tr(),
       theme: PylonsAppTheme.buildAppTheme(),
       initialRoute: '/',
       routes: {

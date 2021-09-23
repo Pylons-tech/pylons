@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
@@ -43,11 +44,11 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
                   size: 20,
                   color: Color(0xFF616161)
               ),
-              const Text('Filter', style: TextStyle(fontWeight: FontWeight.w500),),
-              Spacer(),
+              Text('filter'.tr(), style: const TextStyle(fontWeight: FontWeight.w500),),
+              const Spacer(),
               FlatButton(
                 onPressed: (){},
-                child: Text('Reset', style: PylonsAppTheme.HOME_LABEL,)
+                child: Text('reset'.tr(), style: PylonsAppTheme.HOME_LABEL,)
               )
             ],
           ),
@@ -78,14 +79,14 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
               Expanded(
                 child: SizedBox(
                 height: 35,
-                child: _PylonsGreyButton(onTap: (){}, text: "Cancel",),
+                child: _PylonsGreyButton(onTap: (){}, text: "cancel".tr(),),
               ),),
              const HorizontalSpace(20),
              Expanded(
                flex: 2,
                child: SizedBox(
                  height: 35,
-                   child: PylonsBlueButton(onTap: (){}, text: "Apply",)),
+                   child: PylonsBlueButton(onTap: (){}, text: "apply".tr(),)),
              ),
 
             ]

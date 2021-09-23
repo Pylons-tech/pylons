@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
@@ -48,7 +49,7 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                       color: kIconBGColor
                   )
               ),
-              title: Text('Pylons Account', style: TextStyle(color: Color(0xFF080830))),
+              title: Text('pylons_account'.tr(), style: TextStyle(color: Color(0xFF080830))),
             ),
             SliverList(delegate: SliverChildListDelegate([
               Divider(),
@@ -94,14 +95,14 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
               Padding(
                 padding: EdgeInsets.all(16),
                 child: PylonsTextInput(
-                  controller: TextEditingController(), label: "User Name",
+                  controller: TextEditingController(), label: "user_name".tr(),
                   disabled: true,
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(16),
                 child: PylonsTextInput(
-                  controller: TextEditingController(), label: "User ID",
+                  controller: TextEditingController(), label: "user_id".tr(),
                   disabled: true,
                 ),
               ),

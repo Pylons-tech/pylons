@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/payment/payment_result_screen.dart';
@@ -23,10 +24,10 @@ class CardInfoFormState extends State<CardInfoForm> {
   final cvcController = TextEditingController();
   final zipController = TextEditingController();
 
-  String dropdownValue = 'United States';
+  String dropdownValue = 'us'.tr();
 
   List <String> countries = [
-    'United States',
+    'us'.tr(),
   ];
 
 
@@ -49,7 +50,7 @@ class CardInfoFormState extends State<CardInfoForm> {
           children: [
             Align(
               alignment: Alignment.topLeft,
-              child: Text('Add your payment Information', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+              child: Text('add_payment_info'.tr(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
             ),
             SizedBox(height: 24),
             Padding(
@@ -60,7 +61,7 @@ class CardInfoFormState extends State<CardInfoForm> {
                 children: [
                   Align(
                     alignment: Alignment.topLeft,
-                    child: Text('Card Information'),
+                    child: Text('card_info'.tr()),
                   ),
                   TextFormField(
                     controller: cardNumberController,
@@ -71,7 +72,7 @@ class CardInfoFormState extends State<CardInfoForm> {
 
                         contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                         filled: true,
-                        hintText: 'Card Number',
+                        hintText: 'card_number'.tr(),
                         hintStyle: TextStyle(color: Colors.grey[800]),
                         fillColor: Colors.white70
                     ),
@@ -85,7 +86,6 @@ class CardInfoFormState extends State<CardInfoForm> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
                               ),
-
                               contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                               filled: true,
                               hintText: 'MM/YY',
@@ -123,7 +123,7 @@ class CardInfoFormState extends State<CardInfoForm> {
                   children: [
                     Align(
                       alignment: Alignment.topLeft,
-                      child: Text('Country or region'),
+                      child: Text('country_or_region'.tr()),
                     ),
                     DropdownButton<String>(
                       value: dropdownValue,

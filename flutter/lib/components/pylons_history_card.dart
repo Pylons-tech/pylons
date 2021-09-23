@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
@@ -24,10 +25,10 @@ class PylonsHistoryCard extends StatelessWidget {
                 ),
                 // title: Text('Linda purchased \'Title of Artwork\''),
               contentPadding: EdgeInsets.zero,
-                title: RichText(text: const TextSpan(text: "Linda", style: TextStyle(color: Colors.black,
+                title: RichText(text: TextSpan(text: "Linda", style: TextStyle(color: Colors.black,
                 fontWeight: FontWeight.w500, fontSize: 16),
                   children: [
-                    TextSpan(text: " purchased ", style: TextStyle(
+                    TextSpan(text: " ${'purchased'.tr()} ", style: TextStyle(
                       fontWeight: FontWeight.w400,
                     ),),
                     TextSpan(text: "'Title of Artwork'", style: TextStyle(

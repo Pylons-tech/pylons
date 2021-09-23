@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/forms/card_info_form.dart';
 import 'package:pylons_wallet/pages/detail/detail_tab_info.dart';
@@ -77,7 +78,7 @@ class _PaymentInfoScreenWidgetState extends State<PaymentInfoScreenWidget> with 
                   padding: EdgeInsets.fromLTRB(50, 0, 50, 0),
                   minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
               ),
-              child: Text('Pay \$82.00', style: TextStyle(color: Colors.white))
+              child: Text('${'pay'.tr()} \$82.00', style: TextStyle(color: Colors.white))
           )
       ),
     );
