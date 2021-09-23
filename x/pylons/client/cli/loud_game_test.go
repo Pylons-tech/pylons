@@ -25,13 +25,15 @@ const (
 )
 
 var (
-	basicTradePercentage sdk.Dec
-	err                  error
-	common               []string
-	execCount            int = 0
-	itemCount            int = 0
-	characterID          string
-	swordID              string
+	basicTradePercentage   sdk.Dec
+	err                    error
+	common                 []string
+	execCount              int = 0
+	itemCount              int = 0
+	characterID            string
+	swordID                string
+	getCharacterRecipeID   string
+	buyCopperSwordRecipeID string
 )
 
 func TestLOUDBasic(t *testing.T) {
@@ -50,8 +52,10 @@ func TestLOUDBasic(t *testing.T) {
 	}
 
 	createCookbook(t, net, ctx)
+	createCharacterRecipe(t, net, ctx)
 	createCharacter(t, net, ctx)
 	getLOUDCoin(t, net, ctx)
+	createBuyCopperSwordRecipe(t, net, ctx)
 	buyCopperSword(t, net, ctx)
 	fightWolfWithSword(t, net, ctx)
 }
@@ -75,7 +79,7 @@ func createCookbook(t *testing.T, net *network.Network, ctx client.Context) {
 	require.NoError(t, err)
 }
 
-func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
+func createCharacterRecipe(t *testing.T, net *network.Network, ctx client.Context) {
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: nil,
 		ItemOutputs: []types.ItemOutput{{
@@ -136,7 +140,7 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 	})
 
 	// Get Character Recipe
-	getCharacterRecipeID := "LOUDGetCharacter123125"
+	getCharacterRecipeID = "LOUDGetCharacter123125"
 	getCharacterRecipe := []string{
 		"LOUD-Get-Character-Recipe",
 		"Creates a basic character in LOUD",
@@ -156,9 +160,11 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
+}
 
+func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 	// execute recipe for character
-	args = []string{cookbookID, getCharacterRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args := []string{cookbookID, getCharacterRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -194,7 +200,6 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
-	require.Equal(t, height, itemResp.Item.LastUpdate)
 }
 
 func getLOUDCoin(t *testing.T, net *network.Network, ctx client.Context) {
@@ -269,7 +274,7 @@ func getLOUDCoin(t *testing.T, net *network.Network, ctx client.Context) {
 	// TODO check balance?
 }
 
-func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
+func createBuyCopperSwordRecipe(t *testing.T, net *network.Network, ctx client.Context) {
 	denom, err := types.CookbookDenom(cookbookID, "loudCoin")
 	require.NoError(t, err)
 
@@ -322,7 +327,7 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	})
 
 	// Get Character Recipe
-	buyCopperSwordRecipeID := "LOUDbuyCopperSword123125"
+	buyCopperSwordRecipeID = "LOUDbuyCopperSword123125"
 	buyCopperSwordRecipe := []string{
 		"LOUD-Buy-Copper-Sword",
 		"Purchases a copper sword for loudCoin",
@@ -342,9 +347,11 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
+}
 
+func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	// execute recipe for character
-	args = []string{cookbookID, buyCopperSwordRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args := []string{cookbookID, buyCopperSwordRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -380,8 +387,6 @@ func buyCopperSword(t *testing.T, net *network.Network, ctx client.Context) {
 	var itemResp types.QueryGetItemResponse
 	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
-	require.Equal(t, height, itemResp.Item.LastUpdate)
-	fmt.Println(itemResp.Item)
 }
 
 func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) {
@@ -562,6 +567,14 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 
 	outputs, err := json.Marshal([]types.WeightedOutputs{
 		{
+			EntryIDs: []string{},
+			Weight:   3,
+		},
+		{
+			EntryIDs: []string{"coin_reward", "modified_character"},
+			Weight:   3,
+		},
+		{
 			EntryIDs: []string{"coin_reward", "modified_character", "sword"},
 			Weight:   24,
 		},
@@ -597,12 +610,12 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
-	// get sword and character IDs
-	itemInputIDs, err := json.Marshal([]string{characterID, swordID})
-	require.NoError(t, err)
+	// Farm this wolf fight until the character or sword are lost / dead
+	for i := 0; i < 50; i++ {
+		// get sword and character IDs
+		itemInputIDs, err := json.Marshal([]string{characterID, swordID})
+		require.NoError(t, err)
 
-	// Farm this wolf fight
-	for i := 0; i < 10; i++ {
 		// execute recipe for character
 		args = []string{cookbookID, fightWolfWithSwordRecipeID, "0", string(itemInputIDs)} // empty list for item-ids since there is no item input
 		args = append(args, common...)
@@ -631,11 +644,31 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 		// verify completed
 		require.Equal(t, true, execResp.Completed)
 
+		// some items could have been minted from this execution
+		// increase itemCount accordingly
+		itemCount += len(execResp.Execution.ItemOutputIDs)
+
+		// if the character died or their sword was broken, get a new one!
+		var itemResp types.QueryGetItemResponse
 		args = []string{cookbookID, characterID}
 		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
-		var itemResp types.QueryGetItemResponse
 		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
-		require.Equal(t, itemResp.Item.Owner, net.Validators[0].Address.String())
+		if itemResp.Item.Owner != net.Validators[0].Address.String() {
+			// PLAYER DIED
+			createCharacter(t, net, ctx)
+			buyCopperSword(t, net, ctx)
+			continue
+		}
+
+		args = []string{cookbookID, swordID}
+		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
+		require.NoError(t, err)
+		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
+		if itemResp.Item.Owner != net.Validators[0].Address.String() {
+			// LOST SWORD
+			buyCopperSword(t, net, ctx)
+			continue
+		}
 	}
 }
