@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   smooth_page_indicator: ^0.3.0-nullsafety.0
   modal_bottom_sheet: ^2.0.0
   mobx: ^2.0.3
@@ -27,6 +29,7 @@ dependencies:
   expandable: ^5.0.1
   getwidget: ^2.0.3
   parent_child_checkbox: ^0.0.3
+  intl: ^0.17.0
 
 
   cosmos_ui_components:
@@ -58,6 +61,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.1
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/images/
