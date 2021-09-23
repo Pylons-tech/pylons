@@ -19,6 +19,7 @@ func (suite *IntegrationTestSuite) TestDefaultParams() {
 	require.Equal(types.DefaultMinNameFieldLength, k.MinNameFieldLength(ctx))
 	require.Equal(types.DefaultMinDescriptionFieldLength, k.MinDescriptionFieldLength(ctx))
 	require.Equal(types.DefaultCoinIssuers, k.CoinIssuers(ctx))
+	require.Equal(types.DefaultPaymentProcessors, k.PaymentProcessors(ctx))
 	require.Equal(types.DefaultRecipeFeePercentage, k.RecipeFeePercentage(ctx))
 	require.Equal(types.DefaultItemTransferFeePercentage, k.ItemTransferFeePercentage(ctx))
 	require.Equal(types.DefaultUpdateItemStringFee, k.UpdateItemStringFee(ctx))

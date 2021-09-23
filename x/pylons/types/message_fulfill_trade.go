@@ -7,12 +7,13 @@ import (
 
 var _ sdk.Msg = &MsgFulfillTrade{}
 
-func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []ItemRef) *MsgFulfillTrade {
+func NewMsgFulfillTrade(creator string, id, coinInputsIndex uint64, items []ItemRef, paymentInfos []PaymentInfo) *MsgFulfillTrade {
 	return &MsgFulfillTrade{
 		Creator:         creator,
 		ID:              id,
 		CoinInputsIndex: coinInputsIndex,
 		Items:           items,
+		PaymentInfos:    paymentInfos,
 	}
 }
 
@@ -50,6 +51,12 @@ func (msg *MsgFulfillTrade) ValidateBasic() error {
 		}
 		err = ValidateID(item.CookbookID)
 		if err != nil {
+			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
+		}
+	}
+
+	for _, pi := range msg.PaymentInfos {
+		if err = ValidatePaymentInfo(pi); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}

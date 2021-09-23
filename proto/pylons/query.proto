@@ -5,6 +5,8 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "gogoproto/gogo.proto";
 // this line is used by starport scaffolding # 1
+import "pylons/redeem_info.proto";
+import "pylons/payment_info.proto";
 import "pylons/accounts.proto";
 import "pylons/trade.proto";
 import "pylons/google_iap_order.proto";
@@ -23,6 +25,28 @@ service Query {
 	}
 
 // this line is used by starport scaffolding # 2
+
+	// Queries a redeemInfo by index.
+	rpc RedeemInfo(QueryGetRedeemInfoRequest) returns (QueryGetRedeemInfoResponse) {
+		option (google.api.http).get = "/pylons/redeem/{ID}";
+	}
+
+	// Queries a list of redeemInfo items.
+	rpc RedeemInfoAll(QueryAllRedeemInfoRequest) returns (QueryAllRedeemInfoResponse) {
+		option (google.api.http).get = "/pylons/redeems";
+	}
+
+
+	// Queries a paymentInfo by index.
+	rpc PaymentInfo(QueryGetPaymentInfoRequest) returns (QueryGetPaymentInfoResponse) {
+		option (google.api.http).get = "/pylons/payment/{purchaseID}";
+	}
+
+	// Queries a list of paymentInfo items.
+	rpc PaymentInfoAll(QueryAllPaymentInfoRequest) returns (QueryAllPaymentInfoResponse) {
+		option (google.api.http).get = "/pylons/payments";
+	}
+
 
 	// Queries a list of getAccountByAddress items.
 	rpc UsernameByAddress(QueryGetUsernameByAddressRequest) returns (QueryGetUsernameByAddressResponse) {
@@ -105,6 +129,38 @@ message QueryListTradesByCreatorResponse {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetRedeemInfoRequest {
+	string ID = 1;
+}
+
+message QueryGetRedeemInfoResponse {
+	RedeemInfo RedeemInfo = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllRedeemInfoRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllRedeemInfoResponse {
+	repeated RedeemInfo RedeemInfo = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryGetPaymentInfoRequest {
+	string purchaseID = 1;
+}
+
+message QueryGetPaymentInfoResponse {
+	PaymentInfo PaymentInfo = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllPaymentInfoRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllPaymentInfoResponse {
+	repeated PaymentInfo PaymentInfo = 1 [(gogoproto.nullable) = false];
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
 message QueryGetUsernameByAddressRequest {
   string address = 1;
 }

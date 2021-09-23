@@ -38,6 +38,18 @@ var (
 		},
 	}
 
+	DefaultConsensusCut, _   = sdk.NewDecFromStr("0.001")
+	DefaultProcessingCut     = sdk.ZeroDec()
+	DefaultPaymentProcessors = []PaymentProcessor{
+		{
+			CoinDenom:     "ustripeusd",
+			PubKey:        "TODO", // TODO: replace
+			ProcessingCut: DefaultProcessingCut,
+			ConsensusCut:  DefaultConsensusCut,
+			Name:          "Pylons_Inc",
+		},
+	}
+
 	DefaultRecipeFeePercentage, _       = sdk.NewDecFromStr("0.10")
 	DefaultItemTransferFeePercentage, _ = sdk.NewDecFromStr("0.10")
 	DefaultUpdateItemStringFee          = sdk.NewCoin(PylonsCoinDenom, sdk.NewInt(10))
@@ -51,6 +63,7 @@ var (
 	ParamStoreKeyMinNameFieldLength        = []byte("MinNameFieldLength")
 	ParamStoreKeyMinDescriptionFieldLength = []byte("MinDescriptionFieldLength")
 	ParamStoreKeyCoinIssuers               = []byte("CoinIssuers")
+	ParamStoreKeyPaymentProcessors         = []byte("PaymentProcessors")
 	ParamStoreKeyRecipeFeePercentage       = []byte("RecipeFeePercentage")
 	ParamStoreKeyItemTransferFeePercentage = []byte("ItemTransferFeePercentage")
 	ParamStoreKeyUpdateItemStringFee       = []byte("UpdateItemStringFee")
@@ -64,6 +77,7 @@ func NewParams(
 	minNameFieldLength uint64,
 	minDescriptionFieldLength uint64,
 	coinIssuers []CoinIssuer,
+	paymentProcessors []PaymentProcessor,
 	recipeFeePercentage sdk.Dec,
 	itemTransferFeePercentage sdk.Dec,
 	updateItemStringFee sdk.Coin,
@@ -75,6 +89,7 @@ func NewParams(
 		MinNameFieldLength:        minNameFieldLength,
 		MinDescriptionFieldLength: minDescriptionFieldLength,
 		CoinIssuers:               coinIssuers,
+		PaymentProcessors:         paymentProcessors,
 		RecipeFeePercentage:       recipeFeePercentage,
 		ItemTransferFeePercentage: itemTransferFeePercentage,
 		UpdateItemStringFee:       updateItemStringFee,
@@ -90,6 +105,7 @@ func DefaultParams() Params {
 		DefaultMinNameFieldLength,
 		DefaultMinDescriptionFieldLength,
 		DefaultCoinIssuers,
+		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
 		DefaultItemTransferFeePercentage,
 		DefaultUpdateItemStringFee,
@@ -105,6 +121,7 @@ func NetworkTestParams() Params {
 		DefaultMinNameFieldLength,
 		DefaultMinDescriptionFieldLength,
 		DefaultCoinIssuers,
+		DefaultPaymentProcessors,
 		DefaultRecipeFeePercentage,
 		DefaultItemTransferFeePercentage,
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
@@ -133,6 +150,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamStoreKeyItemTransferFeePercentage, &p.ItemTransferFeePercentage, validateDecPercentage),
 		paramtypes.NewParamSetPair(ParamStoreKeyUpdateItemStringFee, &p.UpdateItemStringFee, validateCoinFee),
 		paramtypes.NewParamSetPair(ParamStoreKeyCoinIssuers, &p.CoinIssuers, validateCoinIssuers),
+		paramtypes.NewParamSetPair(ParamStoreKeyPaymentProcessors, &p.PaymentProcessors, validatePaymentProcessor),
 		paramtypes.NewParamSetPair(ParamStoreKeyRecipeFeePercentage, &p.RecipeFeePercentage, validateDecPercentage),
 		paramtypes.NewParamSetPair(ParamStoreKeyMinTransferFee, &p.MinTransferFee, validateInt),
 		paramtypes.NewParamSetPair(ParamStoreKeyMaxTransferFee, &p.MaxTransferFee, validateInt),
@@ -278,6 +296,36 @@ func validateCoinIssuers(i interface{}) error {
 					return fmt.Errorf("invalid amount")
 				}
 			}
+		}
+	}
+	return nil
+}
+
+func validatePaymentProcessor(i interface{}) error {
+	v, ok := i.([]PaymentProcessor)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+
+	for _, pp := range v {
+		coin := sdk.Coin{Denom: pp.CoinDenom, Amount: sdk.OneInt()}
+		if !coin.IsValid() {
+			return fmt.Errorf("invalid denom")
+		}
+		if err := validateDecPercentage(pp.ProcessingCut); err != nil {
+			return fmt.Errorf("processing cut must be in the range [0, 1), got %v", pp.ProcessingCut.String())
+		}
+		if err := validateDecPercentage(pp.ConsensusCut); err != nil {
+			return fmt.Errorf("consensus cut must be in the range [0, 1), got %v", pp.ConsensusCut.String())
+		}
+		if err := validateDecPercentage(pp.ProcessingCut.Add(pp.ConsensusCut)); err != nil {
+			return fmt.Errorf("processing cut and consensus together must be in the range [0, 1)")
+		}
+		if pp.PubKey == "" {
+			return fmt.Errorf("empty string for pubKey")
+		}
+		if pp.Name == "" {
+			return fmt.Errorf("empty string for name")
 		}
 	}
 	return nil

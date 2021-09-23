@@ -19,9 +19,9 @@ var _ = strconv.Itoa(0)
 
 func CmdFulfillTrade() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "fulfill-trade [id] [coin-inputs-index] [items]",
+		Use:   "fulfill-trade [id] [coin-inputs-index] [items] [payment-info]",
 		Short: "fulfill an existing trade",
-		Args:  cobra.ExactArgs(3),
+		Args:  cobra.ExactArgs(4),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			argsID, err := cast.ToUint64E(args[0])
 			if err != nil {
@@ -37,13 +37,19 @@ func CmdFulfillTrade() *cobra.Command {
 			if err != nil {
 				return err
 			}
+			argsPaymentInfo := args[3]
+			jsonArgsPaymentInfo := make([]types.PaymentInfo, 0)
+			err = json.Unmarshal([]byte(argsPaymentInfo), &jsonArgsPaymentInfo)
+			if err != nil {
+				return err
+			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			msg := types.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsID, argsCoinInputsIndex, jsonArgsItems)
+			msg := types.NewMsgFulfillTrade(clientCtx.GetFromAddress().String(), argsID, argsCoinInputsIndex, jsonArgsItems, jsonArgsPaymentInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
