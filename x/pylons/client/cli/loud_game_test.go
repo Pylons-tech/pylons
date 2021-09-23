@@ -57,7 +57,6 @@ func TestLOUDBasic(t *testing.T) {
 }
 
 func createCookbook(t *testing.T, net *network.Network, ctx client.Context) {
-
 	cbFields := []string{
 		"Legend of the Undead Dragon",
 		"Cookbook for running pylons recreation of LOUD",
@@ -74,7 +73,6 @@ func createCookbook(t *testing.T, net *network.Network, ctx client.Context) {
 	args = append(args, common...)
 	_, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateCookbook(), args)
 	require.NoError(t, err)
-
 }
 
 func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
@@ -201,8 +199,6 @@ func createCharacter(t *testing.T, net *network.Network, ctx client.Context) {
 
 func getLOUDCoin(t *testing.T, net *network.Network, ctx client.Context) {
 	denom := "loudCoin"
-	// require.NoError(t, err)
-
 	entries, err := json.Marshal(types.EntriesList{
 		CoinOutputs: []types.CoinOutput{{
 			ID:   "loudCoin",
@@ -547,8 +543,6 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				MutableStrings:  nil,
 				TransferFee:     nil,
 				TradePercentage: basicTradePercentage,
-				Quantity:        0,
-				AmountMinted:    0,
 				Tradeable:       true,
 			},
 			{
@@ -560,8 +554,6 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 				MutableStrings:  nil,
 				TransferFee:     nil,
 				TradePercentage: basicTradePercentage,
-				Quantity:        0,
-				AmountMinted:    0,
 				Tradeable:       true,
 			},
 		},
@@ -569,14 +561,6 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 	require.NoError(t, err)
 
 	outputs, err := json.Marshal([]types.WeightedOutputs{
-		{
-			EntryIDs: []string{},
-			Weight:   3,
-		},
-		{
-			EntryIDs: []string{"coin_reward", "modified_character"},
-			Weight:   3,
-		},
 		{
 			EntryIDs: []string{"coin_reward", "modified_character", "sword"},
 			Weight:   24,
@@ -627,7 +611,6 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 		var resp sdk.TxResponse
 		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 		require.Equal(t, uint32(0), resp.Code)
-		fmt.Println(resp.RawLog)
 
 		// simulate waiting for later block heights
 		height, err := net.LatestHeight()
@@ -648,16 +631,11 @@ func fightWolfWithSword(t *testing.T, net *network.Network, ctx client.Context) 
 		// verify completed
 		require.Equal(t, true, execResp.Completed)
 
-		// TODO
-		// new item may or may not exist
-		// we need to verify that the exec did something though
-		// check the execution
 		args = []string{cookbookID, characterID}
 		out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdShowItem(), args)
 		require.NoError(t, err)
 		var itemResp types.QueryGetItemResponse
 		require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &itemResp))
-		// verify completed
-		fmt.Println(itemResp.Item)
+		require.Equal(t, itemResp.Item.Owner, net.Validators[0].Address.String())
 	}
 }

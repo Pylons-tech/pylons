@@ -168,18 +168,15 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 
 	// unlock the locked coins and perform payment(s)
 	// separate cookbook coins so they can be burned
-	cookbookCoinDenoms := k.GetDenomsByCookbook(ctx, recipe.CookbookID)
 	burnCoins := sdk.NewCoins()
 	payCoins := sdk.NewCoins()
 	transferCoins := sdk.NewCoins()
 	feeCoins := sdk.NewCoins()
 coinLoop:
 	for _, coin := range pendingExecution.CoinInputs {
-		for _, denom := range cookbookCoinDenoms {
-			if coin.Denom == denom {
-				burnCoins = burnCoins.Add(coin)
-				continue coinLoop
-			}
+		if types.IsCookbookDenom(coin.Denom) {
+			burnCoins = burnCoins.Add(coin)
+			continue coinLoop
 		}
 		payCoins = payCoins.Add(coin)
 		feeAmt := coin.Amount.ToDec().Mul(k.RecipeFeePercentage(ctx)).RoundInt()
