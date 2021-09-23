@@ -5,10 +5,10 @@ import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_white_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/pages/account/account.dart';
+import 'package:pylons_wallet/pages/gallery/add_artwork.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
+import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
 
-import 'add_artwork.dart';
-import 'gallery_tab_like.dart';
 
 class GalleryScreenWidget extends StatefulWidget {
   const GalleryScreenWidget({Key? key}) : super(key: key);

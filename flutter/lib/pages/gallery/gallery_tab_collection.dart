@@ -5,8 +5,8 @@ import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/next_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:pylons_wallet/pages/gallery/collections.dart';
 
-import 'collections.dart';
 
 class GalleryTabCollectionWidget extends StatelessWidget {
 
