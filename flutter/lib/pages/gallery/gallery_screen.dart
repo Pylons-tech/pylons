@@ -5,10 +5,11 @@ import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_white_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/pages/account/account.dart';
+import 'package:pylons_wallet/pages/edit_profile/edit_profile_screen.dart';
+import 'package:pylons_wallet/pages/gallery/add_artwork.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
+import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
 
-import 'add_artwork.dart';
-import 'gallery_tab_like.dart';
 
 class GalleryScreenWidget extends StatefulWidget {
   const GalleryScreenWidget({Key? key}) : super(key: key);
@@ -189,7 +190,9 @@ class _GalleryScreenWidgetState extends State<GalleryScreenWidget> with SingleTi
                       SizedBox(
                           height: 30,
                           width: 138,
-                          child: PylonsBlueButton(onTap: (){}, text: 'Follow')
+                          child: PylonsBlueButton(onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
+                          }, text: 'Follow')
                       ),
                       SizedBox(
                         height: 30,

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_grey_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/pages/gallery/add_artwork_grid.dart';
 
-import 'add_artwork_grid.dart';
 
 class AddArtworkWidget extends StatefulWidget {
 
