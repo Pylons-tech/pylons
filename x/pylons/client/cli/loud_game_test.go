@@ -627,7 +627,7 @@ func fightWolfWithSword(t *testing.T, simInfo *loudBasicSim) {
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
 
-	// Farm this wolf fight until the character or sword are lost / dead
+	// Farm this wolf fight
 	for i := 0; i < 30; i++ {
 		// get sword and character IDs
 		itemInputIDs, err := json.Marshal([]string{simInfo.characterID, simInfo.swordID})
