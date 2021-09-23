@@ -10,14 +10,14 @@ import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
 
 
-class GalleryScreenWidget extends StatefulWidget {
-  const GalleryScreenWidget({Key? key}) : super(key: key);
+class GalleryScreen extends StatefulWidget {
+  const GalleryScreen({Key? key}) : super(key: key);
 
   @override
-  State<GalleryScreenWidget> createState() => _GalleryScreenWidgetState();
+  State<GalleryScreen> createState() => _GalleryScreenState();
 }
 
-class _GalleryScreenWidgetState extends State<GalleryScreenWidget> with SingleTickerProviderStateMixin {
+class _GalleryScreenState extends State<GalleryScreen> with SingleTickerProviderStateMixin {
   final double bannerSize = 135;
   int tabIndex = 0;
   late TabController _tabController;

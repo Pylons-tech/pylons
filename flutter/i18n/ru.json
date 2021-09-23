@@ -1,0 +1,9 @@
+{
+  "appTitle": "Pylons Wallet",
+  "somethingWrong": "Что-то пошло не так",
+  "walletRetrievingErrMsg": "Возникли проблемы с получением кошельков из безопасного хранилища.",
+  "home": "Главная",
+  "discover": "Найти",
+  "marketPlace": "Магазин",
+  "gallery": "Галерея"
+}

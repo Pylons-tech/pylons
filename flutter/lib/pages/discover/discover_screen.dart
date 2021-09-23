@@ -1,49 +1,44 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
-import 'package:pylons_wallet/components/pylons_app_bar.dart';
-import 'package:pylons_wallet/components/pylons_dashboard_filter.dart';
-import 'package:pylons_wallet/components/pylons_history_card.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
+import 'package:pylons_wallet/pages/home/home_activity.dart';
 import 'package:pylons_wallet/pages/home/home_following.dart';
 import 'package:pylons_wallet/pages/home/home_recommendation.dart';
-import 'package:pylons_wallet/pages/home/home_activity.dart';
 
-import 'package:pylons_wallet/pages/home/notification.dart';
-
-class DiscoverScreenWidget extends StatefulWidget {
-  const DiscoverScreenWidget({Key? key}) : super(key: key);
+class DiscoverScreen extends StatefulWidget {
+  const DiscoverScreen({Key? key}) : super(key: key);
 
   @override
-  State<DiscoverScreenWidget> createState() => _DiscoverScreenWidgetState();
+  State<DiscoverScreen> createState() => _DiscoverScreenState();
 }
 
-class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
+class _DiscoverScreenState extends State<DiscoverScreen> {
+  String dropdownValue = 'my_activity'.tr();
 
-  String dropdownValue = 'My activity';
-
-  List <String> spinnerItems = [
-    'My Activity',
-    'Recommended',
-    'Following',
+  List<String> spinnerItems = [
+    'my_activity'.tr(),
+    'recommended'.tr(),
+    'following'.tr(),
   ];
 
-  static const Map<String, Widget> _pages = {
-    'My activity': HomeActivityWidget(),
-    'Recommended': HomeRecommendationWidget(),
-    'Following': HomeFollowingWidget()
+  static final Map<String, Widget> _pages = {
+    'my_activity'.tr(): const HomeActivityWidget(),
+    'recommended'.tr(): const HomeRecommendationWidget(),
+    'following'.tr(): const HomeFollowingWidget()
   };
 
   DateTime _date = DateTime(2020, 11, 17);
 
-  Future<void> _selectDate()  async {
+  Future<void> _selectDate() async {
     final DateTime? newDate = await showDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(2017, 1),
       lastDate: DateTime(2022, 7),
-      helpText: 'Select a date',
+      helpText: 'select_a_date'.tr(),
     );
     if (newDate != null) {
       setState(() {
@@ -52,11 +47,7 @@ class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
     }
   }
 
-  List list = [
-    "asdf",
-    "asdf",
-    "aaaa"
-  ];
+  List list = ["asdf", "asdf", "aaaa"];
   List chips = [
     "+",
     "#3D",
@@ -80,91 +71,83 @@ class _DiscoverScreenWidgetState extends State<DiscoverScreenWidget> {
             backgroundColor: Colors.white,
             stretch: true,
             titleSpacing: 0,
-
             automaticallyImplyLeading: false,
             title: Padding(
-              padding: EdgeInsets.fromLTRB(16, 30, 16, 10),
+              padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
               child: GFSearchBar(
-
-                searchQueryBuilder:(query, list) {
-                  return list.where((item)=>item!.toString().toLowerCase().contains(query.toLowerCase())).toList();
+                searchQueryBuilder: (query, list) {
+                  return list
+                      .where((item) => item!
+                          .toString()
+                          .toLowerCase()
+                          .contains(query.toLowerCase()))
+                      .toList();
                 },
-                overlaySearchListItemBuilder: (item){
+                overlaySearchListItemBuilder: (item) {
                   return Container(
-                    width: MediaQuery.of(context).size.width,
-                      padding: EdgeInsets.all(8),
-                      child: Text(
-                          item.toString(),
-                          style: const TextStyle(fontSize: 18)
-                      )
-                  );
+                      width: MediaQuery.of(context).size.width,
+                      padding: const EdgeInsets.all(8),
+                      child: Text(item.toString(),
+                          style: const TextStyle(fontSize: 18)));
                 },
-                onItemSelected: (item){
-                  setState((){
-
-                  });
-                }, searchList: list,
+                onItemSelected: (item) {
+                  setState(() {});
+                },
+                searchList: list,
               ),
-            ) ,
+            ),
           ),
-
           SliverList(
               delegate: SliverChildListDelegate([
-                //3 image card
-                Container(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: Wrap(
-                      spacing: 10,
-                      runSpacing: 5,
-                      children: chips.map((tag) =>
-                           Chip(
-                            backgroundColor: Color(0xFFED8864),
-                            label: new Text(tag.toString()),
-                          )
-                        ).toList()
-                    )
-                ),
-                SizedBox(height: 20),
-              ])
-          ),
-
-      SliverPadding(
-        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-        sliver:SliverStaggeredGrid.countBuilder(
-            crossAxisCount: 3,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            itemCount: 15,
-            itemBuilder: (context, index) {
-              return Container(
-                  decoration:BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.all(
-                          Radius.circular(5)
-                      )
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
-                    child: InkWell(
-                      child: Image(
-                        image: AssetImage('assets/images/Rectangle 312.png'),
-                        fit: BoxFit.cover
-                      ),
-                      onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: false)));
-
-                      },
-                    )
-                  )
-              );
-            },
-            staggeredTileBuilder: (index) {
-              return StaggeredTile.count((index == 1 || index == 6)? 2: 1,(index == 1 || index == 6)? 2: 1 );
-            }
-        ),
-      )
-
-
+            //3 image card
+            Container(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                child: Wrap(
+                    spacing: 10,
+                    runSpacing: 5,
+                    children: chips
+                        .map((tag) => Chip(
+                              backgroundColor: const Color(0xFFED8864),
+                              label: Text(tag.toString()),
+                            ))
+                        .toList())),
+            const SizedBox(height: 20),
+          ])),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            sliver: SliverStaggeredGrid.countBuilder(
+                crossAxisCount: 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                itemCount: 15,
+                itemBuilder: (context, index) {
+                  return Container(
+                      decoration: const BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
+                      child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5)),
+                          child: InkWell(
+                            child: const Image(
+                                image: AssetImage(
+                                    'assets/images/Rectangle 312.png'),
+                                fit: BoxFit.cover),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DetailScreenWidget(
+                                              isOwner: false)));
+                            },
+                          )));
+                },
+                staggeredTileBuilder: (index) {
+                  return StaggeredTile.count((index == 1 || index == 6) ? 2 : 1,
+                      (index == 1 || index == 6) ? 2 : 1);
+                }),
+          )
         ],
       ),
     );

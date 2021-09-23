@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/pages/routing_page.dart';
 import 'package:pylons_wallet/stores/wallets_store.dart';
@@ -20,19 +19,10 @@ class PylonsApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [
-          Locale('en', ''),
-          Locale('ru', ''),
-        ],
-      onGenerateTitle: (context) {
-        return AppLocalizations.of(context)!.appTitle;
-      },
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
+      title: "appTitle".tr(),
       theme: PylonsAppTheme.buildAppTheme(),
       initialRoute: '/',
       routes: {

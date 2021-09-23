@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallets_store.dart';
@@ -9,9 +10,18 @@ import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.
 import 'package:transaction_signing_gateway/mobile/mobile_key_info_storage.dart';
 import 'package:transaction_signing_gateway/mobile/no_op_transaction_summary_ui.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   _buildDependencies();
-  runApp(PylonsApp());
+  runApp(EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('ru')],
+      path: 'i18n',
+      fallbackLocale: Locale('en'),
+      saveLocale: false,
+      useOnlyLangCode: true,
+      child: PylonsApp()
+  ),);
 }
 
 void _buildDependencies() {

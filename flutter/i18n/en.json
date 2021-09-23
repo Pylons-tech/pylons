@@ -1,0 +1,18 @@
+{
+  "appTitle": "Pylons Wallet",
+  "something_wrong": "Something went wrong",
+  "wallet_retrieving_err_msg": "We had problems retrieving wallets from secure storage.",
+  "home": "Home",
+  "discover": "Discover",
+  "market_place": "MarketPlace",
+  "gallery": "Gallery",
+  "my_activity": "My Activity",
+  "recommended": "Recommended",
+  "following": "Following",
+  "select_a_date": "Select a date",
+  "what_is_new": "What's New",
+  "trending": "Trending",
+  "price": "Price",
+  "low_to_high": "Low to High",
+  "high_to_low": "High to Low"
+}

@@ -1,9 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_app_drawer.dart';
-import 'package:pylons_wallet/components/pylons_dashboard_dropdown.dart';
-import 'package:pylons_wallet/components/pylons_history_card.dart';
-import 'package:pylons_wallet/pages/dashboard/dashboard_assets.dart';
 import 'package:pylons_wallet/pages/discover/discover_screen.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_screen.dart';
 import 'package:pylons_wallet/pages/home/home_screen.dart';
@@ -12,6 +9,7 @@ import 'package:pylons_wallet/pages/marketplace/marketplace_screen.dart';
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
   static const String _title = 'Pylons Home';
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -29,43 +27,44 @@ class DashboardWidget extends StatefulWidget {
 }
 
 class _DashboardWidgetState extends State<DashboardWidget> {
-int _selectedIndex = 0;
-PageController _pageController = PageController(initialPage: 0);
+  int _selectedIndex = 0;
+  PageController _pageController = PageController(initialPage: 0);
 
-@override
-void initState(){
-  super.initState();
-  //_pageController = PageController(initialPage: _selectedIndex);
-}
+  @override
+  void initState() {
+    super.initState();
+    //_pageController = PageController(initialPage: _selectedIndex);
+  }
 
-@override
-void dispose(){
-  _pageController.dispose();
-  super.dispose();
-}
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
-void _onItemTapped(int index) {
-  setState(() {
-    _selectedIndex = index;
-    _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.ease);
-  });
-}
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      _pageController.animateToPage(index,
+          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+    });
+  }
 
-void onPageChanged(int page) {
-  setState((){
-    _selectedIndex = page;
-  });
-}
+  void onPageChanged(int page) {
+    setState(() {
+      _selectedIndex = page;
+    });
+  }
 
+  static const List<Widget> _pages = <Widget>[
+    HomeScreen(),
+    DiscoverScreen(),
+    MarketplaceScreen(),
+    GalleryScreen()
+  ];
 
-static const List<Widget> _pages = <Widget>[
-  HomeScreenWidget(),
-  DiscoverScreenWidget(),
-  MarketplaceScreenWidget(),
-  GalleryScreenWidget()
-];
-
-static const TextStyle optionStyle = TextStyle(fontSize: 12, color: Colors.indigo, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(
+      fontSize: 12, color: Colors.indigo, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +74,9 @@ static const TextStyle optionStyle = TextStyle(fontSize: 12, color: Colors.indig
       //  child: _pages[_selectedIndex],
       //),
       body: PageView(
-        children: _pages,
-        onPageChanged: onPageChanged,
-        controller: _pageController
-      ),
-
+          onPageChanged: onPageChanged,
+          controller: _pageController,
+          children: _pages),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
@@ -95,32 +92,28 @@ static const TextStyle optionStyle = TextStyle(fontSize: 12, color: Colors.indig
                 AssetImage('assets/icons/home.png'),
                 size: 24,
               ),
-              label: 'Home'
-          ),
+              label: "home".tr()),
           BottomNavigationBarItem(
               icon: const ImageIcon(
                 AssetImage('assets/icons/discover.png'),
                 size: 24,
               ),
-              label: 'Discover'
-          ),
+              label: "discover".tr()),
           BottomNavigationBarItem(
               icon: const ImageIcon(
                 AssetImage('assets/icons/market.png'),
                 size: 24,
               ),
-              label: 'MarketPlace'
-          ),
+              label: "marketPlace".tr()),
           BottomNavigationBarItem(
               icon: const ImageIcon(
                 AssetImage('assets/icons/gallery.png'),
                 size: 24,
               ),
-              label: 'Gallery'
-          ),
+              label: "gallery".tr()),
         ],
       ),
-      drawer: PylonsAppDrawer(),
+      drawer: const PylonsAppDrawer(),
     );
   }
 }

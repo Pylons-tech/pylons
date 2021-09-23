@@ -29,7 +29,7 @@ dependencies:
   expandable: ^5.0.1
   getwidget: ^2.0.3
   parent_child_checkbox: ^0.0.3
-  intl: ^0.17.0
+  easy_localization: ^3.0.0
 
 
   cosmos_ui_components:
@@ -61,12 +61,13 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.1
 
 flutter:
-  generate: true
   uses-material-design: true
   assets:
     - assets/images/
     - assets/icons/
     - assets/images/icon/
+    - i18n/en.json
+    - i18n/ru.json
 
   fonts:
     - family: Inter

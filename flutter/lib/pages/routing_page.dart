@@ -1,6 +1,6 @@
 import 'package:cosmos_ui_components/cosmos_ui_components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/dashboard/dashboard_main.dart';
 import 'package:pylons_wallet/pages/presenting_onboard_page.dart';
@@ -43,15 +43,14 @@ class _RoutingPageState extends State<RoutingPage> {
 
   @override
   Widget build(BuildContext context) {
-    var i18n = AppLocalizations.of(context);
     return Scaffold(
       backgroundColor: kBGColor,
       body: ContentStateSwitcher(
         isLoading: PylonsApp.walletsStore.areWalletsLoading.value,
         isError: PylonsApp.walletsStore.loadWalletsFailure.value != null,
         errorChild: CosmosErrorView(
-          title: i18n!.somethingWrong,
-          message: i18n.walletRetrievingErrMsg,
+          title: "somethingWrong".tr(),
+          message: "walletRetrievingErrMsg".tr(),
         ),
         contentChild: const SizedBox(),
       ),
