@@ -32,6 +32,10 @@ func (k msgServer) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr stri
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %v not found", id)
 				}
 				if inputItem.Owner != creatorAddr {
+					modAcc := k.accountKeeper.GetModuleAddress(types.ExecutionsLockerName)
+					if inputItem.Owner == modAcc.String() {
+						return nil, sdkerrors.Wrapf(types.ErrItemLocked, "item with id %s locked", inputItem.ID)
+					}
 					return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "item with id %s not owned by sender", inputItem.ID)
 				}
 			}
@@ -43,7 +47,7 @@ func (k msgServer) MatchItemInputsForExecution(ctx sdk.Context, creatorAddr stri
 				return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			err = recipeItemInput.MatchItem(inputItem, ec)
-			if err != nil {
+			if err == nil {
 				matchedItems[i] = inputItem
 				checkedInputItems[j] = true
 				break

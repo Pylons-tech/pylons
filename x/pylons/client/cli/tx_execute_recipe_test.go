@@ -139,8 +139,8 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// this recipe can be run infinitely
-	// run it 10x in a loop
-	for i := 0; i < 10; i++ {
+	// run it 5x in a loop
+	for i := 0; i < 5; i++ {
 		// create execution
 		args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
 		args = append(args, common...)

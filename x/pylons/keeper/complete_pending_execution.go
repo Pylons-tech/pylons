@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/rogpeppe/go-internal/semver"
 
@@ -55,10 +54,10 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		return nil, nil, nil, err
 	}
 
-	coinPrefix := strings.ReplaceAll(recipe.CookbookID, "_", "")
+	// coinPrefix := strings.ReplaceAll(recipe.CookbookID, "_", "")
 	coins := make([]sdk.Coin, len(coinOutputs))
 	for i, coinOutput := range coinOutputs {
-		coins[i].Denom = coinPrefix + "/" + coinOutput.Coin.Denom
+		coins[i].Denom = coinOutput.Coin.Denom
 		if coinOutput.Program != "" {
 			val, err := ec.EvalInt64(coinOutput.Program)
 			if err != nil {
@@ -106,7 +105,7 @@ func (k Keeper) GenerateExecutionResult(ctx sdk.Context, addr sdk.AccAddress, en
 		if err != nil {
 			return nil, nil, nil, err
 		}
-		modifiedItems = append(modifiedItems, item)
+		modifiedItems[idx] = item
 		recipe.Entries.ItemOutputs[idx].AmountMinted++
 	}
 
@@ -159,7 +158,7 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 		itemOutputIDs[i] = id
 	}
 	// update modify items in keeper
-	itemModifyOutputIDs := make([]string, len(mintItems))
+	itemModifyOutputIDs := make([]string, len(modifyItems))
 	for i, item := range modifyItems {
 		k.UnlockItemForExecution(ctx, item, pendingExecution.Creator)
 		itemModifyOutputIDs[i] = item.ID
@@ -169,18 +168,15 @@ func (k Keeper) CompletePendingExecution(ctx sdk.Context, pendingExecution types
 
 	// unlock the locked coins and perform payment(s)
 	// separate cookbook coins so they can be burned
-	cookbookCoinDenoms := k.GetDenomsByCookbook(ctx, recipe.CookbookID)
 	burnCoins := sdk.NewCoins()
 	payCoins := sdk.NewCoins()
 	transferCoins := sdk.NewCoins()
 	feeCoins := sdk.NewCoins()
 coinLoop:
 	for _, coin := range pendingExecution.CoinInputs {
-		for _, denom := range cookbookCoinDenoms {
-			if coin.Denom == denom {
-				burnCoins = burnCoins.Add(coin)
-				continue coinLoop
-			}
+		if types.IsCookbookDenom(coin.Denom) {
+			burnCoins = burnCoins.Add(coin)
+			continue coinLoop
 		}
 		payCoins = payCoins.Add(coin)
 		feeAmt := coin.Amount.ToDec().Mul(k.RecipeFeePercentage(ctx)).RoundInt()
