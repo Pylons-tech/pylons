@@ -27,6 +27,8 @@ dependencies:
   expandable: ^5.0.1
   getwidget: ^2.0.3
   parent_child_checkbox: ^0.0.3
+  image_picker: ^0.8.4+1
+  image_cropper: ^1.4.1
 
 
   cosmos_ui_components:
