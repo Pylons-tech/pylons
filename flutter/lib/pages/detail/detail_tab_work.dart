@@ -1,4 +1,5 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
@@ -34,7 +35,7 @@ class DetailTabWorkWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text('Title of Artwork',
+                Text('title_of_artwork'.tr(),
                     style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Color(0xFF080830))),
                 Spacer(),
                 FavoriteButton(onTap: (){}),
@@ -59,7 +60,7 @@ class DetailTabWorkWidget extends StatelessWidget {
             //Description
             Align(
               alignment: Alignment.topLeft,
-              child: Text('Description about the artwork', )
+              child: Text('artwork_description'.tr(), )
             ),
 
             ListView.separated(
@@ -79,7 +80,7 @@ class DetailTabWorkWidget extends StatelessWidget {
 
                 Row(
                   children: [
-                    Text('Related Items', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF242423))),
+                    Text('related_items'.tr(), style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF242423))),
                     Spacer(),
                     MoreButton(onTap: (){})
                   ],

@@ -1,5 +1,6 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
@@ -35,7 +36,7 @@ class DetailTabInfoWidget extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.topLeft,
-                  child:Text('Creator', style:TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  child:Text('creator'.tr(), style:TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
                 ListTile(
                   leading: CircleAvatar(
@@ -47,7 +48,7 @@ class DetailTabInfoWidget extends StatelessWidget {
                     height: 35,
                     child: PylonsBlueButton(
                       onTap: (){},
-                      text :'Following'
+                      text :'following'.tr()
                     ),
                   )
                 ),
@@ -59,7 +60,7 @@ class DetailTabInfoWidget extends StatelessWidget {
               children: [
                 Align(
                   alignment: Alignment.topLeft,
-                  child: Text('Owner', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+                  child: Text('owner'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
                 ),
                 ListTile(
                   leading: CircleAvatar(
@@ -71,7 +72,7 @@ class DetailTabInfoWidget extends StatelessWidget {
                       height: 35,
                       child: PylonsBlueButton(
                           onTap: (){},
-                          text :'Following'
+                          text :'following'.tr()
                       ),
                     )
                 ),
@@ -85,7 +86,7 @@ class DetailTabInfoWidget extends StatelessWidget {
                       height: 35,
                       child: PylonsBlueButton(
                           onTap: (){},
-                          text :'Following'
+                          text :'following'.tr()
                       ),
                     )
                 ),

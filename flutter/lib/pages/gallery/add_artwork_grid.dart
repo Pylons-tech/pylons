@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/nft_view.dart';
@@ -97,7 +98,7 @@ class _AddArtworkGridWidgetState extends State<AddArtworkGridWidget> with Single
             child: Row(children: [
               Text('15',),
               SizedBox(width: 10),
-              Text('Add', style: TextStyle(color: Colors.white),)
+              Text('add'.tr(), style: TextStyle(color: Colors.white),)
             ])
           )],
       ),

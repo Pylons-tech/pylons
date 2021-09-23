@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
@@ -52,7 +53,7 @@ class _ItemsNewScreenWidgetState extends State<ItemsNewScreenWidget> {
                     color: kIconBGColor
                 )
             ),
-            title: Text('What\'s New', style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: kTextBlackColor, fontFamily: 'Roboto', )),
+            title: Text('what_is_new'.tr(), style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: kTextBlackColor, fontFamily: 'Roboto', )),
           ),
           SliverPadding(
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),

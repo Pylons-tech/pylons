@@ -1,4 +1,5 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
@@ -35,7 +36,7 @@ class DetailTabHistoryWidget extends StatelessWidget {
                   style: DefaultTextStyle.of(context).style,
                   children: <TextSpan>[
                     TextSpan(text: 'Linda', style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' purchased'),
+                    TextSpan(text: ' ${'purchased'.tr()}'),
                     TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -60,7 +61,7 @@ class DetailTabHistoryWidget extends StatelessWidget {
                   style: DefaultTextStyle.of(context).style,
                   children: <TextSpan>[
                     TextSpan(text: 'Linda', style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' purchased'),
+                    TextSpan(text: ' ${'purchased'.tr()}'),
                     TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),
@@ -85,7 +86,7 @@ class DetailTabHistoryWidget extends StatelessWidget {
                   style: DefaultTextStyle.of(context).style,
                   children: <TextSpan>[
                     TextSpan(text: 'Linda', style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: ' purchased'),
+                    TextSpan(text: ' ${'purchased'.tr()}'),
                     TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
                   ],
                 ),

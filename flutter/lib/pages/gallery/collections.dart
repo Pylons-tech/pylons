@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
@@ -83,7 +84,7 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
                             VerticalSpace(108),
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text('Photography',
+                              child: Text('photography'.tr(),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
 

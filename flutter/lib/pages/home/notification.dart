@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/notification_item.dart';
@@ -19,7 +20,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text('Notification', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: kTextBlackColor, fontFamily: 'Roboto', )),
+        title: Text('notification'.tr(), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: kTextBlackColor, fontFamily: 'Roboto', )),
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
@@ -55,15 +56,15 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 header: Container(
                   height: 60,
                   color: Colors.white,
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   alignment: Alignment.centerLeft,
-                  child: Text('This Week',
+                  child: Text('this_week'.tr(),
                     style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, i) => NotificationItem(),
+                        (context, i) => const NotificationItem(),
                     childCount: 6,
                   ),
                 ),
@@ -80,7 +81,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                       Divider(),
                       Container(
                         alignment: Alignment.centerLeft,
-                        child:Text('This Month',
+                        child:Text('this_month'.tr(),
                           style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       )

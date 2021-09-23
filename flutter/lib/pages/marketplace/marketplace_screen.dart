@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:pylons_wallet/components/pylons_marketplace_card.dart';
@@ -108,9 +109,9 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                               size: 24,
                             ),
                           ),
-                          const Padding(
-                              padding: EdgeInsets.only(right: 10, left: 5),
-                              child: Text('FILTER BY')
+                          Padding(
+                              padding: const EdgeInsets.only(right: 10, left: 5),
+                              child: Text('filter_by'.tr())
                           ),
                           const Icon(
                             Icons.keyboard_arrow_down,

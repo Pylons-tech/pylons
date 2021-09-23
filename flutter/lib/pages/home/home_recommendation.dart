@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/buttons/add_friend_button.dart';
 import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_history_card.dart';
@@ -32,7 +33,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Trending', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                    Text('trending'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                     // Spacer(),
                     MoreButton(onTap: (){
                     })
@@ -44,7 +45,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
                   child: ListView.builder(
                     itemCount: 15,
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index)=>PylonsTrendingCard()
+                    itemBuilder: (context, index)=> const PylonsTrendingCard()
                   )
               ),
             ],
@@ -60,7 +61,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Trending Collections', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  Text('trending_ollections'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                   // Spacer(),
                   // AddFriendButton(onTap: (){
                   // })
@@ -73,7 +74,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
                   shrinkWrap: true,
                   itemCount: 15,
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index)=> PylonsTrendingColCard()
+                  itemBuilder: (context, index)=> const PylonsTrendingColCard()
                 )
               )
             ],
@@ -82,16 +83,16 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
         SizedBox(height: 12,),
         //What's New
         Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           color: Colors.white,
           child: Column(
             children: [
               Row(
                 children: [
-                  const Text('What\'s New', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  Text('what_is_new'.tr(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                   Spacer(),
                   MoreButton(onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ItemsNewScreenWidget()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const ItemsNewScreenWidget()));
                   })
                 ],
               ),
@@ -100,7 +101,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
                 child: ListView.builder(
                   itemCount: 15,
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index)=>PylonsTrendingNewCard(),
+                  itemBuilder: (context, index)=>const PylonsTrendingNewCard(),
                 )
               )
             ],

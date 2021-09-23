@@ -1,4 +1,5 @@
 import 'package:cosmos_ui_components/cosmos_ui_components.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cosmos_utils/cosmos_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
@@ -19,8 +20,8 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CosmosAppBar(
-        title: "Wallet Creation",
+      appBar: CosmosAppBar(
+        title: "wallet_creation".tr(),
       ),
       body: SafeArea(
         child: Padding(
@@ -30,7 +31,7 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
             emptyChild: Center(
               child: PylonsBlueButton(
                 onTap: _generateMnemonicClicked,
-                text: "Create new Wallet",
+                text: "create_new_wallet".tr(),
               ),
             ),
             contentChild: Center(
@@ -40,16 +41,13 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
                 children: [
                   CosmosMnemonicWordsGrid(mnemonicWords: mnemonicWords),
                   const SizedBox(height: CosmosAppTheme.spacingM),
-                  const Text(
-                    'Follow best practices for security. Be sure to write your mnemonic pass phrase in a safe place. '
-                    'This phrase is the only way to recover your account if you forget your password. '
-                    'Without your password or recovery passphrase, account recovery is not possible. '
-                    'Even Emeris cannot help you.',
+                  Text(
+                    'security_hint'.tr(),
                     style: PylonsAppTheme.HOME_LABEL,
                   ),
                   PylonsBlueButton(
                     onTap: _proceedClicked,
-                    text: "Proceed"
+                    text: "proceed".tr()
                   )
                 ],
               ),

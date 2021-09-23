@@ -1,5 +1,6 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/next_button.dart';
@@ -66,7 +67,7 @@ class GalleryTabCollectionWidget extends StatelessWidget {
                       ),
                       Row(
                           children:[
-                            Text('Photo Collection'),
+                            Text('photo_collection'.tr()),
                             Spacer(),
                             IconButton(
                                 icon: ImageIcon(
@@ -125,7 +126,7 @@ class GalleryTabCollectionWidget extends StatelessWidget {
                       ),
                       Row(
                           children:[
-                            Text('Photo Collection'),
+                            Text('photo_collection'.tr()),
                             Spacer(),
                             IconButton(
                                 icon: ImageIcon(

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -68,8 +69,8 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                           bottom: 70,
                           child: Column(
                             children: [
-                              Text('Congratulations!', style: TextStyle(color: Color(0xFF1212C4), fontSize: 20, fontWeight: FontWeight.w700)),
-                              Text('You have successfully bought the item.\nYour item is in collection', style: TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500))
+                              Text('congratulations'.tr(), style: TextStyle(color: Color(0xFF1212C4), fontSize: 20, fontWeight: FontWeight.w700)),
+                              Text('successfully_bought_the_item'.tr(), style: TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500))
                             ],
                           )
                       ),
@@ -91,9 +92,9 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
-                                                  Text('Product Name', style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
+                                                  Text('product_name'.tr(), style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
                                                   Spacer(),
-                                                  Text('Title of Artwork', style:TextStyle(color: Color(0xFF201D1D), fontSize: 16, fontWeight: FontWeight.w500))
+                                                  Text('title_of_artwork'.tr(), style:TextStyle(color: Color(0xFF201D1D), fontSize: 16, fontWeight: FontWeight.w500))
                                                 ]
                                             )
                                         ),
@@ -127,7 +128,7 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                     constraints: BoxConstraints(
                                                       minHeight: 80,
                                                     ),
-                                                    child: Text('Description about the artwork', )
+                                                    child: Text('artwork_description'.tr(), )
                                                 )
                                             ),
                                             Column(
@@ -137,7 +138,7 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                       padding: EdgeInsets.fromLTRB(10, 15, 10, 20),
                                                       child: Row(
                                                           children: [
-                                                            Text('Price', style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
+                                                            Text('price'.tr(), style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
                                                             Spacer(),
                                                             Text('\$82.00', style:TextStyle(color: Color(0xFF201D1D), fontSize: 16, fontWeight: FontWeight.w500))
                                                           ]
@@ -154,7 +155,7 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                                                   padding: EdgeInsets.fromLTRB(10, 15, 10, 20),
                                                   child: Row(
                                                       children: [
-                                                        Text('Price', style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
+                                                        Text('price'.tr(), style:TextStyle(color: Color(0xFF616161), fontSize: 16, fontWeight: FontWeight.w500)),
                                                         Spacer(),
                                                         Text('\$82.00', style:TextStyle(color: Color(0xFF201D1D), fontSize: 16, fontWeight: FontWeight.w500))
                                                       ]
@@ -195,7 +196,7 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                 padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
                 minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
               ),
-              child: Text('Continue', style: TextStyle(color: Colors.white))
+              child: Text('continue'.tr(), style: TextStyle(color: Colors.white))
           )
       ),
     );

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cosmos_ui_components/components/cosmos_app_bar.dart';
 import 'package:cosmos_utils/mnemonic.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +57,7 @@ class PresentingOnboardPage extends StatelessWidget {
                       )
                   );
                 },
-                text: "Import an account",
+                text: "import_an_account".tr(),
               ),
               const VerticalSpace(10),
               PylonsBlueButton(
@@ -75,15 +76,15 @@ class PresentingOnboardPage extends StatelessWidget {
                       )
                   );
                 },
-                text: "Create an account",
+                text: "create_an_account".tr(),
               ),
               const VerticalSpace(10),
               GestureDetector(
                 onTap: () {
                   // TODO : implement hyperlink action
                 },
-                child: const Text("Terms of service",
-                    style: TextStyle(
+                child: Text("terms_of_service".tr(),
+                    style: const TextStyle(
                         // decoration: TextDecoration.underline,
                         color: Color(0xff1212C4))),
               )
@@ -160,16 +161,16 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
 class Page1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(children: const <Widget>[
-      Image(
+    return Column(children: <Widget>[
+      const Image(
         image: AssetImage('assets/images/image_001.png'),
         alignment: Alignment.bottomCenter,
       ),
       Text(
-        "MANAGE YOUR NFT",
+        "manage_your_nft".tr(),
         style: PylonsAppTheme.HOME_TITLE,
       ),
-      Text("Pylons is a fast NFT infrastructure",
+      Text("pylons_infrastructure".tr(),
           style: PylonsAppTheme.HOME_LABEL),
     ]);
   }
@@ -178,14 +179,14 @@ class Page1 extends StatelessWidget {
 class Page2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(children: const <Widget>[
-      Image(
+    return Column(children: <Widget>[
+      const Image(
         image: AssetImage('assets/images/image_002.png'),
         alignment: Alignment.bottomCenter,
       ),
-      Text("SELL AND BUY ARTWORKS", style: PylonsAppTheme.HOME_TITLE),
-      Text("Transactions are free", style: PylonsAppTheme.HOME_LABEL),
-      Text("Easy to use for everyone", style: PylonsAppTheme.HOME_LABEL),
+      Text("sell_and_buy_artworks".tr(), style: PylonsAppTheme.HOME_TITLE),
+      Text("transactions_free".tr(), style: PylonsAppTheme.HOME_LABEL),
+      Text("easy_for_everyone".tr(), style: PylonsAppTheme.HOME_LABEL),
     ]);
   }
 }
@@ -193,12 +194,12 @@ class Page2 extends StatelessWidget {
 class Page3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(children: const <Widget>[
-      Image(
+    return Column(children: <Widget>[
+      const Image(
         image: AssetImage('assets/images/image_001.png'),
         alignment: Alignment.bottomCenter,
       ),
-      Text("IT STORES IN BLOCKCHAIN", style: PylonsAppTheme.HOME_TITLE),
+      Text("it_stores_in_blockchain".tr(), style: PylonsAppTheme.HOME_TITLE),
     ]);
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_grey_button.dart';
@@ -47,7 +48,7 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
             child: Row(
                 children:[
                   Icon(Icons.add, color: Color(0xFF616161), size: 16,),
-                  Text('Add Artwork',style: TextStyle(color: Color(0xFF616161), fontSize: 14, fontWeight: FontWeight.w600))
+                  Text('add_artwork'.tr(),style: TextStyle(color: Color(0xFF616161), fontSize: 14, fontWeight: FontWeight.w600))
                 ]
             ),
             onTap: (){
@@ -105,7 +106,7 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
           ),
           VerticalSpace(16),
           TextFormField(
-            controller: TextEditingController(text:'Photography'),
+            controller: TextEditingController(text:'photography'.tr()),
             decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
@@ -139,13 +140,13 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
                 Expanded(
                   child: SizedBox(
                     height: 30,
-                    child: PylonsBlueButton(onTap: (){}, text: "Confirm",),
+                    child: PylonsBlueButton(onTap: (){}, text: "confirm".tr(),),
                   ),),
                 const HorizontalSpace(20),
                 Expanded(
                   child: SizedBox(
                       height: 30,
-                      child: PylonsGreyButton (onTap: (){}, text: "Cancel",)),
+                      child: PylonsGreyButton (onTap: (){}, text: "cancel".tr(),)),
                 ),
 
               ]
