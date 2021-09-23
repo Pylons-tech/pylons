@@ -19,16 +19,23 @@ class ImageSourceBottomSheet extends StatelessWidget {
           children: [
             const VerticalSpace(40),
             _MenuButtonWidget(
-              title: "Take Photo",
-              onTap: ()async{
-                var file = await _pickImageFromCamera();
+              onTap: (){
+                 _pickImageFromCamera().then((file){
+                  debugPrint(file!.path);
+                  Navigator.pop(context);
+                });
+
               },
+              title: "Take Photo",
             ),
             const Divider(),
             _MenuButtonWidget(
               title: "Choose from ${Platform.isAndroid ? "Gallery" : "Photos"}",
-              onTap: ()async{
-                var file = await _pickImageFromGallery();
+              onTap: (){
+                _pickImageFromGallery().then((file){
+                  debugPrint(file!.path);
+                  Navigator.pop(context);
+                });
               },
             ),
             const Divider(),

@@ -190,34 +190,55 @@ class _GalleryScreenWidgetState extends State<GalleryScreenWidget> with SingleTi
                       SizedBox(
                           height: 30,
                           width: 138,
-                          child: PylonsBlueButton(onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
-                          }, text: 'Follow')
-                      ),
-                      SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: OutlinedButton(
-                          onPressed: () {
-                            this.setExandMode();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            alignment:Alignment.center,
-                            primary: Colors.white,
-                            padding: EdgeInsets.all(0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5), // <-- Radius
+                          child: ElevatedButton(
+                            onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                side: const BorderSide(color: Color(0xffCACACA),)
+                              )
+                            ),
+                            child: SizedBox(
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      "Edit Profile",
+                                      style: const TextStyle(fontSize: 15, color: Color(0xff616161))),
+                                ],
+                              ),
                             ),
                           ),
-
-                          child: Center(
-                            child: Icon(
-                              (isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-                              color: Color(0xFF616161),
-                           ),
-                          ),
-                        ),
-                      )
+                          
+                      ),
+                      // SizedBox(
+                      //   height: 30,
+                      //   width: 30,
+                      //   child: OutlinedButton(
+                      //     onPressed: () {
+                      //       this.setExandMode();
+                      //     },
+                      //     style: ElevatedButton.styleFrom(
+                      //       alignment:Alignment.center,
+                      //       primary: Colors.white,
+                      //       padding: EdgeInsets.all(0),
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(5), // <-- Radius
+                      //       ),
+                      //     ),
+                      //
+                      //     child: Center(
+                      //       child: Icon(
+                      //         (isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+                      //         color: Color(0xFF616161),
+                      //      ),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                   isExpanded ? (
