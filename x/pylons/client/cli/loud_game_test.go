@@ -176,6 +176,7 @@ func createCharacterRecipe(t *testing.T, simInfo *loudBasicSim) {
 	// create recipe
 	args := []string{cookbookID, simInfo.getCharacterRecipeID}
 	args = append(args, getCharacterRecipe...)
+	fmt.Println(args)
 	args = append(args, simInfo.common...)
 	_, err = clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdCreateRecipe(), args)
 	require.NoError(t, err)
