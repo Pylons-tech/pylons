@@ -66,20 +66,36 @@ class _GalleryScreenState extends State<GalleryScreen>
         Positioned(
           top: 0,
           child: Container(
-              alignment: Alignment.center,
-              color: Colors.black12,
-              width: MediaQuery.of(context).size.width,
-              height: bannerSize,
-              child: ListTile(
-                  minLeadingWidth: 10,
-                  leading: const ImageIcon(
-                      AssetImage('assets/images/icon/add_btn.png'),
-                      size: 20,
-                      color: Color(0xFF616161)),
-                  title: Text(
-                    'add_an_image'.tr(),
-                    style: const TextStyle(color: Colors.white),
-                  ))),
+            alignment: Alignment.centerRight,
+            color: Colors.black12,
+            width: MediaQuery.of(context).size.width,
+            height: bannerSize,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0),
+              child: ElevatedButton.icon(
+                  onPressed: null,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color.fromRGBO(97, 97, 97, 0.6)),
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                        EdgeInsets.symmetric(horizontal: 4, vertical: 2)),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    )),
+                  ),
+                  icon: const ImageIcon(AssetImage('assets/icons/camera.png'),
+                      size: 14, color: Colors.white),
+                  label: Text(
+                    'edit_cover'.tr(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                        color: Colors.white,
+                        fontFamily: 'Inter'),
+                  )),
+            ),
+          ),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +180,8 @@ class _GalleryScreenState extends State<GalleryScreen>
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const AccountScreenWidget()));
+                              builder: (context) =>
+                                  const AccountScreenWidget()));
                     },
                   ),
                   Row(
@@ -183,8 +200,8 @@ class _GalleryScreenState extends State<GalleryScreen>
                       SizedBox(
                           height: 30,
                           width: 138,
-                          child:
-                              PylonsBlueButton(onTap: () {}, text: 'follow'.tr())),
+                          child: PylonsBlueButton(
+                              onTap: () {}, text: 'follow'.tr())),
                       SizedBox(
                         height: 30,
                         width: 30,
@@ -211,30 +228,33 @@ class _GalleryScreenState extends State<GalleryScreen>
                           ),
                         ),
                       ),
-                         ElevatedButton(
-                            onPressed: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              shape: RoundedRectangleBorder(
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => EditProfileScreen()));
+                        },
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(6),
-                                side: const BorderSide(color: Color(0xffCACACA),)
-                              )
-                            ),
-                            child: SizedBox(
-                              height: 50,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                      "Edit Profile",
-                                      style: const TextStyle(fontSize: 15, color: Color(0xff616161))),
-                                ],
-                              ),
-                            ),
+                                side: const BorderSide(
+                                  color: Color(0xffCACACA),
+                                ))),
+                        child: SizedBox(
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Edit Profile",
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Color(0xff616161))),
+                            ],
                           ),
-                          
+                        ),
+                      ),
+
                       //),
                       // SizedBox(
                       //   height: 30,
@@ -262,30 +282,34 @@ class _GalleryScreenState extends State<GalleryScreen>
                       // )
                     ],
                   ),
-                  if (isExpanded) Column(children: [
-                          Row(children: [
-                            Text('suggested_accounts'.tr()),
-                            const Spacer(),
-                            TextButton(
-                              onPressed: () {},
-                              child: Row(children: [
-                                Text('see_all'.tr(),
-                                    style: const TextStyle(color: Color(0xFF616161))),
-                                const Icon(
-                                  Icons.chevron_right,
-                                  color: Color(0xFF616161),
-                                )
-                              ]),
-                            ),
+                  if (isExpanded)
+                    Column(children: [
+                      Row(children: [
+                        Text('suggested_accounts'.tr()),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () {},
+                          child: Row(children: [
+                            Text('see_all'.tr(),
+                                style:
+                                    const TextStyle(color: Color(0xFF616161))),
+                            const Icon(
+                              Icons.chevron_right,
+                              color: Color(0xFF616161),
+                            )
                           ]),
-                          Container(
-                              height: 105,
-                              child: ListView.builder(
-                                  itemCount: 15,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) =>
-                                      const FollowCardWidget())),
-                        ]) else const SizedBox(height: 0)
+                        ),
+                      ]),
+                      Container(
+                          height: 105,
+                          child: ListView.builder(
+                              itemCount: 15,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) =>
+                                  const FollowCardWidget())),
+                    ])
+                  else
+                    const SizedBox(height: 0)
                 ],
               ),
             ),
