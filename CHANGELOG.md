@@ -10,3 +10,4 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.
 
 ### Changes:
+- [#425](https://github.com/Pylons-tech/pylons/pull/425) Upgrade Tendermint Core to v0.34.13 (was v0.34.12) and IBC-go to v1.2.0 (was v1.1.0).
