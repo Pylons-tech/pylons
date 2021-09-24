@@ -15,10 +15,6 @@ export declare enum AuthorizationType {
 }
 export declare function authorizationTypeFromJSON(object: any): AuthorizationType;
 export declare function authorizationTypeToJSON(object: AuthorizationType): string;
-/** Validators defines list of validator addresses. */
-export interface Validators {
-    address: string[];
-}
 /** StakeAuthorization defines authorization for delegate/undelegate/redelegate. */
 export interface StakeAuthorization {
     /**
@@ -30,25 +26,29 @@ export interface StakeAuthorization {
      * allow_list specifies list of validator addresses to whom grantee can delegate tokens on behalf of granter's
      * account.
      */
-    allowList: Validators | undefined;
+    allowList: StakeAuthorization_Validators | undefined;
     /** deny_list specifies list of validator addresses to whom grantee can not delegate tokens. */
-    denyList: Validators | undefined;
+    denyList: StakeAuthorization_Validators | undefined;
     /** authorization_type defines one of AuthorizationType. */
     authorizationType: AuthorizationType;
 }
-export declare const Validators: {
-    encode(message: Validators, writer?: Writer): Writer;
-    decode(input: Reader | Uint8Array, length?: number): Validators;
-    fromJSON(object: any): Validators;
-    toJSON(message: Validators): unknown;
-    fromPartial(object: DeepPartial<Validators>): Validators;
-};
+/** Validators defines list of validator addresses. */
+export interface StakeAuthorization_Validators {
+    address: string[];
+}
 export declare const StakeAuthorization: {
     encode(message: StakeAuthorization, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): StakeAuthorization;
     fromJSON(object: any): StakeAuthorization;
     toJSON(message: StakeAuthorization): unknown;
     fromPartial(object: DeepPartial<StakeAuthorization>): StakeAuthorization;
+};
+export declare const StakeAuthorization_Validators: {
+    encode(message: StakeAuthorization_Validators, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): StakeAuthorization_Validators;
+    fromJSON(object: any): StakeAuthorization_Validators;
+    toJSON(message: StakeAuthorization_Validators): unknown;
+    fromPartial(object: DeepPartial<StakeAuthorization_Validators>): StakeAuthorization_Validators;
 };
 declare type Builtin = Date | Function | Uint8Array | string | number | undefined;
 export declare type DeepPartial<T> = T extends Builtin ? T : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {

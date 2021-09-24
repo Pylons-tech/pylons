@@ -41,15 +41,15 @@ export default {
 		await this.$store.dispatch('common/env/init')
 		this.initialized = true
 		if (!window.keplr) {
-			console.log("Keplr not installed")
-		}else{
+			console.log('Keplr not installed')
+		} else {
 			await window.keplr.experimentalSuggestChain({
 				chainId: 'pylons',
 				chainName: 'Pylons',
-				rpc: 'http://localhost:26657',
-				rest: 'http://localhost:1317',
+				rpc: 'http://192.168.2.105:26657',
+				rest: 'http://192.168.2.105:1317',
 				bip44: {
-					coinType: 118
+					coinType: 1 //Testnet all coins https://github.com/satoshilabs/slips/blob/master/slip-0044.md
 				},
 				bech32Config: {
 					bech32PrefixAccAddr: 'cosmos',
@@ -61,31 +61,25 @@ export default {
 				},
 				currencies: [
 					{
-						coinDenom: 'ATOM',
-						coinMinimalDenom: 'uatom',
-						coinDecimals: 6,
-						coinGeckoId: 'cosmos'
-					},
-					{
 						coinDenom: 'BEDROCK',
 						coinMinimalDenom: 'ubedrock',
 						coinDecimals: 6,
-						coinGeckoId: 'cosmos'
-					},
+						coinGeckoId: 'pylons'
+					}
 				],
 				feeCurrencies: [
 					{
 						coinDenom: 'BEDROCK',
 						coinMinimalDenom: 'ubedrock',
 						coinDecimals: 6,
-						coinGeckoId: 'cosmos'
-					},
+						coinGeckoId: 'pylons'
+					}
 				],
 				stakeCurrency: {
 					coinDenom: 'BEDROCK',
 					coinMinimalDenom: 'ubedrock',
 					coinDecimals: 6,
-					coinGeckoId: 'cosmos'
+					coinGeckoId: 'pylons'
 				},
 				coinType: 118,
 				gasPriceStep: {

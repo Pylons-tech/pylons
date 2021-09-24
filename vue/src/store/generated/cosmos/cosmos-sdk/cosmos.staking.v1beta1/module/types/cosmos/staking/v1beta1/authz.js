@@ -49,63 +49,6 @@ export function authorizationTypeToJSON(object) {
             return 'UNKNOWN';
     }
 }
-const baseValidators = { address: '' };
-export const Validators = {
-    encode(message, writer = Writer.create()) {
-        for (const v of message.address) {
-            writer.uint32(10).string(v);
-        }
-        return writer;
-    },
-    decode(input, length) {
-        const reader = input instanceof Uint8Array ? new Reader(input) : input;
-        let end = length === undefined ? reader.len : reader.pos + length;
-        const message = { ...baseValidators };
-        message.address = [];
-        while (reader.pos < end) {
-            const tag = reader.uint32();
-            switch (tag >>> 3) {
-                case 1:
-                    message.address.push(reader.string());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-            }
-        }
-        return message;
-    },
-    fromJSON(object) {
-        const message = { ...baseValidators };
-        message.address = [];
-        if (object.address !== undefined && object.address !== null) {
-            for (const e of object.address) {
-                message.address.push(String(e));
-            }
-        }
-        return message;
-    },
-    toJSON(message) {
-        const obj = {};
-        if (message.address) {
-            obj.address = message.address.map((e) => e);
-        }
-        else {
-            obj.address = [];
-        }
-        return obj;
-    },
-    fromPartial(object) {
-        const message = { ...baseValidators };
-        message.address = [];
-        if (object.address !== undefined && object.address !== null) {
-            for (const e of object.address) {
-                message.address.push(e);
-            }
-        }
-        return message;
-    }
-};
 const baseStakeAuthorization = { authorizationType: 0 };
 export const StakeAuthorization = {
     encode(message, writer = Writer.create()) {
@@ -113,10 +56,10 @@ export const StakeAuthorization = {
             Coin.encode(message.maxTokens, writer.uint32(10).fork()).ldelim();
         }
         if (message.allowList !== undefined) {
-            Validators.encode(message.allowList, writer.uint32(18).fork()).ldelim();
+            StakeAuthorization_Validators.encode(message.allowList, writer.uint32(18).fork()).ldelim();
         }
         if (message.denyList !== undefined) {
-            Validators.encode(message.denyList, writer.uint32(26).fork()).ldelim();
+            StakeAuthorization_Validators.encode(message.denyList, writer.uint32(26).fork()).ldelim();
         }
         if (message.authorizationType !== 0) {
             writer.uint32(32).int32(message.authorizationType);
@@ -134,10 +77,10 @@ export const StakeAuthorization = {
                     message.maxTokens = Coin.decode(reader, reader.uint32());
                     break;
                 case 2:
-                    message.allowList = Validators.decode(reader, reader.uint32());
+                    message.allowList = StakeAuthorization_Validators.decode(reader, reader.uint32());
                     break;
                 case 3:
-                    message.denyList = Validators.decode(reader, reader.uint32());
+                    message.denyList = StakeAuthorization_Validators.decode(reader, reader.uint32());
                     break;
                 case 4:
                     message.authorizationType = reader.int32();
@@ -158,13 +101,13 @@ export const StakeAuthorization = {
             message.maxTokens = undefined;
         }
         if (object.allowList !== undefined && object.allowList !== null) {
-            message.allowList = Validators.fromJSON(object.allowList);
+            message.allowList = StakeAuthorization_Validators.fromJSON(object.allowList);
         }
         else {
             message.allowList = undefined;
         }
         if (object.denyList !== undefined && object.denyList !== null) {
-            message.denyList = Validators.fromJSON(object.denyList);
+            message.denyList = StakeAuthorization_Validators.fromJSON(object.denyList);
         }
         else {
             message.denyList = undefined;
@@ -180,8 +123,8 @@ export const StakeAuthorization = {
     toJSON(message) {
         const obj = {};
         message.maxTokens !== undefined && (obj.maxTokens = message.maxTokens ? Coin.toJSON(message.maxTokens) : undefined);
-        message.allowList !== undefined && (obj.allowList = message.allowList ? Validators.toJSON(message.allowList) : undefined);
-        message.denyList !== undefined && (obj.denyList = message.denyList ? Validators.toJSON(message.denyList) : undefined);
+        message.allowList !== undefined && (obj.allowList = message.allowList ? StakeAuthorization_Validators.toJSON(message.allowList) : undefined);
+        message.denyList !== undefined && (obj.denyList = message.denyList ? StakeAuthorization_Validators.toJSON(message.denyList) : undefined);
         message.authorizationType !== undefined && (obj.authorizationType = authorizationTypeToJSON(message.authorizationType));
         return obj;
     },
@@ -194,13 +137,13 @@ export const StakeAuthorization = {
             message.maxTokens = undefined;
         }
         if (object.allowList !== undefined && object.allowList !== null) {
-            message.allowList = Validators.fromPartial(object.allowList);
+            message.allowList = StakeAuthorization_Validators.fromPartial(object.allowList);
         }
         else {
             message.allowList = undefined;
         }
         if (object.denyList !== undefined && object.denyList !== null) {
-            message.denyList = Validators.fromPartial(object.denyList);
+            message.denyList = StakeAuthorization_Validators.fromPartial(object.denyList);
         }
         else {
             message.denyList = undefined;
@@ -210,6 +153,63 @@ export const StakeAuthorization = {
         }
         else {
             message.authorizationType = 0;
+        }
+        return message;
+    }
+};
+const baseStakeAuthorization_Validators = { address: '' };
+export const StakeAuthorization_Validators = {
+    encode(message, writer = Writer.create()) {
+        for (const v of message.address) {
+            writer.uint32(10).string(v);
+        }
+        return writer;
+    },
+    decode(input, length) {
+        const reader = input instanceof Uint8Array ? new Reader(input) : input;
+        let end = length === undefined ? reader.len : reader.pos + length;
+        const message = { ...baseStakeAuthorization_Validators };
+        message.address = [];
+        while (reader.pos < end) {
+            const tag = reader.uint32();
+            switch (tag >>> 3) {
+                case 1:
+                    message.address.push(reader.string());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+            }
+        }
+        return message;
+    },
+    fromJSON(object) {
+        const message = { ...baseStakeAuthorization_Validators };
+        message.address = [];
+        if (object.address !== undefined && object.address !== null) {
+            for (const e of object.address) {
+                message.address.push(String(e));
+            }
+        }
+        return message;
+    },
+    toJSON(message) {
+        const obj = {};
+        if (message.address) {
+            obj.address = message.address.map((e) => e);
+        }
+        else {
+            obj.address = [];
+        }
+        return obj;
+    },
+    fromPartial(object) {
+        const message = { ...baseStakeAuthorization_Validators };
+        message.address = [];
+        if (object.address !== undefined && object.address !== null) {
+            for (const e of object.address) {
+                message.address.push(e);
+            }
         }
         return message;
     }
