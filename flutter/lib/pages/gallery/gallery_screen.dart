@@ -4,6 +4,7 @@ import 'package:pylons_wallet/components/follow_card.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/pages/account/account.dart';
+import 'package:pylons_wallet/pages/edit_profile/edit_profile_screen.dart';
 import 'package:pylons_wallet/pages/gallery/add_artwork.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
@@ -209,7 +210,56 @@ class _GalleryScreenState extends State<GalleryScreen>
                             ),
                           ),
                         ),
-                      )
+                      ),
+                         ElevatedButton(
+                            onPressed: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(6),
+                                side: const BorderSide(color: Color(0xffCACACA),)
+                              )
+                            ),
+                            child: SizedBox(
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                      "Edit Profile",
+                                      style: const TextStyle(fontSize: 15, color: Color(0xff616161))),
+                                ],
+                              ),
+                            ),
+                          ),
+                          
+                      //),
+                      // SizedBox(
+                      //   height: 30,
+                      //   width: 30,
+                      //   child: OutlinedButton(
+                      //     onPressed: () {
+                      //       this.setExandMode();
+                      //     },
+                      //     style: ElevatedButton.styleFrom(
+                      //       alignment:Alignment.center,
+                      //       primary: Colors.white,
+                      //       padding: EdgeInsets.all(0),
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(5), // <-- Radius
+                      //       ),
+                      //     ),
+                      //
+                      //     child: Center(
+                      //       child: Icon(
+                      //         (isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+                      //         color: Color(0xFF616161),
+                      //      ),
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                   if (isExpanded) Column(children: [

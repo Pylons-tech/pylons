@@ -87,7 +87,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       items: list.map<DropdownMenuItem<String>>((value) {
                         return DropdownMenuItem<String>(
                           value: value.toString(),
-                          child: Text(value.toString(), style: const TextStyle(color: Color(0xFF616161))),
+                          child: Text("$value", style: TextStyle(color: Color(0xFF616161))),
                         );
                       }).toList(),
                     ),
