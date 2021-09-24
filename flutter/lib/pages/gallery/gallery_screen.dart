@@ -172,7 +172,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                       const SizedBox(width: 70),
                       Text('${'followers'.tr()}: 23'),
                       const SizedBox(width: 60),
-                      Text('${'following'.tr().toLowerCase()}: 20')
+                      Text('${'followings'.tr().toLowerCase()}: 20')
                     ],
                   ),
                   const VerticalSpace(10),

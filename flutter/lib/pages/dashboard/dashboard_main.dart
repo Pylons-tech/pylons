@@ -104,7 +104,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
                 AssetImage('assets/icons/market.png'),
                 size: 24,
               ),
-              label: "marketPlace".tr()),
+              label: "market_place".tr()),
           BottomNavigationBarItem(
               icon: const ImageIcon(
                 AssetImage('assets/icons/gallery.png'),

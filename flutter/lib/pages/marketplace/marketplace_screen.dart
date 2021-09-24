@@ -14,7 +14,7 @@ class MarketplaceScreen extends StatefulWidget {
 }
 
 class _MarketplaceScreenState extends State<MarketplaceScreen> {
-  String _sortValue = "Recommended";
+  String _sortValue = "recommended".tr();
   List list = [
     "recommended".tr(),
     "what_is_new".tr(),
