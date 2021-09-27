@@ -1,7 +1,10 @@
 package types
 
 import (
+	"encoding/base64"
 	"fmt"
+
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 
 	"gopkg.in/yaml.v2"
 
@@ -40,10 +43,11 @@ var (
 
 	DefaultConsensusCut, _   = sdk.NewDecFromStr("0.001")
 	DefaultProcessingCut     = sdk.ZeroDec()
+	DefaultPylonsIncPubKey   = "EVK1dqjD6K8hGylacMpWAa/ru/OnWUDtCZ+lPkv2TTA=" // this is a testing key, do not use in production!
 	DefaultPaymentProcessors = []PaymentProcessor{
 		{
 			CoinDenom:     "ustripeusd",
-			PubKey:        "TODO", // TODO: replace
+			PubKey:        DefaultPylonsIncPubKey,
 			ProcessingCut: DefaultProcessingCut,
 			ConsensusCut:  DefaultConsensusCut,
 			Name:          "Pylons_Inc",
@@ -321,8 +325,12 @@ func validatePaymentProcessor(i interface{}) error {
 		if err := validateDecPercentage(pp.ProcessingCut.Add(pp.ConsensusCut)); err != nil {
 			return fmt.Errorf("processing cut and consensus together must be in the range [0, 1)")
 		}
-		if pp.PubKey == "" {
-			return fmt.Errorf("empty string for pubKey")
+		pubKeyBytes, err := base64.StdEncoding.DecodeString(pp.PubKey)
+		if err != nil {
+			return fmt.Errorf("pubKey decoding failure: %s", err.Error())
+		}
+		if len(pubKeyBytes) != ed25519.PubKeySize {
+			return fmt.Errorf("invalid pubKey size")
 		}
 		if pp.Name == "" {
 			return fmt.Errorf("empty string for name")

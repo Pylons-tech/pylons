@@ -217,7 +217,7 @@ func Test_validatePaymentProcessor(t *testing.T) {
 
 	invaliPaymentProcessorCoinDenom[0] = PaymentProcessor{
 		CoinDenom:     "$",
-		PubKey:        "test",
+		PubKey:        DefaultPaymentProcessors[0].PubKey,
 		Name:          "test",
 		ProcessingCut: sdk.ZeroDec(),
 		ConsensusCut:  sdk.ZeroDec(),
@@ -233,7 +233,7 @@ func Test_validatePaymentProcessor(t *testing.T) {
 
 	invaliPaymentProcessorPercentages[0] = PaymentProcessor{
 		CoinDenom:     "test",
-		PubKey:        "test",
+		PubKey:        DefaultPaymentProcessors[0].PubKey,
 		Name:          "test",
 		ProcessingCut: sdk.OneDec(),
 		ConsensusCut:  sdk.ZeroDec(),
@@ -241,7 +241,7 @@ func Test_validatePaymentProcessor(t *testing.T) {
 
 	invaliPaymentProcessorName[0] = PaymentProcessor{
 		CoinDenom:     "test",
-		PubKey:        "test",
+		PubKey:        DefaultPaymentProcessors[0].PubKey,
 		Name:          "",
 		ProcessingCut: sdk.ZeroDec(),
 		ConsensusCut:  sdk.ZeroDec(),
@@ -249,7 +249,7 @@ func Test_validatePaymentProcessor(t *testing.T) {
 
 	validPaymentProcessor[0] = PaymentProcessor{
 		CoinDenom:     "test",
-		PubKey:        "test",
+		PubKey:        DefaultPaymentProcessors[0].PubKey,
 		Name:          "test",
 		ProcessingCut: sdk.ZeroDec(),
 		ConsensusCut:  sdk.ZeroDec(),
