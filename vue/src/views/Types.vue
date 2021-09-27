@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="container">
-			<SpTypeForm modulePath="Pylonstech.pylons.pylons" moduleType="Cookbook" action="create" id="createCookBook" />
+			<SpType modulePath="Pylonstech.pylons.pylons" moduleType="Cookbook" />
 
 			<!--			<SpType modulePath="Pylonstech.pylons.pylons" moduleType="Recipe" />-->
 			<!-- this line is used by starport scaffolding # 4 -->

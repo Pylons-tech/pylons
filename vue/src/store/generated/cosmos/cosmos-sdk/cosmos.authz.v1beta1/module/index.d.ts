@@ -1,8 +1,8 @@
 import { StdFee } from "@cosmjs/launchpad";
 import { OfflineSigner, EncodeObject } from "@cosmjs/proto-signing";
 import { Api } from "./rest";
-import { MsgGrant } from "./types/cosmos/authz/v1beta1/tx";
 import { MsgRevoke } from "./types/cosmos/authz/v1beta1/tx";
+import { MsgGrant } from "./types/cosmos/authz/v1beta1/tx";
 import { MsgExec } from "./types/cosmos/authz/v1beta1/tx";
 export declare const MissingWalletError: Error;
 interface TxClientOptions {
@@ -14,8 +14,8 @@ interface SignAndBroadcastOptions {
 }
 declare const txClient: (wallet: OfflineSigner, { addr: addr }?: TxClientOptions) => Promise<{
     signAndBroadcast: (msgs: EncodeObject[], { fee, memo }?: SignAndBroadcastOptions) => Promise<import("@cosmjs/stargate").BroadcastTxResponse>;
-    msgGrant: (data: MsgGrant) => EncodeObject;
     msgRevoke: (data: MsgRevoke) => EncodeObject;
+    msgGrant: (data: MsgGrant) => EncodeObject;
     msgExec: (data: MsgExec) => EncodeObject;
 }>;
 interface QueryClientOptions {
