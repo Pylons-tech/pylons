@@ -10,7 +10,7 @@ import (
 
 // ValidatePaymentInfo validates the payment receipt using the provided signature
 func (pp PaymentProcessor) ValidatePaymentInfo(pi PaymentInfo) error {
-	msg := fmt.Sprintf("{\"purchaseID\":\"%s\",\"payerAddr\":\"%s\",\"amount\":\"%s\",\"productID\":\"%s\"}", pi.PurchaseID, pi.Amount, pi.PayerAddr, pi.ProductID)
+	msg := fmt.Sprintf("{\"purchaseID\":\"%s\",\"address\":\"%s\",\"amount\":\"%s\",\"productID\":\"%s\"}", pi.PurchaseID, pi.Amount, pi.PayerAddr, pi.ProductID)
 	return pp.verifySignature(msg, pi.Signature)
 }
 
