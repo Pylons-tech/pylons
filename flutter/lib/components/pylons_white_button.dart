@@ -15,23 +15,33 @@ class PylonsWhiteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xCCFFFFFF),
+        color: const Color(0xFFFFFFFF),
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color: const Color(0xFF1212C4))
+        border: Border.all(color: const Color(0xFF1212C4)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.25),
+            spreadRadius: 0,
+            blurRadius: 3,
+            offset: Offset(0, 4), // changes position of shadow
+          ),
+        ],
       ),
+
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          primary: const Color(0xCCFFFFFF)
+          primary: const Color(0xFFFFFFFF),
+          elevation: 0
         ),
         child: SizedBox(
-          height: 50,
+          height: 43,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
                 text,
-                style: const TextStyle(fontSize: 15, color:  Color(0xFF1212C4))),
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, color:  Color(0xFF1212C4))),
             ],
           ),
         ),

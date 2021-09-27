@@ -19,13 +19,13 @@ class PylonsBlueButton extends StatelessWidget {
         primary: const Color(0xFF1212C4),
       ),
       child: SizedBox(
-        height: 50,
+        height: 43,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
                 text,
-                style: const TextStyle(fontSize: 15, color: Colors.white)),
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
           ],
         ),
       ),

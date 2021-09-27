@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:pylons_wallet/components/pylons_marketplace_card.dart';
@@ -38,7 +37,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           backgroundColor: Colors.white,
           automaticallyImplyLeading: false,
           title: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
             child: GFSearchBar(
               searchQueryBuilder:(query, list) {
                 return list.where((item)=>item!.toString().toLowerCase().contains(query.toLowerCase())).toList();

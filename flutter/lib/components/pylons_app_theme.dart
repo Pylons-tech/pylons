@@ -10,7 +10,6 @@ class PylonsAppTheme extends CosmosAppTheme {
   static const IconThemeData ICON_THEME_ENABLED = IconThemeData(color: Colors.indigo,size: 14);
   static const IconThemeData ICON_THEME_DISABLED = IconThemeData(color: Colors.white70,size: 14);
 
-
   static ThemeData buildAppTheme() {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
@@ -24,6 +23,33 @@ class PylonsAppTheme extends CosmosAppTheme {
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
       ),
+      textTheme: TextTheme(
+        headline1: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Inter'
+        ),
+        headline2: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Inter'
+        ),
+        subtitle1: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'Inter'
+        ),
+        subtitle2: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'Inter'
+        ),
+        bodyText1: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          fontFamily: 'Inter'
+        ),
+      )
     );
   }
 }

@@ -73,7 +73,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             titleSpacing: 0,
             automaticallyImplyLeading: false,
             title: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 30, 16, 10),
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
               child: GFSearchBar(
                 searchQueryBuilder: (query, list) {
                   return list

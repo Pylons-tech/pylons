@@ -34,11 +34,14 @@ class PresentingOnboardPage extends StatelessWidget {
                 child: SmoothPageIndicator(
                   controller: _controller, // PageController
                   count: 3,
-                  // effect: const WormEffect(), // your preferred effect
+                  effect: const WormEffect(
+                    dotHeight: 4,
+                    dotWidth: 4,
+                  ), // your preferred effect
                 ),
               ),
               SizedBox(
-                height: 450,
+                height: MediaQuery.of(context).size.height * 0.65,
                 child: OnboardingPageView(),
               ),
               PylonsWhiteButton(
@@ -85,6 +88,9 @@ class PresentingOnboardPage extends StatelessWidget {
                 },
                 child: Text("terms_of_service".tr(),
                     style: const TextStyle(
+                      fontFamily: 'Inter',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
                         // decoration: TextDecoration.underline,
                         color: Color(0xff1212C4))),
               )
