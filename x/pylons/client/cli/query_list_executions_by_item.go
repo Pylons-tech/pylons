@@ -22,10 +22,7 @@ func CmdListExecutionsByItem() *cobra.Command {
 			reqCookbookID := args[0]
 			reqItemID := args[1]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
+			clientCtx := client.GetClientContextFromCmd(cmd)
 
 			queryClient := types.NewQueryClient(clientCtx)
 

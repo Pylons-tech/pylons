@@ -51,7 +51,7 @@ func (msg *MsgExecuteRecipe) ValidateBasic() error {
 	}
 
 	for _, id := range msg.ItemIDs {
-		if err = ValidateNumber(id); err != nil {
+		if err = ValidateItemID(id); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}

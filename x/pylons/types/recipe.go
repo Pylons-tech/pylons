@@ -620,6 +620,12 @@ func ValidateCoinOutput(co CoinOutput, idMap map[string]bool) error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, co.Coin.String())
 	}
 
+	// prevent ibc coins as coin outputs
+	// theoretically, a cookbook could have the ID 'ibc'. This prevents coinOutputs from aliasing real ibc coins
+	if IsIBCDenomRepresentation(co.Coin.Denom) {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "coin denom %s is of ibc/{hash} - cannot be used as a coin output", co.Coin.Denom)
+	}
+
 	return nil
 }
 

@@ -3,6 +3,8 @@ package cli
 import (
 	"encoding/json"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/spf13/cobra"
 
@@ -24,38 +26,38 @@ func CmdCreateCookbook() *cobra.Command {
 			id := args[0]
 			argsName, err := cast.ToStringE(args[1])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsDescription, err := cast.ToStringE(args[2])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsDeveloper, err := cast.ToStringE(args[3])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsVersion, err := cast.ToStringE(args[4])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsSupportEmail, err := cast.ToStringE(args[5])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsCostPerBlock := args[6]
 			jsonArgsCostPerBlock := sdk.Coin{}
 			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsEnabled, err := cast.ToBoolE(args[7])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			msg := types.NewMsgCreateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, jsonArgsCostPerBlock, argsEnabled)
@@ -80,38 +82,38 @@ func CmdUpdateCookbook() *cobra.Command {
 			id := args[0]
 			argsName, err := cast.ToStringE(args[1])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsDescription, err := cast.ToStringE(args[2])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsDeveloper, err := cast.ToStringE(args[3])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsVersion, err := cast.ToStringE(args[4])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsSupportEmail, err := cast.ToStringE(args[5])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsCostPerBlock := args[6]
 			jsonArgsCostPerBlock := sdk.Coin{}
 			err = json.Unmarshal([]byte(argsCostPerBlock), &jsonArgsCostPerBlock)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 			argsEnabled, err := cast.ToBoolE(args[7])
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
 			msg := types.NewMsgUpdateCookbook(clientCtx.GetFromAddress().String(), id, argsName, argsDescription, argsDeveloper, argsVersion, argsSupportEmail, jsonArgsCostPerBlock, argsEnabled)

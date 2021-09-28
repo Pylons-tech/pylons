@@ -1,8 +1,16 @@
 package cli
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"time"
+
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/cosmos/cosmos-sdk/client/input"
+	"github.com/cosmos/cosmos-sdk/client/tx"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/spf13/cobra"
 
@@ -36,6 +44,7 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdFulfillTrade())
 
 	cmd.AddCommand(CmdCreateTrade())
+
 	cmd.AddCommand(CmdCancelTrade())
 
 	cmd.AddCommand(CmdCompleteExecutionEarly())
@@ -59,4 +68,76 @@ func GetTxCmd() *cobra.Command {
 	cmd.AddCommand(CmdUpdateCookbook())
 
 	return cmd
+}
+
+// GenerateOrBroadcastMsgs is customized from utils.GenerateOrBroadcastMsgs
+func GenerateOrBroadcastMsgs(cliCtx client.Context, txBldr tx.Factory, msgs ...sdk.Msg) error {
+	if cliCtx.GenerateOnly {
+		return fmt.Errorf("cannot run cli cmd in GenerateOnly mode")
+	}
+
+	return CustomCompleteAndBroadcastTxCLI(txBldr, cliCtx, msgs...)
+}
+
+// CustomCompleteAndBroadcastTxCLI is a custom tx
+func CustomCompleteAndBroadcastTxCLI(txf tx.Factory, clientCtx client.Context, msgs ...sdk.Msg) error {
+	txf, err := txf.Prepare(clientCtx)
+	if err == nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account already exits")
+	}
+
+	if txf.SimulateAndExecute() || clientCtx.Simulate {
+		_, adjusted, err := tx.CalculateGas(clientCtx, txf, msgs...)
+		if err != nil {
+			return err
+		}
+
+		txf = txf.WithGas(adjusted)
+		_, _ = fmt.Fprintf(os.Stderr, "%s\n", tx.GasEstimateResponse{GasEstimate: txf.Gas()})
+	}
+
+	if clientCtx.Simulate {
+		return nil
+	}
+
+	txs, err := txf.BuildUnsignedTx(msgs...)
+	if err != nil {
+		return err
+	}
+
+	if !clientCtx.SkipConfirm {
+		out, err := clientCtx.TxConfig.TxJSONEncoder()(txs.GetTx())
+		if err != nil {
+			return err
+		}
+
+		_, _ = fmt.Fprintf(os.Stderr, "%s\n\n", out)
+
+		buf := bufio.NewReader(os.Stdin)
+		ok, err := input.GetConfirmation("confirm transaction before signing and broadcasting", buf, os.Stderr)
+
+		if err != nil || !ok {
+			_, _ = fmt.Fprintf(os.Stderr, "%s\n", "cancelled transaction")
+			return err
+		}
+	}
+
+	txs.SetFeeGranter(clientCtx.GetFeeGranterAddress())
+	err = tx.Sign(txf, clientCtx.GetFromName(), txs, true)
+	if err != nil {
+		return err
+	}
+
+	txBytes, err := clientCtx.TxConfig.TxEncoder()(txs.GetTx())
+	if err != nil {
+		return err
+	}
+
+	// broadcast to a Tendermint node
+	res, err := clientCtx.BroadcastTx(txBytes)
+	if err != nil {
+		return err
+	}
+
+	return clientCtx.PrintProto(res)
 }

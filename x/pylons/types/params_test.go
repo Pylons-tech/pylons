@@ -23,7 +23,6 @@ func Test_validateUint(t *testing.T) {
 		{"invalid type int32 1", args{int32(1)}, true},
 		{"invalid type int64 1", args{int64(1)}, true},
 		{"invalid type uint32 1", args{uint32(1)}, true},
-
 		{"valid type uint64 1", args{uint64(1)}, false},
 	}
 
@@ -85,31 +84,35 @@ func Test_validateCoinIssuers(t *testing.T) {
 
 	invalidCoinIssuerPackages := make([]CoinIssuer, 1)
 	invalidCoinIssuerCoinDenom := make([]CoinIssuer, 1)
-	invalidCoinIssuerPubkey := make([]CoinIssuer, 1)
+	noCoinIssuerPubkey := make([]CoinIssuer, 1)
 	validCoinIssuer := make([]CoinIssuer, 1)
 
 	invalidCoinIssuerPackages[0] = CoinIssuer{
 		CoinDenom:                 "pylons",
 		Packages:                  invalidPackages,
 		GoogleInAppPurchasePubKey: "asdg",
+		EntityName:                "test",
 	}
 
 	invalidCoinIssuerCoinDenom[0] = CoinIssuer{
 		CoinDenom:                 "",
 		Packages:                  validPackages,
 		GoogleInAppPurchasePubKey: "asdf",
+		EntityName:                "test",
 	}
 
-	invalidCoinIssuerPubkey[0] = CoinIssuer{
+	noCoinIssuerPubkey[0] = CoinIssuer{
 		CoinDenom:                 "pylons",
 		Packages:                  validPackages,
 		GoogleInAppPurchasePubKey: "",
+		EntityName:                "test",
 	}
 
 	validCoinIssuer[0] = CoinIssuer{
 		CoinDenom:                 "pylons",
 		Packages:                  validPackages,
 		GoogleInAppPurchasePubKey: "asdf",
+		EntityName:                "test",
 	}
 
 	tests := []struct {
@@ -129,8 +132,8 @@ func Test_validateCoinIssuers(t *testing.T) {
 		},
 		{
 			name:    "invalid PubKey",
-			args:    args{invalidCoinIssuerPubkey},
-			wantErr: true,
+			args:    args{noCoinIssuerPubkey},
+			wantErr: false,
 		},
 		{
 			name:    "valid",

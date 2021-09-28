@@ -21,10 +21,7 @@ func CmdListCookbooksByCreator() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			reqCreator := args[0]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
+			clientCtx := client.GetClientContextFromCmd(cmd)
 
 			queryClient := types.NewQueryClient(clientCtx)
 
