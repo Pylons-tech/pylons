@@ -25,7 +25,7 @@ class PylonsBlueButton extends StatelessWidget {
           children: [
             Text(
                 text,
-                style: const TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
+                style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
           ],
         ),
       ),

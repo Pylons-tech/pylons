@@ -107,7 +107,8 @@ class _GalleryScreenState extends State<GalleryScreen>
         ),
         Positioned(
           left: 0,
-          top: MediaQuery.of(context).size.height * 0.32,
+          top: bannerSize + 160,//MediaQuery.of(context).size.height * 0.32,
+          right: 0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
