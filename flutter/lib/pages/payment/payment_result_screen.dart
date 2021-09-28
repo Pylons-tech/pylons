@@ -47,7 +47,7 @@ class _PaymentResultScreenWidgetState extends State<PaymentResultScreenWidget> w
                   icon: const ImageIcon(
                       AssetImage('assets/images/icon/close.png'),
                       size: kIconSize,
-                      color: kIconBGColor
+                      color: kSelectedIcon
                   )
               ),
             ),

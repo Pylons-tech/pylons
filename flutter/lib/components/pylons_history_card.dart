@@ -31,24 +31,28 @@ class PylonsHistoryCard extends StatelessWidget {
                 fontWeight: FontWeight.w500, fontSize: 14),
                   children: [
                     TextSpan(text: " ${'purchased'.tr()} ", style: TextStyle(
+                      color: kTextColor,
                       fontWeight: FontWeight.w400,
+                      fontSize: 16
                     ),),
                     TextSpan(text: "'Title of Artwork'", style: TextStyle(
-                      fontWeight: FontWeight.w500
+                      color: kTextColor,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16
                     ))
                   ]
                 )),
                 trailing: Icon(
                     Icons.arrow_forward_ios_sharp,
                     size: 16,
-                    color: Color(0xFF616161)
+                    color: kUnselectedIcon
                 ),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: true)));
                 },
             ),
             Card(
-              margin: const EdgeInsets.only(left: 6, right: 6),
+              margin: EdgeInsets.zero,
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                       child: Column(
@@ -59,45 +63,45 @@ class PylonsHistoryCard extends StatelessWidget {
                           height: 200,
                           fit: BoxFit.cover,
                         ),
-                        Row(
-                            children:[
-                              Padding(
-                                padding: const EdgeInsets.only(right: 4, left: 10),
-                                child: GestureDetector(
-                                    child: Image.asset('assets/icons/comment.png',
-                                        width: 18,
-                                        fit: BoxFit.fill,
-                                        color: Color(0xFF616161)
-                                    ),
-                                    onTap: () {}
-                                ),
-                              ),
-                              Text('40'),
-                              const HorizontalSpace(10),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 4),
-                                child: GestureDetector(
-                                    child: Image.asset('assets/icons/like.png',
-                                        width: 18,
-                                        color: Color(0xFF616161)
-                                    ),
-                                    onTap: () {}
-                                ),
-                              ),
-                              Text('142'),
-                              Spacer(),
-                              IconButton(
-                                  icon: Icon(
-                                      Icons.more_vert,
-                                      size: 18,
-                                      color: Color(0xFF616161)
+                      Row(
+                          children:[
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4, left: 10),
+                              child: GestureDetector(
+                                  child: Image.asset('assets/icons/comment.png',
+                                      width: kSmallIconSize,
+                                      fit: BoxFit.fill,
+                                      color: kUnselectedIcon,
                                   ),
-                                  onPressed: () {}
+                                  onTap: () {}
                               ),
-                            ]
-                        )
-                      ]
-                  )
+                            ),
+                            Text('40', style: TextStyle(color: kUnselectedIcon)),
+                            const HorizontalSpace(10),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 4),
+                              child: GestureDetector(
+                                  child: Image.asset('assets/icons/like.png',
+                                      width: kSmallIconSize,
+                                      color: kUnselectedIcon
+                                  ),
+                                  onTap: () {}
+                              ),
+                            ),
+                            Text('142', style: TextStyle(color: kUnselectedIcon)),
+                            Spacer(),
+                            IconButton(
+                                icon: Icon(
+                                    Icons.more_vert,
+                                    size: kSmallIconSize,
+                                    color: kUnselectedIcon
+                                ),
+                                onPressed: () {}
+                            ),
+                          ]
+                      )
+                    ]
+                )
               ),
             ),
 

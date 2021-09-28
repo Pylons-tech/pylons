@@ -35,7 +35,7 @@ class PylonsAppTheme extends CosmosAppTheme {
           fontFamily: 'Inter'
         ),
         subtitle1: TextStyle(
-          fontSize: 16,
+          fontSize: 26,
           fontWeight: FontWeight.w600,
           fontFamily: 'Inter'
         ),

@@ -46,6 +46,51 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  int _selectedIndex = 0;
+  bool enableList = false;
+
+  void _onChanged(int position) {
+    setState(() {
+      _selectedIndex = position;
+      enableList = !enableList;
+    });
+  }
+
+  void _onhandleTap() {
+    setState(() {
+      enableList = !enableList;
+    });
+  }
+
+/*
+  Widget _buildDropdownList() => Container(
+    height: 30.0 * spinnerItems.length,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(5))
+    ),
+    padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+    margin: EdgeInsets.only(top: 5.0),
+    child: ListView.builder(
+      scrollDirection: Axis.vertical,
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      itemCount: spinnerItems.length,
+      itemBuilder: (context, position){
+        return InkWell(
+          onTap: (){
+            _onChanged(position);
+          },
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            decoration:BoxDecoration(
+              color:position == _selectedIndex ? Colors.grey[100] : Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(4.0))),
+            child: Text(spinnerItems[position], style: TextStyle(color: Colors.black))
+          )
+        );
+      }
+    )
+  );
+*/
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,13 +107,13 @@ class _HomeScreenState extends State<HomeScreen> {
             leading: IconButton(
                 onPressed: () {},
                 icon: const ImageIcon(AssetImage('assets/icons/sort.png'),
-                    size: kIconSize, color: kIconBGColor)),
+                    size: kIconSize, color: kSelectedIcon)),
             actions: [
               IconButton(
                   icon: const ImageIcon(
                     AssetImage('assets/icons/bell.png'),
                     size: 20,
-                    color: kIconBGColor,
+                    color: kSelectedIcon,
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -85,15 +130,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         DropdownButton<String>(
                           value: dropdownValue,
-                          icon: const Icon(
-                              Icons.keyboard_arrow_down,
-                              size: 24,
-                              color: kIconBGColor),
+                          icon: const Icon(Icons.keyboard_arrow_down,
+                              size: 24, color: kSelectedIcon),
+                          iconSize: 24,
                           elevation: 16,
                           underline: const SizedBox(),
                           focusColor: const Color(0xFF1212C4),
                           style: const TextStyle(
-                              color: kIconBGColor, fontSize: 14),
+                              color: kSelectedIcon, fontSize: 14),
                           onChanged: (String? data) {
                             setState(() {
                               dropdownValue = data!;
@@ -107,16 +151,25 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }).toList(),
                         ),
+
+                        /*InkWell(
+                          onTap: _onhandleTap,
+                          child: Row(
+                            children: [
+                              Text(spinnerItems[_selectedIndex])
+                            ]
+                          )
+                        ),*/
                         const Spacer(),
                         IconButton(
                             icon: const Icon(Icons.calendar_today_rounded,
-                                size: kIconSize, color: kIconBGColor),
+                                size: kSmallIconSize, color: kUnselectedIcon),
                             onPressed: _selectDate),
                         IconButton(
                           icon: const ImageIcon(
                             AssetImage('assets/icons/filter.png'),
-                            size: kIconSize,
-                            color: kIconBGColor,
+                            size: kSmallIconSize,
+                            color: kUnselectedIcon,
                           ),
                           onPressed: () {
                             showDialog(
@@ -129,6 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ))),
           ),
+          /*enableList? _buildDropdownList(): Container(),*/
           _pages[dropdownValue]!
         ],
       ),

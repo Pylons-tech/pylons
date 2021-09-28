@@ -19,7 +19,7 @@ class ShareButton extends StatelessWidget {
         icon: const Icon(
           Icons.share_outlined,
           size: 20,
-          color: kIconBGColor,
+          color: kSelectedIcon,
         ),
     );
   }

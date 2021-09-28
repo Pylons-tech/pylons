@@ -49,7 +49,7 @@ class _PaymentInfoScreenWidgetState extends State<PaymentInfoScreenWidget> with 
                   icon: const ImageIcon(
                       AssetImage('assets/images/icon/before.png'),
                       size: kIconSize,
-                      color: kIconBGColor
+                      color: kSelectedIcon
                   )
               ),
             ),

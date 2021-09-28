@@ -46,7 +46,7 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                   icon: const ImageIcon(
                       AssetImage('assets/images/icon/close.png'),
                       size: kIconSize,
-                      color: kIconBGColor
+                      color: kSelectedIcon
                   )
               ),
               title: Text('pylons_account'.tr(), style: TextStyle(color: Color(0xFF080830))),
@@ -84,7 +84,7 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                       icon: ImageIcon(
                           AssetImage('assets/images/icon/dots.png'),
                           size: 24,
-                          color: kIconBGColor
+                          color: kSelectedIcon
                       ),
                       onPressed: () {}
                   ),

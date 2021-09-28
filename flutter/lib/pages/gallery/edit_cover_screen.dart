@@ -84,7 +84,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                       icon: const ImageIcon(
                           AssetImage('assets/images/icon/chevron-down.png'),
                           size: 24,
-                          color: kIconBGColor),
+                          color: kSelectedIcon),
                       iconSize: 24,
                       elevation: 16,
                       underline: const SizedBox(),

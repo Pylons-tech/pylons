@@ -18,6 +18,7 @@ class _HomeActivityWidgetState extends State<HomeActivityWidget> {
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
           return Container(
+            padding: EdgeInsets.only(top: 30.0),
             child: Center(
               child: PylonsHistoryCard(),
             ),

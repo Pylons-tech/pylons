@@ -324,7 +324,9 @@ class _GalleryScreenState extends State<GalleryScreen>
                     const SizedBox(height: 0)
                 ],
               ),
-            )),
+            )
+          ),
+        )
       ],
     );
   }

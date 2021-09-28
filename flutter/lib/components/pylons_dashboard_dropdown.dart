@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
 class PylonsDashboardDropDown extends StatefulWidget {
+
   @override
   DropDownWidget createState() => DropDownWidget();
 }
@@ -25,12 +26,12 @@ class DropDownWidget extends State {
       icon: ImageIcon(
           AssetImage('assets/images/icon/chevron-down.png'),
           size: 24,
-          color: kIconBGColor
+          color: kSelectedIcon
       ),
       iconSize: 24,
       elevation: 16,
       underline: SizedBox(),
-      style: TextStyle(color: kIconBGColor, fontSize: 14),
+      style: TextStyle(color: kSelectedIcon, fontSize: 14),
       onChanged: (String? data) {
         setState(() {
           dropdownValue = data!;

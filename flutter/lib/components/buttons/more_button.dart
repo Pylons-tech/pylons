@@ -27,7 +27,7 @@ class MoreButton extends StatelessWidget {
             const Icon(
               Icons.keyboard_arrow_right_rounded,
               size: kIconSize,
-              color: kIconBGColor,
+              color: kSelectedIcon,
             ),
           ],
         ));

@@ -17,7 +17,7 @@ class NextButton extends StatelessWidget {
         icon: const ImageIcon(
           AssetImage('assets/images/icon/more.png'),
           size: kIconSize,
-          color: kIconBGColor,
+          color: kSelectedIcon,
         ),
     );
   }

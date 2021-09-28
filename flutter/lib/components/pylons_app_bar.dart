@@ -61,7 +61,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
             icon: const ImageIcon(
                 AssetImage('assets/images/icon/drawer.png'),
                 size: kIconSize,
-                color: kIconBGColor
+                color: kSelectedIcon
             )
         ),
         actions: [
@@ -69,7 +69,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
               icon: const ImageIcon(
                 AssetImage('assets/images/icon/alert.png'),
                 size: kIconSize,
-                color: kIconBGColor,
+                color: kSelectedIcon,
               ),
               onPressed: () {}
           )
@@ -85,12 +85,12 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
                       icon: ImageIcon(
                           AssetImage('assets/images/icon/chevron-down.png'),
                           size: 24,
-                          color: kIconBGColor
+                          color: kSelectedIcon
                       ),
                       iconSize: 24,
                       elevation: 16,
                       underline: SizedBox(),
-                      style: TextStyle(color: kIconBGColor, fontSize: 14),
+                      style: TextStyle(color: kSelectedIcon, fontSize: 14),
                       onChanged: (String? data) {
                         setState(() {
                           dropdownValue = data!;
@@ -109,7 +109,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
                         icon: const ImageIcon(
                             AssetImage('assets/images/icon/callendar.png'),
                             size: kIconSize,
-                            color:kIconBGColor
+                            color:kSelectedIcon
                         ),
                         onPressed: _selectDate
                     ),
@@ -117,7 +117,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
                       icon: const ImageIcon(
                         AssetImage('assets/images/icon/Filter.png'),
                         size:kIconSize,
-                        color: kIconBGColor,
+                        color: kSelectedIcon,
                       ),
                       onPressed: (){
                         showDialog(context: context,

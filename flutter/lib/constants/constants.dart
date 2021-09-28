@@ -1,14 +1,17 @@
 import 'dart:ui';
 
-const Color kBGColor = Color(0xFFF1F1F2);
-const Color kIconBGColor = Color(0xFF616161);
-const Color kSocialIconColor = Color(0xFFC4C4C4);
+const Color kDarkBG = Color(0xFFF1F1F2);
+const Color kSelectedIcon = Color(0xFF616161);
+const Color kUnselectedIcon = Color(0xFFC4C4C4);
+const Color kTextColor = Color(0xFF201D1D);
 
 const Color kTextBlackColor = Color(0xFF080830);
 const Color kBlue = Color(0xFF1212C4);
 const Color kPeach = Color(0xFFFFB094);
+const Color kPeachDark = Color(0xFFED8864);
 
 const double kIconSize = 24.0;
+const double kSmallIconSize = 18.0;
 const double kAppBarSize = 100.0;
 const double kAppBarNormalSize = 60.0;
 

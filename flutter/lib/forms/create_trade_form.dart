@@ -73,7 +73,7 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                                       icon: const Icon(
                                           Icons.keyboard_arrow_down,
                                           size: 16,
-                                          color: kIconBGColor),
+                                          color: kSelectedIcon),
                                       elevation: 16,
                                       underline: const SizedBox(),
                                       focusColor: const Color(0xFF1212C4),

@@ -20,7 +20,17 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('notification'.tr(), style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: kTextBlackColor, fontFamily: 'Roboto', )),
+        leading: IconButton(
+          icon: Icon(
+            Icons.chevron_left,
+            size: 24,
+            color: kTextColor
+          ),
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text('notification'.tr(), style: Theme.of(context).textTheme.subtitle1),
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),

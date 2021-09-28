@@ -21,7 +21,7 @@ class FavoriteButton extends StatelessWidget {
       icon: const Icon(
         Icons.favorite_outline,
         size: 20,
-        color: kIconBGColor,
+        color: kSelectedIcon,
       ),
     );
   }

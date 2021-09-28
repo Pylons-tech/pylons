@@ -44,7 +44,7 @@ class _RoutingPageState extends State<RoutingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kBGColor,
+      backgroundColor: kDarkBG,
       body: ContentStateSwitcher(
         isLoading: PylonsApp.walletsStore.areWalletsLoading.value,
         isError: PylonsApp.walletsStore.loadWalletsFailure.value != null,

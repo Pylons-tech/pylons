@@ -20,7 +20,7 @@ class AddFriendButton extends StatelessWidget {
        icon: ImageIcon(
           AssetImage('assets/images/icon/add_friend.png'),
           size: kIconSize,
-          color: kIconBGColor,
+          color: kSelectedIcon,
        ),
     );
   }

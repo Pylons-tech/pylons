@@ -52,7 +52,7 @@ class _ItemsNewScreenWidgetState extends State<ItemsNewScreenWidget> {
                 icon: const Icon(
                     Icons.keyboard_arrow_left_rounded,
                     size: kIconSize,
-                    color: kIconBGColor
+                    color: kSelectedIcon
                 )
             ),
             title: Text('what_is_new'.tr(), style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: kTextBlackColor, fontFamily: 'Roboto', )),
