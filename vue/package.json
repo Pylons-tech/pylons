@@ -1,8 +1,8 @@
 {
-  "name": "@starport/template",
+  "name": "@pylons/vue",
   "version": "0.1.49",
-  "description": "A Vue 3 boilerplate project utilizing @starport/vue and @starport/vuex",
-  "author": "Tendermint, Inc <hello@tendermint.com>",
+  "description": "Pylons Web Interface",
+  "author": "Rafael de Andrade <rafael.andrade@tendermint.com>",
   "private": true,
   "scripts": {
     "dev": "npm install && vue-cli-service serve",

@@ -2,7 +2,9 @@ import { txClient, queryClient, MissingWalletError } from './module'
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex'
 
-export {}
+
+
+export {  };
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -19,9 +21,9 @@ async function initQueryClient(vuexGetters) {
 function mergeResults(value, next_values) {
 	for (let prop of Object.keys(next_values)) {
 		if (Array.isArray(next_values[prop])) {
-			value[prop] = [...value[prop], ...next_values[prop]]
-		} else {
-			value[prop] = next_values[prop]
+			value[prop]=[...value[prop], ...next_values[prop]]
+		}else{
+			value[prop]=next_values[prop]
 		}
 	}
 	return value
@@ -40,8 +42,11 @@ function getStructure(template) {
 
 const getDefaultState = () => {
 	return {
-		_Structure: {},
-		_Subscriptions: new Set()
+				
+				_Structure: {
+						
+		},
+		_Subscriptions: new Set(),
 	}
 }
 
@@ -66,6 +71,7 @@ export default {
 		}
 	},
 	getters: {
+				
 		getTypeStructure: (state) => (type) => {
 			return state._Structure[type].fields
 		}
@@ -89,39 +95,42 @@ export default {
 			state._Subscriptions.forEach(async (subscription) => {
 				try {
 					await dispatch(subscription.action, subscription.payload)
-				} catch (e) {
+				}catch(e) {
 					throw new SpVuexError('Subscriptions: ' + e.message)
 				}
 			})
 		},
-
+		
 		async sendMsgVerifyInvariant({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
-				const txClient = await initTxClient(rootGetters)
+				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgVerifyInvariant(value)
-				const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee, gas: '200000' }, memo })
+				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
+	gas: "200000" }, memo})
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgVerifyInvariant:Init', 'Could not initialize signing client. Wallet is required.')
-				} else {
-					throw new SpVuexError('TxClient:MsgVerifyInvariant:Send', 'Could not broadcast Tx: ' + e.message)
+				}else{
+					throw new SpVuexError('TxClient:MsgVerifyInvariant:Send', 'Could not broadcast Tx: '+ e.message)
 				}
 			}
 		},
-
+		
 		async MsgVerifyInvariant({ rootGetters }, { value }) {
 			try {
-				const txClient = await initTxClient(rootGetters)
+				const txClient=await initTxClient(rootGetters)
 				const msg = await txClient.msgVerifyInvariant(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgVerifyInvariant:Init', 'Could not initialize signing client. Wallet is required.')
-				} else {
+				}else{
 					throw new SpVuexError('TxClient:MsgVerifyInvariant:Create', 'Could not create message: ' + e.message)
+					
 				}
 			}
-		}
+		},
+		
 	}
 }

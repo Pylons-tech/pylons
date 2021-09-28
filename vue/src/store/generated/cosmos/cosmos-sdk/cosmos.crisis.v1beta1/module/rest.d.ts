@@ -1,5 +1,7 @@
 export interface ProtobufAny {
-    "@type"?: string;
+    typeUrl?: string;
+    /** @format byte */
+    value?: string;
 }
 export interface RpcStatus {
     /** @format int32 */

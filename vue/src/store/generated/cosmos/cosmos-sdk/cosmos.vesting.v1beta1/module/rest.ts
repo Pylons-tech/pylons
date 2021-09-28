@@ -48,13 +48,10 @@ Example 2: Pack and unpack a message in Java.
  Example 4: Pack and unpack a message in Go
 
      foo := &pb.Foo{...}
-     any, err := anypb.New(foo)
-     if err != nil {
-       ...
-     }
+     any, err := ptypes.MarshalAny(foo)
      ...
      foo := &pb.Foo{}
-     if err := any.UnmarshalTo(foo); err != nil {
+     if err := ptypes.UnmarshalAny(any, foo); err != nil {
        ...
      }
 
@@ -123,7 +120,13 @@ export interface ProtobufAny {
    * Schemes other than `http`, `https` (or the empty scheme) might be
    * used with implementation specific semantics.
    */
-  "@type"?: string;
+  typeUrl?: string;
+
+  /**
+   * Must be a valid serialized protocol buffer of the above specified type.
+   * @format byte
+   */
+  value?: string;
 }
 
 export interface RpcStatus {
