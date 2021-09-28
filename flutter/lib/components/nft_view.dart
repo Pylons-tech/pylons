@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
@@ -42,10 +43,10 @@ class _NFTViewWidgetState extends State<NFTViewWidget> with SingleTickerProvider
             },
           )
       ),
-      body: Align(
+      body: const Align(
         alignment: Alignment.center,
         child: Image(
-          image: AssetImage('assets/images/Rectangle 156.png'),
+          image: CachedNetworkImageProvider(kImage),
           width: double.infinity,
           fit: BoxFit.cover,
         )

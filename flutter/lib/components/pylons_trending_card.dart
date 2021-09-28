@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
@@ -22,9 +24,8 @@ class PylonsTrendingCard extends StatelessWidget {
                   Expanded(
                       child:ListTile(
                         contentPadding: EdgeInsets.only(left: 0, right: 0),
-                          leading: CircleAvatar(
-                            child: FlutterLogo(size: 18.0),
-                          ),
+                          horizontalTitleGap: 0,
+                          leading: UserImageWidget(imageUrl: kImage2, radius: 15,),
                           title: Text('Linda'),
                         trailing: IconButton(
                           onPressed: (){},
@@ -41,8 +42,8 @@ class PylonsTrendingCard extends StatelessWidget {
             ),
             ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Image(
-                image: AssetImage('assets/images/Rectangle 312.png'),
+              child: CachedNetworkImage(
+                imageUrl: kImage2,
                 width: 200.0,
                 height: 250.0,
                 fit: BoxFit.cover
@@ -52,8 +53,8 @@ class PylonsTrendingCard extends StatelessWidget {
                 children:[
                   TextButton.icon(
                     icon: ImageIcon(
-                        AssetImage('assets/images/icon/union.png'),
-                        size: kIconSize,
+                        AssetImage('assets/icons/comment.png'),
+                        size: 18,
                         color: kSocialIconColor
                     ),
                     label: Text('40', style: TextStyle(color: kSocialIconColor),),
@@ -61,8 +62,8 @@ class PylonsTrendingCard extends StatelessWidget {
                   ),
                   TextButton.icon(
                     icon: ImageIcon(
-                        AssetImage('assets/images/icon/favorite_border.png'),
-                        size: kIconSize,
+                        AssetImage('assets/icons/like.png'),
+                        size: 18,
                         color: kSocialIconColor
                     ),
                     label: Text('142', style: TextStyle(color: kSocialIconColor)),

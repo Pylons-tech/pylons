@@ -106,12 +106,12 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
           ),
           VerticalSpace(16),
           TextFormField(
-            controller: TextEditingController(text:'photography'.tr()),
+            // controller: TextEditingController(text:'photography'.tr()),
             decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                 ),
-
+                hintText: "photography".tr(),
                 contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
                 filled: true,
                 fillColor: Colors.white70
@@ -146,7 +146,9 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
                 Expanded(
                   child: SizedBox(
                       height: 30,
-                      child: PylonsGreyButton (onTap: (){}, text: "cancel".tr(),)),
+                      child: PylonsGreyButton (onTap: (){
+                        Navigator.pop(context);
+                      }, text: "cancel".tr(),)),
                 ),
 
               ]

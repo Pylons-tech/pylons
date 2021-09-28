@@ -105,7 +105,7 @@ class _AddArtworkGridWidgetState extends State<AddArtworkGridWidget> with Single
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
+            SizedBox(
                 height: 105,
                 child: ListView.builder(
                     itemCount: 15,

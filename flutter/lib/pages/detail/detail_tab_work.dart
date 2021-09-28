@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -5,6 +6,8 @@ import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/constants/constants.dart';
 
 class DetailTabWorkWidget extends StatelessWidget {
 
@@ -16,12 +19,7 @@ class DetailTabWorkWidget extends StatelessWidget {
     '#3D', '#Photography', '#Sculpture'
   ];
 
-  static List<String> nfts= [
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
+  static List<String> nfts= [...kImageList, kImage
   ];
 
   @override
@@ -68,9 +66,7 @@ class DetailTabWorkWidget extends StatelessWidget {
               shrinkWrap: true,
                 itemBuilder: (_, index) =>  ListTile(
               contentPadding: EdgeInsets.zero,
-              leading: CircleAvatar(
-                child: FlutterLogo(size: 20.0),
-              ),
+              leading: UserImageWidget(imageUrl: kImage2),
               title: Text('jimin', style:TextStyle(color: Colors.black,fontSize: 16, fontWeight: FontWeight.w600),),
               subtitle: Text('Really Love the artwork!', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
               trailing: Text('10 min', style: TextStyle(color: Color(0xFFC4C4C4), fontSize:16, fontWeight: FontWeight.w400)),
@@ -95,10 +91,10 @@ class DetailTabWorkWidget extends StatelessWidget {
                   childAspectRatio: 3.5/4,
                   children:
                     nfts.map((nft) =>
-                    new ClipRRect(
+                     ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                       child: Image(
-                         image: AssetImage(nft),
+                       child: CachedNetworkImage(
+                           imageUrl: nft,
                          height:60,
                          fit: BoxFit.cover
                        )

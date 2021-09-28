@@ -1,6 +1,8 @@
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
 class PylonsTrendingColCard extends StatelessWidget {
@@ -23,9 +25,7 @@ class PylonsTrendingColCard extends StatelessWidget {
                     Expanded(
                         child:ListTile(
                           contentPadding: EdgeInsets.zero,
-                            leading: CircleAvatar(
-                              child: FlutterLogo(size: 20.0),
-                            ),
+                            leading: UserImageWidget(imageUrl: kImage2, radius: 16,),
                             title: Text('Linda')
                         )
                     ),
@@ -53,8 +53,8 @@ class PylonsTrendingColCard extends StatelessWidget {
 
                       children: [
                         //1x2 image
-                        Image(
-                          image: AssetImage('assets/images/Rectangle 312.png'),
+                        CachedNetworkImage(
+                            imageUrl: kImage1,
                           width: 200.0,
                           height: 200.0,
                           fit: BoxFit.cover
@@ -64,8 +64,8 @@ class PylonsTrendingColCard extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Image(
-                              image: AssetImage('assets/images/Rectangle 312.png'),
+                            CachedNetworkImage(
+                              imageUrl: kImage3,
                               width: 110.0,
                               height: 100.0,
                               fit: BoxFit.cover
@@ -73,8 +73,8 @@ class PylonsTrendingColCard extends StatelessWidget {
                             SizedBox(
                                 height: 2.0
                             ),
-                            Image(
-                                image: AssetImage('assets/images/Rectangle 312.png'),
+                            CachedNetworkImage(
+                                imageUrl: kImage1,
                                 width: 110.0,
                                 height: 100.0,
                                 fit: BoxFit.cover

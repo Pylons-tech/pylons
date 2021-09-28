@@ -1,5 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/constants/constants.dart';
 
 class NotificationItem extends StatelessWidget {
 
@@ -18,9 +22,7 @@ class NotificationItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ListTile(
-                        leading: CircleAvatar(
-                          child: FlutterLogo(size: 20.0),
-                        ),
+                        leading: UserImageWidget(imageUrl: kImage2,),
                         title: RichText(
                           text: TextSpan(
                             style: DefaultTextStyle.of(context).style,
@@ -34,17 +36,17 @@ class NotificationItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                     Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: ClipRect(
-                          child: Image(
-                            image: AssetImage('assets/images/Rectangle 312.png'),
-                            width: 44,
-                            height: 44,
-                            fit: BoxFit.fill,
-                          )
-                        )
-                    )
+                     const HorizontalSpace(10),
+                     ClipRRect(
+                       borderRadius: BorderRadius.circular(4),
+                       child: CachedNetworkImage(
+                         imageUrl: kImage3,
+                         width: 44,
+                         height: 44,
+                         fit: BoxFit.fill,
+                       ),
+                     ),
+                    const HorizontalSpace(10),
                   ]
               ),
           ]

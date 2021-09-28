@@ -1,12 +1,14 @@
 import 'dart:ui';
 import 'dart:ui';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/add_friend_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_history_card.dart';
 import 'package:pylons_wallet/components/pylons_trending_col_card.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 import 'package:pylons_wallet/pages/gallery/collections.dart';
@@ -22,310 +24,146 @@ class _HomeFollowingWidgetState extends State<HomeFollowingWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double padding = 10;
-    double tileWidth =  (MediaQuery. of(context). size. width - 30) / 3;
+
 
     return SliverList(
       delegate: SliverChildListDelegate([
-        //3 image card
-        Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          child: Column(
-            children: [
-              Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: FlutterLogo(size: 20.0),
-                          ),
-                          title: RichText(
-                            text: TextSpan(
-                              style: DefaultTextStyle.of(context).style,
-                              children: <TextSpan>[
-                                TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: ' created'),
-                                TextSpan(text: ' \'Photography\'', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: ' collection')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+        ...List.generate(5, (index) => _FollowingCard(
+          userName: "Linda$index",
+          userImage: kImage2,
+          collectionTitle: "Pylons$index",
+        ))
+      ])
+    );
+  }
+}
 
-                      MoreButton(
-                        showText: false,
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
-                          })
-                    ]
-                ),
-              Container(
-                child:  Card(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Column(
-                        children: [
-                          InkWell(
-                            child: Container(
-                              child: Row(
-                                children: [
-                                  Image(
-                                    image: AssetImage('assets/images/Rectangle 312.png'),
-                                    width: tileWidth * 2,
-                                    height: tileWidth * 2 + 3,
-                                    fit: BoxFit.cover
-                                  ),
-                                  Spacer(),
-                                  Column(
-                                    children: [
-                                      Image(
-                                        image: AssetImage('assets/images/Rectangle 312.png'),
-                                        width: tileWidth,
-                                        height: tileWidth,
-                                        fit: BoxFit.cover
-                                      ),
-                                      SizedBox(height: 3),
-                                      Image(
-                                        image: AssetImage('assets/images/Rectangle 312.png'),
-                                        width: tileWidth,
-                                        height: tileWidth,
-                                        fit: BoxFit.cover
-                                      ),
-                                    ]
-                                  )
-                                ]
-                              )
-                            ),
-                            onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreenWidget()));
-                            }
-                          ),
-                          Row(
-                              children:[
-                                IconButton(
-                                    icon: ImageIcon(
-                                        AssetImage('assets/images/icon/union.png'),
-                                        size: 24,
-                                        color: kIconBGColor
-                                    ),
-                                    onPressed: () {}
-                                ),
-                                Text('40'),
-                                IconButton(
-                                    icon: ImageIcon(
-                                        AssetImage('assets/images/icon/favorite_border.png'),
-                                        size: 24,
-                                        color: kIconBGColor
-                                    ),
-                                    onPressed: () {}
-                                ),
-                                Text('142'),
-                                Spacer(),
-                                IconButton(
-                                    icon: ImageIcon(
-                                        AssetImage('assets/images/icon/dots.png'),
-                                        size: 24,
-                                        color: kIconBGColor
-                                    ),
-                                    onPressed: () {}
-                                ),
-                              ]
-                          )
-                        ]
-                        )
-                    )
-                ),
+class _FollowingCard extends StatelessWidget {
+  final String userImage;
+  final String userName;
+  final String collectionTitle;
 
-              ),
-          ],
-        )
-      ),
-        SizedBox(height: 20),
-        //1 image card
-        Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+  const _FollowingCard({
+    Key? key,
+    required this.userImage, required this.userName, required this.collectionTitle
+  }) : super(key: key);
 
-            child: Column(
-              children: [
-                Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: FlutterLogo(size: 20.0),
-                          ),
-                          title: RichText(
-                            text: TextSpan(
-                              style: DefaultTextStyle.of(context).style,
-                              children: <TextSpan>[
-                                TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: ' created'),
-                                TextSpan(text: ' \'Photography\'', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: ' collection')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
 
-                      MoreButton(
-                        showText: false,
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
-                        },
-                      )
-                    ]
-                ),
-                Container(
-                  child:  Card(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8.0),
-                        child: Column(
-                          children: [
-                           InkWell(
-                            child:Image(
-                                image: AssetImage('assets/images/Rectangle 312.png'),
-                                width: MediaQuery. of(context). size. width - 20,
-                                height: tileWidth,
-                                fit: BoxFit.fitWidth
-                            ),
-                             onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
-                              },
-                           ),
-                            Row(
-                                children:[
-                                  IconButton(
-                                      icon: ImageIcon(
-                                          AssetImage('assets/images/icon/union.png'),
-                                          size: 24,
-                                          color: kIconBGColor
-                                      ),
-                                      onPressed: () {}
-                                  ),
-                                  Text('40'),
-                                  IconButton(
-                                      icon: ImageIcon(
-                                          AssetImage('assets/images/icon/favorite_border.png'),
-                                          size: 24,
-                                          color: kIconBGColor
-                                      ),
-                                      onPressed: () {}
-                                  ),
-                                  Text('142'),
-                                  Spacer(),
-                                  IconButton(
-                                      icon: ImageIcon(
-                                          AssetImage('assets/images/icon/dots.png'),
-                                          size: 24,
-                                          color: kIconBGColor
-                                      ),
-                                      onPressed: () {}
-                                  ),
-                                ]
-                            )
+
+  @override
+  Widget build(BuildContext context) {
+    double tileWidth =  (MediaQuery. of(context). size. width - 30) / 3;
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      child: Column(
+        children: [
+          Row(
+                children: [
+                  Expanded(
+                    child: ListTile(
+                      leading: UserImageWidget(imageUrl: userImage, radius: 16,),
+                      horizontalTitleGap: 0,
+                      title: RichText(
+                        text: TextSpan(
+                          style: DefaultTextStyle.of(context).style,
+                          children: <TextSpan>[
+                            TextSpan(text: userName, style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' created '),
+                            TextSpan(text: "'$collectionTitle'", style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: ' collection')
                           ],
-                      )
-                    )
+                        ),
+                      ),
+                    ),
                   ),
 
-                ),
-              ],
-            )
-        ),
-        SizedBox(height: 20),
-        Container(
-            padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-
-            child: Column(
-              children: [
-                Row(
-                    children: [
-                      Expanded(
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            child: FlutterLogo(size: 20.0),
-                          ),
-                          title: RichText(
-                            text: TextSpan(
-                              style: DefaultTextStyle.of(context).style,
-                              children: const <TextSpan>[
-                                TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: ' created'),
-                                TextSpan(text: " 'Photography'", style: TextStyle(fontWeight: FontWeight.bold)),
-                                TextSpan(text: ' collection')
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      MoreButton(onTap: (){
-                       Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
-                      },
-                      showText: false,)
-                    ]
-                ),
-                Container(
-                  child:  Card(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: Column(
-                              children: [
-                                InkWell(
-                                  child:Image(
-                                    image: AssetImage('assets/images/Rectangle 312.png'),
-                                    width: MediaQuery. of(context). size. width - 20,
-                                    height: tileWidth,
-                                    fit: BoxFit.fitWidth
-                                ),
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget (isOwner: false)));
-                                  },
-                                ),
-                                Row(
-                                    children:[
-                                      IconButton(
-                                          icon: ImageIcon(
-                                              AssetImage('assets/images/icon/union.png'),
-                                              size: 24,
-                                              color: kIconBGColor
-                                          ),
-                                          onPressed: () {}
+                  MoreButton(
+                    showText: false,
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>CollectionsScreen()));
+                      })
+                ]
+            ),
+          Card(
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Column(
+                      children: [
+                        InkWell(
+                            child: Container(
+                                child: Row(
+                                    children: [
+                                      CachedNetworkImage(
+                                          imageUrl: kImage1,
+                                          width: tileWidth * 2,
+                                          height: tileWidth * 2 + 3,
+                                          fit: BoxFit.cover
                                       ),
-                                      Text('40'),
-                                      IconButton(
-                                          icon: ImageIcon(
-                                              AssetImage('assets/images/icon/favorite_border.png'),
-                                              size: 24,
-                                              color: kIconBGColor
-                                          ),
-                                          onPressed: () {}
-                                      ),
-                                      Text('142'),
                                       Spacer(),
-                                      IconButton(
-                                          icon: ImageIcon(
-                                              AssetImage('assets/images/icon/dots.png'),
-                                              size: 24,
-                                              color: kIconBGColor
-                                          ),
-                                          onPressed: () {}
-                                      ),
+                                      Column(
+                                          children: [
+                                            CachedNetworkImage(
+                                                imageUrl: kImage,
+                                                width: tileWidth,
+                                                height: tileWidth,
+                                                fit: BoxFit.cover
+                                            ),
+                                            SizedBox(height: 3),
+                                            CachedNetworkImage(
+                                                imageUrl: kImage2,
+                                                width: tileWidth,
+                                                height: tileWidth,
+                                                fit: BoxFit.cover
+                                            ),
+                                          ]
+                                      )
                                     ]
                                 )
-                              ]
-                          )
-                      )
-                  ),
+                            ),
+                            onTap: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=> CollectionsScreen()));
+                            }
+                        ),
 
-                ),
-              ],
-            )
-        ),
-        SizedBox(height: 20),
-      ])
+                        Row(
+                            children:[
+                              IconButton(
+                                  icon: ImageIcon(
+                                      AssetImage('assets/icons/comment.png'),
+                                      size: 18,
+                                      color: kIconBGColor
+                                  ),
+                                  onPressed: () {}
+                              ),
+                              Text('40'),
+                              IconButton(
+                                  icon: ImageIcon(
+                                      AssetImage('assets/icons/like.png'),
+                                      size: 18,
+                                      color: kIconBGColor
+                                  ),
+                                  onPressed: () {}
+                              ),
+                              Text('142'),
+                              Spacer(),
+                              IconButton(
+                                  icon: ImageIcon(
+                                      AssetImage('assets/images/icon/dots.png'),
+                                      size: 24,
+                                      color: kIconBGColor
+                                  ),
+                                  onPressed: () {}
+                              ),
+                            ]
+                        )
+                      ]
+                  )
+              )
+          ),
+          SizedBox(height: 20),
+        ],
+      ),
     );
   }
 }
