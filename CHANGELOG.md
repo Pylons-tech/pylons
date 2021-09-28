@@ -3,7 +3,8 @@
 ## Unreleased
 
 ### Features:
-- [#423](https://github.com/Pylons-tech/pylons/pull/421) Create custom testing setup for LOUD tests.  This update adds extendability for future tests.
+- [#430](https://github.com/Pylons-tech/pylons/pull/430) Add `x/evidence` and `x/slashing` modules for IBC functionality.
+- [#423](https://github.com/Pylons-tech/pylons/pull/423) Create custom testing setup for LOUD tests.  This update adds extendability for future tests.
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Add game simulation testing to cli test suite.  Tests cover CEL environment execution, item modification and cookbook coin generation. 
 
 ### Fixes:
