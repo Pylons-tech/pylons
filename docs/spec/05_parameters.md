@@ -14,6 +14,7 @@ The pylons module contains the following parameters:
 | RecipeFeePercentage                    |sdk.Dec       | 10.0                             |
 | ItemTransferFeePercentage             | sdk.Dec       | 20.0                             |
 | UpdateItemStringFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
+| UpdateUsernameFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
 | MinTransferFee                        | sdk.Int       | 20                               |
 | MaxTransferFee                        | sdk.Int       | 20                               |
 
@@ -83,6 +84,10 @@ FeeAmount           =  ItemTransferFeePercentage * coinInputs
 ## UpdateItemStringFee
 
 Fee for updating a string in the `MutableStrings` field of an `Item` using the `SetItemString` Tx.
+
+## UpdateUsernameFee
+
+Fee for updating the username of an account.
 
 ## MinTransferFee
 
