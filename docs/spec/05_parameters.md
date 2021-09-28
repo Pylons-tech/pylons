@@ -10,26 +10,86 @@ The pylons module contains the following parameters:
 | ------------------------------------- | ------------- | -------------------------------- |
 | MinNameFieldLength                    | uint64        | 8                                |
 | MinDescriptionFieldLength             | uint64        | 20                               |
-| CoinIssuers                           | []CoinIssuer  | 20                               |
-| RecipeFeePercentage |sdk.Dec          | 20            |                                  |
-| ItemTransferFeePercentage             | sdk.Dec       | 20                               |
-| UpdateItemStringFee                   | sdk.Coin      | 20                               |
+| CoinIssuers                           | []CoinIssuer  |(see below)                       | 
+| RecipeFeePercentage                    |sdk.Dec       | 10.0                             |
+| ItemTransferFeePercentage             | sdk.Dec       | 20.0                             |
+| UpdateItemStringFee                   | sdk.Coin      | {"denom": "upylon", "amount", 10}                               |
 | MinTransferFee                        | sdk.Int       | 20                               |
 | MaxTransferFee                        | sdk.Int       | 20                               |
 
 
 ## MinNameFieldLength
 
+Minimum string length for the "name" field in `Recipe` and `Cookbook` types on chain.
+
 ## MinDescriptionFieldLength
+
+Minimum string length for the "description" field in `Recipe` and `Cookbook` types on chain.
 
 ## CoinIssuers
 
+Structure to represent a trusted Entity with coin issuing credentials on the pylons chain.  For example,
+Pylons Inc is a trusted coin issuer for issuing the "upylons" denom token.  The structure also contains
+fields for `Packages` which represent the Issuer's Google IAP credentials for on-chain Google IAP functionality.
+
+Example:
+
+```go
+	DefaultCoinIssuers = []CoinIssuer{
+		{
+			CoinDenom: "upylon",
+			Packages: []GoogleInAppPurchasePackage{
+				{PackageName: "com.pylons.loud", ProductID: "pylons_1000", Amount: sdk.NewInt(1000)},
+				{PackageName: "com.pylons.loud", ProductID: "pylons_55000", Amount: sdk.NewInt(55000)},
+			},
+			GoogleInAppPurchasePubKey: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwZsjhk6eN5Pve9pP3uqz2MwBFixvmCRtQJoDQLTEJo3zTd9VMZcXoerQX8cnDPclZWmMZWkO+BWcN1ikYdGHvU2gC7yBLi+TEkhsEkixMlbqOGRdmNptJJhqxuVmXK+drWTb6W0IgQ9g8CuCjZUiMTc0UjHb5mPOE/IhcuTZ0wCHdoqc5FS2spdQqrohvSEP7gR4ZgGzYNI1U+YZHskIEm2qC4ZtSaX9J/fDkAmmJFV2hzeDMcljCxY9+ZM1mdzIpZKwM7O6UdWRpwD1QJ7yXND8AQ9M46p16F0VQuZbbMKCs90NIcKkx6jDDGbVmJrFnUT1Oq1uYxNYtiZjTp+JowIDAQAB",
+			EntityName:                "Pylons_Inc",
+		},
+		{
+			CoinDenom:  "uatom",
+			EntityName: "Cosmos_Hub",
+		},
+		{
+			CoinDenom:  "ubedrock",
+			EntityName: "Pylons_Chain",
+		},
+	}
+```
+
 ## RecipeFeePercentage
+
+Percentage of `Recipe` coinInputs that is taken as a fee for execution.  
+
+```
+CookbookOwnerAmount = (1 -  RecipeFeePercentage) * coinInputs
+```
+
+```
+FeeAmount           =  RecipeFeePercentage * coinInputs
+```
 
 ## ItemTransferFeePercentage
 
+Percentage of coinInputs or transferFees for `Item` objects that is taken as a fee for trades or item-sending, respectively.
+
+```
+CookbookOwnerAmount = (1 -  ItemTransferFeePercentage) * coinInputs 
+```
+
+```
+FeeAmount           =  ItemTransferFeePercentage * coinInputs
+```
+
 ## UpdateItemStringFee
+
+Fee for updating a string in the `MutableStrings` field of an `Item` using the `SetItemString` Tx.
 
 ## MinTransferFee
 
+Minimum transfer fee for sending `Item`s.
+
 ## MaxTransferFee
+
+Minimum transfer fee for sending `Item`s.
+
+
