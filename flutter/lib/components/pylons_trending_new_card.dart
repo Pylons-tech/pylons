@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -29,22 +30,22 @@ class PylonsTrendingNewCard extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Image(
-                      image: AssetImage('assets/images/Rectangle 312.png'),
+                  CachedNetworkImage(
+                      imageUrl: kImage3,
                       width: 100.0,
                       height: 100.0,
                       fit: BoxFit.cover
                   ),
                   SizedBox(height: 5.0),
-                  Image(
-                      image: AssetImage('assets/images/Rectangle 312.png'),
+                  CachedNetworkImage(
+                      imageUrl: kImage2,
                       width: 100.0,
                       height: 100.0,
                       fit: BoxFit.cover
                   ),
                   SizedBox(height: 5.0),
-                  Image(
-                      image: AssetImage('assets/images/Rectangle 312.png'),
+                  CachedNetworkImage(
+                      imageUrl: kImage,
                       width: 100.0,
                       height: 100.0,
                       fit: BoxFit.cover
@@ -54,8 +55,8 @@ class PylonsTrendingNewCard extends StatelessWidget {
               SizedBox(width:5.0),
               Column(
                 children: [
-                  Image(
-                      image: AssetImage('assets/images/Rectangle 312.png'),
+                  CachedNetworkImage(
+                      imageUrl: kImage1,
                       width: 205.0,
                       height: 205.0,
                       fit: BoxFit.cover
@@ -63,15 +64,15 @@ class PylonsTrendingNewCard extends StatelessWidget {
                   SizedBox(height: 5.0,),
                   Row(
                     children: [
-                      Image(
-                          image: AssetImage('assets/images/Rectangle 312.png'),
+                      CachedNetworkImage(
+                          imageUrl: kImage,
                           width: 100.0,
                           height: 100.0,
                           fit: BoxFit.cover
                       ),
                       SizedBox(width: 5.0),
-                      Image(
-                          image: AssetImage('assets/images/Rectangle 312.png'),
+                      CachedNetworkImage(
+                          imageUrl: kImage2,
                           width: 100.0,
                           height: 100.0,
                           fit: BoxFit.cover

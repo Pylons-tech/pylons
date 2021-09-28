@@ -13,7 +13,6 @@ class EditProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
 
     ScreenSizeUtil screenSize = ScreenSizeUtil(context);
 
@@ -140,7 +139,7 @@ class _ProfileImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     final ScreenSizeUtil screenSize = ScreenSizeUtil(context);
     return Container(
       decoration: BoxDecoration(
@@ -189,7 +188,7 @@ class _UserNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -227,7 +226,6 @@ class _TextInputWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Column(
       children: [
         Align(

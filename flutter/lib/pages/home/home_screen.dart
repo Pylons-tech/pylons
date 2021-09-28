@@ -85,11 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         DropdownButton<String>(
                           value: dropdownValue,
-                          icon: const ImageIcon(
-                              AssetImage('assets/images/icon/chevron-down.png'),
+                          icon: const Icon(
+                              Icons.keyboard_arrow_down,
                               size: 24,
                               color: kIconBGColor),
-                          iconSize: 24,
                           elevation: 16,
                           underline: const SizedBox(),
                           focusColor: const Color(0xFF1212C4),

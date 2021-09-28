@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -42,13 +43,14 @@ class _ItemsNewScreenWidgetState extends State<ItemsNewScreenWidget> {
             toolbarHeight: kAppBarNormalSize,
             collapsedHeight: kAppBarNormalSize,
             backgroundColor: Colors.transparent,
+            elevation: 0,
             centerTitle: true,
             leading: IconButton(
                 onPressed: (){
                   Navigator.pop(context);
                 },
-                icon: const ImageIcon(
-                    AssetImage('assets/images/icon/before.png'),
+                icon: const Icon(
+                    Icons.keyboard_arrow_left_rounded,
                     size: kIconSize,
                     color: kIconBGColor
                 )
@@ -61,7 +63,7 @@ class _ItemsNewScreenWidgetState extends State<ItemsNewScreenWidget> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 8,
                 mainAxisSpacing: 8,
-                itemCount: 15,
+                itemCount: 16,
                 itemBuilder: (context, index) {
                   return Container(
                       decoration:BoxDecoration(
@@ -71,16 +73,16 @@ class _ItemsNewScreenWidgetState extends State<ItemsNewScreenWidget> {
                           )
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        child: Image(
-                            image: AssetImage('assets/images/Rectangle 312.png'),
+                        borderRadius: const BorderRadius.all(Radius.circular(5)),
+                        child: CachedNetworkImage(
+                            imageUrl: index % 2 == 0 ? kImage1 : kImage3,
                             fit: BoxFit.cover
                         ),
                       )
                   );
                 },
                 staggeredTileBuilder: (index) {
-                  return StaggeredTile.count((index == 1 || index == 6)? 2: 1,(index == 1 || index == 6)? 2: 1 );
+                  return StaggeredTile.count((index == 1 || index == 6) ? 2: 1,(index == 1 || index == 6)? 2: 1 );
                 }
             ),
           )

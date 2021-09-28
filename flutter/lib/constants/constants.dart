@@ -17,3 +17,4 @@ const String kImage =
 const String kImage1= "https://images.unsplash.com/photo-1529778873920-4da4926a72c2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=736&q=80";
 const String kImage2= "https://images.unsplash.com/photo-1632765265861-55e0726bfa43?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80";
 const String kImage3= "https://images.unsplash.com/photo-1632687222219-93f0ecb7dab0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80";
+const List<String> kImageList = [kImage, kImage1, kImage2, kImage3];

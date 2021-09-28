@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -5,6 +6,8 @@ import 'package:pylons_wallet/components/buttons/favorite_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/buttons/share_button.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/constants/constants.dart';
 
 class DetailTabInfoWidget extends StatelessWidget {
 
@@ -16,13 +19,6 @@ class DetailTabInfoWidget extends StatelessWidget {
     '#3D', '#Photography', '#Sculpture'
   ];
 
-  static List<String> nfts= [
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-    'assets/images/Rectangle 312.png',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +26,18 @@ class DetailTabInfoWidget extends StatelessWidget {
         padding: EdgeInsets.only(bottom: 100),
         //margin: const EdgeInsets.only(bottom: 100.0),
         child: Column(
+
           children: [
             //Creator
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child:Text('creator'.tr(), style:TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 6, bottom: 6),
+                  child: Text('creator'.tr(), style:const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
                 ListTile(
-                  leading: CircleAvatar(
-                    child: FlutterLogo(),
-                  ),
+                  leading: UserImageWidget(imageUrl: kImage1),
                   title: Text('Jimin',style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
                   trailing: SizedBox(
                     width: 100,
@@ -57,43 +53,59 @@ class DetailTabInfoWidget extends StatelessWidget {
             ),
             //owner list
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Text('owner'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, top: 6, bottom: 6),
+                  child: Text('owner'.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                 ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: FlutterLogo(),
-                  ),
-                  title: Text('Linda',style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
-                    trailing: SizedBox(
-                      width: 100,
-                      height: 35,
-                      child: PylonsBlueButton(
-                          onTap: (){},
-                          text :'following'.tr()
-                      ),
-                    )
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  itemCount: 20,
+                    itemBuilder: (_, index) => _OwnerWidget(
+                      userName: "Linda",
+                      userImage: kImage3,
+                      onButtonPressed: (){},
+                    ),
                 ),
-                ListTile(
-                  leading: CircleAvatar(
-                    child: FlutterLogo(),
-                  ),
-                  title: Text('Yuri',style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
-                    trailing: SizedBox(
-                      width: 100,
-                      height: 35,
-                      child: PylonsBlueButton(
-                          onTap: (){},
-                          text :'following'.tr()
-                      ),
-                    )
-                ),
+
+
               ],
             )
           ],
         )
     );
+  }
+}
+
+class _OwnerWidget extends StatelessWidget {
+  const _OwnerWidget({
+    Key? key,
+    required this.userName,
+    required this.userImage,
+    required this.onButtonPressed,
+  }) : super(key: key);
+
+
+  final String userName;
+  final String userImage;
+  final VoidCallback onButtonPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+    leading: UserImageWidget(imageUrl: userImage,),
+    title: Text(userName,style: TextStyle(fontSize:16, fontWeight: FontWeight.w600)),
+    trailing: SizedBox(
+      width: 100,
+      height: 35,
+      child: PylonsBlueButton(
+          onTap: onButtonPressed,
+          text :'following'.tr()
+      ),
+    )
+                );
   }
 }

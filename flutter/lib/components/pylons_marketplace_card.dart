@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
 class PylonsMarketplaceCard extends StatelessWidget {
@@ -19,10 +22,7 @@ class PylonsMarketplaceCard extends StatelessWidget {
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                   minVerticalPadding: 0,
-                  leading: CircleAvatar(
-                    radius: 18,
-                    child: FlutterLogo(size: 20.0),
-                  ),
+                  leading: UserImageWidget(imageUrl: kImage2),
                   title: Text(
                     'Linda',
                     style: TextStyle(fontWeight: FontWeight.w500),
@@ -36,11 +36,11 @@ class PylonsMarketplaceCard extends StatelessWidget {
                 // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
               InkWell(
-                child:Image.asset(
-                  'assets/images/Rectangle 312.png',
+                child: CachedNetworkImage(
+                  imageUrl: kImage1,
                   width: MediaQuery.of(context).size.width,
                   height: 200,
-                  fit: BoxFit.fill,
+                  fit: BoxFit.fitWidth,
                 ),
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: false,)));

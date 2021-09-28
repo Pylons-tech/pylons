@@ -32,6 +32,7 @@ dependencies:
   easy_localization: ^3.0.0
   image_picker: ^0.8.4+1
   image_cropper: ^1.4.1
+  cached_network_image: ^3.1.0
 
 
   cosmos_ui_components:

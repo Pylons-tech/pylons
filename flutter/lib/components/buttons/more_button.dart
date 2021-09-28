@@ -24,8 +24,8 @@ class MoreButton extends StatelessWidget {
               )
             else
               const SizedBox.shrink(),
-            const ImageIcon(
-              AssetImage('assets/images/icon/more.png'),
+            const Icon(
+              Icons.keyboard_arrow_right_rounded,
               size: kIconSize,
               color: kIconBGColor,
             ),

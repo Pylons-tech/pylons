@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -16,19 +17,6 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
-  String dropdownValue = 'my_activity'.tr();
-
-  List<String> spinnerItems = [
-    'my_activity'.tr(),
-    'recommended'.tr(),
-    'following'.tr(),
-  ];
-
-  static final Map<String, Widget> _pages = {
-    'my_activity'.tr(): const HomeActivityWidget(),
-    'recommended'.tr(): const HomeRecommendationWidget(),
-    'following'.tr(): const HomeFollowingWidget()
-  };
 
   DateTime _date = DateTime(2020, 11, 17);
 
@@ -129,9 +117,8 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(5)),
                           child: InkWell(
-                            child: const Image(
-                                image: AssetImage(
-                                    'assets/images/Rectangle 312.png'),
+                            child: CachedNetworkImage(
+                                imageUrl: _getImage(index),
                                 fit: BoxFit.cover),
                             onTap: () {
                               Navigator.push(
@@ -151,5 +138,22 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         ],
       ),
     );
+  }
+
+
+  String _getImage(int index){
+    switch(index % 4){
+      case 1:
+        return  kImage1;
+
+      case 2:
+        return kImage2;
+
+      case 3:
+        return kImage3;
+
+      default:
+        return kImage;
+    }
   }
 }

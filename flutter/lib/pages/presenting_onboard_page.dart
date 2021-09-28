@@ -84,7 +84,7 @@ class PresentingOnboardPage extends StatelessWidget {
               const VerticalSpace(10),
               GestureDetector(
                 onTap: () {
-                  // TODO : implement hyperlink action
+
                 },
                 child: Text("terms_of_service".tr(),
                     style: const TextStyle(

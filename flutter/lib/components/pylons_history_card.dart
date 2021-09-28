@@ -1,6 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
+import 'package:pylons_wallet/components/user_image_widget.dart';
+import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
 class PylonsHistoryCard extends StatelessWidget {
@@ -20,13 +23,12 @@ class PylonsHistoryCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
-                leading: const CircleAvatar(
-                  child: FlutterLogo(size: 28.0),
-                ),
+              horizontalTitleGap: 0,
+                leading: UserImageWidget(imageUrl: kImage2, radius: 16,),
                 // title: Text('Linda purchased \'Title of Artwork\''),
               contentPadding: EdgeInsets.zero,
                 title: RichText(text: TextSpan(text: "Linda", style: TextStyle(color: Colors.black,
-                fontWeight: FontWeight.w500, fontSize: 16),
+                fontWeight: FontWeight.w500, fontSize: 14),
                   children: [
                     TextSpan(text: " ${'purchased'.tr()} ", style: TextStyle(
                       fontWeight: FontWeight.w400,
@@ -46,17 +48,16 @@ class PylonsHistoryCard extends StatelessWidget {
                 },
             ),
             Card(
+              margin: const EdgeInsets.only(left: 6, right: 6),
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                       child: Column(
                       children: [
-                        Container(
-                          child: Image(
-                            image: AssetImage('assets/images/Rectangle 312.png'),
-                            width: MediaQuery.of(context).size.width,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          ),
+                        CachedNetworkImage(
+                          imageUrl: kImage2,
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          fit: BoxFit.cover,
                         ),
                         Row(
                             children:[

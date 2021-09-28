@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -5,25 +6,18 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
-import 'package:pylons_wallet/forms/card_info_form.dart';
-import 'package:pylons_wallet/forms/create_trade_form.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_info.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_work.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_history.dart';
-import 'package:pylons_wallet/pages/home/notification.dart';
-import 'package:pylons_wallet/pages/payment/payment_info_screen.dart';
 
-class CollectionsScreenWidget extends StatefulWidget {
-  const CollectionsScreenWidget({
+class CollectionsScreen extends StatefulWidget {
+  const CollectionsScreen({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CollectionsScreenWidget> createState() => _CollectionsScreenWidgetState();
+  State<CollectionsScreen> createState() => _CollectionsScreenState();
 }
 
-class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with SingleTickerProviderStateMixin {
+class _CollectionsScreenState extends State<CollectionsScreen> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
@@ -54,10 +48,9 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
                   width: double.infinity,
                   height: 370,
                   decoration: BoxDecoration(
-
                     image: DecorationImage(
-                      image: AssetImage("assets/images/Rectangle 156.png"),
-                      fit: BoxFit.cover,
+                      image: CachedNetworkImageProvider(kImage2),
+                      fit: BoxFit.fill,
                     ),
                   ),
                   child:
@@ -80,8 +73,9 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
                         ),
                       ),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            VerticalSpace(108),
+                            // VerticalSpace(108),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text('photography'.tr(),
@@ -89,7 +83,7 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
                                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
 
                             ),
-                            SizedBox(height: 28),
+                            // SizedBox(height: 28),
                             Text('Description about the title Descritpion about the title Description about the title Description about the title',
                                 style: TextStyle(
                                     fontSize: 14,
@@ -97,7 +91,7 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
                                     color: Colors.white
                                 )
                             ),
-                            Spacer(),
+                            // VerticalSpace(10),
                             Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -141,8 +135,8 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
                           ),
                           child: ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
-                            child: Image(
-                                image: AssetImage('assets/images/Rectangle 312.png'),
+                            child: CachedNetworkImage(
+                                imageUrl: _getImage(index),
                                 fit: BoxFit.cover
                             ),
                           )
@@ -159,5 +153,21 @@ class _CollectionsScreenWidgetState extends State<CollectionsScreenWidget> with 
           ]
         ),
      );
+  }
+
+  String _getImage(int index){
+    switch(index % 4){
+      case 1:
+        return  kImage2;
+
+      case 2:
+        return kImage3;
+
+      case 3:
+        return kImage1;
+
+      default:
+        return kImage;
+    }
   }
 }

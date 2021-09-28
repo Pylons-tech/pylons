@@ -51,7 +51,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
             ],
           )
         ),
-        SizedBox(height: 12,),
+        SizedBox(height: 20,),
         //Trending Collection
         Container(
           padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -80,7 +80,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
             ],
           )
         ),
-        SizedBox(height: 12,),
+        SizedBox(height: 20,),
         //What's New
         Container(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -88,15 +88,17 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('what_is_new'.tr(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                  Spacer(),
+                  // const Spacer(),
                   MoreButton(onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> const ItemsNewScreenWidget()));
                   })
                 ],
               ),
-              Container(
+              const VerticalSpace(10),
+              SizedBox(
                 height: 350,
                 child: ListView.builder(
                   itemCount: 15,
