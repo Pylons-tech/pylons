@@ -3,4 +3,4 @@ order: 1
 -->
 
 # Concepts
-TODO
+_Disclaimer: This is work in progress. Mechanisms are susceptible to change._
