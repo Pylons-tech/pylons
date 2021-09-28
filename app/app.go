@@ -46,9 +46,9 @@ import (
 	// distrclient "github.com/cosmos/cosmos-sdk/x/distribution/client"
 	// distrkeeper "github.com/cosmos/cosmos-sdk/x/distribution/keeper"
 	// distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
-	// "github.com/cosmos/cosmos-sdk/x/evidence"
-	// evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
-	// evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
+	 "github.com/cosmos/cosmos-sdk/x/evidence"
+	 evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
+	 evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/gov"
@@ -72,9 +72,9 @@ import (
 	ibchost "github.com/cosmos/ibc-go/modules/core/24-host"
 	ibckeeper "github.com/cosmos/ibc-go/modules/core/keeper"
 
-	// "github.com/cosmos/cosmos-sdk/x/slashing"
-	// slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
-	// slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	 "github.com/cosmos/cosmos-sdk/x/slashing"
+	 slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	 slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	"github.com/cosmos/cosmos-sdk/x/staking"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -136,10 +136,10 @@ var (
 		gov.NewAppModuleBasic(getGovProposalHandlers()...),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
-		// slashing.AppModuleBasic{},
+		slashing.AppModuleBasic{},
 		ibc.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
-		// evidence.AppModuleBasic{},
+		evidence.AppModuleBasic{},
 		transfer.AppModuleBasic{},
 		vesting.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
@@ -199,7 +199,7 @@ type App struct {
 	BankKeeper       bankkeeper.Keeper
 	CapabilityKeeper *capabilitykeeper.Keeper
 	StakingKeeper    stakingkeeper.Keeper
-	// SlashingKeeper   slashingkeeper.Keeper
+	SlashingKeeper   slashingkeeper.Keeper
 	MintKeeper mintkeeper.Keeper
 	// DistrKeeper      distrkeeper.Keeper
 	GovKeeper     govkeeper.Keeper
@@ -207,7 +207,7 @@ type App struct {
 	UpgradeKeeper upgradekeeper.Keeper
 	ParamsKeeper  paramskeeper.Keeper
 	IBCKeeper     *ibckeeper.Keeper // IBC Keeper must be a pointer in the app, so we can SetRouter on it correctly
-	// EvidenceKeeper   evidencekeeper.Keeper
+	EvidenceKeeper   evidencekeeper.Keeper
 	TransferKeeper ibctransferkeeper.Keeper
 
 	// make scoped keepers public for test purposes
@@ -248,9 +248,9 @@ func New(
 	keys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
 		minttypes.StoreKey,
-		// distrtypes.StoreKey, slashingtypes.StoreKey,
+		/*distrtypes.StoreKey,*/ slashingtypes.StoreKey,
 		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey,
-		// evidencetypes.StoreKey,
+		 evidencetypes.StoreKey,
 		ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
 		pylonsmoduletypes.StoreKey,
@@ -301,9 +301,9 @@ func New(
 	//	 appCodec, keys[distrtypes.StoreKey], app.GetSubspace(distrtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
 	//	 &stakingKeeper, authtypes.FeeCollectorName, app.ModuleAccountAddrs(),
 	// )
-	// app.SlashingKeeper = slashingkeeper.NewKeeper(
-	//	 appCodec, keys[slashingtypes.StoreKey], &stakingKeeper, app.GetSubspace(slashingtypes.ModuleName),
-	// )
+	app.SlashingKeeper = slashingkeeper.NewKeeper(
+	     appCodec, keys[slashingtypes.StoreKey], &stakingKeeper, app.GetSubspace(slashingtypes.ModuleName),
+	 )
 	app.CrisisKeeper = crisiskeeper.NewKeeper(
 		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
 	)
@@ -340,11 +340,11 @@ func New(
 	transferModule := transfer.NewAppModule(app.TransferKeeper)
 
 	// Create evidence Keeper for to register the IBC light client misbehaviour evidence route
-	// evidenceKeeper := evidencekeeper.NewKeeper(
-	//	 appCodec, keys[evidencetypes.StoreKey], &app.StakingKeeper, app.SlashingKeeper,
-	// )
+	   evidenceKeeper := evidencekeeper.NewKeeper(
+		 appCodec, keys[evidencetypes.StoreKey], &app.StakingKeeper, app.SlashingKeeper,
+	 )
 	// If evidence needs to be handled for the app, set routes in router here and seal
-	// app.EvidenceKeeper = *evidenceKeeper
+	// app.EvidenceKeeper = *evidenceKeeper //revert this
 
 	app.GovKeeper = govkeeper.NewKeeper(
 		appCodec, keys[govtypes.StoreKey], app.GetSubspace(govtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
@@ -358,6 +358,19 @@ func New(
 	ibcRouter.AddRoute(ibctransfertypes.ModuleName, transferModule)
 	// this line is used by starport scaffolding # ibc/app/router
 	app.IBCKeeper.SetRouter(ibcRouter)
+
+	// create static Evidence routers
+	// add IBC ClientMisbehaviour evidence handler
+
+	//revisit this
+//	evidenceRouter := evidencetypes.NewRouter().AddRoute(ibcclient.RouterKey, ibcclient.HandlerClientMisbehaviour(app.IBCKeeper.ClientKeeper)) //revisit this
+
+	// Setting Router will finalize all routes by sealing router
+	// No more routes can be added
+//	evidenceKeeper.SetRouter(evidenceRouter) //revisit this
+
+	// set the evidence keeper from the section above
+	app.EvidenceKeeper = *evidenceKeeper
 
 	app.PylonsKeeper = pylonsmodulekeeper.NewKeeper(
 		appCodec,
@@ -393,11 +406,11 @@ func New(
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
 		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
 		mint.NewAppModule(appCodec, app.MintKeeper, app.AccountKeeper),
-		// slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
+		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		// distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
 		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
 		upgrade.NewAppModule(app.UpgradeKeeper),
-		// evidence.NewAppModule(app.EvidenceKeeper),
+		evidence.NewAppModule(app.EvidenceKeeper),
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
@@ -412,8 +425,8 @@ func New(
 	app.mm.SetOrderBeginBlockers(
 		upgradetypes.ModuleName, minttypes.ModuleName,
 		// distrtypes.ModuleName,
-		// slashingtypes.ModuleName,
-		// evidencetypes.ModuleName,
+		slashingtypes.ModuleName,
+		evidencetypes.ModuleName,
 		stakingtypes.ModuleName, ibchost.ModuleName, pylonsmoduletypes.ModuleName,
 	)
 
@@ -430,13 +443,13 @@ func New(
 		banktypes.ModuleName,
 		// distrtypes.ModuleName,
 		stakingtypes.ModuleName,
-		// slashingtypes.ModuleName,
+		slashingtypes.ModuleName,
 		govtypes.ModuleName,
 		minttypes.ModuleName,
 		crisistypes.ModuleName,
 		ibchost.ModuleName,
 		genutiltypes.ModuleName,
-		// evidencetypes.ModuleName,
+		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
 		pylonsmoduletypes.ModuleName,
@@ -626,7 +639,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(stakingtypes.ModuleName)
 	paramsKeeper.Subspace(minttypes.ModuleName)
 	// paramsKeeper.Subspace(distrtypes.ModuleName)
-	// paramsKeeper.Subspace(slashingtypes.ModuleName)
+	paramsKeeper.Subspace(slashingtypes.ModuleName)
 	paramsKeeper.Subspace(govtypes.ModuleName).WithKeyTable(govtypes.ParamKeyTable())
 	paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
