@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
 import 'package:pylons_wallet/components/follow_card.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
@@ -9,8 +10,10 @@ import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/account/account.dart';
 import 'package:pylons_wallet/pages/edit_profile/edit_profile_screen.dart';
 import 'package:pylons_wallet/pages/gallery/add_artwork.dart';
+import 'package:pylons_wallet/pages/gallery/edit_cover_screen.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
+import 'package:pylons_wallet/pages/gallery/widget/custom_card_widget.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({Key? key}) : super(key: key);
@@ -21,10 +24,10 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen>
     with SingleTickerProviderStateMixin {
+  var isExpanded = false;
   final double bannerSize = 135;
   int tabIndex = 0;
   late TabController _tabController;
-  bool isExpanded = false;
 
   final List<Widget> myTabs = <Widget>[
     Padding(
@@ -55,7 +58,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     });
   }
 
-  void setExandMode() {
+  void setExpndMode() {
     setState(() {
       isExpanded = !isExpanded;
     });
@@ -79,30 +82,38 @@ class _GalleryScreenState extends State<GalleryScreen>
             width: MediaQuery.of(context).size.width,
             height: bannerSize,
             child: Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: ElevatedButton.icon(
-                  onPressed: null,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        const Color.fromRGBO(97, 97, 97, 0.6)),
-                    padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.symmetric(horizontal: 4, vertical: 2)),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    )),
+                padding: const EdgeInsets.only(right: 20.0, top: 56),
+                child: InkWell(
+                  onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => EditCoverScreen())),
+                  child: Container(
+                    height: 18,
+                    width: 79,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color.fromRGBO(97, 97, 97, 0.6),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Row(
+                      children: [
+                        const ImageIcon(AssetImage('assets/icons/camera.png'),
+                            size: 16, color: Colors.white),
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Text(
+                          'edit_cover'.tr(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                              color: Colors.white,
+                              fontFamily: 'Inter'),
+                        )
+                      ],
+                    ),
                   ),
-                  icon: const ImageIcon(AssetImage('assets/icons/camera.png'),
-                      size: 14, color: Colors.white),
-                  label: Text(
-                    'edit_cover'.tr(),
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10,
-                        color: Colors.white,
-                        fontFamily: 'Inter'),
-                  )),
-            ),
+                )),
           ),
         ),
         Container(
@@ -301,7 +312,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                           ]),
                         ),
                       ]),
-                      Container(
+                      SizedBox(
                           height: 105,
                           child: ListView.builder(
                               itemCount: 15,
@@ -313,9 +324,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                     const SizedBox(height: 0)
                 ],
               ),
-            ),
-          ),
-        ),
+            )),
       ],
     );
   }
