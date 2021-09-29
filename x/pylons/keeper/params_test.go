@@ -32,13 +32,6 @@ func (suite *IntegrationTestSuite) TestDefaultParams() {
 		require.Equal(types.DefaultCoinIssuers[i].CoinDenom, denom)
 	}
 
-	allNonCookbookCoinDenoms := k.GetAllNonCookbookCoinDenoms(ctx)
-	require.Equal(len(allNonCookbookCoinDenoms), len(types.DefaultCoinIssuers)+1)
-	expectedList := append(k.CoinIssuedDenomsList(ctx), types.StakingCoinDenom)
-	for i, denom := range allNonCookbookCoinDenoms {
-		require.Equal(expectedList[i], denom)
-	}
-
 	params := k.GetParams(ctx)
 	require.Equal(types.DefaultParams(), params)
 }

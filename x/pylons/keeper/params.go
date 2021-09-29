@@ -33,12 +33,6 @@ func (k Keeper) CoinIssuedDenomsList(ctx sdk.Context) (res []string) {
 	return
 }
 
-// GetAllNonCookbookCoinDenoms returns the lis of the only valid basic coin denoms
-func (k Keeper) GetAllNonCookbookCoinDenoms(ctx sdk.Context) (res []string) {
-	// TODO - add stripeUSD and IBC tokens
-	return append(k.CoinIssuedDenomsList(ctx), types.StakingCoinDenom)
-}
-
 // RecipeFeePercentage returns the RecipeFeePercentage param
 func (k Keeper) RecipeFeePercentage(ctx sdk.Context) (res sdk.Dec) {
 	k.paramSpace.Get(ctx, types.ParamStoreKeyRecipeFeePercentage, &res)
