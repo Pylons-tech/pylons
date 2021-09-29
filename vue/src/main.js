@@ -1,23 +1,14 @@
-import Vue from 'vue'
-import router from './router/'
-import store from './store/'
-import './registerServiceWorker'
-import './plugins/vuetify'
-import './theme/default.sass'
-
+import { createApp } from 'vue'
+import { createVuetify } from 'vuetify'
 import App from './App.vue'
-import vuetify from './plugins/vuetify'
-import i18n from './plugins/i18n'
-import '@mdi/font/css/materialdesignicons.css'
-import 'jodit/build/jodit.css'
+import router from './router'
+import store from './store'
 
-Vue.config.productionTip = false
+const app = createApp(App)
+const vuetify = createVuetify() // Replaces new Vuetify(...)
 
-const app = new Vue({
-  router,
-  store,
-  i18n,
-  vuetify,
-  render: (h) => h(App),
-})
-app.$mount('#app')
+app.use(router)
+app.use(store)
+app.use(vuetify)
+
+app.mount('#app')
