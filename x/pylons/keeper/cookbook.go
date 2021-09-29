@@ -8,50 +8,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) AddDenomToCookbook(ctx sdk.Context, cookbookID, denom string) {
-	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookCoinDenomKey))
-	store := prefix.NewStore(parentStore, types.KeyPrefix(cookbookID))
-	byteKey := types.KeyPrefix(denom)
-	bz := []byte(denom)
-	store.Set(byteKey, bz)
-}
-
-func (k Keeper) GetDenomsByCookbook(ctx sdk.Context, cookbookID string) (list []string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CookbookCoinDenomKey))
-	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefix(cookbookID))
-
-	defer iterator.Close()
-
-	for ; iterator.Valid(); iterator.Next() {
-		list = append(list, string(iterator.Value()))
-	}
-
-	return
-}
-
-func (k Keeper) AddCookbookToDenom(ctx sdk.Context, denom, cookbookID string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CoinDenomCookbookKey))
-	byteKey := types.KeyPrefix(denom)
-	bz := []byte(cookbookID)
-	store.Set(byteKey, bz)
-}
-
-func (k Keeper) GetCookbookByDenom(ctx sdk.Context, denom string) (cookbookID string) {
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.CoinDenomCookbookKey))
-	byteKey := types.KeyPrefix(denom)
-	bz := store.Get(byteKey)
-
-	// Count doesn't exist: no element
-	if bz == nil {
-		return ""
-	}
-
-	// Parse bytes
-	cookbookID = string(bz)
-
-	return
-}
-
 func (k Keeper) addCookbookToAddress(ctx sdk.Context, cookbookID string, addr sdk.AccAddress) {
 	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrCookbookKey))
 	store := prefix.NewStore(parentStore, addr.Bytes())
