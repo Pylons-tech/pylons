@@ -14,6 +14,10 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=pylons \
 
 BUILD_FLAGS := -ldflags '$(ldflags)'
 
+
+# The below include contains the tools target.
+include contrib/devtools/Makefile
+
 ###############################################################################
 ###                               Build                                     ###
 ###############################################################################
@@ -36,7 +40,7 @@ go.sum: go.mod
 	@go mod verify
 	@go mod tidy -go=1.17
 
-.PHONY: install, go.sum
+.PHONY: install go.sum clean build
 
 ###############################################################################
 ###                               Commands                                  ###
@@ -64,6 +68,8 @@ genesis:
 ###############################################################################
 ###                                Testing                                  ###
 ###############################################################################
+
+include sims.mk
 
 test: test-unit
 
