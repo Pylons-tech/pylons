@@ -9,8 +9,8 @@
 					<v-subheader class="px-1 my-2">Color Option</v-subheader>
 					<div class="color-option">
 						<v-item-group v-model="theme">
-							<template v-for="item in themeColorOptions">
-								<v-item :key="item.key" v-slot="{ active }" :value="item.key">
+							<template v-for="item in themeColorOptions" :key="item.key">
+								<v-item v-slot="{ active }" :value="item.key">
 									<v-avatar :class="active ? 'active' : ''" class="color-option__item" :color="item.key" size="56" tile @click="handleChangeColor(item)">
 										<v-scroll-y-transition>
 											<v-icon v-if="active" color="white"> mdi-check </v-icon>

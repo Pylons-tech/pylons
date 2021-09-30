@@ -4,10 +4,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-const app = createApp(App)
 const vuetify = createVuetify() // Replaces new Vuetify(...)
+const app = createApp(App).use(store).use(router).use(vuetify)
+
 app.config.globalProperties._depsLoaded = true
-app.use(store)
-app.use(router)
-app.use(vuetify)
+
 app.mount('#app')

@@ -2,8 +2,8 @@
 	<v-list two-line class="online_user pa-0">
 		<v-subheader>{{ $tc('user', 2) }}</v-subheader>
 		<v-divider />
-		<template v-for="item in getChatUsers">
-			<v-list-item :key="item.username" @click="handleJoinChat">
+		<template v-for="item in getChatUsers" :key="item.username">
+			<v-list-item @click="handleJoinChat">
 				<v-list-item-avatar>
 					<CAvatar
 						:size="32"
@@ -18,7 +18,6 @@
 					<v-list-item-subtitle> {{ item.ip }} </v-list-item-subtitle>
 				</v-list-item-content>
 			</v-list-item>
-			<v-divider :key="'d' + item.username" />
 		</template>
 	</v-list>
 </template>
