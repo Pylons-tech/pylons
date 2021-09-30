@@ -19,23 +19,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// TODO add tests
-
-// 2 users
-// val (FULFILLER)
-// new user (needs to have account created) (CREATOR)
-
-// create account for new user (CREATOR)
-
-// create execution that mints an item (no coin inputs)
-//		cookbook -> recipe -> exec
-
-// create trade with item as input, coins as output
-
-// fulfill trade
-
-// verify proper objects have been exchanged
-
 type tradeSimInfo struct {
 	net                  *network.Network
 	ctx                  client.Context
@@ -375,5 +358,21 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
 	require.Equal(t, uint32(0), resp.Code)
+
+	// emsure that item is owned by FULFILLER
+	args = make([]string, 0)
+	args = append(args, val.Address.String())
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListItemByOwner(), args)
+	var listItemResp types.QueryListItemByOwnerResponse
+	require.NoError(t, err)
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &listItemResp))
+	require.Equal(t, 1, len(listItemResp.Items))
+
+	args = make([]string, 0)
+	args = append(args, trader.String())
+	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdListItemByOwner(), args)
+	require.NoError(t, err)
+	require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &listItemResp))
+	require.Equal(t, 0, len(listItemResp.Items))
 
 }
