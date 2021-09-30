@@ -16,7 +16,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>pylons_wallet</string>
+	<string>Pylons Wallet</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -31,6 +31,12 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSCameraUsageDescription</key>
+    <string>Pylons Wallet needs to use your camera to capture images for minting and user profile</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Pylons Wallet needs to access your photo library for minting and user profile</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>Pylons Wallet needs to use your microphone to record audios for minting purposes</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

@@ -68,52 +68,57 @@ class _DashboardWidgetState extends State<DashboardWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //appBar: PylonsAppBar(),
-      //body: SafeArea(
-      //  child: _pages[_selectedIndex],
-      //),
-      body: PageView(
-          onPageChanged: onPageChanged,
-          controller: _pageController,
-          children: _pages),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: Colors.indigo,
-        unselectedItemColor: Colors.black12,
-        showUnselectedLabels: true,
-        selectedLabelStyle: optionStyle,
-        unselectedLabelStyle: optionStyle,
-        type: BottomNavigationBarType.fixed,
-        items: [
-          BottomNavigationBarItem(
-              icon: const ImageIcon(
-                AssetImage('assets/icons/home.png'),
-                size: 24,
-              ),
-              label: "home".tr()),
-          BottomNavigationBarItem(
-              icon: const ImageIcon(
-                AssetImage('assets/icons/discover.png'),
-                size: 24,
-              ),
-              label: "discover".tr()),
-          BottomNavigationBarItem(
-              icon: const ImageIcon(
-                AssetImage('assets/icons/market.png'),
-                size: 24,
-              ),
-              label: "market_place".tr()),
-          BottomNavigationBarItem(
-              icon: const ImageIcon(
-                AssetImage('assets/icons/gallery.png'),
-                size: 24,
-              ),
-              label: "gallery".tr()),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        return Future.value(false);
+      },
+      child: Scaffold(
+        //appBar: PylonsAppBar(),
+        //body: SafeArea(
+        //  child: _pages[_selectedIndex],
+        //),
+        body: PageView(
+            onPageChanged: onPageChanged,
+            controller: _pageController,
+            children: _pages),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+          selectedItemColor: Colors.indigo,
+          unselectedItemColor: Colors.black12,
+          showUnselectedLabels: true,
+          selectedLabelStyle: optionStyle,
+          unselectedLabelStyle: optionStyle,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+                icon: const ImageIcon(
+                  AssetImage('assets/icons/home.png'),
+                  size: 24,
+                ),
+                label: "home".tr()),
+            BottomNavigationBarItem(
+                icon: const ImageIcon(
+                  AssetImage('assets/icons/discover.png'),
+                  size: 24,
+                ),
+                label: "discover".tr()),
+            BottomNavigationBarItem(
+                icon: const ImageIcon(
+                  AssetImage('assets/icons/market.png'),
+                  size: 24,
+                ),
+                label: "market_place".tr()),
+            BottomNavigationBarItem(
+                icon: const ImageIcon(
+                  AssetImage('assets/icons/gallery.png'),
+                  size: 24,
+                ),
+                label: "gallery".tr()),
+          ],
+        ),
+        drawer: const PylonsAppDrawer(),
       ),
-      drawer: const PylonsAppDrawer(),
     );
   }
 }
