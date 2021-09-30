@@ -51,9 +51,11 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
+	addresses := types.GenTestBech32List(n)
+
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
-			Creator:          "creator",
+			Creator:          addresses[i],
 			ID:               uint64(i),
 			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
 			ItemInputs:       make([]types.ItemInput, 0),
