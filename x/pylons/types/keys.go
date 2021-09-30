@@ -28,10 +28,6 @@ func KeyPrefix(p string) []byte {
 const (
 	// CookbookKey is a string key used as a prefix to the KVStore
 	CookbookKey = "Cookbook-value-"
-	// CookbookCoinDenomKey is a string key used as a prefix to the KVStore
-	CookbookCoinDenomKey = "Cookbook-denom-"
-	// CoinDenomCookbookKey is a string key used as a prefix to the KVStore
-	CoinDenomCookbookKey = "Denom-cookbook-"
 	// AddrCookbookKey is a string key used as a prefix to the KVStore
 	AddrCookbookKey = "Address-cookbook-"
 	// RecipeKey is a string key used as a prefix to the KVStore

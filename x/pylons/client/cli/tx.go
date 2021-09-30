@@ -6,8 +6,6 @@ import (
 	"os"
 	"time"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
 	"github.com/cosmos/cosmos-sdk/client/input"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -81,11 +79,6 @@ func GenerateOrBroadcastMsgs(cliCtx client.Context, txBldr tx.Factory, msgs ...s
 
 // CustomCompleteAndBroadcastTxCLI is a custom tx
 func CustomCompleteAndBroadcastTxCLI(txf tx.Factory, clientCtx client.Context, msgs ...sdk.Msg) error {
-	txf, err := txf.Prepare(clientCtx)
-	if err == nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account already exits")
-	}
-
 	if txf.SimulateAndExecute() || clientCtx.Simulate {
 		_, adjusted, err := tx.CalculateGas(clientCtx, txf, msgs...)
 		if err != nil {
@@ -100,7 +93,7 @@ func CustomCompleteAndBroadcastTxCLI(txf tx.Factory, clientCtx client.Context, m
 		return nil
 	}
 
-	txs, err := txf.BuildUnsignedTx(msgs...)
+	txs, err := tx.BuildUnsignedTx(txf, msgs...)
 	if err != nil {
 		return err
 	}
