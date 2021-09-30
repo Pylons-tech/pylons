@@ -8,6 +8,8 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Add game simulation testing to cli test suite.  Tests cover CEL environment execution, item modification and cookbook coin generation. 
 
 ### Fixes:
+- [#346](https://github.com/Pylons-tech/pylons/pull/436) Fixes a bug in `x/pylons/keeper/msg_server_fulfill_trade.go` where a transfer fees were being matched from itemInputs where they should have been from itemOutputs.
+- [#346](https://github.com/Pylons-tech/pylons/pull/436) Fixes a bug in `x/pylons/keeper/msg_server_fulfill_trade.go` where a `MatchItemInputsForTrade()` would return an error incorrectly.
 - [#434](https://github.com/Pylons-tech/pylons/pull/434) Add missing `RegisterStoreDecoder()` functionality in `x/pylons/module.go` to enable module simulation tests.
 - [#429](https://github.com/Pylons-tech/pylons/pull/429) Dependabot security upgrade
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.

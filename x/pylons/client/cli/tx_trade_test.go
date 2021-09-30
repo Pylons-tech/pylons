@@ -173,18 +173,6 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	// test json unmarshalling of strings
-	argsEntries, err := cast.ToStringE(string(entries))
-	require.NoError(t, err)
-	jsonArgsEntries := types.EntriesList{}
-	err = json.Unmarshal([]byte(argsEntries), &jsonArgsEntries)
-	require.NoError(t, err)
-	argsOutputs, err := cast.ToStringE(string(itemOutputs))
-	require.NoError(t, err)
-	jsonArgsOutputs := make([]types.WeightedOutputs, 0)
-	err = json.Unmarshal([]byte(argsOutputs), &jsonArgsOutputs)
-	require.NoError(t, err)
-
 	recipeFields := []string{
 		"testRecipeName",
 		"DescriptionDescriptionDescriptionDescription",
