@@ -19,9 +19,9 @@ init:
 
 accounts:
   - name: alice
-    coins: ["20000000000upylon", "200000000stake"]
+    coins: ["20000000000upylon", "200000000ubedrock"]
   - name: bob
-    coins: ["10000000000upylon", "100000000stake"]
+    coins: ["10000000000upylon", "100000000ubedrock"]
 validator:
   name: alice
   staked: "100000000ubedrock"
@@ -32,5 +32,5 @@ client:
     path: "docs/static/openapi.yml"
 faucet:
   name: bob
-  coins: [ "10000000000upylon", "100000000stake" ]
+  coins: [ "10000000000upylon", "100000000ubedrock" ]
 
