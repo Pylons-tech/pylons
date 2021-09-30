@@ -88,146 +88,146 @@ export const protobufPackage = 'google.protobuf'
  *     }
  */
 export interface Any {
-  /**
-   * A URL/resource name that uniquely identifies the type of the serialized
-   * protocol buffer message. This string must contain at least
-   * one "/" character. The last segment of the URL's path must represent
-   * the fully qualified name of the type (as in
-   * `path/google.protobuf.Duration`). The name should be in a canonical form
-   * (e.g., leading "." is not accepted).
-   *
-   * In practice, teams usually precompile into the binary all types that they
-   * expect it to use in the context of Any. However, for URLs which use the
-   * scheme `http`, `https`, or no scheme, one can optionally set up a type
-   * server that maps type URLs to message definitions as follows:
-   *
-   * * If no scheme is provided, `https` is assumed.
-   * * An HTTP GET on the URL must yield a [google.protobuf.Type][]
-   *   value in binary format, or produce an error.
-   * * Applications are allowed to cache lookup results based on the
-   *   URL, or have them precompiled into a binary to avoid any
-   *   lookup. Therefore, binary compatibility needs to be preserved
-   *   on changes to types. (Use versioned type names to manage
-   *   breaking changes.)
-   *
-   * Note: this functionality is not currently available in the official
-   * protobuf release, and it is not used for type URLs beginning with
-   * type.googleapis.com.
-   *
-   * Schemes other than `http`, `https` (or the empty scheme) might be
-   * used with implementation specific semantics.
-   */
-  typeUrl: string
-  /** Must be a valid serialized protocol buffer of the above specified type. */
-  value: Uint8Array
+	/**
+	 * A URL/resource name that uniquely identifies the type of the serialized
+	 * protocol buffer message. This string must contain at least
+	 * one "/" character. The last segment of the URL's path must represent
+	 * the fully qualified name of the type (as in
+	 * `path/google.protobuf.Duration`). The name should be in a canonical form
+	 * (e.g., leading "." is not accepted).
+	 *
+	 * In practice, teams usually precompile into the binary all types that they
+	 * expect it to use in the context of Any. However, for URLs which use the
+	 * scheme `http`, `https`, or no scheme, one can optionally set up a type
+	 * server that maps type URLs to message definitions as follows:
+	 *
+	 * * If no scheme is provided, `https` is assumed.
+	 * * An HTTP GET on the URL must yield a [google.protobuf.Type][]
+	 *   value in binary format, or produce an error.
+	 * * Applications are allowed to cache lookup results based on the
+	 *   URL, or have them precompiled into a binary to avoid any
+	 *   lookup. Therefore, binary compatibility needs to be preserved
+	 *   on changes to types. (Use versioned type names to manage
+	 *   breaking changes.)
+	 *
+	 * Note: this functionality is not currently available in the official
+	 * protobuf release, and it is not used for type URLs beginning with
+	 * type.googleapis.com.
+	 *
+	 * Schemes other than `http`, `https` (or the empty scheme) might be
+	 * used with implementation specific semantics.
+	 */
+	typeUrl: string
+	/** Must be a valid serialized protocol buffer of the above specified type. */
+	value: Uint8Array
 }
 
 const baseAny: object = { typeUrl: '' }
 
 export const Any = {
-  encode(message: Any, writer: Writer = Writer.create()): Writer {
-    if (message.typeUrl !== '') {
-      writer.uint32(10).string(message.typeUrl)
-    }
-    if (message.value.length !== 0) {
-      writer.uint32(18).bytes(message.value)
-    }
-    return writer
-  },
+	encode(message: Any, writer: Writer = Writer.create()): Writer {
+		if (message.typeUrl !== '') {
+			writer.uint32(10).string(message.typeUrl)
+		}
+		if (message.value.length !== 0) {
+			writer.uint32(18).bytes(message.value)
+		}
+		return writer
+	},
 
-  decode(input: Reader | Uint8Array, length?: number): Any {
-    const reader = input instanceof Uint8Array ? new Reader(input) : input
-    let end = length === undefined ? reader.len : reader.pos + length
-    const message = { ...baseAny } as Any
-    while (reader.pos < end) {
-      const tag = reader.uint32()
-      switch (tag >>> 3) {
-        case 1:
-          message.typeUrl = reader.string()
-          break
-        case 2:
-          message.value = reader.bytes()
-          break
-        default:
-          reader.skipType(tag & 7)
-          break
-      }
-    }
-    return message
-  },
+	decode(input: Reader | Uint8Array, length?: number): Any {
+		const reader = input instanceof Uint8Array ? new Reader(input) : input
+		let end = length === undefined ? reader.len : reader.pos + length
+		const message = { ...baseAny } as Any
+		while (reader.pos < end) {
+			const tag = reader.uint32()
+			switch (tag >>> 3) {
+				case 1:
+					message.typeUrl = reader.string()
+					break
+				case 2:
+					message.value = reader.bytes()
+					break
+				default:
+					reader.skipType(tag & 7)
+					break
+			}
+		}
+		return message
+	},
 
-  fromJSON(object: any): Any {
-    const message = { ...baseAny } as Any
-    if (object.typeUrl !== undefined && object.typeUrl !== null) {
-      message.typeUrl = String(object.typeUrl)
-    } else {
-      message.typeUrl = ''
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = bytesFromBase64(object.value)
-    }
-    return message
-  },
+	fromJSON(object: any): Any {
+		const message = { ...baseAny } as Any
+		if (object.typeUrl !== undefined && object.typeUrl !== null) {
+			message.typeUrl = String(object.typeUrl)
+		} else {
+			message.typeUrl = ''
+		}
+		if (object.value !== undefined && object.value !== null) {
+			message.value = bytesFromBase64(object.value)
+		}
+		return message
+	},
 
-  toJSON(message: Any): unknown {
-    const obj: any = {}
-    message.typeUrl !== undefined && (obj.typeUrl = message.typeUrl)
-    message.value !== undefined && (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()))
-    return obj
-  },
+	toJSON(message: Any): unknown {
+		const obj: any = {}
+		message.typeUrl !== undefined && (obj.typeUrl = message.typeUrl)
+		message.value !== undefined && (obj.value = base64FromBytes(message.value !== undefined ? message.value : new Uint8Array()))
+		return obj
+	},
 
-  fromPartial(object: DeepPartial<Any>): Any {
-    const message = { ...baseAny } as Any
-    if (object.typeUrl !== undefined && object.typeUrl !== null) {
-      message.typeUrl = object.typeUrl
-    } else {
-      message.typeUrl = ''
-    }
-    if (object.value !== undefined && object.value !== null) {
-      message.value = object.value
-    } else {
-      message.value = new Uint8Array()
-    }
-    return message
-  }
+	fromPartial(object: DeepPartial<Any>): Any {
+		const message = { ...baseAny } as Any
+		if (object.typeUrl !== undefined && object.typeUrl !== null) {
+			message.typeUrl = object.typeUrl
+		} else {
+			message.typeUrl = ''
+		}
+		if (object.value !== undefined && object.value !== null) {
+			message.value = object.value
+		} else {
+			message.value = new Uint8Array()
+		}
+		return message
+	}
 }
 
 declare var self: any | undefined
 declare var window: any | undefined
 var globalThis: any = (() => {
-  if (typeof globalThis !== 'undefined') return globalThis
-  if (typeof self !== 'undefined') return self
-  if (typeof window !== 'undefined') return window
-  if (typeof global !== 'undefined') return global
-  throw 'Unable to locate global object'
+	if (typeof globalThis !== 'undefined') return globalThis
+	if (typeof self !== 'undefined') return self
+	if (typeof window !== 'undefined') return window
+	if (typeof global !== 'undefined') return global
+	throw 'Unable to locate global object'
 })()
 
 const atob: (b64: string) => string = globalThis.atob || ((b64) => globalThis.Buffer.from(b64, 'base64').toString('binary'))
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64)
-  const arr = new Uint8Array(bin.length)
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i)
-  }
-  return arr
+	const bin = atob(b64)
+	const arr = new Uint8Array(bin.length)
+	for (let i = 0; i < bin.length; ++i) {
+		arr[i] = bin.charCodeAt(i)
+	}
+	return arr
 }
 
 const btoa: (bin: string) => string = globalThis.btoa || ((bin) => globalThis.Buffer.from(bin, 'binary').toString('base64'))
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = []
-  for (let i = 0; i < arr.byteLength; ++i) {
-    bin.push(String.fromCharCode(arr[i]))
-  }
-  return btoa(bin.join(''))
+	const bin: string[] = []
+	for (let i = 0; i < arr.byteLength; ++i) {
+		bin.push(String.fromCharCode(arr[i]))
+	}
+	return btoa(bin.join(''))
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | undefined
 export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
-  : Partial<T>
+	? T
+	: T extends Array<infer U>
+	? Array<DeepPartial<U>>
+	: T extends ReadonlyArray<infer U>
+	? ReadonlyArray<DeepPartial<U>>
+	: T extends {}
+	? { [K in keyof T]?: DeepPartial<T[K]> }
+	: Partial<T>

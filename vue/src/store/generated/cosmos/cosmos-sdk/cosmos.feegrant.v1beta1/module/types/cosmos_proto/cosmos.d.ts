@@ -1,1 +1,1 @@
-export declare const protobufPackage = "cosmos_proto";
+export declare const protobufPackage = 'cosmos_proto'

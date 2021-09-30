@@ -2,18 +2,17 @@ import { txClient, queryClient, MissingWalletError } from './module'
 // @ts-ignore
 import { SpVuexError } from '@starport/vuex'
 
-import { SendAuthorization } from "./module/types/cosmos/bank/v1beta1/authz"
-import { Params } from "./module/types/cosmos/bank/v1beta1/bank"
-import { SendEnabled } from "./module/types/cosmos/bank/v1beta1/bank"
-import { Input } from "./module/types/cosmos/bank/v1beta1/bank"
-import { Output } from "./module/types/cosmos/bank/v1beta1/bank"
-import { Supply } from "./module/types/cosmos/bank/v1beta1/bank"
-import { DenomUnit } from "./module/types/cosmos/bank/v1beta1/bank"
-import { Metadata } from "./module/types/cosmos/bank/v1beta1/bank"
-import { Balance } from "./module/types/cosmos/bank/v1beta1/genesis"
+import { SendAuthorization } from './module/types/cosmos/bank/v1beta1/authz'
+import { Params } from './module/types/cosmos/bank/v1beta1/bank'
+import { SendEnabled } from './module/types/cosmos/bank/v1beta1/bank'
+import { Input } from './module/types/cosmos/bank/v1beta1/bank'
+import { Output } from './module/types/cosmos/bank/v1beta1/bank'
+import { Supply } from './module/types/cosmos/bank/v1beta1/bank'
+import { DenomUnit } from './module/types/cosmos/bank/v1beta1/bank'
+import { Metadata } from './module/types/cosmos/bank/v1beta1/bank'
+import { Balance } from './module/types/cosmos/bank/v1beta1/genesis'
 
-
-export { SendAuthorization, Params, SendEnabled, Input, Output, Supply, DenomUnit, Metadata, Balance };
+export { SendAuthorization, Params, SendEnabled, Input, Output, Supply, DenomUnit, Metadata, Balance }
 
 async function initTxClient(vuexGetters) {
 	return await txClient(vuexGetters['common/wallet/signer'], {
@@ -30,9 +29,9 @@ async function initQueryClient(vuexGetters) {
 function mergeResults(value, next_values) {
 	for (let prop of Object.keys(next_values)) {
 		if (Array.isArray(next_values[prop])) {
-			value[prop]=[...value[prop], ...next_values[prop]]
-		}else{
-			value[prop]=next_values[prop]
+			value[prop] = [...value[prop], ...next_values[prop]]
+		} else {
+			value[prop] = next_values[prop]
 		}
 	}
 	return value
@@ -51,27 +50,26 @@ function getStructure(template) {
 
 const getDefaultState = () => {
 	return {
-				Balance: {},
-				AllBalances: {},
-				TotalSupply: {},
-				SupplyOf: {},
-				Params: {},
-				DenomMetadata: {},
-				DenomsMetadata: {},
-				
-				_Structure: {
-						SendAuthorization: getStructure(SendAuthorization.fromPartial({})),
-						Params: getStructure(Params.fromPartial({})),
-						SendEnabled: getStructure(SendEnabled.fromPartial({})),
-						Input: getStructure(Input.fromPartial({})),
-						Output: getStructure(Output.fromPartial({})),
-						Supply: getStructure(Supply.fromPartial({})),
-						DenomUnit: getStructure(DenomUnit.fromPartial({})),
-						Metadata: getStructure(Metadata.fromPartial({})),
-						Balance: getStructure(Balance.fromPartial({})),
-						
+		Balance: {},
+		AllBalances: {},
+		TotalSupply: {},
+		SupplyOf: {},
+		Params: {},
+		DenomMetadata: {},
+		DenomsMetadata: {},
+
+		_Structure: {
+			SendAuthorization: getStructure(SendAuthorization.fromPartial({})),
+			Params: getStructure(Params.fromPartial({})),
+			SendEnabled: getStructure(SendEnabled.fromPartial({})),
+			Input: getStructure(Input.fromPartial({})),
+			Output: getStructure(Output.fromPartial({})),
+			Supply: getStructure(Supply.fromPartial({})),
+			DenomUnit: getStructure(DenomUnit.fromPartial({})),
+			Metadata: getStructure(Metadata.fromPartial({})),
+			Balance: getStructure(Balance.fromPartial({}))
 		},
-		_Subscriptions: new Set(),
+		_Subscriptions: new Set()
 	}
 }
 
@@ -96,49 +94,63 @@ export default {
 		}
 	},
 	getters: {
-				getBalance: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.Balance[JSON.stringify(params)] ?? {}
-		},
-				getAllBalances: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.AllBalances[JSON.stringify(params)] ?? {}
-		},
-				getTotalSupply: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.TotalSupply[JSON.stringify(params)] ?? {}
-		},
-				getSupplyOf: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.SupplyOf[JSON.stringify(params)] ?? {}
-		},
-				getParams: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.Params[JSON.stringify(params)] ?? {}
-		},
-				getDenomMetadata: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.DenomMetadata[JSON.stringify(params)] ?? {}
-		},
-				getDenomsMetadata: (state) => (params = { params: {}}) => {
-					if (!(<any> params).query) {
-						(<any> params).query=null
-					}
-			return state.DenomsMetadata[JSON.stringify(params)] ?? {}
-		},
-				
+		getBalance:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.Balance[JSON.stringify(params)] ?? {}
+			},
+		getAllBalances:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.AllBalances[JSON.stringify(params)] ?? {}
+			},
+		getTotalSupply:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.TotalSupply[JSON.stringify(params)] ?? {}
+			},
+		getSupplyOf:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.SupplyOf[JSON.stringify(params)] ?? {}
+			},
+		getParams:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.Params[JSON.stringify(params)] ?? {}
+			},
+		getDenomMetadata:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.DenomMetadata[JSON.stringify(params)] ?? {}
+			},
+		getDenomsMetadata:
+			(state) =>
+			(params = { params: {} }) => {
+				if (!(<any>params).query) {
+					;(<any>params).query = null
+				}
+				return state.DenomsMetadata[JSON.stringify(params)] ?? {}
+			},
+
 		getTypeStructure: (state) => (type) => {
 			return state._Structure[type].fields
 		}
@@ -162,230 +174,184 @@ export default {
 			state._Subscriptions.forEach(async (subscription) => {
 				try {
 					await dispatch(subscription.action, subscription.payload)
-				}catch(e) {
+				} catch (e) {
 					throw new SpVuexError('Subscriptions: ' + e.message)
 				}
 			})
 		},
-		
-		
-		
-		 		
-		
-		
-		async QueryBalance({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QueryBalance({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryBalance( key.address,  key.denom)).data
-				
-					
-				commit('QUERY', { query: 'Balance', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryBalance', payload: { options: { all }, params: {...key},query }})
-				return getters['getBalance']( { params: {...key}, query}) ?? {}
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.queryBalance(key.address, key.denom)).data
+
+				commit('QUERY', { query: 'Balance', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryBalance', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getBalance']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryBalance', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
-		
-		
-		 		
-		
-		
-		async QueryAllBalances({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QueryAllBalances(
+			{ commit, rootGetters, getters },
+			{ options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }
+		) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryAllBalances( key.address, query)).data
-				
-					
-				while (all && (<any> value).pagination && (<any> value).pagination.nextKey!=null) {
-					let next_values=(await queryClient.queryAllBalances( key.address, {...query, 'pagination.key':(<any> value).pagination.nextKey})).data
-					value = mergeResults(value, next_values);
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.queryAllBalances(key.address, query)).data
+
+				while (all && (<any>value).pagination && (<any>value).pagination.nextKey != null) {
+					let next_values = (await queryClient.queryAllBalances(key.address, { ...query, 'pagination.key': (<any>value).pagination.nextKey })).data
+					value = mergeResults(value, next_values)
 				}
-				commit('QUERY', { query: 'AllBalances', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryAllBalances', payload: { options: { all }, params: {...key},query }})
-				return getters['getAllBalances']( { params: {...key}, query}) ?? {}
+				commit('QUERY', { query: 'AllBalances', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryAllBalances', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getAllBalances']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryAllBalances', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
-		
-		
-		 		
-		
-		
-		async QueryTotalSupply({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QueryTotalSupply(
+			{ commit, rootGetters, getters },
+			{ options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }
+		) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryTotalSupply(query)).data
-				
-					
-				while (all && (<any> value).pagination && (<any> value).pagination.nextKey!=null) {
-					let next_values=(await queryClient.queryTotalSupply({...query, 'pagination.key':(<any> value).pagination.nextKey})).data
-					value = mergeResults(value, next_values);
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.queryTotalSupply(query)).data
+
+				while (all && (<any>value).pagination && (<any>value).pagination.nextKey != null) {
+					let next_values = (await queryClient.queryTotalSupply({ ...query, 'pagination.key': (<any>value).pagination.nextKey })).data
+					value = mergeResults(value, next_values)
 				}
-				commit('QUERY', { query: 'TotalSupply', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryTotalSupply', payload: { options: { all }, params: {...key},query }})
-				return getters['getTotalSupply']( { params: {...key}, query}) ?? {}
+				commit('QUERY', { query: 'TotalSupply', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryTotalSupply', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getTotalSupply']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryTotalSupply', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
-		
-		
-		 		
-		
-		
-		async QuerySupplyOf({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QuerySupplyOf(
+			{ commit, rootGetters, getters },
+			{ options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }
+		) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.querySupplyOf( key.denom)).data
-				
-					
-				commit('QUERY', { query: 'SupplyOf', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QuerySupplyOf', payload: { options: { all }, params: {...key},query }})
-				return getters['getSupplyOf']( { params: {...key}, query}) ?? {}
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.querySupplyOf(key.denom)).data
+
+				commit('QUERY', { query: 'SupplyOf', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QuerySupplyOf', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getSupplyOf']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QuerySupplyOf', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
-		
-		
-		 		
-		
-		
-		async QueryParams({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QueryParams({ commit, rootGetters, getters }, { options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryParams()).data
-				
-					
-				commit('QUERY', { query: 'Params', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryParams', payload: { options: { all }, params: {...key},query }})
-				return getters['getParams']( { params: {...key}, query}) ?? {}
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.queryParams()).data
+
+				commit('QUERY', { query: 'Params', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryParams', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getParams']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryParams', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
-		
-		
-		 		
-		
-		
-		async QueryDenomMetadata({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QueryDenomMetadata(
+			{ commit, rootGetters, getters },
+			{ options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }
+		) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryDenomMetadata( key.denom)).data
-				
-					
-				commit('QUERY', { query: 'DenomMetadata', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryDenomMetadata', payload: { options: { all }, params: {...key},query }})
-				return getters['getDenomMetadata']( { params: {...key}, query}) ?? {}
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.queryDenomMetadata(key.denom)).data
+
+				commit('QUERY', { query: 'DenomMetadata', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryDenomMetadata', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getDenomMetadata']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryDenomMetadata', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
-		
-		
-		 		
-		
-		
-		async QueryDenomsMetadata({ commit, rootGetters, getters }, { options: { subscribe, all} = { subscribe:false, all:false}, params: {...key}, query=null }) {
+
+		async QueryDenomsMetadata(
+			{ commit, rootGetters, getters },
+			{ options: { subscribe, all } = { subscribe: false, all: false }, params: { ...key }, query = null }
+		) {
 			try {
-				const queryClient=await initQueryClient(rootGetters)
-				let value= (await queryClient.queryDenomsMetadata(query)).data
-				
-					
-				while (all && (<any> value).pagination && (<any> value).pagination.nextKey!=null) {
-					let next_values=(await queryClient.queryDenomsMetadata({...query, 'pagination.key':(<any> value).pagination.nextKey})).data
-					value = mergeResults(value, next_values);
+				const queryClient = await initQueryClient(rootGetters)
+				let value = (await queryClient.queryDenomsMetadata(query)).data
+
+				while (all && (<any>value).pagination && (<any>value).pagination.nextKey != null) {
+					let next_values = (await queryClient.queryDenomsMetadata({ ...query, 'pagination.key': (<any>value).pagination.nextKey })).data
+					value = mergeResults(value, next_values)
 				}
-				commit('QUERY', { query: 'DenomsMetadata', key: { params: {...key}, query}, value })
-				if (subscribe) commit('SUBSCRIBE', { action: 'QueryDenomsMetadata', payload: { options: { all }, params: {...key},query }})
-				return getters['getDenomsMetadata']( { params: {...key}, query}) ?? {}
+				commit('QUERY', { query: 'DenomsMetadata', key: { params: { ...key }, query }, value })
+				if (subscribe) commit('SUBSCRIBE', { action: 'QueryDenomsMetadata', payload: { options: { all }, params: { ...key }, query } })
+				return getters['getDenomsMetadata']({ params: { ...key }, query }) ?? {}
 			} catch (e) {
 				throw new SpVuexError('QueryClient:QueryDenomsMetadata', 'API Node Unavailable. Could not perform query: ' + e.message)
-				
 			}
 		},
-		
-		
+
 		async sendMsgMultiSend({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
-				const txClient=await initTxClient(rootGetters)
+				const txClient = await initTxClient(rootGetters)
 				const msg = await txClient.msgMultiSend(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
+				const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee, gas: '200000' }, memo })
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgMultiSend:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgMultiSend:Send', 'Could not broadcast Tx: '+ e.message)
+				} else {
+					throw new SpVuexError('TxClient:MsgMultiSend:Send', 'Could not broadcast Tx: ' + e.message)
 				}
 			}
 		},
 		async sendMsgSend({ rootGetters }, { value, fee = [], memo = '' }) {
 			try {
-				const txClient=await initTxClient(rootGetters)
+				const txClient = await initTxClient(rootGetters)
 				const msg = await txClient.msgSend(value)
-				const result = await txClient.signAndBroadcast([msg], {fee: { amount: fee, 
-	gas: "200000" }, memo})
+				const result = await txClient.signAndBroadcast([msg], { fee: { amount: fee, gas: '200000' }, memo })
 				return result
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgSend:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
-					throw new SpVuexError('TxClient:MsgSend:Send', 'Could not broadcast Tx: '+ e.message)
+				} else {
+					throw new SpVuexError('TxClient:MsgSend:Send', 'Could not broadcast Tx: ' + e.message)
 				}
 			}
 		},
-		
+
 		async MsgMultiSend({ rootGetters }, { value }) {
 			try {
-				const txClient=await initTxClient(rootGetters)
+				const txClient = await initTxClient(rootGetters)
 				const msg = await txClient.msgMultiSend(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgMultiSend:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
+				} else {
 					throw new SpVuexError('TxClient:MsgMultiSend:Create', 'Could not create message: ' + e.message)
-					
 				}
 			}
 		},
 		async MsgSend({ rootGetters }, { value }) {
 			try {
-				const txClient=await initTxClient(rootGetters)
+				const txClient = await initTxClient(rootGetters)
 				const msg = await txClient.msgSend(value)
 				return msg
 			} catch (e) {
 				if (e == MissingWalletError) {
 					throw new SpVuexError('TxClient:MsgSend:Init', 'Could not initialize signing client. Wallet is required.')
-				}else{
+				} else {
 					throw new SpVuexError('TxClient:MsgSend:Create', 'Could not create message: ' + e.message)
-					
 				}
 			}
-		},
-		
+		}
 	}
 }
