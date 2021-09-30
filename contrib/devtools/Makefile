@@ -57,10 +57,9 @@ RUNSIM         = $(TOOLS_DESTDIR)/runsim
 runsim: $(RUNSIM)
 $(RUNSIM):
 	@echo "Installing runsim..."
-	@(cd /tmp && go install github.com/cosmos/tools/cmd/runsim@v1.0.0)
+	@(cd /tmp && go install github.com/cosmos/tools/cmd/runsim@master)
 
 tools-clean:
-	rm -f $(STATIK) $(GOLANGCI_LINT) $(RUNSIM)
-	rm -f proto-tools-stamp tools-stamp
+	rm -f $(RUNSIM)
 
 .PHONY: tools-clean  runsim
