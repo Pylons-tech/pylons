@@ -7,8 +7,6 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-// TODO add tests
-
 func (suite *IntegrationTestSuite) TestFulfillTradeMsgServerSimple() {
 	k := suite.k
 	ctx := suite.ctx
