@@ -67,10 +67,15 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	}
 	trade := k.GetTrade(ctx, msg.ID)
 	coinInputsIndex := int(msg.CoinInputsIndex)
-	if coinInputsIndex >= len(trade.CoinInputs) {
+	var coinInputs sdk.Coins
+	// nolint: gocritic
+	if coinInputsIndex >= len(trade.CoinInputs) && coinInputsIndex != 0 && len(trade.CoinInputs) != 0 {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+	} else if coinInputsIndex == 0 && len(trade.CoinInputs) == 0 {
+		coinInputs = sdk.Coins{} // empty coins but valid
+	} else {
+		coinInputs = trade.CoinInputs[coinInputsIndex].Coins
 	}
-	coinInputs := trade.CoinInputs[coinInputsIndex].Coins
 
 	// match msg items to trade itemInputs
 	matchedInputItems, err := k.MatchItemInputsForTrade(ctx, msg.Creator, msg.Items, trade)
