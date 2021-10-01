@@ -24,11 +24,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //padding: EdgeInsets.all(16.0),
-      child: CustomScrollView(
+    return Scaffold(
+      // backgroundColor: Color(0xffE5E5E5),
+      body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            elevation: 10,
           pinned: true,
           snap: true,
           floating: true,
@@ -62,16 +63,15 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
           ) ,
 
           bottom: PreferredSize(
-            preferredSize: const Size(0.0,0.0),
+            preferredSize: Size.zero,
             child: Container(
-                padding: const EdgeInsets.only(left: 16.0, top:0, right: 16.0, bottom: 10),
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     DropdownButton<String>(
                       value: _sortValue,
                       icon: const Icon(Icons.keyboard_arrow_down),
-                      iconSize: 24,
                       elevation: 16,
                       style: const TextStyle(color: Colors.red, fontSize: 18),
                       underline: Container(
@@ -86,7 +86,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                       items: list.map<DropdownMenuItem<String>>((value) {
                         return DropdownMenuItem<String>(
                           value: value.toString(),
-                          child: Text("$value", style: TextStyle(color: Color(0xFF616161))),
+                          child: Text("$value", style: const TextStyle(color: Color(0xFF616161))),
                         );
                       }).toList(),
                     ),
@@ -105,12 +105,12 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                             angle: -pi * 0.5,
                             child: const ImageIcon(
                               AssetImage('assets/icons/filter.png'),
-                              size: 24,
+                              size: 20,
                             ),
                           ),
                           Padding(
                               padding: const EdgeInsets.only(right: 10, left: 5),
-                              child: Text('filter_by'.tr())
+                              child: Text('filter_by'.tr(), style: const TextStyle(fontSize: 14))
                           ),
                           const Icon(
                             Icons.keyboard_arrow_down,

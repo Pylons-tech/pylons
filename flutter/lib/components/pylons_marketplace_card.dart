@@ -5,6 +5,7 @@ import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
+import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class PylonsMarketplaceCard extends StatelessWidget {
   const PylonsMarketplaceCard({
@@ -13,16 +14,19 @@ class PylonsMarketplaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = ScreenSizeUtil(context);
     return Container(
-      width: MediaQuery.of(context).size.width,
+      width: screenSize.width(),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Row(children: const [
+        Row(
+            children: const [
            Expanded(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
                   minVerticalPadding: 0,
-                  leading: UserImageWidget(imageUrl: kImage2),
+                  leading: UserImageWidget(imageUrl: kImage2, radius: 16,),
+                  horizontalTitleGap: 0,
                   title: Text(
                     'Linda',
                     style: TextStyle(fontWeight: FontWeight.w500),
@@ -31,28 +35,36 @@ class PylonsMarketplaceCard extends StatelessWidget {
               style: TextStyle(fontSize: 12, color: Color(0xFF201D1D)))
         ]),
         Card(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8)
+          ),
           margin: EdgeInsets.zero,
             child: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
                 children: [
               InkWell(
-                child: CachedNetworkImage(
-                  imageUrl: kImage1,
-                  width: MediaQuery.of(context).size.width,
-                  height: 200,
-                  fit: BoxFit.fitWidth,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(topRight: Radius.circular(8), topLeft: Radius.circular(8)),
+                  child: CachedNetworkImage(
+                    imageUrl: kImage1,
+                    width: screenSize.width(),
+                    height: 200,
+                    fit: BoxFit.fitWidth,
+                  ),
                 ),
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: false,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailScreenWidget(isOwner: false,)));
                 }
               ),
+
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: EdgeInsets.only(left: 20, top: 10),
                   child: Text('Title of Artwork',
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 16,
                           fontWeight: FontWeight.w500,
                           color: Color(0xFF201D1D))),
                 ),
@@ -61,26 +73,26 @@ class PylonsMarketplaceCard extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(20.0, 10, 20, 10),
                 child: Row(children: [
                   GestureDetector(
-                      child: ImageIcon(
+                      child: const ImageIcon(
                           AssetImage('assets/icons/comment.png'),
                           size: 16,
-                          color: Color(0xFF616161)),
+                          color: Color(0xFFC4C4C4)),
                       onTap: () {}),
                   const HorizontalSpace(4),
-                  Text('40'),
+                  Text('40', style: const TextStyle(fontSize: 13, color: Color(0xFFC4C4C4)),),
                   const HorizontalSpace(10),
                   GestureDetector(
-                      child: ImageIcon(
+                      child: const ImageIcon(
                           AssetImage('assets/icons/like.png'),
                           size: 16,
-                          color: Color(0xFF616161)),
+                          color: Color(0xFFC4C4C4)),
                       onTap: () {}),
                   const HorizontalSpace(4),
-                  Text('142'),
+                  Text('142', style: TextStyle(fontSize: 13, color: Color(0xFFC4C4C4))),
                   Spacer(),
                   Text(
                     '\$ 12.00',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   )
                 ]),
               )

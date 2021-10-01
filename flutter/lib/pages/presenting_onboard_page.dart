@@ -101,6 +101,7 @@ class PresentingOnboardPage extends StatelessWidget {
 
   /// Create the new wallet and associate the choosen username with it.
   Future _registerNewUser(String userName, BuildContext context) async {
+
     final _mnemonic = generateMnemonic();
     final _username = userName;
 
@@ -109,7 +110,8 @@ class PresentingOnboardPage extends StatelessWidget {
           //TODO: refactoring : create an util class to read / write values in the preferences store.
           SharedPreferences.getInstance().then((prefs) => prefs.setString("pylons:current_wallet", _username));
           PylonsApp.currentWallet = value;
-          Navigator.of(context).push(MaterialPageRoute(builder: (_) => const Dashboard()));
+
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const Dashboard()), (route) => true);
         });
   }
 }
