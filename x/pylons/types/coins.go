@@ -97,8 +97,6 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 	return validCoinOutputs, nil
 }
 
-// TODO add Name and Symbol fields after SDK upgrade
-
 func PylonsCoinMetadata() banktypes.Metadata {
 	return banktypes.Metadata{
 		Description: "The native engagement token of the Pylons Ecosystem.",
