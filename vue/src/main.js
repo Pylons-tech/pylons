@@ -3,6 +3,8 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import vueLib from '@starport/vue'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap'
 
 const app = createApp(App)
 app.config.globalProperties._depsLoaded = true
