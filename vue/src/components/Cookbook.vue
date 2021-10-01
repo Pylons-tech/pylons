@@ -1,6 +1,28 @@
 <template>
-	<div id="cookbookForm" class="form-group">
-		<SpType modulePath="Pylonstech.pylons.pylons" moduleType="Cookbook" />
+	<div id="cookbookForm" class="sp-form-group sp-box">
+		<div class="sp-type-form__header sp-box-header">CREATE NEW COOKBOOK</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="id" :placeholder="ID" />
+		</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="nodeVersion" :placeholder="NodeVersion" />
+		</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="name" :placeholder="Name" />
+		</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="description" :placeholder="description" />
+		</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="developer" :placeholder="developer" />
+		</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="version" :placeholder="version"  />
+		</div>
+		<div class="sp-type-form__field sp-form-group">
+			<input type="text" class="sp-input" v-model="supportEmail" :placeholder="supportEmail" />
+		</div>
+		<SpButton type="primary" v-on:click="createCookbook()" :busy="inFlight" />
 	</div>
 </template>
 
