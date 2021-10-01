@@ -20,8 +20,10 @@ init:
 accounts:
   - name: alice
     coins: ["20000000000upylon", "200000000ubedrock"]
+    mnemonic: "achieve patch rabbit delay you stairs flag nation lady outside answer property olive man dwarf used chapter sunset bundle sniff between since review logic"
   - name: bob
     coins: ["10000000000upylon", "100000000ubedrock"]
+    mnemonic: "oil inflict cup nation circle palace cactus uphold clarify vibrant believe stem farm aerobic casino treat early amazing remain produce exhaust bachelor flame own"
 validator:
   name: alice
   staked: "100000000ubedrock"

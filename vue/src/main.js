@@ -17,20 +17,14 @@ window.keplr.experimentalSuggestChain({
 		coinType: 118
 	},
 	bech32Config: {
-		bech32PrefixAccAddr: 'cosmos',
-		bech32PrefixAccPub: 'cosmos' + 'pub',
-		bech32PrefixValAddr: 'cosmos' + 'valoper',
-		bech32PrefixValPub: 'cosmos' + 'valoperpub',
-		bech32PrefixConsAddr: 'cosmos' + 'valcons',
-		bech32PrefixConsPub: 'cosmos' + 'valconspub'
+		bech32PrefixAccAddr: 'pylo',
+		bech32PrefixAccPub: 'pylo' + 'pub',
+		bech32PrefixValAddr: 'pylo' + 'valoper',
+		bech32PrefixValPub: 'pylo' + 'valoperpub',
+		bech32PrefixConsAddr: 'pylo' + 'valcons',
+		bech32PrefixConsPub: 'pylo' + 'valconspub'
 	},
 	currencies: [
-		{
-			coinDenom: 'ATOM',
-			coinMinimalDenom: 'uatom',
-			coinDecimals: 6,
-			coinGeckoId: 'cosmos'
-		},
 		{
 			coinDenom: 'BEDROCK',
 			coinMinimalDenom: 'ubedrock',
