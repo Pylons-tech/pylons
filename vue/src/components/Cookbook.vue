@@ -2,7 +2,7 @@
 	<div id="cookbookForm" class="sp-form-group sp-box">
 		<div class="mb-3">CREATE NEW COOKBOOK</div>
 		<div class="sp-type-form__field sp-form-group">
-			<label for="id" class="form-label">Email address</label>
+			<label for="id" class="form-label">ID</label>
 			<input id="id" type="text" class="form-control" v-model="id" placeholder="ID" />
 		</div>
 		<div class="sp-type-form__field sp-form-group">
@@ -29,13 +29,31 @@
 			<label for="nodeVersion" class="form-label">Support Email</label>
 			<input type="text" class="form-control" v-model="supportEmail" placeholder="supportEmail" />
 		</div>
-		<button type="button" v-on:click="createCookbook()" class="btn btn-outline-primary">Submit</button>
+		<div class="card">
+			<div class="card-header">Cost per block</div>
+			<div class="card-body">
+				<div class="sp-type-form__field sp-form-group">
+					<label for="coinDenom" class="form-label">Coin Denomination</label>
+					<input type="text" id="coinDenom" class="form-control" v-model="coinDenom" placeholder="supportEmail" />
+				</div>
+				<div class="sp-type-form__field sp-form-group">
+					<label for="coinAmount" class="form-label">Coin Amount</label>
+					<input type="text" id="coinAmount" class="form-control" v-model="coinAmount" placeholder="supportEmail" />
+				</div>
+			</div>
+		</div>
+		<button type="button" v-on:click="createCookbook()" class="btn btn-primary" :disabled="!address">Submit</button>
 	</div>
 </template>
 
 <script>
 export default {
 	name: 'Cookbook',
+	computed: {
+		address: function () {
+			return this.$store.getters['common/wallet/address']
+		}
+	},
 	data() {
 		return {
 			id: '',
@@ -44,19 +62,27 @@ export default {
 			description: '',
 			developer: '',
 			version: '',
-			supportEmail: ''
+			supportEmail: '',
+			coinDenom: '',
+			coinAmount: ''
 		}
 	},
 	methods: {
-		createCookbook(event) {
+		createCookbook() {
 			this.$store.dispatch('Pylonstech.pylons.pylons/sendMsgCreateCookbook', {
 				value: {
-					name: '',
-					description: '',
-					developer: '',
-					version: '',
-					supportEmail: '',
-					costPerBlock: { amount: '', denom: '' },
+					creator: this.$store.getters['common/wallet/address'],
+					ID: this.id,
+					version: this.version,
+					name: this.name,
+					nodeVersion: this.nodeVersion,
+					description: this.description,
+					developer: this.developer,
+					supportEmail: this.supportEmail,
+					costPerBlock: {
+						denom: this.coinDenom,
+						amount: this.coinAmount
+					},
 					enabled: true
 				},
 				fee: [],
