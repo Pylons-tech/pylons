@@ -24,6 +24,8 @@ npm install
 npm run serve
 ```
 
+or 
+
 ```
 cd vue
 yarn install
