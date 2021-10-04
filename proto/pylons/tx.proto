@@ -62,9 +62,9 @@ message MsgFulfillTradeResponse {
 
 message MsgCreateTrade {
   string creator = 1;
-  repeated CoinInput coinInputs = 2 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin coinInput = 2 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 3 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 4 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  cosmos.base.v1beta1.Coin coinOutput = 4 [(gogoproto.nullable) = false];
   repeated ItemRef itemOutputs = 5 [(gogoproto.nullable) = false];
   string extraInfo = 6;
 }

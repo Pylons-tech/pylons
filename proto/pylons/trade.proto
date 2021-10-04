@@ -15,9 +15,9 @@ message ItemRef {
 message Trade {
   string creator = 1;
   uint64 ID = 2;
-  repeated CoinInput coinInputs = 3 [(gogoproto.nullable) = false];
+  cosmos.base.v1beta1.Coin coinInput = 3 [(gogoproto.nullable) = false];
   repeated ItemInput itemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  cosmos.base.v1beta1.Coin coinOutput = 5 [(gogoproto.nullable) = false];
   repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
   string extraInfo = 7;
   string receiver = 8;

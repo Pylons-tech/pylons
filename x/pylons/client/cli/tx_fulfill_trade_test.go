@@ -290,11 +290,9 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin(testDenom, sdk.NewInt(110))),
-		},
-	})
+	coinInput, err := json.Marshal(
+		sdk.NewCoin(testDenom, sdk.NewInt(110)),
+	)
 	require.NoError(t, err)
 
 	// no item input
@@ -302,7 +300,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 
 	// no coinOutputs
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutput, err := json.Marshal(sdk.Coin{
 		//sdk.NewCoin(testDenom, sdk.NewInt(10)),
 	})
 	require.NoError(t, err)
@@ -322,9 +320,9 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	// coinInputs, itemInputs, coinOutputs, itemOutputs, extraInfo, flags
 	tradeFields := []string{
-		string(coinInputs),
+		string(coinInput),
 		string(itemInputs),
-		string(coinOutputs),
+		string(coinOutput),
 		string(itemOutputs),
 		"extraInfo",
 	}

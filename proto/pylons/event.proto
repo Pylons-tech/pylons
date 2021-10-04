@@ -105,9 +105,9 @@ message EventFulfillTrade {
   string creator = 2;
   string fulfiller = 3;
   repeated ItemRef itemInputs = 4 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinInputs = 5 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  cosmos.base.v1beta1.Coin coinInput = 5 [(gogoproto.nullable) = false];
   repeated ItemRef itemOutputs = 6 [(gogoproto.nullable) = false];
-  repeated cosmos.base.v1beta1.Coin coinOutputs = 7 [(gogoproto.nullable) = false, (gogoproto.castrepeated) = "github.com/cosmos/cosmos-sdk/types.Coins"];
+  cosmos.base.v1beta1.Coin coinOutput = 7 [(gogoproto.nullable) = false];
 }
 
 message EventGooglePurchase {

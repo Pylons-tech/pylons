@@ -32,25 +32,23 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		items = append(items, item)
 	}
 	if len(items) != 0 {
-		for i, coinInputs := range msg.CoinInputs {
-			_, err := types.FindValidPaymentsPermutation(items, coinInputs.Coins)
-			if err != nil {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs at index %d cannot satisfy itemOutputs transferFees requirements", i)
-			}
+		_, err := types.FindValidPaymentsPermutation(items, sdk.NewCoins(msg.CoinInput))
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInput cannot satisfy itemOutputs transferFees requirements")
 		}
 	}
 
 	// lock coins for trade
-	err := k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
+	err := k.LockCoinsForTrade(ctx, addr, sdk.NewCoins(msg.CoinOutput))
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 
 	var trade = types.Trade{
 		Creator:     msg.Creator,
-		CoinInputs:  msg.CoinInputs,
+		CoinInput:   msg.CoinInput,
 		ItemInputs:  msg.ItemInputs,
-		CoinOutputs: msg.CoinOutputs,
+		CoinOutput:  msg.CoinOutput,
 		ItemOutputs: msg.ItemOutputs,
 		ExtraInfo:   msg.ExtraInfo,
 	}
@@ -90,7 +88,7 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 
 	// unlock locked coins
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
-	err := k.UnLockCoinsForTrade(ctx, addr, trade.CoinOutputs)
+	err := k.UnLockCoinsForTrade(ctx, addr, sdk.NewCoins(trade.CoinOutput))
 	if err != nil {
 		// this should never happen, it means the module account has been drained of funds illegitimately
 		panic(err)

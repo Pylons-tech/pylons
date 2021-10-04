@@ -260,6 +260,8 @@ func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 	owners := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = owners[i]
+		items[i].CoinInput = sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}
+		items[i].CoinOutput = sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}
 		items[i].ID = k.AppendTrade(ctx, items[i])
 	}
 	return items

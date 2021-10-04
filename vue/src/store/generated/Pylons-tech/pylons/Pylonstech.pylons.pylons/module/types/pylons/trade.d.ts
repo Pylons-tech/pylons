@@ -1,6 +1,6 @@
 import { Writer, Reader } from 'protobufjs/minimal';
-import { CoinInput, ItemInput } from '../pylons/recipe';
 import { Coin } from '../cosmos/base/v1beta1/coin';
+import { ItemInput } from '../pylons/recipe';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
 export interface ItemRef {
     cookbookID: string;
@@ -9,9 +9,9 @@ export interface ItemRef {
 export interface Trade {
     creator: string;
     ID: number;
-    coinInputs: CoinInput[];
+    coinInput: Coin | undefined;
     itemInputs: ItemInput[];
-    coinOutputs: Coin[];
+    coinOutput: Coin | undefined;
     itemOutputs: ItemRef[];
     extraInfo: string;
     receiver: string;

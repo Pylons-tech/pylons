@@ -7,12 +7,12 @@ import (
 
 var _ sdk.Msg = &MsgCreateTrade{}
 
-func NewMsgCreateTrade(creator string, coinInputs []CoinInput, itemInputs []ItemInput, coinOutputs sdk.Coins, itemOutputs []ItemRef, extraInfo string) *MsgCreateTrade {
+func NewMsgCreateTrade(creator string, coinInput sdk.Coin, itemInputs []ItemInput, coinOutput sdk.Coin, itemOutputs []ItemRef, extraInfo string) *MsgCreateTrade {
 	return &MsgCreateTrade{
 		Creator:     creator,
-		CoinInputs:  coinInputs,
+		CoinInput:   coinInput,
 		ItemInputs:  itemInputs,
-		CoinOutputs: coinOutputs,
+		CoinOutput:  coinOutput,
 		ItemOutputs: itemOutputs,
 		ExtraInfo:   extraInfo,
 	}
@@ -45,14 +45,16 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
 	}
 
-	for i, coinInput := range msg.CoinInputs {
-		if !coinInput.Coins.IsValid() {
-			return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInputs at index %d", i)
-		}
+	if !(msg.CoinInput.Denom == "") && !msg.CoinInput.IsValid() {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "invalid coinInput")
 	}
 
-	if !msg.CoinOutputs.Empty() && !msg.CoinOutputs.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs")
+	if !(msg.CoinOutput.Denom == "") && !msg.CoinOutput.IsValid() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutput")
+	}
+
+	if !(msg.CoinInput.Denom == "") && !(msg.CoinOutput.Denom == "") && msg.CoinOutput.Denom != msg.CoinInput.Denom {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "coin input and coin output denoms must match")
 	}
 
 	for _, item := range msg.ItemOutputs {

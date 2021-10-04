@@ -27,11 +27,9 @@ func TestCreateTradeNoItemOutput(t *testing.T) {
 	ctx := val.ClientCtx
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
-		},
-	})
+	coinInputs, err := json.Marshal(
+		sdk.NewCoin("node0token", sdk.NewInt(1)),
+	)
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -50,9 +48,9 @@ func TestCreateTradeNoItemOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutputs, err := json.Marshal(
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs
@@ -245,11 +243,9 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
-		},
-	})
+	coinInputs, err := json.Marshal(
+		sdk.NewCoin("node0token", sdk.NewInt(1)),
+	)
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -268,9 +264,9 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutputs, err := json.Marshal(
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs
@@ -326,7 +322,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	}
 }
 
-func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
+func TestCreateTradeItemOutputValidCoinInputs(t *testing.T) {
 	net := network.New(t)
 	val := net.Validators[0]
 	ctx := val.ClientCtx
@@ -480,11 +476,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
-		},
-	})
+	coinInput, err := json.Marshal(
+		sdk.NewCoin("node0token", sdk.NewInt(1)),
+	)
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -503,9 +497,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutput, err := json.Marshal(
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs
@@ -519,9 +513,9 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 
 	// coinInputs, itemInputs, coinOutputs, itemOutputs, extraInfo, flags
 	fields := []string{
-		string(coinInputs),
+		string(coinInput),
 		string(itemInputs),
-		string(coinOutputs),
+		string(coinOutput),
 		string(itemOutputs),
 		"extraInfo",
 	}
@@ -540,7 +534,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs(t *testing.T) {
 				fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
 			},
 			err:  nil,
-			code: sdkerrors.ErrInvalidCoins.ABCICode(),
+			code: uint32(0),
 		},
 	} {
 		tc := tc
@@ -714,11 +708,9 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
-		},
-	})
+	coinInput, err := json.Marshal(
+		sdk.NewCoin("node0token", sdk.NewInt(1)),
+	)
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -737,9 +729,9 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutput, err := json.Marshal(
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs
@@ -753,9 +745,9 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 
 	// coinInputs, itemInputs, coinOutputs, itemOutputs, extraInfo, flags
 	fields := []string{
-		string(coinInputs),
+		string(coinInput),
 		string(itemInputs),
-		string(coinOutputs),
+		string(coinOutput),
 		string(itemOutputs),
 		"extraInfo",
 	}
@@ -801,11 +793,9 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	ctx := val.ClientCtx
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
-		},
-	})
+	coinInput, err := json.Marshal(
+		sdk.NewCoin("pylons", sdk.NewInt(1)),
+	)
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -825,9 +815,9 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// validator does not own any "pylons" coins
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutput, err := json.Marshal(
 		sdk.NewCoin("pylons", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs
@@ -836,9 +826,9 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 
 	// coinInputs, itemInputs, coinOutputs, itemOutputs, extraInfo, flags
 	fields := []string{
-		string(coinInputs),
+		string(coinInput),
 		string(itemInputs),
-		string(coinOutputs),
+		string(coinOutput),
 		string(itemOutputs),
 		"extraInfo",
 	}
@@ -884,11 +874,9 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	ctx := val.ClientCtx
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
-		},
-	})
+	coinInput, err := json.Marshal(
+		sdk.NewCoin("node0token", sdk.NewInt(1)),
+	)
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -908,9 +896,9 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// validator does not own any "pylons" coins
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutput, err := json.Marshal(
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs
@@ -924,9 +912,9 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 
 	// coinInputs, itemInputs, coinOutputs, itemOutputs, extraInfo, flags
 	fields := []string{
-		string(coinInputs),
+		string(coinInput),
 		string(itemInputs),
-		string(coinOutputs),
+		string(coinOutput),
 		string(itemOutputs),
 		"extraInfo",
 	}
@@ -972,7 +960,7 @@ func TestCancelTrade(t *testing.T) {
 	ctx := val.ClientCtx
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{})
+	coinInputs, err := json.Marshal(sdk.Coin{})
 	require.NoError(t, err)
 
 	// expect a dummy item
@@ -991,9 +979,9 @@ func TestCancelTrade(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	coinOutputs, err := json.Marshal(sdk.Coins{
+	coinOutputs, err := json.Marshal(
 		sdk.NewCoin("node0token", sdk.NewInt(10)),
-	})
+	)
 	require.NoError(t, err)
 
 	// no  item outputs

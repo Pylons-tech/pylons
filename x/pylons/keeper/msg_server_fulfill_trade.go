@@ -66,11 +66,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "trade does not exist")
 	}
 	trade := k.GetTrade(ctx, msg.ID)
-	coinInputsIndex := int(msg.CoinInputsIndex)
-	if coinInputsIndex >= len(trade.CoinInputs) {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
-	}
-	coinInputs := trade.CoinInputs[coinInputsIndex].Coins
+	// coinInputsIndex := int(msg.CoinInputsIndex)
+	// if coinInputsIndex >= len(trade.CoinInputs) {
+	//	return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "invalid coinInputs index")
+	// }
 
 	// match msg items to trade itemInputs
 	matchedInputItems, err := k.MatchItemInputsForTrade(ctx, msg.Creator, msg.Items, trade)
@@ -86,7 +85,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	minItemInputsTransferFees := sdk.NewCoins()
-	itemInputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(matchedInputItems, trade.CoinOutputs)
+	itemInputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(matchedInputItems, sdk.NewCoins(trade.CoinOutput))
 	if err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "cannot use coinOutputs to pay for the items provided")
 	}
@@ -97,7 +96,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	// check that sender has enough balance to pay coinInputs
 	addr, _ := sdk.AccAddressFromBech32(msg.Creator)
 	balance := k.bankKeeper.SpendableCoins(ctx, addr)
-	if !balance.IsAllGTE(coinInputs) {
+	if !balance.IsAllGTE(sdk.NewCoins(trade.CoinInput)) {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "not enough balance to pay for trade coinInputs")
 	}
 
@@ -108,7 +107,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	}
 
 	minItemOutputsTransferFees := sdk.NewCoins()
-	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, coinInputs)
+	itemOutputsTransferFeePermutation, err := types.FindValidPaymentsPermutation(outputItems, sdk.NewCoins(trade.CoinInput))
 	if err != nil {
 		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "balance not sufficient to pay coinInputs")
 	}
@@ -137,9 +136,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	inputChainTotAmt := sdk.NewCoins()
 	inputTransferTotAmt := sdk.NewCoins()
 	inputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
+	coinOutputs := sdk.NewCoins(trade.CoinOutput)
 	for i, item := range matchedInputItems {
 		baseItemTransferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
-		itemTransferFeeAmt := trade.CoinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
+		itemTransferFeeAmt := coinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
 		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
 		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
@@ -155,6 +155,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	outputChainTotAmt := sdk.NewCoins()
 	outputTransferTotAmt := sdk.NewCoins()
 	outputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
+	coinInputs := sdk.NewCoins(trade.CoinInput)
 	for i, item := range outputItems {
 		baseItemTransferFee := item.TransferFee[itemOutputsTransferFeePermutation[i]]
 		itemTransferFeeAmt := coinInputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(outputItemWeights[i]).RoundInt()
@@ -227,9 +228,9 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		Creator:     trade.Creator,
 		Fulfiller:   msg.Creator,
 		ItemInputs:  itemInputsRefs,
-		CoinInputs:  coinInputs,
+		CoinInput:   trade.CoinInput,
 		ItemOutputs: trade.ItemOutputs,
-		CoinOutputs: trade.CoinOutputs,
+		CoinOutput:  trade.CoinOutput,
 	})
 
 	return &types.MsgFulfillTradeResponse{}, err

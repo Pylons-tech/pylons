@@ -57,9 +57,9 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          addresses[i],
 			ID:               uint64(i),
-			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
+			CoinInput:        sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
 			ItemInputs:       make([]types.ItemInput, 0),
-			CoinOutputs:      sdk.NewCoins(),
+			CoinOutput:       sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)},
 			ItemOutputs:      make([]types.ItemRef, 0),
 			ExtraInfo:        "extra info",
 			Receiver:         "receiver",

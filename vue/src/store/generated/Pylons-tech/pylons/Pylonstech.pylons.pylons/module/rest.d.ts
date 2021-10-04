@@ -298,9 +298,21 @@ export interface PylonsTrade {
     creator?: string;
     /** @format uint64 */
     ID?: string;
-    coinInputs?: PylonsCoinInput[];
+    /**
+     * Coin defines a token with a denomination and an amount.
+     *
+     * NOTE: The amount field is an Int which implements the custom method
+     * signatures required by gogoproto.
+     */
+    coinInput?: V1Beta1Coin;
     itemInputs?: PylonsItemInput[];
-    coinOutputs?: V1Beta1Coin[];
+    /**
+     * Coin defines a token with a denomination and an amount.
+     *
+     * NOTE: The amount field is an Int which implements the custom method
+     * signatures required by gogoproto.
+     */
+    coinOutput?: V1Beta1Coin;
     itemOutputs?: PylonsItemRef[];
     extraInfo?: string;
     receiver?: string;
