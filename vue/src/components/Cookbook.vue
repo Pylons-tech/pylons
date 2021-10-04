@@ -1,4 +1,23 @@
 <template>
+	<div class=''>
+
+	</div>
+	<div class="card">
+		<div class="p-field p-grid">
+			<h4>Create a new Cookbook</h4>
+			<label for="firstname3" class="p-col-fixed" style="width: 100px">ID</label>
+			<div class="p-col">
+				<InputText id="id" type="text" v-model="id" aria-placeholder="id" />
+			</div>
+		</div>
+		<div class="p-field p-grid">
+			<label for="lastname3" class="p-col-fixed" style="width: 100px">Lastname</label>
+			<div class="p-col">
+				<InputText id="lastname3" type="text" />
+			</div>
+		</div>
+	</div>
+
 	<div id="cookbookForm" class="sp-form-group sp-box">
 		<div class="mb-3">CREATE NEW COOKBOOK</div>
 		<div class="sp-type-form__field sp-form-group">
@@ -47,8 +66,13 @@
 </template>
 
 <script>
+import InputText from 'primevue/inputtext/sfc'
+
 export default {
 	name: 'Cookbook',
+	components: {
+		InputText
+	},
 	computed: {
 		address: function () {
 			return this.$store.getters['common/wallet/address']

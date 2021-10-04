@@ -3,12 +3,20 @@ import App from './App.vue'
 import store from './store'
 import router from './router'
 import vueLib from '@starport/vue'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
+import PrimeVue from 'primevue/config'
+
+// PrimeVue Components
+
+import "primevue/resources/themes/saga-blue/theme.css"       //theme
+import "primevue/resources/primevue.min.css"                 //core css
+import "primeicons/primeicons.css"                           //icons
+import 'primeflex/primeflex.css';														 //primeflex
+
 
 const app = createApp(App)
 app.config.globalProperties._depsLoaded = true
-app.use(store).use(router).use(vueLib).mount('#app')
+app.use(store).use(router).use(vueLib).use(PrimeVue).mount('#app')
+
 
 window.keplr.experimentalSuggestChain({
 	chainId: 'pylons',
