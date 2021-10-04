@@ -28,8 +28,8 @@ validator:
   name: alice
   staked: "100000000ubedrock"
 client:
-  vuex:
-    path: "vue/src/store"
+#  vuex:
+#    path: "vue/src/store"
   openapi:
     path: "docs/static/openapi.yml"
 faucet:

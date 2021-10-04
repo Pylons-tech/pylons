@@ -1,26 +1,26 @@
-import { Writer, Reader } from 'protobufjs/minimal'
-export declare const protobufPackage = 'google.api'
+import { Writer, Reader } from 'protobufjs/minimal';
+export declare const protobufPackage = "google.api";
 /**
  * Defines the HTTP configuration for an API service. It contains a list of
  * [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC method
  * to one or more HTTP REST API methods.
  */
 export interface Http {
-	/**
-	 * A list of HTTP configuration rules that apply to individual API methods.
-	 *
-	 * **NOTE:** All service configuration rules follow "last one wins" order.
-	 */
-	rules: HttpRule[]
-	/**
-	 * When set to true, URL path parmeters will be fully URI-decoded except in
-	 * cases of single segment matches in reserved expansion, where "%2F" will be
-	 * left encoded.
-	 *
-	 * The default behavior is to not decode RFC 6570 reserved characters in multi
-	 * segment matches.
-	 */
-	fullyDecodeReservedExpansion: boolean
+    /**
+     * A list of HTTP configuration rules that apply to individual API methods.
+     *
+     * **NOTE:** All service configuration rules follow "last one wins" order.
+     */
+    rules: HttpRule[];
+    /**
+     * When set to true, URL path parmeters will be fully URI-decoded except in
+     * cases of single segment matches in reserved expansion, where "%2F" will be
+     * left encoded.
+     *
+     * The default behavior is to not decode RFC 6570 reserved characters in multi
+     * segment matches.
+     */
+    fullyDecodeReservedExpansion: boolean;
 }
 /**
  * `HttpRule` defines the mapping of an RPC method to one or more HTTP
@@ -242,87 +242,79 @@ export interface Http {
  * repeated fields or map fields.
  */
 export interface HttpRule {
-	/**
-	 * Selects methods to which this rule applies.
-	 *
-	 * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
-	 */
-	selector: string
-	/** Used for listing and getting information about resources. */
-	get: string | undefined
-	/** Used for updating a resource. */
-	put: string | undefined
-	/** Used for creating a resource. */
-	post: string | undefined
-	/** Used for deleting a resource. */
-	delete: string | undefined
-	/** Used for updating a resource. */
-	patch: string | undefined
-	/**
-	 * The custom pattern is used for specifying an HTTP method that is not
-	 * included in the `pattern` field, such as HEAD, or "*" to leave the
-	 * HTTP method unspecified for this rule. The wild-card rule is useful
-	 * for services that provide content to Web (HTML) clients.
-	 */
-	custom: CustomHttpPattern | undefined
-	/**
-	 * The name of the request field whose value is mapped to the HTTP body, or
-	 * `*` for mapping all fields not captured by the path pattern to the HTTP
-	 * body. NOTE: the referred field must not be a repeated field and must be
-	 * present at the top-level of request message type.
-	 */
-	body: string
-	/**
-	 * Optional. The name of the response field whose value is mapped to the HTTP
-	 * body of response. Other response fields are ignored. When
-	 * not set, the response message will be used as HTTP body of response.
-	 */
-	responseBody: string
-	/**
-	 * Additional HTTP bindings for the selector. Nested bindings must
-	 * not contain an `additional_bindings` field themselves (that is,
-	 * the nesting may only be one level deep).
-	 */
-	additionalBindings: HttpRule[]
+    /**
+     * Selects methods to which this rule applies.
+     *
+     * Refer to [selector][google.api.DocumentationRule.selector] for syntax details.
+     */
+    selector: string;
+    /** Used for listing and getting information about resources. */
+    get: string | undefined;
+    /** Used for updating a resource. */
+    put: string | undefined;
+    /** Used for creating a resource. */
+    post: string | undefined;
+    /** Used for deleting a resource. */
+    delete: string | undefined;
+    /** Used for updating a resource. */
+    patch: string | undefined;
+    /**
+     * The custom pattern is used for specifying an HTTP method that is not
+     * included in the `pattern` field, such as HEAD, or "*" to leave the
+     * HTTP method unspecified for this rule. The wild-card rule is useful
+     * for services that provide content to Web (HTML) clients.
+     */
+    custom: CustomHttpPattern | undefined;
+    /**
+     * The name of the request field whose value is mapped to the HTTP body, or
+     * `*` for mapping all fields not captured by the path pattern to the HTTP
+     * body. NOTE: the referred field must not be a repeated field and must be
+     * present at the top-level of request message type.
+     */
+    body: string;
+    /**
+     * Optional. The name of the response field whose value is mapped to the HTTP
+     * body of response. Other response fields are ignored. When
+     * not set, the response message will be used as HTTP body of response.
+     */
+    responseBody: string;
+    /**
+     * Additional HTTP bindings for the selector. Nested bindings must
+     * not contain an `additional_bindings` field themselves (that is,
+     * the nesting may only be one level deep).
+     */
+    additionalBindings: HttpRule[];
 }
 /** A custom pattern is used for defining custom HTTP verb. */
 export interface CustomHttpPattern {
-	/** The name of this custom HTTP verb. */
-	kind: string
-	/** The path matched by this custom verb. */
-	path: string
+    /** The name of this custom HTTP verb. */
+    kind: string;
+    /** The path matched by this custom verb. */
+    path: string;
 }
 export declare const Http: {
-	encode(message: Http, writer?: Writer): Writer
-	decode(input: Reader | Uint8Array, length?: number): Http
-	fromJSON(object: any): Http
-	toJSON(message: Http): unknown
-	fromPartial(object: DeepPartial<Http>): Http
-}
+    encode(message: Http, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): Http;
+    fromJSON(object: any): Http;
+    toJSON(message: Http): unknown;
+    fromPartial(object: DeepPartial<Http>): Http;
+};
 export declare const HttpRule: {
-	encode(message: HttpRule, writer?: Writer): Writer
-	decode(input: Reader | Uint8Array, length?: number): HttpRule
-	fromJSON(object: any): HttpRule
-	toJSON(message: HttpRule): unknown
-	fromPartial(object: DeepPartial<HttpRule>): HttpRule
-}
+    encode(message: HttpRule, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): HttpRule;
+    fromJSON(object: any): HttpRule;
+    toJSON(message: HttpRule): unknown;
+    fromPartial(object: DeepPartial<HttpRule>): HttpRule;
+};
 export declare const CustomHttpPattern: {
-	encode(message: CustomHttpPattern, writer?: Writer): Writer
-	decode(input: Reader | Uint8Array, length?: number): CustomHttpPattern
-	fromJSON(object: any): CustomHttpPattern
-	toJSON(message: CustomHttpPattern): unknown
-	fromPartial(object: DeepPartial<CustomHttpPattern>): CustomHttpPattern
-}
-declare type Builtin = Date | Function | Uint8Array | string | number | undefined
-export declare type DeepPartial<T> = T extends Builtin
-	? T
-	: T extends Array<infer U>
-	? Array<DeepPartial<U>>
-	: T extends ReadonlyArray<infer U>
-	? ReadonlyArray<DeepPartial<U>>
-	: T extends {}
-	? {
-			[K in keyof T]?: DeepPartial<T[K]>
-	  }
-	: Partial<T>
-export {}
+    encode(message: CustomHttpPattern, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): CustomHttpPattern;
+    fromJSON(object: any): CustomHttpPattern;
+    toJSON(message: CustomHttpPattern): unknown;
+    fromPartial(object: DeepPartial<CustomHttpPattern>): CustomHttpPattern;
+};
+declare type Builtin = Date | Function | Uint8Array | string | number | undefined;
+export declare type DeepPartial<T> = T extends Builtin ? T : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>> : T extends {} ? {
+    [K in keyof T]?: DeepPartial<T[K]>;
+} : Partial<T>;
+export {};
