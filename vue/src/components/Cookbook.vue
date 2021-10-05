@@ -1,77 +1,59 @@
 <template>
-	<div class=''>
-
-	</div>
 	<div class="card">
-		<div class="p-field p-grid">
-			<h4>Create a new Cookbook</h4>
-			<label for="firstname3" class="p-col-fixed" style="width: 100px">ID</label>
-			<div class="p-col">
-				<InputText id="id" type="text" v-model="id" aria-placeholder="id" />
+		<Fieldset legend="Create a new Cookbook">
+			<div class="p-field p-grid">CREATE NEW COOKBOOK</div>
+			<div class="p-field p-grid">
+				<label for="cookbookid" class="p-col-fixed" style="width: 200px">ID</label>
+				<div class="p-col"><InputText id="cookbookid" type="text" v-model="id" /></div>
 			</div>
-		</div>
-		<div class="p-field p-grid">
-			<label for="lastname3" class="p-col-fixed" style="width: 100px">Lastname</label>
-			<div class="p-col">
-				<InputText id="lastname3" type="text" />
+			<div class="p-field p-grid">
+				<label for="nodeVersion" class="p-col-fixed" style="width: 200px">Node Version</label>
+				<div class="p-col"><InputText id="nodeVersion" type="text" v-model="nodeVersion" /></div>
 			</div>
-		</div>
+			<div class="p-field p-grid">
+				<label for="name" class="p-col-fixed" style="width: 200px">Name</label>
+				<div class="p-col"><InputText id="name" type="text" v-model="name" /></div>
+			</div>
+			<div class="p-field p-grid">
+				<label for="description" class="p-col-fixed" style="width: 200px">Description</label>
+				<div class="p-col"><InputText id="description" type="text" v-model="description" /></div>
+			</div>
+			<div class="p-field p-grid">
+				<label for="developer" class="p-col-fixed" style="width: 200px">Developer</label>
+				<div class="p-col"><InputText id="developer" type="text" v-model="developer" /></div>
+			</div>
+			<div class="p-field p-grid">
+				<label for="version" class="p-col-fixed" style="width: 200px">version</label>
+				<div class="p-col"><InputText id="developer" type="text" v-model="version" /></div>
+			</div>
+			<Fieldset legend="Cost Per Block">
+				<div class="p-field p-grid">
+					<label for="coinDenom" class="p-col-fixed" style="width: 200px">coinDenom</label>
+					<div class="p-col"><InputText id="developer" type="text" v-model="coinDenom" /></div>
+				</div>
+				<div class="p-field p-grid">
+					<label for="coinAmount" class="p-col-fixed" style="width: 200px">coinAmount</label>
+					<div class="p-col"><InputText id="developer" type="text" v-model="coinAmount" /></div>
+				</div>
+			</Fieldset>
+			<br>
+			<Button label='Submit' v-on:click="createCookbook()" :disabled="!address"/>
+		</Fieldset>
 	</div>
 
-	<div id="cookbookForm" class="sp-form-group sp-box">
-		<div class="mb-3">CREATE NEW COOKBOOK</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="id" class="form-label">ID</label>
-			<input id="id" type="text" class="form-control" v-model="id" placeholder="ID" />
-		</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="nodeVersion" class="form-label">Node Version</label>
-			<input type="text" id="nodeVersion" class="form-control" v-model="nodeVersion" placeholder="NodeVersion" />
-		</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="nodeVersion" class="form-label">Name</label>
-			<input type="text" class="form-control" v-model="name" placeholder="Name" />
-		</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="nodeVersion" class="form-label">Description</label>
-			<input type="text" class="form-control" v-model="description" placeholder="description" />
-		</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="nodeVersion" class="form-label">Developer</label>
-			<input type="text" class="form-control" v-model="developer" placeholder="developer" />
-		</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="nodeVersion" class="form-label">Version</label>
-			<input type="text" class="form-control" v-model="version" placeholder="version" />
-		</div>
-		<div class="sp-type-form__field sp-form-group">
-			<label for="nodeVersion" class="form-label">Support Email</label>
-			<input type="text" class="form-control" v-model="supportEmail" placeholder="supportEmail" />
-		</div>
-		<div class="card">
-			<div class="card-header">Cost per block</div>
-			<div class="card-body">
-				<div class="sp-type-form__field sp-form-group">
-					<label for="coinDenom" class="form-label">Coin Denomination</label>
-					<input type="text" id="coinDenom" class="form-control" v-model="coinDenom" placeholder="supportEmail" />
-				</div>
-				<div class="sp-type-form__field sp-form-group">
-					<label for="coinAmount" class="form-label">Coin Amount</label>
-					<input type="text" id="coinAmount" class="form-control" v-model="coinAmount" placeholder="supportEmail" />
-				</div>
-			</div>
-		</div>
-		<button type="button" v-on:click="createCookbook()" class="btn btn-primary" :disabled="!address">Submit</button>
-	</div>
 </template>
 
 <script>
 import InputText from 'primevue/inputtext/sfc'
+import Fieldset from 'primevue/fieldset'
+import Button from 'primevue/button'
 
 export default {
 	name: 'Cookbook',
 	components: {
-		InputText
+		InputText,
+		Fieldset,
+		Button
 	},
 	computed: {
 		address: function () {

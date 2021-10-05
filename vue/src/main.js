@@ -7,16 +7,14 @@ import PrimeVue from 'primevue/config'
 
 // PrimeVue Components
 
-import "primevue/resources/themes/saga-blue/theme.css"       //theme
-import "primevue/resources/primevue.min.css"                 //core css
-import "primeicons/primeicons.css"                           //icons
-import 'primeflex/primeflex.css';														 //primeflex
-
+import 'primevue/resources/themes/saga-blue/theme.css' //theme
+import 'primevue/resources/primevue.min.css' //core css
+import 'primeicons/primeicons.css' //icons
+import 'primeflex/primeflex.css' //primeflex
 
 const app = createApp(App)
 app.config.globalProperties._depsLoaded = true
 app.use(store).use(router).use(vueLib).use(PrimeVue).mount('#app')
-
 
 window.keplr.experimentalSuggestChain({
 	chainId: 'pylons',

@@ -7,11 +7,11 @@ const routes = [
 	{
 		path: '/',
 		component: Index
-	},{
+	},
+	{
 		path: '/cookbook',
 		component: Cookbook
 	}
-
 ]
 
 const router = createRouter({

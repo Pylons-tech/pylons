@@ -1,35 +1,15 @@
 <template>
 	<div>
-		<div>
-			<SideBarComponent />
-		</div>
+		<ApplicationLayout />
 	</div>
 </template>
 
 <script>
-
-import SideBarComponent from '@/views/ApplicationLayout'
+import ApplicationLayout from '@/views/SidebarComponent'
 
 export default {
 	components: {
-		SideBarComponent,
-	},
-	data() {
-		return {
-			visibleLeft: false,
-			items: [
-				{
-					label: 'Create a new Cookbook',
-					icon: 'pi pi-book',
-					to: '/cookbook'
-				}
-			]
-		}
-	},
-	computed: {
-		address() {
-			return this.$store.getters['common/wallet/address']
-		}
+		ApplicationLayout: ApplicationLayout
 	}
 }
 </script>
