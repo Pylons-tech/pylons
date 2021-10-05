@@ -23,17 +23,21 @@
 				<div class="p-col"><InputText id="developer" type="text" v-model="developer" /></div>
 			</div>
 			<div class="p-field p-grid">
-				<label for="version" class="p-col-fixed" style="width: 200px">version</label>
-				<div class="p-col"><InputText id="developer" type="text" v-model="version" /></div>
+				<label for="developer" class="p-col-fixed" style="width: 200px">Email</label>
+				<div class="p-col"><InputText id="supportEmail" type="text" v-model="supportEmail" /></div>
+			</div>
+			<div class="p-field p-grid">
+				<label for="version" class="p-col-fixed" style="width: 200px">Version</label>
+				<div class="p-col"><InputText id="version" type="text" v-model="version" /></div>
 			</div>
 			<Fieldset legend="Cost Per Block">
 				<div class="p-field p-grid">
 					<label for="coinDenom" class="p-col-fixed" style="width: 200px">coinDenom</label>
-					<div class="p-col"><InputText id="developer" type="text" v-model="coinDenom" /></div>
+					<div class="p-col"><InputText id="coinDenom" type="text" v-model="coinDenom" /></div>
 				</div>
 				<div class="p-field p-grid">
 					<label for="coinAmount" class="p-col-fixed" style="width: 200px">coinAmount</label>
-					<div class="p-col"><InputText id="developer" type="text" v-model="coinAmount" /></div>
+					<div class="p-col"><InputText id="coinAmount" type="text" v-model="coinAmount" /></div>
 				</div>
 			</Fieldset>
 			<br>
