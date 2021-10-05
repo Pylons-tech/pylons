@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/edit_profile/image_source_bottom_sheet.dart';
+import 'package:pylons_wallet/pages/edit_profile/social_media_screen.dart';
 import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -99,7 +100,10 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                   const VerticalSpace(20),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => SocialMediaScreen()));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(

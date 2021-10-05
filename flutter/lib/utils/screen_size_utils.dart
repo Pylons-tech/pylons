@@ -5,7 +5,7 @@ class ScreenSizeUtil{
 
   ScreenSizeUtil(this.context);
 
-  double width({double percent = 100}) => MediaQuery.of(context).size.width * percent;
-  double height({double percent = 100}) => MediaQuery.of(context).size.height * percent;
+  double width({double percent = 1}) => MediaQuery.of(context).size.width * percent;
+  double height({double percent = 1}) => MediaQuery.of(context).size.height * percent;
 
 }
