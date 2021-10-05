@@ -34,5 +34,5 @@ client:
     path: "docs/static/openapi.yml"
 faucet:
   name: bob
-  coins: [ "10000000000upylon", "100000000ubedrock" ]
+  coins: [ "10000upylon", "1000000ubedrock" ]
 
