@@ -1,13 +1,11 @@
-import 'dart:collection';
 import 'dart:convert';
 
 import 'package:decimal/decimal.dart';
+import 'package:http/http.dart' as http;
 import 'package:pylons_wallet/entities/amount.dart';
 import 'package:pylons_wallet/entities/balance.dart';
 import 'package:pylons_wallet/entities/denom.dart';
-import 'package:pylons_wallet/model/balance_json.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
-import 'package:http/http.dart' as http;
 
 class PylonsBalance {
 
@@ -22,6 +20,6 @@ class PylonsBalance {
     if(map['balances'].length!=0){
       return Balance.fromJSON(map['balances'][0] as Map<String,dynamic>);
     }
-    return Balance(denom: Denom("pylon"), amount: Amount(Decimal.zero));
+    return Balance(denom: const Denom("pylon"), amount: Amount(Decimal.zero));
   }
 }

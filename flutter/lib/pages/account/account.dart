@@ -1,16 +1,8 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_text_input_widget.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
-import 'package:pylons_wallet/forms/card_info_form.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_info.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_work.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_history.dart';
-import 'package:pylons_wallet/pages/home/notification.dart';
 
 class AccountScreenWidget extends StatefulWidget {
   const AccountScreenWidget({Key? key}) : super(key: key);
@@ -49,22 +41,22 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                       color: kSelectedIcon
                   )
               ),
-              title: Text('pylons_account'.tr(), style: TextStyle(color: Color(0xFF080830))),
+              title: Text('pylons_account'.tr(), style: const TextStyle(color: Color(0xFF080830))),
             ),
             SliverList(delegate: SliverChildListDelegate([
-              Divider(),
+              const Divider(),
               Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   top: 16,
                   bottom: 16
                 ),
                 child: ListTile(
                   minLeadingWidth : 10,
-                  leading: CircleAvatar(
+                  leading: const CircleAvatar(
                     radius: 30,
                     child: FlutterLogo(size: 28.0),
                   ),
-                  title: Text(
+                  title: const Text(
                       'Linda',
                       style: TextStyle(
                         fontSize: 18,
@@ -72,8 +64,8 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                         color: Color(0xFF201D1D),
                       )
                   ),
-                  subtitle: Text('Media Artist (3D, Motiongraphics, Collecting NFT)',
-                      style: TextStyle(
+                  subtitle: const Text('Media Artist (3D, Motiongraphics, Collecting NFT)',
+                      style:  TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: Color(0xFF616161)
@@ -81,7 +73,7 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                   onTap: (){
                   },
                   trailing: IconButton(
-                      icon: ImageIcon(
+                      icon: const ImageIcon(
                           AssetImage('assets/images/icon/dots.png'),
                           size: 24,
                           color: kSelectedIcon
@@ -90,23 +82,23 @@ class _AccountScreenWidgetState extends State<AccountScreenWidget> with SingleTi
                   ),
                 ),
               ),
-              Divider(),
-              VerticalSpace(16),
+              const Divider(),
+              const VerticalSpace(16),
               Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: PylonsTextInput(
                   controller: TextEditingController(), label: "user_name".tr(),
                   disabled: true,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: PylonsTextInput(
                   controller: TextEditingController(), label: "user_id".tr(),
                   disabled: true,
                 ),
               ),
-              Divider()
+              const Divider()
             ])
           )
         ]

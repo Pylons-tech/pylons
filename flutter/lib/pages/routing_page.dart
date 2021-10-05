@@ -27,17 +27,18 @@ class _RoutingPageState extends State<RoutingPage> {
     //TODO: Create an option for the user to change to a different wallet.
     if (store.loadWalletsFailure.value == null) {
       //Loads the last used wallet.
-      final prefs = await SharedPreferences.getInstance();
-      final currentWallet = prefs.getString("pylons:current_wallet");
-      if (currentWallet == null) {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => PresentingOnboardPage()));
-      } else {
-        PylonsApp.currentWallet = PylonsApp.walletsStore.wallets.value
-            .firstWhere((wallet) => wallet.name == currentWallet);
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (_) => const Dashboard()));
-      }
+      SharedPreferences.getInstance().then((prefs) {
+        final currentWallet = prefs.getString("pylons:current_wallet");
+        if (currentWallet == null) {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => PresentingOnboardPage()));
+        } else {
+          PylonsApp.currentWallet = PylonsApp.walletsStore.wallets.value
+              .firstWhere((wallet) => wallet.name == currentWallet);
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (_) => Dashboard()));
+        }
+      });
     }
   }
 

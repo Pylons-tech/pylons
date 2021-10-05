@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
@@ -15,7 +13,7 @@ class AddArtworkWidget extends StatefulWidget {
 }
 
 class _AddArtworkWidgetState extends State<AddArtworkWidget> {
-  var filter_strings = [
+  List<Map<String, Object>> filter_strings = [
     {"name":"Purchase", 'checked': true},
     {"name":"Mint", "checked": false},
     {"name":"Follow", "checked": false},
@@ -27,7 +25,7 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
   Widget build(BuildContext context) {
 
     return Dialog(
-      insetPadding: EdgeInsets.all(16),
+      insetPadding: const EdgeInsets.all(16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
@@ -37,7 +35,7 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
     );
   }
   Widget contentBox(BuildContext context){
-    double tileWidth = (MediaQuery. of(context). size. width - 32 -32 - 36) / 4;
+    final tileWidth = (MediaQuery. of(context). size. width - 32 -32 - 36) / 4;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -47,15 +45,15 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
           InkWell(
             child: Row(
                 children:[
-                  Icon(Icons.add, color: Color(0xFF616161), size: 16,),
-                  Text('add_artwork'.tr(),style: TextStyle(color: Color(0xFF616161), fontSize: 14, fontWeight: FontWeight.w600))
+                  const Icon(Icons.add, color: Color(0xFF616161), size: 16,),
+                  Text('add_artwork'.tr(),style: const TextStyle(color: Color(0xFF616161), fontSize: 14, fontWeight: FontWeight.w600))
                 ]
             ),
             onTap: (){
               Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AddArtworkGridWidget()));
             },
           ),
-          VerticalSpace(16),
+          const VerticalSpace(16),
           Row(
             children: [
               ClipRRect(
@@ -63,35 +61,35 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
                 child: Container(
                   width: tileWidth,
                   height: tileWidth,
-                  decoration: BoxDecoration(color: Color(0xFFC4C4C4))
+                  decoration: const BoxDecoration(color: Color(0xFFC4C4C4))
                ),
               ),
-              SizedBox(width: 12),
+              const VerticalSpace(12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Container(
                     width: tileWidth,
                     height: tileWidth,
-                    decoration: BoxDecoration(color: Color(0xFFC4C4C4))
+                    decoration: const BoxDecoration(color: Color(0xFFC4C4C4))
                 ),
               ),
-              SizedBox(width: 12),
+              const VerticalSpace(12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Container(
                     width: tileWidth,
                     height: tileWidth,
-                    decoration: BoxDecoration(color: Color(0xFFC4C4C4))
+                    decoration: const BoxDecoration(color: Color(0xFFC4C4C4))
                 ),
               ),
-              SizedBox(width: 12),
+              const VerticalSpace(12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: Container(
                     width: tileWidth,
                     height: tileWidth,
-                    decoration: BoxDecoration(color: Color(0xFFC4C4C4)),
-                  child: Center(
+                    decoration: const BoxDecoration(color: Color(0xFFC4C4C4)),
+                  child: const Center(
                     child:CircleAvatar(
                       backgroundColor: Colors.white,
                       child: Center(
@@ -104,30 +102,30 @@ class _AddArtworkWidgetState extends State<AddArtworkWidget> {
               )
             ]
           ),
-          VerticalSpace(16),
+          const VerticalSpace(16),
           TextFormField(
             // controller: TextEditingController(text:'photography'.tr()),
             decoration: InputDecoration(
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                 ),
                 hintText: "photography".tr(),
-                contentPadding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 filled: true,
                 fillColor: Colors.white70
             ),
           ),
-          VerticalSpace(16),
+          const VerticalSpace(16),
           TextFormField(
             minLines: 3,
             maxLines: 3,
             controller: TextEditingController(),
             decoration: InputDecoration(
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.zero,
                 ),
 
-                contentPadding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                contentPadding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 filled: true,
                 hintStyle: TextStyle(color: Colors.grey[800]),
                 fillColor: Colors.white70

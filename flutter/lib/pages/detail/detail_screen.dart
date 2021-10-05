@@ -1,19 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/nft_view.dart';
-import 'package:pylons_wallet/components/notification_item.dart';
-import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/forms/card_info_form.dart';
 import 'package:pylons_wallet/forms/create_trade_form.dart';
+import 'package:pylons_wallet/pages/detail/detail_tab_history.dart';
 import 'package:pylons_wallet/pages/detail/detail_tab_info.dart';
 import 'package:pylons_wallet/pages/detail/detail_tab_work.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_history.dart';
-import 'package:pylons_wallet/pages/home/notification.dart';
 import 'package:pylons_wallet/pages/payment/payment_info_screen.dart';
 
 class DetailScreenWidget extends StatefulWidget {
@@ -216,7 +211,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
                         primary: const Color(0xFF1212C4),
                         padding: const EdgeInsets.fromLTRB(50, 0, 50, 0)),
                     child: Text(!widget.isOwner ? 'purchase'.tr() : 'resell_nft'.tr(),
-                        style: TextStyle(color: Colors.white)))
+                        style: const TextStyle(color: Colors.white)))
               ]),
               /*
               Row(

@@ -32,10 +32,10 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime _date = DateTime(2020, 11, 17);
 
   Future<void> _selectDate() async {
-    final DateTime? newDate = await showDatePicker(
+    final  newDate = await showDatePicker(
       context: context,
       initialDate: _date,
-      firstDate: DateTime(2017, 1),
+      firstDate: DateTime(2017),
       lastDate: DateTime(2022, 7),
       helpText: 'select_a_date'.tr(),
     );
@@ -46,21 +46,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  int _selectedIndex = 0;
+  // int _selectedIndex = 0;
   bool enableList = false;
 
-  void _onChanged(int position) {
-    setState(() {
-      _selectedIndex = position;
-      enableList = !enableList;
-    });
-  }
+  // void _onChanged(int position) {
+  //   setState(() {
+  //     _selectedIndex = position;
+  //     enableList = !enableList;
+  //   });
+  // }
 
-  void _onhandleTap() {
-    setState(() {
-      enableList = !enableList;
-    });
-  }
+  // void _onhandleTap() {
+  //   setState(() {
+  //     enableList = !enableList;
+  //   });
+  // }
 
 /*
   Widget _buildDropdownList() => Container(
@@ -93,99 +93,95 @@ class _HomeScreenState extends State<HomeScreen> {
 */
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //padding: EdgeInsets.all(16.0),
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            pinned: true,
-            snap: true,
-            floating: true,
-            forceElevated: true,
-            collapsedHeight: kAppBarSize,
-            backgroundColor: Colors.white,
-            leading: IconButton(
-                onPressed: () {},
-                icon: const ImageIcon(AssetImage('assets/icons/sort.png'),
-                    size: kIconSize, color: kSelectedIcon)),
-            actions: [
-              IconButton(
-                  icon: const ImageIcon(
-                    AssetImage('assets/icons/bell.png'),
-                    size: 20,
-                    color: kSelectedIcon,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NotificationWidget()));
-                  })
-            ],
-            bottom: PreferredSize(
-                preferredSize: const Size(0.0, 0.0),
-                child: Container(
-                    padding: const EdgeInsets.only(left: 16.0, right: 0.0),
-                    child: Row(
-                      children: [
-                        DropdownButton<String>(
-                          value: dropdownValue,
-                          icon: const Icon(Icons.keyboard_arrow_down,
-                              size: 24, color: kSelectedIcon),
-                          iconSize: 24,
-                          elevation: 16,
-                          underline: const SizedBox(),
-                          focusColor: const Color(0xFF1212C4),
-                          style: const TextStyle(
-                              color: kSelectedIcon, fontSize: 14),
-                          onChanged: (String? data) {
-                            setState(() {
-                              dropdownValue = data!;
-                            });
-                          },
-                          items: spinnerItems
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                        ),
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          snap: true,
+          floating: true,
+          forceElevated: true,
+          collapsedHeight: kAppBarSize,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+              onPressed: () {},
+              icon: const ImageIcon(AssetImage('assets/icons/sort.png'),
+                  size: kIconSize, color: kSelectedIcon)),
+          actions: [
+            IconButton(
+                icon: const ImageIcon(
+                  AssetImage('assets/icons/bell.png'),
+                  size: 20,
+                  color: kSelectedIcon,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const NotificationWidget()));
+                })
+          ],
+          bottom: PreferredSize(
+              preferredSize: Size.zero,
+              child: Container(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Row(
+                    children: [
+                      DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.keyboard_arrow_down,
+                            size: 24, color: kSelectedIcon),
+                        elevation: 16,
+                        underline: const SizedBox(),
+                        focusColor: const Color(0xFF1212C4),
+                        style: const TextStyle(
+                            color: kSelectedIcon, fontSize: 14),
+                        onChanged: (String? data) {
+                          setState(() {
+                            dropdownValue = data!;
+                          });
+                        },
+                        items: spinnerItems
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
 
-                        /*InkWell(
-                          onTap: _onhandleTap,
-                          child: Row(
-                            children: [
-                              Text(spinnerItems[_selectedIndex])
-                            ]
-                          )
-                        ),*/
-                        const Spacer(),
-                        IconButton(
-                            icon: const Icon(Icons.calendar_today_rounded,
-                                size: kSmallIconSize, color: kUnselectedIcon),
-                            onPressed: _selectDate),
-                        IconButton(
-                          icon: const ImageIcon(
-                            AssetImage('assets/icons/filter.png'),
-                            size: kSmallIconSize,
-                            color: kUnselectedIcon,
-                          ),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return PylonsDashboardFilterBox();
-                                });
-                          },
+                      /*InkWell(
+                        onTap: _onhandleTap,
+                        child: Row(
+                          children: [
+                            Text(spinnerItems[_selectedIndex])
+                          ]
                         )
-                      ],
-                    ))),
-          ),
-          /*enableList? _buildDropdownList(): Container(),*/
-          _pages[dropdownValue]!
-        ],
-      ),
+                      ),*/
+                      const Spacer(),
+                      IconButton(
+                          icon: const Icon(Icons.calendar_today_rounded,
+                              size: kSmallIconSize, color: kUnselectedIcon),
+                          onPressed: _selectDate),
+                      IconButton(
+                        icon: const ImageIcon(
+                          AssetImage('assets/icons/filter.png'),
+                          size: kSmallIconSize,
+                          color: kUnselectedIcon,
+                        ),
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return PylonsDashboardFilterBox();
+                              });
+                        },
+                      )
+                    ],
+                  ))),
+        ),
+        /*enableList? _buildDropdownList(): Container(),*/
+        _pages[dropdownValue]!
+      ],
     );
   }
 }

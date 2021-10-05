@@ -15,7 +15,7 @@ class EditProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenSizeUtil screenSize = ScreenSizeUtil(context);
+    final screenSize = ScreenSizeUtil(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -73,7 +73,7 @@ class EditProfileScreen extends StatelessWidget {
                             ),
                           ),
                           isDismissible: true,
-                          builder: (_) => ImageSourceBottomSheet());
+                          builder: (_) => const ImageSourceBottomSheet());
                     },
                   ),
                   const VerticalSpace(20),
@@ -191,7 +191,7 @@ class _ProfileImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ScreenSizeUtil screenSize = ScreenSizeUtil(context);
+    final screenSize = ScreenSizeUtil(context);
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey, width: 1.5),
@@ -220,7 +220,7 @@ class _ProfileImageWidget extends StatelessWidget {
                   color: kPeach,
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                padding: EdgeInsets.all(4.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Image.asset(
                   "assets/icons/edit.png",
                   width: 20,
@@ -272,7 +272,7 @@ class _TextInputWidget extends StatelessWidget {
   final int noOfLines;
   final bool enabled;
 
-  _TextInputWidget(
+  const _TextInputWidget(
       {Key? key,
       required this.title,
       required this.hint,
@@ -311,9 +311,9 @@ class _TextInputWidget extends StatelessWidget {
               contentPadding: const EdgeInsets.all(16),
               filled: true,
               hintText: hint,
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                   color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
-              fillColor: Color(0xffFBFBFB)),
+              fillColor: const Color(0xffFBFBFB)),
         ),
       ],
     );
@@ -327,7 +327,7 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
   final int noOfLines;
   final bool enabled;
 
-  _WalletAddressTextInputWidget(
+  const _WalletAddressTextInputWidget(
       {Key? key,
       required this.title,
       required this.hint,
@@ -348,14 +348,14 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
         GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: (){
-            print("main");
+            debugPrint("main");
           },
           child: TextFormField(
             minLines: noOfLines,
             maxLines: noOfLines,
             controller: controller,
             enabled: false,
-            style: TextStyle(color: Color(0xffC4C4C4)),
+            style: const TextStyle(color: Color(0xffC4C4C4)),
             decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
@@ -379,7 +379,7 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
                       color: Colors.transparent,
                       // borderRadius: BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4)),
                       border:  Border(
-                          right: BorderSide(color: Color(0xffC4C4C4), width: 1))),
+                          right: BorderSide(color: Color(0xffC4C4C4)))),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -392,22 +392,22 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
                 ),
                 suffixIcon: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: kBlue,
                     borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5))
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Copy", style: TextStyle(
+                    children: const [
+                       Text("Copy", style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w500),),
                     ],
                   ),
                 ),
 
-                hintStyle: TextStyle(
+                hintStyle: const TextStyle(
                     color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
-                fillColor: Color(0xffFBFBFB)),
+                fillColor: const Color(0xffFBFBFB)),
           ),
         ),
       ],

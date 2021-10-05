@@ -1,6 +1,6 @@
-import 'package:pylons_wallet/entities/balance.dart';
-import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
 import 'package:alan/alan.dart' as alan;
+import 'package:alan/proto/cosmos/bank/v1beta1/export.dart' as bank;
+import 'package:pylons_wallet/entities/balance.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:transaction_signing_gateway/alan/alan_transaction.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';

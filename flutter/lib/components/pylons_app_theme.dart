@@ -10,7 +10,7 @@ class PylonsAppTheme extends CosmosAppTheme {
   static const IconThemeData ICON_THEME_ENABLED = IconThemeData(color: Colors.indigo,size: 14);
   static const IconThemeData ICON_THEME_DISABLED = IconThemeData(color: Colors.white70,size: 14);
 
-  static ThemeData buildAppTheme() {
+  ThemeData buildAppTheme() {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
       disabledColor: Colors.grey,
@@ -23,7 +23,7 @@ class PylonsAppTheme extends CosmosAppTheme {
       inputDecorationTheme: const InputDecorationTheme(
         border: OutlineInputBorder(),
       ),
-      textTheme: TextTheme(
+      textTheme: const TextTheme(
         headline1: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w700,

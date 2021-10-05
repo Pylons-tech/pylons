@@ -6,7 +6,7 @@ import 'package:pylons_wallet/pages/account/account.dart';
 class CustomCardWidget extends StatelessWidget {
   final Widget buttonWidget;
 
-  CustomCardWidget({required this.buttonWidget});
+  const CustomCardWidget({required this.buttonWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class CustomCardWidget extends StatelessWidget {
         child: Column(
           children: <Widget>[
             ListTile(
-              contentPadding: const EdgeInsets.all(0),
+              contentPadding: EdgeInsets.zero,
               minLeadingWidth: 10,
               leading: const CircleAvatar(
                 radius: 30,

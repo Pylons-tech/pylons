@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -22,15 +22,15 @@ class NotificationItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: ListTile(
-                        leading: UserImageWidget(imageUrl: kImage2,),
+                        leading: const UserImageWidget(imageUrl: kImage2,),
                         title: RichText(
                           text: TextSpan(
                             style: DefaultTextStyle.of(context).style,
                             children: <TextSpan>[
-                              TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
+                              const TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
                               TextSpan(text: ' ${'purchased'.tr()}'),
-                              TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
-                              TextSpan(text: '  10min', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                              const TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
+                              const TextSpan(text: '  10min', style: TextStyle(color: Colors.grey, fontSize: 13)),
                             ],
                           ),
                         ),

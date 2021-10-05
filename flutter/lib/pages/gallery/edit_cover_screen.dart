@@ -85,7 +85,6 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                           AssetImage('assets/images/icon/chevron-down.png'),
                           size: 24,
                           color: kSelectedIcon),
-                      iconSize: 24,
                       elevation: 16,
                       underline: const SizedBox(),
                       focusColor: const Color(0xFF1212C4),
@@ -127,7 +126,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                         MaterialPageRoute(builder: (_) => EditProfileScreen()));
                   },
                   style: ElevatedButton.styleFrom(
-                      maximumSize: Size(138, 36),
+                      maximumSize: const Size(138, 36),
                       primary: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),

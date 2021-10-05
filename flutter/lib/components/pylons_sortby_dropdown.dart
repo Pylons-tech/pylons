@@ -23,9 +23,8 @@ class PylonsSortByDropDownWidget extends State {
       value: dropdownValue,
       icon: const ImageIcon(AssetImage('assets/images/icon/chevron-down.png'),
           size: 24, color: Color(0xFF616161)),
-      iconSize: 24,
       elevation: 16,
-      underline: SizedBox(),
+      underline: const SizedBox(),
       style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
       onChanged: (String? data) {
         setState(() {

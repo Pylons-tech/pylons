@@ -1,14 +1,9 @@
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/components/buttons/add_friend_button.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
-import 'package:pylons_wallet/components/pylons_app_bar.dart';
-import 'package:pylons_wallet/components/pylons_history_card.dart';
-import 'package:pylons_wallet/components/pylons_trending_col_card.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
-import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 import 'package:pylons_wallet/pages/gallery/collections.dart';
 
 class HomeFollowingWidget extends StatefulWidget {
@@ -48,10 +43,10 @@ class _FollowingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double tileWidth = (MediaQuery.of(context).size.width - 30) / 3;
+    final tileWidth = (MediaQuery.of(context).size.width - 30) / 3;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
       child: Column(
         children: [
           Row(children: [
@@ -68,12 +63,12 @@ class _FollowingCard extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                           text: userName,
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: ' created '),
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const TextSpan(text: ' created '),
                       TextSpan(
                           text: "'$collectionTitle'",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: ' collection')
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const TextSpan(text: ' collection')
                     ],
                   ),
                 ),
@@ -85,7 +80,7 @@ class _FollowingCard extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CollectionsScreen()));
+                          builder: (context) => const CollectionsScreen()));
                 })
           ]),
           Card(
@@ -93,57 +88,56 @@ class _FollowingCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   child: Column(children: [
                     InkWell(
-                        child: Container(
-                            child: Row(children: [
+                        child: Row(children: [
                           CachedNetworkImage(
-                              imageUrl: kImage1,
-                              width: tileWidth * 2,
-                              height: tileWidth * 2 + 3,
-                              fit: BoxFit.cover),
-                          Spacer(),
+                          imageUrl: kImage1,
+                          width: tileWidth * 2,
+                          height: tileWidth * 2 + 3,
+                          fit: BoxFit.cover),
+                          const Spacer(),
                           Column(children: [
-                            CachedNetworkImage(
-                                imageUrl: kImage,
-                                width: tileWidth,
-                                height: tileWidth,
-                                fit: BoxFit.cover),
-                            SizedBox(height: 3),
-                            CachedNetworkImage(
-                                imageUrl: kImage2,
-                                width: tileWidth,
-                                height: tileWidth,
-                                fit: BoxFit.cover),
+                        CachedNetworkImage(
+                            imageUrl: kImage,
+                            width: tileWidth,
+                            height: tileWidth,
+                            fit: BoxFit.cover),
+                            const SizedBox(height: 3),
+                        CachedNetworkImage(
+                            imageUrl: kImage2,
+                            width: tileWidth,
+                            height: tileWidth,
+                            fit: BoxFit.cover),
                           ])
-                        ])),
+                        ]),
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => CollectionsScreen()));
+                                  builder: (context) => const CollectionsScreen()));
                         }),
                     Row(children: [
                       IconButton(
-                          icon: ImageIcon(
+                          icon: const ImageIcon(
                               AssetImage('assets/icons/comment.png'),
                               size: 18,
                               color: kUnselectedIcon),
                           onPressed: () {}),
-                      Text('40'),
+                      const Text('40'),
                       IconButton(
-                          icon: ImageIcon(AssetImage('assets/icons/like.png'),
+                          icon: const ImageIcon(AssetImage('assets/icons/like.png'),
                               size: 18, color: kUnselectedIcon),
                           onPressed: () {}),
-                      Text('142'),
-                      Spacer(),
+                      const Text('142'),
+                      const Spacer(),
                       IconButton(
-                          icon: ImageIcon(
+                          icon: const ImageIcon(
                               AssetImage('assets/images/icon/dots.png'),
                               size: 24,
                               color: kUnselectedIcon),
                           onPressed: () {}),
                     ])
                   ]))),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
         ],
       ),
     );

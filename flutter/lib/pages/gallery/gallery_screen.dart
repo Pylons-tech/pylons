@@ -3,7 +3,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:pylons_wallet/components/follow_card.dart';
-import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -13,7 +12,6 @@ import 'package:pylons_wallet/pages/gallery/add_artwork.dart';
 import 'package:pylons_wallet/pages/gallery/edit_cover_screen.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
-import 'package:pylons_wallet/pages/gallery/widget/custom_card_widget.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({Key? key}) : super(key: key);
@@ -24,7 +22,7 @@ class GalleryScreen extends StatefulWidget {
 
 class _GalleryScreenState extends State<GalleryScreen>
     with SingleTickerProviderStateMixin {
-  var isExpanded = false;
+  bool isExpanded = false;
   final double bannerSize = 135;
   int tabIndex = 0;
   late TabController _tabController;
@@ -73,7 +71,7 @@ class _GalleryScreenState extends State<GalleryScreen>
           top: 0,
           child: Container(
             alignment: Alignment.centerRight,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: CachedNetworkImageProvider(kImage3),
                 fit: BoxFit.cover
@@ -172,9 +170,9 @@ class _GalleryScreenState extends State<GalleryScreen>
               child: Column(
                 children: <Widget>[
                   ListTile(
-                    contentPadding: const EdgeInsets.all(0),
+                    contentPadding: EdgeInsets.zero,
                     minLeadingWidth: 10,
-                    leading: UserImageWidget(imageUrl: kImage2),
+                    leading: const UserImageWidget(imageUrl: kImage2),
                     title: const Text('Linda',
                         style: TextStyle(
                           fontSize: 18,
@@ -196,7 +194,6 @@ class _GalleryScreenState extends State<GalleryScreen>
                     },
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(width: 70),
                       Text('${'followers'.tr()}: 23'),
@@ -258,9 +255,9 @@ class _GalleryScreenState extends State<GalleryScreen>
                                   ))),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("Edit Profile",
-                                  style: const TextStyle(
+                            children: const [
+                               Text("Edit Profile",
+                                  style:  TextStyle(
                                       fontSize: 15, color: Color(0xff616161))),
                             ],
                           ),

@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/utils/screen_size_utils.dart';
-import 'package:image_cropper/image_cropper.dart';
 
 class ImageSourceBottomSheet extends StatelessWidget {
-  ImageSourceBottomSheet({Key? key}) : super(key: key);
+  const ImageSourceBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
   Future<File?> _pickImageFromCamera() async {
     try {
       final _picker = ImagePicker();
-      var _image = await _picker.pickImage(source: ImageSource.camera,
+      final _image = await _picker.pickImage(source: ImageSource.camera,
           imageQuality: 85,
           maxHeight: 500,
           maxWidth: 500);
@@ -78,7 +78,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
   Future<File?> _pickImageFromGallery() async {
     try{
       final _picker = ImagePicker();
-      var _image = await  _picker.pickImage(source: ImageSource.gallery,
+      final _image = await  _picker.pickImage(source: ImageSource.gallery,
         imageQuality: 85, maxHeight: 500, maxWidth: 500,
       );
       if(_image != null){
@@ -109,7 +109,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
+        iosUiSettings: const IOSUiSettings(
           minimumAspectRatio: 1.0,
         )
     );
@@ -131,7 +131,7 @@ class _MenuButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final ScreenSizeUtil screenSize = ScreenSizeUtil(context);
+   final screenSize = ScreenSizeUtil(context);
     return InkWell(
       onTap: onTap,
       child: SizedBox(

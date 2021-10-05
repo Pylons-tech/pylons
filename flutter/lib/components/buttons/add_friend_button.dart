@@ -1,4 +1,3 @@
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';

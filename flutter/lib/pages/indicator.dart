@@ -11,11 +11,10 @@ class Indicator extends AnimatedWidget {
 
     return Align(
       alignment: Alignment.bottomCenter,
-      child: Container(
+      child:  SizedBox(
         height: 50,
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[ListView.builder(
               shrinkWrap: true,
               itemCount: 3,
@@ -28,27 +27,27 @@ class Indicator extends AnimatedWidget {
     );
   }
   Widget _createIndicator(index) {
-    double w=10;
-    double h=10;
-    MaterialColor color=Colors.grey;
+    var w = 10.0;
+    var h = 10.0;
+    var color = Colors.grey;
 
     if(controller.page==index)
     {
       color=Colors.blueGrey;
-      h=13;
-      w=13;
+      h = 13.0;
+      w = 13.0;
     }
 
-    return Container(
+    return SizedBox(
       height: 26,
       width: 26,
       child: Center(
         child: AnimatedContainer(
-          margin: EdgeInsets.all(5),
+          margin: const EdgeInsets.all(5),
           color: color,
           width: w,
           height: h,
-          duration: Duration(milliseconds: 100),
+          duration: const Duration(milliseconds: 100),
         ),
       ),
     );

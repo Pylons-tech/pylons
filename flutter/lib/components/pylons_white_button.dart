@@ -1,4 +1,3 @@
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 
 class PylonsWhiteButton extends StatelessWidget {
@@ -21,9 +20,8 @@ class PylonsWhiteButton extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.25),
-            spreadRadius: 0,
             blurRadius: 3,
-            offset: Offset(0, 4), // changes position of shadow
+            offset: const Offset(0, 4), // changes position of shadow
           ),
         ],
       ),

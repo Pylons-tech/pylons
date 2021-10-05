@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/favorite_button.dart';
@@ -26,7 +25,7 @@ class DetailTabWorkWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.only(bottom: 100, top: 10, left: 20, right: 20),
+        padding: const EdgeInsets.only(bottom: 100, top: 10, left: 20, right: 20),
         //margin: const EdgeInsets.only(bottom: 100.0),
         child: Column(
 
@@ -34,8 +33,8 @@ class DetailTabWorkWidget extends StatelessWidget {
             Row(
               children: [
                 Text('title_of_artwork'.tr(),
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Color(0xFF080830))),
-                Spacer(),
+                    style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Color(0xFF080830))),
+                const Spacer(),
                 FavoriteButton(onTap: (){}),
                 ShareButton(onTap: (){})
               ],
@@ -46,9 +45,9 @@ class DetailTabWorkWidget extends StatelessWidget {
                   spacing: 10,
                   runSpacing: 5,
                   children: tags.map((tag) =>
-                    new Chip(
-                      backgroundColor: Color(0xFFED8864),
-                      label: new Text(tag),
+                     Chip(
+                      backgroundColor: const Color(0xFFED8864),
+                      label:  Text(tag),
                     )
                     ).toList()
                 )
@@ -62,9 +61,9 @@ class DetailTabWorkWidget extends StatelessWidget {
             ),
 
             ListView.separated(
-              physics: NeverScrollableScrollPhysics(),
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-                itemBuilder: (_, index) =>  ListTile(
+                itemBuilder: (_, index) =>  const ListTile(
               contentPadding: EdgeInsets.zero,
               leading: UserImageWidget(imageUrl: kImage2),
               title: Text('jimin', style:TextStyle(color: Colors.black,fontSize: 16, fontWeight: FontWeight.w600),),
@@ -76,8 +75,8 @@ class DetailTabWorkWidget extends StatelessWidget {
 
                 Row(
                   children: [
-                    Text('related_items'.tr(), style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF242423))),
-                    Spacer(),
+                    Text('related_items'.tr(), style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF242423))),
+                    const Spacer(),
                     MoreButton(onTap: (){})
                   ],
                 ),
@@ -85,7 +84,7 @@ class DetailTabWorkWidget extends StatelessWidget {
                   physics:const  NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   crossAxisCount: 2,
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   crossAxisSpacing: 20,
                   mainAxisSpacing: 20,
                   childAspectRatio: 3.5/4,

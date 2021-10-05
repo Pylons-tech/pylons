@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:parent_child_checkbox/parent_child_checkbox.dart';
 
 class PylonsMarketplaceFilterBox extends StatefulWidget {
@@ -12,7 +9,7 @@ class PylonsMarketplaceFilterBox extends StatefulWidget {
 }
 
 class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox> {
-  var filter_strings = [
+  List<Map<String, Object>> filter_strings = [
     {"name":"Purchase", 'checked': true},
     {"name":"Mint", "checked": false},
     {"name":"Follow", "checked": false},
@@ -35,7 +32,7 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
       children: <Widget>[
         Container(
 
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
               left: 16,
               top: 16,
               right: 16,
@@ -46,11 +43,11 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                trailing: Icon(Icons.search, color: Color(0xFFC4C4C4), size: 20),
+                trailing: const Icon(Icons.search, color: Color(0xFFC4C4C4), size: 20),
                 title: TextField(
                     decoration: InputDecoration(
                         hintText: 'search'.tr(),
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: Color(0xFFC4C4C4),
                           fontSize: 18,
                         )
@@ -60,7 +57,7 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
 
               ParentChildCheckbox(
                 parent: Text('art'.tr()),
-                children: [
+                children: const [
                   Text('Animated GIF'),
                   Text('Animated GIF'),
                   Text('Animated GIF'),
@@ -68,9 +65,9 @@ class _PylonsMarketplaceFilterBoxState extends State<PylonsMarketplaceFilterBox>
               ),
               ParentChildCheckbox(
                   parent: Text('sound'.tr()),
-                  children: [
-                    Text('Music'),
-                    Text('Sound Effect')
+                  children: const [
+                     Text('Music'),
+                     Text('Sound Effect')
                   ])
             ],
           ),

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
@@ -54,7 +53,7 @@ class PylonsMarketplaceCard extends StatelessWidget {
                   ),
                 ),
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> DetailScreenWidget(isOwner: false,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const DetailScreenWidget(isOwner: false,)));
                 }
               ),
 
@@ -79,7 +78,7 @@ class PylonsMarketplaceCard extends StatelessWidget {
                           color: Color(0xFFC4C4C4)),
                       onTap: () {}),
                   const HorizontalSpace(4),
-                  Text('40', style: const TextStyle(fontSize: 13, color: Color(0xFFC4C4C4)),),
+                  const Text('40', style:  TextStyle(fontSize: 13, color: Color(0xFFC4C4C4)),),
                   const HorizontalSpace(10),
                   GestureDetector(
                       child: const ImageIcon(
@@ -88,11 +87,11 @@ class PylonsMarketplaceCard extends StatelessWidget {
                           color: Color(0xFFC4C4C4)),
                       onTap: () {}),
                   const HorizontalSpace(4),
-                  Text('142', style: TextStyle(fontSize: 13, color: Color(0xFFC4C4C4))),
-                  Spacer(),
-                  Text(
+                  const Text('142', style:  TextStyle(fontSize: 13, color: Color(0xFFC4C4C4))),
+                  const Spacer(),
+                  const Text(
                     '\$ 12.00',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
+                    style:  TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                   )
                 ]),
               )

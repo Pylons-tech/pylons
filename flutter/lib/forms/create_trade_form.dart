@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
-import 'package:pylons_wallet/pages/payment/payment_result_screen.dart';
 
 // Define a custom Form widget.
 class CreateTradeForm extends StatefulWidget {
@@ -48,7 +47,7 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                 Align(
                   child: Text('create_trade'.tr(),
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                      const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
                 const VerticalSpace(24),
                 Padding(
@@ -166,7 +165,7 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                               hintStyle: TextStyle(
                                   color: Colors.grey[800],
                                   fontWeight: FontWeight.bold),
-                              fillColor: Color(0xffF1F1F2)),
+                              fillColor: const Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(20),
                         Align(

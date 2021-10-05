@@ -1,8 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:pylons_wallet/components/buttons/add_friend_button.dart';
-import 'package:pylons_wallet/components/pylons_app_bar.dart';
-import 'package:pylons_wallet/components/pylons_history_card.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/buttons/more_button.dart';
 import 'package:pylons_wallet/components/pylons_trending_card.dart';
 import 'package:pylons_wallet/components/pylons_trending_col_card.dart';
@@ -26,7 +23,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
       delegate: SliverChildListDelegate([
         //Trending
         Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           color: Colors.white,
           child: Column(
             children: [
@@ -40,7 +37,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
                   ]
               ),
 
-              Container(
+              SizedBox(
                   height: 360,
                   child: ListView.builder(
                     itemCount: 15,
@@ -51,10 +48,10 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
             ],
           )
         ),
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         //Trending Collection
         Container(
-          padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
           color: Colors.white,
           child: Column(
             children: [
@@ -80,7 +77,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
             ],
           )
         ),
-        SizedBox(height: 20,),
+        const SizedBox(height: 20,),
         //What's New
         Container(
           padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -90,7 +87,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('what_is_new'.tr(), style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  Text('what_is_new'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                   // const Spacer(),
                   MoreButton(onTap: (){
                     Navigator.push(context, MaterialPageRoute(builder: (context)=> const ItemsNewScreenWidget()));

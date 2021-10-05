@@ -21,7 +21,7 @@ class PylonsRoundedButton extends StatelessWidget {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(color: Colors.grey)
+                  side: const BorderSide(color: Colors.grey)
               )
           )
       ),

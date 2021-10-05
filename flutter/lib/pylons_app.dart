@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/pages/routing_page.dart';
 import 'package:pylons_wallet/stores/wallets_store.dart';
@@ -23,7 +23,7 @@ class PylonsApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
       title: "app_title".tr(),
-      theme: PylonsAppTheme.buildAppTheme(),
+      theme: PylonsAppTheme().buildAppTheme(),
       initialRoute: '/',
       routes: {
         '/': (context) => const RoutingPage(),

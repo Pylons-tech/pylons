@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:pylons_wallet/components/notification_item.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -21,7 +20,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.chevron_left,
             size: 24,
             color: kTextColor
@@ -84,11 +83,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 header: Container(
                   height: 60,
                   color: Colors.transparent,
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   alignment: Alignment.centerLeft,
                   child: Column(
                     children: [
-                      Divider(),
+                      const Divider(),
                       Container(
                         alignment: Alignment.centerLeft,
                         child:Text('this_month'.tr(),
@@ -100,7 +99,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 ),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate(
-                        (context, i) => NotificationItem(),
+                        (context, i) => const NotificationItem(),
                     childCount: 10,
                   ),
                 ),
