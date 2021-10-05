@@ -1,8 +1,7 @@
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:cosmos_ui_components/components/cosmos_app_bar.dart';
 import 'package:cosmos_utils/mnemonic.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
@@ -10,11 +9,10 @@ import 'package:pylons_wallet/components/pylons_white_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/forms/import_from_google_form.dart';
 import 'package:pylons_wallet/forms/new_user_form.dart';
+import 'package:pylons_wallet/pages/dashboard/dashboard_main.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import 'package:pylons_wallet/pages/dashboard/dashboard_main.dart';
 
 PageController _controller = PageController();
 
@@ -22,9 +20,6 @@ class PresentingOnboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null, //const CosmosAppBar(
-        //title: "Presentation",
-      //),
       body: SingleChildScrollView(
           child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -49,14 +44,14 @@ class PresentingOnboardPage extends StatelessWidget {
                   showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
+                      shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                          topLeft: const Radius.circular(30.0),
-                          topRight: const Radius.circular(30.0),
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
                         ),
                       ),
-                      builder: (context) => new Wrap(
-                          children: [const ImportFromGoogleForm()]
+                      builder: (context) =>  Wrap(
+                          children: const [ ImportFromGoogleForm()]
                       )
                   );
                 },
@@ -111,7 +106,7 @@ class PresentingOnboardPage extends StatelessWidget {
           SharedPreferences.getInstance().then((prefs) => prefs.setString("pylons:current_wallet", _username));
           PylonsApp.currentWallet = value;
 
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const Dashboard()), (route) => true);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
         });
   }
 }
@@ -122,7 +117,7 @@ class OnboardingPageView extends StatefulWidget {
 }
 
 class _OnboardingPageViewState extends State<OnboardingPageView> {
-  static const TextStyle textLooks = TextStyle(fontFamily: 'Inter');
+  // static const TextStyle textLooks = TextStyle(fontFamily: 'Inter');
 
   var _currentPage = 0;
 

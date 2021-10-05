@@ -1,11 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/forms/card_info_form.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_info.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_work.dart';
-import 'package:pylons_wallet/pages/detail/detail_tab_history.dart';
-import 'package:pylons_wallet/pages/home/notification.dart';
 import 'package:pylons_wallet/pages/payment/payment_result_screen.dart';
 
 class PaymentInfoScreenWidget extends StatefulWidget {
@@ -22,10 +18,10 @@ class _PaymentInfoScreenWidgetState extends State<PaymentInfoScreenWidget> with 
     super.initState();
   }
 
-  void _tabSelect() {
-    setState(() {
-    });
-  }
+  // void _tabSelect() {
+  //   setState(() {
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,16 +51,14 @@ class _PaymentInfoScreenWidgetState extends State<PaymentInfoScreenWidget> with 
             ),
             SliverList(delegate: SliverChildListDelegate([
               //nft image
-              Container(
-                  child: CardInfoForm()
-              ),
+              const CardInfoForm(),
             ]))
 
           ]
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: Container(
-          padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+          padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
           alignment: Alignment.center,
           height: 60,
           color: Colors.white,
@@ -75,10 +69,10 @@ class _PaymentInfoScreenWidgetState extends State<PaymentInfoScreenWidget> with 
               },
               style: ElevatedButton.styleFrom(
                   primary: const Color(0xFF1212C4),
-                  padding: EdgeInsets.fromLTRB(50, 0, 50, 0),
-                  minimumSize: Size(double.infinity, 30), // double.infinity is the width and 30 is the height
+                  padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                  minimumSize: const Size(double.infinity, 30), // double.infinity is the width and 30 is the height
               ),
-              child: Text('${'pay'.tr()} \$82.00', style: TextStyle(color: Colors.white))
+              child: Text('${'pay'.tr()} \$82.00', style: const TextStyle(color: Colors.white))
           )
       ),
     );

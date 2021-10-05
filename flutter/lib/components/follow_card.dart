@@ -9,10 +9,10 @@ class FollowCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double tileWidth = 85;
+    const tileWidth = 85.0;
     const buttonWidth = tileWidth * 0.9;
     return Card(
-        child: Container(
+        child: SizedBox(
             width: tileWidth,
             child: Column(children: [
               Align(

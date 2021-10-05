@@ -7,8 +7,8 @@ import 'package:pylons_wallet/pages/home/home_screen.dart';
 import 'package:pylons_wallet/pages/marketplace/marketplace_screen.dart';
 
 class Dashboard extends StatelessWidget {
-  const Dashboard({Key? key}) : super(key: key);
-  static String _title = 'pylons_home'.tr();
+  Dashboard({Key? key}) : super(key: key);
+  final _title = 'pylons_home'.tr();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class DashboardWidget extends StatefulWidget {
 
 class _DashboardWidgetState extends State<DashboardWidget> {
   int _selectedIndex = 0;
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController();
 
   @override
   void initState() {

@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -24,31 +24,31 @@ class PylonsHistoryCard extends StatelessWidget {
           children: [
             ListTile(
               horizontalTitleGap: 0,
-                leading: UserImageWidget(imageUrl: kImage2, radius: 16,),
+                leading: const UserImageWidget(imageUrl: kImage2, radius: 16,),
                 // title: Text('Linda purchased \'Title of Artwork\''),
               contentPadding: EdgeInsets.zero,
-                title: RichText(text: TextSpan(text: "Linda", style: TextStyle(color: Colors.black,
+                title: RichText(text: TextSpan(text: "Linda", style: const TextStyle(color: Colors.black,
                 fontWeight: FontWeight.w500, fontSize: 14),
                   children: [
-                    TextSpan(text: " ${'purchased'.tr()} ", style: TextStyle(
+                    TextSpan(text: " ${'purchased'.tr()} ", style: const TextStyle(
                       color: kTextColor,
                       fontWeight: FontWeight.w400,
                       fontSize: 16
                     ),),
-                    TextSpan(text: "'Title of Artwork'", style: TextStyle(
+                    const TextSpan(text: "'Title of Artwork'", style: TextStyle(
                       color: kTextColor,
                       fontWeight: FontWeight.w500,
                       fontSize: 16
                     ))
                   ]
                 )),
-                trailing: Icon(
+                trailing: const Icon(
                     Icons.arrow_forward_ios_sharp,
                     size: 16,
                     color: kUnselectedIcon
                 ),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>DetailScreenWidget(isOwner: true)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const DetailScreenWidget(isOwner: true)));
                 },
             ),
             Card(
@@ -76,7 +76,7 @@ class PylonsHistoryCard extends StatelessWidget {
                                   onTap: () {}
                               ),
                             ),
-                            Text('40', style: TextStyle(color: kUnselectedIcon)),
+                            const Text('40', style: TextStyle(color: kUnselectedIcon)),
                             const HorizontalSpace(10),
                             Padding(
                               padding: const EdgeInsets.only(right: 4),
@@ -88,10 +88,10 @@ class PylonsHistoryCard extends StatelessWidget {
                                   onTap: () {}
                               ),
                             ),
-                            Text('142', style: TextStyle(color: kUnselectedIcon)),
-                            Spacer(),
+                            const Text('142', style: TextStyle(color: kUnselectedIcon)),
+                            const Spacer(),
                             IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                     Icons.more_vert,
                                     size: kSmallIconSize,
                                     color: kUnselectedIcon

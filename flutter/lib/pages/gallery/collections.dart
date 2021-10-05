@@ -1,10 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:pylons_wallet/components/pylons_blue_button.dart';
-import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
 
@@ -33,7 +30,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: Icon(Icons.chevron_left, color: Colors.white),
+          icon: const Icon(Icons.chevron_left, color: Colors.white),
           onPressed: (){
             Navigator.pop(context);
           },
@@ -47,7 +44,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
                 Container(
                   width: double.infinity,
                   height: 370,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: CachedNetworkImageProvider(kImage2),
                       fit: BoxFit.fill,
@@ -56,9 +53,9 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
                   child:
                   Container(
                       alignment: Alignment.topLeft,
-                      padding: EdgeInsets.all( 16 ),
+                      padding: const EdgeInsets.all( 16 ),
                       width: double.infinity,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
                           // Where the linear gradient begins and ends
                           begin: Alignment.topCenter,
@@ -80,11 +77,11 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
                               alignment: Alignment.centerLeft,
                               child: Text('photography'.tr(),
                                   textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
+                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white)),
 
                             ),
                             // SizedBox(height: 28),
-                            Text('Description about the title Descritpion about the title Description about the title Description about the title',
+                            const Text('Description about the title Descritpion about the title Description about the title Description about the title',
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
@@ -96,12 +93,12 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
-                                      icon: Icon(Icons.add, color: Colors.white),
+                                      icon: const Icon(Icons.add, color: Colors.white),
                                       onPressed: (){
                                       }
                                   ),
                                   IconButton(
-                                      icon: Icon(Icons.more_vert, color: Colors.white),
+                                      icon: const Icon(Icons.more_vert, color: Colors.white),
                                       onPressed: (){}
                                   )
                                 ]
@@ -115,7 +112,7 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
             ),
 
             SliverPadding(
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               sliver:  SliverStaggeredGrid.countBuilder(
                   crossAxisCount: 3,
                   crossAxisSpacing: 8,
@@ -127,14 +124,14 @@ class _CollectionsScreenState extends State<CollectionsScreen> with SingleTicker
                           Navigator.of(context).push(MaterialPageRoute(builder: (_) => const DetailScreenWidget(isOwner: true)));
                         },
                         child:Container(
-                          decoration:BoxDecoration(
+                          decoration: const BoxDecoration(
                               color: Colors.transparent,
                               borderRadius: BorderRadius.all(
                                   Radius.circular(5)
                               )
                           ),
                           child: ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderRadius: const BorderRadius.all(Radius.circular(5)),
                             child: CachedNetworkImage(
                                 imageUrl: _getImage(index),
                                 fit: BoxFit.cover

@@ -1,9 +1,9 @@
 import 'package:cosmos_ui_components/cosmos_ui_components.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:cosmos_utils/cosmos_utils.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
+import 'package:pylons_wallet/components/pylons_blue_button.dart';
 
 class MnemonicOnboardingPage extends StatefulWidget {
   const MnemonicOnboardingPage({Key? key}) : super(key: key);

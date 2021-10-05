@@ -1,13 +1,13 @@
+import 'package:alan/alan.dart' as alan;
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/entities/balance.dart';
-import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/transactions/pylons_balance.dart';
+import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import 'package:transaction_signing_gateway/model/credentials_storage_failure.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
-import 'package:alan/alan.dart' as alan;
 
 
 class WalletsStore {
@@ -42,7 +42,7 @@ class WalletsStore {
     isError.value = false;
     isBalancesLoading.value = true;
     try {
-      var balance = await PylonsBalance(baseEnv).getBalance(walletAddress);
+      final balance = await PylonsBalance(baseEnv).getBalance(walletAddress);
       balancesList.value = [balance];
     } catch (error) {
       isError.value = false;

@@ -1,7 +1,7 @@
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
@@ -22,7 +22,7 @@ class PylonsTrendingColCard extends StatelessWidget {
             children: [
               Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                         child:ListTile(
                           contentPadding: EdgeInsets.zero,
                             leading: UserImageWidget(imageUrl: kImage2, radius: 16,),
@@ -30,10 +30,10 @@ class PylonsTrendingColCard extends StatelessWidget {
                         )
                     ),
                     Padding(
-                        padding: EdgeInsets.only(right: 0),
+                        padding: EdgeInsets.zero,
                         child: IconButton(
                           onPressed: (){},
-                          icon: ImageIcon(
+                          icon: const ImageIcon(
                               AssetImage('assets/images/icon/add_friend.png')
                           ),
                         )
@@ -59,9 +59,7 @@ class PylonsTrendingColCard extends StatelessWidget {
                           height: 200.0,
                           fit: BoxFit.cover
                         ),
-                        SizedBox(
-                          width: 2.0
-                        ),
+                        const HorizontalSpace(2.0),
                         Column(
                           children: [
                             CachedNetworkImage(
@@ -70,9 +68,7 @@ class PylonsTrendingColCard extends StatelessWidget {
                               height: 100.0,
                               fit: BoxFit.cover
                             ),
-                            SizedBox(
-                                height: 2.0
-                            ),
+                            const VerticalSpace(2.0),
                             CachedNetworkImage(
                                 imageUrl: kImage1,
                                 width: 110.0,

@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
@@ -12,17 +11,17 @@ class PylonsTrendingNewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    const layout = [
-      [1, 1],
-      [2, 2],
-      [1, 1],
-      [1, 1],
-      [1, 1],
-      [1, 1]
-    ];
+    // const layout = [
+    //   [1, 1],
+    //   [2, 2],
+    //   [1, 1],
+    //   [1, 1],
+    //   [1, 1],
+    //   [1, 1]
+    // ];
 
     return Container(
-        padding: EdgeInsets.only(right: 6),
+        padding: const EdgeInsets.only(right: 6),
         width: 325,
         child:
 
@@ -36,14 +35,14 @@ class PylonsTrendingNewCard extends StatelessWidget {
                       height: 100.0,
                       fit: BoxFit.cover
                   ),
-                  SizedBox(height: 5.0),
+                  const SizedBox(height: 5.0),
                   CachedNetworkImage(
                       imageUrl: kImage2,
                       width: 100.0,
                       height: 100.0,
                       fit: BoxFit.cover
                   ),
-                  SizedBox(height: 5.0),
+                  const SizedBox(height: 5.0),
                   CachedNetworkImage(
                       imageUrl: kImage,
                       width: 100.0,
@@ -52,7 +51,7 @@ class PylonsTrendingNewCard extends StatelessWidget {
                   ),
                ],
               ),
-              SizedBox(width:5.0),
+              const SizedBox(width:5.0),
               Column(
                 children: [
                   CachedNetworkImage(
@@ -61,7 +60,7 @@ class PylonsTrendingNewCard extends StatelessWidget {
                       height: 205.0,
                       fit: BoxFit.cover
                   ),
-                  SizedBox(height: 5.0,),
+                  const SizedBox(height: 5.0,),
                   Row(
                     children: [
                       CachedNetworkImage(
@@ -70,7 +69,7 @@ class PylonsTrendingNewCard extends StatelessWidget {
                           height: 100.0,
                           fit: BoxFit.cover
                       ),
-                      SizedBox(width: 5.0),
+                      const SizedBox(width: 5.0),
                       CachedNetworkImage(
                           imageUrl: kImage2,
                           width: 100.0,

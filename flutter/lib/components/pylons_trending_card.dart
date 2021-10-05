@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cosmos_ui_components/cosmos_app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
@@ -13,30 +12,30 @@ class PylonsTrendingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: EdgeInsets.only(right: 6, left: 6),
+        padding: const EdgeInsets.only(right: 6, left: 6),
         width: 200,
         child: Column(children: [
           Row(children: [
             Expanded(
                 child: ListTile(
-              contentPadding: EdgeInsets.only(left: 0, right: 0),
+              contentPadding: EdgeInsets.zero,
               horizontalTitleGap: 0,
-              leading: UserImageWidget(
+              leading: const UserImageWidget(
                 imageUrl: kImage2,
                 radius: 15,
               ),
-              title: Text('Linda'),
+              title: const Text('Linda'),
               trailing: IconButton(
                 onPressed: () {},
                 icon:
-                    ImageIcon(AssetImage('assets/images/icon/add_friend.png')),
+                const ImageIcon(AssetImage('assets/images/icon/add_friend.png')),
               ),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            DetailScreenWidget(isOwner: false)));
+                            const DetailScreenWidget(isOwner: false)));
               },
             )),
           ]),
@@ -49,23 +48,23 @@ class PylonsTrendingCard extends StatelessWidget {
                   fit: BoxFit.cover)),
           Row(children: [
             TextButton.icon(
-              icon: ImageIcon(AssetImage('assets/icons/comment.png'),
+              icon: const ImageIcon(AssetImage('assets/icons/comment.png'),
                   size: kIconSize, color: kUnselectedIcon),
-              label: Text(
+              label: const Text(
                 '40',
                 style: TextStyle(color: kUnselectedIcon),
               ),
               onPressed: () {},
             ),
             TextButton.icon(
-              icon: ImageIcon(AssetImage('assets/icons/like.png'),
+              icon: const ImageIcon(AssetImage('assets/icons/like.png'),
                   size: kIconSize, color: kUnselectedIcon),
-              label: Text('142', style: TextStyle(color: kUnselectedIcon)),
+              label: const Text('142', style: TextStyle(color: kUnselectedIcon)),
               onPressed: () {},
             ),
-            Spacer(),
+            const Spacer(),
             IconButton(
-              icon: ImageIcon(AssetImage('assets/images/icon/dots.png'),
+              icon: const ImageIcon(AssetImage('assets/images/icon/dots.png'),
                   size: kIconSize, color: kUnselectedIcon),
               onPressed: () {},
             )

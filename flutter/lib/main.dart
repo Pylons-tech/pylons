@@ -16,9 +16,9 @@ Future<void> main() async {
   _buildDependencies();
   runApp(
     EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('ru')],
+      supportedLocales: const [Locale('en'), Locale('ru')],
       path: 'i18n',
-      fallbackLocale: Locale('en'),
+      fallbackLocale: const Locale('en'),
       saveLocale: false,
       useOnlyLangCode: true,
       child: PylonsApp()

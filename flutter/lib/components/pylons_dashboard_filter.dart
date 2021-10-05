@@ -1,7 +1,5 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
@@ -13,7 +11,7 @@ class PylonsDashboardFilterBox extends StatefulWidget {
 }
 
 class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
-  var filter_strings = [
+  List<Map<String, Object>> filterStrings = [
     {"name":"Purchase", 'checked': true},
     {"name":"Mint", "checked": false},
     {"name":"Follow", "checked": false},
@@ -46,32 +44,29 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
               ),
               Text('filter'.tr(), style: const TextStyle(fontWeight: FontWeight.w500),),
               const Spacer(),
-              FlatButton(
-                onPressed: (){},
-                child: Text('reset'.tr(), style: PylonsAppTheme.HOME_LABEL,)
-              )
+              TextButton(onPressed: (){},
+                  child: Text('reset'.tr(), style: PylonsAppTheme.HOME_LABEL,))
             ],
           ),
-          for (var i = 0; i < filter_strings.length; i += 1)
+          for (var i = 0; i < filterStrings.length; i += 1)
             Row(
                 children: [
                   Checkbox(
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     onChanged: (value) {
                       setState((){
-                        filter_strings[i]['checked']=value!;
+                        filterStrings[i]['checked']=value!;
                       });
                     },
                     tristate: i == 1,
-                    value: filter_strings[i]['checked'] == true,
-                    activeColor: Color(0xFF6200EE),
+                    value: filterStrings[i]['checked'] == true,
+                    activeColor: const Color(0xFF6200EE),
                   ),
                   Text(
-                    filter_strings[i]['name'].toString(),
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                    filterStrings[i]['name'].toString(),
+                    style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
                 ],
-                mainAxisAlignment: MainAxisAlignment.start,
               ),
           const VerticalSpace(10),
           Row(

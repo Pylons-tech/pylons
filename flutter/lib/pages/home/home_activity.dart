@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/components/pylons_app_bar.dart';
 import 'package:pylons_wallet/components/pylons_history_card.dart';
 
 class HomeActivityWidget extends StatefulWidget {
@@ -18,8 +17,8 @@ class _HomeActivityWidgetState extends State<HomeActivityWidget> {
       delegate: SliverChildBuilderDelegate(
             (BuildContext context, int index) {
           return Container(
-            padding: EdgeInsets.only(top: 30.0),
-            child: Center(
+            padding: const EdgeInsets.only(top: 30.0),
+            child: const Center(
               child: PylonsHistoryCard(),
             ),
           );

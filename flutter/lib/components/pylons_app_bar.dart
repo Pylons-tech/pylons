@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:pylons_wallet/components/pylons_dashboard_dropdown.dart';
+import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_dashboard_filter.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
@@ -25,10 +24,10 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
     DateTime _date = DateTime(2020, 11, 17);
 
     Future<void> _selectDate()  async {
-      final DateTime? newDate = await showDatePicker(
+      final newDate = await showDatePicker(
         context: context,
         initialDate: _date,
-        firstDate: DateTime(2017, 1),
+        firstDate: DateTime(2017),
         lastDate: DateTime(2022, 7),
         helpText: 'select_a_date'.tr(),
       );
@@ -75,22 +74,21 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
           )
         ],
         bottom: PreferredSize(
-            preferredSize: Size(0.0, 0.0),
+            preferredSize: Size.zero,
             child: Container(
-                padding: EdgeInsets.only(left: 16.0, right: 0.0),
+                padding: const EdgeInsets.only(left: 16.0),
                 child: Row(
                   children: [
                   DropdownButton<String>(
                       value: dropdownValue,
-                      icon: ImageIcon(
+                      icon: const ImageIcon(
                           AssetImage('assets/images/icon/chevron-down.png'),
                           size: 24,
                           color: kSelectedIcon
                       ),
-                      iconSize: 24,
                       elevation: 16,
-                      underline: SizedBox(),
-                      style: TextStyle(color: kSelectedIcon, fontSize: 14),
+                      underline: const SizedBox(),
+                      style: const TextStyle(color: kSelectedIcon, fontSize: 14),
                       onChanged: (String? data) {
                         setState(() {
                           dropdownValue = data!;
@@ -104,7 +102,7 @@ class PylonsAppBar extends StatefulWidget implements PreferredSizeWidget {
                         );
                       }).toList(),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     IconButton(
                         icon: const ImageIcon(
                             AssetImage('assets/images/icon/callendar.png'),
