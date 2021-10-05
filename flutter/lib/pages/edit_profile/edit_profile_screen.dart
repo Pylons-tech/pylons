@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/edit_profile/image_source_bottom_sheet.dart';
+import 'package:pylons_wallet/pages/edit_profile/social_media_screen.dart';
 import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class EditProfileScreen extends StatelessWidget {
-   EditProfileScreen({Key? key}) : super(key: key);
+  EditProfileScreen({Key? key}) : super(key: key);
 
-  final TextEditingController _bioController =  TextEditingController();
-  final TextEditingController _websiteController =  TextEditingController();
-  final TextEditingController _userIDController =  TextEditingController(text: "cosmos1xfkoi9863893j90387jwksmsk0w");
+  final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _userIDController =
+      TextEditingController(text: "cosmos1xfkoi9863893j90387jwksmsk0w");
 
   @override
   Widget build(BuildContext context) {
-
     ScreenSizeUtil screenSize = ScreenSizeUtil(context);
 
     return Scaffold(
@@ -21,28 +22,35 @@ class EditProfileScreen extends StatelessWidget {
       appBar: AppBar(
         leadingWidth: 44,
         leading: Container(
-          width: 10, height: 10,
+          width: 10,
+          height: 10,
           margin: const EdgeInsets.only(left: 20),
           child: InkWell(
-            onTap: (){
+            onTap: () {
               Navigator.pop(context);
             },
-            child: Image.asset("assets/icons/close.png",
+            child: Image.asset(
+              "assets/icons/close.png",
               fit: BoxFit.contain,
-              color: Colors.black,),
+              color: Colors.black,
+            ),
           ),
         ),
         centerTitle: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text("Pylons Account", style: TextStyle(
-          fontSize: 18, fontWeight: FontWeight.w500,
-          color: Colors.black
-        ),),
+        title: const Text(
+          "Pylons Account",
+          style: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+        ),
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.done, color: kBlue,),
+            icon: const Icon(
+              Icons.done,
+              color: kBlue,
+            ),
           ),
         ],
       ),
@@ -55,45 +63,61 @@ class EditProfileScreen extends StatelessWidget {
               child: Column(
                 children: [
                   _ProfileImageWidget(
-                    onEditTap: (){
-                      showModalBottomSheet(context: context,
+                    onEditTap: () {
+                      showModalBottomSheet(
+                          context: context,
                           shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40),),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
+                            ),
                           ),
                           isDismissible: true,
-                          builder: (_) => ImageSourceBottomSheet()
-                      );
+                          builder: (_) => ImageSourceBottomSheet());
                     },
                   ),
                   const VerticalSpace(20),
                   const _UserNameWidget(username: "Linda"),
                   const VerticalSpace(20),
                   _TextInputWidget(
-                      title: 'Bio', hint: 'Add Bio', controller: _bioController,
+                    title: 'Bio',
+                    hint: 'Add Bio',
+                    controller: _bioController,
                     noOfLines: 3,
                   ),
                   const VerticalSpace(20),
                   _TextInputWidget(
-                    title: 'Website', hint: 'Add Website', controller: _websiteController,
+                    title: 'Website',
+                    hint: 'Add Website',
+                    controller: _websiteController,
                   ),
                   const VerticalSpace(20),
-                  _TextInputWidget(
-                    title: 'User ID', hint: 'User ID', controller: _userIDController,
+                  _WalletAddressTextInputWidget(
+                    title: 'User ID',
+                    hint: 'User ID',
+                    controller: _userIDController,
                     enabled: false,
                   ),
-
                   const VerticalSpace(20),
                   GestureDetector(
-                    onTap: (){},
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (_) => SocialMediaScreen()));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(
                         children: [
-                          Image.asset('assets/images/gcloud.png', width: 20,),
+                          Image.asset(
+                            'assets/icons/circled_link.png',
+                            width: 20,
+                          ),
                           const HorizontalSpace(10),
-                          const Text("Export account to Google Cloud",
-                          style: TextStyle(color: kBlue, fontWeight: FontWeight.w500),),
+                          const Text(
+                            "Link to Social Media",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.w400),
+                          ),
                         ],
                       ),
                     ),
@@ -102,22 +126,49 @@ class EditProfileScreen extends StatelessWidget {
                     color: Color(0xffF1F1F2),
                     thickness: 1,
                   ),
-
                   GestureDetector(
-                    onTap: (){},
+                    onTap: () {},
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
                       child: Row(
                         children: [
-                          Image.asset('assets/icons/log_out.png', width: 20,),
+                          Image.asset(
+                            'assets/images/gcloud.png',
+                            width: 20,
+                          ),
                           const HorizontalSpace(10),
-                          const Text("Log out",
-                            style: TextStyle(color: kBlue),),
+                          const Text(
+                            "Export account to Google Cloud",
+                            style: TextStyle(
+                                color: Colors.black, fontWeight: FontWeight.w400),
+                          ),
                         ],
                       ),
                     ),
                   ),
-
+                  const Divider(
+                    color: Color(0xffF1F1F2),
+                    thickness: 1,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/icons/log_out.png',
+                            width: 20,
+                          ),
+                          const HorizontalSpace(10),
+                          const Text(
+                            "Log out",
+                            style: TextStyle(color: kBlue),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -129,17 +180,17 @@ class EditProfileScreen extends StatelessWidget {
 }
 
 class _ProfileImageWidget extends StatelessWidget {
-  const _ProfileImageWidget({Key? key,
+  const _ProfileImageWidget({
+    Key? key,
     required this.onEditTap,
-    this.imageUrl = kImage,})
-      : super(key: key);
+    this.imageUrl = kImage,
+  }) : super(key: key);
 
   final String imageUrl;
   final VoidCallback onEditTap;
 
   @override
   Widget build(BuildContext context) {
-
     final ScreenSizeUtil screenSize = ScreenSizeUtil(context);
     return Container(
       decoration: BoxDecoration(
@@ -170,8 +221,12 @@ class _ProfileImageWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20.0),
                 ),
                 padding: EdgeInsets.all(4.0),
-                child: Image.asset("assets/icons/edit.png", width: 20, height: 20,
-                color: Colors.white,),
+                child: Image.asset(
+                  "assets/icons/edit.png",
+                  width: 20,
+                  height: 20,
+                  color: Colors.white,
+                ),
               ),
             ),
           )
@@ -188,7 +243,6 @@ class _UserNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -199,8 +253,12 @@ class _UserNameWidget extends StatelessWidget {
         const HorizontalSpace(4),
         InkWell(
           onTap: () {},
-          child:  Image.asset("assets/icons/edit.png", width: 30, height: 30,
-            color: Colors.grey,),
+          child: Image.asset(
+            "assets/icons/edit.png",
+            width: 30,
+            height: 30,
+            color: Colors.grey,
+          ),
         )
       ],
     );
@@ -220,8 +278,7 @@ class _TextInputWidget extends StatelessWidget {
       required this.hint,
       required this.controller,
       this.noOfLines = 1,
-        this.enabled = true
-      })
+      this.enabled = true})
       : super(key: key);
 
   @override
@@ -247,7 +304,7 @@ class _TextInputWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5),
                 borderSide: const BorderSide(color: Color(0xffC4C4C4)),
               ),
-              disabledBorder:  OutlineInputBorder(
+              disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(5),
                 borderSide: const BorderSide(color: Color(0xffC4C4C4)),
               ),
@@ -257,6 +314,101 @@ class _TextInputWidget extends StatelessWidget {
               hintStyle: TextStyle(
                   color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
               fillColor: Color(0xffFBFBFB)),
+        ),
+      ],
+    );
+  }
+}
+
+class _WalletAddressTextInputWidget extends StatelessWidget {
+  final TextEditingController controller;
+  final String title;
+  final String hint;
+  final int noOfLines;
+  final bool enabled;
+
+  _WalletAddressTextInputWidget(
+      {Key? key,
+      required this.title,
+      required this.hint,
+      required this.controller,
+      this.noOfLines = 1,
+      this.enabled = true})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(title),
+        ),
+        const VerticalSpace(4),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: (){
+            print("main");
+          },
+          child: TextFormField(
+            minLines: noOfLines,
+            maxLines: noOfLines,
+            controller: controller,
+            enabled: false,
+            style: TextStyle(color: Color(0xffC4C4C4)),
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: const BorderSide(color: Color(0xffC4C4C4)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(color: Color(0xffC4C4C4)),
+                ),
+                disabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: const BorderSide(color: Color(0xffC4C4C4)),
+                ),
+                contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                filled: true,
+                hintText: hint,
+                prefixIcon: Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                      color: Colors.transparent,
+                      // borderRadius: BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4)),
+                      border:  Border(
+                          right: BorderSide(color: Color(0xffC4C4C4), width: 1))),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/icons/link.png',
+                        width: 24,
+                      ),
+                    ],
+                  ),
+                ),
+                suffixIcon: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: kBlue,
+                    borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5))
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Copy", style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.w500),),
+                    ],
+                  ),
+                ),
+
+                hintStyle: TextStyle(
+                    color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
+                fillColor: Color(0xffFBFBFB)),
+          ),
         ),
       ],
     );
