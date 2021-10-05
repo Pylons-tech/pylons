@@ -29,6 +29,14 @@ export default {
 						this.visible = false
 						this.$router.push("/cookbook")
 					},
+				},
+				{
+					label: 'Create a new Recipe',
+					icon: 'pi pi-file',
+					command : () => {
+						this.visible = false
+						this.$router.push("/recipe")
+					},
 				}
 			]
 		}

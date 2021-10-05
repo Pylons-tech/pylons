@@ -32,11 +32,11 @@
 			</div>
 			<Fieldset legend="Cost Per Block">
 				<div class="p-field p-grid">
-					<label for="coinDenom" class="p-col-fixed" style="width: 200px">coinDenom</label>
+					<label for="coinDenom" class="p-col-fixed" style="width: 200px">Coin Denomination</label>
 					<div class="p-col"><InputText id="coinDenom" type="text" v-model="coinDenom" /></div>
 				</div>
 				<div class="p-field p-grid">
-					<label for="coinAmount" class="p-col-fixed" style="width: 200px">coinAmount</label>
+					<label for="coinAmount" class="p-col-fixed" style="width: 200px">Coin Amount</label>
 					<div class="p-col"><InputText id="coinAmount" type="text" v-model="coinAmount" /></div>
 				</div>
 			</Fieldset>
