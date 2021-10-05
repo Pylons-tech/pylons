@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import InputText from 'primevue/inputtext/sfc'
+import InputText from 'primevue/inputtext'
 import Fieldset from 'primevue/fieldset'
 import Button from 'primevue/button'
 
@@ -56,9 +56,7 @@ export default {
 		Button
 	},
 	computed: {
-		address: function () {
-			return this.$store.getters['common/wallet/address']
-		}
+		address: () => window.keplr.getKey('pylons')
 	},
 	data() {
 		return {

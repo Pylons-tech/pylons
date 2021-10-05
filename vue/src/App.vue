@@ -1,9 +1,9 @@
 <template>
 	<div class="p-grid">
-		<div class="p-col-fixed" style="width:15vw">
+		<div class="p-col-fixed" style="width: 15vw">
 			<Button type="button" @click="toggle" icon="pi pi-bars" />
 		</div>
-		<div class="p-col-fixed" style='width:85vw'>
+		<div class="p-col-fixed" style="width: 85vw">
 			<div>Pylons App</div>
 		</div>
 	</div>
@@ -26,11 +26,6 @@ export default {
 			initialized: false
 		}
 	},
-	computed: {
-		hasWallet() {
-			return this.$store.hasModule(['common', 'wallet'])
-		}
-	},
 	methods: {
 		toggle: function () {
 			this.$refs.sidebar.toggle()
@@ -38,11 +33,14 @@ export default {
 	},
 	async created() {
 		await this.$store.dispatch('common/env/init')
+
+		const chainId = 'pylons'
+
+		window.keplr.enable(chainId)
+		const offlineSigner = window.getOfflineSigner(chainId)
+		this.$store.dispatch('common/wallet/connectWithKeplr', offlineSigner)
+
 		this.initialized = true
-	},
-	errorCaptured(err) {
-		console.log(err)
-		return false
 	}
 }
 </script>
