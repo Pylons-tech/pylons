@@ -6671,6 +6671,31 @@ mixin-deep@^1.2.0:
   dependencies:
     minimist "^1.2.5"
 
+monaco-editor-vue3@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/monaco-editor-vue3/-/monaco-editor-vue3-0.1.5.tgz#3b38ebd796a0754a3ac5f44190f14a12994cd242"
+  integrity sha512-/14Edm77tUSI1GaRVs+0C6SN7W7BWkzwVviQfhYBVhcODAPpA5ZBOj997hz45OkY+otGiIXsHHkWpZl3dQ9TKw==
+  dependencies:
+    monaco-editor "^0.25.2"
+    vue "^3.1.2"
+
+monaco-editor-webpack-plugin@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-4.2.0.tgz#2be76cde9cca7bd8c3418503625990f86886927b"
+  integrity sha512-/P3sFiEgBl+Y50he4mbknMhbLJVop5gBUZiPS86SuHUDOOnQiQ5rL1jU5lwt1XKAwMEkhwZbUwqaHxTPkb1Utw==
+  dependencies:
+    loader-utils "^2.0.0"
+
+monaco-editor@^0.25.2:
+  version "0.25.2"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.25.2.tgz#119e2b15bbd968a1a99c03cac9c329316d7c37e9"
+  integrity sha512-5iylzSJevCnzJn9UVsW8yOZ3yHjmAs4TfvH3zsbftKiFKmHG0xirGN6DK9Kk04VSWxYCZZAIafYJoNJJMAU1KA==
+
+monaco-editor@^0.28.1:
+  version "0.28.1"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.28.1.tgz#732788ff2172d59e6d436b206da8cac715413940"
+  integrity sha512-P1vPqxB4B1ZFzTeR1ScggSp9/5NoQrLCq88fnlNUsuRAP1usEBN4TIpI2lw0AYIZNVIanHk0qwjze2uJwGOHUw==
+
 move-concurrently@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/move-concurrently/-/move-concurrently-1.0.1.tgz#be2c005fda32e0b29af1f05d7c4b33214c701f92"
@@ -9817,7 +9842,7 @@ vue-uuid@^2.0.2:
     "@types/uuid" "^8.0.0"
     uuid "^8.1.0"
 
-vue@^3.0.11:
+vue@^3.0.11, vue@^3.1.2:
   version "3.2.19"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.19.tgz#da2c80a6a0271c7097fee9e31692adfd9d569c8f"
   integrity sha512-6KAMdIfAtlK+qohTIUE4urwAv4A3YRuo8uAbByApUmiB0CziGAAPs6qVugN6oHPia8YIafHB/37K0O6KZ7sGmA==
