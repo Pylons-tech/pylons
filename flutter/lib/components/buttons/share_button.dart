@@ -4,12 +4,10 @@ import 'package:pylons_wallet/constants/constants.dart';
 
 class ShareButton extends StatelessWidget {
   final VoidCallback onTap;
-  final String text;
 
   const ShareButton({
     Key? key,
     required this.onTap,
-    this.text = "",
   }) : super(key: key);
 
   @override

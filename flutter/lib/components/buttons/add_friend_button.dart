@@ -16,11 +16,12 @@ class AddFriendButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-       onPressed: this.onTap,
-       icon: ImageIcon(
+       onPressed: onTap,
+       icon: const ImageIcon(
           AssetImage('assets/images/icon/add_friend.png'),
           size: kIconSize,
           color: kSelectedIcon,
+         key: ValueKey("Add-Friend-Button"),
        ),
     );
   }
