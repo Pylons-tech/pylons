@@ -18,6 +18,7 @@ class NextButton extends StatelessWidget {
           AssetImage('assets/images/icon/more.png'),
           size: kIconSize,
           color: kSelectedIcon,
+          key: ValueKey("NextButton"),
         ),
     );
   }
