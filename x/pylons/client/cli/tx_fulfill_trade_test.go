@@ -291,7 +291,11 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 
 	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin(testDenom, sdk.NewInt(110))),
+		[]types.CoinInput{
+			{
+				Coins: sdk.NewCoins(sdk.NewCoin(testDenom, sdk.NewInt(110))),
+			},
+		},
 	)
 	require.NoError(t, err)
 

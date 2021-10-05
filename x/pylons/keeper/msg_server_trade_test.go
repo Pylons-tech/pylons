@@ -21,7 +21,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreateSimple() {
 	for i := 0; i < 5; i++ {
 		resp, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
 			Creator:     creator,
-			CoinInputs:  sdk.Coins{},
+			CoinInputs:  nil,
 			ItemInputs:  nil,
 			CoinOutputs: sdk.Coins{},
 			ItemOutputs: nil,
@@ -43,10 +43,13 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreateInvalidCoinInputs() {
 	numTests := 5
 	items := createNItem(k, ctx, numTests, true)
 
+	coinInputs := make([]types.CoinInput, 0)
+	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+
 	for i := 0; i < 5; i++ {
 		_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
 			Creator:     items[i].Owner,
-			CoinInputs:  sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
+			CoinInputs:  coinInputs,
 			ItemInputs:  nil,
 			CoinOutputs: sdk.Coins{},
 			ItemOutputs: []types.ItemRef{{CookbookID: items[i].CookbookID, ItemID: items[i].ID}},
@@ -89,7 +92,7 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCancel() {
 		suite.Run(tc.desc, func() {
 			_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
 				Creator:     creator,
-				CoinInputs:  sdk.Coins{},
+				CoinInputs:  nil,
 				ItemInputs:  nil,
 				CoinOutputs: sdk.Coins{},
 				ItemOutputs: nil,

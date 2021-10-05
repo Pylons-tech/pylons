@@ -28,9 +28,12 @@ func TestCreateTradeNoItemOutput1(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -108,9 +111,12 @@ func TestCreateTradeNoItemOutput2(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin(testIBCDenom, sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -324,9 +330,12 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -557,9 +566,12 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -789,9 +801,12 @@ func TestCreateTradeItemOutputInvalidCoinInputs2(t *testing.T) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -1021,9 +1036,12 @@ func TestCreateTradeItemOutputInvalidCoinInputs3(t *testing.T) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -1252,9 +1270,12 @@ func TestCreateTradeItemOutputInvalidNonTradable(t *testing.T) {
 	require.Equal(t, cookbookID, itemResp.Item.CookbookID)
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -1337,9 +1358,12 @@ func TestCreateTradeInvalidCoinOutput(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("pylons", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -1418,9 +1442,12 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	val := net.Validators[0]
 	ctx := val.ClientCtx
 
-	// no coinInputs
 	coinInputs, err := json.Marshal(
-		sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+		[]types.CoinInput{
+			{
+				sdk.NewCoins(sdk.NewCoin("node0token", sdk.NewInt(1))),
+			},
+		},
 	)
 	require.NoError(t, err)
 
@@ -1505,7 +1532,7 @@ func TestCancelTrade(t *testing.T) {
 	ctx := val.ClientCtx
 
 	// no coinInputs
-	coinInputs, err := json.Marshal(sdk.Coins{})
+	coinInputs, err := json.Marshal([]types.CoinInput{})
 	require.NoError(t, err)
 
 	// expect a dummy item

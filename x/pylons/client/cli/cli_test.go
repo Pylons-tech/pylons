@@ -57,11 +57,14 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 
 	addresses := types.GenTestBech32List(n)
 
+	coinInputs := make([]types.CoinInput, 0)
+	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
 			Creator:          addresses[i],
 			ID:               uint64(i),
-			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
+			CoinInputs:       coinInputs,
 			ItemInputs:       make([]types.ItemInput, 0),
 			CoinOutputs:      sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
 			ItemOutputs:      make([]types.ItemRef, 0),
