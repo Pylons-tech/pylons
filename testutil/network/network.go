@@ -6,6 +6,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
+	"github.com/stretchr/testify/require"
+
+	"github.com/Pylons-tech/pylons/x/pylons/client/cli"
+
 	"github.com/cosmos/cosmos-sdk/codec"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
@@ -45,6 +51,26 @@ func New(t *testing.T, configs ...network.Config) *network.Network {
 	}
 	net := network.New(t, cfg)
 	t.Cleanup(net.Cleanup)
+
+	// create accounts for the validators
+	for i, val := range net.Validators {
+		ctx := val.ClientCtx
+		addr := val.Address.String()
+		flags := []string{
+			fmt.Sprintf("--%s=%s", flags.FlagFrom, addr),
+			fmt.Sprintf("--%s=true", flags.FlagSkipConfirmation),
+			fmt.Sprintf("--%s=%s", flags.FlagBroadcastMode, flags.BroadcastBlock),
+			fmt.Sprintf("--%s=%s", flags.FlagFees, sdk.NewCoins(sdk.NewCoin(net.Config.BondDenom, sdk.NewInt(10))).String()),
+		}
+
+		args := []string{fmt.Sprintf("val%d", i)}
+		args = append(args, flags...)
+		_, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdCreateAccount(), args)
+		require.NoError(t, err)
+		// var resp sdk.TxResponse
+		// require.NoError(t, ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &resp))
+	}
+
 	return net
 }
 
