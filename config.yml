@@ -1,38 +1,17 @@
-genesis:
-  chain_id: "pylons"
-  app_state:
-    staking:
-      params:
-        bond_denom: "ubedrock"
-    crisis:
-      constant_fee:
-        denom: ubedrock
-    gov:
-      deposit_params:
-        min_deposit:
-          denom: ubedrock
-
-init:
-  config:
-    api:
-      swagger: true
-
 accounts:
   - name: alice
-    coins: ["20000000000upylon", "200000000ubedrock"]
-    mnemonic: "achieve patch rabbit delay you stairs flag nation lady outside answer property olive man dwarf used chapter sunset bundle sniff between since review logic"
+    coins: ["20000000000upylon", "200000000stake"]
   - name: bob
-    coins: ["10000000000upylon", "100000000ubedrock"]
-    mnemonic: "oil inflict cup nation circle palace cactus uphold clarify vibrant believe stem farm aerobic casino treat early amazing remain produce exhaust bachelor flame own"
+    coins: ["10000000000upylon", "100000000stake"]
 validator:
   name: alice
-  staked: "100000000ubedrock"
+  staked: "100000000stake"
 client:
-#  vuex:
-#    path: "vue/src/store"
+  vuex:
+    path: "vue/src/store"
   openapi:
     path: "docs/static/openapi.yml"
 faucet:
   name: bob
-  coins: [ "10000upylon", "1000000ubedrock" ]
+  coins: [ "10000000000upylon", "100000000stake" ]
 

@@ -1,46 +1,49 @@
 <template>
-	<div class="p-grid">
-		<div class="p-col-fixed" style="width: 15vw">
-			<Button type="button" @click="toggle" icon="pi pi-bars" />
-		</div>
-		<div class="p-col-fixed" style="width: 85vw">
-			<div>Pylons App</div>
-		</div>
-	</div>
-	<div class="p-card">
-		<router-view />
-	</div>
-	<div class="p-card">
-		<SideBarComponent ref="sidebar" />
+	<div v-if="initialized">
+		<SpWallet ref="wallet" v-on:dropdown-opened="$refs.menu.closeDropdown()" />
+		<SpLayout>
+			<template v-slot:sidebar>
+				<Sidebar />
+			</template>
+			<template v-slot:content>
+				<router-view />
+			</template>
+		</SpLayout>
 	</div>
 </template>
 
+<style>
+body {
+	margin: 0;
+}
+</style>
+
 <script>
-import SideBarComponent from '@/views/SidebarComponent'
-import Button from 'primevue/button/sfc'
+import './scss/app.scss'
+import '@starport/vue/lib/starport-vue.css'
+import Sidebar from './components/Sidebar'
 
 export default {
-	components: { SideBarComponent, Button },
+	components: {
+		Sidebar
+	},
 	data() {
 		return {
 			initialized: false
 		}
 	},
-	methods: {
-		toggle: function () {
-			this.$refs.sidebar.toggle()
+	computed: {
+		hasWallet() {
+			return this.$store.hasModule(['common', 'wallet'])
 		}
 	},
 	async created() {
 		await this.$store.dispatch('common/env/init')
-
-		const chainId = 'pylons'
-
-		window.keplr.enable(chainId)
-		const offlineSigner = window.getOfflineSigner(chainId)
-		this.$store.dispatch('common/wallet/connectWithKeplr', offlineSigner)
-
 		this.initialized = true
+	},
+	errorCaptured(err) {
+		console.log(err)
+		return false
 	}
 }
 </script>
