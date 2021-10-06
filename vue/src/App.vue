@@ -10,7 +10,7 @@
 	<div class="p-card">
 		<router-view />
 	</div>
-	<div>
+	<div class="p-card">
 		<SideBarComponent ref="sidebar" />
 	</div>
 </template>
