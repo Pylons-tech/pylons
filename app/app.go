@@ -89,6 +89,7 @@ import (
 	"github.com/Pylons-tech/pylons/docs"
 
 	// this line is used by starport scaffolding # stargate/app/moduleImport
+	appparams "github.com/Pylons-tech/pylons/app/params"
 	pylonsmodule "github.com/Pylons-tech/pylons/x/pylons"
 	pylonsmodulekeeper "github.com/Pylons-tech/pylons/x/pylons/keeper"
 	pylonsmoduletypes "github.com/Pylons-tech/pylons/x/pylons/types"
@@ -102,6 +103,10 @@ const (
 	// Name is the name of the app, here "pylons"
 	Name = "pylons"
 )
+
+func init() {
+	appparams.SetupDenomsAndPrefixes()
+}
 
 // this line is used by starport scaffolding # stargate/wasm/app/enabledProposals
 
