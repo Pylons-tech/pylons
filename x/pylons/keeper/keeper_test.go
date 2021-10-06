@@ -236,7 +236,7 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
-		k.AppendItem(ctx, items[i])
+		items[i].ID = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
