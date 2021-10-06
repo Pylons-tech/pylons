@@ -83,9 +83,9 @@ export interface EventFulfillTrade {
     creator: string;
     fulfiller: string;
     itemInputs: ItemRef[];
-    coinInputs: Coin[];
+    coinInput: Coin | undefined;
     itemOutputs: ItemRef[];
-    coinOutputs: Coin[];
+    coinOutput: Coin | undefined;
 }
 export interface EventGooglePurchase {
     creator: string;

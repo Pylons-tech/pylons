@@ -1,8 +1,8 @@
 /* eslint-disable */
 import * as Long from 'long'
 import { util, configure, Writer, Reader } from 'protobufjs/minimal'
-import { CoinInput, ItemInput } from '../pylons/recipe'
 import { Coin } from '../cosmos/base/v1beta1/coin'
+import { ItemInput } from '../pylons/recipe'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
 
@@ -14,9 +14,9 @@ export interface ItemRef {
 export interface Trade {
   creator: string
   ID: number
-  coinInputs: CoinInput[]
+  coinInput: Coin | undefined
   itemInputs: ItemInput[]
-  coinOutputs: Coin[]
+  coinOutput: Coin | undefined
   itemOutputs: ItemRef[]
   extraInfo: string
   receiver: string
@@ -105,14 +105,14 @@ export const Trade = {
     if (message.ID !== 0) {
       writer.uint32(16).uint64(message.ID)
     }
-    for (const v of message.coinInputs) {
-      CoinInput.encode(v!, writer.uint32(26).fork()).ldelim()
+    if (message.coinInput !== undefined) {
+      Coin.encode(message.coinInput, writer.uint32(26).fork()).ldelim()
     }
     for (const v of message.itemInputs) {
       ItemInput.encode(v!, writer.uint32(34).fork()).ldelim()
     }
-    for (const v of message.coinOutputs) {
-      Coin.encode(v!, writer.uint32(42).fork()).ldelim()
+    if (message.coinOutput !== undefined) {
+      Coin.encode(message.coinOutput, writer.uint32(42).fork()).ldelim()
     }
     for (const v of message.itemOutputs) {
       ItemRef.encode(v!, writer.uint32(50).fork()).ldelim()
@@ -133,9 +133,7 @@ export const Trade = {
     const reader = input instanceof Uint8Array ? new Reader(input) : input
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseTrade } as Trade
-    message.coinInputs = []
     message.itemInputs = []
-    message.coinOutputs = []
     message.itemOutputs = []
     message.tradedItemInputs = []
     while (reader.pos < end) {
@@ -148,13 +146,13 @@ export const Trade = {
           message.ID = longToNumber(reader.uint64() as Long)
           break
         case 3:
-          message.coinInputs.push(CoinInput.decode(reader, reader.uint32()))
+          message.coinInput = Coin.decode(reader, reader.uint32())
           break
         case 4:
           message.itemInputs.push(ItemInput.decode(reader, reader.uint32()))
           break
         case 5:
-          message.coinOutputs.push(Coin.decode(reader, reader.uint32()))
+          message.coinOutput = Coin.decode(reader, reader.uint32())
           break
         case 6:
           message.itemOutputs.push(ItemRef.decode(reader, reader.uint32()))
@@ -178,9 +176,7 @@ export const Trade = {
 
   fromJSON(object: any): Trade {
     const message = { ...baseTrade } as Trade
-    message.coinInputs = []
     message.itemInputs = []
-    message.coinOutputs = []
     message.itemOutputs = []
     message.tradedItemInputs = []
     if (object.creator !== undefined && object.creator !== null) {
@@ -193,20 +189,20 @@ export const Trade = {
     } else {
       message.ID = 0
     }
-    if (object.coinInputs !== undefined && object.coinInputs !== null) {
-      for (const e of object.coinInputs) {
-        message.coinInputs.push(CoinInput.fromJSON(e))
-      }
+    if (object.coinInput !== undefined && object.coinInput !== null) {
+      message.coinInput = Coin.fromJSON(object.coinInput)
+    } else {
+      message.coinInput = undefined
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
       for (const e of object.itemInputs) {
         message.itemInputs.push(ItemInput.fromJSON(e))
       }
     }
-    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
-      for (const e of object.coinOutputs) {
-        message.coinOutputs.push(Coin.fromJSON(e))
-      }
+    if (object.coinOutput !== undefined && object.coinOutput !== null) {
+      message.coinOutput = Coin.fromJSON(object.coinOutput)
+    } else {
+      message.coinOutput = undefined
     }
     if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
       for (const e of object.itemOutputs) {
@@ -235,21 +231,13 @@ export const Trade = {
     const obj: any = {}
     message.creator !== undefined && (obj.creator = message.creator)
     message.ID !== undefined && (obj.ID = message.ID)
-    if (message.coinInputs) {
-      obj.coinInputs = message.coinInputs.map((e) => (e ? CoinInput.toJSON(e) : undefined))
-    } else {
-      obj.coinInputs = []
-    }
+    message.coinInput !== undefined && (obj.coinInput = message.coinInput ? Coin.toJSON(message.coinInput) : undefined)
     if (message.itemInputs) {
       obj.itemInputs = message.itemInputs.map((e) => (e ? ItemInput.toJSON(e) : undefined))
     } else {
       obj.itemInputs = []
     }
-    if (message.coinOutputs) {
-      obj.coinOutputs = message.coinOutputs.map((e) => (e ? Coin.toJSON(e) : undefined))
-    } else {
-      obj.coinOutputs = []
-    }
+    message.coinOutput !== undefined && (obj.coinOutput = message.coinOutput ? Coin.toJSON(message.coinOutput) : undefined)
     if (message.itemOutputs) {
       obj.itemOutputs = message.itemOutputs.map((e) => (e ? ItemRef.toJSON(e) : undefined))
     } else {
@@ -267,9 +255,7 @@ export const Trade = {
 
   fromPartial(object: DeepPartial<Trade>): Trade {
     const message = { ...baseTrade } as Trade
-    message.coinInputs = []
     message.itemInputs = []
-    message.coinOutputs = []
     message.itemOutputs = []
     message.tradedItemInputs = []
     if (object.creator !== undefined && object.creator !== null) {
@@ -282,20 +268,20 @@ export const Trade = {
     } else {
       message.ID = 0
     }
-    if (object.coinInputs !== undefined && object.coinInputs !== null) {
-      for (const e of object.coinInputs) {
-        message.coinInputs.push(CoinInput.fromPartial(e))
-      }
+    if (object.coinInput !== undefined && object.coinInput !== null) {
+      message.coinInput = Coin.fromPartial(object.coinInput)
+    } else {
+      message.coinInput = undefined
     }
     if (object.itemInputs !== undefined && object.itemInputs !== null) {
       for (const e of object.itemInputs) {
         message.itemInputs.push(ItemInput.fromPartial(e))
       }
     }
-    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
-      for (const e of object.coinOutputs) {
-        message.coinOutputs.push(Coin.fromPartial(e))
-      }
+    if (object.coinOutput !== undefined && object.coinOutput !== null) {
+      message.coinOutput = Coin.fromPartial(object.coinOutput)
+    } else {
+      message.coinOutput = undefined
     }
     if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
       for (const e of object.itemOutputs) {
