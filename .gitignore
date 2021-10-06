@@ -1,3 +1,6 @@
+# Here is a good article on how to declare .gitignore entries :
+# https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+
 # OS
 .DS_Store
 
