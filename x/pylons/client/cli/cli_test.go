@@ -15,6 +15,10 @@ import (
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
 
+const (
+	testIBCDenom = "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35"
+)
+
 func generateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
 	addrs := make([]sdk.AccAddress, n)
 	for i := 0; i < n; i++ {
@@ -59,7 +63,7 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 			ID:               uint64(i),
 			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
 			ItemInputs:       make([]types.ItemInput, 0),
-			CoinOutputs:      sdk.NewCoins(),
+			CoinOutputs:      sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
 			ItemOutputs:      make([]types.ItemRef, 0),
 			ExtraInfo:        "extra info",
 			Receiver:         "receiver",

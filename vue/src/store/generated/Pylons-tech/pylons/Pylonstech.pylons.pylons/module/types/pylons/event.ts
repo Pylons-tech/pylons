@@ -102,9 +102,9 @@ export interface EventFulfillTrade {
   creator: string
   fulfiller: string
   itemInputs: ItemRef[]
-  coinInput: Coin | undefined
+  coinInputs: Coin[]
   itemOutputs: ItemRef[]
-  coinOutput: Coin | undefined
+  coinOutputs: Coin[]
 }
 
 export interface EventGooglePurchase {
@@ -1449,14 +1449,14 @@ export const EventFulfillTrade = {
     for (const v of message.itemInputs) {
       ItemRef.encode(v!, writer.uint32(34).fork()).ldelim()
     }
-    if (message.coinInput !== undefined) {
-      Coin.encode(message.coinInput, writer.uint32(42).fork()).ldelim()
+    for (const v of message.coinInputs) {
+      Coin.encode(v!, writer.uint32(42).fork()).ldelim()
     }
     for (const v of message.itemOutputs) {
       ItemRef.encode(v!, writer.uint32(50).fork()).ldelim()
     }
-    if (message.coinOutput !== undefined) {
-      Coin.encode(message.coinOutput, writer.uint32(58).fork()).ldelim()
+    for (const v of message.coinOutputs) {
+      Coin.encode(v!, writer.uint32(58).fork()).ldelim()
     }
     return writer
   },
@@ -1466,7 +1466,9 @@ export const EventFulfillTrade = {
     let end = length === undefined ? reader.len : reader.pos + length
     const message = { ...baseEventFulfillTrade } as EventFulfillTrade
     message.itemInputs = []
+    message.coinInputs = []
     message.itemOutputs = []
+    message.coinOutputs = []
     while (reader.pos < end) {
       const tag = reader.uint32()
       switch (tag >>> 3) {
@@ -1483,13 +1485,13 @@ export const EventFulfillTrade = {
           message.itemInputs.push(ItemRef.decode(reader, reader.uint32()))
           break
         case 5:
-          message.coinInput = Coin.decode(reader, reader.uint32())
+          message.coinInputs.push(Coin.decode(reader, reader.uint32()))
           break
         case 6:
           message.itemOutputs.push(ItemRef.decode(reader, reader.uint32()))
           break
         case 7:
-          message.coinOutput = Coin.decode(reader, reader.uint32())
+          message.coinOutputs.push(Coin.decode(reader, reader.uint32()))
           break
         default:
           reader.skipType(tag & 7)
@@ -1502,7 +1504,9 @@ export const EventFulfillTrade = {
   fromJSON(object: any): EventFulfillTrade {
     const message = { ...baseEventFulfillTrade } as EventFulfillTrade
     message.itemInputs = []
+    message.coinInputs = []
     message.itemOutputs = []
+    message.coinOutputs = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = Number(object.ID)
     } else {
@@ -1523,20 +1527,20 @@ export const EventFulfillTrade = {
         message.itemInputs.push(ItemRef.fromJSON(e))
       }
     }
-    if (object.coinInput !== undefined && object.coinInput !== null) {
-      message.coinInput = Coin.fromJSON(object.coinInput)
-    } else {
-      message.coinInput = undefined
+    if (object.coinInputs !== undefined && object.coinInputs !== null) {
+      for (const e of object.coinInputs) {
+        message.coinInputs.push(Coin.fromJSON(e))
+      }
     }
     if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
       for (const e of object.itemOutputs) {
         message.itemOutputs.push(ItemRef.fromJSON(e))
       }
     }
-    if (object.coinOutput !== undefined && object.coinOutput !== null) {
-      message.coinOutput = Coin.fromJSON(object.coinOutput)
-    } else {
-      message.coinOutput = undefined
+    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+      for (const e of object.coinOutputs) {
+        message.coinOutputs.push(Coin.fromJSON(e))
+      }
     }
     return message
   },
@@ -1551,20 +1555,30 @@ export const EventFulfillTrade = {
     } else {
       obj.itemInputs = []
     }
-    message.coinInput !== undefined && (obj.coinInput = message.coinInput ? Coin.toJSON(message.coinInput) : undefined)
+    if (message.coinInputs) {
+      obj.coinInputs = message.coinInputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.coinInputs = []
+    }
     if (message.itemOutputs) {
       obj.itemOutputs = message.itemOutputs.map((e) => (e ? ItemRef.toJSON(e) : undefined))
     } else {
       obj.itemOutputs = []
     }
-    message.coinOutput !== undefined && (obj.coinOutput = message.coinOutput ? Coin.toJSON(message.coinOutput) : undefined)
+    if (message.coinOutputs) {
+      obj.coinOutputs = message.coinOutputs.map((e) => (e ? Coin.toJSON(e) : undefined))
+    } else {
+      obj.coinOutputs = []
+    }
     return obj
   },
 
   fromPartial(object: DeepPartial<EventFulfillTrade>): EventFulfillTrade {
     const message = { ...baseEventFulfillTrade } as EventFulfillTrade
     message.itemInputs = []
+    message.coinInputs = []
     message.itemOutputs = []
+    message.coinOutputs = []
     if (object.ID !== undefined && object.ID !== null) {
       message.ID = object.ID
     } else {
@@ -1585,20 +1599,20 @@ export const EventFulfillTrade = {
         message.itemInputs.push(ItemRef.fromPartial(e))
       }
     }
-    if (object.coinInput !== undefined && object.coinInput !== null) {
-      message.coinInput = Coin.fromPartial(object.coinInput)
-    } else {
-      message.coinInput = undefined
+    if (object.coinInputs !== undefined && object.coinInputs !== null) {
+      for (const e of object.coinInputs) {
+        message.coinInputs.push(Coin.fromPartial(e))
+      }
     }
     if (object.itemOutputs !== undefined && object.itemOutputs !== null) {
       for (const e of object.itemOutputs) {
         message.itemOutputs.push(ItemRef.fromPartial(e))
       }
     }
-    if (object.coinOutput !== undefined && object.coinOutput !== null) {
-      message.coinOutput = Coin.fromPartial(object.coinOutput)
-    } else {
-      message.coinOutput = undefined
+    if (object.coinOutputs !== undefined && object.coinOutputs !== null) {
+      for (const e of object.coinOutputs) {
+        message.coinOutputs.push(Coin.fromPartial(e))
+      }
     }
     return message
   }

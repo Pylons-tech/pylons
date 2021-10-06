@@ -32,11 +32,9 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 		items = append(items, item)
 	}
 	if len(items) != 0 {
-		for i, coinInputs := range msg.CoinInputs {
-			_, err := types.FindValidPaymentsPermutation(items, coinInputs.Coins)
-			if err != nil {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInputs at index %d cannot satisfy itemOutputs transferFees requirements", i)
-			}
+		_, err := types.FindValidPaymentsPermutation(items, msg.CoinInputs)
+		if err != nil {
+			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "provided coinInput cannot satisfy itemOutputs transferFees requirements")
 		}
 	}
 
@@ -96,7 +94,7 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 		panic(err)
 	}
 
-	k.RemoveTrade(ctx, msg.ID, addr)
+	k.RemoveTrade(ctx, msg.ID)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
 		Creator: msg.Creator,

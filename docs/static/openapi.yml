@@ -15114,21 +15114,29 @@ paths:
                   ID:
                     type: string
                     format: uint64
-                  coinInput:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
+                  coinInputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        coins:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              denom:
+                                type: string
+                              amount:
+                                type: string
+                            description: >-
+                              Coin defines a token with a denomination and an
+                              amount.
 
 
-                      NOTE: The amount field is an Int which implements the
-                      custom method
+                              NOTE: The amount field is an Int which implements
+                              the custom method
 
-                      signatures required by gogoproto.
+                              signatures required by gogoproto.
                   itemInputs:
                     type: array
                     items:
@@ -15237,21 +15245,23 @@ paths:
                             ConditionList is a struct for describing ItemInput
                             expression conditions
                       title: ItemInput is a struct for describing an input item
-                  coinOutput:
-                    type: object
-                    properties:
-                      denom:
-                        type: string
-                      amount:
-                        type: string
-                    description: >-
-                      Coin defines a token with a denomination and an amount.
+                  coinOutputs:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        denom:
+                          type: string
+                        amount:
+                          type: string
+                      description: >-
+                        Coin defines a token with a denomination and an amount.
 
 
-                      NOTE: The amount field is an Int which implements the
-                      custom method
+                        NOTE: The amount field is an Int which implements the
+                        custom method
 
-                      signatures required by gogoproto.
+                        signatures required by gogoproto.
                   itemOutputs:
                     type: array
                     items:
@@ -24883,21 +24893,28 @@ definitions:
           ID:
             type: string
             format: uint64
-          coinInput:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
+          coinInputs:
+            type: array
+            items:
+              type: object
+              properties:
+                coins:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      denom:
+                        type: string
+                      amount:
+                        type: string
+                    description: >-
+                      Coin defines a token with a denomination and an amount.
 
 
-              NOTE: The amount field is an Int which implements the custom
-              method
+                      NOTE: The amount field is an Int which implements the
+                      custom method
 
-              signatures required by gogoproto.
+                      signatures required by gogoproto.
           itemInputs:
             type: array
             items:
@@ -25006,21 +25023,23 @@ definitions:
                     ConditionList is a struct for describing ItemInput
                     expression conditions
               title: ItemInput is a struct for describing an input item
-          coinOutput:
-            type: object
-            properties:
-              denom:
-                type: string
-              amount:
-                type: string
-            description: >-
-              Coin defines a token with a denomination and an amount.
+          coinOutputs:
+            type: array
+            items:
+              type: object
+              properties:
+                denom:
+                  type: string
+                amount:
+                  type: string
+              description: >-
+                Coin defines a token with a denomination and an amount.
 
 
-              NOTE: The amount field is an Int which implements the custom
-              method
+                NOTE: The amount field is an Int which implements the custom
+                method
 
-              signatures required by gogoproto.
+                signatures required by gogoproto.
           itemOutputs:
             type: array
             items:
@@ -26919,18 +26938,28 @@ definitions:
       ID:
         type: string
         format: uint64
-      coinInput:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
+      coinInputs:
+        type: array
+        items:
+          type: object
+          properties:
+            coins:
+              type: array
+              items:
+                type: object
+                properties:
+                  denom:
+                    type: string
+                  amount:
+                    type: string
+                description: >-
+                  Coin defines a token with a denomination and an amount.
 
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+
+                  NOTE: The amount field is an Int which implements the custom
+                  method
+
+                  signatures required by gogoproto.
       itemInputs:
         type: array
         items:
@@ -27039,18 +27068,20 @@ definitions:
                 ConditionList is a struct for describing ItemInput expression
                 conditions
           title: ItemInput is a struct for describing an input item
-      coinOutput:
-        type: object
-        properties:
-          denom:
-            type: string
-          amount:
-            type: string
-        description: |-
-          Coin defines a token with a denomination and an amount.
+      coinOutputs:
+        type: array
+        items:
+          type: object
+          properties:
+            denom:
+              type: string
+            amount:
+              type: string
+          description: |-
+            Coin defines a token with a denomination and an amount.
 
-          NOTE: The amount field is an Int which implements the custom method
-          signatures required by gogoproto.
+            NOTE: The amount field is an Int which implements the custom method
+            signatures required by gogoproto.
       itemOutputs:
         type: array
         items:

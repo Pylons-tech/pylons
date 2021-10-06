@@ -23,12 +23,12 @@ func CmdCreateTrade() *cobra.Command {
 		Short: "Create a new Trade",
 		Args:  cobra.ExactArgs(5),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			argsCoinInput, err := cast.ToStringE(args[0])
+			argsCoinInputs, err := cast.ToStringE(args[0])
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinInput := sdk.Coin{}
-			err = json.Unmarshal([]byte(argsCoinInput), &jsonArgsCoinInput)
+			jsonArgsCoinInputs := make([]types.CoinInput, 0)
+			err = json.Unmarshal([]byte(argsCoinInputs), &jsonArgsCoinInputs)
 			if err != nil {
 				return err
 			}
@@ -45,7 +45,7 @@ func CmdCreateTrade() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinOutput := sdk.Coin{}
+			jsonArgsCoinOutput := sdk.Coins{}
 			err = json.Unmarshal([]byte(argsCoinOutput), &jsonArgsCoinOutput)
 			if err != nil {
 				return err
@@ -69,7 +69,7 @@ func CmdCreateTrade() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInput, jsonArgsItemInputs, jsonArgsCoinOutput, jsonArgsItemOutputs, argsExtraInfo)
+			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsCoinOutput, jsonArgsItemOutputs, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
