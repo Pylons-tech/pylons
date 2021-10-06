@@ -43,7 +43,7 @@ func (msg *MsgCreateCookbook) GetSignBytes() []byte {
 }
 
 func (msg *MsgCreateCookbook) ValidateBasic() error {
-	//TODO : Validate the length of the Name and Description fields
+	// TODO : Validate the length of the Name and Description fields
 	_, err := sdk.AccAddressFromBech32(msg.Creator)
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid creator address (%s)", err)
