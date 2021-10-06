@@ -1,20 +1,15 @@
 <template>
 	<div>
-		<div class="container">
-			<SpWelcome />
-			<SpTokenSend :address="address" />
-			<SpTransferList :address="address" />
-		</div>
+		<ApplicationLayout />
 	</div>
 </template>
 
 <script>
+import ApplicationLayout from '@/views/SidebarComponent'
+
 export default {
-	name: 'Index',
-	computed: {
-		address() {
-			return this.$store.getters['common/wallet/address']
-		}
+	components: {
+		ApplicationLayout: ApplicationLayout
 	}
 }
 </script>

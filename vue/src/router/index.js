@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Index from '@/views/Index.vue'
-import Types from '@/views/Types.vue'
-import Relayers from '@/views/Relayers.vue'
+import Cookbook from '@/components/Cookbook'
+import Recipe from '@/components/Recipe'
 
 const routerHistory = createWebHistory()
 const routes = [
@@ -9,8 +9,14 @@ const routes = [
 		path: '/',
 		component: Index
 	},
-	{ path: '/types', component: Types },
-	{ path: '/relayers', component: Relayers }
+	{
+		path: '/cookbook',
+		component: Cookbook
+	},
+	{
+		path: '/recipe',
+		component: Recipe
+	}
 ]
 
 const router = createRouter({
