@@ -1,13 +1,22 @@
 import { Reader, Writer } from 'protobufjs/minimal';
-import { Username, AccountAddr } from '../pylons/accounts';
-import { Trade } from '../pylons/trade';
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination';
+import { Trade } from '../pylons/trade';
+import { Username, AccountAddr } from '../pylons/accounts';
 import { Item } from '../pylons/item';
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order';
 import { Execution } from '../pylons/execution';
 import { Recipe } from '../pylons/recipe';
 import { Cookbook } from '../pylons/cookbook';
 export declare const protobufPackage = "Pylonstech.pylons.pylons";
+export interface QueryListTradesByCreatorRequest {
+    creator: string;
+    pagination: PageRequest | undefined;
+}
+export interface QueryListTradesByCreatorResponse {
+    Trades: Trade[];
+    /** pagination defines the pagination in the response. */
+    pagination: PageResponse | undefined;
+}
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetUsernameByAddressRequest {
     address: string;
@@ -114,6 +123,20 @@ export interface QueryGetCookbookRequest {
 export interface QueryGetCookbookResponse {
     Cookbook: Cookbook | undefined;
 }
+export declare const QueryListTradesByCreatorRequest: {
+    encode(message: QueryListTradesByCreatorRequest, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListTradesByCreatorRequest;
+    fromJSON(object: any): QueryListTradesByCreatorRequest;
+    toJSON(message: QueryListTradesByCreatorRequest): unknown;
+    fromPartial(object: DeepPartial<QueryListTradesByCreatorRequest>): QueryListTradesByCreatorRequest;
+};
+export declare const QueryListTradesByCreatorResponse: {
+    encode(message: QueryListTradesByCreatorResponse, writer?: Writer): Writer;
+    decode(input: Reader | Uint8Array, length?: number): QueryListTradesByCreatorResponse;
+    fromJSON(object: any): QueryListTradesByCreatorResponse;
+    toJSON(message: QueryListTradesByCreatorResponse): unknown;
+    fromPartial(object: DeepPartial<QueryListTradesByCreatorResponse>): QueryListTradesByCreatorResponse;
+};
 export declare const QueryGetUsernameByAddressRequest: {
     encode(message: QueryGetUsernameByAddressRequest, writer?: Writer): Writer;
     decode(input: Reader | Uint8Array, length?: number): QueryGetUsernameByAddressRequest;
@@ -298,6 +321,8 @@ export declare const QueryGetCookbookResponse: {
 };
 /** Query defines the gRPC querier service. */
 export interface Query {
+    /** Queries a list of listTradesByCreator items. */
+    ListTradesByCreator(request: QueryListTradesByCreatorRequest): Promise<QueryListTradesByCreatorResponse>;
     /** Queries a list of getAccountByAddress items. */
     UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse>;
     /** Queries a username by account. */
@@ -328,6 +353,7 @@ export interface Query {
 export declare class QueryClientImpl implements Query {
     private readonly rpc;
     constructor(rpc: Rpc);
+    ListTradesByCreator(request: QueryListTradesByCreatorRequest): Promise<QueryListTradesByCreatorResponse>;
     UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse>;
     AddressByUsername(request: QueryGetAddressByUsernameRequest): Promise<QueryGetAddressByUsernameResponse>;
     Trade(request: QueryGetTradeRequest): Promise<QueryGetTradeResponse>;

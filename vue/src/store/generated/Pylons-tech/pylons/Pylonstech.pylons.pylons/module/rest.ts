@@ -351,6 +351,13 @@ export interface PylonsQueryListRecipesByCookbookResponse {
   pagination?: V1Beta1PageResponse;
 }
 
+export interface PylonsQueryListTradesByCreatorResponse {
+  Trades?: PylonsTrade[];
+
+  /** pagination defines the pagination in the response. */
+  pagination?: V1Beta1PageResponse;
+}
+
 export interface PylonsRecipe {
   cookbookID?: string;
   ID?: string;
@@ -947,6 +954,33 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     this.request<PylonsQueryGetTradeResponse, RpcStatus>({
       path: `/pylons/trade/${ID}`,
       method: "GET",
+      format: "json",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryListTradesByCreator
+   * @summary Queries a list of listTradesByCreator items.
+   * @request GET:/pylons/trades/{creator}
+   */
+  queryListTradesByCreator = (
+    creator: string,
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.countTotal"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<PylonsQueryListTradesByCreatorResponse, RpcStatus>({
+      path: `/pylons/trades/${creator}`,
+      method: "GET",
+      query: query,
       format: "json",
       ...params,
     });

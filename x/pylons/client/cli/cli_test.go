@@ -72,6 +72,33 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 	return network.New(t, cfg), state.TradeList
 }
 
+func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	addresses := types.GenTestBech32List(1)
+
+	for i := 0; i < n; i++ {
+		state.TradeList = append(state.TradeList, types.Trade{
+			Creator:          addresses[0],
+			ID:               uint64(i),
+			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
+			ItemInputs:       make([]types.ItemInput, 0),
+			CoinOutputs:      sdk.NewCoins(),
+			ItemOutputs:      make([]types.ItemRef, 0),
+			ExtraInfo:        "extra info",
+			Receiver:         "receiver",
+			TradedItemInputs: make([]types.ItemRef, 0),
+		})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.TradeList
+}
+
 // A network with cookbook object just contains a state of:
 //	 	N cookbooks
 func networkWithCookbookObjects(t *testing.T, n int) (*network.Network, []types.Cookbook) {
