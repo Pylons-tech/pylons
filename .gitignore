@@ -7,7 +7,7 @@
 .dir-locals.el
 .vscode
 
-vue/node_modules/**
+**/node_modules
 vue/dist
 release/
 
