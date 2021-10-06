@@ -26,7 +26,6 @@
     "material-design-icons": "^3.0.1",
     "monaco-editor": "^0.28.1",
     "monaco-editor-vue3": "^0.1.5",
-    "monaco-editor-webpack-plugin": "^4.2.0",
     "primeflex": "2.0.0",
     "primeicons": "^4.1.0",
     "primevue": "^3.7.1",

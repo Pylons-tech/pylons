@@ -16,6 +16,15 @@ const app = createApp(App)
 app.config.globalProperties._depsLoaded = true
 app.use(store).use(router).use(vueLib).use(PrimeVue).mount('#app')
 
+window.MonacoEnvironment = {
+	getWorkerUrl: function (workerId, label) {
+		return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+              self.MonacoEnvironment = { baseUrl: '${window.location.origin}/' };
+              importScripts('${window.location.origin}/vs/base/worker/workerMain.js');
+          `)}`;
+	}
+};
+
 window.keplr.experimentalSuggestChain({
 	chainId: 'pylons',
 	chainName: 'Pylons Testnet',
