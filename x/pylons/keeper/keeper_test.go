@@ -204,12 +204,10 @@ func createNItem(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []type
 	for i := range items {
 		items[i].Owner = owners[i]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
-		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
-		k.SetItem(ctx, items[i])
-		k.SetItemCount(ctx, uint64(i)+1)
+		items[i].ID = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -221,10 +219,9 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 	for i := range items {
 		items[i].Owner = owner
 		items[i].CookbookID = cookbookID
-		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
-		k.SetItem(ctx, items[i])
+		items[i].ID = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -232,7 +229,7 @@ func createNItemSameOwnerAndCookbook(k keeper.Keeper, ctx sdk.Context, n int, co
 func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable bool) []types.Item {
 	items := make([]types.Item, n)
 	owner := types.GenTestBech32List(1)
-	coin := []sdk.Coin{sdk.NewCoin("test", sdk.OneInt())}
+	coin := []sdk.Coin{sdk.NewCoin(types.PylonsCoinDenom, sdk.NewInt(100))}
 	for i := range items {
 		items[i].Owner = owner[0]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
@@ -240,7 +237,7 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
-		k.SetItem(ctx, items[i])
+		k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -260,6 +257,16 @@ func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 	owners := types.GenTestBech32List(n)
 	for i := range items {
 		items[i].Creator = owners[i]
+		items[i].ID = k.AppendTrade(ctx, items[i])
+	}
+	return items
+}
+
+func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
+	items := make([]types.Trade, n)
+	owners := types.GenTestBech32List(1)
+	for i := range items {
+		items[i].Creator = owners[0]
 		items[i].ID = k.AppendTrade(ctx, items[i])
 	}
 	return items

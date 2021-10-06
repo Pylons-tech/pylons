@@ -323,5 +323,20 @@ export class Api extends HttpClient {
             format: "json",
             ...params,
         });
+        /**
+         * No description
+         *
+         * @tags Query
+         * @name QueryListTradesByCreator
+         * @summary Queries a list of listTradesByCreator items.
+         * @request GET:/pylons/trades/{creator}
+         */
+        this.queryListTradesByCreator = (creator, query, params = {}) => this.request({
+            path: `/pylons/trades/${creator}`,
+            method: "GET",
+            query: query,
+            format: "json",
+            ...params,
+        });
     }
 }

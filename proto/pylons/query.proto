@@ -17,7 +17,12 @@ option go_package = "github.com/Pylons-tech/pylons/x/pylons/types";
 
 // Query defines the gRPC querier service.
 service Query {
-	// this line is used by starport scaffolding # 2
+	// Queries a list of listTradesByCreator items.
+	rpc ListTradesByCreator(QueryListTradesByCreatorRequest) returns (QueryListTradesByCreatorResponse) {
+		option (google.api.http).get = "/pylons/trades/{creator}";
+	}
+
+// this line is used by starport scaffolding # 2
 
 	// Queries a list of getAccountByAddress items.
 	rpc UsernameByAddress(QueryGetUsernameByAddressRequest) returns (QueryGetUsernameByAddressResponse) {
@@ -83,6 +88,20 @@ service Query {
 	rpc Cookbook(QueryGetCookbookRequest) returns (QueryGetCookbookResponse) {
 		option (google.api.http).get = "/pylons/cookbook/{ID}";
 	}
+}
+
+message QueryListTradesByCreatorRequest {
+  string creator = 1;
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryListTradesByCreatorResponse {
+	option (gogoproto.equal)           = false;
+	option (gogoproto.goproto_getters) = false;
+	repeated Trade Trades = 1 [(gogoproto.nullable) = false];
+
+	// pagination defines the pagination in the response.
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // this line is used by starport scaffolding # 3

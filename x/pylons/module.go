@@ -229,7 +229,6 @@ func (AppModule) ConsensusVersion() uint64 { return 2 }
 // ____________________________________________________________________________
 
 // AppModuleSimulation functions
-// TODO finish simulation functionality in /x/pylons/simulation
 
 // GenerateGenesisState creates a randomized GenState of the pylons module.
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {

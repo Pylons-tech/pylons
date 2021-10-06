@@ -96,7 +96,7 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 		panic(err)
 	}
 
-	k.RemoveTrade(ctx, msg.ID)
+	k.RemoveTrade(ctx, msg.ID, addr)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
 		Creator: msg.Creator,

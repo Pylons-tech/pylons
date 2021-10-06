@@ -10,22 +10,26 @@ import (
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
 
-func (k Keeper) ListItemByOwner(goCtx context.Context, req *types.QueryListItemByOwnerRequest) (*types.QueryListItemByOwnerResponse, error) {
+func (k Keeper) ListTradesByCreator(goCtx context.Context, req *types.QueryListTradesByCreatorRequest) (*types.QueryListTradesByCreatorResponse, error) {
 	if req == nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	addr, err := sdk.AccAddressFromBech32(req.Owner)
+	addr, err := sdk.AccAddressFromBech32(req.Creator)
 	if err != nil {
 		return nil, status.Error(codes.InvalidArgument, "invalid address")
 	}
 
-	items, pageRes, err := k.GetItemsByOwnerPaginated(ctx, addr, req.Pagination)
+	trades, pageRes, err := k.GetTradesByCreatorPaginated(ctx, addr, req.Pagination)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}
 
-	return &types.QueryListItemByOwnerResponse{Items: items, Pagination: pageRes}, nil
+	return &types.QueryListTradesByCreatorResponse{
+			Trades:     trades,
+			Pagination: pageRes,
+		},
+		nil
 }

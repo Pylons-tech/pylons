@@ -7,7 +7,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	ibctypes "github.com/cosmos/ibc-go/modules/apps/transfer/types"
 )
 
@@ -95,45 +94,4 @@ func CreateValidCoinOutputsList(cookbookID string, coinOutputs []CoinOutput) ([]
 	}
 
 	return validCoinOutputs, nil
-}
-
-// TODO add Name and Symbol fields after SDK upgrade
-
-func PylonsCoinMetadata() banktypes.Metadata {
-	return banktypes.Metadata{
-		Description: "The native engagement token of the Pylons Ecosystem.",
-		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: PylonsCoinDenom, Exponent: uint32(0), Aliases: []string{"micropylon"}},
-			{Denom: "mpylon", Exponent: uint32(3), Aliases: []string{"millipylon"}},
-			{Denom: "pylon", Exponent: uint32(6), Aliases: nil},
-		},
-		Base:    PylonsCoinDenom,
-		Display: "pylon",
-	}
-}
-
-func StakingCoinMetadata() banktypes.Metadata {
-	return banktypes.Metadata{
-		Description: "The native staking token of the Pylons Ecosystem.",
-		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: StakingCoinDenom, Exponent: uint32(0), Aliases: []string{"microbedrock"}},
-			{Denom: "mbedrock", Exponent: uint32(3), Aliases: []string{"millibedrock"}},
-			{Denom: "bedrock", Exponent: uint32(6), Aliases: nil},
-		},
-		Base:    StakingCoinDenom,
-		Display: "bedrock",
-	}
-}
-
-func AtomCoinMetadata() banktypes.Metadata {
-	return banktypes.Metadata{
-		Description: "The native staking token of the Cosmos Hub.",
-		DenomUnits: []*banktypes.DenomUnit{
-			{Denom: "uatom", Exponent: uint32(0), Aliases: []string{"microatom"}},
-			{Denom: "matom", Exponent: uint32(3), Aliases: []string{"milliatom"}},
-			{Denom: "atom", Exponent: uint32(6), Aliases: nil},
-		},
-		Base:    "uatom",
-		Display: "atom",
-	}
 }

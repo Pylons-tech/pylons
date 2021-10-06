@@ -58,6 +58,8 @@ const (
 	GlobalEntityCountKey = "GlobalEntity-count-"
 	// TradeKey is a string used as prefix to the KVStore
 	TradeKey = "Trade-value-"
+	// AddrTradeKey is a string key used as a prefix to the KVStore
+	AddrTradeKey = "Address-trade-"
 	// TradeCountKey is a string used as prefix to the KVStore
 	TradeCountKey = "Trade-count-"
 	// UsernameKey is a string used as prefix to the KVStore

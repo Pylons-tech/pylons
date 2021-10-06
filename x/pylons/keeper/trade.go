@@ -6,6 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
 
 	"github.com/Pylons-tech/pylons/x/pylons/types"
 )
@@ -50,9 +51,7 @@ func (k Keeper) AppendTrade(
 	// Set the ID of the appended value
 	trade.ID = count
 
-	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
-	appendedValue := k.cdc.MustMarshal(&trade)
-	store.Set(getTradeIDBytes(trade.ID), appendedValue)
+	k.SetTrade(ctx, trade)
 
 	// Update trade count
 	k.SetTradeCount(ctx, count+1)
@@ -64,6 +63,10 @@ func (k Keeper) AppendTrade(
 func (k Keeper) SetTrade(ctx sdk.Context, trade types.Trade) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
 	b := k.cdc.MustMarshal(&trade)
+
+	addr, _ := sdk.AccAddressFromBech32(trade.Creator)
+	k.addTradeToAddress(ctx, getTradeIDBytes(trade.ID), addr)
+
 	store.Set(getTradeIDBytes(trade.ID), b)
 }
 
@@ -87,8 +90,9 @@ func (k Keeper) GetTradeOwner(ctx sdk.Context, id uint64) string {
 }
 
 // RemoveTrade removes a trade from the store
-func (k Keeper) RemoveTrade(ctx sdk.Context, id uint64) {
+func (k Keeper) RemoveTrade(ctx sdk.Context, id uint64, creator sdk.AccAddress) {
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.TradeKey))
+	k.removeTradeFromAddress(ctx, getTradeIDBytes(id), creator)
 	store.Delete(getTradeIDBytes(id))
 }
 
@@ -112,4 +116,36 @@ func getTradeIDBytes(id uint64) []byte {
 	bz := make([]byte, 8)
 	binary.BigEndian.PutUint64(bz, id)
 	return bz
+}
+
+func (k Keeper) addTradeToAddress(ctx sdk.Context, tradeIDBytes []byte, addr sdk.AccAddress) {
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrTradeKey))
+	addrStore := prefix.NewStore(parentStore, addr.Bytes())
+	addrStore.Set(tradeIDBytes, tradeIDBytes)
+}
+
+func (k Keeper) removeTradeFromAddress(ctx sdk.Context, tradeIDBytes []byte, addr sdk.AccAddress) {
+	parentStore := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrTradeKey))
+	addrStore := prefix.NewStore(parentStore, addr.Bytes())
+	addrStore.Delete(tradeIDBytes)
+}
+
+func (k Keeper) GetTradesByCreatorPaginated(ctx sdk.Context, creator sdk.AccAddress, pagination *query.PageRequest) ([]types.Trade, *query.PageResponse, error) {
+	trades := make([]types.Trade, 0)
+
+	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrTradeKey))
+	store = prefix.NewStore(store, creator.Bytes())
+
+	pageRes, err := query.Paginate(store, pagination, func(_, value []byte) error {
+		id := binary.BigEndian.Uint64(value)
+		trade := k.GetTrade(ctx, id)
+		trades = append(trades, trade)
+		return nil
+	})
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return trades, pageRes, nil
 }

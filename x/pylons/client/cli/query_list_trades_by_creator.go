@@ -16,29 +16,38 @@ import (
 
 var _ = strconv.Itoa(0)
 
-func CmdListCookbooksByCreator() *cobra.Command {
+func CmdListTradesByCreator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-cookbooks [creator]",
-		Short: "list cookbooks by creator",
+		Use:   "list-trades [creator]",
+		Short: "List trades by creator",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) (err error) {
-			reqCreator := args[0]
+			reqAddress := args[0]
 
 			// verify address is proper
-			_, err = sdk.AccAddressFromBech32(reqCreator)
+			_, err = sdk.AccAddressFromBech32(reqAddress)
 			if err != nil {
 				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
 
-			clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			params := &types.QueryListCookbooksByCreatorRequest{
-				Creator: reqCreator,
+			params := &types.QueryListTradesByCreatorRequest{
+				Creator: reqAddress,
 			}
 
-			res, err := queryClient.ListCookbooksByCreator(cmd.Context(), params)
+			pageReq, err := client.ReadPageRequest(cmd.Flags())
+			if err != nil {
+				return err
+			}
+			params.Pagination = pageReq
+
+			res, err := queryClient.ListTradesByCreator(cmd.Context(), params)
 			if err != nil {
 				return err
 			}
