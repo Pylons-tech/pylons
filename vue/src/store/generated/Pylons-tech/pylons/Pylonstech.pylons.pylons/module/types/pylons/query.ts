@@ -1,9 +1,9 @@
 /* eslint-disable */
 import { Reader, util, configure, Writer } from 'protobufjs/minimal'
 import * as Long from 'long'
-import { Username, AccountAddr } from '../pylons/accounts'
-import { Trade } from '../pylons/trade'
 import { PageRequest, PageResponse } from '../cosmos/base/query/v1beta1/pagination'
+import { Trade } from '../pylons/trade'
+import { Username, AccountAddr } from '../pylons/accounts'
 import { Item } from '../pylons/item'
 import { GoogleInAppPurchaseOrder } from '../pylons/google_iap_order'
 import { Execution } from '../pylons/execution'
@@ -11,6 +11,17 @@ import { Recipe } from '../pylons/recipe'
 import { Cookbook } from '../pylons/cookbook'
 
 export const protobufPackage = 'Pylonstech.pylons.pylons'
+
+export interface QueryListTradesByCreatorRequest {
+  creator: string
+  pagination: PageRequest | undefined
+}
+
+export interface QueryListTradesByCreatorResponse {
+  Trades: Trade[]
+  /** pagination defines the pagination in the response. */
+  pagination: PageResponse | undefined
+}
 
 /** this line is used by starport scaffolding # 3 */
 export interface QueryGetUsernameByAddressRequest {
@@ -142,6 +153,157 @@ export interface QueryGetCookbookRequest {
 
 export interface QueryGetCookbookResponse {
   Cookbook: Cookbook | undefined
+}
+
+const baseQueryListTradesByCreatorRequest: object = { creator: '' }
+
+export const QueryListTradesByCreatorRequest = {
+  encode(message: QueryListTradesByCreatorRequest, writer: Writer = Writer.create()): Writer {
+    if (message.creator !== '') {
+      writer.uint32(10).string(message.creator)
+    }
+    if (message.pagination !== undefined) {
+      PageRequest.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryListTradesByCreatorRequest {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryListTradesByCreatorRequest } as QueryListTradesByCreatorRequest
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.creator = reader.string()
+          break
+        case 2:
+          message.pagination = PageRequest.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryListTradesByCreatorRequest {
+    const message = { ...baseQueryListTradesByCreatorRequest } as QueryListTradesByCreatorRequest
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator)
+    } else {
+      message.creator = ''
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromJSON(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryListTradesByCreatorRequest): unknown {
+    const obj: any = {}
+    message.creator !== undefined && (obj.creator = message.creator)
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageRequest.toJSON(message.pagination) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryListTradesByCreatorRequest>): QueryListTradesByCreatorRequest {
+    const message = { ...baseQueryListTradesByCreatorRequest } as QueryListTradesByCreatorRequest
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator
+    } else {
+      message.creator = ''
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageRequest.fromPartial(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  }
+}
+
+const baseQueryListTradesByCreatorResponse: object = {}
+
+export const QueryListTradesByCreatorResponse = {
+  encode(message: QueryListTradesByCreatorResponse, writer: Writer = Writer.create()): Writer {
+    for (const v of message.Trades) {
+      Trade.encode(v!, writer.uint32(10).fork()).ldelim()
+    }
+    if (message.pagination !== undefined) {
+      PageResponse.encode(message.pagination, writer.uint32(18).fork()).ldelim()
+    }
+    return writer
+  },
+
+  decode(input: Reader | Uint8Array, length?: number): QueryListTradesByCreatorResponse {
+    const reader = input instanceof Uint8Array ? new Reader(input) : input
+    let end = length === undefined ? reader.len : reader.pos + length
+    const message = { ...baseQueryListTradesByCreatorResponse } as QueryListTradesByCreatorResponse
+    message.Trades = []
+    while (reader.pos < end) {
+      const tag = reader.uint32()
+      switch (tag >>> 3) {
+        case 1:
+          message.Trades.push(Trade.decode(reader, reader.uint32()))
+          break
+        case 2:
+          message.pagination = PageResponse.decode(reader, reader.uint32())
+          break
+        default:
+          reader.skipType(tag & 7)
+          break
+      }
+    }
+    return message
+  },
+
+  fromJSON(object: any): QueryListTradesByCreatorResponse {
+    const message = { ...baseQueryListTradesByCreatorResponse } as QueryListTradesByCreatorResponse
+    message.Trades = []
+    if (object.Trades !== undefined && object.Trades !== null) {
+      for (const e of object.Trades) {
+        message.Trades.push(Trade.fromJSON(e))
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromJSON(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  },
+
+  toJSON(message: QueryListTradesByCreatorResponse): unknown {
+    const obj: any = {}
+    if (message.Trades) {
+      obj.Trades = message.Trades.map((e) => (e ? Trade.toJSON(e) : undefined))
+    } else {
+      obj.Trades = []
+    }
+    message.pagination !== undefined && (obj.pagination = message.pagination ? PageResponse.toJSON(message.pagination) : undefined)
+    return obj
+  },
+
+  fromPartial(object: DeepPartial<QueryListTradesByCreatorResponse>): QueryListTradesByCreatorResponse {
+    const message = { ...baseQueryListTradesByCreatorResponse } as QueryListTradesByCreatorResponse
+    message.Trades = []
+    if (object.Trades !== undefined && object.Trades !== null) {
+      for (const e of object.Trades) {
+        message.Trades.push(Trade.fromPartial(e))
+      }
+    }
+    if (object.pagination !== undefined && object.pagination !== null) {
+      message.pagination = PageResponse.fromPartial(object.pagination)
+    } else {
+      message.pagination = undefined
+    }
+    return message
+  }
 }
 
 const baseQueryGetUsernameByAddressRequest: object = { address: '' }
@@ -1914,6 +2076,8 @@ export const QueryGetCookbookResponse = {
 
 /** Query defines the gRPC querier service. */
 export interface Query {
+  /** Queries a list of listTradesByCreator items. */
+  ListTradesByCreator(request: QueryListTradesByCreatorRequest): Promise<QueryListTradesByCreatorResponse>
   /** Queries a list of getAccountByAddress items. */
   UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse>
   /** Queries a username by account. */
@@ -1947,6 +2111,12 @@ export class QueryClientImpl implements Query {
   constructor(rpc: Rpc) {
     this.rpc = rpc
   }
+  ListTradesByCreator(request: QueryListTradesByCreatorRequest): Promise<QueryListTradesByCreatorResponse> {
+    const data = QueryListTradesByCreatorRequest.encode(request).finish()
+    const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'ListTradesByCreator', data)
+    return promise.then((data) => QueryListTradesByCreatorResponse.decode(new Reader(data)))
+  }
+
   UsernameByAddress(request: QueryGetUsernameByAddressRequest): Promise<QueryGetUsernameByAddressResponse> {
     const data = QueryGetUsernameByAddressRequest.encode(request).finish()
     const promise = this.rpc.request('Pylonstech.pylons.pylons.Query', 'UsernameByAddress', data)

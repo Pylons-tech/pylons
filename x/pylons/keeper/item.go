@@ -142,7 +142,7 @@ func (k Keeper) GetAllItemByOwner(ctx sdk.Context, owner sdk.AccAddress) (list [
 	return
 }
 
-func (k Keeper) getItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, pagination *query.PageRequest) ([]types.Item, *query.PageResponse, error) {
+func (k Keeper) GetItemsByOwnerPaginated(ctx sdk.Context, owner sdk.AccAddress, pagination *query.PageRequest) ([]types.Item, *query.PageResponse, error) {
 	items := make([]types.Item, 0)
 
 	store := prefix.NewStore(ctx.KVStore(k.storeKey), types.KeyPrefix(types.AddrItemKey))
