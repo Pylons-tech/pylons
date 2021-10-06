@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/stores/wallets_store.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
@@ -13,6 +14,8 @@ import 'package:transaction_signing_gateway/mobile/no_op_transaction_summary_ui.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
+  // Read the values from .env file
+  await dotenv.load();
   _buildDependencies();
   runApp(
     EasyLocalization(
@@ -38,16 +41,18 @@ void _buildDependencies() {
       serializers: [AlanCredentialsSerializer()],
     ),
   );
+
   PylonsApp.baseEnv = BaseEnv()
     ..setEnv(
-      lcdUrl: lcdUrl,
-      grpcUrl: grpcPort,
-      lcdPort: lcdPort,
-      grpcPort: grpcPort,
-      ethUrl: ethUrl,
-      tendermintPort: tendermintPort,
-      faucetPort: faucetPort,
-      wsUrl: wsUrl
+      lcdUrl: dotenv.env['LCD_PORT']!,
+      grpcUrl: dotenv.env['GRPC_PORT']!,
+      lcdPort: dotenv.env['LCD_PORT']!,
+      grpcPort: dotenv.env['GRPC_PORT']!,
+      ethUrl: dotenv.env['ETH_URL']!,
+      tendermintPort: dotenv.env['TENDERMINT_PORT']!,
+      faucetUrl: dotenv.env['FAUCET_URL'],
+      faucetPort: dotenv.env['FAUCET_PORT'],
+      wsUrl: dotenv.env['WS_URL']!
     );
   PylonsApp.walletsStore = WalletsStore(PylonsApp.signingGateway, PylonsApp.baseEnv);
 }

@@ -34,6 +34,7 @@ dependencies:
   image_cropper: ^1.4.1
   popup_menu: ^1.0.5
   cached_network_image: ^3.1.0
+  flutter_dotenv: 5.0.2
 
 
   cosmos_ui_components:
@@ -72,6 +73,7 @@ flutter:
     - assets/images/icon/
     - i18n/en.json
     - i18n/ru.json
+    - .env
 
   fonts:
     - family: Inter

@@ -15,6 +15,7 @@ class BaseEnv {
     required String ethUrl,
     required String wsUrl,
     required String tendermintPort,
+    String? faucetUrl,
     String? faucetPort,
   }) {
     _networkInfo = NetworkInfo(
@@ -24,7 +25,7 @@ class BaseEnv {
     );
     _baseApiUrl = "$lcdUrl:$lcdPort";
     _baseEthUrl = ethUrl;
-    _baseFaucetUrl = "$lcdUrl:$faucetPort";
+    _baseFaucetUrl = "$faucetUrl:$faucetPort";
     _baseWsUrl = "$wsUrl:$tendermintPort";
   }
 
@@ -38,12 +39,3 @@ class BaseEnv {
 
   String get baseWsUrl => _baseWsUrl;
 }
-
-const lcdPort = String.fromEnvironment('LCD_PORT', defaultValue: '1317');
-const grpcPort = String.fromEnvironment('GRPC_PORT', defaultValue: '9091');
-const lcdUrl = String.fromEnvironment('LCD_URL', defaultValue: '192.168.2.122');
-const grpcUrl = String.fromEnvironment('GRPC_URL', defaultValue: '192.168.2.122');
-const ethUrl = String.fromEnvironment('ETH_URL', defaultValue: 'HTTP://127.0.0.1:7545');
-const wsUrl = String.fromEnvironment('WS_URL', defaultValue: 'ws://192.168.2.122');
-const faucetPort = String.fromEnvironment('FAUCET_PORT', defaultValue: '4500');
-const tendermintPort = String.fromEnvironment('TENDERMINT_PORT', defaultValue: '26657');
