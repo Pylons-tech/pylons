@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pylons_wallet/pages/dashboard/dashboard_assets.dart';
 
 class PylonsAppDrawer extends StatelessWidget {
   final String title;
@@ -33,6 +34,12 @@ class PylonsAppDrawer extends StatelessWidget {
                 leading:const Icon(Icons.comment),
                 onTap: (){
                   //Navigator.pop(context);
+                }
+            ),ListTile(
+                title: const Text('Balances'),
+                leading:const Icon(Icons.account_balance_wallet),
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const DashboardAssets()));
                 }
             )
           ],

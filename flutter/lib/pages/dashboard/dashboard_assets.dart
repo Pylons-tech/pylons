@@ -30,44 +30,57 @@ class _DashboardAssetsState extends State<DashboardAssets> {
           });
         });
     }();
-    final channel = IOWebSocketChannel.connect(Uri.parse(
-        "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=${PylonsApp.currentWallet.publicAddress}"));
-    channel.stream.listen((message) {
-      debugPrint("received $message");
-    });
+    // TODO : Create the websocket with the pylons testnet
+    // final channel = IOWebSocketChannel.connect(Uri.parse(
+    //     "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=${PylonsApp.currentWallet.publicAddress}"));
+    // channel.stream.listen((message) {
+    //   debugPrint("received $message");
+    // });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text("total_assets".tr(),
-                  style: const TextStyle(color: Colors.black, fontSize: 18)),
-            ],
-          ),
-          Row(children: <Widget>[
-            Text("$_balance",
-                style: const TextStyle(color: Colors.black, fontSize: 36)),
-            const Text("  PYLONS",
-                style: TextStyle(color: Colors.indigo, fontSize: 36)),
-          ]),
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  PylonsBlueButton(onTap: _buypylons, text: "${'buy'.tr()} Pylons"),
-                  PylonsWhiteButton(onTap: () {}, text: "${'send'.tr()} Pylons")
-                ],
-              )),
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Ballances'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text("total_assets".tr(),
+                    style: const TextStyle(color: Colors.black, fontSize: 18)),
+              ],
+            ),
+            Row(children: <Widget>[
+              Text("$_balance",
+                  style: const TextStyle(color: Colors.black, fontSize: 36)),
+              const Text("  PYLONS",
+                  style: TextStyle(color: Colors.indigo, fontSize: 36)),
+            ]),
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    PylonsBlueButton(onTap: _buypylons, text: "${'buy'.tr()} Pylons"),
+                    PylonsWhiteButton(onTap: () {}, text: "${'send'.tr()} Pylons")
+                  ],
+                )),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Increment Counter',
+        onPressed: () {  },
+        child: const Icon(Icons.add),
       ),
     );
   }
+
+
 
   void _buypylons() {
     BuyPylons()
