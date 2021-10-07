@@ -4,15 +4,24 @@ order: 3
 
 # Messages
 
+This section describes the processing of the `pylons` messages and the corresponding updates to the state.
+
 ## Accounts
 
 Accounts in `pylons` are a two-way map between a Cosmos SDK address and a username.  
-Account creation differs from standard Cosmos SDK chains where an account is created automatically and only when an address receives tokens.
-Pylons aims to allow for free experiences where accounts can have 0 balance, so a manual Tx for account creation is included.
 
-Usernames are enforced to be globally unique and MUST satisfy the following regex: `^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$`.
+Account creation in Pylons differs from standard Cosmos SDK chains where an account is created automatically and only when an address receives tokens.
 
-### `MsgCreateAccount`
+Pylons allows for free experiences for accounts that have 0 balance. A manual transaction for account creation is included.
+
+Usernames are enforced to be globally unique and MUST satisfy the following regex: 
+
+```text
+^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$
+```
+
+### MsgCreateAccount
+
 ```protobuf
 message MsgCreateAccount {
   string creator = 1;
@@ -20,7 +29,9 @@ message MsgCreateAccount {
 }
 ```
 
-### `MsgUpdateAccount`
+### MsgUpdateAccount
+
+
 ```protobuf
 message MsgUpdateAccount {
   string creator = 1;
@@ -33,10 +44,13 @@ message MsgUpdateAccount {
 Cookbooks are the "container" object that `Recipe` objects are scoped to.
 They specify a collection of recipes with some common relationship or ecosystem.
 
-### `MsgCreateCookbook`
+### MsgCreateCookbook
 
+The `ID` string field MUST satisfy the following regex: 
 
-The `ID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 The `name` string field MUST be a minimum of `MinNameFieldLength` characters.
 
@@ -64,6 +78,7 @@ message MsgCreateCookbook {
 
 
 When updating a `Cookbook` the following fields may be modified:
+
 - `name`
 - `description`
 - `developer`
@@ -107,15 +122,24 @@ message MsgTransferCookbook {
 
 ## Recipes
 
-`Recipe`s are blueprints for `Execution`s, specifying inputs (coins and `Item`s) and outputs (coins and `Item`s) 
-as well as logic and probabilities for execution.
+`Recipe` objects are blueprints for `Execution` objects, specifying inputs (coins and `Item`s) and outputs (coins and `Item`) as well as logic and probabilities for execution.
 
 ### `MsgCreateRecipe`
 
+The `cookbookID` string field MUST:
 
-The `cookbookID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.  It MUST also point to an existing `Cookbook` that is owned by `Recipe.creator`.
+- Point to an existing `Cookbook` that is owned by `Recipe.creator`.
+- Satisfy the following regex:  
 
-The `ID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+    ```text
+    ^[a-zA-Z_][a-zA-Z_0-9]*$
+    ```
+
+The `ID` string field MUST satisfy the following regex:  
+
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 The `name` string field MUST be a minimum of `MinNameFieldLength` characters.
 
@@ -123,7 +147,7 @@ The `description` string field MUST be a minimum of `MinDescriptionFieldLength	`
 
 The `version` string field MUST be a valid Semantic Version string.
 
-`blockInterval` MUST be a non-negative integer.
+The `blockInterval` field MUST be a non-negative integer.
 
 ```protobuf
 message MsgCreateRecipe {
@@ -145,7 +169,8 @@ message MsgCreateRecipe {
 
 ### `MsgUpdateRecipe`
 
-When updating a `Recipe` the following fields may be modified:
+When a `Recipe` is updated, the following fields can be modified:
+
 - `name`
 - `description`
 - `developer`
@@ -157,9 +182,9 @@ When updating a `Recipe` the following fields may be modified:
 - `enabled`
 - `extraInfo`
 
-following the established regex restrictions.
+Updates must follow the established regex restrictions.
 
-The `version` field MUST be greater than the current version when updating (ex. v0.1.1 > v0.1.0).
+The `version` field MUST be greater than the current version. For example, v0.1.1 > v0.1.0.
 
 ```protobuf
 message MsgUpdateRecipe {
@@ -181,13 +206,10 @@ message MsgUpdateRecipe {
 
 ## Executions
 
-`Execution`s represent an instance of running the "program" specified by a `Recipe`.  It is essentially a function
-taking a specified input (coins and `Item`s) and returning a concrete output (coins and `Item`s) based on its 
-internal logic.  
+`Execution` objects represent an instance of running the "program" that is specified by a `Recipe`. Execution is essentially a function
+taking a specified input (coins and `Item`s) and returning a concrete output (coins and `Item`s) based on its internal logic.  
  
-When an `Execution` is created, it is added to the pending list of executions in a Store.  Only the validity of the inputs
-is checked upon submission.  Execution and creation of the outputs is deferred until the `EndBlocker`
-of block #`executionSubmissionHeight + recipe.blockInterval`.
+When an `Execution` is created, it is added to the pending list of executions in a Store. Only the validity of the inputs is checked on submission.  Execution and creation of the outputs is deferred until the `EndBlocker` of block #`executionSubmissionHeight + recipe.blockInterval`.
 
 ### `MsgExecuteRecipe`
 
@@ -215,7 +237,7 @@ of:
 ```
 cookbook.costPerBlock * ((executionSubmissionHeight + recipe.blockInterval) - currentBlockHeightHeight )
 ```
-
+<!-- describe what follows here, is this output?-->
 ```protobuf
 message MsgCompleteExecutionEarly {
   string creator = 1;
@@ -225,12 +247,12 @@ message MsgCompleteExecutionEarly {
 
 ## Items
 
-`Item`s can only be created by executing a `Recipe` so they cannot be created directly with a `Msg`.  They can, however, have
-their mutable strings update or be transferred between accounts.
+`Item`s can be created only by executing a `Recipe` and cannot be created directly with a `Msg`.  Items can, however, have their mutable strings updated or be transferred between accounts.
 
 ### `MsgSetItemString`
 
-When modifying an `Item`'s strings, only the fields in its "mutableStrings" field may be mutated.  
+When modifying an `Item`'s strings, only the fields in its `mutableStrings` field can be mutated. 
+
 The "mutableStrings" are stored as a map with a `field` and a corresponding `value`.
 
 The `cookbookID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.  It MUST also point to an existing `Cookbook` that is owned by `Recipe.creator`.
@@ -290,7 +312,7 @@ The `ID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]
 
 Each `cookbookID` string field of the `items` field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
 
-Each `ID` string field of the `items` field MUST be a valid 8 Byte base58 encoded unsigned integer ([encoding logic](https://github.com/Pylons-tech/pylons/blob/a5f1d165c41a3ab120f2997dd465b2685644b331/x/pylons/types/item.go#L14)).
+Each `ID` string field of the `items` field MUST be a valid 8-byte base58-encoded unsigned integer ([encoding logic](https://github.com/Pylons-tech/pylons/blob/a5f1d165c41a3ab120f2997dd465b2685644b331/x/pylons/types/item.go#L14)).
 
 
 ```protobuf

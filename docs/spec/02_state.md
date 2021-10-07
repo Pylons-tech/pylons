@@ -4,15 +4,18 @@ order: 2
 
 # State
 
-The `pylons` module keeps state of six primary objects: 
+The `pylons` module tracks the state of these primary objects: 
+
 - Cookbooks
 - Recipes
-- Executions (pending and completed)
+- Executions, pending and completed
 - Items
 - Trades
 - PylonsAccounts
 
 ## Cookbooks
+
+Cookbooks objects are <!-- need general cookbook object description here, what is the file with this code? where does it live in the repo? -->.
 
 ```go
 type Cookbook struct {
@@ -30,6 +33,8 @@ type Cookbook struct {
 ```
 
 ## Recipes
+
+Recipe objects are <!-- need general recipe object description here, what is the file with this code? where does it live in the repo? -->.
 
 ```go
 type Recipe struct {
@@ -51,6 +56,8 @@ type Recipe struct {
 
 ## Executions
 
+Execution objects are <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+
 ```go
 type Execution struct {
 	Creator             string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
@@ -69,6 +76,8 @@ type Execution struct {
 ```
 
 ## Items
+
+Item objects provide the core asset identity file for the `pylons` module. <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
 
 ````go
 type Item struct {
@@ -90,6 +99,8 @@ type Item struct {
 
 ## Trades
 
+Trades objects are <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+
 ```go
 type Trade struct {
 	Creator          string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
@@ -105,6 +116,10 @@ type Trade struct {
 ```
 
 ## PylonsAccounts
+
+The PylonsAccounts objects define a two-way map between a Cosmos SDK address and a username.  
+
+  <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
 
 ```go
 type UserMap struct {
