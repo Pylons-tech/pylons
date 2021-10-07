@@ -13,9 +13,9 @@ class IPCEngine {
 
     _sub = linkStream.listen((String? link) {
       print(link);
-      // Parse the link and warn the user, if it is not correct
+      // Link contains the data that the wallet need
     }, onError: (err) {
-      // Handle exception by warning the user their action did not succeed
+
     });
 
   }
