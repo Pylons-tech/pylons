@@ -17,6 +17,8 @@ Future<void> main() async {
   // Read the values from .env file
   await dotenv.load();
   _buildDependencies();
+
+
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ru')],
