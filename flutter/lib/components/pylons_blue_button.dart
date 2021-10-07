@@ -16,15 +16,20 @@ class PylonsBlueButton extends StatelessWidget {
       onPressed: onTap,
       style: ElevatedButton.styleFrom(
         primary: const Color(0xFF1212C4),
+
       ),
       child: SizedBox(
-        height: 43,
+        // height: 43,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-                text,
-                style: const TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white)),
+            Expanded(
+              child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontFamily: 'Inter', fontSize: 13, fontWeight: FontWeight.w600, color: Colors.white)),
+            ),
           ],
         ),
       ),

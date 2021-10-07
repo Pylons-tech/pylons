@@ -12,6 +12,7 @@ import 'package:pylons_wallet/pages/gallery/add_artwork.dart';
 import 'package:pylons_wallet/pages/gallery/edit_cover_screen.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_collection.dart';
 import 'package:pylons_wallet/pages/gallery/gallery_tab_like.dart';
+import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class GalleryScreen extends StatefulWidget {
 class _GalleryScreenState extends State<GalleryScreen>
     with SingleTickerProviderStateMixin {
   bool isExpanded = false;
-  final double bannerSize = 135;
+
   int tabIndex = 0;
   late TabController _tabController;
 
@@ -64,264 +65,269 @@ class _GalleryScreenState extends State<GalleryScreen>
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = ScreenSizeUtil(context);
+    final bannerSize = screenSize.height(percent: 0.20);
+
     return Stack(
-      alignment: Alignment.center,
-      children: <Widget>[
-        Positioned(
-          top: 0,
-          child: Container(
-            alignment: Alignment.centerRight,
-            decoration: const BoxDecoration(
+      children: [
+        Container(
+          alignment: Alignment.centerRight,
+          decoration: const BoxDecoration(
               image: DecorationImage(
-                image: CachedNetworkImageProvider(kImage3),
-                fit: BoxFit.cover
-              )
-            ),
-            width: MediaQuery.of(context).size.width,
-            height: bannerSize,
-            child: Padding(
-                padding: const EdgeInsets.only(right: 20.0, top: 56),
-                child: InkWell(
-                  onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => EditCoverScreen())),
-                  child: Container(
-                    height: 18,
-                    width: 79,
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(97, 97, 97, 0.6),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      children: [
-                        const ImageIcon(AssetImage('assets/icons/camera.png'),
-                            size: 16, color: Colors.white),
-                        const SizedBox(
-                          width: 7,
-                        ),
-                        Text(
-                          'edit_cover'.tr(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 10,
-                              color: Colors.white,
-                              fontFamily: 'Inter'),
-                        )
-                      ],
-                    ),
-                  ),
-                )),
-          ),
+                  image: CachedNetworkImageProvider(kImage3),
+                  fit: BoxFit.cover)),
+          width: MediaQuery.of(context).size.width,
+          height: bannerSize,
+
         ),
         Container(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          color: Colors.white,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          margin: EdgeInsets.only(top: bannerSize * 0.6,) ,
+          child: Column(
             children: [
               Container(
-                  color: Colors.white,
-                  child: TabBar(
-                    indicatorPadding: const EdgeInsets.only(left: 10, right: 10),
-                    isScrollable: true,
-                    controller: _tabController,
-                    labelColor: const Color(0xFF1212C4),
-                    unselectedLabelColor: Colors.grey[700],
-                    indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: const Color(0xFF1212C4),
-                    tabs: myTabs,
-                    labelPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                width: screenSize.width(),
+                  padding: const EdgeInsets.only(
+                    right: 20.0,
+                  ),
+                  alignment: Alignment.topRight,
+                  child: GestureDetector(
+                    onTap: () => Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (_) => EditCoverScreen())),
+                    child: Container(
+                      padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(97, 97, 97, 0.6),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const ImageIcon(AssetImage('assets/icons/camera.png'),
+                              size: 16, color: Colors.white),
+                          const SizedBox(
+                            width: 7,
+                          ),
+                          Text(
+                            'edit_cover'.tr(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                                color: Colors.white,
+                                fontFamily: 'Inter'),
+                          )
+                        ],
+                      ),
+                    ),
                   )),
-              Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AddArtworkWidget();
-                          });
-                    },
-                    icon: const Icon(Icons.add),
-                  ))
-            ],
-          ),
-        ),
-        Positioned(
-          top: bannerSize + 200,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: _pages[tabIndex],
-        ),
-        Positioned(
-          top: bannerSize - 25,
-          left: 15,
-          right: 15,
-          child: Card(
-            elevation: 8,
-            color: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              width: MediaQuery.of(context).size.width * .90,
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    minLeadingWidth: 10,
-                    leading: const UserImageWidget(imageUrl: kImage2),
-                    title: const Text('Linda',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                          color: Color(0xFF201D1D),
-                        )),
-                    subtitle: const Text(
-                        'Media Artist (3D, Motiongraphics, Collecting NFT)',
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFF616161))),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const AccountScreenWidget()));
-                    },
-                  ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 70),
-                      Text('${'followers'.tr()}: 23'),
-                      const SizedBox(width: 50),
-                      Text('${'following'.tr().toLowerCase()}: 20')
-                    ],
-                  ),
-                  const VerticalSpace(10),
-                  ButtonBar(
-                    alignment: MainAxisAlignment.center,
-                    children: [
-                      // SizedBox(
-                      //     height: 30,
-                      //     width: 138,
-                      //     child: PylonsBlueButton(
-                      //         onTap: () {}, text: 'follow'.tr())),
-                      // SizedBox(
-                      //   height: 30,
-                      //   width: 30,
-                      //   child: OutlinedButton(
-                      //     onPressed: () {
-                      //       setExandMode();
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       alignment: Alignment.center,
-                      //       primary: Colors.white,
-                      //       padding: const EdgeInsets.all(0),
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius:
-                      //             BorderRadius.circular(5), // <-- Radius
-                      //       ),
-                      //     ),
-                      //     child: Center(
-                      //       child: Icon(
-                      //         isExpanded
-                      //             ? Icons.keyboard_arrow_up
-                      //             : Icons.keyboard_arrow_down,
-                      //         color: const Color(0xFF616161),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-                      SizedBox(
-                        height: 30,
-                        child: ElevatedButton(
-                          onPressed: () {
+              const VerticalSpace(6),
+              Card(
+                  elevation: 8,
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    width: MediaQuery.of(context).size.width * .90,
+                    child: Column(
+                      children: <Widget>[
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          minLeadingWidth: 10,
+                          leading: const UserImageWidget(imageUrl: kImage2),
+                          title: const Text('Linda',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xFF201D1D),
+                              )),
+                          subtitle: const Text(
+                              'Media Artist (3D, Motiongraphics, Collecting NFT)',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: Color(0xFF616161))),
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => EditProfileScreen()));
+                                    builder: (context) =>
+                                        const AccountScreenWidget()));
                           },
-                          style: ElevatedButton.styleFrom(
-                              primary: Colors.white,
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(6),
-                                  side: const BorderSide(
-                                    color: Color(0xffCACACA),
-                                  ))),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                               Text("Edit Profile",
-                                  style:  TextStyle(
-                                      fontSize: 15, color: Color(0xff616161))),
-                            ],
-                          ),
                         ),
-                      ),
+                        Row(
+                          children: [
+                            const SizedBox(width: 70),
+                            Text('${'followers'.tr()}: 23'),
+                            const SizedBox(width: 50),
+                            Text('${'following'.tr().toLowerCase()}: 20')
+                          ],
+                        ),
+                        const VerticalSpace(10),
+                        ButtonBar(
+                          alignment: MainAxisAlignment.center,
+                          children: [
+                            // SizedBox(
+                            //     height: 30,
+                            //     width: 138,
+                            //     child: PylonsBlueButton(
+                            //         onTap: () {}, text: 'follow'.tr())),
+                            // SizedBox(
+                            //   height: 30,
+                            //   width: 30,
+                            //   child: OutlinedButton(
+                            //     onPressed: () {
+                            //       setExandMode();
+                            //     },
+                            //     style: ElevatedButton.styleFrom(
+                            //       alignment: Alignment.center,
+                            //       primary: Colors.white,
+                            //       padding: const EdgeInsets.all(0),
+                            //       shape: RoundedRectangleBorder(
+                            //         borderRadius:
+                            //             BorderRadius.circular(5), // <-- Radius
+                            //       ),
+                            //     ),
+                            //     child: Center(
+                            //       child: Icon(
+                            //         isExpanded
+                            //             ? Icons.keyboard_arrow_up
+                            //             : Icons.keyboard_arrow_down,
+                            //         color: const Color(0xFF616161),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                            SizedBox(
+                              height: 30,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => EditProfileScreen()));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(6),
+                                        side: const BorderSide(
+                                          color: Color(0xffCACACA),
+                                        ))),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text("Edit Profile",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Color(0xff616161))),
+                                  ],
+                                ),
+                              ),
+                            ),
 
-                      //),
-                      // SizedBox(
-                      //   height: 30,
-                      //   width: 30,
-                      //   child: OutlinedButton(
-                      //     onPressed: () {
-                      //       this.setExandMode();
-                      //     },
-                      //     style: ElevatedButton.styleFrom(
-                      //       alignment:Alignment.center,
-                      //       primary: Colors.white,
-                      //       padding: EdgeInsets.all(0),
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(5), // <-- Radius
-                      //       ),
-                      //     ),
-                      //
-                      //     child: Center(
-                      //       child: Icon(
-                      //         (isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-                      //         color: Color(0xFF616161),
-                      //      ),
-                      //     ),
-                      //   ),
-                      // )
-                    ],
-                  ),
-                  if (isExpanded)
-                    Column(children: [
-                      Row(children: [
-                        Text('suggested_accounts'.tr()),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: Row(children: [
-                            Text('see_all'.tr(),
-                                style:
-                                    const TextStyle(color: Color(0xFF616161))),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Color(0xFF616161),
-                            )
-                          ]),
+                            //),
+                            // SizedBox(
+                            //   height: 30,
+                            //   width: 30,
+                            //   child: OutlinedButton(
+                            //     onPressed: () {
+                            //       this.setExandMode();
+                            //     },
+                            //     style: ElevatedButton.styleFrom(
+                            //       alignment:Alignment.center,
+                            //       primary: Colors.white,
+                            //       padding: EdgeInsets.all(0),
+                            //       shape: RoundedRectangleBorder(
+                            //         borderRadius: BorderRadius.circular(5), // <-- Radius
+                            //       ),
+                            //     ),
+                            //
+                            //     child: Center(
+                            //       child: Icon(
+                            //         (isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+                            //         color: Color(0xFF616161),
+                            //      ),
+                            //     ),
+                            //   ),
+                            // )
+                          ],
                         ),
-                      ]),
-                      SizedBox(
-                          height: 105,
-                          child: ListView.builder(
-                              itemCount: 15,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, index) =>
-                                  const FollowCardWidget())),
-                    ])
-                  else
-                    const SizedBox(height: 0)
-                ],
+                        if (isExpanded)
+                          Column(children: [
+                            Row(children: [
+                              Text('suggested_accounts'.tr()),
+                              const Spacer(),
+                              TextButton(
+                                onPressed: () {},
+                                child: Row(children: [
+                                  Text('see_all'.tr(),
+                                      style: const TextStyle(
+                                          color: Color(0xFF616161))),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    color: Color(0xFF616161),
+                                  )
+                                ]),
+                              ),
+                            ]),
+                            SizedBox(
+                                height: 105,
+                                child: ListView.builder(
+                                    itemCount: 15,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) =>
+                                        const FollowCardWidget())),
+                          ])
+                        else
+                          const SizedBox(height: 0)
+                      ],
+                    ),
+                  )),
+              const VerticalSpace(6),
+              Container(
+                // padding: const EdgeInsets.symmetric(vertical: 5),
+                width: screenSize.width(),
+                color: Colors.white,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        color: Colors.white,
+                        child: TabBar(
+                          indicatorPadding:
+                              const EdgeInsets.only(left: 10, right: 10),
+                          isScrollable: true,
+                          controller: _tabController,
+                          labelColor: const Color(0xFF1212C4),
+                          unselectedLabelColor: Colors.grey[700],
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicatorColor: const Color(0xFF1212C4),
+                          tabs: myTabs,
+                          labelPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        )),
+                    Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AddArtworkWidget();
+                                });
+                          },
+                          icon: const Icon(Icons.add),
+                        ))
+                  ],
+                ),
               ),
-            )
+              Expanded(
+                child: SizedBox(
+                  width: screenSize.width(),
+                    child: _pages[tabIndex],),
+              )
+            ],
           ),
         )
       ],

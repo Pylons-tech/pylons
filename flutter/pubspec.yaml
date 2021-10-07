@@ -39,6 +39,8 @@ dependencies:
 
   uni_links: ^0.5.1
 
+  grpc: ^3.0.2
+
 
   cosmos_ui_components:
     git:

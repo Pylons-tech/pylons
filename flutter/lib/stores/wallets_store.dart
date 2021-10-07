@@ -35,6 +35,7 @@ class WalletsStore {
       (fail) => loadWalletsFailure.value = fail,
       (newWallets) => wallets.value = newWallets,
     );
+
     areWalletsLoading.value = false;
   }
 
@@ -57,7 +58,7 @@ class WalletsStore {
     final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
     final creds = AlanPrivateWalletCredentials(
       publicInfo: WalletPublicInfo(
-        chainId: 'cosmos',
+        chainId: 'pylo',
         walletId: userName,
         name: userName,
         publicAddress: wallet.bech32Address,
