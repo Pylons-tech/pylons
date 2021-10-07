@@ -44,8 +44,8 @@ void _buildDependencies() {
 
   PylonsApp.baseEnv = BaseEnv()
     ..setEnv(
-      lcdUrl: dotenv.env['LCD_PORT']!,
-      grpcUrl: dotenv.env['GRPC_PORT']!,
+      lcdUrl: dotenv.env['LCD_URL']!,
+      grpcUrl: dotenv.env['GRPC_URL']!,
       lcdPort: dotenv.env['LCD_PORT']!,
       grpcPort: dotenv.env['GRPC_PORT']!,
       ethUrl: dotenv.env['ETH_URL']!,
