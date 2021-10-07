@@ -24,7 +24,8 @@ class _DashboardAssetsState extends State<DashboardAssets> {
     //Query the balance and update it.
     () async {
       PylonsBalance(PylonsApp.baseEnv)
-        ..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
+        ..getBalance("pylo19zqumd9hf6t0dnnzf5a94gq2csd20mhmejcntn").then((balance) {
+        //..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
           setState(() {
             _balance = balance.amount.value;
           });
@@ -42,7 +43,7 @@ class _DashboardAssetsState extends State<DashboardAssets> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ballances'),
+        title: const Text('Balances'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
