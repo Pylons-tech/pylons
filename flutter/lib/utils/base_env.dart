@@ -19,7 +19,7 @@ class BaseEnv {
     String? faucetPort,
   }) {
     _networkInfo = NetworkInfo(
-      bech32Hrp: 'cosmos',
+      bech32Hrp: 'pylo',
       lcdInfo: LCDInfo(host: lcdUrl, port: int.parse(lcdPort)),
       grpcInfo: GRPCInfo(host: grpcUrl, port: int.parse(grpcPort)),
     );

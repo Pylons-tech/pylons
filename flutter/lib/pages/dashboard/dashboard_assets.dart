@@ -22,15 +22,13 @@ class _DashboardAssetsState extends State<DashboardAssets> {
   void initState() {
     super.initState();
     //Query the balance and update it.
-    () async {
-      PylonsBalance(PylonsApp.baseEnv)
-        ..getBalance("pylo19zqumd9hf6t0dnnzf5a94gq2csd20mhmejcntn").then((balance) {
-        //..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
-          setState(() {
-            _balance = balance.amount.value;
-          });
-        });
-    }();
+    PylonsBalance(PylonsApp.baseEnv)
+    ..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
+      setState(() {
+        _balance = balance.amount.value;
+      });
+    });
+
     // TODO : Create the websocket with the pylons testnet
     // final channel = IOWebSocketChannel.connect(Uri.parse(
     //     "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=${PylonsApp.currentWallet.publicAddress}"));
@@ -41,6 +39,9 @@ class _DashboardAssetsState extends State<DashboardAssets> {
 
   @override
   Widget build(BuildContext context) {
+
+    final address = PylonsApp.currentWallet.publicAddress;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Balances'),
@@ -49,6 +50,12 @@ class _DashboardAssetsState extends State<DashboardAssets> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text("Address: $address".tr(),
+                    style: const TextStyle(color: Colors.black, fontSize: 18)),
+              ],
+            ),
             Row(
               children: <Widget>[
                 Text("total_assets".tr(),
