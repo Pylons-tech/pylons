@@ -8,6 +8,8 @@
 - [#423](https://github.com/Pylons-tech/pylons/pull/423) Create custom testing setup for LOUD tests.  This update adds extendability for future tests.
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Add game simulation testing to cli test suite.  Tests cover CEL environment execution, item modification and cookbook coin generation. 
 
+### Client Breaking Changes:
+
 ### Fixes:
 - [#346](https://github.com/Pylons-tech/pylons/pull/436) Fix a bug in `x/pylons/keeper/msg_server_fulfill_trade.go` where a transfer fees were being matched from itemInputs where they should have been from itemOutputs.
 - [#346](https://github.com/Pylons-tech/pylons/pull/436) Fix a bug in `x/pylons/keeper/msg_server_fulfill_trade.go` where a `MatchItemInputsForTrade()` would return an error incorrectly.

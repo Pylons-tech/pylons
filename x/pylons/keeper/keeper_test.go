@@ -233,11 +233,10 @@ func createNItemSingleOwner(k keeper.Keeper, ctx sdk.Context, n int, tradeable b
 	for i := range items {
 		items[i].Owner = owner[0]
 		items[i].CookbookID = fmt.Sprintf("%d", i)
-		items[i].ID = types.EncodeItemID(uint64(i))
 		items[i].TransferFee = coin
 		items[i].Tradeable = tradeable
 		items[i].TradePercentage = sdk.ZeroDec()
-		k.AppendItem(ctx, items[i])
+		items[i].ID = k.AppendItem(ctx, items[i])
 	}
 	return items
 }
@@ -255,8 +254,14 @@ func createNRecipe(k keeper.Keeper, ctx sdk.Context, cb types.Cookbook, n int) [
 func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 	items := make([]types.Trade, n)
 	owners := types.GenTestBech32List(n)
+
+	coinInputs := make([]types.CoinInput, 0)
+	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+
 	for i := range items {
 		items[i].Creator = owners[i]
+		items[i].CoinInputs = coinInputs
+		items[i].CoinOutputs = sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}
 		items[i].ID = k.AppendTrade(ctx, items[i])
 	}
 	return items
@@ -265,8 +270,14 @@ func createNTrade(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 func createNTradeSameOwner(k keeper.Keeper, ctx sdk.Context, n int) []types.Trade {
 	items := make([]types.Trade, n)
 	owners := types.GenTestBech32List(1)
+
+	coinInputs := make([]types.CoinInput, 0)
+	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+
 	for i := range items {
 		items[i].Creator = owners[0]
+		items[i].CoinInputs = coinInputs
+		items[i].CoinOutputs = sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}
 		items[i].ID = k.AppendTrade(ctx, items[i])
 	}
 	return items

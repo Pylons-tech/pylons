@@ -102,6 +102,8 @@ func getTestCoins(t *testing.T, simInfo *tradeSimInfo, common []string) {
 	require.NoError(t, simInfo.ctx.JSONCodec.UnmarshalJSON(out.Bytes(), &execResp))
 	// verify completed
 	require.Equal(t, true, execResp.Completed)
+
+	// TODO check balance?
 }
 
 func TestFulfillTradeItemForCoins(t *testing.T) {
@@ -288,11 +290,13 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.Equal(t, height, itemResp.Item.LastUpdate)
 
 	// no coinInputs
-	coinInputs, err := json.Marshal([]types.CoinInput{
-		{
-			Coins: sdk.NewCoins(sdk.NewCoin(testDenom, sdk.NewInt(110))),
+	coinInputs, err := json.Marshal(
+		[]types.CoinInput{
+			{
+				Coins: sdk.NewCoins(sdk.NewCoin(testDenom, sdk.NewInt(110))),
+			},
 		},
-	})
+	)
 	require.NoError(t, err)
 
 	// no item input

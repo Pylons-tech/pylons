@@ -39,7 +39,6 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 			}
 		}
 	}
-
 	// lock coins for trade
 	err := k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
 	if err != nil {

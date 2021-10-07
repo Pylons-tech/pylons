@@ -142,9 +142,10 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 	inputChainTotAmt := sdk.NewCoins()
 	inputTransferTotAmt := sdk.NewCoins()
 	inputCookbookOwnersTotAmtMap := make(map[string]sdk.Coins)
+	coinOutputs := trade.CoinOutputs
 	for i, item := range matchedInputItems {
 		baseItemTransferFee := item.TransferFee[itemInputsTransferFeePermutation[i]]
-		itemTransferFeeAmt := trade.CoinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
+		itemTransferFeeAmt := coinOutputs.AmountOf(baseItemTransferFee.Denom).ToDec().Mul(inputItemWeights[i]).RoundInt()
 		tmpCookbookAmt := sdk.NewCoin(baseItemTransferFee.Denom, itemTransferFeeAmt.ToDec().Mul(item.TradePercentage).RoundInt())
 		if tmpCookbookAmt.Amount.GT(maxTransferFee) {
 			// clamp to maxTransferFee - maxTransferFee and minTransferFee are global (i.e. same for every coin)
@@ -234,7 +235,7 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		ItemInputs:  itemInputsRefs,
 		CoinInputs:  coinInputs,
 		ItemOutputs: trade.ItemOutputs,
-		CoinOutputs: trade.CoinOutputs,
+		CoinOutputs: coinOutputs,
 	})
 
 	return &types.MsgFulfillTradeResponse{}, err

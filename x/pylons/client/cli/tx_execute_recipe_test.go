@@ -11,13 +11,12 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
 	"github.com/spf13/cast"
 
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	clitestutil "github.com/cosmos/cosmos-sdk/testutil/cli"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/stretchr/testify/require"
 
 	"github.com/Pylons-tech/pylons/testutil/network"
@@ -38,7 +37,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -74,7 +73,7 @@ func TestExecuteRecipeNoInputOutput(t *testing.T) {
 					},
 				},
 				MutableStrings:  nil,
-				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
 				TradePercentage: tradePercentage,
 				Quantity:        0,
 				AmountMinted:    0,
@@ -193,7 +192,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -234,7 +233,7 @@ func TestExecuteRecipeQuantityField(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
 				Quantity:        1, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
 				AmountMinted:    0,
@@ -385,7 +384,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -426,7 +425,7 @@ func TestExecuteUpdatedRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
 				Quantity:        0, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
 				AmountMinted:    0,
@@ -556,7 +555,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 		"Developer",
 		"v0.0.1",
 		"test@email.com",
-		"{\"denom\": \"pylons\", \"amount\": \"1\"}",
+		"{\"denom\": \"upylon\", \"amount\": \"1\"}",
 		"true",
 	}
 
@@ -597,7 +596,7 @@ func TestExecuteDisableRecipe(t *testing.T) {
 						Value: "testMutValue",
 					},
 				},
-				TransferFee:     []sdk.Coin{sdk.NewCoin("pylons", sdk.OneInt())},
+				TransferFee:     []sdk.Coin{sdk.NewCoin("upylon", sdk.OneInt())},
 				Quantity:        0, // Set quantity so it can only be executed once
 				TradePercentage: tradePercentage,
 				AmountMinted:    0,
