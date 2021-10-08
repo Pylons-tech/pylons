@@ -35,20 +35,7 @@ class WalletsStore {
       (fail) => loadWalletsFailure.value = fail,
       (newWallets) => wallets.value = newWallets,
     );
-
     areWalletsLoading.value = false;
-  }
-
-  Future<void> getBalances(String walletAddress) async {
-    isError.value = false;
-    isBalancesLoading.value = true;
-    try {
-      final balance = await PylonsBalance(baseEnv).getBalance(walletAddress);
-      balancesList.value = [balance];
-    } catch (error) {
-      isError.value = false;
-    }
-    isBalancesLoading.value = false;
   }
 
   Future<WalletPublicInfo> importAlanWallet(

@@ -1,12 +1,9 @@
 import 'package:decimal/decimal.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:pylons_wallet/components/pylons_blue_button.dart';
-import 'package:pylons_wallet/components/pylons_white_button.dart';
+import 'package:flutter/services.dart';
 import 'package:pylons_wallet/pylons_app.dart';
-import 'package:pylons_wallet/transactions/buy_pylons.dart';
 import 'package:pylons_wallet/transactions/pylons_balance.dart';
-import 'package:web_socket_channel/io.dart';
 
 class DashboardAssets extends StatefulWidget {
   const DashboardAssets({Key? key}) : super(key: key);
@@ -16,34 +13,19 @@ class DashboardAssets extends StatefulWidget {
 }
 
 class _DashboardAssetsState extends State<DashboardAssets> {
-  late Decimal _balance = Decimal.fromInt(0);
 
   @override
   void initState() {
     super.initState();
-    //Query the balance and update it.
-    () async {
-      PylonsBalance(PylonsApp.baseEnv)
-        ..getBalance("pylo19zqumd9hf6t0dnnzf5a94gq2csd20mhmejcntn").then((balance) {
-        // ..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
-          setState(() {
-            _balance = balance.amount.value;
-          });
-        });
-    }();
-    // TODO : Create the websocket with the pylons testnet
-    // final channel = IOWebSocketChannel.connect(Uri.parse(
-    //     // "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=${PylonsApp.currentWallet.publicAddress}"));
-    //     "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=pylo19zqumd9hf6t0dnnzf5a94gq2csd20mhmejcntn"));
-    // channel.stream.listen((message) {
-    //   debugPrint("received $message");
-    // });
-
-
   }
+
+  var _assetsList = <Widget>[];
 
   @override
   Widget build(BuildContext context) {
+    final address = PylonsApp.currentWallet.publicAddress;
+    _buildAssetsList();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Balances'),
@@ -52,49 +34,56 @@ class _DashboardAssetsState extends State<DashboardAssets> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text("total_assets".tr(),
-                    style: const TextStyle(color: Colors.black, fontSize: 18)),
-              ],
+            Card(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text("Address".tr(),
+                      style:
+                      const TextStyle(color: Colors.black, fontSize: 18)),
+                  Text(address,
+                      style:
+                      const TextStyle(color: Colors.black, fontSize: 18)),
+                  IconButton(
+                    icon: const Icon(Icons.content_copy),
+                    onPressed: () {
+                      Clipboard.setData(ClipboardData(text: address));
+                    },
+                  )
+                ],
+              ),
             ),
-            Row(children: <Widget>[
-              Text("$_balance",
-                  style: const TextStyle(color: Colors.black, fontSize: 36)),
-              const Text("  PYLONS",
-                  style: TextStyle(color: Colors.indigo, fontSize: 36)),
-            ]),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Expanded(child: PylonsBlueButton(onTap: _buypylons, text: "${'buy'.tr()} Pylons")),
-                    Expanded(child: PylonsWhiteButton(onTap: () {}, text: "${'send'.tr()} Pylons"))
-                  ],
-                )),
+            Card(
+              child: Column(
+                children: _assetsList,
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         tooltip: 'Increment Counter',
-        onPressed: () {  },
+        onPressed: () {},
         child: const Icon(Icons.add),
       ),
     );
   }
 
-
-
-  void _buypylons() {
-    BuyPylons()
-      ..buy().then((value) {
-        PylonsBalance(PylonsApp.baseEnv)
-          ..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
-            setState(() {
-              _balance = balance.amount.value;
-            });
-          });
-      });
+  Future<void> _buildAssetsList() async {
+    //Query the balance and update it.
+    final balanceObj = PylonsBalance(PylonsApp.baseEnv);
+    final balances = await balanceObj.getBalance(PylonsApp.currentWallet.publicAddress);
+    final assetsList = <Widget>[];
+    for (final balance in balances) {
+      final denom = balance.denom.toString();
+      final amount = balance.amount.toString();
+      assetsList.add(Row(children: <Widget>[
+        Text("$denom: ", style: const TextStyle(color: Colors.indigo, fontSize: 36)),
+        Text(amount, style: const TextStyle(color: Colors.black, fontSize: 36)),
+      ]));
+    }
+    setState(() {
+      _assetsList = assetsList;
+    });
   }
 }
