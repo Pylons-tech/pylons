@@ -21,7 +21,7 @@ class PylonsBalance {
     final balances = <Balance>[];
     if(balancesList.isEmpty){
       balances.add(
-        Balance(denom: const Denom("upylo"), amount: Amount(Decimal.zero))
+        Balance(denom: const Denom("upylon"), amount: Amount(Decimal.zero))
       );
     }
     for (final balance in balancesList) {
