@@ -25,7 +25,7 @@ class _DashboardAssetsState extends State<DashboardAssets> {
     () async {
       PylonsBalance(PylonsApp.baseEnv)
         ..getBalance("pylo19zqumd9hf6t0dnnzf5a94gq2csd20mhmejcntn").then((balance) {
-        //..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
+        // ..getBalance(PylonsApp.currentWallet.publicAddress).then((balance) {
           setState(() {
             _balance = balance.amount.value;
           });
@@ -33,10 +33,13 @@ class _DashboardAssetsState extends State<DashboardAssets> {
     }();
     // TODO : Create the websocket with the pylons testnet
     // final channel = IOWebSocketChannel.connect(Uri.parse(
-    //     "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=${PylonsApp.currentWallet.publicAddress}"));
+    //     // "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=${PylonsApp.currentWallet.publicAddress}"));
+    //     "${PylonsApp.baseEnv.baseWsUrl}?transfer.recipient=pylo19zqumd9hf6t0dnnzf5a94gq2csd20mhmejcntn"));
     // channel.stream.listen((message) {
     //   debugPrint("received $message");
     // });
+
+
   }
 
   @override
@@ -64,10 +67,10 @@ class _DashboardAssetsState extends State<DashboardAssets> {
             Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    PylonsBlueButton(onTap: _buypylons, text: "${'buy'.tr()} Pylons"),
-                    PylonsWhiteButton(onTap: () {}, text: "${'send'.tr()} Pylons")
+                    Expanded(child: PylonsBlueButton(onTap: _buypylons, text: "${'buy'.tr()} Pylons")),
+                    Expanded(child: PylonsWhiteButton(onTap: () {}, text: "${'send'.tr()} Pylons"))
                   ],
                 )),
           ],

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -13,6 +15,7 @@ import 'package:transaction_signing_gateway/mobile/no_op_transaction_summary_ui.
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   await EasyLocalization.ensureInitialized();
   // Read the values from .env file
   await dotenv.load();
@@ -57,4 +60,13 @@ void _buildDependencies() {
       wsUrl: dotenv.env['WS_URL']!
     );
   PylonsApp.walletsStore = WalletsStore(PylonsApp.signingGateway, PylonsApp.baseEnv);
+}
+
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
 }

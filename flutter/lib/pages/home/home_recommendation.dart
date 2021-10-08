@@ -27,6 +27,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
           color: Colors.white,
           child: Column(
             children: [
+              const VerticalSpace(10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

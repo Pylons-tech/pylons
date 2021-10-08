@@ -105,6 +105,9 @@ class PresentingOnboardPage extends StatelessWidget {
           //TODO: refactoring : create an util class to read / write values in the preferences store.
           SharedPreferences.getInstance().then((prefs) => prefs.setString("pylons:current_wallet", _username));
           PylonsApp.currentWallet = value;
+          print("Wallet add: ${value.publicAddress} ${value.name} ${value.chainId}");
+
+
 
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
         });

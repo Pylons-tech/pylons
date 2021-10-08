@@ -397,7 +397,7 @@ packages:
     source: hosted
     version: "1.1.0"
   grpc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: grpc
       url: "https://pub.dartlang.org"

@@ -10,7 +10,6 @@ class SocialMediaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 44,
