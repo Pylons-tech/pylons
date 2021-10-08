@@ -15,7 +15,9 @@ The `pylons` module tracks the state of these primary objects:
 
 ## Cookbooks
 
-Cookbooks objects are <!-- need general cookbook object description here, what is the file with this code? where does it live in the repo? -->.
+Cookbooks objects are containers for recipes.  A cookbook could be a collection of recipes that make up a game experience or be a portfolio of recipes an artist uses to mint their NFTs from.
+
+The definition of a cookbook can be found in [`cookbook.proto`](LINK).
 
 ```go
 type Cookbook struct {
@@ -34,7 +36,11 @@ type Cookbook struct {
 
 ## Recipes
 
-Recipe objects are <!-- need general recipe object description here, what is the file with this code? where does it live in the repo? -->.
+Recipe objects are blueprints for digital experiences involving coins and NFT items.  They can deterministically mint an NFT as users are familiar with from
+other blockchains experiences like Ethereum, or specify mini-programs to probabilistically result in a variety of outcomes.  The recipe structure contains
+fields specifying the rules and logic of a recipe.
+
+The definition of a recipe can be found in [`recipe.proto`](LINK).
 
 ```go
 type Recipe struct {
@@ -56,7 +62,10 @@ type Recipe struct {
 
 ## Executions
 
-Execution objects are <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+Execution objects are instances created when a user actually runs a recipe.  The data structure contains information about the specific coins, items,
+recipe and outputs involved in the execution.
+
+The definition of a recipe can be found in [`execution.proto`](LINK).
 
 ```go
 type Execution struct {
@@ -78,6 +87,9 @@ type Execution struct {
 ## Items
 
 Item objects provide the core asset identity file for the `pylons` module. <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+
+The definition of a recipe can be found in [`item.proto`](LINK).
+
 
 ````go
 type Item struct {
@@ -101,6 +113,9 @@ type Item struct {
 
 Trades objects are <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
 
+The definition of a recipe can be found in [`trade.proto`](LINK).
+
+
 ```go
 type Trade struct {
 	Creator          string                                   `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
@@ -120,6 +135,8 @@ type Trade struct {
 The PylonsAccounts objects define a two-way map between a Cosmos SDK address and a username.  
 
   <!-- need general object description here, what is the file with this code? where does it live in the repo? -->.
+The definition of a recipe can be found in [`accounts.proto`](LINK).
+
 
 ```go
 type UserMap struct {

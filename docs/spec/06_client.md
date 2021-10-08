@@ -95,6 +95,12 @@ pylonsd query pylons get-cookbook [id] [flags]
   pylonsd query pylons list-recipes-by-cookbook [id] [flags]
 ```
 
+#### list-trades
+
+```bash
+  pylonsd query pylons list-trades [creator] [flags]
+```
+
 ### Transactions
 
 The `tx` commands allow users to interact with the `pylons` module.
@@ -103,7 +109,6 @@ The `tx` commands allow users to interact with the `pylons` module.
 
 ```bash
   pylonsd tx pylons create-account [username] [flags]
-
 ```
 
 #### update-account

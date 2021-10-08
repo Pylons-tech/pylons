@@ -14,7 +14,7 @@ Account creation in Pylons differs from standard Cosmos SDK chains where an acco
 
 Pylons allows for free experiences for accounts that have 0 balance. A manual transaction for account creation is included.
 
-Usernames are enforced to be globally unique and MUST satisfy the following regex: 
+Usernames are enforced to be globally unique and MUST satisfy the following regular expression rule: 
 
 ```text
 ^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$
@@ -29,6 +29,10 @@ message MsgCreateAccount {
 }
 ```
 
+The message handling should fail if:
+- an account has already been created with the creator address
+- the username is already taken by another account
+
 ### MsgUpdateAccount
 
 
@@ -39,6 +43,9 @@ message MsgUpdateAccount {
 }
 ```
 
+The message handling should fail if:
+- the username is already taken by another account
+
 ## Cookbooks
 
 Cookbooks are the "container" object that `Recipe` objects are scoped to.
@@ -46,7 +53,7 @@ They specify a collection of recipes with some common relationship or ecosystem.
 
 ### MsgCreateCookbook
 
-The `ID` string field MUST satisfy the following regex: 
+The `ID` string field MUST satisfy the following regular expression rule: 
 
 ```text
 ^[a-zA-Z_][a-zA-Z_0-9]*$
@@ -58,7 +65,11 @@ The `description` string field MUST be a minimum of `MinDescriptionFieldLength	`
 
 The `version` string field MUST be a valid Semantic Version string.
 
-The `supportEmail` string field MUST be a valid email address satisfying the following regex: `^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z0-9]{2,})$`.
+The `supportEmail` string field MUST be a valid email address satisfying the following regular expression rule: 
+
+```text
+^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z0-9]{2,})$
+```
 
 ```protobuf
 message MsgCreateCookbook {
@@ -74,8 +85,10 @@ message MsgCreateCookbook {
 }
 ```
 
-### `MsgUpdateCookbook`
+The message handling should fail if: 
+- the value of ID is already taken by another cookbook
 
+### `MsgUpdateCookbook`
 
 When updating a `Cookbook` the following fields may be modified:
 
@@ -87,7 +100,7 @@ When updating a `Cookbook` the following fields may be modified:
 - `costPerBlock`
 - `enabled`
 
-following the established regex restrictions.
+following the established regular expression rule restrictions.
 
 The `version` field MUST be greater than the current version when updating (ex. v0.1.1 > v0.1.0).
 
@@ -105,6 +118,10 @@ message MsgUpdateCookbook {
 }
 ```
 
+The message handling should fail if:
+- the cookbook specified by ID is not owned by the message creator address or does not exist
+- the version field is incorrectly updated
+
 `Cookbook`s may also be transferred.  The `recipient` of the transfer will become the new `Cookbook` owner 
 and will therefore control the creation of new `Recipe`s and collect future fees from executions and transfers.
 
@@ -120,6 +137,9 @@ message MsgTransferCookbook {
 }
 ```
 
+The message handling should fail if:
+- the cookbook specified by ID is not owned by the message creator address or does not exist
+
 ## Recipes
 
 `Recipe` objects are blueprints for `Execution` objects, specifying inputs (coins and `Item`s) and outputs (coins and `Item`) as well as logic and probabilities for execution.
@@ -129,11 +149,11 @@ message MsgTransferCookbook {
 The `cookbookID` string field MUST:
 
 - Point to an existing `Cookbook` that is owned by `Recipe.creator`.
-- Satisfy the following regex:  
+- Satisfy the following regular expression rule:  
 
-    ```text
-    ^[a-zA-Z_][a-zA-Z_0-9]*$
-    ```
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 The `ID` string field MUST satisfy the following regex:  
 
@@ -166,6 +186,10 @@ message MsgCreateRecipe {
   string extraInfo = 13;
 }
 ```
+
+The message handling should fail if:
+- the cookbook specified by cookbookID is not owned by the message creator address
+- the value of ID is already taken by another recipe
 
 ### `MsgUpdateRecipe`
 
@@ -204,6 +228,11 @@ message MsgUpdateRecipe {
 }
 ```
 
+The message handling should fail if:
+- the cookbook specified by cookbookID is not owned by the message creator address
+- the recipe specified by ID is not owned by the message creator address
+- the version field is incorrectly updated
+
 ## Executions
 
 `Execution` objects represent an instance of running the "program" that is specified by a `Recipe`. Execution is essentially a function
@@ -213,9 +242,17 @@ When an `Execution` is created, it is added to the pending list of executions in
 
 ### `MsgExecuteRecipe`
 
-The `cookbookID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`. 
+The `cookbookID` string field MUST satisfy the following regular expression rule:  
 
-The `recipeID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+``` 
+
+The `recipeID` string field MUST satisfy the following regular expression rule: 
+
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 The `Recipe` and `Cookbook` specified by `recipeID` and `cookbookID` MUST have the same owner address.
 
@@ -229,13 +266,20 @@ message MsgExecuteRecipe {
 }
 ```
 
+The message handling should fail if:
+- the cookbook specified by cookbookID does not exist or is disabled
+- the recipe specified by recipeID does not exist or is disabled
+- the account of the creator message address does not have sufficient coins to cover the recipe coinInputs
+- the items specified by itemIDs do not exist or are not owned by the message creator address
+- the itemIDs provided by the message creator address do not [satisfy](https://github.com/Pylons-tech/pylons/blob/e0cc654fed2be191b7d10735a6ef1705cb1996d6/x/pylons/keeper/msg_server_execute_recipe.go#L80) the message itemInputs 
+
 ### `MsgCompleteExecutionEarly`
 
 An `Execution` can be completed before block #`executionSubmissionHeight + recipe.blockInterval` by submitting the Tx corresponding to`MsgCompleteExecutionEarly` and paying a fee
 of:
 
 ```
-cookbook.costPerBlock * ((executionSubmissionHeight + recipe.blockInterval) - currentBlockHeightHeight )
+completeEarlyFee = cookbook.costPerBlock * ((executionSubmissionHeight + recipe.blockInterval) - currentBlockHeightHeight )
 ```
 <!-- describe what follows here, is this output?-->
 ```protobuf
@@ -244,6 +288,10 @@ message MsgCompleteExecutionEarly {
   string ID = 2;
 }
 ```
+
+The message handling should fail if:
+- the execution specified by ID does not exist or was not created by the message creator address
+- the account of the creator message address does not have sufficient coins to cover `completeEarlyFee`
 
 ## Items
 
@@ -255,7 +303,13 @@ When modifying an `Item`'s strings, only the fields in its `mutableStrings` fiel
 
 The "mutableStrings" are stored as a map with a `field` and a corresponding `value`.
 
-The `cookbookID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.  It MUST also point to an existing `Cookbook` that is owned by `Recipe.creator`.
+The `cookbookID` string field MUST satisfy the following regular expression rule:  
+
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```  
+
+It MUST also point to an existing `Cookbook` that is owned by `Recipe.creator`.
 
 The `ID` string field MUST be a valid 8 Byte base58 encoded unsigned integer ([encoding logic](https://github.com/Pylons-tech/pylons/blob/a5f1d165c41a3ab120f2997dd465b2685644b331/x/pylons/types/item.go#L14)).  
 
@@ -268,6 +322,9 @@ message MsgSetItemString {
   string value = 6;
 }
 ```
+
+The message handling should fail if:
+- the item specified by ID is not owned by the message creator address or does not exist
 
 ### `MsgSendItems`
 
@@ -284,6 +341,11 @@ message MsgSendItems {
 }
 ```
 
+The message handling should fail if:
+- an item in the items field does not exist or is not owned by the message creator
+- an item in the items field is not tradeable
+- the account of the creator message address does not have sufficient coins to cover the item transferFees
+
 ## Trades
 
 `Trade`s are posted to the blockchain when created.  They can then be queried and "fulfilled" in another Tx.
@@ -291,7 +353,11 @@ message MsgSendItems {
 
 ### `MsgCreateTrade`
 
-Each `cookbookID` string field of the `itemOutputs` field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+Each `cookbookID` string field of the `itemOutputs` field MUST satisfy the following regular expression rule:  
+
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 Each `ID` string field of the `itemOutputs` field MUST be a valid 8 Byte base58 encoded unsigned integer ([encoding logic](https://github.com/Pylons-tech/pylons/blob/a5f1d165c41a3ab120f2997dd465b2685644b331/x/pylons/types/item.go#L14)).
 
@@ -306,11 +372,25 @@ message MsgCreateTrade {
 }
 ```
 
+The message handling should fail if:
+- an item in the itemOutputs field does not exist or is not owned by the message creator
+- an item in the itemOutputs field is not tradeable
+- an `sdk.Coins` list in the coinInputs field cannot [cover](https://github.com/Pylons-tech/pylons/blob/e0cc654fed2be191b7d10735a6ef1705cb1996d6/x/pylons/keeper/msg_server_trade.go#L36) the fees of the itemOutputs items
+- the account of the creator message address does not have sufficient coins to cover the coinOutputs
+
 ### `MsgFulfillTrade`
 
-The `ID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+The `ID` string field MUST satisfy the following regular expression rule:
 
-Each `cookbookID` string field of the `items` field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
+
+Each `cookbookID` string field of the `items` field MUST satisfy the following regular expression rule:  
+
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 Each `ID` string field of the `items` field MUST be a valid 8-byte base58-encoded unsigned integer ([encoding logic](https://github.com/Pylons-tech/pylons/blob/a5f1d165c41a3ab120f2997dd465b2685644b331/x/pylons/types/item.go#L14)).
 
@@ -324,9 +404,22 @@ message MsgFulfillTrade {
 }
 ```
 
+The message handling should fail if:
+- the trade specified by ID does not exist
+- the coinInputsIndex value is larger than the number of coinInputs to choose from in the trade
+- an item from the items field is not owned by the message creator or does not exist
+- an item from the items field is not tradeable
+- the items provided by the message creator address do not [satisfy](https://github.com/Pylons-tech/pylons/blob/e0cc654fed2be191b7d10735a6ef1705cb1996d6/x/pylons/keeper/msg_server_fulfill_trade.go#L81) the message itemInputs
+- the `sdk.Coins` list in the coinOutputs field cannot [cover](https://github.com/Pylons-tech/pylons/blob/e0cc654fed2be191b7d10735a6ef1705cb1996d6/x/pylons/keeper/msg_server_fulfill_trade.go#L94) the fees of all items in the items field
+- the selected coinInputs `sdk.Coins` list cannot [cover](https://github.com/Pylons-tech/pylons/blob/e0cc654fed2be191b7d10735a6ef1705cb1996d6/x/pylons/keeper/msg_server_fulfill_trade.go#L116) the fees of all items in the trade itemOutputs
+
 ### `MsgCancelTrade`
 
-The `ID` string field MUST satisfy the following regex:  `^[a-zA-Z_][a-zA-Z_0-9]*$`.
+The `ID` string field MUST satisfy the following regular expression rule:
+
+```text
+^[a-zA-Z_][a-zA-Z_0-9]*$
+```
 
 ```protobuf
 message MsgCancelTrade {
@@ -335,11 +428,12 @@ message MsgCancelTrade {
 }
 ```
 
+The message handling should fail if:
+- the trade specified by ID does not exist or was not created by the message creator
 
 ## Purchases
 
 ### `MsgGoogleInAppPurchaseGetCoins`
-
 
 ```protobuf
 message MsgGoogleInAppPurchaseGetCoins {
@@ -350,6 +444,10 @@ message MsgGoogleInAppPurchaseGetCoins {
   string signature = 5;
 }
 ```
+
+The message handling should fail if:
+- a Google IAP Order specified by the purchaseToken does not exist
+- the Google IAP signature is invalid
 
 <!--
 TODO add stripe
