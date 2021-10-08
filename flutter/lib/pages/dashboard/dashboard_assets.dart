@@ -1,6 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_white_button.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -50,11 +51,21 @@ class _DashboardAssetsState extends State<DashboardAssets> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text("Address: $address".tr(),
-                    style: const TextStyle(color: Colors.black, fontSize: 18)),
-              ],
+            Card(
+              child:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text("Address".tr(),style: const TextStyle(color: Colors.black, fontSize: 18)),
+                    Text(address,style: const TextStyle(color: Colors.black, fontSize: 18)),
+                    IconButton(
+                        icon: const Icon(Icons.content_copy),
+                        onPressed: () {
+                          Clipboard.setData(ClipboardData(text: address));
+                        },
+                    )
+                  ],
+                ),
             ),
             Row(
               children: <Widget>[
