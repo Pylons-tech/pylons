@@ -24,37 +24,27 @@ class _RoutingPageState extends State<RoutingPage> {
   Future<void> _loadWallets() async {
     final store = PylonsApp.walletsStore;
     await store.loadWallets();
-    //TODO: Create an option for the user to change to a different wallet.
     if (store.loadWalletsFailure.value == null) {
       //Loads the last used wallet.
-      SharedPreferences.getInstance().then((prefs) {
-        final currentWallet = prefs.getString("pylons:current_wallet");
-        if (currentWallet == null) {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => PresentingOnboardPage()));
-        } else {
-          PylonsApp.currentWallet = PylonsApp.walletsStore.wallets.value
-              .firstWhere((wallet) => wallet.name == currentWallet);
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (_) => Dashboard()));
-        }
-      });
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => PresentingOnboardPage()));
+      } else {
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) => Dashboard()));
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kDarkBG,
-      body: ContentStateSwitcher(
-        isLoading: PylonsApp.walletsStore.areWalletsLoading.value,
-        isError: PylonsApp.walletsStore.loadWalletsFailure.value != null,
-        errorChild: CosmosErrorView(
-          title: "something_wrong".tr(),
-          message: "wallet_retrieving_err_msg".tr(),
-        ),
-        contentChild: const SizedBox(),
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: kDarkBG,
+    body: ContentStateSwitcher(
+      isLoading: PylonsApp.walletsStore.areWalletsLoading.value,
+      isError: PylonsApp.walletsStore.loadWalletsFailure.value != null,
+      errorChild: CosmosErrorView(
+        title: "something_wrong".tr(),
+        message: "wallet_retrieving_err_msg".tr(),
       ),
-    );
-  }
-}
+      contentChild: const SizedBox(),
+    ),
+  );
+}}
