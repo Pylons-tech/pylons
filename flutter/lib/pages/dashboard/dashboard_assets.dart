@@ -16,6 +16,7 @@ class _DashboardAssetsState extends State<DashboardAssets> {
   @override
   void initState() {
     super.initState();
+    _buildAssetsList();
   }
 
   var _assetsList = <Widget>[];
@@ -23,31 +24,47 @@ class _DashboardAssetsState extends State<DashboardAssets> {
   @override
   Widget build(BuildContext context) {
     final address = PylonsApp.currentWallet.publicAddress;
-    _buildAssetsList();
+
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Balances'),
+        actions:  [
+          IconButton(
+              icon: const Icon(Icons.cached_outlined), onPressed: () {
+            _buildAssetsList();
+          },)
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Card(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text("Address".tr(),
-                      style:
-                      const TextStyle(color: Colors.black, fontSize: 18)),
-                  Text(address,
-                      style:
-                      const TextStyle(color: Colors.black, fontSize: 18)),
-                  IconButton(
-                    icon: const Icon(Icons.content_copy),
-                    onPressed: () {
-                      Clipboard.setData(ClipboardData(text: address));
-                    },
+                  Expanded(
+                    child
+                        : Text("Address".tr(),
+                        style:
+                        const TextStyle(color: Colors.black, fontSize: 18)),
+                  ),
+                  Expanded(
+                    flex: 2,
+
+                    child: Text(address,
+                        style:
+                        const TextStyle(color: Colors.black, fontSize: 18)),
+                  ),
+                  Expanded(
+                    child: IconButton(
+                      icon: const Icon(Icons.content_copy),
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: address));
+                      },
+                    ),
                   )
                 ],
               ),
