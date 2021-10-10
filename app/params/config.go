@@ -39,17 +39,17 @@ func SetupDenomsAndPrefixes() {
 
 func RegisterDenoms() {
 	// register pylon
-	err := sdk.RegisterDenom(PylonsHumanCoinUnit, sdk.OneDec())
-	if err != nil {
-		panic(err)
-	}
-	err = sdk.RegisterDenom(PylonsBaseCoinUnit, sdk.NewDecWithPrec(1, PylonsExponent))
-	if err != nil {
-		panic(err)
-	}
+	// err := sdk.RegisterDenom(PylonsHumanCoinUnit, sdk.OneDec())
+	// if err != nil {
+	//	panic(err)
+	// }
+	// err = sdk.RegisterDenom(PylonsBaseCoinUnit, sdk.NewDecWithPrec(1, PylonsExponent))
+	// if err != nil {
+	//	panic(err)
+	// }
 
 	// register bedrock
-	err = sdk.RegisterDenom(StakingHumanCoinUnit, sdk.OneDec())
+	err := sdk.RegisterDenom(StakingHumanCoinUnit, sdk.OneDec())
 	if err != nil {
 		panic(err)
 	}

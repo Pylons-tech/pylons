@@ -1,11 +1,24 @@
+genesis:
+  chain_id: "pylons"
+  app_state:
+    staking:
+      params:
+        bond_denom: "ubedrock"
+    crisis:
+      constant_fee:
+        denom: ubedrock
+    gov:
+      deposit_params:
+        min_deposit:
+          denom: ubedrock
 accounts:
   - name: alice
-    coins: ["20000000000upylon", "200000000stake"]
+    coins: ["20000000000upylon", "200000000ubedrock"]
   - name: bob
-    coins: ["10000000000upylon", "100000000stake"]
+    coins: ["10000000000upylon", "100000000ubedrock"]
 validator:
   name: alice
-  staked: "100000000stake"
+  staked: "100000000ubedrock"
 client:
   vuex:
     path: "vue/src/store"
@@ -13,5 +26,5 @@ client:
     path: "docs/static/openapi.yml"
 faucet:
   name: bob
-  coins: [ "10000000000upylon", "100000000stake" ]
+  coins: [ "10000000000upylon", "100000000ubedrock" ]
 
