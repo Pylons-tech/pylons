@@ -66,7 +66,7 @@ class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
               ),
               const VerticalSpace(10),
               SizedBox(
-                height: 300,
+                height: 301,
                 child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: 15,

@@ -21,6 +21,7 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0),
       ),
@@ -72,15 +73,16 @@ class _PylonsDashboardFilterBoxState extends State<PylonsDashboardFilterBox> {
           Row(
             children:[
               Expanded(
+                flex: 1,
                 child: SizedBox(
-                height: 35,
+                height: 44,
                 child: _PylonsGreyButton(onTap: (){}, text: "cancel".tr(),),
               ),),
-             const HorizontalSpace(20),
+             const HorizontalSpace(15),
              Expanded(
                flex: 2,
                child: SizedBox(
-                 height: 35,
+                 height: 44,
                    child: PylonsBlueButton(onTap: (){}, text: "apply".tr(),)),
              ),
 
@@ -111,14 +113,13 @@ class _PylonsGreyButton extends StatelessWidget {
         primary: const Color(0xFFC4C4C4),
       ),
       child: SizedBox(
-        height: 50,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-                text,
-                style: const TextStyle(fontSize: 15, color: Colors.white)),
-          ],
+        height: 43,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 12.0, bottom: 13),
+          child: Text(
+              text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 14, color: Colors.white)),
         ),
       ),
     );

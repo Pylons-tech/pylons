@@ -126,7 +126,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                         MaterialPageRoute(builder: (_) => EditProfileScreen()));
                   },
                   style: ElevatedButton.styleFrom(
-                      maximumSize: const Size(138, 36),
+                      minimumSize: const Size(138, 36),
                       primary: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),
