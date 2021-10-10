@@ -13,9 +13,10 @@ class GalleryTabLikeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 10),
+        padding: const EdgeInsets.only(top: 0),
         //margin: const EdgeInsets.only(bottom: 100.0),
         child: ListView.builder(
+          // physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           shrinkWrap: true,
             itemCount: 10,

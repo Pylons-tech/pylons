@@ -5,6 +5,7 @@ import 'package:getwidget/components/search_bar/gf_search_bar.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 import 'package:pylons_wallet/pages/detail/detail_screen.dart';
+import 'package:pylons_wallet/utils/screen_size_utils.dart';
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = ScreenSizeUtil(context);
     return CustomScrollView(
       slivers: <Widget>[
         SliverAppBar(
@@ -41,7 +43,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             child: GFSearchBar(
               searchQueryBuilder: (query, list) {
                 return list
-                    .where((item) => item!
+                    .where((item) => item
                         .toString()
                         .toLowerCase()
                         .contains(query.toLowerCase()))
@@ -49,7 +51,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               },
               overlaySearchListItemBuilder: (item) {
                 return Container(
-                    width: MediaQuery.of(context).size.width,
+                    width: screenSize.width(),
                     padding: const EdgeInsets.all(8),
                     child: Text(item.toString(),
                         style: const TextStyle(fontSize: 18)));

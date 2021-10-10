@@ -60,7 +60,7 @@ class NewUserFormState extends State<NewUserForm> {
                   PylonsTextInput(controller: usernameController, label: "user_name".tr()),
                  const VerticalSpace(50),
                   PylonsBlueButton(
-                      onTap : () => widget.onValidate(usernameController.value.text),
+                      onTap : onStartPylonsPressed,
                       text: "start_pylons".tr()),
                   const VerticalSpace(30)
                 ],
@@ -69,6 +69,21 @@ class NewUserFormState extends State<NewUserForm> {
         ],
       ),
     );
+  }
+
+  void onStartPylonsPressed(){
+
+    if(usernameController.text.isEmpty){
+
+
+      ScaffoldMessenger.of(context)..hideCurrentSnackBar()
+        ..showSnackBar(const SnackBar(content: Text('User name is Empty'),));
+      Navigator.of(context).pop();
+      return;
+    }
+
+    widget.onValidate(usernameController.value.text);
+
   }
 
 }

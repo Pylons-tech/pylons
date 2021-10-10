@@ -59,20 +59,7 @@ class PresentingOnboardPage extends StatelessWidget {
           const VerticalSpace(10),
           PylonsBlueButton(
             onTap: () {
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                    ),
-                  ),
-                  builder: (context) => Wrap(children: [
-                        NewUserForm(
-                            onValidate: (userName) =>
-                                _registerNewUser(userName, context))
-                      ]));
+              onCreateAccountPressed(context);
             },
             text: "create_an_account".tr(),
           ),
@@ -97,17 +84,30 @@ class PresentingOnboardPage extends StatelessWidget {
     final _mnemonic = generateMnemonic();
     final _username = userName;
 
-    await PylonsApp.walletsStore
-        .importAlanWallet(_mnemonic, _username)
-        .then((value) {
-      //TODO: refactoring : create an util class to read / write values in the preferences store.
-      SharedPreferences.getInstance()
-          .then((prefs) => prefs.setString("pylons:current_wallet", _username));
-      PylonsApp.currentWallet = value;
+    var value = await PylonsApp.walletsStore.importAlanWallet(_mnemonic, _username);
+    //TODO: refactoring : create an util class to read / write values in the preferences store.
+    SharedPreferences.getInstance().then((prefs) => prefs.setString("pylons:current_wallet", _username));
+    PylonsApp.currentWallet = value;
+    print("Wallet add: ${value.publicAddress} ${value.name} ${value.chainId}");
 
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
-    });
+
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
+  }
+
+  void onCreateAccountPressed(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft:  Radius.circular(30.0),
+            topRight:  Radius.circular(30.0),
+          ),
+        ),
+        builder: (context) =>  Wrap(
+            children: [NewUserForm(onValidate: (userName) => _registerNewUser(userName,context))]
+        )
+    );
   }
 }
 

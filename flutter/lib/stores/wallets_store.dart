@@ -1,7 +1,6 @@
 import 'package:alan/alan.dart' as alan;
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/entities/balance.dart';
-import 'package:pylons_wallet/transactions/pylons_balance.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
@@ -31,23 +30,12 @@ class WalletsStore {
 
   Future<void> loadWallets() async {
     areWalletsLoading.value = true;
-    (await _transactionSigningGateway.getWalletsList()).fold(
+    final walletsResultEither = await _transactionSigningGateway.getWalletsList();
+    walletsResultEither.fold(
       (fail) => loadWalletsFailure.value = fail,
       (newWallets) => wallets.value = newWallets,
     );
     areWalletsLoading.value = false;
-  }
-
-  Future<void> getBalances(String walletAddress) async {
-    isError.value = false;
-    isBalancesLoading.value = true;
-    try {
-      final balance = await PylonsBalance(baseEnv).getBalance(walletAddress);
-      balancesList.value = [balance];
-    } catch (error) {
-      isError.value = false;
-    }
-    isBalancesLoading.value = false;
   }
 
   Future<WalletPublicInfo> importAlanWallet(
@@ -57,7 +45,7 @@ class WalletsStore {
     final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
     final creds = AlanPrivateWalletCredentials(
       publicInfo: WalletPublicInfo(
-        chainId: 'cosmos',
+        chainId: 'pylo',
         walletId: userName,
         name: userName,
         publicAddress: wallet.bech32Address,

@@ -13,13 +13,25 @@ class PylonsBalance {
 
   PylonsBalance(this.baseEnv);
 
-  Future<Balance> getBalance(String walletAddress) async {
+  Future<List<Balance>> getBalance(String walletAddress) async {
     final uri = '${baseEnv.baseApiUrl}/cosmos/bank/v1beta1/balances/$walletAddress';
     final response = await http.get(Uri.parse(uri));
-    final map = jsonDecode(response.body) as Map<String, dynamic>;
-    if(map['balances'].length!=0){
-      return Balance.fromJSON(map['balances'][0] as Map<String,dynamic>);
+    final balancesResponse = jsonDecode(response.body) as Map<String, dynamic>;
+    final balancesList = balancesResponse["balances"] as List;
+    final balances = <Balance>[];
+    if(balancesList.isEmpty){
+      balances.add(
+        Balance(denom: const Denom("upylon"), amount: Amount(Decimal.zero))
+      );
     }
-    return Balance(denom: const Denom("pylon"), amount: Amount(Decimal.zero));
+    for (final balance in balancesList) {
+      balances.add(
+          Balance(
+            denom: Denom(balance["denom"] as String),
+            amount: Amount(Decimal.parse(balance["amount"] as String))
+          )
+      );
+    }
+    return balances;
   }
 }

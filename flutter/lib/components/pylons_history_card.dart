@@ -18,7 +18,7 @@ class PylonsHistoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
       child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
