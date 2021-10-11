@@ -44,9 +44,6 @@ UNAME_M ?= $(shell uname -m)
 GOPATH ?= $(shell $(GO) env GOPATH)
 GITHUBDIR := $(GOPATH)$(FS)src$(FS)github.com
 
-BUF_VERSION ?= 0.11.0
-
-TOOLS_DESTDIR  ?= $(GOPATH)/bin
 RUNSIM         = $(TOOLS_DESTDIR)/runsim
 
 # Install the runsim binary with a temporary workaround of entering an outside
@@ -59,7 +56,4 @@ $(RUNSIM):
 	@echo "Installing runsim..."
 	@(cd /tmp && go install github.com/cosmos/tools/cmd/runsim@master)
 
-tools-clean:
-	rm -f $(RUNSIM)
-
-.PHONY: tools-clean  runsim
+.PHONY:  runsim
