@@ -87,6 +87,17 @@ build: go.sum
 build-linux: go.sum
 	LEDGER_ENABLED=false GOOS=linux GOARCH=amd64 $(MAKE) build
 
+build-reproducible: go.sum
+	$(DOCKER) rm latest-build || true
+	$(DOCKER) run --volume=$(CURDIR):/sources:ro \
+        --env TARGET_PLATFORMS='linux/amd64 darwin/amd64 linux/arm6' \
+        --env APP=pylonsd \
+        --env VERSION=$(VERSION) \
+        --env COMMIT=$(COMMIT) \
+        --env LEDGER_ENABLED=$(LEDGER_ENABLED) \
+        --name latest-build cosmossdk/rbuilder:latest
+	$(DOCKER) cp -a latest-build:/home/builder/artifacts/ $(CURDIR)/
+
 clean:
 	@rm -rf $(ARTIFACT_DIR)
 
@@ -95,7 +106,7 @@ go.sum: go.mod
 	@go mod verify
 	@go mod tidy -go=1.17
 
-.PHONY: install go.sum clean build build-linux
+.PHONY: install go.sum clean build build-linux build-reproducible
 
 ###############################################################################
 ###                               Commands                                  ###
