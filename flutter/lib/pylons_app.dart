@@ -8,6 +8,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
 class PylonsApp extends StatefulWidget {
   static late TransactionSigningGateway signingGateway;
@@ -34,6 +35,7 @@ class _PylonsAppState extends State<PylonsApp> {
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
