@@ -42,30 +42,26 @@ class _DashboardAssetsState extends State<DashboardAssets> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Card(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Expanded(
-                    child
-                        : Text("Address".tr(),
-                        style:
-                        const TextStyle(color: Colors.black, fontSize: 18)),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text("Address".tr(), style: const TextStyle(color: Colors.black, fontSize: 18)),
+                      ),
+                      IconButton(
+                          icon: const Icon(Icons.content_copy),
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: address));
+                          }
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 2,
+                  Text(address,
+                      style:
+                      const TextStyle(color: Colors.black, fontSize: 18)),
 
-                    child: Text(address,
-                        style:
-                        const TextStyle(color: Colors.black, fontSize: 18)),
-                  ),
-                  Expanded(
-                    child: IconButton(
-                      icon: const Icon(Icons.content_copy),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: address));
-                      },
-                    ),
-                  )
                 ],
               ),
             ),
