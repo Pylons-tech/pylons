@@ -130,19 +130,19 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
 
 
     // TODO enable it later causing issue in testing
-    // const interval =  Duration(seconds: 5);
-    // var timer = Timer.periodic(interval, (Timer timer) {
-    //   if (_currentPage <= 2) {
-    //     _currentPage++;
-    //   } else {
-    //     _currentPage = 0;
-    //   }
-    //   _controller.animateToPage(
-    //     _currentPage,
-    //     duration: const Duration(milliseconds: 1000),
-    //     curve: Curves.easeIn,
-    //   );
-    // });
+    const interval =  Duration(seconds: 5);
+    var timer = Timer.periodic(interval, (Timer timer) {
+      if (_currentPage <= 2) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      _controller.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeIn,
+      );
+    });
   }
 
   @override

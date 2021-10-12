@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
@@ -28,7 +30,12 @@ class _PylonsAppState extends State<PylonsApp> {
   @override
   void initState() {
     super.initState();
-    ipcEngine.init();
+
+
+
+      ipcEngine.init();
+
+
   }
 
   @override
@@ -43,6 +50,7 @@ class _PylonsAppState extends State<PylonsApp> {
       title: "app_title".tr(),
       theme: PylonsAppTheme().buildAppTheme(),
       initialRoute: '/',
+
       routes: {
         '/': (context) => const RoutingPage(),
       },

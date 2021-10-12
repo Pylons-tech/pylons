@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/pylons_app.dart';
@@ -17,6 +18,8 @@ class IPCEngine {
 
   /// This method initiate the IPC Engine
   Future<bool> init() async {
+    log('init', name: '[IPCEngine : init]');
+
     await handleInitialLink();
     setUpListener();
     return true;
@@ -24,7 +27,6 @@ class IPCEngine {
 
   /// This method setups the listener which receives
   void setUpListener() {
-    print('Init done');
     _sub = linkStream.listen((String? link) {
       if (link == null) {
         return;
@@ -38,11 +40,18 @@ class IPCEngine {
 
   /// This method is used to handle the uni link when the app first opens
   Future<void> handleInitialLink() async {
+
+
+    /// This will handle the initial delay when the app first time opens
+    await Future.delayed(const Duration(seconds: 2));
+
     final initialLink = await getInitialLink();
 
-    if (initialLink != null) {
-      handleLink(initialLink);
+    log('$initialLink', name: '[IPCEngine : handleInitialLink]');
+    if (initialLink == null) {
+      return;
     }
+    handleLink(initialLink);
   }
 
   /// This method encodes the message that we need to send to wallet
@@ -65,6 +74,9 @@ class IPCEngine {
   /// [Input] : [link] contains the link that is received from the 3rd party apps.
   /// [Output] : [List] contains the decoded message
   Future<List> handleLink(String link) async {
+
+    log(link, name: '[IPCEngine : handleLink]');
+
     final getMessage = decodeMessage(link.split('/').last);
 
     if (systemHandlingASignal) {

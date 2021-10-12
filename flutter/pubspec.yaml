@@ -46,6 +46,11 @@ dependencies:
   # For dependency injection
   get_it: ^7.2.0
 
+
+
+
+
+
   cosmos_ui_components:
     git:
       url: https://github.com/tendermint/flutter.git
