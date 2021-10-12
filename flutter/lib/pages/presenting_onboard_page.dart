@@ -121,11 +121,17 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
 
   var _currentPage = 0;
 
+
+
   @override
   void initState() {
     super.initState();
-    const interval = Duration(seconds: 5);
-    Timer.periodic(interval, (Timer timer) {
+
+
+
+    // TODO enable it later causing issue in testing
+    const interval =  Duration(seconds: 5);
+    var timer = Timer.periodic(interval, (Timer timer) {
       if (_currentPage <= 2) {
         _currentPage++;
       } else {

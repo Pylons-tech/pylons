@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:pylons_wallet/components/pylons_app_theme.dart';
@@ -8,6 +10,7 @@ import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 
+GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
 class PylonsApp extends StatefulWidget {
   static late TransactionSigningGateway signingGateway;
@@ -27,13 +30,19 @@ class _PylonsAppState extends State<PylonsApp> {
   @override
   void initState() {
     super.initState();
-    ipcEngine.init();
+
+
+
+      ipcEngine.init();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -41,6 +50,7 @@ class _PylonsAppState extends State<PylonsApp> {
       title: "app_title".tr(),
       theme: PylonsAppTheme().buildAppTheme(),
       initialRoute: '/',
+
       routes: {
         '/': (context) => const RoutingPage(),
       },
