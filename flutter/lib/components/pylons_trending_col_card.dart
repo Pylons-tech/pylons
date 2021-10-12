@@ -18,7 +18,6 @@ class PylonsTrendingColCard extends StatelessWidget {
         padding: EdgeInsets.zero,
         width: 320,
         child:Column(
-
             children: [
               Row(
                   children: [

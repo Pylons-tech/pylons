@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class PylonsAppTheme extends CosmosAppTheme {
 
-
   static const TextStyle HOME_TITLE = TextStyle(fontFamily: 'Inter', fontSize: 22);
   static const TextStyle HOME_LABEL = TextStyle(fontFamily: 'Inter', fontSize: 14, color: Colors.grey);
 
@@ -32,7 +31,8 @@ class PylonsAppTheme extends CosmosAppTheme {
         headline2: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w500,
-          fontFamily: 'Inter'
+          fontFamily: 'Inter',
+          fontStyle: FontStyle.normal
         ),
         subtitle1: TextStyle(
           fontSize: 26,
@@ -46,7 +46,7 @@ class PylonsAppTheme extends CosmosAppTheme {
         ),
         bodyText1: TextStyle(
           fontSize: 14,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.normal,
           fontFamily: 'Inter'
         ),
       )

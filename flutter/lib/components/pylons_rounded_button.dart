@@ -42,9 +42,11 @@ class PylonsRoundedButton extends StatelessWidget {
         return [
           Image(image: glyph),
           const HorizontalSpace(10),
-          Text(
-              text,
-              style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
+          Expanded(
+            child: Text(
+                text,
+                style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
+          ),
         ];
       } else {
         return [
