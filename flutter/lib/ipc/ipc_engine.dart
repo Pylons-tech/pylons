@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:pylons_wallet/ipc/handler/handler_factory.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,7 +90,7 @@ class IPCEngine {
 
     systemHandlingASignal = true;
 
-    await showApprovalDialog(key: getMessage[1], sender: getMessage.first);
+    await showApprovalDialog(key: getMessage[1], sender: getMessage.first, wholeMessage: getMessage, );
     systemHandlingASignal = false;
     return getMessage;
   }
@@ -107,7 +109,7 @@ class IPCEngine {
   /// This is a temporary dialog for the proof of concept.
   /// [Input] : [sender] The sender of the signal
   /// [Output] : [key] The signal kind against which the signal is sent
-  Future showApprovalDialog({required String sender, required String key}) {
+  Future showApprovalDialog({required String sender, required String key, required List<String> wholeMessage}) {
     return showDialog(
         context: navigatorKey.currentState!.overlay!.context,
         builder: (_) => AlertDialog(
@@ -117,9 +119,16 @@ class IPCEngine {
                   onPressed: () async {
                     Navigator.of(_).pop();
 
-                    final encodedMessage = encodeMessage([key, 'OK']);
 
-                    await dispatchUniLink('pylons://$sender/$encodedMessage');
+                    final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(wholeMessage).handle();
+
+                    await dispatchUniLink(handlerMessage);
+
+
+                    //
+                    // final encodedMessage = encodeMessage([key, 'OK']);
+                    //
+                    // await dispatchUniLink('pylons://$sender/$encodedMessage');
                   },
                   child: const Text('Approval'),
                 )
