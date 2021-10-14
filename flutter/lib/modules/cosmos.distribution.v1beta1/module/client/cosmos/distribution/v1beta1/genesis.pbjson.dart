@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: cosmos/distribution/v1beta1/genesis.proto
 //
-// @dart = 2.3
+
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 const DelegatorWithdrawInfo$json = const {
@@ -80,7 +80,15 @@ const GenesisState$json = const {
     const {'1': 'delegator_withdraw_infos', '3': 3, '4': 3, '5': 11, '6': '.cosmos.distribution.v1beta1.DelegatorWithdrawInfo', '8': const {}, '10': 'delegatorWithdrawInfos'},
     const {'1': 'previous_proposer', '3': 4, '4': 1, '5': 9, '8': const {}, '10': 'previousProposer'},
     const {'1': 'outstanding_rewards', '3': 5, '4': 3, '5': 11, '6': '.cosmos.distribution.v1beta1.ValidatorOutstandingRewardsRecord', '8': const {}, '10': 'outstandingRewards'},
-    const {'1': 'validator_accumulated_commissions', '3': 6, '4': 3, '5': 11, '6': '.cosmos.distribution.v1beta1.ValidatorAccumulatedCommissionRecord', '8': const {}, '10': 'validatorAccumulatedCommissions'},
+    const {
+      '1': 'validator_accumulated_commissions',
+      '3': 6,
+      '4': 3,
+      '5': 11,
+      '6': '.cosmos.distribution.v1beta1.ValidatorAccumulatedCommissionRecord',
+      '8': const {},
+      '10': 'validatorAccumulatedCommissions'
+    },
     const {'1': 'validator_historical_rewards', '3': 7, '4': 3, '5': 11, '6': '.cosmos.distribution.v1beta1.ValidatorHistoricalRewardsRecord', '8': const {}, '10': 'validatorHistoricalRewards'},
     const {'1': 'validator_current_rewards', '3': 8, '4': 3, '5': 11, '6': '.cosmos.distribution.v1beta1.ValidatorCurrentRewardsRecord', '8': const {}, '10': 'validatorCurrentRewards'},
     const {'1': 'delegator_starting_infos', '3': 9, '4': 3, '5': 11, '6': '.cosmos.distribution.v1beta1.DelegatorStartingInfoRecord', '8': const {}, '10': 'delegatorStartingInfos'},
@@ -88,4 +96,3 @@ const GenesisState$json = const {
   ],
   '7': const {},
 };
-

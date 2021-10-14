@@ -23,16 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
     'following'.tr(),
   ];
 
-  static final Map<String, Widget> _pages = {
-    'my_activity'.tr(): const HomeActivityWidget(),
-    'recommended'.tr(): const HomeRecommendationWidget(),
-    'following'.tr(): const HomeFollowingWidget()
-  };
+  static final Map<String, Widget> _pages = {'my_activity'.tr(): const HomeActivityWidget(), 'recommended'.tr(): const HomeRecommendationWidget(), 'following'.tr(): const HomeFollowingWidget()};
 
   DateTime _date = DateTime(2020, 11, 17);
 
   Future<void> _selectDate() async {
-    final  newDate = await showDatePicker(
+    final newDate = await showDatePicker(
       context: context,
       initialDate: _date,
       firstDate: DateTime(2017),
@@ -102,10 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
           forceElevated: true,
           collapsedHeight: kAppBarSize,
           backgroundColor: Colors.white,
-          leading: IconButton(
-              onPressed: () {},
-              icon: const ImageIcon(AssetImage('assets/icons/sort.png'),
-                  size: kIconSize, color: kSelectedIcon)),
+          leading: IconButton(onPressed: () {}, icon: const ImageIcon(AssetImage('assets/icons/sort.png'), size: kIconSize, color: kSelectedIcon)),
           actions: [
             IconButton(
                 icon: const ImageIcon(
@@ -114,10 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: kSelectedIcon,
                 ),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const NotificationWidget()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationWidget()));
                 })
           ],
           bottom: PreferredSize(
@@ -128,20 +118,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       DropdownButton<String>(
                         value: dropdownValue,
-                        icon: const Icon(Icons.keyboard_arrow_down,
-                            size: 24, color: kSelectedIcon),
+                        icon: const Icon(Icons.keyboard_arrow_down, size: 24, color: kSelectedIcon),
                         elevation: 16,
                         underline: const SizedBox(),
                         focusColor: const Color(0xFF1212C4),
-                        style: const TextStyle(
-                            color: kSelectedIcon, fontSize: 14),
+                        style: const TextStyle(color: kSelectedIcon, fontSize: 14),
                         onChanged: (String? data) {
                           setState(() {
                             dropdownValue = data!;
                           });
                         },
-                        items: spinnerItems
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -158,10 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         )
                       ),*/
                       const Spacer(),
-                      IconButton(
-                          icon: const Icon(Icons.calendar_today_rounded,
-                              size: kSmallIconSize, color: kUnselectedIcon),
-                          onPressed: _selectDate),
+                      IconButton(icon: const Icon(Icons.calendar_today_rounded, size: kSmallIconSize, color: kUnselectedIcon), onPressed: _selectDate),
                       IconButton(
                         icon: const ImageIcon(
                           AssetImage('assets/icons/filter.png'),

@@ -7,7 +7,9 @@ class VerticalSpace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return  SizedBox(height: height,);
+    return SizedBox(
+      height: height,
+    );
   }
 }
 
@@ -18,7 +20,8 @@ class HorizontalSpace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return SizedBox(width: width,);
+    return SizedBox(
+      width: width,
+    );
   }
 }
-

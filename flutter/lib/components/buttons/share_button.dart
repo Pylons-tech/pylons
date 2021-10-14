@@ -13,12 +13,12 @@ class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: onTap,
-        icon: const Icon(
-          Icons.share_outlined,
-          size: 20,
-          color: kSelectedIcon,
-        ),
+      onPressed: onTap,
+      icon: const Icon(
+        Icons.share_outlined,
+        size: 20,
+        color: kSelectedIcon,
+      ),
     );
   }
 }

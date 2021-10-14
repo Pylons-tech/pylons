@@ -51,8 +51,7 @@ class PresentingOnboardPage extends StatelessWidget {
                       topRight: Radius.circular(30.0),
                     ),
                   ),
-                  builder: (context) =>
-                      Wrap(children: const [ImportFromGoogleForm()]));
+                  builder: (context) => Wrap(children: const [ImportFromGoogleForm()]));
             },
             text: "import_an_account".tr(),
           ),
@@ -81,7 +80,7 @@ class PresentingOnboardPage extends StatelessWidget {
 
   /// Create the new wallet and associate the choosen username with it.
   Future _registerNewUser(String userName, BuildContext context) async {
-    final _mnemonic = generateMnemonic();
+    final _mnemonic = await generateMnemonic();
     final _username = userName;
 
     var value = await PylonsApp.walletsStore.importAlanWallet(_mnemonic, _username);
@@ -89,7 +88,6 @@ class PresentingOnboardPage extends StatelessWidget {
     SharedPreferences.getInstance().then((prefs) => prefs.setString("pylons:current_wallet", _username));
     PylonsApp.currentWallet = value;
     print("Wallet add: ${value.publicAddress} ${value.name} ${value.chainId}");
-
 
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
   }
@@ -100,14 +98,11 @@ class PresentingOnboardPage extends StatelessWidget {
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topLeft:  Radius.circular(30.0),
-            topRight:  Radius.circular(30.0),
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
           ),
         ),
-        builder: (context) =>  Wrap(
-            children: [NewUserForm(onValidate: (userName) => _registerNewUser(userName,context))]
-        )
-    );
+        builder: (context) => Wrap(children: [NewUserForm(onValidate: (userName) => _registerNewUser(userName, context))]));
   }
 }
 
@@ -121,16 +116,12 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
 
   var _currentPage = 0;
 
-
-
   @override
   void initState() {
     super.initState();
 
-
-
     // TODO enable it later causing issue in testing
-    const interval =  Duration(seconds: 5);
+    const interval = Duration(seconds: 5);
     var timer = Timer.periodic(interval, (Timer timer) {
       if (_currentPage <= 2) {
         _currentPage++;
@@ -173,23 +164,22 @@ class Page1 extends StatelessWidget {
     return Column(children: <Widget>[
       const Expanded(
         child: Image(
-          image: AssetImage('assets/images/image_001.png',),
+          image: AssetImage(
+            'assets/images/image_001.png',
+          ),
         ),
       ),
-      const SizedBox(height: 29,),
+      const SizedBox(
+        height: 29,
+      ),
       Text(
         "manage_your_nft".tr(),
-        style: Theme.of(context)
-            .textTheme
-            .headline2!
-            .copyWith(color: const Color(0xFF333333)),
+        style: Theme.of(context).textTheme.headline2!.copyWith(color: const Color(0xFF333333)),
       ),
-      Text("pylons_infrastructure".tr(),
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: const Color(0xFF616161))),
-      const SizedBox(height: 38,),
+      Text("pylons_infrastructure".tr(), style: Theme.of(context).textTheme.bodyText1!.copyWith(color: const Color(0xFF616161))),
+      const SizedBox(
+        height: 38,
+      ),
     ]);
   }
 }
@@ -203,23 +193,15 @@ class Page2 extends StatelessWidget {
           image: AssetImage('assets/images/image_002.png'),
         ),
       ),
-      const SizedBox(height: 29,),
-      Text("sell_and_buy_artworks".tr(),
-          style: Theme.of(context)
-              .textTheme
-              .headline2!
-              .copyWith(color: const Color(0xFF333333))),
-      Text("transactions_free".tr(),
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: const Color(0xFF616161))),
-      Text("easy_for_everyone".tr(),
-          style: Theme.of(context)
-              .textTheme
-              .bodyText1!
-              .copyWith(color: const Color(0xFF616161))),
-      const SizedBox(height: 19,),
+      const SizedBox(
+        height: 29,
+      ),
+      Text("sell_and_buy_artworks".tr(), style: Theme.of(context).textTheme.headline2!.copyWith(color: const Color(0xFF333333))),
+      Text("transactions_free".tr(), style: Theme.of(context).textTheme.bodyText1!.copyWith(color: const Color(0xFF616161))),
+      Text("easy_for_everyone".tr(), style: Theme.of(context).textTheme.bodyText1!.copyWith(color: const Color(0xFF616161))),
+      const SizedBox(
+        height: 19,
+      ),
     ]);
   }
 }
@@ -235,14 +217,13 @@ class Page3 extends StatelessWidget {
           alignment: Alignment.bottomCenter,
         ),
       ),
-      const SizedBox(height: 29,),
-      Text("it_stores_in_blockchain".tr(),
-          textAlign: TextAlign.center,
-          style: Theme.of(context)
-              .textTheme
-              .headline2!
-              .copyWith(color: const Color(0xFF333333))),
-      SizedBox(height: screenSize.height(percent: 0.077),),
+      const SizedBox(
+        height: 29,
+      ),
+      Text("it_stores_in_blockchain".tr(), textAlign: TextAlign.center, style: Theme.of(context).textTheme.headline2!.copyWith(color: const Color(0xFF333333))),
+      SizedBox(
+        height: screenSize.height(percent: 0.077),
+      ),
     ]);
   }
 }

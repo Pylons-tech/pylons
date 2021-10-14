@@ -22,8 +22,7 @@ class DetailScreenWidget extends StatefulWidget {
   State<DetailScreenWidget> createState() => _DetailScreenWidgetState();
 }
 
-class _DetailScreenWidgetState extends State<DetailScreenWidget>
-    with SingleTickerProviderStateMixin {
+class _DetailScreenWidgetState extends State<DetailScreenWidget> with SingleTickerProviderStateMixin {
   bool isInResellMode = false;
   bool isInTrade = false;
   int tabIndex = 0;
@@ -78,8 +77,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
 
   void onPressPurchase() {
     if (!widget.isOwner) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const PaymentInfoScreenWidget()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentInfoScreenWidget()));
     } else {
       if (!isInResellMode) {
         //setState(() {
@@ -134,8 +132,10 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, ),
-          onPressed: (){
+          icon: const Icon(
+            Icons.chevron_left,
+          ),
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -163,8 +163,7 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
                   fit: BoxFit.cover,
                 ),
                 onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const NFTViewWidget()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => const NFTViewWidget()));
                 }),
             const VerticalSpace(10),
             //tab bar
@@ -196,22 +195,14 @@ class _DetailScreenWidgetState extends State<DetailScreenWidget>
           child: Column(
             children: [
               Row(children: [
-                const Text('\$ 82.00',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                        color: Color(0xFF201D1D),
-                        fontFamily: 'Inter')),
+                const Text('\$ 82.00', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF201D1D), fontFamily: 'Inter')),
                 const Spacer(),
                 ElevatedButton(
                     onPressed: () {
                       onPressPurchase();
                     },
-                    style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFF1212C4),
-                        padding: const EdgeInsets.fromLTRB(50, 0, 50, 0)),
-                    child: Text(!widget.isOwner ? 'purchase'.tr() : 'resell_nft'.tr(),
-                        style: const TextStyle(color: Colors.white)))
+                    style: ElevatedButton.styleFrom(primary: const Color(0xFF1212C4), padding: const EdgeInsets.fromLTRB(50, 0, 50, 0)),
+                    child: Text(!widget.isOwner ? 'purchase'.tr() : 'resell_nft'.tr(), style: const TextStyle(color: Colors.white)))
               ]),
               /*
               Row(

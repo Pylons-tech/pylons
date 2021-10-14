@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pylons_wallet/pylons_app.dart';
 
-
 class BuyPylons {
-
   Future<double> buy() async {
     debugPrint("Sending 100 pylon to ${PylonsApp.currentWallet.publicAddress}");
     final response = await http.post(
@@ -18,12 +16,10 @@ class BuyPylons {
       },
       body: jsonEncode(<String, dynamic>{
         "address": PylonsApp.currentWallet.publicAddress,
-        "coins": [
-          "100pylon"
-        ]
+        "coins": ["100pylon"]
       }),
     );
-    if (response.statusCode!=200){
+    if (response.statusCode != 200) {
       debugPrint("Error");
       return 0.0;
     }

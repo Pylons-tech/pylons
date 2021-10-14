@@ -40,8 +40,7 @@ class TokenSender {
     );
     await signedAlanTransaction.fold<Future?>(
       (fail) => null,
-      (signedTransaction) => transactionSigningGateway.broadcastTransaction(
-          walletLookupKey: walletLookupKey, transaction: signedTransaction),
+      (signedTransaction) => transactionSigningGateway.broadcastTransaction(walletLookupKey: walletLookupKey, transaction: signedTransaction),
     );
   }
 }

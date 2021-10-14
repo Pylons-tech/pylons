@@ -10,10 +10,7 @@ extension SetScreenSize on WidgetTester {
     binding.window.devicePixelRatioTestValue = pixelDensity;
   }
 
-
   Future testAppForWidgetTesting(Widget child) {
-    return pumpWidget( MaterialApp(
-        home: child));
+    return pumpWidget(MaterialApp(home: child));
   }
-
 }

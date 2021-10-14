@@ -11,9 +11,9 @@ class Balance extends Equatable {
     required this.amount,
   });
 
-  Balance.fromJSON(Map<String,dynamic> json) :
-          denom = Denom(json['denom'] as String),
-          amount = Amount.fromString(json['amount'] as String);
+  Balance.fromJSON(Map<String, dynamic> json)
+      : denom = Denom(json['denom'] as String),
+        amount = Amount.fromString(json['amount'] as String);
 
   @override
   String toString() => '$amount $denom';
@@ -23,6 +23,4 @@ class Balance extends Equatable {
         denom,
         amount,
       ];
-
-
 }

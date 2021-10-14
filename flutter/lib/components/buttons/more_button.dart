@@ -7,8 +7,7 @@ class MoreButton extends StatelessWidget {
   final VoidCallback onTap;
   final bool showText;
 
-  const MoreButton({Key? key, required this.onTap, this.showText = true})
-      : super(key: key);
+  const MoreButton({Key? key, required this.onTap, this.showText = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

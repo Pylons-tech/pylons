@@ -23,9 +23,7 @@ class PylonsGreyButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-                text,
-                style: const TextStyle(fontSize: 15, color: Colors.white)),
+            Text(text, style: const TextStyle(fontSize: 15, color: Colors.white)),
           ],
         ),
       ),

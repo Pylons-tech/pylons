@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
 class PylonsDashboardDropDown extends StatefulWidget {
-
   @override
   DropDownWidget createState() => DropDownWidget();
 }
 
 class DropDownWidget extends State {
-
   String dropdownValue = 'my_activity'.tr();
 
   List<String> spinnerItems = [
@@ -23,11 +21,7 @@ class DropDownWidget extends State {
   Widget build(BuildContext context) {
     return DropdownButton<String>(
       value: dropdownValue,
-      icon: const ImageIcon(
-          AssetImage('assets/images/icon/chevron-down.png'),
-          size: 24,
-          color: kSelectedIcon
-      ),
+      icon: const ImageIcon(AssetImage('assets/images/icon/chevron-down.png'), size: 24, color: kSelectedIcon),
       elevation: 16,
       underline: const SizedBox(),
       style: const TextStyle(color: kSelectedIcon, fontSize: 14),
@@ -42,6 +36,6 @@ class DropDownWidget extends State {
           child: Text(value),
         );
       }).toList(),
-   );
+    );
   }
 }

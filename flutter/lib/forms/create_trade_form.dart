@@ -37,17 +37,11 @@ class CreateTradeFormState extends State<CreateTradeForm> {
     return Form(
         key: _formKey,
         child: Padding(
-            padding: EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 40,
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(left: 16, right: 16, top: 40, bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: [
                 Align(
-                  child: Text('create_trade'.tr(),
-                      style:
-                      const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  child: Text('create_trade'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                 ),
                 const VerticalSpace(24),
                 Padding(
@@ -69,37 +63,27 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                                     ),
                                     suffix: DropdownButton<String>(
                                       value: dropdownValue,
-                                      icon: const Icon(
-                                          Icons.keyboard_arrow_down,
-                                          size: 16,
-                                          color: kSelectedIcon),
+                                      icon: const Icon(Icons.keyboard_arrow_down, size: 16, color: kSelectedIcon),
                                       elevation: 16,
                                       underline: const SizedBox(),
                                       focusColor: const Color(0xFF1212C4),
-                                      style: const TextStyle(
-                                          color: Color(0xFF1212C4),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500),
+                                      style: const TextStyle(color: Color(0xFF1212C4), fontSize: 14, fontWeight: FontWeight.w500),
                                       onChanged: (String? data) {
                                         setState(() {
                                           dropdownValue = data!;
                                         });
                                       },
-                                      items: currencies
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
+                                      items: currencies.map<DropdownMenuItem<String>>((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
                                         );
                                       }).toList(),
                                     ),
-                                    contentPadding: const EdgeInsets.fromLTRB(
-                                        16, 0, 16, -10),
+                                    contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, -10),
                                     filled: true,
                                     hintText: 'expecting_price'.tr(),
-                                    hintStyle:
-                                        TextStyle(color: Colors.grey[800]),
+                                    hintStyle: TextStyle(color: Colors.grey[800]),
                                     fillColor: Colors.white70),
                               ),
                             ),
@@ -116,26 +100,21 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               // border: OutlineInputBorder(
                               //   borderRadius: BorderRadius.zero,
                               //   borderSide: BorderSide(color: Colors.transparent),
                               // ),
 
-                              contentPadding:
-                                  const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                              contentPadding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                               filled: true,
                               hintText: 'title_of_artwork'.tr(),
-                              hintStyle: TextStyle(
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.bold),
+                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
                               fillColor: const Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(20),
@@ -151,20 +130,16 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'artwork_description'.tr(),
-                              hintStyle: TextStyle(
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.bold),
+                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
                               fillColor: const Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(20),
@@ -180,20 +155,16 @@ class CreateTradeFormState extends State<CreateTradeForm> {
                           decoration: InputDecoration(
                               enabledBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               focusedBorder: const OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
+                                borderSide: BorderSide(color: Colors.transparent),
                               ),
                               contentPadding: const EdgeInsets.all(16),
                               filled: true,
                               hintText: 'cosmosxxx',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey[800],
-                                  fontWeight: FontWeight.bold),
+                              hintStyle: TextStyle(color: Colors.grey[800], fontWeight: FontWeight.bold),
                               fillColor: const Color(0xffF1F1F2)),
                         ),
                         const VerticalSpace(40),

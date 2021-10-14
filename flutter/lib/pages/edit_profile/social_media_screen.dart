@@ -8,8 +8,6 @@ class SocialMediaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 44,
@@ -33,73 +31,56 @@ class SocialMediaScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           "Link to Social Media",
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
         ),
-
       ),
       body: GridView.count(
-        physics:const  NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        crossAxisCount: 2,
-        padding: EdgeInsets.all(10),
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 1,
-        childAspectRatio: 3.2/4,
-        children: [
-          _SocialCard(
-            icon: "assets/icons/facebook.png",
-            name: "Facebook",
-            isAdded: true,
-            accountName: "Choeun Park",
-            onTap: (){},
-          ),
-
-          _SocialCard(
-            icon: "assets/icons/instagram.png",
-            name: "Instagram",
-            isAdded: false,
-            onTap: (){},
-          ),
-
-          _SocialCard(
-            icon: "assets/icons/twitter.png",
-            name: "Twitter",
-            isAdded: false,
-            onTap: (){},
-          ),
-
-          _SocialCard(
-            icon: "assets/icons/website.png",
-            name: "Website",
-            isAdded: false,
-            onTap: (){},
-          ),
-
-        ]
-
-      ),
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          crossAxisCount: 2,
+          padding: EdgeInsets.all(10),
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 1,
+          childAspectRatio: 3.2 / 4,
+          children: [
+            _SocialCard(
+              icon: "assets/icons/facebook.png",
+              name: "Facebook",
+              isAdded: true,
+              accountName: "Choeun Park",
+              onTap: () {},
+            ),
+            _SocialCard(
+              icon: "assets/icons/instagram.png",
+              name: "Instagram",
+              isAdded: false,
+              onTap: () {},
+            ),
+            _SocialCard(
+              icon: "assets/icons/twitter.png",
+              name: "Twitter",
+              isAdded: false,
+              onTap: () {},
+            ),
+            _SocialCard(
+              icon: "assets/icons/website.png",
+              name: "Website",
+              isAdded: false,
+              onTap: () {},
+            ),
+          ]),
     );
   }
 }
 
 class _SocialCard extends StatelessWidget {
-  const _SocialCard({
-    Key? key,
-    required this.icon,
-    required this.name,
-    required this.isAdded,
-    required this.onTap,
-    this.accountName = ""
-  }) : super(key: key);
+  const _SocialCard({Key? key, required this.icon, required this.name, required this.isAdded, required this.onTap, this.accountName = ""}) : super(key: key);
 
   final String icon;
   final String name;
   final String accountName;
   final bool isAdded;
   final VoidCallback onTap;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -109,24 +90,42 @@ class _SocialCard extends StatelessWidget {
       child: Stack(
         children: [
           Align(
-            alignment: Alignment.topRight,
-              child: IconButton(onPressed: (){}, icon: const Icon(Icons.more_vert, color: Color(0xFFC4C4C4),))),
+              alignment: Alignment.topRight,
+              child: IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Color(0xFFC4C4C4),
+                  ))),
           Align(
             child: Padding(
               padding: const EdgeInsets.only(top: 24.0, bottom: 20),
               child: Column(
                 children: [
-                  Image.asset(icon,
+                  Image.asset(
+                    icon,
                     width: screen.width(percent: 0.2),
                   ),
                   const VerticalSpace(20),
-                  Text(name, style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),),
+                  Text(
+                    name,
+                    style: Theme.of(context).textTheme.bodyText2?.copyWith(fontSize: 16),
+                  ),
                   const VerticalSpace(20),
-                  if (!isAdded) SizedBox(
-                    height: 30,
+                  if (!isAdded)
+                    SizedBox(
+                      height: 30,
                       width: screen.width(percent: 0.3),
-                      child: PylonsBlueButton(onTap: onTap, text: "Add account",),
-                  ) else Text(accountName, style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16),),
+                      child: PylonsBlueButton(
+                        onTap: onTap,
+                        text: "Add account",
+                      ),
+                    )
+                  else
+                    Text(
+                      accountName,
+                      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 16),
+                    ),
                 ],
               ),
             ),

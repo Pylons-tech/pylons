@@ -12,7 +12,6 @@ class DashboardAssets extends StatefulWidget {
 }
 
 class _DashboardAssetsState extends State<DashboardAssets> {
-
   @override
   void initState() {
     super.initState();
@@ -25,15 +24,16 @@ class _DashboardAssetsState extends State<DashboardAssets> {
   Widget build(BuildContext context) {
     final address = PylonsApp.currentWallet.publicAddress;
 
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Balances'),
-        actions:  [
+        actions: [
           IconButton(
-              icon: const Icon(Icons.cached_outlined), onPressed: () {
-            _buildAssetsList();
-          },)
+            icon: const Icon(Icons.cached_outlined),
+            onPressed: () {
+              _buildAssetsList();
+            },
+          )
         ],
       ),
       body: Padding(
@@ -54,14 +54,10 @@ class _DashboardAssetsState extends State<DashboardAssets> {
                           icon: const Icon(Icons.content_copy),
                           onPressed: () {
                             Clipboard.setData(ClipboardData(text: address));
-                          }
-                      ),
+                          }),
                     ],
                   ),
-                  Text(address,
-                      style:
-                      const TextStyle(color: Colors.black, fontSize: 18)),
-
+                  Text(address, style: const TextStyle(color: Colors.black, fontSize: 18)),
                 ],
               ),
             ),

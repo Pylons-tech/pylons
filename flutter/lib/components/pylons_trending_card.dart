@@ -27,29 +27,17 @@ class PylonsTrendingCard extends StatelessWidget {
               title: const Text('Linda'),
               trailing: IconButton(
                 onPressed: () {},
-                icon:
-                const ImageIcon(AssetImage('assets/images/icon/add_friend.png')),
+                icon: const ImageIcon(AssetImage('assets/images/icon/add_friend.png')),
               ),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            const DetailScreenWidget(isOwner: false)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const DetailScreenWidget(isOwner: false)));
               },
             )),
           ]),
-          ClipRRect(
-              borderRadius: BorderRadius.circular(5.0),
-              child: CachedNetworkImage(
-                  imageUrl: kImage2,
-                  width: 200.0,
-                  height: 250.0,
-                  fit: BoxFit.cover)),
+          ClipRRect(borderRadius: BorderRadius.circular(5.0), child: CachedNetworkImage(imageUrl: kImage2, width: 200.0, height: 250.0, fit: BoxFit.cover)),
           Row(children: [
             TextButton.icon(
-              icon: const ImageIcon(AssetImage('assets/icons/comment.png'),
-                  size: kIconSize, color: kUnselectedIcon),
+              icon: const ImageIcon(AssetImage('assets/icons/comment.png'), size: kIconSize, color: kUnselectedIcon),
               label: const Text(
                 '40',
                 style: TextStyle(color: kUnselectedIcon),
@@ -57,15 +45,13 @@ class PylonsTrendingCard extends StatelessWidget {
               onPressed: () {},
             ),
             TextButton.icon(
-              icon: const ImageIcon(AssetImage('assets/icons/like.png'),
-                  size: kIconSize, color: kUnselectedIcon),
+              icon: const ImageIcon(AssetImage('assets/icons/like.png'), size: kIconSize, color: kUnselectedIcon),
               label: const Text('142', style: TextStyle(color: kUnselectedIcon)),
               onPressed: () {},
             ),
             const Spacer(),
             IconButton(
-              icon: const ImageIcon(AssetImage('assets/images/icon/dots.png'),
-                  size: kIconSize, color: kUnselectedIcon),
+              icon: const ImageIcon(AssetImage('assets/images/icon/dots.png'), size: kIconSize, color: kUnselectedIcon),
               onPressed: () {},
             )
           ])

@@ -6,19 +6,16 @@ import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.
 import 'package:transaction_signing_gateway/model/wallet_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 
-
 class TokenSender {
   TransactionSigningGateway transactionSigningGateway;
 
   TokenSender(this.transactionSigningGateway);
 
   Future<void> sendPylons(
-      WalletPublicInfo info,
-      Balance balance,
-      String toAddress,
-      ) async {
-
-
+    WalletPublicInfo info,
+    Balance balance,
+    String toAddress,
+  ) async {
     final message = bank.MsgSend.create()
       ..fromAddress = info.publicAddress
       ..toAddress = toAddress;
@@ -41,9 +38,8 @@ class TokenSender {
       walletLookupKey: walletLookupKey,
     );
     await signedAlanTransaction.fold<Future?>(
-          (fail) => null,
-          (signedTransaction) => transactionSigningGateway.broadcastTransaction(
-          walletLookupKey: walletLookupKey, transaction: signedTransaction),
+      (fail) => null,
+      (signedTransaction) => transactionSigningGateway.broadcastTransaction(walletLookupKey: walletLookupKey, transaction: signedTransaction),
     );
   }
 }

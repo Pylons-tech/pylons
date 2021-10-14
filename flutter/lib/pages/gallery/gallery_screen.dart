@@ -21,8 +21,7 @@ class GalleryScreen extends StatefulWidget {
   State<GalleryScreen> createState() => _GalleryScreenState();
 }
 
-class _GalleryScreenState extends State<GalleryScreen>
-    with SingleTickerProviderStateMixin {
+class _GalleryScreenState extends State<GalleryScreen> with SingleTickerProviderStateMixin {
   bool isExpanded = false;
 
   int tabIndex = 0;
@@ -39,10 +38,7 @@ class _GalleryScreenState extends State<GalleryScreen>
     ),
   ];
 
-  static const List<Widget> _pages = <Widget>[
-    GalleryTabCollectionWidget(),
-    GalleryTabLikeWidget()
-  ];
+  static const List<Widget> _pages = <Widget>[GalleryTabCollectionWidget(), GalleryTabLikeWidget()];
 
   @override
   void initState() {
@@ -72,30 +68,26 @@ class _GalleryScreenState extends State<GalleryScreen>
       children: [
         Container(
           alignment: Alignment.centerRight,
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: CachedNetworkImageProvider(kImage3),
-                  fit: BoxFit.cover)),
+          decoration: const BoxDecoration(image: DecorationImage(image: CachedNetworkImageProvider(kImage3), fit: BoxFit.cover)),
           width: MediaQuery.of(context).size.width,
           height: bannerSize,
-
         ),
         Container(
-          margin: EdgeInsets.only(top: bannerSize * 0.6,) ,
+          margin: EdgeInsets.only(
+            top: bannerSize * 0.6,
+          ),
           child: Column(
             children: [
               Container(
-                width: screenSize.width(),
+                  width: screenSize.width(),
                   padding: const EdgeInsets.only(
                     right: 20.0,
                   ),
                   alignment: Alignment.topRight,
                   child: GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (_) => EditCoverScreen())),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => EditCoverScreen())),
                     child: Container(
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
                       decoration: BoxDecoration(
                         color: const Color.fromRGBO(97, 97, 97, 0.6),
                         borderRadius: BorderRadius.circular(5),
@@ -103,18 +95,13 @@ class _GalleryScreenState extends State<GalleryScreen>
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const ImageIcon(AssetImage('assets/icons/camera.png'),
-                              size: 16, color: Colors.white),
+                          const ImageIcon(AssetImage('assets/icons/camera.png'), size: 16, color: Colors.white),
                           const SizedBox(
                             width: 7,
                           ),
                           Text(
                             'edit_cover'.tr(),
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                                color: Colors.white,
-                                fontFamily: 'Inter'),
+                            style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 10, color: Colors.white, fontFamily: 'Inter'),
                           )
                         ],
                       ),
@@ -124,8 +111,7 @@ class _GalleryScreenState extends State<GalleryScreen>
               Card(
                   elevation: 8,
                   color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     width: MediaQuery.of(context).size.width * .90,
@@ -141,27 +127,13 @@ class _GalleryScreenState extends State<GalleryScreen>
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xFF201D1D),
                               )),
-                          subtitle: const Text(
-                              'Media Artist (3D, Motiongraphics, Collecting NFT)',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xFF616161))),
+                          subtitle: const Text('Media Artist (3D, Motiongraphics, Collecting NFT)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF616161))),
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const AccountScreenWidget()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountScreenWidget()));
                           },
                         ),
                         Row(
-                          children: [
-                            const SizedBox(width: 70),
-                            Text('${'followers'.tr()}: 23'),
-                            const SizedBox(width: 50),
-                            Text('${'following'.tr().toLowerCase()}: 20')
-                          ],
+                          children: [const SizedBox(width: 70), Text('${'followers'.tr()}: 23'), const SizedBox(width: 50), Text('${'following'.tr().toLowerCase()}: 20')],
                         ),
                         const VerticalSpace(10),
                         ButtonBar(
@@ -202,10 +174,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                               height: 30,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => EditProfileScreen()));
+                                  Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
                                 },
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.white,
@@ -218,10 +187,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: const [
-                                    Text("Edit Profile",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Color(0xff616161))),
+                                    Text("Edit Profile", style: TextStyle(fontSize: 15, color: Color(0xff616161))),
                                   ],
                                 ),
                               ),
@@ -262,9 +228,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                               TextButton(
                                 onPressed: () {},
                                 child: Row(children: [
-                                  Text('see_all'.tr(),
-                                      style: const TextStyle(
-                                          color: Color(0xFF616161))),
+                                  Text('see_all'.tr(), style: const TextStyle(color: Color(0xFF616161))),
                                   const Icon(
                                     Icons.chevron_right,
                                     color: Color(0xFF616161),
@@ -272,13 +236,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                                 ]),
                               ),
                             ]),
-                            SizedBox(
-                                height: 105,
-                                child: ListView.builder(
-                                    itemCount: 15,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) =>
-                                        const FollowCardWidget())),
+                            SizedBox(height: 105, child: ListView.builder(itemCount: 15, scrollDirection: Axis.horizontal, itemBuilder: (context, index) => const FollowCardWidget())),
                           ])
                         else
                           const SizedBox(height: 0)
@@ -296,8 +254,7 @@ class _GalleryScreenState extends State<GalleryScreen>
                     Container(
                         color: Colors.white,
                         child: TabBar(
-                          indicatorPadding:
-                              const EdgeInsets.only(left: 10, right: 10),
+                          indicatorPadding: const EdgeInsets.only(left: 10, right: 10),
                           isScrollable: true,
                           controller: _tabController,
                           labelColor: const Color(0xFF1212C4),
@@ -325,7 +282,8 @@ class _GalleryScreenState extends State<GalleryScreen>
               Expanded(
                 child: SizedBox(
                   width: screenSize.width(),
-                    child: _pages[tabIndex],),
+                  child: _pages[tabIndex],
+                ),
               )
             ],
           ),

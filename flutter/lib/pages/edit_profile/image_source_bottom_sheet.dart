@@ -18,20 +18,19 @@ class ImageSourceBottomSheet extends StatelessWidget {
           children: [
             const VerticalSpace(40),
             _MenuButtonWidget(
-              onTap: (){
-                 _pickImageFromCamera().then((file){
+              onTap: () {
+                _pickImageFromCamera().then((file) {
                   debugPrint(file!.path);
                   Navigator.pop(context);
                 });
-
               },
               title: "Take Photo",
             ),
             const Divider(),
             _MenuButtonWidget(
               title: "Choose from ${Platform.isAndroid ? "Gallery" : "Photos"}",
-              onTap: (){
-                _pickImageFromGallery().then((file){
+              onTap: () {
+                _pickImageFromGallery().then((file) {
                   debugPrint(file!.path);
                   Navigator.pop(context);
                 });
@@ -40,12 +39,12 @@ class ImageSourceBottomSheet extends StatelessWidget {
             const Divider(),
             _MenuButtonWidget(
               title: "Choose from NFT Collection",
-              onTap: (){},
+              onTap: () {},
             ),
             const Divider(),
             _MenuButtonWidget(
               title: "Remove Profile Photo",
-              onTap: (){},
+              onTap: () {},
               textColor: const Color(0xffE53C3C),
             ),
             const VerticalSpace(30),
@@ -55,36 +54,33 @@ class ImageSourceBottomSheet extends StatelessWidget {
     );
   }
 
-
   Future<File?> _pickImageFromCamera() async {
     try {
       final _picker = ImagePicker();
-      final _image = await _picker.pickImage(source: ImageSource.camera,
-          imageQuality: 85,
-          maxHeight: 500,
-          maxWidth: 500);
+      final _image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 85, maxHeight: 500, maxWidth: 500);
 
       if (_image != null) {
         return _cropImage(_image.path);
-
       }
-
-    }catch(e){
+    } catch (e) {
       debugPrint("$e");
     }
     return null;
   }
 
   Future<File?> _pickImageFromGallery() async {
-    try{
+    try {
       final _picker = ImagePicker();
-      final _image = await  _picker.pickImage(source: ImageSource.gallery,
-        imageQuality: 85, maxHeight: 500, maxWidth: 500,
+      final _image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+        maxHeight: 500,
+        maxWidth: 500,
       );
-      if(_image != null){
-        return  _cropImage(_image.path);
+      if (_image != null) {
+        return _cropImage(_image.path);
       }
-    }catch(e){
+    } catch (e) {
       // showMessage(e.toString());
       debugPrint("$e");
     }
@@ -92,38 +88,20 @@ class ImageSourceBottomSheet extends StatelessWidget {
     return null;
   }
 
-
-  Future<File?> _cropImage(String path)async{
-     return  ImageCropper.cropImage(
+  Future<File?> _cropImage(String path) async {
+    return ImageCropper.cropImage(
         sourcePath: path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio3x2,
-          CropAspectRatioPreset.original,
-          CropAspectRatioPreset.ratio4x3,
-          CropAspectRatioPreset.ratio16x9
-        ],
-        androidUiSettings: const AndroidUiSettings(
-            toolbarTitle: 'Pylons',
-            toolbarColor: kBlue,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
+        aspectRatioPresets: [CropAspectRatioPreset.square, CropAspectRatioPreset.ratio3x2, CropAspectRatioPreset.original, CropAspectRatioPreset.ratio4x3, CropAspectRatioPreset.ratio16x9],
+        androidUiSettings:
+            const AndroidUiSettings(toolbarTitle: 'Pylons', toolbarColor: kBlue, toolbarWidgetColor: Colors.white, initAspectRatio: CropAspectRatioPreset.original, lockAspectRatio: false),
         iosUiSettings: const IOSUiSettings(
           minimumAspectRatio: 1.0,
-        )
-    );
+        ));
   }
-
 }
 
 class _MenuButtonWidget extends StatelessWidget {
-  const _MenuButtonWidget({
-    Key? key,
-    required this.title,
-    required this.onTap,
-    this.textColor = Colors.black
-  }) : super(key: key);
+  const _MenuButtonWidget({Key? key, required this.title, required this.onTap, this.textColor = Colors.black}) : super(key: key);
 
   final String title;
   final VoidCallback onTap;
@@ -131,22 +109,20 @@ class _MenuButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   final screenSize = ScreenSizeUtil(context);
+    final screenSize = ScreenSizeUtil(context);
     return InkWell(
       onTap: onTap,
       child: SizedBox(
         width: screenSize.width(),
         height: 40,
         child: Align(
-          child: Text(title,
+          child: Text(
+            title,
             textAlign: TextAlign.center,
-            style:  TextStyle(
-            color: textColor,
-              fontSize: 15,
-              fontWeight: FontWeight.w500),),
+            style: TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
+          ),
         ),
       ),
     );
   }
-
 }

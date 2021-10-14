@@ -45,10 +45,7 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
                     'security_hint'.tr(),
                     style: PylonsAppTheme.HOME_LABEL,
                   ),
-                  PylonsBlueButton(
-                    onTap: _proceedClicked,
-                    text: "proceed".tr()
-                  )
+                  PylonsBlueButton(onTap: _proceedClicked, text: "proceed".tr())
                 ],
               ),
             ),
@@ -58,7 +55,7 @@ class _MnemonicOnboardingPageState extends State<MnemonicOnboardingPage> {
     );
   }
 
-  void _generateMnemonicClicked() => setState(() => mnemonic = generateMnemonic());
+  void _generateMnemonicClicked() => setState(() async => mnemonic = await generateMnemonic());
 
   void _proceedClicked() => notImplemented(context);
 }

@@ -28,7 +28,6 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final screenSize = ScreenSizeUtil(context);
     final bannerSize = screenSize.height(percent: 0.20);
     return Scaffold(
@@ -37,11 +36,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
         elevation: 0,
         title: Text(
           'edit_cover'.tr(),
-          style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-              color: Color(0xFF080830),
-              fontFamily: 'Inter'),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFF080830), fontFamily: 'Inter'),
         ),
         centerTitle: false,
         leading: IconButton(
@@ -56,11 +51,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
               onPressed: null,
               child: Text(
                 'Save',
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: Color(0xFF1212C4),
-                    fontFamily: 'Inter'),
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16, color: Color(0xFF1212C4), fontFamily: 'Inter'),
               ))
         ],
       ),
@@ -68,23 +59,20 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
         children: [
           Container(
             alignment: Alignment.centerRight,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: CachedNetworkImageProvider(kImage3),
-                    fit: BoxFit.cover)),
+            decoration: const BoxDecoration(image: DecorationImage(image: CachedNetworkImageProvider(kImage3), fit: BoxFit.cover)),
             width: MediaQuery.of(context).size.width,
             height: bannerSize,
-
           ),
           Container(
-            margin: EdgeInsets.only(top: bannerSize * 0.6,),
+            margin: EdgeInsets.only(
+              top: bannerSize * 0.6,
+            ),
             child: Column(
               children: [
                 Card(
                     elevation: 8,
                     color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
                     child: Container(
                       padding: const EdgeInsets.all(16),
                       width: MediaQuery.of(context).size.width * .90,
@@ -100,27 +88,13 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                                   fontWeight: FontWeight.w500,
                                   color: Color(0xFF201D1D),
                                 )),
-                            subtitle: const Text(
-                                'Media Artist (3D, Motiongraphics, Collecting NFT)',
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xFF616161))),
+                            subtitle: const Text('Media Artist (3D, Motiongraphics, Collecting NFT)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF616161))),
                             onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const AccountScreenWidget()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountScreenWidget()));
                             },
                           ),
                           Row(
-                            children: [
-                              const SizedBox(width: 70),
-                              Text('${'followers'.tr()}: 23'),
-                              const SizedBox(width: 50),
-                              Text('${'following'.tr().toLowerCase()}: 20')
-                            ],
+                            children: [const SizedBox(width: 70), Text('${'followers'.tr()}: 23'), const SizedBox(width: 50), Text('${'following'.tr().toLowerCase()}: 20')],
                           ),
                           const VerticalSpace(10),
                           ButtonBar(
@@ -130,10 +104,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                                 height: 30,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => EditProfileScreen()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (_) => EditProfileScreen()));
                                   },
                                   style: ElevatedButton.styleFrom(
                                       primary: Colors.white,
@@ -146,10 +117,7 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
-                                      Text("Edit Profile",
-                                          style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color(0xff616161))),
+                                      Text("Edit Profile", style: TextStyle(fontSize: 15, color: Color(0xff616161))),
                                     ],
                                   ),
                                 ),
@@ -192,25 +160,17 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: DropdownButton<String>(
                       value: dropdownValue,
-                      icon: const ImageIcon(
-                          AssetImage('assets/images/icon/chevron-down.png'),
-                          size: 24,
-                          color: kSelectedIcon),
+                      icon: const ImageIcon(AssetImage('assets/images/icon/chevron-down.png'), size: 24, color: kSelectedIcon),
                       elevation: 16,
                       underline: const SizedBox(),
                       focusColor: const Color(0xFF1212C4),
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          color: Colors.black,
-                          fontFamily: 'Inter'),
+                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 20, color: Colors.black, fontFamily: 'Inter'),
                       onChanged: (String? data) {
                         setState(() {
                           dropdownValue = data!;
                         });
                       },
-                      items: spinnerItems
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: spinnerItems.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -220,7 +180,6 @@ class _EditCoverScreenState extends State<EditCoverScreen> {
                   ),
                 ),
                 Expanded(child: CollectionViewWidget())
-
               ],
             ),
           )

@@ -16,7 +16,6 @@ class ImportFromGoogleForm extends StatefulWidget {
 }
 
 class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
-
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,33 +25,27 @@ class ImportFromGoogleFormState extends State<ImportFromGoogleForm> {
       child: Column(
         children: <Widget>[
           Padding(
-              padding: EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 50,
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(left: 16, right: 16, top: 50, bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
                   const Image(
-                    image:  AssetImage('assets/images/pylons_logo.png'),
+                    image: AssetImage('assets/images/pylons_logo.png'),
                     alignment: Alignment.bottomCenter,
                   ),
-                 const  VerticalSpace(30),
-                  PylonsRoundedButton(
-                      glyph: const AssetImage('assets/images/gcloud.png'),
-                      text: "import_from_google_cloud".tr(),
-                      onTap: (){}
-                  ),
+                  const VerticalSpace(30),
+                  PylonsRoundedButton(glyph: const AssetImage('assets/images/gcloud.png'), text: "import_from_google_cloud".tr(), onTap: () {}),
                   const VerticalSpace(20),
                   PylonsTextInput(controller: TextEditingController(), label: "user_name".tr()),
                   const VerticalSpace(20),
                   PylonsTextInput(controller: TextEditingController(), label: "user_id".tr()),
                   const VerticalSpace(30),
-                  PylonsBlueButton(onTap: (){}, text: "start_pylons".tr(),),
+                  PylonsBlueButton(
+                    onTap: () {},
+                    text: "start_pylons".tr(),
+                  ),
                   const VerticalSpace(20),
                 ],
-              )
-          )// Add TextFormFields and ElevatedButton here.
+              )) // Add TextFormFields and ElevatedButton here.
         ],
       ),
     );

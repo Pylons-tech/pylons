@@ -9,13 +9,11 @@ class HomeActivityWidget extends StatefulWidget {
 }
 
 class _HomeActivityWidgetState extends State<HomeActivityWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
+        (BuildContext context, int index) {
           return Container(
             padding: const EdgeInsets.only(top: 10.0),
             child: const Center(

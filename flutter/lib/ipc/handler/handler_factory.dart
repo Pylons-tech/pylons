@@ -1,9 +1,7 @@
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/create_cook_book_handler.dart';
 
-
 class HandlerFactory {
-
   static const String GET_COOKBOOKS = 'getCookbooks';
   static const String GET_PROFILE = 'getProfile';
   static const String GET_RECIPE = 'getRecipes';
@@ -34,21 +32,12 @@ class HandlerFactory {
   static const String ERR_ITEM_NOT_OWNED = 'itemNotOwned';
   static const String ERR_MISSING_ITEM_INPUTS = 'missingItemInputs';
 
-
-
-
-
-
   BaseHandler getHandler(List<String> message) {
-
-
     final key = message[1];
 
-    if(key == TX_CREATE_COOKBOOK){
+    if (key == TX_CREATE_COOKBOOK) {
       return CreateCookBookHandler(message);
     }
-
-
 
     return CreateCookBookHandler([]);
   }

@@ -8,7 +8,6 @@ import 'package:pylons_wallet/entities/denom.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 
 class PylonsBalance {
-
   BaseEnv baseEnv;
 
   PylonsBalance(this.baseEnv);
@@ -19,18 +18,11 @@ class PylonsBalance {
     final balancesResponse = jsonDecode(response.body) as Map<String, dynamic>;
     final balancesList = balancesResponse["balances"] as List;
     final balances = <Balance>[];
-    if(balancesList.isEmpty){
-      balances.add(
-        Balance(denom: const Denom("upylon"), amount: Amount(Decimal.zero))
-      );
+    if (balancesList.isEmpty) {
+      balances.add(Balance(denom: const Denom("upylon"), amount: Amount(Decimal.zero)));
     }
     for (final balance in balancesList) {
-      balances.add(
-          Balance(
-            denom: Denom(balance["denom"] as String),
-            amount: Amount(Decimal.parse(balance["amount"] as String))
-          )
-      );
+      balances.add(Balance(denom: Denom(balance["denom"] as String), amount: Amount(Decimal.parse(balance["amount"] as String))));
     }
     return balances;
   }

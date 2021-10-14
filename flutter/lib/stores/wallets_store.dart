@@ -8,7 +8,6 @@ import 'package:transaction_signing_gateway/model/credentials_storage_failure.da
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
-
 class WalletsStore {
   final TransactionSigningGateway _transactionSigningGateway;
   final BaseEnv baseEnv;

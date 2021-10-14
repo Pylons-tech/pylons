@@ -15,98 +15,73 @@ class HomeRecommendationWidget extends StatefulWidget {
 }
 
 class _HomeRecommendationWidgetState extends State<HomeRecommendationWidget> {
-
-
   @override
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildListDelegate([
         //Trending
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          color: Colors.white,
-          child: Column(
-            children: [
-              const VerticalSpace(10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('trending'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                    // Spacer(),
-                    MoreButton(onTap: (){
-                    })
-                  ]
-              ),
-
-              SizedBox(
-                  height: 360,
-                  child: ListView.builder(
-                    itemCount: 15,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index)=> const PylonsTrendingCard()
-                  )
-              ),
-            ],
-          )
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            color: Colors.white,
+            child: Column(
+              children: [
+                const VerticalSpace(10),
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text('trending'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                  // Spacer(),
+                  MoreButton(onTap: () {})
+                ]),
+                SizedBox(height: 360, child: ListView.builder(itemCount: 15, scrollDirection: Axis.horizontal, itemBuilder: (context, index) => const PylonsTrendingCard())),
+              ],
+            )),
+        const SizedBox(
+          height: 20,
         ),
-        const SizedBox(height: 20,),
         //Trending Collection
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          color: Colors.white,
-          child: Column(
-            children: [
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            color: Colors.white,
+            child: Column(
+              children: [
+                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                   Text('trending_ollections'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
                   // Spacer(),
                   // AddFriendButton(onTap: (){
                   // })
-                ]
-              ),
-              const VerticalSpace(10),
-              SizedBox(
-                height: 301,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 15,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index)=> const PylonsTrendingColCard()
-                )
-              )
-            ],
-          )
+                ]),
+                const VerticalSpace(10),
+                SizedBox(height: 301, child: ListView.builder(shrinkWrap: true, itemCount: 15, scrollDirection: Axis.horizontal, itemBuilder: (context, index) => const PylonsTrendingColCard()))
+              ],
+            )),
+        const SizedBox(
+          height: 20,
         ),
-        const SizedBox(height: 20,),
         //What's New
         Container(
-          padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-          color: Colors.white,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('what_is_new'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
-                  // const Spacer(),
-                  MoreButton(onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const ItemsNewScreenWidget()));
-                  })
-                ],
-              ),
-              const VerticalSpace(10),
-              SizedBox(
-                height: 350,
-                child: ListView.builder(
-                  itemCount: 15,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index)=>const PylonsTrendingNewCard(),
-                )
-              )
-            ],
-          )
-        )
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            color: Colors.white,
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('what_is_new'.tr(), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+                    // const Spacer(),
+                    MoreButton(onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ItemsNewScreenWidget()));
+                    })
+                  ],
+                ),
+                const VerticalSpace(10),
+                SizedBox(
+                    height: 350,
+                    child: ListView.builder(
+                      itemCount: 15,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) => const PylonsTrendingNewCard(),
+                    ))
+              ],
+            ))
         //Games
       ]),
     );

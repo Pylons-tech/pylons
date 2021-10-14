@@ -21,11 +21,7 @@ class CollectionViewWidget extends StatelessWidget {
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
-              child: Image(
-                  image: const CachedNetworkImageProvider(kImage2),
-                  width: tileWidth * 2,
-                  height: tileWidth * 2 + 2,
-                  fit: BoxFit.cover),
+              child: Image(image: const CachedNetworkImageProvider(kImage2), width: tileWidth * 2, height: tileWidth * 2 + 2, fit: BoxFit.cover),
             ),
           ),
         );

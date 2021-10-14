@@ -24,23 +24,17 @@ class PylonsApp extends StatefulWidget {
 }
 
 class _PylonsAppState extends State<PylonsApp> {
-
   IPCEngine ipcEngine = IPCEngine();
 
   @override
   void initState() {
     super.initState();
 
-
-
-      ipcEngine.init();
-
-
+    ipcEngine.init();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
@@ -50,13 +44,11 @@ class _PylonsAppState extends State<PylonsApp> {
       title: "app_title".tr(),
       theme: PylonsAppTheme().buildAppTheme(),
       initialRoute: '/',
-
       routes: {
         '/': (context) => const RoutingPage(),
       },
     );
   }
-
 
   @override
   void dispose() {

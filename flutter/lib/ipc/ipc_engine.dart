@@ -42,8 +42,6 @@ class IPCEngine {
 
   /// This method is used to handle the uni link when the app first opens
   Future<void> handleInitialLink() async {
-
-
     /// This will handle the initial delay when the app first time opens
     await Future.delayed(const Duration(seconds: 2));
 
@@ -76,7 +74,6 @@ class IPCEngine {
   /// [Input] : [link] contains the link that is received from the 3rd party apps.
   /// [Output] : [List] contains the decoded message
   Future<List> handleLink(String link) async {
-
     log(link, name: '[IPCEngine : handleLink]');
 
     final getMessage = decodeMessage(link.split('/').last);
@@ -90,7 +87,11 @@ class IPCEngine {
 
     systemHandlingASignal = true;
 
-    await showApprovalDialog(key: getMessage[1], sender: getMessage.first, wholeMessage: getMessage, );
+    await showApprovalDialog(
+      key: getMessage[1],
+      sender: getMessage.first,
+      wholeMessage: getMessage,
+    );
     systemHandlingASignal = false;
     return getMessage;
   }
@@ -119,11 +120,9 @@ class IPCEngine {
                   onPressed: () async {
                     Navigator.of(_).pop();
 
-
                     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(wholeMessage).handle();
 
                     await dispatchUniLink(handlerMessage);
-
 
                     //
                     // final encodedMessage = encodeMessage([key, 'OK']);

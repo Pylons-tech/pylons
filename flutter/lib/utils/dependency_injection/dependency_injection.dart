@@ -7,12 +7,8 @@ final sl = GetIt.instance;
 
 /// This method is used for initializing the dependencies
 Future<void> init() async {
-
-
   /// Core Logics
-  sl.registerLazySingleton<HandlerFactory>( () => HandlerFactory());
-
-
+  sl.registerLazySingleton<HandlerFactory>(() => HandlerFactory());
 
   /// Data Sources
   sl.registerLazySingleton<LocalDataSource>(

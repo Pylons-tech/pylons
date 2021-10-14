@@ -25,21 +25,15 @@ class PylonsWhiteButton extends StatelessWidget {
           ),
         ],
       ),
-
       child: ElevatedButton(
         onPressed: onTap,
-        style: ElevatedButton.styleFrom(
-          primary: const Color(0xFFFFFFFF),
-          elevation: 0
-        ),
+        style: ElevatedButton.styleFrom(primary: const Color(0xFFFFFFFF), elevation: 0),
         child: SizedBox(
           height: 43,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                text,
-                style: const TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, color:  Color(0xFF1212C4))),
+              Text(text, style: const TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF1212C4))),
             ],
           ),
         ),

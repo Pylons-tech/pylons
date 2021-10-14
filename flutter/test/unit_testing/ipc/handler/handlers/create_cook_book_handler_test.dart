@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pylons_wallet/generated/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
-
+// import 'package:pylons_wallet/generated/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 
 var MOCK_COOKBOOK = '''{
   "creator": "pylo1akzpu26f36pgxr636uch8evdtdjepu93v5y9s2",
@@ -15,21 +14,9 @@ var MOCK_COOKBOOK = '''{
   "enabled": true
 }''';
 
-
-
-
-
-void main(){
-
-
-  test('test cookbook making', (){
-    MsgClient().createCookbook(request);
-    var mockCookBook = MsgCreateCookbookResponse.fromJson(MOCK_COOKBOOK);
-
-
+void main() {
+  test('test cookbook making', () {
+    // MsgClient().createCookbook(request);
+    // var mockCookBook = MsgCreateCookbookResponse.fromJson(MOCK_COOKBOOK);
   });
-
-
-
-
 }

@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: cosmos/bank/v1beta1/query.proto
 //
-// @dart = 2.3
+
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 const QueryBalanceRequest$json = const {
@@ -107,4 +107,3 @@ const QueryDenomMetadataResponse$json = const {
     const {'1': 'metadata', '3': 1, '4': 1, '5': 11, '6': '.cosmos.bank.v1beta1.Metadata', '8': const {}, '10': 'metadata'},
   ],
 };
-

@@ -78,6 +78,7 @@ dev_dependencies:
     sdk: flutter
   lint: ^1.5.3
   flutter_launcher_icons: ^0.9.1
+  lints: ^1.0.1
 
 flutter:
   uses-material-design: true

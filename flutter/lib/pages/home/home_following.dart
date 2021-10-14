@@ -34,12 +34,7 @@ class _FollowingCard extends StatelessWidget {
   final String userName;
   final String collectionTitle;
 
-  const _FollowingCard(
-      {Key? key,
-      required this.userImage,
-      required this.userName,
-      required this.collectionTitle})
-      : super(key: key);
+  const _FollowingCard({Key? key, required this.userImage, required this.userName, required this.collectionTitle}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +56,9 @@ class _FollowingCard extends StatelessWidget {
                   text: TextSpan(
                     style: DefaultTextStyle.of(context).style,
                     children: <TextSpan>[
-                      TextSpan(
-                          text: userName,
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: userName, style: const TextStyle(fontWeight: FontWeight.bold)),
                       const TextSpan(text: ' created '),
-                      TextSpan(
-                          text: "'$collectionTitle'",
-                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: "'$collectionTitle'", style: const TextStyle(fontWeight: FontWeight.bold)),
                       const TextSpan(text: ' collection')
                     ],
                   ),
@@ -77,10 +68,7 @@ class _FollowingCard extends StatelessWidget {
             MoreButton(
                 showText: false,
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CollectionsScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const CollectionsScreen()));
                 })
           ]),
           Card(
@@ -89,52 +77,24 @@ class _FollowingCard extends StatelessWidget {
                   child: Column(children: [
                     InkWell(
                         child: Row(children: [
-                          CachedNetworkImage(
-                          imageUrl: kImage1,
-                          width: tileWidth * 2,
-                          height: tileWidth * 2 + 3,
-                          fit: BoxFit.cover),
+                          CachedNetworkImage(imageUrl: kImage1, width: tileWidth * 2, height: tileWidth * 2 + 3, fit: BoxFit.cover),
                           const Spacer(),
                           Column(children: [
-                        CachedNetworkImage(
-                            imageUrl: kImage,
-                            width: tileWidth,
-                            height: tileWidth,
-                            fit: BoxFit.cover),
+                            CachedNetworkImage(imageUrl: kImage, width: tileWidth, height: tileWidth, fit: BoxFit.cover),
                             const SizedBox(height: 3),
-                        CachedNetworkImage(
-                            imageUrl: kImage2,
-                            width: tileWidth,
-                            height: tileWidth,
-                            fit: BoxFit.cover),
+                            CachedNetworkImage(imageUrl: kImage2, width: tileWidth, height: tileWidth, fit: BoxFit.cover),
                           ])
                         ]),
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const CollectionsScreen()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const CollectionsScreen()));
                         }),
                     Row(children: [
-                      IconButton(
-                          icon: const ImageIcon(
-                              AssetImage('assets/icons/comment.png'),
-                              size: 18,
-                              color: kUnselectedIcon),
-                          onPressed: () {}),
+                      IconButton(icon: const ImageIcon(AssetImage('assets/icons/comment.png'), size: 18, color: kUnselectedIcon), onPressed: () {}),
                       const Text('40'),
-                      IconButton(
-                          icon: const ImageIcon(AssetImage('assets/icons/like.png'),
-                              size: 18, color: kUnselectedIcon),
-                          onPressed: () {}),
+                      IconButton(icon: const ImageIcon(AssetImage('assets/icons/like.png'), size: 18, color: kUnselectedIcon), onPressed: () {}),
                       const Text('142'),
                       const Spacer(),
-                      IconButton(
-                          icon: const ImageIcon(
-                              AssetImage('assets/images/icon/dots.png'),
-                              size: 24,
-                              color: kUnselectedIcon),
-                          onPressed: () {}),
+                      IconButton(icon: const ImageIcon(AssetImage('assets/images/icon/dots.png'), size: 24, color: kUnselectedIcon), onPressed: () {}),
                     ])
                   ]))),
           const SizedBox(height: 20),

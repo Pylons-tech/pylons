@@ -32,26 +32,13 @@ class CustomCardWidget extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF201D1D),
                   )),
-              subtitle: const Text(
-                  'Media Artist (3D, Motiongraphics, Collecting NFT)',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF616161))),
+              subtitle: const Text('Media Artist (3D, Motiongraphics, Collecting NFT)', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color(0xFF616161))),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AccountScreenWidget()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AccountScreenWidget()));
               },
             ),
             Row(
-              children: [
-                const SizedBox(width: 70),
-                Text('${'followers'.tr()}: 23'),
-                const SizedBox(width: 60),
-                Text('${'followings'.tr().toLowerCase()}: 20')
-              ],
+              children: [const SizedBox(width: 70), Text('${'followers'.tr()}: 23'), const SizedBox(width: 60), Text('${'followings'.tr().toLowerCase()}: 20')],
             ),
             const VerticalSpace(10),
             buttonWidget,

@@ -5,7 +5,6 @@ import 'package:pylons_wallet/components/user_image_widget.dart';
 import 'package:pylons_wallet/constants/constants.dart';
 
 class GalleryTabLikeWidget extends StatelessWidget {
-
   const GalleryTabLikeWidget({
     Key? key,
   }) : super(key: key);
@@ -16,13 +15,11 @@ class GalleryTabLikeWidget extends StatelessWidget {
         padding: const EdgeInsets.only(top: 0),
         //margin: const EdgeInsets.only(bottom: 100.0),
         child: ListView.builder(
-          // physics: NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
+            // physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
             itemCount: 10,
-            itemBuilder: (_, index) => _LikeWidget(userName: "Linda$index",
-                userImage: kImage2, artWorkTitle: "Artwork$index", date: "Dec 20, 2020"))
-    );
+            itemBuilder: (_, index) => _LikeWidget(userName: "Linda$index", userImage: kImage2, artWorkTitle: "Artwork$index", date: "Dec 20, 2020")));
   }
 }
 
@@ -32,13 +29,7 @@ class _LikeWidget extends StatelessWidget {
   final String artWorkTitle;
   final String date;
 
-  const _LikeWidget({
-    Key? key,
-    required this.userName,
-    required this.userImage,
-    required this.artWorkTitle,
-    required this.date
-  }) : super(key: key);
+  const _LikeWidget({Key? key, required this.userName, required this.userImage, required this.artWorkTitle, required this.date}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +37,12 @@ class _LikeWidget extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16, 5, 16, 5),
       decoration: BoxDecoration(
         border: Border.all(
-          color: const Color(0xFFF1F1F2),  // red as border color
+          color: const Color(0xFFF1F1F2), // red as border color
         ),
       ),
       child: ListTile(
         leading: UserImageWidget(imageUrl: userImage),
-        title:RichText(
+        title: RichText(
           text: TextSpan(
             style: DefaultTextStyle.of(context).style,
             children: <TextSpan>[
@@ -62,7 +53,7 @@ class _LikeWidget extends StatelessWidget {
           ),
         ),
         subtitle: Text(date, style: const TextStyle(color: Color(0xFFC4C4C4))),
-        trailing: NextButton(onTap: (){}),
+        trailing: NextButton(onTap: () {}),
       ),
     );
   }

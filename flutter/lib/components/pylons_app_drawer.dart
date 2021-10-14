@@ -12,7 +12,7 @@ class PylonsAppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child:  Drawer(
+      child: Drawer(
         child: ListView(
           children: [
             const UserAccountsDrawerHeader(
@@ -31,17 +31,16 @@ class PylonsAppDrawer extends StatelessWidget {
             ),
             ListTile(
                 title: const Text('qwerqwerqwer'),
-                leading:const Icon(Icons.comment),
-                onTap: (){
+                leading: const Icon(Icons.comment),
+                onTap: () {
                   //Navigator.pop(context);
-                }
-            ),ListTile(
+                }),
+            ListTile(
                 title: const Text('Balances'),
-                leading:const Icon(Icons.account_balance_wallet),
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const DashboardAssets()));
-                }
-            )
+                leading: const Icon(Icons.account_balance_wallet),
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DashboardAssets()));
+                })
           ],
         ),
       ),

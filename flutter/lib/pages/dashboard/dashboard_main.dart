@@ -45,8 +45,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      _pageController.animateToPage(index,
-          duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      _pageController.animateToPage(index, duration: const Duration(milliseconds: 500), curve: Curves.ease);
     });
   }
 
@@ -56,15 +55,9 @@ class _DashboardWidgetState extends State<DashboardWidget> {
     });
   }
 
-  static const List<Widget> _pages = <Widget>[
-    HomeScreen(),
-    DiscoverScreen(),
-    MarketplaceScreen(),
-    GalleryScreen()
-  ];
+  static const List<Widget> _pages = <Widget>[HomeScreen(), DiscoverScreen(), MarketplaceScreen(), GalleryScreen()];
 
-  static const TextStyle optionStyle = TextStyle(
-      fontSize: 12, color: Colors.indigo, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle = TextStyle(fontSize: 12, color: Colors.indigo, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +70,7 @@ class _DashboardWidgetState extends State<DashboardWidget> {
         //body: SafeArea(
         //  child: _pages[_selectedIndex],
         //),
-        body: PageView(
-            onPageChanged: onPageChanged,
-            controller: _pageController,
-            children: _pages),
+        body: PageView(onPageChanged: onPageChanged, controller: _pageController, children: _pages),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,

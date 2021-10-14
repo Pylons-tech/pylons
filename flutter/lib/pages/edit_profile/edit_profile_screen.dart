@@ -10,8 +10,7 @@ class EditProfileScreen extends StatelessWidget {
 
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
-  final TextEditingController _userIDController =
-      TextEditingController(text: "cosmos1xfkoi9863893j90387jwksmsk0w");
+  final TextEditingController _userIDController = TextEditingController(text: "cosmos1xfkoi9863893j90387jwksmsk0w");
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +40,7 @@ class EditProfileScreen extends StatelessWidget {
         elevation: 0,
         title: const Text(
           "Pylons Account",
-          style: TextStyle(
-              fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
         ),
         actions: [
           IconButton(
@@ -101,8 +99,7 @@ class EditProfileScreen extends StatelessWidget {
                   const VerticalSpace(20),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => SocialMediaScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => SocialMediaScreen()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -115,8 +112,7 @@ class EditProfileScreen extends StatelessWidget {
                           const HorizontalSpace(10),
                           const Text(
                             "Link to Social Media",
-                            style: TextStyle(
-                                color: Colors.black, fontWeight: FontWeight.w400),
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -139,8 +135,7 @@ class EditProfileScreen extends StatelessWidget {
                           const HorizontalSpace(10),
                           const Text(
                             "Export account to Google Cloud",
-                            style: TextStyle(
-                                color: Colors.black, fontWeight: FontWeight.w400),
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -193,9 +188,7 @@ class _ProfileImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = ScreenSizeUtil(context);
     return Container(
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey, width: 1.5),
-          shape: BoxShape.circle),
+      decoration: BoxDecoration(border: Border.all(color: Colors.grey, width: 1.5), shape: BoxShape.circle),
       child: Stack(
         children: <Widget>[
           ClipRRect(
@@ -272,14 +265,7 @@ class _TextInputWidget extends StatelessWidget {
   final int noOfLines;
   final bool enabled;
 
-  const _TextInputWidget(
-      {Key? key,
-      required this.title,
-      required this.hint,
-      required this.controller,
-      this.noOfLines = 1,
-      this.enabled = true})
-      : super(key: key);
+  const _TextInputWidget({Key? key, required this.title, required this.hint, required this.controller, this.noOfLines = 1, this.enabled = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -311,8 +297,7 @@ class _TextInputWidget extends StatelessWidget {
               contentPadding: const EdgeInsets.all(16),
               filled: true,
               hintText: hint,
-              hintStyle: const TextStyle(
-                  color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
+              hintStyle: const TextStyle(color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
               fillColor: const Color(0xffFBFBFB)),
         ),
       ],
@@ -327,14 +312,7 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
   final int noOfLines;
   final bool enabled;
 
-  const _WalletAddressTextInputWidget(
-      {Key? key,
-      required this.title,
-      required this.hint,
-      required this.controller,
-      this.noOfLines = 1,
-      this.enabled = true})
-      : super(key: key);
+  const _WalletAddressTextInputWidget({Key? key, required this.title, required this.hint, required this.controller, this.noOfLines = 1, this.enabled = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -347,7 +325,7 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
         const VerticalSpace(4),
         GestureDetector(
           behavior: HitTestBehavior.translucent,
-          onTap: (){
+          onTap: () {
             debugPrint("main");
           },
           child: TextFormField(
@@ -378,8 +356,7 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
                   decoration: const BoxDecoration(
                       color: Colors.transparent,
                       // borderRadius: BorderRadius.only(topLeft: Radius.circular(4), bottomLeft: Radius.circular(4)),
-                      border:  Border(
-                          right: BorderSide(color: Color(0xffC4C4C4)))),
+                      border: Border(right: BorderSide(color: Color(0xffC4C4C4)))),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -392,21 +369,18 @@ class _WalletAddressTextInputWidget extends StatelessWidget {
                 ),
                 suffixIcon: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: const BoxDecoration(
-                    color: kBlue,
-                    borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5))
-                  ),
+                  decoration: const BoxDecoration(color: kBlue, borderRadius: BorderRadius.only(topRight: Radius.circular(5), bottomRight: Radius.circular(5))),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                       Text("Copy", style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.w500),),
+                      Text(
+                        "Copy",
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                      ),
                     ],
                   ),
                 ),
-
-                hintStyle: const TextStyle(
-                    color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
+                hintStyle: const TextStyle(color: Color(0xffC4C4C4), fontWeight: FontWeight.w500),
                 fillColor: const Color(0xffFBFBFB)),
           ),
         ),

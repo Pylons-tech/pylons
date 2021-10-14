@@ -12,7 +12,6 @@ class NFTViewWidget extends StatefulWidget {
 }
 
 class _NFTViewWidgetState extends State<NFTViewWidget> with SingleTickerProviderStateMixin {
-
   @override
   void initState() {
     super.initState();
@@ -21,24 +20,21 @@ class _NFTViewWidgetState extends State<NFTViewWidget> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            icon: const Icon(Icons.close, color: Colors.white),
-            onPressed: (){
-              Navigator.pop(context);
-            },
-          )
-      ),
-      body: const Align(
-        child: Image(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              icon: const Icon(Icons.close, color: Colors.white),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )),
+        body: const Align(
+            child: Image(
           image: CachedNetworkImageProvider(kImage),
           width: double.infinity,
           fit: BoxFit.cover,
-        )
-      )
-    );
+        )));
   }
 }
