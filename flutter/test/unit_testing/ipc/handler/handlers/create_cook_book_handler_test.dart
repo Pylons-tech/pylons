@@ -1,4 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pylons_wallet/ipc/handler/handlers/create_cook_book_handler.dart';
+import 'package:pylons_wallet/modules/cosmos.authz.v1beta1/module/client/tendermint/abci/types.pb.dart';
 // import 'package:pylons_wallet/generated/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
 
 var MOCK_COOKBOOK = '''{
@@ -16,6 +18,11 @@ var MOCK_COOKBOOK = '''{
 
 void main() {
   test('test cookbook making', () {
+
+    var wholeMessage = [MOCK_COOKBOOK];
+    var handler = CreateCookBookHandler(wholeMessage);
+    handler.handle();
+
     // MsgClient().createCookbook(request);
     // var mockCookBook = MsgCreateCookbookResponse.fromJson(MOCK_COOKBOOK);
   });
