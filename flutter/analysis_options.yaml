@@ -23,7 +23,7 @@ analyzer:
     always_declare_return_types: error
     override_on_non_overriding_member: error
     annotate_overrides: error
-    avoid_relative_lib_imports: error
+#    avoid_relative_lib_imports: error
     avoid_empty_else: error
     avoid_returning_null_for_future: error
     empty_statements: error
@@ -37,7 +37,7 @@ analyzer:
     non_constant_identifier_names: ignore
     only_throw_errors: error
     exhaustive_cases: error
-    always_use_package_imports: error
+#    always_use_package_imports: error
     missing_enum_constant_in_switch: error
 
 linter:
@@ -52,7 +52,7 @@ linter:
     - empty_statements
     - always_declare_return_types
     - avoid_empty_else
-    - avoid_relative_lib_imports
+#    - avoid_relative_lib_imports
     - avoid_returning_null_for_future
     - always_put_control_body_on_new_line
     - always_require_non_null_named_parameters

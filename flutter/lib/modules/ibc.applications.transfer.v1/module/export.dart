@@ -39,6 +39,6 @@ export 'client/ibc/applications/transfer/v1/tx.pbjson.dart';
 export 'client/cosmos/upgrade/v1beta1/upgrade.pb.dart';
 export 'client/cosmos/upgrade/v1beta1/upgrade.pbenum.dart';
 export 'client/cosmos/upgrade/v1beta1/upgrade.pbjson.dart';
-export 'client/ibc/core/client/v1/client.pb.dart';
+// export 'client/ibc/core/client/v1/client.pb.dart';
 export 'client/ibc/core/client/v1/client.pbenum.dart';
-export 'client/ibc/core/client/v1/client.pbjson.dart';
+// export 'client/ibc/core/client/v1/client.pbjson.dart';
