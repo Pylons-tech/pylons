@@ -35,6 +35,9 @@ class HandlerFactory {
   BaseHandler getHandler(List<String> message) {
     final key = message[1];
 
+    print(message);
+
+
     if (key == TX_CREATE_COOKBOOK) {
       return CreateCookBookHandler(message);
     }

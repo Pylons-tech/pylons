@@ -13,9 +13,8 @@ class CreateCookBookHandler implements BaseHandler {
 
   @override
   Future<String> handle() async {
-
-    var signingGateway = PylonsApp.signingGateway;
-    var currentWallet = PylonsApp.currentWallet;
+    final signingGateway = PylonsApp.signingGateway;
+    final currentWallet = PylonsApp.currentWallet;
 
     final walletLookupKey = WalletLookupKey(
       walletId: currentWallet.walletId,
@@ -23,26 +22,21 @@ class CreateCookBookHandler implements BaseHandler {
       password: '',
     );
 
-
-
-    for(var json in wholeMessage){
-      var msgObj = pylons.MsgCreateCookbook.fromJson(json);
-      final result = await signingGateway
-          .signTransaction(
-            transaction: UnsignedAlanTransaction(messages: [msgObj]),
-            walletLookupKey: walletLookupKey)
-          .mapError<dynamic>((error) => throw error)
-          .flatMap((signed) => signingGateway.broadcastTransaction(
-                      walletLookupKey: walletLookupKey,
-                      transaction: signed,
+    print(wholeMessage);
+    var msgObj = pylons.MsgCreateCookbook.fromJson(wholeMessage[2]);
+    final result = await signingGateway.signTransaction(transaction: UnsignedAlanTransaction(messages: [msgObj]), walletLookupKey: walletLookupKey).mapError<dynamic>((error) => throw error).flatMap(
+          (signed) => signingGateway.broadcastTransaction(
+            walletLookupKey: walletLookupKey,
+            transaction: signed,
           ),
-      );
-      result.fold(
-            (fail) => throw fail as Object,
-            (hash) => debugPrint("new TX hash: $hash"),
-      );
-    }
+        );
 
+    print(result);
+
+    result.fold(
+      (fail) => throw fail as Object,
+      (hash) => debugPrint("new TX hash: $hash"),
+    );
 
     return SynchronousFuture('');
   }
