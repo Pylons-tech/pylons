@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: pylons/recipe.proto
 //
-
+// @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 import 'dart:core' as $core;
@@ -10,28 +10,46 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
-import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart' as $3;
+import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'item.pb.dart' as $3;
 
 class DoubleInputParam extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleInputParam',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleInputParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'minValue', protoName: 'minValue')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'maxValue', protoName: 'maxValue')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   DoubleInputParam._() : super();
-  factory DoubleInputParam() => create();
+  factory DoubleInputParam({
+    $core.String? key,
+    $core.String? minValue,
+    $core.String? maxValue,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (minValue != null) {
+      _result.minValue = minValue;
+    }
+    if (maxValue != null) {
+      _result.maxValue = maxValue;
+    }
+    return _result;
+  }
   factory DoubleInputParam.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DoubleInputParam.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   DoubleInputParam clone() => DoubleInputParam()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   DoubleInputParam copyWith(void Function(DoubleInputParam) updates) => super.copyWith((message) => updates(message as DoubleInputParam)) as DoubleInputParam; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -45,10 +63,7 @@ class DoubleInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
   @$pb.TagNumber(1)
-  set key($core.String v) {
-    $_setString(0, v);
-  }
-
+  set key($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -57,10 +72,7 @@ class DoubleInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get minValue => $_getSZ(1);
   @$pb.TagNumber(2)
-  set minValue($core.String v) {
-    $_setString(1, v);
-  }
-
+  set minValue($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasMinValue() => $_has(1);
   @$pb.TagNumber(2)
@@ -69,10 +81,7 @@ class DoubleInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get maxValue => $_getSZ(2);
   @$pb.TagNumber(3)
-  set maxValue($core.String v) {
-    $_setString(2, v);
-  }
-
+  set maxValue($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasMaxValue() => $_has(2);
   @$pb.TagNumber(3)
@@ -80,24 +89,42 @@ class DoubleInputParam extends $pb.GeneratedMessage {
 }
 
 class LongInputParam extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LongInputParam',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LongInputParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'minValue', protoName: 'minValue')
     ..aInt64(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'maxValue', protoName: 'maxValue')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   LongInputParam._() : super();
-  factory LongInputParam() => create();
+  factory LongInputParam({
+    $core.String? key,
+    $fixnum.Int64? minValue,
+    $fixnum.Int64? maxValue,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (minValue != null) {
+      _result.minValue = minValue;
+    }
+    if (maxValue != null) {
+      _result.maxValue = maxValue;
+    }
+    return _result;
+  }
   factory LongInputParam.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory LongInputParam.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   LongInputParam clone() => LongInputParam()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   LongInputParam copyWith(void Function(LongInputParam) updates) => super.copyWith((message) => updates(message as LongInputParam)) as LongInputParam; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -111,10 +138,7 @@ class LongInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
   @$pb.TagNumber(1)
-  set key($core.String v) {
-    $_setString(0, v);
-  }
-
+  set key($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -123,10 +147,7 @@ class LongInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get minValue => $_getI64(1);
   @$pb.TagNumber(2)
-  set minValue($fixnum.Int64 v) {
-    $_setInt64(1, v);
-  }
-
+  set minValue($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasMinValue() => $_has(1);
   @$pb.TagNumber(2)
@@ -135,10 +156,7 @@ class LongInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $fixnum.Int64 get maxValue => $_getI64(2);
   @$pb.TagNumber(3)
-  set maxValue($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set maxValue($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasMaxValue() => $_has(2);
   @$pb.TagNumber(3)
@@ -146,23 +164,37 @@ class LongInputParam extends $pb.GeneratedMessage {
 }
 
 class StringInputParam extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StringInputParam',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StringInputParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   StringInputParam._() : super();
-  factory StringInputParam() => create();
+  factory StringInputParam({
+    $core.String? key,
+    $core.String? value,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (value != null) {
+      _result.value = value;
+    }
+    return _result;
+  }
   factory StringInputParam.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory StringInputParam.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   StringInputParam clone() => StringInputParam()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   StringInputParam copyWith(void Function(StringInputParam) updates) => super.copyWith((message) => updates(message as StringInputParam)) as StringInputParam; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -176,10 +208,7 @@ class StringInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
   @$pb.TagNumber(1)
-  set key($core.String v) {
-    $_setString(0, v);
-  }
-
+  set key($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -188,10 +217,7 @@ class StringInputParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get value => $_getSZ(1);
   @$pb.TagNumber(2)
-  set value($core.String v) {
-    $_setString(1, v);
-  }
-
+  set value($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasValue() => $_has(1);
   @$pb.TagNumber(2)
@@ -199,24 +225,42 @@ class StringInputParam extends $pb.GeneratedMessage {
 }
 
 class ConditionList extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ConditionList',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ConditionList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..pc<DoubleInputParam>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'doubles', $pb.PbFieldType.PM, subBuilder: DoubleInputParam.create)
     ..pc<LongInputParam>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longs', $pb.PbFieldType.PM, subBuilder: LongInputParam.create)
     ..pc<StringInputParam>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'strings', $pb.PbFieldType.PM, subBuilder: StringInputParam.create)
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   ConditionList._() : super();
-  factory ConditionList() => create();
+  factory ConditionList({
+    $core.Iterable<DoubleInputParam>? doubles,
+    $core.Iterable<LongInputParam>? longs,
+    $core.Iterable<StringInputParam>? strings,
+  }) {
+    final _result = create();
+    if (doubles != null) {
+      _result.doubles.addAll(doubles);
+    }
+    if (longs != null) {
+      _result.longs.addAll(longs);
+    }
+    if (strings != null) {
+      _result.strings.addAll(strings);
+    }
+    return _result;
+  }
   factory ConditionList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ConditionList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   ConditionList clone() => ConditionList()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   ConditionList copyWith(void Function(ConditionList) updates) => super.copyWith((message) => updates(message as ConditionList)) as ConditionList; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -238,26 +282,52 @@ class ConditionList extends $pb.GeneratedMessage {
 }
 
 class ItemInput extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemInput',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemInput', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ID', protoName: 'ID')
     ..pc<DoubleInputParam>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'doubles', $pb.PbFieldType.PM, subBuilder: DoubleInputParam.create)
     ..pc<LongInputParam>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longs', $pb.PbFieldType.PM, subBuilder: LongInputParam.create)
     ..pc<StringInputParam>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'strings', $pb.PbFieldType.PM, subBuilder: StringInputParam.create)
     ..aOM<ConditionList>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'conditions', subBuilder: ConditionList.create)
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   ItemInput._() : super();
-  factory ItemInput() => create();
+  factory ItemInput({
+    $core.String? iD,
+    $core.Iterable<DoubleInputParam>? doubles,
+    $core.Iterable<LongInputParam>? longs,
+    $core.Iterable<StringInputParam>? strings,
+    ConditionList? conditions,
+  }) {
+    final _result = create();
+    if (iD != null) {
+      _result.iD = iD;
+    }
+    if (doubles != null) {
+      _result.doubles.addAll(doubles);
+    }
+    if (longs != null) {
+      _result.longs.addAll(longs);
+    }
+    if (strings != null) {
+      _result.strings.addAll(strings);
+    }
+    if (conditions != null) {
+      _result.conditions = conditions;
+    }
+    return _result;
+  }
   factory ItemInput.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ItemInput.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   ItemInput clone() => ItemInput()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   ItemInput copyWith(void Function(ItemInput) updates) => super.copyWith((message) => updates(message as ItemInput)) as ItemInput; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -271,10 +341,7 @@ class ItemInput extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get iD => $_getSZ(0);
   @$pb.TagNumber(1)
-  set iD($core.String v) {
-    $_setString(0, v);
-  }
-
+  set iD($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasID() => $_has(0);
   @$pb.TagNumber(1)
@@ -292,10 +359,7 @@ class ItemInput extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   ConditionList get conditions => $_getN(4);
   @$pb.TagNumber(5)
-  set conditions(ConditionList v) {
-    setField(5, v);
-  }
-
+  set conditions(ConditionList v) { setField(5, v); }
   @$pb.TagNumber(5)
   $core.bool hasConditions() => $_has(4);
   @$pb.TagNumber(5)
@@ -305,24 +369,42 @@ class ItemInput extends $pb.GeneratedMessage {
 }
 
 class DoubleWeightRange extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleWeightRange',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleWeightRange', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lower')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'upper')
     ..a<$fixnum.Int64>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weight', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   DoubleWeightRange._() : super();
-  factory DoubleWeightRange() => create();
+  factory DoubleWeightRange({
+    $core.String? lower,
+    $core.String? upper,
+    $fixnum.Int64? weight,
+  }) {
+    final _result = create();
+    if (lower != null) {
+      _result.lower = lower;
+    }
+    if (upper != null) {
+      _result.upper = upper;
+    }
+    if (weight != null) {
+      _result.weight = weight;
+    }
+    return _result;
+  }
   factory DoubleWeightRange.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DoubleWeightRange.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   DoubleWeightRange clone() => DoubleWeightRange()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   DoubleWeightRange copyWith(void Function(DoubleWeightRange) updates) => super.copyWith((message) => updates(message as DoubleWeightRange)) as DoubleWeightRange; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -336,10 +418,7 @@ class DoubleWeightRange extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get lower => $_getSZ(0);
   @$pb.TagNumber(1)
-  set lower($core.String v) {
-    $_setString(0, v);
-  }
-
+  set lower($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasLower() => $_has(0);
   @$pb.TagNumber(1)
@@ -348,10 +427,7 @@ class DoubleWeightRange extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get upper => $_getSZ(1);
   @$pb.TagNumber(2)
-  set upper($core.String v) {
-    $_setString(1, v);
-  }
-
+  set upper($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasUpper() => $_has(1);
   @$pb.TagNumber(2)
@@ -360,10 +436,7 @@ class DoubleWeightRange extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $fixnum.Int64 get weight => $_getI64(2);
   @$pb.TagNumber(3)
-  set weight($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set weight($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasWeight() => $_has(2);
   @$pb.TagNumber(3)
@@ -371,25 +444,47 @@ class DoubleWeightRange extends $pb.GeneratedMessage {
 }
 
 class DoubleParam extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleParam',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'DoubleParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rate')
     ..pc<DoubleWeightRange>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weightRanges', $pb.PbFieldType.PM, protoName: 'weightRanges', subBuilder: DoubleWeightRange.create)
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   DoubleParam._() : super();
-  factory DoubleParam() => create();
+  factory DoubleParam({
+    $core.String? key,
+    $core.String? rate,
+    $core.Iterable<DoubleWeightRange>? weightRanges,
+    $core.String? program,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (rate != null) {
+      _result.rate = rate;
+    }
+    if (weightRanges != null) {
+      _result.weightRanges.addAll(weightRanges);
+    }
+    if (program != null) {
+      _result.program = program;
+    }
+    return _result;
+  }
   factory DoubleParam.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory DoubleParam.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   DoubleParam clone() => DoubleParam()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   DoubleParam copyWith(void Function(DoubleParam) updates) => super.copyWith((message) => updates(message as DoubleParam)) as DoubleParam; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -403,10 +498,7 @@ class DoubleParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
   @$pb.TagNumber(1)
-  set key($core.String v) {
-    $_setString(0, v);
-  }
-
+  set key($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -415,10 +507,7 @@ class DoubleParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get rate => $_getSZ(1);
   @$pb.TagNumber(2)
-  set rate($core.String v) {
-    $_setString(1, v);
-  }
-
+  set rate($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasRate() => $_has(1);
   @$pb.TagNumber(2)
@@ -430,10 +519,7 @@ class DoubleParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get program => $_getSZ(3);
   @$pb.TagNumber(4)
-  set program($core.String v) {
-    $_setString(3, v);
-  }
-
+  set program($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasProgram() => $_has(3);
   @$pb.TagNumber(4)
@@ -441,24 +527,42 @@ class DoubleParam extends $pb.GeneratedMessage {
 }
 
 class IntWeightRange extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'IntWeightRange',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'IntWeightRange', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aInt64(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'lower')
     ..aInt64(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'upper')
     ..a<$fixnum.Int64>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weight', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   IntWeightRange._() : super();
-  factory IntWeightRange() => create();
+  factory IntWeightRange({
+    $fixnum.Int64? lower,
+    $fixnum.Int64? upper,
+    $fixnum.Int64? weight,
+  }) {
+    final _result = create();
+    if (lower != null) {
+      _result.lower = lower;
+    }
+    if (upper != null) {
+      _result.upper = upper;
+    }
+    if (weight != null) {
+      _result.weight = weight;
+    }
+    return _result;
+  }
   factory IntWeightRange.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory IntWeightRange.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   IntWeightRange clone() => IntWeightRange()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   IntWeightRange copyWith(void Function(IntWeightRange) updates) => super.copyWith((message) => updates(message as IntWeightRange)) as IntWeightRange; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -472,10 +576,7 @@ class IntWeightRange extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $fixnum.Int64 get lower => $_getI64(0);
   @$pb.TagNumber(1)
-  set lower($fixnum.Int64 v) {
-    $_setInt64(0, v);
-  }
-
+  set lower($fixnum.Int64 v) { $_setInt64(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasLower() => $_has(0);
   @$pb.TagNumber(1)
@@ -484,10 +585,7 @@ class IntWeightRange extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get upper => $_getI64(1);
   @$pb.TagNumber(2)
-  set upper($fixnum.Int64 v) {
-    $_setInt64(1, v);
-  }
-
+  set upper($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasUpper() => $_has(1);
   @$pb.TagNumber(2)
@@ -496,10 +594,7 @@ class IntWeightRange extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $fixnum.Int64 get weight => $_getI64(2);
   @$pb.TagNumber(3)
-  set weight($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set weight($fixnum.Int64 v) { $_setInt64(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasWeight() => $_has(2);
   @$pb.TagNumber(3)
@@ -507,25 +602,47 @@ class IntWeightRange extends $pb.GeneratedMessage {
 }
 
 class LongParam extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LongParam',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'LongParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rate')
     ..pc<IntWeightRange>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weightRanges', $pb.PbFieldType.PM, protoName: 'weightRanges', subBuilder: IntWeightRange.create)
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   LongParam._() : super();
-  factory LongParam() => create();
+  factory LongParam({
+    $core.String? key,
+    $core.String? rate,
+    $core.Iterable<IntWeightRange>? weightRanges,
+    $core.String? program,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (rate != null) {
+      _result.rate = rate;
+    }
+    if (weightRanges != null) {
+      _result.weightRanges.addAll(weightRanges);
+    }
+    if (program != null) {
+      _result.program = program;
+    }
+    return _result;
+  }
   factory LongParam.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory LongParam.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   LongParam clone() => LongParam()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   LongParam copyWith(void Function(LongParam) updates) => super.copyWith((message) => updates(message as LongParam)) as LongParam; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -539,10 +656,7 @@ class LongParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
   @$pb.TagNumber(1)
-  set key($core.String v) {
-    $_setString(0, v);
-  }
-
+  set key($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -551,10 +665,7 @@ class LongParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get rate => $_getSZ(1);
   @$pb.TagNumber(2)
-  set rate($core.String v) {
-    $_setString(1, v);
-  }
-
+  set rate($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasRate() => $_has(1);
   @$pb.TagNumber(2)
@@ -566,10 +677,7 @@ class LongParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get program => $_getSZ(3);
   @$pb.TagNumber(4)
-  set program($core.String v) {
-    $_setString(3, v);
-  }
-
+  set program($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasProgram() => $_has(3);
   @$pb.TagNumber(4)
@@ -577,25 +685,47 @@ class LongParam extends $pb.GeneratedMessage {
 }
 
 class StringParam extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StringParam',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'StringParam', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'key')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'rate')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'value')
     ..aOS(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   StringParam._() : super();
-  factory StringParam() => create();
+  factory StringParam({
+    $core.String? key,
+    $core.String? rate,
+    $core.String? value,
+    $core.String? program,
+  }) {
+    final _result = create();
+    if (key != null) {
+      _result.key = key;
+    }
+    if (rate != null) {
+      _result.rate = rate;
+    }
+    if (value != null) {
+      _result.value = value;
+    }
+    if (program != null) {
+      _result.program = program;
+    }
+    return _result;
+  }
   factory StringParam.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory StringParam.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   StringParam clone() => StringParam()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   StringParam copyWith(void Function(StringParam) updates) => super.copyWith((message) => updates(message as StringParam)) as StringParam; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -609,10 +739,7 @@ class StringParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get key => $_getSZ(0);
   @$pb.TagNumber(1)
-  set key($core.String v) {
-    $_setString(0, v);
-  }
-
+  set key($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasKey() => $_has(0);
   @$pb.TagNumber(1)
@@ -621,10 +748,7 @@ class StringParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get rate => $_getSZ(1);
   @$pb.TagNumber(2)
-  set rate($core.String v) {
-    $_setString(1, v);
-  }
-
+  set rate($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasRate() => $_has(1);
   @$pb.TagNumber(2)
@@ -633,10 +757,7 @@ class StringParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get value => $_getSZ(2);
   @$pb.TagNumber(3)
-  set value($core.String v) {
-    $_setString(2, v);
-  }
-
+  set value($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasValue() => $_has(2);
   @$pb.TagNumber(3)
@@ -645,10 +766,7 @@ class StringParam extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get program => $_getSZ(3);
   @$pb.TagNumber(4)
-  set program($core.String v) {
-    $_setString(3, v);
-  }
-
+  set program($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasProgram() => $_has(3);
   @$pb.TagNumber(4)
@@ -656,24 +774,42 @@ class StringParam extends $pb.GeneratedMessage {
 }
 
 class CoinOutput extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CoinOutput',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CoinOutput', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ID', protoName: 'ID')
     ..aOM<$2.Coin>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coin', subBuilder: $2.Coin.create)
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'program')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   CoinOutput._() : super();
-  factory CoinOutput() => create();
+  factory CoinOutput({
+    $core.String? iD,
+    $2.Coin? coin,
+    $core.String? program,
+  }) {
+    final _result = create();
+    if (iD != null) {
+      _result.iD = iD;
+    }
+    if (coin != null) {
+      _result.coin = coin;
+    }
+    if (program != null) {
+      _result.program = program;
+    }
+    return _result;
+  }
   factory CoinOutput.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CoinOutput.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   CoinOutput clone() => CoinOutput()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   CoinOutput copyWith(void Function(CoinOutput) updates) => super.copyWith((message) => updates(message as CoinOutput)) as CoinOutput; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -687,10 +823,7 @@ class CoinOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get iD => $_getSZ(0);
   @$pb.TagNumber(1)
-  set iD($core.String v) {
-    $_setString(0, v);
-  }
-
+  set iD($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasID() => $_has(0);
   @$pb.TagNumber(1)
@@ -699,10 +832,7 @@ class CoinOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $2.Coin get coin => $_getN(1);
   @$pb.TagNumber(2)
-  set coin($2.Coin v) {
-    setField(2, v);
-  }
-
+  set coin($2.Coin v) { setField(2, v); }
   @$pb.TagNumber(2)
   $core.bool hasCoin() => $_has(1);
   @$pb.TagNumber(2)
@@ -713,10 +843,7 @@ class CoinOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get program => $_getSZ(2);
   @$pb.TagNumber(3)
-  set program($core.String v) {
-    $_setString(2, v);
-  }
-
+  set program($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasProgram() => $_has(2);
   @$pb.TagNumber(3)
@@ -724,32 +851,77 @@ class CoinOutput extends $pb.GeneratedMessage {
 }
 
 class ItemOutput extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemOutput',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemOutput', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ID', protoName: 'ID')
     ..pc<DoubleParam>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'doubles', $pb.PbFieldType.PM, subBuilder: DoubleParam.create)
     ..pc<LongParam>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longs', $pb.PbFieldType.PM, subBuilder: LongParam.create)
     ..pc<StringParam>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'strings', $pb.PbFieldType.PM, subBuilder: StringParam.create)
-    ..pc<$3.StringKeyValue>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutableStrings', $pb.PbFieldType.PM,
-        protoName: 'mutableStrings', subBuilder: $3.StringKeyValue.create)
+    ..pc<$3.StringKeyValue>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutableStrings', $pb.PbFieldType.PM, protoName: 'mutableStrings', subBuilder: $3.StringKeyValue.create)
     ..pc<$2.Coin>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'transferFee', $pb.PbFieldType.PM, protoName: 'transferFee', subBuilder: $2.Coin.create)
     ..aOS(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradePercentage', protoName: 'tradePercentage')
     ..a<$fixnum.Int64>(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, protoName: 'amountMinted', defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOB(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradeable')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   ItemOutput._() : super();
-  factory ItemOutput() => create();
+  factory ItemOutput({
+    $core.String? iD,
+    $core.Iterable<DoubleParam>? doubles,
+    $core.Iterable<LongParam>? longs,
+    $core.Iterable<StringParam>? strings,
+    $core.Iterable<$3.StringKeyValue>? mutableStrings,
+    $core.Iterable<$2.Coin>? transferFee,
+    $core.String? tradePercentage,
+    $fixnum.Int64? quantity,
+    $fixnum.Int64? amountMinted,
+    $core.bool? tradeable,
+  }) {
+    final _result = create();
+    if (iD != null) {
+      _result.iD = iD;
+    }
+    if (doubles != null) {
+      _result.doubles.addAll(doubles);
+    }
+    if (longs != null) {
+      _result.longs.addAll(longs);
+    }
+    if (strings != null) {
+      _result.strings.addAll(strings);
+    }
+    if (mutableStrings != null) {
+      _result.mutableStrings.addAll(mutableStrings);
+    }
+    if (transferFee != null) {
+      _result.transferFee.addAll(transferFee);
+    }
+    if (tradePercentage != null) {
+      _result.tradePercentage = tradePercentage;
+    }
+    if (quantity != null) {
+      _result.quantity = quantity;
+    }
+    if (amountMinted != null) {
+      _result.amountMinted = amountMinted;
+    }
+    if (tradeable != null) {
+      _result.tradeable = tradeable;
+    }
+    return _result;
+  }
   factory ItemOutput.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ItemOutput.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   ItemOutput clone() => ItemOutput()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   ItemOutput copyWith(void Function(ItemOutput) updates) => super.copyWith((message) => updates(message as ItemOutput)) as ItemOutput; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -763,10 +935,7 @@ class ItemOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get iD => $_getSZ(0);
   @$pb.TagNumber(1)
-  set iD($core.String v) {
-    $_setString(0, v);
-  }
-
+  set iD($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasID() => $_has(0);
   @$pb.TagNumber(1)
@@ -790,10 +959,7 @@ class ItemOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.String get tradePercentage => $_getSZ(6);
   @$pb.TagNumber(7)
-  set tradePercentage($core.String v) {
-    $_setString(6, v);
-  }
-
+  set tradePercentage($core.String v) { $_setString(6, v); }
   @$pb.TagNumber(7)
   $core.bool hasTradePercentage() => $_has(6);
   @$pb.TagNumber(7)
@@ -802,10 +968,7 @@ class ItemOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $fixnum.Int64 get quantity => $_getI64(7);
   @$pb.TagNumber(8)
-  set quantity($fixnum.Int64 v) {
-    $_setInt64(7, v);
-  }
-
+  set quantity($fixnum.Int64 v) { $_setInt64(7, v); }
   @$pb.TagNumber(8)
   $core.bool hasQuantity() => $_has(7);
   @$pb.TagNumber(8)
@@ -814,10 +977,7 @@ class ItemOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $fixnum.Int64 get amountMinted => $_getI64(8);
   @$pb.TagNumber(9)
-  set amountMinted($fixnum.Int64 v) {
-    $_setInt64(8, v);
-  }
-
+  set amountMinted($fixnum.Int64 v) { $_setInt64(8, v); }
   @$pb.TagNumber(9)
   $core.bool hasAmountMinted() => $_has(8);
   @$pb.TagNumber(9)
@@ -826,10 +986,7 @@ class ItemOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.bool get tradeable => $_getBF(9);
   @$pb.TagNumber(10)
-  set tradeable($core.bool v) {
-    $_setBool(9, v);
-  }
-
+  set tradeable($core.bool v) { $_setBool(9, v); }
   @$pb.TagNumber(10)
   $core.bool hasTradeable() => $_has(9);
   @$pb.TagNumber(10)
@@ -837,33 +994,82 @@ class ItemOutput extends $pb.GeneratedMessage {
 }
 
 class ItemModifyOutput extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemModifyOutput',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'ItemModifyOutput', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ID', protoName: 'ID')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'itemInputRef', protoName: 'itemInputRef')
     ..pc<DoubleParam>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'doubles', $pb.PbFieldType.PM, subBuilder: DoubleParam.create)
     ..pc<LongParam>(4, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'longs', $pb.PbFieldType.PM, subBuilder: LongParam.create)
     ..pc<StringParam>(5, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'strings', $pb.PbFieldType.PM, subBuilder: StringParam.create)
-    ..pc<$3.StringKeyValue>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutableStrings', $pb.PbFieldType.PM,
-        protoName: 'mutableStrings', subBuilder: $3.StringKeyValue.create)
+    ..pc<$3.StringKeyValue>(6, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'mutableStrings', $pb.PbFieldType.PM, protoName: 'mutableStrings', subBuilder: $3.StringKeyValue.create)
     ..pc<$2.Coin>(7, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'transferFee', $pb.PbFieldType.PM, protoName: 'transferFee', subBuilder: $2.Coin.create)
     ..aOS(8, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradePercentage', protoName: 'tradePercentage')
     ..a<$fixnum.Int64>(9, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'quantity', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..a<$fixnum.Int64>(10, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'amountMinted', $pb.PbFieldType.OU6, protoName: 'amountMinted', defaultOrMaker: $fixnum.Int64.ZERO)
     ..aOB(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'tradeable')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   ItemModifyOutput._() : super();
-  factory ItemModifyOutput() => create();
+  factory ItemModifyOutput({
+    $core.String? iD,
+    $core.String? itemInputRef,
+    $core.Iterable<DoubleParam>? doubles,
+    $core.Iterable<LongParam>? longs,
+    $core.Iterable<StringParam>? strings,
+    $core.Iterable<$3.StringKeyValue>? mutableStrings,
+    $core.Iterable<$2.Coin>? transferFee,
+    $core.String? tradePercentage,
+    $fixnum.Int64? quantity,
+    $fixnum.Int64? amountMinted,
+    $core.bool? tradeable,
+  }) {
+    final _result = create();
+    if (iD != null) {
+      _result.iD = iD;
+    }
+    if (itemInputRef != null) {
+      _result.itemInputRef = itemInputRef;
+    }
+    if (doubles != null) {
+      _result.doubles.addAll(doubles);
+    }
+    if (longs != null) {
+      _result.longs.addAll(longs);
+    }
+    if (strings != null) {
+      _result.strings.addAll(strings);
+    }
+    if (mutableStrings != null) {
+      _result.mutableStrings.addAll(mutableStrings);
+    }
+    if (transferFee != null) {
+      _result.transferFee.addAll(transferFee);
+    }
+    if (tradePercentage != null) {
+      _result.tradePercentage = tradePercentage;
+    }
+    if (quantity != null) {
+      _result.quantity = quantity;
+    }
+    if (amountMinted != null) {
+      _result.amountMinted = amountMinted;
+    }
+    if (tradeable != null) {
+      _result.tradeable = tradeable;
+    }
+    return _result;
+  }
   factory ItemModifyOutput.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory ItemModifyOutput.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   ItemModifyOutput clone() => ItemModifyOutput()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   ItemModifyOutput copyWith(void Function(ItemModifyOutput) updates) => super.copyWith((message) => updates(message as ItemModifyOutput)) as ItemModifyOutput; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -877,10 +1083,7 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get iD => $_getSZ(0);
   @$pb.TagNumber(1)
-  set iD($core.String v) {
-    $_setString(0, v);
-  }
-
+  set iD($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasID() => $_has(0);
   @$pb.TagNumber(1)
@@ -889,10 +1092,7 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get itemInputRef => $_getSZ(1);
   @$pb.TagNumber(2)
-  set itemInputRef($core.String v) {
-    $_setString(1, v);
-  }
-
+  set itemInputRef($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasItemInputRef() => $_has(1);
   @$pb.TagNumber(2)
@@ -916,10 +1116,7 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.String get tradePercentage => $_getSZ(7);
   @$pb.TagNumber(8)
-  set tradePercentage($core.String v) {
-    $_setString(7, v);
-  }
-
+  set tradePercentage($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(8)
   $core.bool hasTradePercentage() => $_has(7);
   @$pb.TagNumber(8)
@@ -928,10 +1125,7 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $fixnum.Int64 get quantity => $_getI64(8);
   @$pb.TagNumber(9)
-  set quantity($fixnum.Int64 v) {
-    $_setInt64(8, v);
-  }
-
+  set quantity($fixnum.Int64 v) { $_setInt64(8, v); }
   @$pb.TagNumber(9)
   $core.bool hasQuantity() => $_has(8);
   @$pb.TagNumber(9)
@@ -940,10 +1134,7 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $fixnum.Int64 get amountMinted => $_getI64(9);
   @$pb.TagNumber(10)
-  set amountMinted($fixnum.Int64 v) {
-    $_setInt64(9, v);
-  }
-
+  set amountMinted($fixnum.Int64 v) { $_setInt64(9, v); }
   @$pb.TagNumber(10)
   $core.bool hasAmountMinted() => $_has(9);
   @$pb.TagNumber(10)
@@ -952,10 +1143,7 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   $core.bool get tradeable => $_getBF(10);
   @$pb.TagNumber(11)
-  set tradeable($core.bool v) {
-    $_setBool(10, v);
-  }
-
+  set tradeable($core.bool v) { $_setBool(10, v); }
   @$pb.TagNumber(11)
   $core.bool hasTradeable() => $_has(10);
   @$pb.TagNumber(11)
@@ -963,25 +1151,42 @@ class ItemModifyOutput extends $pb.GeneratedMessage {
 }
 
 class EntriesList extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'EntriesList',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'EntriesList', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..pc<CoinOutput>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coinOutputs', $pb.PbFieldType.PM, protoName: 'coinOutputs', subBuilder: CoinOutput.create)
     ..pc<ItemOutput>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'itemOutputs', $pb.PbFieldType.PM, protoName: 'itemOutputs', subBuilder: ItemOutput.create)
-    ..pc<ItemModifyOutput>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'itemModifyOutputs', $pb.PbFieldType.PM,
-        protoName: 'itemModifyOutputs', subBuilder: ItemModifyOutput.create)
-    ..hasRequiredFields = false;
+    ..pc<ItemModifyOutput>(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'itemModifyOutputs', $pb.PbFieldType.PM, protoName: 'itemModifyOutputs', subBuilder: ItemModifyOutput.create)
+    ..hasRequiredFields = false
+  ;
 
   EntriesList._() : super();
-  factory EntriesList() => create();
+  factory EntriesList({
+    $core.Iterable<CoinOutput>? coinOutputs,
+    $core.Iterable<ItemOutput>? itemOutputs,
+    $core.Iterable<ItemModifyOutput>? itemModifyOutputs,
+  }) {
+    final _result = create();
+    if (coinOutputs != null) {
+      _result.coinOutputs.addAll(coinOutputs);
+    }
+    if (itemOutputs != null) {
+      _result.itemOutputs.addAll(itemOutputs);
+    }
+    if (itemModifyOutputs != null) {
+      _result.itemModifyOutputs.addAll(itemModifyOutputs);
+    }
+    return _result;
+  }
   factory EntriesList.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EntriesList.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   EntriesList clone() => EntriesList()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   EntriesList copyWith(void Function(EntriesList) updates) => super.copyWith((message) => updates(message as EntriesList)) as EntriesList; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -1003,23 +1208,37 @@ class EntriesList extends $pb.GeneratedMessage {
 }
 
 class WeightedOutputs extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WeightedOutputs',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'WeightedOutputs', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..pPS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'entryIDs', protoName: 'entryIDs')
     ..a<$fixnum.Int64>(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'weight', $pb.PbFieldType.OU6, defaultOrMaker: $fixnum.Int64.ZERO)
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   WeightedOutputs._() : super();
-  factory WeightedOutputs() => create();
+  factory WeightedOutputs({
+    $core.Iterable<$core.String>? entryIDs,
+    $fixnum.Int64? weight,
+  }) {
+    final _result = create();
+    if (entryIDs != null) {
+      _result.entryIDs.addAll(entryIDs);
+    }
+    if (weight != null) {
+      _result.weight = weight;
+    }
+    return _result;
+  }
   factory WeightedOutputs.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory WeightedOutputs.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   WeightedOutputs clone() => WeightedOutputs()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   WeightedOutputs copyWith(void Function(WeightedOutputs) updates) => super.copyWith((message) => updates(message as WeightedOutputs)) as WeightedOutputs; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -1036,10 +1255,7 @@ class WeightedOutputs extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $fixnum.Int64 get weight => $_getI64(1);
   @$pb.TagNumber(2)
-  set weight($fixnum.Int64 v) {
-    $_setInt64(1, v);
-  }
-
+  set weight($fixnum.Int64 v) { $_setInt64(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasWeight() => $_has(1);
   @$pb.TagNumber(2)
@@ -1047,22 +1263,32 @@ class WeightedOutputs extends $pb.GeneratedMessage {
 }
 
 class CoinInput extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CoinInput',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'CoinInput', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..pc<$2.Coin>(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'coins', $pb.PbFieldType.PM, subBuilder: $2.Coin.create)
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   CoinInput._() : super();
-  factory CoinInput() => create();
+  factory CoinInput({
+    $core.Iterable<$2.Coin>? coins,
+  }) {
+    final _result = create();
+    if (coins != null) {
+      _result.coins.addAll(coins);
+    }
+    return _result;
+  }
   factory CoinInput.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory CoinInput.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   CoinInput clone() => CoinInput()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   CoinInput copyWith(void Function(CoinInput) updates) => super.copyWith((message) => updates(message as CoinInput)) as CoinInput; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -1078,8 +1304,7 @@ class CoinInput extends $pb.GeneratedMessage {
 }
 
 class Recipe extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Recipe',
-      package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Recipe', package: const $pb.PackageName(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'Pylonstech.pylons.pylons'), createEmptyInstance: create)
     ..aOS(1, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'cookbookID', protoName: 'cookbookID')
     ..aOS(2, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'ID', protoName: 'ID')
     ..aOS(3, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'nodeVersion', protoName: 'nodeVersion')
@@ -1093,19 +1318,78 @@ class Recipe extends $pb.GeneratedMessage {
     ..aInt64(11, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'blockInterval', protoName: 'blockInterval')
     ..aOB(12, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'enabled')
     ..aOS(13, const $core.bool.fromEnvironment('protobuf.omit_field_names') ? '' : 'extraInfo', protoName: 'extraInfo')
-    ..hasRequiredFields = false;
+    ..hasRequiredFields = false
+  ;
 
   Recipe._() : super();
-  factory Recipe() => create();
+  factory Recipe({
+    $core.String? cookbookID,
+    $core.String? iD,
+    $core.String? nodeVersion,
+    $core.String? name,
+    $core.String? description,
+    $core.String? version,
+    $core.Iterable<CoinInput>? coinInputs,
+    $core.Iterable<ItemInput>? itemInputs,
+    EntriesList? entries,
+    $core.Iterable<WeightedOutputs>? outputs,
+    $fixnum.Int64? blockInterval,
+    $core.bool? enabled,
+    $core.String? extraInfo,
+  }) {
+    final _result = create();
+    if (cookbookID != null) {
+      _result.cookbookID = cookbookID;
+    }
+    if (iD != null) {
+      _result.iD = iD;
+    }
+    if (nodeVersion != null) {
+      _result.nodeVersion = nodeVersion;
+    }
+    if (name != null) {
+      _result.name = name;
+    }
+    if (description != null) {
+      _result.description = description;
+    }
+    if (version != null) {
+      _result.version = version;
+    }
+    if (coinInputs != null) {
+      _result.coinInputs.addAll(coinInputs);
+    }
+    if (itemInputs != null) {
+      _result.itemInputs.addAll(itemInputs);
+    }
+    if (entries != null) {
+      _result.entries = entries;
+    }
+    if (outputs != null) {
+      _result.outputs.addAll(outputs);
+    }
+    if (blockInterval != null) {
+      _result.blockInterval = blockInterval;
+    }
+    if (enabled != null) {
+      _result.enabled = enabled;
+    }
+    if (extraInfo != null) {
+      _result.extraInfo = extraInfo;
+    }
+    return _result;
+  }
   factory Recipe.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory Recipe.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
+  'Will be removed in next major version')
   Recipe clone() => Recipe()..mergeFromMessage(this);
-  @$core.Deprecated('Using this can add significant overhead to your binary. '
-      'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
-      'Will be removed in next major version')
+  @$core.Deprecated(
+  'Using this can add significant overhead to your binary. '
+  'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
+  'Will be removed in next major version')
   Recipe copyWith(void Function(Recipe) updates) => super.copyWith((message) => updates(message as Recipe)) as Recipe; // ignore: deprecated_member_use
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
@@ -1119,10 +1403,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get cookbookID => $_getSZ(0);
   @$pb.TagNumber(1)
-  set cookbookID($core.String v) {
-    $_setString(0, v);
-  }
-
+  set cookbookID($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasCookbookID() => $_has(0);
   @$pb.TagNumber(1)
@@ -1131,10 +1412,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get iD => $_getSZ(1);
   @$pb.TagNumber(2)
-  set iD($core.String v) {
-    $_setString(1, v);
-  }
-
+  set iD($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasID() => $_has(1);
   @$pb.TagNumber(2)
@@ -1143,10 +1421,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get nodeVersion => $_getSZ(2);
   @$pb.TagNumber(3)
-  set nodeVersion($core.String v) {
-    $_setString(2, v);
-  }
-
+  set nodeVersion($core.String v) { $_setString(2, v); }
   @$pb.TagNumber(3)
   $core.bool hasNodeVersion() => $_has(2);
   @$pb.TagNumber(3)
@@ -1155,10 +1430,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get name => $_getSZ(3);
   @$pb.TagNumber(4)
-  set name($core.String v) {
-    $_setString(3, v);
-  }
-
+  set name($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasName() => $_has(3);
   @$pb.TagNumber(4)
@@ -1167,10 +1439,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get description => $_getSZ(4);
   @$pb.TagNumber(5)
-  set description($core.String v) {
-    $_setString(4, v);
-  }
-
+  set description($core.String v) { $_setString(4, v); }
   @$pb.TagNumber(5)
   $core.bool hasDescription() => $_has(4);
   @$pb.TagNumber(5)
@@ -1179,10 +1448,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.String get version => $_getSZ(5);
   @$pb.TagNumber(6)
-  set version($core.String v) {
-    $_setString(5, v);
-  }
-
+  set version($core.String v) { $_setString(5, v); }
   @$pb.TagNumber(6)
   $core.bool hasVersion() => $_has(5);
   @$pb.TagNumber(6)
@@ -1197,10 +1463,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   EntriesList get entries => $_getN(8);
   @$pb.TagNumber(9)
-  set entries(EntriesList v) {
-    setField(9, v);
-  }
-
+  set entries(EntriesList v) { setField(9, v); }
   @$pb.TagNumber(9)
   $core.bool hasEntries() => $_has(8);
   @$pb.TagNumber(9)
@@ -1214,10 +1477,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   $fixnum.Int64 get blockInterval => $_getI64(10);
   @$pb.TagNumber(11)
-  set blockInterval($fixnum.Int64 v) {
-    $_setInt64(10, v);
-  }
-
+  set blockInterval($fixnum.Int64 v) { $_setInt64(10, v); }
   @$pb.TagNumber(11)
   $core.bool hasBlockInterval() => $_has(10);
   @$pb.TagNumber(11)
@@ -1226,10 +1486,7 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   $core.bool get enabled => $_getBF(11);
   @$pb.TagNumber(12)
-  set enabled($core.bool v) {
-    $_setBool(11, v);
-  }
-
+  set enabled($core.bool v) { $_setBool(11, v); }
   @$pb.TagNumber(12)
   $core.bool hasEnabled() => $_has(11);
   @$pb.TagNumber(12)
@@ -1238,12 +1495,10 @@ class Recipe extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   $core.String get extraInfo => $_getSZ(12);
   @$pb.TagNumber(13)
-  set extraInfo($core.String v) {
-    $_setString(12, v);
-  }
-
+  set extraInfo($core.String v) { $_setString(12, v); }
   @$pb.TagNumber(13)
   $core.bool hasExtraInfo() => $_has(12);
   @$pb.TagNumber(13)
   void clearExtraInfo() => clearField(13);
 }
+

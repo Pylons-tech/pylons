@@ -2,7 +2,7 @@
 //  Generated code. Do not modify.
 //  source: google/protobuf/descriptor.proto
 //
-
+// @dart = 2.12
 // ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
 
 // ignore_for_file: UNDEFINED_SHOWN_NAME
@@ -29,7 +29,7 @@ class FieldDescriptorProto_Type extends $pb.ProtobufEnum {
   static const FieldDescriptorProto_Type TYPE_SINT32 = FieldDescriptorProto_Type._(17, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'TYPE_SINT32');
   static const FieldDescriptorProto_Type TYPE_SINT64 = FieldDescriptorProto_Type._(18, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'TYPE_SINT64');
 
-  static const $core.List<FieldDescriptorProto_Type> values = <FieldDescriptorProto_Type>[
+  static const $core.List<FieldDescriptorProto_Type> values = <FieldDescriptorProto_Type> [
     TYPE_DOUBLE,
     TYPE_FLOAT,
     TYPE_INT64,
@@ -61,7 +61,7 @@ class FieldDescriptorProto_Label extends $pb.ProtobufEnum {
   static const FieldDescriptorProto_Label LABEL_REQUIRED = FieldDescriptorProto_Label._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'LABEL_REQUIRED');
   static const FieldDescriptorProto_Label LABEL_REPEATED = FieldDescriptorProto_Label._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'LABEL_REPEATED');
 
-  static const $core.List<FieldDescriptorProto_Label> values = <FieldDescriptorProto_Label>[
+  static const $core.List<FieldDescriptorProto_Label> values = <FieldDescriptorProto_Label> [
     LABEL_OPTIONAL,
     LABEL_REQUIRED,
     LABEL_REPEATED,
@@ -78,7 +78,7 @@ class FileOptions_OptimizeMode extends $pb.ProtobufEnum {
   static const FileOptions_OptimizeMode CODE_SIZE = FileOptions_OptimizeMode._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'CODE_SIZE');
   static const FileOptions_OptimizeMode LITE_RUNTIME = FileOptions_OptimizeMode._(3, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'LITE_RUNTIME');
 
-  static const $core.List<FileOptions_OptimizeMode> values = <FileOptions_OptimizeMode>[
+  static const $core.List<FileOptions_OptimizeMode> values = <FileOptions_OptimizeMode> [
     SPEED,
     CODE_SIZE,
     LITE_RUNTIME,
@@ -95,7 +95,7 @@ class FieldOptions_CType extends $pb.ProtobufEnum {
   static const FieldOptions_CType CORD = FieldOptions_CType._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'CORD');
   static const FieldOptions_CType STRING_PIECE = FieldOptions_CType._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'STRING_PIECE');
 
-  static const $core.List<FieldOptions_CType> values = <FieldOptions_CType>[
+  static const $core.List<FieldOptions_CType> values = <FieldOptions_CType> [
     STRING,
     CORD,
     STRING_PIECE,
@@ -112,7 +112,7 @@ class FieldOptions_JSType extends $pb.ProtobufEnum {
   static const FieldOptions_JSType JS_STRING = FieldOptions_JSType._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'JS_STRING');
   static const FieldOptions_JSType JS_NUMBER = FieldOptions_JSType._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'JS_NUMBER');
 
-  static const $core.List<FieldOptions_JSType> values = <FieldOptions_JSType>[
+  static const $core.List<FieldOptions_JSType> values = <FieldOptions_JSType> [
     JS_NORMAL,
     JS_STRING,
     JS_NUMBER,
@@ -129,7 +129,7 @@ class MethodOptions_IdempotencyLevel extends $pb.ProtobufEnum {
   static const MethodOptions_IdempotencyLevel NO_SIDE_EFFECTS = MethodOptions_IdempotencyLevel._(1, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'NO_SIDE_EFFECTS');
   static const MethodOptions_IdempotencyLevel IDEMPOTENT = MethodOptions_IdempotencyLevel._(2, const $core.bool.fromEnvironment('protobuf.omit_enum_names') ? '' : 'IDEMPOTENT');
 
-  static const $core.List<MethodOptions_IdempotencyLevel> values = <MethodOptions_IdempotencyLevel>[
+  static const $core.List<MethodOptions_IdempotencyLevel> values = <MethodOptions_IdempotencyLevel> [
     IDEMPOTENCY_UNKNOWN,
     NO_SIDE_EFFECTS,
     IDEMPOTENT,
@@ -140,3 +140,4 @@ class MethodOptions_IdempotencyLevel extends $pb.ProtobufEnum {
 
   const MethodOptions_IdempotencyLevel._($core.int v, $core.String n) : super(v, n);
 }
+

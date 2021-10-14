@@ -2,9 +2,13 @@
 //  Generated code. Do not modify.
 //  source: pylons/tx.proto
 //
+// @dart = 2.12
+// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields,deprecated_member_use_from_same_package
 
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
-
+import 'dart:core' as $core;
+import 'dart:convert' as $convert;
+import 'dart:typed_data' as $typed_data;
+@$core.Deprecated('Use msgUpdateAccountDescriptor instead')
 const MsgUpdateAccount$json = const {
   '1': 'MsgUpdateAccount',
   '2': const [
@@ -13,10 +17,16 @@ const MsgUpdateAccount$json = const {
   ],
 };
 
+/// Descriptor for `MsgUpdateAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgUpdateAccountDescriptor = $convert.base64Decode('ChBNc2dVcGRhdGVBY2NvdW50EhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISGgoIdXNlcm5hbWUYAiABKAlSCHVzZXJuYW1l');
+@$core.Deprecated('Use msgUpdateAccountResponseDescriptor instead')
 const MsgUpdateAccountResponse$json = const {
   '1': 'MsgUpdateAccountResponse',
 };
 
+/// Descriptor for `MsgUpdateAccountResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgUpdateAccountResponseDescriptor = $convert.base64Decode('ChhNc2dVcGRhdGVBY2NvdW50UmVzcG9uc2U=');
+@$core.Deprecated('Use msgCreateAccountDescriptor instead')
 const MsgCreateAccount$json = const {
   '1': 'MsgCreateAccount',
   '2': const [
@@ -25,10 +35,16 @@ const MsgCreateAccount$json = const {
   ],
 };
 
+/// Descriptor for `MsgCreateAccount`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateAccountDescriptor = $convert.base64Decode('ChBNc2dDcmVhdGVBY2NvdW50EhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISGgoIdXNlcm5hbWUYAiABKAlSCHVzZXJuYW1l');
+@$core.Deprecated('Use msgCreateAccountResponseDescriptor instead')
 const MsgCreateAccountResponse$json = const {
   '1': 'MsgCreateAccountResponse',
 };
 
+/// Descriptor for `MsgCreateAccountResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateAccountResponseDescriptor = $convert.base64Decode('ChhNc2dDcmVhdGVBY2NvdW50UmVzcG9uc2U=');
+@$core.Deprecated('Use msgFulfillTradeDescriptor instead')
 const MsgFulfillTrade$json = const {
   '1': 'MsgFulfillTrade',
   '2': const [
@@ -39,10 +55,16 @@ const MsgFulfillTrade$json = const {
   ],
 };
 
+/// Descriptor for `MsgFulfillTrade`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgFulfillTradeDescriptor = $convert.base64Decode('Cg9Nc2dGdWxmaWxsVHJhZGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIOCgJJRBgCIAEoBFICSUQSKAoPY29pbklucHV0c0luZGV4GAMgASgEUg9jb2luSW5wdXRzSW5kZXgSPQoFaXRlbXMYBCADKAsyIS5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuSXRlbVJlZkIEyN4fAFIFaXRlbXM=');
+@$core.Deprecated('Use msgFulfillTradeResponseDescriptor instead')
 const MsgFulfillTradeResponse$json = const {
   '1': 'MsgFulfillTradeResponse',
 };
 
+/// Descriptor for `MsgFulfillTradeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgFulfillTradeResponseDescriptor = $convert.base64Decode('ChdNc2dGdWxmaWxsVHJhZGVSZXNwb25zZQ==');
+@$core.Deprecated('Use msgCreateTradeDescriptor instead')
 const MsgCreateTrade$json = const {
   '1': 'MsgCreateTrade',
   '2': const [
@@ -55,6 +77,9 @@ const MsgCreateTrade$json = const {
   ],
 };
 
+/// Descriptor for `MsgCreateTrade`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateTradeDescriptor = $convert.base64Decode('Cg5Nc2dDcmVhdGVUcmFkZRIYCgdjcmVhdG9yGAEgASgJUgdjcmVhdG9yEkkKCmNvaW5JbnB1dHMYAiADKAsyIy5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEkkKCml0ZW1JbnB1dHMYAyADKAsyIy5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuSXRlbUlucHV0QgTI3h8AUgppdGVtSW5wdXRzEm0KC2NvaW5PdXRwdXRzGAQgAygLMhkuY29zbW9zLmJhc2UudjFiZXRhMS5Db2luQjDI3h8Aqt8fKGdpdGh1Yi5jb20vY29zbW9zL2Nvc21vcy1zZGsvdHlwZXMuQ29pbnNSC2NvaW5PdXRwdXRzEkkKC2l0ZW1PdXRwdXRzGAUgAygLMiEuUHlsb25zdGVjaC5weWxvbnMucHlsb25zLkl0ZW1SZWZCBMjeHwBSC2l0ZW1PdXRwdXRzEhwKCWV4dHJhSW5mbxgGIAEoCVIJZXh0cmFJbmZv');
+@$core.Deprecated('Use msgCreateTradeResponseDescriptor instead')
 const MsgCreateTradeResponse$json = const {
   '1': 'MsgCreateTradeResponse',
   '2': const [
@@ -62,6 +87,9 @@ const MsgCreateTradeResponse$json = const {
   ],
 };
 
+/// Descriptor for `MsgCreateTradeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateTradeResponseDescriptor = $convert.base64Decode('ChZNc2dDcmVhdGVUcmFkZVJlc3BvbnNlEg4KAklEGAEgASgEUgJJRA==');
+@$core.Deprecated('Use msgCancelTradeDescriptor instead')
 const MsgCancelTrade$json = const {
   '1': 'MsgCancelTrade',
   '2': const [
@@ -70,10 +98,16 @@ const MsgCancelTrade$json = const {
   ],
 };
 
+/// Descriptor for `MsgCancelTrade`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCancelTradeDescriptor = $convert.base64Decode('Cg5Nc2dDYW5jZWxUcmFkZRIYCgdjcmVhdG9yGAEgASgJUgdjcmVhdG9yEg4KAklEGAIgASgEUgJJRA==');
+@$core.Deprecated('Use msgCancelTradeResponseDescriptor instead')
 const MsgCancelTradeResponse$json = const {
   '1': 'MsgCancelTradeResponse',
 };
 
+/// Descriptor for `MsgCancelTradeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCancelTradeResponseDescriptor = $convert.base64Decode('ChZNc2dDYW5jZWxUcmFkZVJlc3BvbnNl');
+@$core.Deprecated('Use msgCompleteExecutionEarlyDescriptor instead')
 const MsgCompleteExecutionEarly$json = const {
   '1': 'MsgCompleteExecutionEarly',
   '2': const [
@@ -82,6 +116,9 @@ const MsgCompleteExecutionEarly$json = const {
   ],
 };
 
+/// Descriptor for `MsgCompleteExecutionEarly`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCompleteExecutionEarlyDescriptor = $convert.base64Decode('ChlNc2dDb21wbGV0ZUV4ZWN1dGlvbkVhcmx5EhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISDgoCSUQYAiABKAlSAklE');
+@$core.Deprecated('Use msgCompleteExecutionEarlyResponseDescriptor instead')
 const MsgCompleteExecutionEarlyResponse$json = const {
   '1': 'MsgCompleteExecutionEarlyResponse',
   '2': const [
@@ -89,6 +126,9 @@ const MsgCompleteExecutionEarlyResponse$json = const {
   ],
 };
 
+/// Descriptor for `MsgCompleteExecutionEarlyResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCompleteExecutionEarlyResponseDescriptor = $convert.base64Decode('CiFNc2dDb21wbGV0ZUV4ZWN1dGlvbkVhcmx5UmVzcG9uc2USDgoCSUQYASABKAlSAklE');
+@$core.Deprecated('Use msgTransferCookbookDescriptor instead')
 const MsgTransferCookbook$json = const {
   '1': 'MsgTransferCookbook',
   '2': const [
@@ -98,10 +138,16 @@ const MsgTransferCookbook$json = const {
   ],
 };
 
+/// Descriptor for `MsgTransferCookbook`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgTransferCookbookDescriptor = $convert.base64Decode('ChNNc2dUcmFuc2ZlckNvb2tib29rEhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISDgoCSUQYAiABKAlSAklEEhwKCXJlY2lwaWVudBgDIAEoCVIJcmVjaXBpZW50');
+@$core.Deprecated('Use msgTransferCookbookResponseDescriptor instead')
 const MsgTransferCookbookResponse$json = const {
   '1': 'MsgTransferCookbookResponse',
 };
 
+/// Descriptor for `MsgTransferCookbookResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgTransferCookbookResponseDescriptor = $convert.base64Decode('ChtNc2dUcmFuc2ZlckNvb2tib29rUmVzcG9uc2U=');
+@$core.Deprecated('Use msgGoogleInAppPurchaseGetCoinsDescriptor instead')
 const MsgGoogleInAppPurchaseGetCoins$json = const {
   '1': 'MsgGoogleInAppPurchaseGetCoins',
   '2': const [
@@ -113,10 +159,16 @@ const MsgGoogleInAppPurchaseGetCoins$json = const {
   ],
 };
 
+/// Descriptor for `MsgGoogleInAppPurchaseGetCoins`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgGoogleInAppPurchaseGetCoinsDescriptor = $convert.base64Decode('Ch5Nc2dHb29nbGVJbkFwcFB1cmNoYXNlR2V0Q29pbnMSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIcCglwcm9kdWN0SUQYAiABKAlSCXByb2R1Y3RJRBIkCg1wdXJjaGFzZVRva2VuGAMgASgJUg1wdXJjaGFzZVRva2VuEiwKEXJlY2VpcHREYXRhQmFzZTY0GAQgASgJUhFyZWNlaXB0RGF0YUJhc2U2NBIcCglzaWduYXR1cmUYBSABKAlSCXNpZ25hdHVyZQ==');
+@$core.Deprecated('Use msgGoogleInAppPurchaseGetCoinsResponseDescriptor instead')
 const MsgGoogleInAppPurchaseGetCoinsResponse$json = const {
   '1': 'MsgGoogleInAppPurchaseGetCoinsResponse',
 };
 
+/// Descriptor for `MsgGoogleInAppPurchaseGetCoinsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgGoogleInAppPurchaseGetCoinsResponseDescriptor = $convert.base64Decode('CiZNc2dHb29nbGVJbkFwcFB1cmNoYXNlR2V0Q29pbnNSZXNwb25zZQ==');
+@$core.Deprecated('Use msgSendItemsDescriptor instead')
 const MsgSendItems$json = const {
   '1': 'MsgSendItems',
   '2': const [
@@ -126,10 +178,16 @@ const MsgSendItems$json = const {
   ],
 };
 
+/// Descriptor for `MsgSendItems`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgSendItemsDescriptor = $convert.base64Decode('CgxNc2dTZW5kSXRlbXMSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIaCghyZWNlaXZlchgCIAEoCVIIcmVjZWl2ZXISPQoFaXRlbXMYAyADKAsyIS5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuSXRlbVJlZkIEyN4fAFIFaXRlbXM=');
+@$core.Deprecated('Use msgSendItemsResponseDescriptor instead')
 const MsgSendItemsResponse$json = const {
   '1': 'MsgSendItemsResponse',
 };
 
+/// Descriptor for `MsgSendItemsResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgSendItemsResponseDescriptor = $convert.base64Decode('ChRNc2dTZW5kSXRlbXNSZXNwb25zZQ==');
+@$core.Deprecated('Use msgExecuteRecipeDescriptor instead')
 const MsgExecuteRecipe$json = const {
   '1': 'MsgExecuteRecipe',
   '2': const [
@@ -141,6 +199,9 @@ const MsgExecuteRecipe$json = const {
   ],
 };
 
+/// Descriptor for `MsgExecuteRecipe`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgExecuteRecipeDescriptor = $convert.base64Decode('ChBNc2dFeGVjdXRlUmVjaXBlEhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISHgoKY29va2Jvb2tJRBgCIAEoCVIKY29va2Jvb2tJRBIaCghyZWNpcGVJRBgDIAEoCVIIcmVjaXBlSUQSKAoPY29pbklucHV0c0luZGV4GAQgASgEUg9jb2luSW5wdXRzSW5kZXgSHgoHaXRlbUlEcxgFIAMoCUIEyN4fAFIHaXRlbUlEcw==');
+@$core.Deprecated('Use msgExecuteRecipeResponseDescriptor instead')
 const MsgExecuteRecipeResponse$json = const {
   '1': 'MsgExecuteRecipeResponse',
   '2': const [
@@ -148,6 +209,9 @@ const MsgExecuteRecipeResponse$json = const {
   ],
 };
 
+/// Descriptor for `MsgExecuteRecipeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgExecuteRecipeResponseDescriptor = $convert.base64Decode('ChhNc2dFeGVjdXRlUmVjaXBlUmVzcG9uc2USDgoCSUQYASABKAlSAklE');
+@$core.Deprecated('Use msgSetItemStringDescriptor instead')
 const MsgSetItemString$json = const {
   '1': 'MsgSetItemString',
   '2': const [
@@ -159,10 +223,16 @@ const MsgSetItemString$json = const {
   ],
 };
 
+/// Descriptor for `MsgSetItemString`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgSetItemStringDescriptor = $convert.base64Decode('ChBNc2dTZXRJdGVtU3RyaW5nEhgKB2NyZWF0b3IYASABKAlSB2NyZWF0b3ISHgoKY29va2Jvb2tJRBgCIAEoCVIKY29va2Jvb2tJRBIOCgJJRBgEIAEoCVICSUQSFAoFZmllbGQYBSABKAlSBWZpZWxkEhQKBXZhbHVlGAYgASgJUgV2YWx1ZQ==');
+@$core.Deprecated('Use msgSetItemStringResponseDescriptor instead')
 const MsgSetItemStringResponse$json = const {
   '1': 'MsgSetItemStringResponse',
 };
 
+/// Descriptor for `MsgSetItemStringResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgSetItemStringResponseDescriptor = $convert.base64Decode('ChhNc2dTZXRJdGVtU3RyaW5nUmVzcG9uc2U=');
+@$core.Deprecated('Use msgCreateRecipeDescriptor instead')
 const MsgCreateRecipe$json = const {
   '1': 'MsgCreateRecipe',
   '2': const [
@@ -182,10 +252,16 @@ const MsgCreateRecipe$json = const {
   ],
 };
 
+/// Descriptor for `MsgCreateRecipe`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateRecipeDescriptor = $convert.base64Decode('Cg9Nc2dDcmVhdGVSZWNpcGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIeCgpjb29rYm9va0lEGAIgASgJUgpjb29rYm9va0lEEg4KAklEGAMgASgJUgJJRBISCgRuYW1lGAQgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAUgASgJUgtkZXNjcmlwdGlvbhIYCgd2ZXJzaW9uGAYgASgJUgd2ZXJzaW9uEkkKCmNvaW5JbnB1dHMYByADKAsyIy5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEkkKCml0ZW1JbnB1dHMYCCADKAsyIy5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuSXRlbUlucHV0QgTI3h8AUgppdGVtSW5wdXRzEkUKB2VudHJpZXMYCSABKAsyJS5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuRW50cmllc0xpc3RCBMjeHwBSB2VudHJpZXMSSQoHb3V0cHV0cxgKIAMoCzIpLlB5bG9uc3RlY2gucHlsb25zLnB5bG9ucy5XZWlnaHRlZE91dHB1dHNCBMjeHwBSB291dHB1dHMSJAoNYmxvY2tJbnRlcnZhbBgLIAEoA1INYmxvY2tJbnRlcnZhbBIYCgdlbmFibGVkGAwgASgIUgdlbmFibGVkEhwKCWV4dHJhSW5mbxgNIAEoCVIJZXh0cmFJbmZv');
+@$core.Deprecated('Use msgCreateRecipeResponseDescriptor instead')
 const MsgCreateRecipeResponse$json = const {
   '1': 'MsgCreateRecipeResponse',
 };
 
+/// Descriptor for `MsgCreateRecipeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateRecipeResponseDescriptor = $convert.base64Decode('ChdNc2dDcmVhdGVSZWNpcGVSZXNwb25zZQ==');
+@$core.Deprecated('Use msgUpdateRecipeDescriptor instead')
 const MsgUpdateRecipe$json = const {
   '1': 'MsgUpdateRecipe',
   '2': const [
@@ -205,10 +281,16 @@ const MsgUpdateRecipe$json = const {
   ],
 };
 
+/// Descriptor for `MsgUpdateRecipe`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgUpdateRecipeDescriptor = $convert.base64Decode('Cg9Nc2dVcGRhdGVSZWNpcGUSGAoHY3JlYXRvchgBIAEoCVIHY3JlYXRvchIeCgpjb29rYm9va0lEGAIgASgJUgpjb29rYm9va0lEEg4KAklEGAMgASgJUgJJRBISCgRuYW1lGAQgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAUgASgJUgtkZXNjcmlwdGlvbhIYCgd2ZXJzaW9uGAYgASgJUgd2ZXJzaW9uEkkKCmNvaW5JbnB1dHMYByADKAsyIy5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuQ29pbklucHV0QgTI3h8AUgpjb2luSW5wdXRzEkkKCml0ZW1JbnB1dHMYCCADKAsyIy5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuSXRlbUlucHV0QgTI3h8AUgppdGVtSW5wdXRzEkUKB2VudHJpZXMYCSABKAsyJS5QeWxvbnN0ZWNoLnB5bG9ucy5weWxvbnMuRW50cmllc0xpc3RCBMjeHwBSB2VudHJpZXMSSQoHb3V0cHV0cxgKIAMoCzIpLlB5bG9uc3RlY2gucHlsb25zLnB5bG9ucy5XZWlnaHRlZE91dHB1dHNCBMjeHwBSB291dHB1dHMSJAoNYmxvY2tJbnRlcnZhbBgLIAEoA1INYmxvY2tJbnRlcnZhbBIYCgdlbmFibGVkGAwgASgIUgdlbmFibGVkEhwKCWV4dHJhSW5mbxgNIAEoCVIJZXh0cmFJbmZv');
+@$core.Deprecated('Use msgUpdateRecipeResponseDescriptor instead')
 const MsgUpdateRecipeResponse$json = const {
   '1': 'MsgUpdateRecipeResponse',
 };
 
+/// Descriptor for `MsgUpdateRecipeResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgUpdateRecipeResponseDescriptor = $convert.base64Decode('ChdNc2dVcGRhdGVSZWNpcGVSZXNwb25zZQ==');
+@$core.Deprecated('Use msgCreateCookbookDescriptor instead')
 const MsgCreateCookbook$json = const {
   '1': 'MsgCreateCookbook',
   '2': const [
@@ -224,10 +306,16 @@ const MsgCreateCookbook$json = const {
   ],
 };
 
+/// Descriptor for `MsgCreateCookbook`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateCookbookDescriptor = $convert.base64Decode('ChFNc2dDcmVhdGVDb29rYm9vaxIYCgdjcmVhdG9yGAEgASgJUgdjcmVhdG9yEg4KAklEGAIgASgJUgJJRBISCgRuYW1lGAMgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAQgASgJUgtkZXNjcmlwdGlvbhIcCglkZXZlbG9wZXIYBSABKAlSCWRldmVsb3BlchIYCgd2ZXJzaW9uGAYgASgJUgd2ZXJzaW9uEiIKDHN1cHBvcnRFbWFpbBgHIAEoCVIMc3VwcG9ydEVtYWlsEkMKDGNvc3RQZXJCbG9jaxgIIAEoCzIZLmNvc21vcy5iYXNlLnYxYmV0YTEuQ29pbkIEyN4fAFIMY29zdFBlckJsb2NrEhgKB2VuYWJsZWQYCSABKAhSB2VuYWJsZWQ=');
+@$core.Deprecated('Use msgCreateCookbookResponseDescriptor instead')
 const MsgCreateCookbookResponse$json = const {
   '1': 'MsgCreateCookbookResponse',
 };
 
+/// Descriptor for `MsgCreateCookbookResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgCreateCookbookResponseDescriptor = $convert.base64Decode('ChlNc2dDcmVhdGVDb29rYm9va1Jlc3BvbnNl');
+@$core.Deprecated('Use msgUpdateCookbookDescriptor instead')
 const MsgUpdateCookbook$json = const {
   '1': 'MsgUpdateCookbook',
   '2': const [
@@ -243,6 +331,12 @@ const MsgUpdateCookbook$json = const {
   ],
 };
 
+/// Descriptor for `MsgUpdateCookbook`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgUpdateCookbookDescriptor = $convert.base64Decode('ChFNc2dVcGRhdGVDb29rYm9vaxIYCgdjcmVhdG9yGAEgASgJUgdjcmVhdG9yEg4KAklEGAIgASgJUgJJRBISCgRuYW1lGAMgASgJUgRuYW1lEiAKC2Rlc2NyaXB0aW9uGAQgASgJUgtkZXNjcmlwdGlvbhIcCglkZXZlbG9wZXIYBSABKAlSCWRldmVsb3BlchIYCgd2ZXJzaW9uGAYgASgJUgd2ZXJzaW9uEiIKDHN1cHBvcnRFbWFpbBgHIAEoCVIMc3VwcG9ydEVtYWlsEkMKDGNvc3RQZXJCbG9jaxgIIAEoCzIZLmNvc21vcy5iYXNlLnYxYmV0YTEuQ29pbkIEyN4fAFIMY29zdFBlckJsb2NrEhgKB2VuYWJsZWQYCSABKAhSB2VuYWJsZWQ=');
+@$core.Deprecated('Use msgUpdateCookbookResponseDescriptor instead')
 const MsgUpdateCookbookResponse$json = const {
   '1': 'MsgUpdateCookbookResponse',
 };
+
+/// Descriptor for `MsgUpdateCookbookResponse`. Decode as a `google.protobuf.DescriptorProto`.
+final $typed_data.Uint8List msgUpdateCookbookResponseDescriptor = $convert.base64Decode('ChlNc2dVcGRhdGVDb29rYm9va1Jlc3BvbnNl');
