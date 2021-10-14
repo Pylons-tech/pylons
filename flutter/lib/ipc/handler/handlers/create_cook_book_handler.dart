@@ -56,8 +56,9 @@ class CreateCookBookHandler implements BaseHandler {
             (fail) => throw fail as Object,
             (hash) => debugPrint("new TX hash: $hash"),
       );
-    } catch(e){
+    } catch(e, stacktrace){
       print(e);
+      print(stacktrace);
     }
 
     return SynchronousFuture('');
