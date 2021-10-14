@@ -1,23 +1,17 @@
 ///
-//  Generated code. Do not modify.
-//  source: pylons/genesis.proto
-//
-
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
-
 import 'dart:core' as $core;
+import 'dart:core';
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
-
-import 'cookbook.pb.dart' as $5;
-import 'recipe.pb.dart' as $4;
-import 'item.pb.dart' as $3;
-import 'execution.pb.dart' as $7;
-import 'google_iap_order.pb.dart' as $8;
-import 'params.pb.dart' as $9;
-import 'trade.pb.dart' as $6;
-import 'accounts.pb.dart' as $10;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/accounts.pb.dart' as $10;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart' as $5;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/execution.pb.dart' as $7;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/google_iap_order.pb.dart' as $8;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart' as $3;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/params.pb.dart' as $9;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart' as $4;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/trade.pb.dart' as $6;
 
 class GenesisState extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'GenesisState',
@@ -46,17 +40,21 @@ class GenesisState extends $pb.GeneratedMessage {
   factory GenesisState() => create();
   factory GenesisState.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory GenesisState.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   GenesisState clone() => GenesisState()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   GenesisState copyWith(void Function(GenesisState) updates) => super.copyWith((message) => updates(message as GenesisState)) as GenesisState; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static GenesisState create() => GenesisState._();
+  @override
   GenesisState createEmptyInstance() => create();
   static $pb.PbList<GenesisState> createRepeated() => $pb.PbList<GenesisState>();
   @$core.pragma('dart2js:noInline')

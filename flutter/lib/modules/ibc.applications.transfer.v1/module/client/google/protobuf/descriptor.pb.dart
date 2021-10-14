@@ -10,7 +10,7 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'descriptor.pbenum.dart';
+import 'package:pylons_wallet/modules/ibc.applications.transfer.v1/module/client/google/protobuf/descriptor.pbenum.dart';
 
 export 'descriptor.pbenum.dart';
 

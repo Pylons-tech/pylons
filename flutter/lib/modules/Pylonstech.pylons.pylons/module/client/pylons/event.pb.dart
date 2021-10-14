@@ -1,20 +1,14 @@
 ///
-//  Generated code. Do not modify.
-//  source: pylons/event.proto
-//
-
-// ignore_for_file: annotate_overrides,camel_case_types,unnecessary_const,non_constant_identifier_names,library_prefixes,unused_import,unused_shown_name,return_of_invalid_type,unnecessary_this,prefer_final_fields
-
 import 'dart:core' as $core;
+import 'dart:core';
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
-
-import 'cookbook.pb.dart' as $5;
-import 'recipe.pb.dart' as $4;
-import '../cosmos/base/v1beta1/coin.pb.dart' as $2;
-import 'item.pb.dart' as $3;
-import 'trade.pb.dart' as $6;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/cosmos/base/v1beta1/coin.pb.dart' as $2;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/cookbook.pb.dart' as $5;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/item.pb.dart' as $3;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/recipe.pb.dart' as $4;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/trade.pb.dart' as $6;
 
 class EventCreateAccount extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'EventCreateAccount',
@@ -27,17 +21,21 @@ class EventCreateAccount extends $pb.GeneratedMessage {
   factory EventCreateAccount() => create();
   factory EventCreateAccount.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCreateAccount.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCreateAccount clone() => EventCreateAccount()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCreateAccount copyWith(void Function(EventCreateAccount) updates) => super.copyWith((message) => updates(message as EventCreateAccount)) as EventCreateAccount; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCreateAccount create() => EventCreateAccount._();
+  @override
   EventCreateAccount createEmptyInstance() => create();
   static $pb.PbList<EventCreateAccount> createRepeated() => $pb.PbList<EventCreateAccount>();
   @$core.pragma('dart2js:noInline')
@@ -80,17 +78,21 @@ class EventUpdateAccount extends $pb.GeneratedMessage {
   factory EventUpdateAccount() => create();
   factory EventUpdateAccount.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventUpdateAccount.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventUpdateAccount clone() => EventUpdateAccount()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventUpdateAccount copyWith(void Function(EventUpdateAccount) updates) => super.copyWith((message) => updates(message as EventUpdateAccount)) as EventUpdateAccount; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventUpdateAccount create() => EventUpdateAccount._();
+  @override
   EventUpdateAccount createEmptyInstance() => create();
   static $pb.PbList<EventUpdateAccount> createRepeated() => $pb.PbList<EventUpdateAccount>();
   @$core.pragma('dart2js:noInline')
@@ -133,18 +135,22 @@ class EventCreateCookbook extends $pb.GeneratedMessage {
   factory EventCreateCookbook() => create();
   factory EventCreateCookbook.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCreateCookbook.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCreateCookbook clone() => EventCreateCookbook()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCreateCookbook copyWith(void Function(EventCreateCookbook) updates) =>
       super.copyWith((message) => updates(message as EventCreateCookbook)) as EventCreateCookbook; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCreateCookbook create() => EventCreateCookbook._();
+  @override
   EventCreateCookbook createEmptyInstance() => create();
   static $pb.PbList<EventCreateCookbook> createRepeated() => $pb.PbList<EventCreateCookbook>();
   @$core.pragma('dart2js:noInline')
@@ -186,18 +192,22 @@ class EventUpdateCookbook extends $pb.GeneratedMessage {
   factory EventUpdateCookbook() => create();
   factory EventUpdateCookbook.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventUpdateCookbook.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventUpdateCookbook clone() => EventUpdateCookbook()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventUpdateCookbook copyWith(void Function(EventUpdateCookbook) updates) =>
       super.copyWith((message) => updates(message as EventUpdateCookbook)) as EventUpdateCookbook; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventUpdateCookbook create() => EventUpdateCookbook._();
+  @override
   EventUpdateCookbook createEmptyInstance() => create();
   static $pb.PbList<EventUpdateCookbook> createRepeated() => $pb.PbList<EventUpdateCookbook>();
   @$core.pragma('dart2js:noInline')
@@ -231,18 +241,22 @@ class EventTransferCookbook extends $pb.GeneratedMessage {
   factory EventTransferCookbook() => create();
   factory EventTransferCookbook.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventTransferCookbook.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventTransferCookbook clone() => EventTransferCookbook()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventTransferCookbook copyWith(void Function(EventTransferCookbook) updates) =>
       super.copyWith((message) => updates(message as EventTransferCookbook)) as EventTransferCookbook; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventTransferCookbook create() => EventTransferCookbook._();
+  @override
   EventTransferCookbook createEmptyInstance() => create();
   static $pb.PbList<EventTransferCookbook> createRepeated() => $pb.PbList<EventTransferCookbook>();
   @$core.pragma('dart2js:noInline')
@@ -298,17 +312,21 @@ class EventCreateRecipe extends $pb.GeneratedMessage {
   factory EventCreateRecipe() => create();
   factory EventCreateRecipe.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCreateRecipe.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCreateRecipe clone() => EventCreateRecipe()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCreateRecipe copyWith(void Function(EventCreateRecipe) updates) => super.copyWith((message) => updates(message as EventCreateRecipe)) as EventCreateRecipe; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCreateRecipe create() => EventCreateRecipe._();
+  @override
   EventCreateRecipe createEmptyInstance() => create();
   static $pb.PbList<EventCreateRecipe> createRepeated() => $pb.PbList<EventCreateRecipe>();
   @$core.pragma('dart2js:noInline')
@@ -362,17 +380,21 @@ class EventUpdateRecipe extends $pb.GeneratedMessage {
   factory EventUpdateRecipe() => create();
   factory EventUpdateRecipe.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventUpdateRecipe.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventUpdateRecipe clone() => EventUpdateRecipe()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventUpdateRecipe copyWith(void Function(EventUpdateRecipe) updates) => super.copyWith((message) => updates(message as EventUpdateRecipe)) as EventUpdateRecipe; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventUpdateRecipe create() => EventUpdateRecipe._();
+  @override
   EventUpdateRecipe createEmptyInstance() => create();
   static $pb.PbList<EventUpdateRecipe> createRepeated() => $pb.PbList<EventUpdateRecipe>();
   @$core.pragma('dart2js:noInline')
@@ -405,18 +427,22 @@ class EventCreateExecution extends $pb.GeneratedMessage {
   factory EventCreateExecution() => create();
   factory EventCreateExecution.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCreateExecution.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCreateExecution clone() => EventCreateExecution()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCreateExecution copyWith(void Function(EventCreateExecution) updates) =>
       super.copyWith((message) => updates(message as EventCreateExecution)) as EventCreateExecution; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCreateExecution create() => EventCreateExecution._();
+  @override
   EventCreateExecution createEmptyInstance() => create();
   static $pb.PbList<EventCreateExecution> createRepeated() => $pb.PbList<EventCreateExecution>();
   @$core.pragma('dart2js:noInline')
@@ -466,18 +492,22 @@ class EventCompleteExecution extends $pb.GeneratedMessage {
   factory EventCompleteExecution() => create();
   factory EventCompleteExecution.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCompleteExecution.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCompleteExecution clone() => EventCompleteExecution()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCompleteExecution copyWith(void Function(EventCompleteExecution) updates) =>
       super.copyWith((message) => updates(message as EventCompleteExecution)) as EventCompleteExecution; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCompleteExecution create() => EventCompleteExecution._();
+  @override
   EventCompleteExecution createEmptyInstance() => create();
   static $pb.PbList<EventCompleteExecution> createRepeated() => $pb.PbList<EventCompleteExecution>();
   @$core.pragma('dart2js:noInline')
@@ -541,17 +571,21 @@ class EventDropExecution extends $pb.GeneratedMessage {
   factory EventDropExecution() => create();
   factory EventDropExecution.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventDropExecution.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventDropExecution clone() => EventDropExecution()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventDropExecution copyWith(void Function(EventDropExecution) updates) => super.copyWith((message) => updates(message as EventDropExecution)) as EventDropExecution; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventDropExecution create() => EventDropExecution._();
+  @override
   EventDropExecution createEmptyInstance() => create();
   static $pb.PbList<EventDropExecution> createRepeated() => $pb.PbList<EventDropExecution>();
   @$core.pragma('dart2js:noInline')
@@ -594,18 +628,22 @@ class EventCompleteExecutionEarly extends $pb.GeneratedMessage {
   factory EventCompleteExecutionEarly() => create();
   factory EventCompleteExecutionEarly.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCompleteExecutionEarly.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCompleteExecutionEarly clone() => EventCompleteExecutionEarly()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCompleteExecutionEarly copyWith(void Function(EventCompleteExecutionEarly) updates) =>
       super.copyWith((message) => updates(message as EventCompleteExecutionEarly)) as EventCompleteExecutionEarly; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCompleteExecutionEarly create() => EventCompleteExecutionEarly._();
+  @override
   EventCompleteExecutionEarly createEmptyInstance() => create();
   static $pb.PbList<EventCompleteExecutionEarly> createRepeated() => $pb.PbList<EventCompleteExecutionEarly>();
   @$core.pragma('dart2js:noInline')
@@ -649,17 +687,21 @@ class EventSendItems extends $pb.GeneratedMessage {
   factory EventSendItems() => create();
   factory EventSendItems.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventSendItems.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventSendItems clone() => EventSendItems()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventSendItems copyWith(void Function(EventSendItems) updates) => super.copyWith((message) => updates(message as EventSendItems)) as EventSendItems; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventSendItems create() => EventSendItems._();
+  @override
   EventSendItems createEmptyInstance() => create();
   static $pb.PbList<EventSendItems> createRepeated() => $pb.PbList<EventSendItems>();
   @$core.pragma('dart2js:noInline')
@@ -708,17 +750,21 @@ class EventSetItemString extends $pb.GeneratedMessage {
   factory EventSetItemString() => create();
   factory EventSetItemString.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventSetItemString.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventSetItemString clone() => EventSetItemString()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventSetItemString copyWith(void Function(EventSetItemString) updates) => super.copyWith((message) => updates(message as EventSetItemString)) as EventSetItemString; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventSetItemString create() => EventSetItemString._();
+  @override
   EventSetItemString createEmptyInstance() => create();
   static $pb.PbList<EventSetItemString> createRepeated() => $pb.PbList<EventSetItemString>();
   @$core.pragma('dart2js:noInline')
@@ -776,17 +822,21 @@ class EventCreateTrade extends $pb.GeneratedMessage {
   factory EventCreateTrade() => create();
   factory EventCreateTrade.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCreateTrade.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCreateTrade clone() => EventCreateTrade()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCreateTrade copyWith(void Function(EventCreateTrade) updates) => super.copyWith((message) => updates(message as EventCreateTrade)) as EventCreateTrade; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCreateTrade create() => EventCreateTrade._();
+  @override
   EventCreateTrade createEmptyInstance() => create();
   static $pb.PbList<EventCreateTrade> createRepeated() => $pb.PbList<EventCreateTrade>();
   @$core.pragma('dart2js:noInline')
@@ -829,17 +879,21 @@ class EventCancelTrade extends $pb.GeneratedMessage {
   factory EventCancelTrade() => create();
   factory EventCancelTrade.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventCancelTrade.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventCancelTrade clone() => EventCancelTrade()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventCancelTrade copyWith(void Function(EventCancelTrade) updates) => super.copyWith((message) => updates(message as EventCancelTrade)) as EventCancelTrade; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventCancelTrade create() => EventCancelTrade._();
+  @override
   EventCancelTrade createEmptyInstance() => create();
   static $pb.PbList<EventCancelTrade> createRepeated() => $pb.PbList<EventCancelTrade>();
   @$core.pragma('dart2js:noInline')
@@ -887,17 +941,21 @@ class EventFulfillTrade extends $pb.GeneratedMessage {
   factory EventFulfillTrade() => create();
   factory EventFulfillTrade.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventFulfillTrade.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventFulfillTrade clone() => EventFulfillTrade()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventFulfillTrade copyWith(void Function(EventFulfillTrade) updates) => super.copyWith((message) => updates(message as EventFulfillTrade)) as EventFulfillTrade; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventFulfillTrade create() => EventFulfillTrade._();
+  @override
   EventFulfillTrade createEmptyInstance() => create();
   static $pb.PbList<EventFulfillTrade> createRepeated() => $pb.PbList<EventFulfillTrade>();
   @$core.pragma('dart2js:noInline')
@@ -967,18 +1025,22 @@ class EventGooglePurchase extends $pb.GeneratedMessage {
   factory EventGooglePurchase() => create();
   factory EventGooglePurchase.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventGooglePurchase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventGooglePurchase clone() => EventGooglePurchase()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventGooglePurchase copyWith(void Function(EventGooglePurchase) updates) =>
       super.copyWith((message) => updates(message as EventGooglePurchase)) as EventGooglePurchase; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventGooglePurchase create() => EventGooglePurchase._();
+  @override
   EventGooglePurchase createEmptyInstance() => create();
   static $pb.PbList<EventGooglePurchase> createRepeated() => $pb.PbList<EventGooglePurchase>();
   @$core.pragma('dart2js:noInline')
@@ -1057,18 +1119,22 @@ class EventStripePurchase extends $pb.GeneratedMessage {
   factory EventStripePurchase() => create();
   factory EventStripePurchase.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
   factory EventStripePurchase.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.deepCopy] instead. '
       'Will be removed in next major version')
   EventStripePurchase clone() => EventStripePurchase()..mergeFromMessage(this);
+  @override
   @$core.Deprecated('Using this can add significant overhead to your binary. '
       'Use [GeneratedMessageGenericExtensions.rebuild] instead. '
       'Will be removed in next major version')
   EventStripePurchase copyWith(void Function(EventStripePurchase) updates) =>
       super.copyWith((message) => updates(message as EventStripePurchase)) as EventStripePurchase; // ignore: deprecated_member_use
+  @override
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
   static EventStripePurchase create() => EventStripePurchase._();
+  @override
   EventStripePurchase createEmptyInstance() => create();
   static $pb.PbList<EventStripePurchase> createRepeated() => $pb.PbList<EventStripePurchase>();
   @$core.pragma('dart2js:noInline')

@@ -9,7 +9,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'http.pb.dart' as $11;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/google/api/http.pb.dart' as $11;
 
 class Annotations {
   static final http = $pb.Extension<$11.HttpRule>(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'google.protobuf.MethodOptions',

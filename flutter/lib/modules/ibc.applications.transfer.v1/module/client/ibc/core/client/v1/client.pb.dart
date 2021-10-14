@@ -10,8 +10,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../../../google/protobuf/any.pb.dart' as $6;
-import '../../../../cosmos/upgrade/v1beta1/upgrade.pb.dart' as $7;
+import 'package:pylons_wallet/modules/ibc.applications.transfer.v1/module/client/google/protobuf/any.pb.dart' as $6;
+import 'package:pylons_wallet/modules/ibc.applications.transfer.v1/module/client/cosmos/upgrade/v1beta1/upgrade.pb.dart' as $7;
 
 class IdentifiedClientState extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(const $core.bool.fromEnvironment('protobuf.omit_message_names') ? '' : 'IdentifiedClientState',

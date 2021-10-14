@@ -10,7 +10,7 @@ import 'dart:async' as $async;
 import 'dart:core' as $core;
 
 import 'package:grpc/service_api.dart' as $grpc;
-import 'tx.pb.dart' as $1;
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart' as $1;
 export 'tx.pb.dart';
 
 class MsgClient extends $grpc.Client {
