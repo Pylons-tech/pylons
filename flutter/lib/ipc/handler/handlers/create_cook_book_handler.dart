@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cosmos_utils/cosmos_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
@@ -6,6 +8,7 @@ import 'package:pylons_wallet/pylons_app.dart';
 import 'package:transaction_signing_gateway/alan/alan_transaction.dart';
 import 'package:transaction_signing_gateway/model/wallet_lookup_key.dart';
 
+
 class CreateCookBookHandler implements BaseHandler {
   List<String> wholeMessage;
 
@@ -13,30 +16,49 @@ class CreateCookBookHandler implements BaseHandler {
 
   @override
   Future<String> handle() async {
-    final signingGateway = PylonsApp.signingGateway;
-    final currentWallet = PylonsApp.currentWallet;
 
-    final walletLookupKey = WalletLookupKey(
-      walletId: currentWallet.walletId,
-      chainId: currentWallet.chainId,
-      password: '',
-    );
+    try {
+      final signingGateway = PylonsApp.signingGateway;
+      final currentWallet = PylonsApp.currentWallet;
 
-    print(wholeMessage);
-    var msgObj = pylons.MsgCreateCookbook.fromJson(wholeMessage[2]);
-    final result = await signingGateway.signTransaction(transaction: UnsignedAlanTransaction(messages: [msgObj]), walletLookupKey: walletLookupKey).mapError<dynamic>((error) => throw error).flatMap(
-          (signed) => signingGateway.broadcastTransaction(
-            walletLookupKey: walletLookupKey,
-            transaction: signed,
-          ),
-        );
+      final walletLookupKey = WalletLookupKey(
+        walletId: currentWallet.walletId,
+        chainId: currentWallet.chainId,
+        password: '',
+      );
 
-    print(result);
+      // print(wholeMessage);
+      //
+      // var registry = $pb.ExtensionRegistry();
+      // registry.add($pb.Extension(extendee, name, tagNumber, fieldType))
 
-    result.fold(
-      (fail) => throw fail as Object,
-      (hash) => debugPrint("new TX hash: $hash"),
-    );
+      final jsonMap = jsonDecode(wholeMessage[2]);
+
+      var msgObj = pylons.MsgCreateCookbook.create()
+        ..mergeFromProto3Json(jsonMap);
+
+      // var msgObj = pylons.MsgCreateCookbook.fromJson(wholeMessage[2],);
+      final result = await signingGateway.signTransaction(transaction: UnsignedAlanTransaction(messages: [msgObj]), walletLookupKey: walletLookupKey).mapError<dynamic>((error) {
+
+        print(error);
+        throw error;
+      }).flatMap(
+            (signed) =>
+            signingGateway.broadcastTransaction(
+              walletLookupKey: walletLookupKey,
+              transaction: signed,
+            ),
+      );
+
+      print(result);
+
+      result.fold(
+            (fail) => throw fail as Object,
+            (hash) => debugPrint("new TX hash: $hash"),
+      );
+    } catch(e){
+      print(e);
+    }
 
     return SynchronousFuture('');
   }
