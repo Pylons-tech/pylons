@@ -44,7 +44,7 @@ class WalletsStore {
     final wallet = alan.Wallet.derive(mnemonic.split(" "), baseEnv.networkInfo);
     final creds = AlanPrivateWalletCredentials(
       publicInfo: WalletPublicInfo(
-        chainId: 'pylo',
+        chainId: 'pylons',
         walletId: userName,
         name: userName,
         publicAddress: wallet.bech32Address,

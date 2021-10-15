@@ -10,8 +10,7 @@ void main() {
     var key = "txCreateCookbook";
     var json = '''{
                       "creator": "pylo1t3xupuj9f72jpxddkfs2sps4lsj8ejznd9r4jj",
-                      "ID": "v1",
-                      "nodeVersion": "v16",
+                      "ID": "v1",                      
                       "name": "Legend of the Undead Dragon",
                       "description": "Cookbook for running pylons recreation of LOUD",
                       "developer": "Pylons Inc",

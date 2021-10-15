@@ -83,12 +83,8 @@ class PresentingOnboardPage extends StatelessWidget {
     final _mnemonic = await generateMnemonic();
     final _username = userName;
 
-    var value = await PylonsApp.walletsStore.importAlanWallet(_mnemonic, _username);
-    //TODO: refactoring : create an util class to read / write values in the preferences store.
-    SharedPreferences.getInstance().then((prefs) => prefs.setString("pylons:current_wallet", _username));
-    PylonsApp.currentWallet = value;
-    print("Wallet add: ${value.publicAddress} ${value.name} ${value.chainId}");
-
+    PylonsApp.currentWallet = await PylonsApp.walletsStore.importAlanWallet(_mnemonic, _username);
+    // print("Wallet add: ${value.publicAddress} ${value.name} ${value.chainId}");
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
   }
 
