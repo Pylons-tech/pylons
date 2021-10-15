@@ -57,14 +57,14 @@ dependencies:
     git:
 #      url: https://github.com/Pylons-tech/flutter.git
 #      path: packages/cosmos_utils
-      ../../flutter/cosmos_utils
+      path: ../../flutter/cosmos_utils
       ref: main
 
   transaction_signing_gateway:
     git:
 #      url: https://github.com/Pylons-tech/flutter.git
 #      path: packages/transaction_signing_gateway
-      ../../flutter/transaction_signing_gateway
+      path: ../../flutter/transaction_signing_gateway
       ref: main
 
   cupertino_icons: ^1.0.3
