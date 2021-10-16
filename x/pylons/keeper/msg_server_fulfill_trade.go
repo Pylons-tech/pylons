@@ -244,13 +244,13 @@ func (k msgServer) FulfillTrade(goCtx context.Context, msg *types.MsgFulfillTrad
 		itemInputsRefs[i] = types.ItemRef{CookbookID: item.CookbookID, ItemID: item.ID}
 	}
 	err = ctx.EventManager().EmitTypedEvent(&types.EventFulfillTrade{
-		ID:          trade.ID,
-		Creator:     trade.Creator,
+		ID:           trade.ID,
+		Creator:      trade.Creator,
 		Fulfiller:    msg.Creator,
-		ItemInputs:  itemInputsRefs,
-		CoinInputs:  coinInputs,
-		ItemOutputs: trade.ItemOutputs,
-		CoinOutputs: coinOutputs,
+		ItemInputs:   itemInputsRefs,
+		CoinInputs:   coinInputs,
+		ItemOutputs:  trade.ItemOutputs,
+		CoinOutputs:  coinOutputs,
 		PaymentInfos: msg.PaymentInfos,
 	})
 
