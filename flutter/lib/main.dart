@@ -30,6 +30,7 @@ Future<void> main() async {
 }
 
 void _buildDependencies() {
+
   PylonsApp.baseEnv = BaseEnv()
     ..setEnv(
         lcdUrl: dotenv.env['LCD_URL']!,
@@ -41,7 +42,6 @@ void _buildDependencies() {
         faucetUrl: dotenv.env['FAUCET_URL'],
         faucetPort: dotenv.env['FAUCET_PORT'],
         wsUrl: dotenv.env['WS_URL']!);
-
 
   PylonsApp.signingGateway = TransactionSigningGateway(
     transactionSummaryUI: NoOpTransactionSummaryUI(),

@@ -1,4 +1,6 @@
 import 'package:alan/alan.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:grpc/grpc.dart';
 
 class BaseEnv {
   late NetworkInfo _networkInfo;
@@ -20,8 +22,20 @@ class BaseEnv {
   }) {
     _networkInfo = NetworkInfo(
       bech32Hrp: 'pylo',
-      lcdInfo: LCDInfo(host: lcdUrl, port: int.parse(lcdPort)),
-      grpcInfo: GRPCInfo(host: grpcUrl, port: int.parse(grpcPort)),
+      lcdInfo: LCDInfo(
+          host: lcdUrl,
+          port: int.parse(lcdPort)
+      ),
+      grpcInfo: GRPCInfo(
+          host: grpcUrl,
+          port: int.parse(grpcPort),
+          credentials: ChannelCredentials.secure(
+            onBadCertificate: (cert, host) {
+                debugPrint("host: $host, cert: $cert");
+                return true;
+              },
+          )
+      ),
     );
     _baseApiUrl = "$lcdUrl:$lcdPort";
     _baseEthUrl = ethUrl;
