@@ -1,10 +1,12 @@
 import 'package:alan/alan.dart' as alan;
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/entities/balance.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import 'package:transaction_signing_gateway/model/credentials_storage_failure.dart';
+import 'package:transaction_signing_gateway/model/wallet_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
 
@@ -76,5 +78,30 @@ class WalletsStore {
       isError.value = true;
     }
     isSendMoneyLoading.value = false;
+  }
+
+  Future<void> createCookBook(MsgCreateCookbook msgObj) async {
+
+    final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
+    print(unsignedTransaction);
+
+    var info = wallets.value.last;
+
+    final walletLookupKey = WalletLookupKey(
+      walletId: info.walletId,
+      chainId: info.chainId,
+      password: '',
+    );
+
+    //
+    print(walletLookupKey);
+
+
+
+
+    var either = await _transactionSigningGateway.signTransaction(transaction: unsignedTransaction, walletLookupKey: walletLookupKey);
+    print(either);
+
+
   }
 }
