@@ -29,18 +29,6 @@ Future<void> main() async {
 }
 
 void _buildDependencies() {
-  PylonsApp.signingGateway = TransactionSigningGateway(
-    transactionSummaryUI: NoOpTransactionSummaryUI(),
-    signers: [
-      AlanTransactionSigner(),
-    ],
-    broadcasters: [
-      AlanTransactionBroadcaster(),
-    ],
-    infoStorage: MobileKeyInfoStorage(
-      serializers: [AlanCredentialsSerializer()],
-    ),
-  );
 
   PylonsApp.baseEnv = BaseEnv()
     ..setEnv(
@@ -53,6 +41,21 @@ void _buildDependencies() {
         faucetUrl: dotenv.env['FAUCET_URL'],
         faucetPort: dotenv.env['FAUCET_PORT'],
         wsUrl: dotenv.env['WS_URL']!);
+
+  PylonsApp.signingGateway = TransactionSigningGateway(
+    transactionSummaryUI: NoOpTransactionSummaryUI(),
+    signers: [
+      AlanTransactionSigner(PylonsApp.baseEnv.networkInfo),
+    ],
+    broadcasters: [
+      AlanTransactionBroadcaster(PylonsApp.baseEnv.networkInfo),
+    ],
+    infoStorage: MobileKeyInfoStorage(
+      serializers: [AlanCredentialsSerializer()],
+    ),
+  );
+
+
   PylonsApp.walletsStore = WalletsStore(PylonsApp.signingGateway, PylonsApp.baseEnv);
 }
 

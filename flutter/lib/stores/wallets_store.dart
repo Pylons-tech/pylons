@@ -50,7 +50,6 @@ class WalletsStore {
         publicAddress: wallet.bech32Address,
       ),
       mnemonic: mnemonic,
-      networkInfo: baseEnv.networkInfo,
     );
     await _transactionSigningGateway.storeWalletCredentials(
       credentials: creds,
