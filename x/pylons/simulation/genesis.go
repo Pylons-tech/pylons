@@ -21,7 +21,8 @@ func randomLengthField(r *rand.Rand) uint64 {
 
 func randomPercentage(r *rand.Rand) sdk.Dec {
 	percent := r.Int63n(101) + 1 // range [1 - 100]
-	return sdk.NewDec(percent)
+	dec := sdk.NewDec(percent)
+	return dec.Quo(sdk.NewDec(100))
 }
 
 func randomCoinFee(r *rand.Rand) sdk.Coin {

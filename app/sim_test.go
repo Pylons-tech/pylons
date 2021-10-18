@@ -25,6 +25,91 @@ func init() {
 	simapp.GetSimulatorFlags()
 }
 
+func TestFullAppSimulation(t *testing.T) {
+	// -Enabled=true -NumBlocks=1000 -BlockSize=200 \
+	// -Period=1 -Commit=true -Seed=57 -v -timeout 24h
+	simapp.FlagEnabledValue = true
+	simapp.FlagNumBlocksValue = 20
+	simapp.FlagBlockSizeValue = 25
+	simapp.FlagCommitValue = true
+	simapp.FlagVerboseValue = true
+	simapp.FlagPeriodValue = 10
+	simapp.FlagSeedValue = 10
+	fullAppSimulation(t, true)
+}
+
+func fullAppSimulation(tb testing.TB, is_testing bool) {
+	config, db, dir, logger, _, err := simapp.SetupSimulation("goleveldb-app-sim", "Simulation")
+	if err != nil {
+		tb.Fatalf("simulation setup failed: %s", err.Error())
+	}
+
+	defer func() {
+		db.Close()
+		err = os.RemoveAll(dir)
+		if err != nil {
+			tb.Fatal(err)
+		}
+	}()
+
+	// fauxMerkleModeOpt returns a BaseApp option to use a dbStoreAdapter instead of
+	// an IAVLStore for faster simulation speed.
+	fauxMerkleModeOpt := func(bapp *baseapp.BaseApp) {
+		if is_testing {
+			bapp.SetFauxMerkleMode()
+		}
+	}
+
+	cmdApp := pylons.New(
+		logger,
+		db,
+		nil,
+		true, // load latest
+		map[int64]bool{},
+		pylons.DefaultNodeHome,
+		simapp.FlagPeriodValue,
+		cosmoscmd.MakeEncodingConfig(pylons.ModuleBasics),
+		simapp.EmptyAppOptions{},
+		interBlockCacheOpt(),
+		fauxMerkleModeOpt)
+
+	var app *pylons.App
+	switch cmdApp.(type) {
+	case *pylons.App:
+		app = cmdApp.(*pylons.App)
+	default:
+		panic("imported simApp incorrectly")
+	}
+
+
+	// Run randomized simulation:
+	_, simParams, simErr := simulation.SimulateFromSeed(
+		tb,
+		os.Stdout,
+		app.BaseApp,
+		simapp.AppStateFn(app.AppCodec(), app.SimulationManager()),
+		simulation2.RandomAccounts, // Replace with own random account function if using keys other than secp256k1
+		simapp.SimulationOperations(app, app.AppCodec(), config),
+		app.ModuleAccountAddrs(),
+		config,
+		app.AppCodec(),
+	)
+
+	// export state and simParams before the simulation error is checked
+	if err = simapp.CheckExportSimulation(app, config, simParams); err != nil {
+		tb.Fatal(err)
+	}
+
+	if simErr != nil {
+		tb.Fatal(simErr)
+	}
+
+	if config.Commit {
+		simapp.PrintStats(db)
+	}
+}
+
+
 // Profile with:
 // /usr/local/go/bin/go test -benchmem -run=^$ github.com/cosmos/cosmos-sdk/GaiaApp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
 func BenchmarkFullAppSimulation(b *testing.B) {
@@ -85,8 +170,6 @@ func interBlockCacheOpt() func(*baseapp.BaseApp) {
 	return baseapp.SetInterBlockCache(store.NewCommitKVStoreCacheManager())
 }
 
-//// TODO: Make another test for the fuzzer itself, which just has noOp txs
-//// and doesn't depend on the application.
 func TestAppStateDeterminism(t *testing.T) {
 	if !simapp.FlagEnabledValue {
 		t.Skip("skipping application simulation")

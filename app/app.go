@@ -497,6 +497,7 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 
 		transferModule,
+		pylonsModule,
 	)
 
 	app.sm.RegisterStoreDecoders()
