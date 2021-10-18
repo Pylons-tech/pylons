@@ -10,8 +10,8 @@ replace (
 
 require (
 	github.com/btcsuite/btcutil v1.0.3-0.20201208143702-a53e38424cce
-	github.com/cosmos/cosmos-sdk v0.44.1
-	github.com/cosmos/ibc-go v1.2.0
+	github.com/cosmos/cosmos-sdk v0.44.2
+	github.com/cosmos/ibc-go v1.2.2
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
 	github.com/google/cel-go v0.8.0
