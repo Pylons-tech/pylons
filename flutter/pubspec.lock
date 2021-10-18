@@ -28,7 +28,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.2"
+    version: "3.1.6"
   args:
     dependency: transitive
     description:
@@ -84,7 +84,7 @@ packages:
       name: build
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   build_config:
     dependency: transitive
     description:
@@ -140,7 +140,7 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.3"
+    version: "0.3.5"
   clock:
     dependency: transitive
     description:
@@ -167,7 +167,7 @@ packages:
     description:
       path: "packages/cosmos_ui_components"
       ref: main
-      resolved-ref: d8ee7962a2ff736f593f9a5975ffc46640ec682d
+      resolved-ref: fba8a8cbdbee1c9ee67d00a4d265d9c7806a62ca
       url: "https://github.com/tendermint/flutter.git"
     source: git
     version: "0.0.1"
@@ -176,7 +176,7 @@ packages:
     description:
       path: "packages/cosmos_utils"
       ref: main
-      resolved-ref: d8ee7962a2ff736f593f9a5975ffc46640ec682d
+      resolved-ref: fba8a8cbdbee1c9ee67d00a4d265d9c7806a62ca
       url: "https://github.com/tendermint/flutter.git"
     source: git
     version: "0.0.1"
@@ -207,7 +207,7 @@ packages:
       name: dart_style
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   dartz:
     dependency: transitive
     description:
@@ -291,7 +291,7 @@ packages:
       name: floating_pullup_card
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -357,7 +357,7 @@ packages:
       name: flutter_staggered_grid_view
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.1"
   flutter_sticky_header:
     dependency: "direct main"
     description:
@@ -395,7 +395,7 @@ packages:
       name: glob
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   googleapis_auth:
     dependency: transitive
     description:
@@ -444,7 +444,7 @@ packages:
       name: image
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.4"
+    version: "3.0.8"
   image_cropper:
     dependency: "direct main"
     description:
@@ -458,7 +458,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.4+1"
+    version: "0.8.4+2"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -493,7 +493,7 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.1"
+    version: "4.1.0"
   json_serializable:
     dependency: transitive
     description:
@@ -507,7 +507,7 @@ packages:
       name: lint
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.0"
+    version: "1.7.2"
   lints:
     dependency: "direct dev"
     description:
@@ -542,7 +542,7 @@ packages:
       name: mobx
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   modal_bottom_sheet:
     dependency: "direct main"
     description:
@@ -584,7 +584,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   path_provider_linux:
     dependency: transitive
     description:
@@ -626,7 +626,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "4.3.0"
   platform:
     dependency: transitive
     description:
@@ -640,7 +640,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   pointycastle:
     dependency: transitive
     description:
@@ -682,7 +682,7 @@ packages:
       name: pubspec_parse
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.1.0"
   rational:
     dependency: transitive
     description:
@@ -833,7 +833,7 @@ packages:
     description:
       path: "packages/transaction_signing_gateway"
       ref: main
-      resolved-ref: d8ee7962a2ff736f593f9a5975ffc46640ec682d
+      resolved-ref: ff61d1d9ce584a015db690cef1ff80f51f0349cd
       url: "https://github.com/tendermint/flutter.git"
     source: git
     version: "0.0.1"
@@ -941,7 +941,7 @@ packages:
       name: watcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.1"
   win32:
     dependency: transitive
     description:
@@ -962,7 +962,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.2"
+    version: "5.3.0"
   yaml:
     dependency: transitive
     description:

@@ -37,25 +37,12 @@ class CreateCookBookHandler implements BaseHandler {
       var msgObj = pylons.MsgCreateCookbook.create()
         ..mergeFromProto3Json(jsonMap);
 
-      // var msgObj = pylons.MsgCreateCookbook.fromJson(wholeMessage[2],);
-      final result = await signingGateway.signTransaction(transaction: UnsignedAlanTransaction(messages: [msgObj]), walletLookupKey: walletLookupKey).mapError<dynamic>((error) {
 
-        print(error);
-        throw error;
-      }).flatMap(
-            (signed) =>
-            signingGateway.broadcastTransaction(
-              walletLookupKey: walletLookupKey,
-              transaction: signed,
-            ),
-      );
+      final store = PylonsApp.walletsStore;
 
-      print(result);
+      store.createCookBook(msgObj);
 
-      result.fold(
-            (fail) => throw fail as Object,
-            (hash) => debugPrint("new TX hash: $hash"),
-      );
+
     } catch(e, stacktrace){
       print(e);
       print(stacktrace);
