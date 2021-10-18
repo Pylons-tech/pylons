@@ -18,6 +18,7 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.
 
 ### Changes:
+- [#463](https://github.com/Pylons-tech/pylons/pull/463) Bump SDK version to v0.44.2 and IBC-Go to v1.2.2.
 - [#447](https://github.com/Pylons-tech/pylons/pull/447) Move automated coin denom registration to `app/app.go`.
 - [#434](https://github.com/Pylons-tech/pylons/pull/434) Bump SDK version to v0.44.1.
 - [#428](https://github.com/Pylons-tech/pylons/pull/428) Follow migration [guide](https://github.com/tendermint/starport/blob/v0.18.0/docs/migration/index.md) for updating a starport-scaffolded chain to starport v0.18 compliance 
