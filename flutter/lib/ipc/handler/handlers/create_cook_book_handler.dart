@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:alan/proto/cosmos/crisis/v1beta1/tx.pbgrpc.dart';
 import 'package:cosmos_utils/cosmos_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
@@ -25,14 +26,31 @@ class CreateCookBookHandler implements BaseHandler {
         password: '',
       );
 
+
+      var json = """{
+                      "creator": "pylo1mwky96p8qzckfvus0cpcdzv9c2983az65lp37t",
+                      "ID": "v1",                      
+                      "name": "Legend of the Undead Dragon",
+                      "description": "Cookbook for running pylons recreation of LOUD",
+                      "developer": "Pylons Inc",
+                      "version": "v1.0.0",
+                      "supportEmail": "pylons@pylons.tech",
+                      "costPerBlock": {
+                      "denom": "pylo",
+                      "amount": "1000"
+                      },
+                      "enabled": true
+              }""";
       // print(wholeMessage);
       //
       // var registry = $pb.ExtensionRegistry();
       // registry.add($pb.Extension(extendee, name, tagNumber, fieldType))
 
-      final jsonMap = jsonDecode(wholeMessage[2]);
+      final jsonMap = jsonDecode(json);
 
       var msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(jsonMap);
+
+
 
       // var msgObj = pylons.MsgCreateCookbook.fromJson(wholeMessage[2],);
       final result = await signingGateway
@@ -47,11 +65,13 @@ class CreateCookBookHandler implements BaseHandler {
               ),
           );
 
-      store.createCookBook(msgObj);
+
+      print(result);
+
 
       result.fold(
         (fail) => throw fail as Object,
-        (hash) => debugPrint("new TX hash: $hash"),
+        (hash) => debugPrint("new TX hash: ${hash.txHash}"),
       );
     } catch (e, stacktrace) {
       print(e);

@@ -165,14 +165,14 @@ packages:
   cosmos_ui_components:
     dependency: "direct main"
     description:
-      path: "../../flutter/packages/cosmos_ui_components"
+      path: "../pylons/flutter/packages/cosmos_ui_components"
       relative: true
     source: path
     version: "0.0.1"
   cosmos_utils:
     dependency: "direct main"
     description:
-      path: "../../flutter/packages/cosmos_utils"
+      path: "../pylons/flutter/packages/cosmos_utils"
       relative: true
     source: path
     version: "0.0.1"
@@ -827,7 +827,7 @@ packages:
   transaction_signing_gateway:
     dependency: "direct main"
     description:
-      path: "../../flutter/packages/transaction_signing_gateway"
+      path: "../pylons/flutter/packages/transaction_signing_gateway"
       relative: true
     source: path
     version: "0.0.1"

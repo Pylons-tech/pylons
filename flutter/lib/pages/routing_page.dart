@@ -31,6 +31,8 @@ class _RoutingPageState extends State<RoutingPage> {
       PylonsApp.currentWallet = store.wallets.value.last;
       Navigator.of(context).push(MaterialPageRoute(builder: (_) => Dashboard()));
     }
+
+
   }
 
   @override
