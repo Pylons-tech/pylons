@@ -3,6 +3,9 @@ package cli
 import (
 	"strconv"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -15,16 +18,19 @@ var _ = strconv.Itoa(0)
 
 func CmdListCookbooksByCreator() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list-cookbooks [addr]",
-		Short: "list cookbooks by address",
+		Use:   "list-cookbooks [creator]",
+		Short: "list cookbooks by creator",
 		Args:  cobra.ExactArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, args []string) (err error) {
 			reqCreator := args[0]
 
-			clientCtx, err := client.GetClientTxContext(cmd)
+			// verify address is proper
+			_, err = sdk.AccAddressFromBech32(reqCreator)
 			if err != nil {
-				return err
+				return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 			}
+
+			clientCtx := client.GetClientContextFromCmd(cmd)
 
 			queryClient := types.NewQueryClient(clientCtx)
 

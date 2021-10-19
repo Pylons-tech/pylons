@@ -24,6 +24,14 @@ npm install
 npm run serve
 ```
 
+or 
+
+```
+cd vue
+yarn install
+yarn serve
+```
+
 The frontend app is built using the `@starport/vue` and `@starport/vuex` packages. For details, see the [monorepo for Starport front-end development](https://github.com/tendermint/vue).
 
 ## Release

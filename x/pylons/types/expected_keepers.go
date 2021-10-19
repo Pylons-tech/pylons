@@ -26,4 +26,5 @@ type AccountKeeper interface {
 	SetAccount(ctx sdk.Context, acc types.AccountI)
 	GetModuleAddress(moduleName string) sdk.AccAddress
 	NewAccountWithAddress(ctx sdk.Context, addr sdk.AccAddress) types.AccountI
+	GetNextAccountNumber(ctx sdk.Context) uint64
 }

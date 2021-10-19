@@ -10,3 +10,9 @@
 vue/node_modules
 vue/dist
 release/
+
+genesis/alpha
+genesis/beta
+genesis/gamma
+genesis/pylonsd
+

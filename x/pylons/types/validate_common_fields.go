@@ -71,3 +71,13 @@ func ValidateNumber(s string) error {
 
 	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid number")
 }
+
+// ValidateItemID validates an ItemID
+func ValidateItemID(s string) error {
+	decode := DecodeItemID(s)
+	if EncodeItemID(decode) != s {
+		return sdkerrors.Wrap(ErrInvalidRequestField, "invalid itemID")
+	}
+
+	return nil
+}

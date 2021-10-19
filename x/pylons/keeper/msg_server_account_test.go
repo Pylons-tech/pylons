@@ -36,7 +36,7 @@ func (suite *IntegrationTestSuite) TestCreateAccount() {
 		{
 			desc:    "DuplicateUsername",
 			request: &types.MsgCreateAccount{Creator: addr[1], Username: "testUser"},
-			err:     sdkerrors.ErrInvalidRequest,
+			err:     types.ErrDuplicateUsername,
 		},
 	} {
 		tc := tc
@@ -92,7 +92,7 @@ func (suite *IntegrationTestSuite) TestUpdateAccount() {
 		{
 			desc:    "DuplicateUsername",
 			request: &types.MsgUpdateAccount{Creator: addr[0], Username: "testUserUpdated"},
-			err:     sdkerrors.ErrInvalidRequest,
+			err:     types.ErrDuplicateUsername,
 		},
 	} {
 		tc := tc

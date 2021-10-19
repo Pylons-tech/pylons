@@ -39,7 +39,6 @@ func (k msgServer) CreateTrade(goCtx context.Context, msg *types.MsgCreateTrade)
 			}
 		}
 	}
-
 	// lock coins for trade
 	err := k.LockCoinsForTrade(ctx, addr, msg.CoinOutputs)
 	if err != nil {
@@ -96,7 +95,7 @@ func (k msgServer) CancelTrade(goCtx context.Context, msg *types.MsgCancelTrade)
 		panic(err)
 	}
 
-	k.RemoveTrade(ctx, msg.ID)
+	k.RemoveTrade(ctx, msg.ID, addr)
 
 	err = ctx.EventManager().EmitTypedEvent(&types.EventCancelTrade{
 		Creator: msg.Creator,

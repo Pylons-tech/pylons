@@ -4,6 +4,9 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/crypto/hd"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
 
@@ -11,6 +14,19 @@ import (
 
 	"github.com/Pylons-tech/pylons/testutil/network"
 )
+
+const (
+	testIBCDenom = "ibc/529ba5e3e86ba7796d7caab4fc02728935fbc75c0f7b25a9e611c49dd7d68a35"
+)
+
+func generateAddressesInKeyring(ring keyring.Keyring, n int) []sdk.AccAddress {
+	addrs := make([]sdk.AccAddress, n)
+	for i := 0; i < n; i++ {
+		info, _, _ := ring.NewMnemonic("NewUser"+strconv.Itoa(i), keyring.English, sdk.FullFundraiserPath, keyring.DefaultBIP39Passphrase, hd.Secp256k1)
+		addrs[i] = info.GetAddress()
+	}
+	return addrs
+}
 
 func networkWithAccountObjects(t *testing.T, n int) (*network.Network, []types.UserMap) {
 	t.Helper()
@@ -39,9 +55,41 @@ func networkWithTradeObjects(t *testing.T, n int) (*network.Network, []types.Tra
 	state := types.GenesisState{}
 	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
 
+	addresses := types.GenTestBech32List(n)
+
+	coinInputs := make([]types.CoinInput, 0)
+	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+
 	for i := 0; i < n; i++ {
 		state.TradeList = append(state.TradeList, types.Trade{
-			Creator:          "creator",
+			Creator:          addresses[i],
+			ID:               uint64(i),
+			CoinInputs:       coinInputs,
+			ItemInputs:       make([]types.ItemInput, 0),
+			CoinOutputs:      sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}},
+			ItemOutputs:      make([]types.ItemRef, 0),
+			ExtraInfo:        "extra info",
+			Receiver:         "receiver",
+			TradedItemInputs: make([]types.ItemRef, 0),
+		})
+	}
+	buf, err := cfg.Codec.MarshalJSON(&state)
+	require.NoError(t, err)
+	cfg.GenesisState[types.ModuleName] = buf
+	return network.New(t, cfg), state.TradeList
+}
+
+func networkWithTradeObjectsSingleOwner(t *testing.T, n int) (*network.Network, []types.Trade) {
+	t.Helper()
+	cfg := network.DefaultConfig()
+	state := types.GenesisState{}
+	require.NoError(t, cfg.Codec.UnmarshalJSON(cfg.GenesisState[types.ModuleName], &state))
+
+	addresses := types.GenTestBech32List(1)
+
+	for i := 0; i < n; i++ {
+		state.TradeList = append(state.TradeList, types.Trade{
+			Creator:          addresses[0],
 			ID:               uint64(i),
 			CoinInputs:       []types.CoinInput{{Coins: sdk.NewCoins()}},
 			ItemInputs:       make([]types.ItemInput, 0),

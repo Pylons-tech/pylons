@@ -13,10 +13,12 @@ message GoogleInAppPurchasePackage {
   string Amount = 3 [(gogoproto.nullable) = false, (gogoproto.moretags) = "yaml:\"amount\"", (gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Int"];
 }
 
+// CoinIssuer represents an entity or external blockchain
 message CoinIssuer {
   string CoinDenom = 1 [(gogoproto.moretags) = "yaml:\"coin_denom\""];
   repeated GoogleInAppPurchasePackage Packages= 2 [(gogoproto.moretags) = "yaml:\"google_iap_packages\"", (gogoproto.nullable) = false];
   string GoogleInAppPurchasePubKey = 3 [(gogoproto.moretags) = "yaml:\"google_iap_pubkey\""];
+  string EntityName = 4;
 }
 
 // Params represent the parameters used by the pylons module

@@ -3,6 +3,8 @@ package cli
 import (
 	"strconv"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -31,7 +33,9 @@ func CmdCreateAccount() *cobra.Command {
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+
+			txf := tx.NewFactoryCLI(clientCtx, cmd.Flags())
+			return GenerateOrBroadcastMsgs(clientCtx, txf, []sdk.Msg{msg}...)
 		},
 	}
 

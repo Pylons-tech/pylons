@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/cosmos/cosmos-sdk/telemetry"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,8 +21,8 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 	}
 	acc := k.accountKeeper.GetAccount(ctx, addr)
 	if acc == nil {
+		k.accountKeeper.NewAccountWithAddress(ctx, addr)
 		defer telemetry.IncrCounter(1, "new", "account")
-		k.accountKeeper.SetAccount(ctx, k.accountKeeper.NewAccountWithAddress(ctx, addr))
 	}
 
 	username := types.Username{Value: msg.Username}
@@ -29,7 +30,7 @@ func (k msgServer) CreateAccount(goCtx context.Context, msg *types.MsgCreateAcco
 
 	found := k.HasUsername(ctx, username) || k.HasAccountAddr(ctx, accountAddr)
 	if found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
+		return nil, types.ErrDuplicateUsername
 	}
 
 	k.SetPylonsAccount(ctx, accountAddr, username)
@@ -59,7 +60,7 @@ func (k msgServer) UpdateAccount(goCtx context.Context, msg *types.MsgUpdateAcco
 
 	found := k.HasUsername(ctx, username)
 	if found {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "username already taken")
+		return nil, types.ErrDuplicateUsername
 	}
 
 	k.SetPylonsAccount(ctx, accountAddr, username)

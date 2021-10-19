@@ -29,13 +29,25 @@ func TestShowTrade(t *testing.T) {
 		obj  types.Trade
 	}{
 		{
-			desc: "found",
+			desc: "found1",
 			id:   fmt.Sprintf("%d", objs[0].ID),
 			args: common,
 			obj:  objs[0],
 		},
 		{
+			desc: "found2",
+			id:   fmt.Sprintf("%d", objs[1].ID),
+			args: common,
+			obj:  objs[1],
+		},
+		{
 			desc: "not found",
+			id:   fmt.Sprintf("%d", objs[1].ID+1),
+			args: common,
+			err:  status.Error(codes.InvalidArgument, "not found"),
+		},
+		{
+			desc: "invalid ID",
 			id:   "not_found",
 			args: common,
 			err:  status.Error(codes.InvalidArgument, "not found"),

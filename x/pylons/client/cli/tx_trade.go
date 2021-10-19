@@ -41,12 +41,12 @@ func CmdCreateTrade() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			argsCoinOutputs, err := cast.ToStringE(args[2])
+			argsCoinOutput, err := cast.ToStringE(args[2])
 			if err != nil {
 				return err
 			}
-			jsonArgsCoinOutputs := sdk.NewCoins()
-			err = json.Unmarshal([]byte(argsCoinOutputs), &jsonArgsCoinOutputs)
+			jsonArgsCoinOutput := sdk.Coins{}
+			err = json.Unmarshal([]byte(argsCoinOutput), &jsonArgsCoinOutput)
 			if err != nil {
 				return err
 			}
@@ -69,7 +69,7 @@ func CmdCreateTrade() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsCoinOutputs, jsonArgsItemOutputs, argsExtraInfo)
+			msg := types.NewMsgCreateTrade(clientCtx.GetFromAddress().String(), jsonArgsCoinInputs, jsonArgsItemInputs, jsonArgsCoinOutput, jsonArgsItemOutputs, argsExtraInfo)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

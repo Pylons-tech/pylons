@@ -19,7 +19,14 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreateSimple() {
 
 	creator := types.GenTestBech32FromString("creator")
 	for i := 0; i < 5; i++ {
-		resp, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{Creator: creator})
+		resp, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
+			Creator:     creator,
+			CoinInputs:  nil,
+			ItemInputs:  nil,
+			CoinOutputs: sdk.Coins{},
+			ItemOutputs: nil,
+			ExtraInfo:   "",
+		})
 		require.NoError(err)
 		require.Equal(i, int(resp.ID))
 	}
@@ -36,12 +43,15 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCreateInvalidCoinInputs() {
 	numTests := 5
 	items := createNItem(k, ctx, numTests, true)
 
+	coinInputs := make([]types.CoinInput, 0)
+	coinInputs = append(coinInputs, types.CoinInput{Coins: sdk.Coins{sdk.Coin{Denom: "test", Amount: sdk.NewInt(0)}}})
+
 	for i := 0; i < 5; i++ {
 		_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
 			Creator:     items[i].Owner,
-			CoinInputs:  []types.CoinInput{{Coins: sdk.NewCoins(sdk.NewCoin("test", sdk.NewInt(1)))}},
+			CoinInputs:  coinInputs,
 			ItemInputs:  nil,
-			CoinOutputs: nil,
+			CoinOutputs: sdk.Coins{},
 			ItemOutputs: []types.ItemRef{{CookbookID: items[i].CookbookID, ItemID: items[i].ID}},
 			ExtraInfo:   "extraInfo",
 		})
@@ -80,7 +90,14 @@ func (suite *IntegrationTestSuite) TestTradeMsgServerCancel() {
 	} {
 		tc := tc
 		suite.Run(tc.desc, func() {
-			_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{Creator: creator})
+			_, err := srv.CreateTrade(wctx, &types.MsgCreateTrade{
+				Creator:     creator,
+				CoinInputs:  nil,
+				ItemInputs:  nil,
+				CoinOutputs: sdk.Coins{},
+				ItemOutputs: nil,
+				ExtraInfo:   "",
+			})
 			require.NoError(err)
 			_, err = srv.CancelTrade(wctx, tc.request)
 			if tc.err != nil {

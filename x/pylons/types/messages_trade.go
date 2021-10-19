@@ -55,6 +55,43 @@ func (msg *MsgCreateTrade) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "invalid coinOutputs")
 	}
 
+	// ensure that there is only one payment token
+	for _, coinInput := range msg.CoinInputs {
+
+		paymentDenom := ""
+		for _, coin := range coinInput.Coins {
+			switch {
+			case !IsCookbookDenom(coin.Denom) && !IsIBCDenomRepresentation(coin.Denom):
+				if paymentDenom != "" {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinInputs")
+				}
+				paymentDenom = coin.Denom
+			case IsIBCDenomRepresentation(coin.Denom):
+				if paymentDenom != "" {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinInputs")
+				}
+				paymentDenom = coin.Denom
+			}
+		}
+
+		for _, coin := range msg.CoinOutputs {
+			switch {
+			case !IsCookbookDenom(coin.Denom) && !IsIBCDenomRepresentation(coin.Denom):
+				if coin.Denom != paymentDenom && paymentDenom != "" {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinOutputs")
+				} else if paymentDenom == "" {
+					paymentDenom = coin.Denom
+				}
+			case IsIBCDenomRepresentation(coin.Denom):
+				if coin.Denom != paymentDenom && paymentDenom != "" {
+					return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "multiple paymentDenoms in CoinOutputs")
+				} else if paymentDenom == "" {
+					paymentDenom = coin.Denom
+				}
+			}
+		}
+	}
+
 	for _, item := range msg.ItemOutputs {
 		err := ValidateNumber(item.ItemID)
 		if err != nil {
