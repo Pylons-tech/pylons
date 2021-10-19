@@ -18,6 +18,7 @@
 - [#421](https://github.com/Pylons-tech/pylons/pull/421) Recipe execution validation and item matching logic fixed.
 
 ### Changes:
+- [#465](https://github.com/Pylons-tech/pylons/pull/465) Remove the `/vue/` directory.  Code has been [moved](https://github.com/Pylons-tech/pylons-web).
 - [#463](https://github.com/Pylons-tech/pylons/pull/463) Bump SDK version to v0.44.2 and IBC-Go to v1.2.2.
 - [#447](https://github.com/Pylons-tech/pylons/pull/447) Move automated coin denom registration to `app/app.go`.
 - [#434](https://github.com/Pylons-tech/pylons/pull/434) Bump SDK version to v0.44.1.
