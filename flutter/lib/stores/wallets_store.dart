@@ -82,6 +82,7 @@ class WalletsStore {
 
   Future<void> createCookBook(MsgCreateCookbook msgObj) async {
 
+
     final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
     print(unsignedTransaction);
 

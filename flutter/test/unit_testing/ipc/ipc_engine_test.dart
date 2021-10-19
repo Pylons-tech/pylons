@@ -8,8 +8,8 @@ void main() {
 
     var sender = "pylo1t3xupuj9f72jpxddkfs2sps4lsj8ejznd9r4jj";
     var key = "txCreateCookbook";
-    var json = '''{
-                      "creator": "pylo1t3xupuj9f72jpxddkfs2sps4lsj8ejznd9r4jj",
+    var json = """{
+                      "creator": "pylo1mwky96p8qzckfvus0cpcdzv9c2983az65lp37t",
                       "ID": "v1",                      
                       "name": "Legend of the Undead Dragon",
                       "description": "Cookbook for running pylons recreation of LOUD",
@@ -21,7 +21,7 @@ void main() {
                       "amount": "1000"
                       },
                       "enabled": true
-              }''';
+              }""";
     final list = <String>[sender,key,json];
     var result = IPCEngine().encodeMessage(list);
 
