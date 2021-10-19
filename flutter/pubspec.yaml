@@ -47,14 +47,22 @@ dependencies:
   get_it: ^7.2.0
 
   cosmos_ui_components:
-    path: ../pylons/flutter/packages/cosmos_ui_components
+    git:
+      url: https://github.com/tendermint/flutter.git
+      path: packages/cosmos_ui_components
+      ref: main
 
   cosmos_utils:
-    path: ../pylons/flutter/packages/cosmos_utils
-
+    git:
+      url: https://github.com/tendermint/flutter.git
+      path: packages/cosmos_utils
+      ref: main
 
   transaction_signing_gateway:
-    path: ../pylons/flutter/packages/transaction_signing_gateway
+    git:
+      url: https://github.com/tendermint/flutter.git
+      path: packages/transaction_signing_gateway
+      ref: main
 
   cupertino_icons: ^1.0.3
   decimal: 1.3.0
