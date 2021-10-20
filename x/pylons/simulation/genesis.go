@@ -29,9 +29,9 @@ func randomCoinFee(r *rand.Rand) sdk.Coin {
 	return sdk.NewCoin("upylon", sdk.NewInt(r.Int63n(10)+1)) // [1, 100]
 }
 
-func randomTransferFeePair() (sdk.Int, sdk.Int) {
-	min := sdk.NewInt(rand.Int63n(11))              // [0, 10]
-	max := sdk.NewInt(rand.Int63n(10) + 1).Add(min) // [min, min + 10]
+func randomTransferFeePair(r *rand.Rand) (sdk.Int, sdk.Int) {
+	min := sdk.NewInt(r.Int63n(11))              // [0, 10]
+	max := sdk.NewInt(r.Int63n(10) + 1).Add(min) // [min, min + 10]
 	return min, max
 }
 
@@ -74,7 +74,7 @@ func RandomizedGenState(simState *module.SimulationState) {
 		&updateUsernameFee, simState.Rand,
 		func(r *rand.Rand) { updateUsernameFee = randomCoinFee(r) })
 
-	minTransferFee, maxTransferFee := randomTransferFeePair()
+	minTransferFee, maxTransferFee := randomTransferFeePair(simState.Rand)
 
 	genesis := types.GenesisState{
 		Params: types.Params{
