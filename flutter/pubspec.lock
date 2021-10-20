@@ -165,16 +165,20 @@ packages:
   cosmos_ui_components:
     dependency: "direct main"
     description:
-      path: "../pylons/flutter/packages/cosmos_ui_components"
-      relative: true
-    source: path
+      path: "packages/cosmos_ui_components"
+      ref: main
+      resolved-ref: ff61d1d9ce584a015db690cef1ff80f51f0349cd
+      url: "https://github.com/tendermint/flutter.git"
+    source: git
     version: "0.0.1"
   cosmos_utils:
     dependency: "direct main"
     description:
-      path: "../pylons/flutter/packages/cosmos_utils"
-      relative: true
-    source: path
+      path: "packages/cosmos_utils"
+      ref: main
+      resolved-ref: ff61d1d9ce584a015db690cef1ff80f51f0349cd
+      url: "https://github.com/tendermint/flutter.git"
+    source: git
     version: "0.0.1"
   cross_file:
     dependency: transitive
@@ -827,9 +831,11 @@ packages:
   transaction_signing_gateway:
     dependency: "direct main"
     description:
-      path: "../pylons/flutter/packages/transaction_signing_gateway"
-      relative: true
-    source: path
+      path: "packages/transaction_signing_gateway"
+      ref: main
+      resolved-ref: ff61d1d9ce584a015db690cef1ff80f51f0349cd
+      url: "https://github.com/tendermint/flutter.git"
+    source: git
     version: "0.0.1"
   transparent_image:
     dependency: "direct main"
