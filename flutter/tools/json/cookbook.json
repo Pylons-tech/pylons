@@ -1,0 +1,14 @@
+{
+  "creator": "pylo1np6w3qwugamt8yzqyns5wr5e500239sf7gw6l5",
+  "ID": "ras12345",
+  "name": "A nice cookbook",
+  "description": "A test cookbook where everything works",
+  "developer": "Pylons Tech",
+  "version": "v1.0.0",
+  "supportEmail": "pylons@pylons.tech",
+  "costPerBlock": {
+    "denom": "uphoton",
+    "amount": "1"
+  },
+  "enabled": true
+}

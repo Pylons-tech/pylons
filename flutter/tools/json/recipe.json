@@ -1,0 +1,21 @@
+{
+  "cookbookID": "ras12345",
+  "ID": "r1234aaa",
+  "nodeVersion": "v1.0.0",
+  "name": "A simple recipe test",
+  "description": "A simple test recipe to be executed",
+  "version": "v1.0.0",
+  "coinInputs": [
+    {
+      "coins": [
+        {
+          "denom": "uphoton",
+          "amount": "10"
+        }
+      ]
+    }
+  ],
+  "blockInterval": "4",
+  "enabled": true
+
+}
