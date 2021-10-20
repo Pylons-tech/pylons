@@ -230,3 +230,46 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 	}
 }
 
+// SimulateExecuteRecipe generates a MsgExecuteRecipe with random values
+func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCreateCookbook{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		// add cookbook id to global state store
+		cookbookID := ""
+		recipeID := ""
+		accState := state[simAccount.Address.String()]
+		if len(accState.RecipeIDs) > 0 {
+			cookbookID = accState.CookbookIDs[0]
+			recipeID = accState.RecipeIDs[0]
+		}
+
+		msg := &types.MsgCreateRecipe{
+			Creator:      	simAccount.Address.String(),
+			CookbookID:    cookbookID,
+			ID:            recipeID,
+			Name:          "namenamenamenamenamename",
+			Description:   "descriptiondescriptiondescription",
+			Version:       "v0.0.1",
+			CoinInputs:    nil,
+			ItemInputs:    nil,
+			Entries:       types.EntriesList{},
+			Outputs:       nil,
+			BlockInterval: 0,
+			Enabled:       true,
+			ExtraInfo:     "",
+		}
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
