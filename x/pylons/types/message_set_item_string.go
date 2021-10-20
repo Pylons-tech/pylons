@@ -46,7 +46,7 @@ func (msg *MsgSetItemString) ValidateBasic() error {
 	if err = ValidateID(msg.CookbookID); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
-	if err = ValidateNumber(msg.ID); err != nil {
+	if err = ValidateItemID(msg.ID); err != nil {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 	}
 	if err = ValidateID(msg.Field); err != nil {
