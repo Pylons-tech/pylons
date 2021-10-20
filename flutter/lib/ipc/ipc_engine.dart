@@ -55,24 +55,24 @@ class IPCEngine {
   }
 
   /// This method encodes the message that we need to send to wallet
-  /// [Input] : [msg] is the string received from the wallet
-  /// [Output] : [List] contains the decoded response
+  /// Input]  [msg] is the string received from the wallet
+  /// Output : [List] contains the decoded response
   String encodeMessage(List<String> msg) {
     final encodedMessageWithComma = msg.map((e) => base64Url.encode(utf8.encode(e))).join(',');
     return base64Url.encode(utf8.encode(encodedMessageWithComma));
   }
 
   /// This method decode the message that the wallet sends back
-  /// [Input] : [msg] is the string received from the wallet
-  /// [Output] : [List] contains the decoded response
+  /// Input : [msg] is the string received from the wallet
+  /// Output : [List] contains the decoded response
   List<String> decodeMessage(String msg) {
     final decoded = utf8.decode(base64Url.decode(msg));
     return decoded.split(',').map((e) => utf8.decode(base64Url.decode(e))).toList();
   }
 
   /// This method handles the link that the wallet received from the 3rd Party apps
-  /// [Input] : [link] contains the link that is received from the 3rd party apps.
-  /// [Output] : [List] contains the decoded message
+  /// Input : [link] contains the link that is received from the 3rd party apps.
+  /// Output : [List] contains the decoded message
   Future<List> handleLink(String link) async {
     log(link, name: '[IPCEngine : handleLink]');
 
@@ -97,7 +97,7 @@ class IPCEngine {
   }
 
   /// This method sends the unilink to the wallet app
-  /// [Input] : [unilink] is the unilink with data for the wallet app
+  /// Input : [String] is the unilink with data for the wallet app
   Future<bool> dispatchUniLink(String uniLink) async {
     if (await canLaunch(uniLink)) {
       await launch(uniLink);
@@ -108,8 +108,8 @@ class IPCEngine {
   }
 
   /// This is a temporary dialog for the proof of concept.
-  /// [Input] : [sender] The sender of the signal
-  /// [Output] : [key] The signal kind against which the signal is sent
+  /// Input : [sender] The sender of the signal
+  /// Output : [key] The signal kind against which the signal is sent
   Future showApprovalDialog({required String sender, required String key, required List<String> wholeMessage}) {
     return showDialog(
         context: navigatorKey.currentState!.overlay!.context,
@@ -121,13 +121,8 @@ class IPCEngine {
                     Navigator.of(_).pop();
 
                     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(wholeMessage).handle();
-
+                    print(handlerMessage);
                     await dispatchUniLink(handlerMessage);
-
-                    //
-                    // final encodedMessage = encodeMessage([key, 'OK']);
-                    //
-                    // await dispatchUniLink('pylons://$sender/$encodedMessage');
                   },
                   child: const Text('Approval'),
                 )
@@ -141,8 +136,8 @@ class IPCEngine {
   }
 
   /// This method disconnect any new signal. If another signal is already in process
-  /// [Input] : [sender] The sender of the signal
-  /// [Output] : [key] The signal kind against which the signal is sent
+  /// Input : [sender] The sender of the signal
+  /// Output : [key] The signal kind against which the signal is sent
   Future<void> disconnectThisSignal({required String sender, required String key}) async {
     final encodedMessage = encodeMessage([key, 'Wallet Busy: A transaction is already is already in progress']);
     await dispatchUniLink('pylons://$sender/$encodedMessage');

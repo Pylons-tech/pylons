@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:alan/alan.dart' as alan;
+import 'package:cosmos_utils/extensions.dart';
+import 'package:cosmos_utils/future_either.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pylons_wallet/entities/balance.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
+import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/utils/base_env.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
 import 'package:transaction_signing_gateway/model/credentials_storage_failure.dart';
+import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/model/wallet_lookup_key.dart';
 import 'package:transaction_signing_gateway/model/wallet_public_info.dart';
 import 'package:transaction_signing_gateway/transaction_signing_gateway.dart';
@@ -57,6 +63,7 @@ class WalletsStore {
       credentials: creds,
       password: '',
     );
+    
     wallets.value.add(creds.publicInfo);
     return creds.publicInfo;
   }
@@ -80,13 +87,18 @@ class WalletsStore {
     isSendMoneyLoading.value = false;
   }
 
-  Future<void> createCookBook(MsgCreateCookbook msgObj) async {
 
+
+  /// This method creates the cookbook
+  /// Input : [Map] containing the info related to the creation of cookbook
+  /// Output : [TransactionHash] hash of the transaction
+  Future<TransactionHash> createCookBook(Map json) async {
+
+    final msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(json);
 
     final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
-    print(unsignedTransaction);
 
-    var info = wallets.value.last;
+    final info = wallets.value.last;
 
     final walletLookupKey = WalletLookupKey(
       walletId: info.walletId,
@@ -94,15 +106,18 @@ class WalletsStore {
       password: '',
     );
 
-    //
-    print(walletLookupKey);
+    msgObj.creator = info.publicAddress;
 
+    final result = await _transactionSigningGateway.signTransaction(transaction: unsignedTransaction, walletLookupKey: walletLookupKey).mapError<dynamic>((error) {
+      print(error);
+      throw error;
+    }).flatMap(
+      (signed) => _transactionSigningGateway.broadcastTransaction(
+        walletLookupKey: walletLookupKey,
+        transaction: signed,
+      ),
+    );
 
-
-
-    var either = await _transactionSigningGateway.signTransaction(transaction: unsignedTransaction, walletLookupKey: walletLookupKey);
-    print(either);
-
-
+    return result.getOrElse(() => TransactionHash(txHash: ''));
   }
 }
