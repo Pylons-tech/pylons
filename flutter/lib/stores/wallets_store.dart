@@ -63,6 +63,7 @@ class WalletsStore {
       credentials: creds,
       password: '',
     );
+    
     wallets.value.add(creds.publicInfo);
     return creds.publicInfo;
   }
@@ -86,6 +87,11 @@ class WalletsStore {
     isSendMoneyLoading.value = false;
   }
 
+
+
+  /// This method creates the cookbook
+  /// Input : [Map] containing the info related to the creation of cookbook
+  /// Output : [TransactionHash] hash of the transaction
   Future<TransactionHash> createCookBook(Map json) async {
 
     final msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(json);

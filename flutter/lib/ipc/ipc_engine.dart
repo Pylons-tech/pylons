@@ -121,13 +121,8 @@ class IPCEngine {
                     Navigator.of(_).pop();
 
                     final handlerMessage = await GetIt.I.get<HandlerFactory>().getHandler(wholeMessage).handle();
-
+                    print(handlerMessage);
                     await dispatchUniLink(handlerMessage);
-
-                    //
-                    // final encodedMessage = encodeMessage([key, 'OK']);
-                    //
-                    // await dispatchUniLink('pylons://$sender/$encodedMessage');
                   },
                   child: const Text('Approval'),
                 )
