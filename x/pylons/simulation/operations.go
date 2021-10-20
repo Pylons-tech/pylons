@@ -21,8 +21,25 @@ import (
 const (
 	OpWeightMsgCreatAcc       = "op_weight_msg_create_acc"
 	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
+	OpWeightMsgCreateRecipe = "op_weight_msg_create_recipe"
 	invalidField              = "invalid"
 )
+
+// map from account address to objects they "own"
+type pylonsSimState map[string]accountState
+
+type accountState struct {
+	CookbookIDs []string
+	RecipeIDs []string
+	ItemIDs []string
+	TradeIDs []string
+}
+
+var state pylonsSimState
+
+func init() {
+	state = make(pylonsSimState)
+}
 
 // WeightedOperations returns all the operations from the module with their respective weights
 func WeightedOperations(
@@ -31,6 +48,7 @@ func WeightedOperations(
 
 	var weightMsgCreateAcc int
 	var weightMsgCreateCookbook int
+	var weightMsgCreateRecipe int
 	appParams.GetOrGenerate(cdc, OpWeightMsgCreatAcc, &weightMsgCreateAcc, nil,
 		func(_ *rand.Rand) {
 			weightMsgCreateAcc = 100
@@ -43,6 +61,13 @@ func WeightedOperations(
 		},
 	)
 
+	appParams.GetOrGenerate(cdc, OpWeightMsgCreateRecipe, &weightMsgCreateRecipe, nil,
+		func(_ *rand.Rand) {
+			weightMsgCreateRecipe = 100
+		},
+	)
+
+
 	return simulation.WeightedOperations{
 		simulation.NewWeightedOperation(
 			weightMsgCreateAcc,
@@ -51,6 +76,10 @@ func WeightedOperations(
 		simulation.NewWeightedOperation(
 			weightMsgCreateCookbook,
 			SimulateCreateCookbook(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgCreateRecipe,
+			SimulateCreateRecipe(bk, k),
 		),
 	}
 }
@@ -95,7 +124,15 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account have no coin"), nil, nil
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		// initialize state struct for this address
+		state[simAccount.Address.String()] = accountState{
+			CookbookIDs: make([]string, 0),
+			RecipeIDs: make([]string, 0),
+			TradeIDs: make([]string, 0),
+			ItemIDs: make([]string, 0),
 		}
 
 		username := generateRandomUsername(r)
@@ -121,11 +158,16 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
-				types.ModuleName, msgType, "Account have no coin"), nil, nil
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
 		id := generateRandomStringID(r)
 		email := generateRandomEmail(r)
+
+		// add cookbook id to global state store
+		accState := state[simAccount.Address.String()]
+		accState.CookbookIDs = append(accState.CookbookIDs, id)
+		state[simAccount.Address.String()] = accState
 
 		msg := &types.MsgCreateCookbook{
 			Creator:      simAccount.Address.String(),
@@ -141,3 +183,50 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
 }
+
+// SimulateCreateRecipe generates a MsgCreateRecipe with random values
+func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operation {
+	return func(
+		r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context,
+		accs []simtypes.Account, chainID string,
+	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
+
+		simAccount, _ := simtypes.RandomAcc(r, accs)
+		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
+		msgType := (&types.MsgCreateCookbook{}).Type()
+
+		if simCoins.Len() <= 0 {
+			return simtypes.NoOpMsg(
+				types.ModuleName, msgType, "Account has no balance"), nil, nil
+		}
+
+		id := generateRandomStringID(r)
+
+		// add cookbook id to global state store
+		cookbookID := ""
+		accState := state[simAccount.Address.String()]
+		if len(accState.CookbookIDs) > 0 {
+			cookbookID = accState.CookbookIDs[0]
+			accState.RecipeIDs = append(accState.RecipeIDs, id)
+			state[simAccount.Address.String()] = accState
+		}
+
+		msg := &types.MsgCreateRecipe{
+			Creator:      	simAccount.Address.String(),
+			CookbookID:    cookbookID,
+			ID:            id,
+			Name:          "namenamenamenamenamename",
+			Description:   "descriptiondescriptiondescription",
+			Version:       "v0.0.1",
+			CoinInputs:    nil,
+			ItemInputs:    nil,
+			Entries:       types.EntriesList{},
+			Outputs:       nil,
+			BlockInterval: 0,
+			Enabled:       true,
+			ExtraInfo:     "",
+		}
+		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
+	}
+}
+
