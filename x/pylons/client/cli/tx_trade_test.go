@@ -1477,7 +1477,7 @@ func TestCreateTradeInvalidItemOutput(t *testing.T) {
 	itemOutputs, err := json.Marshal([]types.ItemRef{
 		{
 			CookbookID: "fakeCookbook",
-			ItemID:     "12353",
+			ItemID:     types.EncodeItemID(113345),
 		},
 	})
 	require.NoError(t, err)
