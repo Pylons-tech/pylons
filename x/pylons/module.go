@@ -242,6 +242,7 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 
 // RandomizedParams creates randomized pylons param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	// return []simtypes.ParamChange{}
 	return simulation.ParamChanges(r)
 }
 
@@ -253,7 +254,8 @@ func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
 
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
-	return simulation.WeightedOperations(
-		simState.AppParams, simState.Cdc, am.bankKeeper, am.keeper,
-	)
+	return []simtypes.WeightedOperation{}
+	// return simulation.WeightedOperations(
+	//	simState.AppParams, simState.Cdc, am.bankKeeper, am.keeper,
+	// )
 }

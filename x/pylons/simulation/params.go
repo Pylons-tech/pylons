@@ -12,20 +12,20 @@ import (
 // on the simulation
 func ParamChanges(r *rand.Rand) []simtypes.ParamChange {
 	/*
-	return []simtypes.ParamChange{
-		simulation.NewSimParamChange(types.ModuleName, string(types.ParamStoreKeyItemTransferFeePercentage),
-			func(r *rand.Rand) string {
+		return []simtypes.ParamChange{
+			simulation.NewSimParamChange(types.ModuleName, string(types.ParamStoreKeyItemTransferFeePercentage),
+				func(r *rand.Rand) string {
 
-				return "TODO"
-			},
-		),
-		simulation.NewSimParamChange(types.ModuleName, string(types.ParamStoreKeyMaxTransferFee),
-			func(r *rand.Rand) string {
+					return "TODO"
+				},
+			),
+			simulation.NewSimParamChange(types.ModuleName, string(types.ParamStoreKeyMaxTransferFee),
+				func(r *rand.Rand) string {
 
-				return "TODO"
-			},
-		),
-	}
-	 */
+					return "TODO"
+				},
+			),
+		}
+	*/
 	return []simtypes.ParamChange{} // TODO
 }

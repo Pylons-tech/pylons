@@ -81,7 +81,6 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		panic("imported simApp incorrectly")
 	}
 
-
 	// Run randomized simulation:
 	_, simParams, simErr := simulation.SimulateFromSeed(
 		tb,
@@ -108,7 +107,6 @@ func fullAppSimulation(tb testing.TB, is_testing bool) {
 		simapp.PrintStats(db)
 	}
 }
-
 
 // Profile with:
 // /usr/local/go/bin/go test -benchmem -run=^$ github.com/cosmos/cosmos-sdk/GaiaApp -bench ^BenchmarkFullAppSimulation$ -Commit=true -cpuprofile cpu.out
