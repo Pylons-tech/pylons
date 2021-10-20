@@ -8,8 +8,11 @@ import 'package:pylons_wallet/entities/balance.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/client/pylons/tx.pb.dart';
 import 'package:pylons_wallet/modules/Pylonstech.pylons.pylons/module/export.dart' as pylons;
 import 'package:pylons_wallet/utils/base_env.dart';
+import 'package:pylons_wallet/utils/custom_transaction_signer/custom_transaction_signer.dart';
 import 'package:pylons_wallet/utils/token_sender.dart';
+import 'package:transaction_signing_gateway/alan/alan_transaction_broadcaster.dart';
 import 'package:transaction_signing_gateway/gateway/transaction_signing_gateway.dart';
+import 'package:transaction_signing_gateway/mobile/no_op_transaction_summary_ui.dart';
 import 'package:transaction_signing_gateway/model/credentials_storage_failure.dart';
 import 'package:transaction_signing_gateway/model/transaction_hash.dart';
 import 'package:transaction_signing_gateway/model/wallet_lookup_key.dart';
@@ -59,12 +62,58 @@ class WalletsStore {
       ),
       mnemonic: mnemonic,
     );
+
+
+    wallets.value.add(creds.publicInfo);
+
     await _transactionSigningGateway.storeWalletCredentials(
       credentials: creds,
       password: '',
     );
-    
-    wallets.value.add(creds.publicInfo);
+
+    final info = wallets.value.last;
+
+
+    final msgObj = pylons.MsgCreateAccount.create()..mergeFromProto3Json({'creator': wallet.bech32Address, 'username': userName});
+
+    final walletLookupKey = WalletLookupKey(
+      walletId: info.walletId,
+      chainId: info.chainId,
+      password: '',
+    );
+
+    final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
+
+
+
+    var customSigningGateway = TransactionSigningGateway(
+      transactionSummaryUI: NoOpTransactionSummaryUI(),
+      signers: [
+        CustomTransactionSigner(baseEnv.networkInfo),
+      ],
+      broadcasters: [
+        AlanTransactionBroadcaster(baseEnv.networkInfo),
+      ],
+      infoStorage: MobileKeyInfoStorage(
+        serializers: [AlanCredentialsSerializer()],
+      ),
+    );
+
+
+
+    final result = await customSigningGateway.signTransaction(transaction: unsignedTransaction, walletLookupKey: walletLookupKey).mapError<dynamic>((error) {
+
+      throw error;
+    }).flatMap(
+          (signed) => customSigningGateway.broadcastTransaction(
+        walletLookupKey: walletLookupKey,
+        transaction: signed,
+      ),
+    );
+    print(result);
+
+
+
     return creds.publicInfo;
   }
 
@@ -87,13 +136,10 @@ class WalletsStore {
     isSendMoneyLoading.value = false;
   }
 
-
-
   /// This method creates the cookbook
   /// Input : [Map] containing the info related to the creation of cookbook
   /// Output : [TransactionHash] hash of the transaction
   Future<TransactionHash> createCookBook(Map json) async {
-
     final msgObj = pylons.MsgCreateCookbook.create()..mergeFromProto3Json(json);
 
     final unsignedTransaction = UnsignedAlanTransaction(messages: [msgObj]);
