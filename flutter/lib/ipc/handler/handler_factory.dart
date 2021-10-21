@@ -1,5 +1,6 @@
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/create_cook_book_handler.dart';
+import 'package:pylons_wallet/ipc/handler/handlers/create_recipe_handler.dart';
 
 class HandlerFactory {
   static const String GET_COOKBOOKS = 'getCookbooks';
@@ -40,6 +41,9 @@ class HandlerFactory {
 
     if (key == TX_CREATE_COOKBOOK) {
       return CreateCookBookHandler(message);
+    }
+    if (key == TX_CREATE_RECIPE) {
+      return CreateRecipeHandler(message);
     }
 
     return CreateCookBookHandler([]);
