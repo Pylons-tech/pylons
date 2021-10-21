@@ -37,7 +37,7 @@ func randomTransferFeePair(r *rand.Rand) (sdk.Int, sdk.Int) {
 
 // RandomizedGenState generates a random GenesisState for bank
 func RandomizedGenState(simState *module.SimulationState) {
-	// TODO add logic for randomizing state
+	// TODO add logic for randomizing stateMap
 	var minNameFieldLength uint64
 	simState.AppParams.GetOrGenerate(
 		simState.Cdc, string(types.ParamStoreKeyMinNameFieldLength),

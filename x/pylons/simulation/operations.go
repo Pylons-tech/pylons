@@ -21,24 +21,36 @@ import (
 const (
 	OpWeightMsgCreatAcc       = "op_weight_msg_create_acc"
 	OpWeightMsgCreateCookbook = "op_weight_msg_create_cookbook"
-	OpWeightMsgCreateRecipe = "op_weight_msg_create_recipe"
+	OpWeightMsgCreateRecipe   = "op_weight_msg_create_recipe"
+	OpWeightMsgExecuteRecipe   = "op_weight_msg_execute_recipe"
 	invalidField              = "invalid"
 )
+
+// TODO add a global (not per-account) store of cookbook/recipeIDs
+type recipeInfo struct {
+	Address string
+	CookbookID string
+	ID string
+}
+
+var recipeInfoList []recipeInfo
 
 // map from account address to objects they "own"
 type pylonsSimState map[string]accountState
 
 type accountState struct {
 	CookbookIDs []string
-	RecipeIDs []string
-	ItemIDs []string
-	TradeIDs []string
+	RecipeIDs   []string
+	ItemIDs     []string
+	TradeIDs    []string
 }
 
-var state pylonsSimState
+// global stateMap map
+var stateMap pylonsSimState
 
 func init() {
-	state = make(pylonsSimState)
+	stateMap = make(pylonsSimState)
+	recipeInfoList = make([]recipeInfo, 0)
 }
 
 // WeightedOperations returns all the operations from the module with their respective weights
@@ -49,6 +61,8 @@ func WeightedOperations(
 	var weightMsgCreateAcc int
 	var weightMsgCreateCookbook int
 	var weightMsgCreateRecipe int
+	var weightMsgExecuteRecipe int
+
 	appParams.GetOrGenerate(cdc, OpWeightMsgCreatAcc, &weightMsgCreateAcc, nil,
 		func(_ *rand.Rand) {
 			weightMsgCreateAcc = 100
@@ -67,6 +81,11 @@ func WeightedOperations(
 		},
 	)
 
+	appParams.GetOrGenerate(cdc, OpWeightMsgExecuteRecipe, &weightMsgExecuteRecipe, nil,
+		func(_ *rand.Rand) {
+			weightMsgExecuteRecipe = 100
+		},
+	)
 
 	return simulation.WeightedOperations{
 		simulation.NewWeightedOperation(
@@ -80,6 +99,10 @@ func WeightedOperations(
 		simulation.NewWeightedOperation(
 			weightMsgCreateRecipe,
 			SimulateCreateRecipe(bk, k),
+		),
+		simulation.NewWeightedOperation(
+			weightMsgExecuteRecipe,
+			SimulateExecuteRecipe(bk, k),
 		),
 	}
 }
@@ -127,12 +150,12 @@ func SimulateCreateAccount(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 				types.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
-		// initialize state struct for this address
-		state[simAccount.Address.String()] = accountState{
+		// initialize stateMap struct for this address
+		stateMap[simAccount.Address.String()] = accountState{
 			CookbookIDs: make([]string, 0),
-			RecipeIDs: make([]string, 0),
-			TradeIDs: make([]string, 0),
-			ItemIDs: make([]string, 0),
+			RecipeIDs:   make([]string, 0),
+			TradeIDs:    make([]string, 0),
+			ItemIDs:     make([]string, 0),
 		}
 
 		username := generateRandomUsername(r)
@@ -164,10 +187,10 @@ func SimulateCreateCookbook(bk types.BankKeeper, k keeper.Keeper) simtypes.Opera
 		id := generateRandomStringID(r)
 		email := generateRandomEmail(r)
 
-		// add cookbook id to global state store
-		accState := state[simAccount.Address.String()]
+		// add cookbook id to global stateMap store
+		accState := stateMap[simAccount.Address.String()]
 		accState.CookbookIDs = append(accState.CookbookIDs, id)
-		state[simAccount.Address.String()] = accState
+		stateMap[simAccount.Address.String()] = accState
 
 		msg := &types.MsgCreateCookbook{
 			Creator:      simAccount.Address.String(),
@@ -193,7 +216,7 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgCreateCookbook{}).Type()
+		msgType := (&types.MsgCreateRecipe{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
@@ -202,17 +225,24 @@ func SimulateCreateRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operati
 
 		id := generateRandomStringID(r)
 
-		// add cookbook id to global state store
+		// add cookbook id to global stateMap store
 		cookbookID := ""
-		accState := state[simAccount.Address.String()]
+		accState := stateMap[simAccount.Address.String()]
 		if len(accState.CookbookIDs) > 0 {
 			cookbookID = accState.CookbookIDs[0]
 			accState.RecipeIDs = append(accState.RecipeIDs, id)
-			state[simAccount.Address.String()] = accState
+			stateMap[simAccount.Address.String()] = accState
+
+			info := recipeInfo{
+				Address:   simAccount.Address.String(),
+				CookbookID: accState.CookbookIDs[0],
+				ID:         id,
+			}
+			recipeInfoList = append(recipeInfoList, info)
 		}
 
 		msg := &types.MsgCreateRecipe{
-			Creator:      	simAccount.Address.String(),
+			Creator:       simAccount.Address.String(),
 			CookbookID:    cookbookID,
 			ID:            id,
 			Name:          "namenamenamenamenamename",
@@ -239,37 +269,35 @@ func SimulateExecuteRecipe(bk types.BankKeeper, k keeper.Keeper) simtypes.Operat
 
 		simAccount, _ := simtypes.RandomAcc(r, accs)
 		simCoins := bk.SpendableCoins(ctx, simAccount.Address)
-		msgType := (&types.MsgCreateCookbook{}).Type()
+		msgType := (&types.MsgExecuteRecipe{}).Type()
 
 		if simCoins.Len() <= 0 {
 			return simtypes.NoOpMsg(
 				types.ModuleName, msgType, "Account has no balance"), nil, nil
 		}
 
-		// add cookbook id to global state store
+
+		// add cookbook id to global stateMap store
 		cookbookID := ""
 		recipeID := ""
-		accState := state[simAccount.Address.String()]
-		if len(accState.RecipeIDs) > 0 {
-			cookbookID = accState.CookbookIDs[0]
-			recipeID = accState.RecipeIDs[0]
+
+		// find use a recipe created by any account
+		if len(recipeInfoList) > 0 {
+			index := int(r.Int31n(int32(len(recipeInfoList))))
+			info := recipeInfoList[index]
+			cookbookID = info.CookbookID
+			recipeID = info.ID
 		}
 
-		msg := &types.MsgCreateRecipe{
-			Creator:      	simAccount.Address.String(),
-			CookbookID:    cookbookID,
-			ID:            recipeID,
-			Name:          "namenamenamenamenamename",
-			Description:   "descriptiondescriptiondescription",
-			Version:       "v0.0.1",
-			CoinInputs:    nil,
-			ItemInputs:    nil,
-			Entries:       types.EntriesList{},
-			Outputs:       nil,
-			BlockInterval: 0,
-			Enabled:       true,
-			ExtraInfo:     "",
+		msg := &types.MsgExecuteRecipe{
+			Creator:         simAccount.Address.String(),
+			CookbookID:      cookbookID,
+			RecipeID:        recipeID,
+			CoinInputsIndex: 0,
+			ItemIDs:         nil,
 		}
+
 		return simtypes.NewOperationMsg(msg, true, "TODO", nil), nil, nil
 	}
 }
+
