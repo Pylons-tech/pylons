@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/pylons_app.dart';
 import 'package:pylons_wallet/transactions/pylons_balance.dart';
 
@@ -79,7 +80,7 @@ class _DashboardAssetsState extends State<DashboardAssets> {
 
   Future<void> _buildAssetsList() async {
     //Query the balance and update it.
-    final balanceObj = PylonsBalance(PylonsApp.baseEnv);
+    final balanceObj = PylonsBalance(GetIt.I.get());
     final balances = await balanceObj.getBalance(PylonsApp.currentWallet.publicAddress);
     final assetsList = <Widget>[];
     for (final balance in balances) {

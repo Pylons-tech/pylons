@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:pylons_wallet/pylons_app.dart';
 
@@ -10,7 +11,7 @@ class BuyPylons {
     final response = await http.post(
       //This the address that android emulator uses to communicate with host.
       // Get some pylon from the Faucet.
-      Uri.parse(PylonsApp.baseEnv.baseFaucetUrl),
+      Uri.parse(GetIt.I.get()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

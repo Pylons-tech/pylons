@@ -12,7 +12,7 @@ class NotificationItem extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Container(
-        padding: EdgeInsets.only(right: 6, left: 6),
+        padding: const EdgeInsets.only(right: 6, left: 6),
         child:Column(
             children: [
               Row(
@@ -25,7 +25,7 @@ class NotificationItem extends StatelessWidget {
                         title: RichText(
                           text: TextSpan(
                             style: DefaultTextStyle.of(context).style,
-                            children: <TextSpan>[
+                            children: const <TextSpan>[
                               TextSpan(text: 'Jimin', style: TextStyle(fontWeight: FontWeight.bold)),
                               TextSpan(text: ' purchased'),
                               TextSpan(text: ' Title of Artwork', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -34,7 +34,7 @@ class NotificationItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
+                    const Padding(
                         padding: EdgeInsets.only(right: 10),
                         child: ClipRect(
                           child: Image(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cosmos_utils/mnemonic.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/components/pylons_blue_button.dart';
 import 'package:pylons_wallet/components/pylons_white_button.dart';
 import 'package:pylons_wallet/components/space_widgets.dart';
@@ -10,6 +11,7 @@ import 'package:pylons_wallet/forms/import_from_google_form.dart';
 import 'package:pylons_wallet/forms/new_user_form.dart';
 import 'package:pylons_wallet/pages/dashboard/dashboard_main.dart';
 import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/stores/wallet_store.dart';
 import 'package:pylons_wallet/utils/screen_size_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -17,6 +19,13 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 PageController _controller = PageController();
 
 class PresentingOnboardPage extends StatelessWidget {
+
+
+  WalletsStore get walletsStore => GetIt.I.get();
+
+
+
+
   @override
   Widget build(BuildContext context) {
     final screenSize = ScreenSizeUtil(context);
@@ -83,7 +92,7 @@ class PresentingOnboardPage extends StatelessWidget {
     final _mnemonic = await generateMnemonic();
     final _username = userName;
 
-    PylonsApp.currentWallet = await PylonsApp.walletsStore.importAlanWallet(_mnemonic, _username);
+    PylonsApp.currentWallet = await walletsStore.importAlanWallet(_mnemonic, _username);
     // print("Wallet add: ${value.publicAddress} ${value.name} ${value.chainId}");
     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => Dashboard()), (route) => true);
   }
