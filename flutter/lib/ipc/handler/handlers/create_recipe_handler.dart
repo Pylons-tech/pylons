@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/ipc/handler/base_handler.dart';
 import 'package:pylons_wallet/pylons_app.dart';
+import 'package:pylons_wallet/stores/wallet_store.dart';
 
 class CreateRecipeHandler implements BaseHandler {
 
@@ -24,7 +26,9 @@ class CreateRecipeHandler implements BaseHandler {
       jsonMap.remove('nodeVersion');
 
 
-      response = (await PylonsApp.walletsStore.createRecipe(jsonMap)).txHash;
+      var walletsStore = GetIt.I.get<WalletsStore>();
+
+      response = (await walletsStore.createCookBook(jsonMap)).txHash;
 
     } catch (e, stacktrace) {
       log('$e', name: 'Create Cook book Handler', stackTrace: stacktrace);

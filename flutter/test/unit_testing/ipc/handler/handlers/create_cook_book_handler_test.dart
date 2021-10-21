@@ -1,9 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
 import 'package:pylons_wallet/ipc/handler/handlers/create_cook_book_handler.dart';
-import 'package:pylons_wallet/modules/cosmos.authz.v1beta1/module/client/tendermint/abci/types.pb.dart';
-// import 'package:pylons_wallet/generated/Pylonstech.pylons.pylons/module/client/pylons/tx.pbgrpc.dart';
+import 'package:pylons_wallet/stores/wallet_store.dart';
+import '../../../../mocks/mock_constants.dart';
+import '../../../../mocks/mock_wallet_store.dart';
 
-var MOCK_COOKBOOK = '''{
+var MOCK_COOKBOOK = """
+{
   "creator": "pylo1akzpu26f36pgxr636uch8evdtdjepu93v5y9s2",
   "ID": "cookbookLOUD",
   "name": "Legend of the Undead Dragon",
@@ -14,16 +17,22 @@ var MOCK_COOKBOOK = '''{
   "supportEmail": "alex@shmeeload.xyz",
   "costPerBlock": {"denom":  "upylon", "amount":  "1000000"},
   "enabled": true
-}''';
+}""";
 
 void main() {
-  test('test cookbook making', () {
+  test('test createCookBook handler', () async {
 
-    var wholeMessage = [MOCK_COOKBOOK];
-    var handler = CreateCookBookHandler(wholeMessage);
-    handler.handle();
 
-    // MsgClient().createCookbook(request);
-    // var mockCookBook = MsgCreateCookbookResponse.fromJson(MOCK_COOKBOOK);
+
+    final mockWalletStore = MockWalletStore();
+
+    GetIt.I.registerSingleton<WalletsStore>(mockWalletStore);
+
+
+    final wholeMessage = ['Sending app', 'Transaction type', MOCK_COOKBOOK];
+    final handler = CreateCookBookHandler(wholeMessage);
+    final response = await handler.handle();
+    expect(MOCK_TRANSACTION.txHash, response);
+
   });
 }
