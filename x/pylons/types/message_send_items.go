@@ -52,7 +52,7 @@ func (msg *MsgSendItems) ValidateBasic() error {
 		if err = ValidateID(itemRef.CookbookID); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
-		if err = ValidateNumber(itemRef.ItemID); err != nil {
+		if err = ValidateItemID(itemRef.ItemID); err != nil {
 			return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, err.Error())
 		}
 	}

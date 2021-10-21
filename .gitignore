@@ -7,9 +7,8 @@
 .dir-locals.el
 .vscode
 
-vue/node_modules
-vue/dist
-release/
+./vue/
+
 
 genesis/alpha
 genesis/beta

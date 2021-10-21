@@ -62,16 +62,6 @@ func ValidateUsername(s string) error {
 	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid username")
 }
 
-// ValidateNumber validates numbers
-func ValidateNumber(s string) error {
-	regex := regexp.MustCompile(`^[0-9]+$`)
-	if regex.MatchString(s) {
-		return nil
-	}
-
-	return sdkerrors.Wrap(ErrInvalidRequestField, "invalid number")
-}
-
 // ValidateItemID validates an ItemID
 func ValidateItemID(s string) error {
 	decode := DecodeItemID(s)
