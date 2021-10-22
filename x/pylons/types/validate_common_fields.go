@@ -92,7 +92,7 @@ func ValidatePaymentInfo(p PaymentInfo) error {
 	}
 
 	if p.ProductID == "" {
-		return sdkerrors.Wrap(ErrInvalidRequestField, "empty purchase ID in payment info")
+		return sdkerrors.Wrap(ErrInvalidRequestField, "empty product ID in payment info")
 	}
 
 	if p.Signature == "" {

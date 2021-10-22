@@ -22,7 +22,7 @@ func (k Keeper) ProcessPaymentInfos(ctx sdk.Context, paymentInfos []types.Paymen
 
 				addr, _ := sdk.AccAddressFromBech32(pi.PayerAddr)
 				if !addr.Equals(senderAddr) {
-					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.ProductID)
+					return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "address for purchase %s do not match", pi.PurchaseID)
 				}
 
 				amt := pi.Amount
