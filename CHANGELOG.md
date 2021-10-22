@@ -3,6 +3,7 @@
 ## Unreleased
 
 ### Features:
+- [#473](https://github.com/Pylons-tech/pylons/pull/473) Add `paymentProcessors` support for `Trade`s and `Recipe`s.
 - [#448](https://github.com/Pylons-tech/pylons/pull/448) Add query `list-trades` for listing `Trade`s by creator address.
 - [#430](https://github.com/Pylons-tech/pylons/pull/430) Add `x/evidence` and `x/slashing` modules for IBC functionality.
 - [#423](https://github.com/Pylons-tech/pylons/pull/423) Create custom testing setup for LOUD tests.  This update adds extendability for future tests.
