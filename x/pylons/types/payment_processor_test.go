@@ -35,11 +35,11 @@ func genTestRedeemInfoSignature(payoutID, address string, amount types.Int, priv
 func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 	privKey := ed25519.GenPrivKey()
 	type fields struct {
-		CoinDenom     string
-		PubKey        string
-		ProcessingCut types.Dec
-		ConsensusCut  types.Dec
-		Name          string
+		CoinDenom            string
+		PubKey               string
+		ProcessorPercentange types.Dec
+		ValidatorsPercentage types.Dec
+		Name                 string
 	}
 	type args struct {
 		pi PaymentInfo
@@ -53,11 +53,11 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 		{
 			name: "Valid",
 			fields: fields{
-				CoinDenom:     "ustripeusd",
-				PubKey:        base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessingCut: DefaultProcessingCut,
-				ConsensusCut:  DefaultConsensusCut,
-				Name:          "Pylons_Inc",
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
 			},
 			args: args{
 				pi: PaymentInfo{
@@ -74,11 +74,11 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 		{
 			name: "InvalidSignature",
 			fields: fields{
-				CoinDenom:     "ustripeusd",
-				PubKey:        base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessingCut: DefaultProcessingCut,
-				ConsensusCut:  DefaultConsensusCut,
-				Name:          "Pylons_Inc",
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
 			},
 			args: args{
 				pi: PaymentInfo{
@@ -96,11 +96,11 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pp := PaymentProcessor{
-				CoinDenom:     tt.fields.CoinDenom,
-				PubKey:        tt.fields.PubKey,
-				ProcessingCut: tt.fields.ProcessingCut,
-				ConsensusCut:  tt.fields.ConsensusCut,
-				Name:          tt.fields.Name,
+				CoinDenom:            tt.fields.CoinDenom,
+				PubKey:               tt.fields.PubKey,
+				ProcessorPercentage:  tt.fields.ProcessorPercentange,
+				ValidatorsPercentage: tt.fields.ValidatorsPercentage,
+				Name:                 tt.fields.Name,
 			}
 			if err := pp.ValidatePaymentInfo(tt.args.pi); (err != nil) != tt.wantErr {
 				t.Errorf("ValidatePaymentInfo() error = %v, wantErr %v", err, tt.wantErr)
@@ -112,11 +112,11 @@ func TestPaymentProcessor_ValidatePaymentInfo(t *testing.T) {
 func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 	privKey := ed25519.GenPrivKey()
 	type fields struct {
-		CoinDenom     string
-		PubKey        string
-		ProcessingCut types.Dec
-		ConsensusCut  types.Dec
-		Name          string
+		CoinDenom            string
+		PubKey               string
+		ProcessorPercentange types.Dec
+		ValidatorsPercentage types.Dec
+		Name                 string
 	}
 	type args struct {
 		ri RedeemInfo
@@ -130,11 +130,11 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 		{
 			name: "Valid",
 			fields: fields{
-				CoinDenom:     "ustripeusd",
-				PubKey:        base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessingCut: DefaultProcessingCut,
-				ConsensusCut:  DefaultConsensusCut,
-				Name:          "Pylons_Inc",
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
 			},
 			args: args{
 				ri: RedeemInfo{
@@ -150,11 +150,11 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 		{
 			name: "InvalidSignature",
 			fields: fields{
-				CoinDenom:     "ustripeusd",
-				PubKey:        base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
-				ProcessingCut: DefaultProcessingCut,
-				ConsensusCut:  DefaultConsensusCut,
-				Name:          "Pylons_Inc",
+				CoinDenom:            "ustripeusd",
+				PubKey:               base64.StdEncoding.EncodeToString(privKey.PubKey().Bytes()),
+				ProcessorPercentange: DefaultProcessorPercentage,
+				ValidatorsPercentage: DefaultValidatorsPercentage,
+				Name:                 "Pylons_Inc",
 			},
 			args: args{
 				ri: RedeemInfo{
@@ -171,11 +171,11 @@ func TestPaymentProcessor_ValidateRedeemInfo(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			pp := PaymentProcessor{
-				CoinDenom:     tt.fields.CoinDenom,
-				PubKey:        tt.fields.PubKey,
-				ProcessingCut: tt.fields.ProcessingCut,
-				ConsensusCut:  tt.fields.ConsensusCut,
-				Name:          tt.fields.Name,
+				CoinDenom:            tt.fields.CoinDenom,
+				PubKey:               tt.fields.PubKey,
+				ProcessorPercentage:  tt.fields.ProcessorPercentange,
+				ValidatorsPercentage: tt.fields.ValidatorsPercentage,
+				Name:                 tt.fields.Name,
 			}
 			if err := pp.ValidateRedeemInfo(tt.args.ri); (err != nil) != tt.wantErr {
 				t.Errorf("ValidateRedeemInfo() error = %v, wantErr %v", err, tt.wantErr)

@@ -216,43 +216,43 @@ func Test_validatePaymentProcessor(t *testing.T) {
 	validPaymentProcessor := make([]PaymentProcessor, 1)
 
 	invaliPaymentProcessorCoinDenom[0] = PaymentProcessor{
-		CoinDenom:     "$",
-		PubKey:        DefaultPaymentProcessors[0].PubKey,
-		Name:          "test",
-		ProcessingCut: sdk.ZeroDec(),
-		ConsensusCut:  sdk.ZeroDec(),
+		CoinDenom:            "$",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "test",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	invaliPaymentProcessorPubkey[0] = PaymentProcessor{
-		CoinDenom:     "test",
-		PubKey:        "",
-		Name:          "test",
-		ProcessingCut: sdk.ZeroDec(),
-		ConsensusCut:  sdk.ZeroDec(),
+		CoinDenom:            "test",
+		PubKey:               "",
+		Name:                 "test",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	invaliPaymentProcessorPercentages[0] = PaymentProcessor{
-		CoinDenom:     "test",
-		PubKey:        DefaultPaymentProcessors[0].PubKey,
-		Name:          "test",
-		ProcessingCut: sdk.OneDec(),
-		ConsensusCut:  sdk.ZeroDec(),
+		CoinDenom:            "test",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "test",
+		ProcessorPercentage:  sdk.OneDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	invaliPaymentProcessorName[0] = PaymentProcessor{
-		CoinDenom:     "test",
-		PubKey:        DefaultPaymentProcessors[0].PubKey,
-		Name:          "",
-		ProcessingCut: sdk.ZeroDec(),
-		ConsensusCut:  sdk.ZeroDec(),
+		CoinDenom:            "test",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	validPaymentProcessor[0] = PaymentProcessor{
-		CoinDenom:     "test",
-		PubKey:        DefaultPaymentProcessors[0].PubKey,
-		Name:          "test",
-		ProcessingCut: sdk.ZeroDec(),
-		ConsensusCut:  sdk.ZeroDec(),
+		CoinDenom:            "test",
+		PubKey:               DefaultPaymentProcessors[0].PubKey,
+		Name:                 "test",
+		ProcessorPercentage:  sdk.ZeroDec(),
+		ValidatorsPercentage: sdk.ZeroDec(),
 	}
 
 	tests := []struct {

@@ -294,7 +294,7 @@ func TestCreateTradeItemOutput(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -530,7 +530,7 @@ func TestCreateTradeItemOutputInvalidCoinInputs1(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	args = []string{cookbookID, recipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, recipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)

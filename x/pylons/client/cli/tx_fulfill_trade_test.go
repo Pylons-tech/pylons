@@ -76,7 +76,7 @@ func createGetTestCoinsRecipe(t *testing.T, simInfo *tradeSimInfo) {
 
 func getTestCoins(t *testing.T, simInfo *tradeSimInfo, common []string) {
 	// execute recipe
-	args := []string{simInfo.cookbookID, simInfo.getCoinRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args := []string{simInfo.cookbookID, simInfo.getCoinRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, common...)
 	out, err := clitestutil.ExecTestCLICmd(simInfo.ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -253,7 +253,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.NoError(t, err)
 
 	// create execution
-	args = []string{cookbookID, itemRecipeID, "0", "[]"} // empty list for item-ids since there is no item input
+	args = []string{cookbookID, itemRecipeID, "0", "[]", "[]"} // empty list for item-ids since there is no item input
 	args = append(args, simInfo.traderCommon...)
 	out, err = clitestutil.ExecTestCLICmd(ctx, cli.CmdExecuteRecipe(), args)
 	require.NoError(t, err)
@@ -341,7 +341,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 	require.Equal(t, uint32(0), resp.Code)
 
 	// fulfill trade from FULFILLER
-	//  pylonsd tx pylons fulfill-trade [id] [coin-inputs-index] [items] [flags]
+	//  pylonsd tx pylons fulfill-trade [id] [coin-inputs-index] [item-ids] [payment-info] [flags]
 	tradeID := 0
 	coinIndex := 0
 	items, err := json.Marshal([]types.ItemRef{})
@@ -351,6 +351,7 @@ func TestFulfillTradeItemForCoins(t *testing.T) {
 		fmt.Sprintf("%d", tradeID),
 		fmt.Sprintf("%d", coinIndex),
 		string(items),
+		"[]",
 	}
 
 	args = make([]string, 0)
